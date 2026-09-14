@@ -81,10 +81,25 @@ const textOf = (p, key, lang) => p.evaluate(({ key, lang }) => {
 
   console.log("\n2. THE RATING IS THE WORST GRADED POINT, AND THE WORD AND DECISION FOLLOW IT");
   ok(/CONDITION RATING\s*4/.test(r.text), "worst of {2,4} is 4, not the first point's 2", (r.text.match(/CONDITION RATING\s*\d/) || [""])[0]);
-  ok(/LEVEL\s*4 – Severe/.test(r.text), "  the level word comes off that number", (r.text.match(/LEVEL\s*4[^A-Za-z]*\w+/) || [""])[0]);
+  /* SEVERITY, not LEVEL: the office asked for the proper name on 2026-09-14,
+     and the ISO 14224 class the grade exports as rides beside it as a chip —
+     beside, not as the column's name, because this fleet's scale has five
+     steps and the standard has four. */
+  ok(/SEVERITY\s*4 – Severe/.test(r.text), "  the level word comes off that number", (r.text.match(/SEVERITY\s*4[^A-Za-z]*\w+/) || [""])[0]);
+  /* No \b after DEG: innerText runs the chip straight into "DECISION", so the
+     class ends up as "DEGDE" and a word boundary never arrives. */
+  ok(/SEVERITY[\s\S]{0,40}?DEG/.test(r.text), "    with the ISO class beside it", (r.text.match(/SEVERITY[^C]{0,44}/) || [""])[0]);
   ok(/DECISION\s*Repair soon/.test(r.text), "  and so does the decision", (r.text.match(/DECISION\s*[^C]+/) || [""])[0].slice(0, 40));
-  ok(/1 Normal · 2 Incipient · 3 Degraded · 4 Severe · 5 Critical/.test(r.text),
-     "  the scale line is printed, so the number is never colour-alone");
+  /* The scale carries the app's own words for THIS round — the same second
+     line the phone shows on its grade cards (GRADE.meaning, per round family)
+     — so the number is never colour-alone and the key is not a fifth
+     restatement of the scale written into the report's own dictionary. */
+  ok(/1\s*Normal/.test(r.text) && /2\s*Incipient/.test(r.text) && /3\s*Degraded/.test(r.text)
+     && /4\s*Severe/.test(r.text) && /5\s*Critical/.test(r.text),
+     "  the scale is printed, so the number is never colour-alone");
+  ok(/Light paste; no particles/.test(r.text),
+     "    with the meaning this round type has in the app",
+     (r.text.match(/Light paste[^·]{0,24}/) || [""])[0]);
 
   console.log("\n3. THE DECISION WORDING IS CORRECT FOR RATINGS 1..5");
   const want = { 1: "Continue normal monitoring", 2: "Monitor at the next planned inspection",
@@ -140,7 +155,14 @@ const textOf = (p, key, lang) => p.evaluate(({ key, lang }) => {
      "  the approval roles are translated", 1);
   /* The scale line is single-language by design — its five words in the
      reader's language only, no inline pair. */
-  ok(/1 Норма · 2 Начальный/.test(ru), "  the scale line is Russian-only, not doubled", 1);
+  /* Scoped to the SCALE, not the page. Every finding on a bilingual sheet is
+     paired by design, so "Incipient" appears elsewhere and a whole-page scan
+     reads that as the key having doubled. The key is the block after
+     "Шкала состояния:". */
+  const ruScale = (ru.match(/Шкала состояния:([\s\S]{0,320})/) || ["", ""])[1];
+  ok(/1\s*Норма/.test(ruScale) && /2\s*Начальный/.test(ruScale)
+     && !/Incipient/.test(ruScale) && !/Light paste/.test(ruScale),
+     "  the scale is Russian-only, not doubled", ruScale.slice(0, 60));
 
   ok(errs.length === 0, "no page errors", errs.slice(0, 3).join(" | ") || "none");
   await b.close();

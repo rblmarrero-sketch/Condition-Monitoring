@@ -5,9 +5,11 @@
    or card grid, read from the one normalised item shape both surfaces build,
    with honest empty states — "Not recorded", "Not measured", "No finding" —
    where a field the template prints was not captured. Common to every sheet:
-   the CONDITION RATING / LEVEL / DECISION strip, the MODEL/SMU/INSPECTED BY/
-   LOCATION metadata, the Maintenance action strip, the DATA/EVIDENCE/REVIEW/
-   APPROVAL status strip and the three-role approval table.
+   the CONDITION RATING / SEVERITY / DECISION strip, the Maintenance action
+   strip, the DATA/EVIDENCE/REVIEW/APPROVAL status strip and the three-role
+   approval table. The MODEL/SMU/INSPECTED BY/LOCATION strip was common
+   furniture until 2026-09-14 and is not any more — the office struck it out
+   as three facts the sheet already carried; see section 0.
 
    Run: node tests/rpttypes.cjs [port]   (needs tests/ed-srv.cjs on 8093) */
 const { chromium } = require(require("./pw.cjs"));
@@ -113,7 +115,17 @@ const textOf = (p, key, lang) => p.evaluate(({ key, lang }) => {
   console.log("\n0. EVERY SINGLE SHEET CARRIES THE COMMON FURNITURE");
   const mp = await textOf(p, k("TK900", "2026-08-10", "MP"), "en");
   ok(/Condition scale:/.test(mp), "the rating strip and scale");
-  ok(/Model/.test(mp) && /Inspected by/.test(mp) && /Location/.test(mp), "the metadata strip");
+  /* THE FOUR-CELL METADATA STRIP IS GONE, DELIBERATELY, AND WHAT IT CARRIED
+     IS NOT. The office struck it out on 2026-09-14: MODEL and SMU are on the
+     masthead a centimetre above it and the inspector is the CM Technician row
+     of the approval table at the foot, so three of its four cells said a
+     thing the sheet had already said. What was only there — the location — is
+     one quiet line when the round has a fix and nothing when it does not.
+     So this checks the FACTS are on the sheet, which is what the strip was
+     ever for, rather than the furniture that used to hold them. */
+  ok(!/Inspected by/.test(mp), "the four-cell metadata strip is gone");
+  ok(/TK900/.test(mp) && /2026-08-10/.test(mp), "  the unit and the date are on the masthead");
+  ok(/Ivanov/.test(mp), "  and the inspector is on the approval table");
   ok(/Maintenance action/.test(mp), "the maintenance-action strip");
   ok(/DATA[\s\S]*EVIDENCE[\s\S]*REVIEW[\s\S]*APPROVAL/.test(mp), "the DATA/EVIDENCE/REVIEW/APPROVAL status strip");
   ok(/CM Technician/.test(mp) && /Reliability Engineer/.test(mp) && /Maintenance Supervisor/.test(mp),

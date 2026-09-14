@@ -145,13 +145,21 @@ const HARNESS = `(async (sections) => {
     const r = { page1H: page1.getBoundingClientRect().height, roomPx,
       mapsH: maps ? maps.getBoundingClientRect().height : 0,
       hasCondSum: /Condition summary|Сводка состояния/.test(page1.textContent || ''),
+      /* The four-cell MODEL / SMU / INSPECTED BY / LOCATION strip went on
+         2026-09-14 — the office struck it out as three facts the masthead and
+         the approval table already carried. What page one must still hold is
+         the machine's IDENTITY, which is what the strip was ever standing in
+         for, so that is what is asked for: the unit and the SMU, on the
+         masthead where they always were. */
+      hasIdent: /DZ004/.test(page1.textContent || '') && /7410/.test(page1.textContent || ''),
       hasStrip: !!page1.querySelector('.mstrip'),
       regPage2CarriesSummary: /Condition summary|Сводка состояния/.test((els[1] || {}).textContent || '') };
     holder.remove(); st.remove();
     return r;
   }, secs);
   ok('the drawing and the condition summary are on the same (page one) section',
-    g.hasCondSum && g.hasStrip, JSON.stringify(g));
+    g.hasCondSum && g.hasIdent, JSON.stringify(g));
+  ok('  and the retired metadata strip is not back', g.hasStrip === false);
   ok('page one still fits in one physical page with all of it',
     g.page1H <= g.roomPx, Math.round(g.page1H) + ' of ' + Math.round(g.roomPx) + 'px room');
   ok('the drawing is roughly 35-42% of the page\'s own room, not most of it',

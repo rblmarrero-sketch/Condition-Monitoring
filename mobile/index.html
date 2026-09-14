@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=360">
+<link rel="manifest" href="manifest.webmanifest?v=361">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=360">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=360">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=360">
+<link rel="apple-touch-icon" href="icon-192.png?v=361">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=361">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=361">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2499,15 +2499,15 @@ function bootDel(k){ try { localStorage.removeItem(k); } catch (e) {} }
   }
 })();
 </script>
-<script src="native.js?v=360"></script>
-<script src="upload-defaults.js?v=360"></script>
-<script src="hme.js?v=360"></script>
-<script src="mp-fc.js?v=360"></script>
-<script src="hme-cascade.js?v=360"></script>
-<script src="assets.js?v=360"></script>
-<script src="temp-limits.js?v=360"></script>
-<script src="normalize.js?v=360"></script>
-<script src="terms.js?v=360"></script>
+<script src="native.js?v=361"></script>
+<script src="upload-defaults.js?v=361"></script>
+<script src="hme.js?v=361"></script>
+<script src="mp-fc.js?v=361"></script>
+<script src="hme-cascade.js?v=361"></script>
+<script src="assets.js?v=361"></script>
+<script src="temp-limits.js?v=361"></script>
+<script src="normalize.js?v=361"></script>
+<script src="terms.js?v=361"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2526,25 +2526,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=360"></script>
-<script src="edits.js?v=360"></script>
-<script src="due.js?v=360"></script>
-<script src="wear.js?v=360"></script>
-<script src="wear-figs.js?v=360"></script>
-<script src="wear-map.js?v=360"></script>
-<script src="machine-photos.js?v=360"></script>
-<script src="machine-fig.js?v=360"></script>
-<script src="get.js?v=360"></script>
-<script src="points.js?v=360"></script>
-<script src="uc-points.js?v=360"></script>
-<script src="inspect-guide.js?v=360"></script>
-<script src="get-figs.js?v=360"></script>
-<script src="body-points.js?v=360"></script>
-<script src="body-map.js?v=360"></script>
-<script src="lube.js?v=360"></script>
-<script src="lube-overrides.js?v=360"></script>
-<script src="lube2027.js?v=360"></script>
-<script src="report-core.js?v=360"></script>
+<script src="grade.js?v=361"></script>
+<script src="edits.js?v=361"></script>
+<script src="due.js?v=361"></script>
+<script src="wear.js?v=361"></script>
+<script src="wear-figs.js?v=361"></script>
+<script src="wear-map.js?v=361"></script>
+<script src="machine-photos.js?v=361"></script>
+<script src="machine-fig.js?v=361"></script>
+<script src="get.js?v=361"></script>
+<script src="points.js?v=361"></script>
+<script src="uc-points.js?v=361"></script>
+<script src="inspect-guide.js?v=361"></script>
+<script src="get-figs.js?v=361"></script>
+<script src="body-points.js?v=361"></script>
+<script src="body-map.js?v=361"></script>
+<script src="lube.js?v=361"></script>
+<script src="lube-overrides.js?v=361"></script>
+<script src="lube2027.js?v=361"></script>
+<script src="report-core.js?v=361"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -5431,6 +5431,35 @@ function renderGradeOvr(){
   }
 }
 $("gradeWhy").addEventListener("input",()=>{ const p=curP(); p.gradeWhy=$("gradeWhy").value.trim(); });
+/* HOW LONG EACH GRADE GETS, IN ONE PLACE. Stated as a function of the grade
+   and the machine rather than five dates typed into the markup, so the phone,
+   a later office default and anything else that needs the same answer read one
+   rule. Returns an ISO day, or null when it cannot work one out — and null
+   leaves the field empty rather than guessing, because a wrong due date on a
+   critical finding is worse than an unfilled one.
+
+   GRADE_DUE_DAYS holds the two the grade decides on its own. The third is not
+   a number at all: it is the round's own interval for THIS machine's class,
+   read from due.js, which is the only place an interval is allowed to live. */
+const GRADE_DUE_DAYS = { 4: 7, 5: 1 };
+function defaultTargetFor(g){
+  if(!window.DUE) return null;
+  const today = todayISO();
+  if(GRADE_DUE_DAYS[g]) return DUE.shift(today, GRADE_DUE_DAYS[g]);
+  if(g !== 3) return null;
+  /* The next planned service for this round on this machine. DUE.days renders
+     the interval to the calendar at the fleet's own hours-per-day; a round
+     with no hour figure (TEMP, LUBE) answers with the calendar it already
+     runs on, which is the right answer for those too. */
+  const a = ASSET_BY[curEquip] || {};
+  const cls = (window.PTS && PTS.classOf) ? PTS.classOf(a.cls || a.cat || "") : (a.cls || "");
+  /* days(type, part, hoursPerDay, cls, unit) — part and rate left to the
+     round's own answer, and the UNIT passed as well as the class, so a figure
+     stated for one machine (DZ011 is cut every 500 h where its class is on
+     1,000) is the one this default uses. */
+  const d = DUE.days(type, null, null, cls, curEquip);
+  return (d && isFinite(d) && d > 0) ? DUE.shift(today, Math.round(d)) : null;
+}
 /* ---- what a grade of 3, 4 or 5 asks for ------------------------------------ */
 function renderGradeReq(){
   const box=$("gradeReq"); if(!box) return;
@@ -5439,6 +5468,30 @@ function renderGradeReq(){
   box.classList.toggle("hidden", !on);
   if(!on) return;
   $("gradeReqText").textContent=t("g_req_"+g);
+  /* A TARGET DATE THE GRADE ALREADY IMPLIES IS FILLED IN, NOT ASKED FOR.
+     A 3, a 4 and a 5 each carry their own answer to "by when", and it was
+     being typed on a date picker at −40 with gloves on for every finding —
+     the one control on this screen that takes four taps to give back
+     something the grade had already decided.
+
+       3  the next planned service for this round on this machine: the
+          interval in hours rendered to the calendar at the fleet's own rate
+          (DUE.days, so a 250 h round is 13 days and a 1,000 h one 50).
+          "Plan the repair" means plan it for when the machine is next open.
+       4  seven days. "Repair soon" without a figure is a wish.
+       5  tomorrow. A 5 stops the machine; the date is not the question.
+
+     A DEFAULT, NOT A RULE: written only into an empty field, written into the
+     record the same instant it appears so the screen and the saved position
+     can never disagree, and changed by the inspector to anything they like.
+     The interval is asked for WITH the machine's class, because a figure is a
+     property of the round and the machine both — an excavator's undercarriage
+     is 4,000 h where a dozer's is 1,000, and defaulting both to one number is
+     a mistake this project has already shipped once. */
+  if(!p.target && req.target){
+    const d=defaultTargetFor(g);
+    if(d){ curP().target=d; p.target=d; }
+  }
   $("gResp").value=p.resp||""; $("gTarget").value=p.target||""; $("gOpstat").value=p.opstat||"";
   $("gNotifyWrap").classList.toggle("hidden", !req.notify);
   $("gNotify").checked=!!p.notified;
@@ -12848,7 +12901,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="360";
+const BUILD="361";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

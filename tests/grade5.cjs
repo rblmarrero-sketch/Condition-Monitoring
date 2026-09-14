@@ -111,6 +111,52 @@ const J = o => JSON.stringify(o).slice(0, 420);
      req.g1.grade === 1 && req.g1.sev === 'NOF' && !req.g1.req && req.g3.req && !req.g3.notify && /target date/.test(req.g3.text)
      && req.g4.req && /close-up/.test(req.g4.text) && req.g5.req && req.g5.notify && req.g5.grade === 5 && req.g5.sev === 'CRI' && req.g5.on === '5'
      && req.off.grade === null && !req.off.sev && !req.off.req, J(req));
+  /* A TARGET DATE THE GRADE ALREADY IMPLIES IS FILLED IN, NOT ASKED FOR.
+     Reported from the field on 2026-09-14: every finding needed a date typed
+     on a picker at −40 with gloves on, for something the grade had already
+     decided. 3 gets the next planned service for THIS round on THIS machine
+     (due.js's interval, rendered to the calendar at the fleet's rate); 4 gets
+     seven days; 5 gets tomorrow. A default and not a rule: it goes only into
+     an empty field, it is written into the record the same instant it appears
+     so the screen and the saved position cannot disagree, and a date the
+     inspector has typed is never overwritten.
+
+     The days are ASKED OF due.js, not typed here — MP on a haul truck is
+     250 h, which is 13 days at the fleet's rate, and a suite carrying its own
+     copy of that is the trap CLAUDE.md names. */
+  const tgt = await p.evaluate(async () => {
+    const click = n => { document.querySelector(`#gradeSeg .gcard[data-g="${n}"]`).click();
+                         return new Promise(r => setTimeout(r, 140)); };
+    const rd = () => ({ field: document.getElementById('gTarget').value,
+                        rec: draft.positions[curItem].target || '' });
+    const day = n => DUE.shift(todayISO(), n);
+    const out = { insp: Math.round(DUE.days(type, null, null, 'HT', curEquip)) };
+    await click(0 + 3); out.g3 = rd();
+    delete draft.positions[curItem].target;
+    await click(4); out.g4 = rd();
+    delete draft.positions[curItem].target;
+    await click(5); out.g5 = rd();
+    /* A date somebody typed is theirs. Re-render on the same grade and it
+       must still be there, unchanged. */
+    draft.positions[curItem].target = '2026-12-25';
+    renderGradeReq(); await new Promise(r => setTimeout(r, 80));
+    out.kept = rd();
+    out.want = { g3: day(out.insp), g4: day(7), g5: day(1) };
+    return out;
+  });
+  ok('a 3 defaults to the next planned service for this round on this machine',
+     tgt.g3.field === tgt.want.g3 && tgt.g3.rec === tgt.want.g3,
+     tgt.insp + ' d → ' + tgt.g3.field + ' (want ' + tgt.want.g3 + ')');
+  ok('  a 4 defaults to seven days', tgt.g4.field === tgt.want.g4 && tgt.g4.rec === tgt.want.g4,
+     tgt.g4.field + ' (want ' + tgt.want.g4 + ')');
+  ok('  a 5 to tomorrow — it stops the machine, the date is not the question',
+     tgt.g5.field === tgt.want.g5 && tgt.g5.rec === tgt.want.g5,
+     tgt.g5.field + ' (want ' + tgt.want.g5 + ')');
+  ok('  and it reaches the RECORD, not just the screen',
+     tgt.g3.rec === tgt.g3.field && tgt.g5.rec === tgt.g5.field);
+  ok('  a date the inspector typed is never overwritten',
+     tgt.kept.field === '2026-12-25' && tgt.kept.rec === '2026-12-25', J(tgt.kept));
+
   /* A critical failure mode proposes 5; graded lower, it asks why. */
   const ovr = await p.evaluate(async () => {
     const p = draft.positions[curItem]; const crit = Object.values(DEFECT_BY).find(d => d.defaultSeverity === 'Critical');

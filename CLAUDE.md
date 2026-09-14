@@ -297,6 +297,20 @@ instead of quietly sorting on the plan again. A fallback is not a degraded
 answer to this question — it is the answer to a different one
 (`tests/cmraised.cjs`).
 
+**AND THE CAUSE IS WRITTEN IN THREE PLACES, AT THREE DIFFERENT MOMENTS.** The
+register read it off `WODefect cause` — the WORK ORDER's field, which the
+office named and which is correct — but 1C only fills that once a work order
+has actually been raised. Measured on 2026-09-14: of 48 defects, every one of
+the 19 at status "Registered" had a blank cause and every one of the 29 past it
+had one. Not eighteen of nineteen. All of them. A defect at Registered is still
+a WORK REQUEST and the cause the inspector typed is in `WRDefect cause`, so a
+field the site treats as mandatory printed an em-dash against an answer that
+had been given. All three are read now, in the order 1C settles them (work
+order, then request, then certification), each row records which one it came
+from (`causeFrom`) and the file totals them (`cmCauseFrom`) — so "nobody has
+typed one yet" can never again be confused with "this file looked in the wrong
+column", and the office gets a number to chase instead of a row of dashes.
+
 **ONE WORK ORDER, ONE CAPTION IN THE PLAN GRID.** A tier includes the tiers
 below it, so TK156's 4,000 h order is four rounds — and each one printed the
 same `WO-015691` and the same `4000h · 13.09` under its own pill. Four
@@ -337,6 +351,63 @@ returns `failedKeys` beside `failed`; the phone keeps the set (`badNote`). The
 count used to be ADDED on every incremental pull, and an unreadable document
 sits on the cursor — so one bad file made the Due screen's warning climb by one
 every five minutes, 288 times a day.
+
+**A COMPONENT IS NEVER PRINTED IN TWO HALVES, AND THE RULE THAT PROMISED THAT
+MATCHED NOTHING.** `atomBands` tells the cutter where a fold may not fall, and
+its list said `.cell` — a class no element on this report has ever carried. The
+component card is `.cel`. One letter: no error, no warning, nothing protected,
+for as long as the list has existed, and a filter card sheared across the page
+break in a signed PDF. The height cap was the second half: a literal 520 canvas
+pixels, about a fifth of a page, where a card with a photograph is 814. It is
+one page's worth now, passed in by the paginator — anything that CAN fit on a
+page is moved whole, anything taller must still break or the document never
+advances. `tests/rptclean.cjs` puts `.cell` back and watches a 631 px card get
+cut, so the selector can never again select nothing in silence.
+
+**"NOT RECORDED" IS FOR A FIELD THAT SHOULD CARRY SOMETHING AND DOES NOT.** A
+position graded Normal with no defect has no direct cause and no detection
+method, and printing "Not recorded" against it says an inspector left a form
+half-filled when what happened is they found the machine in order — the
+false-alarm half of this project's signature defect. `tbClean`/`tbNA` give a
+clean position an em-dash and keep "Not recorded" wherever a finding makes the
+field expected. The Maintenance action strip is the same story one level up:
+`flagged` counted `it.action`, EVERY position carries one (a Normal one carries
+"Monitor / re-inspect next PM"), so a round of nothing but 1s printed five
+empty fields. It counts a defect, a cause or a grade of 3 and up; a clean round
+gets one sentence — and still gets the heading, because an absent section reads
+as a lost one.
+
+**THE INSPECTOR'S OWN WORDS REACH THE OFFICE SHEET, IN THE GRADE'S INK.** A
+table-bodied round — FC, INSP, TEMP, GET — had no column for the comment and no
+row under the position, so everything an inspector typed about a filter was on
+the phone, in the record, in the export, and nowhere on the document a
+superintendent reads. `typeTable` gives it a `.rnote` row under its position.
+The colour is `GRADE.TEXT`, a ramp of the same five grades **as ink on white**:
+the chip HEX is a fill and set as 10.5 px type its middle collapses (the amber
+is 1.83:1). The ink ramp measures 5.9–6.8 against white, past the report's own
+floor. Never use `HEX` for text; never use `TEXT` for a chip.
+
+**THE MASTHEAD IS NOT REPEATED THREE CENTIMETRES BELOW ITSELF.** The four-cell
+MODEL / SMU / INSPECTED BY / LOCATION strip went on 2026-09-14: the subtitle
+line already says the unit, the date, the SMU and the model, and the approval
+table already names the inspector with the date beside it. What was only there
+is the location, and that is one quiet line when the round carries a fix and
+nothing when it does not. `metaStrip` still exists and still answers — it just
+answers with the one fact the sheet does not already hold.
+
+**THE CONDITION SCALE IS COLOUR-CODED AND THE COLUMN IS NAMED AS ISO NAMES IT.**
+The scale wears the sheet's own five colours as filled swatches with the number
+inside and the name beside, so it maps to the chip above without the reader
+carrying five pairs in their head, and so it still maps in monochrome. The cell
+headed LEVEL is headed SEVERITY / ISO 14224 and carries the class code
+(`GRADE.iso`: NOF · INC · DEG · DEG · CRI) after the grade's own name.
+
+**THE GRADE ALREADY KNOWS BY WHEN.** A target date is filled in rather than
+asked for: 3 gets the next planned service for that round on that machine
+(`DUE.days` with the class AND the unit, so DZ011's 500 h filter cut is its
+own), 4 gets seven days, 5 gets tomorrow (`GRADE_DUE_DAYS`, `defaultTargetFor`).
+A default and not a rule — only into an empty field, written into the record the
+same instant it appears, and never over a date somebody typed.
 
 **THE REPORT CARRIES ITS OWN FONT AND ITS OWN RESOLUTION.** `CMR.FONT_CSS`
 embeds CM Sans (a kerned subset of Liberation Sans, Cyrillic in full, ~15 kB a

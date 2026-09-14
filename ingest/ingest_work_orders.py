@@ -284,9 +284,27 @@ CM_FIELDS = {
     "sysComp":  ["System component", "System / component", "System and component", "Component"],
     "priority": ["Priority"],
     "defType":  ["Defect Type", "Defect type", "Type of defect"],
-    # "WODefect cause" is the header — corrected by the office. Left with
-    # the plainer spellings behind it, but the first one is the real one.
+    # THE CAUSE IS WRITTEN IN THREE PLACES AND ARRIVES IN THEM AT THREE
+    # DIFFERENT MOMENTS. "WODefect cause" is the WORK ORDER's field and the
+    # office named it, correctly — but 1C only fills it once a work order has
+    # actually been raised against the request. Measured on 2026-09-14: of 48
+    # defects, every one of the 19 at status "Registered" had a blank cause
+    # and every one of the 29 past it had a cause. Not 18 of 19. All of them.
+    #
+    # A defect at "Registered" is still a WORK REQUEST, and the cause the
+    # inspector typed when they raised it is in the REQUEST's own field,
+    # "WRDefect cause". Reading only the work order's copy therefore printed
+    # an em-dash against a field the site treats as mandatory — the cause was
+    # recorded, and the panel rendered it as nothing.
+    #
+    # So all three are read, in the order 1C settles them: the work order's
+    # answer where there is one, else the request's, else the certification
+    # pass's. Which one each row came from is written out (`causeFrom`) and
+    # totalled (`cmCauseFrom`), so "the office has not typed one yet" can
+    # never again be confused with "this file looked in the wrong column".
     "cause":    ["WODefect cause", "Cause of Defect", "Cause of defect", "Defect cause"],
+    "causeWR":  ["WRDefect cause"],
+    "causeCert": ["CERTTDefect cause", "CERTDefect cause"],
     "desc":     ["Defect description", "Description of defect", "Defect descr"],
     "status":   ["CMMSWork order status"],      # the office asked for the CMMS one by name
     "person":   ["Responsible person", "Responsible", "Responsible person name"],
@@ -477,6 +495,14 @@ def main():
             d_iso = raised_iso or det_iso or plan_iso
             d_from = ("raised" if raised_iso else "detected" if det_iso
                       else "planStart" if plan_iso else None)
+            # The cause, from whichever of 1C's three fields has settled by
+            # now, and a note of which one that was. See CM_FIELDS["cause"].
+            cause_v, cause_src = None, None
+            for _f, _s in (("cause", "wo"), ("causeWR", "wr"), ("causeCert", "cert")):
+                _v = str(cm_get(_f) or "").strip()
+                if _v:
+                    cause_v, cause_src = _v, _s
+                    break
             if d_iso and d_iso >= CM_SINCE:
                 ref = str(cm_get("request") or "").strip()
                 m = DEFECT_RE.search(ref)
@@ -496,7 +522,8 @@ def main():
                     "system": str(cm_get("sysComp") or "").strip() or None,
                     "priority": str(cm_get("priority") or "").strip() or None,
                     "defectType": str(cm_get("defType") or "").strip() or None,
-                    "cause": str(cm_get("cause") or "").strip() or None,
+                    "cause": cause_v,
+                    "causeFrom": cause_src,
                     "descr": str(cm_get("desc") or "").strip() or None,
                     "status": str(cm_get("status") or "").strip() or None,
                     "by": who,
@@ -617,6 +644,15 @@ def main():
         # office is told rather than left to notice the sort looks odd.
         "cmDateFrom": {k: sum(1 for r in cm_dedup if r.get("dateFrom") == k)
                        for k in ("raised", "detected", "planStart")},
+        # Which of 1C's three cause fields each defect's cause came from, and
+        # how many carry none at all. The site treats the cause as mandatory,
+        # so "none" is a number somebody should be able to see and chase —
+        # not an em-dash in a cell that could equally mean this file looked in
+        # the wrong column, which is exactly what it did mean until today.
+        "cmCauseFrom": dict(
+            {k: sum(1 for r in cm_dedup if not r.get("planned") and r.get("causeFrom") == k)
+             for k in ("wo", "wr", "cert")},
+            none=sum(1 for r in cm_dedup if not r.get("planned") and not r.get("causeFrom"))),
         "cmSince": CM_SINCE,
         "cmPeople": [n.capitalize() for n in CM_PEOPLE],
         "cmWorkOrders": cm_dedup,

@@ -129,7 +129,7 @@
    class the report invents has to be a word the host does not use.
    (And no back-ticks in this comment: it lives inside the template literal
    that IS the stylesheet, and one would end it.) */
-#rptRoot tr.rnote td{border-top:0;padding-top:0;color:#4a545e;}
+#rptRoot tr.rnote td{border-top:0;padding-top:0;color:#4a545e;font-weight:600;}
 #rptRoot .unit{font-weight:750;letter-spacing:-.01em;white-space:nowrap;}
 #rptRoot .code{font-size:9.5px;color:#5b6670;font-variant-numeric:tabular-nums;
   letter-spacing:.02em;white-space:nowrap;}
@@ -184,6 +184,28 @@
 #rptRoot .rrate .rd{border-left:1px solid #e4e9ec;}
 #rptRoot .rscale{font-size:9.5px;color:#5b6670;margin-top:5px;letter-spacing:.01em;}
 #rptRoot .rscale b{color:#3d474f;font-weight:700;}
+/* THE SCALE WEARS THE SHEET'S OWN FIVE COLOURS. A filled swatch with the
+   number inside it and the name beside it, so the key maps to the chip above
+   without the reader holding five pairs in their head — and so it still maps
+   on a monochrome printer, where the number and the word carry it alone. The
+   name takes the INK ramp, never the fill: an amber chip colour set as 9.5 px
+   type is 1.83:1 and simply is not there. */
+/* Five cells across, so the key is a small block a reader takes in at once
+   rather than a paragraph they have to parse. Each cell: the swatch and the
+   name on one line, the round's own meaning under it. */
+#rptRoot .rscale .rsrow{display:grid;grid-template-columns:repeat(5,1fr);gap:0 8px;margin-top:3px;}
+#rptRoot .rscale .rsg{min-width:0;}
+#rptRoot .rscale .rsh{display:block;white-space:nowrap;}
+#rptRoot .rscale .rsg i{display:inline-block;min-width:13px;padding:0 3px;margin-right:3px;
+  border-radius:3px;font-style:normal;font-weight:700;text-align:center;font-size:9px;line-height:1.5;}
+#rptRoot .rscale .rsg b{font-weight:650;}
+/* The meaning: quieter than the name and still over the page's floor. */
+#rptRoot .rscale .rsm{display:block;font-size:8.5px;line-height:1.35;color:#5b6670;margin-top:1px;}
+#rptRoot .rscale .rsm .alt{color:#5b6670;}
+/* The ISO 14224 class, after the grade's own name. Quieter than the name and
+   never lighter than the page's floor — it is a code, read when looked for. */
+#rptRoot .rrate .isoc{font-size:.78em;font-weight:700;letter-spacing:.06em;color:#5b6670;
+  border:1px solid #c8ced3;border-radius:3px;padding:0 3px;margin-left:3px;vertical-align:1px;}
 /* THE DATA · EVIDENCE · REVIEW · APPROVAL strip — one honest row: what the
    office holds, not what it approves. A synchronised round is not approved,
    and this says so. */
@@ -228,6 +250,10 @@
   text-transform:uppercase;font-size:8.5px;display:block;}
 #rptRoot .mact .f b{font-weight:700;}
 #rptRoot .mact .miss{color:#8a6100;font-weight:650;}
+/* A clean round says it in one sentence — see actionStrip. The green is the
+   grade-1 INK, not the chip fill, because this is type on paper. */
+#rptRoot .mact.none{display:block;font-size:10.5px;font-weight:650;color:#0a7134;
+  border-color:#bcd9c6;background:#f2f8f4;}
 
 /* undercarriage measurement grid — two columns of readings, not one long list,
    and both halves in ONE table so a row is a full-width band. See the comment
@@ -458,6 +484,12 @@
 #rptRoot .mstrip .ms b{font-weight:700;font-size:11.5px;font-variant-numeric:tabular-nums;
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block;}
 #rptRoot .mstrip .ms .miss{color:#5b6670;font-weight:600;}
+/* The one line left of the old four-cell strip on a single-inspection sheet:
+   where the round was walked. See metaStrip's own note for what went and why. */
+#rptRoot .gpsline{margin-top:8px;font-size:10px;color:#5b6670;letter-spacing:.01em;}
+#rptRoot .gpsline i{font-style:normal;letter-spacing:.1em;text-transform:uppercase;
+  font-size:8.5px;font-weight:700;margin-right:5px;}
+#rptRoot .gpsline b{color:#3d474f;font-weight:700;font-variant-numeric:tabular-nums;}
 
 /* When every position says the same thing, the sheet says it once. Four columns
    repeating one defect, one cause and one action is four times the ink for the
@@ -520,8 +552,11 @@
    and keep their nowrap. */
 #rptRoot .cel div.code{white-space:normal;}
 #rptRoot .cel dd b{font-weight:700;}
+/* The comment carries the grade's own ink, set inline per card (see cell()).
+   600 rather than 400: a coloured word at book weight reads washed out beside
+   black, and this line is the one on the card somebody actually reads. */
 #rptRoot .cel .cm{font-size:10.5px;line-height:1.45;color:#16242c;margin-top:6px;
-  border-top:1px solid #eaeef1;padding-top:5px;}
+  border-top:1px solid #eaeef1;padding-top:5px;font-weight:600;}
 #rptRoot .cel .num{font-variant-numeric:tabular-nums;}
 #rptRoot .b4{grid-template-columns:repeat(4,1fr);}
 #rptRoot .b3{grid-template-columns:repeat(3,1fr);}
@@ -825,8 +860,9 @@
       st_mark:"PRELIMINARY",
       f_status:"Standing",
       rr_report:"REPORT",
-      rr_rating:"CONDITION RATING", rr_level:"LEVEL", rr_decision:"DECISION",
+      rr_rating:"CONDITION RATING", rr_level:"SEVERITY", rr_decision:"DECISION",
       rr_scale:"Condition scale",
+      rr_isot:"ISO 14224 failure class this grade exports as",
       rr_none:"Not rated",
       dec_1:"Continue normal monitoring",
       dec_2:"Monitor at the next planned inspection",
@@ -847,6 +883,7 @@
       ap_sig_miss:"Recorded signature not yet received by the office",
       ma_head:"Maintenance action", ma_action:"Recorded action", ma_cause:"Direct cause",
       ma_owner:"Owner", ma_wo:"Work order", ma_due:"Due date", ma_none:"Not recorded",
+      ma_clear:"No action required — every position inspected was found normal.",
       /* Type-body subheadings and column labels, to the v2 single-inspection
          templates. Honest empty states share c_notrec / c_notmeas / c_nofind. */
       tb_mp:"Equipment and component evidence",
@@ -1013,8 +1050,9 @@
       st_mark:"PRELIMINARY",
       f_status:"Статус",
       rr_report:"ОТЧЁТ",
-      rr_rating:"ОЦЕНКА СОСТОЯНИЯ", rr_level:"УРОВЕНЬ", rr_decision:"РЕШЕНИЕ",
+      rr_rating:"ОЦЕНКА СОСТОЯНИЯ", rr_level:"СТЕПЕНЬ", rr_decision:"РЕШЕНИЕ",
       rr_scale:"Шкала состояния",
+      rr_isot:"Класс отказа по ISO 14224, в который выгружается эта оценка",
       rr_none:"Без оценки",
       dec_1:"Продолжать обычный контроль",
       dec_2:"Проверить на следующем плановом осмотре",
@@ -1035,6 +1073,7 @@
       ap_sig_miss:"Записанная подпись ещё не получена офисом",
       ma_head:"Действие по обслуживанию", ma_action:"Записанное действие", ma_cause:"Прямая причина",
       ma_owner:"Ответственный", ma_wo:"Наряд-заказ", ma_due:"Срок", ma_none:"Не записано",
+      ma_clear:"Действий не требуется — все осмотренные позиции в норме.",
       tb_mp:"Данные и фото по компонентам",
       tb_fc:"Результаты по фильтрам", tb_fc_ev:"Обязательные фотографии",
       tb_insp:"Выявленное по узлам и системам", tb_insp_ph:"Фотографии выявленного",
@@ -1141,6 +1180,11 @@
      letter off an old record is read through gnum() first, everywhere. */
   var GR = (typeof GRADE !== "undefined" && GRADE) ? GRADE : null;
   var GRADE_HEX = GR ? GR.HEX : { 1:"#0a7134", 2:"#fab219", 3:"#ec835a", 4:"#d9511f", 5:"#c8232c" };
+  /* The same five as INK ON WHITE — see grade.js's own note. A chip colour set
+     as type collapses: the amber is 1.83:1. Every word on this page is held to
+     4.5:1 and these are 5.9–6.8. */
+  var GRADE_TEXT = (GR && GR.TEXT) || { 1:"#0a7134", 2:"#8a5a00", 3:"#a8451b", 4:"#b03a14", 5:"#b31a24" };
+  var GRADE_ISO = (GR && GR.ISO) || { 1:"NOF", 2:"INC", 3:"DEG", 4:"DEG", 5:"CRI" };
   var LEGACY_G = { A:1, B:2, C:3, D:4, X:5 };
   function gnum(v){
     if(GR) return GR.num(v);
@@ -1156,7 +1200,7 @@
   function gname(n){ n=gnum(n); if(!n) return ""; return GR ? GR.name(n,curLang) : (GNAME[curLang]||GNAME.en)[n]; }
   var GRADE_LEVELS = [1,2,3,4,5];
   var SEV_HEX   = { NOF:GRADE_HEX[1], INC:GRADE_HEX[2], DEG:GRADE_HEX[3], CRI:GRADE_HEX[5] };
-  CMR.GRADE_HEX = GRADE_HEX; CMR.SEV_HEX = SEV_HEX; CMR.gradeNum = gnum;
+  CMR.GRADE_HEX = GRADE_HEX; CMR.GRADE_TEXT = GRADE_TEXT; CMR.SEV_HEX = SEV_HEX; CMR.gradeNum = gnum;
 
   function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g, function(c){
     return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
@@ -2202,15 +2246,67 @@
        under the level as a second line and the strip read as broken. */
     var level = n ? T.both(n + " – " + gw("g_" + n), gwA("g_" + n), "alti") : T.I("rr_none");
     var dec = T.I("dec_" + (n || 0));
-    var scale = '<div class="rscale"><b>' + esc(T("rr_scale")) + ':</b> '
-      + GRADE_LEVELS.map(function (g) { return g + " " + esc(gw("g_" + g)); }).join(" · ")
-      + '</div>';
+    /* THE SCALE IS COLOUR-CODED, AND THE COLOUR IS NOT THE ONLY THING SAYING
+       IT. Five numbers and five words in one grey line asked the reader to
+       carry the mapping in their head while looking at a coloured chip three
+       centimetres above — so the key now wears the same five colours the sheet
+       does, as a filled swatch with the number in it, and the word stays
+       beside it. Never colour alone: the number is inside the swatch and the
+       name is next to it, which is what makes it survive a monochrome
+       printer and a reader who cannot separate the reds. */
+    /* THE KEY SAYS WHAT THE APP SAYS, IN THE APP'S OWN WORDS. The office
+       asked for this in one line — "follow what we have" — with the phone's
+       grade cards open beside it: "1 – Normal / No defect; working normally".
+       That second line is GRADE.meaning, and it is PER ROUND: a 3 on a plug
+       round is "Fine metal filings" and on a general inspection it is "Clear
+       defect; equipment remains usable". So the sheet's key is the meanings
+       for THIS round's family, straight out of grade.js, rather than a
+       fifth restatement of the scale written into the report's own
+       dictionary. One source; the inspector who graded it and the manager
+       reading it are looking at the same sentence. The static g_N glosses
+       stay as the fallback for a page that somehow has no grade.js. */
+    var mean = function (g) {
+      return GR ? GR.meaning(g, rec.type, curLang) : String(T("g_" + g)).split(" — ")[1] || "";
+    };
+    /* SINGLE-LANGUAGE, EVEN ON A BILINGUAL SHEET — the rule the scale line
+       already had before it grew a second line, and it is more right now, not
+       less. This is a key: the reader consults it once to find out what a 3
+       means. Ten sentences where five would do turns the one part of the page
+       nobody has to read into the biggest block on it. Every finding on the
+       sheet is still paired; the key is not a finding. */
+    var scale = '<div class="rscale"><b>' + esc(T("rr_scale")) + ':</b>'
+      + '<div class="rsrow">' + GRADE_LEVELS.map(function (g) {
+          var m = mean(g);
+          return '<span class="rsg">'
+            + '<span class="rsh"><i style="background:' + GRADE_HEX[g] + ';color:'
+            + (g === 2 ? "#3d2c00" : "#fff") + '">' + g + '</i>'
+            + '<b style="color:' + GRADE_TEXT[g] + '">' + esc(gw("g_" + g)) + '</b></span>'
+            + (m ? '<span class="rsm">' + esc(m) + '</span>' : "")
+            + '</span>';
+        }).join("") + '</div></div>';
+    /* "LEVEL" was the column's own word for something the standard already
+       names. ISO 14224 classes the condition NOF / INC / DEG / CRI, that code
+       is what this record exports as, and the office reads the export beside
+       the sheet — so the cell is headed SEVERITY and carries the code after
+       the name. Two grades share DEG, which is the standard's doing and not a
+       rounding here: "serious defect, repair soon" is a degraded failure in
+       its sense, not a critical one. */
+    /* THE ISO CLASS AS A CHIP, NOT AS THE COLUMN'S NAME. The heading was
+       "SEVERITY / ISO 14224" for a day, and it overclaimed: this fleet's
+       scale has five steps and ISO 14224 has four, so the grade is the site's
+       and the CODE is the standard's — "almost ISO 14224", in the office's
+       own words. The column is headed SEVERITY, which is the proper name for
+       what it holds, and the class the record EXPORTS as rides beside the
+       grade with the standard named in its title. Claiming the whole scale is
+       ISO would be a panel saying something it cannot support. */
+    var isoCode = n ? GRADE_ISO[n] : "";
     return '<div class="rrate">'
       + '<div class="rc" style="border-left:4px solid ' + col + '">'
         + '<div class="rk">' + esc(T("rr_rating")) + '</div>'
-        + '<div class="rv" style="color:' + col + '">' + (n || "—") + '</div></div>'
+        + '<div class="rv" style="color:' + GRADE_TEXT[n] + '">' + (n || "—") + '</div></div>'
       + '<div class="rc"><div class="rk">' + esc(T("rr_level")) + '</div>'
-        + '<div class="rv">' + level + '</div></div>'
+        + '<div class="rv" style="color:' + (n ? GRADE_TEXT[n] : "inherit") + '">' + level
+        + (isoCode ? ' <span class="isoc">' + esc(isoCode) + '</span>' : '') + '</div></div>'
       + '<div class="rc rd"><div class="rk">' + esc(T("rr_decision")) + '</div>'
         + '<div class="rv">' + dec + '</div></div>'
       + '</div>' + (compact ? "" : scale);
@@ -2244,13 +2340,42 @@
      round (five "Not recorded" cells), because "no action was required" is
      itself a fact the sheet states rather than an empty space. */
   function actionStrip(T, rec) {
+    /* WHAT COUNTS AS A MAINTENANCE ACTION, AND "MONITOR" DOES NOT.
+       This read `it.action || it.defect || it.cause || grade >= 3`, and every
+       position on every round carries an action — a Normal one carries
+       "Monitor / re-inspect next PM", which is the routine disposition the
+       grade itself implies and not a job for anybody. So a round of nothing
+       but 1s came out flagged, the strip printed the worst of them, and with
+       no defect and no cause behind it the reader got "Direct cause: Not
+       recorded" against a machine with nothing wrong. Reported from the
+       office on 2026-09-14, and they were right to read it as a form
+       somebody had failed to fill in.
+       A maintenance action exists when the position is a FINDING (grade 3 and
+       up, GRADE.isFinding — one rule, in grade.js) or when somebody wrote a
+       defect or a cause on it, which nobody does on a clean position. */
     var flagged = (rec.items || []).filter(function (it) {
-      return it.action || it.defect || it.cause || gnum(it.grade) >= 3; });
+      return it.defect || it.cause || gnum(it.grade) >= 3; });
     flagged.sort(function (a, b) { return gnum(b.grade) - gnum(a.grade); });
     var it = flagged[0] || {};
     var miss = '<b class="miss">' + esc(T("ma_none")) + '</b>';
     function f(k, v) {
       return '<span class="f"><i>' + esc(k) + '</i>' + (v ? '<b>' + esc(v) + '</b>' : miss) + '</span>';
+    }
+    /* NOTHING TO ACT ON IS A SENTENCE, NOT FIVE EMPTY FIELDS. A round with no
+       flagged position printed "Not recorded" five times — under Recorded
+       action, Direct cause, Owner, Work order and Due date — and the office
+       read that as a form somebody had failed to fill in rather than as a
+       machine with nothing wrong. "Not recorded" is the right word for a field
+       that SHOULD carry something and does not; on a clean round none of them
+       should, so the honest thing is to say so once.
+
+       The section still appears. "No action was required" is a finding the
+       sheet states, and an absent heading would leave the reader wondering
+       whether the page had simply lost it — which is the same defect in the
+       other direction. */
+    if (!flagged.length) {
+      return '<div class="subhd" style="margin-top:13px;">' + T.I("ma_head") + '</div>'
+        + '<div class="mact none">' + T.I("ma_clear") + '</div>';
     }
     return '<div class="subhd" style="margin-top:13px;">' + T.I("ma_head") + '</div>'
       + '<div class="mact">'
@@ -2298,35 +2423,33 @@
           : row(T("ap_sup"), "", T("ap_sup_s"), "", true))
       + '</tbody></table>';
   }
-  /* The four-cell metadata strip — the reference's MODEL / SMU / INSPECTED BY /
-     LOCATION row, always four cells so the strip keeps its shape, each honest
-     as "Not recorded" when the round does not carry it. The fourth cell is the
-     location when there is one, else the verifier, else the equipment class —
-     the reference varies its fourth field by inspection type. */
+  /* WHAT THE MASTHEAD DOES NOT ALREADY SAY, WHICH IS THE LOCATION AND NOTHING
+     ELSE.
+
+     This was a four-cell strip: MODEL / SMU / INSPECTED BY / LOCATION, each
+     cell reading "Not recorded" when the round did not carry it. The office
+     struck the whole thing out on 2026-09-14 and they were right — three of
+     the four are already on the sheet, two of them three centimetres above it.
+     The masthead's subtitle line is "TK156 · 2026-09-13 · 8047 h · NHL TR60":
+     the unit, the date, the SMU and the model. The inspector is the CM
+     Technician row of the approval table at the foot, with the date beside it
+     and the status "Inspection complete". A page that says one fact twice
+     spends the reader's attention proving it has nothing new.
+
+     What was NOT anywhere else is the location, and that is real evidence —
+     where the round was actually walked. So the strip is one quiet line when
+     there is a fix, and nothing at all when there is not. Nothing is dropped:
+     what went is the repetition.
+
+     GPS only when it is genuinely a pair of numbers. A record whose gps holds
+     a lat but no lon (or names it `lng`, as a phone build once did) used to
+     reach `.toFixed` on undefined and throw — taking the whole report down,
+     the pure form of this project's defect turned into a hard crash. */
   function metaStrip(T, rec) {
-    /* Labels bilingual (T.I) like the rest of the report, so a bilingual sheet
-       pairs them and a single-language sheet shows the one — the same rule
-       every other label on the page obeys. */
-    function ms(labelKey, val) {
-      return '<div class="ms"><i>' + T.I(labelKey) + '</i>'
-        + (val ? '<b>' + val + '</b>' : '<b class="miss">' + esc(T("ma_none")) + '</b>') + '</div>';
-    }
-    /* GPS only when it is genuinely a pair of numbers. A record whose gps holds
-       a lat but no lon (or names it `lng`, as a phone build once did) used to
-       reach `.toFixed` on undefined and throw — taking the whole report down,
-       the pure form of this project's defect turned into a hard crash. Read
-       both coordinates, accept either lon or lng, and fall back to the
-       supervisor or class the moment the pair is not two finite numbers. */
     var gp = gpsPair(rec.gps);
-    var loc = gp ? { k: "gps", v: esc(gp) }
-            : rec.sup ? { k: "f_sup", v: esc(rec.sup) }
-            : { k: "f_cat", v: esc(rec.clsLabel || "") };
-    return '<div class="mstrip">'
-      + ms("f_model", esc(rec.model || rec.clsLabel || ""))
-      + ms("f_smu", rec.smu ? esc(rec.smu) + ' h' : "")
-      + ms("f_by", esc(rec.by || ""))
-      + ms(loc.k, loc.v)
-      + '</div>';
+    if (!gp) return "";
+    return '<div class="gpsline"><i>' + T.I("gps") + '</i>'
+      + '<b>' + esc(gp) + '</b></div>';
   }
   /* The machine's own evidence — the equipment overview and the general
      photographs — rendered as an inline block so it leads the sheet rather
@@ -2348,6 +2471,27 @@
      template prints but the round did not capture says so in the cell — "Not
      recorded", "Not measured", "No finding" — never blank and never invented. */
   function tbMiss(T, k) { return '<span class="muted">' + esc(T(k || "c_notrec")) + '</span>'; }
+  /* "NOT RECORDED" IS FOR A FIELD THAT SHOULD CARRY SOMETHING AND DOES NOT.
+     A position graded Normal with no defect on it has no direct cause and no
+     detection method, because there is nothing to have caused or detected —
+     so printing "Not recorded" against it says an inspector left a form
+     half-filled, when what actually happened is that they found the machine
+     in order. Reported from the office on 2026-09-14: "when it's 1 Normal, no
+     findings, Direct cause is saying not recorded? It should just be blank."
+     They are right, and it is the false-alarm half of this project's
+     signature defect: a panel claiming a gap it has no evidence for.
+
+     A clean position gets an em-dash, which reads as "does not apply". A
+     position with any finding at all — a grade above Normal, a defect, a
+     particle count, a cause already typed — keeps "Not recorded", because
+     there the field IS expected and its absence is worth seeing. */
+  function tbClean(it) {
+    return gnum(it.grade) === 1 && !it.defect && !it.cause && !it.particle
+      && it.sev !== "DEG" && it.sev !== "CRI";
+  }
+  function tbNA(T, it, k) {
+    return tbClean(it) ? '<span class="muted">—</span>' : tbMiss(T, k);
+  }
   function tbGrade(T, it) {
     var n = gnum(it.grade);
     /* One line: "3 – Degraded" split over two rows in a narrow grade column
@@ -2372,9 +2516,30 @@
         + (c.w ? ' style="width:' + c.w + '"' : "") + '>' + c.th + '</th>';
     }).join("") + '</tr>';
     list.forEach(function (it, i) {
-      x += '<tr class="' + (i % 2 ? "zebra" : "") + '">' + cols.map(function (c) {
+      var zebra = i % 2 ? "zebra" : "";
+      x += '<tr class="' + zebra + '">' + cols.map(function (c) {
         return '<td' + (c.cls ? ' class="' + c.cls + '"' : "") + '>' + c.get(it) + '</td>';
       }).join("") + '</tr>';
+      /* THE INSPECTOR'S OWN WORDS REACH THE OFFICE SHEET. A table-bodied
+         round — Filter Cut, General Inspection, Thermography, GET — had no
+         column for the comment and no row under the position either, so
+         everything an inspector typed about a filter was on the phone, in the
+         record, in the export, and nowhere on the document a superintendent
+         reads. A real value rendered as nothing, on the one field that is not
+         a code or a number.
+
+         Under its own row and inside the same stripe, so it is unmistakably
+         about the position above — the shape the notable-findings table has
+         used since v2 — and in the GRADE's own ink, which is what the office
+         asked for: on a sheet of a dozen positions the eye needs to know
+         which comments are worth reading before it reads them. The INK ramp,
+         never the chip fill; see grade.js. */
+      if (it.comment) {
+        var gc = gnum(it.grade);
+        x += '<tr class="' + zebra + ' rnote"><td class="stripe" colspan="' + cols.length
+          + '" style="border-left-color:' + (GRADE_HEX[gc] || SEV_HEX[it.sev] || "transparent")
+          + (gc ? ';color:' + GRADE_TEXT[gc] : "") + '">' + esc(it.comment) + '</td></tr>';
+      }
     });
     return x + '</table>';
   }
@@ -2424,7 +2589,7 @@
         { th: T.L("c_debris"), get: function (it) {
             var d = [it.particle && ("PC " + it.particle), it.defect].filter(Boolean);
             return d.length ? esc(d.join("; ")) : tbMiss(T, "c_nofind"); } },
-        { th: T.L("c_cause"), get: function (it) { return it.cause ? esc(it.cause) : tbMiss(T); } },
+        { th: T.L("c_cause"), get: function (it) { return it.cause ? esc(it.cause) : tbNA(T, it); } },
         { th: T.L("c_action"), get: function (it) { return tbAct(T, it); } }
       ], rec.items || [])
       + photoGallery(ctx, T, rec, "tb_fc_ev");
@@ -2439,7 +2604,7 @@
         { th: T.L("c_defect"), get: function (it) {
             return it.defect ? esc(it.defect) + (it.iso ? ' <span class="code">ISO ' + esc(it.iso) + '</span>' : "")
                              : tbMiss(T, "c_nofind"); } },
-        { th: T.L("c_detection"), w: "96px", get: function (it) { return it.detect ? esc(it.detect) : tbMiss(T); } },
+        { th: T.L("c_detection"), w: "96px", get: function (it) { return it.detect ? esc(it.detect) : tbNA(T, it); } },
         { th: T.L("c_action"), get: function (it) { return tbAct(T, it); } },
         { th: T.L("c_opstat"), w: "84px", get: function (it) { return it.opstatLabel ? esc(it.opstatLabel) : tbMiss(T); } }
       ], rec.items || [])
@@ -3648,7 +3813,19 @@
       + ((it.grade || it.sev) ? '<div class="chips">' + gradeChip(it.grade) + sevIf(ctx, it) + '</div>' : "")
       + '</div>'
       + (rows ? '<dl>' + rows + '</dl>' : "")
-      + (it.comment ? '<div class="cm">' + esc(it.comment) + '</div>' : "")
+      /* THE INSPECTOR'S OWN WORDS, IN THE COLOUR OF WHAT THEY FOUND. The
+         office asked for it and it earns its place: the comment is the one
+         line on a card that is not a label or a code, and on a board of a
+         dozen positions the eye needs to know which of them are worth reading
+         before reading them. The GRADE ink, never the chip fill — see
+         grade.js's TEXT ramp: the amber fill set as 10.5 px type is 1.83:1
+         and simply is not on the page. A card with no grade keeps the
+         default near-black rather than borrowing a colour that would mean
+         something it does not. */
+      + (it.comment
+          ? '<div class="cm"' + (gnum(it.grade)
+              ? ' style="color:' + GRADE_TEXT[gnum(it.grade)] + '"' : "")
+            + '>' + esc(it.comment) + '</div>' : "")
       + '</div></div>';
   }
 
@@ -4361,8 +4538,22 @@
      reports the band it occupies; a cut landing inside one is lifted to the top
      of that band. A band taller than the room left is skipped rather than
      honoured, because a cut that cannot advance is a document that never ends. */
-  function atomBands(el, sc) {
+  function atomBands(el, sc, cap) {
     var er = el.getBoundingClientRect(), out = [];
+    /* HOW TALL A THING MAY BE AND STILL BE MOVED WHOLE. It was the literal
+       520 — canvas pixels, so about a fifth of a page — and a component card
+       with a photograph in it is three times that. Every card on every sheet
+       was therefore over the cap and skipped, and the fold went through them
+       exactly as if none of this existed: reported from the office on
+       2026-09-14 with a filter card sheared across the page break.
+
+       The right limit is not a number about cards, it is the paper: anything
+       that CAN fit on a page by itself should be moved to the next one rather
+       than cut, and anything that cannot must be allowed to break or the
+       document never advances. The caller passes one page's worth of canvas
+       pixels; the old literal stays as the fallback for a caller that does
+       not, because a small cap protects less than it should but never hangs. */
+    var MAXB = cap && cap > 0 ? cap : 520;
     /* Units of MEANING: a reading and its number, a card and its caption, a key
        entry and its label. Anything a reader has to hold in one glance belongs
        on this list. */
@@ -4372,10 +4563,18 @@
        excavator came back with "Track frame / guards" and "Track sag / top
        chain" on page one and their Russian sub-labels alone on page two — a
        whole sheet of paper carrying two fragments of a caption. */
-    var q = el.querySelectorAll("tr,.lgrow,.pkey > *,.ckey > *,.mapkey > *,figure,.cell");
+    /* `.cel`, NOT `.cell`. The component card's class is `cel`, this list said
+       `cell`, and `cell` is a class no element on this report has ever
+       carried — so the one band a reader most needs kept together matched
+       nothing at all, for as long as the list has existed. A selector that
+       silently selects nothing is this project's signature defect in one
+       letter: no error, no warning, and a card cut in half months later.
+       Nothing else is added here on a guess — a selector is only worth having
+       if something on the page carries it, which is the whole lesson. */
+    var q = el.querySelectorAll("tr,.lgrow,.pkey > *,.ckey > *,.mapkey > *,figure,.cel");
     for (var i = 0; i < q.length; i++) {
       var r = q[i].getBoundingClientRect();
-      if (r.height <= 0 || r.height > 520) continue;
+      if (r.height <= 0 || r.height > MAXB) continue;
       out.push([(r.top - er.top) * sc, (r.bottom - er.top) * sc]);
     }
     /* And units of LEGIBILITY: the lines. A running paragraph is allowed to
@@ -4400,13 +4599,33 @@
     return out;
   }
   function liftCut(bands, cut, floor) {
-    /* Nested bands (a table inside a cell) nest their ranges too, so the lowest
-       conflicting top is the one that clears all of them. */
+    /* Nested bands (a table inside a cell, a line inside a card) nest their
+       ranges too, so the lowest conflicting top is the one that clears all of
+       them — WHEN it can be honoured.
+
+       IT CANNOT ALWAYS, AND GIVING UP WAS WRONG. This took the lowest
+       conflicting top and, if that sat before the floor, returned the
+       ORIGINAL cut — through every band it had just found. That was harmless
+       while the bands were small (a row, a line): a band starting before the
+       floor was one the page had no room for anyway. The moment the component
+       card became an atom it stopped being harmless — a card taller than the
+       room left has its top before the floor, so the whole lift was abandoned
+       and the fold went back to slicing the line it landed on. Reported by
+       tests/pagecut.cjs the same hour the card was protected: a Russian
+       action string sheared through the x-height, by the fix for the defect
+       above it.
+
+       So: of the bands this cut falls inside, take the lowest top that is
+       ACTUALLY reachable. A card that cannot be moved whole is then still
+       broken between two of its own lines rather than through one of them,
+       which is the point. Only when nothing at all is reachable does the cut
+       stand where it fell. */
     var best = cut;
     for (var i = 0; i < bands.length; i++)
-      if (cut > bands[i][0] + 0.5 && cut < bands[i][1] - 0.5 && bands[i][0] < best)
+      if (cut > bands[i][0] + 0.5 && cut < bands[i][1] - 0.5
+          && bands[i][0] > floor && bands[i][0] < best)
         best = bands[i][0];
-    return best > floor ? Math.floor(best) : cut;
+    return best < cut ? Math.floor(best) : cut;
   }
 
   /* A PHOTOGRAPH THAT NEVER ARRIVED MUST NOT PRINT AS A GREY RECTANGLE.
@@ -4502,6 +4721,11 @@
   };
   /* Run the fit over a laid-out document. One reader for the PDF and for the
      estimate, so the page count is the count of the pages that get made. */
+  /* The cut rule, reachable by the suite. tests/rptclean.cjs asks the engine
+     where a fold may not fall rather than keeping its own copy of the
+     selector — which is the whole reason `.cell` protected nothing for months
+     without one test noticing. */
+  CMR.__atomBands = atomBands;
   CMR.fitAll = function (holder, sections, roomPx) {
     var els = Array.prototype.slice.call(holder.children), out = [];
     for (var i = 0; i < els.length; i++)
@@ -4613,7 +4837,10 @@
         if(!c.width||!c.height) continue;
         var k = cw/c.width, hh = c.height*k;
         var sc = c.width / (els[i].getBoundingClientRect().width || c.width);
-        var bands = atomBands(els[i], sc);
+        /* One full page, in this canvas's own pixels: anything that fits
+           inside it is moved whole rather than cut, anything taller has to be
+           allowed to break or the document never advances. See atomBands. */
+        var bands = atomBands(els[i], sc, (bottom - top) / k);
         if(opts.sections[i].nb && drew){ doc.addPage(); y=top; }
         else if(drew && hh<=bottom-top && y+hh>bottom){ doc.addPage(); y=top; }
         var sY=0;

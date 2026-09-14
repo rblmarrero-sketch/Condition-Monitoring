@@ -72,8 +72,15 @@ const save = async p => { await p.evaluate(PHOTOS); await p.evaluate(() => goSte
   await save(p);
   ok('still refused', (await queued(p)) === 0);
   d = await dlgTxt(p);
-  ok('it asks for the target date, the comment, the close-up and the notification',
-     /target date/.test(d) && /comment/.test(d) && /close-up/.test(d) && /notification/.test(d), d);
+  /* THE TARGET DATE IS NO LONGER ASKED FOR, BECAUSE THE GRADE ALREADY
+     ANSWERED IT. Since build 361 a 5 arrives with tomorrow's date already in
+     the field (defaultTargetFor — a 5 stops the machine, the date is not the
+     question), so a block message still demanding it would be the app asking
+     for something it had itself supplied. What is left is what only a person
+     can give: the words, the photograph and the call to the supervisor. */
+  ok('it asks for the comment, the close-up and the notification',
+     /comment/.test(d) && /close-up/.test(d) && /notification/.test(d), d);
+  ok('  and not for the date it filled in itself', !/target date/.test(d), d);
   ok('and no longer for the defect or the action', !/a defect/.test(d) && !/recommended action/.test(d), d);
   await close(p);
 
@@ -111,7 +118,10 @@ const save = async p => { await p.evaluate(PHOTOS); await p.evaluate(() => goSte
   await save(p);
   ok('refused without them', (await queued(p)) === 2);
   d = await dlgTxt(p);
-  ok('naming the action and the target date', /recommended action/.test(d) && /target date/.test(d), d);
+  /* Same again one grade down: a 3 gets the next planned service for this
+     round on this machine, so only the action is still owing. */
+  ok('naming the action, and not the date it filled in itself',
+     /recommended action/.test(d) && !/target date/.test(d), d);
   await close(p);
   await p.evaluate(() => { draft.positions[curItem].action = 'MON'; draft.positions[curItem].target = '2026-09-20'; });
   await save(p);

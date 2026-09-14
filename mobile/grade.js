@@ -49,6 +49,21 @@
   var CSS = { 1: 'var(--good)', 2: 'var(--warning)', 3: 'var(--serious)', 4: 'var(--severe)', 5: 'var(--critical)' };
   var HEX = { 1: '#0a7134', 2: '#fab219', 3: '#ec835a', 4: '#d9511f', 5: '#c8232c' };
   var INK = { 1: '#fff', 2: '#3d2c00', 3: '#fff', 4: '#fff', 5: '#fff' };
+  /* THE SAME FIVE GRADES AS INK ON WHITE, WHICH IS NOT THE SAME RAMP.
+     HEX above is a FILL: a solid chip with white or dark type on it, and
+     chosen for that. Set as type on a white page the middle of it collapses —
+     the amber is 1.83:1 and the orange 2.64:1, both of them unreadable and
+     both of them well under the 4.5:1 this report holds every other word to.
+     A grade written in its own colour is worth having (the office asked for
+     it on the comment lines), so the colour it is written in is stated here,
+     once, rather than each surface darkening the fill by eye and arriving
+     somewhere different.
+
+     Measured against white: 6.13 · 5.93 · 5.95 · 6.07 · 6.80 — one family,
+     every one of them past the report's own floor of #5b6670 (5.87). Keep
+     them there if they are ever retuned: the point of this ramp is that it
+     can be read on paper, by somebody who is not looking for it. */
+  var TEXT = { 1: '#0a7134', 2: '#8a5a00', 3: '#a8451b', 4: '#b03a14', 5: '#b31a24' };
 
   var NAME = {
     en: { 1: 'Normal', 2: 'Incipient', 3: 'Degraded', 4: 'Severe', 5: 'Critical' },
@@ -211,7 +226,7 @@
   function requires(n) { n = num(n); return n ? REQUIRE[n] : {}; }
 
   G.GRADE = {
-    LEVELS: LEVELS, LEGACY: LEGACY, ISO: ISO, HEX: HEX, CSS: CSS,
+    LEVELS: LEVELS, LEGACY: LEGACY, ISO: ISO, HEX: HEX, CSS: CSS, TEXT: TEXT,
     num: num, isLegacy: isLegacy, name: name, gloss: gloss, action: action, label: label,
     meaning: meaning, family: family, iso: iso, fromIso: fromIso,
     css: css, hex: hex, ink: ink, cls: cls, worst: worst, roundGrade: roundGrade,

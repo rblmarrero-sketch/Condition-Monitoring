@@ -41,12 +41,17 @@ const py = path.join(tmp, 'mk.py');
 const iso = d => new Date(Date.now() - d * 86400000).toISOString().slice(0, 10);
 
 /* One python file, told which headers to DROP, so the fallback cases are the
-   same workbook minus a column rather than a second fixture to keep in step. */
+   same workbook minus a column rather than a second fixture to keep in step.
+   argv[4] is extra rows a case needs and argv[5] ("only") drops the standard
+   ones — a case about a column the standard rows do not exercise writes its
+   own three lines rather than bending the fixture every other case reads. */
 fs.writeFileSync(py, `
 import sys, json, openpyxl
 from datetime import datetime, timedelta, date
 cols = json.loads(sys.argv[2])
 drop = set(json.loads(sys.argv[3]))
+extra = sys.argv[4] if len(sys.argv) > 4 else ''
+only  = (len(sys.argv) > 5 and sys.argv[5] == 'only')
 cols = [c for c in cols if c not in drop]
 wb = openpyxl.Workbook(); ws = wb.active; ws.append(cols)
 i = {c: n for n, c in enumerate(cols)}
@@ -57,7 +62,7 @@ def row(**kw):
     for k, v in kw.items():
         if k in i: r[i[k]] = v
     return r
-for n, (raised_off, det_off, plan_off) in enumerate([(0, -1, 15), (-1, -2, 15), (-7, -8, -3)]):
+for n, (raised_off, det_off, plan_off) in ([] if only else enumerate([(0, -1, 15), (-1, -2, 15), (-7, -8, -3)])):
     ws.append(row(**{
       'Asset description': 'x', 'Equip no': 'TK%03d' % (150 + n),
       'Work request creation date': dt(raised_off),
@@ -70,17 +75,20 @@ for n, (raised_off, det_off, plan_off) in enumerate([(0, -1, 15), (-1, -2, 15), 
       'Responsible person': 'Slam', 'Equipmen type': 'TRUCK, DUMP',
       'System component': 'x', 'Defect type': '1.01 Leakage',
       'WODefect cause': 'wear', 'Defect description': 'leak'}))
-ws.append(row(**{'Asset description': 'x', 'Equip no': 'TK150',
-  'Maintenence type': '1000 Hours service Planned', 'Start date plan': dt(2),
-  'End date plan': None, 'Start date actual': None, 'End date actual': None,
-  'Work order status': 'Open', 'CMMSWork order status': 'Open',
-  'Priority': 'P4', 'Work order number': 'WO-018000'}))
+if not only:
+    ws.append(row(**{'Asset description': 'x', 'Equip no': 'TK150',
+      'Maintenence type': '1000 Hours service Planned', 'Start date plan': dt(2),
+      'End date plan': None, 'Start date actual': None, 'End date actual': None,
+      'Work order status': 'Open', 'CMMSWork order status': 'Open',
+      'Priority': 'P4', 'Work order number': 'WO-018000'}))
+if extra: exec(extra)
 wb.save(sys.argv[1])
 `);
 
-function build(name, drop) {
+function build(name, drop, extra, only) {
   const xl = path.join(tmp, name + '.xlsx');
-  execFileSync('python3', [py, xl, JSON.stringify(COLS), JSON.stringify(drop || [])],
+  execFileSync('python3', [py, xl, JSON.stringify(COLS), JSON.stringify(drop || []),
+                           extra || '', only ? 'only' : ''],
                { stdio: ['ignore', 'ignore', 'pipe'] });
   const out = path.join(tmp, name + '.js');
   execFileSync('python3', [path.join(ROOT, 'ingest/ingest_work_orders.py'), xl, '--out', out],
@@ -153,7 +161,59 @@ const dash = fs.readFileSync(path.join(ROOT, 'dashboard/index.html'), 'utf8');
 ok('  the column is headed by what it holds', /cw_c_date:"Raised"/.test(dash));
 ok('  and the panel reads cmDateFrom', /cmDateFrom/.test(dash));
 
-console.log('\n6. the planned service half of the file is untouched');
+console.log('\n6. a cause 1C has settled in a different field is still a cause');
+/* THE CAUSE IS WRITTEN IN THREE PLACES AND ARRIVES IN THEM AT THREE MOMENTS.
+   Reported from the office on 2026-09-14: "some causes of defect are blank,
+   this is mandatory so it should never be blank". Measured on the live file:
+   of 48 defects, all 19 at status "Registered" had a blank cause and all 29
+   past it had one. Not eighteen of nineteen — every single one. A defect at
+   Registered is still a WORK REQUEST, and the cause the inspector typed sits
+   in the request's own field; the work order's copy, which is all this
+   ingester read, is only filled when a work order is actually raised. The
+   cause was recorded and the panel rendered it as nothing. */
+const C = build('cause', [], `
+ws.append(row(**{'Asset description':'x','Equip no':'TK901',
+  'Work request creation date': dt(0), 'Start date plan': dt(5),
+  'CMMSWork order status':'Registered','Work order status':'Open','Priority':'P2',
+  'Maintenence type':'P4 Planned Repair','Responsible person':'Slam',
+  'Work request number':'DD-00099001','WRDefect cause':'Iznos uplotneniya'}))
+ws.append(row(**{'Asset description':'x','Equip no':'TK902',
+  'Work request creation date': dt(0), 'Start date plan': dt(5),
+  'CMMSWork order status':'Elimination scheduled','Work order status':'Open','Priority':'P2',
+  'Maintenence type':'P4 Planned Repair','Responsible person':'Slam',
+  'Work request number':'DD-00099002','Work order number':'WO-099002',
+  'WODefect cause':'Povrezhden shlang'}))
+ws.append(row(**{'Asset description':'x','Equip no':'TK903',
+  'Work request creation date': dt(0), 'Start date plan': dt(5),
+  'CMMSWork order status':'Registered','Work order status':'Open','Priority':'P2',
+  'Maintenence type':'P4 Planned Repair','Responsible person':'Slam',
+  'Work request number':'DD-00099003'}))
+`, true);
+const by = {};
+C.cmWorkOrders.filter(r => !r.planned).forEach(r => { by[r.asset] = r; });
+ok('the work order\'s own cause is still the first answer',
+   (by.TK902 || {}).cause === 'Povrezhden shlang' && (by.TK902 || {}).causeFrom === 'wo',
+   JSON.stringify([(by.TK902 || {}).cause, (by.TK902 || {}).causeFrom]));
+ok('  a Registered defect reads the cause off the work REQUEST',
+   (by.TK901 || {}).cause === 'Iznos uplotneniya' && (by.TK901 || {}).causeFrom === 'wr',
+   JSON.stringify([(by.TK901 || {}).cause, (by.TK901 || {}).causeFrom]));
+ok('  and one with nothing anywhere is not invented',
+   (by.TK903 || {}).cause == null && (by.TK903 || {}).causeFrom == null,
+   JSON.stringify([(by.TK903 || {}).cause, (by.TK903 || {}).causeFrom]));
+ok('  the file totals where every cause came from',
+   JSON.stringify(C.cmCauseFrom) === JSON.stringify({ wo: 1, wr: 1, cert: 0, none: 1 }),
+   JSON.stringify(C.cmCauseFrom));
+ok('  all three columns are named, so a missing one is visible',
+   C.cmColumns.cause === 'WODefect cause' && C.cmColumns.causeWR === 'WRDefect cause'
+   && C.cmColumns.causeCert === 'CERTTDefect cause',
+   [C.cmColumns.cause, C.cmColumns.causeWR, C.cmColumns.causeCert].join(' | '));
+ok('  and the office has the words for a cause nobody has typed',
+   (dash.match(/\bcw_nocause\s*:/g) || []).length === 2,
+   (dash.match(/\bcw_nocause\s*:/g) || []).length + ' definition(s)');
+ok('  which it reads off the file, not off the blank cells',
+   /cmCauseFrom/.test(dash));
+
+console.log('\n7. the planned service half of the file is untouched');
 ok('planned services still come through', Array.isArray(D.workOrders) && D.workOrders.length === 1,
    (D.workOrders || []).length + ' service(s)');
 

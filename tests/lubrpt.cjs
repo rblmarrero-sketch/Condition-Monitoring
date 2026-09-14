@@ -109,7 +109,13 @@ const SEED = async () => {
      'off standard is said in Russian too');
 
   console.log('\nand it is still a document');
-  ok(/Inspected by|Осмотр/.test(en),
+  /* "Inspected by" was the four-cell metadata strip's label, and that strip
+     went on 2026-09-14 — three of its four cells said what the masthead and
+     the approval table already said. The block this line is about is the
+     approval table, so it is asked for by its own words: the three roles and
+     the technician's status. */
+  ok(/CM Technician/.test(en) && /Maintenance Supervisor/.test(en)
+     && /Inspection complete/.test(en),
      'the signature block survived being moved onto the table');
   ok(txt.en.indexOf('__N__') < 0, 'no section number was left unfilled');
 

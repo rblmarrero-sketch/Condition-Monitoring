@@ -3637,22 +3637,22 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=360"></script>
+<script src="../data/magnetic_plug.js?v=361"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=360"></script>
-<script src="../mobile/hme.js?v=360"></script>
-<script src="../mobile/mp-fc.js?v=360"></script>
-<script src="../mobile/hme-cascade.js?v=360"></script>
-<script src="../mobile/temp-limits.js?v=360"></script>
+<script src="../data/work_orders.js?v=361"></script>
+<script src="../mobile/hme.js?v=361"></script>
+<script src="../mobile/mp-fc.js?v=361"></script>
+<script src="../mobile/hme-cascade.js?v=361"></script>
+<script src="../mobile/temp-limits.js?v=361"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=360"></script>
-<script src="../mobile/normalize.js?v=360"></script>
-<script src="../mobile/terms.js?v=360"></script>
+<script src="../mobile/assets.js?v=361"></script>
+<script src="../mobile/normalize.js?v=361"></script>
+<script src="../mobile/terms.js?v=361"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -3671,19 +3671,19 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=360"></script>
-<script src="../mobile/edits.js?v=360"></script>
-<script src="../mobile/due.js?v=360"></script>
-<script src="../mobile/wear.js?v=360"></script>
-<script src="../mobile/wear-map.js?v=360"></script>
-<script src="../mobile/lube.js?v=360"></script>
-<script src="../mobile/lube-overrides.js?v=360"></script>
-<script src="../mobile/lube2027.js?v=360"></script>
-<script src="../mobile/lube-tds.js?v=360"></script>
+<script src="../mobile/grade.js?v=361"></script>
+<script src="../mobile/edits.js?v=361"></script>
+<script src="../mobile/due.js?v=361"></script>
+<script src="../mobile/wear.js?v=361"></script>
+<script src="../mobile/wear-map.js?v=361"></script>
+<script src="../mobile/lube.js?v=361"></script>
+<script src="../mobile/lube-overrides.js?v=361"></script>
+<script src="../mobile/lube2027.js?v=361"></script>
+<script src="../mobile/lube-tds.js?v=361"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=360"></script>
-<script src="../mobile/machine-photos.js?v=360"></script>
+<script src="../mobile/upload-defaults.js?v=361"></script>
+<script src="../mobile/machine-photos.js?v=361"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3692,17 +3692,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=360"></script>
-<script src="../mobile/get.js?v=360"></script>
-<script src="../mobile/points.js?v=360"></script>
-<script src="../mobile/uc-points.js?v=360"></script>
-<script src="../mobile/inspect-guide.js?v=360"></script>
-<script src="../mobile/get-figs.js?v=360"></script>
-<script src="../mobile/body-points.js?v=360"></script>
-<script src="../mobile/body-map.js?v=360"></script>
-<script src="../mobile/jspdf.umd.min.js?v=360"></script>
-<script src="../mobile/html2canvas.min.js?v=360"></script>
-<script src="../mobile/report-core.js?v=360"></script>
+<script src="../mobile/machine-fig.js?v=361"></script>
+<script src="../mobile/get.js?v=361"></script>
+<script src="../mobile/points.js?v=361"></script>
+<script src="../mobile/uc-points.js?v=361"></script>
+<script src="../mobile/inspect-guide.js?v=361"></script>
+<script src="../mobile/get-figs.js?v=361"></script>
+<script src="../mobile/body-points.js?v=361"></script>
+<script src="../mobile/body-map.js?v=361"></script>
+<script src="../mobile/jspdf.umd.min.js?v=361"></script>
+<script src="../mobile/html2canvas.min.js?v=361"></script>
+<script src="../mobile/report-core.js?v=361"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -4639,6 +4639,7 @@ const I18N={
   cw_plan_on:"repair planned to start {d}", cw_plan_none:"no planned start in 1C",
   cw_notraised:"{n} of these rows carry no creation date in 1C. They are filed under {f} instead, so their place in this list is when the repair is planned — not when the defect was written up.",
   cw_from_detected:"the date the defect was detected", cw_from_plan:"the planned start of the repair",
+  cw_nocause:"{n} defect(s) carry no cause in 1C — not on the work order, the work request or the certification. The site treats the cause as mandatory, so these are worth chasing in 1C.",
   cw_c_system:"System component", cw_c_prio:"Priority", cw_c_dtype:"Defect type",
   cw_c_descr:"Defect description", cw_c_cause:"Cause of defect",
   cw_c_status:"Status", cw_c_by:"Raised by",
@@ -5501,6 +5502,7 @@ const I18N={
   cw_plan_on:"ремонт запланирован с {d}", cw_plan_none:"плановая дата начала в 1С не указана",
   cw_notraised:"У {n} строк в 1С нет даты создания заявки. Они отнесены к «{f}», поэтому их место в списке — это дата планируемого ремонта, а не дата регистрации дефекта.",
   cw_from_detected:"дата обнаружения дефекта", cw_from_plan:"плановая дата начала ремонта",
+  cw_nocause:"У {n} дефектов в 1С не указана причина — ни в наряде, ни в заявке, ни в сертификации. Причина обязательна, поэтому такие строки стоит проверить в 1С.",
   cw_c_system:"Узел / система", cw_c_prio:"Приоритет", cw_c_dtype:"Тип дефекта",
   cw_c_descr:"Описание дефекта", cw_c_cause:"Причина дефекта",
   cw_c_status:"Статус", cw_c_by:"Заявил",
@@ -15986,12 +15988,12 @@ function cwCsv(){
   const rows=[["date","date_source","raised","detected","planned_start",
                "asset","defect_no","work_request_number","equipment_type",
                "system_component","priority","defect_type","defect_description",
-               "cause_of_defect","status","raised_by","work_order","maintenance_type",
+               "cause_of_defect","cause_source","status","raised_by","work_order","maintenance_type",
                "is_planned_service"]];
   cwRows().forEach(r=>rows.push([r.date||"", r.dateFrom||"", r.raised||"", r.detected||"",
     r.planStart||"", r.asset||"", r.defect||"", r.requestNo||"",
     r.eqType||"", r.system||"", r.priority||"", r.defectType||"", r.descr||"", r.cause||"",
-    r.status||"", r.by||"", r.woNumber||"", r.maintType||"", r.planned?1:0]));
+    r.causeFrom||"", r.status||"", r.by||"", r.woNumber||"", r.maintType||"", r.planned?1:0]));
   const csv=rows.map(r=>r.map(v=>{ const x=String(v==null?"":v);
     return /[",\n]/.test(x) ? '"'+x.replace(/"/g,'""')+'"' : x; }).join(",")).join("\n");
   const a=document.createElement("a");
@@ -17020,6 +17022,16 @@ function renderCmWoTab(){
        a modifier no rule paints is a class that says nothing. */
     if(nf) html += `<div class="note">${esc(t("cw_notraised",{ n:String(nf),
       f: t(df.planStart ? "cw_from_plan" : "cw_from_detected") }))}</div>`;
+    /* A CAUSE THE SITE TREATS AS MANDATORY AND 1C HAS NOT GOT. The column was
+       being read from the WORK ORDER alone, and 1C only fills that once a work
+       order is raised — so every defect still at "Registered" printed an
+       em-dash against a cause the inspector HAD typed, into the work
+       request's own field. That is fixed at the ingest; what is left is the
+       genuine remainder, and it gets a number rather than a row of dashes
+       nobody can act on. Silent when there is none, because a guard that
+       fires on nothing is the noise a real one hides in. */
+    const cf = D.cmCauseFrom || {};
+    if(cf.none) html += `<div class="note">${esc(t("cw_nocause",{ n:String(cf.none) }))}</div>`;
     warn.innerHTML = html;
   }
   if($("cwAsOf")) asOfInto($("cwAsOf"), D.generated);
@@ -17364,8 +17376,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=360"></script>
-<script src="sync-adapter.js?v=360"></script>
-<script src="report.js?v=360"></script>
+<script src="drive.js?v=361"></script>
+<script src="sync-adapter.js?v=361"></script>
+<script src="report.js?v=361"></script>
 </body>
 </html>
