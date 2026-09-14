@@ -167,10 +167,22 @@ const server = http.createServer((req, res) => {
     if (!a) return null;
     SCHED.byUnit[a.n] = [{ wo: 'WO-9', hours: 4000, types: ['FC', 'INSP', 'MP', 'TB'],
                            plan: DUE.today(), priority: 'P3 Planned (PM)' }];
-    return { unit: a.n, offered: [...visitRounds(a.n)].sort() };
+    /* ASKED, NOT REMEMBERED. This held the literal ["FC"] — a copy of which
+       rounds the site had taken a KAMAZ off on 12 September — so when they
+       took it off the rest on the 14th the suite failed on correct code and
+       said the opposite of the truth. The rule lives in due.js; the only
+       thing worth asserting here is that this screen OBEYS it. */
+    const offered = [...visitRounds(a.n)].sort();
+    return { unit: a.n, offered,
+             held: offered.filter(ty => !!DUE.offRound(ty, a)),
+             onAny: ['MP','FC','INSP','TEMP','UC','GET','TB','LUBE']
+                      .filter(ty => !DUE.offRound(ty, a)) };
   });
-  ok('a KAMAZ is offered only the round it is still on',
-     km && JSON.stringify(km.offered) === '["FC"]', km && km.unit + ' -> ' + JSON.stringify(km.offered));
+  ok('a round the site has taken off this machine is never offered',
+     km && km.held.length === 0, km && km.unit + ' -> ' + JSON.stringify(km.offered));
+  ok('  and with a KAMAZ off every round, nothing is offered at all',
+     km && km.onAny.length === 0 && km.offered.length === 0,
+     km && 'still on ' + JSON.stringify(km.onAny));
 
   console.log('\n3. THE CARRY — what the inspector does not answer twice');
   const carried = await p.evaluate(() => {

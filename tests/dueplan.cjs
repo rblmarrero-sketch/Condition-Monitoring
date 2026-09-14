@@ -115,10 +115,21 @@ const server = http.createServer((req, res) => {
                            plan: d, priority: 'P3 Planned (PM)' }];
     const got = planRows('').filter(r => r.unit === a.n).map(r => r.ty).sort();
     delete SCHED.byUnit[a.n];
-    return { unit: a.n, got };
+    /* ASKED, NOT REMEMBERED. This held the literal ["FC"] — a copy of which
+       rounds the site had taken a KAMAZ off on 12 September — so when they
+       took it off the rest on the 14th the suite failed on correct code and
+       said the opposite of the truth. The rule lives in due.js; what belongs
+       here is that the 1C plan OBEYS it. */
+    return { unit: a.n, got,
+             held: got.filter(ty => !!DUE.offRound(ty, a)),
+             onAny: ['MP','FC','INSP','TEMP','UC','GET','TB','LUBE']
+                      .filter(ty => !DUE.offRound(ty, a)) };
   }, day(1));
-  ok('a KAMAZ is proposed only the round it is still on',
-     km && JSON.stringify(km.got) === '["FC"]', km && km.unit + ' -> ' + JSON.stringify(km.got));
+  ok('a round the site has taken off a machine is never proposed here',
+     km && km.held.length === 0, km && km.unit + ' -> ' + JSON.stringify(km.got));
+  ok('  and with a KAMAZ off every round, the 1C plan proposes none',
+     km && km.onAny.length === 0 && km.got.length === 0,
+     km && 'still on ' + JSON.stringify(km.onAny));
 
   console.log('\n3. THE OTHER COUNTS DO NOT MOVE');
   const counts = await p.evaluate(() => {

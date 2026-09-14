@@ -200,16 +200,25 @@
        invent — this comes off the list when they say so.
        --------------------------------------------------------------------- */
     OFF: {
-      INSP: [{ model: 'KAMAZ', why: 'off_kamaz', since: '2026-09-12' }],
-      /* Added the same day, once the office had seen what the exclusion did
-         to the schedule: the KAMAZ trucks come off the plug round and the
-         body round as well. All three are the rounds their class (HT) put
-         them on, so after this a KAMAZ is proposed no Condition Monitoring
-         work at all — which is a large thing to be true quietly, and is why
-         the count of held-off machines is on the Due screen and the Plan vs
-         Actual tab rather than left to this file. */
-      MP:   [{ model: 'KAMAZ', why: 'off_kamaz', since: '2026-09-12' }],
-      TB:   [{ model: 'KAMAZ', why: 'off_kamaz', since: '2026-09-12' }],
+      /* '*' IS EVERY ROUND TYPE, AND IT IS A WILDCARD ON PURPOSE.
+
+         This began as three entries — INSP on 12 September, then MP and TB
+         the same day once the office saw what the first one did. All three
+         are the rounds class HT puts a KAMAZ on, so the three together
+         happened to mean "no Condition Monitoring work at all". Happened to.
+         The site asked on 14 September for that to be the RULE — every
+         inspection and every CM round, case by case from here — and an
+         enumerated list cannot say that: add a ninth round type, or move one
+         KAMAZ into a class that carries FC or LUBE, and work reappears for a
+         machine nobody put back on. Silent, plausible, and found months later
+         by somebody noticing a truck on a list it should not be on.
+
+         So it is stated once, as the wildcard, and every round type reads it.
+         Nothing else needs to know: offRound() consults '*' alongside the
+         type, so heldOffUnits, paHeldOff, planRows and duePlanRows all follow
+         with no change. A per-type entry still works and still stacks on top
+         of this, for the next exception that is genuinely about one round. */
+      '*': [{ model: 'KAMAZ', why: 'off_kamaz', since: '2026-09-14' }],
     },
   };
 
@@ -217,8 +226,12 @@
      register ({n, cls, cat, m, mk}); anything else answers null, because a
      machine we know nothing about is not one we can hold off anything. */
   function offRound(type, asset) {
-    var rules = D.OFF && D.OFF[type];
-    if (!rules || !asset) return null;
+    if (!asset || !D.OFF) return null;
+    /* The wildcard first, then anything stated for this round in particular.
+       Concatenated rather than either/or: a machine held off everything AND
+       named under one round must not depend on which list is consulted. */
+    var rules = (D.OFF['*'] || []).concat(D.OFF[type] || []);
+    if (!rules.length) return null;
     var model = String(asset.m || '') + ' ' + String(asset.mk || '');
     var unit = String(asset.n || '').toUpperCase();
     for (var i = 0; i < rules.length; i++) {
