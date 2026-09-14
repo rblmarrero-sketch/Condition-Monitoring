@@ -214,6 +214,76 @@ reclaimed file must rig ALL THREE readers (`tests/staleblob.cjs`,
 `tests/recovery.cjs`); one that rigs FileReader alone is the field case, and
 the photograph is expected to be SENT (`tests/readpath.cjs`).
 
+**A FAILURE WITH NOWHERE TO GO STILL LEAVES A MARK** (`bad`, `window.__errs`,
+build 372). `try{ dbDel(DRAFT_ID); }catch(e){}` reads as a guard and catches
+nothing: the call returns a promise before it can fail, so the catch never runs
+and the failure becomes an unhandled rejection — which neither surface listened
+for. Six had shipped. The one with a round in it is `resetForm()`: on a phone
+whose IndexedDB refuses writes the draft outlives its own round and
+`offerDraft()` restores it on the resume path WITHOUT ASKING, which is how one
+walk reaches the folder twice (`draftStale` makes that path ask). The others
+were the readiness card at three call sites — a rejection left the card showing
+its previous verdict — the worker's config mirror and `askPersist`. The cut is
+in two places, not six: `bad(where,e)` plus `unhandledrejection` and window
+`error` listeners ABOVE EVERY OTHER SCRIPT on both surfaces, so a failure
+nobody handled is recorded anyway, including in code written later; and
+`tests/audit-scan.cjs` refuses a sync `try` around a call the file declares
+`async` (`tests/norej.cjs`).
+
+**AN IDLE OFFICE PAGE MAKES NO WORK FOR ITSELF** (build 374). Equipment
+History, a unit with photographs, a backend attached: the whole history
+destroyed and rebuilt every 15 ms — 210 repaint batches in three seconds,
+measured, with nobody touching the page. `renderHistory()` ends by asking for
+the unit's photographs, `pullDrivePhotos()` repaints when photographs arrive,
+and `ensurePhotos()` answered with how many the unit WANTS rather than how many
+that call ADDED, so with everything cached it was truthy for ever. Under it,
+the cache pass held every stored copy to the INDEX's claimed length — right for
+a re-sent round landing under the same name with other bytes, but a file whose
+index size is simply wrong is then dropped and refetched on every pass, with a
+request in it. What a person sees is not "slow": it is a photograph that cannot
+be CLICKED, because the card is rebuilt under the cursor before the press
+lands. The pull reports what it added; the cache is held to our own measurement
+once we have one, and `stale()` remains the one place "the index now says a
+different length" is answered (`tests/noloop.cjs`).
+
+**THE UPLOAD IS PREFLIGHTED, AND `function.js` ANSWERING OPTIONS IS LOAD-BEARING.**
+`postT` is an XMLHttpRequest because fetch cannot watch its own upload, and
+ATTACHING ANY LISTENER TO `xhr.upload` makes a request non-simple whatever its
+content type — so "both clients send text/plain, so no preflight is needed"
+stopped being true the day the idle timeout arrived, silently, and two comments
+went on asserting it. Live it costs one round trip an hour, not one per file
+(`Access-Control-Max-Age: 3600`). Two things follow: this endpoint must GO ON
+answering OPTIONS — remove it and every photograph and sidecar stops uploading
+everywhere at once — and the retired Apps Script has `doGet` and `doPost` and no
+`doOptions` and cannot serve one, so switching the old backend back on is NOT a
+one-step fallback. `tests/audit.cjs` §8 asserts the preflight happens and is
+answered.
+
+**A RED SUITE THAT NOBODY READS IS THE NOISE THE NEXT FAILURE HIDES IN.** Four
+suites — `phase3`, `prevmeas`, `wedge`, `audit` — were carried as "known" for
+months. Every one was correct; one was reporting the re-render loop above. None
+needed a judgement call to diagnose: a DOM mutation counter, a request log, a
+stack trace and the app's own constants settled all four. Three of them were
+keeping their own copy of something the app owns — a page count the report's
+stated shape had outgrown, a 30 s deadline where the app gives
+`TEAM_TIMEOUT_FULL` 150, a network flag flipped while a paint was still in
+flight (`netfresh`, which failed under load and passed alone, i.e. "flaky").
+**A failing suite is fixed or explained the same day; it is never carried.**
+
+**AND EVERY INSTRUMENT PROVES IT CAN STILL SEE, ON EVERY RUN.** A clean report
+and a blind one are the same text, so each tightening of a check is a step
+toward one that looks at nothing and never complains. `tests/audit-scan.cjs`
+plants one fault of every kind it knows and reports a check that misses its own
+as BLIND, in place of the clean bill; `tests/crawl.cjs` plants a throw and a
+`console.error`; `tests/noloop.cjs` plants a repaint. Each also states what it
+READ — the language tables' sizes, the constants compared, the screens visited —
+because a zero over a zero is not an answer. The scanner's own first two
+answers were wrong in exactly the two shapes this project produces: 86 findings
+that were artefacts of its parser, then silence caused by a lexer that did not
+know a regex literal from a division and read a template literal as "up to the
+next backtick". Every unit's braces must balance to exactly zero; that balance
+is the proof the reading is real.
+
 **NOTHING REACHES STORAGE THAT THIS PAGE HAS NOT READ END TO END** (`ownBytes`,
 called unconditionally from `intakeNoted`). Read off a handset on 2026-09-14,
 38 GB free and every earlier photograph cleared: `1 photo(s) could not be read
