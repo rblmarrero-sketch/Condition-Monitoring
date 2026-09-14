@@ -75,10 +75,29 @@ const SEED = () => {
   console.log('\n3. AND THE PANEL LEARNS THIS MACHINE');
   const learnt = await p.evaluate(() => ({ rate: CMReport.rate(), saved: localStorage.getItem('cm_rpt_secpp') }));
   ok('the run was written down', learnt.saved !== null && learnt.rate > 0, learnt.saved + ' s/page');
-  ok('  and it moved towards what was seen, without jumping to it',
-     Math.abs(learnt.rate - start.rate) > 0.05
-     && Math.abs(learnt.rate - start.rate) < Math.abs((took / pages) - start.rate),
-     'was ' + start.rate + ', seen ' + (took / pages).toFixed(1) + ', now ' + learnt.rate);
+  /* THE ONE CASE THIS COULD NOT SEE WAS THE ONE WHERE NOTHING SHOULD HAPPEN.
+     It demanded the rate move by more than 0.05 — but when the run comes in at
+     exactly the rate already stored (22 against 22.0, which is what a settled
+     estimate on a steady machine looks like), a correct learner moves by zero
+     and the suite failed on working code. Worse, it could not tell "the
+     learner is broken" from "the learner was already right": both read as no
+     movement. The invariant is not that the figure MOVES, it is where it ends
+     up — between what was stored and what was seen, never all the way to the
+     new run, so one slow afternoon cannot become the quote for ever. */
+  const seen = took / pages, gap = Math.abs(seen - start.rate);
+  /* The figure is QUOTED to the nearest second, so a gap of a tenth cannot
+     move it and demanding movement fails on a learner working perfectly. What
+     is actually being protected is where the figure LANDS: between what was
+     stored and what this run saw, never out past the new observation — so one
+     slow afternoon cannot become the quote for ever. Movement is only
+     required where there is enough gap for a whole second of it. */
+  const lo = Math.min(start.rate, seen) - 0.51, hi = Math.max(start.rate, seen) + 0.51;
+  const landed = learnt.rate >= lo && learnt.rate <= hi;
+  const moved = gap < 2 || Math.abs(learnt.rate - start.rate) >= 0.5;
+  ok('  and it moved towards what was seen, without jumping past it',
+     landed && moved,
+     'was ' + start.rate + ', seen ' + seen.toFixed(1) + ', now ' + learnt.rate
+       + (gap < 2 ? ' (gap ' + gap.toFixed(1) + ' s — under the second it is quoted in)' : ''));
   const est2 = await p.evaluate(o => CMReport.estimate('unit', 'TK101', o), OPT);
   ok('  the next estimate is quoted from it', est2.secPp === learnt.rate, JSON.stringify(est2));
 

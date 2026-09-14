@@ -145,7 +145,12 @@ const srv = http.createServer((req, res) => {
       terexInsp: !!DUE.offRound('INSP', terex),
       kmMp: !!DUE.offRound('MP', kmHT),
       kmTb: !!DUE.offRound('TB', kmHT),
-      kmFc: !!DUE.offRound('FC', kmHT),
+      /* The hold-off is a WILDCARD now, so the thing to measure is not which
+         rounds it reaches but which MACHINES it does not. */
+      kmAllOff: ['MP','FC','INSP','TEMP','UC','GET','TB','LUBE']
+                  .filter(ty => !DUE.offRound(ty, kmHT)),
+      terexAllOn: ['MP','FC','INSP','TEMP','UC','GET','TB','LUBE']
+                  .filter(ty => !!DUE.offRound(ty, terex)),
       terexMp: !!DUE.offRound('MP', terex),
       terexTb: !!DUE.offRound('TB', terex),
       dzInsp: !!DUE.offRound('INSP', a('DZ011')),
@@ -161,8 +166,20 @@ const srv = http.createServer((req, res) => {
     '  and off the plug round and the body round as well');
   ok(off.terexMp === false && off.terexTb === false,
     '  which the Terex of the same class are NOT — all three rules are per machine');
-  ok(off.kmFc === false,
-    '  and a round nobody named is untouched: the KAMAZ keep their filter cut');
+  /* THIS HELD `off.kmFc === false` — "a round nobody named is untouched: the
+     KAMAZ keep their filter cut". That was true of the 12 September decision,
+     which named INSP, MP and TB. On the 14th the site asked for every
+     inspection and every CM round, and DUE.OFF became the wildcard OFF['*'],
+     so the suite failed on correct code and asserted the opposite of what the
+     site had decided. A test may not keep its own copy of a rule that lives in
+     due.js — what belongs here is that the hold-off reaches every round for
+     the machines named and NO round for anyone else. */
+  ok(off.kmAllOff.length === 0,
+    '  and it reaches every round, because that is what the wildcard says',
+    'still on ' + JSON.stringify(off.kmAllOff));
+  ok(off.terexAllOn.length === 0,
+    '  while a machine nobody named keeps all eight of its rounds',
+    off.terex + ' off ' + JSON.stringify(off.terexAllOn));
   ok(!!off.why, '  and the reason travels with it, so work not proposed can still be explained', String(off.why));
   ok(off.unknown === null, '  a machine the register does not know is held off nothing');
 

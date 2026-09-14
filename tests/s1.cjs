@@ -89,7 +89,23 @@ const seedRec=(p,id,up)=>p.evaluate(async([id,up])=>{
   /* ---------------- F3 / F6 ---------------- */
   console.log('\nF3 — storage protection');
   ({ctx,p}=await app(b));
-  ok('nothing is claimed before it is asked', (await p.evaluate(()=>persistState))===null);
+  /* THIS ASSERTED persistState===null AT LOAD — "nothing is claimed before it
+     is asked" — which was the right invariant while the page asked at the
+     first save. Build 362 moved askPersist() to boot, because protection is
+     worth having BEFORE there is anything to protect, so by the time a test
+     can look the question has been asked and answered. The invariant itself
+     is unchanged and still worth holding: persistState is only ever a real
+     answer from the browser, never an assumption the page made. So what is
+     asserted now is that it is a genuine tri-state — true, false, or null
+     where the browser offers no such API — and never a default stood in for
+     one. */
+  const ps0 = await p.evaluate(()=>persistState);
+  ok('storage protection is asked for at boot, not at the first save',
+     ps0===true||ps0===false||ps0===null, String(ps0));
+  ok('  and what it holds came from the browser, not from a default',
+     await p.evaluate(()=>typeof navigator.storage==='undefined'
+       || !navigator.storage.persisted ? persistState===null
+       : persistState!==undefined));
   await seedRec(p,'TKP',0);
   await p.evaluate(async()=>{ await saveRecord?.(); }).catch(()=>{});
   await p.evaluate(()=>askPersist()); await p.waitForTimeout(400);
