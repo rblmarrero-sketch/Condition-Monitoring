@@ -66,11 +66,57 @@ const SEED = () => {
   const bf = bytes / est.bytes;
   ok('the size was within a factor of two', bf > 0.5 && bf < 2,
      (est.bytes / 1048576).toFixed(2) + ' MB estimated / ' + (bytes / 1048576).toFixed(2) + ' MB made (×' + bf.toFixed(2) + ')');
-  /* Wide, because a test machine is not an office machine and the point is to
-     catch an order of magnitude, which is what went wrong. */
-  const tf = took / est.seconds;
-  ok('the time was within a factor of four — an order of magnitude cannot pass',
-     tf > 0.25 && tf < 4, est.seconds + ' s estimated / ' + took.toFixed(1) + ' s taken (×' + tf.toFixed(2) + ')');
+  /* THE FIRST QUOTE IS THE SEED'S, AND THE SEED IS NOT THIS MACHINE.
+
+     This compared the very first estimate against the run, and the first
+     estimate is 22 s a page — what the matrix harness measured on a real
+     office machine, and the right figure to ship. A container that renders at
+     1.5 s a page is then fifteen times faster than the quote through no fault
+     of the code, and the suite failed for being run somewhere quick: 66 s
+     estimated, 4.6 s taken, on build 374's own untouched files as well as on
+     this one. It had passed twice this week and stopped when the host got
+     faster, which is the definition of a figure this assertion cannot own.
+
+     What the panel actually promises is not "22 s is right for you" — it is
+     "the figure you are quoted is YOUR machine's", and that holds anywhere.
+     So the document is made until the quote settles on what this machine
+     really does, and the assertion is that it CONVERGES. A learner that never
+     moves, moves the wrong way, or needs a dozen goes fails here; a fast host
+     does not. §3 below still holds where each step lands, so the two together
+     say the blend is both correct per step and convergent overall.
+
+     The original defect — 1.6 s a page promised for a document that takes
+     three and a half minutes — is caught by this in one run, from the other
+     direction, because a quote that stays wrong is exactly a quote that does
+     not converge. */
+  /* Stop well inside the bound the assertion uses, not on its edge: the first
+     version stopped the moment it cleared ×0.25 and landed on ×0.26, which is
+     a pass that the next run's ordinary jitter turns into a failure. Converge
+     to ×0.5–×2, assert ×0.25–×4. On an office machine the seed is already
+     right and the loop does not run at all, so the extra documents are only
+     ever made where the machine differs from the seed. */
+  const MAX_RUNS = 8;
+  let runs = 1, quote = est.seconds, tf = took / quote;
+  const trail = [est.seconds.toFixed(0)];
+  while ((tf <= 0.5 || tf >= 2) && runs < MAX_RUNS) {
+    const dlN = p.waitForEvent('download', { timeout: 600000 }); dlN.catch(() => {});
+    await p.evaluate(o => window.CMReport.generate('unit', 'TK101', o), OPT);
+    await dlN;
+    runs++;
+    quote = (await p.evaluate(o => CMReport.estimate('unit', 'TK101', o), OPT)).seconds;
+    trail.push(quote.toFixed(0));
+    tf = took / quote;
+  }
+  ok('the quote converges on what this machine really does',
+     tf > 0.25 && tf < 4,
+     trail.join(' → ') + ' s quoted over ' + runs + ' run(s) / ' + took.toFixed(1) + ' s taken (×' + tf.toFixed(2) + ')');
+  /* A budget, not a target. The blend is deliberately conservative — one slow
+     afternoon must not become the quote for ever — so a machine fifteen times
+     off the seed takes about six documents to be believed, and one that
+     matches the seed takes none. Exhausting the budget means the quote is
+     not tracking at all. */
+  ok('  and it gets there within its budget, not after a dozen',
+     runs < MAX_RUNS, runs + ' of ' + MAX_RUNS + ' run(s)');
 
   console.log('\n3. AND THE PANEL LEARNS THIS MACHINE');
   const learnt = await p.evaluate(() => ({ rate: CMReport.rate(), saved: localStorage.getItem('cm_rpt_secpp') }));
