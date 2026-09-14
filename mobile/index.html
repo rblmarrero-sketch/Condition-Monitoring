@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=372">
+<link rel="manifest" href="manifest.webmanifest?v=373">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=372">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=372">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=372">
+<link rel="apple-touch-icon" href="icon-192.png?v=373">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=373">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=373">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2550,15 +2550,15 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=372"></script>
-<script src="upload-defaults.js?v=372"></script>
-<script src="hme.js?v=372"></script>
-<script src="mp-fc.js?v=372"></script>
-<script src="hme-cascade.js?v=372"></script>
-<script src="assets.js?v=372"></script>
-<script src="temp-limits.js?v=372"></script>
-<script src="normalize.js?v=372"></script>
-<script src="terms.js?v=372"></script>
+<script src="native.js?v=373"></script>
+<script src="upload-defaults.js?v=373"></script>
+<script src="hme.js?v=373"></script>
+<script src="mp-fc.js?v=373"></script>
+<script src="hme-cascade.js?v=373"></script>
+<script src="assets.js?v=373"></script>
+<script src="temp-limits.js?v=373"></script>
+<script src="normalize.js?v=373"></script>
+<script src="terms.js?v=373"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2577,25 +2577,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=372"></script>
-<script src="edits.js?v=372"></script>
-<script src="due.js?v=372"></script>
-<script src="wear.js?v=372"></script>
-<script src="wear-figs.js?v=372"></script>
-<script src="wear-map.js?v=372"></script>
-<script src="machine-photos.js?v=372"></script>
-<script src="machine-fig.js?v=372"></script>
-<script src="get.js?v=372"></script>
-<script src="points.js?v=372"></script>
-<script src="uc-points.js?v=372"></script>
-<script src="inspect-guide.js?v=372"></script>
-<script src="get-figs.js?v=372"></script>
-<script src="body-points.js?v=372"></script>
-<script src="body-map.js?v=372"></script>
-<script src="lube.js?v=372"></script>
-<script src="lube-overrides.js?v=372"></script>
-<script src="lube2027.js?v=372"></script>
-<script src="report-core.js?v=372"></script>
+<script src="grade.js?v=373"></script>
+<script src="edits.js?v=373"></script>
+<script src="due.js?v=373"></script>
+<script src="wear.js?v=373"></script>
+<script src="wear-figs.js?v=373"></script>
+<script src="wear-map.js?v=373"></script>
+<script src="machine-photos.js?v=373"></script>
+<script src="machine-fig.js?v=373"></script>
+<script src="get.js?v=373"></script>
+<script src="points.js?v=373"></script>
+<script src="uc-points.js?v=373"></script>
+<script src="inspect-guide.js?v=373"></script>
+<script src="get-figs.js?v=373"></script>
+<script src="body-points.js?v=373"></script>
+<script src="body-map.js?v=373"></script>
+<script src="lube.js?v=373"></script>
+<script src="lube-overrides.js?v=373"></script>
+<script src="lube2027.js?v=373"></script>
+<script src="report-core.js?v=373"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -3998,10 +3998,6 @@ function compLabel(code,l){
 }
 function groupLabel(g,l){ const x=DGROUP_BY[g]; return x?(x[l||lang]||x.en):g; }
 function causeGroupLabel(g,l){ const x=CGROUP_BY[g]; return x?(x[l||lang]||x.en):g; }
-function isoText(d,l){
-  const m=(HME.isoFailureModeCodes||{})[d.iso14224];
-  return `ISO ${d.iso14224||"—"}${m?" "+(m[l||lang]||m.en||m):""}`;
-}
 
 /* The modes this component can actually fail in. Sorted by group so the picker
    reads in the same order every time; the cascade's own key order is not
@@ -4021,10 +4017,6 @@ function defectsForComponent(code,ty,withDemoted){
   return Object.keys(by).filter(d=>!dm||!dm.has(d))
     .map(d=>DEFECT_BY[d]).filter(Boolean)
     .sort((a,b)=> (a.group||"").localeCompare(b.group||"") || a.code.localeCompare(b.code));
-}
-function demotedCount(code){
-  const d=CX.dm && CX.dm[upComp(code)];
-  return d ? d.length : 0;
 }
 /* Specific first, general behind the expander. Within a rank the matrix is
    already sorted alphabetically by English name — preserve that. */
@@ -11103,7 +11095,12 @@ async function teamAsk(g,params,ms){
 
    Returns a map of position -> [dataURL], or null when the folder could not be
    reached. Null is not "no photographs": the caller has to say which it was. */
-const MEDIA_BATCH=8;                         // MEDIA_MAX in google-upload.gs
+/* Eight, matching MEDIA_BATCH in docs/yandex/function.js and the retired
+   Apps Script kept in step with it. It is how many DOCUMENTS one action=files
+   reply can carry, not a limit on photographs — the office's own twenty-per-
+   position constant used to share the name MEDIA_MAX with it, which is the
+   two-truths shape this project keeps paying for. */
+const MEDIA_BATCH=8;
 function b64Blob(b64,mime){
   const bin=atob(String(b64||"")), a=new Uint8Array(bin.length);
   for(let i=0;i<bin.length;i++) a[i]=bin.charCodeAt(i);
@@ -13145,7 +13142,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="372";
+const BUILD="373";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

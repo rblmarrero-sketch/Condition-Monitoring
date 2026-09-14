@@ -72,6 +72,7 @@ FILES.forEach(f => { const t = fs.readFileSync(path.join(ROOT, f), 'utf8');
 
 const findings = [];
 const I18N_SEEN = [];
+let TWO_TRUTHS_SEEN = 0;
 const add = (sev, kind, file, line, text, note) =>
   findings.push({ sev, kind, file, line, text: String(text).trim().slice(0, 120), note });
 
@@ -474,6 +475,50 @@ function scanUnit(u) {
   });
 }
 
+/* ── 8. ONE NAME, TWO NUMBERS, TWO FILES ──────────────────────────────────
+   The rule this project states for itself is "one source of truth per fact",
+   and it has been broken the expensive way twice: a second interval table in
+   the dashboard said 90 days for a 250 h round, and two copies of the
+   12 September hold-off decision had to be found by hand. `tests/interval.cjs`
+   guards the intervals by name. This guards the shape: an ALL-CAPS constant
+   defined in more than one shipped file with DIFFERENT values.
+
+   It is reported, never assumed — two facts may legitimately share a name,
+   and the first thing this found was exactly that: the office's MEDIA_MAX is
+   twenty photographs per position and the backend's is eight documents per
+   `action=files` batch. Neither is wrong; the collision is, because the next
+   person to change one will read the other. The phone already sidesteps it by
+   calling its copy MEDIA_BATCH. */
+{
+  const byName = new Map();
+  FILES.forEach(f => {
+    const code = lex(fs.readFileSync(path.join(ROOT, f), 'utf8')).mask;
+    let m; const re = /\b(?:const|let|var)\s+([A-Z][A-Z0-9_]{2,})\s*=\s*([0-9][0-9_.eE*+ ]*?)\s*[;,\n]/g;
+    while ((m = re.exec(code))) {
+      let v = m[2].trim();
+      if (!/^[\d.eE*+ _]+$/.test(v)) continue;
+      try { v = String(Function('"use strict";return (' + v + ')')()); } catch (e) { continue; }
+      const line = code.slice(0, m.index).split('\n').length;
+      (byName.get(m[1]) || byName.set(m[1], []).get(m[1])).push({ f, v, line });
+    }
+  });
+  /* How many it actually read. A collision check that collected nothing
+     reports "no collisions" in exactly the words of a clean answer — the same
+     silence the i18n check had to be cured of. */
+  TWO_TRUTHS_SEEN = byName.size;
+  byName.forEach((where, name) => {
+    if (where.length < 2) return;
+    /* two definitions in ONE file are two locals in two functions — the
+       scope-aware redeclaration check above is the one that judges those */
+    const files = new Set(where.map(w => w.f));
+    if (files.size < 2) return;
+    if (new Set(where.map(w => w.v)).size < 2) return;         // they agree
+    add('med', 'two-truths', where[0].f, where[0].line, name,
+      name + ' is ' + where.map(w => w.v + ' in ' + w.f).join(' and ')
+      + ' — one name, two numbers, in two files that are edited apart');
+  });
+}
+
 /* ── 0. THE SCANNER PROVES IT CAN SEE, BEFORE IT IS BELIEVED ──────────────
    Every check above was tightened to stop it crying wolf, and each tightening
    is a step towards a scanner that reports nothing because it looks at
@@ -671,6 +716,8 @@ ok('no guard reads a window property nothing publishes', count('dead-guard') ===
 ok('no name is declared twice in one scope', count('redeclared') === 0, count('redeclared'));
 ok('no JSON.parse is reachable with nothing to catch it', count('json-parse') === 0, count('json-parse'));
 ok('no sync try pretends to guard an async call', count('async-in-sync-try') === 0, count('async-in-sync-try'));
+ok('numeric constants were actually collected to compare', TWO_TRUTHS_SEEN >= 60, TWO_TRUTHS_SEEN + ' ALL-CAPS numeric constants');
+ok('  and none names two different numbers in two files', count('two-truths') === 0, count('two-truths'));
 ok('nothing at high or medium severity', show.length === 0, show.length + ' finding(s)');
 console.log('\n' + (fails.length ? fails.length + ' FAILED' : 'ALL PASS'));
 process.exit(fails.length ? 1 : 0);

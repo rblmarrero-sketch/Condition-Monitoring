@@ -3671,22 +3671,22 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=372"></script>
+<script src="../data/magnetic_plug.js?v=373"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=372"></script>
-<script src="../mobile/hme.js?v=372"></script>
-<script src="../mobile/mp-fc.js?v=372"></script>
-<script src="../mobile/hme-cascade.js?v=372"></script>
-<script src="../mobile/temp-limits.js?v=372"></script>
+<script src="../data/work_orders.js?v=373"></script>
+<script src="../mobile/hme.js?v=373"></script>
+<script src="../mobile/mp-fc.js?v=373"></script>
+<script src="../mobile/hme-cascade.js?v=373"></script>
+<script src="../mobile/temp-limits.js?v=373"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=372"></script>
-<script src="../mobile/normalize.js?v=372"></script>
-<script src="../mobile/terms.js?v=372"></script>
+<script src="../mobile/assets.js?v=373"></script>
+<script src="../mobile/normalize.js?v=373"></script>
+<script src="../mobile/terms.js?v=373"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -3705,19 +3705,19 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=372"></script>
-<script src="../mobile/edits.js?v=372"></script>
-<script src="../mobile/due.js?v=372"></script>
-<script src="../mobile/wear.js?v=372"></script>
-<script src="../mobile/wear-map.js?v=372"></script>
-<script src="../mobile/lube.js?v=372"></script>
-<script src="../mobile/lube-overrides.js?v=372"></script>
-<script src="../mobile/lube2027.js?v=372"></script>
-<script src="../mobile/lube-tds.js?v=372"></script>
+<script src="../mobile/grade.js?v=373"></script>
+<script src="../mobile/edits.js?v=373"></script>
+<script src="../mobile/due.js?v=373"></script>
+<script src="../mobile/wear.js?v=373"></script>
+<script src="../mobile/wear-map.js?v=373"></script>
+<script src="../mobile/lube.js?v=373"></script>
+<script src="../mobile/lube-overrides.js?v=373"></script>
+<script src="../mobile/lube2027.js?v=373"></script>
+<script src="../mobile/lube-tds.js?v=373"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=372"></script>
-<script src="../mobile/machine-photos.js?v=372"></script>
+<script src="../mobile/upload-defaults.js?v=373"></script>
+<script src="../mobile/machine-photos.js?v=373"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3726,17 +3726,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=372"></script>
-<script src="../mobile/get.js?v=372"></script>
-<script src="../mobile/points.js?v=372"></script>
-<script src="../mobile/uc-points.js?v=372"></script>
-<script src="../mobile/inspect-guide.js?v=372"></script>
-<script src="../mobile/get-figs.js?v=372"></script>
-<script src="../mobile/body-points.js?v=372"></script>
-<script src="../mobile/body-map.js?v=372"></script>
-<script src="../mobile/jspdf.umd.min.js?v=372"></script>
-<script src="../mobile/html2canvas.min.js?v=372"></script>
-<script src="../mobile/report-core.js?v=372"></script>
+<script src="../mobile/machine-fig.js?v=373"></script>
+<script src="../mobile/get.js?v=373"></script>
+<script src="../mobile/points.js?v=373"></script>
+<script src="../mobile/uc-points.js?v=373"></script>
+<script src="../mobile/inspect-guide.js?v=373"></script>
+<script src="../mobile/get-figs.js?v=373"></script>
+<script src="../mobile/body-points.js?v=373"></script>
+<script src="../mobile/body-map.js?v=373"></script>
+<script src="../mobile/jspdf.umd.min.js?v=373"></script>
+<script src="../mobile/html2canvas.min.js?v=373"></script>
+<script src="../mobile/report-core.js?v=373"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -7109,7 +7109,6 @@ function actionRequired(r,i){ const s=actionState(r,i); return s.k==="open"||s.k
 /* Kept as the name the rest of the file already uses, now delegating so there
    is exactly one rule. Callers that only hold an item (no record) still work:
    sevOf falls back to the item's own grade. */
-function fOpen(i,r){ return actionRequired(r||{items:[i]}, i); }
 const ACT_STATE_LABEL={ open:"as_open", triage:"as_triage", closed:"as_closed",
                         noaction:"as_noaction", none:"as_none" };
 const ACT_MISS_LABEL={ action:"as_m_action", prio:"as_m_prio", owner:"as_m_owner",
@@ -8872,14 +8871,6 @@ let histView=(function(){ try{ return localStorage.getItem(HVK)==="photo"?"photo
 /* One row per POSITION, newest round first — the unit of a finding is a
    position on a machine, not a round, and a round with eleven plugs read is
    eleven things that might be getting worse. */
-function histRows(recs){
-  const out=[];
-  recs.forEach(rec=>rec.items.forEach(i=>{
-    const med=mediaOf(i,rec);
-    out.push({ rec, i, sev:sevOf(rec,i), n:med.length });
-  }));
-  return out;
-}
 /* THE RETIRED PLUG ANGLES, MERGED FOR DISPLAY. 4C and 4E are the same left
    rear final drive photographed from two angles, 4D and 4F the same right rear;
    the TR60 plug set now carries one code per drive. On the history and photo
@@ -10470,9 +10461,6 @@ function photoTally(rec){
    somebody can make. */
 function unresolvedPhotos(rec){
   return orphanPhotos(rec).filter(p=>photoState(p)===PH_VIEWABLE);
-}
-function missingPhotos(rec){
-  return orphanPhotos(rec).filter(p=>photoState(p)===PH_MISSING);
 }
 /* THE POINTS THIS ROUND ACTUALLY HAS, ON THIS MACHINE.
 
@@ -14466,25 +14454,11 @@ const LUBE_NOHUE = "#8b969c";
 /* Which ink survives on that fill. Gear purple takes 2.6:1 with black and 8:1
    with white; hydraulic red is the other way round. Deciding this by eye is how
    a label ends up invisible on one row of the sheet only. */
-function lubeInk(hex){
-  const h = String(hex||"").trim();
-  if(!/^#[0-9a-f]{6}$/i.test(h)) return "#101418";
-  const c = [1,3,5].map(i=>{ const v = parseInt(h.substr(i,2),16)/255;
-    return v <= .04045 ? v/12.92 : Math.pow((v+.055)/1.055, 2.4); });
-  const L = .2126*c[0] + .7152*c[1] + .0722*c[2];
-  return (L + .05) / .05 >= 4.5 ? "#101418" : "#ffffff";
-}
 /* Brand is shown only while it still matters — that is, while more than one
    brand serves the same job. A permanent brand mark would teach the mess the
    site is trying to leave; an edge that appears only on a split type makes the
    standardisation gap the visible thing, and it disappears on its own the day
    they converge. Today nothing is split, so nothing is drawn. */
-function lubeEdge(name){
-  if(!name || !window.LUBE) return null;
-  const pr = LUBE.product(name);
-  if(!pr || !pr.brand || !LUBE.brandMatters(pr.t)) return null;
-  return LUBE.brandHue(pr.brand);
-}
 function lubeShort(n){
   return String(n||"")
     .replace(/\b(universal tractor fluid|arctic synth|arctic|synth)\b/gi,"")
@@ -17200,10 +17174,6 @@ function moreSync(){
   tog.setAttribute("aria-expanded", open?"true":"false");
   if(n){ n.textContent=String(set); n.classList.toggle("hidden", !set); }
 }
-function dqSync(){
-  const on=!!($("fDq")&&$("fDq").value);
-  moreSync();
-}
 $("fMore").onclick=()=>{
   moreOpen=!($("fMore").getAttribute("aria-expanded")==="true");
   moreSync();
@@ -17418,8 +17388,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=372"></script>
-<script src="sync-adapter.js?v=372"></script>
-<script src="report.js?v=372"></script>
+<script src="drive.js?v=373"></script>
+<script src="sync-adapter.js?v=373"></script>
+<script src="report.js?v=373"></script>
 </body>
 </html>

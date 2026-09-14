@@ -102,7 +102,7 @@ function doPost(e) {
        answers every GET — so the dashboard sends this to find out whether the
        half it needs is actually live. It writes nothing. */
     if (b.op === 'ping')    return json({ ok: true, write: true, batch: true, canDelete: !!ADMIN_SECRET,
-                                          index: true, media: MEDIA_MAX, at: indexAt_() });
+                                          index: true, media: MEDIA_BATCH, at: indexAt_() });
 
     if (b.op === 'edit')    return json(saveEdit_(b));
     if (b.op === 'delete')  return json(deleteRecord_(b));
@@ -1061,9 +1061,9 @@ function rebuildIndex_(p) {
    meant five round trips and five script starts for five thumbnails; the pool
    that limits it to five at a time exists precisely because that is expensive.
    Asked for together they cost one. */
-var MEDIA_MAX = 8;
+var MEDIA_BATCH = 8;
 function readFiles_(ids) {
-  var list = String(ids || '').split(',').filter(String).slice(0, MEDIA_MAX);
+  var list = String(ids || '').split(',').filter(String).slice(0, MEDIA_BATCH);
   var out = [], known = {};
   for (var i = 0; i < list.length; i++) {
     try {

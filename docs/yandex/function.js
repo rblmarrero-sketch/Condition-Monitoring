@@ -76,9 +76,18 @@ const MEDIA_RE  = /\.(jpe?g|png|webp|mp4|mov)$/i;
 const RECORDS_MAX = 600;
 /* Eight, the same as the Apps Script. The phone asks for exactly this many at a
    time because that is what one reply can carry without timing out on the link
-   they have. Changing it here without changing MEDIA_MAX there means the phone
-   asks for more than comes back and quietly loses the rest. */
-const MEDIA_MAX = 8;
+   they have. Changing it here without changing MEDIA_BATCH there means the phone
+   asks for more than comes back and quietly loses the rest.
+
+   IT IS A BATCH SIZE, NOT A LIMIT ON PHOTOGRAPHS, and it was called MEDIA_MAX —
+   which is also the name the OFFICE gives to something else entirely: twenty
+   photographs per position (dashboard/index.html). Two facts, one name, in two
+   files that are edited apart, so the next person to change one would read the
+   other. Neither number was wrong and nothing had broken; this is the shape that
+   produced a second interval table saying ninety days for a 250 h round. The
+   phone already called its copy MEDIA_BATCH; the backends match it now.
+   tests/audit-scan.cjs fails on any constant carrying two numbers in two files. */
+const MEDIA_BATCH = 8;
 
 /* ---- signing ------------------------------------------------------------
    SigV4, by hand. Long, but it is the only part of this file that is not
@@ -311,9 +320,9 @@ async function readFile(id) {
 }
 
 async function readFiles(ids) {
-  const list = String(ids || '').split(',').filter(Boolean).slice(0, MEDIA_MAX);
+  const list = String(ids || '').split(',').filter(Boolean).slice(0, MEDIA_BATCH);
   /* Eight independent GETs, not eight in a row. Each is its own https request
-     with no shared state (see s3()), and MEDIA_MAX already caps this at eight
+     with no shared state (see s3()), and MEDIA_BATCH already caps this at eight
      — small enough to fire at once rather than chunk. Order is Promise.all's
      own guarantee, not something built back in after the fact. */
   const files = await Promise.all(list.map(async id => {
@@ -988,7 +997,7 @@ exports.handler = async function (event) {
     }
     if (SECRET && b.secret !== SECRET) return json({ ok: false, error: 'Bad or missing secret' });
     if (b.op === 'ping') return json({ ok: true, write: true, batch: true,
-      canDelete: !!ADMIN, index: false, media: MEDIA_MAX, at: await indexAt() });
+      canDelete: !!ADMIN, index: false, media: MEDIA_BATCH, at: await indexAt() });
     if (b.op === 'edit')    { const r = await saveEdit(b); if (r && r.ok) folderChanged('edit'); return json(r); }
     if (b.op === 'subscribe')   return json(await pushSubscribe(b));
     if (b.op === 'unsubscribe') return json(await pushUnsubscribe(b));

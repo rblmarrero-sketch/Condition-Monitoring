@@ -95,7 +95,7 @@ function mkDrive(){
   if(process.env.CM_OLD){
     raw=raw.replace(/^.*p\.action === 'index'.*$/m,'')
            .replace(/^.*p\.action === 'files'.*$/m,'')
-           .replace(/index: true, media: MEDIA_MAX, at: indexAt_\(\)/,'');
+           .replace(/index: true, media: MEDIA_BATCH, at: indexAt_\(\)/,'');
   }
   const src=raw
     .replace(/const SECRET = '[^']*';/, "const SECRET = '';")
