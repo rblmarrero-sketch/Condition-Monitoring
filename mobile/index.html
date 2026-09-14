@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=363">
+<link rel="manifest" href="manifest.webmanifest?v=364">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=363">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=363">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=363">
+<link rel="apple-touch-icon" href="icon-192.png?v=364">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=364">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=364">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2504,15 +2504,15 @@ function bootDel(k){ try { localStorage.removeItem(k); } catch (e) {} }
   }
 })();
 </script>
-<script src="native.js?v=363"></script>
-<script src="upload-defaults.js?v=363"></script>
-<script src="hme.js?v=363"></script>
-<script src="mp-fc.js?v=363"></script>
-<script src="hme-cascade.js?v=363"></script>
-<script src="assets.js?v=363"></script>
-<script src="temp-limits.js?v=363"></script>
-<script src="normalize.js?v=363"></script>
-<script src="terms.js?v=363"></script>
+<script src="native.js?v=364"></script>
+<script src="upload-defaults.js?v=364"></script>
+<script src="hme.js?v=364"></script>
+<script src="mp-fc.js?v=364"></script>
+<script src="hme-cascade.js?v=364"></script>
+<script src="assets.js?v=364"></script>
+<script src="temp-limits.js?v=364"></script>
+<script src="normalize.js?v=364"></script>
+<script src="terms.js?v=364"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2531,25 +2531,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=363"></script>
-<script src="edits.js?v=363"></script>
-<script src="due.js?v=363"></script>
-<script src="wear.js?v=363"></script>
-<script src="wear-figs.js?v=363"></script>
-<script src="wear-map.js?v=363"></script>
-<script src="machine-photos.js?v=363"></script>
-<script src="machine-fig.js?v=363"></script>
-<script src="get.js?v=363"></script>
-<script src="points.js?v=363"></script>
-<script src="uc-points.js?v=363"></script>
-<script src="inspect-guide.js?v=363"></script>
-<script src="get-figs.js?v=363"></script>
-<script src="body-points.js?v=363"></script>
-<script src="body-map.js?v=363"></script>
-<script src="lube.js?v=363"></script>
-<script src="lube-overrides.js?v=363"></script>
-<script src="lube2027.js?v=363"></script>
-<script src="report-core.js?v=363"></script>
+<script src="grade.js?v=364"></script>
+<script src="edits.js?v=364"></script>
+<script src="due.js?v=364"></script>
+<script src="wear.js?v=364"></script>
+<script src="wear-figs.js?v=364"></script>
+<script src="wear-map.js?v=364"></script>
+<script src="machine-photos.js?v=364"></script>
+<script src="machine-fig.js?v=364"></script>
+<script src="get.js?v=364"></script>
+<script src="points.js?v=364"></script>
+<script src="uc-points.js?v=364"></script>
+<script src="inspect-guide.js?v=364"></script>
+<script src="get-figs.js?v=364"></script>
+<script src="body-points.js?v=364"></script>
+<script src="body-map.js?v=364"></script>
+<script src="lube.js?v=364"></script>
+<script src="lube-overrides.js?v=364"></script>
+<script src="lube2027.js?v=364"></script>
+<script src="report-core.js?v=364"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -3231,6 +3231,7 @@ const I18N = {
     rdy_sto_t:"Room for photographs", rdy_sto_ok:"About {n} more photographs fit ({p}% used).",
     rdy_sto_low:"Only about {n} photographs fit ({p}% used). Free storage: delete inspections already sent.",
     rdy_sto_evict:"The phone may clear this app's storage. Tap to ask it not to.",
+    rdy_sto_evict_add:"Rounds are waiting to send and this phone may clear the app's storage before they go. Add the app to the Home Screen — that is what stops it.",
     rdy_sto_unknown:"This phone will not say how much room is left.",
     rdy_up_t:"Somewhere to send rounds", rdy_up_ok:"Set up. Finished inspections send themselves.",
     rdy_up_none:"No destination set. Rounds will stay on this phone only.",
@@ -3825,6 +3826,7 @@ const I18N = {
     rdy_sto_t:"Место под фотографии", rdy_sto_ok:"Поместится ещё около {n} фото ({p}% занято).",
     rdy_sto_low:"Поместится всего около {n} фото ({p}% занято). Удалите обходы, которые уже в облаке.",
     rdy_sto_evict:"Телефон может очистить память приложения. Нажмите, чтобы запретить.",
+    rdy_sto_evict_add:"Обходы ждут отправки, а телефон может очистить память приложения раньше. Добавьте приложение на главный экран — это и защищает данные.",
     rdy_sto_unknown:"Телефон не сообщает, сколько места осталось.",
     rdy_up_t:"Есть куда отправлять", rdy_up_ok:"Настроено. Завершённые осмотры отправляются сами.",
     rdy_up_none:"Назначение не задано. Обходы останутся только на телефоне.",
@@ -12925,7 +12927,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="363";
+const BUILD="364";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -15413,9 +15415,23 @@ async function yardCheck(){
       { label:t("rdy_fix_retry"), run:async()=>{} },"storage_unknown");
     else if(st.pct>=80 || st.photos<60)
       add("bad",t("rdy_sto_t"),t("rdy_sto_low",{n:st.photos,p:st.pct}),null,"storage");
-    else if(persistState===false)
-      add("warn",t("rdy_sto_t"),t("rdy_sto_evict"),
-        { label:t("rdy_fix_persist"), run:async()=>{ try{ await askPersist(); }catch(e){} } },"evict");
+    /* AN EVICTABLE STORE WITH NOTHING IN IT LOSES NOTHING. Asking for
+       persistence at boot rather than at the first save (build 362) is right
+       — it is granted before there is anything to protect — but it made this
+       row fire on every phone the browser refuses, and Safari refuses
+       anything that is not on the home screen. So a clean phone with every
+       round sent carried a permanent amber warning, and its Fix button
+       re-asked and was refused again: a guard crying wolf, offering a fix
+       that cannot fix. The risk is to UN-UPLOADED work, so that is what it
+       is gated on, and the remedy named is the one that actually works —
+       the home screen, where persistence is granted — unless the app is
+       already there and re-asking is genuinely all that is left. */
+    else if(persistState===false && (await within(3000,()=>pendingCount(),null)))
+      add("warn",t("rdy_sto_t"),t(isStandalone()?"rdy_sto_evict":"rdy_sto_evict_add"),
+        isStandalone()
+          ? { label:t("rdy_fix_persist"), run:async()=>{ try{ await askPersist(); }catch(e){} } }
+          : null,
+        "evict");
     else add("ok",t("rdy_sto_t"),t("rdy_sto_ok",{n:st.photos,p:st.pct}),null,"storage");
 
     /* 4. somewhere for the work to go */
