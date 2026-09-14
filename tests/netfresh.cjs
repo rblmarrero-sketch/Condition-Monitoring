@@ -62,7 +62,19 @@ const ok = (n, c, d) => { console.log((c ? "  PASS  " : "  FAIL  ") + n + (d !==
   ok("it says offline when the phone is offline", /offline|saved|Офлайн|сохран/i.test(off), JSON.stringify(off));
 
   /* Back on the network. No send, no pull, no request of any kind — exactly
-     the phone that was photographed. */
+     the phone that was photographed.
+
+     SETTLE THE OFFLINE PAINT FIRST, or this stages a race rather than the
+     shift it means to. renderNet() awaits netState(), which awaits IndexedDB
+     and only THEN reads navigator.onLine — so a paint started by the offline
+     event can still be in flight when the flag is flipped back, finish, read
+     the new flag, and put "All sent" on the badge. The app is right to paint
+     what is true when it paints; the staging was wrong. Awaiting a render of
+     our own supersedes any older one (netRun) and returns only when a paint
+     has completed, so nothing is in flight across the flip. Under the full
+     sweep's load this failed about one run in five and passed alone every
+     time — the kind of intermittent that gets called flaky and ignored. */
+  await p.evaluate(() => renderNet());
   await p.evaluate(() => { Object.defineProperty(navigator, "onLine", { get: () => true, configurable: true }); });
   const stillOff = await badge();
   ok("  nothing has redrawn it yet, so it is still saying offline",
