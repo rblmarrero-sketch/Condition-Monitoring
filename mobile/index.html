@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=368">
+<link rel="manifest" href="manifest.webmanifest?v=369">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=368">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=368">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=368">
+<link rel="apple-touch-icon" href="icon-192.png?v=369">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=369">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=369">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2504,15 +2504,15 @@ function bootDel(k){ try { localStorage.removeItem(k); } catch (e) {} }
   }
 })();
 </script>
-<script src="native.js?v=368"></script>
-<script src="upload-defaults.js?v=368"></script>
-<script src="hme.js?v=368"></script>
-<script src="mp-fc.js?v=368"></script>
-<script src="hme-cascade.js?v=368"></script>
-<script src="assets.js?v=368"></script>
-<script src="temp-limits.js?v=368"></script>
-<script src="normalize.js?v=368"></script>
-<script src="terms.js?v=368"></script>
+<script src="native.js?v=369"></script>
+<script src="upload-defaults.js?v=369"></script>
+<script src="hme.js?v=369"></script>
+<script src="mp-fc.js?v=369"></script>
+<script src="hme-cascade.js?v=369"></script>
+<script src="assets.js?v=369"></script>
+<script src="temp-limits.js?v=369"></script>
+<script src="normalize.js?v=369"></script>
+<script src="terms.js?v=369"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2531,25 +2531,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=368"></script>
-<script src="edits.js?v=368"></script>
-<script src="due.js?v=368"></script>
-<script src="wear.js?v=368"></script>
-<script src="wear-figs.js?v=368"></script>
-<script src="wear-map.js?v=368"></script>
-<script src="machine-photos.js?v=368"></script>
-<script src="machine-fig.js?v=368"></script>
-<script src="get.js?v=368"></script>
-<script src="points.js?v=368"></script>
-<script src="uc-points.js?v=368"></script>
-<script src="inspect-guide.js?v=368"></script>
-<script src="get-figs.js?v=368"></script>
-<script src="body-points.js?v=368"></script>
-<script src="body-map.js?v=368"></script>
-<script src="lube.js?v=368"></script>
-<script src="lube-overrides.js?v=368"></script>
-<script src="lube2027.js?v=368"></script>
-<script src="report-core.js?v=368"></script>
+<script src="grade.js?v=369"></script>
+<script src="edits.js?v=369"></script>
+<script src="due.js?v=369"></script>
+<script src="wear.js?v=369"></script>
+<script src="wear-figs.js?v=369"></script>
+<script src="wear-map.js?v=369"></script>
+<script src="machine-photos.js?v=369"></script>
+<script src="machine-fig.js?v=369"></script>
+<script src="get.js?v=369"></script>
+<script src="points.js?v=369"></script>
+<script src="uc-points.js?v=369"></script>
+<script src="inspect-guide.js?v=369"></script>
+<script src="get-figs.js?v=369"></script>
+<script src="body-points.js?v=369"></script>
+<script src="body-map.js?v=369"></script>
+<script src="lube.js?v=369"></script>
+<script src="lube-overrides.js?v=369"></script>
+<script src="lube2027.js?v=369"></script>
+<script src="report-core.js?v=369"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -2795,6 +2795,7 @@ const I18N = {
     g_req_4:"A 4 is urgent: action, a comment on what was found, a close-up of the defect, and a target date.",
     g_req_5:"A 5 stops the machine: notify the supervisor now, then record the action, a comment, a close-up of the defect and the target date.",
     g_resp:"Responsible person / team", g_target:"Target date", g_opstat:"Equipment operating status",
+    g_resp_sup:"Maintenance Supervisor", g_resp_supt:"Maintenance Superintendent",
     g_op_none:"— not stated —", g_op_run:"Running", g_op_res:"Running with restriction", g_op_stop:"Stopped",
     g_notify:"Supervisor / planner notified immediately",
     g_wo_req:"No work order raised for this yet",
@@ -3417,6 +3418,7 @@ const I18N = {
     g_req_4:"4 — срочно: действие, комментарий о находке, крупный план дефекта и срок.",
     g_req_5:"5 — машина останавливается: немедленно уведомите руководителя, затем запишите действие, комментарий, крупный план дефекта и срок.",
     g_resp:"Ответственный / бригада", g_target:"Срок", g_opstat:"Состояние техники",
+    g_resp_sup:"Мастер по обслуживанию", g_resp_supt:"Начальник по обслуживанию",
     g_op_none:"— не указано —", g_op_run:"В работе", g_op_res:"В работе с ограничением", g_op_stop:"Остановлена",
     g_notify:"Руководитель / планировщик уведомлён немедленно",
     g_wo_req:"Заявка на это ещё не создана",
@@ -5453,6 +5455,23 @@ $("gradeWhy").addEventListener("input",()=>{ const p=curP(); p.gradeWhy=$("grade
    a number at all: it is the round's own interval for THIS machine's class,
    read from due.js, which is the only place an interval is allowed to live. */
 const GRADE_DUE_DAYS = { 4: 7, 5: 1 };
+/* WHO OWNS A FINDING, BY GRADE. A 3 is planned work and belongs to the
+   Maintenance Supervisor; a 4 and a 5 are escalations and belong to the
+   Superintendent. Stated once, here, beside the dates the same grades imply.
+
+   TWO THINGS ARE STORED, ON PURPOSE. `resp` is free text an inspector may
+   overtype with a person's name, and it is printed verbatim on the report —
+   so it is written in the language of the phone, which is what they would
+   have typed and what the office reads. That alone would put two spellings
+   of one role in the folder and split one owner into two in the action
+   register, so the stable key goes with it as `respRole`. The label is for
+   people; the key is for counting. The English wording is report-core's own
+   (CMR ap_sup), not a second copy of it. */
+const GRADE_RESP = { 3: "sup", 4: "supt", 5: "supt" };
+function defaultRespFor(g){
+  const k = GRADE_RESP[g];
+  return k ? { role: k, label: t("g_resp_" + k) } : null;
+}
 /* WHAT 1C HAS PLANNED FOR THIS MACHINE, ONCE, FOR THE TWO THINGS THAT NEED IT.
 
    `near` is the order this round is being walked AGAINST — the one nearest
@@ -5593,6 +5612,23 @@ function renderGradeReq(){
       if(d && d !== p.target){ curP().target=d; curP().targetAuto=d; p.target=d; p.targetAuto=d; }
     }
   }
+  /* AND WHO IT BELONGS TO, BY THE SAME RULE. A 3 is planned work and goes to
+     the Maintenance Supervisor; a 4 and a 5 are escalations and go to the
+     Superintendent. Identical machinery to the date above — `respAuto` marks
+     what the phone proposed, so it follows the grade while it is still a
+     proposal and is never moved once somebody has named a person. It is a
+     starting point, not an assignment: the field is free text and a real name
+     typed over it is the better answer every time. */
+  if(req.resp !== false){
+    const rauto = p.respAuto || "";
+    if(!p.resp || p.resp === rauto){
+      const r = defaultRespFor(g);
+      if(r && r.label && r.label !== p.resp){
+        curP().resp=r.label; curP().respAuto=r.label; curP().respRole=r.role;
+        p.resp=r.label; p.respAuto=r.label; p.respRole=r.role;
+      }
+    }
+  }
   $("gResp").value=p.resp||""; $("gTarget").value=p.target||""; $("gOpstat").value=p.opstat||"";
   $("gNotifyWrap").classList.toggle("hidden", !req.notify);
   $("gNotify").checked=!!p.notified;
@@ -5602,7 +5638,16 @@ function renderGradeReq(){
     dl.innerHTML=seen.map(s=>`<option value="${esc(s)}">`).join("");
   }
 }
-$("gResp").addEventListener("input",()=>{ curP().resp=$("gResp").value.trim(); });
+/* A NAME TYPED OVER THE ROLE IS A NAME, AND THE KEY MUST STOP CLAIMING
+   OTHERWISE. respRole exists so the office can count one owner as one owner
+   whatever language the phone was in; left in place under a person's name it
+   would file that person's work under the role they replaced, which is the
+   same wrong answer wearing a tidier hat. */
+$("gResp").addEventListener("input",()=>{
+  const v=$("gResp").value.trim(); const p=curP();
+  p.resp=v;
+  if(v!==(p.respAuto||"")) p.respRole="";
+});
 $("gTarget").addEventListener("change",()=>{ curP().target=$("gTarget").value; });
 $("gOpstat").addEventListener("change",()=>{ curP().opstat=$("gOpstat").value; });
 $("gNotify").addEventListener("change",()=>{ curP().notified=$("gNotify").checked?1:0; });
@@ -7880,7 +7925,7 @@ function editRecord(rec){ if(rec.cls && CLASSES[rec.cls]){ eqClass=rec.cls; lsSe
   draft={positions:{}};
   for(const [k,pp] of Object.entries(rec.positions)) draft.positions[k]={grade:GRADE.num(pp.grade),sev:gradeIso(pp.grade)||pp.sev||"",sevMan:pp.sevMan||0,
     gradeMan:pp.gradeMan||0, gradeSug:pp.gradeSug||null, gradeWhy:pp.gradeWhy||"", gradeAudit:pp.gradeAudit||null,
-    resp:pp.resp||"", target:pp.target||"", opstat:pp.opstat||"", notified:pp.notified||0,action:pp.action,wo:pp.wo,particle:pp.particle,comp:pp.comp,oil:pp.oil,comment:pp.comment,defect:pp.defect,cause:pp.cause,tempV:pp.tempV||"",tempA:pp.tempA||"",tempM:pp.tempM||"",
+    resp:pp.resp||"", respRole:pp.respRole||"", target:pp.target||"", opstat:pp.opstat||"", notified:pp.notified||0,action:pp.action,wo:pp.wo,particle:pp.particle,comp:pp.comp,oil:pp.oil,comment:pp.comment,defect:pp.defect,cause:pp.cause,tempV:pp.tempV||"",tempA:pp.tempA||"",tempM:pp.tempM||"",
     prio:pp.prio||"",
     mm:(pp.mm==null?null:Number(pp.mm)),stood:pp.stood?1:0,reason:pp.reason||"",detect:pp.detect||"",
     /* Same four fields, coming back. Reopening a lubrication round to fix a
@@ -13041,7 +13086,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="368";
+const BUILD="369";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

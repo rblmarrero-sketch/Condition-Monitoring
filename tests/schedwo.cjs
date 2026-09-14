@@ -196,6 +196,46 @@ const srv = http.createServer((q, s) => {
        walk.recleared === 1, walk.recleared + 'd');
   } else ok('EX016 FC has a position to walk', false);
 
+  console.log('\n6. AND WHO THE FINDING BELONGS TO, BY THE SAME RULE');
+  const who = await p.evaluate(() => {
+    curEquip = 'EX016'; type = 'FC'; draft = { positions: {} };
+    const k = (items()[0] || {}).k; if (!k) return null;
+    curItem = k;
+    const pick = g => { curP().grade = g; renderGradeReq();
+                        const q = draft.positions[k] || {};
+                        return { resp: q.resp, role: q.respRole }; };
+    const out = { three: pick(3), four: pick(4), five: pick(5) };
+    /* a real name typed over it wins, and takes the role key with it — the
+       key exists to count owners, and left behind it would file a person's
+       work under the role they replaced */
+    document.getElementById('gResp').value = 'A. Petrov';
+    document.getElementById('gResp').dispatchEvent(new Event('input'));
+    const q = draft.positions[k] || {};
+    out.typed = { resp: q.resp, role: q.respRole };
+    out.afterThree = pick(3);
+    /* and the label is the report's own wording, not a second copy of it */
+    out.ru = (function () { const was = lang; lang = 'ru';
+      const r = defaultRespFor(4); lang = was; return r && r.label; })();
+    out.reportEn = (window.CMR && CMR.T && CMR.T.en && CMR.T.en.ap_sup) || '';
+    return out;
+  });
+  if (who) {
+    ok('a 3 is the Maintenance Supervisor',
+       who.three.resp === 'Maintenance Supervisor' && who.three.role === 'sup',
+       who.three.resp + ' / ' + who.three.role);
+    ok('  a 4 is the Superintendent', who.four.resp === 'Maintenance Superintendent'
+       && who.four.role === 'supt', who.four.resp);
+    ok('  and so is a 5', who.five.resp === 'Maintenance Superintendent'
+       && who.five.role === 'supt', who.five.resp);
+    ok('a name typed over it is kept, by any later grade',
+       who.typed.resp === 'A. Petrov' && who.afterThree.resp === 'A. Petrov',
+       who.typed.resp + ' -> ' + who.afterThree.resp);
+    ok('  and the role key is dropped, so a person is not counted as a role',
+       !who.typed.role && !who.afterThree.role,
+       JSON.stringify([who.typed.role, who.afterThree.role]));
+    ok('  the role is said in Russian too', /[А-Яа-я]/.test(who.ru || ''), who.ru);
+  } else ok('EX016 FC has a position to grade', false);
+
   ok('no page errors throughout', errs.length === 0, errs.slice(0, 3).join(' | '));
   await b.close(); srv.close();
   console.log(fails.length ? `\n${fails.length} FAILED: ` + fails.join(' | ') : '\nall passed');
