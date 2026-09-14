@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=361">
+<link rel="manifest" href="manifest.webmanifest?v=362">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=361">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=361">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=361">
+<link rel="apple-touch-icon" href="icon-192.png?v=362">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=362">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=362">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -404,6 +404,11 @@
   .pitem .meta{grid-area:meta;}
   .pitem .acts{grid-area:acts;display:flex;justify-content:flex-end;align-items:center;}
   .pitem .thumb{width:52px;height:52px;border-radius:8px;object-fit:cover;background:var(--surface-3);flex:none;}
+  /* A thumbnail the phone cannot paint is a DIAGNOSIS, not a rendering glitch:
+     Safari's own "?" glyph is what a blob URL looks like when the file behind
+     it has been reclaimed. Say it in the app's words instead. */
+  .pitem .thumb.bad{display:flex;align-items:center;justify-content:center;
+    font-size:22px;color:var(--warn-ink);border:1px dashed var(--warn-ink);}
   .pitem .meta{min-width:0;} .pitem .meta .a{font-weight:700;} .pitem .meta .b{font-size:12.5px;color:var(--muted);}
   .tag{display:inline-block;font-size:10.5px;font-weight:700;padding:1px 6px;border-radius:6px;background:var(--accent);color:#fff;margin-right:6px;vertical-align:middle;}
   /* A queue of nine rounds across four types is where the colour earns its
@@ -2499,15 +2504,15 @@ function bootDel(k){ try { localStorage.removeItem(k); } catch (e) {} }
   }
 })();
 </script>
-<script src="native.js?v=361"></script>
-<script src="upload-defaults.js?v=361"></script>
-<script src="hme.js?v=361"></script>
-<script src="mp-fc.js?v=361"></script>
-<script src="hme-cascade.js?v=361"></script>
-<script src="assets.js?v=361"></script>
-<script src="temp-limits.js?v=361"></script>
-<script src="normalize.js?v=361"></script>
-<script src="terms.js?v=361"></script>
+<script src="native.js?v=362"></script>
+<script src="upload-defaults.js?v=362"></script>
+<script src="hme.js?v=362"></script>
+<script src="mp-fc.js?v=362"></script>
+<script src="hme-cascade.js?v=362"></script>
+<script src="assets.js?v=362"></script>
+<script src="temp-limits.js?v=362"></script>
+<script src="normalize.js?v=362"></script>
+<script src="terms.js?v=362"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2526,25 +2531,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=361"></script>
-<script src="edits.js?v=361"></script>
-<script src="due.js?v=361"></script>
-<script src="wear.js?v=361"></script>
-<script src="wear-figs.js?v=361"></script>
-<script src="wear-map.js?v=361"></script>
-<script src="machine-photos.js?v=361"></script>
-<script src="machine-fig.js?v=361"></script>
-<script src="get.js?v=361"></script>
-<script src="points.js?v=361"></script>
-<script src="uc-points.js?v=361"></script>
-<script src="inspect-guide.js?v=361"></script>
-<script src="get-figs.js?v=361"></script>
-<script src="body-points.js?v=361"></script>
-<script src="body-map.js?v=361"></script>
-<script src="lube.js?v=361"></script>
-<script src="lube-overrides.js?v=361"></script>
-<script src="lube2027.js?v=361"></script>
-<script src="report-core.js?v=361"></script>
+<script src="grade.js?v=362"></script>
+<script src="edits.js?v=362"></script>
+<script src="due.js?v=362"></script>
+<script src="wear.js?v=362"></script>
+<script src="wear-figs.js?v=362"></script>
+<script src="wear-map.js?v=362"></script>
+<script src="machine-photos.js?v=362"></script>
+<script src="machine-fig.js?v=362"></script>
+<script src="get.js?v=362"></script>
+<script src="points.js?v=362"></script>
+<script src="uc-points.js?v=362"></script>
+<script src="inspect-guide.js?v=362"></script>
+<script src="get-figs.js?v=362"></script>
+<script src="body-points.js?v=362"></script>
+<script src="body-map.js?v=362"></script>
+<script src="lube.js?v=362"></script>
+<script src="lube-overrides.js?v=362"></script>
+<script src="lube2027.js?v=362"></script>
+<script src="report-core.js?v=362"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -2759,6 +2764,8 @@ const I18N = {
     gal_odd_t:"Kept, but not in the usual format",
     gal_odd_b:"{n} photograph(s) could not be converted to the standard format on this phone, so they were kept exactly as they are ({names}). They may not display in the office. Taking the shot with the camera button here always works.",
     gal_odd_heic:"{n} photograph(s) are in Apple's HEIC format and this phone cannot convert them ({names}). They were kept as they are, but the office may not be able to open them. Either take the shot with the camera button here, or set iPhone Settings \u2192 Camera \u2192 Formats to \u201cMost Compatible\u201d.",
+    thumb_unread:"This photograph cannot be read on this phone. The round and its readings are intact — open it and take the position again.",
+    gal_odd_own:"This phone handed the app a photograph and then could not read it back ({names}). It has been kept, but it may not survive to the upload. Take it again with the camera button here — that copy is held by the app itself and cannot be reclaimed by the phone.",
     media_hint:"Up to {p} photos + 1 video (max {s} sec).", media_empty:"No photos yet.",
     media_photo_n:"Photo {n}", media_del:"Remove",
     m_oops_t:"That did not work",
@@ -3379,6 +3386,8 @@ const I18N = {
     gal_odd_t:"Сохранено, но не в обычном формате",
     gal_odd_b:"Не удалось привести к стандартному формату фотографий: {n} ({names}). Они сохранены как есть; в офисе они могут не открыться. Съёмка кнопкой камеры в приложении работает всегда.",
     gal_odd_heic:"Фотографий в формате Apple HEIC: {n} ({names}). Этот телефон не может их преобразовать — они сохранены как есть, но в офисе могут не открыться. Снимайте кнопкой камеры в приложении или переключите на iPhone: Настройки \u2192 Камера \u2192 Форматы \u2192 \u00abНаиболее совместимые\u00bb.",
+    thumb_unread:"Эту фотографию телефон прочитать не может. Обход и замеры целы — откройте его и снимите точку заново.",
+    gal_odd_own:"Телефон передал приложению фотографию и тут же не смог прочитать её обратно ({names}). Она сохранена, но может не дойти до выгрузки. Сделайте снимок заново кнопкой камеры в приложении — такая копия хранится самим приложением, и телефон её не удалит.",
     media_hint:"До {p} фото + 1 видео (макс. {s} сек).", media_empty:"Пока нет фото.",
     media_photo_n:"Фото {n}", media_del:"Удалить",
     m_oops_t:"Не получилось",
@@ -5040,7 +5049,7 @@ async function takePhoto(){
     const got=await intakeNoted(f);
     addPos(p, got.att, "COMPONENT");
     renderMedia(); renderChips(); renderGrade();
-    if(got.why) dlg([t("gal_odd_t"), t(got.why==="heic"?"gal_odd_heic":"gal_odd_b",{n:1, names:f.name||""})]);
+    if(got.why) dlg([t("gal_odd_t"), t(intakeWhyKey(got.why),{n:1, names:f.name||""})]);
   } finally { renderMedia(); }                      // re-derives the disabled state
 }
 /* Ask where it comes from. Both buttons ask, and both offer the same two
@@ -5266,7 +5275,7 @@ async function takeMachinePhoto(cat){
   const got=await intakeNoted(f);
   addPos(p, got.att, cat);
   renderMachinePhotos(); draftFlush();
-  if(got.why) dlg([t("gal_odd_t"), t(got.why==="heic"?"gal_odd_heic":"gal_odd_b",{n:1, names:f.name||""})]);
+  if(got.why) dlg([t("gal_odd_t"), t(intakeWhyKey(got.why),{n:1, names:f.name||""})]);
 }
 function dropMachinePhoto(cat,i){
   const p=draft.positions[GEN_KEY]; if(!p) return;
@@ -7947,7 +7956,8 @@ $("saveBtn").onclick=async ()=>{
   /* The round is away and the form is clear: if an update has been waiting
      for somebody to stop working, this is that moment. */
   setTimeout(applyUpdateIfIdle, 400);
-  // First real save is the moment there is something worth protecting.
+  /* Belt and braces: asked at boot now (see the call beside the inbound
+     timers), so this only covers a phone whose first boot answered null. */
   if(persistState===null) askPersist();
   const m=t("m_saved"); dlg([m[0], m[1].replace("{x}",equip)]);
 };
@@ -11757,6 +11767,20 @@ async function renderPending(){
     row.querySelector(".rpt1").onclick=guard(async(ev)=>{ev.stopPropagation();await reportOne(rec);});
     row.querySelector(".edit").onclick=(ev)=>{ev.stopPropagation();openEdit();};
     row.querySelector(".meta").onclick=openEdit; row.querySelector(".thumb").onclick=openEdit;
+    /* THE "?" ON A SAVED ROUND IS THE FILE-BACKED-FILE DEFECT, HOURS EARLY.
+       A blob URL onto a File whose backing item iOS has reclaimed fails to
+       decode, and Safari paints its own question mark — which reads as the
+       app being broken and tells nobody what happened or what to do. Since
+       `ownBytes` nothing new can land in this state, but rounds captured
+       before it still can, so name it: the round still opens, the readings
+       are intact, and the position can be retaken from the editor. */
+    const timg=row.querySelector("img.thumb");
+    if(timg) timg.onerror=()=>{
+      const d=document.createElement("div");
+      d.className="thumb bad"; d.textContent="⚠";
+      d.title=t("thumb_unread"); d.setAttribute("aria-label",t("thumb_unread"));
+      d.onclick=openEdit; timg.replaceWith(d);
+    };
     /* Deleting here is final — the record lives nowhere else until it has been
        uploaded. Name the unit and say which case this is, because "are you sure?"
        does not tell anyone what they are about to lose. */
@@ -12901,7 +12925,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="361";
+const BUILD="362";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -13417,11 +13441,66 @@ async function reencode(blob,max){
    returns the same attachment with the reason it could not be brought into
    the system's shape, for the three places that put a person in front of a
    dialog about it. One implementation under both. */
+/* ═══ THE BYTES ARE OURS BEFORE THEY ARE STORED, ALWAYS ═══════════════════
+   Read off a handset on 2026-09-14, on a phone with 38 GB free and every
+   earlier photograph cleared: three rounds captured that morning, and
+   `DZ002_RIGHT_14.09.2026_UC_3.jpg` came back `NotFoundError` from all three
+   readers at upload. The sidecar went. The findings went. The photograph was
+   not unreadable — it was NOT THERE.
+
+   `NotFoundError` is the whole diagnosis. NotReadable means the bytes resist;
+   NotFound means the file the Blob points AT is gone. A `File` from
+   `<input type=file>` is not bytes: on WebKit it is a reference to an item in
+   the browser's temporary file store, and `new File([thatFile], name)` copies
+   the reference, not the contents — the spec permits the copy to be lazy and
+   WebKit takes it. iOS then clears the camera's staging file, on its own
+   schedule, and IndexedDB is left holding a faithful pointer to nothing.
+
+   That is why some rounds were verified byte for byte and others were not, on
+   the same phone in the same hour: a frame that went through the canvas in
+   `reencode` came back as a blob the page had MADE, and those survived. The
+   pass-throughs — a JPEG already inside the size limit, a re-encode that came
+   out no smaller, a video, a HEIC the decoder refused, "Original" chosen on
+   purpose — handed the picker's own File straight to storage. Six doors, all
+   of them returning `blob`.
+
+   So the rule is not "shrink it" and never was. It is: NOTHING REACHES
+   STORAGE THAT THIS PAGE HAS NOT READ END TO END. One read, at intake, with
+   the button still disabled and the inspector still standing at the machine.
+   Unconditional — a canvas blob is re-read too, because a rule with an
+   exception is a rule somebody has to remember, and the cost is one copy of
+   about 300 kB.
+
+   It is also the earliest possible DETECTION. Before this, a photograph that
+   was going to vanish was found hours later at upload, when the inspector had
+   driven away; now the read happens while they can simply take it again. */
+async function ownBytes(blob){
+  const u=await readBlobBytes(blob);
+  return new Blob([u], { type: blob.type || "application/octet-stream" });
+}
 async function intakeNoted(blob){
   const r=await standardise(blob);
-  return { att:attWrap(r.blob), why:r.why||"" };
+  let out=r.blob, why=r.why||"";
+  try{
+    out=await ownBytes(r.blob);
+  }catch(e){
+    /* Never discard evidence: the original is kept and the round is still
+       saved with it. What changes is that this is said NOW, not at upload —
+       and `own` is a reason of its own, because "this phone could not read
+       back the file it was just handed" is not the same news as "this is a
+       HEIC we cannot convert". */
+    why=why||"own";
+  }
+  return { att:attWrap(out), why:why };
 }
 async function intake(blob){ return (await intakeNoted(blob)).att; }
+/* One reason, one sentence — read by both doors that put a person in front
+   of a dialog, so the two can never drift into saying different things
+   about the same file. */
+function intakeWhyKey(why){
+  return why==="heic" ? "gal_odd_heic" : why==="own" ? "gal_odd_own" : "gal_odd_b";
+}
+
 /* Shrink camera photos before upload — the single biggest lever on upload time.
    Skipped for the signature PNG and for anything already smaller than the limit. */
 /* The frame, decoded. createImageBitmap first; when it refuses — and on the
@@ -16844,6 +16923,18 @@ document.addEventListener("visibilitychange",()=>{
    back. schedEnsureLoaded throttles on SCHED_STALE_MS and repaints only
    when 1C's stamp has moved, so none of these can turn into a request
    storm or a screen that redraws under a thumb. */
+/* PROTECTION IS ASKED FOR BEFORE THERE IS ANYTHING TO PROTECT, NOT AFTER.
+   It was asked at the first SAVE — "the moment there is something worth
+   protecting" — which reads well and is a shift too late: the handset read on
+   2026-09-14 had walked three rounds and still said "protection not requested
+   yet", because the branch only fires when persistState is null AND a save
+   completes, and a phone that has been reset or reinstalled arrives with a
+   drawer full of unprotected captures before the first save lands. Without it
+   WebKit may evict the whole origin after about a week of disuse, and Android
+   evicts under pressure — either takes an un-uploaded round with it.
+   It costs one call, it is idempotent, and the answer is recorded honestly so
+   ⚙ can say what is true rather than reassure. */
+try{ if(persistState===null) askPersist(); }catch(e){}
 schedTimer = setInterval(()=>schedRefresh("timer"), SCHED_MS);
 document.addEventListener("visibilitychange",()=>{
   if(!document.hidden) schedRefresh("visible");

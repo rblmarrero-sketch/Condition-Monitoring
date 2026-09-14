@@ -214,6 +214,31 @@ reclaimed file must rig ALL THREE readers (`tests/staleblob.cjs`,
 `tests/recovery.cjs`); one that rigs FileReader alone is the field case, and
 the photograph is expected to be SENT (`tests/readpath.cjs`).
 
+**NOTHING REACHES STORAGE THAT THIS PAGE HAS NOT READ END TO END** (`ownBytes`,
+called unconditionally from `intakeNoted`). Read off a handset on 2026-09-14,
+38 GB free and every earlier photograph cleared: `1 photo(s) could not be read
+… (NotFoundError)`. `NotFoundError` is the whole diagnosis and it is not build
+347's fault — NotReadable means the bytes resist, NotFound means the file the
+Blob points AT is gone, which is also why all three readers failed together.
+A `File` from `<input type=file>` is not bytes: on WebKit it is a reference to
+an item in the browser's temporary store, `new File([thatFile], name)` copies
+the REFERENCE (the spec permits a lazy copy and WebKit takes it), and iOS
+clears the camera's staging file on its own schedule — IndexedDB is then
+holding a faithful pointer to nothing. Six paths returned the picker's own File
+to storage: a JPEG already inside the limit, a re-encode that came out no
+smaller, a video, bytes that are not a photo type, "Original" chosen on
+purpose, and a HEIC the decoder refused. A frame that went through the canvas
+in `reencode` came back as a blob the PAGE had made — which is why one round on
+that phone verified byte for byte in the same hour another lost every
+photograph. The read is unconditional, a canvas blob included, because a rule
+with an exception is a rule somebody has to remember; and it is the earliest
+possible detection — it happens with the inspector still at the machine, where
+retaking costs ten seconds, not at the upload after they have driven away. A
+file that is ALREADY gone is kept, never discarded, and said as its own reason
+(`gal_odd_own`, via `intakeWhyKey`). The `?` in a saved round's thumbnail is
+this same defect showing itself hours earlier. `askPersist()` is asked at boot,
+not at the first save (`tests/ownbytes.cjs`).
+
 **An upload is dead when its bytes stop moving, not when a clock runs out.**
 "Press Sync four times and it goes through" (build 348): `fetchT` gave a POST
 90 s whatever it was doing, a 4 MB original at 55 KB/s needs 100, the server
