@@ -72,6 +72,13 @@ strips them, so `grep "cm endpoint"` arrives as two arguments and a deploy that
 worked reports a failure on its last line. Use a pattern that needs no quoting
 (`grep cm.endpoint`). VM-SETUP §12 carries the case.
 
+**Every expected number comes off the file in the repository as the instruction
+is written, never from memory.** A check quoting the wrong figure reports a
+working deploy as a broken one, and what the reader learns is to stop believing
+the check. It has happened twice: `MEDIA_MAX` was quoted as 0 when the file's
+own comment carries the old name once, and the `grep "cm endpoint"` quoting
+above. Both deploys were fine.
+
 **Always include a check that proves the NEW file is the one running** — a deploy that did not happen looks exactly
 like one that did, which is how the request cut sat at two minutes for months
 while everyone believed it was ten.
