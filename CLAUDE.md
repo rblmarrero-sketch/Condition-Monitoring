@@ -526,6 +526,78 @@ arriving together cannot make three requests or redraw under a thumb. The Due
 screen states the age (`schedAge`, beside `histAge`) and says so only where 1C
 is actually on screen (`tests/duetoday.cjs`).
 
+**A MACHINE HELD OFF A ROUND IS HELD OFF IT ON EVERY SCREEN.** `DUE.OFF` is
+the one place a machine comes off a round, and `DUE.offRound` the one way to
+ask. Two things went wrong with it in two days.
+
+It was ENUMERATED: INSP on 12 September, then MP and TB the same day. Those
+three are the rounds class HT puts a KAMAZ on, so the three together happened
+to mean "no Condition Monitoring work at all" — happened to. When the site
+asked on the 14th for that to be the rule, an enumerated list could not state
+it: add a ninth round type, or move one KAMAZ into a class carrying FC or
+LUBE, and work reappears for a machine nobody put back on. It is `OFF['*']`
+now, a wildcard every round type reads, and `offRound` concatenates it with
+anything stated for the round in particular, so a machine held off everything
+AND named under one round does not depend on which list is read first.
+
+And `dueWeekRows` — the phone's agenda — was **the only reader of the schedule
+that never called it**. planRows had it, dueRows had it, neverRows had it, the
+office's duePlanRows had it. So from the 12th the List stopped proposing INSP
+for the KAMAZ trucks while the calendar beside it went on drawing INSP for the
+same trucks on the same days: two screens, one fact, two answers, and the
+wrong one is the one somebody drives out on — the same shape as the
+`schedWalkedFor` split, in the same pair of functions. Reported from the field
+with TK030 and TK041 circled. Held-off rounds are DROPPED there, not struck
+through: `done` is struck through because a walked round is work that
+happened, and a held-off round is not work at all (`tests/dueweek.cjs` §6,
+`tests/dueplan.cjs`, `tests/onevisit.cjs` — the last two each held a literal
+`["FC"]` copy of the 12 September decision and so failed on correct code).
+
+**THE GRADE FILLS IN THE DATE AND THE OWNER, AND KEEPS FILLING THEM IN.**
+A 3 gets the round's own interval for this machine, a 4 seven days, a 5
+tomorrow (`GRADE_DUE_DAYS`, `defaultTargetFor`); a 3 goes to the Maintenance
+Supervisor and a 4 and a 5 to the Superintendent (`GRADE_RESP`,
+`defaultRespFor`). Three things had to be true and only the first was.
+
+FOLLOWING THE GRADE. The guard was `if(!p.target)` — fill only when empty.
+The condition cards are tapped in order down the screen, so a 3 is usually
+selected on the way to a 5; the 3 filled the field and nothing touched it
+again. Read off a handset on EX016: a 5 selected, target 03.11.2026, fifty
+days — the FC interval on an excavator, the answer for a 3, against "this
+machine stops now". A default that cannot follow the thing it is a default OF
+is not a default, it is the first tap made permanent. `targetAuto` and
+`respAuto` remember what the phone last proposed, so an untouched default is
+recomputed on every grade change and a typed one is never moved again.
+
+NOT PAST THE NEXT TIME THE MACHINE IS OPEN. The interval alone is right for
+what it was specified against (MP 250 h = 13 days, INSP 1,000 h = 50) and
+wrong at the long end: a 3 on an excavator's undercarriage (4,000 h) came out
+at 200 days, April 2027. It is capped by 1C's next planned service for that
+machine and only ever pulled IN, so a machine 1C has nothing booked for still
+gets the interval and nothing drifts later.
+
+ONE ROLE, ONE SPELLING. `resp` is free text printed verbatim, so the default
+is written in the phone's language — which alone would put two spellings of
+one role in the folder and split one owner into two in the action register.
+The stable key travels beside it as `respRole`, and is DROPPED the moment a
+person's name is typed over the role. The label is for people, the key is for
+counting; the wording is report-core's own `ap_sup`, not a copy of it.
+
+**AND THE WORK ORDER IS ALREADY ON THE ROW THEY TAPPED.** `schedOrdersFor`
+answers two questions off the one SCHED that `schedRefresh` keeps current —
+`near`, the order this round is being walked against, and `next`, when the
+machine is next open — and they are never one figure. `near` fills the 1C
+notification / WO field: only into an empty field, written into the record the
+instant it appears, never borrowed (a round no order covers gets nothing,
+because a number from another job sends the office to the wrong work).
+**Its first guard was `window.SCHED &&`, and `SCHED` is `let SCHED = null` at
+module scope** — never a window property, so the guard was always false and
+the function would have answered "1C has nothing planned" for all 1,128
+machines, for ever, with no error and no empty field to notice. This project's
+signature defect inside the check written to be careful about it, found by
+probing the output rather than reading the code. `tests/schedwo.cjs` §1 plants
+a schedule and asserts the lookup SEES it.
+
 **A ROUND ALREADY WALKED IS MARKED DONE, NOT LEFT AS WORK.** `schedWalkedFor`
 is the one rule — a CM round of that type on that unit dated on or after the
 day 1C wants the service — and it was written inline inside `planRows` and
