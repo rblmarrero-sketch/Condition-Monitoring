@@ -263,7 +263,15 @@ function startPushTriggers(fn, o) {
      start and says so once, so a machine that was never configured for this
      is not silently pretending to watch. */
   const woUrl = o.woUrl || process.env.WO_URL || 'https://askpi.94-131-94-152.sslip.io/WO.xlsx';
-  const woMs = o.woPollMs != null ? o.woPollMs : Number(process.env.WO_POLL_MS || 600000);
+  /* FIVE MINUTES, NOT TEN. Measured on the live branch on 2026-09-14, the
+     gaps between actual refreshes of data/work_orders.js were 4h43, 5h09,
+     2h36 and 4h10 — a source that lands hourly, rebuilt every two to five
+     hours, because GitHub's cron is best-effort and this poller (the part
+     that is NOT best-effort) was never switched on. When it is, the worst
+     case a planner sees is one poll plus the workflow's own few minutes, so
+     the poll is the part worth halving. Headers only: a few hundred bytes,
+     and an unchanged file still costs nothing but the request. */
+  const woMs = o.woPollMs != null ? o.woPollMs : Number(process.env.WO_POLL_MS || 300000);
   const woToken = o.woToken || process.env.WO_GH_TOKEN || '';
   const woRepo = o.woRepo || process.env.WO_GH_REPO || 'rblmarrero-sketch/Condition-Monitoring';
   const woWf = o.woWorkflow || process.env.WO_GH_WORKFLOW || 'refresh-work-orders.yml';

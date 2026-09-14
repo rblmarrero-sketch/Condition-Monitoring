@@ -478,9 +478,19 @@ is best-effort**: on 2026-09-13 the "hourly" job actually ran at 21:49, 23:35,
 
 This machine can do better, because its clock is not best-effort. Since build
 357 `server.js` asks the pipeline for the file's HEADERS every `WO_POLL_MS`
-(ten minutes by default) — an ETag and a length, a few hundred bytes, never the
-workbook — and when they change it asks GitHub to run the refresh **now**. A
+(**five minutes** by default) — an ETag and a length, a few hundred bytes, never
+the workbook — and when they change it asks GitHub to run the refresh **now**. A
 file that has not changed produces no request at all.
+
+**This is the difference between "hourly" and hourly.** Measured on the live
+branch on 2026-09-14, the gaps between real refreshes of `data/work_orders.js`
+were 4 h 43, 5 h 09, 2 h 36 and 4 h 10 — a source that lands every hour,
+rebuilt every two to five hours, because GitHub's `cron: '0 * * * *'` is
+best-effort and this poller, the part that is not, had never been switched on.
+The office sees it as a Defects raised register that is quietly five hours old;
+the "as of" stamp beside it turns amber past two hours and says so, which is
+how it was noticed at all. Until the token is set, the amber stamp is the
+system working correctly — it is reporting a staleness it cannot fix.
 
 It is **off unless a token is set**, and the token is the only new secret:
 
