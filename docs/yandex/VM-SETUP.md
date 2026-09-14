@@ -465,6 +465,47 @@ cm endpoint on 127.0.0.1:8080 · request 960s · headers 65s
 If the line has no `· request` on it, the old `server.js` is still loaded and
 the copy above did not take: check you were in `/opt/cm` when you ran it.
 
+### The whole thing as one paste
+
+For when you just want it done. Run this in PowerShell on your own machine —
+it opens the connection, replaces both files, restarts, and prints the proof,
+without you typing anything on the VM:
+
+```powershell
+ssh cmadmin@baimskaya-cm.duckdns.org @'
+set -e
+cd /opt/cm
+B=https://raw.githubusercontent.com/rblmarrero-sketch/Condition-Monitoring/claude/magnetic-plug-dashboard-llv4wc/docs/yandex
+sudo curl -fsSLO $B/function.js
+sudo curl -fsSLO $B/server.js
+sudo systemctl restart cm
+sleep 2
+sudo systemctl status cm --no-pager | head -3
+sudo journalctl -u cm -n 20 --no-pager | grep "cm endpoint"
+'@
+```
+
+`set -e` stops at the first failure, so a download that did not arrive cannot
+be followed by a restart onto a half-written file. If PowerShell complains
+about the `@'` block, the connection and the commands can always be done in
+two steps as above.
+
+### Proving the change you deployed is the one running
+
+`active (running)` only says the server started. It does not say WHICH file
+started, and every deploy since build 354 has had a way to tell — use the one
+that belongs to the change:
+
+| What was deployed | What proves it, from PowerShell |
+|---|---|
+| any `server.js` change | `ssh cmadmin@baimskaya-cm.duckdns.org 'journalctl -u cm -n 20 --no-pager \| grep "cm endpoint"'` — reads `request 960s · headers 65s` |
+| `MEDIA_BATCH` (was `MEDIA_MAX`) | `ssh cmadmin@baimskaya-cm.duckdns.org 'grep -c MEDIA_BATCH /opt/cm/function.js'` — reads `6`, and `grep -c MEDIA_MAX` reads `0` |
+| deferral reasons (`whyKey`) | `ssh cmadmin@baimskaya-cm.duckdns.org 'grep -c "whyKey" /opt/cm/function.js'` — reads `2` |
+| the hourly 1C dispatch | `ssh cmadmin@baimskaya-cm.duckdns.org 'journalctl -u cm -n 200 --no-pager \| grep -i "WO_GH"'` — silence means the token is not set; see §12's note |
+
+A grep against the file on the VM is the only check that cannot be satisfied
+by a server that merely answers. Prefer it to anything that reads the endpoint.
+
 Nothing in the bucket is touched by this, and `cm.env` — the file with the keys
 and the admin password in it — is not one of the files being replaced. Restarting
 takes about a second, during which a phone that happens to be syncing retries.

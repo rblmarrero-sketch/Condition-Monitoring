@@ -35,6 +35,41 @@ So:
   Yandex. Code that branches on `d.id === "gas"` is therefore talking to Yandex.
   Branch on the id, never on the URL.
 
+### IF IT NEEDS THE VM, SAY SO AND HAND OVER THE COMMANDS
+
+**Standing rule, asked for on 2026-09-14.** A change under `docs/yandex/` is not
+live when it is pushed. So any answer that ships one must END with the deploy
+block, ready to paste into PowerShell — never "this needs a VM deploy" on its
+own, and never a pointer to this file. The maintainer is on Windows; the
+commands are written for the terminal they actually have open.
+
+State three things every time: **what** is waiting, **what it changes on the
+running server**, and **what is still true until it runs** — a backend fix
+described as done, sitting undeployed, is this project's signature defect with
+a person's memory as the place the value gets lost.
+
+A change that needs NO deploy should say that too, in one clause, so the two
+cases are never confused.
+
+Copy-paste block (also in `docs/yandex/VM-SETUP.md` §12, with the verification):
+
+```powershell
+ssh cmadmin@baimskaya-cm.duckdns.org
+```
+then, on the VM:
+```bash
+cd /opt/cm
+sudo curl -fsSLO https://raw.githubusercontent.com/rblmarrero-sketch/Condition-Monitoring/claude/magnetic-plug-dashboard-llv4wc/docs/yandex/function.js
+sudo curl -fsSLO https://raw.githubusercontent.com/rblmarrero-sketch/Condition-Monitoring/claude/magnetic-plug-dashboard-llv4wc/docs/yandex/server.js
+sudo systemctl restart cm
+sudo systemctl status cm --no-pager
+```
+
+`cm.env` is never among the replaced files. **Always include a check that proves
+the NEW file is the one running** — a deploy that did not happen looks exactly
+like one that did, which is how the request cut sat at two minutes for months
+while everyone believed it was ten.
+
 ### Deploying a backend change
 
 The phone and the dashboard are GitHub Pages — a push puts them in front of
