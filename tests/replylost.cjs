@@ -132,7 +132,20 @@ srv.listen(PORT, async () => {
   await p.waitForTimeout(6000);
   st = await (await fetch(B + '/__stat')).json();
   const rec2 = await p.evaluate(async () => { const r = (await dbAll()).find(r => r.equip === 'TK151'); return { up: r && r.up, err: lastErr || '', retry: !!retryTimer }; });
-  ok('the sidecar was not taken as landed: the folder is empty and the round is not up', Object.keys(st.files).length === 0 && rec2.up !== 1, JSON.stringify({ files: Object.keys(st.files), up: rec2.up }));
+  /* ASKED ABOUT THIS ROUND, NOT ABOUT THE FOLDER'S TOTAL. This counted every
+     file the mock held and required zero. The question it is really asking is
+     whether TK151's sidecar was taken as landed when the server kept nothing,
+     and a count answers that only while nothing else in the system ever writes
+     — which stopped being true when the phone began filing its own sync trace
+     (build 370, `_meta/diag/<DEV>.json`). On the real backend that is a
+     different folder and a round's read-back would never see it; this mock
+     puts everything in one bag, so the suite read its own diagnostics as the
+     round having landed. Named, the assertion is both correct and immune to
+     the next thing that writes. */
+  const mine = Object.keys(st.files).filter(n => /TK151/.test(n));
+  ok('the sidecar was not taken as landed: nothing of this round is filed and it is not up',
+     mine.length === 0 && rec2.up !== 1,
+     JSON.stringify({ forThisRound: mine, other: Object.keys(st.files), up: rec2.up }));
   ok('the round waits, the bar names the failure, and the retry clock is armed', rec2.up !== 1 && !!rec2.err && rec2.retry, JSON.stringify(rec2));
   const tr2 = await p.evaluate(() => (window.__sync || []).slice(-12).map(e => e.ev + (e.landed != null ? ':landed=' + e.landed : '')));
   ok('  and the trace records that the folder was asked and did not have it', tr2.some(e => e === 'reply-lost:landed=false'), tr2.join(' '));

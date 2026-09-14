@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=369">
+<link rel="manifest" href="manifest.webmanifest?v=370">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=369">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=369">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=369">
+<link rel="apple-touch-icon" href="icon-192.png?v=370">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=370">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=370">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2504,15 +2504,15 @@ function bootDel(k){ try { localStorage.removeItem(k); } catch (e) {} }
   }
 })();
 </script>
-<script src="native.js?v=369"></script>
-<script src="upload-defaults.js?v=369"></script>
-<script src="hme.js?v=369"></script>
-<script src="mp-fc.js?v=369"></script>
-<script src="hme-cascade.js?v=369"></script>
-<script src="assets.js?v=369"></script>
-<script src="temp-limits.js?v=369"></script>
-<script src="normalize.js?v=369"></script>
-<script src="terms.js?v=369"></script>
+<script src="native.js?v=370"></script>
+<script src="upload-defaults.js?v=370"></script>
+<script src="hme.js?v=370"></script>
+<script src="mp-fc.js?v=370"></script>
+<script src="hme-cascade.js?v=370"></script>
+<script src="assets.js?v=370"></script>
+<script src="temp-limits.js?v=370"></script>
+<script src="normalize.js?v=370"></script>
+<script src="terms.js?v=370"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2531,25 +2531,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=369"></script>
-<script src="edits.js?v=369"></script>
-<script src="due.js?v=369"></script>
-<script src="wear.js?v=369"></script>
-<script src="wear-figs.js?v=369"></script>
-<script src="wear-map.js?v=369"></script>
-<script src="machine-photos.js?v=369"></script>
-<script src="machine-fig.js?v=369"></script>
-<script src="get.js?v=369"></script>
-<script src="points.js?v=369"></script>
-<script src="uc-points.js?v=369"></script>
-<script src="inspect-guide.js?v=369"></script>
-<script src="get-figs.js?v=369"></script>
-<script src="body-points.js?v=369"></script>
-<script src="body-map.js?v=369"></script>
-<script src="lube.js?v=369"></script>
-<script src="lube-overrides.js?v=369"></script>
-<script src="lube2027.js?v=369"></script>
-<script src="report-core.js?v=369"></script>
+<script src="grade.js?v=370"></script>
+<script src="edits.js?v=370"></script>
+<script src="due.js?v=370"></script>
+<script src="wear.js?v=370"></script>
+<script src="wear-figs.js?v=370"></script>
+<script src="wear-map.js?v=370"></script>
+<script src="machine-photos.js?v=370"></script>
+<script src="machine-fig.js?v=370"></script>
+<script src="get.js?v=370"></script>
+<script src="points.js?v=370"></script>
+<script src="uc-points.js?v=370"></script>
+<script src="inspect-guide.js?v=370"></script>
+<script src="get-figs.js?v=370"></script>
+<script src="body-points.js?v=370"></script>
+<script src="body-map.js?v=370"></script>
+<script src="lube.js?v=370"></script>
+<script src="lube-overrides.js?v=370"></script>
+<script src="lube2027.js?v=370"></script>
+<script src="report-core.js?v=370"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -13086,7 +13086,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="369";
+const BUILD="370";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -14776,12 +14776,83 @@ let syncing=false, lastErr="", syncingId=null;
 const SLOG_KEY="cm_sync_log", SLOG_MAX=400;
 let SLOG=(()=>{ try{ const v=JSON.parse(localStorage.getItem(SLOG_KEY)||"[]"); return Array.isArray(v)?v:[]; }catch(e){ return []; } })();
 let slogT=null;
+/* NOTHING THAT IS A SECRET GOES INTO THE TRACE, AT THE MOMENT IT IS WRITTEN.
+
+   The trace is built out of error strings, and an error string quotes the
+   request that failed: `q.set("secret", g.sec)` puts the endpoint's shared
+   secret into a QUERY STRING on three read paths, and Safari's own network
+   errors name the URL they were for. The trace is already shown on screen and
+   copied to a clipboard by the Copy button, and is now also uploaded — three
+   ways out of the phone for a credential nobody meant to move.
+
+   Redacted HERE rather than at each of those three, because a rule applied at
+   the exit is a rule somebody has to remember at the next exit. `sec` is
+   deliberately in the list: it is what this app's own config calls the field.
+   The value is never stored raw, so nothing can recover it afterwards — which
+   is the point. */
+const SECRET_RE = /((?:secret|sec|token|key|password|pwd|sig|signature)=)[^&\s"']+/gi;
+function slogSafe(v){
+  if (typeof v === "string") return v.replace(SECRET_RE, "$1<redacted>");
+  return v;
+}
 function slog(ev, o){
   const e=Object.assign({t:new Date().toISOString().slice(11,23), ev}, o||{});
+  for(const k in e) e[k]=slogSafe(e[k]);
   SLOG.push(e); if(SLOG.length>SLOG_MAX) SLOG.splice(0, SLOG.length-SLOG_MAX);
   window.__sync=SLOG;
   clearTimeout(slogT); slogT=setTimeout(()=>{ try{ lsSet(SLOG_KEY, JSON.stringify(SLOG)); }catch(_){ } }, 300);
   return e;
+}
+/* THE TRACE HAS TO REACH SOMEBODY WITHOUT ANYBODY CARRYING IT.
+
+   Every failure this project has diagnosed from the field arrived as a
+   photograph of a screen, and the questions that needed the trace — "press
+   Sync twenty times and it goes through", which run made progress, which
+   reader refused which file — could not be answered from one. The trace has
+   existed since build 350 and reaching it costs an inspector four taps on the
+   Sync screen and somewhere to paste it, which is the same standing rule as
+   the update path: if it needs a decision from them at −40, it does not
+   happen.
+
+   So the phone files it like any other document. `_meta/diag/` is a folder
+   the deployed backend already accepts — saveOne path-joins b.folder, so this
+   needs no VM change and nothing new on the wire.
+
+   Rules it obeys, all of them so that diagnostics can never cost an
+   inspection:
+     · AFTER the run, never during — the queue is the only thing allowed to
+       hold the link while a round is waiting;
+     · only when something actually went wrong, so a healthy fleet writes
+       nothing;
+     · at most once per TRACE_GAP per phone;
+     · one small JSON, and a failure to send it is silent and forgotten. */
+const TRACE_GAP = 1800000, TRACE_AT = "cm_trace_at", TRACE_LINES = 200;
+function traceDoc(why){
+  let pend = null; try{ pend = (SLOG.filter(e=>e.ev==="queue").pop()||{}).pending; }catch(e){}
+  return {
+    type: "cm-sync-trace", v: 1, build: BUILD, dev: DEVICE, why: String(why||""),
+    at: new Date().toISOString(), lang, online: navigator.onLine,
+    surface: (typeof isStandalone==="function" && isStandalone()) ? "app" : "tab",
+    pending: pend == null ? null : pend,
+    err: slogSafe(String(lastErr||"")).slice(0, 300),
+    persist: persistState, bookFail: bookFail ? bookFail.size : 0,
+    lines: SLOG.slice(-TRACE_LINES),
+  };
+}
+async function sendTrace(why){
+  try{
+    const d = (activeDests()||[])[0]; if(!d) return false;
+    let last = 0; try{ last = +(localStorage.getItem(TRACE_AT)||0) || 0; }catch(e){}
+    if(Date.now() - last < TRACE_GAP) return false;
+    const body = JSON.stringify(traceDoc(why), null, 1);
+    const name = DEVICE + "_" + new Date().toISOString().replace(/[:.]/g,"-").slice(0,19) + ".json";
+    /* Its own folder, and the destination otherwise untouched — a shallow copy
+       so nothing here can alter where the rounds themselves go. */
+    await putOne(Object.assign({}, d, { folder: "_meta/diag" }), name,
+                 new Blob([body], { type: "application/json" }), "application/json", {}, "");
+    lsSet(TRACE_AT, String(Date.now()));
+    return true;
+  }catch(e){ return false; }   // a diagnostic that fails is not a fault to report
 }
 function slogText(n){
   return SLOG.slice(-(n||60)).map(e=>{ const o=Object.assign({},e); delete o.t; delete o.ev;
@@ -15101,6 +15172,16 @@ async function syncNow(manual){
     // One request, and it keeps the due list honest across the whole team.
     teamPull(false);
     if(pressPending){ pressPending=false; setTimeout(()=>syncNow(true),0); }
+    /* AND, WHEN SOMETHING WENT WRONG, THE TRACE GOES WITH IT — after the run,
+       never during, and after the press that was queued has been handed on,
+       so a diagnostic can never be what the queue is waiting behind. Only on
+       a real fault (an error, or an upload whose bookkeeping failed), so a
+       fleet that is working writes nothing at all. Deliberately not awaited:
+       the sync is finished, and whether the trace lands changes nothing. */
+    try{
+      const bad = (lastErr && String(lastErr).trim()) || (bookFail && bookFail.size);
+      if(bad) sendTrace(lastErr ? "run-error" : "bookkeeping");
+    }catch(e){}
   }
 }
 
