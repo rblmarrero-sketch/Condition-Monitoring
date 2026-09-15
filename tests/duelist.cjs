@@ -148,11 +148,15 @@ const SEED = `(() => {
     sheet.when.includes('7') && sheet.when.includes('off'), sheet.when.join(' '));
 
   /* The reason is the point of asking. Refused, not defaulted — "no reason
-     given" recorded a hundred times is the same as no record at all. */
-  await p.click('#dueDlgOk');
-  await p.waitForTimeout(200);
-  const nagged = await p.textContent('#dueDlgMsg');
-  ok('it refuses without one', nagged.length > 10, nagged);
+     given" recorded a hundred times is the same as no record at all. OK used
+     to stay pressable and answer a real tap with one small grey sentence
+     under a dialog that stayed open, which read in the field as "it does not
+     respond". It is disabled outright now, so the button itself says what a
+     nag message could not be counted on to be read. */
+  ok('OK is disabled with nothing typed', await p.evaluate(() => document.getElementById('dueDlgOk').disabled));
+  let refused = false;
+  try { await p.click('#dueDlgOk', { timeout: 1000 }); } catch (e) { refused = true; }
+  ok('a real tap on it cannot land', refused);
   ok('and nothing was written', (await p.evaluate(() =>
     Object.keys(JSON.parse(localStorage.getItem('cm_due_defer') || '{}')).length)) === 0);
 

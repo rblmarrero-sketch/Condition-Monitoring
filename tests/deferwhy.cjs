@@ -181,6 +181,45 @@ const R = f => fs.readFileSync(path.join(__dirname, "..", f), "utf8");
   ok("the deferral keeps both halves", !!stored && stored.whyKey === "unsafe", JSON.stringify(stored));
   ok("  the words are the ones shown, not the code",
      !!stored && stored.why === "Unsafe conditions", (stored || {}).why);
+
+  console.log("\n7b. \"NOT BEING DONE\" IS A CHIP, NOT A COMPLETE ANSWER — AND OK SAYS SO");
+  /* Read off a handset: tap the chip, tap OK, nothing visibly happens. It was
+     never a dead handler — the chip highlighted exactly as written and OK's
+     guard fired exactly as written — but a rejection was one small grey
+     sentence under a dialog that stayed open, which a phone at -40 with
+     gloves on cannot tell apart from a button doing nothing at all. The fix
+     is not to relax the rule (a reason is still required); it is that OK
+     must LOOK unpressable rather than silently refuse a real press, and a
+     real press is what this asserts — page.click(), which fails the way a
+     finger does when the element cannot be interacted with. */
+  await p.evaluate(() => document.querySelector('#dueWeekList [data-f="TK147"]').click());
+  await p.waitForTimeout(300);
+  ok("the dialog opens on the second row", await p.evaluate(() => document.getElementById("dueDlg").open));
+  await p.click('#dueWhen [data-w="off"]');
+  const offState = await p.evaluate(() => ({
+    chip: document.querySelector('#dueWhen [data-w="off"]').className,
+    okDisabled: document.getElementById("dueDlgOk").disabled,
+    msg: document.getElementById("dueDlgMsg").textContent,
+  }));
+  ok("  the chip itself still responds to the tap", /danger/.test(offState.chip), offState.chip);
+  ok("  and OK is visibly disabled with no reason typed yet", offState.okDisabled === true,
+     JSON.stringify(offState));
+  let blocked = false;
+  try { await p.click("#dueDlgOk", { timeout: 1000 }); } catch (e) { blocked = true; }
+  ok("  a real tap on OK cannot even land while it is disabled", blocked === true);
+  await p.fill("#dueWhy", "no access, gate locked");
+  ok("  typing a reason re-enables it immediately",
+     await p.evaluate(() => document.getElementById("dueDlgOk").disabled) === false);
+  const offStored = await p.evaluate(async () => {
+    document.getElementById("dueDlgOk").click();
+    await new Promise(r => setTimeout(r, 400));
+    return deferOf("MP", "TK147");
+  });
+  ok("  and the round is recorded as not being done at all, not merely deferred",
+     !!offStored && offStored.until === null, JSON.stringify(offStored));
+  ok("  with the reason that was typed", !!offStored && offStored.why === "no access, gate locked",
+     (offStored || {}).why);
+
   ok("no page errors on the phone", perr.length === 0, perr.slice(0, 2).join(" | "));
   await p.close();
 
@@ -228,7 +267,8 @@ const R = f => fs.readFileSync(path.join(__dirname, "..", f), "utf8");
     const sel = document.getElementById("dueWhySel");
     const wrap = sel && sel.closest("label");
     const hidden = !wrap || wrap.classList.contains("hidden");
-    document.getElementById("dueWhy").value = "no access to the bay";
+    const w = document.getElementById("dueWhy");
+    w.value = "no access to the bay"; w.dispatchEvent(new Event("input"));
     document.getElementById("dueDlgOk").click();
     await new Promise(r => setTimeout(r, 300));
     const d = deferOf("MP", "TK199");

@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=375">
+<link rel="manifest" href="manifest.webmanifest?v=376">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=375">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=375">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=375">
+<link rel="apple-touch-icon" href="icon-192.png?v=376">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=376">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=376">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -751,6 +751,15 @@
     main{max-width:760px;}
   }
   .hint{font-size:12.5px;color:var(--muted);margin-top:6px;} #setMsg{white-space:pre-wrap;word-break:break-word;user-select:text;}
+  /* "Not being done" was a chip plus a button, and OK stayed live either way —
+     so tapping the chip, then OK, with nothing typed yet, produced a small
+     grey sentence under a dialog that was still sitting open. Read as "it
+     doesn't respond" in the field, because the one thing that actually
+     changed was easy to miss with gloves on. #dueDlgMsg.err is that sentence
+     in the report's own critical ink, and dueNotDoing now disables OK itself
+     until a reason exists, so the button LOOKS unpressable rather than
+     silently refusing a press. */
+  #dueDlgMsg.err{color:var(--crit-ink);font-weight:600;}
   .btn-set{border:1px solid var(--border);background:var(--surface-2);color:var(--ink-2);
     border-radius:10px;min-width:44px;min-height:44px;padding:0;font-size:17px;
     cursor:pointer;margin-left:auto;flex:none;}
@@ -2568,15 +2577,15 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=375"></script>
-<script src="upload-defaults.js?v=375"></script>
-<script src="hme.js?v=375"></script>
-<script src="mp-fc.js?v=375"></script>
-<script src="hme-cascade.js?v=375"></script>
-<script src="assets.js?v=375"></script>
-<script src="temp-limits.js?v=375"></script>
-<script src="normalize.js?v=375"></script>
-<script src="terms.js?v=375"></script>
+<script src="native.js?v=376"></script>
+<script src="upload-defaults.js?v=376"></script>
+<script src="hme.js?v=376"></script>
+<script src="mp-fc.js?v=376"></script>
+<script src="hme-cascade.js?v=376"></script>
+<script src="assets.js?v=376"></script>
+<script src="temp-limits.js?v=376"></script>
+<script src="normalize.js?v=376"></script>
+<script src="terms.js?v=376"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2595,25 +2604,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=375"></script>
-<script src="edits.js?v=375"></script>
-<script src="due.js?v=375"></script>
-<script src="wear.js?v=375"></script>
-<script src="wear-figs.js?v=375"></script>
-<script src="wear-map.js?v=375"></script>
-<script src="machine-photos.js?v=375"></script>
-<script src="machine-fig.js?v=375"></script>
-<script src="get.js?v=375"></script>
-<script src="points.js?v=375"></script>
-<script src="uc-points.js?v=375"></script>
-<script src="inspect-guide.js?v=375"></script>
-<script src="get-figs.js?v=375"></script>
-<script src="body-points.js?v=375"></script>
-<script src="body-map.js?v=375"></script>
-<script src="lube.js?v=375"></script>
-<script src="lube-overrides.js?v=375"></script>
-<script src="lube2027.js?v=375"></script>
-<script src="report-core.js?v=375"></script>
+<script src="grade.js?v=376"></script>
+<script src="edits.js?v=376"></script>
+<script src="due.js?v=376"></script>
+<script src="wear.js?v=376"></script>
+<script src="wear-figs.js?v=376"></script>
+<script src="wear-map.js?v=376"></script>
+<script src="machine-photos.js?v=376"></script>
+<script src="machine-fig.js?v=376"></script>
+<script src="get.js?v=376"></script>
+<script src="points.js?v=376"></script>
+<script src="uc-points.js?v=376"></script>
+<script src="inspect-guide.js?v=376"></script>
+<script src="get-figs.js?v=376"></script>
+<script src="body-points.js?v=376"></script>
+<script src="body-map.js?v=376"></script>
+<script src="lube.js?v=376"></script>
+<script src="lube-overrides.js?v=376"></script>
+<script src="lube2027.js?v=376"></script>
+<script src="report-core.js?v=376"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -5218,13 +5227,34 @@ async function addPicked(picked){
   /* Both buttons are held down while ten frames are being shrunk, so a second
      tap cannot start a competing pass over the same position. */
   $("takeBtn").disabled=true; $("videoBtn").disabled=true;
+  const isVidF = f => /^video\//.test(f.type) || (!f.type && /\.(mp4|mov|m4v|3gp|avi|mkv|webm)$/i.test(f.name||""));
+  /* SECURED BEFORE ANY OF THEM IS PROCESSED, NOT ONE AT A TIME IN LINE WITH
+     THE SLOW WORK. Read off a handset on 2026-09-15: a component photographed
+     from the gallery failed to send; the same position retaken with the
+     camera synced immediately. intakeNoted already owns every photograph's
+     bytes (ownBytes, build 372) — but this loop called it once per file, in
+     the SAME order it also decoded and re-encoded them in, and decoding and
+     re-encoding a 12 MP frame is real time. A multi-select gallery pick hands
+     several files over behind ONE permission grant; file #1's canvas work
+     held up the READ of file #4, and by the time #4's turn came the OS could
+     already have taken the grant back — every reader failing together, which
+     is indistinguishable from a file that was already gone, because by then
+     it was. So every photograph in the batch is read into memory — fast, one
+     pass over the bytes, no decode — in PARALLEL, the instant the picker
+     hands them over, before the sequential loop starts any of the slow part.
+     A file this cannot secure is passed through unsecured, exactly as
+     before: intakeNoted makes its own attempt and names the reason if that
+     one fails too. Videos are read by their own path (acceptVideo). */
+  const secured=new Map();
+  await Promise.all(picked.filter(f=>!isVidF(f)).map(async f=>{
+    try{ secured.set(f, await ownBytes(f)); }catch(e){}
+  }));
   try{
     const p=curP(); (p.photos ||= []);
     let room=MAX_PHOTOS-p.photos.length, skipped=0, vidSettled=!!p.video;
     const odd=[];      // files kept, but not brought into the system's own shape
     for(const f of picked){
-      const isVid = /^video\//.test(f.type) || (!f.type && /\.(mp4|mov|m4v|3gp|avi|mkv|webm)$/i.test(f.name||""));
-      if(isVid){
+      if(isVidF(f)){
         /* One clip per position, and one attempt: a clip refused for length has
            already said so itself, and stacking a second dialog behind that one
            explains nothing it did not already. */
@@ -5236,7 +5266,7 @@ async function addPicked(picked){
       /* Standardised on the way in, exactly like a photograph taken here — a
          12 MP HEIC out of an iPhone gallery is otherwise 4 MB on the link and
          a frame the office cannot open. */
-      const got=await intakeNoted(f);
+      const got=await intakeNoted(secured.get(f)||f);
       addPos(p, got.att, "COMPONENT"); room--;
       if(got.why) odd.push({name:f.name||"", why:got.why});
     }
@@ -10084,24 +10114,53 @@ async function dueNotDoing(ty,unit){
      repair" could reach the folder keyed as "No operator" and the office's
      count would be confidently wrong — the failure `respRole` was given the
      same rule to avoid. */
-  $("dueWhy").oninput=()=>{
-    if(!whyKey) return;
-    if($("dueWhy").value.trim()!==TERMS.whyLabel(whyKey,lang)){ whyKey=""; if(sel) sel.value=""; }
+  /* THE BUTTON SAYS WHETHER IT CAN BE PRESSED. Read off a handset: tap the
+     chip, tap OK, nothing visibly happens — because "nothing happens" WAS the
+     answer, printed as one small grey sentence under a dialog that stayed
+     open. OK is disabled the instant the reason is too short and enabled the
+     instant it is not, on every event that could change either — so a phone
+     at −40 with gloves on sees a button it cannot press rather than one that
+     silently refuses the press. */
+  const syncOk=()=>{
+    const ok=$("dueDlgOk"); if(!ok) return;
+    const have=$("dueWhy").value.trim().length>=3;
+    ok.disabled=!have;
+    if(have) $("dueDlgMsg").textContent="", $("dueDlgMsg").classList.remove("err");
   };
+  $("dueWhy").oninput=()=>{
+    if(whyKey && $("dueWhy").value.trim()!==TERMS.whyLabel(whyKey,lang)){ whyKey=""; if(sel) sel.value=""; }
+    syncOk();
+  };
+  if(sel){ const prevChange=sel.onchange; sel.onchange=()=>{ prevChange&&prevChange(); syncOk(); }; }
   const paint=()=>{ $("dueWhen").innerHTML=
       DUE_PUT.map(n=>`<button class="btn chipbtn ${String(n)===until?"primary":""}" data-w="${n}">${
         esc(t("due_put_n").replace("{n}",n))}</button>`).join("")
       + `<button class="btn chipbtn ${until==="off"?"danger":""}" data-w="off">${esc(t("due_off"))}</button>`;
-    $("dueWhen").querySelectorAll("[data-w]").forEach(b=>b.onclick=()=>{ until=b.dataset.w; paint(); }); };
+    $("dueWhen").querySelectorAll("[data-w]").forEach(b=>b.onclick=()=>{
+      until=b.dataset.w; paint();
+      /* Choosing WHEN is not choosing WHY. A reason is still required, and
+         the next natural tap should land there, not on a button that will
+         not move. */
+      if($("dueWhy").value.trim().length<3){
+        const target=(sel && !sel.closest("label").classList.contains("hidden")) ? sel : $("dueWhy");
+        target.focus(); target.scrollIntoView&&target.scrollIntoView({block:"nearest"});
+      }
+    }); };
   paint();
+  syncOk();
   dlg.showModal();
   const done=await new Promise(res=>{
     $("dueDlgCancel").onclick=()=>res(null);
     $("dueDlgOk").onclick=()=>{
       const why=$("dueWhy").value.trim();
       /* Refused, not defaulted. "No reason given" recorded a hundred times is
-         the same as having no record at all. */
-      if(why.length<3){ $("dueDlgMsg").textContent=t("due_why_need"); $("dueWhy").focus(); return; }
+         the same as having no record at all. Kept as a second guard — OK is
+         disabled below this length, but a guard that only lives in one place
+         is a guard somebody eventually calls from the other one. */
+      if(why.length<3){
+        $("dueDlgMsg").textContent=t("due_why_need"); $("dueDlgMsg").classList.add("err");
+        $("dueWhy").focus(); syncOk(); return;
+      }
       res({until, why, whyKey});
     };
   });
@@ -13217,7 +13276,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="375";
+const BUILD="376";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

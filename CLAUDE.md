@@ -802,6 +802,49 @@ already downloaded and in charge, and only needs a reload.
 Losing a half-captured inspection to a reload is worse than a phone being an
 hour behind. `applyUpdateIfIdle` checks `__swBusy()` for exactly that reason.
 
+**A BUTTON THAT REFUSES A PRESS MUST LOOK LIKE ONE.** Read off a handset on
+build 375: "when you choose Not being done it's not responding — it never
+worked." It was never a dead handler. The chip highlighted exactly as
+written, and OK's own guard fired exactly as written — but a refusal was one
+small grey sentence under a dialog that stayed open, and a phone at −40 with
+gloves on cannot tell that apart from a button doing nothing at all. The fix
+is not to relax the rule — a reason is still required, on every one of the
+ten `DUE_PUT` chips including "off" — it is that `dueNotDoing`'s OK button is
+now `disabled` outright until the reason box holds three characters, on every
+event that could change that (chip tap, picking from the ten, typing,
+clearing), so the button is visibly unpressable rather than silently
+rejecting the press; the length check inside the click handler stays as a
+second guard, not the only one. Selecting a chip with no reason yet also
+moves focus to wherever the reason is entered, because choosing WHEN is not
+choosing WHY. `tests/deferwhy.cjs` §7b and `tests/duelist.cjs` assert the
+disabled state with a real `page.click()`, which fails the way a finger does
+against an element that cannot be interacted with — a program calling the
+handler directly cannot tell a disabled button from a live one that merely
+declines.
+
+**A GALLERY BATCH IS ONE PERMISSION GRANT, NOT ONE PER FILE PROCESSED IN
+TURN.** Read off a handset on 2026-09-15: a component photographed from the
+gallery failed to send; the same position retaken with the app's own camera
+synchronised immediately. `ownBytes` already reads every photograph into
+memory before anything is stored (build 372, the NotFoundError fix above) —
+that was not the gap. The gap was ORDER: `addPicked` called `intakeNoted`
+once per file, in the SAME sequence it also decoded and re-encoded them in,
+and decoding a 12 MP frame is real time. A multi-select gallery pick hands
+every file over behind ONE grant; file #1's canvas work held up the READ of
+file #4, and by the time #4's turn came in the loop the OS could already have
+taken the grant back — every reader failing together, indistinguishable from
+a file that was already gone, because by then it was. The camera path never
+showed this because it is always exactly one file, read the instant it is
+handed over. `addPicked` now secures every photograph's bytes — one pass,
+`ownBytes`, no decode — in PARALLEL, for the WHOLE batch, before the
+sequential loop starts any of the slow work on any of them; a file that
+still cannot be secured is passed through unsecured exactly as before, and
+`intakeNoted` makes its own attempt downstream. `tests/gallerybatch.cjs`
+makes decoding artificially slow and one file in a five-photo batch go
+NotFoundError after a fixed delay — long enough to survive a parallel read at
+pick time, too short to survive three files' decoding ahead of it in the old
+order — and is the one test that tells the two orderings apart.
+
 ---
 
 ## Secrets
