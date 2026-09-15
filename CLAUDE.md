@@ -903,6 +903,20 @@ the round for its own reason either way. A build with no
 before this fix — there is no later, better answer for it to wait for.
 `tests/quarflash.cjs`.
 
+**AND NO BACKEND ATTACHED IS THE SAME SILENCE, NOT A CONFIRMED ABSENCE.**
+The fix above still shipped a fresh way to get the wrong answer, on the very
+next report: the sibling KPI tiles correctly said "no backend attached —
+nothing to compare against" (`CMDrive.configured()` false, `syncScan()`'s own
+`linked` guard), while the correction panel underneath them went on
+confidently reporting TK115 and DZ007 as "10 photo file(s) missing."
+`CMDrive.hasName` is a function whether or not a backend is configured — with
+nothing to ask, it simply answers false for every name — and `idxTrust` never
+checked `configured()` at all, only `tried`/`fresh`. A backend that was never
+asked because there is nothing to ask is exactly as unconfirmed as one that
+was asked and has not answered yet; `orphanPhotos()` now requires `linked`
+before it will trust the cache as a verdict either way, matching the same
+`CMDrive.configured()` check the KPI tiles already used. `tests/quarflash.cjs`.
+
 **A GALLERY BATCH IS ONE PERMISSION GRANT, NOT ONE PER FILE PROCESSED IN
 TURN.** Read off a handset on 2026-09-15: a component photographed from the
 gallery failed to send; the same position retaken with the app's own camera

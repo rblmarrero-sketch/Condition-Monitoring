@@ -150,6 +150,38 @@ const RECS = [
      'no mediaIndexState at all trusts hasName immediately, same as always', JSON.stringify(noApi));
   await p2.close();
 
+  console.log('\nNO BACKEND ATTACHED IS SILENCE TOO, NOT A CONFIRMED ABSENCE');
+  /* Reported live on 2026-09-15: the sibling KPI tiles already say "no
+     backend attached — nothing to compare against" (CMDrive.configured()
+     false, the same `linked` guard syncScan() has always used), but this
+     panel went on confidently accusing TK115/DZ007 of missing photographs —
+     CMDrive.hasName is a function regardless of whether a backend is
+     configured, so with nothing to ask, it simply answers false for
+     everything and orphanPhotos() read that as a verdict. A backend that
+     was never asked is exactly as unconfirmed as one that was asked and
+     has not answered yet — `idxTrust` must be false in both. */
+  const p3 = await b.newPage({ viewport: { width: 1440, height: 900 } });
+  await p3.addInitScript(u => { localStorage.setItem('cm_drive_url', u); localStorage.setItem('cm_drive_sec', ''); },
+    `http://127.0.0.1:${PORT}/live`);
+  await p3.goto(`http://127.0.0.1:${PORT}/dashboard/index.html`, { waitUntil: 'load' });
+  await p3.waitForFunction(() => window.CMDrive && typeof CMDrive.mediaIndexState === 'function', null, { timeout: 20000 });
+  const noBackend = await p3.evaluate(async recs => {
+    CMDrive.configured = () => false;
+    await CMDrive.refreshMediaIndex().catch(() => {});
+    CMDash.importRecords(recs);
+    const rec = RECS.find(r => r.equip === 'TK115');
+    const tally = photoTally(rec);
+    showTab('sync'); renderSync();
+    const row = [...document.querySelectorAll('#syQuarTbl [data-quargo]')].find(r => /TK115/.test(r.textContent));
+    return { missing: tally.missing, received: tally.received,
+             rowText: row ? row.textContent.replace(/\s+/g, ' ') : '' };
+  }, RECS);
+  ok(noBackend.missing === 0, 'unconfigured — no photograph is accused of being missing', JSON.stringify(noBackend));
+  ok(!/photo file missing/i.test(noBackend.rowText),
+     'and the row does not say a file is missing when there is no backend to have checked it against',
+     noBackend.rowText.slice(0, 120));
+  await p3.close();
+
   ok(errs.length === 0, 'no page errors', errs.slice(0, 3).join(' | '));
   await b.close(); srv.close();
   console.log(fails.length ? `\n${fails.length} FAILED: ` + fails.join(' | ') : '\nall passed');
