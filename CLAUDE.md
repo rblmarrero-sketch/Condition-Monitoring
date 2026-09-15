@@ -822,6 +822,27 @@ against an element that cannot be interacted with — a program calling the
 handler directly cannot tell a disabled button from a live one that merely
 declines.
 
+**AND THE CLASS BEING RIGHT IS NOT THE SAME AS THE SCREEN BEING RIGHT.** The
+same handset, the same round, one build later (376, minutes after the fix
+above shipped): "still don't respond and don't change color when touched."
+The chip was in fact gaining `class="btn chipbtn danger"` exactly as written
+— this was verified by reading `className`, which is how the first fix's own
+test proved it — and NOTHING ON SCREEN CHANGED, because **`.btn.danger` had
+no CSS rule on the phone at all**, ever, on any build. Not new: `ask()`'s
+own dangerous-confirm button (`$("dlgOk").className="btn "+(danger?"danger":
+"primary")`) — the "delete this unsent round" dialog among others — has been
+setting the identical class, to the identical nothing, for as long as `ask()`
+has taken a `danger` argument. A selected "Not being done" chip and a
+"delete permanently" OK button both looked exactly like their own default
+state; this project's signature defect one rung further down than usual,
+because the STATE changed and even the MARKUP proved it, and still nothing
+readable reached the glass. `.btn.danger{background:var(--critical);color:
+#fff;}` is the whole fix — the dashboard already had this rule, the phone
+never did. **A test that reads `className` is reading the DOM's opinion, not
+the screen's**: `tests/deferwhy.cjs` §7b now also reads `getComputedStyle(...)
+.backgroundColor` before and after the tap and asserts it actually changed,
+which is the one question `/danger/.test(className)` was never able to ask.
+
 **A GALLERY BATCH IS ONE PERMISSION GRANT, NOT ONE PER FILE PROCESSED IN
 TURN.** Read off a handset on 2026-09-15: a component photographed from the
 gallery failed to send; the same position retaken with the app's own camera

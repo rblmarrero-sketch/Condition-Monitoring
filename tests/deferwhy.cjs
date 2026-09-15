@@ -195,13 +195,24 @@ const R = f => fs.readFileSync(path.join(__dirname, "..", f), "utf8");
   await p.evaluate(() => document.querySelector('#dueWeekList [data-f="TK147"]').click());
   await p.waitForTimeout(300);
   ok("the dialog opens on the second row", await p.evaluate(() => document.getElementById("dueDlg").open));
+  /* THE CLASS NAME IS NOT THE PROOF. build 376 shipped with the "off" chip
+     correctly gaining class="btn chipbtn danger" on a real tap and NOTHING
+     ON SCREEN CHANGING, because .btn.danger had no rule at all — read off a
+     handset the same day this shipped: "doesn't change color when touched".
+     A test that only reads className would have called that build passing.
+     getComputedStyle is what a screen actually shows. */
+  const chipColorBefore = await p.evaluate(() =>
+    getComputedStyle(document.querySelector('#dueWhen [data-w="off"]')).backgroundColor);
   await p.click('#dueWhen [data-w="off"]');
   const offState = await p.evaluate(() => ({
     chip: document.querySelector('#dueWhen [data-w="off"]').className,
+    color: getComputedStyle(document.querySelector('#dueWhen [data-w="off"]')).backgroundColor,
     okDisabled: document.getElementById("dueDlgOk").disabled,
     msg: document.getElementById("dueDlgMsg").textContent,
   }));
   ok("  the chip itself still responds to the tap", /danger/.test(offState.chip), offState.chip);
+  ok("  and a screen, not just the DOM, can see it: the fill actually changed",
+     offState.color !== chipColorBefore, chipColorBefore + " -> " + offState.color);
   ok("  and OK is visibly disabled with no reason typed yet", offState.okDisabled === true,
      JSON.stringify(offState));
   let blocked = false;

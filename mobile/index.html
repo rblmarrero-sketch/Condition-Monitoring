@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=376">
+<link rel="manifest" href="manifest.webmanifest?v=377">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=376">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=376">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=376">
+<link rel="apple-touch-icon" href="icon-192.png?v=377">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=377">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=377">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -388,6 +388,19 @@
      cursor — indistinguishable from a live control that simply does nothing. */
   .btn:disabled{opacity:.45;cursor:default;}
   .btn.primary{background:var(--accent);color:var(--accent-ink);}
+  /* MISSING ENTIRELY UNTIL BUILD 376. Two call sites — the generic confirm
+     dialog's dangerous OK ($("dlgOk").className, build unknown) and the
+     "Not being done" chip added this build — set class="btn danger" and
+     nothing on the phone ever painted it: no rule here answered `.danger`
+     at all, so a selected "Not being done" chip and a "delete this" OK
+     button both looked exactly like their own unselected/default state.
+     Read off a handset: "doesn't change color when touched" — the class WAS
+     applied (proven in tests/deferwhy.cjs and tests/duelist.cjs by reading
+     className), which is exactly this project's signature defect one layer
+     lower than usual: a real state change with nothing on screen to show it.
+     Filled solid, the same way .primary is, so a dangerous choice reads as
+     clearly made as a safe one does. */
+  .btn.danger{background:var(--critical);color:#fff;}
   .btn.ghost{background:var(--surface-2);color:var(--ink);border:1px solid var(--border);}
   .btn.ghost:active{background:var(--surface-3);opacity:1;}
   .pending{display:flex;flex-direction:column;gap:10px;}
@@ -2577,15 +2590,15 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=376"></script>
-<script src="upload-defaults.js?v=376"></script>
-<script src="hme.js?v=376"></script>
-<script src="mp-fc.js?v=376"></script>
-<script src="hme-cascade.js?v=376"></script>
-<script src="assets.js?v=376"></script>
-<script src="temp-limits.js?v=376"></script>
-<script src="normalize.js?v=376"></script>
-<script src="terms.js?v=376"></script>
+<script src="native.js?v=377"></script>
+<script src="upload-defaults.js?v=377"></script>
+<script src="hme.js?v=377"></script>
+<script src="mp-fc.js?v=377"></script>
+<script src="hme-cascade.js?v=377"></script>
+<script src="assets.js?v=377"></script>
+<script src="temp-limits.js?v=377"></script>
+<script src="normalize.js?v=377"></script>
+<script src="terms.js?v=377"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2604,25 +2617,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=376"></script>
-<script src="edits.js?v=376"></script>
-<script src="due.js?v=376"></script>
-<script src="wear.js?v=376"></script>
-<script src="wear-figs.js?v=376"></script>
-<script src="wear-map.js?v=376"></script>
-<script src="machine-photos.js?v=376"></script>
-<script src="machine-fig.js?v=376"></script>
-<script src="get.js?v=376"></script>
-<script src="points.js?v=376"></script>
-<script src="uc-points.js?v=376"></script>
-<script src="inspect-guide.js?v=376"></script>
-<script src="get-figs.js?v=376"></script>
-<script src="body-points.js?v=376"></script>
-<script src="body-map.js?v=376"></script>
-<script src="lube.js?v=376"></script>
-<script src="lube-overrides.js?v=376"></script>
-<script src="lube2027.js?v=376"></script>
-<script src="report-core.js?v=376"></script>
+<script src="grade.js?v=377"></script>
+<script src="edits.js?v=377"></script>
+<script src="due.js?v=377"></script>
+<script src="wear.js?v=377"></script>
+<script src="wear-figs.js?v=377"></script>
+<script src="wear-map.js?v=377"></script>
+<script src="machine-photos.js?v=377"></script>
+<script src="machine-fig.js?v=377"></script>
+<script src="get.js?v=377"></script>
+<script src="points.js?v=377"></script>
+<script src="uc-points.js?v=377"></script>
+<script src="inspect-guide.js?v=377"></script>
+<script src="get-figs.js?v=377"></script>
+<script src="body-points.js?v=377"></script>
+<script src="body-map.js?v=377"></script>
+<script src="lube.js?v=377"></script>
+<script src="lube-overrides.js?v=377"></script>
+<script src="lube2027.js?v=377"></script>
+<script src="report-core.js?v=377"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -13276,7 +13289,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="376";
+const BUILD="377";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
