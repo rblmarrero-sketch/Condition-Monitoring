@@ -990,6 +990,45 @@ close the gap — a deliberate power-button lock, or simply carrying the
 phone past the window, still can — it only shrinks it, for the specific
 case this project has actually seen twice. `tests/wakehold.cjs`.
 
+**THREE PLACES THE UPLOAD PATH TRUSTED SILENCE AS SUCCESS.** Surfaced by an
+external code investigation, verified line by line against the running
+functions before anything was changed. All three are in the client, not the
+deployed backend, which has always answered correctly by construction —
+these are about what the phone assumes on a reply that says something else.
+
+`putBatch` threw an "unreadable" error naming ZERO files when a chunk was
+already fully reconciled: every photograph in it failed to read AND every
+one was already verified on the server (`serverHolds`), so both `built` and
+`unreadable` came out empty — nothing was actually wrong — but the guard
+only checked `built`, not `unreadable`, and raised anyway.
+
+A batch reply of `{ok:true, saved:[...], failed:[...]}` that left a
+submitted file out of BOTH lists was read as complete. `putBatch` marks
+`sent` only from `saved` and only raises for names in `failed`; a name in
+neither vanished silently. Upstream, `putAll` and `syncNow` read "no throw"
+as "this destination is done" and could set the round's own `up:1`, while
+`attSettle`'s per-attachment state — built from the very same `sent` map —
+correctly kept it `pending`: two answers to the same question on the same
+record, the exact shape this file's own rules list warns against. Every
+name `built` for the wire is now checked against the union of `saved` and
+`failed`; one missing from both is treated as failed, so it stays out of
+`sent` and goes again next attempt.
+
+`confirmRun` double-counted a file the server lists at 0 bytes when the
+phone also knows what it should weigh: `size(n)===0` satisfied both the
+`empty` filter and the `short` filter (0 is never the wanted size), so
+`bad = missing.concat(empty).concat(short)` carried the same name twice and
+`conf.n = names.length - bad.length` went negative for one bad file in a
+one-file round — a confirmation count a person could not trust. `short` now
+excludes an already-empty file outright, so the two lists partition `names`
+instead of overlapping.
+
+`tests/upload-recovery-edge.cjs` reproduces all three directly against
+`putBatch`/`confirmRun` (with controls proving an ordinary batch and a
+genuinely unreadable, unverified file are both unaffected), and fails
+against the pre-fix code on exactly the four assertions tied to the bugs —
+checked by hand before this suite existed, and again after.
+
 ---
 
 ## Secrets

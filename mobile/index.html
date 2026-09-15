@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=383">
+<link rel="manifest" href="manifest.webmanifest?v=384">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=383">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=383">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=383">
+<link rel="apple-touch-icon" href="icon-192.png?v=384">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=384">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=384">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2607,15 +2607,15 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=383"></script>
-<script src="upload-defaults.js?v=383"></script>
-<script src="hme.js?v=383"></script>
-<script src="mp-fc.js?v=383"></script>
-<script src="hme-cascade.js?v=383"></script>
-<script src="assets.js?v=383"></script>
-<script src="temp-limits.js?v=383"></script>
-<script src="normalize.js?v=383"></script>
-<script src="terms.js?v=383"></script>
+<script src="native.js?v=384"></script>
+<script src="upload-defaults.js?v=384"></script>
+<script src="hme.js?v=384"></script>
+<script src="mp-fc.js?v=384"></script>
+<script src="hme-cascade.js?v=384"></script>
+<script src="assets.js?v=384"></script>
+<script src="temp-limits.js?v=384"></script>
+<script src="normalize.js?v=384"></script>
+<script src="terms.js?v=384"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2634,25 +2634,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=383"></script>
-<script src="edits.js?v=383"></script>
-<script src="due.js?v=383"></script>
-<script src="wear.js?v=383"></script>
-<script src="wear-figs.js?v=383"></script>
-<script src="wear-map.js?v=383"></script>
-<script src="machine-photos.js?v=383"></script>
-<script src="machine-fig.js?v=383"></script>
-<script src="get.js?v=383"></script>
-<script src="points.js?v=383"></script>
-<script src="uc-points.js?v=383"></script>
-<script src="inspect-guide.js?v=383"></script>
-<script src="get-figs.js?v=383"></script>
-<script src="body-points.js?v=383"></script>
-<script src="body-map.js?v=383"></script>
-<script src="lube.js?v=383"></script>
-<script src="lube-overrides.js?v=383"></script>
-<script src="lube2027.js?v=383"></script>
-<script src="report-core.js?v=383"></script>
+<script src="grade.js?v=384"></script>
+<script src="edits.js?v=384"></script>
+<script src="due.js?v=384"></script>
+<script src="wear.js?v=384"></script>
+<script src="wear-figs.js?v=384"></script>
+<script src="wear-map.js?v=384"></script>
+<script src="machine-photos.js?v=384"></script>
+<script src="machine-fig.js?v=384"></script>
+<script src="get.js?v=384"></script>
+<script src="points.js?v=384"></script>
+<script src="uc-points.js?v=384"></script>
+<script src="inspect-guide.js?v=384"></script>
+<script src="get-figs.js?v=384"></script>
+<script src="body-points.js?v=384"></script>
+<script src="body-map.js?v=384"></script>
+<script src="lube.js?v=384"></script>
+<script src="lube-overrides.js?v=384"></script>
+<script src="lube2027.js?v=384"></script>
+<script src="report-core.js?v=384"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -13382,7 +13382,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="383";
+const BUILD="384";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -14232,7 +14232,16 @@ async function putBatch(UP, files, rec, sent){
     try{ e.localRead=true; }catch(_){}
     return e;
   };
-  if(!built.length){ slog("batch-unreadable", {names:unreadable.map(u=>u.name).join(",")}); throw unreadableErr(); }
+  /* AN EMPTY BATCH IS NOT THE SAME AS A FAILED ONE. A chunk where every file
+     failed to read AND every one was already verified on the server (the
+     serverHolds continue above) leaves both built and unreadable empty —
+     there is nothing to send and nothing wrong. The old unconditional throw
+     here read that as a read failure naming zero files (up_noread with
+     n:0), over a chunk that had, in fact, fully reconciled. */
+  if(!built.length){
+    if(!unreadable.length) return;
+    slog("batch-unreadable", {names:unreadable.map(u=>u.name).join(",")}); throw unreadableErr();
+  }
   const body={ op:"batch", folder, secret:UP.sec||"", dev:(rec&&rec.dev)||DEVICE, files: built };
   const t0=Date.now(), bbytes=files.reduce((s,f)=>s+((f.blob&&f.blob.size)||0),0);
   let r;
@@ -14272,7 +14281,9 @@ async function putBatch(UP, files, rec, sent){
   /* Mark by the name we ASKED for. Drive may hold it under another when a
      second phone already owns that name. */
   const bad=(j.failed||[]).slice();
+  const ackd=new Set(bad.map(x=>x&&x.name).filter(Boolean));
   (j.saved||[]).forEach(x=>{ const nm=x&&(x.req||x.name); if(!nm) return;
+    ackd.add(nm);
     /* A backend that issues receipts hands one back per file. One that does
        not simply leaves this empty, and the evidence ladder stays where it
        was — nothing here demands a receipt in order to work. */
@@ -14283,6 +14294,19 @@ async function putBatch(UP, files, rec, sent){
     if(x.receipt && x.receipt.verified===false){ bad.push({name:nm, error:x.receipt.error||"the store could not verify what it kept"}); return; }
     sentMark(sent,nm);
     if(x.req && x.name && x.name!==x.req && STORED) STORED[x.req]=x.name; });
+  /* A NAME THE REPLY NEVER MENTIONED IS NOT A NAME THAT LANDED. function.js
+     always answers one file with one entry, in saved or in failed — but a
+     client that assumes that contract holds on every reply that actually
+     arrives, on every backend, forever, is exactly how `up:1` came to mean
+     less than it says elsewhere in this file. A name in neither list falls
+     through here silently otherwise: not marked sent, but not raised either
+     — syncNow saw no throw and stamped the round complete anyway, while
+     attSettle's own per-attachment state (built from the same `sent` map)
+     correctly kept it pending, two answers to one question on the same
+     record. Treated as failed: it stays out of `sent`, so the retry below
+     tries it again instead of the round being marked done over a file
+     nobody said anything about. */
+  built.forEach(f=>{ if(!ackd.has(f.name)) bad.push({name:f.name, error:"no acknowledgment from the server for this file"}); });
   /* SOME LANDED AND SOME DID NOT: the ones that did are marked and the rest
      are raised. Until build 354 a batch with one failed file returned as if
      whole — the lane took it as done, the round went up:1 with a photograph
@@ -14407,8 +14431,15 @@ async function confirmRun(done, dests){
          cannot be compared produces no finding, because a guard that cries
          wolf is the noise a real failure hides in. */
       const want=sizes||{};
+      /* A ZERO-LENGTH FILE IS EMPTY, NOT ALSO SHORT. size(n)===0 satisfied
+         both this filter and the one below — has(n), not null, and 0 is
+         never the wanted byte count — so `bad` and `resend` each carried
+         the same name twice, and the confirmation count went negative for
+         one bad file (`conf.n = names.length - bad.length`, bad.length
+         counting it twice). Excluded here so the two lists partition
+         `names` instead of overlapping. */
       const short=names.filter(n=>{
-        if(!has(n) || size(n)==null) return false;
+        if(!has(n) || size(n)==null || size(n)===0) return false;
         const w=Number(want[n]||0);
         return w>0 && Number(size(n))!==w;
       });
