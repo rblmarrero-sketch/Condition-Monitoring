@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=379">
+<link rel="manifest" href="manifest.webmanifest?v=380">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=379">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=379">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=379">
+<link rel="apple-touch-icon" href="icon-192.png?v=380">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=380">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=380">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2598,15 +2598,15 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=379"></script>
-<script src="upload-defaults.js?v=379"></script>
-<script src="hme.js?v=379"></script>
-<script src="mp-fc.js?v=379"></script>
-<script src="hme-cascade.js?v=379"></script>
-<script src="assets.js?v=379"></script>
-<script src="temp-limits.js?v=379"></script>
-<script src="normalize.js?v=379"></script>
-<script src="terms.js?v=379"></script>
+<script src="native.js?v=380"></script>
+<script src="upload-defaults.js?v=380"></script>
+<script src="hme.js?v=380"></script>
+<script src="mp-fc.js?v=380"></script>
+<script src="hme-cascade.js?v=380"></script>
+<script src="assets.js?v=380"></script>
+<script src="temp-limits.js?v=380"></script>
+<script src="normalize.js?v=380"></script>
+<script src="terms.js?v=380"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2625,25 +2625,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=379"></script>
-<script src="edits.js?v=379"></script>
-<script src="due.js?v=379"></script>
-<script src="wear.js?v=379"></script>
-<script src="wear-figs.js?v=379"></script>
-<script src="wear-map.js?v=379"></script>
-<script src="machine-photos.js?v=379"></script>
-<script src="machine-fig.js?v=379"></script>
-<script src="get.js?v=379"></script>
-<script src="points.js?v=379"></script>
-<script src="uc-points.js?v=379"></script>
-<script src="inspect-guide.js?v=379"></script>
-<script src="get-figs.js?v=379"></script>
-<script src="body-points.js?v=379"></script>
-<script src="body-map.js?v=379"></script>
-<script src="lube.js?v=379"></script>
-<script src="lube-overrides.js?v=379"></script>
-<script src="lube2027.js?v=379"></script>
-<script src="report-core.js?v=379"></script>
+<script src="grade.js?v=380"></script>
+<script src="edits.js?v=380"></script>
+<script src="due.js?v=380"></script>
+<script src="wear.js?v=380"></script>
+<script src="wear-figs.js?v=380"></script>
+<script src="wear-map.js?v=380"></script>
+<script src="machine-photos.js?v=380"></script>
+<script src="machine-fig.js?v=380"></script>
+<script src="get.js?v=380"></script>
+<script src="points.js?v=380"></script>
+<script src="uc-points.js?v=380"></script>
+<script src="inspect-guide.js?v=380"></script>
+<script src="get-figs.js?v=380"></script>
+<script src="body-points.js?v=380"></script>
+<script src="body-map.js?v=380"></script>
+<script src="lube.js?v=380"></script>
+<script src="lube-overrides.js?v=380"></script>
+<script src="lube2027.js?v=380"></script>
+<script src="report-core.js?v=380"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -2860,6 +2860,8 @@ const I18N = {
     gal_odd_heic:"{n} photograph(s) are in Apple's HEIC format and this phone cannot convert them ({names}). They were kept as they are, but the office may not be able to open them. Either take the shot with the camera button here, or set iPhone Settings \u2192 Camera \u2192 Formats to \u201cMost Compatible\u201d.",
     thumb_unread:"This photograph cannot be read on this phone. The round and its readings are intact — open it and take the position again.",
     gal_odd_own:"This phone handed the app a photograph and then could not read it back ({names}). It has been kept, but it may not survive to the upload. Take it again with the camera button here — that copy is held by the app itself and cannot be reclaimed by the phone.",
+    verify_fail_t:"Saved — but retake this now",
+    verify_fail_b:"{x} is saved and queued. Checking it back just now found {n} photograph(s) that can no longer be read on this phone: {names}. This can happen quietly after saving, with no warning at the time — which is why it is being said now instead of after you leave. Retake it while you are still at the machine; it may not be recoverable once you go.",
     media_hint:"Up to {p} photos + 1 video (max {s} sec).", media_empty:"No photos yet.",
     media_photo_n:"Photo {n}", media_del:"Remove",
     m_oops_t:"That did not work",
@@ -3486,6 +3488,8 @@ const I18N = {
     gal_odd_heic:"Фотографий в формате Apple HEIC: {n} ({names}). Этот телефон не может их преобразовать — они сохранены как есть, но в офисе могут не открыться. Снимайте кнопкой камеры в приложении или переключите на iPhone: Настройки \u2192 Камера \u2192 Форматы \u2192 \u00abНаиболее совместимые\u00bb.",
     thumb_unread:"Эту фотографию телефон прочитать не может. Обход и замеры целы — откройте его и снимите точку заново.",
     gal_odd_own:"Телефон передал приложению фотографию и тут же не смог прочитать её обратно ({names}). Она сохранена, но может не дойти до выгрузки. Сделайте снимок заново кнопкой камеры в приложении — такая копия хранится самим приложением, и телефон её не удалит.",
+    verify_fail_t:"Сохранено — но переснимите это сейчас",
+    verify_fail_b:"{x} сохранён и поставлен в очередь. Проверка прямо сейчас показала: {n} фотограф(ий/ия/ию) больше нельзя прочитать на этом телефоне: {names}. Это может произойти незаметно уже после сохранения, без предупреждения в тот момент — поэтому это говорится сейчас, а не после того как вы уедете. Переснимите, пока вы ещё у машины — после отъезда это может быть невозможно восстановить.",
     media_hint:"До {p} фото + 1 видео (макс. {s} сек).", media_empty:"Пока нет фото.",
     media_photo_n:"Фото {n}", media_del:"Удалить",
     m_oops_t:"Не получилось",
@@ -8218,6 +8222,10 @@ $("saveBtn").onclick=async ()=>{
      complete, hashed account of what it captured. */
   try{ await attSync(rec); }catch(e){}
   await dbPut(rec); noteDone(rec); noteWear(rec); await loadBaselines();
+  /* Read back while the inspector can still do something about it — see
+     verifySavedRec. Never blocks or discards; only changes which dialog is
+     shown next. */
+  const verifyBad = await verifySavedRec(id).catch(()=>[]);
   clearTimeout(draftT); draftT=null; draftSig="";
   try{ await dbDel(DRAFT_ID); }catch(e){}
   resetForm(); renderPending(); renderDue(); syncThenArm();
@@ -8228,7 +8236,12 @@ $("saveBtn").onclick=async ()=>{
   /* Belt and braces: asked at boot now (see the call beside the inbound
      timers), so this only covers a phone whose first boot answered null. */
   if(persistState===null) askPersist();
-  const m=t("m_saved"); dlg([m[0], m[1].replace("{x}",equip)]);
+  if(verifyBad.length){
+    const names=[...new Set(verifyBad)].join(", ");
+    dlg([t("verify_fail_t"), t("verify_fail_b",{x:equip, n:verifyBad.length, names})]);
+  }else{
+    const m=t("m_saved"); dlg([m[0], m[1].replace("{x}",equip)]);
+  }
 };
 
 /* ===================== inspection due-list =====================
@@ -13351,7 +13364,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="379";
+const BUILD="380";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -13667,6 +13680,39 @@ function readBlobBytes(b){
     try{ e.name="NotReadableError"; e.readers=tried; e.localRead=true; }catch(_){}
     throw e;
   })();
+}
+/* THE SAVE IS PROVEN BY READING IT BACK, NOT BY WRITING IT.
+
+   Read off two rounds on 2026-09-15, on two different trucks, in the same
+   position every time (the last magnetic plug of the walk): captured
+   offline with no dialog at the machine — ownBytes had already read the
+   photograph fine — saved, carried for hours with the phone shut for the
+   ride back, and only found broken once a signal let it try to upload.
+   Whatever breaks it happens to the STORED copy, after intake, while the
+   phone sits closed — which ownBytes cannot see, because it only ever
+   answers for the read it was just handed.
+
+   This asks the question intake cannot: not "can the picker's file still
+   be read" but "did what IndexedDB just wrote come back as the same
+   photograph" — the identical read the eventual upload will make, run now
+   instead of after a drive, while the position can still be retaken. It
+   changes nothing about what is stored; a failure here is said, not acted
+   on, because a round is never rejected for a phone's own defect
+   (tests/postsave.cjs). */
+async function verifySavedRec(id){
+  let rec; try{ rec=await dbGet(id); }catch(e){ return []; }
+  if(!rec) return [];
+  const bad=[];
+  for(const [k,p] of positionsOf(rec)){
+    const ph=photosOf(p);
+    for(let i=0;i<ph.length;i++){
+      try{ await readBlobBytes(ph[i]); }catch(e){ bad.push(itemLabelFor(rec,k)); }
+    }
+    if(isBlob(p.video)){
+      try{ await readBlobBytes(p.video); }catch(e){ bad.push(itemLabelFor(rec,k)); }
+    }
+  }
+  return bad;
 }
 function dataUrlBytes(s){ const i=s.indexOf(","); const bin=atob(i>=0?s.slice(i+1):s);
   const u=new Uint8Array(bin.length); for(let k=0;k<bin.length;k++) u[k]=bin.charCodeAt(k); return u; }

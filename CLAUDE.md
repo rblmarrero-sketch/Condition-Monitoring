@@ -902,6 +902,38 @@ NotFoundError after a fixed delay — long enough to survive a parallel read at
 pick time, too short to survive three files' decoding ahead of it in the old
 order — and is the one test that tells the two orderings apart.
 
+**A SAVE THAT SURVIVES THE WRITE CAN STILL NOT SURVIVE THE PHONE BEING SHUT.**
+Read off two trucks on 2026-09-15, in the same slot both times — the last
+magnetic plug of an HT round, its second photograph, always from the
+gallery: no dialog at the machine (`ownBytes` had already read the file
+fine), the round captured and saved entirely OFFLINE, carried for hours
+with the phone shut for the ride back, and only found broken once a signal
+let the first upload try — NotFoundError, the same name build 372 already
+gave a meaning to, but on the STORED copy this time. Re-picking a different
+photograph into the same position, on the fixed build, reproduced it again.
+`ownBytes` cannot see this class of failure: it only ever answers for the
+read it was just handed, at intake, before the record has an id — it has
+nothing to say about what IndexedDB does with that copy afterward, on a
+phone that is about to be closed and carried for a shift. **Root cause
+unconfirmed** — read every reader's bytes at intake and the picker's own
+reference is out of the picture, which leaves either a WebKit IndexedDB
+blob-durability gap under exactly this pattern (write, then close, then a
+long idle/offline stretch) or something narrower this pair of rounds
+happens to share; a platform bug is not fixed by asking harder in
+JavaScript, so this ships a NET, not a cure. `verifySavedRec` reads the
+record straight back out of IndexedDB — by its own id, the identical read
+any later upload will make — the moment Save finishes, and if a photograph
+does not come back, the inspector is told BY NAME, on the save screen,
+while the position can still be retaken, instead of by a banner after a
+drive with nobody left at the machine to fix it. It changes nothing about
+what is stored or sent — a phone's own defect is never a reason to reject a
+round — only which dialog is shown next. `tests/postsave.cjs` plants an
+attachment every reader already refuses before Save ever runs (the exact
+rig `tests/readpath.cjs` uses for "genuinely gone", keyed on byte size
+because a marker property does not survive the clone into IndexedDB) and
+proves the retake dialog names it, that a clean round still gets the
+ordinary one, and that the round is saved and queued either way.
+
 ---
 
 ## Secrets
