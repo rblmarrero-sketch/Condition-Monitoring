@@ -2,10 +2,10 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-09-15T05:32:10+00:00",
+  "generated": "2026-09-15T07:32:09+00:00",
   "source": "https://askpi.94-131-94-152.sslip.io/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
-  "unitsInWorkbook": 670,
+  "unitsInWorkbook": 671,
   "unitsKept": [
     "BL001",
     "BL002",
@@ -397,13 +397,13 @@ window.CM_WO_DATA = {
     "wo": "Work order number"
   },
   "cmDateFrom": {
-    "raised": 49,
+    "raised": 51,
     "detected": 0,
     "planStart": 0
   },
   "cmCauseFrom": {
     "wo": 30,
-    "wr": 19,
+    "wr": 21,
     "cert": 0,
     "none": 0
   },
@@ -416,6 +416,50 @@ window.CM_WO_DATA = {
     "Bekzhan"
   ],
   "cmWorkOrders": [
+    {
+      "date": "2026-09-15",
+      "dateFrom": "raised",
+      "raised": "2026-09-15",
+      "detected": "2026-09-15",
+      "planStart": null,
+      "asset": "TK115",
+      "defect": "DD-00012678",
+      "requestNo": "DD-00012678",
+      "eqType": "TRUCK, ARTICULATED",
+      "system": "TK115.DRS.COO.RAD Radiator / Радиатор",
+      "priority": "P2 Urgent",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Износ уплотнения",
+      "causeFrom": "wr",
+      "descr": "утечка охлаждающей жидкости из нижнего бачка радиатора правой секции.",
+      "status": "Registered",
+      "by": "Slam",
+      "woNumber": null,
+      "maintType": null,
+      "planned": false
+    },
+    {
+      "date": "2026-09-15",
+      "dateFrom": "raised",
+      "raised": "2026-09-15",
+      "detected": "2026-09-15",
+      "planStart": null,
+      "asset": "TK115",
+      "defect": "DD-00012677",
+      "requestNo": "DD-00012677",
+      "eqType": "TRUCK, ARTICULATED",
+      "system": "TK115.DRS.ENG (Engine / Двигатель)",
+      "priority": "P4 Planned (Repair)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "cause": "Усталостная трещина",
+      "causeFrom": "wr",
+      "descr": "Выявлены продольные повреждения ремня кондиционера.",
+      "status": "Registered",
+      "by": "Slam",
+      "woNumber": null,
+      "maintType": null,
+      "planned": false
+    },
     {
       "date": "2026-09-14",
       "dateFrom": "raised",
@@ -35434,15 +35478,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-09-11",
       "planStartDt": "2026-09-11T13:00:00",
       "planEnd": "2026-09-11",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-09-11",
+      "actualStartDt": "2026-09-11T13:00:00",
+      "actualEnd": "2026-09-11"
     },
     {
       "equip": "TK047",
