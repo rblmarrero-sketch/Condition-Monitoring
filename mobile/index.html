@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=385">
+<link rel="manifest" href="manifest.webmanifest?v=386">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=385">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=385">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=385">
+<link rel="apple-touch-icon" href="icon-192.png?v=386">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=386">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=386">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2607,15 +2607,15 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=385"></script>
-<script src="upload-defaults.js?v=385"></script>
-<script src="hme.js?v=385"></script>
-<script src="mp-fc.js?v=385"></script>
-<script src="hme-cascade.js?v=385"></script>
-<script src="assets.js?v=385"></script>
-<script src="temp-limits.js?v=385"></script>
-<script src="normalize.js?v=385"></script>
-<script src="terms.js?v=385"></script>
+<script src="native.js?v=386"></script>
+<script src="upload-defaults.js?v=386"></script>
+<script src="hme.js?v=386"></script>
+<script src="mp-fc.js?v=386"></script>
+<script src="hme-cascade.js?v=386"></script>
+<script src="assets.js?v=386"></script>
+<script src="temp-limits.js?v=386"></script>
+<script src="normalize.js?v=386"></script>
+<script src="terms.js?v=386"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2634,25 +2634,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=385"></script>
-<script src="edits.js?v=385"></script>
-<script src="due.js?v=385"></script>
-<script src="wear.js?v=385"></script>
-<script src="wear-figs.js?v=385"></script>
-<script src="wear-map.js?v=385"></script>
-<script src="machine-photos.js?v=385"></script>
-<script src="machine-fig.js?v=385"></script>
-<script src="get.js?v=385"></script>
-<script src="points.js?v=385"></script>
-<script src="uc-points.js?v=385"></script>
-<script src="inspect-guide.js?v=385"></script>
-<script src="get-figs.js?v=385"></script>
-<script src="body-points.js?v=385"></script>
-<script src="body-map.js?v=385"></script>
-<script src="lube.js?v=385"></script>
-<script src="lube-overrides.js?v=385"></script>
-<script src="lube2027.js?v=385"></script>
-<script src="report-core.js?v=385"></script>
+<script src="grade.js?v=386"></script>
+<script src="edits.js?v=386"></script>
+<script src="due.js?v=386"></script>
+<script src="wear.js?v=386"></script>
+<script src="wear-figs.js?v=386"></script>
+<script src="wear-map.js?v=386"></script>
+<script src="machine-photos.js?v=386"></script>
+<script src="machine-fig.js?v=386"></script>
+<script src="get.js?v=386"></script>
+<script src="points.js?v=386"></script>
+<script src="uc-points.js?v=386"></script>
+<script src="inspect-guide.js?v=386"></script>
+<script src="get-figs.js?v=386"></script>
+<script src="body-points.js?v=386"></script>
+<script src="body-map.js?v=386"></script>
+<script src="lube.js?v=386"></script>
+<script src="lube-overrides.js?v=386"></script>
+<script src="lube2027.js?v=386"></script>
+<script src="report-core.js?v=386"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -8231,6 +8231,12 @@ $("saveBtn").onclick=async ()=>{
      an identity from the moment the round exists — not the first time somebody
      manages to upload it. A phone that never reaches a signal still holds a
      complete, hashed account of what it captured. */
+  /* Every photograph and video is re-read into a fresh File here, before
+     this record is the one written — see reArmForSave. This is the record
+     that is about to outlive the draft; nothing in it may still be the
+     same object the draft put into storage under its own id, which is
+     about to be deleted. */
+  await reArmForSave(rec);
   /* Requested now, not after the write: the risk window is the write
      itself plus whatever idle time follows it, and asking after the fact
      would already have missed the first half. Same window, said twice —
@@ -13382,7 +13388,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="385";
+const BUILD="386";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -14036,6 +14042,59 @@ async function intakeNoted(blob){
   return { att:attWrap(out), why:why };
 }
 async function intake(blob){ return (await intakeNoted(blob)).att; }
+/* THE RECORD THAT GETS SAVED MUST NOT SHARE A SINGLE BLOB WITH THE DRAFT
+   IT REPLACES.
+
+   Root-cause candidate for the offline photo-loss defect first read off
+   two trucks on 2026-09-15 and reproduced twice more the same day in
+   controlled testing (BS002, BL012) — confirmed only on iPhone, never on
+   an identical Android test (BL007), never tied to screen lock or to
+   storage headroom, and always the FIRST photographs of the round, never
+   the last: `draftKeep()` writes the WHOLE current draft — the very same
+   Blob/File objects a photograph already is — to IndexedDB under
+   `__draft__` every time a position is left (`saveCur→draftKeep`), so a
+   photograph taken early in a round has already been the target of
+   several `dbPut()` calls under that id before Save ever runs. Save then
+   hands those SAME objects to `dbPut()` a second time, now under the
+   round's own id, and deletes the draft record within moments
+   afterward. If WebKit's IndexedDB shares or reference-counts backing
+   storage across separate `put()` calls for what is, in memory, the
+   identical object — unconfirmed, but the only mechanism found so far
+   that explains "always the first ones, never the last" and "verifySavedRec
+   never catches it" (it runs BEFORE the draft is deleted) — deleting the
+   draft could silently take the round's own copy down with it.
+
+   This does not depend on proving that mechanism. It removes the shared
+   identity outright: every photograph and video is re-read into a BRAND
+   NEW File the instant before this is the copy that gets saved — an
+   object that has never been handed to dbPut() under any other id, so
+   there is nothing left for dbDel(DRAFT_ID) to reach through. The name is
+   kept (attIdOf reads the attachment's identity off it), only the
+   underlying bytes are fresh. A read that fails here keeps the original
+   rather than losing the evidence a second time — ownBytes already proved
+   this exact photograph readable once, at intake, so failure here is not
+   expected, only guarded against (tests/redraft.cjs). */
+async function reArmForSave(rec){
+  for(const p of Object.values(rec.positions||{})){
+    const ph=p.photos||[];
+    for(let i=0;i<ph.length;i++){
+      const b=ph[i]; if(!isBlob(b)) continue;
+      try{
+        const u=await readBlobBytes(b);
+        ph[i]=(typeof File!=="undefined") ? new File([u], b.name||"", {type:b.type||"image/jpeg"})
+                                           : new Blob([u], {type:b.type||""});
+      }catch(e){}
+    }
+    if(isBlob(p.video)){
+      const b=p.video;
+      try{
+        const u=await readBlobBytes(b);
+        p.video=(typeof File!=="undefined") ? new File([u], b.name||"", {type:b.type||"video/mp4"})
+                                             : new Blob([u], {type:b.type||""});
+      }catch(e){}
+    }
+  }
+}
 /* One reason, one sentence — read by both doors that put a person in front
    of a dialog, so the two can never drift into saying different things
    about the same file. */

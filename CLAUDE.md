@@ -1026,9 +1026,37 @@ automatic retry got the chance CD001's got. Don't call a photograph gone
 until retries have actually been exhausted over a real span of time, not
 one failed attempt.
 
-The mechanism underneath is still unconfirmed — this narrows the search to
-WebKit's IndexedDB/Blob storage rather than to anything a page's own
-JavaScript controls, and no further theory has been tested past this point.
+The mechanism underneath is still unconfirmed at the WebKit level, but one
+candidate was found and closed the same day: **`reArmForSave`** (added
+right after the finding above). It was always the FIRST photographs of a
+round that went bad, never the last — and `draftKeep()` writes the WHOLE
+current draft, the very same live Blob/File objects, to IndexedDB under
+`__draft__` every time a position is left (`saveCur→draftKeep`). A
+photograph taken early in a round has already been the target of several
+`dbPut()` calls under the draft's id before Save ever runs; Save then hands
+those SAME objects to `dbPut()` again under the round's own id, and deletes
+the draft record within moments. If WebKit shares or reference-counts
+backing storage across separate `put()` calls for what is, in memory, the
+identical object, deleting the draft could silently take the round's own
+copy with it — which would also explain why `verifySavedRec` never caught
+it: it runs BEFORE that delete.
+
+This does not depend on proving that mechanism. `reArmForSave` removes the
+shared identity outright: every photograph and video is re-read into a
+BRAND NEW File the instant before it is the record that gets saved — an
+object that has never been handed to `dbPut()` under any other id, so
+there is nothing left for `dbDel(DRAFT_ID)` to reach through. The
+attachment's identity (its file name, which `attIdOf` reads) survives the
+swap; only the underlying bytes are a fresh, independent copy. A read that
+fails here keeps the original rather than losing the evidence a second
+time — `ownBytes` already proved this exact photograph readable once, at
+intake, so failure at this point is not expected, only guarded against.
+`tests/redraft.cjs` proves the fix's own contract directly — the final
+record's photographs are never `===` the objects the draft put into
+storage, same name, same bytes — since Chromium does not carry the
+suspected WebKit bug and cannot be used to reproduce data loss itself.
+This is a candidate closed, not a confirmed cause found; the field test
+that would confirm it is the same offline recipe run again on build 386.
 
 **THREE PLACES THE UPLOAD PATH TRUSTED SILENCE AS SUCCESS.** Surfaced by an
 external code investigation, verified line by line against the running
