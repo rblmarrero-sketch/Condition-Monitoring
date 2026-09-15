@@ -1,19 +1,6 @@
 {
-  "generated": "2026-09-14T23:37:23+00:00",
+  "generated": "2026-09-15T02:33:14+00:00",
   "byUnit": {
-    "DZ002": [
-      {
-        "wo": "WO-016656",
-        "hours": 4000,
-        "types": [
-          "FC",
-          "INSP",
-          "UC"
-        ],
-        "plan": "2026-09-14",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
     "DZ004": [
       {
         "wo": "WO-016609",
@@ -181,20 +168,6 @@
         "priority": "P3 Planned (PM)"
       }
     ],
-    "TK031": [
-      {
-        "wo": "WO-016302",
-        "hours": 2000,
-        "types": [
-          "FC",
-          "INSP",
-          "MP",
-          "TB"
-        ],
-        "plan": "2026-09-12",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
     "TK032": [
       {
         "wo": "WO-016303",
@@ -252,31 +225,7 @@
         "types": [
           "MP"
         ],
-        "plan": "2026-09-11",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "TK040": [
-      {
-        "wo": "WO-016435",
-        "hours": 500,
-        "types": [
-          "MP"
-        ],
-        "plan": "2026-09-13",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "TK041": [
-      {
-        "wo": "WO-016255",
-        "hours": 1000,
-        "types": [
-          "FC",
-          "INSP",
-          "MP"
-        ],
-        "plan": "2026-09-08",
+        "plan": "2026-10-22",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -607,15 +556,6 @@
     ],
     "TK143": [
       {
-        "wo": "WO-015628",
-        "hours": 500,
-        "types": [
-          "MP"
-        ],
-        "plan": "2026-09-13",
-        "priority": "P3 Planned (PM)"
-      },
-      {
         "wo": "WO-016573",
         "hours": 250,
         "types": [
@@ -813,15 +753,6 @@
       }
     ],
     "TK159": [
-      {
-        "wo": "WO-015693",
-        "hours": 250,
-        "types": [
-          "MP"
-        ],
-        "plan": "2026-09-10",
-        "priority": "P3 Planned (PM)"
-      },
       {
         "wo": "WO-016655",
         "hours": 4000,
