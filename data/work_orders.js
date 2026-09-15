@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-09-15T05:17:22+00:00",
+  "generated": "2026-09-15T05:32:10+00:00",
   "source": "https://askpi.94-131-94-152.sslip.io/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 670,
@@ -402,8 +402,8 @@ window.CM_WO_DATA = {
     "planStart": 0
   },
   "cmCauseFrom": {
-    "wo": 29,
-    "wr": 20,
+    "wo": 30,
+    "wr": 19,
     "cert": 0,
     "none": 0
   },
@@ -443,7 +443,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-09-13",
       "detected": "2026-09-13",
-      "planStart": null,
+      "planStart": "2026-09-27",
       "asset": "TK101",
       "defect": "DD-00012594",
       "requestNo": "DD-00012594",
@@ -452,12 +452,12 @@ window.CM_WO_DATA = {
       "priority": "P2 Urgent",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "cause": "Поврежден шланга/линии",
-      "causeFrom": "wr",
+      "causeFrom": "wo",
       "descr": "Обнаружена течь масла из РВД тормозного фильтра.",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "by": "Slam",
-      "woNumber": null,
-      "maintType": null,
+      "woNumber": "WO-017165",
+      "maintType": "P4 Planned Repair",
       "planned": false
     },
     {
@@ -2905,10 +2905,10 @@ window.CM_WO_DATA = {
     {
       "equip": "CD009",
       "cls": "GEN",
-      "woNumber": "GD-023130",
-      "maintType": "250 Hours service Planned",
-      "hours": 250,
-      "cmLabel": "250h service",
+      "woNumber": "GD-023133",
+      "maintType": "1000 Hours service Planned",
+      "hours": 1000,
+      "cmLabel": "1000h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
@@ -2924,10 +2924,10 @@ window.CM_WO_DATA = {
     {
       "equip": "CD009",
       "cls": "GEN",
-      "woNumber": "GD-023133",
-      "maintType": "1000 Hours service Planned",
-      "hours": 1000,
-      "cmLabel": "1000h service",
+      "woNumber": "GD-023130",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
