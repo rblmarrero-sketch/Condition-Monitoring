@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-15T22:21:48+00:00",
+  "generated": "2026-09-15T23:31:49+00:00",
   "byUnit": {
     "DZ004": [
       {
@@ -23,7 +23,7 @@
           "INSP",
           "UC"
         ],
-        "plan": "2026-09-30",
+        "plan": "2026-10-03",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -119,17 +119,6 @@
           "FC"
         ],
         "plan": "2026-09-18",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "GR013": [
-      {
-        "wo": "WO-015676",
-        "hours": 1000,
-        "types": [
-          "FC"
-        ],
-        "plan": "2026-09-10",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -739,20 +728,6 @@
           "TB"
         ],
         "plan": "2026-09-24",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "TK160": [
-      {
-        "wo": "WO-015694",
-        "hours": 4000,
-        "types": [
-          "FC",
-          "INSP",
-          "MP",
-          "TB"
-        ],
-        "plan": "2026-09-10",
         "priority": "P3 Planned (PM)"
       }
     ],
