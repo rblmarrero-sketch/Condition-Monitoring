@@ -843,6 +843,42 @@ the screen's**: `tests/deferwhy.cjs` §7b now also reads `getComputedStyle(...)
 .backgroundColor` before and after the tap and asserts it actually changed,
 which is the one question `/danger/.test(className)` was never able to ask.
 
+**AND THE DIALOG SAVING CORRECTLY WAS NOT THE SAME AS THE SCREEN IT WAS
+OPENED FROM SAYING SO.** Third report on the same feature, same shift: "when
+I press OK it doesn't do anything — it should update then synchronize." By
+this point the dialog genuinely was closing, genuinely was saving — `deferOf`
+returned exactly the right document — and the fortnight agenda the dialog had
+been opened FROM sat completely unchanged: the same count, the same row, no
+mark of any kind. `dueWeekRows()` builds the agenda from 1C's schedule and
+had exactly one hold-off check already (`DUE.offRound`, added for the KAMAZ
+trucks) and exactly one walked-check (`schedWalkedFor`) — and had never once
+asked `deferOf()`. The identical shape as both of those, in the identical
+function, for the identical reason: a THIRD reader of the schedule with no
+check the List has carried since deferrals existed. `syncDefer` genuinely was
+queued to go out on the next run — the "synchronize" half was never broken —
+but a phone reads "did anything happen" off the SCREEN, not off a queue it
+cannot see, and the screen said nothing had.
+
+The fix reuses the List's own rule rather than writing a second one:
+`DUE.status`'s "live" test (`d.at >= last.d` — a deferral is answered by any
+round of that type walked since) and its "put" test (a dated deferral holds
+only while `d.until` is still ahead; the day it arrives the round is
+ordinarily due again). A deferred row is not dropped, the way a held-off one
+is — "not work at all" is true of a class the SITE took off a round; it is
+not true of an occurrence one inspector answered "not now" or "no" for this
+shift, and dropping it silently would be the same defect from the other
+side: real work, invisible. It gets the SAME visual demotion `done` gets
+(off the outstanding count, sorted to the bottom, muted styling) with its own
+reason on the row, printed the same sentence the flat List already prints on
+its own copy of the row (`dueRows()`'s `.dueput`) — one wording, read by
+`t("due_put_to")` / `t("due_off")` on both, never a second copy. The two
+badges an inspector actually watches (`#dueSpanF`'s Today / All 14 days
+counts — the exact numbers open in the screenshot this bug was reported
+with) now exclude a deferred round the same way they already excluded a
+done one. `tests/deferwhy.cjs` §7c asserts the row is still ON the agenda
+(never silently dropped), carries its reason, and that both badges actually
+move.
+
 **A GALLERY BATCH IS ONE PERMISSION GRANT, NOT ONE PER FILE PROCESSED IN
 TURN.** Read off a handset on 2026-09-15: a component photographed from the
 gallery failed to send; the same position retaken with the app's own camera

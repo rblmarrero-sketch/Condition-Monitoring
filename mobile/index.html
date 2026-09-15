@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=377">
+<link rel="manifest" href="manifest.webmanifest?v=378">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=377">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=377">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=377">
+<link rel="apple-touch-icon" href="icon-192.png?v=378">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=378">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=378">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -544,6 +544,14 @@
     border:1px solid var(--border);}
   .daygroup.past .agitem.done{border-left-color:var(--border);}
   .agitem .donenote{color:var(--good);font-weight:650;}
+  /* A round somebody said isn't happening is answered, not outstanding — the
+     same visual demotion .done gets, in the report's own amber rather than
+     green, because "not now" is not the same news as "walked". */
+  .agitem.deferred{background:transparent;border-left-color:var(--border);}
+  .agitem.deferred .u{color:var(--ink-2);font-weight:600;}
+  .agitem.deferred .tag{background:var(--surface-2);color:var(--ink-2);
+    border:1px solid var(--border);}
+  .agitem .defnote{color:var(--warn-ink);font-weight:650;}
   /* A recovery action, offered as a line of text rather than a second button
      of the same weight as the one used every day. */
   .linkrow{display:block;width:100%;text-align:left;background:none;border:0;padding:10px 0 2px;
@@ -2590,15 +2598,15 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=377"></script>
-<script src="upload-defaults.js?v=377"></script>
-<script src="hme.js?v=377"></script>
-<script src="mp-fc.js?v=377"></script>
-<script src="hme-cascade.js?v=377"></script>
-<script src="assets.js?v=377"></script>
-<script src="temp-limits.js?v=377"></script>
-<script src="normalize.js?v=377"></script>
-<script src="terms.js?v=377"></script>
+<script src="native.js?v=378"></script>
+<script src="upload-defaults.js?v=378"></script>
+<script src="hme.js?v=378"></script>
+<script src="mp-fc.js?v=378"></script>
+<script src="hme-cascade.js?v=378"></script>
+<script src="assets.js?v=378"></script>
+<script src="temp-limits.js?v=378"></script>
+<script src="normalize.js?v=378"></script>
+<script src="terms.js?v=378"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2617,25 +2625,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=377"></script>
-<script src="edits.js?v=377"></script>
-<script src="due.js?v=377"></script>
-<script src="wear.js?v=377"></script>
-<script src="wear-figs.js?v=377"></script>
-<script src="wear-map.js?v=377"></script>
-<script src="machine-photos.js?v=377"></script>
-<script src="machine-fig.js?v=377"></script>
-<script src="get.js?v=377"></script>
-<script src="points.js?v=377"></script>
-<script src="uc-points.js?v=377"></script>
-<script src="inspect-guide.js?v=377"></script>
-<script src="get-figs.js?v=377"></script>
-<script src="body-points.js?v=377"></script>
-<script src="body-map.js?v=377"></script>
-<script src="lube.js?v=377"></script>
-<script src="lube-overrides.js?v=377"></script>
-<script src="lube2027.js?v=377"></script>
-<script src="report-core.js?v=377"></script>
+<script src="grade.js?v=378"></script>
+<script src="edits.js?v=378"></script>
+<script src="due.js?v=378"></script>
+<script src="wear.js?v=378"></script>
+<script src="wear-figs.js?v=378"></script>
+<script src="wear-map.js?v=378"></script>
+<script src="machine-photos.js?v=378"></script>
+<script src="machine-fig.js?v=378"></script>
+<script src="get.js?v=378"></script>
+<script src="points.js?v=378"></script>
+<script src="uc-points.js?v=378"></script>
+<script src="inspect-guide.js?v=378"></script>
+<script src="get-figs.js?v=378"></script>
+<script src="body-points.js?v=378"></script>
+<script src="body-map.js?v=378"></script>
+<script src="lube.js?v=378"></script>
+<script src="lube-overrides.js?v=378"></script>
+<script src="lube2027.js?v=378"></script>
+<script src="report-core.js?v=378"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -3188,6 +3196,7 @@ const I18N = {
     due_week_none_today:"1C has nothing open on today. Tap All 14 days for the week behind and the week ahead.",
     due_week_n:"{n} machine(s)",
     due_week_n_done:"{n} outstanding · {m} done",
+    due_week_seg_todo:"{n} outstanding", due_week_seg_deferred:"{n} deferred", due_week_seg_done:"{n} done",
     due_week_done:"inspected {d}",
     due_week_pmnote:"walk ahead of PM {d}",
     m_due_loaded:["History loaded ✔","{n} unit/type dates added to the due list."],
@@ -3799,6 +3808,7 @@ const I18N = {
     due_week_none_today:"На сегодня у 1С нет открытых нарядов. Нажмите «Все 14 дней», чтобы увидеть неделю назад и неделю вперёд.",
     due_week_n:"{n} машин(ы)",
     due_week_n_done:"осталось: {n} · выполнено: {m}",
+    due_week_seg_todo:"осталось: {n}", due_week_seg_deferred:"отложено: {n}", due_week_seg_done:"выполнено: {n}",
     due_week_done:"выполнено {d}",
     due_week_pmnote:"провести до ТО {d}",
     m_due_loaded:["История загружена ✔","Добавлено дат: {n}."],
@@ -9224,6 +9234,35 @@ function dueWeekRows(){
      round is not work at all — it was never proposed — so showing it as
      "not done" would state the opposite of the decision. */
   const heldOff=(unit,ty)=>!!(DUE.offRound && DUE.offRound(ty, ASSET_BY[unit]));
+  /* A ROUND THIS INSPECTOR ALREADY ANSWERED IS NOT SILENTLY DUE AGAIN EITHER.
+     dueWeekRows() consulted the site's own hold-off list (above) and
+     schedWalkedFor (below), and never deferOf() — so pressing OK in
+     dueNotDoing() saved the deferral correctly, closed the dialog correctly,
+     and the row it was pressed on sat on the agenda completely unchanged,
+     because nothing that builds this list had ever asked. Read off a
+     handset the same day the dialog itself was fixed: "when I press OK it
+     doesn't do anything — it should update then synchronize." It already
+     WAS synchronising (syncDefer sends it on the next run); the update it
+     never did was to its own screen. The flat List asks deferOf() and has
+     for as long as deferrals have existed — this is the identical gap as
+     the hold-off note above, in the identical function, and the rule below
+     is the List's own (dueRows(), DUE.status), not a second copy of it: a
+     deferral answers a round it was written for or later, same as the List
+     reads "live"; a dated one holds the row only while its date is still
+     ahead, same as the List turns "put" back into ordinary due the day it
+     arrives. */
+  const h=histAll();
+  const deferState=(unit,ty)=>{
+    const d=deferOf(ty,unit); if(!d) return null;
+    const last=histEntry(h[ty+"|"+unit]) || {};
+    if(!(String(d.at||"") >= String(last.d||""))) return null;   // answered by a round walked since
+    if(d.until){
+      const left=DUE.dayDiff(today, d.until);
+      if(left!=null && left>0) return d;
+      return null;   // the put-off date has arrived; back to ordinary due
+    }
+    return d;
+  };
   Object.keys(SCHED.byUnit).forEach(unit=>{
     (SCHED.byUnit[unit]||[]).forEach(w=>{
       const types=(w.types||[]).filter(ty=>!heldOff(unit,ty));
@@ -9241,7 +9280,7 @@ function dueWeekRows(){
            one the List's 1C scope uses to leave it out; the two screens now
            differ in what they DO with the fact, never in the fact. */
         [...onDate].sort().forEach(code=>out.push({ unit, day:w.plan, code, isPre:false, w,
-          done: schedWalkedFor(unit, code, w.plan) }));
+          done: schedWalkedFor(unit, code, w.plan), defer: deferState(unit,code) }));
       }
       if(shiftInsp && w.plan && !schedPreInspDone(unit,w.plan)){
         const wanted=DUE.shift(w.plan,-SCHED_PREINSP_DAYS);
@@ -9257,7 +9296,7 @@ function dueWeekRows(){
         /* The pre-check has its own "done" — schedPreInspDone, three lines
            up, already keeps a walked one out entirely. Reaching here means
            it is outstanding, so it is never marked done. */
-        if(inWindow(day)) out.push({ unit, day, code:"INSP", isPre:true, w, done:null });
+        if(inWindow(day)) out.push({ unit, day, code:"INSP", isPre:true, w, done:null, defer: deferState(unit,"INSP") });
       }
     });
   });
@@ -9279,7 +9318,12 @@ function renderDueWeek(){
        number an inspector reads off a chip has to be the number of things
        they still have to do. The day heading beside it says both, in words,
        so the two figures can be told apart rather than silently disagreeing. */
-    const todo=entries.filter(e=>!e.done);
+    /* Nor is a deferred round work still to do — it is answered, the same
+       way a walked one is, just answered with "not now" instead of "done".
+       Left in here, "Not being done" would tick down nothing on the one
+       badge an inspector actually watches, which is the exact shape of the
+       bug this counts for. */
+    const todo=entries.filter(e=>!e.done && !e.defer);
     const nToday=todo.filter(e=>e.day===today).length;
     const nAll=todo.filter(e=>allDays.indexOf(e.day)>=0).length;
     spanBox.innerHTML=[["today","due_span_today",nToday],["all","due_span_all",nAll]]
@@ -9314,12 +9358,23 @@ function renderDueWeek(){
       dueSpan==="today" ? "due_week_none_today" : "due_week_none"))}</div>`; return; }
   box.innerHTML=groups.map(d=>{
     const past=DUE.agendaPast(today,d);
-    /* Outstanding first, then what has been walked — a list read top-down
-       on a phone puts the work at the top. Within each half, by unit. */
+    /* Outstanding first, then a round somebody said isn't happening, then
+       what has been walked — a list read top-down on a phone puts the work
+       still to do at the top, and a deferral is an ANSWER, same shelf as
+       done, just not the same answer. Within each third, by unit. */
+    const rank=e=>e.done?2:e.defer?1:0;
     const rows=[...byDay[d]].sort((a,b)=>
-      (a.done?1:0)-(b.done?1:0) || (a.unit<b.unit?-1:a.unit>b.unit?1:0));
-    const nDone=rows.filter(e=>e.done).length, nTodo=rows.length-nDone;
-    const hdCount=nDone ? t("due_week_n_done",{n:nTodo, m:nDone}) : t("due_week_n",{n:nTodo});
+      rank(a)-rank(b) || (a.unit<b.unit?-1:a.unit>b.unit?1:0));
+    const nDone=rows.filter(e=>e.done).length;
+    const nDeferred=rows.filter(e=>e.defer).length;
+    const nTodo=rows.length-nDone-nDeferred;
+    /* Unchanged wording when nothing is deferred — the common case, and the
+       one every existing suite already reads — with a third segment that
+       only appears once there is something to say. */
+    const hdCount = nDeferred
+      ? [nTodo && t("due_week_seg_todo",{n:nTodo}), t("due_week_seg_deferred",{n:nDeferred}), nDone && t("due_week_seg_done",{n:nDone})]
+          .filter(Boolean).join(" · ")
+      : (nDone ? t("due_week_n_done",{n:nTodo, m:nDone}) : t("due_week_n",{n:nTodo}));
     return `<div class="daygroup${past?" past":""}">
       <div class="dayhd"><b${d===today?' class="today"':past?' class="late"':""}>${esc(dayLabel(d))}</b><span>${esc(hdCount)}</span></div>
       ${rows.map(e=>{
@@ -9330,11 +9385,18 @@ function renderDueWeek(){
            with the date it was recorded, so the row answers the question
            without anybody having to know what grey means. */
         const done=e.done?` <span class="donenote">· ${esc(t("due_week_done",{d:schedShortDate(e.done.d)}))}</span>`:"";
-        const item=`<button type="button" class="agitem${e.isPre?" pre":""}${e.done?" done":""}" data-u="${esc(e.unit)}" data-t="${esc(e.code)}">
-          <span class="tag">${e.done?"✓ ":""}${esc(e.code)}</span>
+        /* PUT OFF, AND BY WHOM AND WHY — same sentence the flat List prints
+           on its own row (see dueRows()'s "put" div), because a deferral
+           without its reason visible is the exact fact this rebuilds: a real
+           decision an inspector made, showing on screen as nothing. */
+        const defer=e.defer?` <span class="defnote">· ${esc(e.defer.until
+            ? t("due_put_to").replace("{d}", e.defer.until) : t("due_off"))}${
+            e.defer.why?" — "+esc(e.defer.why):""}</span>`:"";
+        const item=`<button type="button" class="agitem${e.isPre?" pre":""}${e.done?" done":""}${e.defer?" deferred":""}" data-u="${esc(e.unit)}" data-t="${esc(e.code)}">
+          <span class="tag">${e.done?"✓ ":e.defer?"⋯ ":""}${esc(e.code)}</span>
           <span class="body">
             <span class="u">${esc(e.unit)}${a&&a.cat?` <span class="cat">${esc(a.cat)}</span>`:""}</span>
-            <span class="m">${esc(e.w.wo||"—")}${hrs?" · "+esc(hrs):""}${pre}${done}</span>
+            <span class="m">${esc(e.w.wo||"—")}${hrs?" · "+esc(hrs):""}${pre}${done}${defer}</span>
           </span></button>`;
         /* Walked rounds keep the plain row — see the .agrow note in the CSS. */
         if(e.done) return `<div class="duerow agrow">${item}</div>`;
@@ -13289,7 +13351,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="377";
+const BUILD="378";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

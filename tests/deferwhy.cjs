@@ -231,6 +231,34 @@ const R = f => fs.readFileSync(path.join(__dirname, "..", f), "utf8");
   ok("  with the reason that was typed", !!offStored && offStored.why === "no access, gate locked",
      (offStored || {}).why);
 
+  console.log("\n7c. AND THE AGENDA ITSELF SAYS SO — NOT JUST cm_due_defer");
+  /* Read off a handset the same day 7b's fix shipped: "when I press OK it
+     doesn't do anything — it should update then synchronize." The dialog
+     WAS saving correctly and closing correctly; dueWeekRows() had never once
+     asked deferOf(), the identical gap this file's own §"THE AGENDA OBEYS
+     THE HOLD-OFF" precedent already closed for DUE.offRound — so TK147 sat
+     on the agenda completely unchanged, still counted as outstanding, with
+     no visible sign the round had been answered at all. */
+  const agenda = await p.evaluate(() => ({
+    span: document.getElementById("dueSpanF").textContent.replace(/\s+/g, " "),
+    stillOnScreen: !!document.querySelector('#dueWeekList [data-u="TK147"]'),
+    rowClasses: (document.querySelector('#dueWeekList [data-u="TK147"]') || {}).className || "",
+    rowText: (document.querySelector('#dueWeekList [data-u="TK147"]') || {}).textContent
+      .replace(/\s+/g, " ") || "",
+  }));
+  ok("the round is not silently dropped — it is still on the agenda",
+     agenda.stillOnScreen, agenda.rowText);
+  ok("  visibly marked as answered, not outstanding", /deferred/.test(agenda.rowClasses),
+     agenda.rowClasses);
+  ok("  with the reason on the row, the same as the flat List prints its own",
+     /no access, gate locked/.test(agenda.rowText), agenda.rowText);
+  /* TK146 (section 7, put off 7 days) and TK147 (this section, cancelled
+     outright) are the whole seed, so with both answered the badge the field
+     actually watches — the one open in the earlier screenshot report — reads
+     zero on both spans, not the two it opened this dialog showing. */
+  ok("  and it no longer counts toward either badge — the number the field actually watches",
+     agenda.span === "Today0All 14 days0", agenda.span);
+
   ok("no page errors on the phone", perr.length === 0, perr.slice(0, 2).join(" | "));
   await p.close();
 
