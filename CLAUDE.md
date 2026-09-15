@@ -990,6 +990,46 @@ close the gap — a deliberate power-button lock, or simply carrying the
 phone past the window, still can — it only shrinks it, for the specific
 case this project has actually seen twice. `tests/wakehold.cjs`.
 
+**FIELD-TESTED THE SAME DAY: NOT SCREEN LOCK, NOT STORAGE CAPACITY, NOT
+ANDROID — AND NOT ALWAYS PERMANENT.** Six controlled tests, same shift,
+2026-09-15, in direct response to "this never happened before": BS004
+(always online) clean; BS005 (airplane mode, 5 min offline, screen ON and
+never locked) clean; BL007 — a Samsung Fold, same recipe, same minute —
+clean; CD001 (airplane mode, 5 min, screen never locked) reported two named
+photographs `NotFoundError` mid-attempt, then **landed all six on the
+server anyway** on a later automatic retry; BS002 and BL012 (a plain wifi
+toggle off/on, 5 min, screen never locked) each lost photographs for real —
+confirmed directly against the server folder, not from the phone's own
+say-so — and were deleted from the phone before a further retry could be
+tried.
+
+That rules out two theories this file used to carry as the leading
+explanation. It is not screen lock or backgrounding: BS002/BL012's screen
+was on the entire five minutes. It is not storage capacity: the handset is
+a 2 TB iPhone with almost nothing on it. **It also has not reproduced on
+Android** on the identical recipe (BL007) — same JavaScript, same intake
+path, different engine — which points at Safari/WebKit's own handling of
+stored Blobs rather than at this file's code, without this file being able
+to prove it further from here.
+
+And CD001 corrects something this file asserted as settled: a `NotFoundError`
+photograph is not always gone for good. `putAll`'s own bookkeeping
+(`left = payload.filter(f=>!already[f.name])`) never marks a failed read as
+sent, so a photograph that fails to read is retried from scratch on *every*
+later sync attempt — nothing remembers "this one is dead" and gives up on
+it. CD001's two named photographs read as unreadable once and landed
+successfully on a later attempt minutes afterward, with nothing done to the
+phone in between. So a `NotFoundError` banner means "unreadable on this
+attempt," not "unrecoverable" — the only two confirmed-permanent losses
+this project has are BS002 and BL012, and both were deleted before the
+automatic retry got the chance CD001's got. Don't call a photograph gone
+until retries have actually been exhausted over a real span of time, not
+one failed attempt.
+
+The mechanism underneath is still unconfirmed — this narrows the search to
+WebKit's IndexedDB/Blob storage rather than to anything a page's own
+JavaScript controls, and no further theory has been tested past this point.
+
 **THREE PLACES THE UPLOAD PATH TRUSTED SILENCE AS SUCCESS.** Surfaced by an
 external code investigation, verified line by line against the running
 functions before anything was changed. All three are in the client, not the
