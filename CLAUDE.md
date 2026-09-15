@@ -879,6 +879,30 @@ done one. `tests/deferwhy.cjs` §7c asserts the row is still ON the agenda
 (never silently dropped), carries its reason, and that both badges actually
 move.
 
+**A NAME ABSENT FROM A CACHE NOBODY HAS CHECKED THIS SESSION IS SILENCE, NOT
+A VERDICT.** Read live on 2026-09-15: TK115 (2026-08-05) and DZ007
+(2026-08-02), weeks old and fully synced — every photograph present and
+correctly sized on the server, confirmed directly against the bucket —
+flashed into "10 photo file(s) missing" on the Data & Sync tab on every
+dashboard reload, and cleared itself moments later with nothing else done.
+`orphanPhotos()` built its MISSING placeholders from `CMDrive.hasName`,
+which answers off whatever localStorage last cached; `showTab("sync")`
+paints once, synchronously, off exactly that cache, and only afterward asks
+the server for a fresh listing (deliberately — "the panel that says missing
+has to ask last, not earliest"). The FIRST paint was reading an unconfirmed
+cache as a confirmed absence. The fix does not wait for a SUCCESSFUL
+refresh — `CMDrive.mediaIndexState().fresh` already exists for that, and a
+caller that waited on it would wait for ever on a failing link, contradicting
+the "stale beats absent" rule the rest of drive.js keeps. It waits for an
+ATTEMPT: `tried` flips the instant `refreshMediaIndex()` is CALLED, not once
+it settles, so a name absent from a cache this session has already asked
+about is trusted as MISSING again, and one it has not yet asked about reads
+as LOADING instead — costing nothing, because the keyless point still holds
+the round for its own reason either way. A build with no
+`CMDrive.mediaIndexState` at all trusts the cache immediately, exactly as
+before this fix — there is no later, better answer for it to wait for.
+`tests/quarflash.cjs`.
+
 **A GALLERY BATCH IS ONE PERMISSION GRANT, NOT ONE PER FILE PROCESSED IN
 TURN.** Read off a handset on 2026-09-15: a component photographed from the
 gallery failed to send; the same position retaken with the app's own camera
@@ -933,6 +957,24 @@ rig `tests/readpath.cjs` uses for "genuinely gone", keyed on byte size
 because a marker property does not survive the clone into IndexedDB) and
 proves the retake dialog names it, that a clean round still gets the
 ordinary one, and that the round is saved and queued either way.
+
+**AND THE ONLY THING THIS PAGE CAN ACTUALLY HOLD BACK IS THE SCREEN.** A
+phone tested with signal the whole time (BL011) has never once reproduced
+the failure above; every confirmed case was captured offline and the phone
+was closed for a multi-hour drive before the first upload attempt ever ran.
+There is no API on this platform to demand that an IndexedDB write reach
+disk on command, so the write itself cannot be made safer from here — but
+whether the SCREEN is allowed to sleep on its OWN right after Save is this
+page's to decide, and a technician who taps Save and puts the phone down,
+rather than pressing the power button, is the ordinary case. `holdAwake()`
+requests a screen wake lock for a bounded window right when Save starts —
+before the write, not after — and releases it itself; a platform that
+refuses the request, or does not have the API at all, is swallowed the same
+way `ownBytes` swallows a picker it cannot read, because a technician
+should never see a permission dialog for a screen timeout. This does not
+close the gap — a deliberate power-button lock, or simply carrying the
+phone past the window, still can — it only shrinks it, for the specific
+case this project has actually seen twice. `tests/wakehold.cjs`.
 
 ---
 

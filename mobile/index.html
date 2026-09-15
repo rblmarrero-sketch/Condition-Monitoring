@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=380">
+<link rel="manifest" href="manifest.webmanifest?v=382">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=380">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=380">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=380">
+<link rel="apple-touch-icon" href="icon-192.png?v=382">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=382">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=382">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1619,6 +1619,15 @@
        question nobody thinks to ask is answered by a thing they have to go and
        look for exactly never. -->
   <div class="ready" id="readyBar" role="status" aria-live="polite"></div>
+  <!-- THE RISK WINDOW MADE VISIBLE, NOT JUST HELD OPEN BEHIND THE SCENES.
+       holdAwake() keeps the screen from sleeping on its own for the same
+       window this shows for — but a silent wake lock is a fact about the
+       phone, not an instruction to the person holding it, and someone who
+       glances away and locks it with the power button gets no benefit from
+       either. This says, in words, the one thing that actually matters:
+       don't put the phone away yet. It clears itself; nobody has to
+       dismiss it, and it does not block anything underneath it. -->
+  <div class="ready" id="saveGuard" role="status" aria-live="polite"></div>
   <!-- FOUR STEPS, ALWAYS ON SCREEN. The technician always knows where they
        are: setting up, recording findings, reviewing, saved. Each chip is a
        door to that step; nothing is hidden from a script, only folded. -->
@@ -2598,15 +2607,15 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=380"></script>
-<script src="upload-defaults.js?v=380"></script>
-<script src="hme.js?v=380"></script>
-<script src="mp-fc.js?v=380"></script>
-<script src="hme-cascade.js?v=380"></script>
-<script src="assets.js?v=380"></script>
-<script src="temp-limits.js?v=380"></script>
-<script src="normalize.js?v=380"></script>
-<script src="terms.js?v=380"></script>
+<script src="native.js?v=382"></script>
+<script src="upload-defaults.js?v=382"></script>
+<script src="hme.js?v=382"></script>
+<script src="mp-fc.js?v=382"></script>
+<script src="hme-cascade.js?v=382"></script>
+<script src="assets.js?v=382"></script>
+<script src="temp-limits.js?v=382"></script>
+<script src="normalize.js?v=382"></script>
+<script src="terms.js?v=382"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2625,25 +2634,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=380"></script>
-<script src="edits.js?v=380"></script>
-<script src="due.js?v=380"></script>
-<script src="wear.js?v=380"></script>
-<script src="wear-figs.js?v=380"></script>
-<script src="wear-map.js?v=380"></script>
-<script src="machine-photos.js?v=380"></script>
-<script src="machine-fig.js?v=380"></script>
-<script src="get.js?v=380"></script>
-<script src="points.js?v=380"></script>
-<script src="uc-points.js?v=380"></script>
-<script src="inspect-guide.js?v=380"></script>
-<script src="get-figs.js?v=380"></script>
-<script src="body-points.js?v=380"></script>
-<script src="body-map.js?v=380"></script>
-<script src="lube.js?v=380"></script>
-<script src="lube-overrides.js?v=380"></script>
-<script src="lube2027.js?v=380"></script>
-<script src="report-core.js?v=380"></script>
+<script src="grade.js?v=382"></script>
+<script src="edits.js?v=382"></script>
+<script src="due.js?v=382"></script>
+<script src="wear.js?v=382"></script>
+<script src="wear-figs.js?v=382"></script>
+<script src="wear-map.js?v=382"></script>
+<script src="machine-photos.js?v=382"></script>
+<script src="machine-fig.js?v=382"></script>
+<script src="get.js?v=382"></script>
+<script src="points.js?v=382"></script>
+<script src="uc-points.js?v=382"></script>
+<script src="inspect-guide.js?v=382"></script>
+<script src="get-figs.js?v=382"></script>
+<script src="body-points.js?v=382"></script>
+<script src="body-map.js?v=382"></script>
+<script src="lube.js?v=382"></script>
+<script src="lube-overrides.js?v=382"></script>
+<script src="lube2027.js?v=382"></script>
+<script src="report-core.js?v=382"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -2873,6 +2882,7 @@ const I18N = {
     rdy_bad:"⚠️ Not ready to work offline",
     rdy_bad_sub:"{n} of {of} files downloaded. Finish this while you still have signal — in the pit the app may not open.",
     rdy_fix:"Finish downloading now", rdy_fixing:"Downloading…",
+    save_guard:"Saved. Keep this screen open a few more seconds before locking the phone.",
     sw_checking:"Checking the offline copy…",
     sw_ok:"Offline copy complete — all {n} files. This phone works with no signal.",
     sw_partial:"⚠️ Offline copy incomplete — {n} of {of} files. The app may not open without signal until this is finished.",
@@ -3501,6 +3511,7 @@ const I18N = {
     rdy_bad:"⚠️ К работе без связи не готово",
     rdy_bad_sub:"Загружено {n} из {of} файлов. Завершите, пока есть связь — в карьере приложение может не открыться.",
     rdy_fix:"Дозагрузить сейчас", rdy_fixing:"Загрузка…",
+    save_guard:"Сохранено. Не блокируйте телефон ещё несколько секунд.",
     sw_checking:"Проверяем офлайн-копию…",
     sw_ok:"Офлайн-копия полная — все файлы ({n}). Телефон работает без связи.",
     sw_partial:"⚠️ Офлайн-копия неполная — {n} из {of}. Без связи приложение может не открыться, пока загрузка не завершена.",
@@ -8220,6 +8231,13 @@ $("saveBtn").onclick=async ()=>{
      an identity from the moment the round exists — not the first time somebody
      manages to upload it. A phone that never reaches a signal still holds a
      complete, hashed account of what it captured. */
+  /* Requested now, not after the write: the risk window is the write
+     itself plus whatever idle time follows it, and asking after the fact
+     would already have missed the first half. Same window, said twice —
+     once to the OS (holdAwake), once to the person (showSaveGuard) —
+     because only one of those two can be seen. */
+  holdAwake(SAVE_GUARD_MS);
+  showSaveGuard(SAVE_GUARD_MS);
   try{ await attSync(rec); }catch(e){}
   await dbPut(rec); noteDone(rec); noteWear(rec); await loadBaselines();
   /* Read back while the inspector can still do something about it — see
@@ -13364,7 +13382,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="380";
+const BUILD="382";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -13680,6 +13698,51 @@ function readBlobBytes(b){
     try{ e.name="NotReadableError"; e.readers=tried; e.localRead=true; }catch(_){}
     throw e;
   })();
+}
+/* THE PHONE CANNOT BE ALLOWED TO SLEEP THROUGH ITS OWN WRITE.
+
+   The failure below (verifySavedRec) is the same on every device that has
+   shown it so far: a phone tested WITH SIGNAL THE WHOLE TIME never
+   reproduces it — Save is followed within moments by an upload that reads
+   the photograph back while the screen is still on — and a phone that goes
+   offline in the field and is not opened again until the office does,
+   every time, on the LAST photograph taken before the round was closed and
+   the phone put away. The write reports complete to this page; whether it
+   has actually reached disk on this platform is a separate question this
+   page cannot ask, and iOS is free to suspend the page the instant it goes
+   idle or the screen locks — before that answer is ever settled.
+
+   This cannot fix that. What it can do is keep the one thing under this
+   page's control — whether the SCREEN is allowed to go to sleep on its own
+   — from being the reason the window closes early: a technician who taps
+   Save and puts the phone down, rather than pressing the power button, is
+   the common case this closes off. `navigator.wakeLock` is refused
+   whenever the tab is hidden (by the platform, not this code) and can be
+   revoked at any time, so this is a best-effort delay, not a guarantee —
+   and it releases itself, because a screen a technician never asked to stay
+   lit is its own kind of defect. */
+const SAVE_GUARD_MS=20000;   // one number, so the lock and the words on screen can never drift apart
+async function holdAwake(ms){
+  try{
+    if(!(navigator.wakeLock && navigator.wakeLock.request)) return null;
+    const wl=await navigator.wakeLock.request("screen");
+    setTimeout(()=>{ try{ wl.release(); }catch(e){} }, ms);
+    return wl;
+  }catch(e){ return null; }        // denied, unsupported, or already hidden — proceed anyway
+}
+/* THE SAME WINDOW, SAID OUT LOUD.
+   A wake lock is a fact about the phone; it is not an instruction to the
+   person holding it, and it does nothing at all against a deliberate press
+   of the power button. `#saveGuard` says the one sentence that actually
+   matters, for the identical window holdAwake covers, so a technician who
+   glances at the screen has something to act on rather than a silent
+   assumption that Save already means safe. It clears itself — nobody has
+   to dismiss it, and it never blocks the screen underneath it. */
+function showSaveGuard(ms){
+  const el=$("saveGuard"); if(!el) return;
+  el.className="ready busy";
+  el.innerHTML='<span class="dot"></span><span>'+esc(t("save_guard"))+'</span>';
+  setTimeout(()=>{ if(el.className==="ready busy"){ el.className="ready"; el.innerHTML=""; } }, ms);
 }
 /* THE SAVE IS PROVEN BY READING IT BACK, NOT BY WRITING IT.
 

@@ -98,10 +98,23 @@
     const v = JSON.parse(localStorage.getItem(LS_MED + "_at") || "null");
     if (v && typeof v === "object") mediaState = { at: Number(v.at) || 0, fresh: false, err: "", n: Object.keys(index).length };
   } catch (e) {}
+  /* WHETHER THIS SESSION HAS ASKED, SEPARATE FROM WHETHER IT LIKED THE ANSWER.
+     `fresh` only ever turns true on a genuine success — so a browser that has
+     never yet completed one this session, or whose one attempt just failed,
+     reads exactly like a browser that has not asked at all. A caller that
+     waits for `fresh` before trusting `hasName` therefore waits forever on a
+     failing link, which is worse than the stale-but-present answer this
+     module already keeps for exactly that case (see the "stale beats absent"
+     note above `refreshMediaIndex`). `tried` flips the moment a refresh is
+     ATTEMPTED, not once it settles, so a caller can say "we asked; trust
+     whatever came back, cache or fresh or failed" without ever blocking on a
+     link that never answers. */
+  let refreshTried = false;
   function mediaIndexState() {
-    return { at: mediaState.at, fresh: !!mediaState.fresh, err: mediaState.err || "", n: Object.keys(index).length };
+    return { at: mediaState.at, fresh: !!mediaState.fresh, err: mediaState.err || "", n: Object.keys(index).length, tried: refreshTried };
   }
   async function refreshMediaIndex() {
+    refreshTried = true;
     try {
       const r = await api({ action: "records", after: 9e15, index: 1 });
       const list = r.index || [];
@@ -381,6 +394,16 @@
         (r.conflicts || []).forEach(x => cons.push(x));
         (r.deferrals || []).forEach(x => defs.push(x));
         (r.deleted || []).forEach(x => dels.push(x));
+        /* THIS IS ALSO A FRESH ANSWER, NOT ONLY refreshMediaIndex()'S OWN.
+           An ordinary records pull carries the same file index on page 0
+           (see the comment above) — most sessions never open the Sync tab
+           at all, so if only refreshMediaIndex() could mark the index
+           trustworthy, `orphanPhotos()` would defer EVERY genuinely-missing
+           call to LOADING for the whole session on the common path, not
+           just the moment right after boot. An index is answered the
+           instant a request that ASKED for one (`index: pages === 0 ? 1 : 0`)
+           comes back, wherever it came down. */
+        if (Array.isArray(r.index)) { refreshTried = true; mediaState = { at: Date.now(), fresh: true, err: "", n: r.index.length }; }
         (r.index || []).forEach(f => { index[f.name] = { id: f.id, size: f.size }; });
         failed += r.failed || 0;
         files = r.files || files;

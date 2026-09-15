@@ -162,7 +162,7 @@ const ok = (c, n, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
     /* One file arrived, one never did, both on a point with no key. Before the
        manifest the panel could only call the second one "#2" — which tells
        somebody chasing it nothing, and is unsearchable. */
-    const r = await p.evaluate(() => {
+    const r = await p.evaluate(async () => {
       const rec = { equip: 'DZ007', date: '2026-08-02', type: 'UC', cls: 'DOZ', by: 'S. Volkov',
         items: [{ photos: 2, att: [
           { attachmentId: 'b1', seq: 1, mediaType: 'photo', storedName: 'dz_here.jpg',
@@ -173,6 +173,13 @@ const ok = (c, n, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
       const held = ['dz_here.jpg'];
       CMDrive.names = () => held;
       CMDrive.hasName = n => held.indexOf(n) >= 0;
+      /* An absence is trusted as MISSING only once this session has actually
+         asked the index once — see CMDrive.mediaIndexState().tried. A real
+         session reaches "missing" only after that ask; this fixture makes
+         the same ask (against whatever backend is or isn't configured —
+         refreshMediaIndex() never throws) so it is asserting the settled
+         state a real dashboard would show, not the transient one before it. */
+      if (typeof CMDrive.refreshMediaIndex === 'function') await CMDrive.refreshMediaIndex();
       CMDash.addPhoto('dz_here.jpg', 'blob:fake/x');
       const dz = RECS.find(x => x.equip === 'DZ007');
       const rows = orphanPhotos(dz);

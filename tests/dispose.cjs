@@ -62,7 +62,7 @@ const REC = {
 
   /* Two of the four photographs are in the folder; two never arrived. The
      names follow the phone's own rule so nothing here is invented. */
-  const setup = await p.evaluate(r => {
+  const setup = await p.evaluate(async r => {
     try { localStorage.setItem('cm_dash_who', 'R. Marrero'); } catch (e) {}
     CMDash.importRecords([r]);
     const rec = RECS.find(x => x.equip === 'TK115' && x.type === 'TB');
@@ -76,6 +76,12 @@ const REC = {
     CMDrive.configured = () => true;
     CMDrive.names = () => here;
     CMDrive.hasName = (n) => here.indexOf(n) >= 0;
+    /* An absence is trusted as MISSING only once this session has actually
+       asked the index once — CMDrive.mediaIndexState().tried. Asking here
+       (against whatever backend is or isn't configured; refreshMediaIndex()
+       never throws) makes the fixture match the settled state a real
+       session reaches, not the transient one before anyone has checked. */
+    if (typeof CMDrive.refreshMediaIndex === 'function') await CMDrive.refreshMediaIndex();
     here.forEach((n, i) => CMDash.addPhoto(n, 'blob:fake/' + i));
     window.__saved = [];
     CMDrive.saveEdit = d => { window.__saved.push(d); return Promise.resolve({ ok: true }); };
