@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-15T20:21:32.241Z",
+  "generated": "2026-09-15T21:26:29.615Z",
   "source": "https://baimskaya-cm.duckdns.org?action=records",
   "pairsSeen": 131,
   "hist": {
@@ -267,13 +267,13 @@
     "INSP|EX006": {
       "d": "2026-09-15"
     },
-    "TEMP|BS002": {
+    "TEMP|BS005": {
       "d": "2026-09-16"
     },
-    "TEMP|BL012": {
+    "TEMP|CD001": {
       "d": "2026-09-16"
     },
-    "TEMP|BS004": {
+    "TEMP|BL007": {
       "d": "2026-09-16"
     }
   }
