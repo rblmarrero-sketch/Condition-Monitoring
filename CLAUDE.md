@@ -1127,6 +1127,41 @@ truly gone file looks like, and the round still waits and still names it;
 restoring the name with no receipt ever given is what TK161 looked like,
 and the round now completes on the server's word alone.
 
+**A HISTORY CARD WITH ONE FINDING AND SEVERAL PHOTOGRAPHS IS NOT THE SAME
+COMPONENT LOOKING LIKE TWO REPORTS.** `.b1` alone caps a lone card at 340px
+— sized for a single short finding sitting among narrower content — and
+`mpEvidence` already lifts that cap (the `wide` class) for the one shape
+that needs it: one item, more than one photograph. `earlierRoundSections`
+(the Equipment History report's older-round cards) never carried the same
+check. Read off CR005's Jaw Crusher (CRS.JAW): its 2026-09-08 card — one
+position, two photographs — printed squeezed to roughly a third of the
+page, while the identical position on the 2026-09-10 visit, one section up,
+spanned the full width (that section uses the gallery board, which is
+already immune to the cap). The same component looked like two different
+reports depending on which visit was showing it. `earlierRoundSections` now
+computes `wide` the same way `mpEvidence` does and adds it to the board's
+class when it applies. `tests/histwide.cjs` measures the rendered board
+width directly (not the class string alone) for both the two-photograph
+case and a one-photograph control that must stay capped, and is confirmed
+non-vacuous against the pre-fix code. Its own fixture had to learn a
+lesson from the surrounding code first: two photographs seeded as the
+identical data URI collapse to one on ingest (content is deduplicated), so
+a test proving a two-photograph card needs two genuinely different frames,
+not one frame repeated.
+
+**A FIX MUST CHANGE ONLY WHAT WAS ASKED, NOT WHAT ELSE LOOKED WRONG ALONG
+THE WAY.** The same investigation also proposed hiding an MP plug's card
+when it carried no grade and no photograph — a real gap (loadPos() stamps
+a work order onto whatever position is on screen the instant it opens,
+so a plug merely navigated past on the way to the one actually being
+checked picked one up with nothing else) — but the maintainer's own
+instruction was narrower: keep the report's existing content and layout,
+change nothing there. That change shipped as build 389 and was reverted in
+389→390 the same day, because a fix nobody asked for is still a change to
+somebody's report, live to the whole fleet the moment it is pushed. It
+remains a real defect, undocumented and unfixed, should it ever be asked
+for again — but it is not this file's decision to make unasked.
+
 **THREE PLACES THE UPLOAD PATH TRUSTED SILENCE AS SUCCESS.** Surfaced by an
 external code investigation, verified line by line against the running
 functions before anything was changed. All three are in the client, not the

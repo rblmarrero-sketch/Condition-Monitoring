@@ -3661,6 +3661,19 @@
       var rest = rec.items.filter(function (it) { return told.indexOf(it) < 0; });
       var sh = shared(told);
       var cols = told.length >= 4 ? 4 : told.length === 3 ? 3 : told.length === 2 ? 2 : 1;
+      /* ONE POSITION, SEVERAL PHOTOGRAPHS: THE SHEET IS THEIRS HERE TOO.
+         `.b1` alone caps a lone card at 340px — sized for a single short
+         finding sitting among narrower content — and mpEvidence already
+         lifts that cap (`wide`) for exactly this shape. earlierRoundSections
+         never did, so a history round with one graded item and two or more
+         photographs printed squeezed into little more than a third of the
+         page while the SAME position, photographed on a LATER visit, spanned
+         the full width in the "photos" section above (which is immune to the
+         cap: `.board.gal.b1{max-width:none}`). Read off CR005's Jaw Crusher
+         (CRS.JAW): its 2026-09-08 card cramped to ~340px beside its
+         2026-09-10 card at full width, the same component looking like two
+         different reports. */
+      var wide = told.length === 1 && ((told[0].photos || []).length > 1);
       out.push({ nb: false, gap: 4, html: '<div class="sec olderr">'
         + '<div class="ohd">'
           + '<b>' + esc(rec.date || "") + '</b>'
@@ -3677,7 +3690,7 @@
           + '<span class="ov">' + verdictChip(ctx, T, verdict(rec)) + '</span>'
         + '</div>'
         + commonBand(T, sh, told.length, true)
-        + '<div class="board mini b' + cols + '">'
+        + '<div class="board mini b' + cols + (wide ? ' wide' : '') + '">'
         + told.map(function (it) { return cell(ctx, T, it, sh); }).join("")
         + '</div>'
         + restLine(T, rest, false)
