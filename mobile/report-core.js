@@ -2624,33 +2624,11 @@
       + '<div class="board gal b1">'
       + ph.map(function (it) { return cell(ctx, T, it, null, true); }).join("") + '</div>';
   }
-  /* A POSITION MERELY OPENED IN THE GUIDED FLOW IS NOT A POSITION THAT WAS
-     READ. loadPos() (mobile/index.html) stamps the round's own work order
-     onto whichever position is on screen the instant it opens — "written
-     into the record the same instant it appears" is deliberate there, so
-     the field and the manifest can never disagree — but a plug an inspector
-     only passed through on the way to the one they were actually checking
-     picks up a WO reference and nothing else: no grade, no photograph, no
-     finding. hasEvidence(p) on the phone already excludes a bare `wo` from
-     counting as evidence for exactly this reason (it is why Save's
-     grade-required gate never fires off one); a card here applies the same
-     rule to what the visit's evidence board claims to have measured. TK161's
-     MP round on 2026-09-16 printed "1 Engine" and "4 Differential" as full
-     cards carrying only WO-016634 and nothing else, beside 4E/4F which
-     carried a grade and a photograph each — indistinguishable, on the page,
-     from a plug that WAS checked and came back clean. */
-  function hasFinding(it) {
-    return !!(gnum(it.grade) || (it.photos && it.photos.length) || it.video
-      || it.defect || it.comment || it.action || (it.readings && it.readings.length)
-      || (it.w && it.w.mm != null) || it.lube);
-  }
   /* MP — every plug as a card, photograph first, then code/component, grade,
      the particle finding and component/oil hours, the defect and action. A
-     clean plug still earns its card: the reading IS the record — but only
-     once there IS one; see hasFinding above for what "only opened, never
-     read" looks like on the manifest. */
+     clean plug still earns its card: the reading IS the record. */
   function mpEvidence(ctx, T, rec) {
-    var its = (rec.items || []).filter(hasFinding);
+    var its = rec.items || [];
     if (!its.length) return "";
     var cols = its.length >= 4 ? 4 : its.length === 3 ? 3 : its.length === 2 ? 2 : 1;
     var wide = its.length === 1 && ((its[0].photos || []).length > 1);

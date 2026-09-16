@@ -1127,30 +1127,6 @@ truly gone file looks like, and the round still waits and still names it;
 restoring the name with no receipt ever given is what TK161 looked like,
 and the round now completes on the server's word alone.
 
-**A PLUG MERELY PASSED THROUGH ON THE WAY TO ANOTHER ONE IS NOT PART OF THE
-VISIT'S RECORD.** TK161's own MP round, printed the same day: "1 Engine" and
-"4 Differential" as full cards on the report, each carrying nothing but
-`WO-016634` — no grade, no photograph, no comment — beside "4E"/"4F", which
-carried a real reading and a photograph each. `loadPos()` stamps the round's
-own work order onto whichever position is on screen the instant it opens
-("written into the record the same instant it appears," so the screen and
-the manifest can never disagree — deliberate, and right, for the WO field
-itself) — but a plug an inspector only navigated PAST on the way to the one
-they meant to check picks one up regardless, with nothing else. On the page
-that is indistinguishable from a plug that WAS checked and came back clean:
-this project's signature defect wearing a work order instead of a grade.
-`hasEvidence(p)` on the phone already excludes a bare `wo` from counting as
-evidence, for exactly this reason — it is why Save's grade-required gate
-never fires off one. `mpEvidence` (`mobile/report-core.js`) now applies the
-same rule to what the visit's evidence board prints: a position with no
-grade, no photograph, no defect, no comment, no action and no reading earns
-no card. "MP — every plug as a card… a clean plug still earns its card: the
-reading IS the record" still holds — a plug graded 1 prints exactly as
-before — the fix is only for a plug with no reading at all. `tests/
-mpempty.cjs` reproduces TK161's own shape (two plugs opened and never read
-beside two that were) and a clean control where every plug WAS read, proving
-the filter costs nothing on an ordinary round.
-
 **THREE PLACES THE UPLOAD PATH TRUSTED SILENCE AS SUCCESS.** Surfaced by an
 external code investigation, verified line by line against the running
 functions before anything was changed. All three are in the client, not the
