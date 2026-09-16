@@ -1302,6 +1302,39 @@ it shipped, every page that loads `report-core.js` — which is both surfaces
 two-word comment nobody would have thought to suspect. Plain quotes only,
 never a backtick, inside any comment that lives inside a template literal.
 
+**THE PRINTED TRAY WAS CUT FOR BOTH MODELS, AND THE LIVE DOM SAID NOTHING
+WAS WRONG.** A real report on 2026-09-16, TK108's HM400: the drawing
+printed a sliver about 46 CSS px wide — the L-series stations down one
+edge, then nothing — with every floor, right-side and tail station simply
+gone, no error, no warning. The drawing was correct: `svg.bodymap`
+measured a real, right 292x640 in the very DOM handed to html2canvas, and
+giving it an explicit pixel width instead of the portrait rewrite's
+"auto" changed nothing, because the live box was never wrong. The mis-
+render is inside html2canvas's OWN pass over an inline `<svg>`'s children
+— the identical renderer `flattenUcmapPhotos` already distrusts for a
+nested photograph, on a drawing that carries no photograph at all to
+blame it on. Confirmed by rasterising the same markup through the
+BROWSER's own SVG-to-canvas path — exactly `flattenUcmapPhotos`'s
+technique — and finding every station present, correctly placed, proof
+the html2canvas copy was the only thing that was ever wrong.
+`CMR.flattenBodyMaps` is that same rescue for every `svg.bodymap`, no
+`image` filter, wired into `CMR.paginate` beside the existing one. TR60's
+own report was cut exactly the same way the same day, before either was
+fixed.
+
+`tests/bodyflatten.cjs` reads the ACTUAL RASTER html2canvas produced on
+both models, never the live DOM — the live DOM was correct on 2026-09-16
+too, and said nothing about the file, which is exactly how this shipped
+in the first place. Confirmed non-vacuous by hand: with the call to
+`flattenBodyMaps` commented out, the suite's own "still paints after
+flattening" checks fail on both models. A first draft of that same check
+sampled a dot's exact centre, which is a pale fill by design
+(`var(--surface)`) — the same near-white as a blank page — and so it
+called every station "blank" whether or not the fix was in; the check
+reads the darkest pixel in a small neighbourhood instead, because a
+station's own stroke ring or code label is what actually answers whether
+anything was drawn there.
+
 ---
 
 ## Secrets

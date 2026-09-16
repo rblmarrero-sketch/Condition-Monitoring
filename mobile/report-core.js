@@ -4981,7 +4981,25 @@
      exactly what a plain screenshot of the same markup does), sized to
      the box the drawing already occupies after fitAll has run, then
      swapped in as a plain <img>. html2canvas has never mis-sized a plain
-     <img> anywhere else in this report. */
+     <img> anywhere else in this report.
+
+     THE DUMP-BODY TRAY DRAWING NEEDS THE IDENTICAL RESCUE, WITH NO
+     PHOTOGRAPH ANYWHERE IN IT. Read off a real report on 2026-09-16:
+     both HM400 and TR60 printed a sliver of the tray about 46 CSS px
+     wide — L-series stations down one edge and every floor, right-side
+     and tail station simply gone, on a drawing that measured a correct
+     292x640 in the very DOM handed to html2canvas. Giving the <svg> an
+     explicit pixel width (see body-map.js's sizeStyle) instead of "auto"
+     changed nothing — the live DOM box was already right; the mis-render
+     is inside html2canvas's OWN pass over an inline <svg>'s children, the
+     same renderer this note already distrusts, and it has nothing to do
+     with an embedded photograph or an intrinsic-ratio guess. Confirmed by
+     rendering the identical markup through the browser's own SVG path
+     (exactly this technique) and finding every station present, correctly
+     placed, at the correct size — proof the drawing itself was always
+     right and only html2canvas's copy of it was not. `flattenBodyMaps`
+     below is the same rescue with no `image` filter, because a bodymap
+     never carries one to filter on. */
   /* A clone carries no styling of its own — every colour a puck has comes
      from CMR.CSS, scoped under #rptRoot, which a standalone SVG document
      never sees. Copied onto the clone as plain attributes, so the picture
@@ -5032,6 +5050,41 @@
       });
     }));
   };
+  /* Every tray drawing, photograph or not — see the note above
+     flattenUcmapPhotos. Same rescue, same technique, no `image` filter. */
+  CMR.flattenBodyMaps = function (holder, scale) {
+    var svgs = Array.prototype.slice.call(holder.querySelectorAll("svg.bodymap"));
+    if (!svgs.length) return Promise.resolve();
+    scale = scale || 2;
+    return Promise.all(svgs.map(function (svg) {
+      return new Promise(function (resolve) {
+        var r = svg.getBoundingClientRect();
+        var w = Math.max(1, Math.round(r.width)), h = Math.max(1, Math.round(r.height));
+        var clone = svg.cloneNode(true);
+        var liveEls = svg.querySelectorAll("*"), cloneEls = clone.querySelectorAll("*");
+        inlineUcmapStyle(clone, svg);
+        for (var i = 0; i < liveEls.length; i++) inlineUcmapStyle(cloneEls[i], liveEls[i]);
+        var xml = new XMLSerializer().serializeToString(clone);
+        var img = new Image();
+        img.onload = function () {
+          try {
+            var c = document.createElement("canvas");
+            c.width = w * scale; c.height = h * scale;
+            c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+            var out = document.createElement("img");
+            out.className = svg.getAttribute("class") || "bodymap";
+            var st = svg.getAttribute("style"); if (st) out.setAttribute("style", st);
+            out.width = w; out.height = h;
+            out.src = c.toDataURL("image/png");
+            if (svg.parentNode) svg.parentNode.replaceChild(out, svg);
+          } catch (e) { /* leave the live svg — a rare drawing beats a broken one */ }
+          resolve();
+        };
+        img.onerror = function () { resolve(); };            // leave the live svg
+        img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(xml);
+      });
+    }));
+  };
   CMR.paginate = async function (opts) {
     var holder = document.createElement("div");
     holder.id = "rptRoot";
@@ -5052,6 +5105,7 @@
       /* After the fit, so the box each drawing is flattened into is the one
          it actually ends up occupying, not the one it started at. */
       await CMR.flattenUcmapPhotos(holder, opts.scale || 2);
+      await CMR.flattenBodyMaps(holder, opts.scale || 2);
       var y=top, drew=false;
       for(var i=0;i<els.length;i++){
         if(opts.onProgress) opts.onProgress(i+1, els.length);

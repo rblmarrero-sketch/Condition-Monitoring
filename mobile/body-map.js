@@ -92,13 +92,23 @@
     VB_W = vb.w; vbH = vb.h;
 
     /* o.cssH is the report's own call: an explicit height in real CSS pixels,
-       width left to follow the model's own ratio. The report's shared
-       `.bodymap` rule is `width:100%`, right for the old shared landscape box
-       and wrong for a tall narrow one — width:100% times a portrait ratio is
-       most of a page of blank paper below the last station. An inline style
+       width computed from the model's own ratio and stated as its own pixel
+       figure — never "auto". A live browser derives an SVG's auto width from
+       its viewBox correctly; html2canvas, which is what actually rasterises
+       the PDF, does not, the same gap noted elsewhere in this file for
+       `aspect-ratio`. On screen "auto" and this figure are the same number,
+       so nothing here is guessed — but the file printed a 46 px sliver of
+       HM400's tray with every floor and right-side station gone, on a
+       drawing that measured 292 px wide in the very DOM html2canvas was
+       handed. Both dimensions are now numbers no renderer can decline.
+       The report's shared `.bodymap` rule is `width:100%`, right for the old
+       shared landscape box and wrong for a tall narrow one — an inline style
        here beats that rule outright rather than fighting it through a class,
        and leaves the phone (which never passes cssH) untouched. */
-    var sizeStyle = o.cssH ? ' style="width:auto;height:' + o.cssH + 'px;display:block;margin:0 auto;max-height:none;"' : '';
+    var sizeStyle = o.cssH
+      ? ' style="width:' + Math.round(o.cssH * vb.w / vb.h) + 'px;height:' + o.cssH
+        + 'px;display:block;margin:0 auto;max-height:none;"'
+      : '';
     s.push('<svg class="bodymap"' + sizeStyle + ' viewBox="0 0 ' + VB_W.toFixed(1) + ' ' + vbH.toFixed(1) +
            '" preserveAspectRatio="xMidYMid meet" role="group" aria-label="' +
            (lang === 'ru' ? 'Кузов и точки замера' : 'Tray and its measurement stations') + '">');
