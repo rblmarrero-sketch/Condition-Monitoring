@@ -661,21 +661,36 @@
 #rptRoot .quiet b{color:#12161a;font-weight:700;}
 #rptRoot .shsign{display:flex;gap:34px;align-items:flex-end;margin-top:16px;
   border-top:1px solid #dfe4e9;padding-top:11px;}
-/* Three frames to the width of the sheet, each the WHOLE photograph. A
-   cropped 150 px stamp is what management called "distorted": object-fit
-   cover cut the evidence and the small tile rasterised soft. */
+/* Three frames to the width of the sheet, each the WHOLE photograph, never
+   cropped — a cropped 150 px stamp is what management called "distorted":
+   object-fit cover cut the evidence and the small tile rasterised soft.
+   That fix left the FIGURE itself uncapped (max-width:none), which was
+   fine while every general-evidence photo happened to be landscape enough
+   to fit one track. A wider landscape frame has no cap to stop it, so its
+   figure — the actual grid item — grows past its own track into the row's
+   free space, and the same three-photo row prints as two oversized tiles
+   with a gap where the third belongs, no longer a row of standard tiles.
+   Capped now to one tile's own footprint (three tiles across a 760px sheet
+   at this gap is 248px; 240 leaves it room), with the image fitted inside
+   by max-width/max-height and auto on both dimensions — the classic
+   fit-inside-a-box technique that predates object-fit/aspect-ratio
+   entirely and asks html2canvas for nothing it does not already do
+   correctly for a plain img tag (this file's own note above: an explicit
+   dimension with the other left auto is the one sizing method it honours).
+   A portrait frame and a landscape one now occupy the identical box. */
 #rptRoot .shots{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px 8px;}
-#rptRoot .shots figure{width:auto;max-width:none;margin:0;}
+#rptRoot .shots figure{width:auto;max-width:240px;margin:0;}
 #rptRoot .shots{justify-items:center;align-items:center;}
-#rptRoot .shots img{display:block;height:182px;width:auto;max-width:100%;background:#fff;
+#rptRoot .shots img{display:block;width:auto;height:auto;max-width:240px;max-height:182px;background:#fff;
   border-radius:3px;border:1px solid #dfe4e9;}
 #rptRoot .shots figcaption{font-size:9.5px;color:#3d474f;margin-top:4px;line-height:1.3;}
 /* General evidence: the same size and rhythm as the point galleries, so a
-   reader does not read "different size" as "different importance". */
+   reader does not read "different size" as "different importance" — and
+   the same standard-tile fix as .shots above, for the identical reason. */
 #rptRoot .genrow{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px 8px;}
-#rptRoot .genrow figure{width:auto;max-width:none;margin:0;}
+#rptRoot .genrow figure{width:auto;max-width:240px;margin:0;}
 #rptRoot .genrow{justify-items:center;align-items:center;}
-#rptRoot .genrow img{display:block;height:182px;width:auto;max-width:100%;background:#fff;
+#rptRoot .genrow img{display:block;width:auto;height:auto;max-width:240px;max-height:182px;background:#fff;
   border-radius:3px;border:1px solid #dfe4e9;}
 #rptRoot .genrow figcaption{font-size:9.5px;color:#3d474f;margin-top:4px;line-height:1.3;}
 #rptRoot .genwhy{font-size:9.5px;color:#5b6670;margin-top:6px;line-height:1.4;}
@@ -1384,11 +1399,23 @@
   var PHOTO = {};
   /* HOW BIG A PHOTOGRAPH GOES INTO THE DOCUMENT, said once for both surfaces.
      The largest a figure prints is 272 x 330 CSS px; at the default raster
-     scale that is 653 x 792 device px, so 900 px on the long side is a little
-     more than the paper can hold and anything beyond it is bytes for nothing.
+     scale that is 653 x 792 device px. 900 covers that for the LONG side of
+     a photo shaped like the box it is going into — it does not cover the
+     SHORT side of a wide landscape frame filling a tall cell (`.last1`,
+     height:330): the cap below binds WIDTH, so a 4:3 landscape photo capped
+     to 900 wide carries only 675 px of real height data into a cell that
+     wants 792, and the page raster stretches it past its own resolution —
+     read on paper as soft, and worse once a reader zooms the PDF in. Raised
+     to 1600, the same number the phone already shoots at (`PHOTO_PX_DEFAULT`
+     in mobile/index.html) — a landscape frame at that width still carries
+     1200 px of height at 4:3 and 900 at 16:9, both past what any cell in
+     this report asks for, so this is the ceiling and not a second capture
+     resolution to keep in step with the first. Quality raised a step with
+     it, because the extra bytes an inspector is already carrying at 1600
+     are worth less if the second JPEG pass throws half of them away again.
      The quality is the FIRST of the two JPEG passes a photograph takes (this
      one, then the page raster), which is why it sits above the page's. */
-  CMR.PHOTO_PX = 900; CMR.PHOTO_Q = 0.86;
+  CMR.PHOTO_PX = 1600; CMR.PHOTO_Q = 0.9;
   CMR.inlinePhoto = function (url) {
     if (!url) return Promise.resolve("");
     if (PHOTO[url]) return PHOTO[url];
@@ -3376,6 +3403,7 @@
 
     var secs = [];
     var head = '<div class="sec">'
+      + '<div class="mast">'
       + '<div class="mhead"><div class="eyebrow">' + T.I("sub") + '</div>'
         + '<div class="rno"><i>' + T.I("rr_report") + '</i> <b class="rnum">EQH-' + esc(equip) + '-' + esc(today.replace(/-/g, "")) + '</b></div></div>'
       + '<div class="m1">' + T.I("uh_title") + '</div>'
@@ -3383,6 +3411,7 @@
         + (model ? ' · ' + esc(model) : '') + (smu ? ' · <b>' + esc(String(smu)) + '</b> h' : '')
         + ' · ' + T.I("sm_report_date") + ' ' + esc(today) + '</div>'
       + '<div class="quiet" style="margin-top:2px;">' + T.S("uh_sub") + '</div>'
+      + '</div>'
       + '<div class="rule" style="margin:11px 0 0"></div>'
       + '<div class="mstrip" style="margin-top:12px">'
         + '<div class="ms"><i>' + T.I("f_unit") + '</i><b>' + esc(equip) + '</b></div>'
@@ -3532,12 +3561,14 @@
     var decKey = worst >= 5 ? "sm_dec_crit" : worst >= 3 ? "sm_dec_plan" : "sm_dec_ok";
 
     var head = '<div class="sec">'
+      + '<div class="mast">'
       + '<div class="mhead"><div class="eyebrow">' + T.I("sub") + '</div>'
         + '<div class="rno"><i>' + T.I("rr_report") + '</i> <b class="rnum">EQ-' + esc(equip) + '-' + esc(today.replace(/-/g, "")) + '</b></div></div>'
       + '<div class="m1">' + T.I("sm_title") + '</div>'
       + '<div class="msub"><span class="unum">' + esc(equip) + '</span>'
         + (model ? ' · ' + esc(model) : '') + (smu ? ' · <b>' + esc(String(smu)) + '</b> h' : '')
         + ' · ' + T.I("sm_report_date") + ' ' + esc(today) + '</div>'
+      + '</div>'
       + '<div class="rule" style="margin:11px 0 0"></div>'
       /* The overview strip — the reference's EQUIPMENT / MODEL / LATEST SMU /
          REPORT DATE. */

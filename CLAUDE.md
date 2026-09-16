@@ -1335,6 +1335,66 @@ reads the darkest pixel in a small neighbourhood instead, because a
 station's own stroke ring or code label is what actually answers whether
 anything was drawn there.
 
+**A LANDSCAPE PHOTOGRAPH IN GENERAL EVIDENCE HAD NO CAP, SO IT WAS NOT A
+STANDARD TILE.** `.cel .phg.gallery` (the findings gallery) caps the grid
+ITEM itself — the `<img>` is its own track's occupant, and `max-width:100%`
+on it is enough. `.shots`/`.genrow` (general evidence, not tied to a
+finding) wrap the photo in a `<figure>` for its caption, and that figure —
+the actual grid item — carried `max-width:none`, on purpose, from a
+narrower fix (`object-fit:cover` cropping a stamp small enough to look
+"distorted"). A landscape frame wide enough at its fixed 182px height has
+nothing to stop it growing past its own track into the row's free space,
+so three photographs on 2026-09-16 printed as two oversized tiles with a
+gap where the third belonged — read live and reported as "landscape
+photos are not standard tiles". Fitted inside a box now
+(`max-width:240px;max-height:182px;width:auto;height:auto`) — the
+fit-inside-a-box technique that predates `object-fit`/`aspect-ratio` and
+asks html2canvas for nothing beyond what it already does correctly for a
+plain `<img>`: derive size from the photo's own ratio. A portrait frame
+and a landscape one now occupy the identical footprint.
+`tests/rptmirror.cjs`'s own CSS-string check had encoded the BUG as the
+contract (`height:182px` and nothing capping width) — updated to check the
+box instead, or a real fix would have failed a passing suite.
+
+**A PHOTOGRAPH DOWNSCALED TO 900px COULD NOT FILL A 330px-TALL CELL.**
+`CMR.PHOTO_PX` caps the WIDTH a photograph is re-encoded to before it goes
+into the document — correct for the ordinary 182px-tall cell, where 900
+wide at any real aspect ratio carries more height than the 436 device px
+that cell needs at scale 2.4. The one CELL taller than that
+(`.last1`, height:330, the lone photograph on its own row) needs 792
+device px, and a 4:3 LANDSCAPE photo capped to 900 wide carries only 675
+— less than the cell asks for, so the page raster stretched it past its
+own resolution, read on paper as soft and worse once a reader zoomed the
+PDF in. Raised to 1600 — the same figure the phone already shoots at
+(`PHOTO_PX_DEFAULT` in mobile/index.html), not a second capture
+resolution to keep in step with the first — a landscape frame at that
+width still carries more height than any cell in this report asks for,
+16:9 included. Quality raised a step with it (0.86 → 0.9): the extra
+bytes an inspector is already carrying at 1600 are worth less if the
+second JPEG pass throws half of them away again. This is the SAME first
+pass on both surfaces — the phone's own page-raster JPEG quality
+(`PHONE_PDF.jpeg`, 0.86) is a separate, deliberate choice for a satellite
+link and is untouched; `tests/teamopen.cjs` already asserts it.
+
+**THE EQUIPMENT HISTORY REPORT NEVER GOT THE MASTHEAD IT WAS BUILT WITH THE
+SAME MARKUP FOR.** `unitSheets` and `summarySheets` (the "Equipment History
+and Trend" and fleet-summary documents) build the identical `.mhead`/`.m1`/
+`.msub` masthead markup the single-round report does — title, unit number,
+report-number pill — but never wrapped it in the `class="mast"` div that
+carries the ACTUAL styling: the 2.5px dark divider, the 20px bold title,
+the bold 17px unit number. Zero of it applied, on either document, since
+the day this shape was written — the read-off-the-file complaint was "this
+looks totally different, not professional" beside a round report's
+masthead, and the reason was one missing wrapper class, not a design
+difference. Wrapped now, matching the single-round masthead exactly.
+`tests/prevmeas.cjs` had encoded the OLD bare masthead as part of its own
+"one header, not one per round" check — counting `class="mast"` and
+`class="mhead"` together assumed they were mutually exclusive alternatives,
+which stopped being true the moment both classes could sit on the same
+element; the check now counts `class="mhead"` alone, since that is the one
+thing that is still true regardless: exactly one masthead, wrapped in
+`mast` or not.
+
 ---
 
 ## Secrets

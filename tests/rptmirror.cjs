@@ -231,16 +231,30 @@ const SEED = () => {
     ok('  ' + k + ' lays out as a grid, so a row cannot go ragged',
        cells[k] && /display:grid/.test(cells[k]), (cells[k] || '').slice(0, 70));
   });
-  ['galImg', 'shotsImg', 'genImg'].forEach(k => {
+  /* galImg IS the grid item — .cel .phg.gallery has no figure wrapper — so
+     capping its own width to the track (max-width:100%) is enough; a HEIGHT
+     in pixels rather than an aspect ratio, because html2canvas draws the PDF
+     and does not honour aspect-ratio, so a cell that is perfect in the DOM
+     came out ragged in the FILE — the one place it matters. */
+  const c = cells.galImg || '';
+  ok('  galImg is one fixed height, at the photograph\'s own width',
+     /height:182px/.test(c) && /width:auto/.test(c) && /max-width:100%/.test(c),
+     c.slice(0, 90));
+  /* shots/genrow wrap the img in a figure that IS the grid item, and a wide
+     landscape frame at a fixed height has no reason to stay inside its own
+     track — nothing capped the figure, so it grew into the row's free space
+     and the same three-photo row printed as two oversized tiles with a gap
+     where the third belonged (2026-09-16, general evidence). Fitted inside a
+     box now — max-width AND max-height, both dimensions auto — the classic
+     technique that predates object-fit/aspect-ratio and asks html2canvas for
+     nothing beyond what it already does correctly for a plain img: derive
+     size from the photo's own ratio. A portrait frame and a landscape one
+     now occupy the identical box regardless of which way round they are. */
+  ['shotsImg', 'genImg'].forEach(k => {
     const c = cells[k] || '';
-    /* A HEIGHT IN PIXELS, NOT AN ASPECT RATIO. html2canvas draws the PDF and
-       does not honour aspect-ratio, so a cell that is perfect in the DOM came
-       out ragged in the FILE — the one place it matters. */
-    /* An explicit HEIGHT and an AUTOMATIC width — the only pair html2canvas
-       implements. object-fit appears zero times in its build, so a cell that
-       relies on it letterboxes on screen and stretches in the file. */
-    ok('  ' + k + ' is one fixed height, at the photograph\'s own width',
-       /height:182px/.test(c) && /width:auto/.test(c) && /max-width:100%/.test(c),
+    ok('  ' + k + ' fits inside a fixed box, not a fixed height alone',
+       /max-width:240px/.test(c) && /max-height:182px/.test(c)
+         && /width:auto/.test(c) && /height:auto/.test(c),
        c.slice(0, 90));
   });
 

@@ -257,10 +257,17 @@ const run = async (p, recs, unit, want, photos) => {
 
   console.log('\nbut not the furniture');
   /* build 300: the multi-round report leads with its OWN header (class="mhead"
-     / "m1"), not the single-inspection masthead (class="mast") — one or the
-     other, never both, and never one per round either way. */
-  const heads = (r.html.match(/class="mast"/g) || []).length
-    + (r.html.match(/class="mhead"/g) || []).length;
+     / "m1") and, until 2026-09-16, that header was deliberately bare — never
+     wrapped in the single-inspection masthead class ("mast") — so counting
+     the two classes together could never double-count one header as two.
+     The maintainer's own read of the printed file called that bare header
+     "totally different, not professional" next to the single-round sheet's
+     styled one, so the compact history header is wrapped in "mast" now too
+     — the two classes correctly coexist on the SAME element, and a count
+     that still summed them would call one header two. class="mhead" alone
+     is what never repeats: exactly one per document, wrapped in "mast" or
+     not, and that is the invariant this check actually guards. */
+  const heads = (r.html.match(/class="mhead"/g) || []).length;
   ok('one report header, not one per round', heads === 1, String(heads));
   /* The sign-off is the three-role approval table now, once per report. */
   ok('one sign-off block', (r.html.match(/class="appr"/g) || []).length === 1,
