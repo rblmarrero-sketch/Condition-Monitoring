@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=392">
+<link rel="manifest" href="manifest.webmanifest?v=393">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=392">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=392">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=392">
+<link rel="apple-touch-icon" href="icon-192.png?v=393">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=393">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=393">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1181,11 +1181,23 @@
   .bm-z.watch{fill:color-mix(in srgb,var(--warning) 22%,var(--bm-s0));}
   .bm-z.act{fill:color-mix(in srgb,var(--critical) 26%,var(--bm-s0));}
   .bm-fold{fill:none;stroke:var(--bm-fold);stroke-width:1.6;stroke-dasharray:7 5;opacity:.85;}
-  .bm-div{fill:none;stroke:var(--bm-edge);stroke-width:1;opacity:.7;}
+  /* Same colour as the zone's own outline at the same weight was not a
+     division, it was noise the outline already made — the line inspectors
+     asked to actually be able to see. `--muted` is the ink used for a label,
+     not a boundary, so it reads against the floor's pale fill instead of
+     dissolving into it the way `--bm-edge` did. */
+  .bm-div{fill:none;stroke:var(--muted);stroke-width:1.6;opacity:1;}
   .bm-lip{fill:none;stroke:var(--warn-ink);stroke-width:5;stroke-linecap:round;opacity:.75;}
   .bm-face{fill:var(--ink-2);font-weight:700;font-size:11px;line-height:1;font-family:inherit;letter-spacing:.09em;
     paint-order:stroke fill;stroke:var(--surface);stroke-width:3.5px;stroke-linejoin:round;opacity:.9;}
   .bm-way{fill:var(--muted);font-weight:700;font-size:10.5px;line-height:1;font-family:inherit;letter-spacing:.1em;opacity:.75;}
+  /* Every station named on the drawing itself, not only the one selected —
+     the reference this map was traced from names all of them, and a plate
+     matched by eye against a code beneath it is faster than tapping through
+     the ones it is not. Small and quiet: the dot still carries the reading,
+     this is only what to call it. */
+  .bm-code{fill:var(--muted);font-weight:600;font-size:6.4px;line-height:1;font-family:inherit;
+    paint-order:stroke fill;stroke:var(--surface);stroke-width:2px;stroke-linejoin:round;}
   /* The surface is the control, not the dot — 63 stations across a phone puts
      them about seven pixels apart, and nothing that small is a button. */
   .bm-hit{fill:transparent;cursor:pointer;}
@@ -1208,7 +1220,17 @@
   .tbwrap{background:var(--surface);border:1px solid var(--line);border-radius:10px;
     padding:5px 4px;flex:0 0 auto;aspect-ratio:640/330;display:flex;align-items:center;
     justify-content:center;width:100%;margin-bottom:9px;}
-  body.tbreading .tbwrap{flex:1 1 auto;aspect-ratio:auto;min-height:150px;}
+  /* Choosing a station wants the map at the width of the screen; reading one
+     wants it small and out of the way of the number box below. Capping the
+     HEIGHT and leaving width at 100% seemed like the same idea, but a tall
+     narrow model (HM400, closer to 2:1 than the shared box every tray used to
+     use) then has its width constrained too, by the ratio, to far less than
+     the box actually has — letterboxed to a sliver, every station shrunk with
+     it, well under a thumb's reach. Driving the box from HEIGHT alone (width
+     auto, still ratio-locked) uses the space the shape actually wants instead
+     of the space a fixed-ratio box assumed it would. */
+  body.tbreading .tbwrap{flex:0 0 auto;width:auto;height:30vh;min-height:150px;margin:0 auto 9px;}
+  @media (max-height:620px){ body.tbreading .tbwrap{height:26vh;} }
   /* Taking a reading is a different screen from choosing where to take it: the
      orientation note has been read by then, and seven zone chips over three rows
      are worth less than the map they were stealing. */
@@ -1255,8 +1277,6 @@
      technical drawing of the part; a tray station's drawing is the map above,
      so this is the number, the last reading and the way on — and every pixel
      it hands back is map that is not being covered. */
-  body.tbreading .tbwrap{max-height:40vh;}
-  @media (max-height:620px){ body.tbreading .tbwrap{max-height:34vh;} }
   /* Said once, and it must stay said — somebody must not learn from a colour
      that a plate has no limit behind it. But three lines of it on every paint
      of the map cost more than the warning is worth, so the short form carries
@@ -2607,15 +2627,15 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=392"></script>
-<script src="upload-defaults.js?v=392"></script>
-<script src="hme.js?v=392"></script>
-<script src="mp-fc.js?v=392"></script>
-<script src="hme-cascade.js?v=392"></script>
-<script src="assets.js?v=392"></script>
-<script src="temp-limits.js?v=392"></script>
-<script src="normalize.js?v=392"></script>
-<script src="terms.js?v=392"></script>
+<script src="native.js?v=393"></script>
+<script src="upload-defaults.js?v=393"></script>
+<script src="hme.js?v=393"></script>
+<script src="mp-fc.js?v=393"></script>
+<script src="hme-cascade.js?v=393"></script>
+<script src="assets.js?v=393"></script>
+<script src="temp-limits.js?v=393"></script>
+<script src="normalize.js?v=393"></script>
+<script src="terms.js?v=393"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2634,25 +2654,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=392"></script>
-<script src="edits.js?v=392"></script>
-<script src="due.js?v=392"></script>
-<script src="wear.js?v=392"></script>
-<script src="wear-figs.js?v=392"></script>
-<script src="wear-map.js?v=392"></script>
-<script src="machine-photos.js?v=392"></script>
-<script src="machine-fig.js?v=392"></script>
-<script src="get.js?v=392"></script>
-<script src="points.js?v=392"></script>
-<script src="uc-points.js?v=392"></script>
-<script src="inspect-guide.js?v=392"></script>
-<script src="get-figs.js?v=392"></script>
-<script src="body-points.js?v=392"></script>
-<script src="body-map.js?v=392"></script>
-<script src="lube.js?v=392"></script>
-<script src="lube-overrides.js?v=392"></script>
-<script src="lube2027.js?v=392"></script>
-<script src="report-core.js?v=392"></script>
+<script src="grade.js?v=393"></script>
+<script src="edits.js?v=393"></script>
+<script src="due.js?v=393"></script>
+<script src="wear.js?v=393"></script>
+<script src="wear-figs.js?v=393"></script>
+<script src="wear-map.js?v=393"></script>
+<script src="machine-photos.js?v=393"></script>
+<script src="machine-fig.js?v=393"></script>
+<script src="get.js?v=393"></script>
+<script src="points.js?v=393"></script>
+<script src="uc-points.js?v=393"></script>
+<script src="inspect-guide.js?v=393"></script>
+<script src="get-figs.js?v=393"></script>
+<script src="body-points.js?v=393"></script>
+<script src="body-map.js?v=393"></script>
+<script src="lube.js?v=393"></script>
+<script src="lube-overrides.js?v=393"></script>
+<script src="lube2027.js?v=393"></script>
+<script src="report-core.js?v=393"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -4723,7 +4743,17 @@ function renderBodyMap(){
     h+=tbNote("nolimits", t("tb_partlimits_s"),
               t("tb_partlimits",{z:ungraded.map(z=>z[lang]||z.en).join(", ")}));
   h+=bodyTally();
-  h+='<div class="tbwrap">'+
+  /* Each model draws its own real shape now — HM400 tall and narrow, TR60 near
+     square — so the box around it has to ask BODY for that model's own aspect
+     rather than the one ratio every tray used to share. */
+  /* Each model draws its own real shape now — HM400 tall and narrow, TR60 near
+     square — so the box holding it has to ask BODY for that model's aspect
+     rather than share the one ratio every tray used to. The ratio holds in
+     BOTH states; what changes between them is which side of the box is fixed
+     (CSS, width for choosing a station, height for reading one) and which is
+     left to follow from the ratio. */
+  const vb=(BODY.of(id)||{}).vb||{w:640,h:330}, ar=vb.w+"/"+vb.h;
+  h+='<div class="tbwrap" style="aspect-ratio:'+ar+'">'+
      bodyMap({ model:id, lang:lang, sel:curItem, tag:true,
                state:bodyState, zoneState:bodyZoneState })+'</div>';
   /* The zones, named. A code on the plate is quick once you know it; the name
@@ -13388,7 +13418,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="392";
+const BUILD="393";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

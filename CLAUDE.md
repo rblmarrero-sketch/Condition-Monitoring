@@ -1233,6 +1233,75 @@ genuinely unreadable, unverified file are both unaffected), and fails
 against the pre-fix code on exactly the four assertions tied to the bugs —
 checked by hand before this suite existed, and again after.
 
+**THE TRAY IS DRAWN TO ITS OWN REAL SHAPE NOW, TRACED, NOT APPROXIMATED.** A
+maintainer review on 2026-09-16 held the dump-body liner diagram up against
+the machine and against a redesign the client had already mocked up, and
+neither matched: the app drew the regions each station occupies as a generic
+opened-box outline, evenly spaced, landscape, with no relationship to the
+manufacturer's own plan-view drawing — readable as data, useless as a map,
+because an inspector standing at the tray cannot match a rectangle to the
+thing in front of them. HM400 and TR60 each carry their own outline now
+(`mobile/body-points.js`'s `regions`, one polygon per zone) and their own
+portrait canvas size (`BODY.of(id).vb`) — portrait because that is how the
+sheet is drawn and how an inspector actually holds the phone walking a tray,
+head at the top, tail at the bottom, the two side walls left and right of the
+floor exactly where they sit on the real machine. FRONT/LEFT/RIGHT/TAIL (and
+TR60's FLR3) are the manufacturer's own polygons, unioned untouched; only the
+floor's internal FLR1/FLR2 boundaries are synthesised (`shapely`'s Voronoi,
+seeded on each zone's own points, restricted to the true outline), because
+the source draws the floor in horizontal ROW bands and has no per-column
+ground truth to copy — a straight-cut alternative was tried and abandoned
+because it clips a station out of its own zone where the plate tapers. Point
+identity (`k`, `z`, `en`, `ru`, `zones[].n`, `route`) never moved; only
+`regions` and `vb` did, verified the same way `tests/bodychk.cjs` always has
+— every station lands inside the zone that claims it and no other — so the
+whole redesign carries no migration risk and no history-join risk.
+
+**AND EVERY STATION IS NAMED ON THE DRAWING NOW, NOT ONLY THE ONE SELECTED.**
+The client's own mock-up labels all sixty-two/forty-four station codes at
+once and says so on its face ("point IDs preserved") — matching a plate in
+hand against a code on the phone should not cost tapping through every other
+station to rule it out first. `body-map.js` prints a small `.bm-code` label
+under every dot (`o.codes !== false`), positioned below rather than beside
+so it never falls into a neighbouring COLUMN — the tightest columns on this
+drawing sit closer side to side than top to bottom. The one adversarial check
+this needed — that no two of sixty-three tightly packed labels overlap, and
+none sits on a station it does not name — has to measure the REAL rendered
+box, at the REAL 6.4px rule, not a default browser font standing in for it:
+a first draft of the check ran against `body-map.js` and `body-points.js`
+alone, with no stylesheet at all, and every label rendered at the browser's
+16px default came back "colliding" against its own neighbour — a false
+alarm from a test asking a question the real page was never asked. Checked
+instead inside `tests/tray.cjs`, which already boots the real page with its
+real CSS for exactly this reason, HM400's own sixty-three labels are clear.
+
+**A DIVISION LINE THE SAME COLOUR AND WEIGHT AS THE OUTLINE IT SITS INSIDE
+IS NOT A DIVISION, IT IS THE OUTLINE'S OWN NOISE.** The floor's three rows
+(FLR1/FLR2/FLR3) are separated by a plain line (`.bm-div`) so an inspector
+can tell which row a reading belongs to without counting stations — and it
+shared `--bm-edge` with the zone's own boundary stroke, at the same weight,
+so on the pale floor fill it read as nothing: present in the markup, invisible
+on the glass. It now draws in `--muted` (the label ink, not a boundary colour)
+at 1.6px instead of 1px, fully opaque instead of .7 — the same fix on the
+printed report's own `.bm-div`, which had the identical problem in its own
+palette. Neither surface had a test asserting this line is actually visible;
+this was caught by rendering the real page and looking, the way the client
+asked for it to be checked.
+
+**A COMMENT WITH A BACKTICK IN IT INSIDE A TEMPLATE-LITERAL CSS BLOCK IS NOT
+A COMMENT.** The report-side fix above was first written as `` `.bm-div` ``
+and `` `#5b6670` `` inside a `/* … */` comment, because that is how a code
+name or a colour is written everywhere else in this file's prose. `report-
+core.js`'s CSS lives inside a JavaScript template literal, and a backtick
+anywhere inside one closes it — silently, with no error at the backtick
+itself, only a `SyntaxError: Invalid or unexpected token` pointing at
+whatever came next, however far down the file that was. Caught by
+`node --check` before the change ever reached a test, let alone a push: had
+it shipped, every page that loads `report-core.js` — which is both surfaces
+— would have failed to parse it and lost the report engine entirely, for a
+two-word comment nobody would have thought to suspect. Plain quotes only,
+never a backtick, inside any comment that lives inside a template literal.
+
 ---
 
 ## Secrets

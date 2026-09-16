@@ -503,10 +503,15 @@ const put = (p, k, v) => p.evaluate(a => { pickComponent(a[0]);
      under 5 px tall - printed, present, and useless. So the drawing owns the
      width of the sheet and the key goes under it, and these four checks are
      what stops that quietly reverting: the numbers are there, they are whole
-     millimetres, the drawing is most of the page, and no two stations overlap.
+     millimetres, a station reads at a real size, and no two stations overlap.
 
-     The width check is the one that fails on the old layout, so it is written
-     against the sheet rather than a pixel count nobody would maintain. */
+     "Owns the width of the sheet" stopped being the right proxy for that the
+     day the drawing stopped sharing one landscape box: HM400's real shape is
+     tall and narrow, and at a legible HEIGHT (bounded to still fit an A4
+     page, checked below) its correct width is a fraction of the sheet — which
+     is the shape doing its job, not the old column-squeeze bug come back. The
+     dot's own on-screen size is what actually answers "can this be read",
+     on either shape, so that is what is asserted now. */
   console.log('\nthe printed tray is big enough to read');
   const paper = await p.evaluate(async () => {
     const recs = (await rptRecords()).filter(r => r.type === 'TB');
@@ -559,8 +564,8 @@ const put = (p, k, v) => p.evaluate(a => { pickComponent(a[0]);
     paper.vals > 0 && paper.vals === paper.measured, paper.vals + ' of ' + paper.measured);
   ok('  as whole millimetres, because a decimal doubles the width of a dot',
     paper.vals > 0 && paper.decimal === 0, paper.decimal + ' with a decimal point');
-  ok('the drawing gets the width of the sheet, not a column beside a legend',
-    paper.w / paper.sheet >= 0.75, (paper.w / paper.sheet).toFixed(2) + ' of the sheet');
+  ok('a station reads at a real size, not squeezed into a column beside a legend',
+    paper.dia >= 10, paper.dia.toFixed(1) + ' px across');
   ok('  and the figure fits inside the station it belongs to',
     paper.spill > 0 && paper.spill <= 1, (paper.spill * 100).toFixed(0) + '% of the dot');
   ok('  and the page it is on still fits A4, so nothing is sliced at the fold',

@@ -350,11 +350,18 @@
 #rptRoot .bm-z.watch{fill:#fdf1d6;}
 #rptRoot .bm-z.act{fill:#fbe3e1;}
 #rptRoot .bm-fold{fill:none;stroke:#5b6670;stroke-width:1.4;stroke-dasharray:6 4;}
-#rptRoot .bm-div{fill:none;stroke:#c8d0d6;stroke-width:.9;}
+/* Same fix as the phone's .bm-div: an edge-grey line on a pale floor fill
+   printed as nothing. #5b6670 is the report's own label ink. */
+#rptRoot .bm-div{fill:none;stroke:#5b6670;stroke-width:1.4;}
 #rptRoot .bm-lip{fill:none;stroke:#8a6300;stroke-width:4;stroke-linecap:round;}
 #rptRoot .bm-face{fill:#5b6670;font-weight:700;font-size:11px;line-height:1;font-family:inherit;letter-spacing:.12em;
   paint-order:stroke fill;stroke:#fff;stroke-width:3px;stroke-linejoin:round;}
 #rptRoot .bm-way{fill:#5b6670;font-weight:700;font-size:10px;line-height:1;font-family:inherit;letter-spacing:.1em;}
+/* Every station named on the printed drawing too, not only the phone's screen —
+   a superintendent matching a plate against the sheet has the same sixty-two
+   stations to rule out that the inspector did. */
+#rptRoot .bm-code{fill:#5b6670;font-weight:600;font-size:7px;line-height:1;font-family:inherit;
+  paint-order:stroke fill;stroke:#fff;stroke-width:2px;stroke-linejoin:round;}
 #rptRoot .bm-hit{fill:none;}
 /* Printed, often in grey, so state is carried by the fill AND the outline
    weight — a station at the limit has to read as different on a page with no
