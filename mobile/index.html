@@ -14244,6 +14244,37 @@ function serverHolds(rec,f){
   return !!(e && e.serverSha256 && Number(e.serverByteSize)>0 && !e.lastError
             && (e.serverSha256===e.wireSha256 || e.serverSha256===e.sha256));
 }
+/* A NAME AND A NONZERO SIZE ON THE SERVER ARE NOT ENOUGH TO CALL A LOCALLY
+   UNREADABLE PHOTOGRAPH "SENT" — filesForRecord derives a name from the
+   equipment, the position, the date and an ordinal, never from content or
+   revision, so a position retaken in a LATER revision lands its new
+   photograph under the exact name an earlier upload already used. A phone
+   that cannot read the new file and asks the listing "is this name there"
+   would find the OLD revision's bytes, at their own nonzero size, and call
+   the round complete with the wrong photograph on the server and nothing
+   ever alarming — the same "same name, same length is not the same file"
+   mistake `landedAnyway` above exists to avoid for a merely-lost reply.
+   Checked instead against what THIS attachment's own manifest entry says it
+   weighs — `byteSize`, the File object's own reported size, recorded at
+   intake before anything about the bytes could go wrong, so it still holds
+   even once the bytes themselves do not — and, where the listing reports
+   one, that the folder's copy was written no earlier than this attachment
+   was captured (LANDED_SKEW for a phone clock that runs ahead). An older
+   revision's upload sitting under the name fails one check or the other;
+   only a listing with no `updated` at all is read as before, same as
+   `landedAnyway`. */
+function serverListedAsCurrent(idx, name, e){
+  const exp=e ? Number(e.byteSize)||0 : 0;
+  if(!exp) return false;
+  const f=idx.get(name); if(!f) return false;
+  const sz=(f.size==null||f.size==="") ? null : Number(f.size);
+  if(sz!==exp) return false;
+  if(f.updated && e.capturedAt){
+    const u=Date.parse(f.updated), c=Date.parse(e.capturedAt);
+    if(isFinite(u) && isFinite(c) && u<c-LANDED_SKEW) return false;
+  }
+  return true;
+}
 async function putBatch(UP, files, rec, sent){
   const folder=expandFolder(UP.folder||"", rec);
   const built=[], unreadable=[];
@@ -14291,14 +14322,17 @@ async function putBatch(UP, files, rec, sent){
      at "1 photo(s) could not be read… will retry by itself" on the
      capturing phone through a full restart, unchanged, while the same
      photograph had already landed on the server minutes earlier from a
-     phone it had been shared to. */
+     phone it had been shared to. A bare nonzero size is not enough to
+     answer this — see serverListedAsCurrent — so this weighs the listing
+     against what THIS revision's own manifest says the attachment weighs,
+     not against any file that happens to sit under the name. */
   if(unreadable.length && listCapable(UP)){
     try{
-      const have=await serverNames(UP, folder);
+      const idx=new Map((await serverList(UP, folder)).map(f=>[String(f.name), f]));
+      const ix=attIndex(rec);
       const stillMissing=[];
       for(const u of unreadable){
-        const sz=have.get(u.name);
-        if(sz!=null && sz>0){ u.f.serverHeld=true; sentMark(sent,u.name); }
+        if(serverListedAsCurrent(idx, u.name, ix[u.f.aid]||null)){ u.f.serverHeld=true; sentMark(sent,u.name); }
         else stillMissing.push(u);
       }
       unreadable.length=0; unreadable.push(...stillMissing);
@@ -14685,9 +14719,8 @@ async function putAll(dest, files, rec, sent){
           if(serverHolds(rec,f)){ f.serverHeld=true; sentMark(sent,f.name); return; }
           if(listCapable(dest)){
             try{
-              const have=await serverNames(dest, expandFolder(dest.folder||"", rec));
-              const sz=have.get(f.name);
-              if(sz!=null && sz>0){ f.serverHeld=true; sentMark(sent,f.name); return; }
+              const idx=new Map((await serverList(dest, expandFolder(dest.folder||"", rec))).map(x=>[String(x.name), x]));
+              if(serverListedAsCurrent(idx, f.name, attIndex(rec)[f.aid]||null)){ f.serverHeld=true; sentMark(sent,f.name); return; }
             }catch(e2){}
           }
         }
@@ -14737,10 +14770,10 @@ async function putAll(dest, files, rec, sent){
        once for the whole chunk rather than once per file. */
     if(unresolved.length && listCapable(dest)){
       try{
-        const have=await serverNames(dest, expandFolder(dest.folder||"", rec));
+        const idx=new Map((await serverList(dest, expandFolder(dest.folder||"", rec))).map(x=>[String(x.name), x]));
+        const ix=attIndex(rec);
         for(const u of unresolved.slice()){
-          const sz=have.get(u.name);
-          if(sz!=null && sz>0){ u.f.serverHeld=true; sentMark(sent,u.name); unresolved.splice(unresolved.indexOf(u),1); }
+          if(serverListedAsCurrent(idx, u.name, ix[u.f.aid]||null)){ u.f.serverHeld=true; sentMark(sent,u.name); unresolved.splice(unresolved.indexOf(u),1); }
         }
       }catch(e){}
     }

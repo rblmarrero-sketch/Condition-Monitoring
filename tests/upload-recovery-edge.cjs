@@ -195,8 +195,21 @@ const setListing = files => new Promise((res, rej) => {
      ever answers for a receipt THIS device recorded, so the capturing
      phone had no way to know the file was already there and would have
      reported it unreadable, and left the round below up:1, forever. */
-  await setListing([{ name: 'p1.jpg', size: 12345 }]);   // the server already has it — put there by another device
-  const r4 = await p.evaluate(async (url) => {
+  /* Every case below shares a record whose manifest already knows what
+     THIS attachment weighs (byteSize, recorded at intake from the File's
+     own .size — before anything about the bytes could go wrong) and when
+     it was captured — the two facts serverListedAsCurrent checks a listing
+     hit against, because filesForRecord's names are stable across
+     revisions and a bare "name present, size>0" would accept an OLDER
+     revision's upload sitting under the same name. */
+  const recWith = (byteSize, capturedAt) => ({
+    equip: 'TK161', date: '2026-09-16', type: 'TB',
+    positions: { p1: { att: { a1: { byteSize, capturedAt } } } },
+  });
+  const CAPTURED = '2026-09-16T10:00:00.000Z';
+
+  await setListing([{ name: 'p1.jpg', size: 12345, updated: '2026-09-16T10:05:00.000Z' }]);   // the server already has it — put there by another device, written AFTER this photo was captured
+  const r4 = await p.evaluate(async ({ url, rec }) => {
     const realB64 = window.blobToB64, realHolds = window.serverHolds;
     window.blobToB64 = async () => { const e = new Error('cannot read'); e.localRead = true; throw e; };
     window.serverHolds = () => false;   // this phone recorded no receipt of its own
@@ -205,17 +218,17 @@ const setListing = files => new Promise((res, rej) => {
     try {
       await putBatch({ id: 'gas', url, folder: '' },
         [{ name: 'p1.jpg', blob: { size: 10, type: 'image/jpeg' }, type: 'image/jpeg', aid: 'a1' }],
-        { equip: 'TK161', date: '2026-09-16', type: 'TB' }, sent);
+        rec, sent);
     } catch (e) { threw = e.message; }
     window.blobToB64 = realB64; window.serverHolds = realHolds;
     return { threw, sentKeys: Object.keys(sent) };
-  }, `http://127.0.0.1:${PORT}/exec`);
-  ok(r4.threw === null, 'putBatch does not throw once the server listing shows the file is already there', JSON.stringify(r4));
+  }, { url: `http://127.0.0.1:${PORT}/exec`, rec: recWith(12345, CAPTURED) });
+  ok(r4.threw === null, 'putBatch does not throw once the server listing shows the file is already there, at this attachment\'s own size', JSON.stringify(r4));
   ok(r4.sentKeys.join() === 'p1.jpg', 'and marks it sent, so the round can reach up:1', JSON.stringify(r4.sentKeys));
 
   console.log('\n   (control: the same file genuinely absent from the listing still raises, exactly as before)');
   await setListing([]);   // the server does not have it — a real, unrecovered loss
-  const r4b = await p.evaluate(async (url) => {
+  const r4b = await p.evaluate(async ({ url, rec }) => {
     const realB64 = window.blobToB64, realHolds = window.serverHolds;
     window.blobToB64 = async () => { const e = new Error('cannot read'); e.localRead = true; throw e; };
     window.serverHolds = () => false;
@@ -224,17 +237,17 @@ const setListing = files => new Promise((res, rej) => {
     try {
       await putBatch({ id: 'gas', url, folder: '' },
         [{ name: 'p1.jpg', blob: { size: 10, type: 'image/jpeg' }, type: 'image/jpeg', aid: 'a1' }],
-        { equip: 'TK161', date: '2026-09-16', type: 'TB' }, sent);
+        rec, sent);
     } catch (e) { threw = e.message; }
     window.blobToB64 = realB64; window.serverHolds = realHolds;
     return { threw, sentKeys: Object.keys(sent) };
-  }, `http://127.0.0.1:${PORT}/exec`);
+  }, { url: `http://127.0.0.1:${PORT}/exec`, rec: recWith(12345, CAPTURED) });
   ok(!!r4b.threw, 'a name genuinely absent from the listing still raises the ordinary unreadable error', JSON.stringify(r4b));
   ok(r4b.sentKeys.length === 0, 'and is not marked sent', JSON.stringify(r4b.sentKeys));
 
   console.log('\n   (control: a destination that cannot be listed skips the check and behaves as before)');
-  await setListing([{ name: 'p1.jpg', size: 12345 }]);
-  const r4c = await p.evaluate(async (url) => {
+  await setListing([{ name: 'p1.jpg', size: 12345, updated: '2026-09-16T10:05:00.000Z' }]);
+  const r4c = await p.evaluate(async ({ url, rec }) => {
     const realB64 = window.blobToB64, realHolds = window.serverHolds;
     window.blobToB64 = async () => { const e = new Error('cannot read'); e.localRead = true; throw e; };
     window.serverHolds = () => false;
@@ -244,12 +257,55 @@ const setListing = files => new Promise((res, rej) => {
       // No id: 'gas'/'mirror' — listCapable() is false, so no listing is ever asked.
       await putBatch({ url, folder: '' },
         [{ name: 'p1.jpg', blob: { size: 10, type: 'image/jpeg' }, type: 'image/jpeg', aid: 'a1' }],
-        { equip: 'TK161', date: '2026-09-16', type: 'TB' }, sent);
+        rec, sent);
     } catch (e) { threw = e.message; }
     window.blobToB64 = realB64; window.serverHolds = realHolds;
     return { threw, sentKeys: Object.keys(sent) };
-  }, `http://127.0.0.1:${PORT}/exec`);
+  }, { url: `http://127.0.0.1:${PORT}/exec`, rec: recWith(12345, CAPTURED) });
   ok(!!r4c.threw, 'a destination this phone cannot list is never asked, and the file still raises as before', JSON.stringify(r4c));
+
+  console.log('\n   (control: a name at a DIFFERENT size than this attachment is an OLDER revision\'s upload, not this one — still raises)');
+  await setListing([{ name: 'p1.jpg', size: 99999, updated: '2026-09-16T10:05:00.000Z' }]);   // some earlier revision's bytes, still sitting under the stable name
+  const r4d = await p.evaluate(async ({ url, rec }) => {
+    const realB64 = window.blobToB64, realHolds = window.serverHolds;
+    window.blobToB64 = async () => { const e = new Error('cannot read'); e.localRead = true; throw e; };
+    window.serverHolds = () => false;
+    const sent = {};
+    let threw = null;
+    try {
+      await putBatch({ id: 'gas', url, folder: '' },
+        [{ name: 'p1.jpg', blob: { size: 10, type: 'image/jpeg' }, type: 'image/jpeg', aid: 'a1' }],
+        rec, sent);
+    } catch (e) { threw = e.message; }
+    window.blobToB64 = realB64; window.serverHolds = realHolds;
+    return { threw, sentKeys: Object.keys(sent) };
+  }, { url: `http://127.0.0.1:${PORT}/exec`, rec: recWith(12345, CAPTURED) });
+  ok(!!r4d.threw, 'a listed size that does not match what THIS attachment weighs is not treated as landed', JSON.stringify(r4d));
+  ok(r4d.sentKeys.length === 0, 'and is not marked sent', JSON.stringify(r4d.sentKeys));
+
+  console.log('\n   (control: a name at the SAME size but written BEFORE this photo was even captured is an older revision too — still raises)');
+  /* The harder case: a retaken photo can coincidentally re-encode to the
+     exact byte count an earlier revision's upload had. Size alone would
+     accept it; the listing's own `updated` — earlier than this attachment's
+     `capturedAt`, by more than a phone clock could explain (LANDED_SKEW) —
+     is what tells them apart. */
+  await setListing([{ name: 'p1.jpg', size: 12345, updated: '2026-09-16T08:00:00.000Z' }]);
+  const r4e = await p.evaluate(async ({ url, rec }) => {
+    const realB64 = window.blobToB64, realHolds = window.serverHolds;
+    window.blobToB64 = async () => { const e = new Error('cannot read'); e.localRead = true; throw e; };
+    window.serverHolds = () => false;
+    const sent = {};
+    let threw = null;
+    try {
+      await putBatch({ id: 'gas', url, folder: '' },
+        [{ name: 'p1.jpg', blob: { size: 10, type: 'image/jpeg' }, type: 'image/jpeg', aid: 'a1' }],
+        rec, sent);
+    } catch (e) { threw = e.message; }
+    window.blobToB64 = realB64; window.serverHolds = realHolds;
+    return { threw, sentKeys: Object.keys(sent) };
+  }, { url: `http://127.0.0.1:${PORT}/exec`, rec: recWith(12345, CAPTURED) });
+  ok(!!r4e.threw, 'a listing written before this photo was even taken is not treated as landed, same size or not', JSON.stringify(r4e));
+  ok(r4e.sentKeys.length === 0, 'and is not marked sent', JSON.stringify(r4e.sentKeys));
 
   ok(errs.length === 0, 'no page errors throughout', errs.slice(0, 3).join(' | '));
   await b.close(); srv.close();

@@ -1086,20 +1086,41 @@ never heard back the one time it sent it, has none. The fix asks a
 different question, one step earlier: before giving up on a chunk, not only
 after a round has already succeeded, `putBatch`, `putAll`'s single-file
 path and its `oneByOne` batch-fallback all check the destination's OWN
-folder listing (`serverNames`, the same `action=list` call `confirmRun`
-already trusts) for each name they are about to declare unreadable. A name
-listed there at a nonzero size is treated exactly as `serverHolds()` treats
-a matching receipt — marked held, folded into `sent`, never re-sent — and
-what remains genuinely missing still raises exactly the alarm it always
-did, naming the photograph. This is the same trust `confirmRun` places in a
-listing once a round is up, asked one step earlier, at the one place a
-round could previously get permanently stuck before ever reaching a
-reconciliation that could unstick it. It costs one GET per chunk that still
-has an unreadable file after the local read attempt — nothing on a chunk
-that reads clean. `tests/upload-recovery-edge.cjs` proves it directly
-against a mock server holding the file under no local receipt; the two
-control cases (a chunk that fully reconciles without asking, and a file
-genuinely absent from the listing) prove the check does not paper over a
+folder listing (the same `action=list` call `confirmRun` already trusts)
+for each name they are about to declare unreadable, and what remains
+genuinely missing still raises exactly the alarm it always did, naming the
+photograph. It costs one GET per chunk that still has an unreadable file
+after the local read attempt — nothing on a chunk that reads clean.
+
+**A NAME PRESENT AT A NONZERO SIZE WAS NEARLY THE FIX SHIPPED, AND IT WAS
+WRONG THE SAME WAY THIS PROJECT HAS ALREADY BEEN WRONG ONCE.** An
+adversarial review of the draft caught it before it went out: `fileName`/
+`filesForRecord` derive a photograph's name from the equipment, the
+position, the date and an ordinal — never from content or revision — so a
+position retaken in a LATER revision lands its new photograph under the
+EXACT name an earlier upload already used. A phone that could not read the
+new file and asked only "is this name on the server, at some size over
+zero" would find the OLD revision's bytes and call the round complete with
+the WRONG photograph confirmed and nothing ever alarming — `landedAnyway`
+above exists for the identical reason ("THE SAME NAME AT THE SAME LENGTH IS
+NOT THE SAME FILE"), and the first draft of this fix repeated the mistake
+one function over instead of reusing the guard. It is checked now against
+what THIS attachment's OWN manifest entry says it weighs — `byteSize`, the
+File object's own reported size, recorded at intake (`attNote`) before
+anything about the bytes could go wrong, so it still holds even once they
+do — and, where the listing gives one, that the folder's copy was written
+no earlier than this attachment was captured (`serverListedAsCurrent`,
+`LANDED_SKEW` for a phone clock running ahead — the harder case, where a
+retaken photograph coincidentally re-encodes to the same byte count the
+old one had, so size alone cannot tell them apart). `tests/upload-
+recovery-edge.cjs` §4 carries both controls: a listed size that does not
+match this attachment's own, and a listed file written before this
+attachment was even captured — same size or not, neither is accepted.
+
+`tests/upload-recovery-edge.cjs` proves the direct case against a mock
+server holding the file under no local receipt; its controls (a chunk that
+fully reconciles without asking, a file genuinely absent from the listing,
+a destination that cannot be listed) prove the check does not paper over a
 real loss. `tests/recovery.cjs` §5 carries the same distinction in its own
 fixture — dropping a name from the mock's listing (`/__drop`) is what a
 truly gone file looks like, and the round still waits and still names it;
