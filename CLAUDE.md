@@ -1162,6 +1162,38 @@ somebody's report, live to the whole fleet the moment it is pushed. It
 remains a real defect, undocumented and unfixed, should it ever be asked
 for again — but it is not this file's decision to make unasked.
 
+**THE ONE PHOTOGRAPH LEFT ON A ROW OF ITS OWN PRINTS AT ITS OWN SIZE, NOT
+STRANDED IN A THIRD OF A TRACK.** Read off EX021's own report: a position
+with four photographs printed three across, evenly sized — the fix build
+371 shipped for this same equipment, when a portrait frame beside two
+landscape ones came out an inconsistent size (`gridCols`'s own history, see
+below) — and then a fourth alone on its own row, pinned small to the left
+third of the card with two empty tracks beside it nothing was using.
+`auto-fill` cannot single that lone photograph out; it only knows how many
+200px tracks the row's OWN width admits, not how many photographs are
+actually left to place in it — the exact shape a maintainer flagged by
+comparing the new report against the OLD, pre-371 one, which happened to
+size a genuinely lone trailing photograph larger just because it filled a
+whole row of the flexbox layout that build 371 replaced (for a different,
+also real, reason: `#rptRoot .cel .phg img{display:block;width:100%;
+aspect-ratio:4/3;object-fit:contain}` letterboxes a photograph rather than
+stretching it, but html2canvas implements neither `aspect-ratio` nor
+`object-fit`, so a mixed-orientation row rasterised inconsistently in the
+FILE while it looked fine in the DOM). The ask was narrow and specific —
+fix the size of the last photograph, keep everything else exactly as
+build 371 left it — so the fix is narrow too: the gallery grid's column
+count is computed in JS (full rows of three, `Math.min(3, ph.length)` for
+a shorter one) instead of left to `auto-fill`, and a photograph that ends
+up GENUINELY ALONE in the final row — a remainder of exactly one after
+full rows of three — is marked and given the same explicit-height,
+automatic-width treatment `.ph` already uses for a position with only one
+photograph: its own size up to 330px, spanning the row instead of one
+narrow track. A remainder of two, or no remainder at all, is untouched —
+three, five, six or one photograph print exactly as they did under build
+371. `tests/galorphan.cjs` proves the marked case (four, and seven —
+the same shape one row later) and every one of those controls, and is
+confirmed non-vacuous against the pre-fix code.
+
 **THREE PLACES THE UPLOAD PATH TRUSTED SILENCE AS SUCCESS.** Surfaced by an
 external code investigation, verified line by line against the running
 functions before anything was changed. All three are in the client, not the

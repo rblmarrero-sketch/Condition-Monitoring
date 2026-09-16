@@ -627,6 +627,16 @@
    photograph's own width. */
 #rptRoot .cel .phg.gallery img{display:block;height:182px;width:auto;max-width:100%;
   aspect-ratio:auto;background:#fff;border:1px solid #dfe4e9;border-radius:3px;}
+/* THE ONE PHOTOGRAPH LEFT ON A ROW OF ITS OWN, AFTER FULL ROWS OF THREE, IS
+   SIZED LIKE A POSITION'S ONLY PHOTOGRAPH — because that is what it is on
+   its own row. An explicit height, not auto: html2canvas honours neither
+   aspect-ratio nor object-fit (see above), so the same "explicit height,
+   automatic width" rule that keeps every other photograph in this sheet
+   correctly proportioned in the FILE, not just the DOM, applies here too.
+   grid-column spans it the full row — cell() only ever marks the true
+   trailing orphan of an incomplete row (see the lastAlone note in cell()),
+   so a full row of three is never touched. */
+#rptRoot .cel .phg.gallery img.last1{height:330px;grid-column:1 / -1;}
 #rptRoot .cel .phg img{display:block;width:100%;aspect-ratio:4/3;object-fit:contain;
   background:#eef1f4;}
 /* One floor size for every tile on the sheet, not one computed per card. A
@@ -3925,9 +3935,23 @@
            warned about, just moved one level up. auto-fill holds every tile
            to the same floor width regardless of how many share the card, and
            a lone photograph stays that size too rather than stretching to
-           fill the space nothing else is using. */
-        top = '<div class="phg gallery">'
-          + ph.map(function (u) { return '<img src="' + u + '">'; }).join("")
+           fill the space nothing else is using.
+
+           ONE EXCEPTION, NARROWLY: a position with MORE than three
+           photographs, filling full rows of three, can still leave exactly
+           one behind on a row of its own — three-across at full size next to
+           an empty two-thirds of the row nothing else is using. `auto-fill`
+           cannot single that one out; a fixed three-column track can, because
+           the count is known in JS. That last photograph spans the row
+           instead of a lone track and reads at its own size (the same rule
+           `.ph` already uses for a position with just one photograph),
+           centred rather than stretched to a width its own aspect ratio
+           never asked for. Every full row is untouched — three or six or
+           nine photographs print exactly as before. */
+        var lastAlone = ph.length > 3 && ph.length % 3 === 1;
+        top = '<div class="phg gallery" style="grid-template-columns:repeat(' + Math.min(3, ph.length) + ',1fr)">'
+          + ph.map(function (u, i) {
+              return '<img' + (lastAlone && i === ph.length - 1 ? ' class="last1"' : '') + ' src="' + u + '">'; }).join("")
           + '</div>';
       } else if (ph.length > 1) {
         /* ONE SIZE, IN ROWS — the layout the magnetic plug sheet already used,
