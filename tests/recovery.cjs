@@ -363,7 +363,13 @@ const BAD = [12347, 23459, 34571];
   ok('  the row says exactly that', /1 photo\(s\) can no longer be read on this phone/.test(row6) && /verified copy stands/.test(row6), row6);
   ok('  and the read-back still lists it whole', s5.conf && s5.conf.n === s5.conf.of, JSON.stringify(s5.conf));
 
-  console.log('\n   without the receipt the rule does not apply — the round waits and the photograph is named');
+  console.log('\n   without the receipt AND genuinely gone from the server, the round still waits and the photograph is named');
+  /* serverHolds() answers off a receipt THIS phone recorded — dropped here to
+     simulate a phone that never got one, or lost its manifest entry. That
+     alone must not be read as absence: the server is asked too (below), and
+     only when its own listing also has nothing under this name does the
+     round stay unsent. */
+  await ctl('/__drop?n=TK904_P2_10.09.2026_MP.jpg');
   await p.evaluate(async id => { const r = await dbGet(id); r.rev = 3; r.up = 0; delete r.upTo; delete r.sent; delete r.upAt;
     for (const [, q] of positionsOf(r)) for (const aid of Object.keys(attMap(q) || {})) { const e = attMap(q)[aid]; delete e.serverSha256; delete e.serverByteSize; delete e.serverHeld; }
     await dbPut(r); }, r5);
@@ -371,6 +377,18 @@ const BAD = [12347, 23459, 34571];
   s5 = await rec(r5);
   ok('the round is not marked up', s5.up !== 1, JSON.stringify({ up: s5.up }));
   ok('  and the alarm names the photograph', /could not be read/.test(await p.evaluate(() => lastErr)) && /TK904_P2/.test(await p.evaluate(() => lastErr)), await p.evaluate(() => lastErr));
+
+  console.log('\n   without the receipt but still listed on the server by name, the listing itself answers and the round completes');
+  /* Read off two trucks on 2026-09-16 (TK161's TB round): a photograph
+     landed from ANOTHER device via Share Inspection, so this phone never
+     recorded a receipt for it — serverHolds() alone left the round stuck
+     for ever. Restoring the name to the server's own listing (without ever
+     giving this phone a receipt) is exactly that shape. */
+  await ctl('/__drop?n=');
+  await p.evaluate(async id => { const r = await dbGet(id); r.rev = 4; r.up = 0; delete r.upTo; delete r.sent; delete r.upAt; await dbPut(r); }, r5);
+  await syncOnce();
+  s5 = await rec(r5);
+  ok('the round completes — the server\'s own listing answered, not a receipt this phone ever held', s5.up === 1, JSON.stringify({ up: s5.up, lastErr: await p.evaluate(() => lastErr) }));
   await p.evaluate(() => { window.__badSizes = []; });
   await p.evaluate(async id => { await dbDel(id); }, r5);
 
@@ -393,8 +411,15 @@ const BAD = [12347, 23459, 34571];
   const recs7 = []; for (const id of ids) recs7.push(await rec(id));
   const upN = recs7.filter(r => r.up === 1).length;
   ok('eighteen rounds are up and one is waiting', upN === 18 && recs7.filter(r => r.up !== 1).length === 1, upN + ' up, in ' + Math.round((Date.now() - t0) / 100) / 10 + ' s');
-  ok('  19 sidecars and 37 photographs crossed the wire — the dead one did not', st7.posted.filter(n => /\.json$/.test(n)).length === 19 && st7.posted.filter(n => /\.jpg$/.test(n)).length === 37,
-     st7.posted.filter(n => /\.json$/.test(n)).length + ' json, ' + st7.posted.filter(n => /\.jpg$/.test(n)).length + ' jpg');
+  /* Matched against the round sidecars' own naming (unit_date_type.json), not
+     against every ".json" the mock ever accepted: a round failing on this
+     phone is "something actually went wrong" by sendTrace()'s own rule, and a
+     healthy run elsewhere in this same suite may have already spent its
+     TRACE_GAP — so whether its one small diagnostic document happens to land
+     inside this window is not this section's business to assert either way. */
+  const sidecar = /^\w+_\d{2}\.\d{2}\.\d{4}_\w+\.json$/;
+  ok('  19 sidecars and 37 photographs crossed the wire — the dead one did not', st7.posted.filter(n => sidecar.test(n)).length === 19 && st7.posted.filter(n => /\.jpg$/.test(n)).length === 37,
+     st7.posted.filter(n => sidecar.test(n)).length + ' json, ' + st7.posted.filter(n => /\.jpg$/.test(n)).length + ' jpg');
   const waiting = recs7.find(r => r.up !== 1);
   ok('  the waiting one is TK927 and its dead photograph is named', waiting && /TK927/.test(waiting.id) && /TK927_P2/.test(await p.evaluate(() => lastErr)), await p.evaluate(() => lastErr));
   /* The pill reads "Needs attention" — a photograph that cannot be read IS

@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=386">
+<link rel="manifest" href="manifest.webmanifest?v=387">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=386">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=386">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=386">
+<link rel="apple-touch-icon" href="icon-192.png?v=387">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=387">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=387">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2607,15 +2607,15 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=386"></script>
-<script src="upload-defaults.js?v=386"></script>
-<script src="hme.js?v=386"></script>
-<script src="mp-fc.js?v=386"></script>
-<script src="hme-cascade.js?v=386"></script>
-<script src="assets.js?v=386"></script>
-<script src="temp-limits.js?v=386"></script>
-<script src="normalize.js?v=386"></script>
-<script src="terms.js?v=386"></script>
+<script src="native.js?v=387"></script>
+<script src="upload-defaults.js?v=387"></script>
+<script src="hme.js?v=387"></script>
+<script src="mp-fc.js?v=387"></script>
+<script src="hme-cascade.js?v=387"></script>
+<script src="assets.js?v=387"></script>
+<script src="temp-limits.js?v=387"></script>
+<script src="normalize.js?v=387"></script>
+<script src="terms.js?v=387"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2634,25 +2634,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=386"></script>
-<script src="edits.js?v=386"></script>
-<script src="due.js?v=386"></script>
-<script src="wear.js?v=386"></script>
-<script src="wear-figs.js?v=386"></script>
-<script src="wear-map.js?v=386"></script>
-<script src="machine-photos.js?v=386"></script>
-<script src="machine-fig.js?v=386"></script>
-<script src="get.js?v=386"></script>
-<script src="points.js?v=386"></script>
-<script src="uc-points.js?v=386"></script>
-<script src="inspect-guide.js?v=386"></script>
-<script src="get-figs.js?v=386"></script>
-<script src="body-points.js?v=386"></script>
-<script src="body-map.js?v=386"></script>
-<script src="lube.js?v=386"></script>
-<script src="lube-overrides.js?v=386"></script>
-<script src="lube2027.js?v=386"></script>
-<script src="report-core.js?v=386"></script>
+<script src="grade.js?v=387"></script>
+<script src="edits.js?v=387"></script>
+<script src="due.js?v=387"></script>
+<script src="wear.js?v=387"></script>
+<script src="wear-figs.js?v=387"></script>
+<script src="wear-map.js?v=387"></script>
+<script src="machine-photos.js?v=387"></script>
+<script src="machine-fig.js?v=387"></script>
+<script src="get.js?v=387"></script>
+<script src="points.js?v=387"></script>
+<script src="uc-points.js?v=387"></script>
+<script src="inspect-guide.js?v=387"></script>
+<script src="get-figs.js?v=387"></script>
+<script src="body-points.js?v=387"></script>
+<script src="body-map.js?v=387"></script>
+<script src="lube.js?v=387"></script>
+<script src="lube-overrides.js?v=387"></script>
+<script src="lube2027.js?v=387"></script>
+<script src="report-core.js?v=387"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -13388,7 +13388,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="386";
+const BUILD="387";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -14272,8 +14272,37 @@ async function putBatch(UP, files, rec, sent){
          because the store has said so, and confirmRun lists it afterwards
          like every other file. */
       if(serverHolds(rec,f)){ f.serverHeld=true; sentMark(sent,f.name); continue; }
-      unreadable.push({name:f.name, err:e});
+      unreadable.push({name:f.name, err:e, f});
     }
+  }
+  /* A NAME THIS DEVICE NEVER GOT A RECEIPT FOR MAY STILL BE ON THE SERVER —
+     put there by a DIFFERENT device (Share Inspection, opened and synced
+     on somebody else's phone), or by an attempt of this one whose reply
+     never reached it. serverHolds() only ever answers for a receipt THIS
+     PHONE recorded; a round shared and synced from another handset lands
+     the identical file under the identical name, and this phone holds no
+     receipt for it — so without asking, it would report the same file
+     unreadable FOR EVER, and the round would never reach up:1, because
+     confirmRun's own read-back only ever runs for a round already marked
+     up (see the note on justDone). Checked by name against the live
+     folder — the same trust confirmRun already places in a listing once a
+     round is up, asked one step earlier: before giving up, not only after
+     succeeding. Read off two trucks on 2026-09-16: TK161's TB round sat
+     at "1 photo(s) could not be read… will retry by itself" on the
+     capturing phone through a full restart, unchanged, while the same
+     photograph had already landed on the server minutes earlier from a
+     phone it had been shared to. */
+  if(unreadable.length && listCapable(UP)){
+    try{
+      const have=await serverNames(UP, folder);
+      const stillMissing=[];
+      for(const u of unreadable){
+        const sz=have.get(u.name);
+        if(sz!=null && sz>0){ u.f.serverHeld=true; sentMark(sent,u.name); }
+        else stillMissing.push(u);
+      }
+      unreadable.length=0; unreadable.push(...stillMissing);
+    }catch(e){ /* the listing itself did not answer — say what was always said */ }
   }
   /* Says plainly what this actually is — a photograph this PHONE cannot
      read any more, not something the backend rejected — and names it, so
@@ -14649,8 +14678,19 @@ async function putAll(dest, files, rec, sent){
     jobs=rest.map(f=>async()=>{
       try{ await putOne(dest,f.name,f.blob,f.type,rec,f.aid); }
       catch(e){
-        /* The same rule as putBatch, one file at a time. */
-        if(e && e.localRead){ f.localUnreadable=true; if(serverHolds(rec,f)){ f.serverHeld=true; sentMark(sent,f.name); return; } }
+        /* The same rule as putBatch, one file at a time — including the
+           name-against-the-listing fallback below serverHolds. */
+        if(e && e.localRead){
+          f.localUnreadable=true;
+          if(serverHolds(rec,f)){ f.serverHeld=true; sentMark(sent,f.name); return; }
+          if(listCapable(dest)){
+            try{
+              const have=await serverNames(dest, expandFolder(dest.folder||"", rec));
+              const sz=have.get(f.name);
+              if(sz!=null && sz>0){ f.serverHeld=true; sentMark(sent,f.name); return; }
+            }catch(e2){}
+          }
+        }
         throw e;
       }
       sentMark(sent,f.name); });
@@ -14681,14 +14721,30 @@ async function putAll(dest, files, rec, sent){
      any file that did in fact land, so a retry costs nothing twice. Only
      when a single file fails too is the link declared gone. */
   const oneByOne=async(chunk)=>{
+    const unresolved=[];
     for(const f of chunk){
       if(sent[f.name]) continue;
       try{ await putOne(dest,f.name,f.blob,f.type,rec,f.aid); sentMark(sent,f.name); }
       catch(e){
-        if(e && e.localRead){ f.localUnreadable=true; if(serverHolds(rec,f)){ f.serverHeld=true; sentMark(sent,f.name); continue; } failed=failed||e; continue; }
+        if(e && e.localRead){ f.localUnreadable=true; if(serverHolds(rec,f)){ f.serverHeld=true; sentMark(sent,f.name); continue; } unresolved.push({name:f.name, err:e, f}); continue; }
         throw e;
       }
     }
+    /* Same rule as putBatch's own listing fallback: a name serverHolds()
+       cannot vouch for (no receipt on THIS phone) may still be on the
+       server — shared to another device and synced from there, or landed
+       from an earlier attempt whose reply never reached this one. Checked
+       once for the whole chunk rather than once per file. */
+    if(unresolved.length && listCapable(dest)){
+      try{
+        const have=await serverNames(dest, expandFolder(dest.folder||"", rec));
+        for(const u of unresolved.slice()){
+          const sz=have.get(u.name);
+          if(sz!=null && sz>0){ u.f.serverHeld=true; sentMark(sent,u.name); unresolved.splice(unresolved.indexOf(u),1); }
+        }
+      }catch(e){}
+    }
+    if(unresolved.length) failed=failed||unresolved[0].err;
   };
   const lane=async()=>{ for(;;){
     if(fatal) return;

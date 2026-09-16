@@ -39,10 +39,19 @@ const ok = (c, n, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
    fetchT. MODE picks the canned batch reply; set over plain HTTP from the
    Node side before each evaluate, so the page need not know it exists. */
 let MODE = 'ack-p1-only';
+let LISTING = [];   // what action=list answers with, for the "ask the server by name" tests
 const srv = http.createServer((req, res) => {
   const u = new URL(req.url, 'http://x');
   const cors = { 'Access-Control-Allow-Origin': '*' };
   if (u.pathname === '/__mode') { MODE = u.searchParams.get('set') || MODE; res.writeHead(200, cors); return res.end('ok'); }
+  if (u.pathname === '/__listing') {
+    let raw = ''; req.on('data', c => raw += c);
+    return req.on('end', () => { LISTING = JSON.parse(raw || '[]'); res.writeHead(200, cors); res.end('ok'); });
+  }
+  if (u.pathname === '/exec' && req.method === 'GET' && u.searchParams.get('action') === 'list') {
+    res.writeHead(200, Object.assign({ 'Content-Type': 'application/json' }, cors));
+    return res.end(JSON.stringify({ ok: true, files: LISTING }));
+  }
   if (u.pathname === '/exec' && req.method === 'POST') {
     let raw = ''; req.on('data', c => raw += c);
     return req.on('end', () => {
@@ -60,6 +69,11 @@ const srv = http.createServer((req, res) => {
 });
 const setMode = m => new Promise((res, rej) => {
   http.get(`http://127.0.0.1:${PORT}/__mode?set=${m}`, r => { r.resume(); r.on('end', res); }).on('error', rej);
+});
+const setListing = files => new Promise((res, rej) => {
+  const body = JSON.stringify(files);
+  const req = http.request(`http://127.0.0.1:${PORT}/__listing`, { method: 'POST' }, r => { r.resume(); r.on('end', res); });
+  req.on('error', rej); req.end(body);
 });
 
 (async () => {
@@ -171,6 +185,71 @@ const setMode = m => new Promise((res, rej) => {
   ok(r3.zeroNoSize && r3.zeroNoSize.n === 0,
      'a zero-byte file with no known wire size still reads as missing, by the empty check alone',
      JSON.stringify(r3.zeroNoSize));
+
+  console.log('\n4. A NAME serverHolds() CANNOT VOUCH FOR MAY STILL BE ON THE SERVER — ASKED BY NAME, NOT ASSUMED GONE');
+  /* Read off two trucks on 2026-09-16: TK161's TB round sat at "1 photo(s)
+     could not be read… will retry by itself" through a full app restart,
+     unchanged, on the phone that captured it — while the identical
+     photograph had already landed on the server minutes earlier, sent by
+     a DIFFERENT phone the round had been shared to. serverHolds() only
+     ever answers for a receipt THIS device recorded, so the capturing
+     phone had no way to know the file was already there and would have
+     reported it unreadable, and left the round below up:1, forever. */
+  await setListing([{ name: 'p1.jpg', size: 12345 }]);   // the server already has it — put there by another device
+  const r4 = await p.evaluate(async (url) => {
+    const realB64 = window.blobToB64, realHolds = window.serverHolds;
+    window.blobToB64 = async () => { const e = new Error('cannot read'); e.localRead = true; throw e; };
+    window.serverHolds = () => false;   // this phone recorded no receipt of its own
+    const sent = {};
+    let threw = null;
+    try {
+      await putBatch({ id: 'gas', url, folder: '' },
+        [{ name: 'p1.jpg', blob: { size: 10, type: 'image/jpeg' }, type: 'image/jpeg', aid: 'a1' }],
+        { equip: 'TK161', date: '2026-09-16', type: 'TB' }, sent);
+    } catch (e) { threw = e.message; }
+    window.blobToB64 = realB64; window.serverHolds = realHolds;
+    return { threw, sentKeys: Object.keys(sent) };
+  }, `http://127.0.0.1:${PORT}/exec`);
+  ok(r4.threw === null, 'putBatch does not throw once the server listing shows the file is already there', JSON.stringify(r4));
+  ok(r4.sentKeys.join() === 'p1.jpg', 'and marks it sent, so the round can reach up:1', JSON.stringify(r4.sentKeys));
+
+  console.log('\n   (control: the same file genuinely absent from the listing still raises, exactly as before)');
+  await setListing([]);   // the server does not have it — a real, unrecovered loss
+  const r4b = await p.evaluate(async (url) => {
+    const realB64 = window.blobToB64, realHolds = window.serverHolds;
+    window.blobToB64 = async () => { const e = new Error('cannot read'); e.localRead = true; throw e; };
+    window.serverHolds = () => false;
+    const sent = {};
+    let threw = null;
+    try {
+      await putBatch({ id: 'gas', url, folder: '' },
+        [{ name: 'p1.jpg', blob: { size: 10, type: 'image/jpeg' }, type: 'image/jpeg', aid: 'a1' }],
+        { equip: 'TK161', date: '2026-09-16', type: 'TB' }, sent);
+    } catch (e) { threw = e.message; }
+    window.blobToB64 = realB64; window.serverHolds = realHolds;
+    return { threw, sentKeys: Object.keys(sent) };
+  }, `http://127.0.0.1:${PORT}/exec`);
+  ok(!!r4b.threw, 'a name genuinely absent from the listing still raises the ordinary unreadable error', JSON.stringify(r4b));
+  ok(r4b.sentKeys.length === 0, 'and is not marked sent', JSON.stringify(r4b.sentKeys));
+
+  console.log('\n   (control: a destination that cannot be listed skips the check and behaves as before)');
+  await setListing([{ name: 'p1.jpg', size: 12345 }]);
+  const r4c = await p.evaluate(async (url) => {
+    const realB64 = window.blobToB64, realHolds = window.serverHolds;
+    window.blobToB64 = async () => { const e = new Error('cannot read'); e.localRead = true; throw e; };
+    window.serverHolds = () => false;
+    const sent = {};
+    let threw = null;
+    try {
+      // No id: 'gas'/'mirror' — listCapable() is false, so no listing is ever asked.
+      await putBatch({ url, folder: '' },
+        [{ name: 'p1.jpg', blob: { size: 10, type: 'image/jpeg' }, type: 'image/jpeg', aid: 'a1' }],
+        { equip: 'TK161', date: '2026-09-16', type: 'TB' }, sent);
+    } catch (e) { threw = e.message; }
+    window.blobToB64 = realB64; window.serverHolds = realHolds;
+    return { threw, sentKeys: Object.keys(sent) };
+  }, `http://127.0.0.1:${PORT}/exec`);
+  ok(!!r4c.threw, 'a destination this phone cannot list is never asked, and the file still raises as before', JSON.stringify(r4c));
 
   ok(errs.length === 0, 'no page errors throughout', errs.slice(0, 3).join(' | '));
   await b.close(); srv.close();

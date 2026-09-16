@@ -1058,6 +1058,54 @@ suspected WebKit bug and cannot be used to reproduce data loss itself.
 This is a candidate closed, not a confirmed cause found; the field test
 that would confirm it is the same offline recipe run again on build 386.
 
+**A ROUND WITH NO RECEIPT FOR A FILE THE SERVER ALREADY HOLDS COULD BE STUCK
+FOR EVER, NOT JUST UNTIL THE NEXT ATTEMPT.** Read off two trucks on
+2026-09-16: TK161's TB round sat at "1 photo(s) could not be read on this
+phone… will retry by itself" through a full app restart and, on one of the
+two, through a Share Inspection to a second handset — the SAME message,
+unchanged, after every recipe the field could try. It was never going to
+change by itself. `putBatch` sends what it can read and then throws for
+whatever it cannot, on every attempt, always — that throw is correct and
+load-bearing (`tests/upload-recovery-edge.cjs`'s own control cases depend on
+it) — but it propagates through `putAll` and `syncNow` and keeps the ROUND'S
+OWN `up` flag at 0 for as long as one photograph on it stays locally
+unreadable with no receipt this phone ever recorded. And `confirmRun` — the
+read-after-write reconciliation that is the only code in this file that ever
+asks the server whether a stuck file is actually there — only ever runs for
+a record already at `up:1` (`justDone`). A round that never reaches `up:1`
+never gets asked about, so a photograph the server has genuinely held for
+minutes, landed there from a DIFFERENT device via Share Inspection or from
+an attempt of this same phone whose reply never arrived, produced the exact
+same alarm on the thousandth check as on the first: not a retry loop that
+eventually succeeds, a loop that eventually gives the same wrong answer
+for ever.
+
+`serverHolds()` cannot rescue this — it answers only from a receipt THIS
+PHONE recorded, and a phone that received the file from someone else, or
+never heard back the one time it sent it, has none. The fix asks a
+different question, one step earlier: before giving up on a chunk, not only
+after a round has already succeeded, `putBatch`, `putAll`'s single-file
+path and its `oneByOne` batch-fallback all check the destination's OWN
+folder listing (`serverNames`, the same `action=list` call `confirmRun`
+already trusts) for each name they are about to declare unreadable. A name
+listed there at a nonzero size is treated exactly as `serverHolds()` treats
+a matching receipt — marked held, folded into `sent`, never re-sent — and
+what remains genuinely missing still raises exactly the alarm it always
+did, naming the photograph. This is the same trust `confirmRun` places in a
+listing once a round is up, asked one step earlier, at the one place a
+round could previously get permanently stuck before ever reaching a
+reconciliation that could unstick it. It costs one GET per chunk that still
+has an unreadable file after the local read attempt — nothing on a chunk
+that reads clean. `tests/upload-recovery-edge.cjs` proves it directly
+against a mock server holding the file under no local receipt; the two
+control cases (a chunk that fully reconciles without asking, and a file
+genuinely absent from the listing) prove the check does not paper over a
+real loss. `tests/recovery.cjs` §5 carries the same distinction in its own
+fixture — dropping a name from the mock's listing (`/__drop`) is what a
+truly gone file looks like, and the round still waits and still names it;
+restoring the name with no receipt ever given is what TK161 looked like,
+and the round now completes on the server's word alone.
+
 **THREE PLACES THE UPLOAD PATH TRUSTED SILENCE AS SUCCESS.** Surfaced by an
 external code investigation, verified line by line against the running
 functions before anything was changed. All three are in the client, not the
