@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=395">
+<link rel="manifest" href="manifest.webmanifest?v=396">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=395">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=395">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=395">
+<link rel="apple-touch-icon" href="icon-192.png?v=396">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=396">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=396">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2627,15 +2627,15 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=395"></script>
-<script src="upload-defaults.js?v=395"></script>
-<script src="hme.js?v=395"></script>
-<script src="mp-fc.js?v=395"></script>
-<script src="hme-cascade.js?v=395"></script>
-<script src="assets.js?v=395"></script>
-<script src="temp-limits.js?v=395"></script>
-<script src="normalize.js?v=395"></script>
-<script src="terms.js?v=395"></script>
+<script src="native.js?v=396"></script>
+<script src="upload-defaults.js?v=396"></script>
+<script src="hme.js?v=396"></script>
+<script src="mp-fc.js?v=396"></script>
+<script src="hme-cascade.js?v=396"></script>
+<script src="assets.js?v=396"></script>
+<script src="temp-limits.js?v=396"></script>
+<script src="normalize.js?v=396"></script>
+<script src="terms.js?v=396"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2654,25 +2654,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=395"></script>
-<script src="edits.js?v=395"></script>
-<script src="due.js?v=395"></script>
-<script src="wear.js?v=395"></script>
-<script src="wear-figs.js?v=395"></script>
-<script src="wear-map.js?v=395"></script>
-<script src="machine-photos.js?v=395"></script>
-<script src="machine-fig.js?v=395"></script>
-<script src="get.js?v=395"></script>
-<script src="points.js?v=395"></script>
-<script src="uc-points.js?v=395"></script>
-<script src="inspect-guide.js?v=395"></script>
-<script src="get-figs.js?v=395"></script>
-<script src="body-points.js?v=395"></script>
-<script src="body-map.js?v=395"></script>
-<script src="lube.js?v=395"></script>
-<script src="lube-overrides.js?v=395"></script>
-<script src="lube2027.js?v=395"></script>
-<script src="report-core.js?v=395"></script>
+<script src="grade.js?v=396"></script>
+<script src="edits.js?v=396"></script>
+<script src="due.js?v=396"></script>
+<script src="wear.js?v=396"></script>
+<script src="wear-figs.js?v=396"></script>
+<script src="wear-map.js?v=396"></script>
+<script src="machine-photos.js?v=396"></script>
+<script src="machine-fig.js?v=396"></script>
+<script src="get.js?v=396"></script>
+<script src="points.js?v=396"></script>
+<script src="uc-points.js?v=396"></script>
+<script src="inspect-guide.js?v=396"></script>
+<script src="get-figs.js?v=396"></script>
+<script src="body-points.js?v=396"></script>
+<script src="body-map.js?v=396"></script>
+<script src="lube.js?v=396"></script>
+<script src="lube-overrides.js?v=396"></script>
+<script src="lube2027.js?v=396"></script>
+<script src="report-core.js?v=396"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -4815,11 +4815,11 @@ function idb(){ return dbConn ||= new Promise((res,rej)=>{ const r=indexedDB.ope
   r.onsuccess=()=>{ r.result.onclose=()=>{ dbConn=null; };          // reopen if the browser drops it
     r.result.onversionchange=()=>{ try{r.result.close();}catch(_){ } dbConn=null; };
     res(r.result); };
-  r.onerror=()=>{ dbConn=null; rej(r.error); }; }); }
+  r.onerror=()=>{ dbConn=null; rej(r.error||new Error("could not open storage")); }; }); }
 /* Anything that reads the store and keeps the answer has to know when the answer
    went stale. One counter, bumped by the only two writers. */
 let dbVer=0;
-async function dbPut(rec){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readwrite"); t.objectStore(STORE).put(rec); t.oncomplete=()=>{ dbVer++; res(); }; t.onerror=()=>rej(t.error); t.onabort=()=>rej(t.error||new Error("save aborted — storage may be full")); }); }
+async function dbPut(rec){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readwrite"); t.objectStore(STORE).put(rec); t.oncomplete=()=>{ dbVer++; res(); }; t.onerror=()=>rej(t.error||new Error("save failed — storage may be full")); t.onabort=()=>rej(t.error||new Error("save aborted — storage may be full")); }); }
 /* The round being typed lives in this store too, under a reserved id, so it
    gets IndexedDB's durability and can hold photographs. It is NOT an
    inspection: filtered out here, once, so that the queue, the sync, the
@@ -4840,11 +4840,11 @@ const DRAFT_ID="__draft__";
    everywhere without every caller having to remember. */
 const TEAM_ID="__team__";
 const isTeamId=id=>String(id||"").indexOf(TEAM_ID)===0;
-async function dbAll(){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readonly"); const rq=t.objectStore(STORE).getAll(); rq.onsuccess=()=>res((rq.result||[]).filter(r=>r&&r.id!==DRAFT_ID&&!isTeamId(r.id))); rq.onerror=()=>rej(rq.error); }); }
+async function dbAll(){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readonly"); const rq=t.objectStore(STORE).getAll(); rq.onsuccess=()=>res((rq.result||[]).filter(r=>r&&r.id!==DRAFT_ID&&!isTeamId(r.id))); rq.onerror=()=>rej(rq.error||new Error("could not read the saved rounds")); }); }
 /* The team rounds only — the other side of that same filter. */
-async function dbTeam(){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readonly"); const rq=t.objectStore(STORE).getAll(); rq.onsuccess=()=>res((rq.result||[]).filter(r=>r&&isTeamId(r.id))); rq.onerror=()=>rej(rq.error); }); }
-async function dbGet(id){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readonly"); const rq=t.objectStore(STORE).get(id); rq.onsuccess=()=>res(rq.result||null); rq.onerror=()=>rej(rq.error); }); }
-async function dbDel(id){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readwrite"); t.objectStore(STORE).delete(id); t.oncomplete=()=>{ dbVer++; res(); }; t.onerror=()=>rej(t.error); }); }
+async function dbTeam(){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readonly"); const rq=t.objectStore(STORE).getAll(); rq.onsuccess=()=>res((rq.result||[]).filter(r=>r&&isTeamId(r.id))); rq.onerror=()=>rej(rq.error||new Error("could not read the shared rounds")); }); }
+async function dbGet(id){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readonly"); const rq=t.objectStore(STORE).get(id); rq.onsuccess=()=>res(rq.result||null); rq.onerror=()=>rej(rq.error||new Error("could not read this record")); }); }
+async function dbDel(id){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readwrite"); t.objectStore(STORE).delete(id); t.oncomplete=()=>{ dbVer++; res(); }; t.onerror=()=>rej(t.error||new Error("delete failed")); }); }
 
 /* ===================== class + type + component chips ===================== */
 function fillClassSel(){ $("classBtn").textContent = eqCat==="ALL"
@@ -5719,7 +5719,18 @@ function defaultTargetFor(g){
 function renderGradeReq(){
   const box=$("gradeReq"); if(!box) return;
   const p=posRO(); const g=GRADE.num(p.grade); const req=GRADE.requires(g);
-  const on=!!(g && GRADE.isFinding(g) && gradeApplies());
+  /* NOT gated on gradeApplies(). A measured station never shows the manual
+     1-5 cards, but a defect with a defaultSeverity still WRITES a grade onto
+     it (the picker at the defect field does this on every round type, with
+     no gradeApplies() check of its own) — and Critical there needs the same
+     target date and notification tick Critical needs anywhere else. Gating
+     this box on gradeApplies() left a Dump Body Liner station holding a
+     silently-assigned 5 with the one box that could ever supply its target
+     date and notify tick permanently hidden: Save demanded them, forever,
+     with nothing on screen to give them. Reported from the field as "there
+     is no selection for grade" — there was a grade, just no way to finish
+     what it required. */
+  const on=!!(g && GRADE.isFinding(g));
   box.classList.toggle("hidden", !on);
   if(!on) return;
   $("gradeReqText").textContent=t("g_req_"+g);
@@ -7935,6 +7946,21 @@ $("pickList").onclick=(e)=>{ const b=e.target.closest(".pickitem"); if(!b) retur
       const m={"No failure":"NOF",Incipient:"INC",Degraded:"DEG",Critical:"CRI"};
       const g=GRADE.fromIso(m[d.defaultSeverity]);
       if(g){ p.grade=g; p.gradeAuto=1; p.sev=gradeIso(g); }
+    /* The defect that proposed this grade is gone — cleared to "none", or
+       changed to one with no severity of its own — and an auto grade with
+       nothing left to justify it is not a finding, it is a stale flag. Read
+       off a Dump Body Liner station in the field: "5 – Critical needs a
+       defect, an action, a target date..." with EVERY field blank, on a
+       station whose manual grade cards are never even shown (a measured
+       station's condition is its reading). The only code path that can put
+       a grade there at all is this one, and it never had a mirror for
+       taking it away — so tapping a defect, then reconsidering and picking
+       a different one or none, left grade 5 behind with nothing on the
+       position to explain it, on a round type with no card to notice it on
+       and correct it from. A grade the inspector confirmed by hand
+       (gradeMan) is never touched here. */
+    } else if(p.gradeAuto && !p.gradeMan){
+      delete p.grade; delete p.gradeAuto; delete p.sev;
     }
     renderGrade(); renderSev();
   }
@@ -13418,7 +13444,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="395";
+const BUILD="396";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

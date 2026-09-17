@@ -1395,6 +1395,78 @@ element; the check now counts `class="mhead"` alone, since that is the one
 thing that is still true regardless: exactly one masthead, wrapped in
 `mast` or not.
 
+**A GRADE ON A MEASURED STATION CAN EXIST WITH NOWHERE TO FINISH IT.** Read
+off a Dump Body Liner round on 2026-09-17: "Can not save… its saying need to
+grade but we dont grade dump body… there is no selection for grade thats the
+problem." The tray genuinely never shows the manual 1–5 cards — a measured
+station's condition is its reading, not a pick, and that has been true since
+build 86 — but the defect picker sets a grade on **any** round type when the
+chosen defect carries a `defaultSeverity`, with no `gradeAppliesTo()` check of
+its own. `renderGradeReq()` — the box holding the target date and the
+notification tick a Critical or Serious grade requires — was ALSO gated on
+`gradeApplies()`, the same flag that (correctly) hides the manual cards. So a
+tray station holding a silently-assigned 5 had the one box that could ever
+supply what Save demanded permanently hidden: Save asked for a target date
+forever, with nothing on the screen able to give it. Fixed by dropping that
+extra gate — the box now shows whenever a finding-level grade exists,
+whatever set it, while the manual cards stay exactly as hidden as before.
+
+**AND THE DEFECT THAT SET IT HAD NO MIRROR FOR TAKING IT AWAY.** The same
+field visit, TK115's F95: "5 – Critical needs a defect, an action, a target
+date, a comment, a close-up photograph, the notification tick" — **every**
+field blank, on a station whose cards are never shown at all. Reproduced
+exactly: picking a defect with a `defaultSeverity` writes `grade`/`gradeAuto`
+onto the position, but clearing that defect back to "— none —", or changing
+it to one with no severity of its own, left the grade standing — the code
+checked `d.defaultSeverity` before writing a grade and never checked it
+before **un**-writing one. On a round with manual cards this is merely
+confusing (the inspector can see and correct a stray grade); on a measured
+station there is no card to notice it on. The same handler now clears an
+unconfirmed auto-grade (`gradeAuto` set, `gradeMan` not) the instant the
+defect that proposed it stops applying — a grade a human confirmed by hand is
+never touched. `tests/needgrade.cjs` reproduces both: the dead end (fixed by
+the first change) and the orphaned grade (fixed by the second), each proven
+non-vacuous against the pre-fix code.
+
+**A REJECTION WITH NOTHING TO SAY STILL HAS TO SAY SOMETHING.** The same
+phone: "Could not record TK150's progress on this phone **(null)** — the
+phone may be out of room." The parenthesis was the whole diagnosis, and it
+said nothing. `up_bookfail` builds its reason from
+`String((e&&e.message)||e)`, which is right about a real `Error` — but
+`dbPut`'s own `onerror` handler was `()=>rej(t.error)`, with no fallback, and
+`IDBTransaction.error` is nullable by spec: a transaction can fire "error"
+with `.error` still `null`. `dbPut`'s sibling `onabort` handler already knew
+this (`t.error||new Error("save aborted — storage may be full")`, one line
+below); `onerror` was simply never given the same treatment. A caught `null`
+stringifies to the four letters a technician read on the glass. Five other
+IndexedDB wrappers shared the exact gap — `idb()` itself, `dbAll`, `dbTeam`,
+`dbGet`, `dbDel` — all fixed the same way. This does not explain WHY the
+transaction had no error object; only that whatever reaches the technician is
+now a sentence, never a null. `tests/dbnullerr.cjs`.
+
+**A CARD WITH NOTHING ON IT IS NOT A CLEAN READING — IT IS ONE NOBODY WALKED
+TO.** A printed TK150 report: two of four cards in "Equipment and component
+evidence" carried a work-order tag and nothing else — no grade, no photo, no
+defect, no comment — the same area on the page as a real finding and none of
+its information. `loadPos()` stamps the round's own work order onto whatever
+position is on screen the instant it opens, so a plug merely navigated past
+on the way to the one actually being checked picks one up with nothing else.
+This is the exact gap build 389 found and reverted the same day, because
+hiding it was proposed but never asked for — "it remains a real defect,
+undocumented and unfixed, should it ever be asked for again." It was asked
+for: "remove [it] in the report if no photo or comments… or just maybe a
+note that 1 and 4 not taken." `mpEvidence()` now drops a position with
+neither a grade, a photograph, a defect nor a comment from the board
+entirely, and names whatever it dropped in one quiet line beneath it — "Also
+on this round, not inspected: 1, 4" — so the reader still knows the round
+has more plugs than the ones printed rather than concluding, wrongly, that
+only four exist. A grade of 1 — Normal, even with nothing else on the card —
+is a real reading (the inspector stood at that plug and looked) and keeps
+its card exactly as before; this is not a "hide anything sparse" filter,
+only the one shape that is never a reading at all. `tests/mpskip.cjs`,
+confirmed non-vacuous, and `tests/rpttypes.cjs`/`prevmeas.cjs`/`rptmirror.cjs`
+re-run clean against it.
+
 ---
 
 ## Secrets

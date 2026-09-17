@@ -100,6 +100,102 @@ const SHOT = `(function(){ const bytes=new Uint8Array([0xff,0xd8,0xff,0xdb,1,2,3
     const it = e.items.find(i => i.wearPct !== '' && i.wearPct != null); return { g: e.g, pct: it ? it.wearPct : null, want: it ? GRADE.fromWorn(it.wearPct) : null, row: teamRow(e).g }; });
   ok('and leaves with g scored from its remaining life', ucg.pct != null && ucg.g === ucg.want && ucg.row === ucg.g, JSON.stringify(ucg));
 
+  console.log('\na measured station whose DEFECT silently assigns a grade still has a way to finish it');
+  /* Reported from the field on a Dump Body Liner (TB) round: "Can not save
+     … its saying need to grade but we dont grade dump body … there is no
+     selection for grade thats the problem." The tray genuinely never shows
+     the manual 1-5 cards (its condition is its reading, same as UC above) —
+     but the defect picker sets a grade on ANY round type when the chosen
+     defect carries a defaultSeverity, with no gradeAppliesTo() check of its
+     own. renderGradeReq() used to require gradeApplies() too, so a tray
+     station holding a silently-assigned 5 had the one box that could ever
+     supply its target date and notification tick permanently hidden: Save
+     demanded them forever with nothing on screen to give them. Fixed by
+     dropping that extra check — the box now shows whenever there is a
+     finding-level grade, whatever set it, while the manual cards stay
+     hidden exactly as before. */
+  await p.evaluate(() => { const s = document.getElementById('typeSel'); s.value = 'TB'; s.dispatchEvent(new Event('change')); });
+  await p.waitForTimeout(300);
+  await p.evaluate(() => selectEquip('TK143')); // Komatsu HM400
+  await p.waitForTimeout(600);
+  const tb = await p.evaluate(() => {
+    const st = ucStatus('TK143');
+    const k = (BODY.of(st.model).points[0] || {}).k;
+    pickComponent(k);
+    return { k, model: st.model };
+  });
+  await p.evaluate(() => ['inspector', 'smu'].forEach((id, n) => { const e = document.getElementById(id); e.value = n ? '1000' : 'R. Marrero'; e.dispatchEvent(new Event('input')); e.dispatchEvent(new Event('change')); }));
+  await p.evaluate(() => goStep(2)); await p.waitForTimeout(250);
+  ok('a tray station with no grade control on screen', await p.evaluate(() => document.getElementById('gradeFld').classList.contains('hidden')), JSON.stringify(tb));
+  // "Show all" so the search reaches a defect outside this station's own curated set.
+  await p.evaluate(() => { showAllDefects = true; });
+  // A measured round folds the coding fields behind isoTog until something is
+  // in them — the same reason defectBtn is not on screen by default here.
+  await p.click('#isoTog'); await p.waitForTimeout(150);
+  await p.click('#defectBtn'); await p.waitForTimeout(300);
+  await p.fill('#pickSearch', 'FM-LEK-03'); await p.waitForTimeout(200);
+  const hit = await p.$$eval('#pickList .pickitem', a => a.length);
+  ok('the defect is found in the picker', hit > 0, hit + ' rows');
+  await p.click('#pickList .pickitem'); await p.waitForTimeout(200);
+  const after = await p.evaluate(() => ({
+    grade: (draft.positions[curItem] || {}).grade,
+    gradeFldHidden: document.getElementById('gradeFld').classList.contains('hidden'),
+    gradeReqHidden: document.getElementById('gradeReq').classList.contains('hidden'),
+  }));
+  ok('the defect silently graded the station Critical', after.grade === 5, JSON.stringify(after));
+  ok('the manual cards stay hidden — the reading is still the condition', after.gradeFldHidden);
+  ok('THE FIX: the box asking for target/notify is now reachable, not stranded', !after.gradeReqHidden, JSON.stringify(after));
+
+  console.log('\nclearing the defect that set an auto grade clears the grade with it');
+  /* Read off TK115's F95 in the field: "5 – Critical needs a defect, an
+     action, a target date, a comment, a close-up photograph, the
+     notification tick" — EVERY field blank, on a station whose manual
+     cards are never shown at all. The only code path that can put a grade
+     on a measured station is the defect picker above, and it never had a
+     mirror for taking one away: tapping a defect, then reconsidering and
+     picking a different one — or "none" — left the auto grade standing
+     with nothing left to justify it, on a round type with no card to
+     notice it on and correct it from. Fixed alongside the box above: the
+     same handler now drops an unconfirmed auto grade the moment the
+     defect that proposed it stops applying. */
+  const st2 = await p.evaluate(() => {
+    const s = ucStatus('TK143');
+    const k2 = (BODY.of(s.model).points[1] || {}).k;
+    pickComponent(k2);
+    return k2;
+  });
+  // isoOpen is already true from opening it on the first station above — a
+  // second click here would toggle it back OFF, not open it again.
+  await p.click('#defectBtn'); await p.waitForTimeout(300);
+  await p.fill('#pickSearch', 'FM-LEK-03'); await p.waitForTimeout(200);
+  await p.click('#pickList .pickitem'); await p.waitForTimeout(200);
+  const graded = await p.evaluate(() => (draft.positions[curItem] || {}).grade);
+  ok('picking the defect grades the second station too', graded === 5, JSON.stringify({ st2, graded }));
+  await p.click('#defectBtn'); await p.waitForTimeout(300);
+  await p.click('#pickList .pickitem'); await p.waitForTimeout(200); // "— none / OK —" is always first
+  const cleared = await p.evaluate(() => ({
+    defect: (draft.positions[curItem] || {}).defect,
+    grade: (draft.positions[curItem] || {}).grade,
+  }));
+  ok('THE FIX: clearing the defect clears the orphaned grade with it', !cleared.defect && !cleared.grade, JSON.stringify(cleared));
+  await p.evaluate((k) => { saveCur(); pickComponent(k); }, tb.k); // back to F95/H21 to finish the save below
+  await p.waitForTimeout(150);
+
+  // Finish what Critical asks for, through the real fields, then save.
+  ok('a close-up photograph on the station', (await p.evaluate(SHOT)) === 1);
+  // A wear-type round folds the comment behind its own toggle too.
+  const ucTog = await p.$('#ucExtraTog');
+  if (ucTog && await ucTog.isVisible()) { await ucTog.click(); await p.waitForTimeout(150); }
+  await p.fill('#comment', 'Liner plate leaking at the seam');
+  await p.click('#actionBtn'); await p.waitForTimeout(250);
+  await p.click('#pickList .pickitem:nth-child(2)'); await p.waitForTimeout(150);
+  await p.evaluate(() => { const c = document.getElementById('gNotify'); if (c) c.checked = true; c.dispatchEvent(new Event('change')); });
+  await p.evaluate(PHOTOS); // the machine-level overview/tray photographs every round needs
+  await p.evaluate(() => goStep(3)); await p.waitForTimeout(200); await p.click('#saveBtn'); await p.waitForTimeout(700);
+  d = await dlgTxt(p);
+  ok('and Save actually goes through — no dead end', /Saved|saved on this phone/i.test(d), d.slice(0, 120));
+  await closeDlg(p);
+
   await ctx.close();
   console.log(fails.length ? '\nFAILED: ' + fails.length + '\n' + fails.join('\n') : '\nall green');
   await b.close(); srv.close();

@@ -979,6 +979,7 @@
       /* Type-body subheadings and column labels, to the v2 single-inspection
          templates. Honest empty states share c_notrec / c_notmeas / c_nofind. */
       tb_mp:"Equipment and component evidence",
+      tb_mp_skip:"Also on this round, not inspected: {n}",
       tb_fc:"Filter findings", tb_fc_ev:"Required evidence",
       tb_insp:"Findings by component or system", tb_insp_ph:"Photographs with findings",
       tb_temp:"Temperature results", tb_temp_lim:"Technical limitation",
@@ -1168,6 +1169,7 @@
       ma_owner:"Ответственный", ma_wo:"Наряд-заказ", ma_due:"Срок", ma_none:"Не записано",
       ma_clear:"Действий не требуется — все осмотренные позиции в норме.",
       tb_mp:"Данные и фото по компонентам",
+      tb_mp_skip:"Также на этом осмотре, не проверено: {n}",
       tb_fc:"Результаты по фильтрам", tb_fc_ev:"Обязательные фотографии",
       tb_insp:"Выявленное по узлам и системам", tb_insp_ph:"Фотографии выявленного",
       tb_temp:"Результаты по температуре", tb_temp_lim:"Техническое ограничение",
@@ -2670,15 +2672,40 @@
   }
   /* MP — every plug as a card, photograph first, then code/component, grade,
      the particle finding and component/oil hours, the defect and action. A
-     clean plug still earns its card: the reading IS the record. */
+     clean plug still earns its card: A GRADE IS A READING, even a Normal one
+     — the inspector stood at that plug and looked.
+
+     A position with NEITHER is not a clean plug, it is one nobody walked to.
+     loadPos() stamps the round's work order onto whatever position is on
+     screen the instant it opens, so a plug merely navigated past on the way
+     to the one actually being checked picks up a WO number and nothing
+     else. Read off a printed TK150 report: two of four cards were exactly
+     that — a work-order tag over an otherwise blank card, the same area on
+     the page as a real finding and none of its information, on a sheet
+     already asked to be clean and minimal. Reported from the field: "remove
+     [it] in the report if no photo or comments... or just maybe a note that
+     1 and 4 not taken." Dropped from the board; named once, in one line,
+     so the reader still knows the round has more plugs than the ones
+     printed and that the rest simply were not reached this visit — the
+     honest gap CLAUDE.md's own rule warns is worse to leave unsaid than to
+     print as an empty box. */
   function mpEvidence(ctx, T, rec) {
-    var its = rec.items || [];
-    if (!its.length) return "";
+    var all = rec.items || [];
+    if (!all.length) return "";
+    var walked = all.filter(function (it) {
+      return gnum(it.grade) || (it.photos || []).length || it.defect || it.comment;
+    });
+    var skipped = all.filter(function (it) { return walked.indexOf(it) < 0; });
+    if (!walked.length) return "";
+    var its = walked;
     var cols = its.length >= 4 ? 4 : its.length === 3 ? 3 : its.length === 2 ? 2 : 1;
     var wide = its.length === 1 && ((its[0].photos || []).length > 1);
     return '<div class="subhd" style="margin-top:12px;">' + T.I("tb_mp") + '</div>'
       + '<div class="board b' + cols + (wide ? ' wide' : '') + '">'
-      + its.map(function (it) { return cell(ctx, T, it, {}); }).join("") + '</div>';
+      + its.map(function (it) { return cell(ctx, T, it, {}); }).join("") + '</div>'
+      + (skipped.length ? '<div class="muted" style="font-size:9.5px;margin-top:4px;">'
+          + esc(T.I("tb_mp_skip", { n: skipped.map(function (it) { return it.code || it.key; }).join(", ") }))
+          + '</div>' : "");
   }
   /* FC — one row per filter: identity, service hours, grade, debris/defect,
      cause, action. The filter-identification, opened-media and debris photos
