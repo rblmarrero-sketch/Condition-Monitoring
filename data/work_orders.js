@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-09-17T03:27:22+00:00",
+  "generated": "2026-09-17T04:02:10+00:00",
   "source": "https://askpi.94-131-94-152.sslip.io/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 672,
@@ -50183,8 +50183,8 @@ window.CM_WO_DATA = {
       "equip": "TK146",
       "cls": "HT",
       "woNumber": null,
-      "maintType": "500 Hours service Planned",
-      "hours": 500,
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
       "cmLabel": "Magnetic Plug",
       "cmTypes": [
         "MP"
@@ -50204,8 +50204,8 @@ window.CM_WO_DATA = {
       "equip": "TK146",
       "cls": "HT",
       "woNumber": null,
-      "maintType": "250 Hours service Planned",
-      "hours": 250,
+      "maintType": "500 Hours service Planned",
+      "hours": 500,
       "cmLabel": "Magnetic Plug",
       "cmTypes": [
         "MP"
@@ -50983,12 +50983,10 @@ window.CM_WO_DATA = {
       "equip": "TK151",
       "cls": "HT",
       "woNumber": null,
-      "maintType": "1000 Hours service Planned",
-      "hours": 1000,
-      "cmLabel": "Filter Cut / General Inspection / Magnetic Plug",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "FC",
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -51006,10 +51004,12 @@ window.CM_WO_DATA = {
       "equip": "TK151",
       "cls": "HT",
       "woNumber": null,
-      "maintType": "250 Hours service Planned",
-      "hours": 250,
-      "cmLabel": "Magnetic Plug",
+      "maintType": "1000 Hours service Planned",
+      "hours": 1000,
+      "cmLabel": "Filter Cut / General Inspection / Magnetic Plug",
       "cmTypes": [
+        "FC",
+        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
