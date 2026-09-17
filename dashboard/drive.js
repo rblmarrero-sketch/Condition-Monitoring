@@ -653,7 +653,23 @@
        only real misses, so a unit opened twice in a morning makes no requests
        at all the second time. */
     const miss = [];
+    /* WHAT THIS CALL ADDED TO THIS PAGE'S OWN MEMORY, NOT WHAT THE NETWORK
+       DID. `fetched` is this module's in-memory map; MEDIA_CACHE is the
+       browser's own disk cache and survives long after `fetched` is empty
+       again — a fresh page load, a unit opened for the first time this
+       session, ties up a name to a picture already sitting on disk from an
+       earlier visit. That is still a picture this PAGE has never shown, and
+       the card it belongs on was built, moments ago in renderHistory(),
+       before this function had asked the disk anything — so a name resolved
+       from MEDIA_CACHE needs the exact same repaint a name resolved over the
+       network gets. Skipping a name already in `fetched` (set only by a
+       PRIOR call, in THIS page's lifetime) is what stops that from becoming
+       the loop the comment below already fixed once: the second time this
+       function sees a name it has already added, that name adds nothing,
+       however many more times it is asked about. */
+    let added = 0;
     for (const nm of names) {
+      if (fetched[nm]) continue;
       /* WHAT LENGTH THE CACHED COPY SHOULD BE — our own measurement once we
          have one, the index's claim until then.
 
@@ -676,28 +692,39 @@
         fetched[nm] = url;
         if (fetchedSize[nm] == null) fetchedSize[nm] = Number(index[nm].size) || null;
         window.CMDash.addPhoto(nm, url);
+        added++;
       }
       else miss.push(nm);
     }
-    /* NOTHING WAS MISSING, SO NOTHING HAPPENED — and saying otherwise put the
-       office page into a permanent re-render loop.
+    /* NOTHING WAS MISSING, SO NOTHING NEW CAME OVER THE NETWORK — and saying
+       "truthy, because names.length is truthy" put the office page into a
+       permanent re-render loop.
 
-       This answered with names.length (what the unit WANTS) and called the
-       progress callback once, both truthy, both meaning "work was done". The
-       only caller that reads the answer is pullDrivePhotos, whose whole job is
-       "if photographs arrived, repaint" — and its repaint is renderHistory,
-       which calls pullDrivePhotos again. Everything already cached, so nothing
-       missing, so truthy again: measured at 210 repaints of the whole history
-       in three seconds, one every 15 ms, for as long as the tab stayed open.
+       The original bug answered with names.length (what the unit WANTS) and
+       called the progress callback once, both truthy, both meaning "work was
+       done". The only caller that reads the answer is pullDrivePhotos, whose
+       whole job is "if photographs arrived, repaint" — and its repaint is
+       renderHistory, which calls pullDrivePhotos again. Everything already
+       cached, so nothing missing, so truthy again: measured at 210 repaints
+       of the whole history in three seconds, one every 15 ms, for as long as
+       the tab stayed open.
 
-       A human sees it as a photograph that cannot be clicked — the card is
+       A human sees THAT as a photograph that cannot be clicked — the card is
        detached and rebuilt under the cursor before the press lands, which is
        exactly how tests/phase3.cjs had been failing, read as a flaky click.
 
-       So the answer is what this call ADDED, which is nothing, and there is no
-       progress to report for work that did not happen. A caller that wants to
-       know whether the unit has photographs at all asks the index, not this. */
-    if (!miss.length) return 0;
+       A DIFFERENT human, on a fresh tab whose disk cache already held every
+       picture this unit needed, saw every card stuck on "no photo" until they
+       clicked into Report or Edit — because `added` above is genuinely 0 only
+       when NOTHING new reached `fetched`, and returning a flat 0 here as
+       before threw that count away and answered as if a full cache hit were
+       the same as nothing to add. It is `added` now, so a page's first look
+       at a unit gets its one repaint whether the pictures came from the
+       network moments ago or from a earlier visit's disk cache — and a
+       SECOND call for the same unit, everything already in `fetched`, still
+       adds and repaints nothing. A caller that wants to know whether the
+       unit has photographs at all asks the index, not this. */
+    if (!miss.length) return added;
 
     /* Several photographs to a request where the deployment allows it. Each one
        used to be its own Apps Script invocation — a script start and a round
@@ -745,8 +772,11 @@
     /* What this call ADDED, so a caller that repaints on the answer repaints
        once per arrival and not for ever. A pull where every file failed adds
        nothing and is not a reason to redraw either — the failures are on
-       lastFetch for whoever wants to say so. */
-    return lastFetch.fetched;
+       lastFetch for whoever wants to say so. Plus `added` from the disk-cache
+       pass above, for the batch that mixed a cache hit with a genuine miss —
+       the hit needs its repaint exactly as much as a batch that was ALL hits
+       does, above. */
+    return lastFetch.fetched + added;
   }
 
   /* ---- 3. corrections, voids and deletion ----

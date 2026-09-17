@@ -3747,8 +3747,29 @@
          cap: `.board.gal.b1{max-width:none}`). Read off CR005's Jaw Crusher
          (CRS.JAW): its 2026-09-08 card cramped to ~340px beside its
          2026-09-10 card at full width, the same component looking like two
-         different reports. */
-      var wide = told.length === 1 && ((told[0].photos || []).length > 1);
+         different reports.
+
+         TWO POSITIONS, EACH WITH SEVERAL PHOTOGRAPHS, IS THE ORDINARY SHAPE
+         OF A MAGNETIC PLUG ROUND — 4E and 4F, side by side on the truck,
+         each with its own pair of photographs — and this is the one shape
+         the fix above never reached, because it only ever fired for a LONE
+         item. Packing two such items into this section's own 2-column row
+         halves each one's own column, and the photo grid INSIDE that column
+         halves it again: read off a real report, TK150's 4E on its current
+         visit spanned most of the page (unitSheets' own "photos" board,
+         `.board.gal.b1`, one item to a row); the identical position one
+         visit earlier, here, printed at roughly a quarter of that — the same
+         component looking like two different reports, the second time this
+         exact shape has produced that complaint. The row is one item deep
+         now whenever packing side by side would ALSO be packing each item's
+         own photographs side by side — every item here carries more than
+         one photograph, and there are few enough of them (two) that
+         stacking them costs one extra row, not a page. A round with three or
+         more graded items keeps its existing density; this is the common
+         two-plug shape, not a rule for every busy round. */
+      var multiPhoto = told.some(function (it) { return (it.photos || []).length > 1; });
+      if (multiPhoto && told.length <= 2) cols = 1;
+      var wide = cols === 1 && (told.length > 1 || (told[0].photos || []).length > 1);
       out.push({ nb: false, gap: 4, html: '<div class="sec olderr">'
         + '<div class="ohd">'
           + '<b>' + esc(rec.date || "") + '</b>'

@@ -1467,6 +1467,71 @@ only the one shape that is never a reading at all. `tests/mpskip.cjs`,
 confirmed non-vacuous, and `tests/rpttypes.cjs`/`prevmeas.cjs`/`rptmirror.cjs`
 re-run clean against it.
 
+**THE PDF'S OWN FIX HAD A SECOND, SEPARATE COPY ON THE LIVE PAGE.** The build
+above fixed `mpEvidence()`, in `report-core.js` — the engine both surfaces
+share for a generated document. It did nothing for the dashboard's own
+Equipment History screen: "still there 1 and 4, no photo and comments" —
+because `renderHistory()`'s gallery card view builds its position grid with
+its OWN filter, inline, never through `mpEvidence()` at all, and that filter
+only ever excluded an empty position on a measured (wear-type) round —
+exactly the one case that was never the complaint. A new `histShown(i,rec)`
+carries the identical rule report-core's fix already proved correct (a grade,
+a photograph, a defect or a comment — any one of them is a reading; none of
+them is a plug nobody reached) and `renderHistory()` splits each round's
+positions into `shownPos`/`skippedPos` before building the grid, with the
+same one quiet line naming what was skipped. `tests/histskip.cjs` opens the
+real page, not `sectionsFor()`, because that is the one thing report-core's
+own test could never have caught — it never renders `dashboard/index.html`
+at all.
+
+**A PICTURE ALREADY ON THIS DISK STILL NEEDED ITS FIRST REPAINT ON A FRESH
+TAB.** "find why its not loading the phot. it loads only when I click report
+or edit... before it loads fast." `ensurePhotos()` (build 374's own fix for
+the re-render loop, see above) answers with what it ADDED to `fetched` —
+this module's in-memory map, empty on every fresh page load — never with
+what the network did. The browser's own disk cache (`MEDIA_CACHE`, Cache
+Storage) survives a reload; a photograph fetched in an earlier tab is still
+on it. But the cache-hit loop only ever populated `fetched` and counted
+nothing, so `if (!miss.length) return 0` answered "nothing to report" for a
+name this PAGE had never shown before quite as confidently as it answered
+for a name already painted seconds ago — the card built moments earlier had
+no picture in it, and nothing told `pullDrivePhotos` to look again. The loop
+now counts `added`: a name the first time THIS session sees it, whichever
+store it came from, skipping only a name `fetched` already holds (the
+build-374 case, unchanged) — so a page's first look at a unit earns its one
+repaint whether the bytes came over the wire moments ago or off a disk a
+prior visit already filled, and a second call for the same unit still adds
+and repaints nothing. Proving it needed a backend of its own:
+`tests/mock.cjs` always answers a photo request with a fixed 13-byte body
+while declaring `size:90000` in its index, so `cacheGet`'s own size check —
+correct, and load-bearing, see `landedAnyway` above — threw the "cached"
+copy away as a different file on every single call, and neither this nor
+`noloop.cjs` had ever actually exercised a disk-cache hit. `tests/loadonce.cjs`
+carries its own tiny backend where the declared size and the served bytes
+agree, the way a live folder's do, and strips the `#equipment?eq=` a first
+visit's own address bar carries — restoring it on reload would re-select and
+re-fetch the same unit during BOOT, before the test ever asks, which earns a
+repaint for a reason the field case does not have.
+
+**THE HISTORICAL SIDE OF A MAGNETIC PLUG ROUND WAS PACKED TWO TO A ROW; THE
+CURRENT VISIT NEVER IS.** "photos report are not fixed as agreed... still
+very messy photos," with TK150's Equipment History PDF attached: 4E on the
+latest visit filled most of the page; the identical position one visit
+earlier, in the same document's history section, printed at roughly a
+quarter of that. `earlierRoundSections()` already had the lone-item "wide"
+exception `histwide.cjs` proved (a single item with more than one
+photograph is lifted clear of the `.b1` 340px cap) — but a Magnetic Plug
+round almost never carries a lone item, it carries 4E and 4F together, and
+`told.length===2` packed them into a two-column row regardless: each item's
+own column already halved, and the photo grid inside that column halved it
+again. The fix extends the same exception to this shape — two items, each
+carrying more than one photograph — the ordinary MP pairing, not a rare
+edge case. Confirmed by rendering the actual failing report through
+`CMReport.sectionsFor` and measuring the rasterised `.cel` width directly:
+187px before, 378px after, against the current visit's own 378px — and by a
+control proving a three-item history round (which already packed correctly)
+keeps its existing density (`tests/histpair.cjs`).
+
 ---
 
 ## Secrets
