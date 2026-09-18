@@ -8298,7 +8298,7 @@ $("saveBtn").onclick=async ()=>{
      would already have missed the first half. Same window, said twice —
      once to the OS (holdAwake), once to the person (showSaveGuard) —
      because only one of those two can be seen. */
-  holdAwake(SAVE_GUARD_MS);
+  await holdAwake(SAVE_GUARD_MS);
   showSaveGuard(SAVE_GUARD_MS);
   try{ await attSync(rec); }catch(e){}
   await dbPut(rec); noteDone(rec); noteWear(rec); await loadBaselines();
