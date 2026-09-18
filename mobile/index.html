@@ -1174,7 +1174,7 @@
      only saturated colours here — a red dot has to be the only red thing on the
      drawing. So the surfaces step s0 (the floor, palest) through s3 (the head,
      deepest), which reinforces the fold instead of competing with it. */
-  .bm-z{stroke:var(--bm-edge);stroke-width:1.1;stroke-linejoin:round;pointer-events:none;opacity:.6;}
+  .bm-z{stroke:var(--bm-edge);stroke-width:1.4;stroke-linejoin:round;pointer-events:none;opacity:.5;}
   .bm-z.s0{fill:var(--bm-s0);} .bm-z.s1{fill:var(--bm-s1);}
   .bm-z.s2{fill:var(--bm-s2);} .bm-z.s3{fill:var(--bm-s3);}
   .bm-z.done{fill:color-mix(in srgb,var(--good) 17%,var(--bm-s0));}
@@ -1186,7 +1186,7 @@
      asked to actually be able to see. `--muted` is the ink used for a label,
      not a boundary, so it reads against the floor's pale fill instead of
      dissolving into it the way `--bm-edge` did. */
-  .bm-div{fill:none;stroke:var(--muted);stroke-width:1.6;stroke-dasharray:5 4;opacity:1;}
+  .bm-div{fill:none;stroke:var(--muted);stroke-width:1.2;opacity:1;}
   .bm-lip{fill:none;stroke:var(--warn-ink);stroke-width:5;stroke-linecap:round;opacity:.75;}
   .bm-face{fill:var(--ink-2);font-weight:700;font-size:11px;line-height:1;font-family:inherit;letter-spacing:.09em;
     paint-order:stroke fill;stroke:var(--surface);stroke-width:3.5px;stroke-linejoin:round;opacity:.9;}
