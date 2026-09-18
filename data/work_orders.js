@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-09-18T08:31:57+00:00",
+  "generated": "2026-09-18T09:37:25+00:00",
   "source": "https://askpi.94-131-94-152.sslip.io/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 673,
@@ -398,13 +398,13 @@ window.CM_WO_DATA = {
     "wo": "Work order number"
   },
   "cmDateFrom": {
-    "raised": 58,
+    "raised": 59,
     "detected": 0,
     "planStart": 0
   },
   "cmCauseFrom": {
     "wo": 35,
-    "wr": 23,
+    "wr": 24,
     "cert": 0,
     "none": 0
   },
@@ -417,6 +417,28 @@ window.CM_WO_DATA = {
     "Bekzhan"
   ],
   "cmWorkOrders": [
+    {
+      "date": "2026-09-18",
+      "dateFrom": "raised",
+      "raised": "2026-09-18",
+      "detected": "2026-09-18",
+      "planStart": null,
+      "asset": "TK118",
+      "defect": "DD-00012866",
+      "requestNo": "DD-00012866",
+      "eqType": "TRUCK, ARTICULATED",
+      "system": "TK118.CH.BED (Bed / Кузов)",
+      "priority": "P4 Planned (Repair)",
+      "defectType": "2.01 Wear / Износ",
+      "cause": "Абразивный износ",
+      "causeFrom": "wr",
+      "descr": "Критический износ кузова, трещины. Требуются футеровка и сварка кузова.",
+      "status": "Registered",
+      "by": "Slam",
+      "woNumber": null,
+      "maintType": null,
+      "planned": false
+    },
     {
       "date": "2026-09-18",
       "dateFrom": "raised",
@@ -3161,10 +3183,10 @@ window.CM_WO_DATA = {
     {
       "equip": "CD009",
       "cls": "GEN",
-      "woNumber": "GD-023130",
-      "maintType": "250 Hours service Planned",
-      "hours": 250,
-      "cmLabel": "250h service",
+      "woNumber": "GD-023133",
+      "maintType": "1000 Hours service Planned",
+      "hours": 1000,
+      "cmLabel": "1000h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
@@ -3180,10 +3202,10 @@ window.CM_WO_DATA = {
     {
       "equip": "CD009",
       "cls": "GEN",
-      "woNumber": "GD-023133",
-      "maintType": "1000 Hours service Planned",
-      "hours": 1000,
-      "cmLabel": "1000h service",
+      "woNumber": "GD-023130",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
@@ -27043,15 +27065,15 @@ window.CM_WO_DATA = {
       "cmLabel": "500h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
-      "planStart": "2026-09-15",
-      "planStartDt": "2026-09-15T00:00:00",
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
+      "planStart": "2026-09-16",
+      "planStartDt": "2026-09-16T07:00:00",
       "planEnd": "2026-09-16",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-09-16",
+      "actualStartDt": "2026-09-16T07:00:00",
+      "actualEnd": "2026-09-16"
     },
     {
       "equip": "LD004",
@@ -51714,15 +51736,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-09-15",
-      "planStartDt": "2026-09-15T00:00:00",
+      "planStartDt": "2026-09-15T08:25:00",
       "planEnd": "2026-09-16",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-09-15",
+      "actualStartDt": "2026-09-15T08:25:00",
+      "actualEnd": "2026-09-16"
     },
     {
       "equip": "TK152",
@@ -52564,15 +52586,15 @@ window.CM_WO_DATA = {
         "TB"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
-      "planStart": "2026-09-12",
-      "planStartDt": "2026-09-12T00:00:00",
-      "planEnd": "2026-09-13",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
+      "planStart": "2026-09-13",
+      "planStartDt": "2026-09-13T08:45:00",
+      "planEnd": "2026-09-14",
+      "actualStart": "2026-09-13",
+      "actualStartDt": "2026-09-13T08:45:00",
+      "actualEnd": "2026-09-14"
     },
     {
       "equip": "TK157",
@@ -52695,15 +52717,15 @@ window.CM_WO_DATA = {
         "TB"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
-      "planStart": "2026-09-13",
-      "planStartDt": "2026-09-13T00:00:00",
-      "planEnd": "2026-09-14",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
+      "planStart": "2026-09-14",
+      "planStartDt": "2026-09-14T14:30:00",
+      "planEnd": "2026-09-15",
+      "actualStart": "2026-09-14",
+      "actualStartDt": "2026-09-14T14:30:00",
+      "actualEnd": "2026-09-15"
     },
     {
       "equip": "TK158",
