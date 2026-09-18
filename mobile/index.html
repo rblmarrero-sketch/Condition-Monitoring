@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=400">
+<link rel="manifest" href="manifest.webmanifest?v=401">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=400">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=400">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=400">
+<link rel="apple-touch-icon" href="icon-192.png?v=401">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=401">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=401">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2627,15 +2627,15 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=400"></script>
-<script src="upload-defaults.js?v=400"></script>
-<script src="hme.js?v=400"></script>
-<script src="mp-fc.js?v=400"></script>
-<script src="hme-cascade.js?v=400"></script>
-<script src="assets.js?v=400"></script>
-<script src="temp-limits.js?v=400"></script>
-<script src="normalize.js?v=400"></script>
-<script src="terms.js?v=400"></script>
+<script src="native.js?v=401"></script>
+<script src="upload-defaults.js?v=401"></script>
+<script src="hme.js?v=401"></script>
+<script src="mp-fc.js?v=401"></script>
+<script src="hme-cascade.js?v=401"></script>
+<script src="assets.js?v=401"></script>
+<script src="temp-limits.js?v=401"></script>
+<script src="normalize.js?v=401"></script>
+<script src="terms.js?v=401"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2654,25 +2654,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=400"></script>
-<script src="edits.js?v=400"></script>
-<script src="due.js?v=400"></script>
-<script src="wear.js?v=400"></script>
-<script src="wear-figs.js?v=400"></script>
-<script src="wear-map.js?v=400"></script>
-<script src="machine-photos.js?v=400"></script>
-<script src="machine-fig.js?v=400"></script>
-<script src="get.js?v=400"></script>
-<script src="points.js?v=400"></script>
-<script src="uc-points.js?v=400"></script>
-<script src="inspect-guide.js?v=400"></script>
-<script src="get-figs.js?v=400"></script>
-<script src="body-points.js?v=400"></script>
-<script src="body-map.js?v=400"></script>
-<script src="lube.js?v=400"></script>
-<script src="lube-overrides.js?v=400"></script>
-<script src="lube2027.js?v=400"></script>
-<script src="report-core.js?v=400"></script>
+<script src="grade.js?v=401"></script>
+<script src="edits.js?v=401"></script>
+<script src="due.js?v=401"></script>
+<script src="wear.js?v=401"></script>
+<script src="wear-figs.js?v=401"></script>
+<script src="wear-map.js?v=401"></script>
+<script src="machine-photos.js?v=401"></script>
+<script src="machine-fig.js?v=401"></script>
+<script src="get.js?v=401"></script>
+<script src="points.js?v=401"></script>
+<script src="uc-points.js?v=401"></script>
+<script src="inspect-guide.js?v=401"></script>
+<script src="get-figs.js?v=401"></script>
+<script src="body-points.js?v=401"></script>
+<script src="body-map.js?v=401"></script>
+<script src="lube.js?v=401"></script>
+<script src="lube-overrides.js?v=401"></script>
+<script src="lube2027.js?v=401"></script>
+<script src="report-core.js?v=401"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -13444,7 +13444,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="400";
+const BUILD="401";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -13829,12 +13829,53 @@ async function verifySavedRec(id){
   if(!rec) return [];
   const bad=[];
   for(const [k,p] of positionsOf(rec)){
+    const attMap=p.att||{};
     const ph=photosOf(p);
     for(let i=0;i<ph.length;i++){
-      try{ await readBlobBytes(ph[i]); }catch(e){ bad.push(itemLabelFor(rec,k)); }
+      try{
+        const blob=ph[i];
+        await readBlobBytes(blob);
+        const aid=attIdOf(blob);
+        if(aid && attMap[aid]){
+          const att=attMap[aid];
+          const expectedSize=att.byteSize||0;
+          const expectedHash=att.sha256||"";
+          if(blob.size!==expectedSize){
+            bad.push(itemLabelFor(rec,k));
+            continue;
+          }
+          if(expectedHash){
+            const storedHash=await sha256Of(blob);
+            if(storedHash!==expectedHash){
+              bad.push(itemLabelFor(rec,k));
+              continue;
+            }
+          }
+        }
+      }catch(e){ bad.push(itemLabelFor(rec,k)); }
     }
     if(isBlob(p.video)){
-      try{ await readBlobBytes(p.video); }catch(e){ bad.push(itemLabelFor(rec,k)); }
+      try{
+        const blob=p.video;
+        await readBlobBytes(blob);
+        const aid=attIdOf(blob);
+        if(aid && attMap[aid]){
+          const att=attMap[aid];
+          const expectedSize=att.byteSize||0;
+          const expectedHash=att.sha256||"";
+          if(blob.size!==expectedSize){
+            bad.push(itemLabelFor(rec,k));
+            continue;
+          }
+          if(expectedHash){
+            const storedHash=await sha256Of(blob);
+            if(storedHash!==expectedHash){
+              bad.push(itemLabelFor(rec,k));
+              continue;
+            }
+          }
+        }
+      }catch(e){ bad.push(itemLabelFor(rec,k)); }
     }
   }
   return bad;
