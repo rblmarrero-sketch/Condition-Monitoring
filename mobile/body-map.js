@@ -153,13 +153,19 @@
            '<text class="bm-way" x="' + (cabPos.x + cabW / 2).toFixed(1) + '" y="' + (cabPos.y + 9).toFixed(1) + '" text-anchor="middle">' + cabTxt + '</text>' +
            '<text class="bm-way" x="' + (disPos.x + disW / 2).toFixed(1) + '" y="' + (disPos.y + 9).toFixed(1) + '" text-anchor="middle">' + disTxt + '</text></g>');
 
-    ORDER.forEach(function (z) {
-      var r = B.region(id, z);
-      if (!r) return;
-      var st = (o.zoneState ? o.zoneState(z) : '') || '';
-      s.push('<path class="bm-z ' + LIFT[z] + (st ? ' ' + st : '') +
-             '" d="' + poly(r) + '" data-band="' + z + '"/>');
-    });
+    /* Use pre-rendered SVG from TRAY_ART if available, otherwise compute regions */
+    var TA = (typeof self !== 'undefined' ? self : this).TRAY_ART;
+    if (TA && TA[id] && TA[id].art) {
+      s.push(TA[id].art);
+    } else {
+      ORDER.forEach(function (z) {
+        var r = B.region(id, z);
+        if (!r) return;
+        var st = (o.zoneState ? o.zoneState(z) : '') || '';
+        s.push('<path class="bm-z ' + LIFT[z] + (st ? ' ' + st : '') +
+               '" d="' + poly(r) + '" data-band="' + z + '"/>');
+      });
+    }
 
     /* The folds. Drawn in the gap between a panel and the floor, which is the
        one place a hinge can be without sitting on top of a station. Portrait
