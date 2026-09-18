@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-09-17T23:26:56+00:00",
+  "generated": "2026-09-18T00:21:51+00:00",
   "source": "https://askpi.94-131-94-152.sslip.io/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 672,
@@ -314,7 +314,7 @@ window.CM_WO_DATA = {
     "WE009",
     "WE011"
   ],
-  "duplicateRowsCollapsed": 184,
+  "duplicateRowsCollapsed": 185,
   "roundsDedupedWithinVisit": 2,
   "columns": [
     "Asset description",
@@ -34846,29 +34846,6 @@ window.CM_WO_DATA = {
       "actualEnd": "2026-09-05"
     },
     {
-      "equip": "TK036",
-      "cls": "HT",
-      "woNumber": "WO-016393",
-      "maintType": "1000 Hours service Planned",
-      "hours": 1000,
-      "cmLabel": "Filter Cut / General Inspection / Magnetic Plug",
-      "cmTypes": [
-        "FC",
-        "INSP",
-        "MP"
-      ],
-      "priority": "P4 Planned (Repair)",
-      "woStatus": "CRTD",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
-      "planStart": "2026-09-11",
-      "planStartDt": "2026-09-11T00:00:00",
-      "planEnd": "2026-09-11",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
-    },
-    {
       "equip": "TK037",
       "cls": "HT",
       "woNumber": null,
@@ -36788,15 +36765,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-09-15",
-      "planStartDt": "2026-09-15T00:00:00",
-      "planEnd": "2026-09-15",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "planStartDt": "2026-09-15T20:00:00",
+      "planEnd": "2026-09-16",
+      "actualStart": "2026-09-15",
+      "actualStartDt": "2026-09-15T20:00:00",
+      "actualEnd": "2026-09-16"
     },
     {
       "equip": "TK085",
@@ -53913,15 +53890,15 @@ window.CM_WO_DATA = {
       "cmLabel": "1000h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "PCNF",
-      "cmmsStatus": "In progress",
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
       "open": false,
       "planStart": "2026-09-17",
       "planStartDt": "2026-09-17T00:00:00",
       "planEnd": "2026-09-17",
-      "actualStart": "2026-09-17",
-      "actualStartDt": "2026-09-17T00:00:00",
-      "actualEnd": "2026-09-17"
+      "actualStart": "2026-09-15",
+      "actualStartDt": "2026-09-15T19:00:00",
+      "actualEnd": "2026-09-16"
     },
     {
       "equip": "TK168",
