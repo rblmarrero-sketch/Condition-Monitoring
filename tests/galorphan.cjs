@@ -1,5 +1,5 @@
-/* THE ONE PHOTOGRAPH LEFT ON A ROW OF ITS OWN PRINTS AT ITS OWN SIZE, NOT
-   STRANDED IN A THIRD OF A TRACK.
+/* A PHOTOGRAPH LEFT ON A ROW OF ITS OWN PRINTS AT A STANDARD SIZE, NOT
+   STRANDED IN A THIRD OF A TRACK OR NEXT TO AN EMPTY ONE.
 
    Read off EX021's own report: a position with four photographs printed
    three across, evenly sized — the fix build 371 shipped for this same
@@ -12,10 +12,20 @@
 
    The gallery grid's column count is computed in JS now (gridCols-style:
    full rows of three), so a photograph that is genuinely alone in the
-   final row — remainder of exactly one — can be marked and given the
+   final row — remainder of exactly one — is marked `last1` and given the
    `.ph`-style single-photograph treatment: its own natural size, up to
-   330px, centred across the row. Every full row is untouched: three,
-   five, six or one photograph must print exactly as before.
+   330px, centred across the row.
+
+   A REMAINDER OF TWO WAS LEFT AS A CONTROL HERE, AND IT IS THE SAME GAP ONE
+   COUNT OVER. Read off TK160's own report: nine attachments received, one a
+   video the PDF cannot show (stills only), leaving eight photographs — two
+   full rows of three and a third row of two, with the row's own third
+   column simply empty next to them: "gap between photos still big... i want
+   it to be standard." The trailing two are wrapped in `.last2` now — one
+   item in the outer three-column row, itself a two-column grid — so both
+   print at the SAME standard tile size the rest of the sheet uses, split
+   evenly across the row instead of one sitting in a narrower third beside a
+   blank one. Every full row, and a genuine single orphan, are untouched.
 
    Run: node tests/galorphan.cjs   (needs tests/mock.cjs on 8099) */
 const { chromium } = require(require('./pw.cjs'));
@@ -40,8 +50,11 @@ const SEED = () => {
       action: 'Monitor / re-inspect next PM', photos: Array.from({ length: count }, () => px(400, 300)) }],
   });
   /* EX021's own shape (four) plus its neighbours: an orphan of exactly one
-     shows up again at seven; three, five, six and one must all stay put. */
-  CMDash.importRecords([mk('EX021', 4), mk('EX022', 7), mk('EX023', 3), mk('EX024', 5), mk('EX025', 6), mk('EX026', 1)]);
+     shows up again at seven; three, six and one are full-row (or single)
+     controls with no orphan at all; five and eight (TK160's own count) are
+     both a remainder of two. */
+  CMDash.importRecords([mk('EX021', 4), mk('EX022', 7), mk('EX023', 3), mk('EX024', 5),
+    mk('EX025', 6), mk('EX026', 1), mk('EX027', 8)]);
   const ov = document.getElementById('dataOv'); if (ov) ov.classList.add('hidden');
 };
 
@@ -63,7 +76,11 @@ const SEED = () => {
     d.innerHTML = secs.map(s => '<div class="secwrap">' + s.html + '</div>').join('');
     document.body.appendChild(d);
     const imgs = [...d.querySelectorAll('.phg.gallery img')];
-    const out = imgs.map(im => ({ last1: im.classList.contains('last1'), h: Math.round(im.getBoundingClientRect().height) }));
+    const out = imgs.map(im => ({
+      last1: im.classList.contains('last1'),
+      last2: !!im.closest('.last2'),
+      h: Math.round(im.getBoundingClientRect().height),
+    }));
     d.remove();
     return out;
   }, equip);
@@ -83,19 +100,32 @@ const SEED = () => {
 
   console.log('\n   (control: a full row of three is untouched)');
   const r3 = await measure('EX023');
-  ok('three photographs, none marked', r3.length === 3 && r3.every(x => !x.last1), JSON.stringify(r3));
+  ok('three photographs, none marked', r3.length === 3 && r3.every(x => !x.last1 && !x.last2), JSON.stringify(r3));
 
-  console.log('\n   (control: five photographs — a row of three and a row of two, no lone orphan)');
+  console.log('\n   (five photographs — a row of three, and a row of two sharing last2)');
   const r5 = await measure('EX024');
-  ok('five photographs, none marked — a remainder of two is not a remainder of one', r5.length === 5 && r5.every(x => !x.last1), JSON.stringify(r5));
+  ok('five photographs found, none marked last1 — a remainder of two is not a remainder of one',
+     r5.length === 5 && r5.every(x => !x.last1), JSON.stringify(r5));
+  ok('the first three sit outside last2, at the ordinary size', r5.slice(0, 3).every(x => !x.last2 && x.h === 182), JSON.stringify(r5.slice(0, 3)));
+  ok('THE FIX: the trailing two share last2, filling the row between them',
+     r5.slice(3).every(x => x.last2), JSON.stringify(r5.slice(3)));
+  ok('  still at the same standard tile height as every other photograph', r5.slice(3).every(x => x.h === 182), JSON.stringify(r5.slice(3)));
+
+  console.log('\n   (TK160\'s own shape: eight photographs — two full rows and a trailing two)');
+  const r8 = await measure('EX027');
+  ok('eight photographs found, none marked last1', r8.length === 8 && r8.every(x => !x.last1), JSON.stringify(r8));
+  ok('the first six sit outside last2', r8.slice(0, 6).every(x => !x.last2), JSON.stringify(r8.slice(0, 6)));
+  ok('THE FIX: the trailing two share last2 instead of leaving the row\'s third column empty',
+     r8.slice(6).every(x => x.last2), JSON.stringify(r8.slice(6)));
+  ok('  both at the standard tile height, not stretched or shrunk', r8.slice(6).every(x => x.h === 182), JSON.stringify(r8.slice(6)));
 
   console.log('\n   (control: two full rows of three)');
   const r6 = await measure('EX025');
-  ok('six photographs, none marked', r6.length === 6 && r6.every(x => !x.last1), JSON.stringify(r6));
+  ok('six photographs, none marked', r6.length === 6 && r6.every(x => !x.last1 && !x.last2), JSON.stringify(r6));
 
   console.log('\n   (control: a position with only one photograph is unaffected)');
   const r1 = await measure('EX026');
-  ok('one photograph, not marked — the existing single-photo rule is untouched', r1.length === 1 && !r1[0].last1, JSON.stringify(r1));
+  ok('one photograph, not marked — the existing single-photo rule is untouched', r1.length === 1 && !r1[0].last1 && !r1[0].last2, JSON.stringify(r1));
 
   ok(fails.filter(f => f.startsWith('PAGEERROR')).length === 0, 'no page errors throughout');
   await b.close();

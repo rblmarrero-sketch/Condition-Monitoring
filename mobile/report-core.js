@@ -644,6 +644,16 @@
    trailing orphan of an incomplete row (see the lastAlone note in cell()),
    so a full row of three is never touched. */
 #rptRoot .cel .phg.gallery img.last1{height:330px;grid-column:1 / -1;}
+/* TWO PHOTOGRAPHS LEFT ON A ROW OF THEIR OWN SPAN IT TOGETHER, AT THE SAME
+   STANDARD SIZE EVERY OTHER TILE ON THE SHEET USES. "last2" is itself the
+   one item the outer three-column row has left in it (grid-column:1/-1,
+   same as last1) and is its own two-column grid inside, so the row's own
+   width splits evenly between the two rather than one third sitting empty.
+   justify-items/align-items are repeated here because they do not reach
+   through a nested grid — the outer rule only centres its OWN direct items,
+   and "last2"'s images are the outer grid's item's children, not its own. */
+#rptRoot .cel .phg.gallery .last2{grid-column:1 / -1;display:grid;
+  grid-template-columns:repeat(2,1fr);gap:8px;justify-items:center;align-items:center;}
 #rptRoot .cel .phg img{display:block;width:100%;aspect-ratio:4/3;object-fit:contain;
   background:#eef1f4;}
 /* One floor size for every tile on the sheet, not one computed per card. A
@@ -4033,11 +4043,34 @@
            `.ph` already uses for a position with just one photograph),
            centred rather than stretched to a width its own aspect ratio
            never asked for. Every full row is untouched — three or six or
-           nine photographs print exactly as before. */
+           nine photographs print exactly as before.
+
+           A REMAINDER OF TWO WAS LEFT UNTOUCHED, AND IT IS THE SAME GAP ONE
+           COUNT OVER. Read off TK160's own report: nine attachments received
+           for HS.DL, one of them a video the PDF cannot show (stills only,
+           see photoSrcs above) — eight photographs into a fixed three-column
+           track is two full rows and a third row of two, with nothing to
+           occupy the row's own third column. The row does not stretch to
+           fill it — a track with no item in it just sits empty — so the
+           reader sees a blank rectangle the width of a photograph, in
+           exactly the position a ninth picture would have been. `last1`'s
+           own fix does not reach this: it spans a LONE photograph across
+           every column, and two photographs cannot both do that. They are
+           wrapped instead in `.last2`, itself one item spanning the row the
+           three-column grid already has, laid out as its own two-column
+           grid inside — so both keep the SAME standard 182px tile the rest
+           of the sheet uses ("I want it to be standard"), sized to fill the
+           row between them rather than each sitting in a narrower third with
+           a blank one beside it. A remainder of one or zero is untouched. */
         var lastAlone = ph.length > 3 && ph.length % 3 === 1;
+        var lastPair = ph.length > 3 && ph.length % 3 === 2;
+        var mainPh = lastPair ? ph.slice(0, -2) : ph;
         top = '<div class="phg gallery" style="grid-template-columns:repeat(' + Math.min(3, ph.length) + ',1fr)">'
-          + ph.map(function (u, i) {
-              return '<img' + (lastAlone && i === ph.length - 1 ? ' class="last1"' : '') + ' src="' + u + '">'; }).join("")
+          + mainPh.map(function (u, i) {
+              return '<img' + (lastAlone && i === mainPh.length - 1 ? ' class="last1"' : '') + ' src="' + u + '">'; }).join("")
+          + (lastPair ? '<div class="last2">'
+              + ph.slice(-2).map(function (u) { return '<img src="' + u + '">'; }).join("")
+              + '</div>' : "")
           + '</div>';
       } else if (ph.length > 1) {
         /* ONE SIZE, IN ROWS — the layout the magnetic plug sheet already used,
