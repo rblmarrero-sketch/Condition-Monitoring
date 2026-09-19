@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=404">
+<link rel="manifest" href="manifest.webmanifest?v=405">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=404">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=404">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=404">
+<link rel="apple-touch-icon" href="icon-192.png?v=405">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=405">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=405">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2627,15 +2627,15 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=404"></script>
-<script src="upload-defaults.js?v=404"></script>
-<script src="hme.js?v=404"></script>
-<script src="mp-fc.js?v=404"></script>
-<script src="hme-cascade.js?v=404"></script>
-<script src="assets.js?v=404"></script>
-<script src="temp-limits.js?v=404"></script>
-<script src="normalize.js?v=404"></script>
-<script src="terms.js?v=404"></script>
+<script src="native.js?v=405"></script>
+<script src="upload-defaults.js?v=405"></script>
+<script src="hme.js?v=405"></script>
+<script src="mp-fc.js?v=405"></script>
+<script src="hme-cascade.js?v=405"></script>
+<script src="assets.js?v=405"></script>
+<script src="temp-limits.js?v=405"></script>
+<script src="normalize.js?v=405"></script>
+<script src="terms.js?v=405"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2654,25 +2654,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=404"></script>
-<script src="edits.js?v=404"></script>
-<script src="due.js?v=404"></script>
-<script src="wear.js?v=404"></script>
-<script src="wear-figs.js?v=404"></script>
-<script src="wear-map.js?v=404"></script>
-<script src="machine-photos.js?v=404"></script>
-<script src="machine-fig.js?v=404"></script>
-<script src="get.js?v=404"></script>
-<script src="points.js?v=404"></script>
-<script src="uc-points.js?v=404"></script>
-<script src="inspect-guide.js?v=404"></script>
-<script src="get-figs.js?v=404"></script>
-<script src="body-points.js?v=404"></script>
-<script src="body-map.js?v=404"></script>
-<script src="lube.js?v=404"></script>
-<script src="lube-overrides.js?v=404"></script>
-<script src="lube2027.js?v=404"></script>
-<script src="report-core.js?v=404"></script>
+<script src="grade.js?v=405"></script>
+<script src="edits.js?v=405"></script>
+<script src="due.js?v=405"></script>
+<script src="wear.js?v=405"></script>
+<script src="wear-figs.js?v=405"></script>
+<script src="wear-map.js?v=405"></script>
+<script src="machine-photos.js?v=405"></script>
+<script src="machine-fig.js?v=405"></script>
+<script src="get.js?v=405"></script>
+<script src="points.js?v=405"></script>
+<script src="uc-points.js?v=405"></script>
+<script src="inspect-guide.js?v=405"></script>
+<script src="get-figs.js?v=405"></script>
+<script src="body-points.js?v=405"></script>
+<script src="body-map.js?v=405"></script>
+<script src="lube.js?v=405"></script>
+<script src="lube-overrides.js?v=405"></script>
+<script src="lube2027.js?v=405"></script>
+<script src="report-core.js?v=405"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -13444,7 +13444,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="404";
+const BUILD="405";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -15398,6 +15398,43 @@ async function storageInfo(){
     return { used, quota, free, pct:Math.round(used/quota*100), photos:Math.floor(free/PHOTO_BYTES) };
   }catch(e){ return null; }
 }
+/* WHEN THE PHONE'S OWN QUOTA IS THE THING THAT IS FULL — not the device, this
+   app's own slice of it — the round is already safe: the server has it,
+   byte-for-byte, or evidenceLevel would not say EV_VERIFIED. Keeping it on
+   THIS phone after that point buys nothing and is exactly what fills the
+   quota that then blocks the next round's write-back (build 404's own field
+   case: "save failed — storage may be full" on a phone with 10 GB free).
+
+   A HALF-MEASURE WAS CONSIDERED AND REJECTED: stripping only the photo blobs
+   and keeping the record. filesForRecord() and attSync() both read straight
+   off p.photos — so a purged round reopened for even an unrelated edit (a
+   typo in a comment) would re-save with p.photos empty, attSync() would read
+   the missing blobs as attachments no longer live and drop them from the
+   manifest, and the next upload would go out missing photographs the server
+   already has safely — the round silently un-confirming itself. A FULL
+   delete has no such state to get wrong: it is the exact same call the
+   trash-can button already makes, on data already proven to have left the
+   phone. Nothing here ever touches a record this phone cannot prove the
+   server holds. */
+const PURGE_MIN_PCT=85, PURGE_TARGET_PCT=70;
+const PURGE_GRACE_MS=7*24*60*60*1000;      // a week; nobody is still editing a round that old
+async function purgeConfirmedIfTight(){
+  let info; try{ info=await storageInfo(); }catch(e){ return; }
+  if(!info || info.pct<PURGE_MIN_PCT) return;
+  let all; try{ all=await dbAll(); }catch(e){ return; }
+  const old=all.filter(rec=>{
+    if(!rec.up || !rec.upAt) return false;
+    if(Date.now()-Date.parse(rec.upAt) < PURGE_GRACE_MS) return false;
+    try{ return evidenceLevel(rec)>=EV_VERIFIED; }catch(e){ return false; }
+  }).sort((a,b)=>Date.parse(a.upAt)-Date.parse(b.upAt));   // oldest, already-confirmed rounds first
+  let removed=0;
+  for(const rec of old){
+    try{ info=await storageInfo(); }catch(e){ break; }
+    if(!info || info.pct<PURGE_TARGET_PCT) break;
+    try{ await dbDel(rec.id); sentForget(rec.id); removed++; }catch(e){ break; }
+  }
+  if(removed){ slog("purge-confirmed",{n:removed, pctBefore:info&&info.pct}); renderPending(); renderDue(); }
+}
 const mb=b=>b>=1073741824 ? (b/1073741824).toFixed(1)+" GB" : Math.round(b/1048576)+" MB";
 async function renderStorage(){
   const el=$("setStore"); if(!el) return;
@@ -15844,6 +15881,12 @@ async function syncNow(manual){
       const bad = (lastErr && String(lastErr).trim()) || (bookFail && bookFail.size);
       if(bad) sendTrace(lastErr ? "run-error" : "bookkeeping");
     }catch(e){}
+    /* A write-back failure is the one signal that means "this phone's own
+       quota, not the link" — see bookFail above. Checked here, not on a
+       timer, so relief follows the failure by seconds rather than waiting for
+       whatever next touches the app. Self-gated on the phone's own usage, so
+       a healthy phone's sync never even calls storageInfo() for this. */
+    if(bookFail && bookFail.size) purgeConfirmedIfTight().catch(()=>{});
   }
 }
 
@@ -17673,6 +17716,10 @@ function checkData(){
 /* ===================== init ===================== */
 updateEquipBtn(); renderGps(); checkData();
 applyForm(); applyTheme(); applyLang(); renderSignFold(); renderSync(); syncThenArm();
+/* A phone that is ALREADY over quota from a previous session needs relief
+   before the first write of THIS one, not after it fails the same way again —
+   see purgeConfirmedIfTight() and the write-back failure it is also armed on. */
+purgeConfirmedIfTight().catch(()=>{});
 /* Baselines change how readings are scored, so they have to be in hand before
    a number is judged. The catalogue answers correctly until they land, and the
    round repaints once they do. */
