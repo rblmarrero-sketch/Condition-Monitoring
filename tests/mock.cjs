@@ -88,9 +88,33 @@ function exec(q, legacy) {
     stats.file++;
     const f = FILES.find(x => x.id === q.get('id'));
     if (!f) return { ok: false, error: 'Missing file id' };
-    const body = f.json ? JSON.stringify(f.json) : 'FAKEJPEGBYTES';
-    return { ok: true, name: f.name, mime: f.json ? 'application/json' : 'image/jpeg',
-             data: Buffer.from(body).toString('base64') };
+    /* A PHOTO'S SERVED BYTES MUST BE THE LENGTH ITS OWN INDEX ENTRY CLAIMS.
+       This always answered a photo with a fixed 13-byte body ('FAKEJPEGBYTES')
+       while FILES declares size:90000 for it — a mismatch the office's own
+       cacheGet()/stale() correctly treat as "this name's bytes moved" (a
+       retake, a re-upload) and refetch, which is exactly right when they
+       DID move and exactly wrong when the fixture just never agreed with
+       itself. It cost nothing while drive.js's own guard against this
+       (build 407/408: ensurePhotos/fetchByName re-checking stale() at all)
+       had a bug that skipped every already-fetched name outright — once
+       fetched here, wrongly-sized or not, it was never asked about again.
+       Fixed, the same mismatch instead refetches this name on every single
+       repaint for ever: tests/phase3.cjs's Equipment History photo grid
+       never stopped rebuilding its own <img>, and a click could never land
+       on an element that does not finish being replaced. loadonce.cjs
+       already diagnosed this exact gap and built its OWN small server to
+       avoid it rather than share this one; every other test sharing this
+       mock inherits the fix here instead. Photo bytes now pad/repeat up to
+       the declared size; JSON sidecars are untouched (their own size field
+       has never gated a re-fetch the same way). */
+    if (f.json) {
+      const body = JSON.stringify(f.json);
+      return { ok: true, name: f.name, mime: 'application/json', data: Buffer.from(body).toString('base64') };
+    }
+    const want = Number(f.size) > 0 ? Number(f.size) : 13;
+    const pad = Buffer.alloc(want);
+    Buffer.from('FAKEJPEGBYTES').copy(pad);
+    return { ok: true, name: f.name, mime: 'image/jpeg', data: pad.toString('base64') };
   }
   return { ok: false, error: 'Unknown action: ' + action };
 }
