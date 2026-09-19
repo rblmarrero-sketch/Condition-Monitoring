@@ -117,12 +117,18 @@ const srv = http.createServer((q, s) => {
      'gap ' + Math.round(gate.gap / 60000) + ' min');
   ok('  and with no destination it is silent, not an error', gate.none === false);
   /* The wiring: it must sit AFTER the queue's own work and behind a real
-     fault, or a fleet that is working would file a document per sync. */
+     fault, or a fleet that is working would file a document per sync.
+     The window and the gap allowed inside the `bad =`...`if(bad)` gate are
+     both generous on purpose: the gate itself grew a third clause (an
+     app-wide error count, alongside lastErr and bookFail) with an explaining
+     comment, which is a legitimate widening of "something actually went
+     wrong", not a change to whether the check still runs after the queue's
+     own work and behind a real fault. */
   const src = fs.readFileSync(path.join(ROOT, 'mobile/index.html'), 'utf8');
-  const tail = src.slice(src.indexOf('slog("run-end"'), src.indexOf('slog("run-end"') + 1400);
+  const tail = src.slice(src.indexOf('slog("run-end"'), src.indexOf('slog("run-end"') + 2600);
   ok('it is wired after the run ends, not inside it', /sendTrace\(/.test(tail));
   ok('  and only when something actually went wrong',
-     /bad\s*=\s*\(lastErr[\s\S]{0,120}if\(bad\)\s*sendTrace/.test(tail.replace(/\n\s*/g, '')));
+     /bad\s*=\s*\(lastErr[\s\S]{0,700}if\(bad\)\s*sendTrace/.test(tail.replace(/\n\s*/g, '')));
   ok('  after the queued press has been handed on',
      tail.indexOf('pressPending') < tail.indexOf('sendTrace('));
 

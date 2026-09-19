@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=410">
+<link rel="manifest" href="manifest.webmanifest?v=411">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=410">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=410">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=410">
+<link rel="apple-touch-icon" href="icon-192.png?v=411">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=411">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=411">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2634,15 +2634,15 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=410"></script>
-<script src="upload-defaults.js?v=410"></script>
-<script src="hme.js?v=410"></script>
-<script src="mp-fc.js?v=410"></script>
-<script src="hme-cascade.js?v=410"></script>
-<script src="assets.js?v=410"></script>
-<script src="temp-limits.js?v=410"></script>
-<script src="normalize.js?v=410"></script>
-<script src="terms.js?v=410"></script>
+<script src="native.js?v=411"></script>
+<script src="upload-defaults.js?v=411"></script>
+<script src="hme.js?v=411"></script>
+<script src="mp-fc.js?v=411"></script>
+<script src="hme-cascade.js?v=411"></script>
+<script src="assets.js?v=411"></script>
+<script src="temp-limits.js?v=411"></script>
+<script src="normalize.js?v=411"></script>
+<script src="terms.js?v=411"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2661,25 +2661,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=410"></script>
-<script src="edits.js?v=410"></script>
-<script src="due.js?v=410"></script>
-<script src="wear.js?v=410"></script>
-<script src="wear-figs.js?v=410"></script>
-<script src="wear-map.js?v=410"></script>
-<script src="machine-photos.js?v=410"></script>
-<script src="machine-fig.js?v=410"></script>
-<script src="get.js?v=410"></script>
-<script src="points.js?v=410"></script>
-<script src="uc-points.js?v=410"></script>
-<script src="inspect-guide.js?v=410"></script>
-<script src="get-figs.js?v=410"></script>
-<script src="body-points.js?v=410"></script>
-<script src="body-map.js?v=410"></script>
-<script src="lube.js?v=410"></script>
-<script src="lube-overrides.js?v=410"></script>
-<script src="lube2027.js?v=410"></script>
-<script src="report-core.js?v=410"></script>
+<script src="grade.js?v=411"></script>
+<script src="edits.js?v=411"></script>
+<script src="due.js?v=411"></script>
+<script src="wear.js?v=411"></script>
+<script src="wear-figs.js?v=411"></script>
+<script src="wear-map.js?v=411"></script>
+<script src="machine-photos.js?v=411"></script>
+<script src="machine-fig.js?v=411"></script>
+<script src="get.js?v=411"></script>
+<script src="points.js?v=411"></script>
+<script src="uc-points.js?v=411"></script>
+<script src="inspect-guide.js?v=411"></script>
+<script src="get-figs.js?v=411"></script>
+<script src="body-points.js?v=411"></script>
+<script src="body-map.js?v=411"></script>
+<script src="lube.js?v=411"></script>
+<script src="lube-overrides.js?v=411"></script>
+<script src="lube2027.js?v=411"></script>
+<script src="report-core.js?v=411"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -8344,6 +8344,12 @@ $("saveBtn").onclick=async ()=>{
     const why=String((e&&e.message)||e||"");
     const pair=t("m_save_failed"); dlg([pair[0], pair[1].split("{why}").join(why)]);
     slog("save-write-fail",{u:rec.equip||"?", id:rec.id, why:why.slice(0,200)});
+    /* This is the one failure a technician is standing at the machine for
+       RIGHT NOW — worth its own trace immediately rather than waiting for
+       the next sync run to notice CM_ERRS grew. Fire-and-forget, same as
+       every other sendTrace call: the save has already failed either way,
+       and whether the trace lands changes nothing about what happens next. */
+    try{ sendTrace("save-write-fail"); }catch(e2){}
     return;
   }
   noteDone(rec); noteWear(rec); await loadBaselines();
@@ -13490,7 +13496,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="410";
+const BUILD="411";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -15560,6 +15566,10 @@ function slog(ev, o){
      · at most once per TRACE_GAP per phone;
      · one small JSON, and a failure to send it is silent and forgotten. */
 const TRACE_GAP = 1800000, TRACE_AT = "cm_trace_at", TRACE_LINES = 200;
+/* How many entries CM_ERRS held the last time a sync run checked it — set to
+   the count already there at load, so whatever happened during boot (before
+   any sync has run) does not itself read as "new" on the very first check. */
+let lastTracedErrs=(window.CM_ERRS||[]).length;
 /* WHEN THE FAILURE IS "SAVE FAILED — STORAGE MAY BE FULL", THE ONE NUMBER THE
    OLD TRACE NEVER CARRIED WAS THE STORAGE ITSELF. `bookFail` said something was
    wrong; nothing said how close to its own quota the phone actually was, so
@@ -15937,10 +15947,23 @@ async function syncNow(manual){
        so a diagnostic can never be what the queue is waiting behind. Only on
        a real fault (an error, or an upload whose bookkeeping failed), so a
        fleet that is working writes nothing at all. Deliberately not awaited:
-       the sync is finished, and whether the trace lands changes nothing. */
+       the sync is finished, and whether the trace lands changes nothing.
+
+       Also checked: whether `bad()` — the app-wide net for an unhandled
+       rejection or a window error, from ANY screen, not only this one —
+       caught something new since the last time this ran. Without this, a
+       failure outside the sync path (a render throwing, a handler nobody
+       wrapped) sat only in CM_ERRS and this phone's own SLOG, visible to
+       nobody until an inspector happened to export it by hand. Watermarked
+       on length rather than cleared, since CM_ERRS is a ring other code
+       already reads (⚙ → System) and truncating it here would be reading it
+       for one purpose at the cost of every other. */
     try{
-      const bad = (lastErr && String(lastErr).trim()) || (bookFail && bookFail.size);
-      if(bad) sendTrace(lastErr ? "run-error" : "bookkeeping");
+      const errsNow=(window.CM_ERRS||[]).length;
+      const bad = (lastErr && String(lastErr).trim()) || (bookFail && bookFail.size)
+                || errsNow>lastTracedErrs;
+      if(bad) sendTrace(lastErr ? "run-error" : bookFail&&bookFail.size ? "bookkeeping" : "app-error");
+      lastTracedErrs=errsNow;
     }catch(e){}
     /* A write-back failure is the one signal that means "this phone's own
        quota, not the link" — see bookFail above. Checked here, not on a

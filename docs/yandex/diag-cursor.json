@@ -1,0 +1,6 @@
+{
+  "_purpose": "Bookmark for the hourly diagnostic-trace review Routine. Holds the `updated` timestamp (ms epoch, from the _meta/diag/ folder listing on the live backend) of the newest trace file already reviewed. Each hourly check reads this, looks only at traces newer than it, analyzes anything actionable, and advances it — so the review never re-reads the same trace twice and never silently skips one. Updated by that Routine, not by hand.",
+  "lastReviewedUpdated": 1789788350745,
+  "lastReviewedName": "DZZ7H3_2026-09-19T03-25-48.json",
+  "lastCheckedAt": "2026-09-19T00:00:00Z"
+}
