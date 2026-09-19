@@ -669,7 +669,16 @@
        however many more times it is asked about. */
     let added = 0;
     for (const nm of names) {
-      if (fetched[nm]) continue;
+      /* `names` already carries only what need() called for — never fetched,
+         OR fetched but stale() because the index's size moved (a retake, a
+         new signature, landed under the same name). Skipping every name
+         already in `fetched` here, with no second look at WHY wanted() still
+         asked for it, threw that distinction away: a stale name is also
+         "already in fetched", so it never reached cacheGet's own size check
+         below it, and the office went on showing the first bytes it ever saw
+         under that name for the life of the tab — read live as a signature
+         that never updates without a full reload (tests/officesign.cjs). */
+      if (fetched[nm] && !stale(nm)) continue;
       /* WHAT LENGTH THE CACHED COPY SHOULD BE — our own measurement once we
          have one, the index's claim until then.
 
@@ -682,15 +691,23 @@
          loop with a network request per photograph in it.
 
          Once these bytes have been fetched here, their length is a fact and the
-         index's figure is a claim, so the fact is what the cache is held to. A
-         genuine re-upload still gets caught: it changes the index size, which
-         is what stale() watches, and that is the one place that question is
-         supposed to be answered. */
-      const want = fetchedSize[nm] != null ? fetchedSize[nm] : index[nm].size;
+         index's figure is a claim, so the fact is what the cache is held to —
+         UNLESS stale() has already said the index's figure moved, which is
+         exactly a genuine re-upload. Held to the old fact in that case, `want`
+         asked cacheGet to accept the very stale copy this loop exists to
+         replace: a Cache Storage entry still sitting at the OLD length would
+         "match" it and be handed back as if it were current, for the same
+         reason a name already in `fetched` used to skip this block outright. */
+      const want = (!stale(nm) && fetchedSize[nm] != null) ? fetchedSize[nm] : index[nm].size;
       const url = await cacheGet(index[nm].id, want);
       if (url) {
         fetched[nm] = url;
-        if (fetchedSize[nm] == null) fetchedSize[nm] = Number(index[nm].size) || null;
+        /* Unconditional, not just-if-null: a hit here for a name stale() just
+           flagged means the cache already held bytes at the NEW length (want
+           was index[nm].size), and leaving the old fetchedSize in place would
+           keep stale() true for ever on a file that is, in fact, current
+           again — refetching it on every future pass for no reason. */
+        fetchedSize[nm] = Number(index[nm].size) || null;
         window.CMDash.addPhoto(nm, url);
         added++;
       }
