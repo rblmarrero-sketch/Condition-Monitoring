@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=408">
+<link rel="manifest" href="manifest.webmanifest?v=409">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=408">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=408">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=408">
+<link rel="apple-touch-icon" href="icon-192.png?v=409">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=409">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=409">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2634,15 +2634,15 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=408"></script>
-<script src="upload-defaults.js?v=408"></script>
-<script src="hme.js?v=408"></script>
-<script src="mp-fc.js?v=408"></script>
-<script src="hme-cascade.js?v=408"></script>
-<script src="assets.js?v=408"></script>
-<script src="temp-limits.js?v=408"></script>
-<script src="normalize.js?v=408"></script>
-<script src="terms.js?v=408"></script>
+<script src="native.js?v=409"></script>
+<script src="upload-defaults.js?v=409"></script>
+<script src="hme.js?v=409"></script>
+<script src="mp-fc.js?v=409"></script>
+<script src="hme-cascade.js?v=409"></script>
+<script src="assets.js?v=409"></script>
+<script src="temp-limits.js?v=409"></script>
+<script src="normalize.js?v=409"></script>
+<script src="terms.js?v=409"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2661,25 +2661,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=408"></script>
-<script src="edits.js?v=408"></script>
-<script src="due.js?v=408"></script>
-<script src="wear.js?v=408"></script>
-<script src="wear-figs.js?v=408"></script>
-<script src="wear-map.js?v=408"></script>
-<script src="machine-photos.js?v=408"></script>
-<script src="machine-fig.js?v=408"></script>
-<script src="get.js?v=408"></script>
-<script src="points.js?v=408"></script>
-<script src="uc-points.js?v=408"></script>
-<script src="inspect-guide.js?v=408"></script>
-<script src="get-figs.js?v=408"></script>
-<script src="body-points.js?v=408"></script>
-<script src="body-map.js?v=408"></script>
-<script src="lube.js?v=408"></script>
-<script src="lube-overrides.js?v=408"></script>
-<script src="lube2027.js?v=408"></script>
-<script src="report-core.js?v=408"></script>
+<script src="grade.js?v=409"></script>
+<script src="edits.js?v=409"></script>
+<script src="due.js?v=409"></script>
+<script src="wear.js?v=409"></script>
+<script src="wear-figs.js?v=409"></script>
+<script src="wear-map.js?v=409"></script>
+<script src="machine-photos.js?v=409"></script>
+<script src="machine-fig.js?v=409"></script>
+<script src="get.js?v=409"></script>
+<script src="points.js?v=409"></script>
+<script src="uc-points.js?v=409"></script>
+<script src="inspect-guide.js?v=409"></script>
+<script src="get-figs.js?v=409"></script>
+<script src="body-points.js?v=409"></script>
+<script src="body-map.js?v=409"></script>
+<script src="lube.js?v=409"></script>
+<script src="lube-overrides.js?v=409"></script>
+<script src="lube2027.js?v=409"></script>
+<script src="report-core.js?v=409"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -3259,6 +3259,7 @@ const I18N = {
     team_reload_hint:"Forget what is stored here and read the whole folder again.",
     team_full:"⚠ No room left on this phone — export or clear old inspections, then reload.",
     m_storage_full:["No room left","This phone's storage is full. Export and clear some inspections, then try again."],
+    m_save_failed:["Not saved","This round could NOT be saved on this phone ({why}). Nothing was lost — your work is still here as a draft. Free up storage in ⚙ → System if it says full, then press Save again."],
     up_timeout:"timed out — signal too weak to finish the upload",
     team_timeout:"The system did not answer in time — weak signal. Try again in coverage.",
     team_more:"More is waiting — tap again.",
@@ -3872,6 +3873,7 @@ const I18N = {
     team_reload_hint:"Забыть сохранённое здесь и перечитать всю папку.",
     team_full:"⚠ На телефоне нет места — выгрузите или очистите старые осмотры и повторите.",
     m_storage_full:["Нет места","Память телефона заполнена. Выгрузите и очистите часть осмотров и повторите."],
+    m_save_failed:["Не сохранено","Этот осмотр НЕ удалось сохранить на телефоне ({why}). Ничего не потеряно — работа осталась как черновик. Если нет места, освободите его в ⚙ → Система, затем снова нажмите «Сохранить»."],
     up_timeout:"истекло время — слишком слабый сигнал для выгрузки",
     team_timeout:"Хранилище не ответило вовремя — слабый сигнал. Повторите в зоне покрытия.",
     team_more:"Есть ещё — нажмите ещё раз.",
@@ -8163,7 +8165,21 @@ function editRecord(rec){ if(rec.cls && CLASSES[rec.cls]){ eqClass=rec.cls; lsSe
 $("cancelEdit").onclick=()=>resetForm();
 
 /* ===================== save to queue ===================== */
+/* A FAST DOUBLE-TAP MUST NOT START TWO SAVES. takeBtn/videoBtn already guard
+   their own async work this way (disabled while addPicked runs) for the
+   identical reason; Save never got the same guard. Without it, a second tap
+   landing before the first save's dbPut/verify/reset finished re-enters from
+   the top on the same still-populated draft: for a NEW round each pass mints
+   its own id from Date.now(), so the round is queued and uploaded TWICE; for
+   an EDIT, if the first tap's save clears `editing` before the second tap's
+   synchronous prefix reads it, the edit forks into a duplicate original-plus-
+   edit pair instead of replacing the original. One flag, checked before
+   anything else, closes both. */
+let savingRound=false;
 $("saveBtn").onclick=async ()=>{
+  if(savingRound) return;
+  savingRound=true;
+  try{
   saveCur();
   const equip=(curEquip||"").trim().toUpperCase().replace(/\s+/g,""); const date=$("date").value;
   /* Never refuse a save while the field that would fix it is folded away. */
@@ -8308,7 +8324,29 @@ $("saveBtn").onclick=async ()=>{
   await holdAwake(SAVE_GUARD_MS);
   showSaveGuard(SAVE_GUARD_MS);
   try{ await attSync(rec); }catch(e){}
-  await dbPut(rec); noteDone(rec); noteWear(rec); await loadBaselines();
+  /* THE ONE WRITE THIS WHOLE SCREEN EXISTS TO MAKE, UNGUARDED.
+     Every other risky call around it — attSync above, dbDel(DRAFT_ID) below —
+     is wrapped; this one, the actual persistence of the completed round, was
+     not, and neither is this handler as a whole (no guard(), no try/catch).
+     dbPut rejects on the exact "storage may be full" condition this file
+     spends pages discussing for the LATER upload-bookkeeping writes — and an
+     unhandled rejection here reaches only the global unhandledrejection
+     listener, which logs and says nothing to the inspector. showSaveGuard,
+     already on screen, self-clears on its own timer regardless of outcome —
+     so the "keep this open, saving…" banner would vanish exactly as it does
+     on success, while the round was never written at all. The draft this
+     round has been autosaving under DRAFT_ID throughout is still intact at
+     this point (dbDel(DRAFT_ID) has not run yet) — so the fix is not to
+     retry silently, which could paper over a genuinely full disk, but to
+     say so plainly and stop before anything below assumes the save worked. */
+  try{ await dbPut(rec); }
+  catch(e){
+    const why=String((e&&e.message)||e||"");
+    const pair=t("m_save_failed"); dlg([pair[0], pair[1].split("{why}").join(why)]);
+    slog("save-write-fail",{u:rec.equip||"?", id:rec.id, why:why.slice(0,200)});
+    return;
+  }
+  noteDone(rec); noteWear(rec); await loadBaselines();
   /* Read back while the inspector can still do something about it — see
      verifySavedRec. Never blocks or discards; only changes which dialog is
      shown next. */
@@ -8329,6 +8367,7 @@ $("saveBtn").onclick=async ()=>{
   }else{
     const m=t("m_saved"); dlg([m[0], m[1].replace("{x}",equip)]);
   }
+  } finally { savingRound=false; }
 };
 
 /* ===================== inspection due-list =====================
@@ -13451,7 +13490,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="408";
+const BUILD="409";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -15713,8 +15752,23 @@ async function syncNow(manual){
                     type:"application/json"}].concat(files);
           /* The names it just learned are kept, so a resume after a kill does
              not have to work them out a second time — and so this phone's own
-             copy of the round says what its photographs are called. */
-          try{ await dbPut(rec); }catch(e){}
+             copy of the round says what its photographs are called.
+
+             `rec` is the copy `dbAll()` snapshotted when this run started —
+             stale the instant an edit lands on this same round while it sits
+             further back in a queue this run is still working through. The
+             write-back at the end of this record's own turn re-reads and
+             checks `(fresh.rev||0)===rev` for exactly this reason ("Putting
+             back the copy we started with would silently discard an edit
+             made during the upload"); this earlier, unconditional dbPut was
+             the same class of write with no such guard — an edit saved in
+             that window was overwritten by the pre-edit copy with nothing
+             said anywhere, the correction simply gone once "Saved" had
+             already shown. Same check, same rule, here too. */
+          try{
+            const fresh0=await dbGet(rec.id);
+            if(fresh0 && (fresh0.rev||0)===rev) await dbPut(rec);
+          }catch(e){}
         }catch(e){ lastErr="Could not read "+rec.equip+": "+(e.message||e); continue; }
       }
       const errs=[];
