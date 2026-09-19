@@ -87,7 +87,10 @@ const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
   ok('the icons are precached, so an install works offline',
     /icon-192\.png/.test(sw) && /icon-512\.png/.test(sw));
   ok('so is the manifest', /manifest\.webmanifest/.test(sw));
-  ok('and it is on this build', new RegExp('BUILD = "' + BUILD + '"').test(sw), BUILD);
+  /* Spacing-insensitive, matching the app's own runtime read of sw.js
+     (checkForNewBuild: /const BUILD\s*=\s*"([^"]+)"/) rather than one exact
+     layout of the `=`. */
+  ok('and it is on this build', new RegExp('BUILD\\s*=\\s*"' + BUILD + '"').test(sw), BUILD);
 
   console.log(fails.length ? '\nFAILED: ' + fails.length + '\n' + fails.join('\n') : '\nall green');
   await b.close();

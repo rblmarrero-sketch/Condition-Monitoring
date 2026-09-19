@@ -70,8 +70,11 @@ ok('no debugger or stray console.log', !noisy.length,
 
 /* 4. The version has to move together or the pair arrives mismatched. */
 console.log('\nthe build number, everywhere it appears');
-const build=(app.match(/const BUILD="([^"]+)"/)||[])[1];
-const swBuild=(sw.match(/const BUILD = "([^"]+)"/)||[])[1];
+/* Spacing-insensitive: the app's own runtime check (checkForNewBuild) reads
+   sw.js with /const BUILD\s*=\s*"([^"]+)"/, so a test that requires one exact
+   spacing is asking a stricter question than the app ever asks. */
+const build=(app.match(/const BUILD\s*=\s*"([^"]+)"/)||[])[1];
+const swBuild=(sw.match(/const BUILD\s*=\s*"([^"]+)"/)||[])[1];
 const appV=[...new Set([...app.matchAll(/\?v=(\d+)/g)].map(m=>m[1]))];
 const dashV=[...new Set([...dash.matchAll(/\?v=(\d+)/g)].map(m=>m[1]))];
 ok('the app and its worker are on the same build', build===swBuild, build+' / '+swBuild);

@@ -153,19 +153,33 @@
            '<text class="bm-way" x="' + (cabPos.x + cabW / 2).toFixed(1) + '" y="' + (cabPos.y + 9).toFixed(1) + '" text-anchor="middle">' + cabTxt + '</text>' +
            '<text class="bm-way" x="' + (disPos.x + disW / 2).toFixed(1) + '" y="' + (disPos.y + 9).toFixed(1) + '" text-anchor="middle">' + disTxt + '</text></g>');
 
-    /* Use pre-rendered SVG from TRAY_ART if available, otherwise compute regions */
+    /* TRAY_ART, where the model has it, is the manufacturer's own traced
+       panel art — drawn in the SAME viewBox coordinates body-points.js
+       already uses (HM400 401x879, TR60 731x733 — no rescale needed), so it
+       drops straight in as a background layer under everything else.
+
+       It is a BACKGROUND, not a replacement: the bm-z paths below still
+       draw, every time, over it — they are what data-band= is (tests/
+       bodychk.cjs counts exactly 7), what a tap target is built from
+       further down, and the only place a zone's condition (watch/act/done)
+       actually paints. Losing them to make room for nicer art would have
+       traded the artwork for the one thing the map exists to show — which
+       zone needs attention — silently, since nothing about a state that
+       never lights up throws or logs anything. hasArt only tells the CSS to
+       drop the plain height-tint (s0-s3) so the traced art shows through
+       where nothing is wrong; a real finding still tints its zone exactly
+       as it always did. */
     var TA = (typeof self !== 'undefined' ? self : this).TRAY_ART;
-    if (TA && TA[id] && TA[id].art) {
-      s.push(TA[id].art);
-    } else {
-      ORDER.forEach(function (z) {
-        var r = B.region(id, z);
-        if (!r) return;
-        var st = (o.zoneState ? o.zoneState(z) : '') || '';
-        s.push('<path class="bm-z ' + LIFT[z] + (st ? ' ' + st : '') +
-               '" d="' + poly(r) + '" data-band="' + z + '"/>');
-      });
-    }
+    var hasArt = !!(TA && TA[id] && TA[id].art);
+    if (hasArt) s.push('<g class="bm-art">' + TA[id].art + '</g>');
+    ORDER.forEach(function (z) {
+      var r = B.region(id, z);
+      if (!r) return;
+      var st = (o.zoneState ? o.zoneState(z) : '') || '';
+      s.push('<path class="bm-z ' + LIFT[z] + (st ? ' ' + st : '') +
+             (hasArt ? ' over-art' : '') +
+             '" d="' + poly(r) + '" data-band="' + z + '"/>');
+    });
 
     /* The folds. Drawn in the gap between a panel and the floor, which is the
        one place a hinge can be without sitting on top of a station. Portrait

@@ -109,9 +109,16 @@ console.log('\nthe phone can open with no signal at all');
   const dead = pre.filter(u => !fs.existsSync(path.join(REPO, 'mobile', u)));
   ok('  and every precached file exists on disk', dead.length === 0, dead.join(',') || pre.length + ' checked');
 
+  /* Spacing-insensitive on purpose: the app's own runtime check
+     (checkForNewBuild, reading sw.js's BUILD to decide whether to update)
+     matches with /const BUILD\s*=\s*"([^"]+)"/ — a test that instead
+     hardcoded one exact spacing would be asking a stricter question than the
+     app itself ever asks, and would fail on a build where only the spacing
+     around `=` changed, which is not a build mismatch. */
+  const BUILD_RE = /const BUILD\s*=\s*"(\d+)"/;
   ok('the worker is on the same build as the page',
-     (sw.match(/const BUILD = "(\d+)"/) || [])[1] === (page.match(/const BUILD="(\d+)"/) || [])[1],
-     (sw.match(/const BUILD = "(\d+)"/) || [])[1] + ' vs ' + (page.match(/const BUILD="(\d+)"/) || [])[1]);
+     (sw.match(BUILD_RE) || [])[1] === (page.match(BUILD_RE) || [])[1],
+     (sw.match(BUILD_RE) || [])[1] + ' vs ' + (page.match(BUILD_RE) || [])[1]);
 }
 
 /* ── 4. both languages, everywhere ───────────────────────────────────────── */
