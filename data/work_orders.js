@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-09-19T14:37:05+00:00",
+  "generated": "2026-09-19T15:47:00+00:00",
   "source": "https://askpi.94-131-94-152.sslip.io/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 676,
@@ -314,7 +314,7 @@ window.CM_WO_DATA = {
     "WE009",
     "WE011"
   ],
-  "duplicateRowsCollapsed": 185,
+  "duplicateRowsCollapsed": 198,
   "roundsDedupedWithinVisit": 2,
   "columns": [
     "Asset description",
@@ -1170,7 +1170,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-09-11",
       "detected": "2026-09-11",
-      "planStart": null,
+      "planStart": "2026-09-21",
       "asset": "DR007",
       "defect": "DD-00012421",
       "requestNo": "DD-00012421",
@@ -1181,9 +1181,9 @@ window.CM_WO_DATA = {
       "cause": "Усталостная трещина",
       "causeFrom": "wo",
       "descr": "Трешина по шву на передвижной раме мачты.",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "by": "Irek",
-      "woNumber": null,
+      "woNumber": "WO-016854",
       "maintType": "P4 Planned Repair",
       "planned": false
     },
@@ -1192,7 +1192,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-09-11",
       "detected": "2026-09-11",
-      "planStart": null,
+      "planStart": "2026-09-21",
       "asset": "DR007",
       "defect": "DD-00012419",
       "requestNo": "DD-00012419",
@@ -1203,9 +1203,9 @@ window.CM_WO_DATA = {
       "cause": "Износ/трещина диска",
       "causeFrom": "wo",
       "descr": "Механическое разрушение РВД.",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "by": "Irek",
-      "woNumber": null,
+      "woNumber": "WO-016855",
       "maintType": "P4 Planned Repair",
       "planned": false
     },
@@ -1214,7 +1214,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-09-11",
       "detected": "2026-09-11",
-      "planStart": null,
+      "planStart": "2026-09-21",
       "asset": "DR007",
       "defect": "DD-00012418",
       "requestNo": "DD-00012418",
@@ -1225,9 +1225,9 @@ window.CM_WO_DATA = {
       "cause": "Усталостная трещина",
       "causeFrom": "wo",
       "descr": "Трещина на кронштейне цилиндра мачты.",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "by": "Irek",
-      "woNumber": null,
+      "woNumber": "WO-016853",
       "maintType": "P4 Planned Repair",
       "planned": false
     },
@@ -6132,29 +6132,6 @@ window.CM_WO_DATA = {
     {
       "equip": "DZ001",
       "cls": "DOZ",
-      "woNumber": null,
-      "maintType": "1000 Hours service Planned",
-      "hours": 1000,
-      "cmLabel": "Filter Cut / General Inspection / Undercarriage",
-      "cmTypes": [
-        "FC",
-        "INSP",
-        "UC"
-      ],
-      "priority": "P3 Planned (PM)",
-      "woStatus": null,
-      "cmmsStatus": "Registered",
-      "open": true,
-      "planStart": null,
-      "planStartDt": null,
-      "planEnd": null,
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
-    },
-    {
-      "equip": "DZ001",
-      "cls": "DOZ",
       "woNumber": "GD-018331",
       "maintType": "500 Hours service Planned",
       "hours": 500,
@@ -6589,6 +6566,29 @@ window.CM_WO_DATA = {
       "actualStart": "2026-09-11",
       "actualStartDt": "2026-09-11T01:20:00",
       "actualEnd": "2026-09-11"
+    },
+    {
+      "equip": "DZ001",
+      "cls": "DOZ",
+      "woNumber": "WO-016580",
+      "maintType": "1000 Hours service Planned",
+      "hours": 1000,
+      "cmLabel": "Filter Cut / General Inspection / Undercarriage",
+      "cmTypes": [
+        "FC",
+        "INSP",
+        "UC"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-09-27",
+      "planStartDt": "2026-09-27T00:00:00",
+      "planEnd": "2026-09-28",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
     },
     {
       "equip": "DZ002",
@@ -44327,7 +44327,7 @@ window.CM_WO_DATA = {
     {
       "equip": "TK115",
       "cls": "AT",
-      "woNumber": "WO-013617",
+      "woNumber": "WO-010083",
       "maintType": "250 Hours service Planned",
       "hours": 250,
       "cmLabel": "Magnetic Plug",
@@ -44335,7 +44335,7 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "CLSD",
+      "woStatus": "REL",
       "cmmsStatus": "Completed",
       "open": false,
       "planStart": "2026-08-30",
@@ -44367,6 +44367,27 @@ window.CM_WO_DATA = {
       "actualStart": "2026-09-13",
       "actualStartDt": "2026-09-13T07:00:00",
       "actualEnd": "2026-09-16"
+    },
+    {
+      "equip": "TK115",
+      "cls": "AT",
+      "woNumber": "WO-010083",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "Magnetic Plug",
+      "cmTypes": [
+        "MP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Completed",
+      "open": false,
+      "planStart": "2026-09-30",
+      "planStartDt": "2026-09-30T00:00:00",
+      "planEnd": "2026-10-01",
+      "actualStart": "2026-08-30",
+      "actualStartDt": "2026-08-30T20:30:00",
+      "actualEnd": "2026-08-30"
     },
     {
       "equip": "TK116",
