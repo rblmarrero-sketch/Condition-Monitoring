@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=403">
+<link rel="manifest" href="manifest.webmanifest?v=404">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=403">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=403">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=403">
+<link rel="apple-touch-icon" href="icon-192.png?v=404">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=404">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=404">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2627,15 +2627,15 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=403"></script>
-<script src="upload-defaults.js?v=403"></script>
-<script src="hme.js?v=403"></script>
-<script src="mp-fc.js?v=403"></script>
-<script src="hme-cascade.js?v=403"></script>
-<script src="assets.js?v=403"></script>
-<script src="temp-limits.js?v=403"></script>
-<script src="normalize.js?v=403"></script>
-<script src="terms.js?v=403"></script>
+<script src="native.js?v=404"></script>
+<script src="upload-defaults.js?v=404"></script>
+<script src="hme.js?v=404"></script>
+<script src="mp-fc.js?v=404"></script>
+<script src="hme-cascade.js?v=404"></script>
+<script src="assets.js?v=404"></script>
+<script src="temp-limits.js?v=404"></script>
+<script src="normalize.js?v=404"></script>
+<script src="terms.js?v=404"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2654,25 +2654,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=403"></script>
-<script src="edits.js?v=403"></script>
-<script src="due.js?v=403"></script>
-<script src="wear.js?v=403"></script>
-<script src="wear-figs.js?v=403"></script>
-<script src="wear-map.js?v=403"></script>
-<script src="machine-photos.js?v=403"></script>
-<script src="machine-fig.js?v=403"></script>
-<script src="get.js?v=403"></script>
-<script src="points.js?v=403"></script>
-<script src="uc-points.js?v=403"></script>
-<script src="inspect-guide.js?v=403"></script>
-<script src="get-figs.js?v=403"></script>
-<script src="body-points.js?v=403"></script>
-<script src="body-map.js?v=403"></script>
-<script src="lube.js?v=403"></script>
-<script src="lube-overrides.js?v=403"></script>
-<script src="lube2027.js?v=403"></script>
-<script src="report-core.js?v=403"></script>
+<script src="grade.js?v=404"></script>
+<script src="edits.js?v=404"></script>
+<script src="due.js?v=404"></script>
+<script src="wear.js?v=404"></script>
+<script src="wear-figs.js?v=404"></script>
+<script src="wear-map.js?v=404"></script>
+<script src="machine-photos.js?v=404"></script>
+<script src="machine-fig.js?v=404"></script>
+<script src="get.js?v=404"></script>
+<script src="points.js?v=404"></script>
+<script src="uc-points.js?v=404"></script>
+<script src="inspect-guide.js?v=404"></script>
+<script src="get-figs.js?v=404"></script>
+<script src="body-points.js?v=404"></script>
+<script src="body-map.js?v=404"></script>
+<script src="lube.js?v=404"></script>
+<script src="lube-overrides.js?v=404"></script>
+<script src="lube2027.js?v=404"></script>
+<script src="report-core.js?v=404"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -13444,7 +13444,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="403";
+const BUILD="404";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -15477,8 +15477,19 @@ function slog(ev, o){
      · at most once per TRACE_GAP per phone;
      · one small JSON, and a failure to send it is silent and forgotten. */
 const TRACE_GAP = 1800000, TRACE_AT = "cm_trace_at", TRACE_LINES = 200;
-function traceDoc(why){
+/* WHEN THE FAILURE IS "SAVE FAILED — STORAGE MAY BE FULL", THE ONE NUMBER THE
+   OLD TRACE NEVER CARRIED WAS THE STORAGE ITSELF. `bookFail` said something was
+   wrong; nothing said how close to its own quota the phone actually was, so
+   reading this from the server still meant asking somebody to go check ⚙ by
+   hand. `storageInfo()` already computes exactly this for the on-screen
+   indicator — reused here rather than duplicated, so the two can never read
+   two different numbers for the same phone. A device whose own device storage
+   is nowhere near full can still be pinned against this origin's OWN quota,
+   which is the split that made "the storage is enough, it's 10GB" and "save
+   failed — storage may be full" both true at once. */
+async function traceDoc(why){
   let pend = null; try{ pend = (SLOG.filter(e=>e.ev==="queue").pop()||{}).pending; }catch(e){}
+  let store = null; try{ store = await storageInfo(); }catch(e){}
   return {
     type: "cm-sync-trace", v: 1, build: BUILD, dev: DEVICE, why: String(why||""),
     at: new Date().toISOString(), lang, online: navigator.onLine,
@@ -15486,6 +15497,7 @@ function traceDoc(why){
     pending: pend == null ? null : pend,
     err: slogSafe(String(lastErr||"")).slice(0, 300),
     persist: persistState, bookFail: bookFail ? bookFail.size : 0,
+    storage: store ? { usedBytes:store.used, quotaBytes:store.quota, pct:store.pct } : null,
     lines: SLOG.slice(-TRACE_LINES),
   };
 }
@@ -15494,7 +15506,7 @@ async function sendTrace(why){
     const d = (activeDests()||[])[0]; if(!d) return false;
     let last = 0; try{ last = +(localStorage.getItem(TRACE_AT)||0) || 0; }catch(e){}
     if(Date.now() - last < TRACE_GAP) return false;
-    const body = JSON.stringify(traceDoc(why), null, 1);
+    const body = JSON.stringify(await traceDoc(why), null, 1);
     const name = DEVICE + "_" + new Date().toISOString().replace(/[:.]/g,"-").slice(0,19) + ".json";
     /* Its own folder, and the destination otherwise untouched — a shallow copy
        so nothing here can alter where the rounds themselves go. */
