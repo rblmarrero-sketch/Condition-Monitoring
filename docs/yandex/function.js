@@ -118,6 +118,23 @@ function sign(method, key, query, body, headers) {
   return { headers: h, path: canonKey + (qs ? '?' + qs : '') };
 }
 
+/* NO CALL HERE HAD A TIMEOUT. Every outbound HTTP helper server.js already
+   owns (headOf, dispatchWorkflow, fetchText) sets one — this, the single
+   function every GET/PUT/HEAD/DELETE/list to the object store goes through,
+   did not. server.js's own requestTimeout bounds receiving the INCOMING
+   request; it does nothing for a stall on the OUTGOING call this handler
+   makes while producing its reply. A connection accepted and then stalled —
+   plausible under 50 phones' concurrent batches, or a transient blip at the
+   store — hung that one request's promise forever: the socket, its response
+   closure and the request that started it all held open with nothing ever
+   thrown, nothing ever logged, for as long as the process runs. Enough of
+   those piling up (each retrying phone's backoff adds more on top rather
+   than replacing a stuck one) can exhaust the VM's own connections with no
+   single error to point at. Bounded the same way server.js already bounds
+   its own outbound calls; the caller's existing try/catch (every S3 call in
+   this file already has one) treats a timeout exactly like any other
+   rejection. */
+const S3_TIMEOUT_MS = 30000;
 function s3(method, key, query, body, extra) {
   return new Promise((res, rej) => {
     const buf = body == null ? '' : Buffer.isBuffer(body) ? body : Buffer.from(body);
@@ -132,6 +149,7 @@ function s3(method, key, query, body, extra) {
       });
     });
     req.on('error', rej);
+    req.setTimeout(S3_TIMEOUT_MS, () => req.destroy(new Error('S3 request timed out')));
     if (buf.length) req.write(buf);
     req.end();
   });

@@ -42,6 +42,27 @@
   let lastFetch = null;                 // what the last ensurePhotos did — asked, cached, fetched, failed[]
   const stale = nm => !!(fetched[nm] && fetchedSize[nm] != null && index[nm]
                          && Number(index[nm].size) > 0 && fetchedSize[nm] !== Number(index[nm].size));
+  /* NOTHING EVER REVOKED AN OBJECT URL ONCE `fetched` OVERWROTE IT. A stale
+     overwrite (ensurePhotos/fetchByName replacing a name whose bytes moved)
+     is deliberately left alone here — the old URL may still be the one an
+     already-painted `<img>` is showing, and revoking under a card that
+     has not yet repainted would blank a photo the office can currently see.
+     A full reset is the one moment that risk does not exist: `fetched` is
+     about to become `{}`, so every URL it held is about to be unreachable by
+     name from anywhere in this module, and the page's own re-render (which
+     always follows a full load/save) will ask for each one again under the
+     same name and get a fresh URL — nothing on screen is relying on the OLD
+     object staying valid past this point. Without this, a dashboard kept
+     open for a working day, opening many units across a growing archive
+     (the stated 1,000+ inspection / 10,000+ photograph scale), held every
+     distinct photo blob it had ever decoded in memory for the rest of the
+     session — pure growth, no ceiling. */
+  function revokeAllFetched() {
+    for (const nm of Object.keys(fetched)) {
+      const u = fetched[nm];
+      if (u) try { URL.revokeObjectURL(u); } catch (e) {}
+    }
+  }
   const need = nm => !!(nm && index[nm] && (!(nm in fetched) || stale(nm)));
   let legacy = false;                   // deployed script predates ?action=records
 
@@ -348,7 +369,7 @@
     /* `fetched` is bytes and may go; `index` is the folder's own listing and
        is refreshed below rather than emptied, so no window exists in which the
        audit is measuring against nothing. */
-    if (opts.full) { fetched = {}; localStorage.removeItem(LS_CUR); }
+    if (opts.full) { revokeAllFetched(); fetched = {}; localStorage.removeItem(LS_CUR); }
 
     if (idxCap() !== false && !legacy) {
       try {
@@ -981,7 +1002,7 @@
       localStorage.setItem(LS_URL, (url || "").trim());
       localStorage.setItem(LS_SEC, sec || "");
       // A different folder's cursor means nothing — start that one from scratch.
-      if (changed) { localStorage.removeItem(LS_CUR); index = {}; fetched = {}; legacy = false;
+      if (changed) { localStorage.removeItem(LS_CUR); index = {}; revokeAllFetched(); fetched = {}; legacy = false;
                      try { localStorage.removeItem(LS_MED); } catch (e) {} }
     },
     indexed() { return Object.keys(index).length; },
