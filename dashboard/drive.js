@@ -622,8 +622,15 @@
     await ensureMediaIndex();
     const e = index[name];
     if (!e) return null;
-    if (fetched[name]) return fetched[name];
-    const cached = await cacheGet(e.id, e.size);
+    /* Same rule as ensurePhotos(), and the same bug fixed there for the same
+       reason: "already fetched" is not "still current" — a name the phone
+       re-sent lands here too (this is the function behind the correction
+       panel's "Look" preview, whose whole point is showing what a decision
+       is actually about), and a stale return here means a supervisor looks
+       at the OLD bytes believing they have verified the current ones. */
+    if (fetched[name] && !stale(name)) return fetched[name];
+    const want = (!stale(name) && fetchedSize[name] != null) ? fetchedSize[name] : e.size;
+    const cached = await cacheGet(e.id, want);
     if (cached) { fetched[name] = cached; fetchedSize[name] = Number(e.size) || null; window.CMDash.addPhoto(name, cached); return cached; }
     const r = await api({ action: "file", id: e.id });
     if (!r || !r.data) { fetched[name] = null; return null; }
