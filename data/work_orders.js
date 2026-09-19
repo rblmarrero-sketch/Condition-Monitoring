@@ -2,10 +2,10 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-09-19T00:22:17+00:00",
+  "generated": "2026-09-19T00:46:55+00:00",
   "source": "https://askpi.94-131-94-152.sslip.io/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
-  "unitsInWorkbook": 673,
+  "unitsInWorkbook": 674,
   "unitsKept": [
     "BL001",
     "BL002",
@@ -4696,9 +4696,9 @@ window.CM_WO_DATA = {
       "planStart": "2026-07-23",
       "planStartDt": "2026-07-23T19:00:00",
       "planEnd": "2026-07-24",
-      "actualStart": "2026-07-22",
-      "actualStartDt": "2026-07-22T00:00:00",
-      "actualEnd": "2026-07-22"
+      "actualStart": "2026-07-23",
+      "actualStartDt": "2026-07-23T19:00:00",
+      "actualEnd": "2026-07-24"
     },
     {
       "equip": "CN023",
@@ -7368,15 +7368,15 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
-      "planStart": "2026-09-15",
-      "planStartDt": "2026-09-15T00:00:00",
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
+      "planStart": "2026-09-16",
+      "planStartDt": "2026-09-16T02:00:00",
       "planEnd": "2026-09-16",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-09-16",
+      "actualStartDt": "2026-09-16T02:00:00",
+      "actualEnd": "2026-09-16"
     },
     {
       "equip": "DZ004",
@@ -17168,9 +17168,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-09-17",
-      "planStartDt": "2026-09-17T00:00:00",
-      "planEnd": "2026-09-18",
+      "planStart": "2026-09-16",
+      "planStartDt": "2026-09-16T08:00:00",
+      "planEnd": "2026-09-16",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -52893,15 +52893,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-09-15",
-      "planStartDt": "2026-09-15T00:00:00",
-      "planEnd": "2026-09-16",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "planStartDt": "2026-09-15T13:30:00",
+      "planEnd": "2026-09-15",
+      "actualStart": "2026-09-15",
+      "actualStartDt": "2026-09-15T13:30:00",
+      "actualEnd": "2026-09-15"
     },
     {
       "equip": "TK159",
