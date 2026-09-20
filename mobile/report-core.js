@@ -2254,8 +2254,7 @@
         + '<div class="subhd">' + T.I("gen_t") + '</div>'
         + '<div class="genrow">'
         + rec.general.map(function (u) { return genShot(T, u); }).join("")
-        + '</div>'
-        + '<div class="genwhy">' + T.I("gen_sub") + '</div></div>' });
+        + '</div></div>' });
     }
     if (rec.gap && rec.gap.missing > 0) {
       out.push({ nb: false, html: '<div class="sec"><div class="evgap">'
@@ -2578,8 +2577,7 @@
       + '<div class="subhd">' + T.I("gen_t") + '</div>'
       + '<div class="genrow">'
       + rec.general.map(function (u) { return genShot(T, u); }).join("")
-      + '</div>'
-      + '<div class="genwhy">' + T.I("gen_sub") + '</div></div>';
+      + '</div></div>';
   }
 
   /* ── The single-inspection type bodies, to the v2 templates ───────────────
