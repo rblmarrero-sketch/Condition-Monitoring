@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=415">
+<link rel="manifest" href="manifest.webmanifest?v=416">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=415">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=415">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=415">
+<link rel="apple-touch-icon" href="icon-192.png?v=416">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=416">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=416">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2634,15 +2634,15 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=415"></script>
-<script src="upload-defaults.js?v=415"></script>
-<script src="hme.js?v=415"></script>
-<script src="mp-fc.js?v=415"></script>
-<script src="hme-cascade.js?v=415"></script>
-<script src="assets.js?v=415"></script>
-<script src="temp-limits.js?v=415"></script>
-<script src="normalize.js?v=415"></script>
-<script src="terms.js?v=415"></script>
+<script src="native.js?v=416"></script>
+<script src="upload-defaults.js?v=416"></script>
+<script src="hme.js?v=416"></script>
+<script src="mp-fc.js?v=416"></script>
+<script src="hme-cascade.js?v=416"></script>
+<script src="assets.js?v=416"></script>
+<script src="temp-limits.js?v=416"></script>
+<script src="normalize.js?v=416"></script>
+<script src="terms.js?v=416"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2661,25 +2661,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=415"></script>
-<script src="edits.js?v=415"></script>
-<script src="due.js?v=415"></script>
-<script src="wear.js?v=415"></script>
-<script src="wear-figs.js?v=415"></script>
-<script src="wear-map.js?v=415"></script>
-<script src="machine-photos.js?v=415"></script>
-<script src="machine-fig.js?v=415"></script>
-<script src="get.js?v=415"></script>
-<script src="points.js?v=415"></script>
-<script src="uc-points.js?v=415"></script>
-<script src="inspect-guide.js?v=415"></script>
-<script src="get-figs.js?v=415"></script>
-<script src="body-points.js?v=415"></script>
-<script src="body-map.js?v=415"></script>
-<script src="lube.js?v=415"></script>
-<script src="lube-overrides.js?v=415"></script>
-<script src="lube2027.js?v=415"></script>
-<script src="report-core.js?v=415"></script>
+<script src="grade.js?v=416"></script>
+<script src="edits.js?v=416"></script>
+<script src="due.js?v=416"></script>
+<script src="wear.js?v=416"></script>
+<script src="wear-figs.js?v=416"></script>
+<script src="wear-map.js?v=416"></script>
+<script src="machine-photos.js?v=416"></script>
+<script src="machine-fig.js?v=416"></script>
+<script src="get.js?v=416"></script>
+<script src="points.js?v=416"></script>
+<script src="uc-points.js?v=416"></script>
+<script src="inspect-guide.js?v=416"></script>
+<script src="get-figs.js?v=416"></script>
+<script src="body-points.js?v=416"></script>
+<script src="body-map.js?v=416"></script>
+<script src="lube.js?v=416"></script>
+<script src="lube-overrides.js?v=416"></script>
+<script src="lube2027.js?v=416"></script>
+<script src="report-core.js?v=416"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -13500,7 +13500,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="415";
+const BUILD="416";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -14428,6 +14428,21 @@ function serverListedAsCurrent(idx, name, e){
   }
   return true;
 }
+/* THE ONE PLACE AN "UNREADABLE" LIST BECOMES A SENTENCE, so a round split
+   across several chunks — the ordinary shape past BATCH_MAX_FILES/BYTES —
+   can be summarised ONCE, over every chunk, rather than once per chunk with
+   only the first chunk's own sentence ever reaching the phone. See the note
+   on unreadableAll in putAll for why that mattered. */
+function unreadableSummary(list){
+  return list.map(u=>{ const r=u.err&&u.err.readers;
+    const why=r&&r.length ? r.map(s=>String(s).split(":")[0]).filter((s,i,a)=>a.indexOf(s)===i).join(", ") : (u.err&&u.err.name)||"";
+    return u.name+(why?" ("+why+")":""); }).join(", ");
+}
+function makeUnreadableErr(list){
+  const e=new Error(t("up_noread",{n:list.length, names:unreadableSummary(list)}));
+  try{ e.localRead=true; e.unreadable=list.slice(); }catch(_){}
+  return e;
+}
 async function putBatch(UP, files, rec, sent){
   const folder=expandFolder(UP.folder||"", rec);
   const built=[], unreadable=[];
@@ -14498,15 +14513,11 @@ async function putBatch(UP, files, rec, sent){
   /* Named with the readers' own verdicts (NotFoundError, NotReadableError…)
      and WITHOUT telling anybody to retake it: the phone of build 347 was
      told to retake three photographs it still held intact. The upload tries
-     again by itself, and the inventory can export what the upload cannot. */
-  const unreadableErr=()=>{
-    const names=unreadable.map(u=>{ const r=u.err&&u.err.readers;
-      const why=r&&r.length ? r.map(s=>String(s).split(":")[0]).filter((s,i,a)=>a.indexOf(s)===i).join(", ") : (u.err&&u.err.name)||"";
-      return u.name+(why?" ("+why+")":""); }).join(", ");
-    const e=new Error(t("up_noread",{n:unreadable.length, names}));
-    try{ e.localRead=true; }catch(_){}
-    return e;
-  };
+     again by itself, and the inventory can export what the upload cannot.
+     e.unreadable carries the raw list alongside the sentence — see
+     unreadableAll in putAll for why a THIS CHUNK's own sentence is not
+     always the whole story. */
+  const unreadableErr=()=>makeUnreadableErr(unreadable);
   /* AN EMPTY BATCH IS NOT THE SAME AS A FAILED ONE. A chunk where every file
      failed to read AND every one was already verified on the server (the
      serverHolds continue above) leaves both built and unreadable empty —
@@ -14876,6 +14887,11 @@ async function putAll(dest, files, rec, sent){
               if(serverListedAsCurrent(idx, f.name, attIndex(rec)[f.aid]||null)){ f.serverHeld=true; sentMark(sent,f.name); return; }
             }catch(e2){}
           }
+          /* One file, one job, on this branch — so the raw item this file's
+             own failure represents is exactly one entry, attached the same
+             way makeUnreadableErr does for a batch, so lane()'s aggregation
+             below treats every source of a localRead failure alike. */
+          try{ e.unreadable=[{name:f.name, err:e, f}]; }catch(_){}
         }
         throw e;
       }
@@ -14894,6 +14910,26 @@ async function putAll(dest, files, rec, sent){
      and on a queue of them nothing ever converged. Same distinction the
      three-strikes breaker in syncNow() already draws, one level down. */
   let next=0, failed=null, fatal=null;
+  /* EVERY CHUNK'S UNREADABLE FILES, NOT JUST THE FIRST CHUNK TO FINISH.
+     Read off four rounds on 2026-09-20 (D1ZMK6, build 410): TK109's own
+     sync log shows batch-unreadable firing for all eleven of its twelve
+     photographs — confirmed against the live folder, which holds only the
+     sidecar for every one of the four — while the message that actually
+     reached the phone and the dashboard's readiness card named three. The
+     lanes below run several chunks of one round CONCURRENTLY, and `failed`
+     was set from whichever chunk's own unreadableErr() finished FIRST
+     (`failed=failed||e` keeps only that one) — so on a phone where nearly
+     every photograph in a round is unreadable, most of them synced,
+     uploaded and vanished from the story before the toast was ever built.
+     The upload's own bookkeeping (`sent`) was never wrong — every file that
+     did not truly land stays out of it and is retried — only the SENTENCE
+     was: "3 could not be read, everything else is sent" when eleven of
+     twelve never sent at all. unreadableAll collects the raw list from
+     every chunk and every fallback path (oneByOne, the non-batch branch
+     below); the combined, honest count and name list is built from it once
+     every lane has finished, replacing whichever single chunk's error
+     would otherwise have stood in for the whole round. */
+  const unreadableAll=[];
   /* A BATCH THE LINK REFUSES WHOLE MAY STILL GO ONE PHOTOGRAPH AT A TIME.
 
      Read off a handset on build 347: fourteen sidecars landed in one
@@ -14930,14 +14966,17 @@ async function putAll(dest, files, rec, sent){
         }
       }catch(e){}
     }
-    if(unresolved.length) failed=failed||unresolved[0].err;
+    if(unresolved.length){ unreadableAll.push(...unresolved); failed=failed||unresolved[0].err; }
   };
   const lane=async()=>{ for(;;){
     if(fatal) return;
     const i=next++; if(i>=jobs.length) return;
     try{ await jobs[i](); }
     catch(e){
-      if(e && e.localRead){ failed=failed||e; continue; }
+      if(e && e.localRead){
+        unreadableAll.push(...(e.unreadable && e.unreadable.length ? e.unreadable : [{name:"?", err:e}]));
+        failed=failed||e; continue;
+      }
       const chunk=chunks && chunks[i];
       if(chunk && chunk.length>1){
         slog("batch-to-single", {n:chunk.length, why:String((e&&e.message)||e).slice(0,120)});
@@ -14957,7 +14996,11 @@ async function putAll(dest, files, rec, sent){
      whichever came first would let a dead photo — which is exempt from the
      three-strikes breaker precisely because it says nothing about the link
      — stand in for a link that has actually gone, and the queue would keep
-     walking the rest of the shift into a hole it had already found. */
+     walking the rest of the shift into a hole it had already found.
+
+     A dead photograph itself is rebuilt from EVERY chunk's contribution,
+     not the one `failed` happened to hold — see unreadableAll above. */
+  if(!fatal && unreadableAll.length) failed=makeUnreadableErr(unreadableAll);
   if(fatal||failed) throw fatal||failed;
 }
 /* fetch() has no timeout. On a signal that connects and then delivers nothing —
