@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=417">
+<link rel="manifest" href="manifest.webmanifest?v=418">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=417">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=417">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=417">
+<link rel="apple-touch-icon" href="icon-192.png?v=418">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=418">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=418">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2634,15 +2634,15 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=417"></script>
-<script src="upload-defaults.js?v=417"></script>
-<script src="hme.js?v=417"></script>
-<script src="mp-fc.js?v=417"></script>
-<script src="hme-cascade.js?v=417"></script>
-<script src="assets.js?v=417"></script>
-<script src="temp-limits.js?v=417"></script>
-<script src="normalize.js?v=417"></script>
-<script src="terms.js?v=417"></script>
+<script src="native.js?v=418"></script>
+<script src="upload-defaults.js?v=418"></script>
+<script src="hme.js?v=418"></script>
+<script src="mp-fc.js?v=418"></script>
+<script src="hme-cascade.js?v=418"></script>
+<script src="assets.js?v=418"></script>
+<script src="temp-limits.js?v=418"></script>
+<script src="normalize.js?v=418"></script>
+<script src="terms.js?v=418"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2661,25 +2661,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=417"></script>
-<script src="edits.js?v=417"></script>
-<script src="due.js?v=417"></script>
-<script src="wear.js?v=417"></script>
-<script src="wear-figs.js?v=417"></script>
-<script src="wear-map.js?v=417"></script>
-<script src="machine-photos.js?v=417"></script>
-<script src="machine-fig.js?v=417"></script>
-<script src="get.js?v=417"></script>
-<script src="points.js?v=417"></script>
-<script src="uc-points.js?v=417"></script>
-<script src="inspect-guide.js?v=417"></script>
-<script src="get-figs.js?v=417"></script>
-<script src="body-points.js?v=417"></script>
-<script src="body-map.js?v=417"></script>
-<script src="lube.js?v=417"></script>
-<script src="lube-overrides.js?v=417"></script>
-<script src="lube2027.js?v=417"></script>
-<script src="report-core.js?v=417"></script>
+<script src="grade.js?v=418"></script>
+<script src="edits.js?v=418"></script>
+<script src="due.js?v=418"></script>
+<script src="wear.js?v=418"></script>
+<script src="wear-figs.js?v=418"></script>
+<script src="wear-map.js?v=418"></script>
+<script src="machine-photos.js?v=418"></script>
+<script src="machine-fig.js?v=418"></script>
+<script src="get.js?v=418"></script>
+<script src="points.js?v=418"></script>
+<script src="uc-points.js?v=418"></script>
+<script src="inspect-guide.js?v=418"></script>
+<script src="get-figs.js?v=418"></script>
+<script src="body-points.js?v=418"></script>
+<script src="body-map.js?v=418"></script>
+<script src="lube.js?v=418"></script>
+<script src="lube-overrides.js?v=418"></script>
+<script src="lube2027.js?v=418"></script>
+<script src="report-core.js?v=418"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -4828,7 +4828,16 @@ function idb(){ return dbConn ||= new Promise((res,rej)=>{ const r=indexedDB.ope
 /* Anything that reads the store and keeps the answer has to know when the answer
    went stale. One counter, bumped by the only two writers. */
 let dbVer=0;
-async function dbPut(rec){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readwrite"); t.objectStore(STORE).put(rec); t.oncomplete=()=>{ dbVer++; res(); }; t.onerror=()=>rej(t.error||new Error("save failed — storage may be full")); t.onabort=()=>rej(t.error||new Error("save aborted — storage may be full")); }); }
+/* "storage may be full" was always a guess, not a diagnosis: it only fires
+   when t.error is null, and IDBTransaction.error is nullable by spec even
+   when the request that caused the abort carries a real DOMException — the
+   same gap build 384's dbnullerr fix closed for onerror/onabort having no
+   fallback at all. The request's own error event fires and bubbles to the
+   transaction BEFORE the transaction's own error event, so listening here
+   costs nothing and cannot change whether the write fails — it only keeps
+   the real reason (QuotaExceededError, or whatever it actually is) instead
+   of a guess, the next time this fires on a field phone. */
+async function dbPut(rec){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readwrite"); let reqErr=null; const rq=t.objectStore(STORE).put(rec); rq.onerror=()=>{ reqErr=rq.error||null; }; t.oncomplete=()=>{ dbVer++; res(); }; t.onerror=()=>rej(reqErr||t.error||new Error("save failed — storage may be full")); t.onabort=()=>rej(reqErr||t.error||new Error("save aborted — storage may be full")); }); }
 /* The round being typed lives in this store too, under a reserved id, so it
    gets IndexedDB's durability and can hold photographs. It is NOT an
    inspection: filtered out here, once, so that the queue, the sync, the
@@ -4853,7 +4862,7 @@ async function dbAll(){ const d=await idb(); return new Promise((res,rej)=>{ con
 /* The team rounds only — the other side of that same filter. */
 async function dbTeam(){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readonly"); const rq=t.objectStore(STORE).getAll(); rq.onsuccess=()=>res((rq.result||[]).filter(r=>r&&isTeamId(r.id))); rq.onerror=()=>rej(rq.error||new Error("could not read the shared rounds")); }); }
 async function dbGet(id){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readonly"); const rq=t.objectStore(STORE).get(id); rq.onsuccess=()=>res(rq.result||null); rq.onerror=()=>rej(rq.error||new Error("could not read this record")); }); }
-async function dbDel(id){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readwrite"); t.objectStore(STORE).delete(id); t.oncomplete=()=>{ dbVer++; res(); }; t.onerror=()=>rej(t.error||new Error("delete failed")); }); }
+async function dbDel(id){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readwrite"); let reqErr=null; const rq=t.objectStore(STORE).delete(id); rq.onerror=()=>{ reqErr=rq.error||null; }; t.oncomplete=()=>{ dbVer++; res(); }; t.onerror=()=>rej(reqErr||t.error||new Error("delete failed")); t.onabort=()=>rej(reqErr||t.error||new Error("delete aborted")); }); }
 
 /* ===================== class + type + component chips ===================== */
 function fillClassSel(){ $("classBtn").textContent = eqCat==="ALL"
@@ -8373,6 +8382,16 @@ $("saveBtn").onclick=async ()=>{
   if(persistState===null) askPersist();
   if(verifyBad.length){
     const names=[...new Set(verifyBad)].join(", ");
+    /* This branch is the one signal that could tell a pre-Save corruption
+       (something dead before verifySavedRec ever ran) apart from a post-Save
+       one (found fine here, dead by the time sync gets to it later) — and
+       until now it reached no trace and no log, only this on-screen dialog.
+       save-write-fail four lines above gets both; this did not, for no
+       stated reason. Without it, every field trace this investigation has
+       is blind to whether the round that later failed to sync had already
+       failed THIS check minutes earlier at the machine. */
+    slog("verify-fail",{u:rec.equip||"?", id:rec.id, n:verifyBad.length, names:names.slice(0,300)});
+    sendTrace("verify-fail");
     dlg([t("verify_fail_t"), t("verify_fail_b",{x:equip, n:verifyBad.length, names})]);
   }else{
     const m=t("m_saved"); dlg([m[0], m[1].replace("{x}",equip)]);
@@ -12458,7 +12477,15 @@ function extOf(blob){ const t=(blob.type||"").toLowerCase();
    dialog says how many were saved and how many still need recovering
    (tests/recovery.cjs). Nothing is renamed and nothing stands in for a
    photograph that is not there. */
-async function readBytes(blob){ return new Uint8Array(await blob.arrayBuffer()); }
+/* Was a bare .arrayBuffer() — the one weaker read in this file, sitting
+   inside the ZIP export the site actually leans on for recovery. Every other
+   read path here (capture, save, upload) falls back through FileReader
+   before calling a photo unreadable; this one gave up on the first refusal
+   and dropped the photo from the ZIP where the ordinary path might still
+   have recovered it. Delegating to readBlobBytes gives it the same three
+   chances, and callers keep their existing try/catch unreadable-handling
+   unchanged — only what counts as "tried everything" changed. */
+async function readBytes(blob){ return await readBlobBytes(blob); }
 function unreadableNote(rec,k,blob,name,err){
   const aid=attIdOf(blob); let e=null;
   try{ const p=(rec.positions||{})[k]; e=(aid && attMap(p) && attMap(p)[aid]) || null; }catch(_){ e=null; }
@@ -12490,7 +12517,38 @@ async function buildPackage(){
      older build has photographs with no id; giving them one here means they go
      up identified rather than anonymous, and the ordinal in their file name
      stops depending on where they happen to sit in an array. */
-  for(const rec of all){ try{ if(await attSync(rec)) await dbPut(rec); }catch(e){} }
+  /* `rec` is `dbAll()`'s own snapshot, taken once at the top of this whole
+     function — which can run for real time over every record and every
+     photo that needs hashing. syncNow()'s automatic retry (armRetry, 20s to
+     5min, entirely independent of what's on screen) writes the SAME records
+     in the background the whole time this runs, and unlike syncNow's own
+     write-backs (which re-read and check rev before writing), this dbPut had
+     no revision check at all — Share/Export could silently replace whatever
+     upTo/sent/receipt fields a concurrent sync attempt had just written with
+     this stale snapshot's pre-sync values, reopening the exact "stuck
+     forever" failure mode the read-after-write reconciliation exists to
+     close. Re-read and check rev, same as syncNow already does, and merge in
+     only what attSync actually touched (photos/video/att, for the case a
+     photograph from an older build is being given an id here for the first
+     time) rather than putting the whole stale object back. */
+  for(const rec of all){
+    try{
+      const rev0=rec.rev||0;
+      if(await attSync(rec)){
+        const fresh=await dbGet(rec.id);
+        if(fresh && (fresh.rev||0)===rev0){
+          for(const [k,p] of positionsOf(rec)){
+            if(fresh.positions && fresh.positions[k]){
+              fresh.positions[k].photos=p.photos;
+              fresh.positions[k].video=p.video;
+              fresh.positions[k].att=p.att;
+            }
+          }
+          await dbPut(fresh);
+        }
+      }
+    }catch(e){}
+  }
   for(const rec of all){ const suffix=(TYPE_META[rec.type]&&TYPE_META[rec.type].suffix)||rec.type||"MP";
     if(rec.smu) (notes[`${rec.equip}|${rec.date}`] ||= {}).smu=rec.smu;
     const isComp = usesRegister(rec.type) && rec.equip && !!componentsForUnit(rec.equip);
@@ -13500,7 +13558,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="417";
+const BUILD="418";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -14029,7 +14087,17 @@ async function sha256Hex(buf){
   }catch(e){ return ""; }
 }
 async function sha256Of(blob){
-  try{ if(!(blob&&blob.arrayBuffer)) return ""; return await sha256Hex(await blob.arrayBuffer()); }
+  /* Every other read in this file falls back through FileReader before
+     giving up (readBlobBytes) — this one, alone, tried only .arrayBuffer()
+     and turned any failure into "", permanently, because attNote() only
+     fills e.sha256 "if not already set" (15291-ish). A photo that merely
+     failed THIS one reader — a real, documented intermediate failure mode,
+     not "genuinely gone" — got a manifest entry that can never be completed,
+     so attSync() reports changed=true for that record forever, on every
+     future call including every Share/Export press. Using the same
+     three-reader fallback everywhere else uses closes that permanently-dirty
+     state the same way a real read would. */
+  try{ if(!blob) return ""; return await sha256Hex(await readBlobBytes(blob)); }
   catch(e){ return ""; }
 }
 /* WHAT THE FILE ACTUALLY IS, not what the picker said it is.
@@ -15438,6 +15506,15 @@ async function filesForRecord(rec){
   const suffix=(TYPE_META[rec.type]&&TYPE_META[rec.type].suffix)||rec.type||"MP";
   const isComp = usesRegister(rec.type) && rec.equip && !!componentsForUnit(rec.equip);
   const out=[];
+  /* THE NAME IS DETERMINISTIC, SO RECOMPUTING IT IS NOT THE SAME AS CHANGING
+     IT. This function runs on every sync attempt — every 20s-to-5min retry,
+     for as long as any destination is outstanding — and until now its
+     caller's write-back had no way to tell "the name is still what it was"
+     from "the name just changed", so it re-persisted the record's entire
+     Blob/File payload on every call regardless. `namesChanged`, stamped onto
+     the returned array, is what lets the caller skip that write when nothing
+     it actually wrote here is new — see the call site in syncNow(). */
+  let namesChanged=false;
   for(const [k,p] of positionsOf(rec)){
     const ph=photosOf(p);
     for(let i=0;i<ph.length;i++){ const ext=extOf(ph[i]); const base=(k===GEN_KEY)?genFileName(rec.equip,attCat(p,ph[i]),rec.date,ext,suffix):fileName(rec.equip,k,rec.date,ext,suffix,isComp);
@@ -15454,16 +15531,17 @@ async function filesForRecord(rec){
          for itself — from the point key, which is exactly what a keyless point
          does not have. Recorded here, at the one place that decides it. */
       const e=aid && attMap(p) && attMap(p)[aid];
-      if(e) e.storedName=nm;
+      if(e){ if(e.storedName!==nm) namesChanged=true; e.storedName=nm; }
       out.push({name:nm, blob:ph[i], aid}); }
     if(isBlob(p.video)){ const vext=(p.video.type||"").includes("quicktime")?"mov":"mp4";
       const vnm=fileName(rec.equip,k,rec.date,vext,suffix,isComp);
       const vaid=attIdOf(p.video);
       const ve=vaid && attMap(p) && attMap(p)[vaid];
-      if(ve) ve.storedName=vnm;
+      if(ve){ if(ve.storedName!==vnm) namesChanged=true; ve.storedName=vnm; }
       out.push({name:vnm, blob:p.video, aid:vaid}); }
   }
   if(isBlob(rec.sign)) out.push({name:`${rec.equip}_${ddmmyyyy(rec.date)}_${suffix}_SIGN.png`, blob:rec.sign});
+  out.namesChanged=namesChanged;
   return out;
 }
 /* ===================== keeping what is captured =====================
@@ -15775,7 +15853,8 @@ async function syncNow(manual){
              Same order on the wire: the sidecar still goes first. It is
              merely written after there is something true to write. */
           const files=[];
-          for(const f of await filesForRecord(rec)){
+          const ffr=await filesForRecord(rec);
+          for(const f of ffr){
             /* THE BYTES THAT ACTUALLY LEAVE, HASHED AS THEY LEAVE.
 
                attNote() hashes the photograph this phone HOLDS. maybeShrink()
@@ -15842,8 +15921,18 @@ async function syncNow(manual){
              said anywhere, the correction simply gone once "Saved" had
              already shown. Same check, same rule, here too. */
           try{
-            const fresh0=await dbGet(rec.id);
-            if(fresh0 && (fresh0.rev||0)===rev) await dbPut(rec);
+            /* Skip the write when filesForRecord() learned nothing new. Names
+               are deterministic (equip+date+position+ordinal), so on every
+               retry after the first this recomputes to the SAME storedName —
+               yet the put re-serializes the record's entire photo payload
+               regardless. Gated now on namesChanged: real news still writes
+               immediately; a round retrying against a dead link, or retrying
+               because the destination itself keeps failing, no longer
+               re-persists every photograph's bytes to learn nothing. */
+            if(ffr.namesChanged){
+              const fresh0=await dbGet(rec.id);
+              if(fresh0 && (fresh0.rev||0)===rev) await dbPut(rec);
+            }
           }catch(e){}
         }catch(e){ lastErr="Could not read "+rec.equip+": "+(e.message||e); continue; }
       }
