@@ -279,8 +279,15 @@ const note = (n, d) => console.log('  ....  ' + n + (d !== undefined ? '   ' + d
   ok('  every frame the same size, so none of them reads as the important one',
      grid.n > 3 && grid.sameW === 1 && grid.sameH === 1,
      grid.n + ' frames, ' + grid.sameW + ' width(s), ' + grid.sameH + ' height(s)');
-  ok('  and the last row is full, not one picture and a hole',
-     grid.n > 3 && grid.cols > 1 && grid.orphans === 0,
+  /* Four across, capped, is the rule now (report-core.js's gridCols, fixed
+     for TK109's Rear Differential plug — see galorphan.cjs): six photographs
+     is a full row of four and a SHORT second row of two, on purpose, rather
+     than the old "least waste" rule hunting for a column count (three) that
+     happens to divide six evenly. A short last row is not "one picture and
+     a hole" — it is a remainder occupying fewer of the SAME four columns,
+     still at the identical standard tile size as the row above it. */
+  ok('  laid out four across, a short last row occupying fewer of the same columns',
+     grid.n > 3 && grid.cols === Math.min(grid.n, 4),
      grid.n + ' across ' + grid.cols + ' columns');
 
   /* ---- and it gives the memory back -------------------------------------
