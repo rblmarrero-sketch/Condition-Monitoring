@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=418">
+<link rel="manifest" href="manifest.webmanifest?v=419">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=418">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=418">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=418">
+<link rel="apple-touch-icon" href="icon-192.png?v=419">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=419">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=419">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2634,15 +2634,15 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=418"></script>
-<script src="upload-defaults.js?v=418"></script>
-<script src="hme.js?v=418"></script>
-<script src="mp-fc.js?v=418"></script>
-<script src="hme-cascade.js?v=418"></script>
-<script src="assets.js?v=418"></script>
-<script src="temp-limits.js?v=418"></script>
-<script src="normalize.js?v=418"></script>
-<script src="terms.js?v=418"></script>
+<script src="native.js?v=419"></script>
+<script src="upload-defaults.js?v=419"></script>
+<script src="hme.js?v=419"></script>
+<script src="mp-fc.js?v=419"></script>
+<script src="hme-cascade.js?v=419"></script>
+<script src="assets.js?v=419"></script>
+<script src="temp-limits.js?v=419"></script>
+<script src="normalize.js?v=419"></script>
+<script src="terms.js?v=419"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2661,25 +2661,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=418"></script>
-<script src="edits.js?v=418"></script>
-<script src="due.js?v=418"></script>
-<script src="wear.js?v=418"></script>
-<script src="wear-figs.js?v=418"></script>
-<script src="wear-map.js?v=418"></script>
-<script src="machine-photos.js?v=418"></script>
-<script src="machine-fig.js?v=418"></script>
-<script src="get.js?v=418"></script>
-<script src="points.js?v=418"></script>
-<script src="uc-points.js?v=418"></script>
-<script src="inspect-guide.js?v=418"></script>
-<script src="get-figs.js?v=418"></script>
-<script src="body-points.js?v=418"></script>
-<script src="body-map.js?v=418"></script>
-<script src="lube.js?v=418"></script>
-<script src="lube-overrides.js?v=418"></script>
-<script src="lube2027.js?v=418"></script>
-<script src="report-core.js?v=418"></script>
+<script src="grade.js?v=419"></script>
+<script src="edits.js?v=419"></script>
+<script src="due.js?v=419"></script>
+<script src="wear.js?v=419"></script>
+<script src="wear-figs.js?v=419"></script>
+<script src="wear-map.js?v=419"></script>
+<script src="machine-photos.js?v=419"></script>
+<script src="machine-fig.js?v=419"></script>
+<script src="get.js?v=419"></script>
+<script src="points.js?v=419"></script>
+<script src="uc-points.js?v=419"></script>
+<script src="inspect-guide.js?v=419"></script>
+<script src="get-figs.js?v=419"></script>
+<script src="body-points.js?v=419"></script>
+<script src="body-map.js?v=419"></script>
+<script src="lube.js?v=419"></script>
+<script src="lube-overrides.js?v=419"></script>
+<script src="lube2027.js?v=419"></script>
+<script src="report-core.js?v=419"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -4836,8 +4836,22 @@ let dbVer=0;
    transaction BEFORE the transaction's own error event, so listening here
    costs nothing and cannot change whether the write fails — it only keeps
    the real reason (QuotaExceededError, or whatever it actually is) instead
-   of a guess, the next time this fires on a field phone. */
-async function dbPut(rec){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readwrite"); let reqErr=null; const rq=t.objectStore(STORE).put(rec); rq.onerror=()=>{ reqErr=rq.error||null; }; t.oncomplete=()=>{ dbVer++; res(); }; t.onerror=()=>rej(reqErr||t.error||new Error("save failed — storage may be full")); t.onabort=()=>rej(reqErr||t.error||new Error("save aborted — storage may be full")); }); }
+   of a guess, the next time this fires on a field phone.
+
+   Build 418 shipped exactly that and D1ZMK6's own next field trace (build
+   418, 2026-09-20T06:33) answered back: still the identical fallback text,
+   on every one of nineteen writeback-fail lines in one run. That is itself
+   a finding, not a non-result — it means reqErr came back null too, so
+   whatever is failing is not surfacing as a request-level error at all; it
+   is the TRANSACTION itself that never receives a real reason, which is a
+   narrower, more specific shape than "t.error can be null" and worth being
+   able to tell apart from a request failure the next time this happens.
+   `.phase` records which event actually fired (abort vs error) and whether
+   a request-level error was ever seen — three bits of information this
+   project had literally none of an hour ago. */
+async function dbPut(rec){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readwrite"); let reqErr=null; const rq=t.objectStore(STORE).put(rec); rq.onerror=()=>{ reqErr=rq.error||null; };
+  const fail=(phase,fallbackMsg)=>{ const e=reqErr||t.error||new Error(fallbackMsg); try{ e.phase=phase; e.hadReqErr=!!reqErr; }catch(_){} rej(e); };
+  t.oncomplete=()=>{ dbVer++; res(); }; t.onerror=()=>fail("error","save failed — storage may be full"); t.onabort=()=>fail("abort","save aborted — storage may be full"); }); }
 /* The round being typed lives in this store too, under a reserved id, so it
    gets IndexedDB's durability and can hold photographs. It is NOT an
    inspection: filtered out here, once, so that the queue, the sync, the
@@ -8352,7 +8366,8 @@ $("saveBtn").onclick=async ()=>{
   catch(e){
     const why=String((e&&e.message)||e||"");
     const pair=t("m_save_failed"); dlg([pair[0], pair[1].split("{why}").join(why)]);
-    slog("save-write-fail",{u:rec.equip||"?", id:rec.id, why:why.slice(0,200)});
+    slog("save-write-fail",{u:rec.equip||"?", id:rec.id, why:why.slice(0,200),
+      phase:(e&&e.phase)||"", hadReqErr:!!(e&&e.hadReqErr)});
     /* This is the one failure a technician is standing at the machine for
        RIGHT NOW — worth its own trace immediately rather than waiting for
        the next sync run to notice CM_ERRS grew. Fire-and-forget, same as
@@ -13558,7 +13573,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="418";
+const BUILD="419";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -16038,7 +16053,12 @@ async function syncNow(manual){
           sizes:payload.reduce((m,f)=>{ if(f.wireSize) m[f.name]=f.wireSize; return m; },{})});
       }
       }catch(e){ errs.push(t("up_bookfail",{u:rec.equip||"?", why:String((e&&e.message)||e)}));
-        slog("writeback-fail", {u:rec.equip, rev, err:String((e&&e.message)||e).slice(0,200)});
+        /* phase/hadReqErr come from dbPut's own fail() tag (build 418) — the
+           one thing missing from every writeback-fail line before now was
+           whether this was the transaction's error event or its abort event,
+           and whether a request-level DOMException was ever seen at all. */
+        slog("writeback-fail", {u:rec.equip, rev, err:String((e&&e.message)||e).slice(0,200),
+          phase:(e&&e.phase)||"", hadReqErr:!!(e&&e.hadReqErr)});
         /* THE ROUND WENT UP AND THE PHONE COULD NOT WRITE THAT DOWN.
 
            Read off a handset on 2026-09-13: nineteen rounds "waiting to

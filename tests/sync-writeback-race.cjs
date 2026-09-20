@@ -208,6 +208,37 @@ const srv = http.createServer((req, res) => {
   });
   ok('a photo readable only via FileReader lands in the ZIP, not in the recovery/skipped list', r5.photos >= 1 && r5.skippedCount === 0, JSON.stringify(r5));
 
+  console.log('\n6. dbPut TAGS WHICH EVENT ACTUALLY FIRED, AND WHETHER A REQUEST-LEVEL ERROR WAS SEEN');
+  /* Shipped after D1ZMK6's own build-418 field trace showed the request-level
+     capture (added earlier this build) still came back null on every one of
+     nineteen writeback-fail lines in one run — meaning whatever fails there
+     isn't surfacing as a request error at all. This tags which transaction
+     event fired (abort vs error) and whether the request ever reported one,
+     so the NEXT field trace can tell those apart instead of everything
+     looking like the identical generic guess. */
+  const r6 = await p.evaluate(async () => {
+    // Force a genuine transaction failure (abort() called mid-flight, the
+    // one thing a page script CAN reliably trigger) and confirm the
+    // rejection carries which event fired and whether a request-level
+    // error was seen — whatever those actually are for this engine, rather
+    // than an assumption about spec event ordering this project cannot
+    // verify without a real failure to test against.
+    const realPut = IDBObjectStore.prototype.put;
+    IDBObjectStore.prototype.put = function (v) {
+      const rq = realPut.call(this, v);
+      this.transaction.abort();
+      return rq;
+    };
+    let threw = null;
+    try { await dbPut({ id: 'ABORT1', x: 1 }); }
+    catch (e) { threw = { phase: e && e.phase, hadReqErr: !!(e && e.hadReqErr) }; }
+    IDBObjectStore.prototype.put = realPut;
+    return threw;
+  });
+  ok('a forced transaction failure is tagged with a real phase, not left blank',
+     r6 && (r6.phase === 'abort' || r6.phase === 'error'), JSON.stringify(r6));
+  ok('  and hadReqErr reports whether the request itself carried the error', r6 && r6.hadReqErr === true, JSON.stringify(r6));
+
   ok('no page errors throughout', errs.length === 0, errs.slice(0, 3).join(' | '));
   await b.close(); srv.close();
   console.log(fails.length ? `\n${fails.length} FAILED: ` + fails.join(' | ') : '\nall passed');
