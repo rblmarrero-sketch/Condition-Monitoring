@@ -232,13 +232,15 @@ const SEED = () => {
        cells[k] && /display:grid/.test(cells[k]), (cells[k] || '').slice(0, 70));
   });
   /* galImg IS the grid item — .cel .phg.gallery has no figure wrapper — so
-     capping its own width to the track (max-width:100%) is enough; a HEIGHT
-     in pixels rather than an aspect ratio, because html2canvas draws the PDF
-     and does not honour aspect-ratio, so a cell that is perfect in the DOM
-     came out ragged in the FILE — the one place it matters. */
+     capping its own width to the track (max-width:100%) is enough. It fits
+     inside a box (max-height, both dimensions auto) rather than a fixed
+     height, because a four-across row (.g4, see report-core.js) needs a
+     SHORTER cap than a three-or-fewer row — html2canvas draws the PDF and
+     does not honour aspect-ratio, so a cell that is perfect in the DOM came
+     out ragged in the FILE — the one place it matters. */
   const c = cells.galImg || '';
-  ok('  galImg is one fixed height, at the photograph\'s own width',
-     /height:182px/.test(c) && /width:auto/.test(c) && /max-width:100%/.test(c),
+  ok('  galImg fits inside a box, at the photograph\'s own width',
+     /max-height:182px/.test(c) && /width:auto/.test(c) && /height:auto/.test(c) && /max-width:100%/.test(c),
      c.slice(0, 90));
   /* shots/genrow wrap the img in a figure that IS the grid item, and a wide
      landscape frame at a fixed height has no reason to stay inside its own

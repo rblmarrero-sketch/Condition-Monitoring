@@ -144,14 +144,19 @@ const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
      same filter from six angles, it printed one big picture and a ragged
      three-then-two strip with an empty cell in it. */
   ok('every frame is the same size, in rows',
-    (html.match(/class="phg"/g) || []).length === 3 && !/class="phx"/.test(html),
-    (html.match(/class="phg"/g) || []).length + ' grids, '
+    (html.match(/class="phg( g4)?"/g) || []).length === 3 && !/class="phx"/.test(html),
+    (html.match(/class="phg( g4)?"/g) || []).length + ' grids, '
       + (html.match(/class="phx"/g) || []).length + ' strips');
-  /* And the rows are chosen for the least waste, so a set never ends in a gap
-     where a photograph should be. */
+  /* Four across, capped — never a wider three-column row chosen because it
+     divides a remainder more evenly (report-core.js's gridCols, fixed for
+     TK109's Rear Differential plug — see galorphan.cjs). CAP is 10 here, so
+     each position is four full rows of four... no: 10 = 4+4+2, and the
+     LAST row is deliberately allowed to be short — the whole point of the
+     fix is that a remainder occupies fewer of the SAME four columns rather
+     than the grid hunting for a column count with no remainder at all. */
   const cols = [...html.matchAll(/grid-template-columns:repeat\((\d+),1fr\)/g)].map(m => +m[1]);
-  ok('laid out with no empty cell left over',
-    cols.length > 0 && cols.every(c => CAP % c === 0 || CAP % c === 0),
+  ok('every position renders at four columns once past four photographs, not a wider row chosen to avoid a remainder',
+    cols.length > 0 && cols.every(c => c === Math.min(CAP, 4)),
     CAP + ' photos into ' + [...new Set(cols)].join('/') + ' columns');
   /* The "+6" badge was the failure mode, not the fallback: it turned up on
      exactly the positions with the most photographs, which are the positions

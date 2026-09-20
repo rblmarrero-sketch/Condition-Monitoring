@@ -1,39 +1,35 @@
-/* A PHOTOGRAPH LEFT ON A ROW OF ITS OWN PRINTS AT A STANDARD SIZE, NOT
-   STRANDED IN A THIRD OF A TRACK, NEXT TO AN EMPTY ONE, OR BLOWN UP PAST
-   ITS SIBLINGS.
+/* FOUR PHOTOGRAPHS PER LINE, ALWAYS, AND A LEFTOVER OF ONE TO THREE PRINTS AT
+   THE SAME SIZE AS THE ROW ABOVE IT — NOT SPANNED, NOT STRANDED BESIDE EMPTY
+   SPACE.
 
-   Read off EX021's own report: a position with four photographs printed
-   three across, evenly sized — the fix build 371 shipped for this same
-   equipment, when a portrait frame beside two landscape ones came out an
-   inconsistent size — and then a fourth alone on its own row, small and
-   pinned to the left third of the card with two empty tracks beside it
-   nothing was using. auto-fill cannot single that lone photograph out; it
-   only knows how many 200px tracks the row's OWN width admits, not how
-   many photographs are actually left to place in it.
+   Read off TK109's Equipment Trend Report, Rear Differential (RRD), four
+   photographs: three printed across a row and the fourth dropped to a row of
+   its own, small, with visible empty space beside it "although it has space
+   still." The previous fix for this shape (build 421, see this file's own
+   prior history) spanned a genuine trailing ORPHAN of one or two across the
+   row and centred it — correct for an orphan, but this was never an orphan:
+   four photographs is a complete row under the "four per line" rule the site
+   asked for, and the old gridCols() picked 3 columns for a remainder of one
+   here because a "least-waste" algorithm chose whichever of 4/3/2 divided the
+   count with the smallest remainder — so 4, 7 and 8 got four columns while 5
+   and 6 got three, the SAME photograph count rendering at inconsistent sizes
+   depending on how many total photographs happened to be on the position.
 
-   The gallery grid's column count is computed in JS now (gridCols-style:
-   full rows of three), so a photograph that is genuinely alone in the
-   final row — remainder of exactly one — is marked `last1`, spans the
-   row and is centred — first shipped at the `.ph`-style single-photograph
-   size (up to 330px), which was itself a second defect one row later:
-   read off EX021's own report a second time, HS.MP's four hydraulic-pump
-   photographs were three at the sheet's standard 182px tile height and a
-   fourth visibly larger than its own siblings, on a page whose stated
-   design is "I want it to be standard." `.last1` now inherits the same
-   182px standard-tile height every other photograph on the sheet uses —
-   it only spans and centres, the same way `.last2` (below) already did
-   for a remainder of two.
+   gridCols(n) is now n<=4 ? n : 4 — a flat rule with no waste-minimisation,
+   used by both the gallery board and the non-gallery (mpEvidence/gradedBody)
+   grid. Four across is never split into 3+1 again; five through eight always
+   render at the SAME four-column tile size, whatever the remainder. A
+   genuine remainder (n%4 !== 0, n>4) sits in the fixed four-column grid
+   occupying fewer of the same columns — ordinary CSS grid behaviour that
+   needs no spanning class at all, so last1/last2 are retired.
 
-   A REMAINDER OF TWO WAS LEFT AS A CONTROL HERE, AND IT IS THE SAME GAP ONE
-   COUNT OVER. Read off TK160's own report: nine attachments received, one a
-   video the PDF cannot show (stills only), leaving eight photographs — two
-   full rows of three and a third row of two, with the row's own third
-   column simply empty next to them: "gap between photos still big... i want
-   it to be standard." The trailing two are wrapped in `.last2` now — one
-   item in the outer three-column row, itself a two-column grid — so both
-   print at the SAME standard tile size the rest of the sheet uses, split
-   evenly across the row instead of one sitting in a narrower third beside a
-   blank one. Every full row, and a genuine single orphan, are untouched.
+   The four-column tile is narrower than the three-column standard (746px
+   available width, 8px gaps: (746-24)/4 ~ 180.5px vs (746-16)/3 ~ 243.3px),
+   so a 4:3 landscape photograph in it is shorter too — .g4 carries an
+   adaptive max-height (135px, the same 3/4 derivation the 182px/three-column
+   standard already uses) so a wide photograph still fills its own, narrower
+   column edge to edge instead of leaving a gap under the 182px cap sized for
+   three columns.
 
    Run: node tests/galorphan.cjs   (needs tests/mock.cjs on 8099) */
 const { chromium } = require(require('./pw.cjs'));
@@ -57,10 +53,11 @@ const SEED = () => {
     items: [{ key: 'HS.MP', label: 'Hydraulic Pumps', grade: 2, defect: 'None noted',
       action: 'Monitor / re-inspect next PM', photos: Array.from({ length: count }, () => px(400, 300)) }],
   });
-  /* EX021's own shape (four) plus its neighbours: an orphan of exactly one
-     shows up again at seven; three, six and one are full-row (or single)
-     controls with no orphan at all; five and eight (TK160's own count) are
-     both a remainder of two. */
+  /* TK109's RRD shape (four) plus its neighbours: 1, 3 are full rows under
+     the OLD three-column rule and stay full rows under the new four-column
+     one too; 4 is TK109's own case; 5-8 must all render at the SAME
+     four-column tile size as 4, never reverting to a wider three-column
+     tile for a "less wasteful" remainder. */
   CMDash.importRecords([mk('EX021', 4), mk('EX022', 7), mk('EX023', 3), mk('EX024', 5),
     mk('EX025', 6), mk('EX026', 1), mk('EX027', 8)]);
   const ov = document.getElementById('dataOv'); if (ov) ov.classList.add('hidden');
@@ -75,7 +72,7 @@ const SEED = () => {
   await p.waitForTimeout(1200);
   await p.evaluate(SEED); await p.waitForTimeout(300);
 
-  const measure = async (equip) => p.evaluate((eq) => {
+  const measure = async (equip) => p.evaluate(async (eq) => {
     const secs = CMReport.sectionsFor('one', eq + '|2026-09-14|INSP', { lang: 'en', photos: true });
     const st = document.getElementById('galorphancss') || (() => { const s = document.createElement('style'); s.id = 'galorphancss'; s.textContent = CMR.CSS; document.head.appendChild(s); return s; })();
     const old = document.getElementById('rptRoot'); if (old) old.remove();
@@ -83,58 +80,52 @@ const SEED = () => {
     d.style.cssText = 'position:fixed;left:-99999px;top:0;width:760px;background:#fff;';
     d.innerHTML = secs.map(s => '<div class="secwrap">' + s.html + '</div>').join('');
     document.body.appendChild(d);
+    const board = d.querySelector('.phg.gallery');
     const imgs = [...d.querySelectorAll('.phg.gallery img')];
-    const out = imgs.map(im => ({
-      last1: im.classList.contains('last1'),
-      last2: !!im.closest('.last2'),
-      h: Math.round(im.getBoundingClientRect().height),
-    }));
+    await Promise.all(imgs.map(im => im.complete ? null : new Promise(res => { im.onload = im.onerror = res; })));
+    await new Promise(res => requestAnimationFrame(() => requestAnimationFrame(res)));
+    const out = {
+      boardClass: board.className,
+      gridTemplate: getComputedStyle(board).gridTemplateColumns.split(' ').length,
+      last1: imgs.some(im => im.classList.contains('last1')),
+      last2: imgs.some(im => im.closest('.last2')),
+      boxes: imgs.map(im => { const r = im.getBoundingClientRect(); return { l: Math.round(r.left), w: Math.round(r.width), h: Math.round(r.height) }; }),
+    };
     d.remove();
     return out;
   }, equip);
 
-  console.log('EX021 (four photographs): all four at the same standard size, the fourth alone on its own row');
-  const r4 = await measure('EX021');
-  ok('four photographs found', r4.length === 4, JSON.stringify(r4));
-  ok('the first three carry no last1 marker', r4.slice(0, 3).every(x => !x.last1), JSON.stringify(r4.slice(0, 3)));
-  ok('  and sit at the ordinary gallery height', r4.slice(0, 3).every(x => x.h === 182), JSON.stringify(r4.slice(0, 3)));
-  ok('the fourth carries last1', r4[3].last1, JSON.stringify(r4[3]));
-  ok('  but renders at the SAME standard height as the row above it — not enlarged', r4[3].h === 182, r4[3].h + 'px');
-
-  console.log('\n   (EX022, seven photographs: the same shape one row later)');
-  const r7 = await measure('EX022');
-  ok('seven photographs found', r7.length === 7, JSON.stringify(r7));
-  ok('only the seventh carries last1', r7.filter(x => x.last1).length === 1 && r7[6].last1, JSON.stringify(r7.map(x => x.last1)));
-  ok('  and all seven, orphan included, sit at the same standard height', r7.every(x => x.h === 182), JSON.stringify(r7));
-
-  console.log('\n   (control: a full row of three is untouched)');
+  console.log('EX023 (three photographs — the old three-column standard, untouched)');
   const r3 = await measure('EX023');
-  ok('three photographs, none marked', r3.length === 3 && r3.every(x => !x.last1 && !x.last2), JSON.stringify(r3));
+  ok('three photographs, no g4 class, three columns', r3.boxes.length === 3 && !/\bg4\b/.test(r3.boardClass) && r3.gridTemplate === 3, JSON.stringify(r3));
+  ok('  at the standard 182px height', r3.boxes.every(x => x.h === 182), JSON.stringify(r3.boxes));
 
-  console.log('\n   (five photographs — a row of three, and a row of two sharing last2)');
-  const r5 = await measure('EX024');
-  ok('five photographs found, none marked last1 — a remainder of two is not a remainder of one',
-     r5.length === 5 && r5.every(x => !x.last1), JSON.stringify(r5));
-  ok('the first three sit outside last2, at the ordinary size', r5.slice(0, 3).every(x => !x.last2 && x.h === 182), JSON.stringify(r5.slice(0, 3)));
-  ok('THE FIX: the trailing two share last2, filling the row between them',
-     r5.slice(3).every(x => x.last2), JSON.stringify(r5.slice(3)));
-  ok('  still at the same standard tile height as every other photograph', r5.slice(3).every(x => x.h === 182), JSON.stringify(r5.slice(3)));
-
-  console.log('\n   (TK160\'s own shape: eight photographs — two full rows and a trailing two)');
-  const r8 = await measure('EX027');
-  ok('eight photographs found, none marked last1', r8.length === 8 && r8.every(x => !x.last1), JSON.stringify(r8));
-  ok('the first six sit outside last2', r8.slice(0, 6).every(x => !x.last2), JSON.stringify(r8.slice(0, 6)));
-  ok('THE FIX: the trailing two share last2 instead of leaving the row\'s third column empty',
-     r8.slice(6).every(x => x.last2), JSON.stringify(r8.slice(6)));
-  ok('  both at the standard tile height, not stretched or shrunk', r8.slice(6).every(x => x.h === 182), JSON.stringify(r8.slice(6)));
-
-  console.log('\n   (control: two full rows of three)');
-  const r6 = await measure('EX025');
-  ok('six photographs, none marked', r6.length === 6 && r6.every(x => !x.last1 && !x.last2), JSON.stringify(r6));
-
-  console.log('\n   (control: a position with only one photograph is unaffected)');
+  console.log('\nEX026 (one photograph — untouched)');
   const r1 = await measure('EX026');
-  ok('one photograph, not marked — the existing single-photo rule is untouched', r1.length === 1 && !r1[0].last1 && !r1[0].last2, JSON.stringify(r1));
+  ok('one photograph, no g4 class', r1.boxes.length === 1 && !/\bg4\b/.test(r1.boardClass), JSON.stringify(r1));
+
+  console.log('\nEX021 (TK109\'s own shape — four photographs)');
+  const r4 = await measure('EX021');
+  ok('four photographs found, carries g4, four columns', r4.boxes.length === 4 && /\bg4\b/.test(r4.boardClass) && r4.gridTemplate === 4, JSON.stringify(r4));
+  ok('no photograph spans (last1/last2 retired)', !r4.last1 && !r4.last2, JSON.stringify(r4));
+  ok('THE FIX: all four sit in ONE row, same size, edge to edge — none dropped to a row of its own with space beside it',
+     new Set(r4.boxes.map(b => b.l)).size === 4 && r4.boxes.every(b => b.h === 135), JSON.stringify(r4.boxes));
+
+  console.log('\nEX024 (five) and EX025 (six): must render at the SAME tile size as four, not a wider three-column tile');
+  const r5 = await measure('EX024');
+  const r6 = await measure('EX025');
+  ok('five photographs, g4, four columns — a row of four and a row of one', r5.boxes.length === 5 && /\bg4\b/.test(r5.boardClass) && r5.gridTemplate === 4, JSON.stringify(r5));
+  ok('six photographs, g4, four columns — a row of four and a row of two', r6.boxes.length === 6 && /\bg4\b/.test(r6.boardClass) && r6.gridTemplate === 4, JSON.stringify(r6));
+  ok('THE FIX: five and six photographs render at the identical tile size as four (the old "least-waste" rule gave them a wider three-column tile instead)',
+     r5.boxes.every(b => b.w === r4.boxes[0].w && b.h === 135) && r6.boxes.every(b => b.w === r4.boxes[0].w && b.h === 135),
+     JSON.stringify({ four: r4.boxes[0], five: r5.boxes[0], six: r6.boxes[0] }));
+  ok('  no spanning markers on the five/six-photograph remainder', !r5.last1 && !r5.last2 && !r6.last1 && !r6.last2);
+
+  console.log('\nEX022 (seven) and EX027 (eight): the same shape one and two rows later');
+  const r7 = await measure('EX022');
+  const r8 = await measure('EX027');
+  ok('seven photographs, g4, four columns, same tile size', r7.boxes.length === 7 && /\bg4\b/.test(r7.boardClass) && r7.boxes.every(b => b.w === r4.boxes[0].w && b.h === 135), JSON.stringify(r7));
+  ok('eight photographs, g4, four columns, two full rows, same tile size', r8.boxes.length === 8 && /\bg4\b/.test(r8.boardClass) && r8.boxes.every(b => b.w === r4.boxes[0].w && b.h === 135), JSON.stringify(r8));
 
   ok(fails.filter(f => f.startsWith('PAGEERROR')).length === 0, 'no page errors throughout');
   await b.close();

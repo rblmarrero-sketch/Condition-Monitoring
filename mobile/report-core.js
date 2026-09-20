@@ -668,42 +668,52 @@
    ratio (182 x 4/3 = 242.67, measured to the pixel) and the photograph is
    stretched to it. Cancelling the ratio is what lets width:auto mean the
    photograph's own width. */
-#rptRoot .cel .phg.gallery img{display:block;height:182px;width:auto;max-width:100%;
-  aspect-ratio:auto;background:#fff;border:1px solid #dfe4e9;border-radius:3px;}
-/* THE ONE PHOTOGRAPH LEFT ON A ROW OF ITS OWN, AFTER FULL ROWS OF THREE, IS
-   SIZED LIKE EVERY OTHER PHOTOGRAPH ON THE SHEET — not enlarged.
+#rptRoot .cel .phg.gallery img{display:block;width:auto;height:auto;max-width:100%;
+  max-height:182px;background:#fff;border:1px solid #dfe4e9;border-radius:3px;}
+/* FOUR ACROSS, ALWAYS FOUR, NEVER A SPANNED OR PACKED-TOGETHER ORPHAN.
 
-   This used to borrow the single-photograph size (330px, see .ph below)
-   on the theory that a photo alone on its row "is" a position's only
-   photograph. It is not: the two-orphan case (.last2, immediately below)
-   already prints its pair at the ordinary 182px standard-tile height, so
-   a position with four evidence photos of ONE finding printed three of
-   them at 182px and the fourth — the same finding, same close-up, no
-   more important than the other three — at nearly double the height.
-   Read off EX021's own INSP report: HS.MP's four hydraulic-pump
-   photographs, three matched and one visibly oversized, on a page whose
-   stated design is "I want it to be standard." The 182px height is
-   inherited from the sheet's general gallery image rule below now — this
-   class only spans and centres, the same way the two-orphan case already
-   did. grid-column spans it the full row — cell() only ever marks the true
-   trailing orphan of an incomplete row (see the lastAlone note in cell()),
-   so a full row of three is never touched. */
-#rptRoot .cel .phg.gallery img.last1{grid-column:1 / -1;}
-/* TWO PHOTOGRAPHS LEFT ON A ROW OF THEIR OWN SPAN IT TOGETHER, AT THE SAME
-   STANDARD SIZE EVERY OTHER TILE ON THE SHEET USES. "last2" is itself the
-   one item the outer three-column row has left in it (grid-column:1/-1,
-   same as last1) and is its own two-column grid inside, so nothing sits one
-   third empty. Auto columns plus centring, not 1fr: two PORTRAIT frames
-   split into two 1fr halves are the exact bug this sheet's own component
-   gallery shipped with (see the "board gal b1" note above) — each frame
-   held to its own 182px-tall standard size but stranded in a half-row built
-   for a landscape one, with the other half of it blank. Packed to their own
-   width and centred as a pair instead, the same fix one level up.
-   justify-items/align-items are repeated here because they do not reach
-   through a nested grid — the outer rule only centres its OWN direct items,
-   and "last2"'s images are the outer grid's item's children, not its own. */
-#rptRoot .cel .phg.gallery .last2{grid-column:1 / -1;display:grid;
-  grid-template-columns:repeat(2,auto);justify-content:center;gap:8px;justify-items:center;align-items:center;}
+   This cell used to hold three columns, however many photographs there
+   were, with the tile past a full row of three either spanning the whole
+   row alone (the old last1 class) or paired into its own two-column strip
+   (the old last2 class) — two special cases built to rescue a THIRD
+   column nobody needed. Read off TK109's own Equipment Trend Report: a
+   four-photograph Rear Differential plug put three photographs in a
+   packed, centred row and left the fourth by itself on the row under it,
+   visibly smaller than the three above it with the width nothing else was
+   using sitting empty beside it — a photograph of the exact same finding,
+   sized as though it mattered less. The row's own three columns were
+   never wide enough to be the problem; the CARD was 746px of standard
+   page and the packed row of three sat centred in a fraction of it,
+   because auto-sized columns size to the photograph's own cropped width,
+   not to a share of the sheet.
+
+   Four photographs now get four EQUAL columns spanning the full 746px
+   width, from gridCols(ph.length) below — the sheet's one rule for how
+   many — and past four, gridCols still returns 4: a fifth photograph
+   starts a second row of the SAME four columns rather than the grid
+   renegotiating a different, smaller column count the way gridCols used
+   to. No spanning, no pairing, no orphan case to maintain: a remainder of
+   one, two or three in the last row simply leaves the columns after it
+   empty, which is what an ordinary CSS grid already does on its own.
+
+   The g4 class's max-height (below) is this rule's only remaining special
+   case, and it exists for the opposite reason the old last1/last2 classes
+   did: with four equal-width columns instead of three, a landscape
+   photograph now needs LESS height to exactly fill its (narrower) column,
+   not more. */
+#rptRoot .cel .phg.gallery.g4{grid-template-columns:repeat(4,1fr);}
+/* 135px IS 3/4 OF THE ~180px COLUMN FOUR EQUAL SHARES OF THIS SHEET'S
+   746px PHOTOGRAPH WIDTH PRODUCE — (746 minus three 8px gaps) / 4 — THE
+   SAME DERIVATION THE SHEET'S OWN 182px STANDARD ALREADY USES FOR THREE
+   COLUMNS ((746 minus two 8px gaps) / 3, times 3/4). A 4:3 landscape
+   frame held to 182px tall wants 243px of width; asked for four of those
+   side by side the row would need 972px on a 746px sheet, which is
+   exactly how three photographs ended up packed into a fraction of the
+   card while a fourth image the same size sat alone beneath them. Held to
+   135px instead, the same landscape frame wants 180px — precisely the
+   width four equal columns already give it, filling the row exactly
+   rather than needing a spanning trick to look filled. */
+#rptRoot .cel .phg.g4 img{max-height:135px;}
 /* THE SAME html2canvas GAP AS THE GALLERY ABOVE, ONE LEVEL DOWN.
    This rule fed mpEvidence()'s per-plug board and the graded findings board
    whenever a position wasn't going through the gallery — width:100% with
@@ -4115,20 +4125,31 @@
   /* One position: what it looked like, then what it was. Rows appear only when
      there is something in them — an empty "Cause —" line is a line of nothing,
      and anything the band above already said is not said again here. */
-  /* How many across, so the last row is not one photograph and a hole.
+  /* FOUR ACROSS, NEVER MORE, AND EVERY TILE THE SAME SIZE — the fifth
+     photograph starts a new row at that same size rather than the row
+     re-negotiating its own column count.
 
-     Eight in a 3-wide strip is two rows and two orphans; the same eight at four
-     across is two full rows. Try the widths that stay legible on A4 and take
-     the one that wastes least, preferring the wider — which is also the one
-     that keeps each frame biggest. */
+     This used to pick "the width that wastes least": eight photographs went
+     four-and-four, but five went three-and-two rather than four-and-one,
+     because three columns divides five with a smaller remainder than four
+     does. That is the exact defect this sheet keeps producing in a new
+     shape each time it is found — the SAME physical photograph coming out a
+     DIFFERENT size depending on how many others happened to share its
+     position, five photographs of one finding sized as though they were a
+     different, smaller finding than four of them or six. Read off TK109's
+     own Equipment Trend Report, a four-photograph Rear Differential plug:
+     the fourth did not print small because four "wastes" a three-column row
+     — it printed small, alone, in a row nothing else was using, next to
+     photographs of ITSELF at what should have been the SAME size. Four
+     across, capped, is the one rule that never has to look at what number
+     divides most evenly: n at or under four gets n columns (unchanged from
+     before for the common case), anything past four gets four, always, and
+     a remainder — one, two or three — simply occupies fewer of that SAME
+     row's columns rather than the grid finding a different column count to
+     fit it. `tests/galorphan.cjs` counts columns directly against this rule
+     for n = 1, 3 through 8. */
   function gridCols(n) {
-    if (n <= 3) return n;
-    var best = 4, waste = 99;
-    [4, 3, 2].forEach(function (c) {
-      var w = (c - (n % c)) % c;
-      if (w < waste || (w === waste && c > best)) { waste = w; best = c; }
-    });
-    return best;
+    return n <= 4 ? n : 4;
   }
   function cell(ctx, T, it, sh, gallery) {
     sh = sh || {};
@@ -4151,84 +4172,39 @@
          photographs it made one frame four times the size of the rest for no
          reason, and left the right half of the sheet empty. */
       if (gallery) {
-        /* A page of nothing but photographs is read as a log, not a report —
-           the same frame size wherever it appears, so a reader comparing two
-           positions is comparing the wear, not being told by the layout that
-           one of them mattered four times as much. gridCols (below) sizes a
-           tile to ITS OWN card, so a position with one photograph got the
-           whole card and a position with five got a third of it — the exact
-           "one frame four times the size of the rest" this comment already
-           warned about, just moved one level up. auto-fill holds every tile
-           to the same floor width regardless of how many share the card, and
-           a lone photograph stays that size too rather than stretching to
-           fill the space nothing else is using.
+        var gcols = gridCols(ph.length);
+        /* FOUR ACROSS GETS EQUAL COLUMNS; THREE OR FEWER STAYS ON THE
+           TECHNIQUE ALREADY PROVEN AGAINST PORTRAIT PHOTOS.
 
-           ONE EXCEPTION, NARROWLY: a position with MORE than three
-           photographs, filling full rows of three, can still leave exactly
-           one behind on a row of its own — three-across at full size next to
-           an empty two-thirds of the row nothing else is using. `auto-fill`
-           cannot single that one out; a fixed three-column track can, because
-           the count is known in JS. That last photograph spans the row
-           instead of a lone track, centred rather than stretched to a width
-           its own aspect ratio never asked for — but AT THE SAME 182px
-           standard-tile height every other photograph on the sheet uses
-           (see .last1 in the CSS above; it borrowed `.ph`'s larger
-           single-photograph size once, and that was its own defect — the
-           four photographs of one finding are not more or less important
-           than each other just because three of them fit a row first).
-           Every full row is untouched — three or six or nine photographs
-           print exactly as before.
+           `auto` columns — each sized to its OWN photograph, not to a share
+           of the row — is what makes one, two or three photographs pack
+           together and centre as a group instead of a portrait frame
+           stranded alone in a wide 1fr column with white on both sides of
+           it (TK126, INSP, 2026-09-19: two 720x1600 photographs read off
+           the printed sheet as "the spacing is too much" when this used
+           equal 1fr columns). That case is untouched here.
 
-           A REMAINDER OF TWO WAS LEFT UNTOUCHED, AND IT IS THE SAME GAP ONE
-           COUNT OVER. Read off TK160's own report: nine attachments received
-           for HS.DL, one of them a video the PDF cannot show (stills only,
-           see photoSrcs above) — eight photographs into a fixed three-column
-           track is two full rows and a third row of two, with nothing to
-           occupy the row's own third column. The row does not stretch to
-           fill it — a track with no item in it just sits empty — so the
-           reader sees a blank rectangle the width of a photograph, in
-           exactly the position a ninth picture would have been. `last1`'s
-           own fix does not reach this: it spans a LONE photograph across
-           every column, and two photographs cannot both do that. They are
-           wrapped instead in `.last2`, itself one item spanning the row the
-           three-column grid already has, laid out as its own two-column
-           grid inside — so both keep the SAME standard 182px tile the rest
-           of the sheet uses ("I want it to be standard"), sized to fill the
-           row between them rather than each sitting in a narrower third with
-           a blank one beside it. A remainder of one or zero is untouched. */
-        /* COLUMNS ARE SIZED TO THE PHOTOGRAPH, NOT TO AN EQUAL SHARE OF THE
-           ROW. This was `repeat(N,1fr)` — equal columns, always — which is
-           harmless for a landscape frame (it nearly fills a 1fr column
-           anyway) and was never noticed on the mostly-landscape reports this
-           sheet was proved against. A field phone shoots PORTRAIT by
-           default, and a 1200x1600 frame held to this sheet's standard
-           182px tile height is only ~137px wide: split across equal 1fr
-           columns built for a ~243px landscape tile, two portrait
-           photographs on TK126's own INSP round sat in the middle of two
-           369px columns with roughly 230px of pure white on either side of
-           each — read off the printed sheet as "the spacing is too much",
-           the same complaint after several rounds of fixing the COUNT of
-           columns (last1/last2/gridCols above) rather than their WIDTH.
-           `auto` sizes each column to its own photograph; `justify-content:
-           center` on `.cel .phg.gallery` (and on `.last2` below) stops the
-           grid doing what `auto` tracks do by default in CSS Grid — grow to
-           fill the container exactly like `1fr` would the moment there is
-           no competing alignment — so two photographs end up beside each
-           other with one 8px gap between them, centred as a pair, instead
-           of each stranded in the middle of its own half-empty column.
-           Confirmed against the real record (TK126, INSP, 2026-09-19,
-           720x1600-class field photos): before, 137px of photograph in a
-           369px column; after, the same two 137px photographs packed
-           together with the gap between them and nothing else. */
-        var lastAlone = ph.length > 3 && ph.length % 3 === 1;
-        var lastPair = ph.length > 3 && ph.length % 3 === 2;
-        var mainPh = lastPair ? ph.slice(0, -2) : ph;
-        top = '<div class="phg gallery" style="grid-template-columns:repeat(' + Math.min(3, ph.length) + ',auto)">'
-          + mainPh.map(function (u, i) {
-              return '<img' + (lastAlone && i === mainPh.length - 1 ? ' class="last1"' : '') + ' src="' + u + '">'; }).join("")
-          + (lastPair ? '<div class="last2">'
-              + ph.slice(-2).map(function (u) { return '<img src="' + u + '">'; }).join("")
-              + '</div>' : "")
+           Four columns is the one gridCols(above) now always returns past
+           three, and it is where `auto` stops being the answer: a report
+           with FOUR OR MORE photographs on one finding is a report with a
+           mostly-landscape one (see the CSS's own `.g4` note for the
+           measured case this was found on, TK109's Rear Differential plug)
+           — and `auto` sizing four such photographs to their own ~243px
+           cropped width needs 972px of a 746px sheet, which cannot fit, so
+           they packed into whatever fraction of the row `auto` could give
+           them, small and centred, with a further photograph alone below
+           looking smaller still for no reason a reader could see. Equal
+           1fr columns (the `.g4` class, CSS above) use the full row width
+           the way the reference asked for; the `.g4 img` max-height (also
+           above) is sized so a landscape frame fills its narrower column
+           exactly rather than needing headroom `auto` columns used to
+           supply for free. A remainder past a full row of four is simply
+           left in the SAME four columns, occupying fewer of them — nothing
+           spans, nothing pairs, because a grid with unused tracks in its
+           last row does not need rescuing. `tests/galorphan.cjs`. */
+        top = '<div class="phg gallery' + (gcols === 4 ? ' g4' : '') + '" style="grid-template-columns:repeat('
+          + gcols + ',' + (gcols === 4 ? '1fr' : 'auto') + ')">'
+          + ph.map(function (u) { return '<img src="' + u + '">'; }).join("")
           + '</div>';
       } else if (ph.length > 1) {
         /* ONE SIZE, IN ROWS — the layout the magnetic plug sheet already used,
@@ -4240,9 +4216,18 @@
            a filter cut, where all six frames are the same filter from six
            angles, it produced one big picture and a ragged 3-then-2 strip with
            an empty cell in it. gridCols picks the row width with the least
-           waste, so six go three-and-three rather than three-and-two-and-a-gap. */
-        top = '<div class="phg" style="grid-template-columns:repeat('
-          + gridCols(ph.length) + ',1fr)">'
+           waste, so six go three-and-three rather than three-and-two-and-a-gap.
+           gridCols is capped at four now (see its own comment) rather than
+           picking whatever count wastes least, for the identical reason the
+           gallery board above stopped doing that — five photographs at three
+           columns is the same photograph sized smaller than four or six of
+           them for no reason the finding gives. The `.g4` class carries the
+           narrower max-height four equal columns need to fill exactly; a
+           board too narrow for it (mpEvidence's own multi-plug cards) is
+           already governed by max-width, so the class costs it nothing. */
+        var ncols = gridCols(ph.length);
+        top = '<div class="phg' + (ncols === 4 ? ' g4' : '') + '" style="grid-template-columns:repeat('
+          + ncols + ',1fr)">'
           + ph.map(function (u) { return '<img src="' + u + '">'; }).join("")
           + '</div>';
       } else {
