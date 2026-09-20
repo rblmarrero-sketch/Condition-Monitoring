@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=416">
+<link rel="manifest" href="manifest.webmanifest?v=417">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=416">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=416">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=416">
+<link rel="apple-touch-icon" href="icon-192.png?v=417">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=417">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=417">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2634,15 +2634,15 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=416"></script>
-<script src="upload-defaults.js?v=416"></script>
-<script src="hme.js?v=416"></script>
-<script src="mp-fc.js?v=416"></script>
-<script src="hme-cascade.js?v=416"></script>
-<script src="assets.js?v=416"></script>
-<script src="temp-limits.js?v=416"></script>
-<script src="normalize.js?v=416"></script>
-<script src="terms.js?v=416"></script>
+<script src="native.js?v=417"></script>
+<script src="upload-defaults.js?v=417"></script>
+<script src="hme.js?v=417"></script>
+<script src="mp-fc.js?v=417"></script>
+<script src="hme-cascade.js?v=417"></script>
+<script src="assets.js?v=417"></script>
+<script src="temp-limits.js?v=417"></script>
+<script src="normalize.js?v=417"></script>
+<script src="terms.js?v=417"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2661,25 +2661,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=416"></script>
-<script src="edits.js?v=416"></script>
-<script src="due.js?v=416"></script>
-<script src="wear.js?v=416"></script>
-<script src="wear-figs.js?v=416"></script>
-<script src="wear-map.js?v=416"></script>
-<script src="machine-photos.js?v=416"></script>
-<script src="machine-fig.js?v=416"></script>
-<script src="get.js?v=416"></script>
-<script src="points.js?v=416"></script>
-<script src="uc-points.js?v=416"></script>
-<script src="inspect-guide.js?v=416"></script>
-<script src="get-figs.js?v=416"></script>
-<script src="body-points.js?v=416"></script>
-<script src="body-map.js?v=416"></script>
-<script src="lube.js?v=416"></script>
-<script src="lube-overrides.js?v=416"></script>
-<script src="lube2027.js?v=416"></script>
-<script src="report-core.js?v=416"></script>
+<script src="grade.js?v=417"></script>
+<script src="edits.js?v=417"></script>
+<script src="due.js?v=417"></script>
+<script src="wear.js?v=417"></script>
+<script src="wear-figs.js?v=417"></script>
+<script src="wear-map.js?v=417"></script>
+<script src="machine-photos.js?v=417"></script>
+<script src="machine-fig.js?v=417"></script>
+<script src="get.js?v=417"></script>
+<script src="points.js?v=417"></script>
+<script src="uc-points.js?v=417"></script>
+<script src="inspect-guide.js?v=417"></script>
+<script src="get-figs.js?v=417"></script>
+<script src="body-points.js?v=417"></script>
+<script src="body-map.js?v=417"></script>
+<script src="lube.js?v=417"></script>
+<script src="lube-overrides.js?v=417"></script>
+<script src="lube2027.js?v=417"></script>
+<script src="report-core.js?v=417"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -13500,7 +13500,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="416";
+const BUILD="417";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -15627,6 +15627,24 @@ let lastTracedErrs=(window.CM_ERRS||[]).length;
    is nowhere near full can still be pinned against this origin's OWN quota,
    which is the split that made "the storage is enough, it's 10GB" and "save
    failed — storage may be full" both true at once. */
+/* WHICH BROWSER, AND HOW MUCH MEMORY IT THINKS IT HAS — the one thing every
+   trace pulled from the field has been missing. A quota of tens of GB reads
+   as "probably Android, iOS Safari's quotas run smaller" — a guess, not a
+   fact, and a guess is exactly what this whole mechanism exists to replace
+   with something read off the phone. navigator.userAgent identifies the
+   engine on every platform this app runs on; deviceMemory and
+   hardwareConcurrency are Chromium-only (undefined elsewhere, which is
+   itself informative — their absence says WebKit) and cost nothing to ask
+   for. None of this changes behaviour; it only means the next unreadable-
+   photo investigation does not have to start by wondering what kind of
+   phone it is looking at. */
+function platformInfo(){
+  try{
+    return { ua: String(navigator.userAgent||"").slice(0,220), platform: String(navigator.platform||""),
+      mem: navigator.deviceMemory!=null ? navigator.deviceMemory : null,
+      cores: navigator.hardwareConcurrency!=null ? navigator.hardwareConcurrency : null };
+  }catch(e){ return null; }
+}
 async function traceDoc(why){
   let pend = null; try{ pend = (SLOG.filter(e=>e.ev==="queue").pop()||{}).pending; }catch(e){}
   let store = null; try{ store = await storageInfo(); }catch(e){}
@@ -15638,6 +15656,7 @@ async function traceDoc(why){
     err: slogSafe(String(lastErr||"")).slice(0, 300),
     persist: persistState, bookFail: bookFail ? bookFail.size : 0,
     storage: store ? { usedBytes:store.used, quotaBytes:store.quota, pct:store.pct } : null,
+    platform: platformInfo(),
     lines: SLOG.slice(-TRACE_LINES),
   };
 }
