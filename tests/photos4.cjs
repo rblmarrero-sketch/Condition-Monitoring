@@ -154,7 +154,7 @@ const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
      LAST row is deliberately allowed to be short — the whole point of the
      fix is that a remainder occupies fewer of the SAME four columns rather
      than the grid hunting for a column count with no remainder at all. */
-  const cols = [...html.matchAll(/grid-template-columns:repeat\((\d+),1fr\)/g)].map(m => +m[1]);
+  const cols = [...html.matchAll(/grid-template-columns:repeat\((\d+),auto\)/g)].map(m => +m[1]);
   ok('every position renders at four columns once past four photographs, not a wider row chosen to avoid a remainder',
     cols.length > 0 && cols.every(c => c === Math.min(CAP, 4)),
     CAP + ' photos into ' + [...new Set(cols)].join('/') + ' columns');

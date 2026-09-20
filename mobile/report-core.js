@@ -618,7 +618,7 @@
    are one size, in rows, rather than one big and a strip of stamps. */
 #rptRoot .board.gal{gap:9px 8px;}
 #rptRoot .board.gal.b1{max-width:none;}
-#rptRoot .cel .phg{display:grid;gap:2px;background:#dfe4e9;justify-items:center;align-items:center;}
+#rptRoot .cel .phg{display:grid;gap:2px;background:#dfe4e9;justify-items:center;align-items:center;justify-content:center;}
 /* ONE CELL, EVERYWHERE, AND IT IS A GRID BECAUSE IT SAYS IT IS.
 
    This rule said display:flex and the rule fifty lines below it set
@@ -696,23 +696,21 @@
    one, two or three in the last row simply leaves the columns after it
    empty, which is what an ordinary CSS grid already does on its own.
 
-   The g4 class's max-height (below) is this rule's only remaining special
-   case, and it exists for the opposite reason the old last1/last2 classes
-   did: with four equal-width columns instead of three, a landscape
-   photograph now needs LESS height to exactly fill its (narrower) column,
-   not more. */
-#rptRoot .cel .phg.gallery.g4{grid-template-columns:repeat(4,1fr);}
-/* 135px IS 3/4 OF THE ~180px COLUMN FOUR EQUAL SHARES OF THIS SHEET'S
-   746px PHOTOGRAPH WIDTH PRODUCE — (746 minus three 8px gaps) / 4 — THE
-   SAME DERIVATION THE SHEET'S OWN 182px STANDARD ALREADY USES FOR THREE
-   COLUMNS ((746 minus two 8px gaps) / 3, times 3/4). A 4:3 landscape
-   frame held to 182px tall wants 243px of width; asked for four of those
-   side by side the row would need 972px on a 746px sheet, which is
-   exactly how three photographs ended up packed into a fraction of the
-   card while a fourth image the same size sat alone beneath them. Held to
-   135px instead, the same landscape frame wants 180px — precisely the
-   width four equal columns already give it, filling the row exactly
-   rather than needing a spanning trick to look filled. */
+   The g4 class no longer picks the column-sizing mode — grid-template-columns
+   is auto for every count now, set inline (above and in the non-gallery
+   branch below), for the reason cell()'s own comment gives. What g4 still
+   carries is the max-height below: with four columns instead of three, a
+   landscape photograph needs LESS height to fill its own (narrower) share of
+   the row exactly. */
+/* 135px IS 3/4 OF THE ~180px AN AUTO-SIZED LANDSCAPE COLUMN COMES OUT TO
+   ACROSS FOUR OF THEM ON THIS SHEET'S 746px PHOTOGRAPH WIDTH — THE SAME
+   DERIVATION THE SHEET'S OWN 182px STANDARD ALREADY USES FOR THREE COLUMNS
+   ((746 minus two 8px gaps) / 3, times 3/4). Measured directly: four 4:3
+   landscape photographs at a 135px cap render at ~180px each, filling the
+   row edge to edge with the sheet's own hairline gap between them — the
+   same result equal 1fr columns gave a pure-landscape row, without 1fr's
+   side effect of stretching a narrower (portrait) photograph mixed into the
+   same row out to that width too. */
 #rptRoot .cel .phg.g4 img{max-height:135px;}
 /* THE SAME html2canvas GAP AS THE GALLERY ABOVE, ONE LEVEL DOWN.
    This rule fed mpEvidence()'s per-plug board and the graded findings board
@@ -4173,37 +4171,40 @@
          reason, and left the right half of the sheet empty. */
       if (gallery) {
         var gcols = gridCols(ph.length);
-        /* FOUR ACROSS GETS EQUAL COLUMNS; THREE OR FEWER STAYS ON THE
-           TECHNIQUE ALREADY PROVEN AGAINST PORTRAIT PHOTOS.
+        /* AUTO COLUMNS, ALWAYS — EVEN AT FOUR ACROSS. `auto` columns, each
+           sized to its OWN photograph rather than to a forced equal share of
+           the row, is what makes photographs pack together and centre as a
+           group instead of a portrait frame stranded alone in a wide 1fr
+           column with white on both sides of it (TK126, INSP, 2026-09-19:
+           two 720x1600 photographs read off the printed sheet as "the
+           spacing is too much" when this used equal 1fr columns).
 
-           `auto` columns — each sized to its OWN photograph, not to a share
-           of the row — is what makes one, two or three photographs pack
-           together and centre as a group instead of a portrait frame
-           stranded alone in a wide 1fr column with white on both sides of
-           it (TK126, INSP, 2026-09-19: two 720x1600 photographs read off
-           the printed sheet as "the spacing is too much" when this used
-           equal 1fr columns). That case is untouched here.
-
-           Four columns is the one gridCols(above) now always returns past
-           three, and it is where `auto` stops being the answer: a report
-           with FOUR OR MORE photographs on one finding is a report with a
-           mostly-landscape one (see the CSS's own `.g4` note for the
-           measured case this was found on, TK109's Rear Differential plug)
-           — and `auto` sizing four such photographs to their own ~243px
-           cropped width needs 972px of a 746px sheet, which cannot fit, so
-           they packed into whatever fraction of the row `auto` could give
-           them, small and centred, with a further photograph alone below
-           looking smaller still for no reason a reader could see. Equal
-           1fr columns (the `.g4` class, CSS above) use the full row width
-           the way the reference asked for; the `.g4 img` max-height (also
-           above) is sized so a landscape frame fills its narrower column
-           exactly rather than needing headroom `auto` columns used to
-           supply for free. A remainder past a full row of four is simply
-           left in the SAME four columns, occupying fewer of them — nothing
-           spans, nothing pairs, because a grid with unused tracks in its
-           last row does not need rescuing. `tests/galorphan.cjs`. */
+           Four columns used to switch to equal 1fr specifically, reasoned
+           (wrongly) that `auto` sizing four ~243px-cropped photographs would
+           overflow the 746px sheet. Read off TK109's own Rear Differential
+           plug the SECOND time, with the equal-1fr fix already live: a
+           mixed-orientation row — a wide machinery shot, a portrait-shot
+           cylindrical part, a wide gasket, a portrait plug — put every
+           portrait photograph in a column exactly as wide as its landscape
+           neighbours and let it sit centred in the middle of the extra
+           width, which is precisely the TK126 defect one column count over,
+           reported back as "the gap are too much" and, on a five-photograph
+           tray round, as the wrapped fifth photograph looking a different
+           size from the four above it. A grid whose tracks are `auto` does
+           not actually overflow when the container is fixed-width: measured
+           directly, four 800x600 photographs at a 135px cap render at their
+           full ~180px each, filling the row exactly as equal columns would
+           have; four 1920x1080 photographs at the same cap render narrower
+           (each track shrinks in proportion, the same graceful degrade `fr`
+           tracks give, without `fr`'s side effect of stretching a photograph
+           that does not need the space). `.g4`'s only remaining job is the
+           narrower 135px height cap four columns need instead of three's
+           182px; it no longer picks the column-sizing mode. A remainder past
+           a full row of four is simply left in the SAME four columns,
+           occupying fewer of them — nothing spans, nothing pairs.
+           `tests/galorphan.cjs`, `tests/galmixed4.cjs`. */
         top = '<div class="phg gallery' + (gcols === 4 ? ' g4' : '') + '" style="grid-template-columns:repeat('
-          + gcols + ',' + (gcols === 4 ? '1fr' : 'auto') + ')">'
+          + gcols + ',auto)">'
           + ph.map(function (u) { return '<img src="' + u + '">'; }).join("")
           + '</div>';
       } else if (ph.length > 1) {
@@ -4215,19 +4216,27 @@
            photograph an inspector happened to take is not the important one. On
            a filter cut, where all six frames are the same filter from six
            angles, it produced one big picture and a ragged 3-then-2 strip with
-           an empty cell in it. gridCols picks the row width with the least
-           waste, so six go three-and-three rather than three-and-two-and-a-gap.
-           gridCols is capped at four now (see its own comment) rather than
-           picking whatever count wastes least, for the identical reason the
-           gallery board above stopped doing that — five photographs at three
-           columns is the same photograph sized smaller than four or six of
-           them for no reason the finding gives. The `.g4` class carries the
-           narrower max-height four equal columns need to fill exactly; a
-           board too narrow for it (mpEvidence's own multi-plug cards) is
-           already governed by max-width, so the class costs it nothing. */
+           an empty cell in it. gridCols is capped at four (see its own comment)
+           rather than picking whatever count wastes least, for the identical
+           reason the gallery board above stopped doing that — five
+           photographs at three columns is the same photograph sized smaller
+           than four or six of them for no reason the finding gives.
+
+           `auto`, not `1fr` — the same reason the gallery board above uses
+           `auto`: equal-width columns force a narrower (portrait) photograph
+           to sit centred in a column sized for its landscape neighbours,
+           which is a big, uneven gap around it rather than the sheet's
+           standard hairline one. `auto` sizes each column to its own
+           photograph and, in this fixed-width board, shrinks gracefully
+           rather than overflowing when the row's own photographs would
+           otherwise need more room than the card has (measured directly,
+           see the gallery comment above). The `.g4` class still carries the
+           narrower max-height four columns need instead of three's; a board
+           too narrow for it (mpEvidence's own multi-plug cards) is already
+           governed by max-width, so the class costs it nothing. */
         var ncols = gridCols(ph.length);
         top = '<div class="phg' + (ncols === 4 ? ' g4' : '') + '" style="grid-template-columns:repeat('
-          + ncols + ',1fr)">'
+          + ncols + ',auto)">'
           + ph.map(function (u) { return '<img src="' + u + '">'; }).join("")
           + '</div>';
       } else {

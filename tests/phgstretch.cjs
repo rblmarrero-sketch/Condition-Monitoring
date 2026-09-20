@@ -122,10 +122,18 @@ const SEED = () => {
      isBlue(r.centres[0]), 'rgb=' + r.centres[0].join(','));
   ok('the RASTER shows the landscape photograph\'s own colour at its centre',
      isRed(r.centres[1]), 'rgb=' + r.centres[1].join(','));
-  ok('THE FIX: past the portrait photograph\'s own right edge is background, not its colour stretched to fill the column',
-     isBackground(r.pastEdge[0]), 'rgb=' + r.pastEdge[0].join(','));
-  ok('  same for the landscape photograph',
-     isBackground(r.pastEdge[1]), 'rgb=' + r.pastEdge[1].join(','));
+  /* Columns are auto-sized to each photograph's own width now (report-core.js,
+     the same technique galmixed4.cjs proves for a mixed four-across row), so
+     the portrait photograph's column no longer carries the slack space the
+     old equal-width column had — its landscape neighbour legitimately sits
+     close beside it. What still has to be true is that this is NOT the
+     portrait's own colour stretched past its edge to fill a column: past the
+     edge is either background or the genuinely adjacent photograph, never
+     blue again. */
+  ok('THE FIX: past the portrait photograph\'s own right edge is its neighbour or background, never its own colour stretched to fill a column',
+     !isBlue(r.pastEdge[0]), 'rgb=' + r.pastEdge[0].join(','));
+  ok('  and past the landscape photograph\'s own right edge is background, never its own colour stretched to fill a column',
+     !isRed(r.pastEdge[1]), 'rgb=' + r.pastEdge[1].join(','));
 
   ok(fails.filter(f => f.startsWith('PAGEERROR')).length === 0, 'no page errors throughout');
   await b.close();
