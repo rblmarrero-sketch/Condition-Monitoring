@@ -1,11 +1,19 @@
 {
   "_purpose": "Bookmark for the hourly diagnostic-trace review Routine. Holds the `updated` timestamp (ms epoch, from the _meta/diag/ folder listing on the live backend) of the newest trace file already reviewed. Each hourly check reads this, looks only at traces newer than it, analyzes anything actionable, and advances it — so the review never re-reads the same trace twice and never silently skips one. Updated by that Routine, not by hand.",
-  "lastReviewedUpdated": 1789857135026,
-  "lastReviewedName": "DKB8FF_2026-09-19T22-32-13.json",
-  "lastCheckedAt": "2026-09-20T01:40:35Z",
+  "lastReviewedUpdated": 1789871232612,
+  "lastReviewedName": "D1ZMK6_2026-09-20T02-27-12.json",
+  "lastCheckedAt": "2026-09-20T02:27:12Z",
   "watching": [
     {
-      "note": "DKB8FF, 2026-09-19T22:32: ~30 identical unhandled-rejection errors in <4s — 'Object Not Found Matching Id:2, MethodName:update, ParamCount:4'. A WebKit-internal transport error (its native bridge routing a callback to an already-torn-down page context), not a JS-level bug in this app. Immediately followed by a clean sync run with pending:0 — no data loss evidence. One occurrence is not a pattern; watching for a repeat (same device or others) before treating this as actionable. If it recurs, look at what reload/navigation path was active in that exact window."
+      "note": "SECOND occurrence, different device: D4W4FT, 2026-09-20T02:09 — ~30 identical unhandled-rejection errors in <4s, 'Object Not Found Matching Id:1, MethodName:update, ParamCount:4', immediately followed by a clean run (pending:0, run-end err:''). Identical shape to DKB8FF on 2026-09-19T22:32 (there it was Id:2). Still no data-loss evidence either time, and the message itself is a WebKit-native message-bridge artifact (a callback routed to an already-torn-down page context), not something this app's JS calls into directly — there is no 'update' RPC of ours named that way. Two occurrences on two devices with the same benign outcome both times keeps this below the bar for a speculative fix; watching for a THIRD occurrence, or any occurrence NOT followed by a clean sync, before treating it as actionable."
+    }
+  ],
+  "resolved": [
+    {
+      "trace": "D1ZMK6_2026-09-20T02-27-12.json (build 410, five builds behind the fleet at the time)",
+      "found": "TK109/DZ006/DZ007/DZ008's 2026-09-20 rounds — the exact four the dashboard's Attachment status panel flagged. The phone's own sync log claimed only 1-3 photographs per round were unreadable and 'everything else is sent'; the live bucket held zero photographs for any of the four (checked directly — only each round's JSON sidecar landed). Root cause: putAll() splits a round into concurrent chunks past BATCH_MAX_FILES, and its lane() aggregation kept only the FIRST chunk's unreadable-photo error (`failed=failed||e`), silently dropping every other chunk's names even though each one's own batch-unreadable line reached the sync log. TK109's true count was 11 of 12 unreadable; the sentence said 3.",
+      "fix": "Build 416, commit 6dc4c75 — putAll() now collects every chunk's (and every fallback path's) raw unreadable list and builds one combined, accurate summary once all lanes finish. tests/upload-chunk-merge.cjs reproduces the shape and is confirmed non-vacuous against the pre-fix code.",
+      "note": "The upload bookkeeping itself (`sent`) was never wrong — nothing was falsely marked delivered, and these four rounds will retry and resolve automatically once this phone updates. This was purely a false-reassurance defect in what the phone told the inspector."
     }
   ]
 }
