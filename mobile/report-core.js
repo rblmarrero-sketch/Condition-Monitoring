@@ -2337,7 +2337,15 @@
   function roundRating(rec) {
     var worst = 0;
     (rec.items || []).forEach(function (it) {
-      var n = gnum(it.grade); if (n > worst) worst = n; });
+      var n = gnum(it.grade);
+      /* A measured station (undercarriage, GET) is graded by its wear, not by
+         a manual pick — the same fallback GRADE.roundGrade() itself applies.
+         Without it a controlling point past its limit rated nothing, and the
+         DECISION cell read "No condition rating recorded" beside a table that
+         had, in fact, found one. */
+      if (!n && it.w && it.w.pct != null && isFinite(Number(it.w.pct)) && GR)
+        n = GR.fromWorn(Number(it.w.pct));
+      if (n > worst) worst = n; });
     return worst || null;
   }
   /* REPORT <TYPE>-<UNIT>-<YYYYMMDD>, deterministic from the record so the same
@@ -2466,11 +2474,17 @@
        recorded" against a machine with nothing wrong. Reported from the
        office on 2026-09-14, and they were right to read it as a form
        somebody had failed to fill in.
-       A maintenance action exists when the position is a FINDING (grade 3 and
-       up, GRADE.isFinding — one rule, in grade.js) or when somebody wrote a
-       defect or a cause on it, which nobody does on a clean position. */
+       A maintenance action exists when the position is worth watching or
+       acting on — isAct/isWatch, the SAME rule the round's own verdict
+       sentence above uses ("N of M points worth watching") — or when
+       somebody wrote a defect or a cause on it, which nobody does on a clean
+       position. This used to be its own threshold (grade 3 and up), one
+       stop higher than the verdict banner's grade 2, so a round the banner
+       reported as "1 of 11 points worth watching" printed "No action
+       required" beneath it for the identical Incipient (2) finding — the
+       same fact, two answers, on the same page. */
     var flagged = (rec.items || []).filter(function (it) {
-      return it.defect || it.cause || gnum(it.grade) >= 3; });
+      return it.defect || it.cause || isAct(it) || isWatch(it); });
     flagged.sort(function (a, b) { return gnum(b.grade) - gnum(a.grade); });
     var it = flagged[0] || {};
     var miss = '<b class="miss">' + esc(T("ma_none")) + '</b>';

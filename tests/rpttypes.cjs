@@ -68,6 +68,18 @@ const SEED = `(function(){
          defect:"Near condemn", action:"Plan intervention", photos:[{name:"u.jpg"}] },
        { key:"R.LINK", label:"Track link R", grade:1, mm:70, newMM:78, condemnMM:50, wearPct:29, band:"done" },
        { key:"L.SHOE", label:"Track shoe L", grade:"", mm:null, reason:"RE-01" } ] },
+   /* A wear round where NOT ONE point was hand-graded — the ordinary shape,
+      since a measured station grades itself from remaining life and the
+      phone never shows a manual card for one. The controlling point sits at
+      80% worn (Severe territory) with nothing in the grade field for
+      roundRating() to read; before the wear-aware fix this printed "No
+      condition rating recorded" beside a table that had, in fact, found
+      one. */
+   { equip:"DZ901", date:"2026-08-18", type:"UC", cls:"DOZ", by:"Hasenov", smu:6300,
+     items:[
+       { key:"PITCH1.L", label:"Sprocket pitch L", grade:"", mm:16, newMM:20, condemnMM:0, wearPct:80, band:"watch" },
+       { key:"PITCH1.R", label:"Sprocket pitch R", grade:"", mm:18, newMM:20, condemnMM:0, wearPct:40, band:"done" },
+       { key:"L.SHOE", label:"Track shoe L", grade:"", mm:null, reason:"RE-01" } ] },
    { equip:"LD900", date:"2026-08-15", type:"GET", cls:"LDR", by:"Hasenov", smu:5200,
      items:[
        { key:"TOOTH", label:"Tooth", grade:3, defect:"Worn tip", action:"Replace soon", photos:[{name:"g.jpg"}] },
@@ -180,6 +192,16 @@ const textOf = (p, key, lang) => p.evaluate(({ key, lang }) => {
   ok(/93%/.test(uc), "  the controlling point's percent");
   ok(/52/.test(uc) && /70/.test(uc), "  the register keeps every reading");
   ok(!/L\.SHOE[\s\S]{0,30}1 – Normal/.test(uc), "  an unmeasured point is not called Normal");
+
+  console.log("\n5b. AN ALL-WEAR ROUND STILL RATES ITSELF — no point was hand-graded");
+  const ucw = await textOf(p, k("DZ901", "2026-08-18", "UC"), "en");
+  ok(/PITCH1\.L/.test(ucw) && /80%/.test(ucw), "  the controlling point at 80% worn is on the sheet");
+  ok(!/No condition rating recorded/.test(ucw),
+     "  the DECISION cell is not blank just because nobody picked a grade");
+  ok(/4 – Severe/.test(ucw), "  80% worn (20% remaining) computes to Severe, GRADE.fromWorn's own answer");
+  ok(/Repair soon; control operation/.test(ucw), "  and the decision text that goes with it");
+  ok(!/No action required/.test(ucw),
+     "  the Maintenance action strip agrees with the rating instead of contradicting it");
 
   console.log("\n6. GET — the eleven-point register, grade required, mm optional");
   const get = await textOf(p, k("LD900", "2026-08-15", "GET"), "en");
