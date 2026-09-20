@@ -78,7 +78,7 @@ const SEED = () => {
   await p.waitForTimeout(1200);
   await p.evaluate(SEED); await p.waitForTimeout(300);
 
-  const measure = async (equip) => p.evaluate((eq) => {
+  const measure = async (equip) => p.evaluate(async (eq) => {
     const secs = CMReport.sectionsFor('unit', eq, { lang: 'en', photos: true });
     const st = document.getElementById('histpaircss') || (() => { const s = document.createElement('style'); s.id = 'histpaircss'; s.textContent = CMR.CSS; document.head.appendChild(s); return s; })();
     const old = document.getElementById('rptRoot'); if (old) old.remove();
@@ -86,13 +86,23 @@ const SEED = () => {
     d.style.cssText = 'position:fixed;left:-99999px;top:0;width:760px;background:#fff;';
     d.innerHTML = secs.map(s => '<div class="secwrap">' + s.html + '</div>').join('');
     document.body.appendChild(d);
+    /* The non-gallery .cel .phg img rule sizes a photograph from its own
+       natural dimensions (width:auto;height:auto;max-height:182px), the same
+       html2canvas-safe technique the gallery rule already used — so, unlike
+       the old width:100% rule, its rendered box is 0x0 until the <img> has
+       actually decoded. A real report only rasterises once every image has
+       loaded; this waits for the same thing before measuring. */
+    await Promise.all([...d.querySelectorAll('img')].map(im => im.complete ? null :
+      new Promise(res => { im.onload = im.onerror = res; })));
     const board = d.querySelector('.sec.olderr .board');
     const cells = board ? [...board.querySelectorAll('.cel')] : [];
+    const curCells = [...d.querySelectorAll('.sec:not(.olderr) .board .cel')];
     const out = {
       boardClass: board ? board.className : null,
       cellCount: cells.length,
       cellWidths: cells.map(c => Math.round(c.getBoundingClientRect().width)),
       photoWidths: cells.map(c => { const im = c.querySelector('.phg img,img.ph'); return im ? Math.round(im.getBoundingClientRect().width) : null; }),
+      curPhotoWidths: curCells.map(c => { const im = c.querySelector('.phg img,img.ph'); return im ? Math.round(im.getBoundingClientRect().width) : null; }).filter(w => w != null),
     };
     d.remove();
     return out;
@@ -104,8 +114,17 @@ const SEED = () => {
   ok('the board carries the wide class (one item deep)', /(^| )wide( |$)/.test(r.boardClass || ''), r.boardClass);
   ok('THE FIX: each item spans the full width, not half of it',
      r.cellWidths.every(w => w > 700), JSON.stringify(r.cellWidths));
-  ok('  so each photograph is sized like the current visit\'s, not a quarter of it',
-     r.photoWidths.every(w => w > 300), JSON.stringify(r.photoWidths));
+  /* "Sized like the current visit's" is no longer a width to clear (that was
+     this project's OTHER standing bug — .cel .phg img stretching a photo to
+     fill whatever column it landed in, so a wider board simply stretched it
+     further). Fixed, both visits' photographs land on the SAME standard
+     tile size — the sheet's one floor, not one computed per card — so the
+     real assertion is that the older round's width equals the current
+     round's, not that it cleared an arbitrary pixel count. */
+  ok('  so each photograph is sized like the current visit\'s — the same standard tile, not a quarter of it',
+     r.curPhotoWidths.length > 0 &&
+     r.photoWidths.every(w => r.curPhotoWidths.some(cw => Math.abs(cw - w) <= 1)),
+     JSON.stringify({ older: r.photoWidths, current: r.curPhotoWidths }));
 
   console.log('\n(control: three graded items on one older round keep their existing packed density)');
   const rb = await measure('BUSY01');

@@ -603,7 +603,7 @@
    are one size, in rows, rather than one big and a strip of stamps. */
 #rptRoot .board.gal{gap:9px 8px;}
 #rptRoot .board.gal.b1{max-width:none;}
-#rptRoot .cel .phg{display:grid;gap:2px;background:#dfe4e9;}
+#rptRoot .cel .phg{display:grid;gap:2px;background:#dfe4e9;justify-items:center;align-items:center;}
 /* ONE CELL, EVERYWHERE, AND IT IS A GRID BECAUSE IT SAYS IT IS.
 
    This rule said display:flex and the rule fifty lines below it set
@@ -689,7 +689,20 @@
    and "last2"'s images are the outer grid's item's children, not its own. */
 #rptRoot .cel .phg.gallery .last2{grid-column:1 / -1;display:grid;
   grid-template-columns:repeat(2,auto);justify-content:center;gap:8px;justify-items:center;align-items:center;}
-#rptRoot .cel .phg img{display:block;width:100%;aspect-ratio:4/3;object-fit:contain;
+/* THE SAME html2canvas GAP AS THE GALLERY ABOVE, ONE LEVEL DOWN.
+   This rule fed mpEvidence()'s per-plug board and the graded findings board
+   whenever a position wasn't going through the gallery — width:100% with
+   aspect-ratio:4/3 and object-fit:contain looked letterboxed in the DOM and
+   was STRETCHED edge to edge in the actual raster, exactly the mechanism the
+   gallery comment above already explains: html2canvas honours neither
+   property. Read directly off a rasterised LUBE compartment cell: a portrait
+   400x600 photo, sized 378x283.5 in the DOM, sampled pure fill colour at
+   every edge of the box in the FILE — no letterbox bar anywhere. Given an
+   explicit max-height and automatic width instead, the same technique
+   .phg.gallery img already uses and .ph already used before that, so the
+   photograph keeps its own proportions and is centred by the container
+   above rather than stretched to fill a box it was never actually inside. */
+#rptRoot .cel .phg img{display:block;width:auto;height:auto;max-width:100%;max-height:182px;
   background:#eef1f4;}
 /* One floor size for every tile on the sheet, not one computed per card. A
    card sized to how MANY photographs a position has (b2's half-page column,

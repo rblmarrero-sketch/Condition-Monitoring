@@ -558,9 +558,18 @@
        of this note. This is the SVG the field actually reported cut: a real
        photograph and its pucks, rasterised to a fraction of the frame at
        exactly the size build 300's own drawing-height fix put it at. */
+    /* o.label names what this drawing actually IS — a GET round's tool, e.g.
+       "Bucket" or "Blade" — and wins whenever a caller states it. Without it
+       every diagram here said "Right undercarriage": the fallback below only
+       ever tells LEFT from the side flag reportUCMap always passes, and
+       reportGETMap never passed a side at all, so a GET round's own bucket or
+       blade diagram was mislabelled as the undercarriage's right side on
+       every single report, regardless of which tool the machine actually
+       carries. */
+    var mapLabel = o.label || ((o.side === 'L' ? 'Left' : 'Right') + ' undercarriage');
     s.push('<svg class="ucmap photo" viewBox="0 0 ' + PVB_W + ' ' + PVB_H +
            '" width="' + PVB_W + '" height="' + PVB_H +
-           '" role="group" aria-label="' + (o.side === 'L' ? 'Left' : 'Right') + ' undercarriage">');
+           '" role="group" aria-label="' + esc1(mapLabel) + '">');
     /* The drawn frame goes in either way, and hides behind the photograph when
        there is one. It is the answer to the photograph not arriving — a cache
        miss on a phone with no signal, a model whose picture has not been shot
@@ -701,7 +710,7 @@
     return {
       html: '<div class="ucmapwrap">' + W.mapPhoto({
         photo: o.photo || '', aspect: prof.aspect, box: [0, 0, 100, 100],
-        lang: lang, tool: prof.tool, sel: 0,
+        lang: lang, tool: prof.tool, label: lang === 'ru' ? prof.ru : prof.en, sel: 0,
         layout: walk.map(function (w) { return [w.n, w.x / 100, w.y / 100]; }),
         numOf: function (n) { return (walk[n - 1] || {}).k; },
         state: function (n) {
