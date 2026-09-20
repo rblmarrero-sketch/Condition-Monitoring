@@ -301,7 +301,13 @@
    past the column so they can be scrolled under a thumb. On paper there is
    nothing to scroll, so the width is reclaimed here explicitly — without this
    the last roller and the grouser row fell off the right edge of the page. */
-#rptRoot .ucmaps{display:flex;flex-direction:column;gap:7px;margin:9px 0 4px;
+/* LEFT AND RIGHT SIDE BY SIDE, NOT STACKED — asked for directly, arrows drawn
+   on the printed page pointing each track frame to its own half of the row.
+   flex-grow (1 1 0, not a fixed percentage) is what keeps a lone side — a
+   round with only one side walked, or a GET map with no "other side" at all
+   — filling the full row exactly as before: with one child, flex-grow alone
+   claims the whole width; with two, they split it evenly. */
+#rptRoot .ucmaps{display:flex;flex-direction:row;align-items:flex-start;gap:10px;margin:9px 0 4px;
   width:100%;max-width:none;flex:0 0 auto;}
 /* The frames at the size a puck stays readable, and everything that explains
    them in the column of paper that was left over beside them. */
@@ -334,7 +340,7 @@
 #rptRoot .mapblock.wide .mapside .pkey{columns:auto;display:flex;flex-direction:column;gap:4px;margin-top:9px;max-width:none;}
 #rptRoot .mapblock.wide .mapside .ckey{grid-template-columns:1fr;gap:4px;max-width:none;}
 #rptRoot .ucmapwrap{background:#f6f8f9;border:1px solid #dfe4e9;border-radius:8px;padding:3px 2px;
-  width:100%;margin:0;flex:0 0 auto;overflow:visible;}
+  min-width:0;margin:0;flex:1 1 0;overflow:visible;}
 #rptRoot .ucmapwrap::after{content:none;}
 /* The tray, at the size the numbers inside it can be read ------------------
    A track frame is a diagram with eleven pucks on it and reads fine in half a
@@ -650,15 +656,24 @@
 #rptRoot .cel .phg.gallery img{display:block;height:182px;width:auto;max-width:100%;
   aspect-ratio:auto;background:#fff;border:1px solid #dfe4e9;border-radius:3px;}
 /* THE ONE PHOTOGRAPH LEFT ON A ROW OF ITS OWN, AFTER FULL ROWS OF THREE, IS
-   SIZED LIKE A POSITION'S ONLY PHOTOGRAPH — because that is what it is on
-   its own row. An explicit height, not auto: html2canvas honours neither
-   aspect-ratio nor object-fit (see above), so the same "explicit height,
-   automatic width" rule that keeps every other photograph in this sheet
-   correctly proportioned in the FILE, not just the DOM, applies here too.
-   grid-column spans it the full row — cell() only ever marks the true
+   SIZED LIKE EVERY OTHER PHOTOGRAPH ON THE SHEET — not enlarged.
+
+   This used to borrow the single-photograph size (330px, see .ph below)
+   on the theory that a photo alone on its row "is" a position's only
+   photograph. It is not: the two-orphan case (.last2, immediately below)
+   already prints its pair at the ordinary 182px standard-tile height, so
+   a position with four evidence photos of ONE finding printed three of
+   them at 182px and the fourth — the same finding, same close-up, no
+   more important than the other three — at nearly double the height.
+   Read off EX021's own INSP report: HS.MP's four hydraulic-pump
+   photographs, three matched and one visibly oversized, on a page whose
+   stated design is "I want it to be standard." The 182px height is
+   inherited from the sheet's general gallery image rule below now — this
+   class only spans and centres, the same way the two-orphan case already
+   did. grid-column spans it the full row — cell() only ever marks the true
    trailing orphan of an incomplete row (see the lastAlone note in cell()),
    so a full row of three is never touched. */
-#rptRoot .cel .phg.gallery img.last1{height:330px;grid-column:1 / -1;}
+#rptRoot .cel .phg.gallery img.last1{grid-column:1 / -1;}
 /* TWO PHOTOGRAPHS LEFT ON A ROW OF THEIR OWN SPAN IT TOGETHER, AT THE SAME
    STANDARD SIZE EVERY OTHER TILE ON THE SHEET USES. "last2" is itself the
    one item the outer three-column row has left in it (grid-column:1/-1,
@@ -4069,11 +4084,15 @@
            an empty two-thirds of the row nothing else is using. `auto-fill`
            cannot single that one out; a fixed three-column track can, because
            the count is known in JS. That last photograph spans the row
-           instead of a lone track and reads at its own size (the same rule
-           `.ph` already uses for a position with just one photograph),
-           centred rather than stretched to a width its own aspect ratio
-           never asked for. Every full row is untouched — three or six or
-           nine photographs print exactly as before.
+           instead of a lone track, centred rather than stretched to a width
+           its own aspect ratio never asked for — but AT THE SAME 182px
+           standard-tile height every other photograph on the sheet uses
+           (see .last1 in the CSS above; it borrowed `.ph`'s larger
+           single-photograph size once, and that was its own defect — the
+           four photographs of one finding are not more or less important
+           than each other just because three of them fit a row first).
+           Every full row is untouched — three or six or nine photographs
+           print exactly as before.
 
            A REMAINDER OF TWO WAS LEFT UNTOUCHED, AND IT IS THE SAME GAP ONE
            COUNT OVER. Read off TK160's own report: nine attachments received

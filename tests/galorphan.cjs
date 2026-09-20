@@ -1,5 +1,6 @@
 /* A PHOTOGRAPH LEFT ON A ROW OF ITS OWN PRINTS AT A STANDARD SIZE, NOT
-   STRANDED IN A THIRD OF A TRACK OR NEXT TO AN EMPTY ONE.
+   STRANDED IN A THIRD OF A TRACK, NEXT TO AN EMPTY ONE, OR BLOWN UP PAST
+   ITS SIBLINGS.
 
    Read off EX021's own report: a position with four photographs printed
    three across, evenly sized — the fix build 371 shipped for this same
@@ -12,9 +13,16 @@
 
    The gallery grid's column count is computed in JS now (gridCols-style:
    full rows of three), so a photograph that is genuinely alone in the
-   final row — remainder of exactly one — is marked `last1` and given the
-   `.ph`-style single-photograph treatment: its own natural size, up to
-   330px, centred across the row.
+   final row — remainder of exactly one — is marked `last1`, spans the
+   row and is centred — first shipped at the `.ph`-style single-photograph
+   size (up to 330px), which was itself a second defect one row later:
+   read off EX021's own report a second time, HS.MP's four hydraulic-pump
+   photographs were three at the sheet's standard 182px tile height and a
+   fourth visibly larger than its own siblings, on a page whose stated
+   design is "I want it to be standard." `.last1` now inherits the same
+   182px standard-tile height every other photograph on the sheet uses —
+   it only spans and centres, the same way `.last2` (below) already did
+   for a remainder of two.
 
    A REMAINDER OF TWO WAS LEFT AS A CONTROL HERE, AND IT IS THE SAME GAP ONE
    COUNT OVER. Read off TK160's own report: nine attachments received, one a
@@ -85,18 +93,19 @@ const SEED = () => {
     return out;
   }, equip);
 
-  console.log('EX021 (four photographs): three at the ordinary size, the fourth alone and larger');
+  console.log('EX021 (four photographs): all four at the same standard size, the fourth alone on its own row');
   const r4 = await measure('EX021');
   ok('four photographs found', r4.length === 4, JSON.stringify(r4));
   ok('the first three carry no last1 marker', r4.slice(0, 3).every(x => !x.last1), JSON.stringify(r4.slice(0, 3)));
   ok('  and sit at the ordinary gallery height', r4.slice(0, 3).every(x => x.h === 182), JSON.stringify(r4.slice(0, 3)));
   ok('the fourth carries last1', r4[3].last1, JSON.stringify(r4[3]));
-  ok('  and renders taller than the row above it', r4[3].h > 182, r4[3].h + 'px');
+  ok('  but renders at the SAME standard height as the row above it — not enlarged', r4[3].h === 182, r4[3].h + 'px');
 
   console.log('\n   (EX022, seven photographs: the same shape one row later)');
   const r7 = await measure('EX022');
   ok('seven photographs found', r7.length === 7, JSON.stringify(r7));
   ok('only the seventh carries last1', r7.filter(x => x.last1).length === 1 && r7[6].last1, JSON.stringify(r7.map(x => x.last1)));
+  ok('  and all seven, orphan included, sit at the same standard height', r7.every(x => x.h === 182), JSON.stringify(r7));
 
   console.log('\n   (control: a full row of three is untouched)');
   const r3 = await measure('EX023');

@@ -142,8 +142,17 @@ const HARNESS = `(async (sections) => {
     const els = Array.prototype.slice.call(holder.children);
     if (secsIn[0].fit) CMR.fitPage(els[0], roomPx);
     const page1 = els[0], maps = page1.querySelector('.ucmaps');
+    const sides = maps ? Array.prototype.slice.call(maps.querySelectorAll('.ucmapwrap')) : [];
+    const sideRects = sides.map(function (s) { return s.getBoundingClientRect(); });
     const r = { page1H: page1.getBoundingClientRect().height, roomPx,
       mapsH: maps ? maps.getBoundingClientRect().height : 0,
+      sideCount: sides.length,
+      /* Left and right, side by side: same row (top within a pixel of each
+         other), different columns (the second starts to the right of where
+         the first ends). Stacked would show the opposite — same left edge,
+         different top. */
+      sidesShareRow: sideRects.length === 2 && Math.abs(sideRects[0].top - sideRects[1].top) < 2,
+      secondStartsRightOfFirst: sideRects.length === 2 && sideRects[1].left >= sideRects[0].right - 2,
       hasCondSum: /Condition summary|Сводка состояния/.test(page1.textContent || ''),
       /* The four-cell MODEL / SMU / INSPECTED BY / LOCATION strip went on
          2026-09-14 — the office struck it out as three facts the masthead and
@@ -162,9 +171,18 @@ const HARNESS = `(async (sections) => {
   ok('  and the retired metadata strip is not back', g.hasStrip === false);
   ok('page one still fits in one physical page with all of it',
     g.page1H <= g.roomPx, Math.round(g.page1H) + ' of ' + Math.round(g.roomPx) + 'px room');
-  ok('the drawing is roughly 35-42% of the page\'s own room, not most of it',
-    g.mapsH / g.roomPx >= 0.30 && g.mapsH / g.roomPx <= 0.46,
+  /* Left and right used to stack, each still capped at the same 175px, so the
+     pair together ran to roughly 35-42% of the page. Side by side (asked for
+     directly, build 421) the same two frames sit in one row instead of two,
+     at the identical per-frame size — the page keeps the room it always had
+     for the condition summary below, it is simply no longer spent on a
+     second stacked row to get it. */
+  ok('the drawing is roughly 12-20% of the page\'s own room now that both sides sit in one row',
+    g.mapsH / g.roomPx >= 0.12 && g.mapsH / g.roomPx <= 0.20,
     Math.round(g.mapsH / g.roomPx * 100) + '% (' + Math.round(g.mapsH) + ' of ' + Math.round(g.roomPx) + 'px)');
+  ok('DZ004\'s round drew both sides', g.sideCount === 2, JSON.stringify(g.sideCount));
+  ok('  LEFT and RIGHT sit in one row, not stacked', g.sidesShareRow, JSON.stringify(g));
+  ok('  RIGHT starts where LEFT\'s half of the row ends, not underneath it', g.secondStartsRightOfFirst, JSON.stringify(g));
   ok('the register page does not repeat the condition summary',
     !g.regPage2CarriesSummary);
 
