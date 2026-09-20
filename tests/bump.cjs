@@ -55,12 +55,20 @@ const SHIPPED = ["mobile/", "dashboard/", "data/"];
   const BUILD = m[1];
   console.log("  build " + BUILD);
 
-  /* The commit that first introduced this exact BUILD string. -S finds every
-     commit where the count of that string changed; the LAST one in log order
-     (oldest) is the one that added it. */
+  /* The commit that first introduced this exact BUILD string. -G (a regex
+     pickaxe, not -S's exact string) finds every commit whose diff added or
+     removed a matching line; the LAST one in log order (oldest) is the one
+     that added it. The regex tolerates either spacing sw.js has used for
+     this declaration ("const BUILD = " and "const BUILD=") — build 402
+     switched to the no-space form, and a literal -S string built for the old
+     one silently found nothing ever after: every check since read as "a
+     fresh bump, not yet committed" and PASSED regardless of whether the
+     build was actually stale, which is the one thing this suite exists to
+     catch. [[:space:]]* is POSIX ERE, which is what -G matches with; \s is
+     not portable here. */
   let introduced = "";
   try {
-    introduced = git("log", "-S", `const BUILD = "${BUILD}"`, "--format=%H", "--", "mobile/sw.js")
+    introduced = git("log", "-G", `const BUILD[[:space:]]*=[[:space:]]*"${BUILD}"`, "--format=%H", "--", "mobile/sw.js")
       .split("\n").filter(Boolean).pop() || "";
   } catch (e) { /* shallow clone or no history — handled below */ }
 
