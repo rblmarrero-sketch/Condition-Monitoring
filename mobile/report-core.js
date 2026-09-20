@@ -174,12 +174,27 @@
    and the scale line beneath so the number is never colour-alone. */
 #rptRoot .rrate{display:flex;align-items:stretch;gap:0;margin-top:11px;
   border:1px solid #d7dde1;border-radius:5px;overflow:hidden;}
-#rptRoot .rrate .rc{padding:5px 11px;border-right:1px solid #e4e9ec;}
+#rptRoot .rrate .rc{padding:5px 11px;border-right:1px solid #e4e9ec;min-width:0;}
 #rptRoot .rrate .rc:last-child{border-right:0;flex:1;}
 #rptRoot .rrate .rk{font-size:8.5px;font-weight:700;letter-spacing:.12em;
   color:#5b6670;text-transform:uppercase;white-space:nowrap;}
+/* NOWRAP ON A FLEX ITEM WITH NO min-width OVERRIDE HOLDS THE ROW OPEN TO
+   WHATEVER THE TEXT NEEDS, NOT TO THE PAGE. The middle (SEVERITY) cell only
+   ever showed a short placeholder on a wear-only round — roundRating()
+   above did not yet read a measured station's wear, so its own DECISION
+   cell (see the fix there) was blank too. Fixed, the same round now shows
+   its real "4 – Severe / Серьёзное", and that bilingual pair beside a
+   3-cell nowrap row with no min-width pushed the DECISION cell — and its
+   own label and value — off the right edge of the sheet: caught by
+   rptbi.cjs on a live Undercarriage round, not invented. min-width:0
+   above lets a cell actually shrink instead of holding the row to its
+   unwrapped content width, and wrapping here is a graceful two-line
+   fallback for the rare long pair, not the stacked "translation under the
+   level" layout this file already rejected once — that was a hard line
+   break in the STRING; T.both's inline "alti" span has none, so a browser
+   wrap here only ever happens when the one line genuinely does not fit. */
 #rptRoot .rrate .rv{font-size:13px;font-weight:750;font-variant-numeric:tabular-nums;
-  line-height:1.3;white-space:nowrap;}
+  line-height:1.3;white-space:normal;overflow-wrap:break-word;}
 #rptRoot .rrate .rv .alti{font-size:.85em;font-weight:500;color:#5b6670;}
 #rptRoot .rrate .rd{border-left:1px solid #e4e9ec;}
 #rptRoot .rscale{font-size:9.5px;color:#5b6670;margin-top:5px;letter-spacing:.01em;}
@@ -598,7 +613,7 @@
    nothing is cropped, which is the rule CLAUDE.md sets — what it forbids is
    cover, the 4:3 STAMP that cuts the evidence. A uniform cell and an
    uncropped photograph are not in tension; the old code simply had neither. */
-#rptRoot .cel .phg.gallery{display:grid;gap:8px;background:#fff;padding:6px 6px 0;}
+#rptRoot .cel .phg.gallery{display:grid;gap:8px;background:#fff;padding:6px 6px 0;justify-content:center;}
 /* AN EXPLICIT HEIGHT, BECAUSE THE PDF IS NOT A BROWSER. aspect-ratio gives a
    perfect 4:3 cell on screen — measured 243x182 across eight frames of mixed
    proportion — and html2canvas, which is what actually draws the page, does
@@ -647,13 +662,18 @@
 /* TWO PHOTOGRAPHS LEFT ON A ROW OF THEIR OWN SPAN IT TOGETHER, AT THE SAME
    STANDARD SIZE EVERY OTHER TILE ON THE SHEET USES. "last2" is itself the
    one item the outer three-column row has left in it (grid-column:1/-1,
-   same as last1) and is its own two-column grid inside, so the row's own
-   width splits evenly between the two rather than one third sitting empty.
+   same as last1) and is its own two-column grid inside, so nothing sits one
+   third empty. Auto columns plus centring, not 1fr: two PORTRAIT frames
+   split into two 1fr halves are the exact bug this sheet's own component
+   gallery shipped with (see the "board gal b1" note above) — each frame
+   held to its own 182px-tall standard size but stranded in a half-row built
+   for a landscape one, with the other half of it blank. Packed to their own
+   width and centred as a pair instead, the same fix one level up.
    justify-items/align-items are repeated here because they do not reach
    through a nested grid — the outer rule only centres its OWN direct items,
    and "last2"'s images are the outer grid's item's children, not its own. */
 #rptRoot .cel .phg.gallery .last2{grid-column:1 / -1;display:grid;
-  grid-template-columns:repeat(2,1fr);gap:8px;justify-items:center;align-items:center;}
+  grid-template-columns:repeat(2,auto);justify-content:center;gap:8px;justify-items:center;align-items:center;}
 #rptRoot .cel .phg img{display:block;width:100%;aspect-ratio:4/3;object-fit:contain;
   background:#eef1f4;}
 /* One floor size for every tile on the sheet, not one computed per card. A
@@ -947,7 +967,6 @@
       meas_t:"Undercarriage measurements", photos:"Photographs",
       /* Filed against the machine rather than against a component. */
       gen_t:"General evidence",
-      gen_sub:"Photographs of the machine or its surroundings, recorded during this round and not tied to a single inspection point.",
       ev_gap_t:"Evidence incomplete.",
       ev_gap:"{n} of {e} photograph(s) taken on this round have not reached the office, so they are not printed here. The readings, condition and actions above are unaffected and still stand.",
       st_final:"FINAL",
@@ -1141,7 +1160,6 @@
       map_t:"Где износ", map_na:"Не измерено",
       meas_t:"Замеры ходовой части", photos:"Фотографии",
       gen_t:"Общий фотоматериал",
-      gen_sub:"Фотографии машины или места работ, сделанные во время осмотра и не привязанные к отдельной точке.",
       ev_gap_t:"Фотоматериал неполный.",
       ev_gap:"Из {e} сделанных на этом осмотре фотографий {n} не дошли до офиса и здесь не приводятся. На замеры, оценку состояния и назначенные действия выше это не влияет.",
       st_final:"ОКОНЧАТЕЛЬНЫЙ",
@@ -4074,10 +4092,34 @@
            of the sheet uses ("I want it to be standard"), sized to fill the
            row between them rather than each sitting in a narrower third with
            a blank one beside it. A remainder of one or zero is untouched. */
+        /* COLUMNS ARE SIZED TO THE PHOTOGRAPH, NOT TO AN EQUAL SHARE OF THE
+           ROW. This was `repeat(N,1fr)` — equal columns, always — which is
+           harmless for a landscape frame (it nearly fills a 1fr column
+           anyway) and was never noticed on the mostly-landscape reports this
+           sheet was proved against. A field phone shoots PORTRAIT by
+           default, and a 1200x1600 frame held to this sheet's standard
+           182px tile height is only ~137px wide: split across equal 1fr
+           columns built for a ~243px landscape tile, two portrait
+           photographs on TK126's own INSP round sat in the middle of two
+           369px columns with roughly 230px of pure white on either side of
+           each — read off the printed sheet as "the spacing is too much",
+           the same complaint after several rounds of fixing the COUNT of
+           columns (last1/last2/gridCols above) rather than their WIDTH.
+           `auto` sizes each column to its own photograph; `justify-content:
+           center` on `.cel .phg.gallery` (and on `.last2` below) stops the
+           grid doing what `auto` tracks do by default in CSS Grid — grow to
+           fill the container exactly like `1fr` would the moment there is
+           no competing alignment — so two photographs end up beside each
+           other with one 8px gap between them, centred as a pair, instead
+           of each stranded in the middle of its own half-empty column.
+           Confirmed against the real record (TK126, INSP, 2026-09-19,
+           720x1600-class field photos): before, 137px of photograph in a
+           369px column; after, the same two 137px photographs packed
+           together with the gap between them and nothing else. */
         var lastAlone = ph.length > 3 && ph.length % 3 === 1;
         var lastPair = ph.length > 3 && ph.length % 3 === 2;
         var mainPh = lastPair ? ph.slice(0, -2) : ph;
-        top = '<div class="phg gallery" style="grid-template-columns:repeat(' + Math.min(3, ph.length) + ',1fr)">'
+        top = '<div class="phg gallery" style="grid-template-columns:repeat(' + Math.min(3, ph.length) + ',auto)">'
           + mainPh.map(function (u, i) {
               return '<img' + (lastAlone && i === mainPh.length - 1 ? ' class="last1"' : '') + ' src="' + u + '">'; }).join("")
           + (lastPair ? '<div class="last2">'
