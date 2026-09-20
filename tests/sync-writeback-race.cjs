@@ -62,6 +62,10 @@ const srv = http.createServer((req, res) => {
   const ctx = await b.newContext({ viewport: { width: 412, height: 915 }, isMobile: true, hasTouch: true, serviceWorkers: 'block' });
   const p = await ctx.newPage();
   const errs = []; p.on('pageerror', e => errs.push(e.message));
+  // No destinations configured — syncNow()/armRetry's background timer is a
+  // no-op (UP.on is false), so the dbFailStreak counting in section 7 isn't
+  // perturbed by an unrelated automatic sync attempt landing mid-count.
+  await p.addInitScript(() => { localStorage.setItem('up_dests', '[]'); });
   await p.goto(`http://127.0.0.1:${PORT}/mobile/index.html`, { waitUntil: 'load' });
   await p.waitForFunction(() => typeof sha256Of === 'function' && typeof filesForRecord === 'function'
     && typeof buildPackage === 'function' && typeof attSync === 'function', null, { timeout: 20000 });
@@ -238,6 +242,70 @@ const srv = http.createServer((req, res) => {
   ok('a forced transaction failure is tagged with a real phase, not left blank',
      r6 && (r6.phase === 'abort' || r6.phase === 'error'), JSON.stringify(r6));
   ok('  and hadReqErr reports whether the request itself carried the error', r6 && r6.hadReqErr === true, JSON.stringify(r6));
+
+  console.log('\n7. THREE CONSECUTIVE WRITE FAILURES FORCE A FRESH CONNECTION, AND A SUCCESS RESETS THE COUNT');
+  /* D1ZMK6's own field data: the same write failed the same way nineteen
+     times in one run, on one connection, after that same shape of write had
+     just succeeded minutes earlier on what was then a freshly-opened one.
+     Nothing here proves reopening the connection fixes the underlying
+     platform issue — that is still unconfirmed — but it is a cheap, safe
+     recovery attempt (IDBDatabase.close() waits for in-flight work to
+     finish) and it is directly testable: does dbConn actually get replaced,
+     and does the phone keep working afterward. */
+  const r7 = await p.evaluate(async () => {
+    // dbFailStreak is the mechanism's own, directly-readable state — the
+    // synchronous, deterministic contract that actually matters. (A
+    // close()-call spy was tried first and dropped: dbReconnect's own
+    // close() runs off an already-resolved promise's .then(), an async
+    // microtask whose exact landing tick relative to a later test section
+    // isn't something worth pinning a test to — the streak variable itself
+    // is reset synchronously, in the same tick dbReconnect runs, and is
+    // what every other behaviour here actually depends on.)
+    dbFailStreak = 0;
+    const realPut = IDBObjectStore.prototype.put;
+    let failing = true;
+    IDBObjectStore.prototype.put = function (v) {
+      const rq = realPut.call(this, v);
+      if (failing) this.transaction.abort();
+      return rq;
+    };
+    // Two failures — below the reconnect threshold — must leave the streak
+    // at 2, not reset it early.
+    for (let i = 0; i < 2; i++) { try { await dbPut({ id: 'STREAK' + i }); } catch (e) {} }
+    const streakAfterTwo = dbFailStreak;
+    // A genuine success must reset it to 0, so a later run of failures is
+    // never treated as a continuation of an old one.
+    failing = false;
+    await dbPut({ id: 'STREAK-OK' });
+    const streakAfterSuccess = dbFailStreak;
+    // Three consecutive failures since that reset must cross the threshold
+    // — dbReconnect's own first act is zeroing the streak, so seeing it
+    // back at 0 here (not 3) is exactly the evidence a reconnect fired.
+    failing = true;
+    for (let i = 0; i < 3; i++) { try { await dbPut({ id: 'STREAK2-' + i }); } catch (e) {} }
+    const streakAfterThree = dbFailStreak;
+    IDBObjectStore.prototype.put = realPut;
+    failing = false;
+    // However that reconnect actually lands, the phone must still be able
+    // to write and read normally afterward — a reconnect that leaves it
+    // unable to reopen its own store would be worse than the failure it
+    // was meant to recover from.
+    let stillWorks = false;
+    try { await dbPut({ id: 'AFTER-RECONNECT', ok: 1 }); const back = await dbGet('AFTER-RECONNECT'); stillWorks = !!(back && back.ok === 1); }
+    catch (e) { stillWorks = false; }
+    return { streakAfterTwo, streakAfterSuccess, streakAfterThree, stillWorks };
+  });
+  ok('two consecutive failures leave the streak at 2, not reset', r7.streakAfterTwo === 2, JSON.stringify(r7));
+  ok('a genuine success resets the streak to 0', r7.streakAfterSuccess === 0, JSON.stringify(r7));
+  ok('three consecutive failures cross the threshold — the streak is back at 0, evidence a reconnect fired', r7.streakAfterThree === 0, JSON.stringify(r7));
+  ok('the phone can still read and write normally right after', r7.stillWorks === true, JSON.stringify(r7));
+
+  console.log('\n8. visInfo() REPORTS WHETHER THE PHONE WAS FOREGROUNDED');
+  const r8 = await p.evaluate(() => {
+    const v = visInfo();
+    return { hasHidden: v && typeof v.hidden === 'boolean', hasVis: v && typeof v.vis === 'string', hasMs: v && typeof v.msSinceVisChange === 'number' };
+  });
+  ok('visInfo reports hidden/vis/msSinceVisChange, the three fields the theory needs', r8.hasHidden && r8.hasVis && r8.hasMs, JSON.stringify(r8));
 
   ok('no page errors throughout', errs.length === 0, errs.slice(0, 3).join(' | '));
   await b.close(); srv.close();

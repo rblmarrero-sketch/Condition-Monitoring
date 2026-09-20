@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=419">
+<link rel="manifest" href="manifest.webmanifest?v=420">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=419">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=419">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=419">
+<link rel="apple-touch-icon" href="icon-192.png?v=420">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=420">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=420">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2634,15 +2634,15 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=419"></script>
-<script src="upload-defaults.js?v=419"></script>
-<script src="hme.js?v=419"></script>
-<script src="mp-fc.js?v=419"></script>
-<script src="hme-cascade.js?v=419"></script>
-<script src="assets.js?v=419"></script>
-<script src="temp-limits.js?v=419"></script>
-<script src="normalize.js?v=419"></script>
-<script src="terms.js?v=419"></script>
+<script src="native.js?v=420"></script>
+<script src="upload-defaults.js?v=420"></script>
+<script src="hme.js?v=420"></script>
+<script src="mp-fc.js?v=420"></script>
+<script src="hme-cascade.js?v=420"></script>
+<script src="assets.js?v=420"></script>
+<script src="temp-limits.js?v=420"></script>
+<script src="normalize.js?v=420"></script>
+<script src="terms.js?v=420"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2661,25 +2661,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=419"></script>
-<script src="edits.js?v=419"></script>
-<script src="due.js?v=419"></script>
-<script src="wear.js?v=419"></script>
-<script src="wear-figs.js?v=419"></script>
-<script src="wear-map.js?v=419"></script>
-<script src="machine-photos.js?v=419"></script>
-<script src="machine-fig.js?v=419"></script>
-<script src="get.js?v=419"></script>
-<script src="points.js?v=419"></script>
-<script src="uc-points.js?v=419"></script>
-<script src="inspect-guide.js?v=419"></script>
-<script src="get-figs.js?v=419"></script>
-<script src="body-points.js?v=419"></script>
-<script src="body-map.js?v=419"></script>
-<script src="lube.js?v=419"></script>
-<script src="lube-overrides.js?v=419"></script>
-<script src="lube2027.js?v=419"></script>
-<script src="report-core.js?v=419"></script>
+<script src="grade.js?v=420"></script>
+<script src="edits.js?v=420"></script>
+<script src="due.js?v=420"></script>
+<script src="wear.js?v=420"></script>
+<script src="wear-figs.js?v=420"></script>
+<script src="wear-map.js?v=420"></script>
+<script src="machine-photos.js?v=420"></script>
+<script src="machine-fig.js?v=420"></script>
+<script src="get.js?v=420"></script>
+<script src="points.js?v=420"></script>
+<script src="uc-points.js?v=420"></script>
+<script src="inspect-guide.js?v=420"></script>
+<script src="get-figs.js?v=420"></script>
+<script src="body-points.js?v=420"></script>
+<script src="body-map.js?v=420"></script>
+<script src="lube.js?v=420"></script>
+<script src="lube-overrides.js?v=420"></script>
+<script src="lube2027.js?v=420"></script>
+<script src="report-core.js?v=420"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -4828,6 +4828,35 @@ function idb(){ return dbConn ||= new Promise((res,rej)=>{ const r=indexedDB.ope
 /* Anything that reads the store and keeps the answer has to know when the answer
    went stale. One counter, bumped by the only two writers. */
 let dbVer=0;
+/* A WRITE THAT FAILS THE SAME WAY EVERY TIME ON ONE CONNECTION IS A REASON
+   TO SUSPECT THE CONNECTION, NOT JUST THE WRITE.
+
+   Field evidence (D1ZMK6, build 418, 2026-09-20T06:33): the exact same
+   dbPut of the exact same records failed 19 times in one run with an
+   identical, contentless error — and the very same shape of write had
+   already succeeded once, at Save time, minutes earlier, on what was then
+   a freshly-opened connection. Nothing here proves WHY a long-lived
+   IndexedDB connection degrades on this engine — it may never be provable
+   from JS — but reopening a connection is a cheap, safe, well-precedented
+   recovery for exactly this class of platform flakiness, and `idb()`
+   already reopens cleanly whenever `dbConn` is null (the browser's own
+   onclose/onversionchange handlers already rely on that). This does the
+   same thing PROACTIVELY, after a run of failures, instead of waiting for
+   the browser to decide the connection is dead on its own — the SAME
+   connection dbGet/dbAll happily keep reading from throughout, which is
+   why this is scoped to write failures only. `IDBDatabase.close()` waits
+   for any transaction already in flight to finish before it takes effect,
+   so this cannot cut off a write that is still actually running. */
+let dbFailStreak=0;
+const DB_RECONNECT_AT=3;
+function dbReconnect(why){
+  slog("db-reconnect", {why, streak:dbFailStreak});
+  dbFailStreak=0;
+  const p=dbConn; dbConn=null;
+  if(p && typeof p.then==="function") p.then(d=>{ try{ d.close(); }catch(e){} }).catch(()=>{});
+}
+function dbWriteOk(){ dbFailStreak=0; }
+function dbWriteFail(why){ dbFailStreak++; if(dbFailStreak>=DB_RECONNECT_AT) dbReconnect(why); }
 /* "storage may be full" was always a guess, not a diagnosis: it only fires
    when t.error is null, and IDBTransaction.error is nullable by spec even
    when the request that caused the abort carries a real DOMException — the
@@ -4850,8 +4879,8 @@ let dbVer=0;
    a request-level error was ever seen — three bits of information this
    project had literally none of an hour ago. */
 async function dbPut(rec){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readwrite"); let reqErr=null; const rq=t.objectStore(STORE).put(rec); rq.onerror=()=>{ reqErr=rq.error||null; };
-  const fail=(phase,fallbackMsg)=>{ const e=reqErr||t.error||new Error(fallbackMsg); try{ e.phase=phase; e.hadReqErr=!!reqErr; }catch(_){} rej(e); };
-  t.oncomplete=()=>{ dbVer++; res(); }; t.onerror=()=>fail("error","save failed — storage may be full"); t.onabort=()=>fail("abort","save aborted — storage may be full"); }); }
+  const fail=(phase,fallbackMsg)=>{ dbWriteFail("dbPut:"+phase); const e=reqErr||t.error||new Error(fallbackMsg); try{ e.phase=phase; e.hadReqErr=!!reqErr; }catch(_){} rej(e); };
+  t.oncomplete=()=>{ dbVer++; dbWriteOk(); res(); }; t.onerror=()=>fail("error","save failed — storage may be full"); t.onabort=()=>fail("abort","save aborted — storage may be full"); }); }
 /* The round being typed lives in this store too, under a reserved id, so it
    gets IndexedDB's durability and can hold photographs. It is NOT an
    inspection: filtered out here, once, so that the queue, the sync, the
@@ -4876,7 +4905,9 @@ async function dbAll(){ const d=await idb(); return new Promise((res,rej)=>{ con
 /* The team rounds only — the other side of that same filter. */
 async function dbTeam(){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readonly"); const rq=t.objectStore(STORE).getAll(); rq.onsuccess=()=>res((rq.result||[]).filter(r=>r&&isTeamId(r.id))); rq.onerror=()=>rej(rq.error||new Error("could not read the shared rounds")); }); }
 async function dbGet(id){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readonly"); const rq=t.objectStore(STORE).get(id); rq.onsuccess=()=>res(rq.result||null); rq.onerror=()=>rej(rq.error||new Error("could not read this record")); }); }
-async function dbDel(id){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readwrite"); let reqErr=null; const rq=t.objectStore(STORE).delete(id); rq.onerror=()=>{ reqErr=rq.error||null; }; t.oncomplete=()=>{ dbVer++; res(); }; t.onerror=()=>rej(reqErr||t.error||new Error("delete failed")); t.onabort=()=>rej(reqErr||t.error||new Error("delete aborted")); }); }
+async function dbDel(id){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readwrite"); let reqErr=null; const rq=t.objectStore(STORE).delete(id); rq.onerror=()=>{ reqErr=rq.error||null; };
+  const fail=(phase,fallbackMsg)=>{ dbWriteFail("dbDel:"+phase); const e=reqErr||t.error||new Error(fallbackMsg); try{ e.phase=phase; e.hadReqErr=!!reqErr; }catch(_){} rej(e); };
+  t.oncomplete=()=>{ dbVer++; dbWriteOk(); res(); }; t.onerror=()=>fail("error","delete failed"); t.onabort=()=>fail("abort","delete aborted"); }); }
 
 /* ===================== class + type + component chips ===================== */
 function fillClassSel(){ $("classBtn").textContent = eqCat==="ALL"
@@ -8367,7 +8398,7 @@ $("saveBtn").onclick=async ()=>{
     const why=String((e&&e.message)||e||"");
     const pair=t("m_save_failed"); dlg([pair[0], pair[1].split("{why}").join(why)]);
     slog("save-write-fail",{u:rec.equip||"?", id:rec.id, why:why.slice(0,200),
-      phase:(e&&e.phase)||"", hadReqErr:!!(e&&e.hadReqErr)});
+      phase:(e&&e.phase)||"", hadReqErr:!!(e&&e.hadReqErr), vis:visInfo()});
     /* This is the one failure a technician is standing at the machine for
        RIGHT NOW — worth its own trace immediately rather than waiting for
        the next sync run to notice CM_ERRS grew. Fire-and-forget, same as
@@ -13573,7 +13604,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="419";
+const BUILD="420";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -15738,6 +15769,21 @@ function platformInfo(){
       cores: navigator.hardwareConcurrency!=null ? navigator.hardwareConcurrency : null };
   }catch(e){ return null; }
 }
+/* iOS suspends a backgrounded tab's JS and can leave its native connections
+   (IndexedDB included) in a state the page never gets to observe until the
+   tab is foregrounded again — a well-documented category of iOS PWA
+   reliability trouble, and armRetry's own timers are exactly the kind of
+   thing that can queue up while hidden and all fire together on resume.
+   Nothing in the writeback-fail trace has ever recorded whether the phone
+   was foregrounded when the failing write ran, or how recently it had
+   changed — this closes that gap so the theory can be checked against real
+   occurrences instead of guessed at. */
+let lastVisChangeAt=Date.now();
+try{ document.addEventListener("visibilitychange", ()=>{ lastVisChangeAt=Date.now(); }); }catch(e){}
+function visInfo(){
+  try{ return { hidden:!!document.hidden, vis:String(document.visibilityState||""), msSinceVisChange:Date.now()-lastVisChangeAt }; }
+  catch(e){ return null; }
+}
 async function traceDoc(why){
   let pend = null; try{ pend = (SLOG.filter(e=>e.ev==="queue").pop()||{}).pending; }catch(e){}
   let store = null; try{ store = await storageInfo(); }catch(e){}
@@ -16058,7 +16104,7 @@ async function syncNow(manual){
            whether this was the transaction's error event or its abort event,
            and whether a request-level DOMException was ever seen at all. */
         slog("writeback-fail", {u:rec.equip, rev, err:String((e&&e.message)||e).slice(0,200),
-          phase:(e&&e.phase)||"", hadReqErr:!!(e&&e.hadReqErr)});
+          phase:(e&&e.phase)||"", hadReqErr:!!(e&&e.hadReqErr), vis:visInfo(), streak:dbFailStreak});
         /* THE ROUND WENT UP AND THE PHONE COULD NOT WRITE THAT DOWN.
 
            Read off a handset on 2026-09-13: nineteen rounds "waiting to
