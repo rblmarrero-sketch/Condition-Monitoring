@@ -2,7 +2,7 @@
   "_purpose": "Bookmark for the hourly diagnostic-trace review Routine. Holds the `updated` timestamp (ms epoch, from the _meta/diag/ folder listing on the live backend) of the newest trace file already reviewed. Each hourly check reads this, looks only at traces newer than it, analyzes anything actionable, and advances it — so the review never re-reads the same trace twice and never silently skips one. Updated by that Routine, not by hand.",
   "lastReviewedUpdated": 1789871232612,
   "lastReviewedName": "D1ZMK6_2026-09-20T02-27-12.json",
-  "lastCheckedAt": "2026-09-20T02:27:12Z",
+  "lastCheckedAt": "2026-09-20T02:40:22Z",
   "watching": [
     {
       "note": "SECOND occurrence, different device: D4W4FT, 2026-09-20T02:09 — ~30 identical unhandled-rejection errors in <4s, 'Object Not Found Matching Id:1, MethodName:update, ParamCount:4', immediately followed by a clean run (pending:0, run-end err:''). Identical shape to DKB8FF on 2026-09-19T22:32 (there it was Id:2). Still no data-loss evidence either time, and the message itself is a WebKit-native message-bridge artifact (a callback routed to an already-torn-down page context), not something this app's JS calls into directly — there is no 'update' RPC of ours named that way. Two occurrences on two devices with the same benign outcome both times keeps this below the bar for a speculative fix; watching for a THIRD occurrence, or any occurrence NOT followed by a clean sync, before treating it as actionable."
