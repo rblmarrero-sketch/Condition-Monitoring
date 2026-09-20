@@ -2,7 +2,7 @@
   "_purpose": "Bookmark for the hourly diagnostic-trace review Routine. Holds the `updated` timestamp (ms epoch, from the _meta/diag/ folder listing on the live backend) of the newest trace file already reviewed. Each hourly check reads this, looks only at traces newer than it, analyzes anything actionable, and advances it — so the review never re-reads the same trace twice and never silently skips one. Updated by that Routine, not by hand.",
   "lastReviewedUpdated": 1789857135026,
   "lastReviewedName": "DKB8FF_2026-09-19T22-32-13.json",
-  "lastCheckedAt": "2026-09-20T00:40:30Z",
+  "lastCheckedAt": "2026-09-20T01:40:35Z",
   "watching": [
     {
       "note": "DKB8FF, 2026-09-19T22:32: ~30 identical unhandled-rejection errors in <4s — 'Object Not Found Matching Id:2, MethodName:update, ParamCount:4'. A WebKit-internal transport error (its native bridge routing a callback to an already-torn-down page context), not a JS-level bug in this app. Immediately followed by a clean sync run with pending:0 — no data loss evidence. One occurrence is not a pattern; watching for a repeat (same device or others) before treating this as actionable. If it recurs, look at what reload/navigation path was active in that exact window."
