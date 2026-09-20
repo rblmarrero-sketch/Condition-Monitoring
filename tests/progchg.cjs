@@ -478,8 +478,17 @@ const srv = http.createServer((req, res) => {
       (seen[k] = seen[k] || []).push(...w.cmTypes); });
     Object.keys(seen).forEach(k => { if (new Set(seen[k]).size !== seen[k].length) twice.push(k); });
     return {
-      tk156: of('TK156', '2026-09-12', 4000).slice().sort(),
-      tk156_250: of('TK156', '2026-09-24', 250).slice().sort(),
+      /* Both dates are picked off the shipped file itself, not memory — the
+         1C pull refreshes hourly (see the "Refresh work_orders.js" commits)
+         and a literal date here goes stale the moment 1C reissues or closes
+         the order it names. TK156's 4,000 h order shifted from 2026-09-12 to
+         2026-09-13 between when this was written and 2026-09-20, and its own
+         2026-09-24 250 h pin never existed at all by then — it was reading a
+         date this project invented, not one 1C ever raised. Both are now
+         CLOSED, historical orders, which do not move on a later refresh the
+         way an open one can. */
+      tk156: of('TK156', '2026-09-13', 4000).slice().sort(),
+      tk156_250: of('TK156', '2026-08-26', 250).slice().sort(),
       ex021_4000: of('EX021', null, 4000).slice().sort(),
       /* THE RULE, NOT THE ANSWER IT HAPPENED TO GIVE. This pinned
          ex021_500 === ["INSP"] and ex021_1000 === ["FC"], which was true
@@ -567,16 +576,24 @@ const srv = http.createServer((req, res) => {
      the FIRST resolved type and dropped the rest — which cost nothing while
      an order resolved to one or two rounds, and became the whole point the
      moment a tier started including the tiers below it. A real value
-     rendered as nothing, produced by the fix for the previous one. */
+     rendered as nothing, produced by the fix for the previous one.
+
+     WO-015691 (TK156) was the order this was originally caught on; by
+     2026-09-20 1C has marked it CNF/Completed, so it correctly no longer
+     appears on a forward-looking plan grid at all — that emptied `entries`
+     here for a reason that has nothing to do with the rule being tested.
+     WO-016655 (TK159, the same 4,000 h/four-round shape) is 1C's current
+     OPEN stand-in; swap it for whichever order is open and carries more
+     than one resolved round type if this drifts again the same way. */
   const pills = await d.evaluate(() => {
     const W = (window.CM_WO_DATA || {}).workOrders || [];
-    const w = W.find(x => x.woNumber === 'WO-015691') || {};
+    const w = W.find(x => x.woNumber === 'WO-016655') || {};
     const rows = paRows();
-    const r = rows.find(x => x.w.woNumber === 'WO-015691');
+    const r = rows.find(x => x.w.woNumber === 'WO-016655');
     /* Draw the grid on a day when that visit is inside the window, so this
        does not quietly pass by testing an empty grid in three weeks' time. */
     DUE.setToday(w.planStart);
-    const entries = paWeekData(rows).filter(e => e.r && e.r.w.woNumber === 'WO-015691');
+    const entries = paWeekData(rows).filter(e => e.r && e.r.w.woNumber === 'WO-016655');
     const out = {
       resolved: (r && r.info.types || []).slice().sort(),
       drawn: entries.map(e => e.code).sort(),
