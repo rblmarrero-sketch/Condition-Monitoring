@@ -2,7 +2,7 @@
   "_purpose": "Bookmark for the hourly diagnostic-trace review Routine. Holds the `updated` timestamp (ms epoch, from the _meta/diag/ folder listing on the live backend) of the newest trace file already reviewed. Each hourly check reads this, looks only at traces newer than it, analyzes anything actionable, and advances it — so the review never re-reads the same trace twice and never silently skips one. Updated by that Routine, not by hand.",
   "lastReviewedUpdated": 1789877021546,
   "lastReviewedName": "D1ZMK6_2026-09-20T04-03-40.json",
-  "lastCheckedAt": "2026-09-20T04:10:00Z",
+  "lastCheckedAt": "2026-09-20T04:40:24Z",
   "watching": [
     {
       "note": "FOUR occurrences now, four different devices, all with the same benign outcome: DKB8FF 2026-09-19T22:32 (Id:2), D4W4FT 2026-09-20T02:09 (Id:1), DO3JLV 2026-09-20T03:03 (Id:3), D8B32O 2026-09-20T03:16 (Id:3). Same shape every time — ~10-30 identical unhandled-rejection 'Object Not Found Matching Id:N, MethodName:update, ParamCount:4' in under 4s, immediately followed by a clean run (pending:0, run-end err:''). No data-loss evidence in any of the four. This is a WebKit-native message-bridge artifact (a callback routed to an already-torn-down page context) — there is no 'update' RPC this app's own JS calls, so it originates below the JS layer and is not fixable from here. Downgrading from 'watching for a repeat' to 'known benign, recurring' — still logging each new occurrence in case one ever arrives WITHOUT a clean sync after it, which would change this.",
