@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=431">
+<link rel="manifest" href="manifest.webmanifest?v=432">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=431">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=431">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=431">
+<link rel="apple-touch-icon" href="icon-192.png?v=432">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=432">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=432">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2751,16 +2751,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=431"></script>
-<script src="upload-defaults.js?v=431"></script>
-<script src="hme.js?v=431"></script>
-<script src="mp-fc.js?v=431"></script>
-<script src="rtw.js?v=431"></script>
-<script src="hme-cascade.js?v=431"></script>
-<script src="assets.js?v=431"></script>
-<script src="temp-limits.js?v=431"></script>
-<script src="normalize.js?v=431"></script>
-<script src="terms.js?v=431"></script>
+<script src="native.js?v=432"></script>
+<script src="upload-defaults.js?v=432"></script>
+<script src="hme.js?v=432"></script>
+<script src="mp-fc.js?v=432"></script>
+<script src="rtw.js?v=432"></script>
+<script src="hme-cascade.js?v=432"></script>
+<script src="assets.js?v=432"></script>
+<script src="temp-limits.js?v=432"></script>
+<script src="normalize.js?v=432"></script>
+<script src="terms.js?v=432"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2779,25 +2779,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=431"></script>
-<script src="edits.js?v=431"></script>
-<script src="due.js?v=431"></script>
-<script src="wear.js?v=431"></script>
-<script src="wear-figs.js?v=431"></script>
-<script src="wear-map.js?v=431"></script>
-<script src="machine-photos.js?v=431"></script>
-<script src="machine-fig.js?v=431"></script>
-<script src="get.js?v=431"></script>
-<script src="points.js?v=431"></script>
-<script src="uc-points.js?v=431"></script>
-<script src="inspect-guide.js?v=431"></script>
-<script src="get-figs.js?v=431"></script>
-<script src="body-points.js?v=431"></script>
-<script src="body-map.js?v=431"></script>
-<script src="lube.js?v=431"></script>
-<script src="lube-overrides.js?v=431"></script>
-<script src="lube2027.js?v=431"></script>
-<script src="report-core.js?v=431"></script>
+<script src="grade.js?v=432"></script>
+<script src="edits.js?v=432"></script>
+<script src="due.js?v=432"></script>
+<script src="wear.js?v=432"></script>
+<script src="wear-figs.js?v=432"></script>
+<script src="wear-map.js?v=432"></script>
+<script src="machine-photos.js?v=432"></script>
+<script src="machine-fig.js?v=432"></script>
+<script src="get.js?v=432"></script>
+<script src="points.js?v=432"></script>
+<script src="uc-points.js?v=432"></script>
+<script src="inspect-guide.js?v=432"></script>
+<script src="get-figs.js?v=432"></script>
+<script src="body-points.js?v=432"></script>
+<script src="body-map.js?v=432"></script>
+<script src="lube.js?v=432"></script>
+<script src="lube-overrides.js?v=432"></script>
+<script src="lube2027.js?v=432"></script>
+<script src="report-core.js?v=432"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -9388,13 +9388,23 @@ const SCHED_STALE_MS = 900000;
 const SCHED_PREINSP_DAYS = 3;        // mirrors the dashboard's PA_PREINSP_DAYS
 let dueSched = false;                 // the toggle's own state
 try{ dueSched = localStorage.getItem("cm_due_sched")==="1"; }catch(e){}
-let SCHED = null;                     // {generated, byUnit} once loaded
+let SCHED = null;                     // {generated, byUnit, rtwOpen} once loaded
+/* KEYED BY BUILD, NOT JUST BY AGE. schedule_slim.json's own SHAPE is this
+   app's to version, even though its CONTENT is on 1C's clock (the "moved"
+   check above is about the latter, not this). Read off the field within
+   SCHED_STALE_MS of build 431 shipping rtwOpen: a phone that had already
+   cached the OLD shape (no rtwOpen at all) in the last 15 minutes trusted
+   it as "fresh enough" and rtwWorkOrders() read undefined — Return to
+   Work's Pick screen said "No open work orders found" against a server
+   that, by then, genuinely had 179. A build-keyed key means a new build
+   never even sees a cache an older build wrote; the one-time cost is the
+   same ~20 kB fetch every build already re-fetches once anyway. */
 function schedCacheGet(){
-  try{ return JSON.parse(localStorage.getItem("cm_sched_cache")||"null"); }
+  try{ return JSON.parse(localStorage.getItem("cm_sched_cache_v"+BUILD)||"null"); }
   catch(e){ return null; }
 }
 function schedCacheSet(j){
-  try{ lsSet("cm_sched_cache", JSON.stringify({ at: Date.now(), data: j })); }
+  try{ lsSet("cm_sched_cache_v"+BUILD, JSON.stringify({ at: Date.now(), data: j })); }
   catch(e){ /* quota — the toggle just falls back to fetching every time */ }
 }
 /* Called once when the toggle turns on, and again whenever Due is opened
@@ -14241,7 +14251,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="431";
+const BUILD="432";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
