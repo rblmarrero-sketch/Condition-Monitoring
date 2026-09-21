@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=434">
+<link rel="manifest" href="manifest.webmanifest?v=435">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=434">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=434">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=434">
+<link rel="apple-touch-icon" href="icon-192.png?v=435">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=435">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=435">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2751,16 +2751,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=434"></script>
-<script src="upload-defaults.js?v=434"></script>
-<script src="hme.js?v=434"></script>
-<script src="mp-fc.js?v=434"></script>
-<script src="rtw.js?v=434"></script>
-<script src="hme-cascade.js?v=434"></script>
-<script src="assets.js?v=434"></script>
-<script src="temp-limits.js?v=434"></script>
-<script src="normalize.js?v=434"></script>
-<script src="terms.js?v=434"></script>
+<script src="native.js?v=435"></script>
+<script src="upload-defaults.js?v=435"></script>
+<script src="hme.js?v=435"></script>
+<script src="mp-fc.js?v=435"></script>
+<script src="rtw.js?v=435"></script>
+<script src="hme-cascade.js?v=435"></script>
+<script src="assets.js?v=435"></script>
+<script src="temp-limits.js?v=435"></script>
+<script src="normalize.js?v=435"></script>
+<script src="terms.js?v=435"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2779,25 +2779,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=434"></script>
-<script src="edits.js?v=434"></script>
-<script src="due.js?v=434"></script>
-<script src="wear.js?v=434"></script>
-<script src="wear-figs.js?v=434"></script>
-<script src="wear-map.js?v=434"></script>
-<script src="machine-photos.js?v=434"></script>
-<script src="machine-fig.js?v=434"></script>
-<script src="get.js?v=434"></script>
-<script src="points.js?v=434"></script>
-<script src="uc-points.js?v=434"></script>
-<script src="inspect-guide.js?v=434"></script>
-<script src="get-figs.js?v=434"></script>
-<script src="body-points.js?v=434"></script>
-<script src="body-map.js?v=434"></script>
-<script src="lube.js?v=434"></script>
-<script src="lube-overrides.js?v=434"></script>
-<script src="lube2027.js?v=434"></script>
-<script src="report-core.js?v=434"></script>
+<script src="grade.js?v=435"></script>
+<script src="edits.js?v=435"></script>
+<script src="due.js?v=435"></script>
+<script src="wear.js?v=435"></script>
+<script src="wear-figs.js?v=435"></script>
+<script src="wear-map.js?v=435"></script>
+<script src="machine-photos.js?v=435"></script>
+<script src="machine-fig.js?v=435"></script>
+<script src="get.js?v=435"></script>
+<script src="points.js?v=435"></script>
+<script src="uc-points.js?v=435"></script>
+<script src="inspect-guide.js?v=435"></script>
+<script src="get-figs.js?v=435"></script>
+<script src="body-points.js?v=435"></script>
+<script src="body-map.js?v=435"></script>
+<script src="lube.js?v=435"></script>
+<script src="lube-overrides.js?v=435"></script>
+<script src="lube2027.js?v=435"></script>
+<script src="report-core.js?v=435"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -3378,7 +3378,7 @@ const I18N = {
     m_rtw_needs_sign:["Not yet","Name the senior mechanic and sign before releasing."],
     m_dictate_failed:["Dictation stopped","The microphone could not be reached. You can keep typing."],
     due_sched_t:"Show 1C schedule",
-    due_sched_s:"Adds the office's own planned date under a round that has one. Off by default — nothing changes unless you turn it on.",
+    due_sched_s:"Adds the office's own planned date under a round already listed below. The Overdue/Due soon counts above never change — they are this app's own schedule, not 1C's.",
     due_sched_line:"1C plan {d} · {h} · WO {wo}",
     due_sched_precheck:"walk ahead of the PM",
     due_sched_on_n:"1C's plan is shown on {n} round(s) below.",
@@ -4027,7 +4027,7 @@ const I18N = {
     m_rtw_needs_sign:["Ещё не всё","Укажите старшего механика и подпишите перед допуском к работе."],
     m_dictate_failed:["Диктовка остановлена","Не удалось подключиться к микрофону. Можно продолжить печатать."],
     due_sched_t:"Показать план 1С",
-    due_sched_s:"Добавляет плановую дату офиса под обходом, для которого она есть. По умолчанию выключено — ничего не меняется, пока вы сами не включите.",
+    due_sched_s:"Добавляет плановую дату офиса под обходом, который уже есть в списке ниже. Счётчики выше (просрочено/скоро) не меняются — это график самого приложения, а не 1С.",
     due_sched_line:"план 1С {d} · {h} · наряд {wo}",
     due_sched_precheck:"провести до ТО",
     due_sched_on_n:"План 1С показан у {n} обход(ов) ниже.",
@@ -14265,7 +14265,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="434";
+const BUILD="435";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
