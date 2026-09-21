@@ -1631,6 +1631,37 @@ Reliability Engineer." `approvalBlock(T, rec, onlySup)` takes an optional
 third argument — RTW's own call site is the only caller that passes it —
 and every other type keeps all three rows exactly as before.
 
+**THE WORK ORDER NUMBER MOVED AGAIN — INTO THE MASTHEAD ITSELF, NOT JUST OUT
+OF THE BOX.** The header strip build 436 shipped was still a box of its own
+below the title; a second annotated report drew the arrow all the way to the
+masthead pill beside the report number. `head` (shared by every branch — the
+one thing built before RTW's own branch even runs) now appends
+`" · " + rec.rtwWo` to that pill for RTW only; every other type's pill is
+untouched. The strip that used to hold the WO number now states what 1C
+scheduled and how this release compares to it: **priority** (just the code
+— P1–P4 — read off 1C's own text, "P3 Planned (PM)" prints as P3, the same
+way a plan-grid pill states priority everywhere else in this project),
+**type**, **hour tier** and **plan date**, plus a **calculated** field,
+"Released vs. schedule" — the whole-day difference between `rec.date` (when
+the checklist was actually completed and signed) and 1C's plan date, printed
+as "N d late" / "N d early" / "On schedule", never typed and never guessed:
+blank when either date is missing. Priority is a FOURTH field carried the
+same way type/hours/schedule already were — Pick → Save (`rtwWoPriority`) →
+three read sites (`recToExport0`, `rptRecords`, the team-round reader) — the
+same "one fact typed in several places" shape this file's rules warn about,
+now four sites deep for this one record.
+
+A debugging note worth keeping: the priority cell appeared to not render at
+all on the first pass, and the actual bug was in the TEST, not the code —
+`T.I()` wraps a bilingual LABEL in a trailing `<span class="alti">/ ...`
+before the closing `</div>`, so a test regex written for the exact string
+`<div class="sk">Priority</div>` never matches once bilingual is the report's
+default. The same "plain string in a bilingual cell" trap `tbRtwMark`'s own
+fix (above) already documents — this time in a test's own assertion rather
+than in the code the test was checking. Confirmed by reading
+`window.__rtwHdrDebug` off the live page (a temporary hook, removed once the
+real cause was found) rather than guessing from the output alone.
+
 ---
 
 ## Secrets

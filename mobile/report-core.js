@@ -1006,6 +1006,8 @@
       method_RTW:"Return to Work",
       rtw_no:"No.", rtw_desc:"Description of operations", rtw_mark:"Mark", rtw_comment:"Comment",
       rtw_comments:"Comments", rtw_wo_type:"Type", rtw_sched:"Scheduled", rtw_sched_hours:"Hours",
+      rtw_priority:"Priority", rtw_vs_sched:"Released vs. schedule",
+      rtw_sched_ontime:"On schedule", rtw_sched_late:"{n} d late", rtw_sched_early:"{n} d early",
       rtw_pre:"Pre-release inspection", rtw_post:"Service completion",
       rtw_photos:"Evidence", rtw_release:"Final release", rtw_senior:"Senior Mechanic",
       rtw_pass:"P", rtw_attn:"!", rtw_na:"N/A",
@@ -1209,6 +1211,8 @@
       method_RTW:"\u0412\u043e\u0437\u0432\u0440\u0430\u0442 \u0432 \u0440\u0430\u0431\u043e\u0442\u0443",
       rtw_no:"\u2116", rtw_desc:"\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435 \u043e\u043f\u0435\u0440\u0430\u0446\u0438\u0438", rtw_mark:"\u041e\u0442\u043c\u0435\u0442\u043a\u0430", rtw_comment:"\u041a\u043e\u043c\u043c\u0435\u043d\u0442\u0430\u0440\u0438\u0439",
       rtw_comments:"\u041a\u043e\u043c\u043c\u0435\u043d\u0442\u0430\u0440\u0438\u0438", rtw_wo_type:"\u0422\u0438\u043f", rtw_sched:"\u041f\u043b\u0430\u043d", rtw_sched_hours:"\u041d\u0430\u0440\u0430\u0431\u043e\u0442\u043a\u0430",
+      rtw_priority:"\u041f\u0440\u0438\u043e\u0440\u0438\u0442\u0435\u0442", rtw_vs_sched:"\u041e\u0442\u043d\u043e\u0441\u0438\u0442\u0435\u043b\u044c\u043d\u043e \u043f\u043b\u0430\u043d\u0430",
+      rtw_sched_ontime:"\u041f\u043e \u043f\u043b\u0430\u043d\u0443", rtw_sched_late:"{n} \u0434\u043d. \u043f\u043e\u0437\u0436\u0435", rtw_sched_early:"{n} \u0434\u043d. \u0440\u0430\u043d\u044c\u0448\u0435",
       rtw_pre:"\u041a\u043e\u043d\u0442\u0440\u043e\u043b\u044c\u043d\u044b\u0439 \u043e\u0441\u043c\u043e\u0442\u0440 \u043f\u0435\u0440\u0435\u0434 \u0432\u043e\u0437\u0432\u0440\u0430\u0442\u043e\u043c \u0432 \u0440\u0430\u0431\u043e\u0442\u0443", rtw_post:"\u041e\u043a\u043e\u043d\u0447\u0430\u043d\u0438\u0435 \u043e\u0431\u0441\u043b\u0443\u0436\u0438\u0432\u0430\u043d\u0438\u044f",
       rtw_photos:"\u0424\u043e\u0442\u043e\u0444\u0438\u043a\u0441\u0430\u0446\u0438\u044f", rtw_release:"\u0414\u043e\u043f\u0443\u0441\u043a \u043a \u0440\u0430\u0431\u043e\u0442\u0435", rtw_senior:"\u0421\u0442\u0430\u0440\u0448\u0438\u0439 \u043c\u0435\u0445\u0430\u043d\u0438\u043a",
       rtw_pass:"\u041d", rtw_attn:"!", rtw_na:"\u041d/\u041f",
@@ -3014,24 +3018,55 @@
     if (m === "na") return '<span class="muted">' + T.I("rtw_na") + '</span>';
     return tbMiss(T);
   }
-  /* THE WORK ORDER, ITS TYPE, ITS SCHEDULE AND ITS HOUR TIER — AT THE TOP,
-     BEFORE THE VERDICT, NOT A BOX PARTWAY DOWN THE PAGE.
+  /* Just the leading code — 1C's own priority column reads "P3 Planned
+     (PM)" or "P2 Severe", and the header strip asks for the code alone
+     (P1–P4), the way every plan-grid pill elsewhere in this project already
+     states priority. The full text is not thrown away — build_rtw_open's
+     `desc` still carries it into the Pick screen — this is only what a
+     one-line header cell has room to say. */
+  function rtwPrioCode(s) {
+    var m = /^(P[1-4])\b/i.exec(String(s || "").trim());
+    return m ? m[1].toUpperCase() : (s || "");
+  }
+  /* THE RELEASE DATE AGAINST THE SCHEDULE — CALCULATED, NEVER TYPED.
+     `rec.date` is when this checklist was actually completed and signed;
+     `rec.rtwSchedDate` is 1C's own plan date for the work order it was
+     raised against. Both are plain YYYY-MM-DD (this round carries no time
+     of day), so the difference is whole days. Blank when either date is
+     missing — a difference with one side unknown is not a number, it is a
+     guess wearing a number's clothes, and this file does not print those. */
+  function rtwVsSchedule(T, rec) {
+    if (!rec.date || !rec.rtwSchedDate) return "";
+    var a = Date.parse(rec.rtwSchedDate + "T00:00:00Z"), b = Date.parse(rec.date + "T00:00:00Z");
+    if (!isFinite(a) || !isFinite(b)) return "";
+    var days = Math.round((b - a) / 86400000);
+    if (days === 0) return T.I("rtw_sched_ontime");
+    return T.I(days > 0 ? "rtw_sched_late" : "rtw_sched_early").replace("{n}", Math.abs(days));
+  }
+  /* THE WORK ORDER'S OWN SCHEDULE, AND WHAT WAS ACTUALLY DONE AGAINST IT —
+     AT THE TOP, BEFORE THE VERDICT, NOT A BOX PARTWAY DOWN THE PAGE.
      Read as a compact strip (.sstrip/.sc/.sk/.sv, the same cells the status
      block already uses — no new CSS for what is still a handful of one-line
      facts) so it costs one row of page height whether it carries one fact or
-     four, not one boxed line per fact. `rtwWoType`/`rtwSchedHours`/
-     `rtwSchedDate` come from the work order 1C actually raised this release
-     against (ingest/ingest_work_orders.py's build_rtw_open, carried through
-     Pick → Save → recToExport0) — a defect work order has no hour tier and
+     four, not one boxed line per fact. The work order NUMBER itself moved
+     to the masthead pill (see `head`'s own comment, above) — asked for by
+     name, with an arrow drawn from this strip's old WO line straight up to
+     it — so this strip is what 1C scheduled and how this release compares
+     to it: priority, type, hour tier and plan date all come from the work
+     order this release was actually raised against
+     (ingest/ingest_work_orders.py's build_rtw_open, carried through
+     Pick → Save → recToExport0); a defect work order has no hour tier and
      that cell is simply not printed, never guessed. */
   function rtwHeaderStrip(T, rec) {
-    if (!rec.rtwWo && !rec.rtwWoType && !rec.rtwSchedDate && rec.rtwSchedHours == null) return "";
+    var vsSched = rtwVsSchedule(T, rec);
+    if (!rec.rtwWoPriority && !rec.rtwWoType && !rec.rtwSchedDate && rec.rtwSchedHours == null && !vsSched) return "";
     function cell(k, v) { return '<div class="sc"><div class="sk">' + esc(k) + '</div><div class="sv">' + v + '</div></div>'; }
     var cells = "";
-    if (rec.rtwWo) cells += cell(T("ma_wo"), esc(rec.rtwWo));
+    if (rec.rtwWoPriority) cells += cell(T.I("rtw_priority"), esc(rtwPrioCode(rec.rtwWoPriority)));
     if (rec.rtwWoType) cells += cell(T.I("rtw_wo_type"), esc(rec.rtwWoType));
-    if (rec.rtwSchedDate) cells += cell(T.I("rtw_sched"), esc(rec.rtwSchedDate));
     if (rec.rtwSchedHours != null) cells += cell(T.I("rtw_sched_hours"), esc(rec.rtwSchedHours) + " h");
+    if (rec.rtwSchedDate) cells += cell(T.I("rtw_sched"), esc(rec.rtwSchedDate));
+    if (vsSched) cells += cell(T.I("rtw_vs_sched"), vsSched);
     return '<div class="sstrip" style="margin-top:10px;">' + cells + '</div>';
   }
   /* The release result gets its OWN treatment, not a cell beside the others
@@ -3311,9 +3346,16 @@
          a point count into one flex row that wrapped into an unreadable block —
          this splits identity (title/subtitle), reference number (eyebrow) and
          metadata (strip) into the three places the reference keeps them. */
+      /* RTW's own work order rides in the SAME pill as the report number,
+         not a line of its own — asked for by name, with an arrow drawn from
+         a boxed "WORK ORDER" line straight up to this masthead. Every other
+         type's pill is untouched; this is the one place `head` (shared by
+         every branch below, RTW included) reads the record before RTW's own
+         branch even runs. */
+      var rno = reportNo(rec) + (rec.type === "RTW" && rec.rtwWo ? " · " + rec.rtwWo : "");
       var head =
         '<div class="mast">'
-        + mastHead(T, '<i>' + T.I("rr_report") + '</i>' + esc(reportNo(rec)))
+        + mastHead(T, '<i>' + T.I("rr_report") + '</i>' + esc(rno))
         /* A type the dictionary has never heard of falls back to the label the
            host resolved, not to the name of the key. One line, the way the
            metadata strip below it already says "MODEL / МОДЕЛЬ" — T.S's own

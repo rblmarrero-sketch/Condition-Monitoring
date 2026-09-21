@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=436">
+<link rel="manifest" href="manifest.webmanifest?v=437">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=436">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=436">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=436">
+<link rel="apple-touch-icon" href="icon-192.png?v=437">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=437">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=437">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2758,16 +2758,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=436"></script>
-<script src="upload-defaults.js?v=436"></script>
-<script src="hme.js?v=436"></script>
-<script src="mp-fc.js?v=436"></script>
-<script src="rtw.js?v=436"></script>
-<script src="hme-cascade.js?v=436"></script>
-<script src="assets.js?v=436"></script>
-<script src="temp-limits.js?v=436"></script>
-<script src="normalize.js?v=436"></script>
-<script src="terms.js?v=436"></script>
+<script src="native.js?v=437"></script>
+<script src="upload-defaults.js?v=437"></script>
+<script src="hme.js?v=437"></script>
+<script src="mp-fc.js?v=437"></script>
+<script src="rtw.js?v=437"></script>
+<script src="hme-cascade.js?v=437"></script>
+<script src="assets.js?v=437"></script>
+<script src="temp-limits.js?v=437"></script>
+<script src="normalize.js?v=437"></script>
+<script src="terms.js?v=437"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2786,25 +2786,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=436"></script>
-<script src="edits.js?v=436"></script>
-<script src="due.js?v=436"></script>
-<script src="wear.js?v=436"></script>
-<script src="wear-figs.js?v=436"></script>
-<script src="wear-map.js?v=436"></script>
-<script src="machine-photos.js?v=436"></script>
-<script src="machine-fig.js?v=436"></script>
-<script src="get.js?v=436"></script>
-<script src="points.js?v=436"></script>
-<script src="uc-points.js?v=436"></script>
-<script src="inspect-guide.js?v=436"></script>
-<script src="get-figs.js?v=436"></script>
-<script src="body-points.js?v=436"></script>
-<script src="body-map.js?v=436"></script>
-<script src="lube.js?v=436"></script>
-<script src="lube-overrides.js?v=436"></script>
-<script src="lube2027.js?v=436"></script>
-<script src="report-core.js?v=436"></script>
+<script src="grade.js?v=437"></script>
+<script src="edits.js?v=437"></script>
+<script src="due.js?v=437"></script>
+<script src="wear.js?v=437"></script>
+<script src="wear-figs.js?v=437"></script>
+<script src="wear-map.js?v=437"></script>
+<script src="machine-photos.js?v=437"></script>
+<script src="machine-fig.js?v=437"></script>
+<script src="get.js?v=437"></script>
+<script src="points.js?v=437"></script>
+<script src="uc-points.js?v=437"></script>
+<script src="inspect-guide.js?v=437"></script>
+<script src="get-figs.js?v=437"></script>
+<script src="body-points.js?v=437"></script>
+<script src="body-map.js?v=437"></script>
+<script src="lube.js?v=437"></script>
+<script src="lube-overrides.js?v=437"></script>
+<script src="lube2027.js?v=437"></script>
+<script src="report-core.js?v=437"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -10550,7 +10550,8 @@ async function rtwSave(){
       sup:(d.sup||"").trim(), sign:await rtwSignBlob(), gps:gps||null, dev:DEVICE,
       positions:{}, created, up:0, upTo:{}, rev:1, phv:2,
       rtwWo:d.wo||"", rtwResult:d.result||"R", rtwComment:(d.overallComment||"").trim(),
-      rtwWoType:d.woType||"", rtwSchedHours:(d.woHours!=null?d.woHours:null), rtwSchedDate:d.woPlan||"" };
+      rtwWoType:d.woType||"", rtwSchedHours:(d.woHours!=null?d.woHours:null), rtwSchedDate:d.woPlan||"",
+      rtwWoPriority:d.priority||"" };
     RTW_ITEMS.forEach(def=>{
       const it=d.items[def.no];
       rec.positions[def.no]={ mark:it.mark||null, comment:(it.comment||"").trim(), photos:(it.photos||[]).slice() };
@@ -13753,6 +13754,7 @@ async function rptRecords(onlyId){
       by:rec.by||"", sup:rec.sup||"", smu:rec.smu||"", gps:rec.gps||null, signUrl, signErr, signed:!!rec.sign,
       rtwResult:rec.rtwResult||"", rtwWo:rec.rtwWo||"", rtwComment:rec.rtwComment||"",
       rtwWoType:rec.rtwWoType||"", rtwSchedHours:(rec.rtwSchedHours!=null?rec.rtwSchedHours:null), rtwSchedDate:rec.rtwSchedDate||"",
+      rtwWoPriority:rec.rtwWoPriority||"",
       /* "This sheet is measurements" — which is NOT the same question as "does
          capture demand a millimetre at every position". meta.wear is the second
          one, and a GET round answers no to it: teeth are graded, and a tape is
@@ -13863,6 +13865,7 @@ function teamRecToReport(rec){
            gps:rec.gps||null, signUrl:"",
            rtwResult:rec.rtwResult||"", rtwWo:rec.rtwWo||"", rtwComment:rec.rtwComment||"",
            rtwWoType:rec.rtwWoType||"", rtwSchedHours:(rec.rtwSchedHours!=null?rec.rtwSchedHours:null), rtwSchedDate:rec.rtwSchedDate||"",
+           rtwWoPriority:rec.rtwWoPriority||"",
            wear:!!(meta.wear||meta.get), temp:!!meta.temp, items };
 }
 /* EVERY PHOTOGRAPH THE FOLDER HANDED BACK, PLACED ON THE ROUND.
@@ -14281,7 +14284,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="436";
+const BUILD="437";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -16931,7 +16934,7 @@ function recToExport0(rec){
        was due, not just which work order number it closed. A defect WO
        carries no hour tier; left null rather than guessed. */
     rtwWoType:rec.rtwWoType||"", rtwSchedHours:(rec.rtwSchedHours!=null?rec.rtwSchedHours:null),
-    rtwSchedDate:rec.rtwSchedDate||"",
+    rtwSchedDate:rec.rtwSchedDate||"", rtwWoPriority:rec.rtwWoPriority||"",
     items:Object.entries(rec.positions).map(([k,p])=>{ const d=DEFECT_BY[upDefect(p.defect)]||null;
       const det=p.detect||DETECT_DEFAULT;
       // Codes leave the app in the shape 1C expects: v4 for the mode, the cause,

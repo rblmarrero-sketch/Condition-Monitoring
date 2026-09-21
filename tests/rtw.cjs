@@ -259,15 +259,29 @@ const jpg = p => p.evaluate(() => {
     return secs.map((s) => s.html).join('');
   }, rec.id);
   ok('the masthead names the round Return to Work, not a raw type code', /Return to Work/.test(html));
-  ok('the work order from the record is on the sheet, at the TOP — before the checklist table', (() => {
-    const wo = html.indexOf('WO-016635'), tbl = html.indexOf('rtw-tbl');
-    return wo >= 0 && tbl > wo;
+  ok('the work order number is in the MASTHEAD PILL, beside the report number — not a box down the page', (() => {
+    const rnoBlock = /<div class="rno">([\s\S]*?)<\/div>/.exec(html);
+    return !!rnoBlock && /RTW-TK112-\d+/.test(rnoBlock[1]) && rnoBlock[1].includes('WO-016635');
   })());
-  ok('carries the schedule it was raised against: type, plan date and hour tier',
-    rec.rtwWoType === '4000 Hours service Planned' && rec.rtwSchedDate === '2026-09-18' && rec.rtwSchedHours === 4000);
+  ok('the work order number no longer sits in the header strip as its own cell — it moved up to the masthead',
+    !/<div class="sk">Work order<\/div>/.test(html));
+  ok('carries the schedule it was raised against: priority, type, plan date and hour tier',
+    rec.rtwWoPriority === 'P1 Critical' && rec.rtwWoType === '4000 Hours service Planned'
+    && rec.rtwSchedDate === '2026-09-18' && rec.rtwSchedHours === 4000);
+  ok('the priority CODE (P1) reaches the header strip, not the full 1C text', (() => {
+    // the .sk LABEL is bilingual ("Priority <span class=alti>/ Приоритет</span>");
+    // only the .sv VALUE is the plain, un-translated code.
+    const m = /<div class="sk">Priority[^<]*(?:<span[^>]*>[^<]*<\/span>)?<\/div><div class="sv">([^<]*)<\/div>/.exec(html);
+    return !!m && m[1] === 'P1';
+  })());
   ok('the work order\'s own type reaches the header strip', html.includes('4000 Hours service Planned'));
   ok('1C\'s plan date reaches the header strip', html.includes('2026-09-18'));
   ok('the scheduled hour tier reaches the header strip, in hours', /4000\s*h\b/.test(html));
+  ok('the release date is compared against the schedule, calculated — not typed', (() => {
+    const days = Math.round((Date.parse(rec.date + 'T00:00:00Z') - Date.parse('2026-09-18T00:00:00Z')) / 86400000);
+    const want = days === 0 ? 'On schedule' : days > 0 ? `${days} d late` : `${-days} d early`;
+    return html.includes(want);
+  })());
   ok('both checklist sections print, NUMBERED, in the document\'s own order', (() => {
     const pre = html.indexOf('1. Pre-release inspection');
     const post = html.indexOf('2. Service completion');
