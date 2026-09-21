@@ -62,6 +62,16 @@
      embedded font has not loaded, the layout is still the layout it was
      measured for. */
   CMR.FONT = `"CM Sans",Arial,Helvetica,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif`;
+  /* THE MASTHEAD CARRIES THE SITE'S OWN MARK, ON THE RIGHT, BESIDE THE REPORT
+     NUMBER — every masthead this engine draws (the single-round sheet, Equipment
+     History, the fleet summary), never a fourth copy pasted into each. Embedded
+     as a data URI for the same reason as CM Sans above: this stylesheet is
+     injected into two pages in two directories, and a relative image path would
+     resolve against whichever one happened to load it. Source PNG, transparent,
+     253x56: docs/logo/. */
+  CMR.LOGO_DATA = "data:image/png;base64,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";
+  CMR.LOGO_HTML = '<img class="brand" src="' + CMR.LOGO_DATA + '" width="72" height="16" alt="Baimskaya">';
+
   CMR.CSS = CMR.FONT_CSS + `
 #rptRoot{font:400 12px/1.5 "CM Sans",Arial,Helvetica,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
   color:#16242c;width:760px;background:#fff;letter-spacing:0;}
@@ -487,6 +497,11 @@
    and fixed — the old header was a single flex row of eight fields that wrapped
    into a soup. */
 #rptRoot .mast .mhead{display:flex;justify-content:space-between;align-items:baseline;gap:12px;}
+/* The logo and the report-number pill share the right side of the masthead —
+   one flex group, so the eyebrow/rno space-between above still has exactly
+   two children and the two don't fight over which one "is" the right edge. */
+#rptRoot .mast .mright{display:flex;align-items:center;gap:10px;flex:none;}
+#rptRoot .mast .mright .brand{display:block;height:16px;width:72px;}
 #rptRoot .mast .rno{font-size:10px;font-weight:700;letter-spacing:.06em;color:#5b6670;
   font-variant-numeric:tabular-nums;white-space:nowrap;}
 #rptRoot .mast .rno i{font-style:normal;color:#5b6670;font-weight:700;margin-right:5px;letter-spacing:.11em;}
@@ -2667,6 +2682,18 @@
      a lat but no lon (or names it `lng`, as a phone build once did) used to
      reach `.toFixed` on undefined and throw — taking the whole report down,
      the pure form of this project's defect turned into a hard crash. */
+  /* ONE MASTHEAD-ROW BUILDER, THREE CALLERS. The single-round sheet, Equipment
+     History and the fleet summary each draw their own report-number pill in
+     their own format — but the eyebrow beside it and the logo beside THAT are
+     the same on all three, and were three separate copies before this. A
+     fourth report (or a fix to one) that only touched one of the three would
+     have put the logo, or the eyebrow, out of step with the other two — the
+     exact one-source-of-truth rule this file's own CSS comments keep citing. */
+  function mastHead(T, rnoInner) {
+    return '<div class="mhead"><div class="eyebrow">' + T.I("sub") + '</div>'
+      + '<div class="mright">' + CMR.LOGO_HTML + '<div class="rno">' + rnoInner + '</div></div>'
+      + '</div>';
+  }
   function metaStrip(T, rec) {
     var gp = gpsPair(rec.gps);
     if (!gp) return "";
@@ -3090,10 +3117,7 @@
          metadata (strip) into the three places the reference keeps them. */
       var head =
         '<div class="mast">'
-        + '<div class="mhead">'
-          + '<div class="eyebrow">' + T.I("sub") + '</div>'
-          + '<div class="rno"><i>' + T.I("rr_report") + '</i>' + esc(reportNo(rec)) + '</div>'
-        + '</div>'
+        + mastHead(T, '<i>' + T.I("rr_report") + '</i>' + esc(reportNo(rec)))
         /* A type the dictionary has never heard of falls back to the label the
            host resolved, not to the name of the key. One line, the way the
            metadata strip below it already says "MODEL / МОДЕЛЬ" — T.S's own
@@ -3587,8 +3611,7 @@
     var secs = [];
     var head = '<div class="sec">'
       + '<div class="mast">'
-      + '<div class="mhead"><div class="eyebrow">' + T.I("sub") + '</div>'
-        + '<div class="rno"><i>' + T.I("rr_report") + '</i> <b class="repno">EQH-' + esc(equip) + '-' + esc(today.replace(/-/g, "")) + '</b></div></div>'
+      + mastHead(T, '<i>' + T.I("rr_report") + '</i> <b class="repno">EQH-' + esc(equip) + '-' + esc(today.replace(/-/g, "")) + '</b>')
       + '<div class="m1">' + T.I("uh_title") + '</div>'
       + '<div class="msub"><span class="unum">' + esc(equip) + '</span>'
         + ' · ' + T.I("sm_report_date") + ' <b>' + esc(today) + '</b>'
@@ -3787,8 +3810,7 @@
 
     var head = '<div class="sec">'
       + '<div class="mast">'
-      + '<div class="mhead"><div class="eyebrow">' + T.I("sub") + '</div>'
-        + '<div class="rno"><i>' + T.I("rr_report") + '</i> <b class="repno">EQ-' + esc(equip) + '-' + esc(today.replace(/-/g, "")) + '</b></div></div>'
+      + mastHead(T, '<i>' + T.I("rr_report") + '</i> <b class="repno">EQ-' + esc(equip) + '-' + esc(today.replace(/-/g, "")) + '</b>')
       + '<div class="m1">' + T.I("sm_title") + '</div>'
       + '<div class="msub"><span class="unum">' + esc(equip) + '</span>'
         + (model ? ' · ' + esc(model) : '') + (smu ? ' · <b>' + esc(String(smu)) + '</b> h' : '')
