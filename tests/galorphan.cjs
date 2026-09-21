@@ -1,35 +1,35 @@
 /* FOUR PHOTOGRAPHS PER LINE, ALWAYS, AND A LEFTOVER OF ONE TO THREE PRINTS AT
    THE SAME SIZE AS THE ROW ABOVE IT — NOT SPANNED, NOT STRANDED BESIDE EMPTY
-   SPACE.
+   SPACE, AND A FULL ROW OF THREE OR FOUR ALWAYS FILLS THE LINE.
 
    Read off TK109's Equipment Trend Report, Rear Differential (RRD), four
    photographs: three printed across a row and the fourth dropped to a row of
    its own, small, with visible empty space beside it "although it has space
-   still." The previous fix for this shape (build 421, see this file's own
-   prior history) spanned a genuine trailing ORPHAN of one or two across the
-   row and centred it — correct for an orphan, but this was never an orphan:
-   four photographs is a complete row under the "four per line" rule the site
-   asked for, and the old gridCols() picked 3 columns for a remainder of one
-   here because a "least-waste" algorithm chose whichever of 4/3/2 divided the
-   count with the smallest remainder — so 4, 7 and 8 got four columns while 5
-   and 6 got three, the SAME photograph count rendering at inconsistent sizes
-   depending on how many total photographs happened to be on the position.
+   still." The build-424 fix (a flat gridCols(n) = n<=4?n:4, no
+   waste-minimisation) put all four in one row and retired the old
+   last1/last2 spanning classes, and build 425 fixed the uneven gaps a
+   mixed-orientation row produced under equal-width columns. Both of those
+   are proven here still, in the same test they were first proven in.
 
-   gridCols(n) is now n<=4 ? n : 4 — a flat rule with no waste-minimisation,
-   used by both the gallery board and the non-gallery (mpEvidence/gradedBody)
-   grid. Four across is never split into 3+1 again; five through eight always
-   render at the SAME four-column tile size, whatever the remainder. A
-   genuine remainder (n%4 !== 0, n>4) sits in the fixed four-column grid
-   occupying fewer of the same columns — ordinary CSS grid behaviour that
-   needs no spanning class at all, so last1/last2 are retired.
-
-   The four-column tile is narrower than the three-column standard (746px
-   available width, 8px gaps: (746-24)/4 ~ 180.5px vs (746-16)/3 ~ 243.3px),
-   so a 4:3 landscape photograph in it is shorter too — .g4 carries an
-   adaptive max-height (135px, the same 3/4 derivation the 182px/three-column
-   standard already uses) so a wide photograph still fills its own, narrower
-   column edge to edge instead of leaving a gap under the 182px cap sized for
-   three columns.
+   A THIRD report off the same position, real photographs this time rather
+   than uniform synthetic swatches, showed a THIRD shape of the identical
+   underlying gap: "the RRD photos since its already 4 then it should
+   occupy the whole line like CH.BY" — a row of four near-square/portrait
+   close-ups packed to a fraction of the sheet while a row of four wide
+   landscape tray photographs, the same rule, filled it. `auto` columns
+   correctly stopped forcing width onto a photograph that did not need it;
+   they never made the row itself reach for the space a narrower set of
+   photographs left unused. The fix is a JUSTIFIED row (galjustify.cjs
+   proves the general case with real, mixed aspect ratios; this suite keeps
+   its own uniform-swatch fixture, where every count's shared row height is
+   the single number these assertions can state and check directly): a full
+   row of three or four solves for a shared HEIGHT such that the SUM of the
+   row's own widths, at that height, lands on the sheet's own 746px content
+   width — never cropped, never stretched out of its own shape, because the
+   height is derived from the photographs actually in the row, not assumed.
+   A remainder past a full row of four keeps that SAME height rather than
+   solving its own, smaller sum — "adopting the sizes... of the other
+   photos," TK109's own original words for it.
 
    Run: node tests/galorphan.cjs   (needs tests/mock.cjs on 8099) */
 const { chromium } = require(require('./pw.cjs'));
@@ -53,11 +53,11 @@ const SEED = () => {
     items: [{ key: 'HS.MP', label: 'Hydraulic Pumps', grade: 2, defect: 'None noted',
       action: 'Monitor / re-inspect next PM', photos: Array.from({ length: count }, () => px(400, 300)) }],
   });
-  /* TK109's RRD shape (four) plus its neighbours: 1, 3 are full rows under
-     the OLD three-column rule and stay full rows under the new four-column
-     one too; 4 is TK109's own case; 5-8 must all render at the SAME
-     four-column tile size as 4, never reverting to a wider three-column
-     tile for a "less wasteful" remainder. */
+  /* TK109's RRD shape (four) plus its neighbours: 1, 3 are full rows on
+     their own; 4 is TK109's own case; 5-8 must all render at the SAME
+     four-photograph tile size, whatever the remainder. Every photograph
+     here is 400x300 (4:3), so a full row's own justified height is one
+     number every one of these positions can be checked against directly. */
   CMDash.importRecords([mk('EX021', 4), mk('EX022', 7), mk('EX023', 3), mk('EX024', 5),
     mk('EX025', 6), mk('EX026', 1), mk('EX027', 8)]);
   const ov = document.getElementById('dataOv'); if (ov) ov.classList.add('hidden');
@@ -77,55 +77,59 @@ const SEED = () => {
     const st = document.getElementById('galorphancss') || (() => { const s = document.createElement('style'); s.id = 'galorphancss'; s.textContent = CMR.CSS; document.head.appendChild(s); return s; })();
     const old = document.getElementById('rptRoot'); if (old) old.remove();
     const d = document.createElement('div'); d.id = 'rptRoot';
-    d.style.cssText = 'position:fixed;left:-99999px;top:0;width:760px;background:#fff;';
+    d.style.cssText = 'position:fixed;left:0;top:0;width:760px;background:#fff;';
     d.innerHTML = secs.map(s => '<div class="secwrap">' + s.html + '</div>').join('');
     document.body.appendChild(d);
     const board = d.querySelector('.phg.gallery');
     const imgs = [...d.querySelectorAll('.phg.gallery img')];
     await Promise.all(imgs.map(im => im.complete ? null : new Promise(res => { im.onload = im.onerror = res; })));
     await new Promise(res => requestAnimationFrame(() => requestAnimationFrame(res)));
+    const boardRect = board.getBoundingClientRect();
+    const rowEls = [...d.querySelectorAll('.phgrow')];
     const out = {
       boardClass: board.className,
-      gridTemplate: getComputedStyle(board).gridTemplateColumns.split(' ').length,
-      last1: imgs.some(im => im.classList.contains('last1')),
-      last2: imgs.some(im => im.closest('.last2')),
-      boxes: imgs.map(im => { const r = im.getBoundingClientRect(); return { l: Math.round(r.left), w: Math.round(r.width), h: Math.round(r.height) }; }),
+      rowCount: rowEls.length,
+      boxes: imgs.map(im => { const r = im.getBoundingClientRect();
+        return { l: Math.round(r.left - boardRect.left), w: Math.round(r.width), h: Math.round(r.height) }; }),
     };
     d.remove();
     return out;
   }, equip);
 
-  console.log('EX023 (three photographs — the old three-column standard, untouched)');
+  console.log('EX023 (three photographs — a full row of three, justified to fill the line)');
   const r3 = await measure('EX023');
-  ok('three photographs, no g4 class, three columns', r3.boxes.length === 3 && !/\bg4\b/.test(r3.boardClass) && r3.gridTemplate === 3, JSON.stringify(r3));
-  ok('  at the standard 182px height', r3.boxes.every(x => x.h === 182), JSON.stringify(r3.boxes));
+  ok('three photographs, one justified row', r3.boxes.length === 3 && r3.rowCount === 1 && /\bg3plus\b/.test(r3.boardClass), JSON.stringify(r3));
+  ok('  all at the same height, and the row fills the sheet edge to edge',
+     new Set(r3.boxes.map(b => b.h)).size === 1
+       && (r3.boxes[r3.boxes.length - 1].l + r3.boxes[r3.boxes.length - 1].w - r3.boxes[0].l) > 720,
+     JSON.stringify(r3.boxes));
 
-  console.log('\nEX026 (one photograph — untouched)');
+  console.log('\nEX026 (one photograph — untouched, not justified)');
   const r1 = await measure('EX026');
-  ok('one photograph, no g4 class', r1.boxes.length === 1 && !/\bg4\b/.test(r1.boardClass), JSON.stringify(r1));
+  ok('one photograph, no g3plus, not stretched to the line', r1.boxes.length === 1 && !/\bg3plus\b/.test(r1.boardClass) && r1.boxes[0].w < 300, JSON.stringify(r1));
 
   console.log('\nEX021 (TK109\'s own shape — four photographs)');
   const r4 = await measure('EX021');
-  ok('four photographs found, carries g4, four columns', r4.boxes.length === 4 && /\bg4\b/.test(r4.boardClass) && r4.gridTemplate === 4, JSON.stringify(r4));
-  ok('no photograph spans (last1/last2 retired)', !r4.last1 && !r4.last2, JSON.stringify(r4));
-  ok('THE FIX: all four sit in ONE row, same size, edge to edge — none dropped to a row of its own with space beside it',
-     new Set(r4.boxes.map(b => b.l)).size === 4 && r4.boxes.every(b => b.h === 135), JSON.stringify(r4.boxes));
+  ok('four photographs, one justified row, filling the line', r4.boxes.length === 4 && r4.rowCount === 1 && /\bg3plus\b/.test(r4.boardClass), JSON.stringify(r4));
+  ok('THE FIX: all four sit in ONE row, same size, edge to edge, filling the sheet — none dropped to a row of its own with space beside it',
+     new Set(r4.boxes.map(b => b.h)).size === 1 && new Set(r4.boxes.map(b => b.l)).size === 4
+       && (r4.boxes[3].l + r4.boxes[3].w - r4.boxes[0].l) > 720,
+     JSON.stringify(r4.boxes));
 
   console.log('\nEX024 (five) and EX025 (six): must render at the SAME tile size as four, not a wider three-column tile');
   const r5 = await measure('EX024');
   const r6 = await measure('EX025');
-  ok('five photographs, g4, four columns — a row of four and a row of one', r5.boxes.length === 5 && /\bg4\b/.test(r5.boardClass) && r5.gridTemplate === 4, JSON.stringify(r5));
-  ok('six photographs, g4, four columns — a row of four and a row of two', r6.boxes.length === 6 && /\bg4\b/.test(r6.boardClass) && r6.gridTemplate === 4, JSON.stringify(r6));
+  ok('five photographs, two rows, the second reusing the first row\'s height', r5.boxes.length === 5 && r5.rowCount === 2, JSON.stringify(r5));
+  ok('six photographs, two rows, both at the same height', r6.boxes.length === 6 && r6.rowCount === 2, JSON.stringify(r6));
   ok('THE FIX: five and six photographs render at the identical tile size as four (the old "least-waste" rule gave them a wider three-column tile instead)',
-     r5.boxes.every(b => b.w === r4.boxes[0].w && b.h === 135) && r6.boxes.every(b => b.w === r4.boxes[0].w && b.h === 135),
+     r5.boxes.every(b => b.w === r4.boxes[0].w && b.h === r4.boxes[0].h) && r6.boxes.every(b => b.w === r4.boxes[0].w && b.h === r4.boxes[0].h),
      JSON.stringify({ four: r4.boxes[0], five: r5.boxes[0], six: r6.boxes[0] }));
-  ok('  no spanning markers on the five/six-photograph remainder', !r5.last1 && !r5.last2 && !r6.last1 && !r6.last2);
 
   console.log('\nEX022 (seven) and EX027 (eight): the same shape one and two rows later');
   const r7 = await measure('EX022');
   const r8 = await measure('EX027');
-  ok('seven photographs, g4, four columns, same tile size', r7.boxes.length === 7 && /\bg4\b/.test(r7.boardClass) && r7.boxes.every(b => b.w === r4.boxes[0].w && b.h === 135), JSON.stringify(r7));
-  ok('eight photographs, g4, four columns, two full rows, same tile size', r8.boxes.length === 8 && /\bg4\b/.test(r8.boardClass) && r8.boxes.every(b => b.w === r4.boxes[0].w && b.h === 135), JSON.stringify(r8));
+  ok('seven photographs, same tile size as four', r7.boxes.length === 7 && r7.boxes.every(b => b.w === r4.boxes[0].w && b.h === r4.boxes[0].h), JSON.stringify(r7));
+  ok('eight photographs, two full rows, same tile size as four', r8.boxes.length === 8 && r8.rowCount === 2 && r8.boxes.every(b => b.w === r4.boxes[0].w && b.h === r4.boxes[0].h), JSON.stringify(r8));
 
   ok(fails.filter(f => f.startsWith('PAGEERROR')).length === 0, 'no page errors throughout');
   await b.close();

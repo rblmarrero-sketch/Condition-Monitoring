@@ -1,33 +1,35 @@
-/* FOUR ACROSS IS "AUTO" NOW, EVEN AT FOUR — SO A NARROWER PHOTOGRAPH
-   NEVER SITS IN A COLUMN SIZED FOR ITS NEIGHBOUR, WITH A BIG GAP EITHER
-   SIDE OF IT.
+/* A ROW OF FOUR NEVER STRETCHES A NARROWER PHOTOGRAPH TO MATCH ITS
+   NEIGHBOUR, WHETHER THE ROW IS EQUAL COLUMNS, AUTO COLUMNS, OR JUSTIFIED.
 
-   The .g4 fix (galorphan.cjs) forced four EQUAL 1fr columns so a
-   four-photograph row would fill the sheet edge to edge — correct for the
-   pure-landscape case it was built and tested against. Read off TK109's own
-   Rear Differential a second time, with photographs that were not
-   synthetic uniform swatches: a wide machinery shot, a PORTRAIT close-up of
-   a cylindrical part, a wide gasket, a PORTRAIT plug. Equal columns gave
-   the portrait photographs a column exactly as wide as their landscape
-   neighbours, so each one sat centred with roughly 40px of white on either
-   side of it — reported back as "the gap are too much," circled on all
-   three joins around the two portrait frames. The same mechanism made a
-   wrapped fifth photograph, when it happened to be portrait, look a
-   different size from the four landscape ones above it — not a size
-   difference at all, a letterbox one.
+   This suite has tracked the SAME defect through two fixes now. The .g4
+   fix (galorphan.cjs) forced four EQUAL 1fr columns so a four-photograph
+   row would fill the sheet edge to edge — correct for the pure-landscape
+   case it was built and tested against, wrong for TK109's own Rear
+   Differential a second time: a wide machinery shot, a PORTRAIT
+   cylindrical part, a wide gasket, a PORTRAIT plug. Equal columns gave
+   each portrait photograph a column as wide as its landscape neighbours,
+   reported back as "the gap are too much." `auto` columns (this suite's
+   own first version) fixed that — but auto sizes a row to whatever its own
+   photographs need, which is narrower than the sheet for anything but
+   near-4:3 landscape content, so a THIRD report off the same position, real
+   photographs this time, showed the identical row of four occupying a
+   fraction of the page next to a DIFFERENT position's own four wide tray
+   photographs that filled it: "the RRD photos since its already 4 then it
+     should occupy the whole line like CH.BY."
 
-   The fix is the SAME technique already proven for two or three
-   photographs (TK126, galportrait.cjs) extended to four and past it: `auto`
-   columns, sized to each photograph's own width, not a forced equal share.
-   Measured directly, `auto` does not overflow a fixed-width sheet the way
-   naive reasoning suggested when this session first chose 1fr for four
-   columns — four wide photographs simply shrink their columns to fit,
-   exactly the way four narrower ones do, so a row of genuinely similar
-   (landscape) photographs still fills the line edge to edge with the
-   sheet's own hairline gap, while a mixed row no longer stretches a
-   narrower photograph's column out to its neighbour's width. `auto` also
-   replaces the non-gallery board's own 1fr, for the identical reason on
-   mpEvidence's findings cards.
+   The gallery board's full row of three or four is JUSTIFIED now
+   (galorphan.cjs's own comment, galjustify.cjs for the general case): the
+   shared row height solves for the row's own photographs so their combined
+   width lands on the sheet's 746px content width, whatever the mix of
+   orientations. For THIS test's exact mix — two 4:3 landscape, two 3:4
+   portrait — that height works out to 173px (722 / (2*4/3 + 2*3/4)); a
+   different mix gets a different number, by design, but the landscape
+   photographs must still come out wider than the portrait ones at whatever
+   height the row settles on, never stretched to match. The non-gallery
+   (mpEvidence) board keeps the earlier `auto`-column fix, unchanged here —
+   its own board width varies with how many sibling positions share a row,
+   which the gallery board's fixed 746px sheet width does not have to
+   account for.
 
    Run: node tests/galmixed4.cjs   (needs tests/ed-srv.cjs on 8093) */
 const { chromium } = require(require('./pw.cjs'));
@@ -87,9 +89,18 @@ const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
   ok('four photographs found', g4.boxes.length === 4, JSON.stringify(g4.boxes));
   ok('  every gap is the sheet\'s own hairline (8px), not a big gap around a portrait photo',
      g4.gaps.every(x => x === 8), JSON.stringify(g4.gaps));
-  ok('  the two landscape photographs still fill their own ~180px column width', g4.boxes[0].w >= 170 && g4.boxes[2].w >= 170, JSON.stringify(g4.boxes));
-  ok('  the two portrait photographs are narrower, not stretched to match', g4.boxes[1].w < 130 && g4.boxes[3].w < 130, JSON.stringify(g4.boxes));
-  ok('  all four sit at the standard 135px g4 height', g4.boxes.every(x => x.h === 135), JSON.stringify(g4.boxes));
+  /* The row is JUSTIFIED now (galorphan.cjs, galjustify.cjs): the shared
+     height solves for the row's own photographs, so it is no longer the
+     fixed 135px a pure-landscape row happens to need — for this exact mix
+     (two 4:3 landscape, two 3:4 portrait) it works out to 722/(2*4/3+2*3/4)
+     = 173px. What must still hold, whatever that number comes out to, is
+     that the landscape photographs stay wider than the portrait ones —
+     never stretched to match — and that all four share one height. */
+  ok('  the two landscape photographs are wider than the two portrait ones, not stretched to match',
+     g4.boxes[0].w > g4.boxes[1].w && g4.boxes[2].w > g4.boxes[3].w && g4.boxes[0].w === g4.boxes[2].w && g4.boxes[1].w === g4.boxes[3].w,
+     JSON.stringify(g4.boxes));
+  ok('  all four share one row height, solved for this row\'s own photographs (173px here)',
+     g4.boxes.every(x => x.h === g4.boxes[0].h) && g4.boxes[0].h === 173, JSON.stringify(g4.boxes));
   ok('  the raster shows each photograph\'s own colour, not a neighbour bleeding through the gap',
      g4.rasterColors.length === 4 && new Set(g4.rasterColors.map(String)).size === 4, JSON.stringify(g4.rasterColors));
 
@@ -99,6 +110,11 @@ const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
      gAll.boxes.length === 4 && gAll.boxes.every(x => x.w >= 170 && x.w <= 190),
      JSON.stringify(gAll.boxes));
   ok('  edge-to-edge, hairline gap only', gAll.gaps.every(x => x === 8), JSON.stringify(gAll.gaps));
+  ok('  THE FIX, side by side: the mixed row above and this pure-landscape row both fill the same 746px line, at their own two different heights',
+     (g4.boxes[3].l + g4.boxes[3].w - g4.boxes[0].l) > 700 && (gAll.boxes[3].l + gAll.boxes[3].w - gAll.boxes[0].l) > 700
+       && g4.boxes[0].h !== gAll.boxes[0].h,
+     JSON.stringify({ mixedRowSpan: g4.boxes[3].l + g4.boxes[3].w - g4.boxes[0].l, mixedH: g4.boxes[0].h,
+                       landscapeRowSpan: gAll.boxes[3].l + gAll.boxes[3].w - gAll.boxes[0].l, landscapeH: gAll.boxes[0].h }));
 
   console.log('\nNON-GALLERY (mpEvidence) BOARD: 2 landscape + 1 portrait, one plug position');
   const ng = await measure(false, [[800,600],[600,800],[800,600]]);

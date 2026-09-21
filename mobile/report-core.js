@@ -3632,6 +3632,31 @@
     }
     secs.push({ nb: true, html: body2 + '</div>' });
 
+    /* THE MACHINE'S OWN PHOTOGRAPH IS NOT A FINDING, AND "NOT A FINDING" WAS
+       NEVER A REASON TO LEAVE IT OFF THE MACHINE'S OWN REPORT.
+
+       sane() (above) moves every it.general item out of rec.items and into
+       rec.general before ANY of this function's own code runs — so `pairs`'s
+       `if (it.general) return` guard and the photoPairs fallback's own
+       `it.general` sort, both a few lines up, have not matched anything
+       since sane() shipped; the machine's overview/left/right/tray
+       photographs simply never had a code path into this document at all,
+       compact or not. fullUnitSheets (the appendix) reads rec.general
+       correctly via evidenceSections; this, the DEFAULT document — the one
+       TK109's own Equipment Trend Report actually is — never called it.
+
+       Read off TK109's own report, 2026-09-20: three findings, three
+       positions' worth of photographs printed under PHOTOGRAPHS, and no
+       trace anywhere of the machine's own overview shot the inspector took
+       that same visit — not even the one page of it fullUnitSheets would
+       have shown, because nobody asks for the appendix on a two-page
+       document. Every latest round is checked, not only the first, because
+       a general photograph can be attached to whichever round the inspector
+       happened to be walking when they took it. */
+    latestArr.forEach(function (r) {
+      evidenceSections(T, r, true).forEach(function (x) { secs.push(x); });
+    });
+
     /* The measured trend — already compact, already bounded to six columns —
        is the one table this report keeps in full: nothing on a finding row
        carries a condemn limit or a rate of wear, and a reader cannot
@@ -4149,6 +4174,115 @@
   function gridCols(n) {
     return n <= 4 ? n : 4;
   }
+  /* A ROW OF 3 OR 4 PHOTOGRAPHS FILLS THE LINE, EVEN WHEN THE PHOTOGRAPHS
+     ARE NOT ALL LANDSCAPE — read off the same TK109 Rear Differential a
+     THIRD time. Build 425's `auto` columns fixed the uneven-gap defect
+     (galmixed4.cjs) but left the row's own TOTAL WIDTH exactly as wide as
+     its own content, whatever that content happens to be: four
+     nearer-square close-up photographs packed to perhaps 550px of a 746px
+     sheet and centred, while the SAME position's own Dump Body tray shots —
+     wide, landscape — filled the same 746px line at the same four-column
+     count. Two positions, the identical rule, two different widths on the
+     printed page: "the RRD photos since its already 4 then it should
+     occupy the whole line like CH.BY." The rule the site actually wants is
+     not a column WIDTH mode at all, it is what a printed contact sheet or a
+     photo gallery calls a justified row: every photograph in a full row of
+     three or four keeps its own untouched aspect ratio (never cropped,
+     never stretched out of shape — the rule CLAUDE.md sets) at a HEIGHT
+     shared by the whole row, and that height is computed, not fixed, so the
+     SUM of the row's own widths lands exactly on the sheet's own content
+     width. A row of four photographs shaped like TK109's plug close-ups
+     needs a taller shared height to reach the same 746px four landscape
+     photographs already reach at a shorter one — same rule, same result,
+     because the height is solved for the width rather than assumed.
+
+     Getting each photograph's own aspect ratio costs nothing extra: every
+     photograph here is already a JPEG or PNG data URI (report-core.js's own
+     CMR.inlinePhoto re-encodes to one before this file ever sees it), and a
+     JPEG's SOF marker or a PNG's IHDR chunk states its width and height in
+     the first few hundred bytes — atob() on a short prefix of the base64
+     text, no Image() decode, no async wait, because cell() is a synchronous
+     string builder called from deep inside synchronous section-building
+     code all over this file and staying that way matters more than saving
+     one string search. A ratio that cannot be read (a format this does not
+     recognise, a URL that is not a data: URI at all) falls back to 4:3, the
+     sheet's own long-standing assumption, rather than refusing to lay the
+     row out at all. */
+  function photoDims(u) {
+    try {
+      var i = (u || "").indexOf(",");
+      if (i < 0) return null;
+      var b64 = u.slice(i + 1, i + 2200);          // comfortably past any header
+      var bin = atob(b64);
+      var len = bin.length, b = new Uint8Array(len);
+      for (var k = 0; k < len; k++) b[k] = bin.charCodeAt(k);
+      if (len >= 24 && b[0] === 0x89 && b[1] === 0x50 && b[2] === 0x4E && b[3] === 0x47) {
+        var w = (b[16] << 24) | (b[17] << 16) | (b[18] << 8) | b[19];
+        var h = (b[20] << 24) | (b[21] << 16) | (b[22] << 8) | b[23];
+        return (w > 0 && h > 0) ? { w: w >>> 0, h: h >>> 0 } : null;
+      }
+      if (len >= 4 && b[0] === 0xFF && b[1] === 0xD8) {
+        var p = 2;
+        while (p + 9 < len) {
+          if (b[p] !== 0xFF) { p++; continue; }
+          var marker = b[p + 1];
+          if (marker === 0xD8 || marker === 0x01 || (marker >= 0xD0 && marker <= 0xD7)) { p += 2; continue; }
+          if (marker === 0xD9 || p + 3 >= len) break;                       // EOI or truncated
+          var segLen = (b[p + 2] << 8) | b[p + 3];
+          if (marker >= 0xC0 && marker <= 0xCF && marker !== 0xC4 && marker !== 0xC8 && marker !== 0xCC) {
+            if (p + 8 >= len) break;                                        // SOF cut off by the prefix
+            var h2 = (b[p + 5] << 8) | b[p + 6], w2 = (b[p + 7] << 8) | b[p + 8];
+            return (w2 > 0 && h2 > 0) ? { w: w2, h: h2 } : null;
+          }
+          p += 2 + segLen;
+        }
+        return null;                                                        // SOF not within the scanned prefix
+      }
+    } catch (e) {}
+    return null;
+  }
+  function photoRatio(u) {
+    var d = photoDims(u);
+    return (d && d.w && d.h) ? (d.w / d.h) : (4 / 3);
+  }
+  function chunkPh(arr, n) {
+    var out = [];
+    for (var i = 0; i < arr.length; i += n) out.push(arr.slice(i, i + n));
+    return out;
+  }
+  /* Solved from the row's own photographs: h such that
+     sum(h * ratio_i) + (n-1)*gap == targetW. Bounded so a row of extreme
+     ratios (all near-panoramic, or all narrow portrait) settles at a
+     readable height rather than a sliver or a page-filling wall — the same
+     kind of floor/ceiling this sheet already keeps on its single-photo and
+     history boards. */
+  function justifiedH(urls, targetW, gap, minH, maxH) {
+    var sumR = 0, i;
+    for (i = 0; i < urls.length; i++) sumR += photoRatio(urls[i]);
+    if (!sumR) sumR = urls.length * (4 / 3);
+    var h = (targetW - (urls.length - 1) * gap) / sumR;
+    return Math.max(minH, Math.min(maxH, Math.round(h)));
+  }
+  /* The gallery board's own measured content width (measurewidth.cjs: a
+     758px board, 6px padding each side) and its established 8px gap —
+     unchanged since build 421. */
+  var GAL_ROW_W = 746, GAL_GAP = 8, GAL_MIN_H = 100, GAL_MAX_H = 250;
+  function justifiedRow(urls, h, gap) {
+    /* max-height:none, explicit, on every image — the shared .cel .phg.gallery
+       img rule (above) caps height at 182px for the OLD one/two-photograph
+       technique this row does not use, and CSS max-height clamps an explicit
+       height same as any other, inline or not: a computed 198px silently
+       came back as 182 the first time this ran, undoing the whole point of
+       solving for the row's own width. Setting it back to none here, inline,
+       is what makes THIS row's own computed height the one that actually
+       reaches the page. */
+    return '<div class="phgrow" style="display:flex;gap:' + gap + 'px;justify-content:center;">'
+      + urls.map(function (u) {
+          return '<img src="' + u + '" style="display:block;height:' + h + 'px;width:auto;max-width:100%;max-height:none;'
+            + 'background:#fff;border:1px solid #dfe4e9;border-radius:3px;">';
+        }).join("")
+      + '</div>';
+  }
   function cell(ctx, T, it, sh, gallery) {
     sh = sh || {};
     /* EVERY photograph the inspector took. Somebody walked to the machine for
@@ -4171,42 +4305,53 @@
          reason, and left the right half of the sheet empty. */
       if (gallery) {
         var gcols = gridCols(ph.length);
-        /* AUTO COLUMNS, ALWAYS — EVEN AT FOUR ACROSS. `auto` columns, each
-           sized to its OWN photograph rather than to a forced equal share of
-           the row, is what makes photographs pack together and centre as a
-           group instead of a portrait frame stranded alone in a wide 1fr
-           column with white on both sides of it (TK126, INSP, 2026-09-19:
-           two 720x1600 photographs read off the printed sheet as "the
-           spacing is too much" when this used equal 1fr columns).
-
-           Four columns used to switch to equal 1fr specifically, reasoned
-           (wrongly) that `auto` sizing four ~243px-cropped photographs would
-           overflow the 746px sheet. Read off TK109's own Rear Differential
-           plug the SECOND time, with the equal-1fr fix already live: a
-           mixed-orientation row — a wide machinery shot, a portrait-shot
-           cylindrical part, a wide gasket, a portrait plug — put every
-           portrait photograph in a column exactly as wide as its landscape
-           neighbours and let it sit centred in the middle of the extra
-           width, which is precisely the TK126 defect one column count over,
-           reported back as "the gap are too much" and, on a five-photograph
-           tray round, as the wrapped fifth photograph looking a different
-           size from the four above it. A grid whose tracks are `auto` does
-           not actually overflow when the container is fixed-width: measured
-           directly, four 800x600 photographs at a 135px cap render at their
-           full ~180px each, filling the row exactly as equal columns would
-           have; four 1920x1080 photographs at the same cap render narrower
-           (each track shrinks in proportion, the same graceful degrade `fr`
-           tracks give, without `fr`'s side effect of stretching a photograph
-           that does not need the space). `.g4`'s only remaining job is the
-           narrower 135px height cap four columns need instead of three's
-           182px; it no longer picks the column-sizing mode. A remainder past
-           a full row of four is simply left in the SAME four columns,
-           occupying fewer of them — nothing spans, nothing pairs.
-           `tests/galorphan.cjs`, `tests/galmixed4.cjs`. */
-        top = '<div class="phg gallery' + (gcols === 4 ? ' g4' : '') + '" style="grid-template-columns:repeat('
-          + gcols + ',auto)">'
-          + ph.map(function (u) { return '<img src="' + u + '">'; }).join("")
-          + '</div>';
+        if (gcols >= 3) {
+          /* A FULL ROW OF THREE OR FOUR IS JUSTIFIED TO FILL THE LINE — see
+             justifiedH's own comment above cell() for why height is solved
+             for the row's target width instead of assumed. The row is built
+             once, from its own first (or only) full set of photographs; a
+             remainder past a full row of four reuses that SAME height
+             ("adopting the sizes... of the other photos" — TK109, the
+             original report), not a size of its own, so a lone fifth
+             photograph reads as this finding's own standard tile rather
+             than independently stretched to fill a line by itself. */
+          var galRows = chunkPh(ph, gcols);
+          var galH = justifiedH(galRows[0], GAL_ROW_W, GAL_GAP, GAL_MIN_H, GAL_MAX_H);
+          /* grid-template-columns:1fr, stated inline, is load-bearing and not
+             decoration: the older #rptRoot .cel .phg.gallery{grid-template-
+             columns:repeat(auto-fill,minmax(200px,1fr))} rule (this file's own
+             CSS, further down) was already dead by the time this branch was
+             written, kept alive only by every OTHER branch always setting its
+             own inline override — this one did not, the first time it was
+             written, and that dead rule woke back up: three implicit ~250px
+             auto-fill columns instead of one full-width column, the row's own
+             flex content overflowing the narrow track it was squeezed into.
+             One column, explicit, closes the same trap the backtick comment
+             two files over in this project keeps warning about in a different
+             shape — a rule assumed inert because nothing currently reaches it
+             is one new branch away from reaching it. */
+          top = '<div class="phg gallery g3plus" style="grid-template-columns:1fr">'
+            + galRows.map(function (r) { return justifiedRow(r, galH, GAL_GAP); }).join("")
+            + '</div>';
+        } else {
+          /* ONE OR TWO PHOTOGRAPHS PACK TOGETHER AND CENTRE, NOT JUSTIFIED
+             TO THE LINE. `auto` columns, each sized to its OWN photograph
+             rather than to a forced equal share of the row, is what makes a
+             portrait frame keep its own width instead of sitting stranded
+             in a wide 1fr column with white on both sides of it (TK126,
+             INSP, 2026-09-19: two 720x1600 photographs read off the printed
+             sheet as "the spacing is too much" when this used equal 1fr
+             columns) — and a genuinely LONE photograph is a standard tile,
+             not the whole line stretched to hold one frame
+             (photogallerysize.cjs). Justifying to fill the line, correct at
+             three or four, would be exactly that defect again at one or two:
+             a single photograph the width of the sheet, or a pair blown out
+             to fill it, neither of which this project has ever asked for.
+             `tests/galportrait.cjs`. */
+          top = '<div class="phg gallery" style="grid-template-columns:repeat(' + gcols + ',auto)">'
+            + ph.map(function (u) { return '<img src="' + u + '">'; }).join("")
+            + '</div>';
+        }
       } else if (ph.length > 1) {
         /* ONE SIZE, IN ROWS — the layout the magnetic plug sheet already used,
            now used wherever a position carries more than one frame.
