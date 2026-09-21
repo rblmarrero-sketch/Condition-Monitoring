@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-09-21T11:29:56+00:00",
+  "generated": "2026-09-21T11:53:25+00:00",
   "source": "https://askpi.94-131-94-152.sslip.io/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 677,
@@ -3356,10 +3356,10 @@ window.CM_WO_DATA = {
     {
       "equip": "CD009",
       "cls": "GEN",
-      "woNumber": "GD-023133",
-      "maintType": "1000 Hours service Planned",
-      "hours": 1000,
-      "cmLabel": "1000h service",
+      "woNumber": "GD-023130",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
@@ -3375,10 +3375,10 @@ window.CM_WO_DATA = {
     {
       "equip": "CD009",
       "cls": "GEN",
-      "woNumber": "GD-023130",
-      "maintType": "250 Hours service Planned",
-      "hours": 250,
-      "cmLabel": "250h service",
+      "woNumber": "GD-023133",
+      "maintType": "1000 Hours service Planned",
+      "hours": 1000,
+      "cmLabel": "1000h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
@@ -7577,6 +7577,25 @@ window.CM_WO_DATA = {
     {
       "equip": "DZ004",
       "cls": "DOZ",
+      "woNumber": null,
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "250h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": null,
+      "cmmsStatus": "Registered",
+      "open": true,
+      "planStart": null,
+      "planStartDt": null,
+      "planEnd": null,
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
+      "equip": "DZ004",
+      "cls": "DOZ",
       "woNumber": "GD-021071",
       "maintType": "500 Hours service Planned",
       "hours": 500,
@@ -7954,25 +7973,6 @@ window.CM_WO_DATA = {
       "actualStart": "2026-09-18",
       "actualStartDt": "2026-09-18T07:45:00",
       "actualEnd": "2026-09-18"
-    },
-    {
-      "equip": "DZ004",
-      "cls": "DOZ",
-      "woNumber": "WO-017261",
-      "maintType": "250 Hours service Planned",
-      "hours": 250,
-      "cmLabel": "250h service",
-      "cmTypes": null,
-      "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
-      "planStart": "2026-09-25",
-      "planStartDt": "2026-09-25T00:00:00",
-      "planEnd": "2026-09-26",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
     },
     {
       "equip": "DZ005",
@@ -54664,15 +54664,15 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "PCNF",
+      "cmmsStatus": "In progress",
+      "open": false,
       "planStart": "2026-09-21",
       "planStartDt": "2026-09-21T00:00:00",
       "planEnd": "2026-09-21",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-09-21",
+      "actualStartDt": "2026-09-21T00:00:00",
+      "actualEnd": "2026-09-21"
     }
   ]
 };
