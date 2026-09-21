@@ -47,7 +47,7 @@ const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
       { equip: 'TK109', clsLabel: 'HT', model: 'X', type: 'MP', typeLabel: 'MP', date: '2026-09-20', by: 'R', smu: '33513',
         items: [
           { key: 'RRD', name: 'Rear Differential', grade: 2, defect: 'Ferrous debris', action: 'Monitor', photos: [solid(600, 400, [210, 40, 40])] },
-          { key: '__general', name: 'Machine', general: true, cats: ['overview'], photos: [overviewPhoto] },
+          { key: '__general', name: 'Machine', general: true, cats: ['OVERVIEW'], photos: [overviewPhoto] },
         ] },
       { equip: 'TK109', clsLabel: 'HT', model: 'X', type: 'INSP', typeLabel: 'INSP', date: '2026-09-20', by: 'R', smu: '33513',
         items: [{ key: 'GEN', name: 'General Inspection', grade: 2, defect: 'oil level', action: 'Monitor', photos: [solid(600, 400, [30, 180, 60])] }] },
