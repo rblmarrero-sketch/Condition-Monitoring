@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=433">
+<link rel="manifest" href="manifest.webmanifest?v=434">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=433">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=433">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=433">
+<link rel="apple-touch-icon" href="icon-192.png?v=434">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=434">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=434">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2507,7 +2507,7 @@
   <div class="hint" id="dueDlgMsg" style="margin-top:8px"></div>
   <div class="row" style="margin-top:14px">
     <button class="btn" id="dueDlgCancel" data-i18n="dlg_cancel">Keep</button>
-    <button class="btn primary" id="dueDlgOk" data-i18n="dlg_ok">OK</button></div></div></dialog>
+    <button class="btn primary" id="dueDlgOk">OK</button></div></div></dialog>
 
 <dialog id="dlg"><div class="dlg-in"><h3 id="dlgTitle"></h3><p id="dlgMsg"></p>
   <div class="row" style="margin-top:14px">
@@ -2751,16 +2751,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=433"></script>
-<script src="upload-defaults.js?v=433"></script>
-<script src="hme.js?v=433"></script>
-<script src="mp-fc.js?v=433"></script>
-<script src="rtw.js?v=433"></script>
-<script src="hme-cascade.js?v=433"></script>
-<script src="assets.js?v=433"></script>
-<script src="temp-limits.js?v=433"></script>
-<script src="normalize.js?v=433"></script>
-<script src="terms.js?v=433"></script>
+<script src="native.js?v=434"></script>
+<script src="upload-defaults.js?v=434"></script>
+<script src="hme.js?v=434"></script>
+<script src="mp-fc.js?v=434"></script>
+<script src="rtw.js?v=434"></script>
+<script src="hme-cascade.js?v=434"></script>
+<script src="assets.js?v=434"></script>
+<script src="temp-limits.js?v=434"></script>
+<script src="normalize.js?v=434"></script>
+<script src="terms.js?v=434"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2779,25 +2779,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=433"></script>
-<script src="edits.js?v=433"></script>
-<script src="due.js?v=433"></script>
-<script src="wear.js?v=433"></script>
-<script src="wear-figs.js?v=433"></script>
-<script src="wear-map.js?v=433"></script>
-<script src="machine-photos.js?v=433"></script>
-<script src="machine-fig.js?v=433"></script>
-<script src="get.js?v=433"></script>
-<script src="points.js?v=433"></script>
-<script src="uc-points.js?v=433"></script>
-<script src="inspect-guide.js?v=433"></script>
-<script src="get-figs.js?v=433"></script>
-<script src="body-points.js?v=433"></script>
-<script src="body-map.js?v=433"></script>
-<script src="lube.js?v=433"></script>
-<script src="lube-overrides.js?v=433"></script>
-<script src="lube2027.js?v=433"></script>
-<script src="report-core.js?v=433"></script>
+<script src="grade.js?v=434"></script>
+<script src="edits.js?v=434"></script>
+<script src="due.js?v=434"></script>
+<script src="wear.js?v=434"></script>
+<script src="wear-figs.js?v=434"></script>
+<script src="wear-map.js?v=434"></script>
+<script src="machine-photos.js?v=434"></script>
+<script src="machine-fig.js?v=434"></script>
+<script src="get.js?v=434"></script>
+<script src="points.js?v=434"></script>
+<script src="uc-points.js?v=434"></script>
+<script src="inspect-guide.js?v=434"></script>
+<script src="get-figs.js?v=434"></script>
+<script src="body-points.js?v=434"></script>
+<script src="body-map.js?v=434"></script>
+<script src="lube.js?v=434"></script>
+<script src="lube-overrides.js?v=434"></script>
+<script src="lube2027.js?v=434"></script>
+<script src="report-core.js?v=434"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -2933,7 +2933,7 @@ const I18N = {
     sec_inspection:"Inspection", hdr_change:"Change",
     res_t:"Carry on where you left off?",
     res_m:"{u} · {r} — {n} reading(s) taken on {d} and not yet saved.",
-    res_go:"Carry on",
+    res_go:"Carry on", res_discard:"Discard it",
     prog_n:"{d}/{n}", prog_all:"{n}/{n} done",
     iso_show:"Report a finding", iso_hide:"Hide the finding fields", lbl_class:"Equipment", lbl_type:"Inspection type", lbl_truck:TERMS.en.equipment, ph_truck:"e.g. TK158", btn_scan:"Scan",
     lbl_defect:"Defect / failure mode", lbl_cause:"Direct cause",
@@ -3323,6 +3323,7 @@ const I18N = {
     due_not_t:"{u} — not doing this round?",
     due_not_m:"{ty}. Defer it to a date, or say it is not being done at all. Either way the reason is kept, so the office can see what was not completed and why.",
     due_put_n:"+{n} d", due_put_to:"deferred to {d}", due_off:"Not being done",
+    due_ok_defer:"Defer {n} d", due_ok_off:"Confirm not being done",
     due_why:"Reason", due_why_ph:"in the workshop · off site · no access",
     due_why_pick:"Choose a reason\u2026", due_why_own:"Or write your own",
     due_why_need:"Say why — this is the part somebody will read later.",
@@ -3602,7 +3603,7 @@ const I18N = {
     sec_inspection:"Осмотр", hdr_change:"Изменить",
     res_t:"Продолжить начатое?",
     res_m:"{u} · {r} — замеров: {n}, дата {d}, ещё не сохранено.",
-    res_go:"Продолжить",
+    res_go:"Продолжить", res_discard:"Удалить черновик",
     prog_n:"{d}/{n}", prog_all:"{n}/{n} готово",
     iso_show:"Записать дефект", iso_hide:"Скрыть поля дефекта", lbl_class:"Оборудование", lbl_type:"Тип осмотра", lbl_truck:"Трак / Ед.", ph_truck:"напр. TK158", btn_scan:"Скан",
     lbl_defect:"Дефект / вид отказа", lbl_cause:"Прямая причина",
@@ -3977,6 +3978,7 @@ const I18N = {
     due_not_t:"{u} — не выполняем этот осмотр?",
     due_not_m:"{ty}. Отложите на срок или укажите, что осмотр не будет выполнен. В обоих случаях причина сохраняется — офис увидит, что не выполнено и почему.",
     due_put_n:"+{n} сут", due_put_to:"отложено до {d}", due_off:"Не выполняется",
+    due_ok_defer:"Отложить на {n} сут", due_ok_off:"Подтвердить: не выполняется",
     due_why:"Причина", due_why_ph:"в ремонте · вне участка · нет доступа",
     due_why_pick:"Выберите причину\u2026", due_why_own:"Или впишите свою",
     due_why_need:"Укажите причину — её будут читать позже.",
@@ -4445,10 +4447,22 @@ function guard(fn){
   };
 }
 /* A question, not a notice. Used where the answer destroys something: the caller
-   waits for a real choice instead of assuming one. */
-function ask(title,msg,okLabel,danger){
+   waits for a real choice instead of assuming one.
+
+   cancelLabel/cancelDanger exist because "Keep it" — the button's own
+   default text — is only true for the callers it was written for: a delete
+   dialog, where declining really does keep the round. offerDraft() reused
+   this same button for "Carry on where you left off?" and an explicit
+   press of it DELETES the draft (dbDel(DRAFT_ID)) — the opposite of what
+   its own label says, and the opposite of what Esc/the backdrop do on the
+   IDENTICAL dialog (see the comment on $("dlg").onclose below: dismissal
+   truly does keep it). A technician reading "Keep it" beside "Carry on"
+   has no way to tell those two answers apart from the words alone. Every
+   OTHER caller keeps the old default text and styling exactly as before. */
+function ask(title,msg,okLabel,danger,cancelLabel,cancelDanger){
   $("dlgTitle").textContent=title; $("dlgMsg").textContent=msg;
-  $("dlgCancel").classList.remove("hidden"); $("dlgCancel").textContent=t("dlg_cancel");
+  $("dlgCancel").textContent=cancelLabel||t("dlg_cancel");
+  $("dlgCancel").className="btn "+(cancelDanger?"danger":"");
   $("dlgOk").textContent=okLabel||t("dlg_ok");
   $("dlgOk").className="btn "+(danger?"danger":"primary");
   $("dlg").showModal();
@@ -11046,6 +11060,13 @@ async function dueNotDoing(ty,unit){
       DUE_PUT.map(n=>`<button class="btn chipbtn ${String(n)===until?"primary":""}" data-w="${n}">${
         esc(t("due_put_n").replace("{n}",n))}</button>`).join("")
       + `<button class="btn chipbtn ${until==="off"?"danger":""}" data-w="off">${esc(t("due_off"))}</button>`;
+    /* THE BUTTON SAYS WHAT IT WILL DO, NOT JUST WHETHER IT CAN BE PRESSED.
+       A static "OK" beside "Keep it", under a message that names TWO
+       possible outcomes ("Defer it... or say it is not being done at
+       all"), left a technician unable to tell from the button alone which
+       one a press commits to. It now names the actual pending choice. */
+    const okBtn=$("dueDlgOk");
+    if(okBtn) okBtn.textContent = until==="off" ? t("due_ok_off") : t("due_ok_defer").replace("{n}",until);
     $("dueWhen").querySelectorAll("[data-w]").forEach(b=>b.onclick=()=>{
       until=b.dataset.w; paint();
       /* Choosing WHEN is not choosing WHY. A reason is still required, and
@@ -14244,7 +14265,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="433";
+const BUILD="434";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -18696,7 +18717,8 @@ async function offerDraft(){
   let silent=false;
   try{ silent=sessionStorage.getItem("cm_resume_silent")==="1"; sessionStorage.removeItem("cm_resume_silent"); }catch(e){}
   const carry=silent ? true : await ask(t("res_t"),
-    t("res_m",{u:d.equip, r:t("type_"+ty), n:n, d:(d.date||"")}), t("res_go"));
+    t("res_m",{u:d.equip, r:t("type_"+ty), n:n, d:(d.date||"")}), t("res_go"),
+    false, t("res_discard"), true);
   if(!carry){
     /* Only on an explicit no — carry===false. A dismissal (Esc, the backdrop,
        the notification that pulled the phone away again) comes back null and

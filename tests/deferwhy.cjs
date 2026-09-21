@@ -195,6 +195,13 @@ const R = f => fs.readFileSync(path.join(__dirname, "..", f), "utf8");
   await p.evaluate(() => document.querySelector('#dueWeekList [data-f="TK147"]').click());
   await p.waitForTimeout(300);
   ok("the dialog opens on the second row", await p.evaluate(() => document.getElementById("dueDlg").open));
+  /* THE BUTTON SAYS WHAT IT WILL DO, NOT JUST "OK". Read off the field
+     alongside "Keep it": a static OK next to a message naming TWO possible
+     outcomes ("Defer it... or say it is not being done at all") left no way
+     to tell from the button which one a press commits to. */
+  ok("  OK opens already naming the default action, not a bare OK",
+     (await p.textContent("#dueDlgOk")).trim() === "Defer 1 d",
+     await p.textContent("#dueDlgOk"));
   /* THE CLASS NAME IS NOT THE PROOF. build 376 shipped with the "off" chip
      correctly gaining class="btn chipbtn danger" on a real tap and NOTHING
      ON SCREEN CHANGING, because .btn.danger had no rule at all — read off a
@@ -208,6 +215,7 @@ const R = f => fs.readFileSync(path.join(__dirname, "..", f), "utf8");
     chip: document.querySelector('#dueWhen [data-w="off"]').className,
     color: getComputedStyle(document.querySelector('#dueWhen [data-w="off"]')).backgroundColor,
     okDisabled: document.getElementById("dueDlgOk").disabled,
+    okText: document.getElementById("dueDlgOk").textContent.trim(),
     msg: document.getElementById("dueDlgMsg").textContent,
   }));
   ok("  the chip itself still responds to the tap", /danger/.test(offState.chip), offState.chip);
@@ -215,6 +223,8 @@ const R = f => fs.readFileSync(path.join(__dirname, "..", f), "utf8");
      offState.color !== chipColorBefore, chipColorBefore + " -> " + offState.color);
   ok("  and OK is visibly disabled with no reason typed yet", offState.okDisabled === true,
      JSON.stringify(offState));
+  ok("  and OK's own text switched to the destructive action it now commits to",
+     offState.okText === "Confirm not being done", offState.okText);
   let blocked = false;
   try { await p.click("#dueDlgOk", { timeout: 1000 }); } catch (e) { blocked = true; }
   ok("  a real tap on OK cannot even land while it is disabled", blocked === true);
