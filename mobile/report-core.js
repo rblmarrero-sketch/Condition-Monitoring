@@ -2782,6 +2782,45 @@
      printed and that the rest simply were not reached this visit — the
      honest gap CLAUDE.md's own rule warns is worse to leave unsaid than to
      print as an empty box. */
+  /* HOW MANY POSITIONS SHARE ONE BOARD ROW, AND WHEN PACKING THEM SIDE BY
+     SIDE WOULD ALSO SQUEEZE EACH ONE'S OWN PHOTOGRAPHS.
+
+     Read off TK156's own MP report, 2026-09-13: three positions (4
+     Differential, 4E Left Rear Final Drive, 4F Right Rear Final Drive),
+     every one of them with its own photograph pair, packed into mpEvidence's
+     three-column board — a 243px card on this sheet's 746px width. Two
+     photographs at their own natural size (a squarish close-up and a
+     narrower one) need about 330px between them; CSS grid's `auto` columns,
+     asked to fit that into 243px, do not shrink each to its OWN
+     proportional share — they split the available width EQUALLY between
+     the two columns instead, so a nearly-square photo and a narrow portrait
+     one came out the identical 122px wide, both far smaller than the same
+     pair renders at, unsqueezed, anywhere else on the sheet. "looks like a
+     bad photo in a report" — it is the same photograph, sized down by
+     nothing but how many neighbours happened to share its row.
+
+     earlierRoundSections already carried a narrower version of this rule
+     (collapsing to one full-width column whenever two positions each held
+     more than one photograph), reasoning that a "busy round" of many
+     multi-photo findings should keep its density and only the common
+     two-plug shape needed the escape hatch. TK156 shows the identical
+     squeeze at exactly THREE positions — the MP round's own standard shape
+     on an HT/AT haul truck, not a rare edge case this project can go on
+     excluding. The threshold is raised to match: three, but no further, so
+     a genuinely busy round of many findings keeps the density that
+     decision deliberately chose.
+
+     One function decides this now, not three separate copies of a column
+     count — mpEvidence, the generic graded-findings board and
+     earlierRoundSections all call it, so a position's photographs cannot
+     be sized correctly on one board and squeezed on another. */
+  function boardCols(items) {
+    var n = items.length;
+    var base = n >= 4 ? 4 : n === 3 ? 3 : n === 2 ? 2 : 1;
+    var multiPhoto = items.some(function (it) { return (it.photos || []).length > 1; });
+    if (multiPhoto && n <= 3) return { cols: 1, wide: true };
+    return { cols: base, wide: false };
+  }
   function mpEvidence(ctx, T, rec) {
     var all = rec.items || [];
     if (!all.length) return "";
@@ -2791,10 +2830,9 @@
     var skipped = all.filter(function (it) { return walked.indexOf(it) < 0; });
     if (!walked.length) return "";
     var its = walked;
-    var cols = its.length >= 4 ? 4 : its.length === 3 ? 3 : its.length === 2 ? 2 : 1;
-    var wide = its.length === 1 && ((its[0].photos || []).length > 1);
+    var bc = boardCols(its);
     return '<div class="subhd" style="margin-top:12px;">' + T.I("tb_mp") + '</div>'
-      + '<div class="board b' + cols + (wide ? ' wide' : '') + '">'
+      + '<div class="board b' + bc.cols + (bc.wide ? ' wide' : '') + '">'
       + its.map(function (it) { return cell(ctx, T, it, {}); }).join("") + '</div>'
       + (skipped.length ? '<div class="muted" style="font-size:9.5px;margin-top:4px;">'
           + esc(T.I("tb_mp_skip", { n: skipped.map(function (it) { return it.code || it.key; }).join(", ") }))
@@ -3107,16 +3145,15 @@
            them, and the table below says which. */
         body = restLine(T, rest, true);
       } else if (board.length && board.length <= 12) {
-        var cols = board.length >= 4 ? 4 : board.length === 3 ? 3 : board.length === 2 ? 2 : 1;
-        /* A single position holding several photographs is not a narrow column.
-           b1 caps the cell at 340px so one graded point with a sentence in it
-           does not stretch across the paper — right for a paragraph, wrong for
-           six photographs, which it squeezed into the left third of the sheet
-           and left the rest of the page empty. */
-        var wide = board.length === 1 && ((board[0].photos || []).length > 1);
+        /* A single position holding several photographs is not a narrow column,
+           and neither are two or three positions that each hold their own pair
+           — boardCols (see its own comment, by mpEvidence) is the one place
+           that decides when packing side by side would squeeze every one of
+           them instead. */
+        var bc = boardCols(board);
         var sh = shared(board);
         body = commonBand(T, sh, board.length)
-          + '<div class="board b' + cols + (wide ? ' wide' : '') + '">'
+          + '<div class="board b' + bc.cols + (bc.wide ? ' wide' : '') + '">'
           + board.map(function (it) { return cell(ctx, T, it, sh); }).join("") + '</div>'
           + restLine(T, rest, false);
       } else if (board.length) {
@@ -3908,7 +3945,6 @@
 
       var rest = rec.items.filter(function (it) { return told.indexOf(it) < 0; });
       var sh = shared(told);
-      var cols = told.length >= 4 ? 4 : told.length === 3 ? 3 : told.length === 2 ? 2 : 1;
       /* ONE POSITION, SEVERAL PHOTOGRAPHS: THE SHEET IS THEIRS HERE TOO.
          `.b1` alone caps a lone card at 340px — sized for a single short
          finding sitting among narrower content — and mpEvidence already
@@ -3922,27 +3958,18 @@
          2026-09-10 card at full width, the same component looking like two
          different reports.
 
-         TWO POSITIONS, EACH WITH SEVERAL PHOTOGRAPHS, IS THE ORDINARY SHAPE
-         OF A MAGNETIC PLUG ROUND — 4E and 4F, side by side on the truck,
-         each with its own pair of photographs — and this is the one shape
-         the fix above never reached, because it only ever fired for a LONE
-         item. Packing two such items into this section's own 2-column row
-         halves each one's own column, and the photo grid INSIDE that column
-         halves it again: read off a real report, TK150's 4E on its current
-         visit spanned most of the page (unitSheets' own "photos" board,
-         `.board.gal.b1`, one item to a row); the identical position one
-         visit earlier, here, printed at roughly a quarter of that — the same
-         component looking like two different reports, the second time this
-         exact shape has produced that complaint. The row is one item deep
-         now whenever packing side by side would ALSO be packing each item's
-         own photographs side by side — every item here carries more than
-         one photograph, and there are few enough of them (two) that
-         stacking them costs one extra row, not a page. A round with three or
-         more graded items keeps its existing density; this is the common
-         two-plug shape, not a rule for every busy round. */
-      var multiPhoto = told.some(function (it) { return (it.photos || []).length > 1; });
-      if (multiPhoto && told.length <= 2) cols = 1;
-      var wide = cols === 1 && (told.length > 1 || (told[0].photos || []).length > 1);
+         TWO OR THREE POSITIONS, EACH WITH SEVERAL PHOTOGRAPHS, IS THE
+         ORDINARY SHAPE OF A MAGNETIC PLUG ROUND — 4, 4E, 4F on an HT/AT
+         truck, side by side, each with its own pair of photographs — and
+         boardCols (see its own comment, by mpEvidence) is the one place
+         that now decides when packing them side by side would ALSO squeeze
+         every one of their own photograph rows. It replaces this section's
+         own copy of the same rule — TK156 showed the identical squeeze at
+         three positions that this file's own "two, not a rule for every
+         busy round" cap had stopped short of, and a second copy of the
+         threshold is exactly how the two would have drifted apart again. */
+      var bc = boardCols(told);
+      var cols = bc.cols, wide = bc.wide;
       out.push({ nb: false, gap: 4, html: '<div class="sec olderr">'
         + '<div class="ohd">'
           + '<b>' + esc(rec.date || "") + '</b>'
@@ -4267,7 +4294,7 @@
      758px board, 6px padding each side) and its established 8px gap —
      unchanged since build 421. */
   var GAL_ROW_W = 746, GAL_GAP = 8, GAL_MIN_H = 100, GAL_MAX_H = 250;
-  function justifiedRow(urls, h, gap) {
+  function justifiedRow(urls, h, gap, targetW) {
     /* max-height:none, explicit, on every image — the shared .cel .phg.gallery
        img rule (above) caps height at 182px for the OLD one/two-photograph
        technique this row does not use, and CSS max-height clamps an explicit
@@ -4276,7 +4303,49 @@
        solving for the row's own width. Setting it back to none here, inline,
        is what makes THIS row's own computed height the one that actually
        reaches the page. */
-    return '<div class="phgrow" style="display:flex;gap:' + gap + 'px;justify-content:center;">'
+    /* A ROW CAN BE TOLD TO SIT SHORTER THAN THE LINE, AND STILL HAS TO LOOK
+       LIKE IT MEANT TO. Read off TK109's own report a fourth time, unit mode,
+       "PHOTOGRAPHS": CH.UC's three photographs (a hub, an oil sample jar, a
+       small cap) are all portrait or near-square enough that solving for the
+       row's own width the way RRD's four wider close-ups do would need a
+       height past GAL_MAX_H — the ceiling that keeps an all-narrow-portrait
+       row from filling most of a page. Capped there, the row's own true
+       width at that height comes up short of GAL_ROW_W, and `justify-
+       content:center` left every photo pinned to the left third of the
+       line with the whole remainder as one blank strip on the right —
+       "same, no change" against the very complaint this row's own fix was
+       meant to answer, because a height cap this project needs for a
+       different reason silently reopened it. Nothing here is cropped,
+       stretched, or resized past its own ratio; only where the LEFTOVER
+       space goes changes: `space-between` spends it as gaps BETWEEN
+       photographs, which reaches the line's own right edge the same way a
+       full-width row does, instead of banking it all after the last frame. */
+    var w = 0;
+    for (var i = 0; i < urls.length; i++) w += h * photoRatio(urls[i]);
+    w += (urls.length - 1) * gap;
+    /* A ROW THAT ALREADY FITS IS NEVER "SHORT" — `h` is `Math.round`ed in
+       justifiedH, so the row's true pixel width almost never lands on
+       GAL_ROW_W exactly even when nothing was clamped; a pure-landscape
+       four-up row comes out a couple of px under it from rounding alone.
+       Treating that as "short" put `space-between`'s extra pixel into every
+       gap of an already-correct row and turned its hairline 8px gap into a
+       visible 9-10px one (galmixed4.cjs's own control caught this). Only a
+       shortfall bigger than rounding could ever produce — a full gap's
+       worth — is the GAL_MAX_H clamp actually firing. */
+    var short = targetW && (targetW - w) > gap;
+    /* `justify-self:stretch` is load-bearing here, not decoration. The
+       column this row sits in is `.phg.gallery`'s own grid, and that grid
+       sets `justify-items:center` — right for the ORDINARY case, where a
+       row's own content already reaches the column's width and centring is
+       a no-op, but it means a SHORT row (this one) is a 534px flex box
+       first, THEN centred as a block inside the 746px column: `justify-
+       content:space-between` on a box that is only ever as wide as its own
+       content has no spare width to distribute and changes nothing. Only
+       once the row itself is stretched to the column's full width does
+       `space-between` have room to push the first and last photograph out
+       to the column's own two edges. */
+    return '<div class="phgrow" style="display:flex;gap:' + gap + 'px;justify-self:stretch;justify-content:'
+      + (short ? "space-between" : "center") + ';">'
       + urls.map(function (u) {
           return '<img src="' + u + '" style="display:block;height:' + h + 'px;width:auto;max-width:100%;max-height:none;'
             + 'background:#fff;border:1px solid #dfe4e9;border-radius:3px;">';
@@ -4331,7 +4400,7 @@
              shape — a rule assumed inert because nothing currently reaches it
              is one new branch away from reaching it. */
           top = '<div class="phg gallery g3plus" style="grid-template-columns:1fr">'
-            + galRows.map(function (r) { return justifiedRow(r, galH, GAL_GAP); }).join("")
+            + galRows.map(function (r) { return justifiedRow(r, galH, GAL_GAP, GAL_ROW_W); }).join("")
             + '</div>';
         } else {
           /* ONE OR TWO PHOTOGRAPHS PACK TOGETHER AND CENTRE, NOT JUSTIFIED

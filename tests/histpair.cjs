@@ -50,22 +50,42 @@ const SEED = () => {
       { key: '4F', label: 'Right Rear Final Drive', grade: 1, photos: [px(320, 240), px(320, 240)] },
     ],
   };
-  /* Control: three or more graded items on one older round keep their
-     existing packed density — this fix is scoped to the common two-item
-     shape, not every busy round. */
+  /* TK156's own shape, one visit earlier: THREE graded items — 4, 4E, 4F,
+     an HT/AT truck's standard MP round — each with its own photograph
+     pair. boardCols raised the collapse threshold from two items to three
+     for exactly this report; unlike the two-item case above this is a NEW
+     assertion, not a preserved one. */
+  const three = {
+    equip: 'TK156X', date: '2026-09-06', type: 'MP', cls: 'HT', by: 'Nurbol', smu: '8000',
+    items: [
+      { key: '4', label: 'Differential', grade: 1, photos: [px(320, 240), px(320, 240)] },
+      { key: '4E', label: 'Left Rear Final Drive', grade: 1, defect: 'Ferrous debris — light',
+        action: 'Monitor / re-inspect next PM', photos: [px(320, 240), px(320, 240)] },
+      { key: '4F', label: 'Right Rear Final Drive', grade: 2, defect: 'Ferrous debris — light',
+        action: 'Monitor / re-inspect next PM', photos: [px(320, 240), px(320, 240)] },
+    ],
+  };
+  const threeLatest = {
+    equip: 'TK156X', date: '2026-09-13', type: 'MP', cls: 'HT', by: 'Rayanov', smu: '8047',
+    items: [{ key: '4', label: 'Differential', grade: 1, photos: [px(320, 240), px(320, 240)] }],
+  };
+  /* Control: FOUR or more graded items on one older round keep their
+     existing packed density — this fix is scoped to the common two- and
+     three-plug shapes, not every busy round. */
   const busy = {
     equip: 'BUSY01', date: '2026-09-08', type: 'INSP', cls: 'GEN', by: 'Rayanov', smu: '5000',
     items: [
       { key: 'A', label: 'Point A', grade: 3, defect: 'Crack', photos: [px(320, 240), px(320, 240)] },
       { key: 'B', label: 'Point B', grade: 3, defect: 'Crack', photos: [px(320, 240), px(320, 240)] },
       { key: 'C', label: 'Point C', grade: 3, defect: 'Crack', photos: [px(320, 240), px(320, 240)] },
+      { key: 'D', label: 'Point D', grade: 3, defect: 'Crack', photos: [px(320, 240), px(320, 240)] },
     ],
   };
   const busyLatest = {
     equip: 'BUSY01', date: '2026-09-10', type: 'INSP', cls: 'GEN', by: 'Rayanov', smu: '5010',
     items: [{ key: 'A', label: 'Point A', grade: 3, defect: 'Crack', photos: [px(320, 240)] }],
   };
-  CMDash.importRecords([latest, older, busyLatest, busy]);
+  CMDash.importRecords([latest, older, threeLatest, three, busyLatest, busy]);
   const ov = document.getElementById('dataOv'); if (ov) ov.classList.add('hidden');
 };
 
@@ -126,11 +146,22 @@ const SEED = () => {
      r.photoWidths.every(w => r.curPhotoWidths.some(cw => Math.abs(cw - w) <= 1)),
      JSON.stringify({ older: r.photoWidths, current: r.curPhotoWidths }));
 
-  console.log('\n(control: three graded items on one older round keep their existing packed density)');
+  console.log('\nTHE FIX: three graded items — TK156\'s own MP round, 4/4E/4F — no longer share a squeezed row either');
+  const r3 = await measure('TK156X');
+  ok('one older-round board found, holding all three positions', r3.cellCount === 3, JSON.stringify(r3));
+  ok('the board carries the wide class (one item deep)', /(^| )wide( |$)/.test(r3.boardClass || ''), r3.boardClass);
+  ok('THE FIX: each item spans the full width, not a third of it',
+     r3.cellWidths.every(w => w > 700), JSON.stringify(r3.cellWidths));
+  ok('  each photograph is sized like the current visit\'s standard tile, not squeezed to fit three across',
+     r3.curPhotoWidths.length > 0 &&
+     r3.photoWidths.every(w => r3.curPhotoWidths.some(cw => Math.abs(cw - w) <= 1)),
+     JSON.stringify({ older: r3.photoWidths, current: r3.curPhotoWidths }));
+
+  console.log('\n(control: FOUR graded items on one older round keep their existing packed density)');
   const rb = await measure('BUSY01');
-  ok('three cells, packed into the ordinary 3-column row', rb.cellCount === 3, JSON.stringify(rb));
-  ok('no wide class — this fix is scoped to the common two-item shape', !/(^| )wide( |$)/.test(rb.boardClass || ''), rb.boardClass);
-  ok('each cell is a third of the sheet, unchanged', rb.cellWidths.every(w => w < 300), JSON.stringify(rb.cellWidths));
+  ok('four cells, packed into the ordinary 4-column row', rb.cellCount === 4, JSON.stringify(rb));
+  ok('no wide class — this fix is scoped to the common two- and three-plug shapes', !/(^| )wide( |$)/.test(rb.boardClass || ''), rb.boardClass);
+  ok('each cell is a quarter of the sheet, unchanged', rb.cellWidths.every(w => w < 220), JSON.stringify(rb.cellWidths));
 
   ok(fails.filter(f => f.startsWith('PAGEERROR')).length === 0, 'no page errors throughout');
   await b.close();
