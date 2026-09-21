@@ -1889,8 +1889,29 @@
       var t=byType[r.type]; t.n++;
       (r.items||[]).forEach(function(it){
         if(it.general) return;
-        var g=gnum(it.grade); if(g>t.worst) t.worst=g;
-        if(it.defect && g>t.ig){ t.issue=it.defect; t.ig=g; }
+        /* A MEASURED STATION IS GRADED BY ITS WEAR, NOT BY A MANUAL PICK — the
+           same fallback roundRating() already carries for the single-round
+           rating bar, missing here. Read off this exact round-scope report:
+           two Undercarriage rounds (DZ001, EX006) each with several carrier
+           rollers at 140-160% of condemn — CRITICAL on every other table on
+           the page, including this same function's own caller's per-unit
+           tally (unitVerdictCounts) — while this row's own WORST RATING and
+           MAIN ISSUE columns printed an em-dash, because a wear point's
+           grade lives in it.w.pct via GR.fromWorn(), never in it.grade. The
+           page-one programme table was reporting "nothing to see" for the
+           exact round type the page's other two tables were flagging red. */
+        var g=gnum(it.grade);
+        if(!g && it.w && it.w.pct!=null && isFinite(Number(it.w.pct)) && GR)
+          g=GR.fromWorn(Number(it.w.pct));
+        if(g>t.worst) t.worst=g;
+        /* A wear point's own "defect" is what it IS, not a free-text note —
+           the detail table two pages later prints an empty DEFECT column for
+           the identical rows (see DZ001, "Grouser height — Left", CRITICAL,
+           no defect text). it.defect || it.name || it.key is the same
+           fallback chain the per-machine glance table already uses so this
+           column can still name the worst finding instead of going blank
+           for a whole class of rounds. */
+        if(g>t.ig && (it.defect || it.name || it.key)){ t.issue=it.defect||it.name||it.key; t.ig=g; }
       });
     });
     return order.map(function(ty){
