@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=432">
+<link rel="manifest" href="manifest.webmanifest?v=433">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=432">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=432">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=432">
+<link rel="apple-touch-icon" href="icon-192.png?v=433">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=433">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=433">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2751,16 +2751,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=432"></script>
-<script src="upload-defaults.js?v=432"></script>
-<script src="hme.js?v=432"></script>
-<script src="mp-fc.js?v=432"></script>
-<script src="rtw.js?v=432"></script>
-<script src="hme-cascade.js?v=432"></script>
-<script src="assets.js?v=432"></script>
-<script src="temp-limits.js?v=432"></script>
-<script src="normalize.js?v=432"></script>
-<script src="terms.js?v=432"></script>
+<script src="native.js?v=433"></script>
+<script src="upload-defaults.js?v=433"></script>
+<script src="hme.js?v=433"></script>
+<script src="mp-fc.js?v=433"></script>
+<script src="rtw.js?v=433"></script>
+<script src="hme-cascade.js?v=433"></script>
+<script src="assets.js?v=433"></script>
+<script src="temp-limits.js?v=433"></script>
+<script src="normalize.js?v=433"></script>
+<script src="terms.js?v=433"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2779,25 +2779,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=432"></script>
-<script src="edits.js?v=432"></script>
-<script src="due.js?v=432"></script>
-<script src="wear.js?v=432"></script>
-<script src="wear-figs.js?v=432"></script>
-<script src="wear-map.js?v=432"></script>
-<script src="machine-photos.js?v=432"></script>
-<script src="machine-fig.js?v=432"></script>
-<script src="get.js?v=432"></script>
-<script src="points.js?v=432"></script>
-<script src="uc-points.js?v=432"></script>
-<script src="inspect-guide.js?v=432"></script>
-<script src="get-figs.js?v=432"></script>
-<script src="body-points.js?v=432"></script>
-<script src="body-map.js?v=432"></script>
-<script src="lube.js?v=432"></script>
-<script src="lube-overrides.js?v=432"></script>
-<script src="lube2027.js?v=432"></script>
-<script src="report-core.js?v=432"></script>
+<script src="grade.js?v=433"></script>
+<script src="edits.js?v=433"></script>
+<script src="due.js?v=433"></script>
+<script src="wear.js?v=433"></script>
+<script src="wear-figs.js?v=433"></script>
+<script src="wear-map.js?v=433"></script>
+<script src="machine-photos.js?v=433"></script>
+<script src="machine-fig.js?v=433"></script>
+<script src="get.js?v=433"></script>
+<script src="points.js?v=433"></script>
+<script src="uc-points.js?v=433"></script>
+<script src="inspect-guide.js?v=433"></script>
+<script src="get-figs.js?v=433"></script>
+<script src="body-points.js?v=433"></script>
+<script src="body-map.js?v=433"></script>
+<script src="lube.js?v=433"></script>
+<script src="lube-overrides.js?v=433"></script>
+<script src="lube2027.js?v=433"></script>
+<script src="report-core.js?v=433"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -3365,8 +3365,6 @@ const I18N = {
     rtw_release_t:"Final release",
     rtw_senior_mech:"Senior mechanic", rtw_senior_mech_ph:"Full name",
     rtw_result:"Result",
-    rtw_result_S:"S — Safe to use", rtw_result_R:"R — Repaired and safe to use",
-    rtw_result_N:"N — Repair required, but safe to use", rtw_result_D:"D — Faulty and unsafe to use",
     rtw_date:"Date", rtw_signature:"Senior mechanic signature",
     rtw_sign_clear:"Clear", rtw_sign_tap:"Tap to sign",
     rtw_progress:"{done} of {total} checks complete",
@@ -4015,8 +4013,6 @@ const I18N = {
     rtw_release_t:"Допуск к работе",
     rtw_senior_mech:"Старший механик", rtw_senior_mech_ph:"Ф.И.О.",
     rtw_result:"Результат",
-    rtw_result_S:"S — Безопасен в использовании", rtw_result_R:"R — Отремонтирован и безопасен в использовании",
-    rtw_result_N:"N — Требуется ремонт, но безопасен в использовании", rtw_result_D:"D — Неисправен и небезопасен в использовании",
     rtw_date:"Дата", rtw_signature:"Подпись старшего механика",
     rtw_sign_clear:"Очистить", rtw_sign_tap:"Нажмите, чтобы подписать",
     rtw_progress:"Проверено {done} из {total}",
@@ -10446,10 +10442,7 @@ function rtwRenderChecklist(keepSignDataUrl){
       <div style="display:flex;gap:8px;">
         <div class="rtw-release-field" style="flex:1.3;"><label>${esc(t('rtw_result'))}</label>
           <select id="rtwResult">
-            <option value="S" ${d.result==='S'?'selected':''}>${esc(t('rtw_result_S'))}</option>
-            <option value="R" ${d.result==='R'?'selected':''}>${esc(t('rtw_result_R'))}</option>
-            <option value="N" ${d.result==='N'?'selected':''}>${esc(t('rtw_result_N'))}</option>
-            <option value="D" ${d.result==='D'?'selected':''}>${esc(t('rtw_result_D'))}</option>
+            ${Object.keys(RTW_RESULTS).map(code=>`<option value="${code}" ${d.result===code?'selected':''}>${esc(code+" — "+(RTW_RESULTS[code][lang]||RTW_RESULTS[code].en))}</option>`).join("")}
           </select></div>
         <div class="rtw-release-field" style="flex:1;"><label>${esc(t('rtw_date'))}</label>
           <input id="rtwDate" type="date" value="${esc(d.date||todayISO())}"></div>
@@ -14251,7 +14244,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="432";
+const BUILD="433";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

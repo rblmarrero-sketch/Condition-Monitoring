@@ -131,6 +131,11 @@ const jpg = p => p.evaluate(() => {
   ok('the work order number is shown', summary.includes('WO-016635'));
   ok('the equipment is filled in from the work order, not typed', summary.includes('TK112'));
   ok('the component is filled in from the work order', summary.includes('Rear Differential'));
+  const resultOptions = await p.$$eval('#rtwResult option', os => os.map(o => o.textContent.trim()));
+  ok('the four release results read exactly as the document states them', JSON.stringify(resultOptions) === JSON.stringify([
+    'S — Safe to use', 'R — Repaired and safe to use',
+    'N — Repair required, but safe to use', 'D — Faulty and unsafe to use',
+  ]), resultOptions.join(' | '));
 
   console.log('\n5. Pass/Attention/N/A — evidence required only on Attention');
   const items = await p.evaluate(() => Object.keys(rtwDraft.items));
