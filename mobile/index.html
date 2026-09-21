@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=429">
+<link rel="manifest" href="manifest.webmanifest?v=430">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=429">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=429">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=429">
+<link rel="apple-touch-icon" href="icon-192.png?v=430">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=430">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=430">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -308,6 +308,66 @@
   .cards button .dot{position:absolute;top:8px;right:9px;width:9px;height:9px;border-radius:50%;background:var(--good);display:none;}
   .cards button.has .dot{display:block;}
   .cards button.on{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent) inset;}
+
+  /* ===================== Return to Work ===================== */
+  .rtw-entry{width:100%;display:flex;align-items:center;gap:12px;cursor:pointer;text-align:left;font:inherit;}
+  .rtw-entry-ic{flex:none;width:38px;height:38px;border-radius:10px;background:var(--accent-soft);color:var(--accent);
+    display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:750;}
+  .rtw-entry-t{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:2px;}
+  .rtw-entry-t b{font-size:15px;color:var(--ink);}
+  .rtw-entry-chev{flex:none;color:var(--muted);font-size:18px;}
+  .rtw-ov{position:fixed;inset:0;background:var(--page);z-index:60;display:flex;flex-direction:column;}
+  .rtw-ov.hidden{display:none;}
+  .rtw-screen{display:flex;flex-direction:column;height:100%;min-height:0;}
+  .rtw-ov-head{flex:none;background:var(--surface);border-bottom:1px solid var(--border);
+    padding:calc(env(safe-area-inset-top) + 10px) 14px 10px;display:flex;align-items:center;gap:10px;}
+  .rtw-ov-back{flex:none;background:none;border:none;color:var(--muted);font-size:22px;line-height:1;padding:2px 4px;cursor:pointer;}
+  .rtw-ov-head b{display:block;font-size:15px;color:var(--ink);}
+  .rtw-ov-head .hint{margin:0;}
+  .rtw-ov-body{flex:1 1 auto;overflow-y:auto;padding:12px 14px 24px;display:flex;flex-direction:column;gap:8px;}
+  .rtw-search-row{display:flex;gap:8px;}
+  .rtw-search-row input{flex:1 1 auto;height:44px;border:1px solid var(--border);border-radius:10px;
+    background:var(--surface);color:var(--ink);padding:0 12px;font:inherit;font-size:14px;}
+  .rtw-wo-card{display:flex;flex-direction:column;gap:4px;background:var(--surface);border:1px solid var(--border);
+    border-left:4px solid var(--border);border-radius:10px;padding:11px 13px;text-align:left;cursor:pointer;width:100%;font:inherit;}
+  .rtw-wo-card b.wo{font-size:14.5px;color:var(--ink);}
+  .rtw-wo-card .sev{font-size:11px;font-weight:700;border-radius:6px;padding:2px 7px;}
+  .rtw-summary-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:11px 13px;
+    display:flex;flex-direction:column;gap:6px;}
+  .rtw-item{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 11px;
+    display:flex;flex-direction:column;gap:6px;}
+  .rtw-item .no{flex:none;width:28px;height:20px;border-radius:5px;background:var(--surface-3);color:var(--muted);
+    font-size:10.5px;font-weight:700;display:flex;align-items:center;justify-content:center;}
+  .rtw-item-head{display:flex;align-items:flex-start;gap:8px;}
+  .rtw-item-title{flex:1 1 auto;font-size:12.5px;font-weight:650;color:var(--ink);line-height:1.3;}
+  .rtw-item-badge{flex:none;font-size:10px;font-weight:700;border-radius:6px;padding:2px 6px;white-space:nowrap;}
+  .rtw-marks{display:flex;gap:4px;}
+  .rtw-marks button{flex:1 1 0;height:28px;border-radius:6px;border:1px solid var(--border);background:var(--surface);
+    color:var(--ink-2);font:inherit;font-size:11px;font-weight:700;cursor:pointer;}
+  .rtw-marks button.on-pass{background:color-mix(in srgb, var(--good) 14%, var(--surface));border-color:var(--good);color:var(--good);}
+  .rtw-marks button.on-attn{background:color-mix(in srgb, var(--critical) 12%, var(--surface));border-color:var(--critical);color:var(--critical);}
+  .rtw-marks button.on-na{background:var(--surface-3);border-color:var(--ink-2);color:var(--ink);}
+  .rtw-evidence-toggle{display:flex;align-items:center;justify-content:space-between;background:none;border:none;
+    border-top:1px solid var(--border);padding:5px 0 0;font:inherit;text-align:left;cursor:pointer;width:100%;color:var(--ink-2);}
+  .rtw-evidence-body{display:flex;flex-direction:column;gap:6px;}
+  .rtw-evidence-body textarea{flex:1 1 auto;box-sizing:border-box;border:1px solid var(--border);border-radius:8px;
+    padding:7px 9px;font:inherit;font-size:12.5px;color:var(--ink);background:var(--surface-2);min-height:34px;resize:none;}
+  .rtw-evidence-row{display:flex;gap:6px;align-items:flex-start;}
+  .rtw-icon-btn{flex:none;width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:var(--surface);
+    color:var(--ink);font-size:14px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;}
+  .rtw-icon-btn.mic{color:var(--accent);}
+  .rtw-icon-btn.mic.rec{color:#fff;background:var(--critical);border-color:var(--critical);animation:pulse 1s infinite;}
+  .rtw-photo-badge{position:absolute;top:-5px;right:-5px;min-width:14px;height:14px;border-radius:7px;background:var(--good);
+    color:#fff;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 3px;}
+  .rtw-release-field{display:flex;flex-direction:column;gap:4px;}
+  .rtw-release-field label{font-size:11.5px;color:var(--muted);}
+  .rtw-release-field input, .rtw-release-field select{height:38px;box-sizing:border-box;border:1px solid var(--border);
+    border-radius:8px;padding:0 10px;font:inherit;font-size:13px;color:var(--ink);background:var(--surface-2);}
+  .rtw-sign-pad-slot{border:1.5px dashed var(--border);border-radius:9px;background:var(--surface-2);min-height:96px;
+    display:flex;align-items:center;justify-content:center;padding:4px;}
+  .rtw-sign-pad-slot canvas{width:100%;height:90px;}
+  .rtw-footer{flex:none;background:var(--surface);border-top:1px solid var(--border);
+    padding:10px 14px calc(env(safe-area-inset-bottom) + 14px);display:flex;flex-direction:column;gap:8px;}
   .searchall{width:100%;padding:9px;border:1px dashed var(--border);background:none;color:var(--accent);border-radius:10px;font-size:13px;font-weight:650;cursor:pointer;margin-bottom:10px;}
   .needunit{width:100%;text-align:center;padding:12px 6px 4px;}
   .needunit .nu-t{color:var(--ink-2);font-size:14px;margin-bottom:12px;}
@@ -2133,6 +2193,18 @@
      what to do now. The archive and the worklist are different questions and
      one of them is asked at the start of every shift. -->
 <div class="pane" id="paneDue">
+  <!-- RETURN TO WORK'S ENTRY POINT — a sibling of the existing .card, before
+       it, not inside it. Its own search (rtwWoList) is a different index
+       from #dueFind below (open 1C work orders, not the CM schedule), so it
+       gets its own control rather than overloading that one. -->
+  <button type="button" class="card rtw-entry" id="rtwEntryBtn" hidden>
+    <div class="rtw-entry-ic">✓</div>
+    <div class="rtw-entry-t">
+      <b data-i18n="rtw_due_card_t">Return to Work</b>
+      <span id="rtwEntrySub" class="hint"></span>
+    </div>
+    <div class="rtw-entry-chev">›</div>
+  </button>
   <div class="card">
     <h2><span data-i18n="sec_due">Inspection due</span> <span class="count-badge" id="dueCount">0</span></h2>
     <!-- A round filter, not an interval box.
@@ -2367,6 +2439,51 @@
   <button class="btn ghost" id="scanCancel" data-i18n="btn_cancel">Cancel</button>
 </div>
 <canvas id="qrCanvas" class="hidden"></canvas>
+
+<!-- RETURN TO WORK. A separate overlay, not the guided round wizard: this is
+     a repair-release checklist triggered by a work order, not a scheduled CM
+     round, and it does not touch draft/curItem/renderMedia at all — it keeps
+     its own small state (rtwDraft) and reuses only the generic, blob-in
+     primitives (intakeNoted/ownBytes) plus the SAME save tail every round
+     goes through (reArmForSave/attSync/dbPut/noteDone/verifySavedRec), so
+     "saved/queued/sent" is exactly as real for this as for every other type. -->
+<div id="rtwOv" class="rtw-ov hidden">
+  <div id="rtwPick" class="rtw-screen">
+    <div class="rtw-ov-head">
+      <button type="button" class="rtw-ov-back" id="rtwPickBack">‹</button>
+      <div>
+        <b data-i18n="rtw_pick_title">Return to Work</b>
+        <div class="hint" data-i18n="rtw_pick_sub">Pick the work order — this fills in the equipment</div>
+      </div>
+    </div>
+    <div class="rtw-ov-body">
+      <div class="rtw-search-row">
+        <input id="rtwPickQ" type="search" inputmode="search" data-i18n-ph="rtw_pick_ph" placeholder="WO number or unit…">
+        <button type="button" class="btn ghost" id="rtwScanBtn">🔳 <span data-i18n="rtw_pick_scan">Scan unit</span></button>
+      </div>
+      <div class="hint" data-i18n="rtw_pick_hint">Scanning narrows this list to that unit's own open work orders — either way ends here.</div>
+      <div style="font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:6px 2px 0;" data-i18n="rtw_pick_list_t">Open work orders — repair complete, awaiting release</div>
+      <div id="rtwPickList"></div>
+      <div class="hint" id="rtwPickNote" data-i18n="rtw_pick_note">Only records with a formal work order number — a defect still awaiting one doesn't show up here until 1C assigns it.</div>
+    </div>
+  </div>
+  <div id="rtwChecklistScr" class="rtw-screen hidden">
+    <div class="rtw-ov-head">
+      <button type="button" class="rtw-ov-back" id="rtwChecklistBack">‹</button>
+      <div>
+        <b data-i18n="rtw_checklist_title">Return to Work</b>
+        <div class="hint" data-i18n="rtw_checklist_sub">Repair release checklist</div>
+      </div>
+    </div>
+    <div class="rtw-ov-body" id="rtwChecklistBody"></div>
+    <div class="rtw-footer">
+      <div class="hint" id="rtwProgress" style="text-align:center;margin:0;"></div>
+      <button type="button" class="btn primary" id="rtwSaveBtn"></button>
+    </div>
+  </div>
+</div>
+<input type="file" id="rtwPhotoInput" accept="image/*" class="hidden">
+<input type="file" id="rtwGeneralPhotoInput" accept="image/*" multiple class="hidden">
 
 <!-- Not doing a round, and saying why.
 
@@ -2634,15 +2751,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=429"></script>
-<script src="upload-defaults.js?v=429"></script>
-<script src="hme.js?v=429"></script>
-<script src="mp-fc.js?v=429"></script>
-<script src="hme-cascade.js?v=429"></script>
-<script src="assets.js?v=429"></script>
-<script src="temp-limits.js?v=429"></script>
-<script src="normalize.js?v=429"></script>
-<script src="terms.js?v=429"></script>
+<script src="native.js?v=430"></script>
+<script src="upload-defaults.js?v=430"></script>
+<script src="hme.js?v=430"></script>
+<script src="mp-fc.js?v=430"></script>
+<script src="rtw.js?v=430"></script>
+<script src="hme-cascade.js?v=430"></script>
+<script src="assets.js?v=430"></script>
+<script src="temp-limits.js?v=430"></script>
+<script src="normalize.js?v=430"></script>
+<script src="terms.js?v=430"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2661,25 +2779,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=429"></script>
-<script src="edits.js?v=429"></script>
-<script src="due.js?v=429"></script>
-<script src="wear.js?v=429"></script>
-<script src="wear-figs.js?v=429"></script>
-<script src="wear-map.js?v=429"></script>
-<script src="machine-photos.js?v=429"></script>
-<script src="machine-fig.js?v=429"></script>
-<script src="get.js?v=429"></script>
-<script src="points.js?v=429"></script>
-<script src="uc-points.js?v=429"></script>
-<script src="inspect-guide.js?v=429"></script>
-<script src="get-figs.js?v=429"></script>
-<script src="body-points.js?v=429"></script>
-<script src="body-map.js?v=429"></script>
-<script src="lube.js?v=429"></script>
-<script src="lube-overrides.js?v=429"></script>
-<script src="lube2027.js?v=429"></script>
-<script src="report-core.js?v=429"></script>
+<script src="grade.js?v=430"></script>
+<script src="edits.js?v=430"></script>
+<script src="due.js?v=430"></script>
+<script src="wear.js?v=430"></script>
+<script src="wear-figs.js?v=430"></script>
+<script src="wear-map.js?v=430"></script>
+<script src="machine-photos.js?v=430"></script>
+<script src="machine-fig.js?v=430"></script>
+<script src="get.js?v=430"></script>
+<script src="points.js?v=430"></script>
+<script src="uc-points.js?v=430"></script>
+<script src="inspect-guide.js?v=430"></script>
+<script src="get-figs.js?v=430"></script>
+<script src="body-points.js?v=430"></script>
+<script src="body-map.js?v=430"></script>
+<script src="lube.js?v=430"></script>
+<script src="lube-overrides.js?v=430"></script>
+<script src="lube2027.js?v=430"></script>
+<script src="report-core.js?v=430"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -2770,6 +2888,17 @@ const TYPE_META = {
      A/B/C/X, it either holds what the standard says or it does not, and that
      verdict is computed from the product rather than typed by the fitter. */
   LUBE: { suffix:"LUBE", showReadings:false, lube:true, title:{en:"Compartment",ru:"Узел"} },
+  /* Return to Work — a repair-release checklist, not a scheduled CM round.
+     `rtw:true` gates its own Pass/Attention/N/A capture UI, the way `lube`
+     and `wear` each gate theirs — a checklist item is not A/B/C/X and not a
+     measurement, so neither existing shape fits. Deliberately NOT in
+     TYPE_ORDER: it has no place in the "Inspection type" picker (it is
+     reached only from the Due tab's own entry point, never from the round
+     wizard), and it carries no interval in due.js — see due.js's own
+     D.OFF['*'] note and the exclusions in dueRows()/roundsOnClass() for why
+     an unscheduled type cannot just be left to fall through the interval
+     table's D.FALLBACK. */
+  RTW:  { suffix:"RTW",  showReadings:false, rtw:true, title:{en:"Checklist item",ru:"Пункт чек-листа"} },
 };
 const TYPE_ORDER = ["MP","FC","INSP","TEMP","UC","GET","TB","LUBE"];
 
@@ -2987,7 +3116,7 @@ const I18N = {
     pos_count:"item(s)", photo_count:"photo(s)",
     type_MP:"Magnetic Plug", type_FC:"Filter Cut", type_INSP:"Inspection", type_TEMP:"Temperature",
     type_UC:"Undercarriage", type_GET:"Ground engaging tools", type_TB:"Dump body liner",
-    type_LUBE:"Lubrication audit",
+    type_LUBE:"Lubrication audit", type_RTW:"Return to Work",
     lube_src_field:"in service now", lube_src_2027:"2027 specification",
     lube_src_both:"in service · 2027",
     lube_prod:"Product in service", lube_other:"Name it as printed on the label",
@@ -3212,6 +3341,43 @@ const I18N = {
     btn_due_import:"Load history file", due_days:"{n} d ago", due_over:"overdue {n} d", due_in:"in {n} d",
     due_never:"never inspected", due_empty:"Nothing is due right now.",
     due_hint:"Built from what this phone has recorded and what the team has sent. A history file from the dashboard fills in the rest of the fleet.",
+    /* Return to Work — the repair-release checklist. Item text itself lives in
+       rtw.js (RTW_ITEMS/RTW_SECTIONS/RTW_RESULTS), read by both this screen
+       and the printed report; these are only the screen's own chrome. */
+    rtw_due_card_t:"Return to Work",
+    rtw_due_card_s:"{n} repair(s) awaiting release · find by work order or equipment",
+    rtw_pick_title:"Return to Work", rtw_pick_sub:"Pick the work order — this fills in the equipment",
+    rtw_pick_ph:"WO number or unit…", rtw_pick_scan:"Scan unit",
+    rtw_pick_hint:"Scanning narrows this list to that unit's own open work orders — either way ends here.",
+    rtw_pick_list_t:"Open work orders — repair complete, awaiting release",
+    rtw_pick_note:"Only records with a formal work order number — a defect still awaiting one (status Registered, no WO raised yet) doesn't show up here until 1C assigns it.",
+    rtw_pick_empty:"No open work orders found.",
+    rtw_checklist_title:"Return to Work", rtw_checklist_sub:"Repair release checklist",
+    rtw_equip:"Equipment", rtw_component:"Component",
+    rtw_mark_hint:"Mark each check — photo and note required only for Attention",
+    rtw_pass:"Pass", rtw_attn:"Attn", rtw_na:"N/A",
+    rtw_not_checked:"Not checked", rtw_needs_evidence:"Needs evidence", rtw_complete:"Complete",
+    rtw_evidence_required:"Photo and note required for Attention",
+    rtw_evidence_optional:"Optional — you can still add a photo or note",
+    rtw_note_ph:"notes…",
+    rtw_overall_t:"Overall comments", rtw_overall_ph:"Final test result, restrictions or remaining work…",
+    rtw_general_photos_t:"General photos", rtw_general_photos_s:"Equipment, work area, other evidence",
+    rtw_release_t:"Final release",
+    rtw_senior_mech:"Senior mechanic", rtw_senior_mech_ph:"Full name",
+    rtw_result:"Result",
+    rtw_result_S:"S — Safe to use", rtw_result_R:"R — Repaired and safe to use",
+    rtw_result_N:"N — Repair required, but safe to use", rtw_result_D:"D — Faulty and unsafe to use",
+    rtw_date:"Date", rtw_signature:"Senior mechanic signature",
+    rtw_sign_clear:"Clear", rtw_sign_tap:"Tap to sign",
+    rtw_progress:"{done} of {total} checks complete",
+    rtw_hint_name:" · name the senior mechanic", rtw_hint_sign:" · sign to confirm",
+    rtw_release_btn_S:"Release to work", rtw_release_btn_R:"Release to work",
+    rtw_release_btn_N:"Release with restriction", rtw_release_btn_D:"Confirm — not released",
+    rtw_released_S:"Released to work", rtw_released_R:"Released to work",
+    rtw_released_N:"Released with restriction", rtw_released_D:"Recorded — not released",
+    m_rtw_incomplete:["Not yet","Mark every check first — Pass, Attention or N/A — and give a photo and a note to any check marked Attention."],
+    m_rtw_needs_sign:["Not yet","Name the senior mechanic and sign before releasing."],
+    m_dictate_failed:["Dictation stopped","The microphone could not be reached. You can keep typing."],
     due_sched_t:"Show 1C schedule",
     due_sched_s:"Adds the office's own planned date under a round that has one. Off by default — nothing changes unless you turn it on.",
     due_sched_line:"1C plan {d} · {h} · WO {wo}",
@@ -3609,7 +3775,7 @@ const I18N = {
     pos_count:"поз.", photo_count:"фото",
     type_MP:"Магнитная пробка", type_FC:"Разрез фильтра", type_INSP:"Осмотр", type_TEMP:"Температура",
     type_UC:"Ходовая часть", type_GET:"Рабочий инструмент", type_TB:"Футеровка кузова",
-    type_LUBE:"Аудит смазочных материалов",
+    type_LUBE:"Аудит смазочных материалов", type_RTW:"Возврат в работу",
     lube_src_field:"сейчас в эксплуатации", lube_src_2027:"спецификация 2027",
     lube_src_both:"в эксплуатации · 2027",
     lube_prod:"Продукт в узле", lube_other:"Название как на этикетке",
@@ -3828,6 +3994,40 @@ const I18N = {
     btn_due_import:"Загрузить историю", due_days:"{n} дн. назад", due_over:"просрочено {n} дн.", due_in:"через {n} дн.",
     due_never:"не проводился", due_empty:"Сейчас ничего не требуется.",
     due_hint:"Строится по данным этого телефона и по тому, что отправила бригада. Файл истории из дашборда дополнит остальную технику.",
+    rtw_due_card_t:"Возврат в работу",
+    rtw_due_card_s:"Ремонтов ожидает допуска: {n} · поиск по номеру заказа или оборудованию",
+    rtw_pick_title:"Возврат в работу", rtw_pick_sub:"Выберите заказ на работу — оборудование заполнится само",
+    rtw_pick_ph:"Номер заказа или машина…", rtw_pick_scan:"Сканировать машину",
+    rtw_pick_hint:"Сканирование сузит список до открытых заказов этой машины — оба пути ведут сюда же.",
+    rtw_pick_list_t:"Открытые заказы на работу — ремонт завершён, ожидает допуска",
+    rtw_pick_note:"Только записи с оформленным номером заказа — дефект, ожидающий заказа (статус «Зарегистрирован»), не появится здесь, пока 1С его не присвоит.",
+    rtw_pick_empty:"Открытых заказов на работу не найдено.",
+    rtw_checklist_title:"Возврат в работу", rtw_checklist_sub:"Контрольный лист допуска к работе",
+    rtw_equip:"Оборудование", rtw_component:"Узел",
+    rtw_mark_hint:"Отметьте каждый пункт — фото и комментарий нужны только для «Замечание»",
+    rtw_pass:"Норма", rtw_attn:"Замеч.", rtw_na:"Н/П",
+    rtw_not_checked:"Не проверено", rtw_needs_evidence:"Нужны доказательства", rtw_complete:"Готово",
+    rtw_evidence_required:"Для «Замечание» нужны фото и комментарий",
+    rtw_evidence_optional:"Необязательно — можно всё равно добавить фото или комментарий",
+    rtw_note_ph:"комментарий…",
+    rtw_overall_t:"Общий комментарий", rtw_overall_ph:"Итог проверки, ограничения или оставшиеся работы…",
+    rtw_general_photos_t:"Общие фото", rtw_general_photos_s:"Оборудование, место работ, другие доказательства",
+    rtw_release_t:"Допуск к работе",
+    rtw_senior_mech:"Старший механик", rtw_senior_mech_ph:"Ф.И.О.",
+    rtw_result:"Результат",
+    rtw_result_S:"S — Безопасен в использовании", rtw_result_R:"R — Отремонтирован и безопасен в использовании",
+    rtw_result_N:"N — Требуется ремонт, но безопасен в использовании", rtw_result_D:"D — Неисправен и небезопасен в использовании",
+    rtw_date:"Дата", rtw_signature:"Подпись старшего механика",
+    rtw_sign_clear:"Очистить", rtw_sign_tap:"Нажмите, чтобы подписать",
+    rtw_progress:"Проверено {done} из {total}",
+    rtw_hint_name:" · укажите старшего механика", rtw_hint_sign:" · подпишите для допуска",
+    rtw_release_btn_S:"Допустить к работе", rtw_release_btn_R:"Допустить к работе",
+    rtw_release_btn_N:"Допустить с ограничением", rtw_release_btn_D:"Подтвердить — не допущен",
+    rtw_released_S:"Допущен к работе", rtw_released_R:"Допущен к работе",
+    rtw_released_N:"Допущен с ограничением", rtw_released_D:"Зафиксировано — не допущен",
+    m_rtw_incomplete:["Ещё не всё","Отметьте каждый пункт — «Норма», «Замечание» или «Н/П» — и добавьте фото и комментарий к каждому пункту с «Замечание»."],
+    m_rtw_needs_sign:["Ещё не всё","Укажите старшего механика и подпишите перед допуском к работе."],
+    m_dictate_failed:["Диктовка остановлена","Не удалось подключиться к микрофону. Можно продолжить печатать."],
     due_sched_t:"Показать план 1С",
     due_sched_s:"Добавляет плановую дату офиса под обходом, для которого она есть. По умолчанию выключено — ничего не меняется, пока вы сами не включите.",
     due_sched_line:"план 1С {d} · {h} · наряд {wo}",
@@ -9668,6 +9868,12 @@ function dueRows(only){
     const [ty,unit]=k.split("|");
     if(only && ty!==only) continue;
     if(!DUE.EVERY[ty] && !TYPE_META[ty]) continue;
+    /* RTW is in TYPE_META (the capture UI needs it) but deliberately not in
+       DUE.EVERY — it has no interval, it is triggered by a work order. The
+       line above only skips a type in NEITHER table; RTW is in one, so
+       without this it would fall through to DUE.next()'s D.FALLBACK 30-day
+       rule below and print a bogus "overdue"/"due soon" row. */
+    if(ty==="RTW") continue;
     const last=histEntry(h[k]);
     /* A date the fleet cannot verify does not put a machine on this list. It
        is still on screen — as never done, which is what it is. */
@@ -9788,6 +9994,13 @@ function roundsOnClass(){
     const h=histAll(), gated=histGated();
     for(const key of Object.keys(h)){
       const [ty,unit]=key.split("|");
+      /* RTW is triggered by a work order, not "this class does this round" —
+         the first RTW round ever saved must not put every other machine of
+         that class on a fabricated RTW programme. Excluded here, in the one
+         place that turns "done once" into "on this round forever," rather
+         than in neverRows()/dueRows() separately: this is the single source
+         both read from. */
+      if(ty==="RTW") continue;
       if(!histFirm(histEntry(h[key]),gated)) continue;
       const a=ASSET_BY[unit]; if(!a) continue;
       add(PTS.classOf(a.cls||a.cat||""), ty);
@@ -9958,7 +10171,407 @@ const DUE_SCOPES=[["over","due_missed","over"],["soon","due_soon","soon"],
    a photograph, not a destination, not the offline app. */
 const DUE_BURST_MS = 1000, DUE_BURST_MAX = 250;
 let dueBurstT0 = 0, dueBurstN = 0, dueRunaway = false;
+
+/* ===================== Return to Work =====================
+   A repair-release checklist, triggered by a 1C work order, not a scheduled
+   CM round — so it is its OWN small overlay, not a step inside the guided
+   wizard: touching curItem/draft/renderMedia's per-type branches for a 9th
+   type would risk the other eight. What IS reused, deliberately, because
+   duplicating it is exactly the mistake a candidate implementation made
+   earlier: intakeNoted/ownBytes/addPos/MAX_PHOTOS for photos (the same
+   HEIC/resize/NotFoundError-hardened pipeline every other round uses), and
+   the identical save tail — reArmForSave/attSync/dbPut/noteDone/
+   verifySavedRec/syncThenArm — so "saved/queued/sent" is exactly as real
+   here as for MP or FC. Its own signature pad, not the wizard's #signPad:
+   sharing that canvas would let opening Return to Work mid-round wipe or
+   corrupt an unrelated in-progress round's supervisor signature. */
+let rtwDraft=null;         // null when the overlay is closed
+let rtwExpanded=null;      // Set of item numbers with evidence force-opened
+let rtwPhotoTarget=null;   // which item no. (or "__general") the next photo file goes to
+let rtwSaving=false;
+let rtwSignCanvas=null, rtwSigning=false, rtwSignDirty=false;
+
+function rtwWorkOrders(){
+  const d=window.CM_WO_DATA||{}; const rows=[];
+  (d.workOrders||[]).forEach(w=>{
+    if(!w || !w.woNumber || !w.open) return;
+    rows.push({wo:String(w.woNumber), equip:String(w.equip||"").toUpperCase(), cls:w.cls||"",
+      comp:"", desc:w.cmLabel||w.maintType||"", priority:w.priority||"", raised:w.planStart||""});
+  });
+  (d.cmWorkOrders||[]).forEach(w=>{
+    if(!w || !w.woNumber) return;
+    if(/closed|completed/i.test(w.status||"")) return;
+    rows.push({wo:String(w.woNumber), equip:String(w.asset||"").toUpperCase(), cls:"",
+      comp:w.system||"", desc:w.descr||w.defectType||"", priority:w.priority||"", raised:w.date||w.raised||""});
+  });
+  const seen=new Set();
+  return rows.filter(r=>{ if(!r.wo||!r.equip||seen.has(r.wo)) return false; seen.add(r.wo); return true; });
+}
+function rtwOpenCount(){ return rtwWorkOrders().length; }
+function rtwRenderDueEntry(){
+  const btn=$("rtwEntryBtn"); if(!btn) return;
+  const n=rtwOpenCount();
+  btn.hidden = !n;
+  if(n) $("rtwEntrySub").textContent = t("rtw_due_card_s",{n});
+}
+function rtwFilterRows(rows,q){
+  q=String(q||"").trim().toUpperCase(); if(!q) return rows;
+  return rows.filter(r=>r.wo.toUpperCase().includes(q) || r.equip.includes(q));
+}
+function rtwRenderPickList(){
+  const q=($("rtwPickQ")||{}).value||"";
+  const rows=rtwFilterRows(rtwWorkOrders(),q).sort((a,b)=>String(b.raised||"").localeCompare(String(a.raised||"")));
+  const box=$("rtwPickList"); if(!box) return;
+  if(!rows.length){ box.innerHTML=`<div class="hint">${esc(t("rtw_pick_empty"))}</div>`; return; }
+  box.innerHTML=rows.map(r=>`
+    <button type="button" class="rtw-wo-card" data-wo="${esc(r.wo)}" style="margin-bottom:8px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+        <b class="wo">${esc(r.wo)}</b>
+        ${r.priority?`<span class="sev" style="background:var(--surface-3);color:var(--ink-2);">${esc(r.priority)}</span>`:""}
+      </div>
+      <div style="font-size:13px;color:var(--ink);"><b>${esc(r.equip)}</b>${r.comp?" · "+esc(r.comp):""}</div>
+      <div style="font-size:12px;color:var(--muted);">${esc(r.desc||"")}${r.raised?" · "+esc(r.raised):""}</div>
+    </button>`).join("");
+  box.querySelectorAll(".rtw-wo-card").forEach(el=>{
+    el.onclick=()=>rtwPickRow(rows.find(r=>r.wo===el.dataset.wo));
+  });
+}
+function rtwOpenPick(){
+  $("rtwOv").classList.remove("hidden");
+  $("rtwPick").classList.remove("hidden");
+  $("rtwChecklistScr").classList.add("hidden");
+  if($("rtwPickQ")) $("rtwPickQ").value="";
+  rtwRenderPickList();
+}
+function rtwClose(){
+  $("rtwOv").classList.add("hidden");
+  rtwDraft=null; rtwExpanded=null; rtwPhotoTarget=null;
+  rtwSignCanvas=null; rtwSignDirty=false; rtwSigning=false;
+}
+function rtwPickRow(row){
+  if(!row) return;
+  rtwDraft={ wo:row.wo, equip:row.equip, cls:row.cls||assetClassOf(row.equip)||"",
+    component:row.comp||"", priority:row.priority||"", date:todayISO(),
+    items:{}, sup:"", result:"R", overallComment:"", released:false,
+    general:{photos:[], comment:""} };
+  RTW_ITEMS.forEach(def=>{ rtwDraft.items[def.no]={mark:null, comment:"", photos:[]}; });
+  rtwExpanded=new Set();
+  $("rtwPick").classList.add("hidden");
+  $("rtwChecklistScr").classList.remove("hidden");
+  rtwRenderChecklist();
+}
+function rtwIsDone(it){
+  if(!it || !it.mark) return false;
+  if(it.mark==="attention") return (it.photos||[]).length>=1 && !!(it.comment||"").trim();
+  return true;
+}
+function rtwEvidenceSummary(it){
+  const n=(it.photos||[]).length, hasNote=!!(it.comment||"").trim();
+  if(n && hasNote) return n+(n===1?" photo, noted":" photos, noted");
+  if(n) return n+(n===1?" photo":" photos");
+  if(hasNote) return t("rtw_complete");
+  return "";
+}
+/* Reads every currently-visible text control back into rtwDraft before any
+   re-render — the same "harvest on the way out, never on every keystroke"
+   rule the round wizard's own #comment field already follows (saveCur()),
+   so a rebuild triggered by tapping a DIFFERENT item never drops what is
+   still being typed in this one, and typing itself never rebuilds the DOM
+   out from under the cursor. */
+function rtwHarvestInputs(){
+  if(!rtwDraft) return;
+  document.querySelectorAll('[data-rtw-note]').forEach(ta=>{
+    const no=ta.dataset.rtwNote;
+    if(rtwDraft.items[no]) rtwDraft.items[no].comment=ta.value;
+  });
+  const overall=$("rtwOverallComment"); if(overall) rtwDraft.overallComment=overall.value;
+  const sup=$("rtwSup"); if(sup) rtwDraft.sup=sup.value;
+  const dt=$("rtwDate"); if(dt) rtwDraft.date=dt.value;
+  const res=$("rtwResult"); if(res) rtwDraft.result=res.value;
+}
+function rtwRerender(){
+  const keep=(rtwSignCanvas && rtwSignDirty) ? rtwSignCanvas.toDataURL() : null;
+  rtwRenderChecklist(keep);
+}
+function rtwSetMark(no,mark){
+  rtwHarvestInputs();
+  const it=rtwDraft.items[no]; if(!it) return;
+  it.mark=mark;
+  if(mark==="attention") rtwExpanded.add(no);
+  rtwRerender();
+}
+function rtwToggleEvidence(no){
+  rtwHarvestInputs();
+  if(rtwExpanded.has(no)) rtwExpanded.delete(no); else rtwExpanded.add(no);
+  rtwRerender();
+}
+function rtwSetupSignCanvas(canvas, restoreDataUrl){
+  if(!canvas) return;
+  rtwSignCanvas=canvas; rtwSigning=false; rtwSignDirty=!!restoreDataUrl;
+  const r=Math.max(1,Math.min(3,window.devicePixelRatio||1));
+  const w=canvas.clientWidth||300, h=canvas.clientHeight||90;
+  canvas.width=Math.round(w*r); canvas.height=Math.round(h*r);
+  const c=canvas.getContext("2d"); c.setTransform(r,0,0,r,0,0);
+  c.fillStyle="#fff"; c.fillRect(0,0,w,h); c.lineWidth=2.2; c.lineCap="round"; c.lineJoin="round"; c.strokeStyle="#111";
+  if(restoreDataUrl){ const i=new Image(); i.onload=()=>c.drawImage(i,0,0,w,h); i.src=restoreDataUrl; }
+  const xy=e=>{ const rc=canvas.getBoundingClientRect(); return [e.clientX-rc.left, e.clientY-rc.top]; };
+  canvas.onpointerdown=e=>{ rtwSigning=true; canvas.setPointerCapture(e.pointerId); c.beginPath(); c.moveTo(...xy(e)); e.preventDefault(); };
+  canvas.onpointermove=e=>{ if(!rtwSigning) return; c.lineTo(...xy(e)); c.stroke(); rtwSignDirty=true; };
+  canvas.onpointerup=canvas.onpointercancel=canvas.onpointerleave=()=>{
+    /* Drawing a stroke does not go through rtwRerender() — it is raw canvas
+       pointer events, not a state change that rebuilds the DOM — so nothing
+       else refreshes the footer's Save-disabled state after it. Without
+       this, a technician could sign, watch the ink appear, and the button
+       stayed disabled with no visible reason: the same "button that refuses
+       a press must look like one" defect this project has already been
+       burned by once. */
+    if(rtwSigning) rtwUpdateFooter();
+    rtwSigning=false;
+  };
+}
+function rtwClearSign(){
+  if(!rtwSignCanvas) return; rtwSignDirty=false;
+  const c=rtwSignCanvas.getContext("2d");
+  c.fillStyle="#fff"; c.fillRect(0,0,rtwSignCanvas.width,rtwSignCanvas.height);
+  rtwUpdateFooter();
+}
+function rtwSignBlob(){ return (rtwSignDirty && rtwSignCanvas) ? new Promise(res=>rtwSignCanvas.toBlob(res,"image/png")) : Promise.resolve(null); }
+function rtwDictate(target, btn){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){ dlg(t("m_dictation")); return; }
+  const ta = target==="__overall" ? $("rtwOverallComment") : document.querySelector(`[data-rtw-note="${target}"]`);
+  if(!ta) return;
+  const rec=new SR(); rec.lang=lang==="ru"?"ru-RU":"en-US"; rec.interimResults=false; rec.continuous=false;
+  rec.onresult=(e)=>{ const tr=e.results[0][0].transcript; ta.value=(ta.value?ta.value+" ":"")+tr; };
+  rec.onend=()=>{ btn.classList.remove("rec"); };
+  /* The round wizard's own #micBtn leaves this silent (rec.onerror does
+     nothing visible) — a real gap against this file's own rule that every
+     async handler produces a sentence on screen, not nothing. Fixed here
+     rather than copied. */
+  rec.onerror=()=>{ btn.classList.remove("rec"); dlg(t("m_dictate_failed")); };
+  btn.classList.add("rec"); rec.start();
+}
+async function rtwIntakeFiles(files, targetPhotosArr, cat){
+  if(!files.length) return;
+  const secured=new Map();
+  await Promise.all(files.map(async f=>{ try{ secured.set(f, await ownBytes(f)); }catch(e){} }));
+  for(const f of files){
+    if(targetPhotosArr.length>=MAX_PHOTOS) break;
+    const got=await intakeNoted(secured.get(f)||f);
+    targetPhotosArr.push(got.att);
+  }
+}
+function rtwUpdateFooter(){
+  if(!rtwDraft) return;
+  const total=RTW_ITEMS.length, done=RTW_ITEMS.filter(def=>rtwIsDone(rtwDraft.items[def.no])).length;
+  const checklistRequired = rtwDraft.result!=="D";
+  const allChecksDone = done===total;
+  const hasSup=!!(rtwDraft.sup||"").trim();
+  const allDone=(!checklistRequired||allChecksDone) && hasSup && rtwSignDirty;
+  let hint="";
+  if(!(checklistRequired && !allChecksDone)){
+    if(!hasSup) hint=t("rtw_hint_name"); else if(!rtwSignDirty) hint=t("rtw_hint_sign");
+  }
+  const prog=$("rtwProgress"); if(prog) prog.textContent=t("rtw_progress",{done,total})+hint;
+  const btn=$("rtwSaveBtn"); if(!btn) return;
+  btn.textContent = rtwDraft.released ? t("rtw_released_"+rtwDraft.result) : t("rtw_release_btn_"+rtwDraft.result);
+  btn.disabled = !allDone || rtwDraft.released;
+}
+function rtwRenderChecklist(keepSignDataUrl){
+  if(!rtwDraft) return;
+  const d=rtwDraft;
+  let itemsHtml="", curSection=0;
+  RTW_ITEMS.forEach(def=>{
+    const it=d.items[def.no];
+    if(def.section!==curSection){
+      curSection=def.section;
+      const sec=RTW_SECTIONS[curSection]||{en:"",ru:""};
+      itemsHtml+=`<div style="background:var(--accent-soft);border-left:3px solid var(--accent);border-radius:6px;padding:6px 10px;margin:${itemsHtml?"4px":"0"} 0 0;">
+        <div style="font-size:13px;font-weight:750;color:var(--ink);">${curSection} · ${esc(sec[lang]||sec.en)}</div>
+      </div>`;
+    }
+    const open = rtwExpanded.has(def.no) || it.mark==="attention";
+    const needsEvidence = it.mark==="attention";
+    let badgeLabel, badgeBg, badgeInk, cardBorder;
+    if(!it.mark){ badgeLabel=t("rtw_not_checked"); badgeBg="var(--surface-3)"; badgeInk="var(--muted)"; cardBorder="var(--border)"; }
+    else if(needsEvidence && !rtwIsDone(it)){ badgeLabel=t("rtw_needs_evidence"); badgeBg="var(--warning)"; badgeInk="#fff"; cardBorder="var(--warning)"; }
+    else { badgeLabel=t("rtw_complete"); badgeBg="var(--good)"; badgeInk="#fff"; cardBorder="var(--good)"; }
+    itemsHtml+=`<div class="rtw-item" style="border-color:${cardBorder};">
+      <div class="rtw-item-head">
+        <div class="no">${esc(def.no)}</div>
+        <div class="rtw-item-title">${esc(def[lang]||def.en)}</div>
+        <div class="rtw-item-badge" style="background:${badgeBg};color:${badgeInk};">${esc(badgeLabel)}</div>
+      </div>
+      <div class="rtw-marks">
+        <button type="button" class="rtw-mark ${it.mark==='pass'?'on-pass':''}" data-mark="pass" data-no="${esc(def.no)}">✓ ${esc(t('rtw_pass'))}</button>
+        <button type="button" class="rtw-mark ${it.mark==='attention'?'on-attn':''}" data-mark="attention" data-no="${esc(def.no)}">! ${esc(t('rtw_attn'))}</button>
+        <button type="button" class="rtw-mark ${it.mark==='na'?'on-na':''}" data-mark="na" data-no="${esc(def.no)}">${esc(t('rtw_na'))}</button>
+      </div>
+      <button type="button" class="rtw-evidence-toggle" data-toggle="${esc(def.no)}">
+        <span style="font-size:10.5px;color:var(--muted);">${esc(rtwEvidenceSummary(it)||t("rtw_evidence_optional"))}</span>
+        <span style="font-size:10.5px;color:var(--muted);">${open?"▴":"▾"}</span>
+      </button>
+      <div class="rtw-evidence-body" ${open?"":'style="display:none;"'}>
+        <div class="hint" style="margin:0;">${esc(needsEvidence?t("rtw_evidence_required"):t("rtw_evidence_optional"))}</div>
+        <div class="rtw-evidence-row">
+          <textarea data-rtw-note="${esc(def.no)}" data-i18n-ph="rtw_note_ph" placeholder="${esc(t('rtw_note_ph'))}" rows="1">${esc(it.comment||"")}</textarea>
+          <button type="button" class="rtw-icon-btn" data-photo="${esc(def.no)}" title="${esc(t('rtw_pass'))}">📷${it.photos.length?`<span class="rtw-photo-badge">${it.photos.length}</span>`:""}</button>
+          <button type="button" class="rtw-icon-btn mic" data-dictate="${esc(def.no)}">🎙</button>
+        </div>
+      </div>
+    </div>`;
+  });
+  const summary=`<div class="rtw-summary-card">
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <b style="font-size:15px;color:var(--ink);">${esc(d.wo)}</b>
+        ${d.priority?`<span class="sev" style="background:var(--surface-3);color:var(--ink-2);font-size:11px;font-weight:700;border-radius:6px;padding:2px 7px;">${esc(d.priority)}</span>`:""}
+      </div>
+      <div style="display:flex;gap:16px;font-size:12px;color:var(--muted);">
+        <div>${esc(t("rtw_equip"))} <b style="color:var(--ink);">${esc(d.equip)}</b></div>
+        ${d.component?`<div>${esc(t("rtw_component"))} <b style="color:var(--ink);">${esc(d.component)}</b></div>`:""}
+      </div>
+    </div>`;
+  const release=`<div class="rtw-summary-card" style="margin-top:4px;">
+      <div style="font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);">${esc(t('rtw_release_t'))}</div>
+      <div class="rtw-release-field"><label>${esc(t('rtw_senior_mech'))}</label>
+        <input id="rtwSup" type="text" placeholder="${esc(t('rtw_senior_mech_ph'))}" value="${esc(d.sup||"")}"></div>
+      <div style="display:flex;gap:8px;">
+        <div class="rtw-release-field" style="flex:1.3;"><label>${esc(t('rtw_result'))}</label>
+          <select id="rtwResult">
+            <option value="S" ${d.result==='S'?'selected':''}>${esc(t('rtw_result_S'))}</option>
+            <option value="R" ${d.result==='R'?'selected':''}>${esc(t('rtw_result_R'))}</option>
+            <option value="N" ${d.result==='N'?'selected':''}>${esc(t('rtw_result_N'))}</option>
+            <option value="D" ${d.result==='D'?'selected':''}>${esc(t('rtw_result_D'))}</option>
+          </select></div>
+        <div class="rtw-release-field" style="flex:1;"><label>${esc(t('rtw_date'))}</label>
+          <input id="rtwDate" type="date" value="${esc(d.date||todayISO())}"></div>
+      </div>
+      <div class="rtw-release-field"><label>${esc(t('rtw_overall_t'))}</label>
+        <div class="rtw-evidence-row">
+          <textarea id="rtwOverallComment" placeholder="${esc(t('rtw_overall_ph'))}" rows="2">${esc(d.overallComment||"")}</textarea>
+          <button type="button" class="rtw-icon-btn mic" data-dictate="__overall">🎙</button>
+        </div></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--surface-2);border-radius:8px;padding:8px 10px;">
+        <div><div style="font-size:12px;font-weight:700;color:var(--ink);">${esc(t('rtw_general_photos_t'))}</div>
+          <div class="hint" style="margin:0;">${esc(t('rtw_general_photos_s'))}</div></div>
+        <button type="button" class="rtw-icon-btn" data-photo="__general">📷${d.general.photos.length?`<span class="rtw-photo-badge">${d.general.photos.length}</span>`:""}</button>
+      </div>
+      <div class="rtw-release-field">
+        <div style="display:flex;align-items:center;justify-content:space-between;"><label>${esc(t('rtw_signature'))}</label>
+          <button type="button" id="rtwSignClear" style="border:none;background:none;color:var(--accent);font-size:11.5px;font-weight:650;">${esc(t('rtw_sign_clear'))}</button></div>
+        <div class="rtw-sign-pad-slot"><canvas id="rtwSignCanvas"></canvas></div>
+      </div>
+    </div>`;
+  $("rtwChecklistBody").innerHTML = summary + itemsHtml + release;
+  rtwSetupSignCanvas(document.getElementById("rtwSignCanvas"), keepSignDataUrl);
+  rtwUpdateFooter();
+}
+/* One delegated listener on the container that never gets torn down —
+   .innerHTML replaces its CONTENTS on every rtwRerender, not the container
+   itself, so this survives every rebuild without being re-attached. */
+document.addEventListener("DOMContentLoaded", function(){
+  const body=$("rtwChecklistBody"); if(!body) return;
+  body.addEventListener("click", (e)=>{
+    const markBtn=e.target.closest("[data-mark]");
+    if(markBtn){ rtwSetMark(markBtn.dataset.no, markBtn.dataset.mark); return; }
+    const tog=e.target.closest("[data-toggle]");
+    if(tog){ rtwToggleEvidence(tog.dataset.toggle); return; }
+    const photoBtn=e.target.closest("[data-photo]");
+    if(photoBtn){ rtwHarvestInputs(); rtwPhotoTarget=photoBtn.dataset.photo;
+      (rtwPhotoTarget==="__general" ? $("rtwGeneralPhotoInput") : $("rtwPhotoInput")).click(); return; }
+    const dictBtn=e.target.closest("[data-dictate]");
+    if(dictBtn){ rtwDictate(dictBtn.dataset.dictate, dictBtn); return; }
+    if(e.target.closest("#rtwSignClear")){ rtwClearSign(); return; }
+  });
+  body.addEventListener("change", (e)=>{
+    if(e.target.id==="rtwResult" || e.target.id==="rtwSup" || e.target.id==="rtwDate"){
+      rtwHarvestInputs(); rtwUpdateFooter();
+    }
+  });
+});
+$("rtwPhotoInput").onchange=async (e)=>{
+  const files=[...(e.target.files||[])]; e.target.value="";
+  const target=rtwPhotoTarget; rtwPhotoTarget=null;
+  if(!files.length || !rtwDraft || !target || target==="__general") return;
+  const it=rtwDraft.items[target]; if(!it) return;
+  (it.photos ||= []);
+  await rtwIntakeFiles(files, it.photos, "COMPONENT");
+  rtwRerender();
+};
+$("rtwGeneralPhotoInput").onchange=async (e)=>{
+  const files=[...(e.target.files||[])]; e.target.value="";
+  if(!files.length || !rtwDraft) return;
+  await rtwIntakeFiles(files, rtwDraft.general.photos, "MACHINE");
+  rtwRerender();
+};
+async function rtwSave(){
+  if(rtwSaving || !rtwDraft) return;
+  rtwSaving=true;
+  try{
+    rtwHarvestInputs();
+    const d=rtwDraft;
+    const checklistRequired = d.result!=="D";
+    const allChecksDone = RTW_ITEMS.every(def=>rtwIsDone(d.items[def.no]));
+    if(checklistRequired && !allChecksDone){ dlg(t("m_rtw_incomplete")); return; }
+    if(!(d.sup||"").trim() || !rtwSignDirty){ dlg(t("m_rtw_needs_sign")); return; }
+    const equip=d.equip, date=d.date||todayISO();
+    const id=`RTW__${equip}__${date}__${DEVICE}__${Date.now()}`;
+    const created=new Date().toISOString();
+    if(!gps) await getGps(true);
+    const rec={ id, cls:d.cls||"", type:"RTW", equip, date, smu:"", by:(d.sup||"").trim(),
+      sup:(d.sup||"").trim(), sign:await rtwSignBlob(), gps:gps||null, dev:DEVICE,
+      positions:{}, created, up:0, upTo:{}, rev:1, phv:2,
+      rtwWo:d.wo||"", rtwResult:d.result||"R", rtwComment:(d.overallComment||"").trim() };
+    RTW_ITEMS.forEach(def=>{
+      const it=d.items[def.no];
+      rec.positions[def.no]={ mark:it.mark||null, comment:(it.comment||"").trim(), photos:(it.photos||[]).slice() };
+    });
+    if((d.general.photos||[]).length || (d.general.comment||"").trim()){
+      rec.positions[GEN_KEY]={ comment:(d.general.comment||"").trim(), photos:(d.general.photos||[]).slice() };
+    }
+    /* From here down: the identical tail every round type's Save handler
+       runs (mobile/index.html's $("saveBtn").onclick) — reArmForSave,
+       attSync, dbPut, noteDone, verifySavedRec, syncThenArm — so this
+       record's "queued"/"sent" state is exactly as real as any other. */
+    await reArmForSave(rec);
+    await holdAwake(SAVE_GUARD_MS);
+    showSaveGuard(SAVE_GUARD_MS);
+    try{ await attSync(rec); }catch(e){}
+    try{ await dbPut(rec); }
+    catch(e){
+      const why=String((e&&e.message)||e||"");
+      const pair=t("m_save_failed"); dlg([pair[0], pair[1].split("{why}").join(why)]);
+      slog("save-write-fail",{u:rec.equip||"?", id:rec.id, why:why.slice(0,200),
+        phase:(e&&e.phase)||"", hadReqErr:!!(e&&e.hadReqErr), vis:visInfo()});
+      sendTrace("save-write-fail");
+      return;
+    }
+    noteDone(rec); noteWear(rec); await loadBaselines();
+    const verifyBad = await verifySavedRec(id).catch(()=>[]);
+    rtwClose();
+    renderPending(); renderDue(); syncThenArm();
+    showSaved(rec);
+    setTimeout(applyUpdateIfIdle, 400);
+    if(persistState===null) askPersist();
+    if(verifyBad.length){
+      const names=[...new Set(verifyBad)].join(", ");
+      slog("verify-fail",{u:rec.equip||"?", id:rec.id, n:verifyBad.length, names:names.slice(0,300)});
+      sendTrace("verify-fail");
+      dlg([t("verify_fail_t"), t("verify_fail_b",{x:equip, n:verifyBad.length, names})]);
+    }else{
+      const m=t("m_saved"); dlg([m[0], m[1].replace("{x}",equip)]);
+    }
+  } finally { rtwSaving=false; }
+}
+$("rtwSaveBtn").onclick=()=>rtwSave();
+$("rtwEntryBtn").onclick=()=>rtwOpenPick();
+$("rtwPickBack").onclick=()=>rtwClose();
+$("rtwChecklistBack").onclick=()=>{ $("rtwChecklistScr").classList.add("hidden"); $("rtwPick").classList.remove("hidden"); rtwRenderPickList(); };
+$("rtwPickQ").oninput=()=>rtwRenderPickList();
+$("rtwScanBtn").onclick=()=>{ scanMode="wo"; startScan(); };
+
 function renderDue(){
+  rtwRenderDueEntry();
   {
     const nw = Date.now();
     if(nw - dueBurstT0 > DUE_BURST_MS){ dueBurstT0 = nw; dueBurstN = 0; }
@@ -12750,6 +13363,12 @@ function itemLabelFor(rec,k){
     if(c) return (lang==="ru" ? c.ru : c.en) || c.en || "";
   }
   if(usesRegister(rec.type) && COMP_BY[upComp(k)]) return compLabel(k);
+  /* RTW's checklist items are not in any class's CLASSES[cls][type] list —
+     the same 23 items apply to every machine — so the fallback below would
+     return "" for every one of them and a verification-failure dialog would
+     name the photo that failed with a blank. */
+  if(rec.type==="RTW"){ const it=(window.RTW_ITEMS||[]).find(x=>x.no===k);
+    return it ? (k+" — "+(it[lang]||it.en)) : k; }
   const list=(CLASSES[rec.cls]&&CLASSES[rec.cls][rec.type])||[];
   for(const e of list){ if(typeof e==="string"){ if(e===k) return COMP[e]?(COMP[e][lang]||COMP[e].en):k; } else if(e.k===k){ return e[lang]||e.en; } } return ""; }
 /* Revoked, whichever way this ends.
@@ -13014,6 +13633,7 @@ async function rptRecords(onlyId){
         : null;
       items.push({ key:k, name:nm.name, nameAlt:nm.nameAlt, code:nm.code, lube,
         general:(k===GEN_KEY?1:0), cats:photosOf(p).map(b=>attCat(p,b)||"COMPONENT"),
+        mark:p.mark||"",
         grade:GRADE.num(p.grade)||"", sev:effSev(p), ...gradeExtras(p),
         defect:p.defect?defectLabel(p.defect):"", defectCode:p.defect?upDefect(p.defect):"",
         iso:d?d.iso14224:"", cause:p.cause?causeLabel(p.cause):"",
@@ -13088,6 +13708,7 @@ async function rptRecords(onlyId){
       type:rec.type, typeLabel:t("type_"+(rec.type||"MP")),
       typeAlt:inOtherLang(()=>t("type_"+(rec.type||"MP"))), date:rec.date||"",
       by:rec.by||"", sup:rec.sup||"", smu:rec.smu||"", gps:rec.gps||null, signUrl, signErr, signed:!!rec.sign,
+      rtwResult:rec.rtwResult||"", rtwWo:rec.rtwWo||"", rtwComment:rec.rtwComment||"",
       /* "This sheet is measurements" — which is NOT the same question as "does
          capture demand a millimetre at every position". meta.wear is the second
          one, and a GET round answers no to it: teeth are graded, and a tape is
@@ -13170,6 +13791,7 @@ function teamRecToReport(rec){
       : null;
     return { key:it.key, name:nm.name, nameAlt:nm.nameAlt, code:nm.code, lube,
              general:it.general?1:0, cats:(it.att||[]).map(e=>e.category||"COMPONENT"),
+             mark:it.mark||"",
              grade:GRADE.num(it.grade)||"", sev:gradeIso(it.grade)||it.sev||"",
              resp:it.resp||"", target:it.target||"", opstat:it.opstat||"", gradeWhy:it.gradeWhy||"",
              defect:it.defect||"", defectCode:it.defectCode||"", iso:it.iso||"",
@@ -13195,6 +13817,7 @@ function teamRecToReport(rec){
            typeAlt:inOtherLang(()=>t("type_"+(rec.type||"MP"))),
            date:rec.date||"", by:rec.by||"", sup:rec.sup||"", smu:rec.smu||"",
            gps:rec.gps||null, signUrl:"",
+           rtwResult:rec.rtwResult||"", rtwWo:rec.rtwWo||"", rtwComment:rec.rtwComment||"",
            wear:!!(meta.wear||meta.get), temp:!!meta.temp, items };
 }
 /* EVERY PHOTOGRAPH THE FOLDER HANDED BACK, PLACED ON THE ROUND.
@@ -13222,7 +13845,7 @@ function attachTeamPhotos(norm, rec, got){
     if(!it){
       const nm=rptName(rec,k);
       it={ key:k, name:nm.name, nameAlt:nm.nameAlt, code:nm.code, lube:null,
-           general:(k===GEN_KEY?1:0), cats:[], grade:"", sev:"",
+           general:(k===GEN_KEY?1:0), cats:[], mark:"", grade:"", sev:"",
            resp:"", target:"", opstat:"", gradeWhy:"", defect:"", defectCode:"",
            iso:"", cause:"", action:"", prio:"", prioLabel:"", wo:"",
            comment:"", readings:[], photos:[], w:null, _filed:1 };
@@ -13462,6 +14085,15 @@ function onScanned(text){
     dlg(t(ok?"m_cfg_ok":"m_cfg_bad"));
     return true;
   }
+  /* Return to Work's own scan target — narrows the Pick screen to this unit's
+     open work orders rather than filling the round wizard's equipment field.
+     Same shape as "cfg" above: check the mode, act, reset scanMode to "unit"
+     so the very next plain scanBtn tap is not still in this mode. */
+  if(scanMode==="wo"){
+    const u=extractUnit(text); stopScan(); scanMode="unit";
+    if(u && $("rtwPickQ")){ $("rtwPickQ").value=u; rtwRenderPickList(); }
+    return true;
+  }
   const u=extractUnit(text); if(!u) return false;
   selectEquip(u); stopScan(); return true;
 }
@@ -13604,7 +14236,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="429";
+const BUILD="430";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -16244,12 +16876,22 @@ function recToExport0(rec){
   return { id:rec.id||"", rev:rec.rev||1,
     equip:rec.equip, date:rec.date, type:rec.type||"MP", cls:rec.cls||"", by:rec.by||"", smu:rec.smu||"",
     sup:rec.sup||"", gps:rec.gps||null, dev:rec.dev||"", signed:rec.sign?1:0,
+    /* Return to Work's own release verdict — a work order, an S/R/N/D result
+       and an overall comment, none of which any other round type carries.
+       Left off this export once, a teammate's phone could open a synced RTW
+       round and print a report with every item marked but no verdict on it. */
+    rtwWo:rec.rtwWo||"", rtwResult:rec.rtwResult||"", rtwComment:rec.rtwComment||"",
     items:Object.entries(rec.positions).map(([k,p])=>{ const d=DEFECT_BY[upDefect(p.defect)]||null;
       const det=p.detect||DETECT_DEFAULT;
       // Codes leave the app in the shape 1C expects: v4 for the mode, the cause,
       // the action and the severity. The app's own severity codes stay internal.
       return { key:k, label:itemLabelFor(rec,k)||"", general:(k===GEN_KEY?1:0), grade:GRADE.num(p.grade)||"", sev:effSev(p),
         sevIso:SEV_V4[effSev(p)]||"", action:p.action||"",
+        /* Return to Work's own condition field — Pass/Attention/N/A, never the
+           1-5 grade scale (see mobile/grade.js's own "the ONLY condition
+           field" rule). Present only on an RTW record's items; every other
+           type's items simply carry mark:"". */
+        mark:p.mark||"",
         ...gradeExtras(p),
         actionIso:p.action?upAction(p.action):"",
         actionLabel:p.action?actionLabel(p.action,"en"):"", wo:p.wo||"",

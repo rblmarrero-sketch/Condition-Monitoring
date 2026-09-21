@@ -986,6 +986,11 @@
          does not close it — typeLabelOf() does, by refusing to hand back a
          string that is still the key it was asked for. */
       method_LUBE:"Lubrication",
+      method_RTW:"Return to Work",
+      rtw_no:"No.", rtw_desc:"Description of operations", rtw_mark:"Mark", rtw_comment:"Comment",
+      rtw_pre:"Pre-release inspection", rtw_post:"Service completion",
+      rtw_photos:"Evidence", rtw_release:"Final release", rtw_senior:"Senior Mechanic",
+      rtw_pass:"P", rtw_attn:"!", rtw_na:"N/A",
       /* The measurement table used to be headed "Undercarriage measurements"
          whatever had been measured — including a truck body, which has no
          undercarriage in it at all. */
@@ -1183,6 +1188,11 @@
       method_UC:"\u0417\u0430\u043c\u0435\u0440\u044b \u0445\u043e\u0434\u043e\u0432\u043e\u0439 \u0447\u0430\u0441\u0442\u0438",
       method_TB:"\u0417\u0430\u043c\u0435\u0440\u044b \u0442\u043e\u043b\u0449\u0438\u043d\u044b \u043a\u0443\u0437\u043e\u0432\u0430", method_GET:"\u0420\u0430\u0431\u043e\u0447\u0438\u0435 \u043e\u0440\u0433\u0430\u043d\u044b",
       method_LUBE:"\u0421\u043c\u0430\u0437\u043a\u0430",
+      method_RTW:"\u0412\u043e\u0437\u0432\u0440\u0430\u0442 \u0432 \u0440\u0430\u0431\u043e\u0442\u0443",
+      rtw_no:"\u2116", rtw_desc:"\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435 \u043e\u043f\u0435\u0440\u0430\u0446\u0438\u0438", rtw_mark:"\u041e\u0442\u043c\u0435\u0442\u043a\u0430", rtw_comment:"\u041a\u043e\u043c\u043c\u0435\u043d\u0442\u0430\u0440\u0438\u0439",
+      rtw_pre:"\u041a\u043e\u043d\u0442\u0440\u043e\u043b\u044c\u043d\u044b\u0439 \u043e\u0441\u043c\u043e\u0442\u0440 \u043f\u0435\u0440\u0435\u0434 \u0432\u043e\u0437\u0432\u0440\u0430\u0442\u043e\u043c \u0432 \u0440\u0430\u0431\u043e\u0442\u0443", rtw_post:"\u041e\u043a\u043e\u043d\u0447\u0430\u043d\u0438\u0435 \u043e\u0431\u0441\u043b\u0443\u0436\u0438\u0432\u0430\u043d\u0438\u044f",
+      rtw_photos:"\u0424\u043e\u0442\u043e\u0444\u0438\u043a\u0441\u0430\u0446\u0438\u044f", rtw_release:"\u0414\u043e\u043f\u0443\u0441\u043a \u043a \u0440\u0430\u0431\u043e\u0442\u0435", rtw_senior:"\u0421\u0442\u0430\u0440\u0448\u0438\u0439 \u043c\u0435\u0445\u0430\u043d\u0438\u043a",
+      rtw_pass:"\u041d", rtw_attn:"!", rtw_na:"\u041d/\u041f",
       meas_UC:"\u0417\u0430\u043c\u0435\u0440\u044b \u0445\u043e\u0434\u043e\u0432\u043e\u0439 \u0447\u0430\u0441\u0442\u0438", meas_TB:"\u0417\u0430\u043c\u0435\u0440\u044b \u0442\u043e\u043b\u0449\u0438\u043d\u044b \u043a\u0443\u0437\u043e\u0432\u0430",
       meas_LUBE:"\u041c\u0430\u0441\u043b\u043e, \u043d\u0430\u0439\u0434\u0435\u043d\u043d\u043e\u0435 \u0432 \u0443\u0437\u043b\u0430\u0445",
       meas_GET:"\u0417\u0430\u043c\u0435\u0440\u044b \u0440\u0430\u0431\u043e\u0447\u0438\u0445 \u043e\u0440\u0433\u0430\u043d\u043e\u0432",
@@ -2947,6 +2957,88 @@
           + '.</b> ' + T.I("tb_temp_note") + '</div>' : "")
       + photoGallery(ctx, T, rec, "photos");
   }
+  /* RTW — Return to Work, the post-repair release checklist. Its own field:
+     `mark` is "pass"/"attention"/"na", NEVER the 1–5 grade (grade.js's own
+     "the ONLY condition field" rule is about the graded types; this type
+     carries no grade at all, by design — see mobile/rtw.js). */
+  function tbRtwMark(T, it) {
+    var m = it.mark || "";
+    if (m === "pass") return '<b style="color:' + GRADE_HEX[1] + '">' + esc(T("rtw_pass")) + '</b>';
+    if (m === "attention") return '<b style="color:' + GRADE_HEX[4] + '">' + esc(T("rtw_attn")) + '</b>';
+    if (m === "na") return '<span class="muted">' + esc(T("rtw_na")) + '</span>';
+    return tbMiss(T);
+  }
+  /* The work order, in the same compact strip the status block already uses
+     (.sstrip/.sc/.sk/.sv) — no new CSS for a one-cell fact. The release
+     result gets its OWN treatment, not a cell beside it: this is the one
+     verdict the whole document exists to state, and "D — Faulty and unsafe
+     to use" sitting in the same small type as a work-order number is not
+     unmistakable — the confirmed design rule for this report. It reuses the
+     same red/amber/green verdict banner every wear round already prints its
+     own decision in (.verdict/.v-act/.v-watch/.v-ok), so a D result reads as
+     unmistakably as a Critical grade does everywhere else in this document. */
+  function rtwSummary(T, rec) {
+    var out = "";
+    if (rec.rtwWo) {
+      out += '<div class="sstrip" style="margin-top:10px;"><div class="sc"><div class="sk">'
+        + esc(T("ma_wo")) + '</div><div class="sv">' + esc(rec.rtwWo) + '</div></div></div>';
+    }
+    var res = (window.RTW_RESULTS || {})[rec.rtwResult];
+    if (res) {
+      var cls = rec.rtwResult === "D" ? "v-act" : rec.rtwResult === "N" ? "v-watch" : "v-ok";
+      out += '<div class="verdict ' + cls + '" style="margin-top:8px;"><b>' + T.I("rtw_release") + ':</b> '
+        + T.both(res.en, res.ru, "alti") + '</div>';
+    }
+    return out;
+  }
+  /* The 23-item checklist, in the document's own two sections — Pre-release
+     inspection then Service completion — never as one flat table, because
+     that is the shape RTW_SECTIONS/RTW_ITEMS (mobile/rtw.js) name and both
+     surfaces read the identical text from there, never a second copy here. */
+  function rtwChecklist(ctx, T, rec) {
+    var byKey = {};
+    (rec.items || []).forEach(function (it) { byKey[it.key] = it; });
+    var defs = window.RTW_ITEMS || [];
+    var secDefs = window.RTW_SECTIONS || {};
+    var bySec = {};
+    defs.forEach(function (d) {
+      (bySec[d.section] = bySec[d.section] || []).push(d);
+    });
+    /* Rows are built from the shared checklist text (RTW_ITEMS), never from
+       the item's own combined "no — description" label (itemLabelFor's own
+       shape, used elsewhere for a single-line reference) — this table
+       already has a No. column, and printing the number twice in one row
+       is the kind of thing a reader notices on the third line, not the
+       first. The comment's stripe colour rides `sev`, same lookup every
+       other type's typeTable row already uses (SEV_HEX), so an Attention
+       item's own note stands out the way a Degraded finding's does. */
+    var cols = [
+      { th: T.L("rtw_no"), w: "34px", get: function (row) { return esc(row.no); } },
+      { th: T.L("rtw_desc"), get: function (row) { return T.both(row.en, row.ru, "alti"); } },
+      { th: T.L("rtw_mark"), w: "60px", cls: "n", get: function (row) { return tbRtwMark(T, row); } }
+    ];
+    var out = "";
+    Object.keys(secDefs).sort().forEach(function (s) {
+      var rows = (bySec[s] || []).filter(function (d) { return byKey[d.no]; })
+        .map(function (d) {
+          var it = byKey[d.no];
+          return { no: d.no, en: d.en, ru: d.ru, mark: it.mark || "",
+                    comment: it.comment || "", grade: 0,
+                    sev: it.mark === "attention" ? "DEG" : "" };
+        });
+      if (!rows.length) return;
+      out += '<div class="subhd" style="margin-top:12px;">' + T.both(secDefs[s].en, secDefs[s].ru, "alti") + '</div>'
+        + typeTable(cols, rows);
+    });
+    return out;
+  }
+  /* Page 2 — every photograph the round holds, captioned by which checklist
+     line it belongs to. The machine's own general evidence (GEN_KEY) is
+     included: it prints under its own general name, same as every other
+     type's photoGallery. */
+  function rtwPhotoItems(rec) {
+    return (rec.items || []).filter(function (it) { return it.photos && it.photos.length; });
+  }
   /* GET — the eleven-point register: point, component, grade, an optional
      millimetre, the reference when one exists, percent worn only where it is
      defensible, the defect or retention note, and the action. Grade is the
@@ -3152,6 +3244,40 @@
          drawing. The wear round already states its rating as the verdict chip;
          the compact rating bar goes on the sheets that have room for it. */
       var rbar = ratingBar(T, rec);
+
+      /* RETURN TO WORK — its own branch, not the graded-body dispatcher.
+         RTW carries no 1–5 grade at all (mobile/rtw.js's own design; see
+         TYPE_META.RTW), so the rating bar above is skipped here on purpose —
+         "Rating: — / Level: None recorded" on a round that was never graded
+         reads as a gap the round does not have, the exact false alarm this
+         file's own rules warn against. Page 1 is the document's own table
+         (WO/result strip, the two checklist sections); page 2 is every
+         photograph the round holds, captioned by which line it belongs to;
+         the sign-off is the SAME three composed blocks every other type
+         ends with, unchanged — the Senior Mechanic's name and signature are
+         `rec.sup`/`rec.signUrl` exactly as every other type's verifier is. */
+      if (rec.type === "RTW") {
+        secs.push({ nb: n > 0, html: '<div class="sec">' + head + mstrip
+          + rtwSummary(T, rec) + rtwChecklist(ctx, T, rec)
+          + (rec.rtwComment ? '<div class="subhd" style="margin-top:12px;">' + T.I("rtw_release") + '</div>'
+              + '<div class="mact"><span class="f" style="flex-basis:100%"><i>' + esc(T("rtw_comment"))
+              + '</i><b>' + esc(rec.rtwComment) + '</b></span></div>' : "")
+          + '</div>' });
+        /* nb:false, same as every other type's trailing photo gallery (the
+           `told.filter(photos)` board further down this function) — the
+           paginator already refuses to cut a `.cel` across the fold
+           (atomBands), so forcing a break here bought nothing but a mostly
+           blank page behind a short checklist and pushed the gallery a page
+           later than the room on the page already allowed. */
+        var rtwPh = rtwPhotoItems(rec);
+        if (rtwPh.length) {
+          secs.push({ nb: false, html: '<div class="sec"><div class="subhd">' + T.I("rtw_photos") + '</div>'
+            + '<div class="board gal b1">' + rtwPh.map(function (it) { return cell(ctx, T, it, null, true); }).join("") + '</div></div>' });
+        }
+        secs.push({ nb: false, html: '<div class="sec">' + approvalBlock(T, rec) + '</div>' });
+        evidenceSections(T, rec).forEach(function (x) { secs.push(x); });
+        return;
+      }
 
       /* A cell is earned by having something to show or something to say. A
          position with nothing but the machine's hours on it is not a finding,

@@ -3677,22 +3677,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=429"></script>
+<script src="../data/magnetic_plug.js?v=430"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=429"></script>
-<script src="../mobile/hme.js?v=429"></script>
-<script src="../mobile/mp-fc.js?v=429"></script>
-<script src="../mobile/hme-cascade.js?v=429"></script>
-<script src="../mobile/temp-limits.js?v=429"></script>
+<script src="../data/work_orders.js?v=430"></script>
+<script src="../mobile/hme.js?v=430"></script>
+<script src="../mobile/mp-fc.js?v=430"></script>
+<script src="../mobile/rtw.js?v=430"></script>
+<script src="../mobile/hme-cascade.js?v=430"></script>
+<script src="../mobile/temp-limits.js?v=430"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=429"></script>
-<script src="../mobile/normalize.js?v=429"></script>
-<script src="../mobile/terms.js?v=429"></script>
+<script src="../mobile/assets.js?v=430"></script>
+<script src="../mobile/normalize.js?v=430"></script>
+<script src="../mobile/terms.js?v=430"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -3711,19 +3712,19 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=429"></script>
-<script src="../mobile/edits.js?v=429"></script>
-<script src="../mobile/due.js?v=429"></script>
-<script src="../mobile/wear.js?v=429"></script>
-<script src="../mobile/wear-map.js?v=429"></script>
-<script src="../mobile/lube.js?v=429"></script>
-<script src="../mobile/lube-overrides.js?v=429"></script>
-<script src="../mobile/lube2027.js?v=429"></script>
-<script src="../mobile/lube-tds.js?v=429"></script>
+<script src="../mobile/grade.js?v=430"></script>
+<script src="../mobile/edits.js?v=430"></script>
+<script src="../mobile/due.js?v=430"></script>
+<script src="../mobile/wear.js?v=430"></script>
+<script src="../mobile/wear-map.js?v=430"></script>
+<script src="../mobile/lube.js?v=430"></script>
+<script src="../mobile/lube-overrides.js?v=430"></script>
+<script src="../mobile/lube2027.js?v=430"></script>
+<script src="../mobile/lube-tds.js?v=430"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=429"></script>
-<script src="../mobile/machine-photos.js?v=429"></script>
+<script src="../mobile/upload-defaults.js?v=430"></script>
+<script src="../mobile/machine-photos.js?v=430"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3732,17 +3733,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=429"></script>
-<script src="../mobile/get.js?v=429"></script>
-<script src="../mobile/points.js?v=429"></script>
-<script src="../mobile/uc-points.js?v=429"></script>
-<script src="../mobile/inspect-guide.js?v=429"></script>
-<script src="../mobile/get-figs.js?v=429"></script>
-<script src="../mobile/body-points.js?v=429"></script>
-<script src="../mobile/body-map.js?v=429"></script>
-<script src="../mobile/jspdf.umd.min.js?v=429"></script>
-<script src="../mobile/html2canvas.min.js?v=429"></script>
-<script src="../mobile/report-core.js?v=429"></script>
+<script src="../mobile/machine-fig.js?v=430"></script>
+<script src="../mobile/get.js?v=430"></script>
+<script src="../mobile/points.js?v=430"></script>
+<script src="../mobile/uc-points.js?v=430"></script>
+<script src="../mobile/inspect-guide.js?v=430"></script>
+<script src="../mobile/get-figs.js?v=430"></script>
+<script src="../mobile/body-points.js?v=430"></script>
+<script src="../mobile/body-map.js?v=430"></script>
+<script src="../mobile/jspdf.umd.min.js?v=430"></script>
+<script src="../mobile/html2canvas.min.js?v=430"></script>
+<script src="../mobile/report-core.js?v=430"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -4298,7 +4299,7 @@ const I18N={
   sev_NOF:"No failure", sev_INC:"Incipient", sev_DEG:"Degraded", sev_CRI:"Critical",
   type_MP:"Magnetic Plug", type_FC:"Filter Cut", type_INSP:"Inspection", type_TEMP:"Temperature",
   type_UC:"Undercarriage", type_GET:"Ground engaging tools", type_TB:"Dump body liner",
-  type_LUBE:"Lubrication audit",
+  type_LUBE:"Lubrication audit", type_RTW:"Return to Work",
   lube_product:"Product in service", lube_evidence:"Evidence", lube_sampled:"Sampled",
   lube_unlisted:"Not on the catalogue",
   lube_ev_label:"Label photographed", lube_ev_batch:"Tank / pump batch",
@@ -5173,7 +5174,7 @@ const I18N={
   sev_NOF:"Без отказа", sev_INC:"Зарождающийся", sev_DEG:"Частичный", sev_CRI:"Критический",
   type_MP:"Магнитная пробка", type_FC:"Разрез фильтра", type_INSP:"Осмотр", type_TEMP:"Температура",
   type_UC:"Ходовая часть", type_GET:"Рабочий инструмент", type_TB:"Футеровка кузова",
-  type_LUBE:"Аудит смазочных материалов",
+  type_LUBE:"Аудит смазочных материалов", type_RTW:"Возврат в работу",
   lube_product:"Продукт в узле", lube_evidence:"Подтверждение", lube_sampled:"Проба отобрана",
   lube_unlisted:"Нет в каталоге",
   lube_ev_label:"Фото этикетки", lube_ev_batch:"Партия из ёмкости",
@@ -5648,7 +5649,7 @@ const PRIO_BY={}; PRIORITIES.forEach(p=>PRIO_BY[p.k]=p);
 const prioName=(k,l)=>{ const p=PRIO_BY[String(k||"").toUpperCase()]; return p?(p[l||lang]||p.en):(k||""); };
 const prioClass=k=>{ const p=PRIO_BY[String(k||"").toUpperCase()]; return p?p.c:"n"; };
 const TYPE_ORDER=["MP","FC","INSP","TEMP","UC","GET","TB","LUBE"];
-const TYPE_LABEL=new Proxy({},{ get:(_,k)=> TYPE_ORDER.indexOf(k)>=0?t("type_"+k):undefined });
+const TYPE_LABEL=new Proxy({},{ get:(_,k)=> (TYPE_ORDER.indexOf(k)>=0||k==="RTW")?t("type_"+k):undefined });
 /* "Carries millimetres." Undercarriage demands them at every point; ground
    engaging tools accept them wherever somebody had a tape. Everything below
    this line — the bands, the severities, the Pareto, the action register —
@@ -15101,6 +15102,11 @@ function dueTabRows(){
   const today=todayISO();
   Object.keys(last).forEach(k=>{
     const [ty,unit]=k.split("|");
+    /* RTW is a repair-release checklist, not a scheduled CM round — it has no
+       entry in due.js's DUE.EVERY, so DUE.next() below would otherwise fall
+       back to the 30-day generic interval and print a bogus overdue/due-soon
+       row. Same exclusion as the phone's dueRows(). */
+    if(ty==="RTW") return;
     const rate=window.DUE ? DUE.rateFrom(trail[unit]||[]) : null;
     /* The machine, not only the round — see the note on the phone's copy of
        this. Both surfaces schedule from due.js and both were asking it the
@@ -15151,6 +15157,11 @@ function dueNeverRows(only){
     if(sp.byClass) Object.keys(sp.byClass).forEach(k=>add(k,ty));
     if(sp.onClass) sp.onClass.forEach(k=>add(k,ty)); });
   Object.keys(have).forEach(key=>{ const [ty,unit]=key.split("|");
+    /* Same exclusion as the phone's roundsOnClass(): RTW is triggered by a
+       work order, not "this class does this round" — the first RTW round
+       recorded anywhere must not put every other machine of that class on a
+       fabricated RTW programme. */
+    if(ty==="RTW") return;
     const a=ASSET_BY[unit]; if(a && a.cls) add(String(a.cls).toUpperCase(),ty); });
   (window.ASSETS||[]).forEach(a=>{
     if(!a || !a.n) return;
@@ -17503,8 +17514,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=429"></script>
-<script src="sync-adapter.js?v=429"></script>
-<script src="report.js?v=429"></script>
+<script src="drive.js?v=430"></script>
+<script src="sync-adapter.js?v=430"></script>
+<script src="report.js?v=430"></script>
 </body>
 </html>

@@ -285,6 +285,7 @@
          sidecar); the office may not hold the file yet. The report tells
          those two apart rather than printing an open line for both. */
       signed: !!rec.signed,
+      rtwResult: rec.rtwResult || "", rtwWo: rec.rtwWo || "", rtwComment: rec.rtwComment || "",
       ...(() => { const m = reportMap(rec, (opts && opts.art && opts.art[rec.equip + "|" + rec.type]) || "");
                   return { mapHTML: m.html, mapKey: m.key }; })(),
       zones: rec.type === "TB" ? bodyZones(rec) : null,
@@ -327,6 +328,7 @@
           grade: (typeof GRADE !== "undefined" ? GRADE.num(it.grade) : it.grade) || "",
           sev: (typeof GRADE !== "undefined" && typeof sevOf === "function")
                  ? (GRADE.iso(sevOf(rec, it)) || it.sev || "") : (it.sev || ""),
+          mark: it.mark || "",
           general: it.general ? 1 : 0,
           cats: (Array.isArray(it.att) ? it.att : []).map(e => (e && e.category) || "COMPONENT"),
           resp: it.resp || "", target: it.target || "", opstat: it.opstat || "", gradeWhy: it.gradeWhy || "",

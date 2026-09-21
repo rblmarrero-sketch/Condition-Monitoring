@@ -36,7 +36,7 @@
        explains itself and offers a retry — because an honest offline page is
        recoverable and a browser error page is not. */
 
-const BUILD="429";
+const BUILD="430";
 const CACHE = "plug-capture-v" + BUILD;
 
 /* Without these the app is not an app: no page, no equipment register, no
@@ -55,6 +55,7 @@ const ESSENTIAL = [
   "./hme.js?v=" + BUILD,
   "./hme-cascade.js?v=" + BUILD,
   "./mp-fc.js?v=" + BUILD,
+  "./rtw.js?v=" + BUILD,
   "./assets.js?v=" + BUILD,
   "./temp-limits.js?v=" + BUILD,
   "./normalize.js?v=" + BUILD,
