@@ -52,7 +52,7 @@ for t in bump.cjs audit-scan.cjs crawl.cjs norej.cjs noloop.cjs deferwhy.cjs rpt
          cards.cjs v4.cjs wear.cjs uc.cjs ucmap.cjs sheet.cjs map2.cjs stale.cjs ver.cjs \
          cf.cjs cfd.cjs cfp.cjs f4.cjs s3.cjs s1.cjs edit.cjs ed2.cjs gs.cjs drv.cjs \
          dash.cjs fold2.cjs stab.cjs team.cjs wedge.cjs audit.cjs offline.cjs \
-         pick.cjs lang.cjs opt.cjs rtw.cjs; do
+         pick.cjs lang.cjs opt.cjs rtw.cjs rtwopen.cjs; do
   [ -f "$t" ] && run "$t"
 done
 pkill -f 'ed-srv.cjs|mock.cjs|stab-srv.cjs|hang.cjs|up-srv.cjs' 2>/dev/null

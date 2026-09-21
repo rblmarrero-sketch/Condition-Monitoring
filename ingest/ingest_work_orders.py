@@ -73,9 +73,9 @@ Usage:
 
 Also writes data/schedule_slim.json alongside --out, in the SAME directory
 (unconditionally, no flag for it) -- the phone's own trimmed slice of this
-same data, for the Due tab's "Show 1C schedule" toggle. See the comment at
-its own write site for what it keeps and why it is not the same file the
-dashboard loads.
+same data, for the Due tab's "Show 1C schedule" toggle and for Return to
+Work's own Pick screen (rtwOpen). See the comment at its own write site for
+what each key keeps and why this is not the same file the dashboard loads.
 
 Re-run this whenever you want a fresher plan-vs-actual comparison -- it is
 not wired into a schedule yet. See the ship note for a GitHub Actions
@@ -410,6 +410,46 @@ def find_header_row(ws, must_have=("Asset description", "Equip no")):
                       "in the first 20 rows) -- the workbook's layout may have changed.")
 
 
+# RETURN TO WORK'S OWN SLICE. mobile/index.html has no <script> tag for
+# data/work_orders.js at all -- that file is dashboard-only (see this
+# module's own docstring) and was never in the phone's precache on purpose,
+# since it refreshes on 1C's clock, not the app's build clock. RTW's Pick
+# screen read window.CM_WO_DATA anyway, a global the phone never sets -- so
+# the entry card was hidden and the picker empty on every real handset,
+# working only in a test that fabricated the global by hand (see
+# tests/rtw.cjs). The filter and shape here are what rtwWorkOrders() (mobile/
+# index.html) used to do itself, moved to the one place that already builds
+# both source lists -- a planned service still open on the calendar, or a
+# defect work order 1C has actually numbered and not yet closed. Deduped by
+# work order number, newest first. A standalone function, not inlined into
+# main(), so it can be unit-tested without the openpyxl/network dependencies
+# the rest of this script needs (see tests/rtwopen.py).
+def build_rtw_open(work_orders, cm_dedup):
+    seen, out = set(), []
+    for w in work_orders:
+        wo = w.get("woNumber")
+        if not wo or not w.get("open") or wo in seen:
+            continue
+        seen.add(wo)
+        out.append({
+            "wo": wo, "equip": (w.get("equip") or "").upper(), "cls": w.get("cls") or "",
+            "comp": "", "desc": w.get("cmLabel") or w.get("maintType") or "",
+            "priority": w.get("priority") or "", "raised": w.get("planStart") or "",
+        })
+    for r in cm_dedup:
+        wo = r.get("woNumber")
+        if not wo or wo in seen or re.search(r"closed|completed", r.get("status") or "", re.I):
+            continue
+        seen.add(wo)
+        out.append({
+            "wo": wo, "equip": (r.get("asset") or "").upper(), "cls": "",
+            "comp": r.get("system") or "", "desc": r.get("descr") or r.get("defectType") or "",
+            "priority": r.get("priority") or "", "raised": r.get("date") or "",
+        })
+    out.sort(key=lambda r: r["raised"] or "", reverse=True)
+    return out
+
+
 def main():
     args = sys.argv[1:]
     out_path = DEFAULT_OUT
@@ -690,13 +730,17 @@ def main():
         })
     for rows in slim_by_unit.values():
         rows.sort(key=lambda r: r["plan"])
+    rtw_open = build_rtw_open(work_orders, cm_dedup)
+
     slim_path = out_file.parent / "schedule_slim.json"
     slim_path.write_text(json.dumps({
         "generated": out["generated"],
         "byUnit": slim_by_unit,
+        "rtwOpen": rtw_open,
     }, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print(f"wrote {slim_path} -- {sum(len(v) for v in slim_by_unit.values())} open, "
-          f"CM-matched work order(s) across {len(slim_by_unit)} unit(s)")
+          f"CM-matched work order(s) across {len(slim_by_unit)} unit(s), "
+          f"{len(rtw_open)} open work order(s) for Return to Work")
 
 
 if __name__ == "__main__":

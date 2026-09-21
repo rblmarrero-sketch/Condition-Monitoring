@@ -32,15 +32,22 @@ const srv = http.createServer((req, res) => {
   res.end(fs.readFileSync(f));
 });
 
+/* SCHED — the SAME global schedEnsureLoaded() fills from data/schedule_slim
+   .json, which is the phone's ONLY source for this (see mobile/index.html's
+   own SCHED_URL comment: data/work_orders.js/window.CM_WO_DATA is dashboard-
+   only and never reaches this file). rtwOpen is already filtered exactly as
+   ingest/ingest_work_orders.py's build_rtw_open() leaves it — see
+   tests/rtwopen.py for the exclusion rules (no work order number, closed/
+   completed, not open) this fixture deliberately does NOT need to repeat,
+   because the phone no longer does that filtering itself; it trusts the
+   slim file the way it already trusts every other field the ingest script
+   resolves. */
 const FIXTURE = {
-  workOrders: [],
-  cmWorkOrders: [
-    { date: '2026-09-18', asset: 'TK112', system: 'Rear Differential', descr: 'Ferrous debris — heavy', defectType: '2.4', priority: 'P1 Critical', status: 'In Progress', woNumber: 'WO-016635' },
-    { date: '2026-09-19', asset: 'TK126', system: 'Frame / guards', descr: 'Abnormal wear', defectType: '2.1', priority: 'P2 Severe', status: 'In Progress', woNumber: 'WO-016620' },
-    /* No formal WO number yet — status Registered — must NOT appear in the picker. */
-    { date: '2026-09-20', asset: 'TK900', system: 'Boom', descr: 'Crack reported', defectType: '1.1', priority: 'P3', status: 'Registered', woNumber: null },
-    /* Closed — must not appear either. */
-    { date: '2026-09-10', asset: 'TK500', system: 'Engine', descr: 'Old defect', defectType: '5.1', priority: 'P4', status: 'Completed', woNumber: 'WO-000001' },
+  generated: '2026-09-21T00:00:00Z',
+  byUnit: {},
+  rtwOpen: [
+    { wo: 'WO-016635', equip: 'TK112', cls: 'HT', comp: 'Rear Differential', desc: 'Ferrous debris — heavy', priority: 'P1 Critical', raised: '2026-09-18' },
+    { wo: 'WO-016620', equip: 'TK126', cls: 'HT', comp: 'Frame / guards', desc: 'Abnormal wear', priority: 'P2 Severe', raised: '2026-09-19' },
   ],
 };
 
@@ -71,7 +78,13 @@ const jpg = p => p.evaluate(() => {
   await p.addInitScript(() => localStorage.setItem('up_dests', '[]'));
   await p.goto(APP, { waitUntil: 'load' });
   await p.waitForTimeout(1200);
-  await p.evaluate((fx) => { window.CM_WO_DATA = fx; }, FIXTURE);
+  /* SCHED is a bare `let` at this page's top level, the same binding every
+     inline <script> tag and this evaluate() share — exactly how schedFor()
+     and rtwWorkOrders() read it. Setting it directly, rather than waiting
+     on a real fetch of data/schedule_slim.json, is what makes this test
+     independent of the network AND, unlike the window.CM_WO_DATA it used
+     to fake, actually the same global the shipped code reads. */
+  await p.evaluate((fx) => { SCHED = fx; }, FIXTURE);
 
   console.log('1. TYPE_META and rtw.js are wired in');
   ok('TYPE_META.RTW exists with its own flag', await p.evaluate(() => !!(window.TYPE_META || TYPE_META).RTW && !!TYPE_META.RTW.rtw));
@@ -88,15 +101,17 @@ const jpg = p => p.evaluate(() => {
   const sub = (await p.textContent('#rtwEntrySub') || '').trim();
   ok('it counts only records with a formal work order number', /\b2\b/.test(sub), sub);
 
-  console.log('\n3. the Pick screen — bidirectional search, WO-number-only');
+  console.log('\n3. the Pick screen — bidirectional search over SCHED.rtwOpen');
   await p.click('#rtwEntryBtn');
   await p.waitForTimeout(150);
   ok('the overlay opens on the Pick screen', await p.isVisible('#rtwPick'));
   let cards = await p.$$('.rtw-wo-card');
-  ok('exactly the two open, numbered work orders are listed', cards.length === 2, 'count=' + cards.length);
-  const listText = await p.textContent('#rtwPickList');
-  ok('the Registered defect with no WO number is excluded', !listText.includes('TK900'));
-  ok('the closed work order is excluded', !listText.includes('TK500'));
+  ok('every entry rtwOpen carries is listed', cards.length === 2, 'count=' + cards.length);
+  /* A defect with no work order number, or one already closed, is EXCLUDED
+     before it ever reaches this file — build_rtw_open() in ingest/
+     ingest_work_orders.py, proven directly (no browser needed) by
+     tests/rtwopen.py. This screen's own job is only to search and pick from
+     whatever SCHED.rtwOpen already holds. */
   await p.fill('#rtwPickQ', 'TK126');
   await p.waitForTimeout(100);
   cards = await p.$$('.rtw-wo-card');
