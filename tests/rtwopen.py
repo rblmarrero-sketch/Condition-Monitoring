@@ -27,7 +27,7 @@ def ok(name, cond, detail=""):
 WORK_ORDERS = [
     {"woNumber": "WO-016635", "equip": "TK112", "cls": "HT", "open": True,
      "cmLabel": "4000h service", "maintType": "4000 Hours service Planned",
-     "priority": "P3 Planned (PM)", "planStart": "2026-09-18"},
+     "priority": "P3 Planned (PM)", "planStart": "2026-09-18", "hours": 4000},
     # Not open -- must be excluded.
     {"woNumber": "WO-000001", "equip": "TK500", "cls": "HT", "open": False,
      "cmLabel": "1000h service", "maintType": "1000 Hours service Planned",
@@ -70,15 +70,17 @@ ok("a planned service with no work order number is excluded", "TK777" not in {r[
 ok("a defect still Registered with no work order number is excluded", "TK900" not in {r["equip"] for r in rows})
 ok("a CLOSED defect is excluded, case-insensitively", "WO-000002" not in by_wo)
 ok("a Completed defect is excluded", "WO-000003" not in by_wo)
-ok("a planned service keeps its own shape",
+ok("a planned service keeps its own shape, now with its type/hours/schedule",
    by_wo.get("WO-016635") == {
        "wo": "WO-016635", "equip": "TK112", "cls": "HT", "comp": "",
        "desc": "4000h service", "priority": "P3 Planned (PM)", "raised": "2026-09-18",
+       "type": "4000 Hours service Planned", "hours": 4000, "plan": "2026-09-18",
    }, str(by_wo.get("WO-016635")))
-ok("a defect work order keeps its own shape",
+ok("a defect work order keeps its own shape -- no hour tier, since a defect isn't one",
    by_wo.get("WO-016620") == {
        "wo": "WO-016620", "equip": "TK126", "cls": "", "comp": "Frame / guards",
        "desc": "Abnormal wear", "priority": "P2 Severe", "raised": "2026-09-19",
+       "type": "2.1", "hours": None, "plan": "",
    }, str(by_wo.get("WO-016620")))
 ok("a work order number seen once is never repeated by a later, colliding row",
    sum(1 for r in rows if r["wo"] == "WO-016635") == 1)

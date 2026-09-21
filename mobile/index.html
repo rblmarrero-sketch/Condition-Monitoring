@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=435">
+<link rel="manifest" href="manifest.webmanifest?v=436">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=435">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=435">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=435">
+<link rel="apple-touch-icon" href="icon-192.png?v=436">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=436">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=436">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -365,7 +365,14 @@
     border-radius:8px;padding:0 10px;font:inherit;font-size:13px;color:var(--ink);background:var(--surface-2);}
   .rtw-sign-pad-slot{border:1.5px dashed var(--border);border-radius:9px;background:var(--surface-2);min-height:96px;
     display:flex;align-items:center;justify-content:center;padding:4px;}
-  .rtw-sign-pad-slot canvas{width:100%;height:90px;}
+  /* touch-action:none, same as .signpad below — without it a real touchscreen
+     drag on this canvas is a scroll gesture inside .rtw-ov-body's own
+     overflow-y:auto (the checklist screen scrolls), and no ink ever reaches
+     the pad. Synthetic dispatchEvent-based tests (tests/rtw.cjs's draw())
+     call the JS handlers directly and never exercise the browser's native
+     gesture recognizer, so this shipped passing every test while "the whole
+     signature window is not working" on a real phone. */
+  .rtw-sign-pad-slot canvas{width:100%;height:90px;touch-action:none;}
   .rtw-footer{flex:none;background:var(--surface);border-top:1px solid var(--border);
     padding:10px 14px calc(env(safe-area-inset-bottom) + 14px);display:flex;flex-direction:column;gap:8px;}
   .searchall{width:100%;padding:9px;border:1px dashed var(--border);background:none;color:var(--accent);border-radius:10px;font-size:13px;font-weight:650;cursor:pointer;margin-bottom:10px;}
@@ -2751,16 +2758,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=435"></script>
-<script src="upload-defaults.js?v=435"></script>
-<script src="hme.js?v=435"></script>
-<script src="mp-fc.js?v=435"></script>
-<script src="rtw.js?v=435"></script>
-<script src="hme-cascade.js?v=435"></script>
-<script src="assets.js?v=435"></script>
-<script src="temp-limits.js?v=435"></script>
-<script src="normalize.js?v=435"></script>
-<script src="terms.js?v=435"></script>
+<script src="native.js?v=436"></script>
+<script src="upload-defaults.js?v=436"></script>
+<script src="hme.js?v=436"></script>
+<script src="mp-fc.js?v=436"></script>
+<script src="rtw.js?v=436"></script>
+<script src="hme-cascade.js?v=436"></script>
+<script src="assets.js?v=436"></script>
+<script src="temp-limits.js?v=436"></script>
+<script src="normalize.js?v=436"></script>
+<script src="terms.js?v=436"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2779,25 +2786,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=435"></script>
-<script src="edits.js?v=435"></script>
-<script src="due.js?v=435"></script>
-<script src="wear.js?v=435"></script>
-<script src="wear-figs.js?v=435"></script>
-<script src="wear-map.js?v=435"></script>
-<script src="machine-photos.js?v=435"></script>
-<script src="machine-fig.js?v=435"></script>
-<script src="get.js?v=435"></script>
-<script src="points.js?v=435"></script>
-<script src="uc-points.js?v=435"></script>
-<script src="inspect-guide.js?v=435"></script>
-<script src="get-figs.js?v=435"></script>
-<script src="body-points.js?v=435"></script>
-<script src="body-map.js?v=435"></script>
-<script src="lube.js?v=435"></script>
-<script src="lube-overrides.js?v=435"></script>
-<script src="lube2027.js?v=435"></script>
-<script src="report-core.js?v=435"></script>
+<script src="grade.js?v=436"></script>
+<script src="edits.js?v=436"></script>
+<script src="due.js?v=436"></script>
+<script src="wear.js?v=436"></script>
+<script src="wear-figs.js?v=436"></script>
+<script src="wear-map.js?v=436"></script>
+<script src="machine-photos.js?v=436"></script>
+<script src="machine-fig.js?v=436"></script>
+<script src="get.js?v=436"></script>
+<script src="points.js?v=436"></script>
+<script src="uc-points.js?v=436"></script>
+<script src="inspect-guide.js?v=436"></script>
+<script src="get-figs.js?v=436"></script>
+<script src="body-points.js?v=436"></script>
+<script src="body-map.js?v=436"></script>
+<script src="lube.js?v=436"></script>
+<script src="lube-overrides.js?v=436"></script>
+<script src="lube2027.js?v=436"></script>
+<script src="report-core.js?v=436"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -10270,6 +10277,12 @@ function rtwPickRow(row){
   if(!row) return;
   rtwDraft={ wo:row.wo, equip:row.equip, cls:row.cls||assetClassOf(row.equip)||"",
     component:row.comp||"", priority:row.priority||"", date:todayISO(),
+    /* The work order's own type, hour tier and 1C plan date — carried from
+       the Pick row onto the record at Save, so the header can say what was
+       actually scheduled, not just which WO number it closed against. A
+       defect WO has no hour tier (build_rtw_open leaves it null); printed
+       only when present, never guessed. */
+    woType:row.type||row.desc||"", woHours:(row.hours!=null?row.hours:null), woPlan:row.plan||"",
     items:{}, sup:"", result:"R", overallComment:"", released:false,
     general:{photos:[], comment:""} };
   RTW_ITEMS.forEach(def=>{ rtwDraft.items[def.no]={mark:null, comment:"", photos:[]}; });
@@ -10536,7 +10549,8 @@ async function rtwSave(){
     const rec={ id, cls:d.cls||"", type:"RTW", equip, date, smu:"", by:(d.sup||"").trim(),
       sup:(d.sup||"").trim(), sign:await rtwSignBlob(), gps:gps||null, dev:DEVICE,
       positions:{}, created, up:0, upTo:{}, rev:1, phv:2,
-      rtwWo:d.wo||"", rtwResult:d.result||"R", rtwComment:(d.overallComment||"").trim() };
+      rtwWo:d.wo||"", rtwResult:d.result||"R", rtwComment:(d.overallComment||"").trim(),
+      rtwWoType:d.woType||"", rtwSchedHours:(d.woHours!=null?d.woHours:null), rtwSchedDate:d.woPlan||"" };
     RTW_ITEMS.forEach(def=>{
       const it=d.items[def.no];
       rec.positions[def.no]={ mark:it.mark||null, comment:(it.comment||"").trim(), photos:(it.photos||[]).slice() };
@@ -13738,6 +13752,7 @@ async function rptRecords(onlyId){
       typeAlt:inOtherLang(()=>t("type_"+(rec.type||"MP"))), date:rec.date||"",
       by:rec.by||"", sup:rec.sup||"", smu:rec.smu||"", gps:rec.gps||null, signUrl, signErr, signed:!!rec.sign,
       rtwResult:rec.rtwResult||"", rtwWo:rec.rtwWo||"", rtwComment:rec.rtwComment||"",
+      rtwWoType:rec.rtwWoType||"", rtwSchedHours:(rec.rtwSchedHours!=null?rec.rtwSchedHours:null), rtwSchedDate:rec.rtwSchedDate||"",
       /* "This sheet is measurements" — which is NOT the same question as "does
          capture demand a millimetre at every position". meta.wear is the second
          one, and a GET round answers no to it: teeth are graded, and a tape is
@@ -13847,6 +13862,7 @@ function teamRecToReport(rec){
            date:rec.date||"", by:rec.by||"", sup:rec.sup||"", smu:rec.smu||"",
            gps:rec.gps||null, signUrl:"",
            rtwResult:rec.rtwResult||"", rtwWo:rec.rtwWo||"", rtwComment:rec.rtwComment||"",
+           rtwWoType:rec.rtwWoType||"", rtwSchedHours:(rec.rtwSchedHours!=null?rec.rtwSchedHours:null), rtwSchedDate:rec.rtwSchedDate||"",
            wear:!!(meta.wear||meta.get), temp:!!meta.temp, items };
 }
 /* EVERY PHOTOGRAPH THE FOLDER HANDED BACK, PLACED ON THE ROUND.
@@ -14265,7 +14281,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="435";
+const BUILD="436";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -16910,6 +16926,12 @@ function recToExport0(rec){
        Left off this export once, a teammate's phone could open a synced RTW
        round and print a report with every item marked but no verdict on it. */
     rtwWo:rec.rtwWo||"", rtwResult:rec.rtwResult||"", rtwComment:rec.rtwComment||"",
+    /* What 1C actually scheduled this release against — the maintenance
+       type, the hour tier and the plan date — so the header can say what
+       was due, not just which work order number it closed. A defect WO
+       carries no hour tier; left null rather than guessed. */
+    rtwWoType:rec.rtwWoType||"", rtwSchedHours:(rec.rtwSchedHours!=null?rec.rtwSchedHours:null),
+    rtwSchedDate:rec.rtwSchedDate||"",
     items:Object.entries(rec.positions).map(([k,p])=>{ const d=DEFECT_BY[upDefect(p.defect)]||null;
       const det=p.detect||DETECT_DEFAULT;
       // Codes leave the app in the shape 1C expects: v4 for the mode, the cause,

@@ -1532,6 +1532,105 @@ edge case. Confirmed by rendering the actual failing report through
 control proving a three-item history round (which already packed correctly)
 keeps its existing density (`tests/histpair.cjs`).
 
+**RTW'S OWN SIGNATURE PAD NEVER GOT THE ONE CSS LINE THAT MAKES A TOUCHSCREEN
+DRAW ON A CANVAS.** Reported plainly: "the whole signature window is not
+working." The main wizard's shared pad has carried `touch-action:none` since
+it shipped — without it, a real finger-drag on a canvas sitting inside a
+scrolling container is a SCROLL gesture to the browser's own gesture
+recognizer, not a stream of pointer events to this page's JS, and no ink
+ever lands. RTW's own signature canvas sits inside `.rtw-ov-body`
+(`overflow-y:auto`, because the checklist screen scrolls) and never carried
+the rule. `tests/rtw.cjs`'s own `draw()` — and the main pad's
+`tests/signfold.cjs` — call `canvas.dispatchEvent(new PointerEvent(...))`
+directly, which invokes the registered JS handlers WITHOUT ever asking the
+browser's native gesture pipeline what `touch-action` says, so both suites
+passed identically with or without the rule. `.rtw-sign-pad-slot canvas`
+now carries `touch-action:none`, matching `.signpad`, and `tests/rtw.cjs`
+also asserts `getComputedStyle(canvas).touchAction === 'none'` directly —
+the one thing a dispatchEvent-based draw test can never otherwise catch.
+
+**THE MARK COLUMN WAS THE ONE CELL THAT NEVER WENT BILINGUAL.** `tbRtwMark`
+called the bare `T("rtw_pass"/"rtw_attn"/"rtw_na")` — makeT's own contract
+says the bare form is primary-language-only, for a title attribute or a
+joined fragment, never a value shown in a bilingual table — while its two
+neighbouring cells (the description, the release verdict) both already went
+through `T.both`/`T.I`. Reported as "shifting from English to Russian in
+the report has a bug": the Pass/Attention/N/A column stayed in whichever
+language it was NOT switched to. Fixed to `T.I(...)`, dropping the `esc()`
+wrapper `T.I` already applies. A second, related bug sat one level up:
+`rtwSummary`'s release verdict and `rtwChecklist`'s row description and
+section title all read `T.both(en, ru, cls)` on a FIXED en/ru pair from
+`mobile/rtw.js` — `T.both` always leads with its first argument, and
+outside a bilingual report prints ONLY that argument, so a Russian-only
+report kept the checklist text and the verdict in English regardless. Both
+are `T.pair(en, ru, cls)` now, which reorders on `T.lang` the way every
+other fixed-pair caller in this file already does (see `T.pair`'s own
+comment on why it exists). `tests/rtw.cjs` §11b regenerates the same round
+with `cm_rep_lang` forced to `"ru"` and asserts the checklist text, the mark
+column and the verdict all actually switch — not just the labels that were
+never broken.
+
+**THE WORK ORDER WAS A BOX PARTWAY DOWN THE PAGE, AND CARRIED NOTHING BUT
+ITS OWN NUMBER.** Read off a real DZ014 report, with the box circled: "put
+the work order number on top... also include the type of work order and
+schedule of work. then put also the hours completed from schedule." The
+number, its maintenance type, 1C's own plan date and the hour tier it was
+raised against all exist in `ingest/ingest_work_orders.py`'s `work_orders`
+rows — `build_rtw_open` only ever carried the number and a free-text
+description through to the phone's Pick screen. It now also carries `type`,
+`hours` and `plan` (null/blank for a defect work order, which is not
+hour-tiered — never guessed); `rtwPickRow` puts them on the draft, Save
+writes `rtwWoType`/`rtwSchedHours`/`rtwSchedDate` onto the record, and
+**four separate places** turn that record into what a report reads —
+`recToExport0` (the synced/dashboard shape), and, on the phone itself,
+`rptRecords` (this phone's own PDF) and the team-round reader (a synced
+round pulled from another phone) — each needed the same three fields added
+by hand, the exact "one fact typed in several places" shape this file's own
+rules warn about, and the reason `tests/rtw.cjs` regenerates the real report
+through `buildReportSections` rather than trusting any one of them read in
+isolation. `rtwHeaderStrip` prints all four facts (WO, type, schedule,
+hours) in the same one-line `.sstrip` cell strip the status block already
+uses, ABOVE the release verdict — one row of page height whether it carries
+one fact or four, not a boxed line per fact.
+
+**"DESCRIPTION OF OPERATIONS" PRINTED TWICE, ONCE PER SECTION, ON A FORM
+WITH ONLY TWO.** Read off the same report, the second header row circled:
+"remove the description of operation we already have on top." Each of RTW's
+two sections built its own `typeTable`, so Section 2 opened with a second
+copy of the No./Description/Mark header row a reader had already read once
+— on a real printed sheet that reads as leaving one table and starting a
+different one halfway down the page. `rtwChecklist` now builds ONE running
+`<table>`: the column header prints once, and each section starts with a
+divider row inside the same table. The sections are numbered on that
+divider now too ("1. Pre-release inspection", "2. Service completion") —
+asked for by name, and worth doing regardless: the item numbers alone
+(1.1 … 2.4) never said how many sections the form has.
+
+**COMMENTS WERE A ROW UNDERNEATH, NEVER A COLUMN, AND THAT COST A WHOLE
+PAGE.** The below-row `.rnote` strip every other table-bodied type uses
+(Filter Cut, General Inspection, GET) is the wrong shape for a form this
+project was asked to hold to one page — a comment on its own full-width row
+costs a row and a half instead of nothing extra per row, on a 23-item
+checklist already close to a page's room. Comments print in their own
+column now, on the right, in `.rtw-cm` (same ink as `.rnote`, same
+left-border stripe technique as `.stripe`, as an ordinary cell). `.rtw-tbl`
+tightens the row padding and font a step further for the same one-page
+reason. Left BLANK when there is nothing to say — this is an optional
+annotation, never a field the round is expected to carry, so `tbMiss`'s own
+"Not recorded" rule does not apply to it (see that rule's own comment).
+
+**RETURN TO WORK HAS ONE SIGNER, NOT THREE.** The shared `approvalBlock`
+prints CM Technician / Reliability Engineer / Maintenance Supervisor for
+every round type — right for a scheduled CM round, which genuinely is
+walked by one person and reviewed by another before a supervisor verifies
+it. RTW is a checklist one Senior Mechanic completes and signs on the spot;
+there was never a second or third role in that workflow, and the other two
+rows printed as open, unfillable signature lines asking for signatures the
+form never needed. Circled on a real report: "Remove the CM technician and
+Reliability Engineer." `approvalBlock(T, rec, onlySup)` takes an optional
+third argument — RTW's own call site is the only caller that passes it —
+and every other type keeps all three rows exactly as before.
+
 ---
 
 ## Secrets

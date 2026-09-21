@@ -46,8 +46,8 @@ const FIXTURE = {
   generated: '2026-09-21T00:00:00Z',
   byUnit: {},
   rtwOpen: [
-    { wo: 'WO-016635', equip: 'TK112', cls: 'HT', comp: 'Rear Differential', desc: 'Ferrous debris — heavy', priority: 'P1 Critical', raised: '2026-09-18' },
-    { wo: 'WO-016620', equip: 'TK126', cls: 'HT', comp: 'Frame / guards', desc: 'Abnormal wear', priority: 'P2 Severe', raised: '2026-09-19' },
+    { wo: 'WO-016635', equip: 'TK112', cls: 'HT', comp: 'Rear Differential', desc: 'Ferrous debris — heavy', priority: 'P1 Critical', raised: '2026-09-18', type: '4000 Hours service Planned', hours: 4000, plan: '2026-09-18' },
+    { wo: 'WO-016620', equip: 'TK126', cls: 'HT', comp: 'Frame / guards', desc: 'Abnormal wear', priority: 'P2 Severe', raised: '2026-09-19', type: '2.1', hours: null, plan: '' },
   ],
 };
 
@@ -172,6 +172,13 @@ const jpg = p => p.evaluate(() => {
   await p.waitForTimeout(50);
   ok('and then that a signature is needed', /sign/i.test(await p.textContent('#rtwProgress')));
   ok('Save is still disabled with no signature', await p.isDisabled('#rtwSaveBtn'));
+  /* touch-action:none is what actually makes a real touchscreen drag reach
+     this canvas instead of scrolling .rtw-ov-body underneath it — dispatchEvent
+     below calls the JS handlers directly and would pass identically whether
+     or not this CSS is present, so it cannot substitute for this check. See
+     the CSS rule's own comment (mobile/index.html, .rtw-sign-pad-slot canvas). */
+  ok('the signature canvas cannot be scrolled through — touch-action is none',
+    await p.evaluate(() => getComputedStyle(document.getElementById('rtwSignCanvas')).touchAction) === 'none');
   await draw(p);
   await p.waitForTimeout(100);
   ok('Save enables once every condition is actually met', !(await p.isDisabled('#rtwSaveBtn')));
@@ -252,21 +259,52 @@ const jpg = p => p.evaluate(() => {
     return secs.map((s) => s.html).join('');
   }, rec.id);
   ok('the masthead names the round Return to Work, not a raw type code', /Return to Work/.test(html));
-  ok('the work order from the record is on the sheet', html.includes('WO-016635'));
-  ok('both checklist sections print, in the document\'s own order', (() => {
-    const pre = html.indexOf('Pre-release inspection');
-    const post = html.indexOf('Service completion');
+  ok('the work order from the record is on the sheet, at the TOP — before the checklist table', (() => {
+    const wo = html.indexOf('WO-016635'), tbl = html.indexOf('rtw-tbl');
+    return wo >= 0 && tbl > wo;
+  })());
+  ok('carries the schedule it was raised against: type, plan date and hour tier',
+    rec.rtwWoType === '4000 Hours service Planned' && rec.rtwSchedDate === '2026-09-18' && rec.rtwSchedHours === 4000);
+  ok('the work order\'s own type reaches the header strip', html.includes('4000 Hours service Planned'));
+  ok('1C\'s plan date reaches the header strip', html.includes('2026-09-18'));
+  ok('the scheduled hour tier reaches the header strip, in hours', /4000\s*h\b/.test(html));
+  ok('both checklist sections print, NUMBERED, in the document\'s own order', (() => {
+    const pre = html.indexOf('1. Pre-release inspection');
+    const post = html.indexOf('2. Service completion');
     return pre >= 0 && post > pre;
   })());
+  ok('the checklist is ONE running table, not one per section — its column header prints once',
+    (html.match(/<table class="rtw-tbl"/g) || []).length === 1
+    && (html.split('Description of operations').length - 1) === 1);
   ok('a checklist item\'s own text prints, not just its number', /Confirm the original repair work is complete/.test(html));
   ok('the Attention item\'s mark and comment both reach the sheet', /Ferrous debris cleared and repaired\./.test(html));
-  ok('a Pass item is marked P, not left blank', />P</.test(html));
+  ok('the comment sits in its OWN column beside the row, not a full-width strip underneath it',
+    !/rnote/.test(html) && /rtw-cm[^>]*>Ferrous debris cleared and repaired\./.test(html));
+  // Bilingual (the default report language) correctly prints "P / Н" now that
+  // tbRtwMark goes through T.I — a plain />P</ match is the PRE-FIX (English-
+  // only) shape and would false-fail on the fixed, bilingual-correct output.
+  ok('a Pass item is marked P, not left blank', />P(<|\s)/.test(html));
   ok('the release result is a verdict banner, not a quiet table cell', /class="verdict v-ok"[^>]*>[^<]*<b>[^<]*<\/b>[^<]*Repaired and safe to use/.test(html)
       || (html.includes('v-ok') && html.includes('Repaired and safe to use')));
   ok('RTW carries no 1–5 grade scale — the rating bar is skipped, not printed empty',
       !html.includes('CONDITION RATING') && !html.includes('Condition scale'));
   ok('page 2 holds the evidence gallery with a real photograph in it', html.includes('board gal b1') && /<img[^>]+src="data:/.test(html));
   ok('the Senior Mechanic\'s name and signature reach the approval table', html.includes('A. Ivanov') && /<img src="data:image\/png/.test(html));
+  ok('RTW has one signer — CM Technician and Reliability Engineer are dropped, Maintenance Supervisor stays',
+    !html.includes('CM Technician') && !html.includes('Reliability Engineer') && /Maintenance Supervisor/.test(html));
+
+  console.log('\n11b. the same report, in Russian — the checklist leads in Russian, not English');
+  const htmlRu = await p.evaluate(async (id) => {
+    localStorage.setItem('cm_rep_lang', 'ru');
+    try { const secs = await buildReportSections(id); return secs.map((s) => s.html).join(''); }
+    finally { localStorage.removeItem('cm_rep_lang'); }
+  }, rec.id);
+  ok('a Russian-only report shows the Russian checklist text, not the English one',
+    htmlRu.includes('Убедитесь, что первоначальные ремонтные работы завершены') && !htmlRu.includes('Confirm the original repair work is complete'));
+  ok('the Mark column also switches — "Н" (Russian pass), not the English "P"',
+    />Н</.test(htmlRu) && !/>P</.test(htmlRu));
+  ok('the release verdict switches too', htmlRu.includes('Отремонтирован') && !htmlRu.includes('Repaired and safe to use'));
+  ok('the numbered section titles switch', htmlRu.includes('1. Контрольный осмотр') || /1\.\s*Контрольный/.test(htmlRu));
 
   console.log('\n12. "D — not released" is unmistakable on the printed sheet');
   // Reopen TK126's WO-016620 (the D case from section 9) and actually save it

@@ -140,6 +140,23 @@
    (And no back-ticks in this comment: it lives inside the template literal
    that IS the stylesheet, and one would end it.) */
 #rptRoot tr.rnote td{border-top:0;padding-top:0;color:#4a545e;font-weight:600;}
+/* RTW's own section divider, INSIDE the one running table — see rtwChecklist's
+   own comment for why this replaced a second table with its own repeated
+   No./Description/Mark header before Section 2. Same ink and case as .subhd,
+   so a divider row reads as the same kind of thing whether it is a div above
+   a table or a row inside one. */
+#rptRoot tr.rtw-sec td{font-size:9.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;
+  color:#3d474f;border-bottom:1px solid #eaeef1;border-top:1.5px solid #12161a;padding:10px 8px 5px;}
+/* The comment lives in its own column, not a row of its own underneath —
+   see rtwChecklist's own comment for why. Same ink as .rnote, and the same
+   left-border stripe technique as td.stripe, but as an ordinary cell rather
+   than a full-width row. Compact throughout (rtw-tbl): the 23-item checklist
+   is asked to hold to one page, and a table this dense earns back more room
+   from tighter row padding than from anything else on the sheet. */
+#rptRoot table.rtw-tbl td{padding:3.5px 8px;font-size:10px;line-height:1.32;}
+#rptRoot table.rtw-tbl th{padding:0 8px 3.5px;}
+#rptRoot table.rtw-tbl tr.rtw-sec td{padding:7px 8px 3px;}
+#rptRoot table.rtw-tbl td.rtw-cm{color:#4a545e;font-weight:600;border-left:3px solid transparent;padding-left:7px;}
 #rptRoot .unit{font-weight:750;letter-spacing:-.01em;white-space:nowrap;}
 #rptRoot .code{font-size:9.5px;color:#5b6670;font-variant-numeric:tabular-nums;
   letter-spacing:.02em;white-space:nowrap;}
@@ -988,6 +1005,7 @@
       method_LUBE:"Lubrication",
       method_RTW:"Return to Work",
       rtw_no:"No.", rtw_desc:"Description of operations", rtw_mark:"Mark", rtw_comment:"Comment",
+      rtw_comments:"Comments", rtw_wo_type:"Type", rtw_sched:"Scheduled", rtw_sched_hours:"Hours",
       rtw_pre:"Pre-release inspection", rtw_post:"Service completion",
       rtw_photos:"Evidence", rtw_release:"Final release", rtw_senior:"Senior Mechanic",
       rtw_pass:"P", rtw_attn:"!", rtw_na:"N/A",
@@ -1190,6 +1208,7 @@
       method_LUBE:"\u0421\u043c\u0430\u0437\u043a\u0430",
       method_RTW:"\u0412\u043e\u0437\u0432\u0440\u0430\u0442 \u0432 \u0440\u0430\u0431\u043e\u0442\u0443",
       rtw_no:"\u2116", rtw_desc:"\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435 \u043e\u043f\u0435\u0440\u0430\u0446\u0438\u0438", rtw_mark:"\u041e\u0442\u043c\u0435\u0442\u043a\u0430", rtw_comment:"\u041a\u043e\u043c\u043c\u0435\u043d\u0442\u0430\u0440\u0438\u0439",
+      rtw_comments:"\u041a\u043e\u043c\u043c\u0435\u043d\u0442\u0430\u0440\u0438\u0438", rtw_wo_type:"\u0422\u0438\u043f", rtw_sched:"\u041f\u043b\u0430\u043d", rtw_sched_hours:"\u041d\u0430\u0440\u0430\u0431\u043e\u0442\u043a\u0430",
       rtw_pre:"\u041a\u043e\u043d\u0442\u0440\u043e\u043b\u044c\u043d\u044b\u0439 \u043e\u0441\u043c\u043e\u0442\u0440 \u043f\u0435\u0440\u0435\u0434 \u0432\u043e\u0437\u0432\u0440\u0430\u0442\u043e\u043c \u0432 \u0440\u0430\u0431\u043e\u0442\u0443", rtw_post:"\u041e\u043a\u043e\u043d\u0447\u0430\u043d\u0438\u0435 \u043e\u0431\u0441\u043b\u0443\u0436\u0438\u0432\u0430\u043d\u0438\u044f",
       rtw_photos:"\u0424\u043e\u0442\u043e\u0444\u0438\u043a\u0441\u0430\u0446\u0438\u044f", rtw_release:"\u0414\u043e\u043f\u0443\u0441\u043a \u043a \u0440\u0430\u0431\u043e\u0442\u0435", rtw_senior:"\u0421\u0442\u0430\u0440\u0448\u0438\u0439 \u043c\u0435\u0445\u0430\u043d\u0438\u043a",
       rtw_pass:"\u041d", rtw_attn:"!", rtw_na:"\u041d/\u041f",
@@ -2643,7 +2662,7 @@
      phone's own PDF printed the signature. The row is filled from the record
      where the record has it, with the signature as an image beside the date,
      and stays an open line where it does not: nothing is invented. */
-  function approvalBlock(T, rec) {
+  function approvalBlock(T, rec, onlySup) {
     function row(role, name, status, date, open, sig) {
       return '<tr><td class="rl">' + esc(role) + '</td>'
         + '<td>' + (open ? '<span class="sg"></span>' : '<span class="nm">' + esc(name) + '</span>') + '</td>'
@@ -2660,6 +2679,25 @@
                   : rec.signErr ? T("ap_sig_err")
                   : rec.signed  ? T("ap_sig_miss")
                   : T("ap_sup_n");
+    /* RETURN TO WORK HAS ONE SIGNER, NOT THREE. Every other round type is
+       walked by a CM technician and reviewed by a reliability engineer
+       before a supervisor verifies it — RTW is a repair-release checklist
+       one Senior Mechanic completes and signs on the spot; there is no
+       separate technician or reviewer role in that workflow at all. Printing
+       the other two rows open (a blank signature line under "CM Technician"
+       nobody was ever going to fill in) asked for two signatures the form
+       never needed, on a document that already carries one real one below.
+       `onlySup` is only ever passed from RTW's own branch; every other
+       caller keeps all three rows exactly as before. */
+    if (onlySup) {
+      return '<table class="appr"><thead><tr>'
+        + '<th>' + esc(T("ap_role")) + '</th><th>' + esc(T("ap_name")) + '</th>'
+        + '<th>' + esc(T("ap_status")) + '</th><th>' + esc(T("ap_date")) + '</th></tr></thead><tbody>'
+        + (verified
+            ? row(T("ap_sup"), rec.sup || T("ma_none"), supStatus, rec.signUrl ? (rec.date || "") : "", false, rec.signUrl || "")
+            : row(T("ap_sup"), "", T("ap_sup_s"), "", true))
+        + '</tbody></table>';
+    }
     return '<table class="appr"><thead><tr>'
       + '<th>' + esc(T("ap_role")) + '</th><th>' + esc(T("ap_name")) + '</th>'
       + '<th>' + esc(T("ap_status")) + '</th><th>' + esc(T("ap_date")) + '</th></tr></thead><tbody>'
@@ -2963,38 +3001,103 @@
      carries no grade at all, by design — see mobile/rtw.js). */
   function tbRtwMark(T, it) {
     var m = it.mark || "";
-    if (m === "pass") return '<b style="color:' + GRADE_HEX[1] + '">' + esc(T("rtw_pass")) + '</b>';
-    if (m === "attention") return '<b style="color:' + GRADE_HEX[4] + '">' + esc(T("rtw_attn")) + '</b>';
-    if (m === "na") return '<span class="muted">' + esc(T("rtw_na")) + '</span>';
+    /* T.I, not a bare T(...): the bare form is documented (makeT's own
+       comment) as primary-language-only, for a title attribute or a joined
+       fragment never shown bilingual — and this cell prints inside a
+       bilingual table where every neighbouring cell (the description, the
+       verdict banner) already goes both languages. It silently stayed
+       English-only (or Russian-only) whichever the report's OTHER language
+       was, on the one column a reader checks first: field-reported as
+       "shifting from English to Russian in the report has a bug". */
+    if (m === "pass") return '<b style="color:' + GRADE_HEX[1] + '">' + T.I("rtw_pass") + '</b>';
+    if (m === "attention") return '<b style="color:' + GRADE_HEX[4] + '">' + T.I("rtw_attn") + '</b>';
+    if (m === "na") return '<span class="muted">' + T.I("rtw_na") + '</span>';
     return tbMiss(T);
   }
-  /* The work order, in the same compact strip the status block already uses
-     (.sstrip/.sc/.sk/.sv) — no new CSS for a one-cell fact. The release
-     result gets its OWN treatment, not a cell beside it: this is the one
-     verdict the whole document exists to state, and "D — Faulty and unsafe
-     to use" sitting in the same small type as a work-order number is not
-     unmistakable — the confirmed design rule for this report. It reuses the
-     same red/amber/green verdict banner every wear round already prints its
-     own decision in (.verdict/.v-act/.v-watch/.v-ok), so a D result reads as
-     unmistakably as a Critical grade does everywhere else in this document. */
+  /* THE WORK ORDER, ITS TYPE, ITS SCHEDULE AND ITS HOUR TIER — AT THE TOP,
+     BEFORE THE VERDICT, NOT A BOX PARTWAY DOWN THE PAGE.
+     Read as a compact strip (.sstrip/.sc/.sk/.sv, the same cells the status
+     block already uses — no new CSS for what is still a handful of one-line
+     facts) so it costs one row of page height whether it carries one fact or
+     four, not one boxed line per fact. `rtwWoType`/`rtwSchedHours`/
+     `rtwSchedDate` come from the work order 1C actually raised this release
+     against (ingest/ingest_work_orders.py's build_rtw_open, carried through
+     Pick → Save → recToExport0) — a defect work order has no hour tier and
+     that cell is simply not printed, never guessed. */
+  function rtwHeaderStrip(T, rec) {
+    if (!rec.rtwWo && !rec.rtwWoType && !rec.rtwSchedDate && rec.rtwSchedHours == null) return "";
+    function cell(k, v) { return '<div class="sc"><div class="sk">' + esc(k) + '</div><div class="sv">' + v + '</div></div>'; }
+    var cells = "";
+    if (rec.rtwWo) cells += cell(T("ma_wo"), esc(rec.rtwWo));
+    if (rec.rtwWoType) cells += cell(T.I("rtw_wo_type"), esc(rec.rtwWoType));
+    if (rec.rtwSchedDate) cells += cell(T.I("rtw_sched"), esc(rec.rtwSchedDate));
+    if (rec.rtwSchedHours != null) cells += cell(T.I("rtw_sched_hours"), esc(rec.rtwSchedHours) + " h");
+    return '<div class="sstrip" style="margin-top:10px;">' + cells + '</div>';
+  }
+  /* The release result gets its OWN treatment, not a cell beside the others
+     above: this is the one verdict the whole document exists to state, and
+     "D — Faulty and unsafe to use" sitting in the same small type as a work
+     order number is not unmistakable — the confirmed design rule for this
+     report. It reuses the same red/amber/green verdict banner every wear
+     round already prints its own decision in (.verdict/.v-act/.v-watch/
+     .v-ok), so a D result reads as unmistakably as a Critical grade does
+     everywhere else in this document. */
   function rtwSummary(T, rec) {
-    var out = "";
-    if (rec.rtwWo) {
-      out += '<div class="sstrip" style="margin-top:10px;"><div class="sc"><div class="sk">'
-        + esc(T("ma_wo")) + '</div><div class="sv">' + esc(rec.rtwWo) + '</div></div></div>';
-    }
     var res = (window.RTW_RESULTS || {})[rec.rtwResult];
-    if (res) {
-      var cls = rec.rtwResult === "D" ? "v-act" : rec.rtwResult === "N" ? "v-watch" : "v-ok";
-      out += '<div class="verdict ' + cls + '" style="margin-top:8px;"><b>' + T.I("rtw_release") + ':</b> '
-        + T.both(res.en, res.ru, "alti") + '</div>';
-    }
-    return out;
+    if (!res) return "";
+    var cls = rec.rtwResult === "D" ? "v-act" : rec.rtwResult === "N" ? "v-watch" : "v-ok";
+    /* T.pair, not T.both: res.en/res.ru is a fixed pair from mobile/rtw.js,
+       not a primary-and-alternate pair already in the report's own language
+       — T.both always prints its FIRST argument as the primary text (and,
+       outside a bilingual report, ONLY that argument), so a Russian-language
+       report kept printing the English verdict text. Same class of bug as
+       tbRtwMark's, on the one line the whole document exists to state. */
+    return '<div class="verdict ' + cls + '" style="margin-top:8px;"><b>' + T.I("rtw_release") + ':</b> '
+      + T.pair(res.en, res.ru, "alti") + '</div>';
   }
   /* The 23-item checklist, in the document's own two sections — Pre-release
-     inspection then Service completion — never as one flat table, because
-     that is the shape RTW_SECTIONS/RTW_ITEMS (mobile/rtw.js) name and both
-     surfaces read the identical text from there, never a second copy here. */
+     inspection then Service completion — as ONE running table, sections
+     marked by a numbered divider row INSIDE it, not two separate tables.
+
+     Two sections each built through typeTable() printed the column header
+     (No. / Description of operations / Mark) a second time immediately
+     before Section 2 — read on a real printed sheet as the reader having
+     left the checklist and started a different table halfway down the page.
+     A header states a column's meaning once; repeating it mid-form states
+     nothing new and costs a line every section adds. The section names
+     themselves carry no number of their own (RTW_SECTIONS is keyed "1"/"2"
+     but never prints the digit) — "Pre-release inspection" and "Service
+     completion" read as two headings, not as "there are two sections and
+     this is the second", so the divider is numbered here.
+
+     Rows are built from the shared checklist text (RTW_ITEMS), never from
+     the item's own combined "no — description" label (itemLabelFor's own
+     shape, used elsewhere for a single-line reference) — this table already
+     has a No. column, and printing the number twice in one row is the kind
+     of thing a reader notices on the third line, not the first. The
+     comment's stripe colour rides `sev`, same lookup every other type's
+     typeTable row already uses (SEV_HEX), so an Attention item's own note
+     stands out the way a Degraded finding's does.
+
+     T.pair, not T.both, for the section title and the row description: both
+     are fixed en/ru pairs from mobile/rtw.js, not a primary-and-alternate
+     pair already in the report's own language, and T.both always leads with
+     its FIRST argument — a Russian-language report kept the checklist text
+     in English regardless. Same bug class as tbRtwMark's and rtwSummary's,
+     just on the two columns that carry the actual words of the form.
+
+     COMMENTS ARE THEIR OWN COLUMN, ON THE RIGHT — not the below-row `.rnote`
+     strip every other table-bodied type uses. Asked for by name, and it
+     earns its keep here for a second reason: a comment on its own full-width
+     row under the position adds a whole row's height for the ~4 items that
+     carry one, on the one report this project needs to hold to ONE page —
+     23 items is already close to a page's room, and a right-hand column
+     costs nothing extra per row instead of a row-and-a-half. `rtw-tbl`
+     tightens the row padding/font a step further for the same reason: nine
+     columns of margin nobody reads costs more than the words do. Left
+     blank when there is nothing to say — this is an optional annotation,
+     never a field the round is expected to carry, so there is no "Not
+     recorded" gap to name (tbMiss's own rule, see its comment above). */
   function rtwChecklist(ctx, T, rec) {
     var byKey = {};
     (rec.items || []).forEach(function (it) { byKey[it.key] = it; });
@@ -3004,21 +3107,10 @@
     defs.forEach(function (d) {
       (bySec[d.section] = bySec[d.section] || []).push(d);
     });
-    /* Rows are built from the shared checklist text (RTW_ITEMS), never from
-       the item's own combined "no — description" label (itemLabelFor's own
-       shape, used elsewhere for a single-line reference) — this table
-       already has a No. column, and printing the number twice in one row
-       is the kind of thing a reader notices on the third line, not the
-       first. The comment's stripe colour rides `sev`, same lookup every
-       other type's typeTable row already uses (SEV_HEX), so an Attention
-       item's own note stands out the way a Degraded finding's does. */
-    var cols = [
-      { th: T.L("rtw_no"), w: "34px", get: function (row) { return esc(row.no); } },
-      { th: T.L("rtw_desc"), get: function (row) { return T.both(row.en, row.ru, "alti"); } },
-      { th: T.L("rtw_mark"), w: "60px", cls: "n", get: function (row) { return tbRtwMark(T, row); } }
-    ];
-    var out = "";
-    Object.keys(secDefs).sort().forEach(function (s) {
+    var secKeys = Object.keys(secDefs).sort();
+    var body = "";
+    var secNum = 0;
+    secKeys.forEach(function (s) {
       var rows = (bySec[s] || []).filter(function (d) { return byKey[d.no]; })
         .map(function (d) {
           var it = byKey[d.no];
@@ -3027,10 +3119,22 @@
                     sev: it.mark === "attention" ? "DEG" : "" };
         });
       if (!rows.length) return;
-      out += '<div class="subhd" style="margin-top:12px;">' + T.both(secDefs[s].en, secDefs[s].ru, "alti") + '</div>'
-        + typeTable(cols, rows);
+      secNum++;
+      body += '<tr class="rtw-sec"><td colspan="4">' + esc(secNum + ". ")
+        + T.pair(secDefs[s].en, secDefs[s].ru, "alti") + '</td></tr>';
+      rows.forEach(function (row, i) {
+        var zebra = i % 2 ? "zebra" : "";
+        body += '<tr class="' + zebra + '"><td>' + esc(row.no) + '</td>'
+          + '<td>' + T.pair(row.en, row.ru, "alti") + '</td>'
+          + '<td class="n">' + tbRtwMark(T, row) + '</td>'
+          + '<td class="rtw-cm"' + (row.comment ? ' style="border-left-color:' + (SEV_HEX[row.sev] || "transparent") + '"' : '')
+          + '>' + (row.comment ? esc(row.comment) : '') + '</td></tr>';
+      });
     });
-    return out;
+    if (!body) return "";
+    return '<table class="rtw-tbl"><tr><th style="width:26px">' + T.L("rtw_no") + '</th><th>' + T.L("rtw_desc")
+      + '</th><th class="n" style="width:48px">' + T.L("rtw_mark") + '</th>'
+      + '<th style="width:26%">' + T.L("rtw_comments") + '</th></tr>' + body + '</table>';
   }
   /* Page 2 — every photograph the round holds, captioned by which checklist
      line it belongs to. The machine's own general evidence (GEN_KEY) is
@@ -3258,7 +3362,7 @@
          `rec.sup`/`rec.signUrl` exactly as every other type's verifier is. */
       if (rec.type === "RTW") {
         secs.push({ nb: n > 0, html: '<div class="sec">' + head + mstrip
-          + rtwSummary(T, rec) + rtwChecklist(ctx, T, rec)
+          + rtwHeaderStrip(T, rec) + rtwSummary(T, rec) + rtwChecklist(ctx, T, rec)
           + (rec.rtwComment ? '<div class="subhd" style="margin-top:12px;">' + T.I("rtw_release") + '</div>'
               + '<div class="mact"><span class="f" style="flex-basis:100%"><i>' + esc(T("rtw_comment"))
               + '</i><b>' + esc(rec.rtwComment) + '</b></span></div>' : "")
@@ -3274,7 +3378,7 @@
           secs.push({ nb: false, html: '<div class="sec"><div class="subhd">' + T.I("rtw_photos") + '</div>'
             + '<div class="board gal b1">' + rtwPh.map(function (it) { return cell(ctx, T, it, null, true); }).join("") + '</div></div>' });
         }
-        secs.push({ nb: false, html: '<div class="sec">' + approvalBlock(T, rec) + '</div>' });
+        secs.push({ nb: false, html: '<div class="sec">' + approvalBlock(T, rec, true) + '</div>' });
         evidenceSections(T, rec).forEach(function (x) { secs.push(x); });
         return;
       }

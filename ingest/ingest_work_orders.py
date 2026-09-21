@@ -425,6 +425,15 @@ def find_header_row(ws, must_have=("Asset description", "Equip no")):
 # main(), so it can be unit-tested without the openpyxl/network dependencies
 # the rest of this script needs (see tests/rtwopen.py).
 def build_rtw_open(work_orders, cm_dedup):
+    # `type`/`hours`/`plan` feed Return to Work's own header strip (the work
+    # order, its maintenance type, its scheduled hour tier and 1C's own plan
+    # date) -- asked for so a released round can be checked against what was
+    # actually scheduled, not just which WO number it closed against. A
+    # planned PM service (the `work_orders` half) genuinely has all three; a
+    # defect work order (the `cm_dedup` half) is not hour-tiered, so `hours`
+    # stays null there rather than guessed, and `type` falls back to the
+    # defect's own system/description -- the same "say what is known, never
+    # what is guessed" rule this file applies everywhere else.
     seen, out = set(), []
     for w in work_orders:
         wo = w.get("woNumber")
@@ -435,6 +444,8 @@ def build_rtw_open(work_orders, cm_dedup):
             "wo": wo, "equip": (w.get("equip") or "").upper(), "cls": w.get("cls") or "",
             "comp": "", "desc": w.get("cmLabel") or w.get("maintType") or "",
             "priority": w.get("priority") or "", "raised": w.get("planStart") or "",
+            "type": w.get("maintType") or w.get("cmLabel") or "",
+            "hours": w.get("hours"), "plan": w.get("planStart") or "",
         })
     for r in cm_dedup:
         wo = r.get("woNumber")
@@ -445,6 +456,8 @@ def build_rtw_open(work_orders, cm_dedup):
             "wo": wo, "equip": (r.get("asset") or "").upper(), "cls": "",
             "comp": r.get("system") or "", "desc": r.get("descr") or r.get("defectType") or "",
             "priority": r.get("priority") or "", "raised": r.get("date") or "",
+            "type": r.get("defectType") or r.get("system") or "",
+            "hours": None, "plan": r.get("planStart") or "",
         })
     out.sort(key=lambda r: r["raised"] or "", reverse=True)
     return out
