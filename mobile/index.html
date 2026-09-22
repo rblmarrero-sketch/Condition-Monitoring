@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=442">
+<link rel="manifest" href="manifest.webmanifest?v=443">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=442">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=442">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=442">
+<link rel="apple-touch-icon" href="icon-192.png?v=443">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=443">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=443">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2457,7 +2457,7 @@
 <div id="rtwOv" class="rtw-ov hidden">
   <div id="rtwPick" class="rtw-screen">
     <div class="rtw-ov-head">
-      <button type="button" class="rtw-ov-back" id="rtwPickBack">‹</button>
+      <button type="button" class="rtw-ov-back" id="rtwPickBack" data-i18n-title="back_title" title="Back">‹</button>
       <div>
         <b data-i18n="rtw_pick_title">Return to Work</b>
         <div class="hint" data-i18n="rtw_pick_sub">Pick the work order — this fills in the equipment</div>
@@ -2476,7 +2476,7 @@
   </div>
   <div id="rtwChecklistScr" class="rtw-screen hidden">
     <div class="rtw-ov-head">
-      <button type="button" class="rtw-ov-back" id="rtwChecklistBack">‹</button>
+      <button type="button" class="rtw-ov-back" id="rtwChecklistBack" data-i18n-title="back_title" title="Back">‹</button>
       <div>
         <b data-i18n="rtw_checklist_title">Return to Work</b>
         <div class="hint" data-i18n="rtw_checklist_sub">Repair release checklist</div>
@@ -2758,16 +2758,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=442"></script>
-<script src="upload-defaults.js?v=442"></script>
-<script src="hme.js?v=442"></script>
-<script src="mp-fc.js?v=442"></script>
-<script src="rtw.js?v=442"></script>
-<script src="hme-cascade.js?v=442"></script>
-<script src="assets.js?v=442"></script>
-<script src="temp-limits.js?v=442"></script>
-<script src="normalize.js?v=442"></script>
-<script src="terms.js?v=442"></script>
+<script src="native.js?v=443"></script>
+<script src="upload-defaults.js?v=443"></script>
+<script src="hme.js?v=443"></script>
+<script src="mp-fc.js?v=443"></script>
+<script src="rtw.js?v=443"></script>
+<script src="hme-cascade.js?v=443"></script>
+<script src="assets.js?v=443"></script>
+<script src="temp-limits.js?v=443"></script>
+<script src="normalize.js?v=443"></script>
+<script src="terms.js?v=443"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2786,25 +2786,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=442"></script>
-<script src="edits.js?v=442"></script>
-<script src="due.js?v=442"></script>
-<script src="wear.js?v=442"></script>
-<script src="wear-figs.js?v=442"></script>
-<script src="wear-map.js?v=442"></script>
-<script src="machine-photos.js?v=442"></script>
-<script src="machine-fig.js?v=442"></script>
-<script src="get.js?v=442"></script>
-<script src="points.js?v=442"></script>
-<script src="uc-points.js?v=442"></script>
-<script src="inspect-guide.js?v=442"></script>
-<script src="get-figs.js?v=442"></script>
-<script src="body-points.js?v=442"></script>
-<script src="body-map.js?v=442"></script>
-<script src="lube.js?v=442"></script>
-<script src="lube-overrides.js?v=442"></script>
-<script src="lube2027.js?v=442"></script>
-<script src="report-core.js?v=442"></script>
+<script src="grade.js?v=443"></script>
+<script src="edits.js?v=443"></script>
+<script src="due.js?v=443"></script>
+<script src="wear.js?v=443"></script>
+<script src="wear-figs.js?v=443"></script>
+<script src="wear-map.js?v=443"></script>
+<script src="machine-photos.js?v=443"></script>
+<script src="machine-fig.js?v=443"></script>
+<script src="get.js?v=443"></script>
+<script src="points.js?v=443"></script>
+<script src="uc-points.js?v=443"></script>
+<script src="inspect-guide.js?v=443"></script>
+<script src="get-figs.js?v=443"></script>
+<script src="body-points.js?v=443"></script>
+<script src="body-map.js?v=443"></script>
+<script src="lube.js?v=443"></script>
+<script src="lube-overrides.js?v=443"></script>
+<script src="lube2027.js?v=443"></script>
+<script src="report-core.js?v=443"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -10483,7 +10483,7 @@ function rtwRenderChecklist(keepSignDataUrl){
         <div class="rtw-evidence-row">
           <textarea data-rtw-note="${esc(def.no)}" data-i18n-ph="rtw_note_ph" placeholder="${esc(t('rtw_note_ph'))}" rows="1">${esc(it.comment||"")}</textarea>
           <button type="button" class="rtw-icon-btn" data-photo="${esc(def.no)}" title="${esc(t('rtw_pass'))}">📷${it.photos.length?`<span class="rtw-photo-badge">${it.photos.length}</span>`:""}</button>
-          <button type="button" class="rtw-icon-btn mic" data-dictate="${esc(def.no)}">🎙</button>
+          <button type="button" class="rtw-icon-btn mic" data-dictate="${esc(def.no)}" data-i18n-title="mic_title" title="${esc(t('mic_title'))}">🎙</button>
         </div>
       </div>
     </div>`;
@@ -10513,7 +10513,7 @@ function rtwRenderChecklist(keepSignDataUrl){
       <div class="rtw-release-field"><label>${esc(t('rtw_overall_t'))}</label>
         <div class="rtw-evidence-row">
           <textarea id="rtwOverallComment" placeholder="${esc(t('rtw_overall_ph'))}" rows="2">${esc(d.overallComment||"")}</textarea>
-          <button type="button" class="rtw-icon-btn mic" data-dictate="__overall">🎙</button>
+          <button type="button" class="rtw-icon-btn mic" data-dictate="__overall" data-i18n-title="mic_title" title="${esc(t('mic_title'))}">🎙</button>
         </div></div>
       <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--surface-2);border-radius:8px;padding:8px 10px;">
         <div><div style="font-size:12px;font-weight:700;color:var(--ink);">${esc(t('rtw_general_photos_t'))}</div>
@@ -14333,7 +14333,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="442";
+const BUILD="443";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
