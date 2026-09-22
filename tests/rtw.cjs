@@ -259,6 +259,10 @@ const jpg = p => p.evaluate(() => {
     return secs.map((s) => s.html).join('');
   }, rec.id);
   ok('the masthead names the round Return to Work, not a raw type code', /Return to Work/.test(html));
+  ok('the eyebrow states RTW specifically, not the generic "Field condition monitoring"', (() => {
+    const m = /<div class="eyebrow">([\s\S]*?)<\/div>/.exec(html);
+    return !!m && /Return to work/i.test(m[1]) && !/Field condition monitoring/i.test(m[1]);
+  })());
   ok('the work order number is in the MASTHEAD PILL, beside the report number — not a box down the page', (() => {
     const rnoBlock = /<div class="rno">([\s\S]*?)<\/div>/.exec(html);
     return !!rnoBlock && /RTW-TK112-\d+/.test(rnoBlock[1]) && rnoBlock[1].includes('WO-016635');
@@ -354,6 +358,62 @@ const jpg = p => p.evaluate(() => {
   }, recD.id) : '';
   ok('a "D — not released" round prints in the alarm colour, not a quiet cell',
       htmlD.includes('v-act') && /Faulty and unsafe to use/.test(htmlD));
+
+  console.log('\n13. editing a saved RTW round from the queue reopens RTW, not the graded wizard');
+  // "if I select edit, its going to Inspection page, it should go to RTW."
+  // rec is the TK112/WO-016635 round saved in section 7.
+  await p.evaluate(() => { showPane('paneQueue'); });
+  await p.evaluate(async () => { await renderPending(); });
+  await p.waitForTimeout(150);
+  const rowOpened = await p.evaluate((id) => {
+    const rows = [...document.querySelectorAll('#pending .pitem')];
+    const row = rows.find((r) => r.querySelector('.a')?.textContent.includes('TK112'));
+    if (!row) return false;
+    row.querySelector('.edit').click();
+    return true;
+  }, rec.id);
+  await p.waitForTimeout(200);
+  ok('the RTW round\'s row was found in the queue and its edit button clicked', rowOpened);
+  const editState = await p.evaluate(() => ({
+    rtwOvOpen: !document.getElementById('rtwOv').classList.contains('hidden'),
+    checklistOpen: !document.getElementById('rtwChecklistScr').classList.contains('hidden'),
+    pickHidden: document.getElementById('rtwPick').classList.contains('hidden'),
+    onCapturePane: document.getElementById('paneCapture')?.classList.contains('on') || false,
+    sup: document.getElementById('rtwSup')?.value || '',
+    wo: (rtwDraft || {}).wo || '',
+    editingId: (typeof rtwEditing !== 'undefined' && rtwEditing) ? rtwEditing.id : null,
+  }));
+  ok('the RTW overlay is open', editState.rtwOvOpen);
+  ok('the checklist screen is showing, with the Pick screen skipped', editState.checklistOpen && editState.pickHidden);
+  ok('the generic capture/inspection pane was never activated', !editState.onCapturePane);
+  ok('the draft was rebuilt from the SAVED record — same senior mechanic, same work order',
+    editState.sup === 'A. Ivanov' && editState.wo === 'WO-016635');
+  ok('rtwEditing tracks the record being corrected, by id', editState.editingId === rec.id);
+  const attItemReopened = await p.evaluate((no) => (rtwDraft.items[no] || {}), lastNo);
+  ok('the Attention item\'s mark and comment came back from the saved record',
+    attItemReopened.mark === 'attention' && /Ferrous debris/.test(attItemReopened.comment || ''));
+
+  console.log('\n14. re-saving the edit updates the SAME record — same id, revision bumped');
+  await p.click('#rtwSaveBtn');
+  await p.waitForTimeout(1200);
+  if (await p.evaluate(() => document.getElementById('dlg')?.open)) { await p.click('#dlgOk'); await p.waitForTimeout(200); }
+  const recAfterEdit = await p.evaluate(async (id) => {
+    const req = indexedDB.open('plug_capture');
+    const db = await new Promise((res, rej) => { req.onsuccess = () => res(req.result); req.onerror = () => rej(req.error); });
+    const tx = db.transaction('inspections', 'readonly');
+    const r = await new Promise((res, rej) => { const rq = tx.objectStore('inspections').getAll(); rq.onsuccess = () => res(rq.result); rq.onerror = () => rej(rq.error); });
+    return r.find((x) => x.id === id) || null;
+  }, rec.id);
+  ok('the edit replaced the original record — same id, no duplicate created', !!recAfterEdit);
+  ok('the revision was bumped, not reset', !!recAfterEdit && recAfterEdit.rev === (rec.rev || 1) + 1);
+  const allRtwCount = await p.evaluate(async () => {
+    const req = indexedDB.open('plug_capture');
+    const db = await new Promise((res, rej) => { req.onsuccess = () => res(req.result); req.onerror = () => rej(req.error); });
+    const tx = db.transaction('inspections', 'readonly');
+    const r = await new Promise((res, rej) => { const rq = tx.objectStore('inspections').getAll(); rq.onsuccess = () => res(rq.result); rq.onerror = () => rej(rq.error); });
+    return r.filter((x) => x.type === 'RTW' && x.equip === 'TK112').length;
+  });
+  ok('editing never leaves a second, duplicate RTW round on this equipment behind', allRtwCount === 1);
 
   await b.close();
   srv.close();

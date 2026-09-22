@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=437">
+<link rel="manifest" href="manifest.webmanifest?v=438">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=437">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=437">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=437">
+<link rel="apple-touch-icon" href="icon-192.png?v=438">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=438">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=438">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2758,16 +2758,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=437"></script>
-<script src="upload-defaults.js?v=437"></script>
-<script src="hme.js?v=437"></script>
-<script src="mp-fc.js?v=437"></script>
-<script src="rtw.js?v=437"></script>
-<script src="hme-cascade.js?v=437"></script>
-<script src="assets.js?v=437"></script>
-<script src="temp-limits.js?v=437"></script>
-<script src="normalize.js?v=437"></script>
-<script src="terms.js?v=437"></script>
+<script src="native.js?v=438"></script>
+<script src="upload-defaults.js?v=438"></script>
+<script src="hme.js?v=438"></script>
+<script src="mp-fc.js?v=438"></script>
+<script src="rtw.js?v=438"></script>
+<script src="hme-cascade.js?v=438"></script>
+<script src="assets.js?v=438"></script>
+<script src="temp-limits.js?v=438"></script>
+<script src="normalize.js?v=438"></script>
+<script src="terms.js?v=438"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2786,25 +2786,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=437"></script>
-<script src="edits.js?v=437"></script>
-<script src="due.js?v=437"></script>
-<script src="wear.js?v=437"></script>
-<script src="wear-figs.js?v=437"></script>
-<script src="wear-map.js?v=437"></script>
-<script src="machine-photos.js?v=437"></script>
-<script src="machine-fig.js?v=437"></script>
-<script src="get.js?v=437"></script>
-<script src="points.js?v=437"></script>
-<script src="uc-points.js?v=437"></script>
-<script src="inspect-guide.js?v=437"></script>
-<script src="get-figs.js?v=437"></script>
-<script src="body-points.js?v=437"></script>
-<script src="body-map.js?v=437"></script>
-<script src="lube.js?v=437"></script>
-<script src="lube-overrides.js?v=437"></script>
-<script src="lube2027.js?v=437"></script>
-<script src="report-core.js?v=437"></script>
+<script src="grade.js?v=438"></script>
+<script src="edits.js?v=438"></script>
+<script src="due.js?v=438"></script>
+<script src="wear.js?v=438"></script>
+<script src="wear-figs.js?v=438"></script>
+<script src="wear-map.js?v=438"></script>
+<script src="machine-photos.js?v=438"></script>
+<script src="machine-fig.js?v=438"></script>
+<script src="get.js?v=438"></script>
+<script src="points.js?v=438"></script>
+<script src="uc-points.js?v=438"></script>
+<script src="inspect-guide.js?v=438"></script>
+<script src="get-figs.js?v=438"></script>
+<script src="body-points.js?v=438"></script>
+<script src="body-map.js?v=438"></script>
+<script src="lube.js?v=438"></script>
+<script src="lube-overrides.js?v=438"></script>
+<script src="lube2027.js?v=438"></script>
+<script src="report-core.js?v=438"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -10214,6 +10214,7 @@ let dueBurstT0 = 0, dueBurstN = 0, dueRunaway = false;
    corrupt an unrelated in-progress round's supervisor signature. */
 let rtwDraft=null;         // null when the overlay is closed
 let rtwExpanded=null;      // Set of item numbers with evidence force-opened
+let rtwEditing=null;       // the saved record being corrected, or null for a fresh release
 let rtwPhotoTarget=null;   // which item no. (or "__general") the next photo file goes to
 let rtwSaving=false;
 let rtwSignCanvas=null, rtwSigning=false, rtwSignDirty=false;
@@ -10270,11 +10271,46 @@ function rtwOpenPick(){
 }
 function rtwClose(){
   $("rtwOv").classList.add("hidden");
-  rtwDraft=null; rtwExpanded=null; rtwPhotoTarget=null;
+  rtwDraft=null; rtwExpanded=null; rtwPhotoTarget=null; rtwEditing=null;
   rtwSignCanvas=null; rtwSignDirty=false; rtwSigning=false;
+}
+/* REOPENING AN ALREADY-SAVED RTW ROUND, NOT A FRESH ONE FROM THE PICK
+   SCREEN. Tapping "edit" on a saved round from the phone's own queue
+   (renderPending's openEdit) used to call the generic wizard's editRecord()
+   for EVERY type, RTW included — which rebuilt `draft` from a graded
+   position shape RTW's own records have never carried (mark/comment, no
+   grade) and opened the Setup -> Findings -> Review wizard instead of RTW's
+   own checklist overlay. Reported plainly: "if I select edit, its going to
+   Inspection page, it should go to RTW." This rebuilds rtwDraft from the
+   SAVED record's own fields — the shape rtwSave() wrote, read back the way
+   editRecord() reads the graded wizard's own shape back — and opens the
+   checklist screen directly, skipping the Pick screen entirely, since the
+   work order this round was raised against is already on the record. */
+async function rtwOpenForEdit(rec){
+  if(!rec || rec.type!=="RTW") return;
+  rtwEditing=rec;
+  const items={};
+  RTW_ITEMS.forEach(def=>{
+    const p=(rec.positions||{})[def.no]||{};
+    items[def.no]={ mark:p.mark||null, comment:p.comment||"", photos:(p.photos||[]).slice() };
+  });
+  const gen=(rec.positions||{})[GEN_KEY]||{};
+  rtwDraft={ wo:rec.rtwWo||"", equip:rec.equip||"", cls:rec.cls||"",
+    component:"", priority:rec.rtwWoPriority||"", date:rec.date||todayISO(),
+    woType:rec.rtwWoType||"", woHours:(rec.rtwSchedHours!=null?rec.rtwSchedHours:null), woPlan:rec.rtwSchedDate||"",
+    items, sup:rec.sup||"", result:rec.rtwResult||"R", overallComment:rec.rtwComment||"", released:false,
+    general:{ photos:(gen.photos||[]).slice(), comment:gen.comment||"" } };
+  rtwExpanded=new Set(Object.keys(items).filter(no=>items[no].mark==="attention"));
+  $("rtwOv").classList.remove("hidden");
+  $("rtwPick").classList.add("hidden");
+  $("rtwChecklistScr").classList.remove("hidden");
+  let signUrl=null;
+  if(isBlob(rec.sign)){ try{ signUrl=URL.createObjectURL(rec.sign); }catch(e){} }
+  rtwRenderChecklist(signUrl);
 }
 function rtwPickRow(row){
   if(!row) return;
+  rtwEditing=null;
   rtwDraft={ wo:row.wo, equip:row.equip, cls:row.cls||assetClassOf(row.equip)||"",
     component:row.comp||"", priority:row.priority||"", date:todayISO(),
     /* The work order's own type, hour tier and 1C plan date — carried from
@@ -10543,12 +10579,16 @@ async function rtwSave(){
     if(checklistRequired && !allChecksDone){ dlg(t("m_rtw_incomplete")); return; }
     if(!(d.sup||"").trim() || !rtwSignDirty){ dlg(t("m_rtw_needs_sign")); return; }
     const equip=d.equip, date=d.date||todayISO();
-    const id=`RTW__${equip}__${date}__${DEVICE}__${Date.now()}`;
-    const created=new Date().toISOString();
+    /* Correcting an already-saved round keeps its id and bumps rev, the same
+       rule the generic wizard's own Save handler follows for `editing` — see
+       rtwOpenForEdit's own comment. A fresh release (rtwEditing null) mints
+       an id the way it always has. */
+    const id=rtwEditing ? rtwEditing.id : `RTW__${equip}__${date}__${DEVICE}__${Date.now()}`;
+    const created=rtwEditing ? (rtwEditing.created||new Date().toISOString()) : new Date().toISOString();
     if(!gps) await getGps(true);
     const rec={ id, cls:d.cls||"", type:"RTW", equip, date, smu:"", by:(d.sup||"").trim(),
       sup:(d.sup||"").trim(), sign:await rtwSignBlob(), gps:gps||null, dev:DEVICE,
-      positions:{}, created, up:0, upTo:{}, rev:1, phv:2,
+      positions:{}, created, up:0, upTo:{}, rev:(rtwEditing?(rtwEditing.rev||0)+1:1), phv:2,
       rtwWo:d.wo||"", rtwResult:d.result||"R", rtwComment:(d.overallComment||"").trim(),
       rtwWoType:d.woType||"", rtwSchedHours:(d.woHours!=null?d.woHours:null), rtwSchedDate:d.woPlan||"",
       rtwWoPriority:d.priority||"" };
@@ -10596,7 +10636,13 @@ async function rtwSave(){
 $("rtwSaveBtn").onclick=()=>rtwSave();
 $("rtwEntryBtn").onclick=()=>rtwOpenPick();
 $("rtwPickBack").onclick=()=>rtwClose();
-$("rtwChecklistBack").onclick=()=>{ $("rtwChecklistScr").classList.add("hidden"); $("rtwPick").classList.remove("hidden"); rtwRenderPickList(); };
+$("rtwChecklistBack").onclick=()=>{
+  /* Editing an already-saved round opened the checklist directly, with no
+     Pick step to go back to — "Back" there closes the overlay instead of
+     revealing an empty or irrelevant Pick screen. */
+  if(rtwEditing){ rtwClose(); return; }
+  $("rtwChecklistScr").classList.add("hidden"); $("rtwPick").classList.remove("hidden"); rtwRenderPickList();
+};
 $("rtwPickQ").oninput=()=>rtwRenderPickList();
 $("rtwScanBtn").onclick=()=>{ scanMode="wo"; startScan(); };
 
@@ -13060,7 +13106,10 @@ async function renderPending(){
       <div class="b">${nPos} ${t("pos_count")} · ${nPhotos} ${t("photo_count")}${nVid?` · ${nVid}🎥`:""}${rec.smu?` · SMU ${esc(rec.smu)}`:""}${rec.sign?" · ✍":""}${rec.gps?" · 📍":""}</div>
       <div class="up ${up.k}">${esc(up.txt)}</div></div>
       <div class="acts"><button class="rpt1" title="${esc(t("rpt1_title"))}" aria-label="${esc(t("rpt1_title"))}">📄</button><button class="edit" title="${esc(t("edit_title"))}" aria-label="${esc(t("edit_title"))}">✎</button><button class="del" title="${esc(t("del_title"))}" aria-label="${esc(t("del_title"))}">🗑</button></div>`;
-    const openEdit=()=>editRecord(rec);
+    /* RTW's own shape (mark/comment, no grade) has no business going through
+       the graded wizard's editRecord() — reported plainly: "if I select
+       edit, its going to Inspection page, it should go to RTW." */
+    const openEdit=()=>rec.type==="RTW" ? rtwOpenForEdit(rec) : editRecord(rec);
     row.querySelector(".rpt1").onclick=guard(async(ev)=>{ev.stopPropagation();await reportOne(rec);});
     row.querySelector(".edit").onclick=(ev)=>{ev.stopPropagation();openEdit();};
     row.querySelector(".meta").onclick=openEdit; row.querySelector(".thumb").onclick=openEdit;
@@ -14284,7 +14333,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="437";
+const BUILD="438";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

@@ -1662,6 +1662,44 @@ than in the code the test was checking. Confirmed by reading
 `window.__rtwHdrDebug` off the live page (a temporary hook, removed once the
 real cause was found) rather than guessing from the output alone.
 
+**THE EYEBROW SAID WHAT KIND OF DOCUMENT THIS IS, GENERICALLY, EVEN ON A
+DOCUMENT THAT ALREADY IS ONE SPECIFIC KIND.** Every report's masthead opens
+with "Field condition monitoring" — correct on every graded round, where it
+is genuinely the only thing on the page that names the programme, but on an
+RTW sheet it sat one line above "Return to Work" stating something the title
+right under it already says better. Asked for by name: replace it with
+"Return to work / Контрольный осмотр перед возвратом в работу" for RTW only.
+`mastHead(T, rnoInner, eyebrowKey)` takes an optional third argument — every
+other type omits it and keeps "sub" ("Field condition monitoring") exactly
+as before; RTW's own call site is the only one that passes "rtw_eyebrow".
+
+**EDITING A SAVED RTW ROUND OPENED THE GRADED WIZARD, BECAUSE THE QUEUE'S
+"EDIT" BUTTON NEVER ASKED WHAT TYPE IT WAS OPENING.** Reported plainly: "if
+I select edit, its going to Inspection page, it should go to RTW." The
+Saved tab's row handler called `editRecord(rec)` for every type — which
+rebuilds `draft` from the GRADED shape (grade/sev/defect/cause) every other
+round type carries and RTW never has, so a technician correcting a typo on
+an already-signed release checklist landed in Setup → Findings → Review
+instead. `rtwOpenForEdit(rec)` is RTW's own mirror of `editRecord`: it
+rebuilds `rtwDraft` from the SAVED record's own fields (the shape
+`rtwSave()` actually wrote — `rtwWo`/`rtwWoType`/`rtwSchedHours`/
+`rtwSchedDate`/`rtwWoPriority`, each position's `mark`/`comment`/`photos`,
+the general block, the existing signature reloaded onto the pad) and opens
+the checklist screen directly, skipping the Pick screen entirely — the work
+order this round was raised against is already on the record, there is
+nothing left to pick. `rtwEditing` (parallel to the graded wizard's own
+`editing`) carries the original record through to Save, which now keeps its
+id and bumps `rev` the identical way the generic Save handler already does
+for `editing` — a correction replaces the round, it does not fork a second
+one. The queue's row handler is now `rec.type==="RTW" ? rtwOpenForEdit(rec)
+: editRecord(rec)` — the only call site that changed; every other type's
+edit path is untouched. `tests/rtw.cjs` §13-14 open a saved round from the
+real queue list (not a direct function call), confirm the checklist screen
+opens with the Pick screen skipped and the generic capture pane never
+activated, that the reloaded draft carries the original work order and
+senior mechanic, and that re-saving replaces the same id (bumped revision,
+no duplicate left behind) rather than minting a second round.
+
 ---
 
 ## Secrets
