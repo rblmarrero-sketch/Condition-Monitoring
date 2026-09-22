@@ -1797,6 +1797,40 @@ shapes (three photographs held short, five as four-plus-one), not only the
 DOM, which is the one check this class of bug has repeatedly needed and
 repeatedly not had until a real printed report disagreed with it.
 
+**A FIX PROVEN ON TWO SYNTHETIC FIXTURES IS NOT A FIX PROVEN ON THE
+DOCUMENT.** The build 441 fix above closed the exact two shapes reported —
+and a THIRD real report (TK117's Dump Body Thickness sheet, same day)
+arrived showing what looked like the identical defect a build later.
+Rendered under the already-fixed code with the same seven photographs
+(mixed portrait/landscape, matching the real sheet), it measured and
+rastered correctly: the full row reaches the line edge to edge, the
+three-photograph remainder sits flush left at the row's own tile size.
+The report the maintainer was looking at had simply been generated before
+build 441 reached that browser tab — the dashboard carries no service
+worker and no self-check the way the phone does, so an open tab keeps
+running whatever `report-core.js` it loaded until the page itself is
+reloaded, and a fixed function does nothing for a document already made
+from the old one. Nothing to fix there; only something to say plainly, and
+something to make certain of everywhere else this rule applies.
+
+That "certain of everywhere else" is `tests/photostandard.cjs`: every
+report type that ever calls into the shared gallery row — FC and INSP
+through `photoGallery()`, GET through its own register tail, TB and UC
+(the wear body) through their own trailing gallery, RTW through its own
+photo section — walked through its REAL per-type body
+(`CMDash.importRecords` → `CMReport.sectionsFor`, not a hand-built
+section), with five photographs of five genuinely different aspect
+ratios, in English, Russian and bilingual. Every one of the twenty-one
+combinations reaches the line edge to edge on a full row and sits flush
+left, at the row's own tile size, on a remainder — and one of them
+(INSP, bilingual) is also rasterised with the bundled html2canvas and
+sampled directly, because a DOM measurement is exactly what let the
+underlying defect ship looking fixed twice already. galorphan.cjs,
+galshort.cjs, galjustify.cjs and galmixed4.cjs each prove the shared
+function against one synthetic fixture; this suite is the standing proof
+that every TYPE actually reaches it, in every language the site reads
+this document in, not only the ones already covered directly.
+
 ---
 
 ## Secrets
