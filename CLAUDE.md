@@ -1662,16 +1662,22 @@ than in the code the test was checking. Confirmed by reading
 `window.__rtwHdrDebug` off the live page (a temporary hook, removed once the
 real cause was found) rather than guessing from the output alone.
 
-**THE EYEBROW SAID WHAT KIND OF DOCUMENT THIS IS, GENERICALLY, EVEN ON A
-DOCUMENT THAT ALREADY IS ONE SPECIFIC KIND.** Every report's masthead opens
-with "Field condition monitoring" — correct on every graded round, where it
-is genuinely the only thing on the page that names the programme, but on an
-RTW sheet it sat one line above "Return to Work" stating something the title
-right under it already says better. Asked for by name: replace it with
-"Return to work / Контрольный осмотр перед возвратом в работу" for RTW only.
-`mastHead(T, rnoInner, eyebrowKey)` takes an optional third argument — every
-other type omits it and keeps "sub" ("Field condition monitoring") exactly
-as before; RTW's own call site is the only one that passes "rtw_eyebrow".
+**THE EYEBROW WAS GIVEN RTW'S OWN TITLE, AND THAT WAS THE SAME REDUNDANCY
+MOVED UP A LINE, NOT REMOVED.** Build 438 swapped the generic eyebrow
+("Field condition monitoring") for "Return to work / Контрольный осмотр
+перед возвратом в работу" on RTW sheets only, asked for by name. Reverted
+the same day, from an annotated report circling BOTH lines: the m1 title
+one line below already reads "Return to Work / Возврат в работу", and the
+new eyebrow text was not only the same fact twice, it was a LONGER
+bilingual copy of it that wrapped onto two lines and visually collided with
+the title underneath. "put only one" — the title already was the one; the
+eyebrow went back to stating what every report on this sheet has in common,
+same as every other type, and `mastHead` lost the `eyebrowKey` argument
+build 438 gave it, since nothing calls it with anything but the default
+once this reverted. The lesson generalises past this one line: a redundant
+fact does not stop being redundant because it moved to a different field —
+before adding a second place to say something, check what the FIRST one
+already says.
 
 **EDITING A SAVED RTW ROUND OPENED THE GRADED WIZARD, BECAUSE THE QUEUE'S
 "EDIT" BUTTON NEVER ASKED WHAT TYPE IT WAS OPENING.** Reported plainly: "if

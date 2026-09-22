@@ -259,9 +259,13 @@ const jpg = p => p.evaluate(() => {
     return secs.map((s) => s.html).join('');
   }, rec.id);
   ok('the masthead names the round Return to Work, not a raw type code', /Return to Work/.test(html));
-  ok('the eyebrow states RTW specifically, not the generic "Field condition monitoring"', (() => {
+  // Build 438 briefly duplicated this into the eyebrow too ("Return to work"
+  // one line above "Return to Work") and it was reverted the same day —
+  // a real report showed both lines circled as redundant. The title says it
+  // once; the eyebrow stays the generic line every other type also uses.
+  ok('the eyebrow is the ordinary generic one, not a second copy of the title', (() => {
     const m = /<div class="eyebrow">([\s\S]*?)<\/div>/.exec(html);
-    return !!m && /Return to work/i.test(m[1]) && !/Field condition monitoring/i.test(m[1]);
+    return !!m && /Field condition monitoring/i.test(m[1]) && !/Return to work/i.test(m[1]);
   })());
   ok('the work order number is in the MASTHEAD PILL, beside the report number — not a box down the page', (() => {
     const rnoBlock = /<div class="rno">([\s\S]*?)<\/div>/.exec(html);

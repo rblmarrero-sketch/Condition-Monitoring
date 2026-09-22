@@ -988,7 +988,6 @@
   var S = {
     en: {
       sub:"Field condition monitoring", generated:"Generated",
-      rtw_eyebrow:"Return to work",
       method_MP:"Magnetic Plug Inspection", method_FC:"Filter Cut Inspection",
       method_INSP:"General Inspection", method_TEMP:"Thermography",
       method_UC:"Undercarriage Measurement",
@@ -1204,7 +1203,6 @@
     },
     ru: {
       sub:"Мониторинг состояния в поле", generated:"Сформировано",
-      rtw_eyebrow:"Контрольный осмотр перед возвратом в работу",
       method_MP:"\u041e\u0441\u043c\u043e\u0442\u0440 \u043c\u0430\u0433\u043d\u0438\u0442\u043d\u043e\u0439 \u043f\u0440\u043e\u0431\u043a\u0438", method_FC:"\u0420\u0430\u0437\u0440\u0435\u0437 \u0444\u0438\u043b\u044c\u0442\u0440\u0430",
       method_INSP:"\u041e\u0431\u0449\u0438\u0439 \u043e\u0441\u043c\u043e\u0442\u0440", method_TEMP:"\u0422\u0435\u0440\u043c\u043e\u0433\u0440\u0430\u0444\u0438\u044f",
       method_UC:"\u0417\u0430\u043c\u0435\u0440\u044b \u0445\u043e\u0434\u043e\u0432\u043e\u0439 \u0447\u0430\u0441\u0442\u0438",
@@ -2743,12 +2741,16 @@
      fourth report (or a fix to one) that only touched one of the three would
      have put the logo, or the eyebrow, out of step with the other two — the
      exact one-source-of-truth rule this file's own CSS comments keep citing. */
-  /* `eyebrowKey` defaults to "sub" ("Field condition monitoring") for every
-     type; RTW's own call site is the only one that passes "rtw_eyebrow" —
-     asked for by name, the eyebrow no longer states this report's kind
-     generically once it already IS this one specific kind. */
-  function mastHead(T, rnoInner, eyebrowKey) {
-    return '<div class="mhead"><div class="eyebrow">' + T.I(eyebrowKey || "sub") + '</div>'
+  /* RTW briefly swapped this eyebrow for its own "Return to work" text
+     (build 438) — reverted the same day: with the m1 title right underneath
+     already reading "Return to Work / Возврат в работу", a second, LONGER
+     bilingual copy of the same fact in the eyebrow one line above it was not
+     a fix, it was the same redundancy moved up a line and stretched onto
+     two of them. "Field condition monitoring" states what every report on
+     this sheet has in common; the title states which one this is; one of
+     those two jobs is enough for the eyebrow to do. */
+  function mastHead(T, rnoInner) {
+    return '<div class="mhead"><div class="eyebrow">' + T.I("sub") + '</div>'
       + '<div class="mright">' + CMR.LOGO_HTML + '<div class="rno">' + rnoInner + '</div></div>'
       + '</div>';
   }
@@ -3361,7 +3363,7 @@
       var rno = reportNo(rec) + (rec.type === "RTW" && rec.rtwWo ? " · " + rec.rtwWo : "");
       var head =
         '<div class="mast">'
-        + mastHead(T, '<i>' + T.I("rr_report") + '</i>' + esc(rno), rec.type === "RTW" ? "rtw_eyebrow" : undefined)
+        + mastHead(T, '<i>' + T.I("rr_report") + '</i>' + esc(rno))
         /* A type the dictionary has never heard of falls back to the label the
            host resolved, not to the name of the key. One line, the way the
            metadata strip below it already says "MODEL / МОДЕЛЬ" — T.S's own
