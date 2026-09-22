@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-22T03:53:17+00:00",
+  "generated": "2026-09-22T04:18:28+00:00",
   "byUnit": {
     "DZ001": [
       {
@@ -380,17 +380,6 @@
         "priority": "P3 Planned (PM)"
       }
     ],
-    "TK113": [
-      {
-        "wo": "WO-016631",
-        "hours": 250,
-        "types": [
-          "MP"
-        ],
-        "plan": "2026-09-22",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
     "TK114": [
       {
         "wo": "WO-017346",
@@ -402,17 +391,6 @@
         "priority": "P3 Planned (PM)"
       }
     ],
-    "TK119": [
-      {
-        "wo": "WO-016624",
-        "hours": 250,
-        "types": [
-          "MP"
-        ],
-        "plan": "2026-09-22",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
     "TK120": [
       {
         "wo": "WO-016568",
@@ -421,18 +399,6 @@
           "MP"
         ],
         "plan": "2026-09-23",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "TK126": [
-      {
-        "wo": "WO-016620",
-        "hours": 1000,
-        "types": [
-          "INSP",
-          "MP"
-        ],
-        "plan": "2026-09-21",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -537,17 +503,6 @@
           "MP"
         ],
         "plan": "2026-09-23",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "TK156": [
-      {
-        "wo": "WO-016621",
-        "hours": 250,
-        "types": [
-          "MP"
-        ],
-        "plan": "2026-09-21",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -1370,30 +1325,6 @@
       "plan": "2026-09-22"
     },
     {
-      "wo": "WO-016631",
-      "equip": "TK113",
-      "cls": "AT",
-      "comp": "",
-      "desc": "Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-09-22",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-09-22"
-    },
-    {
-      "wo": "WO-016624",
-      "equip": "TK119",
-      "cls": "AT",
-      "comp": "",
-      "desc": "Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-09-22",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-09-22"
-    },
-    {
       "wo": "WO-016572",
       "equip": "TK146",
       "cls": "HT",
@@ -1427,18 +1358,6 @@
       "raised": "2026-09-21",
       "type": "2000 Hours service Planned",
       "hours": 2000,
-      "plan": "2026-09-21"
-    },
-    {
-      "wo": "WO-016616",
-      "equip": "EX009",
-      "cls": "EXC",
-      "comp": "",
-      "desc": "500h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-09-21",
-      "type": "500 Hours service Planned",
-      "hours": 500,
       "plan": "2026-09-21"
     },
     {
@@ -1526,32 +1445,8 @@
       "plan": "2026-09-21"
     },
     {
-      "wo": "WO-016620",
-      "equip": "TK126",
-      "cls": "AT",
-      "comp": "",
-      "desc": "General Inspection / Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-09-21",
-      "type": "1000 Hours service Planned",
-      "hours": 1000,
-      "plan": "2026-09-21"
-    },
-    {
       "wo": "WO-016622",
       "equip": "TK149",
-      "cls": "HT",
-      "comp": "",
-      "desc": "Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-09-21",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-09-21"
-    },
-    {
-      "wo": "WO-016621",
-      "equip": "TK156",
       "cls": "HT",
       "comp": "",
       "desc": "Magnetic Plug",
@@ -1728,18 +1623,6 @@
       "type": "1000 Hours service Planned",
       "hours": 1000,
       "plan": "2026-09-19"
-    },
-    {
-      "wo": "WO-017555",
-      "equip": "TK126",
-      "cls": "",
-      "comp": "TK126.DRS.ENG (Engine / Двигатель)",
-      "desc": "Продольные повреждения ремня генератора и кондиционера",
-      "priority": "P4 Planned (Repair)",
-      "raised": "2026-09-19",
-      "type": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "hours": null,
-      "plan": "2026-09-21"
     },
     {
       "wo": "WO-017553",
@@ -2318,18 +2201,6 @@
       "plan": "2026-09-21"
     },
     {
-      "wo": "WO-016853",
-      "equip": "DR007",
-      "cls": "",
-      "comp": "DR007.CH.MT (Mast / Мачта)",
-      "desc": "Трещина на кронштейне цилиндра мачты.",
-      "priority": "P2 Urgent",
-      "raised": "2026-09-11",
-      "type": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "hours": null,
-      "plan": "2026-09-21"
-    },
-    {
       "wo": "WO-008615",
       "equip": "GE095",
       "cls": "GEN",
@@ -2340,30 +2211,6 @@
       "type": "250 Hours service Planned",
       "hours": 250,
       "plan": "2026-09-10"
-    },
-    {
-      "wo": "WO-017026",
-      "equip": "TK156",
-      "cls": "",
-      "comp": "TK156.HS.DL (Hydraulic Lines / Гидролинии)",
-      "desc": "Запотевание РВД.",
-      "priority": "P4 Planned (Repair)",
-      "raised": "2026-09-10",
-      "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "hours": null,
-      "plan": "2026-09-21"
-    },
-    {
-      "wo": "WO-017065",
-      "equip": "TK156",
-      "cls": "",
-      "comp": "TK156.SS.SP (Steering Pump / Насос рулевого управления)",
-      "desc": "Течь с рулевого насоса, требуется диагностика.",
-      "priority": "P4 Planned (Repair)",
-      "raised": "2026-09-10",
-      "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "hours": null,
-      "plan": "2026-09-21"
     },
     {
       "wo": "WO-016809",
@@ -2424,18 +2271,6 @@
       "type": "1000 Hours service Planned",
       "hours": 1000,
       "plan": "2026-08-09"
-    },
-    {
-      "wo": "WO-016190",
-      "equip": "TK122",
-      "cls": "",
-      "comp": "TK122.CH.BY (Dump Body / Самосвальный кузов)",
-      "desc": "Трещина в основании (дне) кузова самосвала.",
-      "priority": "P4 Planned (Repair)",
-      "raised": "2026-08-05",
-      "type": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "hours": null,
-      "plan": "2026-09-19"
     },
     {
       "wo": "GD-023083",
