@@ -4617,7 +4617,7 @@
      758px board, 6px padding each side) and its established 8px gap —
      unchanged since build 421. */
   var GAL_ROW_W = 746, GAL_GAP = 8, GAL_MIN_H = 100, GAL_MAX_H = 250;
-  function justifiedRow(urls, h, gap, targetW) {
+  function justifiedRow(urls, h, gap, targetW, isFull) {
     /* max-height:none, explicit, on every image — the shared .cel .phg.gallery
        img rule (above) caps height at 182px for the OLD one/two-photograph
        technique this row does not use, and CSS max-height clamps an explicit
@@ -4626,54 +4626,82 @@
        solving for the row's own width. Setting it back to none here, inline,
        is what makes THIS row's own computed height the one that actually
        reaches the page. */
-    /* A ROW CAN BE TOLD TO SIT SHORTER THAN THE LINE, AND STILL HAS TO LOOK
-       LIKE IT MEANT TO. Read off TK109's own report a fourth time, unit mode,
-       "PHOTOGRAPHS": CH.UC's three photographs (a hub, an oil sample jar, a
-       small cap) are all portrait or near-square enough that solving for the
-       row's own width the way RRD's four wider close-ups do would need a
-       height past GAL_MAX_H — the ceiling that keeps an all-narrow-portrait
-       row from filling most of a page. Capped there, the row's own true
-       width at that height comes up short of GAL_ROW_W, and `justify-
-       content:center` left every photo pinned to the left third of the
-       line with the whole remainder as one blank strip on the right —
-       "same, no change" against the very complaint this row's own fix was
-       meant to answer, because a height cap this project needs for a
-       different reason silently reopened it. Nothing here is cropped,
-       stretched, or resized past its own ratio; only where the LEFTOVER
-       space goes changes: `space-between` spends it as gaps BETWEEN
-       photographs, which reaches the line's own right edge the same way a
-       full-width row does, instead of banking it all after the last frame. */
-    var w = 0;
-    for (var i = 0; i < urls.length; i++) w += h * photoRatio(urls[i]);
-    w += (urls.length - 1) * gap;
-    /* A ROW THAT ALREADY FITS IS NEVER "SHORT" — `h` is `Math.round`ed in
-       justifiedH, so the row's true pixel width almost never lands on
-       GAL_ROW_W exactly even when nothing was clamped; a pure-landscape
-       four-up row comes out a couple of px under it from rounding alone.
-       Treating that as "short" put `space-between`'s extra pixel into every
-       gap of an already-correct row and turned its hairline 8px gap into a
-       visible 9-10px one (galmixed4.cjs's own control caught this). Only a
-       shortfall bigger than rounding could ever produce — a full gap's
-       worth — is the GAL_MAX_H clamp actually firing. */
-    var short = targetW && (targetW - w) > gap;
-    /* `justify-self:stretch` is load-bearing here, not decoration. The
-       column this row sits in is `.phg.gallery`'s own grid, and that grid
-       sets `justify-items:center` — right for the ORDINARY case, where a
-       row's own content already reaches the column's width and centring is
-       a no-op, but it means a SHORT row (this one) is a 534px flex box
-       first, THEN centred as a block inside the 746px column: `justify-
-       content:space-between` on a box that is only ever as wide as its own
-       content has no spare width to distribute and changes nothing. Only
-       once the row itself is stretched to the column's full width does
-       `space-between` have room to push the first and last photograph out
-       to the column's own two edges. */
-    return '<div class="phgrow" style="display:flex;gap:' + gap + 'px;justify-self:stretch;justify-content:'
-      + (short ? "space-between" : "center") + ';">'
-      + urls.map(function (u) {
-          return '<img src="' + u + '" style="display:block;height:' + h + 'px;width:auto;max-width:100%;max-height:none;'
-            + 'background:#fff;border:1px solid #dfe4e9;border-radius:3px;">';
-        }).join("")
-      + '</div>';
+    /* THE ROW IS POSITIONED BY ARITHMETIC NOW, NOT BY ASKING A LAYOUT
+       ALGORITHM TO DISTRIBUTE IT.
+
+       This used to be a flex row: `justify-self:stretch` to make the row
+       itself occupy the grid column's full width (the column's own
+       `justify-items:center` otherwise shrink-wraps and centres it), then
+       `justify-content:space-between` or `center` to decide where the
+       leftover space goes. Both properties read correctly in every
+       Playwright/DOM check this file has (galshort.cjs, galorphan.cjs) —
+       and STILL printed a 3-photograph row centred with a blank margin on
+       BOTH sides (TK154, HS.CV, 2026-09-22), the exact "same, no change"
+       shape this row's own comment already once described for a different
+       cause. This file has hit this exact class of gap three times before
+       for three OTHER CSS properties html2canvas does not implement
+       (object-fit, aspect-ratio, a nested inline <svg>) — a fourth
+       instance, this time in the grid/flex ALIGNMENT properties
+       (`justify-self`, `justify-content`) rather than the sizing ones, is
+       not a surprising place for it to have been hiding.
+
+       So this row no longer asks the renderer to align, stretch or
+       distribute anything. Every photograph's LEFT OFFSET is computed here,
+       in plain arithmetic, from the same photoRatio() this row already
+       trusts for its own height (justifiedH, above) — and placed with
+       `position:absolute;left:Npx`, which is not an alignment keyword, it
+       is a number, the same kind of thing the explicit `height` already is
+       for exactly the same reason. The photograph's own WIDTH is still left
+       to the browser (`width:auto`, an explicit height) rather than to this
+       function's own arithmetic estimate — that pairing is the one sizing
+       technique this file already trusts (see the block comment above the
+       CSS rules for `.cel .phg.gallery img`), so only the POSITION is new
+       arithmetic, never the shape of the photograph itself. */
+    /* #rptRoot *{box-sizing:border-box} (this file's own reset, line 78)
+       means the explicit `height:Npx` below is the BORDER box, not the
+       content box — so the browser derives width from a content height two
+       pixels shorter than h (the 1px border top and bottom), then adds the
+       1px left/right border back onto that derived width. Estimating width
+       as a plain h*ratio here — the content-box formula — put every image
+       about a pixel wider than the browser was about to render it, and
+       across a four-photograph row that drifted the last hairline gap from
+       8px to 9 (galmixed4.cjs's own control caught this too). */
+    var PH_BORDER = 2;
+    var widths = urls.map(function (u) { return (h - PH_BORDER) * photoRatio(u) + PH_BORDER; });
+    var sumW = widths.reduce(function (a, b) { return a + b; }, 0);
+    /* A FULL ROW (as many photographs as the sheet puts in one line) is
+       spread margin to margin: when justifiedH's own GAL_MAX_H ceiling kept
+       it from reaching targetW on height alone, the GAP between photographs
+       is widened instead — nothing cropped, nothing stretched past its own
+       ratio, only where the unavoidable extra space goes, the same
+       photograph at the same height it would have had anyway.
+
+       A REMAINDER row (fewer photographs than a full line — the last one,
+       two or three after a full row of four) is never spread this way: a
+       lone photograph blown out to the width of three others would not be
+       "the same size," it would be a different, much wider tile for the
+       identical finding. It sits at its own natural width, same height as
+       the row above it, flush against the LEFT margin — never centred,
+       because a small tile floating in the middle of an otherwise-empty
+       line is what this fix exists to stop being the default. */
+    var g = gap;
+    if (isFull && urls.length > 1 && targetW && sumW + (urls.length - 1) * gap < targetW - gap) {
+      g = (targetW - sumW) / (urls.length - 1);
+    }
+    /* left is left UNROUNDED (a fractional px, which CSS accepts fine) —
+       rounding it per image and accumulating from the rounded value is what
+       let a hairline 8px gap drift to 9px across a four-photograph row
+       (galmixed4.cjs's own control caught this): each image's true
+       rendered width is a float too, and only the CONTINUOUS arithmetic
+       lands each photograph exactly `gap` away from the one before it. */
+    var x = 0;
+    var imgs = urls.map(function (u, i) {
+      var style = 'position:absolute;left:' + x + 'px;top:0;display:block;height:' + h
+        + 'px;width:auto;max-width:none;max-height:none;background:#fff;border:1px solid #dfe4e9;border-radius:3px;';
+      x += widths[i] + g;
+      return '<img src="' + u + '" style="' + style + '">';
+    }).join("");
+    return '<div class="phgrow" style="position:relative;width:100%;height:' + h + 'px;">' + imgs + '</div>';
   }
   function cell(ctx, T, it, sh, gallery) {
     sh = sh || {};
@@ -4723,7 +4751,7 @@
              shape — a rule assumed inert because nothing currently reaches it
              is one new branch away from reaching it. */
           top = '<div class="phg gallery g3plus" style="grid-template-columns:1fr">'
-            + galRows.map(function (r) { return justifiedRow(r, galH, GAL_GAP, GAL_ROW_W); }).join("")
+            + galRows.map(function (r) { return justifiedRow(r, galH, GAL_GAP, GAL_ROW_W, r.length === gcols); }).join("")
             + '</div>';
         } else {
           /* ONE OR TWO PHOTOGRAPHS PACK TOGETHER AND CENTRE, NOT JUSTIFIED

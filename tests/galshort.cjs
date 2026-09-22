@@ -8,26 +8,28 @@
    the way RRD's four wider close-ups do would need a height past
    GAL_MAX_H (250) — the ceiling that exists so an all-narrow-portrait row
    does not blow out a page. Clamped there, the row's own TRUE width at
-   that height falls short of GAL_ROW_W (746), and `justify-content:
-   center` on a row that is only ever as wide as its own content pinned
-   every photograph into the left ~70% of the line with one blank strip
-   banked after the last frame — the exact defect galjustify.cjs already
-   fixed for a DIFFERENT cause (auto columns), reopened here by a height
-   cap this project needs for a different, real reason.
+   that height falls short of GAL_ROW_W (746).
 
-   The fix is two changes to justifiedRow(), not a wider ceiling — a wider
-   GAL_MAX_H just moves the same problem to a taller row of narrower
-   photographs, and this project's own "never crop, never stretch" rule
-   already rules out resizing a photograph past its true ratio to make up
-   the difference:
-     - `justify-self:stretch` makes the row itself (a flex box that
-       otherwise sizes to its own content) actually occupy the full
-       746px grid column, not just centre a narrower box inside it;
-     - `justify-content:space-between` then spends the leftover width as
-       gaps BETWEEN photographs instead of banking it all after the last
-       one, so the row still reaches both edges of the line — nothing
-       cropped, nothing stretched past its own aspect ratio, only WHERE
-       the unavoidable extra space goes.
+   This row used to be laid out with flexbox alignment keywords
+   (`justify-self:stretch`, `justify-content:space-between`/`center`) —
+   correct in every Playwright/DOM measurement this suite ever took, and
+   STILL printed a 3-photograph row centred with blank margins on BOTH
+   sides in a real generated PDF (TK154, HS.CV, 2026-09-22): the exact
+   "same, no change" shape this test already exists to catch, reopened not
+   by a new bug in the arithmetic but by html2canvas not reproducing the
+   alignment keywords the DOM was measured through — a fourth instance of
+   this file's own recurring gap (object-fit, aspect-ratio, a nested
+   inline <svg>, and now grid/flex alignment), caught here only because a
+   real render finally disagreed with the DOM. The fix removes the
+   alignment keywords instead of trying to find one html2canvas honours:
+   every photograph's LEFT OFFSET is now plain arithmetic
+   (`position:absolute;left:Npx`), and a short FULL row spends its leftover
+   width as a wider, evenly-computed GAP between photographs — nothing
+   cropped, nothing stretched past its own aspect ratio, only WHERE the
+   unavoidable extra space goes. This suite now measures the actual
+   geometry the fix promises (the row reaches both edges, and it does so by
+   widened gaps, not by resizing a photograph) rather than a CSS keyword,
+   because the keyword is exactly what the real bug hid behind.
    The threshold that decides "short" is deliberately loose (more than one
    full gap's worth) — `Math.round(h)` in justifiedH means an ordinary,
    correctly-filling row is almost never exactly GAL_ROW_W wide either,
@@ -92,15 +94,17 @@ const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
   ok('  the row is held short of a full row height by the clamp — this is the case the fix targets', true, 'h=250');
   ok('  THE FIX: the row still reaches the 746px line, edge to edge', span >= 744, 'span=' + span);
   ok('  by widening the GAPS between photographs, not by cropping or stretching one past its own ratio',
-     r.justify === 'space-between' && new Set(r.boxes.map(bx => bx.w)).size === 3, JSON.stringify({ justify: r.justify, widths: r.boxes.map(bx => bx.w) }));
+     r.gaps.length === 2 && r.gaps.every(g => g > 9) && Math.abs(r.gaps[0] - r.gaps[1]) <= 1
+       && new Set(r.boxes.map(bx => bx.w)).size === 3,
+     JSON.stringify({ gaps: r.gaps, widths: r.boxes.map(bx => bx.w) }));
+  ok('  the first photograph still starts at the line\'s own left margin, never centred',
+     r.boxes[0].l <= 8, 'left=' + r.boxes[0].l);
 
   console.log('\ncontrol: RRD-style row (wider close-ups) already fills the line without clamping — untouched by this fix');
   const rrd = await render('RRD', 'Rear Differential', [[500, 420], [420, 400], [480, 480]]);
   const spanRrd = rrd.boxes.length ? (rrd.boxes[rrd.boxes.length - 1].l + rrd.boxes[rrd.boxes.length - 1].w - rrd.boxes[0].l) : 0;
   ok('this row is not held short — it already reaches the line on its own', spanRrd >= 740, 'span=' + spanRrd);
-  ok('  so it keeps the ordinary centred hairline gap, not the redistributed one', r.justify !== rrd.justify || rrd.justify === 'center', 'rrd justify=' + rrd.justify);
-  ok('  and its gaps stay at the sheet\'s own hairline width (8px), not widened by rounding noise',
-     rrd.gaps.every(g => g >= 7 && g <= 9), JSON.stringify(rrd.gaps));
+  ok('  so it keeps the sheet\'s own hairline gap, not the redistributed one', rrd.gaps.every(g => g >= 7 && g <= 9), JSON.stringify(rrd.gaps));
 
   ok(fails.filter(f => f.startsWith('PAGEERROR')).length === 0, 'no page errors throughout');
   await b.close();

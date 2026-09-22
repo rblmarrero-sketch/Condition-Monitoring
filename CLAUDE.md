@@ -1739,6 +1739,64 @@ string. The deeper WebKit-level mechanism remains exactly as unconfirmed as
 every other `writeback-fail` occurrence — this fix narrows what the NEXT
 occurrence, wherever it strikes, will be able to say about itself.
 
+**A GALLERY ROW TESTED CORRECTLY IN THE DOM AND STILL PRINTED CENTRED WITH
+BLANK MARGINS ON BOTH SIDES.** Two real reports on TK154, 2026-09-22 — the
+single-round INSP PDF ("PHOTOGRAPHS WITH FINDINGS", HS.CV Control Valves,
+three photographs) and the Equipment Trend Report ("PHOTOGRAPHS", HS.DL
+Hydraulic Lines, five) — showed the exact defect galshort.cjs and
+galorphan.cjs already existed to prove fixed: a full row of three held
+short by the GAL_MAX_H ceiling printed centred with equal blank margins on
+both sides instead of reaching the line, and a fifth (remainder)
+photograph printed small on a row of its own. Both suites still PASSED,
+because both only ever measured the DOM through Playwright's own Chromium
+— which correctly honours `justify-self:stretch` overriding the grid's
+`justify-items:center`, and `justify-content:space-between` on the
+resulting flex row. The PDF is not drawn by that Chromium. It is drawn by
+html2canvas, against the same markup, and this file has now hit
+html2canvas failing to reproduce a CSS feature three times before this one
+— `object-fit`, `aspect-ratio`, a nested inline `<svg>` — every one of them
+a SIZING property. This is the fourth instance and the first in an
+ALIGNMENT property: html2canvas evidently does not carry `justify-self`
+through to override the grid's own `justify-items:center`, so the row
+never stretched to the column's full width in the raster, and centred
+inside it exactly as a narrower, un-stretched box would.
+
+The fix does not hunt for an alignment keyword html2canvas honours —
+`justify-content` and `justify-self` are retired from this row entirely.
+Every photograph's LEFT OFFSET is now plain arithmetic
+(`position:absolute;left:Npx`), computed from the same `photoRatio()` this
+row already trusted for its own HEIGHT (`justifiedH`) — a number, not a
+keyword, the same reasoning that already put an explicit `height` on every
+photograph in this sheet instead of `aspect-ratio`. A full row held short
+by the height ceiling spends its leftover width as a wider, evenly
+computed GAP between photographs, reaching both edges exactly as
+`space-between` was meant to; a genuine remainder row (fewer photographs
+than a full line) is never spread this way — stretching one leftover
+photograph to the width of three others would not be "the same size," it
+would be a different, wider tile for the identical finding — it sits at
+its own natural width, the same height as the row above it, flush against
+the LEFT margin, never centred in the middle of an otherwise empty line.
+
+Getting the arithmetic to match the raster exactly needed one more
+correction: `#rptRoot *{box-sizing:border-box}` means an image's explicit
+`height:Npx` is the BORDER box, so the browser derives its width from a
+content height two pixels shorter (the 1px top/bottom border) before
+adding the 1px left/right border back — using the plain `height*ratio`
+formula overestimated every photograph's width by about a pixel, and
+across a four-photograph row that drifted the last hairline gap from 8px
+to 9 (galmixed4.cjs's own control, previously measuring a real flex `gap`
+the browser applied for us, is what caught this once the row supplied its
+own numbers instead).
+
+Both galshort.cjs and galorphan.cjs now measure the geometry the fix
+promises — the row's own left/right span, the size and evenness of its
+gaps, a remainder row's left edge matching the row above it — rather than
+a CSS keyword, because the keyword is exactly what the real defect hid
+behind. Verified against an actual `html2canvas` raster of both reported
+shapes (three photographs held short, five as four-plus-one), not only the
+DOM, which is the one check this class of bug has repeatedly needed and
+repeatedly not had until a real printed report disagreed with it.
+
 ---
 
 ## Secrets

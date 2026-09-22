@@ -124,6 +124,16 @@ const SEED = () => {
   ok('THE FIX: five and six photographs render at the identical tile size as four (the old "least-waste" rule gave them a wider three-column tile instead)',
      r5.boxes.every(b => b.w === r4.boxes[0].w && b.h === r4.boxes[0].h) && r6.boxes.every(b => b.w === r4.boxes[0].w && b.h === r4.boxes[0].h),
      JSON.stringify({ four: r4.boxes[0], five: r5.boxes[0], six: r6.boxes[0] }));
+  /* THE REMAINDER ROW STARTS AT THE LINE'S OWN LEFT MARGIN, NOT CENTRED.
+     Read off TK154's own Equipment Trend Report, HS.DL Hydraulic Lines,
+     2026-09-22: a fifth photograph on a row of its own, pinned small with
+     empty space kept to its RIGHT — the correct edge, arrived at only
+     because the row happens to hold one photograph (see galshort.cjs for
+     the same alignment mechanism failing the other way, centred, for a
+     FULL row). Asserted directly here so a future change to the alignment
+     technique cannot reopen either shape. */
+  ok('the fifth photograph starts flush with the first photograph of the row above it, not centred under the line',
+     r5.boxes[4].l === r4.boxes[0].l, JSON.stringify({ fifth: r5.boxes[4].l, first: r4.boxes[0].l }));
 
   console.log('\nEX022 (seven) and EX027 (eight): the same shape one and two rows later');
   const r7 = await measure('EX022');
