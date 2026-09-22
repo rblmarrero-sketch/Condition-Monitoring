@@ -1,35 +1,45 @@
-/* A ROW OF FOUR NEVER STRETCHES A NARROWER PHOTOGRAPH TO MATCH ITS
-   NEIGHBOUR, WHETHER THE ROW IS EQUAL COLUMNS, AUTO COLUMNS, OR JUSTIFIED.
+/* A ROW OF FOUR NEVER STRETCHES A PHOTOGRAPH OUT OF ITS OWN SHAPE — AND, AS
+   OF THE SQUARE-TILE REDESIGN, NEVER SIZES ITS TILE FROM THE PHOTOGRAPHS
+   EITHER.
 
-   This suite has tracked the SAME defect through two fixes now. The .g4
-   fix (galorphan.cjs) forced four EQUAL 1fr columns so a four-photograph
-   row would fill the sheet edge to edge — correct for the pure-landscape
-   case it was built and tested against, wrong for TK109's own Rear
-   Differential a second time: a wide machinery shot, a PORTRAIT
-   cylindrical part, a wide gasket, a PORTRAIT plug. Equal columns gave
-   each portrait photograph a column as wide as its landscape neighbours,
-   reported back as "the gap are too much." `auto` columns (this suite's
-   own first version) fixed that — but auto sizes a row to whatever its own
-   photographs need, which is narrower than the sheet for anything but
-   near-4:3 landscape content, so a THIRD report off the same position, real
-   photographs this time, showed the identical row of four occupying a
-   fraction of the page next to a DIFFERENT position's own four wide tray
-   photographs that filled it: "the RRD photos since its already 4 then it
-     should occupy the whole line like CH.BY."
+   This suite has tracked the SAME underlying defect through three
+   redesigns now. The .g4 fix (galorphan.cjs) forced four EQUAL 1fr columns
+   so a four-photograph row would fill the sheet edge to edge — correct for
+   the pure-landscape case it was built and tested against, wrong for
+   TK109's own Rear Differential a second time: a wide machinery shot, a
+   PORTRAIT cylindrical part, a wide gasket, a PORTRAIT plug. Equal columns
+   gave each portrait photograph a column as wide as its landscape
+   neighbours, reported back as "the gap are too much." `auto` columns
+   fixed that, then a JUSTIFIED row (solving one shared HEIGHT so the row's
+   own photographs summed to 746px) fixed the next report off the same
+   position — but a THIRD and FOURTH real report (TK154, TK117, 2026-09-22)
+   asked for the tiles to be the SAME SIZE outright, not merely the same
+   line width at whatever height the row's own content happened to need:
+   "the width of photos are not the same, they should be equal or resize to
+   be equal." `tileSize`/`tiledRow` (report-core.js) now give every tile in
+   a row the identical SQUARE footprint — derived purely from the sheet's
+   746px width and the column count, never from the row's own photographs —
+   and letterbox each photograph inside its own tile, centred, at the
+   largest size that keeps its true aspect ratio. The gap between tiles is
+   the sheet's own tight ~1mm hairline (about 4px at this document's 105
+   CSS-px-per-inch baseline), asked for by name to replace the older 8px.
 
-   The gallery board's full row of three or four is JUSTIFIED now
-   (galorphan.cjs's own comment, galjustify.cjs for the general case): the
-   shared row height solves for the row's own photographs so their combined
-   width lands on the sheet's 746px content width, whatever the mix of
-   orientations. For THIS test's exact mix — two 4:3 landscape, two 3:4
-   portrait — that height works out to 173px (722 / (2*4/3 + 2*3/4)); a
-   different mix gets a different number, by design, but the landscape
-   photographs must still come out wider than the portrait ones at whatever
-   height the row settles on, never stretched to match. The non-gallery
-   (mpEvidence) board keeps the earlier `auto`-column fix, unchanged here —
-   its own board width varies with how many sibling positions share a row,
-   which the gallery board's fixed 746px sheet width does not have to
-   account for.
+   One further reversal since: a letterboxed fit — fitting each photograph
+   INSIDE its own tile, padded on the axis that doesn't match — was itself
+   rejected on a real reference photograph the maintainer sent of four
+   actual magnetic-plug close-ups, every tile filled completely with no
+   padding bar on any side: "this an example of same and standard." The fit
+   is COVER now, not CONTAIN — a photograph fills its tile on both axes and
+   whatever does not fit is cropped — and a further instruction made this
+   explicit for every round type, not just Magnetic Plug: the tile size is
+   solved for FOUR columns always (`GAL_TILE_COLS`, report-core.js), never
+   from how many photographs a particular row actually holds.
+
+   The non-gallery (mpEvidence) board keeps the earlier `auto`-column fix,
+   unchanged here — its own board width varies with how many sibling
+   positions share a row, and it was never asked to become uniform tiles or
+   cropped photographs; this is a narrow exception to this project's
+   "never crop" rule, scoped to the ≥3-photo gallery board alone.
 
    Run: node tests/galmixed4.cjs   (needs tests/ed-srv.cjs on 8093) */
 const { chromium } = require(require('./pw.cjs'));
@@ -71,8 +81,11 @@ const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
     await Promise.all(imgs.map(im => im.complete ? null : new Promise(res => { im.onload = im.onerror = res; })));
     await new Promise(res => requestAnimationFrame(() => requestAnimationFrame(res)));
     const boxes = imgs.map(im => im.getBoundingClientRect());
+    const tileEls = gallery ? [...d.querySelectorAll('.phgrow > div')] : [];
+    const tiles = tileEls.map(t => t.getBoundingClientRect());
+    const gapEls = gallery ? tiles : boxes;
     const gaps = [];
-    for (let i = 1; i < boxes.length; i++) gaps.push(Math.round(boxes[i].left - boxes[i - 1].right));
+    for (let i = 1; i < gapEls.length; i++) gaps.push(Math.round(gapEls[i].left - gapEls[i - 1].right));
     const cel = imgs[0].closest('.cel');
     const celRect = cel.getBoundingClientRect();
     const canvas = await html2canvas(cel, { scale: 1, backgroundColor: '#ffffff', logging: false });
@@ -81,40 +94,41 @@ const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
       const y = Math.max(0, Math.min(canvas.height - 1, Math.round(py))); const dat = cx.getImageData(x, y, 1, 1).data; return [dat[0], dat[1], dat[2]]; };
     const rasterColors = boxes.map(bx => sample(bx.left - celRect.left + bx.width / 2, bx.top - celRect.top + bx.height / 2));
     d.remove();
-    return { gaps, boxes: boxes.map(bx => ({ l: Math.round(bx.left), w: Math.round(bx.width), h: Math.round(bx.height) })), rasterColors };
+    return { gaps, boxes: boxes.map(bx => ({ l: Math.round(bx.left), w: Math.round(bx.width), h: Math.round(bx.height) })),
+             tiles: tiles.map(t => ({ l: Math.round(t.left), w: Math.round(t.width), h: Math.round(t.height) })), rasterColors };
   }, { gallery, photoShapes });
 
   console.log('GALLERY BOARD (TK109-style): 2 landscape + 2 portrait, one row of four');
   const g4 = await measure(true, [[800,600],[600,800],[800,600],[600,800]]);
   ok('four photographs found', g4.boxes.length === 4, JSON.stringify(g4.boxes));
-  ok('  every gap is the sheet\'s own hairline (8px), not a big gap around a portrait photo',
-     g4.gaps.every(x => x === 8), JSON.stringify(g4.gaps));
-  /* The row is JUSTIFIED now (galorphan.cjs, galjustify.cjs): the shared
-     height solves for the row's own photographs, so it is no longer the
-     fixed 135px a pure-landscape row happens to need — for this exact mix
-     (two 4:3 landscape, two 3:4 portrait) it works out to 722/(2*4/3+2*3/4)
-     = 173px. What must still hold, whatever that number comes out to, is
-     that the landscape photographs stay wider than the portrait ones —
-     never stretched to match — and that all four share one height. */
-  ok('  the two landscape photographs are wider than the two portrait ones, not stretched to match',
-     g4.boxes[0].w > g4.boxes[1].w && g4.boxes[2].w > g4.boxes[3].w && g4.boxes[0].w === g4.boxes[2].w && g4.boxes[1].w === g4.boxes[3].w,
-     JSON.stringify(g4.boxes));
-  ok('  all four share one row height, solved for this row\'s own photographs (173px here)',
-     g4.boxes.every(x => x.h === g4.boxes[0].h) && g4.boxes[0].h === 173, JSON.stringify(g4.boxes));
+  ok('  every gap between tiles is the sheet\'s own tight ~1mm hairline (about 4px), not a big gap around a portrait photo',
+     g4.gaps.every(x => x >= 2 && x <= 6), JSON.stringify(g4.gaps));
+  /* Every tile is a SQUARE now (tileSize/tiledRow, report-core.js) — sized
+     purely from the sheet's own width and a FIXED four-column count, never
+     from what the row's own photographs look like or how many of them there
+     are. A landscape and a portrait photograph therefore get the IDENTICAL
+     tile footprint; what still varies is how far each photograph's own
+     COVER-fit image overflows (and is cropped) on its non-filled axis. */
+  ok('  all four tiles are the SAME square size (landscape and portrait alike — the tile no longer depends on the photograph)',
+     g4.tiles.length === 4 && new Set(g4.tiles.map(t => t.w)).size === 1 && new Set(g4.tiles.map(t => t.h)).size === 1
+       && g4.tiles.every(t => Math.abs(t.w - t.h) <= 1),
+     JSON.stringify(g4.tiles));
+  ok('  the two landscape photographs fill their tile\'s height and overflow width; the two portrait ones fill the tile\'s width and overflow height — COVER, cropped, never left short on either axis (never letterboxed)',
+     g4.boxes.every((bx, i) => bx.w >= g4.tiles[i].w - 3 && bx.h >= g4.tiles[i].h - 3)
+       && g4.boxes[1].w < g4.boxes[0].w && g4.boxes[3].w < g4.boxes[2].w,
+     JSON.stringify({ boxes: g4.boxes, tiles: g4.tiles }));
   ok('  the raster shows each photograph\'s own colour, not a neighbour bleeding through the gap',
      g4.rasterColors.length === 4 && new Set(g4.rasterColors.map(String)).size === 4, JSON.stringify(g4.rasterColors));
 
-  console.log('\nGALLERY BOARD control: four LANDSCAPE photographs still occupy the whole line, minimal gap');
+  console.log('\nGALLERY BOARD control: four LANDSCAPE photographs get the IDENTICAL tile size as the mixed row above');
   const gAll = await measure(true, [[800,600],[800,600],[800,600],[800,600]]);
-  ok('four photographs, uniform ~180px width, occupy close to the full 746px line',
-     gAll.boxes.length === 4 && gAll.boxes.every(x => x.w >= 170 && x.w <= 190),
-     JSON.stringify(gAll.boxes));
-  ok('  edge-to-edge, hairline gap only', gAll.gaps.every(x => x === 8), JSON.stringify(gAll.gaps));
-  ok('  THE FIX, side by side: the mixed row above and this pure-landscape row both fill the same 746px line, at their own two different heights',
-     (g4.boxes[3].l + g4.boxes[3].w - g4.boxes[0].l) > 700 && (gAll.boxes[3].l + gAll.boxes[3].w - gAll.boxes[0].l) > 700
-       && g4.boxes[0].h !== gAll.boxes[0].h,
-     JSON.stringify({ mixedRowSpan: g4.boxes[3].l + g4.boxes[3].w - g4.boxes[0].l, mixedH: g4.boxes[0].h,
-                       landscapeRowSpan: gAll.boxes[3].l + gAll.boxes[3].w - gAll.boxes[0].l, landscapeH: gAll.boxes[0].h }));
+  ok('four photographs, uniform tile size', gAll.tiles.length === 4 && new Set(gAll.tiles.map(t => t.w)).size === 1, JSON.stringify(gAll.tiles));
+  ok('  edge-to-edge, tight hairline gap only', gAll.gaps.every(x => x >= 2 && x <= 6), JSON.stringify(gAll.gaps));
+  ok('  THE FIX, side by side: the mixed row above and this pure-landscape row both fill the same 746px line, at the SAME tile size — not merely the same width at two different heights',
+     (g4.tiles[3].l + g4.tiles[3].w - g4.tiles[0].l) > 700 && (gAll.tiles[3].l + gAll.tiles[3].w - gAll.tiles[0].l) > 700
+       && g4.tiles[0].h === gAll.tiles[0].h && g4.tiles[0].w === gAll.tiles[0].w,
+     JSON.stringify({ mixedRowSpan: g4.tiles[3].l + g4.tiles[3].w - g4.tiles[0].l, mixedTile: g4.tiles[0],
+                       landscapeRowSpan: gAll.tiles[3].l + gAll.tiles[3].w - gAll.tiles[0].l, landscapeTile: gAll.tiles[0] }));
 
   console.log('\nNON-GALLERY (mpEvidence) BOARD: 2 landscape + 1 portrait, one plug position');
   const ng = await measure(false, [[800,600],[600,800],[800,600]]);

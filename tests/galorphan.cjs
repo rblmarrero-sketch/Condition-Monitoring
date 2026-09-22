@@ -19,17 +19,23 @@
    landscape tray photographs, the same rule, filled it. `auto` columns
    correctly stopped forcing width onto a photograph that did not need it;
    they never made the row itself reach for the space a narrower set of
-   photographs left unused. The fix is a JUSTIFIED row (galjustify.cjs
-   proves the general case with real, mixed aspect ratios; this suite keeps
-   its own uniform-swatch fixture, where every count's shared row height is
-   the single number these assertions can state and check directly): a full
-   row of three or four solves for a shared HEIGHT such that the SUM of the
-   row's own widths, at that height, lands on the sheet's own 746px content
-   width — never cropped, never stretched out of its own shape, because the
-   height is derived from the photographs actually in the row, not assumed.
-   A remainder past a full row of four keeps that SAME height rather than
-   solving its own, smaller sum — "adopting the sizes... of the other
-   photos," TK109's own original words for it.
+   photographs left unused.
+
+   The justified-row fix this comment used to describe (a shared HEIGHT
+   solved from the row's own widths) is superseded twice over since: a
+   letterboxed square tile, then — on the maintainer's own reference
+   photograph of four real magnetic-plug close-ups, every tile filled
+   completely with no padding — a COVER-fit square tile, sized for a FIXED
+   four columns always (`GAL_TILE_COLS`, report-core.js), never solved from
+   how many photographs a particular row actually holds. A full row of
+   FOUR still fills the 746px line edge to edge (four tiles at the fixed
+   size IS the line); a full row of fewer than four — EX023's own three
+   photographs below — now falls SHORT of the line by design, at the same
+   tile size a four-photograph row uses, flush left. A remainder past a
+   full row of four keeps that SAME tile size rather than solving its own,
+   smaller one — "adopting the sizes... of the other photos," TK109's own
+   original words for it, true of the tile size now rather than of a
+   shared row height.
 
    Run: node tests/galorphan.cjs   (needs tests/mock.cjs on 8099) */
 const { chromium } = require(require('./pw.cjs'));
@@ -99,9 +105,9 @@ const SEED = () => {
   console.log('EX023 (three photographs — a full row of three, justified to fill the line)');
   const r3 = await measure('EX023');
   ok('three photographs, one justified row', r3.boxes.length === 3 && r3.rowCount === 1 && /\bg3plus\b/.test(r3.boardClass), JSON.stringify(r3));
-  ok('  all at the same height, and the row fills the sheet edge to edge',
+  ok('  THE FIX: the tile size is the fixed four-column size, so a row of only three photographs falls SHORT of the line by design (about one tile\'s width) rather than solving its own wider three-column line',
      new Set(r3.boxes.map(b => b.h)).size === 1
-       && (r3.boxes[r3.boxes.length - 1].l + r3.boxes[r3.boxes.length - 1].w - r3.boxes[0].l) > 720,
+       && (r3.boxes[r3.boxes.length - 1].l + r3.boxes[r3.boxes.length - 1].w - r3.boxes[0].l) < 650,
      JSON.stringify(r3.boxes));
 
   console.log('\nEX026 (one photograph — untouched, not justified)');

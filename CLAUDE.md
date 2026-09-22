@@ -1831,6 +1831,137 @@ function against one synthetic fixture; this suite is the standing proof
 that every TYPE actually reaches it, in every language the site reads
 this document in, not only the ones already covered directly.
 
+**THE GALLERY ROW WAS DELIBERATELY CHANGED FROM "SAME HEIGHT" TO "SAME
+SIZE" — WITH THE OLD DEFECT NAMED BEFORE THE CHANGE WAS MADE.** Two more
+real reports (TK154, TK117, 2026-09-22), on top of the build-441 fix
+above: "the width of photos are not the same, they should be equal or
+resize to be equal." The justified row build 441 shipped gives every
+photograph its own real width at one shared height — the convention a
+contact sheet or photo gallery uses, and the reason this project had
+ALREADY tried equal width once and reverted it: TK126 (INSP,
+2026-09-19) put two portrait photographs in equal 1fr columns and the
+field read the result as "the spacing is too much," a portrait frame
+sitting small in a column sized for a wider neighbour. That exact
+trade-off — a landscape and a portrait photograph forced into one
+uniform box will show white padding on two sides of the narrower one,
+because nothing here is ever cropped or stretched past its own shape —
+was put to the maintainer directly, by name, before anything was
+changed, and confirmed anyway.
+
+`tileSize`/`tiledRow` (report-core.js, replacing `justifiedH`/
+`justifiedRow`) give every tile in a row the identical SQUARE footprint —
+one width, sized purely from the sheet's own 746px content width and the
+column count, height forced equal to it — never derived from what the
+row's own photographs look like, the way the old shared-height row was.
+Each photograph is letterboxed inside its own square at the largest size
+that keeps its true aspect ratio: a landscape photograph fills its
+tile's width and is padded top and bottom; a portrait one fills the
+tile's height and is padded left and right. A square is the one tile
+shape that treats either orientation exactly alike — neither is closer
+to it than the other — so which way a photograph happens to be taken
+never decides how much of its own tile it fills. The tile itself is
+drawn as a visible bordered box so the padding around a narrower photo
+reads as a deliberately centred frame, not as an accident of the grid.
+
+The gap between tiles was ALSO asked for by name — "gap spacing should
+be tight 1mm" — and is no longer a guessed hairline pixel count: this
+sheet's own documented baseline is 105 CSS px per printed inch
+(`RPT_SCALE`/`DEF_SCALE`'s own comment), so 1mm of paper is 105/25.4 ≈
+4.13 CSS px here, rounded to 4 — replacing the older 8px.
+
+A real bug was caught rewriting the tests for this, not found in the
+field: the tile `<div>` was first sized to the photograph's own
+letterboxed CONTENT area (`side - border*2`) rather than the tile's own
+full outer footprint (`side`), so tiles actually touching edge to edge
+were two pixels smaller than the spacing between them assumed — a gap
+that looked right in isolation but drifted from the intended ~1mm the
+moment two tiles were measured against each other, caught by
+`galmixed4.cjs`'s own "same tile size" assertion failing by exactly that
+amount. And the OLDER `#rptRoot .cel .phg.gallery img{max-height:182px}`
+rule — written for the one/two-photograph technique below this branch —
+matches ANY `<img>` under `.phg.gallery`, this new tile's included, so a
+portrait photograph's own legitimately-taller-than-182px letterboxed
+height was silently cut back to 182 while its width stayed correct;
+`max-width:none;max-height:none` on the tile's own `<img>` (the same
+override the old justified row already needed, for the same reason)
+closes it. Both were caught by `galshort.cjs`'s own letterbox-shape
+assertion and `galmixed4.cjs`'s own equal-tile-size assertion failing
+against the first draft, not by a field report — the standing suites
+this project keeps specifically so a redesign is checked against its own
+stated contract before it ships, not after.
+
+`galshort.cjs`, `galjustify.cjs` and `galmixed4.cjs` — all three of which
+encoded the OLD "own width, shared height" contract as their premise —
+are rewritten to the new one: every tile in a row is the same square
+size regardless of the row's own photographs, a landscape and a portrait
+row get the IDENTICAL tile (not merely the same line width at two
+different heights), the gap is the new tight hairline, and a photograph
+is still never cropped or stretched. `galorphan.cjs`, `galportrait.cjs`,
+`photogallerysize.cjs`, `phgstretch.cjs` and `photostandard.cjs` needed
+no changes — each already asserted the row-level and type-level
+invariants (reaches the line, remainder matches the row above it, every
+type reaches the shared function, non-gallery boards untouched) in terms
+general enough to hold under either design.
+
+**THE LETTERBOXED TILE ABOVE WAS ITSELF REVERSED — BY A REFERENCE
+PHOTOGRAPH, NOT A SENTENCE — AND THE RULE WAS THEN GENERALISED PAST ONE
+ROUND TYPE.** Every mockup built to prove the square-letterboxed tile was
+rejected sight unseen: "that your mock up. nothing was implementted." The
+flat-swatch test fixtures this project had been using to prove geometry
+read, to the person looking at them, as evidence that nothing real had
+shipped — a screenshot of coloured rectangles cannot be told apart from a
+placeholder. What settled it was the maintainer's own photograph of four
+real magnetic-plug close-ups laid out the way the report is meant to look:
+four tiles, identically sized, every one of them filled COMPLETELY by its
+photograph — no white bar on any side, no frame of unused tile around a
+narrower shot. "this an example of same and standard." That is COVER, the
+opposite fit from CONTAIN/letterbox, and it is the one place in this
+project's report engine where a photograph is deliberately cropped rather
+than padded — everywhere else, a photograph forced narrower than its own
+shape is this project's definition of evidence altered. `tiledRow`
+(report-core.js) now sizes each photograph to fill its tile on the axis
+matching its shape (a landscape/square photograph to the tile's height, a
+portrait one to the tile's width) and lets the other axis overflow into
+the tile's own `overflow:hidden`, centred, so a crop takes equally from
+both sides rather than favouring one corner. The photograph is now a CHILD
+of its tile div (the clipping box) rather than a positioned sibling of it,
+which is what makes the crop possible at all.
+
+A further instruction — "this will not be applied to magnetic plug only
+but to all inspection[s]... it[']s a 4 photo rule per line, all equal" —
+corrected an assumption the letterboxed tile still carried: `tileSize` had
+solved the tile's own size from `gcols`, the ACTUAL row's photograph count
+(3 for a lone three-photograph finding, 4 only once a fourth existed), so
+a full row of three photographs was sized as its own wider three-column
+line — a smaller version of the exact "same rule, two different sizes"
+defect this file already fixed once for the row's overall WIDTH
+(galjustify.cjs's own history) and had not yet fixed for the TILE. Every
+gallery row on every round type this board serves — FC, INSP, TB, UC, RTW,
+Magnetic Plug, anything reaching `cell(..., gallery=true)` — is now a slot
+in a FOUR-column grid, always: `GAL_TILE_COLS` is a fixed constant, never
+the row's own count, so three photographs get the identical tile a full
+row of four uses and simply leave the fourth slot empty, flush left,
+rather than negotiating a bigger tile for themselves. `photostandard.cjs`
+(FC/INSP/TEMP/GET/UC/TB/RTW × EN/RU/bilingual, 21 combinations) and a real
+`html2canvas` raster of a five-photograph magnetic-plug finding built from
+photorealistic (gradient-and-noise, not flat-colour) textures both prove
+the tile is filled completely with no letterbox bar and that a bare
+three-photograph row falls short of the line at the SAME tile size a
+four-photograph row uses.
+
+`galshort.cjs`, `galjustify.cjs`, `galmixed4.cjs` and `galorphan.cjs` are
+rewritten again: every letterbox-shaped assertion (a displayed image no
+larger than its tile, padded top/bottom or left/right) is replaced with a
+cover-shaped one (a displayed image reaching or exceeding its tile's own
+inner size on BOTH axes, cropped rather than padded on whichever one
+overflows), and every "a full row of three reaches the 746px line"
+assertion — true only under the old per-row sizing — is replaced with "a
+full row of three falls short of the line by design, at the identical
+tile size a four-photograph row uses, flush left." `galjustify.cjs` adds a
+row built from a genuinely different record `type` (INSP, not MP) proving
+the tile size is identical to MP's own three-photograph case, so the rule
+reads as type-independent in the test the same way it is in the code.
+
 ---
 
 ## Secrets

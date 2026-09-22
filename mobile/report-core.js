@@ -4600,108 +4600,120 @@
     for (var i = 0; i < arr.length; i += n) out.push(arr.slice(i, i + n));
     return out;
   }
-  /* Solved from the row's own photographs: h such that
-     sum(h * ratio_i) + (n-1)*gap == targetW. Bounded so a row of extreme
-     ratios (all near-panoramic, or all narrow portrait) settles at a
-     readable height rather than a sliver or a page-filling wall — the same
-     kind of floor/ceiling this sheet already keeps on its single-photo and
-     history boards. */
-  function justifiedH(urls, targetW, gap, minH, maxH) {
-    var sumR = 0, i;
-    for (i = 0; i < urls.length; i++) sumR += photoRatio(urls[i]);
-    if (!sumR) sumR = urls.length * (4 / 3);
-    var h = (targetW - (urls.length - 1) * gap) / sumR;
-    return Math.max(minH, Math.min(maxH, Math.round(h)));
-  }
   /* The gallery board's own measured content width (measurewidth.cjs: a
-     758px board, 6px padding each side) and its established 8px gap —
-     unchanged since build 421. */
-  var GAL_ROW_W = 746, GAL_GAP = 8, GAL_MIN_H = 100, GAL_MAX_H = 250;
-  function justifiedRow(urls, h, gap, targetW, isFull) {
-    /* max-height:none, explicit, on every image — the shared .cel .phg.gallery
-       img rule (above) caps height at 182px for the OLD one/two-photograph
-       technique this row does not use, and CSS max-height clamps an explicit
-       height same as any other, inline or not: a computed 198px silently
-       came back as 182 the first time this ran, undoing the whole point of
-       solving for the row's own width. Setting it back to none here, inline,
-       is what makes THIS row's own computed height the one that actually
-       reaches the page. */
-    /* THE ROW IS POSITIONED BY ARITHMETIC NOW, NOT BY ASKING A LAYOUT
-       ALGORITHM TO DISTRIBUTE IT.
+     758px board, 6px padding each side) — unchanged since build 421.
+     GAL_GAP is no longer a guessed "hairline" pixel count: this sheet's own
+     documented baseline is 105 CSS px per printed inch (CLAUDE.md, "the
+     scale IS the print resolution: 105 ppi x scale on A4"), so 1mm of paper
+     is 105/25.4 = 4.13 CSS px here — rounded to the nearest whole pixel,
+     the same way every other explicit measurement on this row already is. */
+  var GAL_ROW_W = 746, GAL_GAP = Math.round(105 / 25.4), GAL_MIN_H = 100, GAL_MAX_H = 250;
+  /* EVERY TILE IN A ROW IS THE SAME WIDTH AND THE SAME HEIGHT, ALWAYS —
+     ASKED FOR BY NAME, WITH THE TRADE-OFF STATED AND ACCEPTED.
 
-       This used to be a flex row: `justify-self:stretch` to make the row
-       itself occupy the grid column's full width (the column's own
-       `justify-items:center` otherwise shrink-wraps and centres it), then
-       `justify-content:space-between` or `center` to decide where the
-       leftover space goes. Both properties read correctly in every
-       Playwright/DOM check this file has (galshort.cjs, galorphan.cjs) —
-       and STILL printed a 3-photograph row centred with a blank margin on
-       BOTH sides (TK154, HS.CV, 2026-09-22), the exact "same, no change"
-       shape this row's own comment already once described for a different
-       cause. This file has hit this exact class of gap three times before
-       for three OTHER CSS properties html2canvas does not implement
-       (object-fit, aspect-ratio, a nested inline <svg>) — a fourth
-       instance, this time in the grid/flex ALIGNMENT properties
-       (`justify-self`, `justify-content`) rather than the sizing ones, is
-       not a surprising place for it to have been hiding.
+     This row used to give every photograph its own real width at a shared
+     height (a "justified row", the convention a contact sheet or a photo
+     gallery uses) specifically BECAUSE this project had already tried equal
+     width once and reverted it: TK126 (INSP, 2026-09-19) put two portrait
+     photographs in equal 1fr columns and the field read the result as "the
+     spacing is too much" — a portrait frame sitting small in a column sized
+     for a wider neighbour, with the unused column width showing as raw
+     white space beside it. Read off two more real reports (TK154, TK117,
+     2026-09-22) that the field wants the OTHER way regardless: "the width
+     of photos are not the same, they should be equal or resize to be
+     equal" — put to the maintainer directly, with TK126's own history and
+     the exact trade-off (a landscape and a portrait photograph forced into
+     one uniform box will show white padding on two sides of the narrower
+     one, because nothing here is ever cropped or stretched past its own
+     shape) named before the choice was made, and confirmed anyway.
 
-       So this row no longer asks the renderer to align, stretch or
-       distribute anything. Every photograph's LEFT OFFSET is computed here,
-       in plain arithmetic, from the same photoRatio() this row already
-       trusts for its own height (justifiedH, above) — and placed with
-       `position:absolute;left:Npx`, which is not an alignment keyword, it
-       is a number, the same kind of thing the explicit `height` already is
-       for exactly the same reason. The photograph's own WIDTH is still left
-       to the browser (`width:auto`, an explicit height) rather than to this
-       function's own arithmetic estimate — that pairing is the one sizing
-       technique this file already trusts (see the block comment above the
-       CSS rules for `.cel .phg.gallery img`), so only the POSITION is new
-       arithmetic, never the shape of the photograph itself. */
-    /* #rptRoot *{box-sizing:border-box} (this file's own reset, line 78)
-       means the explicit `height:Npx` below is the BORDER box, not the
-       content box — so the browser derives width from a content height two
-       pixels shorter than h (the 1px border top and bottom), then adds the
-       1px left/right border back onto that derived width. Estimating width
-       as a plain h*ratio here — the content-box formula — put every image
-       about a pixel wider than the browser was about to render it, and
-       across a four-photograph row that drifted the last hairline gap from
-       8px to 9 (galmixed4.cjs's own control caught this too). */
-    var PH_BORDER = 2;
-    var widths = urls.map(function (u) { return (h - PH_BORDER) * photoRatio(u) + PH_BORDER; });
-    var sumW = widths.reduce(function (a, b) { return a + b; }, 0);
-    /* A FULL ROW (as many photographs as the sheet puts in one line) is
-       spread margin to margin: when justifiedH's own GAL_MAX_H ceiling kept
-       it from reaching targetW on height alone, the GAP between photographs
-       is widened instead — nothing cropped, nothing stretched past its own
-       ratio, only where the unavoidable extra space goes, the same
-       photograph at the same height it would have had anyway.
+     So the shape is uniform now, not the row: every tile is a SQUARE
+     ("letterbox same height and width", asked for by name) sized so a full
+     row of `gcols` tiles reaches both margins exactly.
 
-       A REMAINDER row (fewer photographs than a full line — the last one,
-       two or three after a full row of four) is never spread this way: a
-       lone photograph blown out to the width of three others would not be
-       "the same size," it would be a different, much wider tile for the
-       identical finding. It sits at its own natural width, same height as
-       the row above it, flush against the LEFT margin — never centred,
-       because a small tile floating in the middle of an otherwise-empty
-       line is what this fix exists to stop being the default. */
-    var g = gap;
-    if (isFull && urls.length > 1 && targetW && sumW + (urls.length - 1) * gap < targetW - gap) {
-      g = (targetW - sumW) / (urls.length - 1);
-    }
-    /* left is left UNROUNDED (a fractional px, which CSS accepts fine) —
-       rounding it per image and accumulating from the rounded value is what
-       let a hairline 8px gap drift to 9px across a four-photograph row
-       (galmixed4.cjs's own control caught this): each image's true
-       rendered width is a float too, and only the CONTINUOUS arithmetic
-       lands each photograph exactly `gap` away from the one before it. */
-    var x = 0;
-    var imgs = urls.map(function (u, i) {
-      var style = 'position:absolute;left:' + x + 'px;top:0;display:block;height:' + h
-        + 'px;width:auto;max-width:none;max-height:none;background:#fff;border:1px solid #dfe4e9;border-radius:3px;';
-      x += widths[i] + g;
-      return '<img src="' + u + '" style="' + style + '">';
+     THE FIT INSIDE THAT SQUARE WAS ITSELF REVERSED ONE STEP LATER, AND THIS
+     TIME BY A REFERENCE IMAGE, NOT A SENTENCE. The first build of this tile
+     fitted each photograph INSIDE its square at the largest size that kept
+     its true aspect ratio — the ordinary letterbox technique this file uses
+     everywhere else a photograph must never be cropped — and every mockup
+     built to prove it was rejected: "that your mock up. nothing was
+     implementted." What finally settled it was the maintainer's own
+     photograph of four real magnetic-plug close-ups already laid out the
+     way this report is meant to look: four tiles, identically sized, every
+     one of them filled completely by its photograph, no white bar on any
+     side, no frame of unused tile around a narrower shot. That is COVER,
+     not CONTAIN — the photograph fills the tile on both axes and whatever
+     does not fit is cropped, never padded — and it is the opposite fit
+     from the one this file was about to ship. It is scoped to exactly this
+     tile (the `gcols>=3` gallery board `tiledRow` builds) and nowhere
+     else: the one/two-photograph board below, `mpEvidence`'s own
+     evidence rows and every other photograph in this report keep the
+     project's ordinary rule — cropped or stretched past its own shape is
+     evidence altered — because letterboxing on THIS specific wall-chart
+     board is what the field read as "not the same," not letterboxing in
+     general. A square remains the one tile shape a cover-fit crop can use
+     without favouring either orientation: a landscape photograph is
+     cropped on its width, a portrait one on its height, and neither loses
+     more of itself than the other does. */
+  /* THE TILE SIZE IS SOLVED FOR FOUR COLUMNS, ALWAYS — NOT FOR HOWEVER MANY
+     PHOTOGRAPHS THIS PARTICULAR ROW HAPPENS TO HOLD. "this will not be
+     applied to magnetic plug only but to all inspection[s]... it[']s a 4
+     photo rule per line, all equal": every gallery row on every round type
+     this board serves (FC, INSP, TB, UC, RTW — anything reaching `cell(...,
+     gallery=true)`) is a slot in a four-across grid, whether this finding
+     has four photographs to fill it, three, or one carried over as a
+     remainder from a bigger set. A row of three was previously sized as
+     though it were its OWN three-column line — wider tiles than a row of
+     four got — which is the same "same rule, two different sizes" defect
+     this project already fixed once for the ROW's overall width (see the
+     comment above cell()'s gallery branch) and had not yet fixed for the
+     TILE itself. GAL_TILE_COLS is fixed at four; a row of fewer photographs
+     simply occupies fewer of those four slots, flush left, at the identical
+     tile size every other row on the page uses. */
+  var GAL_TILE_COLS = 4;
+  function tileSize(targetW, gap) {
+    var w = (targetW - (GAL_TILE_COLS - 1) * gap) / GAL_TILE_COLS;
+    return Math.max(GAL_MIN_H, Math.min(GAL_MAX_H, Math.round(w)));
+  }
+  /* #rptRoot *{box-sizing:border-box} (this file's own reset, line 78) means
+     an explicit width/height below is the BORDER box — the same correction
+     galmixed4.cjs's control already forced onto the old justified row
+     (PH_BORDER) applies here too, so the tile's own 1px border does not
+     silently steal a pixel from the photograph filling it. */
+  var PH_BORDER = 1;
+  function tiledRow(urls, targetW, gap, x0) {
+    var side = tileSize(targetW, gap);
+    var innerW = side - PH_BORDER * 2, innerH = innerW;
+    var cells = urls.map(function (u, i) {
+      var ratio = photoRatio(u);
+      var dispW, dispH;
+      /* COVER: the tile's SHORTER edge (relative to the photograph's own
+         shape) is the one the image is sized to fill exactly; the other
+         axis overflows and is cropped by the tile's own overflow:hidden,
+         never left short and never padded. Landscape/square (ratio>=1)
+         fills the tile's height and overflows width; portrait (ratio<1)
+         fills the tile's width and overflows height. */
+      if (ratio >= 1) { dispH = innerH; dispW = innerH * ratio; }
+      else { dispW = innerW; dispH = innerW / ratio; }
+      var tx = x0 + i * (side + gap);
+      var ox = (innerW - dispW) / 2, oy = (innerH - dispH) / 2;
+      /* The photograph is now a CHILD of its own tile div, which is the
+         positioned, clipped box (overflow:hidden) — the crop itself. The
+         image's own left/top are relative to that div's padding box, which
+         (no padding, border-box sizing) begins exactly where the border
+         ends, so no further +PH_BORDER offset is needed here the way the
+         old sibling-positioned image needed one. */
+      /* max-width/max-height:none, explicit — the shared #rptRoot .cel
+         .phg.gallery img rule clamps a photograph to 182px tall for the
+         OLDER one/two-photograph technique below, and that clamp applies
+         to ANY <img> matching the selector, this one included. */
+      return '<div style="position:absolute;left:' + tx + 'px;top:0;width:' + side + 'px;height:' + side
+        + 'px;background:#fff;border:' + PH_BORDER + 'px solid #dfe4e9;border-radius:3px;overflow:hidden;">'
+        + '<img src="' + u + '" style="position:absolute;left:' + ox + 'px;top:' + oy
+        + 'px;width:' + dispW + 'px;height:' + dispH + 'px;max-width:none;max-height:none;display:block;">'
+        + '</div>';
     }).join("");
-    return '<div class="phgrow" style="position:relative;width:100%;height:' + h + 'px;">' + imgs + '</div>';
+    return { html: '<div class="phgrow" style="position:relative;width:100%;height:' + side + 'px;">' + cells + '</div>', h: side };
   }
   function cell(ctx, T, it, sh, gallery) {
     sh = sh || {};
@@ -4726,17 +4738,15 @@
       if (gallery) {
         var gcols = gridCols(ph.length);
         if (gcols >= 3) {
-          /* A FULL ROW OF THREE OR FOUR IS JUSTIFIED TO FILL THE LINE — see
-             justifiedH's own comment above cell() for why height is solved
-             for the row's target width instead of assumed. The row is built
-             once, from its own first (or only) full set of photographs; a
-             remainder past a full row of four reuses that SAME height
-             ("adopting the sizes... of the other photos" — TK109, the
-             original report), not a size of its own, so a lone fifth
-             photograph reads as this finding's own standard tile rather
-             than independently stretched to fill a line by itself. */
+          /* A FULL ROW OF THREE OR FOUR IS TILED TO FILL THE LINE, EVERY
+             TILE THE SAME SIZE — see tiledRow's own comment above cell()
+             for the uniform-tile rule and the TK126 trade-off it accepts.
+             Every row is built at the SAME tile size, from `gcols`, not
+             from its own count — a remainder past a full row of four gets
+             the identical tile a full row's photograph would have, not a
+             size of its own, so a lone fifth photograph reads as this
+             finding's own standard tile rather than independently sized. */
           var galRows = chunkPh(ph, gcols);
-          var galH = justifiedH(galRows[0], GAL_ROW_W, GAL_GAP, GAL_MIN_H, GAL_MAX_H);
           /* grid-template-columns:1fr, stated inline, is load-bearing and not
              decoration: the older #rptRoot .cel .phg.gallery{grid-template-
              columns:repeat(auto-fill,minmax(200px,1fr))} rule (this file's own
@@ -4751,7 +4761,7 @@
              shape — a rule assumed inert because nothing currently reaches it
              is one new branch away from reaching it. */
           top = '<div class="phg gallery g3plus" style="grid-template-columns:1fr">'
-            + galRows.map(function (r) { return justifiedRow(r, galH, GAL_GAP, GAL_ROW_W, r.length === gcols); }).join("")
+            + galRows.map(function (r) { return tiledRow(r, GAL_ROW_W, GAL_GAP, 0).html; }).join("")
             + '</div>';
         } else {
           /* ONE OR TWO PHOTOGRAPHS PACK TOGETHER AND CENTRE, NOT JUSTIFIED

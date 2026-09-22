@@ -1,40 +1,26 @@
-/* A ROW HELD SHORTER THAN THE LINE BY THE PAGE-HEIGHT CEILING STILL HAS
-   TO REACH THE LINE.
+/* A ROW OF NEAR-SQUARE OR PORTRAIT PHOTOGRAPHS STILL REACHES THE LINE, AT
+   THE SAME SQUARE TILE SIZE AS ANY OTHER ROW — AND EVERY TILE IS FILLED
+   COMPLETELY, CROPPED RATHER THAN PADDED.
 
-   "same no change" — read against CM_unit_TK109_2026-09-21.pdf, the exact
-   report galjustify.cjs's own fix was already supposed to have answered.
-   CH.UC's three photographs (a hub, a tall oil sample jar, a small cap)
-   are portrait/near-square enough that solving for the row's own width
-   the way RRD's four wider close-ups do would need a height past
-   GAL_MAX_H (250) — the ceiling that exists so an all-narrow-portrait row
-   does not blow out a page. Clamped there, the row's own TRUE width at
-   that height falls short of GAL_ROW_W (746).
+   This suite used to prove a "short row" fix, then a letterboxed-square-tile
+   fix; both are superseded. The tile size is not solved from the row's own
+   content (GAL_ROW_W and the column count alone decide it), and the FIT
+   inside that tile is COVER, not CONTAIN: read off the maintainer's own
+   reference photograph of four real magnetic-plug close-ups, every tile is
+   filled edge to edge by its photograph with no padding bar on any side —
+   "this an example of same and standard." The letterboxed version shipped
+   one build earlier was rejected on exactly this point; cropping the
+   overflow, not padding around a smaller image, is what "the same" turned
+   out to mean. This is a narrow, deliberate exception to this project's
+   otherwise-strict "never crop" rule, scoped to this one gallery board only
+   (report-core.js's own comment on `tiledRow` says why).
 
-   This row used to be laid out with flexbox alignment keywords
-   (`justify-self:stretch`, `justify-content:space-between`/`center`) —
-   correct in every Playwright/DOM measurement this suite ever took, and
-   STILL printed a 3-photograph row centred with blank margins on BOTH
-   sides in a real generated PDF (TK154, HS.CV, 2026-09-22): the exact
-   "same, no change" shape this test already exists to catch, reopened not
-   by a new bug in the arithmetic but by html2canvas not reproducing the
-   alignment keywords the DOM was measured through — a fourth instance of
-   this file's own recurring gap (object-fit, aspect-ratio, a nested
-   inline <svg>, and now grid/flex alignment), caught here only because a
-   real render finally disagreed with the DOM. The fix removes the
-   alignment keywords instead of trying to find one html2canvas honours:
-   every photograph's LEFT OFFSET is now plain arithmetic
-   (`position:absolute;left:Npx`), and a short FULL row spends its leftover
-   width as a wider, evenly-computed GAP between photographs — nothing
-   cropped, nothing stretched past its own aspect ratio, only WHERE the
-   unavoidable extra space goes. This suite now measures the actual
-   geometry the fix promises (the row reaches both edges, and it does so by
-   widened gaps, not by resizing a photograph) rather than a CSS keyword,
-   because the keyword is exactly what the real bug hid behind.
-   The threshold that decides "short" is deliberately loose (more than one
-   full gap's worth) — `Math.round(h)` in justifiedH means an ordinary,
-   correctly-filling row is almost never exactly GAL_ROW_W wide either,
-   and galmixed4.cjs's own control caught the fix's first draft turning
-   that rounding noise into a visibly widened hairline gap.
+   What still has to hold for CH.UC's own shapes (a near-square hub, two
+   portrait shots): every tile here is the same fixed width AND height, the
+   row reaches GAL_ROW_W edge to edge, the gap between tiles is the sheet's
+   own tight ~1mm hairline (not widened, not collapsed), and a photograph
+   fills its tile completely on BOTH axes — never falls short on either one,
+   which is what a letterboxed fit would still show as a padding bar.
 
    Run: node tests/galshort.cjs   (needs tests/ed-srv.cjs on 8093) */
 const { chromium } = require(require('./pw.cjs'));
@@ -74,37 +60,49 @@ const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
     const imgs = [...d.querySelectorAll('.phg.gallery img')];
     await Promise.all(imgs.map(im => im.complete ? null : new Promise(res => { im.onload = im.onerror = res; })));
     await new Promise(res => requestAnimationFrame(() => requestAnimationFrame(res)));
-    const row = d.querySelector('.phgrow');
-    const rowRect = row ? row.getBoundingClientRect() : null;
     const boxes = imgs.map(im => im.getBoundingClientRect());
+    // The TILE is the bordered box behind each photograph — a sibling <div>
+    // immediately before its <img>, per tiledRow's own markup.
+    const tiles = [...d.querySelectorAll('.phgrow > div')];
     const out = {
-      justify: row ? getComputedStyle(row).justifyContent : null,
-      rowWidth: rowRect ? Math.round(rowRect.width) : null,
+      tiles: tiles.map(t => { const r = t.getBoundingClientRect(); return { l: Math.round(r.left), w: Math.round(r.width), h: Math.round(r.height) }; }),
       boxes: boxes.map(bx => ({ l: Math.round(bx.left), w: Math.round(bx.width), h: Math.round(bx.height) })),
-      gaps: boxes.slice(1).map((bx, i) => Math.round(bx.left - (boxes[i].left + boxes[i].width))),
+      gaps: tiles.slice(1).map((t, i) => { const a = tiles[i].getBoundingClientRect(), bRect = t.getBoundingClientRect();
+        return Math.round(bRect.left - (a.left + a.width)); }),
     };
     d.remove();
     return out;
   }, { key, name, shapes });
 
-  console.log('CH.UC-shaped row: a near-square hub + two portrait shots — needs a height past GAL_MAX_H to fill the line');
+  console.log('CH.UC-shaped row: a near-square hub + two portrait shots');
   const r = await render('CH.UC', 'Undercarriage', [[500, 480], [300, 620], [280, 520]]);
-  const span = r.boxes.length ? (r.boxes[r.boxes.length - 1].l + r.boxes[r.boxes.length - 1].w - r.boxes[0].l) : 0;
-  ok('three photographs found, all at the GAL_MAX_H ceiling (250px)', r.boxes.length === 3 && r.boxes.every(bx => bx.h === 250), JSON.stringify(r.boxes));
-  ok('  the row is held short of a full row height by the clamp — this is the case the fix targets', true, 'h=250');
-  ok('  THE FIX: the row still reaches the 746px line, edge to edge', span >= 744, 'span=' + span);
-  ok('  by widening the GAPS between photographs, not by cropping or stretching one past its own ratio',
-     r.gaps.length === 2 && r.gaps.every(g => g > 9) && Math.abs(r.gaps[0] - r.gaps[1]) <= 1
-       && new Set(r.boxes.map(bx => bx.w)).size === 3,
-     JSON.stringify({ gaps: r.gaps, widths: r.boxes.map(bx => bx.w) }));
-  ok('  the first photograph still starts at the line\'s own left margin, never centred',
-     r.boxes[0].l <= 8, 'left=' + r.boxes[0].l);
+  const span = r.tiles.length ? (r.tiles[r.tiles.length - 1].l + r.tiles[r.tiles.length - 1].w - r.tiles[0].l) : 0;
+  ok('three tiles found, every one the SAME size (square, width == height)',
+     r.tiles.length === 3 && new Set(r.tiles.map(t => t.w)).size === 1 && new Set(r.tiles.map(t => t.h)).size === 1
+       && r.tiles.every(t => Math.abs(t.w - t.h) <= 1),
+     JSON.stringify(r.tiles));
+  ok('  THE FIX: the tile size is the sheet\'s own fixed four-column size — a row of only three photographs is never solved as its own three-column line, so it falls short of 746px by about a tile\'s width and sits flush left instead of stretching to reach it',
+     span > 500 && span < 650, 'span=' + span);
+  ok('  the gap between tiles is the sheet\'s own tight ~1mm hairline (about 4px), not widened or collapsed',
+     r.gaps.every(g => g >= 2 && g <= 6), JSON.stringify(r.gaps));
+  ok('  every photograph COVERS its own tile completely on both axes — cropped, never left short (never letterboxed)',
+     // COVER, not contain: the displayed image must reach (or exceed) the
+     // tile's own inner size on BOTH axes — a portrait or near-square shape
+     // is cropped on whichever axis overflows, never padded on either one.
+     // The tile's own 1px border eats 2px off each side (box-sizing:border-box).
+     r.boxes.every((bx, i) => bx.w >= r.tiles[i].w - 3 && bx.h >= r.tiles[i].h - 3),
+     JSON.stringify({ boxes: r.boxes, tiles: r.tiles }));
+  ok('  the first tile still starts at the line\'s own left margin, never centred',
+     r.tiles[0].l <= 8, 'left=' + r.tiles[0].l);
 
-  console.log('\ncontrol: RRD-style row (wider close-ups) already fills the line without clamping — untouched by this fix');
+  console.log('\ncontrol: RRD-style row (wider close-ups) — same tile size, same tight gap, different photographs');
   const rrd = await render('RRD', 'Rear Differential', [[500, 420], [420, 400], [480, 480]]);
-  const spanRrd = rrd.boxes.length ? (rrd.boxes[rrd.boxes.length - 1].l + rrd.boxes[rrd.boxes.length - 1].w - rrd.boxes[0].l) : 0;
-  ok('this row is not held short — it already reaches the line on its own', spanRrd >= 740, 'span=' + spanRrd);
-  ok('  so it keeps the sheet\'s own hairline gap, not the redistributed one', rrd.gaps.every(g => g >= 7 && g <= 9), JSON.stringify(rrd.gaps));
+  const spanRrd = rrd.tiles.length ? (rrd.tiles[rrd.tiles.length - 1].l + rrd.tiles[rrd.tiles.length - 1].w - rrd.tiles[0].l) : 0;
+  ok('this row falls short of the line by the SAME amount, at the identical tile size the CH.UC row used — the tile size never depends on which photographs happen to be in it',
+     spanRrd === span && rrd.tiles[0].w === r.tiles[0].w && rrd.tiles[0].h === r.tiles[0].h,
+     'span=' + spanRrd + ' tile=' + JSON.stringify(rrd.tiles[0]));
+  ok('  and the same tight hairline gap, not widened by rounding noise',
+     rrd.gaps.every(g => g >= 2 && g <= 6), JSON.stringify(rrd.gaps));
 
   ok(fails.filter(f => f.startsWith('PAGEERROR')).length === 0, 'no page errors throughout');
   await b.close();
