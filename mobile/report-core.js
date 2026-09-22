@@ -1005,8 +1005,9 @@
       method_LUBE:"Lubrication",
       method_RTW:"Return to Work",
       rtw_no:"No.", rtw_desc:"Description of operations", rtw_mark:"Mark", rtw_comment:"Comment",
-      rtw_comments:"Comments", rtw_wo_type:"Type", rtw_sched:"Scheduled", rtw_sched_hours:"Hours",
+      rtw_comments:"Comments", rtw_wo_type:"Type", rtw_sched:"Scheduled date", rtw_sched_hours:"Hours",
       rtw_priority:"Priority", rtw_vs_sched:"Released vs. schedule",
+      rtw_pm_service:"PM Service", rtw_pm_type:"Type of PM", rtw_actual:"Actual date",
       rtw_sched_ontime:"On schedule", rtw_sched_late:"{n} d late", rtw_sched_early:"{n} d early",
       rtw_pre:"Pre-release inspection", rtw_post:"Service completion",
       rtw_photos:"Evidence", rtw_release:"Final release", rtw_senior:"Senior Mechanic",
@@ -1210,8 +1211,9 @@
       method_LUBE:"\u0421\u043c\u0430\u0437\u043a\u0430",
       method_RTW:"\u0412\u043e\u0437\u0432\u0440\u0430\u0442 \u0432 \u0440\u0430\u0431\u043e\u0442\u0443",
       rtw_no:"\u2116", rtw_desc:"\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435 \u043e\u043f\u0435\u0440\u0430\u0446\u0438\u0438", rtw_mark:"\u041e\u0442\u043c\u0435\u0442\u043a\u0430", rtw_comment:"\u041a\u043e\u043c\u043c\u0435\u043d\u0442\u0430\u0440\u0438\u0439",
-      rtw_comments:"\u041a\u043e\u043c\u043c\u0435\u043d\u0442\u0430\u0440\u0438\u0438", rtw_wo_type:"\u0422\u0438\u043f", rtw_sched:"\u041f\u043b\u0430\u043d", rtw_sched_hours:"\u041d\u0430\u0440\u0430\u0431\u043e\u0442\u043a\u0430",
+      rtw_comments:"\u041a\u043e\u043c\u043c\u0435\u043d\u0442\u0430\u0440\u0438\u0438", rtw_wo_type:"\u0422\u0438\u043f", rtw_sched:"\u041f\u043b\u0430\u043d\u043e\u0432\u0430\u044f \u0434\u0430\u0442\u0430", rtw_sched_hours:"\u041d\u0430\u0440\u0430\u0431\u043e\u0442\u043a\u0430",
       rtw_priority:"\u041f\u0440\u0438\u043e\u0440\u0438\u0442\u0435\u0442", rtw_vs_sched:"\u041e\u0442\u043d\u043e\u0441\u0438\u0442\u0435\u043b\u044c\u043d\u043e \u043f\u043b\u0430\u043d\u0430",
+      rtw_pm_service:"\u041f\u043b\u0430\u043d\u043e\u0432\u043e\u0435 \u0422\u041e", rtw_pm_type:"\u0422\u0438\u043f \u0422\u041e", rtw_actual:"\u0424\u0430\u043a\u0442\u0438\u0447\u0435\u0441\u043a\u0430\u044f \u0434\u0430\u0442\u0430",
       rtw_sched_ontime:"\u041f\u043e \u043f\u043b\u0430\u043d\u0443", rtw_sched_late:"{n} \u0434\u043d. \u043f\u043e\u0437\u0436\u0435", rtw_sched_early:"{n} \u0434\u043d. \u0440\u0430\u043d\u044c\u0448\u0435",
       rtw_pre:"\u041a\u043e\u043d\u0442\u0440\u043e\u043b\u044c\u043d\u044b\u0439 \u043e\u0441\u043c\u043e\u0442\u0440 \u043f\u0435\u0440\u0435\u0434 \u0432\u043e\u0437\u0432\u0440\u0430\u0442\u043e\u043c \u0432 \u0440\u0430\u0431\u043e\u0442\u0443", rtw_post:"\u041e\u043a\u043e\u043d\u0447\u0430\u043d\u0438\u0435 \u043e\u0431\u0441\u043b\u0443\u0436\u0438\u0432\u0430\u043d\u0438\u044f",
       rtw_photos:"\u0424\u043e\u0442\u043e\u0444\u0438\u043a\u0441\u0430\u0446\u0438\u044f", rtw_release:"\u0414\u043e\u043f\u0443\u0441\u043a \u043a \u0440\u0430\u0431\u043e\u0442\u0435", rtw_senior:"\u0421\u0442\u0430\u0440\u0448\u0438\u0439 \u043c\u0435\u0445\u0430\u043d\u0438\u043a",
@@ -3026,15 +3028,48 @@
     if (m === "na") return '<span class="muted">' + T.I("rtw_na") + '</span>';
     return tbMiss(T);
   }
-  /* Just the leading code — 1C's own priority column reads "P3 Planned
-     (PM)" or "P2 Severe", and the header strip asks for the code alone
-     (P1–P4), the way every plan-grid pill elsewhere in this project already
-     states priority. The full text is not thrown away — build_rtw_open's
-     `desc` still carries it into the Pick screen — this is only what a
-     one-line header cell has room to say. */
+  /* THE CODE AND ITS OWN CLASSIFICATION WORD — never 1C's whole sentence.
+     1C's priority column reads "P3 Planned (PM)" or "P4 Planned (Repair)"
+     or "P2 Urgent" — a work order's own priority code is also, in the
+     field's own text, whether it is planned maintenance or an urgent/repair
+     job, which is the "Type of PM" a released document has to state. The
+     parenthetical (PM)/(Repair) is dropped: it distinguishes a planned
+     service from a planned repair for 1C's OWN bookkeeping, but this
+     document already carries that distinction — PM Service prints an hour
+     tier for one and the work order's own description for the other — so
+     repeating it here was the same fact a third time in smaller type. */
   function rtwPrioCode(s) {
     var m = /^(P[1-4])\b/i.exec(String(s || "").trim());
     return m ? m[1].toUpperCase() : (s || "");
+  }
+  function rtwPmTypeText(s) {
+    var m = /^(P[1-4])\s+(\S+)/i.exec(String(s || "").trim());
+    return m ? (m[1].toUpperCase() + " " + m[2]) : (s || "");
+  }
+  /* WHAT KIND OF SERVICE THIS RELEASE WAS RAISED AGAINST, IN ONE CELL.
+     A planned PM's own `type` text is ALWAYS "{hours} Hours service Planned"
+     (ingest/ingest_work_orders.py's own filter regex) — restating it beside
+     an "Hours" cell carrying the same number is the same fact twice, once as
+     a number and once as a sentence built from that number. A repair/defect
+     work order carries no hour tier at all (build_rtw_open leaves `hours`
+     null rather than guessed) and its `type` is the defect's own system or
+     description — genuinely distinct information with nowhere else to print.
+     So: an hour tier is stated as one, compactly; its absence falls back to
+     whatever 1C did say, never to a blank cell that had text to show. */
+  function rtwPmService(rec) {
+    if (rec.rtwSchedHours != null) return esc(rec.rtwSchedHours) + " h Service";
+    if (rec.rtwWoType) return esc(rec.rtwWoType);
+    return "";
+  }
+  /* THE COMPLETION DATE, WITH THE TIME OF DAY WHEN THE PHONE RECORDED ONE.
+     rec.date stays the plain YYYY-MM-DD every other reader of this record
+     depends on (file names, DUE.next, teamDate/idDate) — the time of day is
+     a separate field, rtwTime, added only for this document's own header
+     cell, exactly the way rtwSchedHours/rtwWoType/rtwWoPriority already ride
+     alongside the record without touching its date. */
+  function rtwActualDate(rec) {
+    if (!rec.date) return "";
+    return esc(rec.date) + (rec.rtwTime ? " " + esc(rec.rtwTime) : "");
   }
   /* THE RELEASE DATE AGAINST THE SCHEDULE — CALCULATED, NEVER TYPED.
      `rec.date` is when this checklist was actually completed and signed;
@@ -3065,15 +3100,25 @@
      (ingest/ingest_work_orders.py's build_rtw_open, carried through
      Pick → Save → recToExport0); a defect work order has no hour tier and
      that cell is simply not printed, never guessed. */
+  /* FIVE FACTS, ONE ROW, IN THE ORDER A READER COMPARES THEM.
+     What was scheduled (PM Service, Type of PM) leads; the two dates that
+     matter — when 1C planned it and when it was actually released — sit
+     NEXT TO EACH OTHER so the comparison is a glance, not a hunt between
+     the strip and the masthead subtitle three lines up; the calculated
+     day count that follows is what those two dates were leading to. The
+     raw "Type" cell (1C's own maintenance-type sentence) and the bare
+     "Hours"/"Priority" cells this replaced said the same three facts in
+     five cells — see rtwPmService's and rtwPrioCode's own comments. */
   function rtwHeaderStrip(T, rec) {
     var vsSched = rtwVsSchedule(T, rec);
-    if (!rec.rtwWoPriority && !rec.rtwWoType && !rec.rtwSchedDate && rec.rtwSchedHours == null && !vsSched) return "";
+    var pmService = rtwPmService(rec);
+    if (!pmService && !rec.rtwWoPriority && !rec.rtwSchedDate && !rec.date && !vsSched) return "";
     function cell(k, v) { return '<div class="sc"><div class="sk">' + esc(k) + '</div><div class="sv">' + v + '</div></div>'; }
     var cells = "";
-    if (rec.rtwWoPriority) cells += cell(T.I("rtw_priority"), esc(rtwPrioCode(rec.rtwWoPriority)));
-    if (rec.rtwWoType) cells += cell(T.I("rtw_wo_type"), esc(rec.rtwWoType));
-    if (rec.rtwSchedHours != null) cells += cell(T.I("rtw_sched_hours"), esc(rec.rtwSchedHours) + " h");
+    if (pmService) cells += cell(T.I("rtw_pm_service"), pmService);
+    if (rec.rtwWoPriority) cells += cell(T.I("rtw_pm_type"), esc(rtwPmTypeText(rec.rtwWoPriority)));
     if (rec.rtwSchedDate) cells += cell(T.I("rtw_sched"), esc(rec.rtwSchedDate));
+    if (rec.date) cells += cell(T.I("rtw_actual"), rtwActualDate(rec));
     if (vsSched) cells += cell(T.I("rtw_vs_sched"), vsSched);
     return '<div class="sstrip" style="margin-top:10px;">' + cells + '</div>';
   }
@@ -3423,10 +3468,24 @@
            (atomBands), so forcing a break here bought nothing but a mostly
            blank page behind a short checklist and pushed the gallery a page
            later than the room on the page already allowed. */
+        /* GENERAL EVIDENCE NEEDS ITS OWN CALL. sane() (see its own comment,
+           above) already lifts the machine's own photographs — RTW's
+           "Equipment, work area, other evidence" pseudo-position, GEN_KEY —
+           out of rec.items and into rec.general before this function ever
+           runs, exactly as it does for every graded type. Every graded
+           branch reads rec.general back out through generalBlock(); this
+           branch never did, so rtwPhotoItems() — which only ever looks at
+           rec.items, correctly, since a checklist line's own evidence lives
+           there — had nothing left to find it with. The photographs were
+           captured, uploaded and sitting in rec.general the whole time; nothing
+           on the printed page ever asked for them. */
         var rtwPh = rtwPhotoItems(rec);
-        if (rtwPh.length) {
-          secs.push({ nb: false, html: '<div class="sec"><div class="subhd">' + T.I("rtw_photos") + '</div>'
-            + '<div class="board gal b1">' + rtwPh.map(function (it) { return cell(ctx, T, it, null, true); }).join("") + '</div></div>' });
+        var rtwGen = generalBlock(T, rec);
+        if (rtwPh.length || rtwGen) {
+          secs.push({ nb: false, html: '<div class="sec">' + rtwGen
+            + (rtwPh.length ? '<div class="subhd">' + T.I("rtw_photos") + '</div>'
+              + '<div class="board gal b1">' + rtwPh.map(function (it) { return cell(ctx, T, it, null, true); }).join("") + '</div>' : "")
+            + '</div>' });
         }
         secs.push({ nb: false, html: '<div class="sec">' + approvalBlock(T, rec, true) + '</div>' });
         evidenceSections(T, rec).forEach(function (x) { secs.push(x); });

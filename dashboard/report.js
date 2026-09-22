@@ -286,6 +286,20 @@
          those two apart rather than printing an open line for both. */
       signed: !!rec.signed,
       rtwResult: rec.rtwResult || "", rtwWo: rec.rtwWo || "", rtwComment: rec.rtwComment || "",
+      /* THE SCHEDULE ITSELF WAS NEVER CARRIED ACROSS TO THIS BUILDER.
+         recToExport0 (mobile/index.html) puts rtwWoType/rtwSchedHours/
+         rtwSchedDate/rtwWoPriority/rtwTime on every RTW sidecar precisely so
+         a report can say what 1C scheduled, not just which work order it
+         closed — but this normalisation, the one both the dashboard's own
+         single-round report and its Equipment History document build every
+         RTW section from, never read any of the five back off rec. A report
+         made on the phone that captured the round showed the header strip
+         correctly; the identical round opened on the dashboard printed an
+         empty strip, because rtwHeaderStrip() (report-core.js) returns ""
+         when every one of these fields is absent — the exact shape of "a
+         real value rendered as nothing" this project keeps finding. */
+      rtwWoType: rec.rtwWoType || "", rtwSchedHours: (rec.rtwSchedHours != null ? rec.rtwSchedHours : null),
+      rtwSchedDate: rec.rtwSchedDate || "", rtwWoPriority: rec.rtwWoPriority || "", rtwTime: rec.rtwTime || "",
       ...(() => { const m = reportMap(rec, (opts && opts.art && opts.art[rec.equip + "|" + rec.type]) || "");
                   return { mapHTML: m.html, mapKey: m.key }; })(),
       zones: rec.type === "TB" ? bodyZones(rec) : null,

@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=444">
+<link rel="manifest" href="manifest.webmanifest?v=445">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=444">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=444">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=444">
+<link rel="apple-touch-icon" href="icon-192.png?v=445">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=445">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=445">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2758,16 +2758,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=444"></script>
-<script src="upload-defaults.js?v=444"></script>
-<script src="hme.js?v=444"></script>
-<script src="mp-fc.js?v=444"></script>
-<script src="rtw.js?v=444"></script>
-<script src="hme-cascade.js?v=444"></script>
-<script src="assets.js?v=444"></script>
-<script src="temp-limits.js?v=444"></script>
-<script src="normalize.js?v=444"></script>
-<script src="terms.js?v=444"></script>
+<script src="native.js?v=445"></script>
+<script src="upload-defaults.js?v=445"></script>
+<script src="hme.js?v=445"></script>
+<script src="mp-fc.js?v=445"></script>
+<script src="rtw.js?v=445"></script>
+<script src="hme-cascade.js?v=445"></script>
+<script src="assets.js?v=445"></script>
+<script src="temp-limits.js?v=445"></script>
+<script src="normalize.js?v=445"></script>
+<script src="terms.js?v=445"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2786,25 +2786,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=444"></script>
-<script src="edits.js?v=444"></script>
-<script src="due.js?v=444"></script>
-<script src="wear.js?v=444"></script>
-<script src="wear-figs.js?v=444"></script>
-<script src="wear-map.js?v=444"></script>
-<script src="machine-photos.js?v=444"></script>
-<script src="machine-fig.js?v=444"></script>
-<script src="get.js?v=444"></script>
-<script src="points.js?v=444"></script>
-<script src="uc-points.js?v=444"></script>
-<script src="inspect-guide.js?v=444"></script>
-<script src="get-figs.js?v=444"></script>
-<script src="body-points.js?v=444"></script>
-<script src="body-map.js?v=444"></script>
-<script src="lube.js?v=444"></script>
-<script src="lube-overrides.js?v=444"></script>
-<script src="lube2027.js?v=444"></script>
-<script src="report-core.js?v=444"></script>
+<script src="grade.js?v=445"></script>
+<script src="edits.js?v=445"></script>
+<script src="due.js?v=445"></script>
+<script src="wear.js?v=445"></script>
+<script src="wear-figs.js?v=445"></script>
+<script src="wear-map.js?v=445"></script>
+<script src="machine-photos.js?v=445"></script>
+<script src="machine-fig.js?v=445"></script>
+<script src="get.js?v=445"></script>
+<script src="points.js?v=445"></script>
+<script src="uc-points.js?v=445"></script>
+<script src="inspect-guide.js?v=445"></script>
+<script src="get-figs.js?v=445"></script>
+<script src="body-points.js?v=445"></script>
+<script src="body-map.js?v=445"></script>
+<script src="lube.js?v=445"></script>
+<script src="lube-overrides.js?v=445"></script>
+<script src="lube2027.js?v=445"></script>
+<script src="report-core.js?v=445"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -3373,7 +3373,7 @@ const I18N = {
     rtw_release_t:"Final release",
     rtw_senior_mech:"Senior mechanic", rtw_senior_mech_ph:"Full name",
     rtw_result:"Result",
-    rtw_date:"Date", rtw_signature:"Senior mechanic signature",
+    rtw_date:"Date", rtw_time:"Time", rtw_signature:"Senior mechanic signature",
     rtw_sign_clear:"Clear", rtw_sign_tap:"Tap to sign",
     rtw_progress:"{done} of {total} checks complete",
     rtw_hint_name:" · name the senior mechanic", rtw_hint_sign:" · sign to confirm",
@@ -4022,7 +4022,7 @@ const I18N = {
     rtw_release_t:"Допуск к работе",
     rtw_senior_mech:"Старший механик", rtw_senior_mech_ph:"Ф.И.О.",
     rtw_result:"Результат",
-    rtw_date:"Дата", rtw_signature:"Подпись старшего механика",
+    rtw_date:"Дата", rtw_time:"Время", rtw_signature:"Подпись старшего механика",
     rtw_sign_clear:"Очистить", rtw_sign_tap:"Нажмите, чтобы подписать",
     rtw_progress:"Проверено {done} из {total}",
     rtw_hint_name:" · укажите старшего механика", rtw_hint_sign:" · подпишите для допуска",
@@ -8351,6 +8351,14 @@ $("supName").addEventListener("input",renderSignFold);
 function todayISO(){
   return (typeof DUE !== "undefined" && DUE && DUE.today) ? DUE.today() : "";
 }
+/* The current wall-clock time as "HH:MM", for RTW's own completion-time
+   field. This is a DISPLAY default only, read once when the checklist
+   screen opens — it never re-reads the clock on its own, so it behaves
+   exactly like todayISO()'s date default and can be typed over. */
+function nowHHMM(){
+  const d=new Date();
+  return String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0");
+}
 $("date").value=todayISO();
 $("inspector").value=localStorage.getItem("inspector")||"";
 $("inspector").addEventListener("input",()=>lsSet("inspector",$("inspector").value.trim()));
@@ -10296,7 +10304,7 @@ async function rtwOpenForEdit(rec){
   });
   const gen=(rec.positions||{})[GEN_KEY]||{};
   rtwDraft={ wo:rec.rtwWo||"", equip:rec.equip||"", cls:rec.cls||"",
-    component:"", priority:rec.rtwWoPriority||"", date:rec.date||todayISO(),
+    component:"", priority:rec.rtwWoPriority||"", date:rec.date||todayISO(), time:rec.rtwTime||nowHHMM(),
     woType:rec.rtwWoType||"", woHours:(rec.rtwSchedHours!=null?rec.rtwSchedHours:null), woPlan:rec.rtwSchedDate||"",
     items, sup:rec.sup||"", result:rec.rtwResult||"R", overallComment:rec.rtwComment||"", released:false,
     general:{ photos:(gen.photos||[]).slice(), comment:gen.comment||"" } };
@@ -10312,7 +10320,7 @@ function rtwPickRow(row){
   if(!row) return;
   rtwEditing=null;
   rtwDraft={ wo:row.wo, equip:row.equip, cls:row.cls||assetClassOf(row.equip)||"",
-    component:row.comp||"", priority:row.priority||"", date:todayISO(),
+    component:row.comp||"", priority:row.priority||"", date:todayISO(), time:nowHHMM(),
     /* The work order's own type, hour tier and 1C plan date — carried from
        the Pick row onto the record at Save, so the header can say what was
        actually scheduled, not just which WO number it closed against. A
@@ -10354,6 +10362,7 @@ function rtwHarvestInputs(){
   const overall=$("rtwOverallComment"); if(overall) rtwDraft.overallComment=overall.value;
   const sup=$("rtwSup"); if(sup) rtwDraft.sup=sup.value;
   const dt=$("rtwDate"); if(dt) rtwDraft.date=dt.value;
+  const tm=$("rtwTime"); if(tm) rtwDraft.time=tm.value;
   const res=$("rtwResult"); if(res) rtwDraft.result=res.value;
 }
 function rtwRerender(){
@@ -10509,6 +10518,8 @@ function rtwRenderChecklist(keepSignDataUrl){
           </select></div>
         <div class="rtw-release-field" style="flex:1;"><label>${esc(t('rtw_date'))}</label>
           <input id="rtwDate" type="date" value="${esc(d.date||todayISO())}"></div>
+        <div class="rtw-release-field" style="flex:.8;"><label>${esc(t('rtw_time'))}</label>
+          <input id="rtwTime" type="time" value="${esc(d.time||nowHHMM())}"></div>
       </div>
       <div class="rtw-release-field"><label>${esc(t('rtw_overall_t'))}</label>
         <div class="rtw-evidence-row">
@@ -10548,7 +10559,7 @@ document.addEventListener("DOMContentLoaded", function(){
     if(e.target.closest("#rtwSignClear")){ rtwClearSign(); return; }
   });
   body.addEventListener("change", (e)=>{
-    if(e.target.id==="rtwResult" || e.target.id==="rtwSup" || e.target.id==="rtwDate"){
+    if(e.target.id==="rtwResult" || e.target.id==="rtwSup" || e.target.id==="rtwDate" || e.target.id==="rtwTime"){
       rtwHarvestInputs(); rtwUpdateFooter();
     }
   });
@@ -10591,7 +10602,7 @@ async function rtwSave(){
       positions:{}, created, up:0, upTo:{}, rev:(rtwEditing?(rtwEditing.rev||0)+1:1), phv:2,
       rtwWo:d.wo||"", rtwResult:d.result||"R", rtwComment:(d.overallComment||"").trim(),
       rtwWoType:d.woType||"", rtwSchedHours:(d.woHours!=null?d.woHours:null), rtwSchedDate:d.woPlan||"",
-      rtwWoPriority:d.priority||"" };
+      rtwWoPriority:d.priority||"", rtwTime:(d.time||"").trim() };
     RTW_ITEMS.forEach(def=>{
       const it=d.items[def.no];
       rec.positions[def.no]={ mark:it.mark||null, comment:(it.comment||"").trim(), photos:(it.photos||[]).slice() };
@@ -13820,7 +13831,7 @@ async function rptRecords(onlyId){
       by:rec.by||"", sup:rec.sup||"", smu:rec.smu||"", gps:rec.gps||null, signUrl, signErr, signed:!!rec.sign,
       rtwResult:rec.rtwResult||"", rtwWo:rec.rtwWo||"", rtwComment:rec.rtwComment||"",
       rtwWoType:rec.rtwWoType||"", rtwSchedHours:(rec.rtwSchedHours!=null?rec.rtwSchedHours:null), rtwSchedDate:rec.rtwSchedDate||"",
-      rtwWoPriority:rec.rtwWoPriority||"",
+      rtwWoPriority:rec.rtwWoPriority||"", rtwTime:rec.rtwTime||"",
       /* "This sheet is measurements" — which is NOT the same question as "does
          capture demand a millimetre at every position". meta.wear is the second
          one, and a GET round answers no to it: teeth are graded, and a tape is
@@ -13931,7 +13942,7 @@ function teamRecToReport(rec){
            gps:rec.gps||null, signUrl:"",
            rtwResult:rec.rtwResult||"", rtwWo:rec.rtwWo||"", rtwComment:rec.rtwComment||"",
            rtwWoType:rec.rtwWoType||"", rtwSchedHours:(rec.rtwSchedHours!=null?rec.rtwSchedHours:null), rtwSchedDate:rec.rtwSchedDate||"",
-           rtwWoPriority:rec.rtwWoPriority||"",
+           rtwWoPriority:rec.rtwWoPriority||"", rtwTime:rec.rtwTime||"",
            wear:!!(meta.wear||meta.get), temp:!!meta.temp, items };
 }
 /* EVERY PHOTOGRAPH THE FOLDER HANDED BACK, PLACED ON THE ROUND.
@@ -14350,7 +14361,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="444";
+const BUILD="445";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -17019,6 +17030,10 @@ function recToExport0(rec){
        carries no hour tier; left null rather than guessed. */
     rtwWoType:rec.rtwWoType||"", rtwSchedHours:(rec.rtwSchedHours!=null?rec.rtwSchedHours:null),
     rtwSchedDate:rec.rtwSchedDate||"", rtwWoPriority:rec.rtwWoPriority||"",
+    /* The time of day the checklist was actually completed and signed —
+       rec.date itself stays plain YYYY-MM-DD, the shape every other reader
+       of this field depends on (file names, DUE.next, teamDate/idDate). */
+    rtwTime:rec.rtwTime||"",
     items:Object.entries(rec.positions).map(([k,p])=>{ const d=DEFECT_BY[upDefect(p.defect)]||null;
       const det=p.detect||DETECT_DEFAULT;
       // Codes leave the app in the shape 1C expects: v4 for the mode, the cause,

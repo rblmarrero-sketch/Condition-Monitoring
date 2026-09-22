@@ -2002,6 +2002,86 @@ breaker predates `!SCHED` by many builds) and is not one `recover.html` was
 ever able to cure; `tests/thawkey.cjs`'s own case 1 now asserts that honest,
 known boundary instead of a promise this exact combination never kept.
 
+**RTW'S OWN GENERAL PHOTOGRAPHS WERE CAPTURED, SAVED, SYNCED — AND PRINTED
+NOWHERE.** Read against a real report request: "check why the overall photo/s
+is not included in the report." `sane()` (report-core.js, run once before any
+round-body function's own code) lifts every `it.general` item — RTW's
+"Equipment, work area, other evidence" pseudo-position, `GEN_KEY` — out of
+`rec.items` and into `rec.general` before ANY branch runs, exactly as it does
+for every graded type; every graded branch reads it back with
+`generalBlock()`. RTW's own branch never called it — it built its photo page
+from `rtwPhotoItems(rec)` alone, which correctly reads `rec.items` for a
+checklist line's OWN evidence, and had nothing left to find the general
+photographs with once `sane()` had already moved them out. Not a save bug, not
+a sync bug: the photographs were sitting in `rec.general` the whole time, and
+nothing on the printed page ever asked for them. Fixed by giving RTW's photo
+section the same `generalBlock(T, rec)` call every graded type's already has.
+`tests/rtw.cjs` had ZERO coverage of this path — the only existing mention of
+`__general` merely excluded it from a position COUNT — and now captures one,
+saves it, and asserts it prints through the same `genwrap`/`genrow` markup
+every other type's machine evidence uses.
+
+**THE OFFICE'S OWN REPORT NEVER CARRIED RTW'S SCHEDULE ACROSS AT ALL.** A
+second, unrelated gap found investigating the same request: `report-core.js`'s
+`rtwHeaderStrip()` reads `rtwWoType`/`rtwSchedHours`/`rtwSchedDate`/
+`rtwWoPriority` off the record — and `dashboard/report.js`'s `normalizeRecs()`,
+the one place that turns a folder sidecar into what report-core.js actually
+reads, never mapped any of the four. A round captured on the phone printed a
+correct header on that phone's OWN report (`rptRecords()` carries them by
+hand); the identical round, opened from the folder on the dashboard, printed
+an EMPTY header strip, because `rtwHeaderStrip()` returns `""` once every
+field it looks for is gone — this document's own shape of "a real value
+rendered as nothing," on a document that has never had a test rendering it
+from the OFFICE side rather than the phone's own IndexedDB. New suite
+`tests/rtwoffice.cjs` seeds a real sidecar in a fake Drive, loads the
+dashboard cold, and proves the five fields (see below) survive
+`normalizeRecs()` and reach the printed strip — the one check this gap could
+never have failed, because nothing had ever asked the question from that
+side.
+
+**THE HEADER ITSELF WAS FIVE FACTS SAYING THREE THINGS, AND THE TWO DATES
+THAT MATTER WERE THREE LINES APART.** Asked for by name against a real
+printed report: "PM service, Scheduled Date, Type of PM, Actual PM Date,
+arrange it good to the eyes." The old strip's "Type" cell printed 1C's own
+maintenance-type sentence — which, for every PLANNED service,
+`ingest_work_orders.py`'s own filter regex guarantees is always exactly
+`"{hours} Hours service Planned"` — beside an "Hours" cell stating the
+identical number a second time, and a "Priority" cell truncated to a bare
+code (`P1`) that was itself a deliberate, tested simplification from before
+this request existed. `rtwPmService(rec)` collapses the two into one: an
+hour tier stated compactly (`"250 h Service"`) when there is one, 1C's own
+type text when there is not — a REPAIR work order carries no hour tier at
+all (`build_rtw_open` leaves `hours` null rather than guessed) and its type
+text is genuinely distinct information with nowhere else to print, so the
+fallback is exact, not a guess. `rtwPmTypeText(rec.rtwWoPriority)` keeps the
+code AND its own classification word (`"P3 Planned"`, `"P2 Urgent"`) — the
+part of 1C's sentence that actually says whether this was planned
+maintenance, an urgent job, or a planned repair, which is what "Type of PM"
+asks — and drops only the trailing `(PM)`/`(Repair)` parenthetical, which
+this document already states elsewhere. The scheduled date and the actual
+release date now sit NEXT TO EACH OTHER in the strip (`rtwActualDate`,
+reading the completion date that used to live only in the masthead subtitle
+three lines up) so the comparison a reader wants — was this released on
+time — is a glance sideways, not a hunt between two parts of the page; the
+calculated day-count cell that already existed follows immediately after,
+because it is what those two dates were leading to. `tests/rtw.cjs` §11/§12
+prove both the hour-tier case and the raw-text fallback against the two
+shapes `build_rtw_open` actually produces.
+
+**THE COMPLETION DATE IS A DAY; THE REPORT NOW ALSO KNOWS THE HOUR.**
+`rec.date` stays exactly what every other reader of this record already
+depends on it being — plain `YYYY-MM-DD`, used raw in string concatenation
+for file names, `DUE.next`, and `teamDate`/`idDate` — asked for by name:
+"in the Date include time." A new, SEPARATE field, `rtwTime` (`"HH:MM"`,
+defaulted to the wall clock when the checklist opens and freely editable),
+rides alongside it exactly the way `rtwWoType`/`rtwSchedHours`/
+`rtwSchedDate`/`rtwWoPriority` already do — the same three read sites
+(`rptRecords`, the team-round reader, `recToExport0`) each needed the one
+extra field, the same "one fact carried by hand at several sites" shape
+this file's rules already warn about for RTW's other schedule fields.
+`rtwActualDate()` appends it to the header's "Actual date" cell only when
+present; nothing that reads `rec.date` on its own was touched.
+
 ---
 
 ## Secrets

@@ -164,11 +164,26 @@ const jpg = p => p.evaluate(() => {
   footer = await p.textContent('#rtwProgress');
   ok('a photo AND a note together complete the Attention item', /23 of 23/.test(footer), footer);
 
+  // The round's own "Equipment, work area, other evidence" pseudo-position —
+  // GEN_KEY — is not a checklist line and carries no evidence requirement of
+  // its own; captured here so §11 below can prove it actually reaches the
+  // printed report, which it never did before this fix (see report-core.js).
+  await p.click('.rtw-icon-btn[data-photo="__general"]');
+  await p.setInputFiles('#rtwGeneralPhotoInput', { name: 'overall.jpg', mimeType: 'image/jpeg', buffer: Buffer.from(b64, 'base64') });
+  await p.waitForTimeout(300);
+  ok('the general-evidence photo is held on the draft', await p.evaluate(() => rtwDraft.general.photos.length) === 1);
+
   console.log('\n6. Release still needs the senior mechanic and a signature');
   ok('Save stays disabled with the checklist complete but nobody named', await p.isDisabled('#rtwSaveBtn'));
   ok('the footer says whose name is missing', /senior mechanic/i.test(await p.textContent('#rtwProgress')));
   await p.fill('#rtwSup', 'A. Ivanov');
   await p.dispatchEvent('#rtwSup', 'change');
+  // The completion date is date-only everywhere else this record is read
+  // (file names, DUE.next, teamDate/idDate) — the time of day is a SEPARATE
+  // field, asked for so the header can say exactly when the checklist was
+  // signed, not merely which day.
+  await p.fill('#rtwTime', '14:37');
+  await p.dispatchEvent('#rtwTime', 'change');
   await p.waitForTimeout(50);
   ok('and then that a signature is needed', /sign/i.test(await p.textContent('#rtwProgress')));
   ok('Save is still disabled with no signature', await p.isDisabled('#rtwSaveBtn'));
@@ -207,6 +222,10 @@ const jpg = p => p.evaluate(() => {
     ok('all 23 items are present with their marks', Object.keys(rec.positions).filter(k => k !== '__general').length === 23);
     const attItem = rec.positions[lastNo];
     ok('the Attention item kept its photo and comment', attItem.mark === 'attention' && (attItem.photos || []).length === 1 && /Ferrous debris/.test(attItem.comment));
+    ok('the general-evidence photo is saved on the __general pseudo-position, the shared mechanism every round type uses',
+      !!rec.positions.__general && (rec.positions.__general.photos || []).length === 1);
+    ok('the completion TIME is captured as its own field, and rec.date stays plain YYYY-MM-DD',
+      rec.rtwTime === '14:37' && /^\d{4}-\d{2}-\d{2}$/.test(rec.date));
     ok('up starts at 0 — nothing is falsely claimed sent before syncNow runs', rec.up === 0);
   }
   ok('no page errors or console errors throughout', fails.filter(f => /^PAGEERROR|^CONSOLE/.test(f)).length === 0,
@@ -276,15 +295,21 @@ const jpg = p => p.evaluate(() => {
   ok('carries the schedule it was raised against: priority, type, plan date and hour tier',
     rec.rtwWoPriority === 'P1 Critical' && rec.rtwWoType === '4000 Hours service Planned'
     && rec.rtwSchedDate === '2026-09-18' && rec.rtwSchedHours === 4000);
-  ok('the priority CODE (P1) reaches the header strip, not the full 1C text', (() => {
-    // the .sk LABEL is bilingual ("Priority <span class=alti>/ Приоритет</span>");
-    // only the .sv VALUE is the plain, un-translated code.
-    const m = /<div class="sk">Priority[^<]*(?:<span[^>]*>[^<]*<\/span>)?<\/div><div class="sv">([^<]*)<\/div>/.exec(html);
-    return !!m && m[1] === 'P1';
+  ok('"Type of PM" carries the code AND its own classification word — P1 Critical, not just P1', (() => {
+    // the .sk LABEL is bilingual ("Type of PM <span class=alti>/ ...</span>");
+    // only the .sv VALUE is the plain, un-translated text.
+    const m = /<div class="sk">Type of PM[^<]*(?:<span[^>]*>[^<]*<\/span>)?<\/div><div class="sv">([^<]*)<\/div>/.exec(html);
+    return !!m && m[1] === 'P1 Critical';
   })());
-  ok('the work order\'s own type reaches the header strip', html.includes('4000 Hours service Planned'));
-  ok('1C\'s plan date reaches the header strip', html.includes('2026-09-18'));
-  ok('the scheduled hour tier reaches the header strip, in hours', /4000\s*h\b/.test(html));
+  ok('"PM Service" states the hour tier, not 1C\'s raw sentence repeating the same number', (() => {
+    const m = /<div class="sk">PM Service[^<]*(?:<span[^>]*>[^<]*<\/span>)?<\/div><div class="sv">([^<]*)<\/div>/.exec(html);
+    return !!m && m[1] === '4000 h Service';
+  })() && !html.includes('4000 Hours service Planned'));
+  ok('1C\'s plan date reaches the header strip, under "Scheduled date"', html.includes('2026-09-18'));
+  ok('the actual release date AND time sit beside the scheduled date, under "Actual date", for a direct comparison', (() => {
+    const m = /<div class="sk">Actual date[^<]*(?:<span[^>]*>[^<]*<\/span>)?<\/div><div class="sv">([^<]*)<\/div>/.exec(html);
+    return !!m && m[1] === rec.date + ' 14:37';
+  })());
   ok('the release date is compared against the schedule, calculated — not typed', (() => {
     const days = Math.round((Date.parse(rec.date + 'T00:00:00Z') - Date.parse('2026-09-18T00:00:00Z')) / 86400000);
     const want = days === 0 ? 'On schedule' : days > 0 ? `${days} d late` : `${-days} d early`;
@@ -311,6 +336,15 @@ const jpg = p => p.evaluate(() => {
   ok('RTW carries no 1–5 grade scale — the rating bar is skipped, not printed empty',
       !html.includes('CONDITION RATING') && !html.includes('Condition scale'));
   ok('page 2 holds the evidence gallery with a real photograph in it', html.includes('board gal b1') && /<img[^>]+src="data:/.test(html));
+  // report-core.js's sane() moves every it.general item (RTW's own "Equipment,
+  // work area, other evidence" pseudo-position) out of rec.items and into
+  // rec.general before this branch ever runs, exactly as it does for every
+  // graded type — but the RTW branch never called generalBlock() to read
+  // rec.general back out, so this photograph was captured, saved and synced
+  // and never printed anywhere. It must appear via the same genwrap/genrow
+  // markup every other round type's machine evidence uses.
+  ok('the general/overall evidence photo reaches the report, through the same generalBlock() every other type uses',
+    /class="genwrap"/.test(html) && (html.match(/class="genrow"[^>]*>[\s\S]*?<img src="data:/g) || []).length > 0);
   ok('the Senior Mechanic\'s name and signature reach the approval table', html.includes('A. Ivanov') && /<img src="data:image\/png/.test(html));
   ok('RTW has one signer — CM Technician and Reliability Engineer are dropped, Maintenance Supervisor stays',
     !html.includes('CM Technician') && !html.includes('Reliability Engineer') && /Maintenance Supervisor/.test(html));
@@ -362,6 +396,17 @@ const jpg = p => p.evaluate(() => {
   }, recD.id) : '';
   ok('a "D — not released" round prints in the alarm colour, not a quiet cell',
       htmlD.includes('v-act') && /Faulty and unsafe to use/.test(htmlD));
+  // WO-016620 (TK126) is the OTHER shape build_rtw_open produces: a defect
+  // work order with no hour tier at all (hours: null) and its own type text
+  // ("2.1", the defect's system/description) — not a planned PM's
+  // "{n} Hours service Planned" sentence. PM Service has nothing to state as
+  // an hour figure, so it must fall back to 1C's own text rather than a
+  // blank cell that had something to show.
+  ok('PM Service falls back to 1C\'s own work-order text when there is no hour tier to state instead',
+    recD.rtwSchedHours == null && recD.rtwWoType === '2.1' && (() => {
+      const m = /<div class="sk">PM Service[^<]*(?:<span[^>]*>[^<]*<\/span>)?<\/div><div class="sv">([^<]*)<\/div>/.exec(htmlD);
+      return !!m && m[1] === '2.1';
+    })());
 
   console.log('\n13. editing a saved RTW round from the queue reopens RTW, not the graded wizard');
   // "if I select edit, its going to Inspection page, it should go to RTW."
