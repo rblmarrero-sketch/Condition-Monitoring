@@ -2082,6 +2082,60 @@ this file's rules already warn about for RTW's other schedule fields.
 `rtwActualDate()` appends it to the header's "Actual date" cell only when
 present; nothing that reads `rec.date` on its own was touched.
 
+**A REAL PDF, MADE OFF THE REAL SCHEDULE FILE, IS WHAT FOUND THE NEXT TWO —
+NEITHER SHOWED UP IN ANY SYNTHETIC FIXTURE.** Generating an actual
+DZ014/WO-016593 release through the real Pick screen (`data/schedule_slim
+.json`, not a test's own `SCHED = {...}` override) and opening the resulting
+PDF surfaced two defects the header-strip work above had just shipped and
+every `tests/rtw.cjs` assertion had still passed against:
+
+1. **Every label on the header strip printed its own HTML as visible text.**
+   `rtwHeaderStrip`'s `cell(k, v)` called `esc(k)` on `k`, and `k` is always
+   `T.I(...)` — a bilingual label that is ALREADY escaped, ALREADY-marked-up
+   HTML (a `<span class="alti">` wrapping the second language, per `T.I`'s
+   own contract in `makeT`). Escaping it a second time turned the literal
+   markup into text: "PM Service &lt;span class=&quot;alti&quot;&gt;/
+   Плановое ТО&lt;/span&gt;" rendered on the actual page, in place of "PM
+   Service / Плановое ТО" in two weights. `statusStrip`'s own `cell()`, a
+   few hundred lines up, looks identical and IS correct — it wraps a bare
+   `T(...)` call with no markup in it — so the same four characters
+   (`esc(k)`) were right in one function and wrong in the one that copied
+   its shape. This is not new: nothing about it changed when the header
+   was redesigned above, and the ORIGINAL "Priority" cell had exactly the
+   same defect from the day it shipped — `tests/rtw.cjs`'s own regex,
+   `[^<]*(?:<span[^>]*>...)?`, is greedy enough that `[^<]*` swallows the
+   escaped span whole (it contains no real `<` character) and still
+   matches, so the test passed whether the markup rendered as markup or as
+   text. Fixed by not escaping a label that was never plain text to begin
+   with; `cell()` now takes `k` raw. `tests/rtw.cjs` asserts directly that
+   `&lt;span` and `&quot;alti&quot;` never reach the page — the one check
+   this class of bug needs and the DOM-level regex could never provide.
+
+2. **The day-count cell's ALTERNATE language kept the literal placeholder.**
+   `rtwVsSchedule` called plain `T.I("rtw_sched_late")` and then
+   `.replace("{n}", Math.abs(days))` on the RESULT, instead of passing the
+   number to `T.I` directly. `T.I` already returns both languages
+   concatenated — `"{n} d late<span class="alti">/ {n} дн. позже</span>"`
+   — before the caller ever sees it, and `.replace()` touches only the
+   FIRST match. The English half printed its number correctly; the
+   Russian half, one `<span>` later, printed the four characters `{n}`
+   verbatim, on every bilingual RTW report this cell has ever appeared
+   in. The correct call was sitting a few hundred lines away the whole
+   time: `T.I("ev_gap", { n: rec.gap.missing, ... })` already passes vars
+   straight through, because `T.I`'s own `pick()` helper substitutes every
+   key in the vars object across BOTH renderings in one pass — `.replace()`
+   on the output was solving a problem `T.I`'s own second argument already
+   solves, one language at a time instead of both. Fixed by passing
+   `{ n: Math.abs(days) }` as `T.I`'s second argument directly.
+   `tests/rtw.cjs` asserts the literal string `{n}` never reaches the page
+   and that the Russian day-count actually carries its own number.
+
+Neither of these failed a single existing assertion before being fixed —
+both are exactly this project's own signature defect, found the way this
+file's own rules say to find it: by generating the real document and
+looking at it, off real data, not by trusting a synthetic fixture that
+happened not to exercise the code path where the bug lived.
+
 ---
 
 ## Secrets

@@ -315,6 +315,24 @@ const jpg = p => p.evaluate(() => {
     const want = days === 0 ? 'On schedule' : days > 0 ? `${days} d late` : `${-days} d early`;
     return html.includes(want);
   })());
+  // T.I(key).replace("{n}", n) only ever touches the FIRST "{n}" — the
+  // English half, already correct — and leaves the literal four characters
+  // "{n}" sitting in the Russian half of the same bilingual string, on
+  // every report, since this cell existed. Caught rendering a REAL PDF for
+  // DZ014/WO-016593 (not a synthetic fixture): "3 d early / {n} дн.
+  // раньше" printed on paper. T.I's own vars argument substitutes both
+  // languages in one call.
+  ok('the day-count cell\'s ALTERNATE language also gets its number — not the literal "{n}"',
+    !html.includes('{n}') && /\d+\s*дн\.\s*(?:раньше|позже)/.test(html));
+  // The header strip's labels are T.I(...) — already-escaped, already-
+  // marked-up bilingual HTML — and cell() used to run esc() over them a
+  // SECOND time, so every label printed its own markup as literal text:
+  // "PM Service <span class="alti">/ Плановое ТО</span>" verbatim on a
+  // real generated PDF. Same class of bug rptmirror.cjs already guards
+  // against for the rest of the document ("NOTHING REACHES THE PAGE AS
+  // MARKUP OR AS A KEY") — RTW's own header strip never had the check.
+  ok('no header-strip label prints its own HTML as visible text',
+    !/&lt;span|&quot;alti&quot;/.test(html));
   ok('both checklist sections print, NUMBERED, in the document\'s own order', (() => {
     const pre = html.indexOf('1. Pre-release inspection');
     const post = html.indexOf('2. Service completion');

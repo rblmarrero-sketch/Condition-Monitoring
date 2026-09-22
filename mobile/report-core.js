@@ -3084,7 +3084,17 @@
     if (!isFinite(a) || !isFinite(b)) return "";
     var days = Math.round((b - a) / 86400000);
     if (days === 0) return T.I("rtw_sched_ontime");
-    return T.I(days > 0 ? "rtw_sched_late" : "rtw_sched_early").replace("{n}", Math.abs(days));
+    /* T.I's OWN vars argument, not a .replace() on its output. T.I builds
+       BOTH languages before this line ever sees the string — "{n} d
+       late<span class="alti">/ {n} дн. позже</span>" — and .replace("{n}",
+       …) touches only the FIRST match, so the primary language's figure
+       filled in correctly while the alternate one printed the literal
+       four characters "{n}" beside it, on every bilingual report, since
+       this cell has existed. `pick()` (makeT's own helper, above) walks
+       every key in the vars object across BOTH renderings for exactly this
+       reason — the same call T.I("ev_gap", {n:...}) already uses a few
+       hundred lines up. */
+    return T.I(days > 0 ? "rtw_sched_late" : "rtw_sched_early", { n: Math.abs(days) });
   }
   /* THE WORK ORDER'S OWN SCHEDULE, AND WHAT WAS ACTUALLY DONE AGAINST IT —
      AT THE TOP, BEFORE THE VERDICT, NOT A BOX PARTWAY DOWN THE PAGE.
@@ -3113,7 +3123,15 @@
     var vsSched = rtwVsSchedule(T, rec);
     var pmService = rtwPmService(rec);
     if (!pmService && !rec.rtwWoPriority && !rec.rtwSchedDate && !rec.date && !vsSched) return "";
-    function cell(k, v) { return '<div class="sc"><div class="sk">' + esc(k) + '</div><div class="sv">' + v + '</div></div>'; }
+    /* k is always T.I(...) here — a bilingual label that is ALREADY markup
+       (its own escaped text plus a raw <span class="alti"> for the second
+       language, see T.I's own contract) — esc()-ing it a second time turned
+       every label on this strip into literal "<span class=..." text on the
+       printed page. `esc(k)` looked identical to `statusStrip`'s own `cell()`
+       a few hundred lines up, which is correct there because it wraps a bare
+       `T(...)` call with no markup in it at all — the two functions read the
+       same but one of their inputs was never safe to escape. */
+    function cell(k, v) { return '<div class="sc"><div class="sk">' + k + '</div><div class="sv">' + v + '</div></div>'; }
     var cells = "";
     if (pmService) cells += cell(T.I("rtw_pm_service"), pmService);
     if (rec.rtwWoPriority) cells += cell(T.I("rtw_pm_type"), esc(rtwPmTypeText(rec.rtwWoPriority)));
