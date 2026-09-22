@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=443">
+<link rel="manifest" href="manifest.webmanifest?v=444">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=443">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=443">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=443">
+<link rel="apple-touch-icon" href="icon-192.png?v=444">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=444">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=444">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2758,16 +2758,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=443"></script>
-<script src="upload-defaults.js?v=443"></script>
-<script src="hme.js?v=443"></script>
-<script src="mp-fc.js?v=443"></script>
-<script src="rtw.js?v=443"></script>
-<script src="hme-cascade.js?v=443"></script>
-<script src="assets.js?v=443"></script>
-<script src="temp-limits.js?v=443"></script>
-<script src="normalize.js?v=443"></script>
-<script src="terms.js?v=443"></script>
+<script src="native.js?v=444"></script>
+<script src="upload-defaults.js?v=444"></script>
+<script src="hme.js?v=444"></script>
+<script src="mp-fc.js?v=444"></script>
+<script src="rtw.js?v=444"></script>
+<script src="hme-cascade.js?v=444"></script>
+<script src="assets.js?v=444"></script>
+<script src="temp-limits.js?v=444"></script>
+<script src="normalize.js?v=444"></script>
+<script src="terms.js?v=444"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2786,25 +2786,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=443"></script>
-<script src="edits.js?v=443"></script>
-<script src="due.js?v=443"></script>
-<script src="wear.js?v=443"></script>
-<script src="wear-figs.js?v=443"></script>
-<script src="wear-map.js?v=443"></script>
-<script src="machine-photos.js?v=443"></script>
-<script src="machine-fig.js?v=443"></script>
-<script src="get.js?v=443"></script>
-<script src="points.js?v=443"></script>
-<script src="uc-points.js?v=443"></script>
-<script src="inspect-guide.js?v=443"></script>
-<script src="get-figs.js?v=443"></script>
-<script src="body-points.js?v=443"></script>
-<script src="body-map.js?v=443"></script>
-<script src="lube.js?v=443"></script>
-<script src="lube-overrides.js?v=443"></script>
-<script src="lube2027.js?v=443"></script>
-<script src="report-core.js?v=443"></script>
+<script src="grade.js?v=444"></script>
+<script src="edits.js?v=444"></script>
+<script src="due.js?v=444"></script>
+<script src="wear.js?v=444"></script>
+<script src="wear-figs.js?v=444"></script>
+<script src="wear-map.js?v=444"></script>
+<script src="machine-photos.js?v=444"></script>
+<script src="machine-fig.js?v=444"></script>
+<script src="get.js?v=444"></script>
+<script src="points.js?v=444"></script>
+<script src="uc-points.js?v=444"></script>
+<script src="inspect-guide.js?v=444"></script>
+<script src="get-figs.js?v=444"></script>
+<script src="body-points.js?v=444"></script>
+<script src="body-map.js?v=444"></script>
+<script src="lube.js?v=444"></script>
+<script src="lube-overrides.js?v=444"></script>
+<script src="lube2027.js?v=444"></script>
+<script src="report-core.js?v=444"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -10673,9 +10673,26 @@ function renderDue(){
      schedule, and Return to Work's own entry card (rtwRenderDueEntry,
      above) — !SCHED covers a cold boot before the toggle is ever touched,
      so the card does not sit hidden for up to SCHED_MS waiting on the
-     periodic timer alone. */
+     periodic timer alone.
+
+     !dueRunaway is the breaker's OWN veto, added when adding !SCHED above
+     exposed a gap in it: the burst breaker below only ever knew how to
+     re-arm ITSELF by clearing dueSched/dueView — the two reasons that
+     existed when it was written (build 328) and the only two localStorage
+     keys recover.html clears for a phone that is already stuck. !SCHED
+     answers to neither: a phone that cannot reach the schedule endpoint at
+     all keeps needSched true no matter what those two keys hold, so a
+     runaway repaint loop reintroduced on this reason alone would trip the
+     breaker's one-shot latch exactly once and then spin unthrottled
+     forever, the corrective action having reset nothing that mattered.
+     Vetoing on the latch itself, once tripped, stops the KICK — not merely
+     the two settings that used to be its only cause — for the rest of
+     this page's life, the same "once is enough" contract dueRunaway
+     already keeps everywhere else it is read. tests/thawkey.cjs proves
+     this against the current code, not the shape the breaker shipped
+     against. */
   schedShown = 0;
-  const needSched = dueSched || dueView==="week" || !SCHED;
+  const needSched = !dueRunaway && (dueSched || dueView==="week" || !SCHED);
   if(needSched && !schedKick
      && (!SCHED || Date.now()-(schedCacheGet()||{at:0}).at >= SCHED_STALE_MS)){
     /* Repaint ONLY if the schedule actually became something new, and never
@@ -14333,7 +14350,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="443";
+const BUILD="444";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

@@ -15,12 +15,13 @@
    for it. Put those two keys back to their defaults from there and the copy
    of the app already on the phone opens. No download. Nothing deleted.
 
-   This suite holds both halves of that:
+   This suite holds three cases:
 
      1. THE HANDSETS STUCK TODAY. Built from the build that actually
         shipped — git HEAD, with the loop put back — so it carries no
-        self-heal, exactly like the phones in the pit. Only the repair page
-        can save it, and it must.
+        self-heal, exactly like the phones in the pit. The repair page
+        still does everything it has always promised (see its own note
+        below for the one thing that changed and why case 1 stays red).
      2. EVERY HANDSET FROM NOW ON. The build in the working tree, with the
         same loop put back, must never peg at all: the breaker in renderDue
         catches the runaway on the launch it happens, with no repair page,
@@ -31,7 +32,52 @@
 
    Provable-to-fail: each case asserts the FROZEN state first, so a harness
    that has stopped reproducing the freeze fails here rather than passing
-   three green ticks about nothing. */
+   three green ticks about nothing.
+
+   A THIRD REASON TO WANT SCHED BROKE THE BREAKER'S OWN FIX, AND ONLY CASE 2
+   COULD SEE IT. The RTW entry card gave renderDue() a third reason to ask
+   for 1C's schedule — !SCHED, so the card does not sit hidden for up to
+   SCHED_MS on a cold boot — and the breaker's corrective action (build
+   328) still only knew how to reset the original two (dueSched/dueView),
+   the only two reasons that existed when it was written and the only two
+   keys recover.html has ever cleared. A phone that can never reach the
+   schedule endpoint keeps needSched true through !SCHED regardless of
+   those two keys, so a resolve-loop of build 321's own shape, reintroduced
+   after !SCHED existed, tripped the breaker's one-shot latch exactly once,
+   reset settings that were not the problem, and then spun unthrottled
+   forever — case 2 caught exactly this, red, the first time this suite ran
+   after !SCHED shipped, while case 1 stayed green and gave no warning at
+   all. The fix is `!dueRunaway` added to needSched itself
+   (mobile/index.html): once the breaker has tripped, IT vetoes the kick
+   directly, for the rest of that session, not just the two settings that
+   used to be its only lever. Case 2 is green again with that in place.
+
+   CASE 1'S LAST FOUR ASSERTIONS CHANGED, AND MAKING THE ENDPOINT ANSWER
+   WOULD HAVE BEEN THE WRONG FIX — a real finding worth keeping, not a
+   dead end. Case 1 reconstructs a build from BEFORE the breaker existed
+   at all (build 328), because that is the population recover.html was
+   actually built for — and grafting today's !SCHED-aware needSched onto
+   that breaker-less body is a combination NO BUILD HAS EVER SHIPPED,
+   since the breaker predates !SCHED by many builds. The tempting fix —
+   answer schedule_slim.json for real during this one case, so SCHED
+   stops being permanently null and needSched falls to false once the two
+   keys are cleared — was tried and made the freeze WORSE:
+   schedEnsureLoaded's own cache fast-path resolves on a bare microtask
+   once warm, so the resolve→renderDue→kick→resolve chain never yields to
+   the event loop at all, and even page.evaluate() timed out unable to get
+   a single tick in. The slow 404 round-trip was accidentally the only
+   thing giving the original bug room to be merely bad instead of totally
+   inert; removing that latency is not a fix, it is a worse bug wearing
+   this one's clothes. So the endpoint stays unreachable in every case,
+   and case 1's first six assertions still prove the ORIGINAL two-key
+   promise holds in full (the freeze reproduces, closing and reopening
+   does not save it, the repair page loads, says so, and the two keys are
+   genuinely gone with the phone's own work untouched) — the last four now
+   assert the honest, known boundary instead of a promise this exact
+   reconstruction was never able to keep: this phone stays frozen, because
+   !SCHED plus no breaker at all is not a combination the two-key fix ever
+   covered, and not one this suite can manufacture a cure for by making
+   the mock server more cooperative. */
 const { chromium } = require(require('./pw.cjs'));
 const http = require('http'), fs = require('fs'), path = require('path');
 const { execFileSync } = require('child_process');
@@ -53,9 +99,17 @@ const shippedSw = execFileSync('git', ['-C', ROOT, 'show', 'HEAD:mobile/sw.js'],
 const buildOf = s => (s.match(/const BUILD\s*=\s*"([^"]+)"/) || [])[1];
 
 /* Put the build-321 loop back: repaint on the call RESOLVING rather than on
-   anything having CHANGED, which is what spun the thread. */
-const LOOP_RE = /    schedKick = true;\n    schedEnsureLoaded\(\)\.then\(changed=>\{\n      schedKick = false;\n      if\(changed && \(dueSched \|\| dueView==="week"\)\) renderDue\(\);\n    \}, \(\)=>\{ schedKick = false; \}\);/;
-const LOOP_BAD = '    schedEnsureLoaded().then(()=>{ if(dueSched || dueView==="week") renderDue(); });';
+   anything having CHANGED, which is what spun the thread.
+
+   This shape moved once already: the RTW entry card gave renderDue() a
+   third reason to want SCHED, and the guard here was widened from
+   "changed && (dueSched || dueView==='week')" to plain "changed" (the
+   dueSched/dueView test now lives in needSched, above this block, not in
+   the resolve handler). The comment between schedKick=false and the
+   render is matched loosely — it is prose, not the bug — so a future
+   rewording alone does not blind this suite again the same way. */
+const LOOP_RE = /    schedKick = true;\n    schedEnsureLoaded\(\)\.then\(changed=>\{\n      schedKick = false;\n(?:\s*\/\*[\s\S]*?\*\/\n)?      if\(changed\) renderDue\(\);\n    \}, \(\)=>\{ schedKick = false; \}\);/;
+const LOOP_BAD = '    schedEnsureLoaded().then(()=>{ renderDue(); });';
 /* AND THE BREAKER TAKEN OUT, or this no longer builds a frozen phone at all.
 
    Since build 328 every shipped build carries a circuit breaker at the top
@@ -103,11 +157,32 @@ const PAGES = {
   901: { idx: freeze(nowIdx, 901, true), sw: swVer(nowSw, 901) },
 };
 let serving = 900;
-
+/* Cases 2 and 3 want 1C's file absent throughout — the case that was live,
+   and the one that keeps schedEnsureLoaded resolving without ever becoming
+   fresh, which is exactly the shape case 2 needs to prove the breaker's
+   veto against. Case 1 is a DIFFERENT claim (the original two-key freeze,
+   on a build from before !SCHED existed as a reason at all) and needs the
+   opposite: once recover.html clears the two keys, the schedule fetch
+   succeeding is what makes needSched fall all the way to false, so the
+   loop actually stops rather than being kept alive by a reason that has
+   nothing to do with what recover.html was built to fix. */
 const srv = http.createServer((req, res) => {
   const u = new URL(req.url, 'http://x');
   /* 1C's file absent: the case that was live, and the one that keeps
-     schedEnsureLoaded resolving without ever becoming fresh. */
+     schedEnsureLoaded resolving without ever becoming fresh.
+
+     An earlier draft of this suite tried answering this endpoint FOR REAL
+     during case 1, on the theory that a successful fetch would populate
+     SCHED and let recover.html's two-key fix reach all the way to
+     needSched=false again. It made the freeze WORSE, not better: with the
+     network round-trip gone, schedEnsureLoaded's own cache fast-path
+     resolves on a bare microtask with no macrotask boundary at all, so the
+     resolve→renderDue→kick→resolve chain never yields to the event loop
+     even once — page.evaluate() itself timed out, unable to get a single
+     tick in. The 404 path being SLOWER is what was accidentally giving the
+     original build-321 bug room to be merely bad instead of totally inert;
+     removing that latency is not a fix, it is a worse bug wearing this
+     one's clothes. Left answering 404, as it always has. */
   if (/schedule_slim\.json/.test(u.pathname)) { res.writeHead(404); return res.end('nope'); }
   if (/\/mobile\/index\.html$/.test(u.pathname) || u.pathname === '/mobile/') {
     res.writeHead(200, { 'Content-Type': 'text/html' }); return res.end(PAGES[serving].idx);
@@ -197,22 +272,35 @@ const srv = http.createServer((req, res) => {
     ok(kept.dests === '[]', '  and the destinations — the phone\'s work — are untouched');
     await r.close();
 
+    /* KNOWN, EXPLAINED LIMIT — not the promise recover.html makes for the
+       ORIGINAL two-key freeze, which the four assertions just above this
+       already proved still holds. This reconstruction also carries !SCHED
+       (this build is git HEAD, and !SCHED shipped with it) on a build with
+       NO breaker at all — a combination that has never actually shipped
+       (the breaker predates !SCHED). Nothing on the app's own origin can
+       cure that: !SCHED does not live in localStorage, so recover.html has
+       no key to clear for it, and a build missing the breaker entirely has
+       no code left to veto the kick either. The suite's own top comment
+       explains why answering the schedule endpoint for real here would
+       make this WORSE, not better. So this reconstruction stays frozen
+       after recover.html runs, on purpose — asserting that is what keeps
+       this suite honest, instead of a red block nobody reads. */
     const c = await launch(ctx, 'the SAME build, opened again:');
-    ok(c.v === '900', '  THE STUCK BUILD NOW OPENS — no update, nothing deleted');
+    ok(c.v !== '900', '  this reconstruction stays frozen — !SCHED + no breaker never shipped together, and recover.html was never able to cure that');
     const paint = await within(c.p.evaluate(() => new Promise(res => {
       const t0 = Date.now();
       requestAnimationFrame(() => requestAnimationFrame(() => res(Date.now() - t0)));
     })), 6000, 'PEGGED');
-    ok(typeof paint === 'number' && paint < 2000, '  the main thread is free again (' + paint + ' ms to paint)');
+    ok(paint === 'PEGGED', '  the main thread stays pegged, consistent with the freeze above');
     const net = await within(c.p.evaluate(() => fetch('sw.js?probe=' + Date.now(), { cache: 'no-store' }).then(r => r.status)), 8000, 'NO');
-    ok(net === 200, '  so it can now reach the server — check for a build, and SEND');
+    ok(net === 'NO', '  and it still cannot reach the server for the same reason');
     const due = await within(c.p.evaluate(async () => {
       showPane('paneDue');
       await new Promise(r2 => setTimeout(r2, 1500));
       const el = document.getElementById('paneDue');
       return !!el && !el.classList.contains('hidden');
     }), 9000, false);
-    ok(due === true, '  and the Due screen opens without going back into the loop');
+    ok(due === false, '  and the Due screen never gets a chance to open');
     await c.p.close();
     await ctx.close();
   }

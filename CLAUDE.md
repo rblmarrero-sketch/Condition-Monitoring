@@ -1962,6 +1962,46 @@ row built from a genuinely different record `type` (INSP, not MP) proving
 the tile size is identical to MP's own three-photograph case, so the rule
 reads as type-independent in the test the same way it is in the code.
 
+**A THIRD REASON TO WANT THE SCHEDULE BROKE THE FREEZE BREAKER'S OWN FIX,
+AND NOBODY NOTICED UNTIL THE OLD LOOP TEST WAS RE-RUN.** `renderDue()`'s
+circuit breaker (build 328, `tests/thawkey.cjs`) exists for exactly one
+failure mode: a resolve-triggered repaint loop (build 321) that pegs the
+main thread hard enough to block the update mechanism that would otherwise
+fix it. Its corrective action has always been narrow and deliberate —
+reset `cm_due_sched`/`cm_due_view`, the only two settings that could ever
+re-arm the cycle when it was written, and the only two keys `recover.html`
+has ever cleared for a phone already frozen. RTW's own entry card later
+gave `needSched` a legitimate THIRD reason to want 1C's schedule — `!SCHED`,
+so the card is not left hidden for up to `SCHED_MS` on a cold boot — and
+nothing updated the breaker to match: a phone that can never reach the
+schedule endpoint keeps `needSched` true through `!SCHED` regardless of
+what the two keys hold, so a resolve-loop of build 321's own shape,
+reintroduced after `!SCHED` shipped, would trip the breaker's one-shot
+latch exactly once, reset settings that were never the problem, and then
+spin unthrottled for ever — the breaker's own safety margin silently
+reduced to zero by a change that never touched the breaker's own code.
+Caught re-running `tests/thawkey.cjs` on unrelated work, not from the
+field: the suite's case 2 (the currently-shipped build reproducing the
+loop) went red, exactly as it is built to do. `needSched` now reads
+`!dueRunaway && (dueSched || dueView==="week" || !SCHED)` — once the
+breaker has tripped, IT vetoes the kick directly, for the rest of that
+page's life, instead of only clearing the two settings that used to be
+its sole lever. The same investigation tried making the schedule endpoint
+answer for real during the OLDER, breaker-less reconstruction the suite
+also carries (build 328's own "before" case), on the theory that a
+successful fetch would let the original two-key promise reach all the way
+to `needSched=false` again — and it made that reconstruction's freeze
+WORSE, not better: `schedEnsureLoaded`'s own cache fast-path resolves on a
+bare microtask once warm, so the resolve→repaint→kick→resolve chain never
+yields to the event loop at all, and even `page.evaluate()` timed out
+unable to get a single tick in. The slow, always-failing round trip was
+accidentally the only thing giving that reproduction room to be merely bad
+instead of totally inert. That reconstruction — `!SCHED` on a build with no
+breaker at all — is a combination that has never actually shipped (the
+breaker predates `!SCHED` by many builds) and is not one `recover.html` was
+ever able to cure; `tests/thawkey.cjs`'s own case 1 now asserts that honest,
+known boundary instead of a promise this exact combination never kept.
+
 ---
 
 ## Secrets
