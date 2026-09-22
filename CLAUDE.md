@@ -1706,6 +1706,39 @@ activated, that the reloaded draft carries the original work order and
 senior mechanic, and that re-saving replaces the same id (bumped revision,
 no duplicate left behind) rather than minting a second round.
 
+**CONFIRMRUN HAD NO PER-RECORD ISOLATION FOR ITS OWN WRITE, THE IDENTICAL GAP
+BUILD 372 ALREADY CLOSED FOR SYNCNOW'S.** Read live: D1ZMK6_2026-09-
+21T23-49-53.json, `readback-throw`, "Error preparing Blob/File data to be
+stored in object store" — the same blob-clone error `writeback-fail` has
+been tracking since build 424 (see the watching-build-424-blob-clone-error
+entries above), this time from `confirmRun()`'s own `dbPut(fresh)` rather
+than `syncNow()`'s bookkeeping put. `syncNow`'s equivalent write has carried
+a per-record try/catch since build 372, with the comment stating the rule
+plainly: "ONE ROUND'S BOOKKEEPING MUST NOT END EVERY OTHER ROUND'S TURN."
+`confirmRun` never got the same treatment — its `dbPut(fresh)` had NO catch
+of its own, so a write failure on any one record propagated out through
+every remaining folder and record in that call, straight to the bare,
+per-CALL catch around `confirmRun()` itself, which aborted the whole
+confirmation pass and reduced the failure to a plain error string
+(`readback-throw`), discarding the `.phase`/`.hadReqErr` tags `dbPut`'s own
+error object already carries (build 418-420) — the exact instrumentation
+this project built specifically to narrow this error down, thrown away at
+the one call site that hit it. `confirmRun`'s write now has its own
+try/catch, logging `confirm-writeback-fail` with the same phase/hadReqErr/
+vis/streak fields `writeback-fail` already captures, and processing
+continues to the next record and folder rather than abandoning the pass.
+No data was at risk in the traced occurrence — EX006's files had already
+landed (the readback listed all 4) before the confirmation write itself
+failed — this closes a real availability gap the trace exposed, not a data-
+loss one. `tests/confirm.cjs`'s new isolation section rigs one record's
+`dbPut` to throw this exact error inside a two-record `confirmRun` call and
+proves: the call does not throw out to its caller, the failed record is
+never silently marked confirmed, the OTHER record in the same pass still
+is, and the logged event carries `phase`/`hadReqErr` rather than a bare
+string. The deeper WebKit-level mechanism remains exactly as unconfirmed as
+every other `writeback-fail` occurrence — this fix narrows what the NEXT
+occurrence, wherever it strikes, will be able to say about itself.
+
 ---
 
 ## Secrets

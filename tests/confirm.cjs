@@ -132,6 +132,49 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
   const ru = await p.evaluate(() => [I18N.ru.up_conf, I18N.ru.up_short]);
   ok(ru.every(x => x && /[Ѐ-ӿ]/.test(x)), "both states are translated", ru.join(" | "));
 
+  console.log("\n  one round's own write-back failure does not stop confirmRun's other rounds");
+  /* The identical shape syncNow's per-record try/catch already guards
+     against (build 372) — confirmRun's own dbPut(fresh) had no such catch at
+     all, so a write failure on ANY record aborted the whole pass, silently
+     dropping every other folder/record still waiting to be confirmed behind
+     it, and lost dbPut's own phase/hadReqErr detail into a bare error
+     string at the outer per-call catch (readback-throw). Reproduces the real
+     trace: D1ZMK6_2026-09-21T23-49-53.json, "Error preparing Blob/File data
+     to be stored in object store", from confirmRun's own write this time. */
+  const iso = await p.evaluate(async ({ d }) => {
+    const shot = () => fetch(d).then(r => r.blob());
+    const mk = async id => ({ id, equip: "TK900", type: "MP", date: "2026-08-20",
+      by: "R", cls: "HT", created: new Date(2026, 7, 20).toISOString(), rev: 0,
+      up: 1, upAt: "2026-08-20T09:00:00.000Z", upTo: { gas: 1 },
+      positions: { "fd.l": { photos: [await shot()] } } });
+    const names = ["x.json"];
+    const dest = [{ id: "gas", on: 1, url: "https://x.example/exec", sec: "s", folder: "" }];
+    const recA = await mk("ISO-A"); await dbPut(recA);
+    const recB = await mk("ISO-B"); await dbPut(recB);
+    const realFetch = window.fetchT, realDbPut = window.dbPut, realSlog = window.slog;
+    window.fetchT = async () => ({ ok: true, text: async () =>
+      JSON.stringify({ ok: true, files: names.map(n => ({ name: n, size: 1000 })) }) });
+    let logged = null;
+    window.slog = (ev, o) => { if (ev === "confirm-writeback-fail") logged = o;
+      return realSlog ? realSlog(ev, o) : undefined; };
+    window.dbPut = async (rec) => {
+      if (rec.id === "ISO-A") { const e = new Error("Error preparing Blob/File data to be stored in object store");
+        e.phase = "error"; e.hadReqErr = true; throw e; }
+      return realDbPut(rec);
+    };
+    let threw = null;
+    try { await confirmRun([{ rec: recA, names }, { rec: recB, names }], dest); }
+    catch (e) { threw = String((e && e.message) || e); }
+    window.fetchT = realFetch; window.dbPut = realDbPut; window.slog = realSlog;
+    const backA = await dbGet("ISO-A"), backB = await dbGet("ISO-B");
+    return { threw, aConf: (backA || {}).conf || null, bConf: (backB || {}).conf || null, logged };
+  }, { d: PX });
+  ok(iso.threw === null, "confirmRun itself does not throw out to its caller over one record's write failure", iso.threw);
+  ok(iso.aConf === null, "the record whose write failed was never silently marked confirmed", JSON.stringify(iso.aConf));
+  ok(!!iso.bConf && iso.bConf.n === 1, "the OTHER record in the same pass still got confirmed", JSON.stringify(iso.bConf));
+  ok(!!iso.logged && iso.logged.phase === "error" && iso.logged.hadReqErr === true,
+    "the failure keeps dbPut's own phase/hadReqErr detail, not just a bare error string", JSON.stringify(iso.logged));
+
   console.log(fail ? "\nFAILED: " + fail : "\nall passed");
   await b.close();
   process.exit(fail ? 1 : 0);
