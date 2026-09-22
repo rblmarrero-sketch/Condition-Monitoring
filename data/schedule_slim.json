@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-22T10:37:17+00:00",
+  "generated": "2026-09-22T10:48:30+00:00",
   "byUnit": {
     "DZ001": [
       {
@@ -1413,30 +1413,6 @@
       "plan": "2026-09-20"
     },
     {
-      "wo": "WO-016588",
-      "equip": "DZ011",
-      "cls": "DOZ",
-      "comp": "",
-      "desc": "250h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-09-20",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-09-20"
-    },
-    {
-      "wo": "WO-016585",
-      "equip": "EX012",
-      "cls": "EXC",
-      "comp": "",
-      "desc": "250h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-09-20",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-09-20"
-    },
-    {
       "wo": "WO-017549",
       "equip": "GE025",
       "cls": "GEN",
@@ -1452,18 +1428,6 @@
       "wo": "WO-016939",
       "equip": "GE109",
       "cls": "GEN",
-      "comp": "",
-      "desc": "500h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-09-20",
-      "type": "500 Hours service Planned",
-      "hours": 500,
-      "plan": "2026-09-20"
-    },
-    {
-      "wo": "WO-016649",
-      "equip": "LD006",
-      "cls": "LDR",
       "comp": "",
       "desc": "500h service",
       "priority": "P3 Planned (PM)",
@@ -1686,18 +1650,6 @@
       "raised": "2026-09-17",
       "type": "1000 Hours service Planned",
       "hours": 1000,
-      "plan": "2026-09-17"
-    },
-    {
-      "wo": "WO-016606",
-      "equip": "EX023",
-      "cls": "EXC",
-      "comp": "",
-      "desc": "500h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-09-17",
-      "type": "500 Hours service Planned",
-      "hours": 500,
       "plan": "2026-09-17"
     },
     {
@@ -2181,19 +2133,7 @@
       "plan": "2026-08-01"
     },
     {
-      "wo": "GD-023113",
-      "equip": "CD008",
-      "cls": "GEN",
-      "comp": "",
-      "desc": "250h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-08-01",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-08-01"
-    },
-    {
-      "wo": "GD-023115",
+      "wo": "GD-023109",
       "equip": "CD008",
       "cls": "GEN",
       "comp": "",
@@ -2202,6 +2142,18 @@
       "raised": "2026-08-01",
       "type": "500 Hours service Planned",
       "hours": 500,
+      "plan": "2026-08-01"
+    },
+    {
+      "wo": "GD-023110",
+      "equip": "CD008",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-08-01",
+      "type": "250 Hours service Planned",
+      "hours": 250,
       "plan": "2026-08-01"
     },
     {
@@ -2229,7 +2181,7 @@
       "plan": "2026-08-01"
     },
     {
-      "wo": "GD-023132",
+      "wo": "GD-023130",
       "equip": "CD009",
       "cls": "GEN",
       "comp": "",
