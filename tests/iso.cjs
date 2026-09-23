@@ -35,6 +35,14 @@ await p.waitForTimeout(600);
 ok('GET, which is graded: the same', await vis(p,'#isoBody') && !(await vis(p,'#isoTog')));
 
 console.log('\na measurement round folds them');
+/* DZ001 is real equipment reading real, live 1C data. loadPos()'s WO
+   backfill (tests/schedwo.cjs) — and isoWanted()'s own deliberate
+   `|| p.wo` (the panel must be open for a stamp to be visible at all) —
+   would force this open whenever today's live schedule happens to carry
+   an order for it, which has nothing to do with what this suite is
+   testing. Neutralised the same way tests/audit.cjs and tests/dueweek.cjs
+   do, so a clean point folds regardless of today's 1C snapshot. */
+await p.evaluate(() => { SCHED = { generated: new Date().toISOString(), byUnit: {} }; });
 await T('UC'); await p.waitForTimeout(300);
 await p.evaluate(() => { selectEquip('DZ001'); goStep(2); }); await p.waitForTimeout(900);
 await p.evaluate(()=>{curItem='ROLLER.L1';loadPos();renderChips();}); await p.waitForTimeout(500);

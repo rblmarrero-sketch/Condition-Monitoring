@@ -16,6 +16,13 @@ async function app(b) {
     localStorage.setItem('uc_view', 'list'); });   // this suite drives the list
   await p.goto(B + '/mobile/index.html', { waitUntil: 'load' });
   await p.waitForTimeout(1700);
+  /* DZ001 is real equipment reading real, live 1C data. loadPos()'s WO
+     backfill (tests/schedwo.cjs) writes a stamp into whatever position is
+     open whenever today's live schedule happens to carry an order for
+     it — real, intentional, and nothing to do with what this suite tests
+     (a number, or a reason, going in and coming back out again).
+     Neutralised the same way tests/iso.cjs and tests/audit.cjs do. */
+  await p.evaluate(() => { SCHED = { generated: new Date().toISOString(), byUnit: {} }; });
   return { ctx, p };
 }
 const setType = (p, ty) => p.evaluate(t => {

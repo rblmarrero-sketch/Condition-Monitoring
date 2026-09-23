@@ -2355,25 +2355,70 @@ a non-RTW type, RTW's own strip staying untouched, and the office's own
 `normalizeRecs()` carrying the same three fields off a real sidecar — the
 same shape `tests/rtwoffice.cjs` already proved for RTW's four.
 
-**VIEWING A POSITION CAPTURED IT.** A multi-user/scale audit asked to test what
-50 inspectors doing ~70 rounds a day would do to this app found a machine that
-counted a plug as "captured" the moment its screen was opened, whether or not
-the inspector ever touched it. `loadPos()` stamps 1C's own work order onto
-whatever position is open — `roundWO()`, "only into an empty field" — and to
-do that it calls `curP()`, which unconditionally creates
-`draft.positions[curItem]` if nothing is there yet. That phantom entry then
-had `p.wo` set and nothing else, and `hasData(p)` counted `p.wo` as evidence:
-a round on any machine with a 1C work order open against it inflated its own
-"N of M done" count for every position an inspector so much as looked at on
-the way to the one they actually meant, and a reason picked and then picked
-again to un-pick it never actually returned the position to empty, because
-the `wo`-only entry was still sitting there counting as "has." `hasData()` no
-longer counts `p.wo`, and `loadPos()` deletes the entry it just created for
-the WO stamp alone if `hasData()` still says there is nothing else on it.
-One root cause, three previously-failing suites: `tests/uc.cjs` ("tapping the
-same reason again undoes it"), `tests/audit.cjs` ("no entry created by merely
-viewing"), `tests/iso.cjs` (the undercarriage fold, which depends on a
-position genuinely starting and returning to empty).
+**VIEWING A POSITION CAPTURED IT — AND THE FIRST FIX FOR THAT DELETED THE
+STAMP IT WAS SUPPOSED TO PROTECT.** A multi-user/scale audit asked to test
+what 50 inspectors doing ~70 rounds a day would do to this app found a
+machine that counted a plug as "captured" the moment its screen was opened,
+whether or not the inspector ever touched it. `loadPos()` stamps 1C's own
+work order onto whatever position is open — `roundWO()`, "only into an
+empty field" — and to do that it calls `curP()`, which unconditionally
+creates `draft.positions[curItem]` if nothing is there yet. That phantom
+entry then had `p.wo` set and nothing else, and `hasData(p)` counted `p.wo`
+as evidence: a round on any machine with a 1C work order open against it
+inflated its own "N of M done" count for every position an inspector so
+much as looked at on the way to the one they actually meant, and a reason
+picked and then picked again to un-pick it never actually returned the
+position to empty, because the `wo`-only entry was still sitting there
+counting as "has." `hasData()` no longer counts `p.wo` — that part of the
+fix was right the first time.
+
+What was not right the first time: `loadPos()` was also given a companion
+line that DELETED the entry it had just stamped, the instant `hasData()`
+said there was nothing else on it — which is exactly the entry `p.wo` was
+supposed to be the ONE thing left standing in. Three suites this fix was
+believed to have closed (`tests/uc.cjs`, `tests/audit.cjs`, `tests/iso.cjs`)
+happened to pass regardless, because none of their own fixture equipment
+had a live 1C order open at the moment they were run — so the deletion's
+own defect never showed up in the very tests written to catch this class of
+bug. The FULL sweep did: `tests/schedwo.cjs` — a suite that plants its own
+schedule fixture rather than reading live data, specifically so it is never
+at the mercy of what 1C says today — failed outright. "and it is in the
+RECORD, not only on the screen" is this project's own standing rule for
+this exact stamp (see "AND THE WORK ORDER IS ALREADY ON THE ROW THEY
+TAPPED" above); a deletion the instant nothing else joins it is the literal
+negation of that rule, for the ONE type of entry the rule is about.
+
+The corrected fix removes the deletion from `loadPos()` entirely — the
+stamped entry is simply left standing, as the original design always said
+it should be. But `hasData()`'s own OR-chain is not the only place this
+project treats "empty" as "delete the position": SIX separate call sites
+(the undercarriage/GET reason toggles, `saveCur()`, the detect/priority/
+action pickers, the defect/cause picker) each already carried their own
+`if(!hasData(p)) delete draft.positions[curItem];` — a pre-existing,
+correct pattern for clearing a position back to nothing when the field
+being toggled was the last thing on it. Once `hasData()` stopped counting
+`p.wo`, EVERY one of those six now read a WO-only position as empty too,
+and deleted the stamp along with whatever else was being cleared — reached
+by `tests/uc.cjs`'s OWN reason-toggle assertion once its equipment (DZ001)
+was checked against a REAL live 1C order, exactly the same shape of gap
+schedwo.cjs's own header comment warns about. All six now read
+`if(!hasData(p) && !p.wo) delete draft.positions[curItem];` — a position is
+only ever thrown away when there is truly nothing left on it, WO stamp
+included.
+
+The deeper lesson, found investigating this: `tests/audit.cjs`, `iso.cjs`
+and `uc.cjs` all point their fixtures at REAL equipment (TK146, DZ001)
+reading the REAL, hourly-refreshed `data/work_orders.js` / schedule files —
+so whether these suites see a WO stamp at all depends on what 1C's live
+schedule happens to say on the day they run, not on anything the test
+itself controls. `tests/schedwo.cjs`, `tests/dueweek.cjs` and others
+already had the right answer for this: plant `SCHED = {byUnit:{}}` (or a
+specific fixture) before running, so the assertion is about the CODE, not
+about today's data. `audit.cjs`, `iso.cjs` and `uc.cjs` now do the same —
+without it, any one of the three could start silently passing or failing
+again the next time 1C schedules or un-schedules a job for this fleet's own
+fixture equipment, which is exactly the kind of flakiness this project's
+own rules warn against keeping.
 
 **FIVE SUITES WERE READING A PAGE THAT HAD MOVED ON WITHOUT THEM.** The same
 audit pass, checking whether the test suite itself still describes the app,

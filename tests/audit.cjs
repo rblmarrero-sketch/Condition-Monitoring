@@ -125,7 +125,16 @@ const shot = async (p) => p.evaluate(async () => {
   console.log('\n1. empty position entries');
   {
     const { ctx, p } = await page();
+    /* TK146 is real equipment reading real, live 1C data — the schedule
+       refreshes hourly, and loadPos()'s own WO backfill (tests/schedwo.cjs)
+       would otherwise write a stamp into the very entry this check expects
+       to stay empty, whenever today's live snapshot happens to carry an
+       open order for it. Neutralised the same way tests/dueweek.cjs and
+       tests/schedwo.cjs's own OWN fixture do, so this asserts against the
+       real question — does merely viewing create anything — not against
+       whatever 1C happens to say about TK146 today. */
     const r = await p.evaluate(() => {
+      SCHED = { generated: new Date().toISOString(), byUnit: {} };
       selectEquip('TK146');
       const ts = document.getElementById('typeSel'); ts.value = 'MP'; ts.dispatchEvent(new Event('change'));
       const first = items()[0].k, second = items()[1].k;

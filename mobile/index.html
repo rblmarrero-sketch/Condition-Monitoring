@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=451">
+<link rel="manifest" href="manifest.webmanifest?v=452">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=451">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=451">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=451">
+<link rel="apple-touch-icon" href="icon-192.png?v=452">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=452">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=452">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2758,16 +2758,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=451"></script>
-<script src="upload-defaults.js?v=451"></script>
-<script src="hme.js?v=451"></script>
-<script src="mp-fc.js?v=451"></script>
-<script src="rtw.js?v=451"></script>
-<script src="hme-cascade.js?v=451"></script>
-<script src="assets.js?v=451"></script>
-<script src="temp-limits.js?v=451"></script>
-<script src="normalize.js?v=451"></script>
-<script src="terms.js?v=451"></script>
+<script src="native.js?v=452"></script>
+<script src="upload-defaults.js?v=452"></script>
+<script src="hme.js?v=452"></script>
+<script src="mp-fc.js?v=452"></script>
+<script src="rtw.js?v=452"></script>
+<script src="hme-cascade.js?v=452"></script>
+<script src="assets.js?v=452"></script>
+<script src="temp-limits.js?v=452"></script>
+<script src="normalize.js?v=452"></script>
+<script src="terms.js?v=452"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2786,25 +2786,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=451"></script>
-<script src="edits.js?v=451"></script>
-<script src="due.js?v=451"></script>
-<script src="wear.js?v=451"></script>
-<script src="wear-figs.js?v=451"></script>
-<script src="wear-map.js?v=451"></script>
-<script src="machine-photos.js?v=451"></script>
-<script src="machine-fig.js?v=451"></script>
-<script src="get.js?v=451"></script>
-<script src="points.js?v=451"></script>
-<script src="uc-points.js?v=451"></script>
-<script src="inspect-guide.js?v=451"></script>
-<script src="get-figs.js?v=451"></script>
-<script src="body-points.js?v=451"></script>
-<script src="body-map.js?v=451"></script>
-<script src="lube.js?v=451"></script>
-<script src="lube-overrides.js?v=451"></script>
-<script src="lube2027.js?v=451"></script>
-<script src="report-core.js?v=451"></script>
+<script src="grade.js?v=452"></script>
+<script src="edits.js?v=452"></script>
+<script src="due.js?v=452"></script>
+<script src="wear.js?v=452"></script>
+<script src="wear-figs.js?v=452"></script>
+<script src="wear-map.js?v=452"></script>
+<script src="machine-photos.js?v=452"></script>
+<script src="machine-fig.js?v=452"></script>
+<script src="get.js?v=452"></script>
+<script src="points.js?v=452"></script>
+<script src="uc-points.js?v=452"></script>
+<script src="inspect-guide.js?v=452"></script>
+<script src="get-figs.js?v=452"></script>
+<script src="body-points.js?v=452"></script>
+<script src="body-map.js?v=452"></script>
+<script src="lube.js?v=452"></script>
+<script src="lube-overrides.js?v=452"></script>
+<script src="lube2027.js?v=452"></script>
+<script src="report-core.js?v=452"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -6810,7 +6810,7 @@ function renderUCReasons(){
     const p=curP();
     if(p.reason===b.dataset.r){ delete p.reason; }
     else { p.reason=b.dataset.r; p.mm=null; $("ucMM").value=""; delete p.stood; $("ucStood").checked=false; }
-    if(!hasData(p)) delete draft.positions[curItem];
+    if(!hasData(p) && !p.wo) delete draft.positions[curItem];
     renderUC(); refreshChips();
   });
 }
@@ -7610,7 +7610,7 @@ function saveCur(){ if(!curItem) return; normDecAll(); const p=curP(); p.particl
     /* Evidence with nothing recorded is not evidence of anything. */
     if(!p.prod && !p.other) delete p.evid;
   }
-  if(!hasData(p)) delete draft.positions[curItem];
+  if(!hasData(p) && !p.wo) delete draft.positions[curItem];
   draftKeep(); }
 /* A measurement point is named by its walk; a component is named by its code
    and its label. One rule, so the heading on the capture screen and the heading
@@ -7656,19 +7656,21 @@ function loadPos(){ causeGate();
      same instant it appears (the pattern the target date uses) so what is on
      screen and what is saved can never disagree, and overtyped freely.
 
-     But merely OPENING a position must not be what creates it. curP() is
-     the WRITE path — it materialises draft.positions[curItem] — and until
-     now this was the one call to it with no real inspector data behind it:
-     every position on a round tied to a 1C order got an entry the instant
-     it was looked at and left with nothing recorded, "has" lit on the card
-     forever, the done/of-N count inflated, and (per hasData()'s own note
-     above) a reason picked and un-picked on that position could never go
-     back to empty. The #wo field still shows the stamp immediately (p.wo=w,
-     read below) and saveCur() re-applies it from that field the moment the
-     position gains real data — so stamp it, then apply the SAME hasData
-     cleanup every other write to curP() already uses. */
-  if(!p.wo){ const w=roundWO(); if(w){ const cp=curP(); cp.wo=w; p.wo=w;
-    if(!hasData(cp)) delete draft.positions[curItem]; } }
+     But merely OPENING a position must not be what COUNTS as capturing it.
+     curP() is the WRITE path — it materialises draft.positions[curItem] —
+     and until this was noticed it was the one call to it with no real
+     inspector data behind it: every position on a round tied to a 1C order
+     got an entry the instant it was looked at, and hasData() counted p.wo
+     as evidence, so "has" lit on the card forever, the done/of-N count was
+     inflated, and a reason picked and un-picked on that position could
+     never go back to empty. The number itself is still meant to survive —
+     "written into the record the same instant it appears" is the whole
+     point of this block, and tests/schedwo.cjs holds it to exactly that —
+     so the fix is in hasData() alone (p.wo is no longer evidence there),
+     never here: this entry is left standing with only the stamp on it,
+     exactly as this comment has always said, and it now correctly reads as
+     empty until something else is on it. */
+  if(!p.wo){ const w=roundWO(); if(w){ const cp=curP(); cp.wo=w; p.wo=w; } }
   $("comment").value=p.comment||""; $("wo").value=p.wo||"";
   $("tempV").value=p.tempV||""; $("tempA").value=p.tempA||""; $("tempM").value=p.tempM||"IR";
   renderGrade(); renderSev(); updateActionBtn(); updatePrioBtn(); updateDetectBtn(); renderMedia(); updateDefectCauseBtns(); renderTempHint(); renderISOFold(); toggleCapture(); }
@@ -8223,17 +8225,17 @@ $("pickList").onclick=(e)=>{ const b=e.target.closest(".pickitem"); if(!b) retur
   if(k==="__all__"){ showAllDefects=true; renderPickList($("pickSearch").value); return; }
   if(k==="__more__"){ showAllCauses=true; renderPickList($("pickSearch").value); return; }
   if(pickMode==="detect"){ const p=curP(); p.detect=k||"";
-    if(!hasData(p)) delete draft.positions[curItem];
+    if(!hasData(p) && !p.wo) delete draft.positions[curItem];
     closePicker(); updateDetectBtn(); renderChips(); return; }
   if(pickMode==="prio"){ const p=curP(); p.prio=k||"";
-    if(!hasData(p)) delete draft.positions[curItem];
+    if(!hasData(p) && !p.wo) delete draft.positions[curItem];
     closePicker(); updatePrioBtn(); renderChips(); return; }
   if(pickMode==="action"){ const p=curP(); p.action=k||"";
     /* An action that raises a job needs a priority. Suggest the one that fits
        what was found rather than leaving the planner to guess. */
     if(p.action && !p.prio){ const g=PRIO_SUGGEST[effSev(p)]; if(g) p.prio=g; }
     if(!p.action) delete p.prio;
-    if(!hasData(p)) delete draft.positions[curItem];
+    if(!hasData(p) && !p.wo) delete draft.positions[curItem];
     closePicker(); updateActionBtn(); updatePrioBtn(); renderChips(); return; }
   const p=curP();
   if(pickMode==="defect"){
@@ -8269,7 +8271,7 @@ $("pickList").onclick=(e)=>{ const b=e.target.closest(".pickitem"); if(!b) retur
     renderGrade(); renderSev();
   }
   else { p.cause=k||""; }
-  if(!hasData(p)) delete draft.positions[curItem];
+  if(!hasData(p) && !p.wo) delete draft.positions[curItem];
   closePicker(); updateDefectCauseBtns(); refreshChips(); };
 
 /* ===================== GPS stamp =====================
@@ -14395,7 +14397,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="451";
+const BUILD="452";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
