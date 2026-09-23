@@ -36,7 +36,7 @@
        explains itself and offers a retry — because an honest offline page is
        recoverable and a browser error page is not. */
 
-const BUILD="452";
+const BUILD="453";
 const CACHE = "plug-capture-v" + BUILD;
 
 /* Without these the app is not an app: no page, no equipment register, no
@@ -78,7 +78,14 @@ const ESSENTIAL = [
   "./lube.js?v=" + BUILD,
   "./lube-overrides.js?v=" + BUILD,
   "./lube2027.js?v=" + BUILD,
-  "./lube-tds.js?v=" + BUILD,
+  /* lube-tds.js is NOT here. It is dashboard/index.html's own data file
+     (oil cold-rating tables), never loaded by mobile/index.html — a commit
+     that added it to the dashboard's script tags also added it here, but
+     the phone page has no <script> tag, no loadLib() call and no reference
+     to it anywhere. Every entry in this list must fetch cleanly before an
+     update can take over (see install() below); one dead entry a phone
+     never asked for was enough to refuse every future update on a marginal
+     link, for a file that does nothing on the phone. */
   "./report-core.js?v=" + BUILD,
 ];
 
