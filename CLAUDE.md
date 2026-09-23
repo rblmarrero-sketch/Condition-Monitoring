@@ -2289,6 +2289,72 @@ invariant (same tile size regardless of count, cropped not squeezed) in
 terms general enough to hold under this widening the same way they held
 under the narrower one.
 
+**A BARE DATE AND A BARE NUMBER ON THE MASTHEAD WERE TWO MORE QUESTIONS A
+READER HAD TO GUESS THE ANSWER TO.** A real EX019 report, subtitle circled:
+"can we label the SMU/Hour Meter, Plan date, PM type (5000 Hours if
+available); P3 or P4 if available... The SMU is already there just label,
+and the date what is that Insp Date? or Plan Date? Make it Standard in all
+report" — then, unprompted, the same rule extended past RTW: "even for
+Inspection remember we have PM and Schedule from 1C they are following
+that. So just put the sched Date, Ins Date, PM Type, etc." RTW's own
+masthead (`rtwHeaderStrip`) already carried this shape for its release
+checklist — PM Service, Type of PM, Scheduled date, Actual date — sourced
+from four fields (`rtwWoType`/`rtwSchedHours`/`rtwSchedDate`/
+`rtwWoPriority`) that only RTW's own Pick screen ever fills. Every OTHER
+round type's masthead printed the date and the SMU bare, with no label at
+all — which is exactly the ambiguity the maintainer's own question proves:
+a bare date reads as "which date?" the moment a second date (1C's plan)
+might also be on the page.
+
+The date is labelled `f_insp_date` ("Insp. date" / "Дата осмотра") — a
+fuller, deliberately different wording from "Scheduled date" / "Плановая
+дата", chosen so the two read as clearly separate facts once both appear on
+the same line, not two abbreviations a tired reader could transpose. The
+SMU keeps its existing `f_smu` label, reused rather than invented, in the
+`unitSheets` (Equipment History) and `summarySheets` (fleet summary)
+mastheads too — those two never get the schedule strip below, because
+neither is tied to one round's own 1C order the way a single-round report
+is, and CLAUDE.md's own "a fix must change only what was asked" rule (see
+the MP-evidence-visibility entry above) is exactly why they stop there.
+
+A new, generic `schedStrip(T, rec)` (report-core.js) prints the SAME three
+facts RTW's strip does — the hour tier or PM type text, the plan date, the
+priority code — for every OTHER type, and returns `""` outright for RTW (its
+own richer strip, with the actual-vs-scheduled day count, stays untouched)
+and `""` when 1C has nothing for this round, never inventing a strip out of
+an empty record. It reads three NEW, generic fields — `schedHours`/
+`schedDate`/`schedPriority` — a deliberately separate namespace from RTW's
+own four, because RTW's facts come from a work order a technician searched
+for and picked by hand; every other type's come from `schedOrdersFor(equip,
+type).near`, the same lookup the Due list and RTW's own Pick screen already
+trust, read automatically at Save with no picker of its own.
+
+**Captured once, at Save, and PRESERVED on an edit — never re-borrowed from
+whatever 1C says on the day of a correction.** This is the identical rule
+`roundWO()` already keeps for the work-order number itself (`draft.wo`, set
+once and never re-read): the graded-round Save handler computes
+`schedOrdersFor(equip, type).near` only `if(!editing)`, exactly mirroring
+the existing `phv:(editing?(editing.phv||1):2)` branch in the same object
+literal, so a round corrected days after 1C's schedule has moved on keeps
+printing the plan it was actually walked against, not a later one that
+happens to be live when somebody fixes a typo. Carrying the three fields to
+where a report actually reads them needed the same four sites RTW's own
+four fields already needed, plus the phone's own Save handler as a fifth —
+the exact "one fact carried by hand at several sites" shape this file's own
+rules warn about, now walked a second time for a second feature:
+`recToExport0`, `rptRecords()` (the phone's own PDF), the team-round reader
+(a synced round from another device), and `dashboard/report.js`'s
+`normalizeRecs()` (the office's own reader of the folder) — the last of
+these for the identical reason the RTW-office gap above was a real gap: a
+report built from a folder sidecar reads a completely different code path
+than a report built from the phone's own live record, and only carrying a
+fact to one of them prints it correctly on one surface and silently drops
+it on the other. `tests/schedstrip.cjs` proves the capture, the
+preserve-on-edit, the empty case, the masthead labels, the generic strip on
+a non-RTW type, RTW's own strip staying untouched, and the office's own
+`normalizeRecs()` carrying the same three fields off a real sidecar — the
+same shape `tests/rtwoffice.cjs` already proved for RTW's four.
+
 ---
 
 ## Secrets

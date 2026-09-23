@@ -300,6 +300,14 @@
          real value rendered as nothing" this project keeps finding. */
       rtwWoType: rec.rtwWoType || "", rtwSchedHours: (rec.rtwSchedHours != null ? rec.rtwSchedHours : null),
       rtwSchedDate: rec.rtwSchedDate || "", rtwWoPriority: rec.rtwWoPriority || "", rtwTime: rec.rtwTime || "",
+      /* The same 1C schedule facts, generalised to every round type (see the
+         schedStrip() comment in report-core.js) — read here for the same
+         reason the five RTW-only fields above are: the office's own reader
+         of the folder must carry them across too, or a report opened from
+         the dashboard prints an empty schedule strip while the phone's own
+         copy of the same round prints it correctly. */
+      schedHours: (rec.schedHours != null ? rec.schedHours : null),
+      schedDate: rec.schedDate || "", schedPriority: rec.schedPriority || "",
       ...(() => { const m = reportMap(rec, (opts && opts.art && opts.art[rec.equip + "|" + rec.type]) || "");
                   return { mapHTML: m.html, mapKey: m.key }; })(),
       zones: rec.type === "TB" ? bodyZones(rec) : null,

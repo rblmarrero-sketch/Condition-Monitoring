@@ -1040,6 +1040,7 @@
       c_zone:"Zone", c_taken:"Read", c_thin:"Thinnest", c_at:"Station",
       f_date:"Date", f_cat:"Equipment", f_model:"Model", f_unit:"Unit",
       f_smu:"SMU", f_pts:"Points", f_by:"Inspected by", f_sup:"Verified by",
+      f_insp_date:"Insp. date",
       allok:"All {n} points normal. Nothing to do on this machine.",
       rest_n:"Also checked, nothing to report —",
       c_action:"Action", c_reading:"Reading",
@@ -1244,6 +1245,7 @@
       c_zone:"\u0417\u043e\u043d\u0430", c_taken:"\u0417\u0430\u043c\u0435\u0440\u0435\u043d\u043e", c_thin:"\u041c\u0438\u043d\u0438\u043c\u0443\u043c", c_at:"\u0422\u043e\u0447\u043a\u0430",
       f_date:"\u0414\u0430\u0442\u0430", f_cat:"\u0422\u0435\u0445\u043d\u0438\u043a\u0430", f_model:"\u041c\u043e\u0434\u0435\u043b\u044c", f_unit:"\u0415\u0434\u0438\u043d\u0438\u0446\u0430",
       f_smu:"\u041d\u0430\u0440\u0430\u0431\u043e\u0442\u043a\u0430", f_pts:"\u0422\u043e\u0447\u0435\u043a", f_by:"\u041e\u0441\u043c\u043e\u0442\u0440 \u0432\u044b\u043f\u043e\u043b\u043d\u0438\u043b", f_sup:"\u041f\u0440\u043e\u0432\u0435\u0440\u0438\u043b",
+      f_insp_date:"\u0414\u0430\u0442\u0430 \u043e\u0441\u043c\u043e\u0442\u0440\u0430",
       allok:"\u0412\u0441\u0435 {n} \u0442\u043e\u0447\u0435\u043a \u0432 \u043d\u043e\u0440\u043c\u0435. \u0414\u0435\u0439\u0441\u0442\u0432\u0438\u0439 \u043d\u0435 \u0442\u0440\u0435\u0431\u0443\u0435\u0442\u0441\u044f.",
       rest_n:"\u0422\u0430\u043a\u0436\u0435 \u043f\u0440\u043e\u0432\u0435\u0440\u0435\u043d\u043e, \u0431\u0435\u0437 \u0437\u0430\u043c\u0435\u0447\u0430\u043d\u0438\u0439 \u2014",
       c_action:"\u0414\u0435\u0439\u0441\u0442\u0432\u0438\u0435", c_reading:"\u041f\u043e\u043a\u0430\u0437\u0430\u043d\u0438\u044f",
@@ -3075,12 +3077,20 @@
      null rather than guessed) and its `type` is the defect's own system or
      description — genuinely distinct information with nowhere else to print.
      So: an hour tier is stated as one, compactly; its absence falls back to
-     whatever 1C did say, never to a blank cell that had text to show. */
-  function rtwPmService(rec) {
-    if (rec.rtwSchedHours != null) return esc(rec.rtwSchedHours) + " h Service";
-    if (rec.rtwWoType) return esc(rec.rtwWoType);
+     whatever 1C did say, never to a blank cell that had text to show.
+
+     Takes the hour figure and the fallback type text as VALUES, not a
+     record — schedStrip (below) needs the identical wording for every
+     OTHER round type's own `schedHours` field, which carries no `type`
+     text of its own (schedOrdersFor's schedule entries are hours/plan/
+     priority only, never a free-text type), so the fallback is simply
+     unused there rather than a second copy of this sentence. */
+  function pmServiceText(hours, typeText) {
+    if (hours != null) return esc(hours) + " h Service";
+    if (typeText) return esc(typeText);
     return "";
   }
+  function rtwPmService(rec) { return pmServiceText(rec.rtwSchedHours, rec.rtwWoType); }
   /* THE COMPLETION DATE, WITH THE TIME OF DAY WHEN THE PHONE RECORDED ONE.
      rec.date stays the plain YYYY-MM-DD every other reader of this record
      depends on (file names, DUE.next, teamDate/idDate) — the time of day is
@@ -3158,6 +3168,42 @@
     if (rec.rtwSchedDate) cells += cell(T.I("rtw_sched"), esc(rec.rtwSchedDate));
     if (rec.date) cells += cell(T.I("rtw_actual"), rtwActualDate(rec));
     if (vsSched) cells += cell(T.I("rtw_vs_sched"), vsSched);
+    return '<div class="sstrip" style="margin-top:10px;">' + cells + '</div>';
+  }
+  /* WHAT 1C SCHEDULED THIS ROUND AGAINST, ON EVERY ROUND TYPE — THE SAME
+     FACTS RTW'S OWN STRIP ALREADY PRINTS FOR A RELEASE, NOT A SECOND COPY
+     OF THEM. Circled on a real EX019 General Inspection report: "can we
+     label the SMU/Hour Meter, Plan date, PM type (5000 Hours if
+     available); P3 or P4 if available... make it Standard in all report."
+     "even for Inspection remember we have PM and Schedule from 1C they are
+     following that" — every CM round, not only RTW's own release checklist,
+     is walked against the SAME `schedOrdersFor` schedule the Due list and
+     the plan grid already read (see CLAUDE.md's own "AND THE WORK ORDER IS
+     ALREADY ON THE ROW THEY TAPPED"), so the fields exist for every type;
+     they were simply never carried onto the record or printed for anything
+     but RTW.
+
+     `rec.schedHours`/`schedDate`/`schedPriority` are captured ONCE, at Save
+     (mobile/index.html), from `schedOrdersFor(equip, type).near` — the
+     identical "captured once, carried through" rule RTW's own
+     rtwSchedHours/rtwSchedDate/rtwWoPriority already follow, so a report
+     made months later still shows what 1C had scheduled AT THE TIME, not
+     whatever the fleet plan says today. A round with no covering order
+     (schedOrdersFor found nothing near it) gets nothing here — never a
+     guess standing in for an empty field.
+
+     RTW is excluded: it already prints five facts of its own, richer
+     (rtwHeaderStrip, above), sourced from its own work-order-scoped
+     fields — printing both would say some of the same things twice. */
+  function schedStrip(T, rec) {
+    if (rec.type === "RTW") return "";
+    var pmService = pmServiceText(rec.schedHours, "");
+    if (!pmService && !rec.schedPriority && !rec.schedDate) return "";
+    function cell(k, v) { return '<div class="sc"><div class="sk">' + k + '</div><div class="sv">' + v + '</div></div>'; }
+    var cells = "";
+    if (pmService) cells += cell(T.I("rtw_pm_service"), pmService);
+    if (rec.schedPriority) cells += cell(T.I("rtw_pm_type"), esc(rtwPmTypeText(rec.schedPriority)));
+    if (rec.schedDate) cells += cell(T.I("rtw_sched"), esc(rec.schedDate));
     return '<div class="sstrip" style="margin-top:10px;">' + cells + '</div>';
   }
   /* The release result gets its OWN treatment, not a cell beside the others
@@ -3455,9 +3501,21 @@
         + '<div class="m1">' + (T.key("method_" + rec.type, "")
             ? T.I("method_" + rec.type)
             : T.both(rec.typeLabel || rec.type, rec.typeAlt, "alti")) + '</div>'
+        /* THE DATE IS LABELLED NOW — asked for by name against a real EX019
+           report, circled: "the date what is that Insp Date? or Plan
+           Date?" A bare date beside a bare hour figure read as neither one
+           thing nor the other once `schedStrip` (below) started printing a
+           SECOND, genuinely different date on the same sheet — 1C's own
+           Scheduled date. `f_insp_date` names this one for what it always
+           was: the day the round was actually walked, `rec.date` itself,
+           the same field file names/DUE.next/teamDate already depend on.
+           `f_smu` is the identical fix one fact over — "The SMU is already
+           there just label" — reusing the exact label
+           earlierRoundSections' own smu/by line already prints, not a
+           second copy of it. */
         + '<div class="msub"><span class="unum">' + esc(rec.equip) + '</span>'
-          + (rec.date ? ' · <b>' + esc(rec.date) + '</b>' : '')
-          + (rec.smu ? ' · <b>' + esc(rec.smu) + '</b> h' : '')
+          + (rec.date ? ' · ' + T.I("f_insp_date") + ' <b>' + esc(rec.date) + '</b>' : '')
+          + (rec.smu ? ' · ' + T.I("f_smu") + ' <b>' + esc(rec.smu) + '</b> h' : '')
           + (rec.model ? ' · ' + esc(rec.model) : '')
           + (mine.length > 1 ? ' · ' + T.S("rounds_n", { n: mine.length - 1 }) : '')
         + '</div>'
@@ -3466,6 +3524,14 @@
            round nobody photographed. */
         + (rec.note ? '<div class="quiet" style="margin-top:6px;">'
               + T.both(rec.note, rec.noteAlt, "altl") + '</div>' : "")
+        /* WHAT 1C SCHEDULED THIS ROUND AGAINST — see schedStrip's own
+           comment. Appended here, inside the masthead itself, so it lands
+           directly under the identity line every branch below already
+           builds from `head`, rather than needing its own copy pasted into
+           every branch the way the graded/wear/GET split would otherwise
+           demand. Empty string, and therefore nothing printed, when the
+           round has no covering 1C order. */
+        + schedStrip(T, rec)
         + '</div>';
       /* The four-cell metadata strip goes on the sheets with room (non-wear,
          via the branches below) and, for a wear round whose first page is the
@@ -3993,7 +4059,7 @@
       + '<div class="m1">' + T.I("uh_title") + '</div>'
       + '<div class="msub"><span class="unum">' + esc(equip) + '</span>'
         + ' · ' + T.I("sm_report_date") + ' <b>' + esc(today) + '</b>'
-        + (smu ? ' · <b>' + esc(String(smu)) + '</b> h' : '')
+        + (smu ? ' · ' + T.I("f_smu") + ' <b>' + esc(String(smu)) + '</b> h' : '')
         + (model ? ' · ' + esc(model) : '') + '</div>'
       + '<div class="quiet" style="margin-top:2px;">' + T.S("uh_sub") + '</div>'
       + '</div>'
@@ -4191,7 +4257,7 @@
       + mastHead(T, '<i>' + T.I("rr_report") + '</i> <b class="repno">EQ-' + esc(equip) + '-' + esc(today.replace(/-/g, "")) + '</b>')
       + '<div class="m1">' + T.I("sm_title") + '</div>'
       + '<div class="msub"><span class="unum">' + esc(equip) + '</span>'
-        + (model ? ' · ' + esc(model) : '') + (smu ? ' · <b>' + esc(String(smu)) + '</b> h' : '')
+        + (model ? ' · ' + esc(model) : '') + (smu ? ' · ' + T.I("f_smu") + ' <b>' + esc(String(smu)) + '</b> h' : '')
         + ' · ' + T.I("sm_report_date") + ' ' + esc(today) + '</div>'
       + '</div>'
       + '<div class="rule" style="margin:11px 0 0"></div>'

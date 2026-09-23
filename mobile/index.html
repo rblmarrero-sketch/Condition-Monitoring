@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=449">
+<link rel="manifest" href="manifest.webmanifest?v=450">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=449">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=449">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=449">
+<link rel="apple-touch-icon" href="icon-192.png?v=450">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=450">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=450">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2758,16 +2758,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=449"></script>
-<script src="upload-defaults.js?v=449"></script>
-<script src="hme.js?v=449"></script>
-<script src="mp-fc.js?v=449"></script>
-<script src="rtw.js?v=449"></script>
-<script src="hme-cascade.js?v=449"></script>
-<script src="assets.js?v=449"></script>
-<script src="temp-limits.js?v=449"></script>
-<script src="normalize.js?v=449"></script>
-<script src="terms.js?v=449"></script>
+<script src="native.js?v=450"></script>
+<script src="upload-defaults.js?v=450"></script>
+<script src="hme.js?v=450"></script>
+<script src="mp-fc.js?v=450"></script>
+<script src="rtw.js?v=450"></script>
+<script src="hme-cascade.js?v=450"></script>
+<script src="assets.js?v=450"></script>
+<script src="temp-limits.js?v=450"></script>
+<script src="normalize.js?v=450"></script>
+<script src="terms.js?v=450"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2786,25 +2786,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=449"></script>
-<script src="edits.js?v=449"></script>
-<script src="due.js?v=449"></script>
-<script src="wear.js?v=449"></script>
-<script src="wear-figs.js?v=449"></script>
-<script src="wear-map.js?v=449"></script>
-<script src="machine-photos.js?v=449"></script>
-<script src="machine-fig.js?v=449"></script>
-<script src="get.js?v=449"></script>
-<script src="points.js?v=449"></script>
-<script src="uc-points.js?v=449"></script>
-<script src="inspect-guide.js?v=449"></script>
-<script src="get-figs.js?v=449"></script>
-<script src="body-points.js?v=449"></script>
-<script src="body-map.js?v=449"></script>
-<script src="lube.js?v=449"></script>
-<script src="lube-overrides.js?v=449"></script>
-<script src="lube2027.js?v=449"></script>
-<script src="report-core.js?v=449"></script>
+<script src="grade.js?v=450"></script>
+<script src="edits.js?v=450"></script>
+<script src="due.js?v=450"></script>
+<script src="wear.js?v=450"></script>
+<script src="wear-figs.js?v=450"></script>
+<script src="wear-map.js?v=450"></script>
+<script src="machine-photos.js?v=450"></script>
+<script src="machine-fig.js?v=450"></script>
+<script src="get.js?v=450"></script>
+<script src="points.js?v=450"></script>
+<script src="uc-points.js?v=450"></script>
+<script src="inspect-guide.js?v=450"></script>
+<script src="get-figs.js?v=450"></script>
+<script src="body-points.js?v=450"></script>
+<script src="body-map.js?v=450"></script>
+<script src="lube.js?v=450"></script>
+<script src="lube-overrides.js?v=450"></script>
+<script src="lube2027.js?v=450"></script>
+<script src="report-core.js?v=450"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -8547,13 +8547,21 @@ $("saveBtn").onclick=async ()=>{
   const id = editing ? editing.id : `${type}__${equip}__${date}__${DEVICE}__${Date.now()}`;
   const created = editing ? (editing.created||new Date().toISOString()) : new Date().toISOString();
   if(!gps) await getGps(true);   // best effort — never blocks the save
+  /* The 1C order this round is being walked against, captured once — like
+     roundWO() above — and PRESERVED on an edit, never re-borrowed from
+     whatever the schedule says today: a round corrected days later must go
+     on printing the plan it was actually walked against. */
+  const schedO = editing ? null : schedOrdersFor(equip, type).near;
   const rec={ id, cls:eqClass, type, equip, date, smu:$("smu").value.trim(), by:$("inspector").value.trim(),
     sup:$("supName").value.trim(), sign:await signBlob(), gps:gps||null, dev:DEVICE, positions:{}, created, up:0, upTo:{},
     rev:(editing?(editing.rev||0)+1:1),
     /* Which photograph rules this round was captured under. 2 = the machine
        overview (and sides, tray, assembly) is required. A round from before
        is not held to a photograph nobody at the crib room can take. */
-    phv:(editing?(editing.phv||1):2) };
+    phv:(editing?(editing.phv||1):2),
+    schedHours:(editing ? (editing.schedHours!=null?editing.schedHours:null) : (schedO && schedO.hours!=null ? schedO.hours : null)),
+    schedDate:(editing ? (editing.schedDate||"") : (schedO && schedO.plan ? schedO.plan : "")),
+    schedPriority:(editing ? (editing.schedPriority||"") : (schedO && schedO.priority ? String(schedO.priority) : "")) };
   for(const [k,p] of Object.entries(draft.positions))
     rec.positions[k]={ grade:GRADE.num(p.grade)||null, sev:gradeIso(p.grade)||p.sev||"", sevMan:p.sevMan||0,
       /* The judgement around the grade: set by hand or proposed, what was
@@ -13832,6 +13840,7 @@ async function rptRecords(onlyId){
       rtwResult:rec.rtwResult||"", rtwWo:rec.rtwWo||"", rtwComment:rec.rtwComment||"",
       rtwWoType:rec.rtwWoType||"", rtwSchedHours:(rec.rtwSchedHours!=null?rec.rtwSchedHours:null), rtwSchedDate:rec.rtwSchedDate||"",
       rtwWoPriority:rec.rtwWoPriority||"", rtwTime:rec.rtwTime||"",
+      schedHours:(rec.schedHours!=null?rec.schedHours:null), schedDate:rec.schedDate||"", schedPriority:rec.schedPriority||"",
       /* "This sheet is measurements" — which is NOT the same question as "does
          capture demand a millimetre at every position". meta.wear is the second
          one, and a GET round answers no to it: teeth are graded, and a tape is
@@ -13943,6 +13952,7 @@ function teamRecToReport(rec){
            rtwResult:rec.rtwResult||"", rtwWo:rec.rtwWo||"", rtwComment:rec.rtwComment||"",
            rtwWoType:rec.rtwWoType||"", rtwSchedHours:(rec.rtwSchedHours!=null?rec.rtwSchedHours:null), rtwSchedDate:rec.rtwSchedDate||"",
            rtwWoPriority:rec.rtwWoPriority||"", rtwTime:rec.rtwTime||"",
+           schedHours:(rec.schedHours!=null?rec.schedHours:null), schedDate:rec.schedDate||"", schedPriority:rec.schedPriority||"",
            wear:!!(meta.wear||meta.get), temp:!!meta.temp, items };
 }
 /* EVERY PHOTOGRAPH THE FOLDER HANDED BACK, PLACED ON THE ROUND.
@@ -14361,7 +14371,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="449";
+const BUILD="450";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -17034,6 +17044,11 @@ function recToExport0(rec){
        rec.date itself stays plain YYYY-MM-DD, the shape every other reader
        of this field depends on (file names, DUE.next, teamDate/idDate). */
     rtwTime:rec.rtwTime||"",
+    /* The same 1C schedule facts RTW carries, generalised to EVERY round
+       type — captured once at Save (see the Save handler) and never
+       re-borrowed on an edit, so the masthead's schedule strip prints what
+       this round was actually walked against. */
+    schedHours:(rec.schedHours!=null?rec.schedHours:null), schedDate:rec.schedDate||"", schedPriority:rec.schedPriority||"",
     items:Object.entries(rec.positions).map(([k,p])=>{ const d=DEFECT_BY[upDefect(p.defect)]||null;
       const det=p.detect||DETECT_DEFAULT;
       // Codes leave the app in the shape 1C expects: v4 for the mode, the cause,
