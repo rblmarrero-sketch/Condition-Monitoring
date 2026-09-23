@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-23T01:05:35+00:00",
+  "generated": "2026-09-23T01:59:17+00:00",
   "byUnit": {
     "DZ001": [
       {
@@ -942,6 +942,18 @@
       "raised": "2026-09-24",
       "type": "500 Hours service Planned",
       "hours": 500,
+      "plan": "2026-09-24"
+    },
+    {
+      "wo": "WO-017741",
+      "equip": "CN007",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "2000h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-09-24",
+      "type": "2000 Hours service Planned",
+      "hours": 2000,
       "plan": "2026-09-24"
     },
     {
