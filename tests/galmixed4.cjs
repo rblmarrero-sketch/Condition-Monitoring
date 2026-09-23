@@ -35,11 +35,27 @@
    solved for FOUR columns always (`GAL_TILE_COLS`, report-core.js), never
    from how many photographs a particular row actually holds.
 
-   The non-gallery (mpEvidence) board keeps the earlier `auto`-column fix,
-   unchanged here — its own board width varies with how many sibling
-   positions share a row, and it was never asked to become uniform tiles or
-   cropped photographs; this is a narrow exception to this project's
-   "never crop" rule, scoped to the ≥3-photo gallery board alone.
+   The non-gallery (mpEvidence) board kept the earlier `auto`-column fix
+   for a while after this — its own board width varies with how many
+   sibling positions share a row, so a NARROW multi-column board (several
+   positions side by side) still shrinks its own columns to fit, unchanged.
+   But a WIDE board (mpEvidence's own single-column case, one position or a
+   few that would otherwise squeeze — `boardCols`' own `wide` flag) is the
+   sheet's FULL 746px width, the identical width the gallery board already
+   tiles at three or four across — and a real TK112 Magnetic Plug report,
+   after "1 or 2 photos start left, not centred" had already shipped,
+   showed exactly why "auto, unchanged" was not the end of the story there
+   either: CTR's own four photographs sat in a small huddle at their own
+   natural width, left-justified but nowhere near filling the wide grey
+   card beside them. Asked for again, by name: "4 photos MUST be perfectly
+   align, fill the horizontal line" — pointing at the gallery board's own
+   EX016 report as the standard. A WIDE mpEvidence board's row of three or
+   four now shares the identical tiledRow/tileSize function the gallery
+   board uses, at the identical 746px target width — same tile, same
+   hairline gap, same cover-fit crop. A NARROW board (several positions
+   packed side by side) is unaffected: it was never asked to become
+   uniform tiles, and cramming a cover-fit square into a quarter-width
+   column would make an already-small photograph unreadable.
 
    Run: node tests/galmixed4.cjs   (needs tests/ed-srv.cjs on 8093) */
 const { chromium } = require(require('./pw.cjs'));
@@ -56,18 +72,24 @@ const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
   await p.goto(URL, { waitUntil: 'load' });
   await p.waitForFunction(() => window.CMR && window.html2canvas, { timeout: 20000 });
 
-  const measure = async (gallery, photoShapes) => p.evaluate(async ({ gallery, photoShapes }) => {
+  const measure = async (gallery, photoShapes, extraPositions) => p.evaluate(async ({ gallery, photoShapes, extraPositions }) => {
     const solid = (w, h, rgb) => { const c = document.createElement('canvas'); c.width = w; c.height = h;
       const x = c.getContext('2d'); x.fillStyle = 'rgb(' + rgb.join(',') + ')'; x.fillRect(0, 0, w, h); return c.toDataURL('image/png'); };
     const colors = [[210,40,40],[30,60,220],[30,180,60],[220,180,20]];
     const photos = photoShapes.map((s, i) => solid(s[0], s[1], colors[i % colors.length]));
+    /* extraPositions: single-photo filler positions added ONLY to push a
+       non-gallery board past boardCols' wide<=3 threshold into a NARROW,
+       multi-column board — proving the fix is scoped to a wide board and
+       does not reach a card packed side by side with its siblings. */
+    const filler = Array.from({ length: extraPositions || 0 }, (_, i) => ({
+      key: 'F' + i, label: 'Filler ' + i, grade: 1, photos: [solid(800, 600, [120, 120, 120])] }));
     const recs = gallery
       ? [{ equip: 'TK900', clsLabel: 'HT', model: 'X', type: 'MP', typeLabel: 'MP', date: '2026-09-14', by: 'R', smu: '1',
             items: [{ key: 'RRD', name: 'Rear Differential', grade: 2, defect: 'Ferrous debris', action: 'Monitor', photos }] },
           { equip: 'TK900', clsLabel: 'HT', model: 'X', type: 'FC', typeLabel: 'FC', date: '2026-09-14', by: 'R', smu: '1',
             items: [{ key: 'ENG', name: 'Engine Oil Filter', grade: 1 }] }]
       : [{ equip: 'TK901', date: '2026-09-14', type: 'MP', cls: 'HT', by: 'R', smu: '1',
-            items: [{ key: 'A', label: 'Plug A', grade: 2, defect: 'debris', action: 'Monitor', photos }] }];
+            items: [{ key: 'A', label: 'Plug A', grade: 2, defect: 'debris', action: 'Monitor', photos }].concat(filler) }];
     const secs = window.CMR.sections({ lang: 'en', bi: false, mode: 'unit', title: 'x', titleAlt: 'y', stamp: new Date(),
       sevLabel: s => s, sevLabelAlt: s => s, records: recs });
     const st = document.getElementById('galmixedcss') || (() => { const s = document.createElement('style'); s.id = 'galmixedcss'; s.textContent = CMR.CSS; document.head.appendChild(s); return s; })();
@@ -76,17 +98,22 @@ const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
     d.style.cssText = 'position:fixed;left:0;top:0;width:760px;background:#fff;';
     d.innerHTML = secs.map(s => '<div class="secwrap">' + s.html + '</div>').join('');
     document.body.appendChild(d);
-    const sel = gallery ? '.phg.gallery img' : '.cel .phg img';
-    const imgs = [...d.querySelectorAll(sel)];
+    /* Scoped to position A's OWN cel — with filler positions added (the
+       narrow-board control) there is more than one .cel on the page, and
+       only A's carries the photographs this measurement is about. */
+    const cel = gallery ? d.querySelector('.board.gal .cel')
+      : [...d.querySelectorAll('.cel')].find(c => c.querySelector('.pk') && c.querySelector('.pk').textContent.trim().indexOf('A') === 0);
+    const board = cel.closest('.board');
+    const boardClass = board ? board.className : null;
+    const imgs = [...cel.querySelectorAll('.phg img')];
     await Promise.all(imgs.map(im => im.complete ? null : new Promise(res => { im.onload = im.onerror = res; })));
     await new Promise(res => requestAnimationFrame(() => requestAnimationFrame(res)));
     const boxes = imgs.map(im => im.getBoundingClientRect());
-    const tileEls = gallery ? [...d.querySelectorAll('.phgrow > div')] : [];
+    const tileEls = [...cel.querySelectorAll('.phgrow > div')];
     const tiles = tileEls.map(t => t.getBoundingClientRect());
-    const gapEls = gallery ? tiles : boxes;
+    const gapEls = tiles.length ? tiles : boxes;
     const gaps = [];
     for (let i = 1; i < gapEls.length; i++) gaps.push(Math.round(gapEls[i].left - gapEls[i - 1].right));
-    const cel = imgs[0].closest('.cel');
     const celRect = cel.getBoundingClientRect();
     const canvas = await html2canvas(cel, { scale: 1, backgroundColor: '#ffffff', logging: false });
     const cx = canvas.getContext('2d');
@@ -94,9 +121,9 @@ const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
       const y = Math.max(0, Math.min(canvas.height - 1, Math.round(py))); const dat = cx.getImageData(x, y, 1, 1).data; return [dat[0], dat[1], dat[2]]; };
     const rasterColors = boxes.map(bx => sample(bx.left - celRect.left + bx.width / 2, bx.top - celRect.top + bx.height / 2));
     d.remove();
-    return { gaps, boxes: boxes.map(bx => ({ l: Math.round(bx.left), w: Math.round(bx.width), h: Math.round(bx.height) })),
+    return { boardClass, gaps, boxes: boxes.map(bx => ({ l: Math.round(bx.left), w: Math.round(bx.width), h: Math.round(bx.height) })),
              tiles: tiles.map(t => ({ l: Math.round(t.left), w: Math.round(t.width), h: Math.round(t.height) })), rasterColors };
-  }, { gallery, photoShapes });
+  }, { gallery, photoShapes, extraPositions });
 
   console.log('GALLERY BOARD (TK109-style): 2 landscape + 2 portrait, one row of four');
   const g4 = await measure(true, [[800,600],[600,800],[800,600],[600,800]]);
@@ -130,12 +157,50 @@ const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
      JSON.stringify({ mixedRowSpan: g4.tiles[3].l + g4.tiles[3].w - g4.tiles[0].l, mixedTile: g4.tiles[0],
                        landscapeRowSpan: gAll.tiles[3].l + gAll.tiles[3].w - gAll.tiles[0].l, landscapeTile: gAll.tiles[0] }));
 
-  console.log('\nNON-GALLERY (mpEvidence) BOARD: 2 landscape + 1 portrait, one plug position');
-  const ng = await measure(false, [[800,600],[600,800],[800,600]]);
-  ok('three photographs found', ng.boxes.length === 3, JSON.stringify(ng.boxes));
-  ok('  every gap is the board\'s own hairline (2px), not stretched wide around the portrait one',
-     ng.gaps.every(x => x === 2), JSON.stringify(ng.gaps));
-  ok('  the portrait photograph is narrower than its landscape neighbours', ng.boxes[1].w < ng.boxes[0].w, JSON.stringify(ng.boxes));
+  console.log('\nNON-GALLERY (mpEvidence) WIDE BOARD: 2 landscape + 1 portrait, one plug position alone — now TILED like the gallery board (asked for by name against a real TK112 report: "4 photos MUST be perfectly align, fill the horizontal line")');
+  const ngWide = await measure(false, [[800,600],[600,800],[800,600]], 0);
+  ok('the board carries the wide class (one position alone)', /\bwide\b/.test(ngWide.boardClass), ngWide.boardClass);
+  ok('three photographs found', ngWide.boxes.length === 3, JSON.stringify(ngWide.boxes));
+  ok('  THE FIX: tiled at the gallery board\'s own square footprint, not auto-sized to each photograph',
+     ngWide.tiles.length === 3 && new Set(ngWide.tiles.map(t => t.w)).size === 1 && new Set(ngWide.tiles.map(t => t.h)).size === 1
+       && ngWide.tiles.every(t => Math.abs(t.w - t.h) <= 1) && ngWide.tiles[0].w === g4.tiles[0].w,
+     JSON.stringify({ tiles: ngWide.tiles, gallerySquare: g4.tiles[0] }));
+  ok('  the same tight hairline gap the gallery board uses, not the old 2px auto-grid gap',
+     ngWide.gaps.every(x => x >= 2 && x <= 6), JSON.stringify(ngWide.gaps));
+  /* THREE photographs are, by the gallery board's own documented rule
+     (GAL_TILE_COLS fixed at 4, always), a row that falls SHORT of the
+     746px line by design — the identical tile a full four-photograph row
+     uses, with the fourth slot simply left empty, flush left. A wide
+     mpEvidence board sharing the same function inherits that same rule:
+     three photographs here are not stretched to fill the line either,
+     they sit at the exact same partial span (3 tiles + 2 hairline gaps)
+     a three-photograph gallery row would. */
+  const wideSpan = ngWide.tiles[2].l + ngWide.tiles[2].w - ngWide.tiles[0].l;
+  const expectSpan = 3 * ngWide.tiles[0].w + 2 * 4;
+  ok('  three photographs fall short of the line by design, at the SAME partial span the gallery board\'s own three-photo row uses (not stretched to reach it, not squeezed to a size of their own)',
+     Math.abs(wideSpan - expectSpan) <= 6, JSON.stringify({ wideSpan, expectSpan }));
+  ok('  the portrait photograph still keeps its own shape — cropped on its overflowing axis, never squeezed',
+     ngWide.boxes[1].w >= ngWide.tiles[1].w - 3 && ngWide.boxes[1].h >= ngWide.tiles[1].h - 3, JSON.stringify(ngWide.boxes));
+
+  console.log('\nNON-GALLERY (mpEvidence) NARROW BOARD control: the SAME 2+1 photo position, packed beside three siblings — still auto-sized, not tiled (a quarter-width column has no room for a full-size cover-fit square)');
+  const ngNarrow = await measure(false, [[800,600],[600,800],[800,600]], 3);
+  ok('the board does NOT carry the wide class (four positions share the row)', !/\bwide\b/.test(ngNarrow.boardClass), ngNarrow.boardClass);
+  ok('three photographs found', ngNarrow.boxes.length === 3, JSON.stringify(ngNarrow.boxes));
+  ok('  unchanged: every gap is the board\'s own hairline (2px), not the gallery board\'s tile gap',
+     ngNarrow.gaps.every(x => x === 2), JSON.stringify(ngNarrow.gaps));
+  /* At this squeeze (four positions sharing the row, one card a quarter
+     of the sheet) `auto` columns clamp every photograph to the SAME
+     narrow column width regardless of its own shape — landscape and
+     portrait alike — rather than a landscape photograph coming out
+     visibly wider the way it does on a wide, unconstrained board
+     (galmixed4.cjs's own wide-board case above, and phgstretch.cjs). That
+     is exactly the "shrinks gracefully" behaviour `auto` was chosen for,
+     and it is a DIFFERENT question from the one this control exists to
+     answer: no `.phgrow` tile markup and no `gallery`/`g3plus` class ever
+     appears on a narrow board's own `.phg`, proving the wide-board fix
+     above did not leak into it. */
+  ok('  never tiled: no gallery/g3plus class or .phgrow tile markup reaches a narrow board\'s own .phg',
+     ngNarrow.tiles.length === 0, JSON.stringify(ngNarrow.tiles));
 
   ok(fails.filter(f => f.startsWith('PAGEERROR')).length === 0, 'no page errors throughout');
   await b.close();

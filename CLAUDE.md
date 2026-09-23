@@ -2190,6 +2190,51 @@ states — restated here because it was written once, forgotten once, and is
 now worth a habit: run `node --check` on this file before trusting any
 test result against it, the same reflex that entry already recommends.
 
+**LEFT-JUSTIFIED WAS NOT THE SAME AS FILLING THE LINE, AND THE SECOND FIX
+HAD TO BE NARROWER THAN THE FIRST ONE'S OWN WORDING SUGGESTED.** The
+left-justify fix above (the base `.cel .phg` rule) was tested against a
+real TK112 report and confirmed correct — and a SECOND real TK112 report,
+sent right after, showed it was not the whole ask: "still TK112 example
+not fixed... 4 photos MUST be perfectly align, fill the horizontal line.
+Scan example of EX016, take the Height and Width, thats the perfect." FRD's
+two photographs were correctly starting flush left; CTR's own four sat in a
+small huddle at their own natural width, left-justified but nowhere near
+reaching the wide grey card's own line, pointing at the standalone
+"PHOTOGRAPHS" gallery page's own EX016 report (already tiled, cover-fit,
+edge to edge) as the standard to match. `mpEvidence`'s per-position board
+(the `ph.length>1`, non-`gallery` branch of `cell()`) had never been asked
+to tile at all — it deliberately keeps `auto` columns, sized to each
+photograph's own shape, specifically so a narrow multi-column board (two,
+three or four positions packed side by side) shrinks gracefully instead of
+overflowing.
+
+The fix is scoped to exactly the shape the report showed: a WIDE board
+(`boardCols`' own `wide` flag — one position alone, or few enough that
+none would be squeezed) with three or four photographs now shares the
+IDENTICAL `tileSize`/`tiledRow` function the gallery board already uses,
+at the same 746px target width — same square tile, same hairline gap, same
+cover-fit crop, and the same "falls short of the line by design" rule for
+a bare three-photograph row that the gallery board already has. A wide
+board's one or two photographs, and every photograph on a NARROW
+multi-column board regardless of count, keep the existing `auto` sizing
+unchanged — cramming a cover-fit square into a quarter-width column would
+make an already-small photograph unreadable, and nobody asked for that.
+`sh.wide` carries the flag from each of the three call sites that already
+compute `boardCols` (`mpEvidence`, the graded findings board, and
+`earlierRoundSections`' history board) into `cell()`, reusing the `sh`
+object every one of them already threads through for the "shared facts"
+band rather than adding a fourth parameter.
+
+`tests/galmixed4.cjs`'s own "NON-GALLERY (mpEvidence) BOARD" section had
+encoded the OLD behaviour (auto columns, 2px gap, a portrait photograph
+narrower than its landscape neighbours) as its premise, which is exactly
+what a real report proved wrong — updated to a WIDE-board case (tiled,
+same square footprint as the gallery board, falls short of the line at the
+same partial span a bare three-photo gallery row does) and a NARROW-board
+control (four positions sharing the row, still auto-sized, never tiled)
+added alongside it to prove the fix does not leak into the shape it was
+never asked to touch.
+
 ---
 
 ## Secrets

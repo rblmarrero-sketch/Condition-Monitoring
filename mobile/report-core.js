@@ -2960,9 +2960,10 @@
     if (!walked.length) return "";
     var its = walked;
     var bc = boardCols(its);
+    var sh = { wide: bc.wide };
     return '<div class="subhd" style="margin-top:12px;">' + T.I("tb_mp") + '</div>'
       + '<div class="board b' + bc.cols + (bc.wide ? ' wide' : '') + '">'
-      + its.map(function (it) { return cell(ctx, T, it, {}); }).join("") + '</div>'
+      + its.map(function (it) { return cell(ctx, T, it, sh); }).join("") + '</div>'
       + (skipped.length ? '<div class="muted" style="font-size:9.5px;margin-top:4px;">'
           + esc(T.I("tb_mp_skip", { n: skipped.map(function (it) { return it.code || it.key; }).join(", ") }))
           + '</div>' : "");
@@ -3573,6 +3574,7 @@
            them instead. */
         var bc = boardCols(board);
         var sh = shared(board);
+        sh.wide = bc.wide;
         body = commonBand(T, sh, board.length)
           + '<div class="board b' + bc.cols + (bc.wide ? ' wide' : '') + '">'
           + board.map(function (it) { return cell(ctx, T, it, sh); }).join("") + '</div>'
@@ -4389,6 +4391,7 @@
          threshold is exactly how the two would have drifted apart again. */
       var bc = boardCols(told);
       var cols = bc.cols, wide = bc.wide;
+      sh.wide = wide;
       out.push({ nb: false, gap: 4, html: '<div class="sec olderr">'
         + '<div class="ohd">'
           + '<b>' + esc(rec.date || "") + '</b>'
@@ -4925,23 +4928,47 @@
            photographs at three columns is the same photograph sized smaller
            than four or six of them for no reason the finding gives.
 
-           `auto`, not `1fr` — the same reason the gallery board above uses
-           `auto`: equal-width columns force a narrower (portrait) photograph
-           to sit centred in a column sized for its landscape neighbours,
-           which is a big, uneven gap around it rather than the sheet's
-           standard hairline one. `auto` sizes each column to its own
-           photograph and, in this fixed-width board, shrinks gracefully
-           rather than overflowing when the row's own photographs would
-           otherwise need more room than the card has (measured directly,
-           see the gallery comment above). The `.g4` class still carries the
-           narrower max-height four columns need instead of three's; a board
-           too narrow for it (mpEvidence's own multi-plug cards) is already
-           governed by max-width, so the class costs it nothing. */
+           `auto`, not `1fr`, on a NARROW multi-column board (two, three or
+           four positions side by side): equal-width columns would force a
+           narrower (portrait) photograph to sit centred in a column sized
+           for its landscape neighbours, and `auto` shrinks gracefully rather
+           than overflowing when a card this narrow cannot fit the sheet's
+           standard tile at all.
+
+           A WIDE, single-column board (`sh.wide`, from boardCols — one
+           position alone on its own line, or few enough that none of them
+           would be squeezed) is a different shape: the card IS the sheet's
+           full 746px width, the same width the standalone "PHOTOGRAPHS"
+           gallery page tiles at three or four across. Read off a real
+           TK112 Magnetic Plug report, after "1 or 2 photos start left, not
+           centred" had already shipped: FRD's two photographs correctly
+           started flush left, and CTR's own four sat in a small huddle at
+           their own natural width with the rest of the wide grey card empty
+           beside them — left-justified, but nowhere near filling the line.
+           Asked for again, by name, against that same report: "4 photos
+           MUST be perfectly align, fill the horizontal line" — pointing at
+           the standalone gallery's own EX016 report as the standard to
+           match. A wide board's row of three or four is now tiled exactly
+           the way the gallery page already does, correctly, with the
+           identical function and the identical 746px target width: cover-fit
+           squares that fill the line edge to edge, sharing one proven
+           implementation instead of a second copy that could drift from it.
+           A wide board's row of one or two photographs, and every row on a
+           NARROW multi-column board regardless of count, keep the `auto`
+           column sizing above unchanged — this is additive, not a
+           replacement of the existing rule. */
         var ncols = gridCols(ph.length);
-        top = '<div class="phg' + (ncols === 4 ? ' g4' : '') + '" style="grid-template-columns:repeat('
-          + ncols + ',auto)">'
-          + ph.map(function (u) { return '<img src="' + u + '">'; }).join("")
-          + '</div>';
+        if (sh && sh.wide && ncols >= 3) {
+          var mpRows = chunkPh(ph, ncols);
+          top = '<div class="phg gallery g3plus" style="grid-template-columns:1fr">'
+            + mpRows.map(function (r) { return tiledRow(r, GAL_ROW_W, GAL_GAP, 0).html; }).join("")
+            + '</div>';
+        } else {
+          top = '<div class="phg' + (ncols === 4 ? ' g4' : '') + '" style="grid-template-columns:repeat('
+            + ncols + ',auto)">'
+            + ph.map(function (u) { return '<img src="' + u + '">'; }).join("")
+            + '</div>';
+        }
       } else {
         top = '<img class="ph" src="' + ph[0] + '">';
       }
