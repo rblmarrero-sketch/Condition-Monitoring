@@ -153,7 +153,7 @@ const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
   const one = await render('RRD', 'Rear Differential', [[500, 420]]);
   ok('one photograph is a standard tile, not stretched to the line', one.boxes.length === 1 && !/\bg3plus\b/.test(one.boardClass) && one.boxes[0].w < 300, JSON.stringify(one));
   const two = await render('RRD', 'Rear Differential', [[420, 560], [400, 560]]);
-  ok('two portrait photographs pack and centre, not tiled to the line', two.boxes.length === 2 && !/\bg3plus\b/.test(two.boardClass) && (two.boxes[1].l + two.boxes[1].w - two.boxes[0].l) < 400, JSON.stringify(two));
+  ok('two portrait photographs pack and stay their own width, not tiled to the line', two.boxes.length === 2 && !/\bg3plus\b/.test(two.boardClass) && (two.boxes[1].l + two.boxes[1].w - two.boxes[0].l) < 400, JSON.stringify(two));
 
   ok(fails.filter(f => f.startsWith('PAGEERROR')).length === 0, 'no page errors throughout');
   await b.close();

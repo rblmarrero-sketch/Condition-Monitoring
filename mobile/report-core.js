@@ -650,7 +650,26 @@
    are one size, in rows, rather than one big and a strip of stamps. */
 #rptRoot .board.gal{gap:9px 8px;}
 #rptRoot .board.gal.b1{max-width:none;}
-#rptRoot .cel .phg{display:grid;gap:2px;background:#dfe4e9;justify-items:center;align-items:center;justify-content:center;}
+#rptRoot .cel .phg{display:grid;gap:2px;background:#dfe4e9;justify-items:start;align-items:center;justify-content:start;}
+/* THIS IS THE BASE RULE EVERY .phg BOARD ON THE SHEET INHERITS FROM —
+   the standalone "PHOTOGRAPHS" gallery page AND the per-position
+   "Equipment and component evidence" cards (mpEvidence's own board on a
+   Magnetic Plug/FC/INSP round) both carry this class. Read off a real
+   TK112 Magnetic Plug report: FRD's two photographs sat centred in the
+   middle of a wide grey card with equal blank margins on both sides,
+   directly above CTR's own four photographs on the row below it, packed
+   correctly and starting flush left — the identical shape
+   tests/galportrait.cjs had already found and fixed on the STANDALONE
+   gallery page (.phg.gallery's own override, below) without this base
+   rule, the one this OTHER board actually reads, ever being touched.
+   Asked for by name and confirmed against that exact printed report:
+   "when 1 or 2 photo is taken it should start from left-justify, not in
+   the center… confirm a rule was applied to all report, mobile and web
+   dashboard." Fixing it here, at the rule both boards share, is what
+   makes it one rule rather than two copies that happened to agree once.
+   A BACKTICK IN THIS COMMENT WOULD CLOSE THE TEMPLATE LITERAL THIS WHOLE
+   STYLESHEET LIVES INSIDE — see CLAUDE.md's own history entry on that
+   exact mistake — so every code name above is plain-quoted on purpose. */
 /* ONE CELL, EVERYWHERE, AND IT IS A GRID BECAUSE IT SAYS IT IS.
 
    This rule said display:flex and the rule fifty lines below it set
@@ -666,7 +685,7 @@
    nothing is cropped, which is the rule CLAUDE.md sets — what it forbids is
    cover, the 4:3 STAMP that cuts the evidence. A uniform cell and an
    uncropped photograph are not in tension; the old code simply had neither. */
-#rptRoot .cel .phg.gallery{display:grid;gap:8px;background:#fff;padding:6px 6px 0;justify-content:center;}
+#rptRoot .cel .phg.gallery{display:grid;gap:8px;background:#fff;padding:6px 6px 0;justify-content:start;}
 /* AN EXPLICIT HEIGHT, BECAUSE THE PDF IS NOT A BROWSER. aspect-ratio gives a
    perfect 4:3 cell on screen — measured 243x182 across eight frames of mixed
    proportion — and html2canvas, which is what actually draws the page, does
@@ -693,7 +712,7 @@
    its own shape and is centred, which is what stops a portrait being squashed
    into a landscape box. Letterboxing by white space in a uniform cell, done
    with the two properties the renderer actually implements. */
-#rptRoot .cel .phg.gallery{justify-items:center;align-items:center;}
+#rptRoot .cel .phg.gallery{justify-items:start;align-items:center;}
 /* aspect-ratio:auto is not decoration. The generic .cel .phg img rule above
    sets aspect-ratio:4/3, and it is inherited here by anything carrying both
    classes — so with an explicit height the browser DERIVES the width from the
@@ -4841,20 +4860,52 @@
             + galRows.map(function (r) { return tiledRow(r, GAL_ROW_W, GAL_GAP, 0).html; }).join("")
             + '</div>';
         } else {
-          /* ONE OR TWO PHOTOGRAPHS PACK TOGETHER AND CENTRE, NOT JUSTIFIED
-             TO THE LINE. `auto` columns, each sized to its OWN photograph
-             rather than to a forced equal share of the row, is what makes a
-             portrait frame keep its own width instead of sitting stranded
-             in a wide 1fr column with white on both sides of it (TK126,
-             INSP, 2026-09-19: two 720x1600 photographs read off the printed
-             sheet as "the spacing is too much" when this used equal 1fr
-             columns) — and a genuinely LONE photograph is a standard tile,
-             not the whole line stretched to hold one frame
-             (photogallerysize.cjs). Justifying to fill the line, correct at
-             three or four, would be exactly that defect again at one or two:
-             a single photograph the width of the sheet, or a pair blown out
-             to fill it, neither of which this project has ever asked for.
-             `tests/galportrait.cjs`. */
+          /* ONE OR TWO PHOTOGRAPHS PACK TOGETHER AND START AT THE LEFT
+             MARGIN, NOT STRETCHED TO FILL THE LINE AND NOT CENTRED IN IT.
+             `auto` columns, each sized to its OWN photograph rather than to
+             a forced equal share of the row, is what makes a portrait frame
+             keep its own width instead of sitting stranded in a wide 1fr
+             column with white on both sides of it (TK126, INSP, 2026-09-19:
+             two 720x1600 photographs read off the printed sheet as "the
+             spacing is too much" when this used equal 1fr columns) — and a
+             genuinely LONE photograph is a standard tile, not the whole
+             line stretched to hold one frame (photogallerysize.cjs).
+             Justifying to fill the line, correct at three or four, would be
+             exactly that defect again at one or two: a single photograph
+             the width of the sheet, or a pair blown out to fill it, neither
+             of which this project has ever asked for.
+
+             CENTRING them as a group was the fix's own first cut, and it
+             was wrong for the same reason every OTHER row on this sheet
+             starts flush left — the tiled three/four-photograph row above,
+             the checklist table beside it, the masthead itself: a reader's
+             eye tracks one consistent left edge down the page, and a lone
+             or paired photograph sitting in the middle of its line was the
+             one shape on the sheet that did not. Asked for by name: "when 1
+             or 2 photo is taken it should start from left-justify, not in
+             the center." `justify-content:start` on `.phg.gallery` (the
+             tiled three/four-photo row's own outer div carries the
+             identical class for its CSS but is positioned by tiledRow's
+             absolute-offset math, which this rule cannot reach either way)
+             replaces the centring `tests/galportrait.cjs` used to assert;
+             `justify-items` moved with it for the same reason, though with
+             auto-sized single-row tracks it has no visible effect on its
+             own.
+
+             This was shipped once here, on the standalone gallery page,
+             and left the BASE `.cel .phg` rule (above `cell()`'s own
+             comment block, still centred) untouched — which is the rule
+             the OTHER `.phg` board on this sheet actually reads: the
+             per-position "Equipment and component evidence" cards
+             (mpEvidence, ph.length>1 branch below, non-gallery). Read off
+             a real TK112 Magnetic Plug report the same day: FRD's two
+             photographs sat centred in a wide grey card, directly above
+             CTR's own four photographs on the row beneath it, packed
+             correctly and starting flush left — the identical shape this
+             comment's own fix already existed for, on a board this fix
+             never reached. The base rule is `start`/`start` now too, so
+             both boards read the fact once, not the gallery's own copy of
+             it. */
           top = '<div class="phg gallery" style="grid-template-columns:repeat(' + gcols + ',auto)">'
             + ph.map(function (u) { return '<img src="' + u + '">'; }).join("")
             + '</div>';

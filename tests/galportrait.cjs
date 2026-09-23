@@ -16,8 +16,12 @@
    too much" and "these has been a long time request."
 
    The columns are sized to their own photograph now (`auto`, not `1fr`),
-   packed together and centred as a group (`justify-content:center`) rather
-   than stretched to fill whatever the row's own width happens to be.
+   packed together as a group rather than stretched to fill whatever the
+   row's own width happens to be — and, asked for by name afterward ("when
+   1 or 2 photo is taken it should start from left-justify, not in the
+   center"), the group starts at the line's own left margin
+   (`justify-content:start`) instead of centring in it, the same edge every
+   other row on this sheet already starts from.
 
    Run: node tests/galportrait.cjs   (needs tests/mock.cjs on 8099) */
 const { chromium } = require(require('./pw.cjs'));
@@ -86,30 +90,28 @@ const SEED = () => {
      whether the PHOTOGRAPHS inside it sit packed together as a group (the
      fix) or each stranded in the middle of its own equal 1fr share of that
      width (the bug). A tight pack means: consecutive photographs touch
-     (an 8px gap, not ~230px), and the group as a whole is centred, not each
-     member centred in its own oversized column. */
+     (an 8px gap, not ~230px), and the group as a whole starts at the
+     board's own left margin, the same edge every other row on the sheet
+     starts from — not centred in the line, and not each member centred in
+     its own oversized column. */
   console.log('DRS.ENG (two portrait photographs on one full-width row)');
   const c0 = geo.cells[0];
   ok('two photographs found', c0.imgWidths.length === 2, JSON.stringify(c0));
   ok('the two photographs sit next to each other, not each centred in its own half',
      Math.abs(c0.imgLefts[1] - (c0.imgLefts[0] + c0.imgWidths[0])) < 20,
      'gap=' + (c0.imgLefts[1] - (c0.imgLefts[0] + c0.imgWidths[0])) + 'px');
-  const groupLeft0 = c0.imgLefts[0];
-  const groupRight0 = c0.phgWidth - (c0.imgLefts[1] + c0.imgWidths[1]);
-  ok('the pair is centred as a group — not each photograph centred in its own ~370px column',
-     Math.abs(groupLeft0 - groupRight0) < 10,
-     'leftMargin=' + Math.round(groupLeft0) + ' rightMargin=' + Math.round(groupRight0));
+  ok('the pair starts flush at the board\'s own left margin, not centred as a group',
+     c0.imgLefts[0] < 10, 'leftMargin=' + Math.round(c0.imgLefts[0]));
   ok('each photograph keeps its own ~137px width — nothing was stretched to fill a column',
      c0.imgWidths.every(w => w > 100 && w < 180), JSON.stringify(c0.imgWidths));
 
   console.log('\nENG.EXS (one portrait photograph alone on its own row)');
   const c1 = geo.cells[1];
   ok('one photograph found', c1.imgWidths.length === 1, JSON.stringify(c1));
-  ok('it keeps its own ~137px width, centred in the row — not stretched wider',
+  ok('it keeps its own ~137px width — not stretched wider to fill the line',
      c1.imgWidths[0] > 100 && c1.imgWidths[0] < 180, 'width=' + c1.imgWidths[0]);
-  const marginL = c1.imgLefts[0], marginR = c1.phgWidth - (c1.imgLefts[0] + c1.imgWidths[0]);
-  ok('  and it is centred, not pinned to one side',
-     Math.abs(marginL - marginR) < 10, 'leftMargin=' + Math.round(marginL) + ' rightMargin=' + Math.round(marginR));
+  ok('  and it starts flush at the left margin, not centred in the row',
+     c1.imgLefts[0] < 10, 'leftMargin=' + Math.round(c1.imgLefts[0]));
 
   console.log(fails.length ? '\nFAILED: ' + fails.length : '\nall passed');
   await b.close();

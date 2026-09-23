@@ -16,9 +16,11 @@
    file (.cel .phg.gallery img, fixed for the identical reason at build 421):
    width:auto;height:auto;max-width:100%;max-height:182px, no aspect-ratio,
    no object-fit — the photograph keeps its own natural proportions and is
-   centred by the grid container (.cel .phg{justify-items:center;
-   align-items:center}) instead of being told to fill a box it was never
-   really inside.
+   vertically centred by the grid container (.cel .phg{align-items:center})
+   instead of being told to fill a box it was never really inside. (The
+   container's horizontal alignment moved from centred to left-justified
+   later — see the same rule's own comment — which this suite's own
+   assertions never depended on.)
 
    This suite renders a REAL mpEvidence board (two full-bleed, solid-colour
    photographs — one portrait blue, one landscape red — so any stretch is

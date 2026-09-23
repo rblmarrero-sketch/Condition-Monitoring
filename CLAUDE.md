@@ -2136,6 +2136,60 @@ file's own rules say to find it: by generating the real document and
 looking at it, off real data, not by trusting a synthetic fixture that
 happened not to exercise the code path where the bug lived.
 
+**ONE OR TWO PHOTOGRAPHS CENTRED WHEN EVERY OTHER ROW ON THE SHEET STARTS
+LEFT — AND THE FIX HAD ALREADY SHIPPED ONCE, ON THE WRONG BOARD.** Asked
+for by name against a real TK112 Magnetic Plug report: "when 1 or 2 photo
+is taken it should start from left-justify, not in the center… confirm a
+rule was applied to all report, mobile and web dashboard." Two things were
+true at once. The standalone "PHOTOGRAPHS" gallery page (`.phg.gallery`,
+`cell(..., gallery=true)`) had already been fixed for this — `justify-
+content:center`/`justify-items:center` became `start`/`start` — but the
+OTHER board that carries a lone or paired photograph, the per-position
+"Equipment and component evidence" cards (`mpEvidence`, the `ph.length>1`
+non-gallery branch every Magnetic Plug/FC/INSP position uses), reads a
+DIFFERENT, base rule — `#rptRoot .cel .phg` — that the gallery-specific fix
+never touched. The real report proved it: FRD's two photographs sat
+centred in a wide grey card with equal blank margins on both sides,
+directly above CTR's own four photographs on the row beneath it, packed
+correctly and starting flush left — one board fixed, the other carrying
+the identical shape untouched, because the fix was written at the more
+specific selector instead of the rule both boards actually share. The base
+rule is `start`/`start` now, so a photograph count of one or two starts at
+the same left margin as three, four, the checklist table beside it and the
+masthead above it, on every round type and on both surfaces, because both
+load the identical `report-core.js`. `tests/galportrait.cjs` (the
+standalone gallery's own proof) was rewritten from asserting the group was
+centred to asserting it starts flush left; the mpEvidence board's own
+suites (`mpcard3.cjs`, `phgstretch.cjs`, `histpair.cjs`, `histwide.cjs`)
+needed no changes because none of them had ever asserted a horizontal
+position, only that photographs were not stretched or squeezed — the exact
+kind of assertion that survives a redesign like this one and the reason
+this file's own rules ask for tests that check the INVARIANT, not the
+implementation.
+
+**A BACKTICK IN A NEW CSS-SECTION COMMENT BROKE THE REPORT ENGINE FOR
+EVERY SURFACE, THE IDENTICAL MISTAKE THIS FILE ALREADY NAMED ONCE.** The
+fix above was first written with the new comment's own code names
+back-quoted — `` `.phg` ``, `` `tests/galportrait.cjs` `` — because that is
+how a file name or a selector reads everywhere else in this project's
+prose, including in comments that live inside ordinary JS function bodies
+a few hundred lines further down the SAME file. This one did not: the CSS
+this comment sits beside is itself a JavaScript template literal, and the
+first backtick inside it closes that literal — not with an error at the
+backtick, but with a `SyntaxError: Unexpected identifier` pointing at
+whatever word came after it, however far down the file that landed
+(`tests`, from the very next sentence). `node --check mobile/report-core.js`
+caught it immediately, before any test ran — every early symptom
+(`ReferenceError: CMR is not defined` in a Playwright page, one gallery
+suite failing while its neighbours also failed in ways that first looked
+like environment resource contention) was this same parse failure wearing
+a browser's clothes. Fixed by writing the code names in the comment as
+plain text, the exact rule this file's own "A COMMENT WITH A BACKTICK IN
+IT INSIDE A TEMPLATE-LITERAL CSS BLOCK IS NOT A COMMENT" entry already
+states — restated here because it was written once, forgotten once, and is
+now worth a habit: run `node --check` on this file before trusting any
+test result against it, the same reflex that entry already recommends.
+
 ---
 
 ## Secrets
