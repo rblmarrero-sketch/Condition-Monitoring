@@ -2717,12 +2717,16 @@
        `onlySup` is only ever passed from RTW's own branch; every other
        caller keeps all three rows exactly as before. */
     if (onlySup) {
+      /* The role printed here is the Senior Mechanic who signs an RTW
+         release, not the Maintenance Supervisor every other type's own
+         `row(T("ap_sup"), ...)` names — a separate label already exists
+         (`rtw_senior`) for exactly this row and the branch never used it. */
       return '<table class="appr"><thead><tr>'
         + '<th>' + esc(T("ap_role")) + '</th><th>' + esc(T("ap_name")) + '</th>'
         + '<th>' + esc(T("ap_status")) + '</th><th>' + esc(T("ap_date")) + '</th></tr></thead><tbody>'
         + (verified
-            ? row(T("ap_sup"), rec.sup || T("ma_none"), supStatus, rec.signUrl ? (rec.date || "") : "", false, rec.signUrl || "")
-            : row(T("ap_sup"), "", T("ap_sup_s"), "", true))
+            ? row(T("rtw_senior"), rec.sup || T("ma_none"), supStatus, rec.signUrl ? (rec.date || "") : "", false, rec.signUrl || "")
+            : row(T("rtw_senior"), "", T("ap_sup_s"), "", true))
         + '</tbody></table>';
     }
     return '<table class="appr"><thead><tr>'

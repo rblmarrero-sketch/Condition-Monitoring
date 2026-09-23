@@ -2804,3 +2804,101 @@ answers with its own name so the page still boots and registers the worker.
 Build 273 shipped without it, the language table read `TERMS.en` at load, and
 a phone whose first load got `index.html` and nothing else had no worker and
 no offline page (`tests/swfail.cjs`).
+
+**A DEEP-SCAN AUDIT OF THE MOBILE CODE, NOT PROMPTED BY A FIELD REPORT.** Asked
+plainly to "find bugs, error, possible error/bugs" in `mobile/`, seven parallel
+readers each covering one subsystem. Eight held up under verification:
+
+- **`hasData()` could answer `undefined`, and one caller trusted it as a
+  boolean.** Every operand in its `||` chain is `undefined` for a genuinely
+  empty position, and `||` on an all-falsy chain returns the LAST operand's
+  actual value — so `hasData({})` was `undefined`, not `false`.
+  `refreshChips()`'s two direct `classList.toggle("has", posCaptured(...))`
+  calls passed that straight through as the `force` argument, and per the DOM
+  spec an `undefined` force means "no force given" (plain toggle) rather than
+  "remove" — so a blank chip, starting with no class at all, had `"has"`
+  ADDED to it the instant it first painted. Every ternary/`filter(Boolean)`
+  caller was already immune; `hasData()` now wraps its whole return in `!!(...)`
+  so no caller, present or future, can be caught by this again. `p.detect`
+  was missing from the OR-chain entirely (a defect's detection method alone
+  did not count as "captured"), added the same pass.
+- **A mis-tapped grade card left `{gradeMan:1}` behind on an otherwise blank
+  position.** Every other single-field setter in that fold (reason, detect,
+  priority, action, defect/cause) cleans up an entry that is now empty on
+  deselection; the grade segment's own click handler never did, so deselecting
+  a grade nobody meant to set left a stray entry that `posCaptured()` then
+  read as a real capture. Given the same `if(!hasData(p) && !p.wo) delete
+  draft.positions[curItem];` guard every sibling handler already carries.
+- **`planRows()` — the "1C plan" scope — was the THIRD reader of the schedule
+  with no defer check.** `dueRows()` and `dueWeekRows()` both ask
+  `deferOf()`/`deferState()` before listing a round as outstanding;
+  `planRows()` never did, so a round an inspector told the app "not now" on
+  went on appearing as 1C's own open plan the moment its work order came due —
+  the identical shape the KAMAZ hold-off exclusion was already written for,
+  one function over. `deferState()` is hoisted out of `dueWeekRows()`'s own
+  local closure to a shared top-level function so both readers (and now a
+  third) apply the identical rule (`tests/dueplan.cjs` §6).
+- **A TEMP reading that proposed a grade had no mirror for taking it away.**
+  `syncTempSev()` wrote `p.grade`/`p.gradeAuto` the moment a reading crossed a
+  limit — the only thing that ever proposes a grade on a measured round — but
+  clearing the reading, or correcting a mistyped value back inside the limit,
+  left the stale grade, its defect, action and target date all standing with
+  nothing behind them. A reading that stops proposing a grade now clears it,
+  unless an inspector has confirmed it by hand (`gradeMan`) (`tests/tempgrade.cjs`).
+- **RTW's own approval row was labelled "Maintenance Supervisor," never
+  "Senior Mechanic."** `approvalBlock`'s `onlySup` branch — the one row RTW's
+  release checklist actually needs — called `T("ap_sup")` instead of the
+  label already sitting in the language table for exactly this role,
+  `T("rtw_senior")`. The existing test had encoded the wrong label as
+  correct; both are fixed together (`tests/rtw.cjs` §11).
+- **RTW's own photo cap failed in silence.** `addPicked`'s cap (`MAX_PHOTOS`)
+  shows the "not everything fitted" dialog the instant a file is left out;
+  `rtwIntakeFiles` — the checklist's own photo intake, a separate function —
+  simply `break`s out of the same cap with nothing said, so a checklist item
+  or the general-evidence photo taken past ten just had fewer photographs
+  than the inspector took (`tests/rtw.cjs` §5b).
+- **`addPicked()`/`acceptVideo()` attached evidence to whatever position was
+  open when the slow part finished, not the one the picker was opened for —
+  and, one level deeper, could lose it outright.** `ownBytes` securing a
+  multi-file gallery batch (build 372's own fix) is genuinely slow, and the
+  phone is fully interactive again the instant the OS picker returns control
+  — long enough for an inspector to tap a different position before the batch
+  finishes. `addPicked` read `curP()` only AFTER that wait, so every
+  photograph (and the clip, through `acceptVideo`) landed on whatever
+  position curItem had drifted to. Capturing the object early is not enough
+  by itself: `saveCur()` DELETES an empty position's own entry the instant
+  the inspector taps away from it, including the very one this batch belongs
+  to, mid-securing — and an object captured before that delete survives in
+  memory under no key the round can ever read from again, decoded and
+  orphaned. The fix captures the KEY (`curItem`, a string) before the slow
+  part and derives `draft.positions[key] ||= {}` again afterward — the
+  misattribution is fixed because the key is frozen before anything can move
+  it, and the orphaning self-heals because a missing key is simply recreated
+  (and one the inspector has meanwhile typed something real into is found and
+  added to, never clobbered). `acceptVideo(f, posKey)` carries the same key
+  through its own async gap (loading the clip's metadata) the same way,
+  re-deriving at the moment of actual use rather than holding an object
+  across it (`tests/curitemrace.cjs`).
+- **A video clip was one of the six paths that returned the picker's own File
+  to storage, and it was never actually closed.** `ownbytes.cjs`'s own
+  history names it directly among the six; the other five were closed by
+  making `ownBytes`/`intakeNoted`'s read unconditional at intake, but
+  `acceptVideo()` never called either — a clip went straight from the picker
+  into `p.video` with nothing between it and storage, on the exact platform
+  this project has twice confirmed reclaims a picker's backing file on its
+  own schedule. `reArmForSave()` does re-read every video's bytes, but only
+  at SAVE, the safety net at the end of a round — not the earliest possible
+  detection every photograph gets at intake, with the button disabled and the
+  inspector still at the machine; a `reArmForSave` failure is also swallowed
+  silently (`catch(e){}`), leaving a stale unreadable original in the record
+  with nobody told. `acceptVideo` now reads the clip the same way a
+  photograph is read at intake, replacing it with a File made from the page's
+  own read bytes; a read that fails KEEPS the original (never discard
+  evidence) and says so now, in the clip's own wording (`video_odd_own`, not
+  the photograph one), while the inspector can still record it again
+  (`tests/videoown.cjs`). The same investigation found `extOf()` — the
+  function `attWrap()` uses to name a clip's own internal identity file —
+  had no video branch at all and fell through to `"jpg"` for every clip,
+  the identical "a wrong [type] is a lie the next reader believes" shape this
+  function's own comment already warns against for a photograph, one call
+  away.

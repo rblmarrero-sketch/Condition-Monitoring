@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=453">
+<link rel="manifest" href="manifest.webmanifest?v=454">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=453">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=453">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=453">
+<link rel="apple-touch-icon" href="icon-192.png?v=454">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=454">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=454">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2758,16 +2758,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=453"></script>
-<script src="upload-defaults.js?v=453"></script>
-<script src="hme.js?v=453"></script>
-<script src="mp-fc.js?v=453"></script>
-<script src="rtw.js?v=453"></script>
-<script src="hme-cascade.js?v=453"></script>
-<script src="assets.js?v=453"></script>
-<script src="temp-limits.js?v=453"></script>
-<script src="normalize.js?v=453"></script>
-<script src="terms.js?v=453"></script>
+<script src="native.js?v=454"></script>
+<script src="upload-defaults.js?v=454"></script>
+<script src="hme.js?v=454"></script>
+<script src="mp-fc.js?v=454"></script>
+<script src="rtw.js?v=454"></script>
+<script src="hme-cascade.js?v=454"></script>
+<script src="assets.js?v=454"></script>
+<script src="temp-limits.js?v=454"></script>
+<script src="normalize.js?v=454"></script>
+<script src="terms.js?v=454"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2786,25 +2786,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=453"></script>
-<script src="edits.js?v=453"></script>
-<script src="due.js?v=453"></script>
-<script src="wear.js?v=453"></script>
-<script src="wear-figs.js?v=453"></script>
-<script src="wear-map.js?v=453"></script>
-<script src="machine-photos.js?v=453"></script>
-<script src="machine-fig.js?v=453"></script>
-<script src="get.js?v=453"></script>
-<script src="points.js?v=453"></script>
-<script src="uc-points.js?v=453"></script>
-<script src="inspect-guide.js?v=453"></script>
-<script src="get-figs.js?v=453"></script>
-<script src="body-points.js?v=453"></script>
-<script src="body-map.js?v=453"></script>
-<script src="lube.js?v=453"></script>
-<script src="lube-overrides.js?v=453"></script>
-<script src="lube2027.js?v=453"></script>
-<script src="report-core.js?v=453"></script>
+<script src="grade.js?v=454"></script>
+<script src="edits.js?v=454"></script>
+<script src="due.js?v=454"></script>
+<script src="wear.js?v=454"></script>
+<script src="wear-figs.js?v=454"></script>
+<script src="wear-map.js?v=454"></script>
+<script src="machine-photos.js?v=454"></script>
+<script src="machine-fig.js?v=454"></script>
+<script src="get.js?v=454"></script>
+<script src="points.js?v=454"></script>
+<script src="uc-points.js?v=454"></script>
+<script src="inspect-guide.js?v=454"></script>
+<script src="get-figs.js?v=454"></script>
+<script src="body-points.js?v=454"></script>
+<script src="body-map.js?v=454"></script>
+<script src="lube.js?v=454"></script>
+<script src="lube-overrides.js?v=454"></script>
+<script src="lube2027.js?v=454"></script>
+<script src="report-core.js?v=454"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -3032,6 +3032,7 @@ const I18N = {
     gal_odd_heic:"{n} photograph(s) are in Apple's HEIC format and this phone cannot convert them ({names}). They were kept as they are, but the office may not be able to open them. Either take the shot with the camera button here, or set iPhone Settings \u2192 Camera \u2192 Formats to \u201cMost Compatible\u201d.",
     thumb_unread:"This photograph cannot be read on this phone. The round and its readings are intact — open it and take the position again.",
     gal_odd_own:"This phone handed the app a photograph and then could not read it back ({names}). It has been kept, but it may not survive to the upload. Take it again with the camera button here — that copy is held by the app itself and cannot be reclaimed by the phone.",
+    video_odd_own:"This phone handed the app a video clip and then could not read it back ({names}). It has been kept, but it may not survive to the upload. Record it again with the video button here — that copy is held by the app itself and cannot be reclaimed by the phone.",
     verify_fail_t:"Saved — but retake this now",
     verify_fail_b:"{x} is saved and queued. Checking it back just now found {n} photograph(s) that can no longer be read on this phone: {names}. This can happen quietly after saving, with no warning at the time — which is why it is being said now instead of after you leave. Retake it while you are still at the machine; it may not be recoverable once you go.",
     media_hint:"Up to {p} photos + 1 video (max {s} sec).", media_empty:"No photos yet.",
@@ -3698,6 +3699,7 @@ const I18N = {
     gal_odd_heic:"Фотографий в формате Apple HEIC: {n} ({names}). Этот телефон не может их преобразовать — они сохранены как есть, но в офисе могут не открыться. Снимайте кнопкой камеры в приложении или переключите на iPhone: Настройки \u2192 Камера \u2192 Форматы \u2192 \u00abНаиболее совместимые\u00bb.",
     thumb_unread:"Эту фотографию телефон прочитать не может. Обход и замеры целы — откройте его и снимите точку заново.",
     gal_odd_own:"Телефон передал приложению фотографию и тут же не смог прочитать её обратно ({names}). Она сохранена, но может не дойти до выгрузки. Сделайте снимок заново кнопкой камеры в приложении — такая копия хранится самим приложением, и телефон её не удалит.",
+    video_odd_own:"Телефон передал приложению видеоролик и тут же не смог прочитать его обратно ({names}). Он сохранён, но может не дойти до выгрузки. Запишите заново кнопкой видео в приложении — такая копия хранится самим приложением, и телефон её не удалит.",
     verify_fail_t:"Сохранено — но переснимите это сейчас",
     verify_fail_b:"{x} сохранён и поставлен в очередь. Проверка прямо сейчас показала: {n} фотограф(ий/ия/ию) больше нельзя прочитать на этом телефоне: {names}. Это может произойти незаметно уже после сохранения, без предупреждения в тот момент — поэтому это говорится сейчас, а не после того как вы уедете. Переснимите, пока вы ещё у машины — после отъезда это может быть невозможно восстановить.",
     media_hint:"До {p} фото + 1 видео (макс. {s} сек).", media_empty:"Пока нет фото.",
@@ -4774,7 +4776,14 @@ function lubeChoices(k){
   return {fit, rest};
 }
 function nodeByCode(tree,code){ let f=null; (function rec(ns){ for(const n of ns){ if(n.k===code){f=n;return;} if(n.ch)rec(n.ch);} })(tree); return f; }
-function hasUnder(node){ if(!node) return false; if(draft.positions[node.k]) return true; return node.ch? node.ch.some(hasUnder):false; }
+/* A position EXISTS the instant loadPos() stamps a 1C work order onto it
+   (curP(), "written into the record the same instant it appears") — it is
+   not CAPTURED until an inspector actually put something on it. Every "has"
+   marker, done-count and "resume where I left off" jump in this file must
+   ask hasData(), never draft.positions[k]'s own truthiness, or a round tied
+   to a live work order reads as finished the moment it is merely opened. */
+function posCaptured(k){ return hasData(draft.positions[k]||{}); }
+function hasUnder(node){ if(!node) return false; if(posCaptured(node.k)) return true; return node.ch? node.ch.some(hasUnder):false; }
 function items(){ const tr=currentTree(); if(tr) return flattenTree(tr);
   if(measType()) return [];              // no walk without an eligible, registered machine
   /* Same rule for the lubrication round, and it has to be said explicitly:
@@ -4985,7 +4994,7 @@ function renderBodyMap(){
   /* The zones, named. A code on the plate is quick once you know it; the name
      is what makes the first round possible without the form in your hand. */
   h+='<div class="rowwrap"><div class="ucgroups rowscroll">'+BODY.zones(id).map(z=>{
-      const done=BODY.inZone(id,z.k).filter(p=>draft.positions[p.k]).length;
+      const done=BODY.inZone(id,z.k).filter(p=>posCaptured(p.k)).length;
       return '<button type="button" data-bz="'+esc(z.k)+'" class="'+
         [bodyZoneState(z.k),(cur&&cur.z===z.k?"on":"")].filter(Boolean).join(" ")+'">'+
         esc(z[lang]||z.en)+'<i class="cnt">'+done+'/'+z.n+'</i></button>';
@@ -5005,7 +5014,7 @@ function renderBodyMap(){
      wall resumes where it was left rather than starting again at the top. */
   const openZone=z=>{
     const ks=BODY.inZone(id,z).map(p=>p.k); if(!ks.length) return;
-    saveCur(); curItem=ks.find(k=>!draft.positions[k]) || ks[0];
+    saveCur(); curItem=ks.find(k=>!posCaptured(k)) || ks[0];
     loadPos(); renderChips();
   };
   $("posnav").querySelectorAll("[data-tbn]").forEach(el=>{
@@ -5192,7 +5201,7 @@ function renderChips(){ const tr=currentTree();
   toggleCapture(); refreshChips(); }
 function renderFlatCards(its){
   let h=guessNote()+'<div class="casc"><button class="searchall" id="searchAllBtn">🔍 '+t("opt_search_all")+'</button>';
-  h+='<div class="cards">'+its.map(it=>`<button data-pick="${it.k}" class="${draft.positions[it.k]?'has':''}${it.k===curItem?' on':''}"><span class="cc">${it.k}</span><span class="cn">${it[lang]||it.en}</span><span class="dot"></span></button>`).join('')+'</div></div>';
+  h+='<div class="cards">'+its.map(it=>`<button data-pick="${it.k}" class="${posCaptured(it.k)?'has':''}${it.k===curItem?' on':''}"><span class="cc">${it.k}</span><span class="cn">${it[lang]||it.en}</span><span class="dot"></span></button>`).join('')+'</div></div>';
   $("posnav").innerHTML=h;
   const sa=$("searchAllBtn"); if(sa) sa.onclick=()=>openPicker("item");
   $("posnav").querySelectorAll('[data-pick]').forEach(b=>b.onclick=()=>pickComponent(b.dataset.pick));
@@ -5207,7 +5216,7 @@ function toggleCapture(){ const tr=currentTree();
   $("captureBox").style.display=show?"":"none"; }
 function pickComponent(code){ saveCur(); curItem=code; loadPos(); renderChips(); }
 function renderComponentNav(tree){
-  const cap=items().filter(it=>draft.positions[it.k]);
+  const cap=items().filter(it=>posCaptured(it.k));
   /* A FLAT tree has nothing to navigate. Every card is a compartment, there are
      nine of them, and they are all on screen at once — so the breadcrumb leads
      nowhere, "Search all components" searches a list you can already see, and
@@ -5240,12 +5249,12 @@ function renderComponentNav(tree){
   } else if(!cascL8){
     const n7=nodeByCode(tree,cascL7); const kids=(n7&&n7.ch)||[];
     h+='<div class="cards">'+kids.map(n=>{ const hk=n.ch&&n.ch.length;
-      const cls=[(draft.positions[n.k]||hasUnder(n))?'has':'', (!hk&&n.k===curItem)?'on':''].filter(Boolean).join(' ');
+      const cls=[(posCaptured(n.k)||hasUnder(n))?'has':'', (!hk&&n.k===curItem)?'on':''].filter(Boolean).join(' ');
       return `<button data-l8="${n.k}" class="${cls}"><span class="cc">${String(n.k).split('.').pop()}${hk?' ›':''}</span><span class="cn">${n[lang]||n.en}</span><span class="dot"></span></button>`; }).join('')+'</div>';
   } else {
     const n8=nodeByCode(tree,cascL8); const kids=(n8&&n8.ch)||[];
-    h+='<div class="cards"><button data-pick="'+n8.k+'" class="'+[draft.positions[n8.k]?'has':'',n8.k===curItem?'on':''].filter(Boolean).join(' ')+'"><span class="cc">▶</span><span class="cn">'+t("nav_whole")+'</span><span class="dot"></span></button>';
-    h+=kids.map(n=>`<button data-pick="${n.k}" class="${[draft.positions[n.k]?'has':'',n.k===curItem?'on':''].filter(Boolean).join(' ')}"><span class="cc">${String(n.k).split('.').pop()}</span><span class="cn">${n[lang]||n.en}</span><span class="dot"></span></button>`).join('')+'</div>';
+    h+='<div class="cards"><button data-pick="'+n8.k+'" class="'+[posCaptured(n8.k)?'has':'',n8.k===curItem?'on':''].filter(Boolean).join(' ')+'"><span class="cc">▶</span><span class="cn">'+t("nav_whole")+'</span><span class="dot"></span></button>';
+    h+=kids.map(n=>`<button data-pick="${n.k}" class="${[posCaptured(n.k)?'has':'',n.k===curItem?'on':''].filter(Boolean).join(' ')}"><span class="cc">${String(n.k).split('.').pop()}</span><span class="cn">${n[lang]||n.en}</span><span class="dot"></span></button>`).join('')+'</div>';
   }
   if(cap.length && !flat) h+='<div class="posnav" style="margin-top:6px">'+cap.map(it=>`<button data-pos="${it.k}" title="${itemLabel(it.k)}"><span>${String(it.k).split('.').pop()}</span><span class="dot"></span></button>`).join('')+'</div>';
   h+='</div>';
@@ -5332,7 +5341,7 @@ function repaintMap(){
       const z=b.dataset.bz;
       b.className=[bodyZoneState(z),(cur&&cur.z===z?"on":"")].filter(Boolean).join(" ");
       const i=b.querySelector("i.cnt");
-      if(i) i.textContent=BODY.inZone(id,z).filter(p=>draft.positions[p.k]).length+"/"+
+      if(i) i.textContent=BODY.inZone(id,z).filter(p=>posCaptured(p.k)).length+"/"+
                           BODY.inZone(id,z).length;
     });
     const tl=nav.querySelector(".uctally");
@@ -5402,7 +5411,7 @@ function refreshChips(){
          graded a component, three functions further down. */
       const n=tr&&nodeByCode(tr,d.l7);
       const group=!!(n&&n.ch&&n.ch.length);
-      b.classList.toggle("has", group ? hasUnder(n) : !!draft.positions[d.l7]);
+      b.classList.toggle("has", group ? hasUnder(n) : posCaptured(d.l7));
       b.classList.toggle("on", !group && d.l7===curItem);
       return;
     }
@@ -5410,7 +5419,7 @@ function refreshChips(){
     if(!code) return;                           // breadcrumb, "search all" — not a card
     const n=(d.l8&&tr)?nodeByCode(tr,d.l8):null;
     const group=!!(n&&n.ch&&n.ch.length);       // a card that drills in, not a component
-    b.classList.toggle("has", group ? hasUnder(n) : !!draft.positions[code]);
+    b.classList.toggle("has", group ? hasUnder(n) : posCaptured(code));
     b.classList.toggle("on", !group && code===curItem);
   });
 }
@@ -5536,11 +5545,43 @@ $("videoBtn").onclick=guard(async ()=>{
    out of the gallery has to clear the same bar as one taken here — and the way
    that goes wrong is a second copy of the rule that forgets to. Resolves true
    if it was taken, false if it was refused. */
-function acceptVideo(f){
+/* `posKey` is the position this clip belongs to — the STRING curItem was at
+   the moment the caller started, never an object handed across this
+   function's own async gap (loading the clip's metadata, real time on a
+   real clip). Two things can move under that gap, and a captured object
+   reference survives neither: curItem can point somewhere else by the time
+   loadedmetadata/onerror fires, and — the deeper one — saveCur()'s own
+   "nothing recorded here yet" cleanup (see its comment) DELETES an empty
+   position's entry the instant the inspector taps away from it, including
+   this one, before this clip has landed on it. draft.positions[posKey]||={}
+   is re-derived at the moment of actual use rather than held across the
+   gap, so a deleted-while-empty entry is simply recreated under its own
+   key, and a position the inspector has meanwhile revisited and typed
+   something real into is found and added to, never silently clobbered or
+   orphaned in memory under a key nothing reads from again. */
+function acceptVideo(f, posKey){
   return new Promise(res=>{
-    if(curP().video) return res(false);                 // one clip per position
+    if((draft.positions[posKey]||{}).video) return res(false);   // one clip per position
     const v=document.createElement("video"); v.preload="metadata";
-    const take=()=>{ curP().video=f; renderMedia(); renderChips(); res(true); };
+    /* A photograph is read end to end at intake, unconditionally, so a
+       vanished reference (the WebKit/picker hazard ownBytes exists for) is
+       found while the inspector is still at the machine and can retake it —
+       never left for reArmForSave's own read to discover for the first time
+       at Save, by which point the round may have moved on to other
+       positions. The clip gets the identical read here, for the identical
+       reason; a read that fails keeps the ORIGINAL file (never discard
+       evidence) and says so now, in the clip's own wording — not the
+       photograph one, and not silently deferred to Save. */
+    const take=async ()=>{
+      let video=f;
+      try{
+        const secured=await ownBytes(f);
+        video=(f.name && typeof File!=="undefined") ? new File([secured], f.name, {type:secured.type||f.type||""}) : secured;
+      }catch(e){
+        dlg([t("gal_odd_t"), t("video_odd_own",{names:f.name||""})]);
+      }
+      (draft.positions[posKey] ||= {}).video=video; renderMedia(); renderChips(); res(true);
+    };
     v.onloadedmetadata=()=>{ const long = v.duration && v.duration>MAX_VIDEO_SEC+0.8;
       URL.revokeObjectURL(v.src);
       if(long){ dlg(t("video_too_long")); res(false); } else take(); };
@@ -5550,7 +5591,7 @@ function acceptVideo(f){
     v.src=URL.createObjectURL(f);
   });
 }
-$("video").onchange=(e)=>{ const f=e.target.files[0]; e.target.value=""; if(f) acceptVideo(f); };
+$("video").onchange=(e)=>{ const f=e.target.files[0]; e.target.value=""; if(f) acceptVideo(f, curItem); };
 /* Photographs and clips the phone already has. The inspector who shot the
    cracked lip before opening the app, or on the walk back, should not have to
    shoot it again — and telling them to is exactly the instruction this app is
@@ -5593,12 +5634,33 @@ async function addPicked(picked){
      A file this cannot secure is passed through unsecured, exactly as
      before: intakeNoted makes its own attempt and names the reason if that
      one fails too. Videos are read by their own path (acceptVideo). */
+  /* CAPTURED AS A KEY, NOT AS AN OBJECT, AND BEFORE THE SECURING AWAIT, NOT
+     AFTER. curItem names whatever position is open RIGHT NOW, and ownBytes
+     below can take real time securing several large files at once — long
+     enough, on a real device, for an inspector to already have tapped a
+     different position by the time it resolves. Reading curItem again only
+     after that await attached every one of these photographs (and the one
+     clip, through acceptVideo) to whatever position happened to be open
+     when the securing finished, not the one the picker was opened for — the
+     same race takePhoto() already avoids by capturing curP() the instant
+     its own one async gap (the picker itself) closes.
+
+     A captured OBJECT reference is not enough on its own, either: saveCur()
+     deletes an EMPTY position's entry the instant the inspector taps away
+     from it (see its own comment) — including this one, mid-securing,
+     before anything has landed on it — and a captured object then survives
+     in memory under no key the round can ever read again. Deriving the
+     entry from the captured KEY, after the await, self-heals that: a
+     deleted-while-empty position is simply recreated under its own name,
+     and one the inspector has meanwhile revisited and typed something real
+     into is found and added to rather than clobbered. */
+  const posKey=curItem;
   const secured=new Map();
   await Promise.all(picked.filter(f=>!isVidF(f)).map(async f=>{
     try{ secured.set(f, await ownBytes(f)); }catch(e){}
   }));
   try{
-    const p=curP(); (p.photos ||= []);
+    const p = draft.positions[posKey] ||= {}; (p.photos ||= []);
     let room=MAX_PHOTOS-p.photos.length, skipped=0, vidSettled=!!p.video;
     const odd=[];      // files kept, but not brought into the system's own shape
     for(const f of picked){
@@ -5607,7 +5669,7 @@ async function addPicked(picked){
            already said so itself, and stacking a second dialog behind that one
            explains nothing it did not already. */
         if(vidSettled){ skipped++; continue; }
-        vidSettled=true; await acceptVideo(f);
+        vidSettled=true; await acceptVideo(f, posKey);
         continue;
       }
       if(room<=0){ skipped++; continue; }
@@ -5806,6 +5868,12 @@ $("gradeSeg").addEventListener("click",(e)=>{ const b=e.target.closest("button[d
   delete p.sevMan;
   /* A technician's own answer, so the limit table stops proposing over it. */
   p.gradeMan=1; delete p.gradeAuto;
+  /* Every other single-field setter in this fold (reason, detect, priority,
+     action, defect/cause) cleans up an entry that is now empty; deselecting
+     a mis-tapped grade card on an otherwise-blank position is the same
+     gesture and needs the same guard, or the stray {gradeMan:1} left behind
+     reads as "has" the instant it is drawn (see posCaptured/hasUnder). */
+  if(!hasData(p) && !p.wo) delete draft.positions[curItem];
   renderGrade(); renderSev(); renderChips(); });
 /* Which meaning column this round reads — see GRADE.family. The dump body's
    graded checks are a walk-around; a lubrication point reads the oil text. */
@@ -7448,6 +7516,17 @@ function syncTempSev(){ if(!TYPE_META[type].temp || !curItem) return;
     const g=sv?GRADE.fromIso(sv):null;
     if(g && !p.gradeMan && GRADE.num(p.grade)!==g){ p.grade=g; p.gradeAuto=1; p.sev=gradeIso(g);
       renderGrade(); renderSev(); }
+    /* The reading that proposed this grade is gone — tempV cleared, or back
+       inside its limit — and an auto grade with nothing left to justify it
+       is a stale flag, the same shape the defect picker's own mirror exists
+       for (see its comment: "the only code path that can put a grade there
+       at all... never had a mirror for taking it away"). This was the
+       SECOND such path with no mirror: clearing a reading past 150C left a
+       Critical grade, its defect, action and target date all standing with
+       no temperature behind any of them. A grade confirmed by hand
+       (gradeMan) is never touched here. */
+    else if(!g && p.gradeAuto && !p.gradeMan){ delete p.grade; delete p.gradeAuto; delete p.sev;
+      renderGrade(); renderSev(); }
     else renderGradeOvr();
   }
   renderTempHint(); }
@@ -7494,7 +7573,17 @@ function normDecAll(){ ["ucMM","tempV","tempA"].forEach(id=>{ const el=$(id); if
    position nobody actually answered permanently read as one that was. The
    report engine already got this right (mpEvidence()'s own `walked` filter
    never checks `wo`); this brings the phone's live state into line with it. */
-function hasData(p){ return (p.mm!=null&&p.mm!=="")||p.reason||p.grade||p.sev||p.action||p.prio||(p.photos&&p.photos.length)||p.video||p.particle||p.comp||p.oil||p.comment||p.defect||p.cause||p.tempV||p.prod||p.other||p.samp||p.resp||p.target||p.opstat; }
+/* Always a real boolean, never the last falsy operand this OR-chain happens
+   to bottom out on. An empty position ({}) makes every term undefined, so
+   without the !!, hasData({}) returned undefined rather than false — and
+   classList.toggle("has", undefined) is NOT "remove the class": per the DOM
+   spec, an omitted-or-undefined force argument means "toggle it either way",
+   which ADDS "has" to a blank button that never had it. Every ternary/
+   filter(Boolean) caller was already immune to this; the two direct
+   classList.toggle(..., posCaptured(...)) call sites in refreshChips were
+   not, and marked every untouched position on a round as captured the
+   instant its card first painted. */
+function hasData(p){ return !!((p.mm!=null&&p.mm!=="")||p.reason||p.grade||p.sev||p.action||p.prio||p.detect||(p.photos&&p.photos.length)||p.video||p.particle||p.comp||p.oil||p.comment||p.defect||p.cause||p.tempV||p.prod||p.other||p.samp||p.resp||p.target||p.opstat); }
 /* The ISO class that applies: derived from the grade, or the stored class on
    a record from before grades decided it. Everything that reasons about how
    bad a finding is in ISO terms — the priority hint, the 1C export code, the
@@ -8868,6 +8957,24 @@ function teamDefer(list){
   return n;
 }
 function deferOf(ty,unit){ return deferAll()[ty+"|"+(unit||"").toUpperCase()]||null; }
+/* The one rule for whether a deferral still holds, shared by every reader of
+   the schedule — dueWeekRows() had its own copy until planRows() (the "1C
+   plan" tab) was found never asking at all, the same shape as the held-off/
+   walked-round split this project has hit more than once: a deferral only
+   answers a round it was written for or later (DUE.status's own "live"
+   test), and a dated one holds only while its date is still ahead (the
+   List's own "put" test) — never a second, drifting copy of either rule. */
+function deferState(unit,ty){
+  const d=deferOf(ty,unit); if(!d) return null;
+  const last=histEntry(histAll()[ty+"|"+unit]) || {};
+  if(!(String(d.at||"") >= String(last.d||""))) return null;   // answered by a round walked since
+  if(d.until){
+    const left=DUE.dayDiff(todayISO(), d.until);
+    if(left!=null && left>0) return d;
+    return null;   // the put-off date has arrived; back to ordinary due
+  }
+  return d;
+}
 function deferPut(ty,unit,d){
   const m=deferAll(); const k=ty+"|"+(unit||"").toUpperCase();
   /* Written now, sent when there is signal. `up` is what syncDefer() clears. */
@@ -9734,18 +9841,6 @@ function dueWeekRows(){
      reads "live"; a dated one holds the row only while its date is still
      ahead, same as the List turns "put" back into ordinary due the day it
      arrives. */
-  const h=histAll();
-  const deferState=(unit,ty)=>{
-    const d=deferOf(ty,unit); if(!d) return null;
-    const last=histEntry(h[ty+"|"+unit]) || {};
-    if(!(String(d.at||"") >= String(last.d||""))) return null;   // answered by a round walked since
-    if(d.until){
-      const left=DUE.dayDiff(today, d.until);
-      if(left!=null && left>0) return d;
-      return null;   // the put-off date has arrived; back to ordinary due
-    }
-    return d;
-  };
   Object.keys(SCHED.byUnit).forEach(unit=>{
     (SCHED.byUnit[unit]||[]).forEach(w=>{
       const types=(w.types||[]).filter(ty=>!heldOff(unit,ty));
@@ -10146,6 +10241,17 @@ function planRows(only){
         if(!TYPE_META[ty]) return;
         if(DUE.offRound && DUE.offRound(ty,a)) return;
         if(schedWalkedFor(unit, ty, w.plan, h)) return;   // already walked for it
+        /* THE THIRD READER OF THE SCHEDULE WITH NO DEFER CHECK. dueRows() and
+           dueWeekRows() both answer deferOf() before showing a round as
+           outstanding; this one — 1C's own plan, a worklist the same way the
+           flat List is — never did, so an inspector who told the app "not
+           now" on this exact round still saw it sitting here, outstanding,
+           with no sign the question had been answered. planRows() already
+           drops a held-off or already-walked round rather than marking it;
+           a deferred one is dropped here the same way, for the same reason:
+           there is no "done"/"defer" field on this row shape to mark it
+           with, only a worklist of what still needs a fresh visit. */
+        if(deferState(unit,ty)) return;
         /* One row per machine and round. Two work orders in the window can
            resolve to the same round — the 1,000 h and the 4,000 h both
            carry the filter cut — and two identical rows is a list that
@@ -10465,11 +10571,18 @@ async function rtwIntakeFiles(files, targetPhotosArr, cat){
   if(!files.length) return;
   const secured=new Map();
   await Promise.all(files.map(async f=>{ try{ secured.set(f, await ownBytes(f)); }catch(e){} }));
+  /* addPicked's own cap (MAX_PHOTOS) says so with gal_full_t/gal_full_b the
+     moment a photograph is left out — this loop broke out of the same cap in
+     silence, so a checklist item or the general evidence photographed past
+     ten just had fewer photographs than the inspector took, with nothing on
+     screen saying any were dropped. */
+  let skipped=0;
   for(const f of files){
-    if(targetPhotosArr.length>=MAX_PHOTOS) break;
+    if(targetPhotosArr.length>=MAX_PHOTOS){ skipped++; continue; }
     const got=await intakeNoted(secured.get(f)||f);
     targetPhotosArr.push(got.att);
   }
+  if(skipped) dlg([t("gal_full_t"), t("gal_full_b",{n:skipped, p:MAX_PHOTOS})]);
 }
 function rtwUpdateFooter(){
   if(!rtwDraft) return;
@@ -13278,6 +13391,15 @@ function extOf(blob){ const t=(blob.type||"").toLowerCase();
   if(t.includes("png"))return"png"; if(t.includes("webp"))return"webp";
   if(t.includes("heif"))return"heif"; if(t.includes("heic"))return"heic";
   if(t.includes("avif"))return"avif"; if(t.includes("gif"))return"gif";
+  /* attWrap() calls this on a clip too (p.video, via the same identity-name
+     scheme every photograph gets) — with no video branch a clip's own
+     internal id carried the extension ".jpg" while its actual bytes and
+     declared type were an mp4/mov/webm, the same "a wrong [type] is a lie
+     the next reader believes" shape this function's own comment warns
+     against for a photograph. Matches the export path's own vext rule
+     (fileName/genFileName), which has always distinguished mov from mp4. */
+  if(t.includes("quicktime"))return"mov"; if(t.includes("webm"))return"webm";
+  if(t.startsWith("video/"))return"mp4";
   return "jpg"; }
 /* ONE PHOTOGRAPH THIS PHONE CANNOT READ MUST NOT COST THE OTHER FORTY-ONE.
 
@@ -14397,7 +14519,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="453";
+const BUILD="454";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

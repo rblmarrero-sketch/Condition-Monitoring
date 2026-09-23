@@ -190,6 +190,25 @@ const server = http.createServer((req, res) => {
   ok('  the other rounds on the machine are still listed',
      found.length > 1, found.length + ' rows');
 
+  console.log('\n6. A ROUND AN INSPECTOR HAS DEFERRED IS NOT PROPOSED AS 1C\'S PLAN EITHER');
+  /* dueRows() and dueWeekRows() both ask deferOf()/deferState() before
+     listing a round; planRows() -- the THIRD reader of the same schedule --
+     never did, so "Not being done" recorded on the List went on being
+     contradicted by the agenda's own "1C plan" scope the moment the work
+     order came due. Same shape as the KAMAZ hold-off above, one function
+     over: two readers of one fact, one of them never asked. */
+  const deferred = await p.evaluate(u => {
+    deferPut('MP', u, { until: null, why: 'test defer', whyKey: '', by: 'test', at: new Date().toISOString() });
+    const got = planRows('').map(r => r.unit + '|' + r.ty);
+    deferClear('MP', u);
+    const restored = planRows('').map(r => r.unit + '|' + r.ty);
+    return { got, restored };
+  }, 'TK001');
+  ok('a round on an open deferral is not proposed as 1C\'s plan',
+     !deferred.got.some(r => r === 'TK001|MP'), deferred.got.join('  '));
+  ok('  clearing the deferral brings it back',
+     deferred.restored.some(r => r === 'TK001|MP'), deferred.restored.join('  '));
+
   ok('no page errors', errs.length === 0, errs.slice(0, 3).join(' | ') || 'none');
   await b.close(); server.close();
   console.log(fails.length ? '\nFAILED ' + fails.length + ': ' + fails.join(' | ') : '\nall passed');

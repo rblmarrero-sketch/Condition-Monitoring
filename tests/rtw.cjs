@@ -173,6 +173,33 @@ const jpg = p => p.evaluate(() => {
   await p.waitForTimeout(300);
   ok('the general-evidence photo is held on the draft', await p.evaluate(() => rtwDraft.general.photos.length) === 1);
 
+  console.log('\n5b. the photo cap says so, the same way addPicked already does for a graded round');
+  /* rtwIntakeFiles broke out of MAX_PHOTOS in silence — addPicked's own cap
+     shows the gal_full_t/gal_full_b dialog the moment a photograph is left
+     out; nothing mirrored that here, so a checklist item photographed past
+     the cap simply had fewer photographs than the inspector took, with
+     nothing on screen ever saying one was dropped. */
+  const capNo = items[0];
+  /* #rtwPhotoInput has no "multiple" attribute — one file per pick, exactly
+     like the phone's camera capture — so the cap is reached position by
+     position, one photograph filling it and the very next one hitting it. */
+  await p.evaluate(no => {
+    rtwDraft.items[no].photos = Array.from({ length: 10 }, (_, i) => ({ name: 'pre' + i + '.jpg', dataUrl: 'data:image/jpeg;base64,AA==' }));
+  }, capNo);
+  await p.click(`.rtw-evidence-toggle[data-toggle="${capNo}"]`);
+  await p.waitForTimeout(100);
+  await p.click(`.rtw-icon-btn[data-photo="${capNo}"]`);
+  const bCap = await jpg(p);
+  await p.setInputFiles('#rtwPhotoInput', { name: 'onemore.jpg', mimeType: 'image/jpeg', buffer: Buffer.from(bCap, 'base64') });
+  await p.waitForTimeout(300);
+  const capLen = await p.evaluate(no => rtwDraft.items[no].photos.length, capNo);
+  ok('the cap actually holds — already at 10, the new one is not added', capLen === 10, capLen);
+  const dlgSeen = await p.evaluate(() => document.getElementById('dlg').open);
+  const dlgText = await p.evaluate(() => ({ title: document.getElementById('dlgTitle').textContent, msg: document.getElementById('dlgMsg').textContent }));
+  ok('the phone says so — one left out, not silence', dlgSeen && dlgText.title === 'Not everything fitted' && /\b1\b/.test(dlgText.msg),
+     JSON.stringify(dlgText));
+  if (await p.evaluate(() => document.getElementById('dlg')?.open)) { await p.click('#dlgOk'); await p.waitForTimeout(200); }
+
   console.log('\n6. Release still needs the senior mechanic and a signature');
   ok('Save stays disabled with the checklist complete but nobody named', await p.isDisabled('#rtwSaveBtn'));
   ok('the footer says whose name is missing', /senior mechanic/i.test(await p.textContent('#rtwProgress')));
@@ -364,8 +391,14 @@ const jpg = p => p.evaluate(() => {
   ok('the general/overall evidence photo reaches the report, through the same generalBlock() every other type uses',
     /class="genwrap"/.test(html) && (html.match(/class="genrow"[^>]*>[\s\S]*?<img src="data:/g) || []).length > 0);
   ok('the Senior Mechanic\'s name and signature reach the approval table', html.includes('A. Ivanov') && /<img src="data:image\/png/.test(html));
-  ok('RTW has one signer — CM Technician and Reliability Engineer are dropped, Maintenance Supervisor stays',
-    !html.includes('CM Technician') && !html.includes('Reliability Engineer') && /Maintenance Supervisor/.test(html));
+  // The row's own role label is "Senior Mechanic" (rtw_senior), not
+  // "Maintenance Supervisor" (ap_sup) — RTW's checklist is signed on the
+  // spot by the mechanic who did the work, never a supervisor; approvalBlock
+  // itself named the row's role wrong until this fix, and this assertion
+  // used to encode that mistake as correct.
+  ok('RTW has one signer — CM Technician and Reliability Engineer are dropped, Senior Mechanic stays',
+    !html.includes('CM Technician') && !html.includes('Reliability Engineer') && /Senior Mechanic/.test(html)
+    && !html.includes('Maintenance Supervisor'));
 
   console.log('\n11b. the same report, in Russian — the checklist leads in Russian, not English');
   const htmlRu = await p.evaluate(async (id) => {
