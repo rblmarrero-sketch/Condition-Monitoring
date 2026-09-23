@@ -185,10 +185,20 @@ const SEED = () => {
 
   console.log('\n6. THE CELLS ARE THE SAME SIZE, MEASURED ON A LAID-OUT PAGE');
   /* The CSS assertions below say what the rule IS; this says what the browser
-     DID with it. Every photograph in a gallery must come out the same width
-     and the same height whatever its own proportions are — a portrait frame
+     DID with it. Every photograph in a gallery sits in a TILE of the same
+     square footprint whatever its own proportions are — a portrait frame
      beside two landscape ones is what produced the ragged row and the
-     half-empty line reported off EX021. */
+     half-empty line reported off EX021.
+
+     The uniform thing to measure is the TILE (`.phgrow > div`), not the raw
+     `<img>` height: cover-fit (report-core.js's `tiledRow`, superseding the
+     earlier letterboxed design this assertion was first written against)
+     fills a photograph to its tile on the axis matching its own shape and
+     lets the OTHER axis overflow, cropped by the tile's own
+     `overflow:hidden` — a portrait frame's own `<img>` element is legitimately
+     TALLER than a landscape one's, by design, so asserting every image's raw
+     height is identical is asserting the letterboxed design this file's own
+     rules retired. */
   const geo = await p.evaluate(async () => {
     const secs = CMReport.sectionsFor('unit', 'DZ002', { lang: 'en', bi: false, photos: true, scale: 2.4 });
     const host = document.createElement('div'); host.id = 'rptRoot';
@@ -201,12 +211,15 @@ const SEED = () => {
     const box = imgs.map(i => { const b = i.getBoundingClientRect();
       return { w: Math.round(b.width), h: Math.round(b.height), nat: i.naturalWidth,
                natW: i.naturalWidth, natH: i.naturalHeight }; });
+    const tiles = [...host.querySelectorAll('.board.gal .phgrow > div')].map(t => {
+      const r = t.getBoundingClientRect(); return { w: Math.round(r.width), h: Math.round(r.height) }; });
     host.remove(); st.remove();
-    return { box, n: imgs.length };
+    return { box, n: imgs.length, tiles };
   });
-  const hs = [...new Set(geo.box.map(b => b.h))];
-  ok('every photograph sits on the same baseline height', hs.length === 1 && hs[0] > 0,
-     geo.n + ' photo(s), height(s) ' + hs.join('/'));
+  const tw = [...new Set(geo.tiles.map(t => t.w))], th = [...new Set(geo.tiles.map(t => t.h))];
+  ok('every photograph sits in the same square TILE, whatever its own proportions overflow into',
+     geo.tiles.length === geo.n && tw.length === 1 && th.length === 1 && tw[0] === th[0] && tw[0] > 0,
+     geo.n + ' photo(s), tile size(s) ' + tw.join('/') + 'x' + th.join('/'));
   /* AND NONE OF THEM IS SQUASHED. The uniform thing is the CELL; the
      photograph inside keeps its own shape, so a portrait frame is narrower
      than a landscape one and both are true. A single width across frames of

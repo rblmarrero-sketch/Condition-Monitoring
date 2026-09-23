@@ -28,6 +28,17 @@
    the IDENTICAL tile — not merely the same LINE WIDTH, the same TILE, at
    the same size a four-photograph row anywhere else on this document uses.
 
+   A further instruction generalised this past a full row entirely: a
+   third real TK112 report circled a TWO-photograph position (FRD) sitting
+   at a visibly smaller, unconstrained size next to sibling positions'
+   correctly-tiled four-photograph rows on the SAME sheet, and asked
+   directly to "standardize the width and height of all photos in all
+   components inspected, for all type of inspections... if a photo is 1 to
+   3, it will follow the height and width of the photos that has already
+   4." One and two photographs on a wide board are tiled now too — the
+   IDENTICAL square footprint, cover-fit, that three and four already use;
+   the fixed four-column size simply has one or two of its slots occupied.
+
    Getting there costs no async step: every photograph here is already a
    JPEG or PNG data URI by the time cell() sees it, and photoDims() reads
    the format's own header bytes (a JPEG SOF marker, a PNG IHDR chunk)
@@ -149,11 +160,17 @@ const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
      insp3.tiles.length === 3 && insp3.tiles.every(t => t.w === three.tiles[0].w && t.h === three.tiles[0].h),
      'insp=' + JSON.stringify(insp3.tiles[0]) + ' mp=' + JSON.stringify(three.tiles[0]));
 
-  console.log('\nA lone photograph, and a pair, are still NOT tiled to the line (photogallerysize.cjs, galportrait.cjs, untouched)');
+  console.log('\nSINCE STANDARDIZED: a lone photograph, and a pair, are now tiled at the SAME size a full row uses too (galportrait.cjs, galorphan.cjs) — a third real TK112 report circled a two-photograph position sitting visibly smaller than its four-photograph neighbours and asked, by name, for every count from one to a complete set to match');
   const one = await render('RRD', 'Rear Differential', [[500, 420]]);
-  ok('one photograph is a standard tile, not stretched to the line', one.boxes.length === 1 && !/\bg3plus\b/.test(one.boardClass) && one.boxes[0].w < 300, JSON.stringify(one));
+  ok('one photograph is tiled at the fixed four-column size, flush left — the SAME tile the three- and four-photograph rows above use',
+     one.boxes.length === 1 && /\bg3plus\b/.test(one.boardClass) && one.tiles.length === 1
+       && one.tiles[0].w === rrd.tiles[0].w && one.tiles[0].h === rrd.tiles[0].h,
+     JSON.stringify({ boxes: one.boxes, tile: one.tiles[0], fourTile: rrd.tiles[0] }));
   const two = await render('RRD', 'Rear Differential', [[420, 560], [400, 560]]);
-  ok('two portrait photographs pack and stay their own width, not tiled to the line', two.boxes.length === 2 && !/\bg3plus\b/.test(two.boardClass) && (two.boxes[1].l + two.boxes[1].w - two.boxes[0].l) < 400, JSON.stringify(two));
+  ok('two portrait photographs are tiled too, at the identical square footprint, not packed at their own natural width',
+     two.boxes.length === 2 && /\bg3plus\b/.test(two.boardClass) && two.tiles.length === 2
+       && two.tiles.every(t => t.w === rrd.tiles[0].w && t.h === rrd.tiles[0].h),
+     JSON.stringify({ tiles: two.tiles, fourTile: rrd.tiles[0] }));
 
   ok(fails.filter(f => f.startsWith('PAGEERROR')).length === 0, 'no page errors throughout');
   await b.close();

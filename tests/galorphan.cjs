@@ -110,9 +110,16 @@ const SEED = () => {
        && (r3.boxes[r3.boxes.length - 1].l + r3.boxes[r3.boxes.length - 1].w - r3.boxes[0].l) < 650,
      JSON.stringify(r3.boxes));
 
-  console.log('\nEX026 (one photograph — untouched, not justified)');
+  console.log('\nEX026 (one photograph — since standardized: the SAME tile size a full row uses, not its own smaller size)');
   const r1 = await measure('EX026');
-  ok('one photograph, no g3plus, not stretched to the line', r1.boxes.length === 1 && !/\bg3plus\b/.test(r1.boardClass) && r1.boxes[0].w < 300, JSON.stringify(r1));
+  /* A real TK112 report circled a two-photograph position sitting visibly
+     smaller than its four-photograph neighbours on the same sheet and
+     asked, by name, to standardize every count to the size a complete
+     four-photograph row uses — this is the identical rule one photograph
+     lower. */
+  ok('one photograph, tiled at the fixed four-column size, flush left — not its own unconstrained size',
+     r1.boxes.length === 1 && /\bg3plus\b/.test(r1.boardClass) && r1.boxes[0].l < 10
+       && r1.boxes[0].w >= r3.boxes[0].w - 3, JSON.stringify(r1));
 
   console.log('\nEX021 (TK109\'s own shape — four photographs)');
   const r4 = await measure('EX021');

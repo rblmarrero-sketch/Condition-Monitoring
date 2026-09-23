@@ -2235,6 +2235,60 @@ control (four positions sharing the row, still auto-sized, never tiled)
 added alongside it to prove the fix does not leak into the shape it was
 never asked to touch.
 
+**"FILL THE LINE AT FOUR" WAS NOT THE END OF IT — ONE, TWO AND THREE HAD TO
+MATCH FOUR TOO, EVERYWHERE.** A THIRD real TK112 report, minutes after the
+build above shipped, circled the SAME FRD position again: its two
+photographs were correctly left-justified and, on a narrow board, correctly
+NOT stretched — but sitting on the SAME wide-board sheet as CTR's and RRD's
+now-tiled four-photograph rows, FRD's own pair still read at a visibly
+smaller size than its neighbours, because "1 or 2 photographs are not
+tiled" had never actually been retired, only the THRESHOLD for a full row
+had moved. "if a photo is 1 to 3, it will follow the height and width of
+the photos that has already 4... standardize the width and height of all
+photos in all components inspected, for all type of inspections." This
+reverses a rule this project had asserted twice before as deliberate
+("a genuinely LONE photograph is a standard tile, not the whole line
+stretched to hold one frame") — the maintainer's own later, explicit
+instruction is what changes it, not a rediscovery of the same defect.
+
+Both places a photo count under the gallery's own three-photo threshold
+took a DIFFERENT path are gone. The standalone "PHOTOGRAPHS" page
+(`cell(...,gallery=true)`) no longer branches on `gcols>=3` at all — every
+row, one photograph included, goes through `tiledRow` at the sheet's fixed
+four-column footprint; a single photograph is simply the first of that same
+four-slot row, the other three left empty rather than the photograph being
+stretched to fill them (`tileSize` was already independent of the row's own
+count — only the branch deciding whether to USE it depended on the count,
+and that branch is what's gone). `mpEvidence`'s own wide-board branch
+(`ph.length>1`, non-gallery) drops its `ncols>=3` condition the same way —
+`sh.wide` alone decides now — and a WIDE board's single photograph (the
+`ph.length===1` case, previously always the unconstrained `.ph` treatment,
+up to 330px) gets a matching new branch: tiled at the identical footprint
+when `sh.wide`, left as `.ph` only when the board is narrow or `sh` carries
+no board information at all. A NARROW multi-column board (several
+positions packed side by side) is untouched in every case, for the same
+reason the earlier fix left it alone: `tileSize`'s tile is always solved
+against the fixed four-column, 746px assumption, and forcing that into a
+quarter-width column would produce a tile bigger than the column itself.
+
+Six suites had encoded the retired rule as their own premise —
+`galportrait.cjs` and `galjustify.cjs` directly ("a lone photograph… keeps
+its own ~137px width," "still NOT tiled to the line"), `galorphan.cjs` at
+one assertion ("no g3plus, not stretched"), and `rptmirror.cjs` one level
+further in: it asserted every photograph in a document shares one raw
+`<img>` HEIGHT, which was only ever true because this fixture had never
+before put a portrait photo through a tiled (cover-fit) row, where the
+photograph's own overflowing axis is deliberately left uncropped in the DOM
+measurement (cropped visually by the tile's `overflow:hidden`) — the
+correct, sheet-wide invariant is that every photograph sits in the same
+square TILE, not that every `<img>` reports the same box, and the suite now
+measures `.phgrow > div` instead of the raw image for exactly that reason.
+`photogallerysize.cjs`, `galmixed4.cjs`, `galshort.cjs`, `mpcard3.cjs` and
+`phgstretch.cjs` needed no changes: each already asserted the tile-level
+invariant (same tile size regardless of count, cropped not squeezed) in
+terms general enough to hold under this widening the same way they held
+under the narrower one.
+
 ---
 
 ## Secrets

@@ -15,13 +15,22 @@
    pure white on either side of it. Reported repeatedly as "the spacing is
    too much" and "these has been a long time request."
 
-   The columns are sized to their own photograph now (`auto`, not `1fr`),
-   packed together as a group rather than stretched to fill whatever the
-   row's own width happens to be — and, asked for by name afterward ("when
-   1 or 2 photo is taken it should start from left-justify, not in the
-   center"), the group starts at the line's own left margin
-   (`justify-content:start`) instead of centring in it, the same edge every
-   other row on this sheet already starts from.
+   The columns were sized to their own photograph for a while (`auto`, not
+   `1fr`), packed together as a group rather than stretched to fill
+   whatever the row's own width happens to be, starting at the line's own
+   left margin rather than centred — and that held until a THIRD real
+   report circled the SAME sheet's FRD position (two photographs) sitting
+   at a visibly smaller size than its neighbours' four-photograph rows,
+   asking directly: "if a photo is 1 to 3, it will follow the height and
+   width of the photos that has already 4... standardize the width and
+   height of all photos in all components inspected, for all type of
+   inspections." A pair or a lone photograph on the gallery board is now
+   TILED exactly like a row of three or four — the same fixed square
+   footprint (`tileSize`/`tiledRow`, cover-fit, cropped on whichever axis
+   overflows), flush left, with the unused slots of that same four-wide row
+   simply left empty. This is a deliberate reversal of the "keep its own
+   natural size" rule this file used to assert — kept here as history, not
+   as the current contract.
 
    Run: node tests/galportrait.cjs   (needs tests/mock.cjs on 8099) */
 const { chromium } = require(require('./pw.cjs'));
@@ -75,43 +84,54 @@ const SEED = () => {
     const cells = [...d.querySelectorAll('.cel')].map(c => {
       const phg = c.querySelector('.phg.gallery');
       const imgs = [...c.querySelectorAll('.phg.gallery img')].map(im => im.getBoundingClientRect());
+      const tiles = [...c.querySelectorAll('.phgrow > div')].map(t => t.getBoundingClientRect());
       return {
+        phgClass: phg ? phg.className : null,
         phgWidth: phg ? phg.getBoundingClientRect().width : null,
         imgWidths: imgs.map(r => Math.round(r.width)),
+        imgHeights: imgs.map(r => Math.round(r.height)),
         imgLefts: imgs.map(r => Math.round(r.left - phg.getBoundingClientRect().left)),
+        tiles: tiles.map(t => ({ l: Math.round(t.left - phg.getBoundingClientRect().left), w: Math.round(t.width), h: Math.round(t.height) })),
       };
     });
     d.remove();
     return { boardWidth: d.querySelector ? 760 : null, cells };
   });
 
-  /* What matters is not the .phg.gallery CONTAINER's own width — it is a
-     block box and naturally spans the full board, fix or no fix — it is
-     whether the PHOTOGRAPHS inside it sit packed together as a group (the
-     fix) or each stranded in the middle of its own equal 1fr share of that
-     width (the bug). A tight pack means: consecutive photographs touch
-     (an 8px gap, not ~230px), and the group as a whole starts at the
-     board's own left margin, the same edge every other row on the sheet
-     starts from — not centred in the line, and not each member centred in
-     its own oversized column. */
+  /* THE STANDARDIZATION FIX: a pair or a lone photograph is now tiled at
+     the SAME square footprint a full four-photograph row uses on this
+     sheet (`g3plus` markup, `.phgrow > div` tiles) — never each photo's
+     own natural size, and never centred as a group. A tight pack of
+     hairline gaps between TILES (not photographs, which can overflow
+     their own tile on the cropped axis) is what "not stretched, not
+     centred" now means. */
   console.log('DRS.ENG (two portrait photographs on one full-width row)');
   const c0 = geo.cells[0];
   ok('two photographs found', c0.imgWidths.length === 2, JSON.stringify(c0));
-  ok('the two photographs sit next to each other, not each centred in its own half',
-     Math.abs(c0.imgLefts[1] - (c0.imgLefts[0] + c0.imgWidths[0])) < 20,
-     'gap=' + (c0.imgLefts[1] - (c0.imgLefts[0] + c0.imgWidths[0])) + 'px');
+  ok('tiled — the same markup the gallery board uses for three or four photographs',
+     /\bg3plus\b/.test(c0.phgClass || ''), c0.phgClass);
+  ok('two tiles, the same square size', c0.tiles.length === 2
+     && Math.abs(c0.tiles[0].w - c0.tiles[0].h) <= 1 && Math.abs(c0.tiles[0].w - c0.tiles[1].w) <= 1,
+     JSON.stringify(c0.tiles));
+  ok('the two tiles sit next to each other at the sheet\'s own hairline gap, not ~230px apart',
+     Math.abs((c0.tiles[1].l - (c0.tiles[0].l + c0.tiles[0].w))) <= 6,
+     'gap=' + (c0.tiles[1].l - (c0.tiles[0].l + c0.tiles[0].w)) + 'px');
   ok('the pair starts flush at the board\'s own left margin, not centred as a group',
-     c0.imgLefts[0] < 10, 'leftMargin=' + Math.round(c0.imgLefts[0]));
-  ok('each photograph keeps its own ~137px width — nothing was stretched to fill a column',
-     c0.imgWidths.every(w => w > 100 && w < 180), JSON.stringify(c0.imgWidths));
+     c0.tiles[0].l < 10, 'leftMargin=' + c0.tiles[0].l);
+  ok('THE FIX: each photograph now fills its OWN standard tile (cover-fit) — not the old ~137px natural width',
+     c0.imgWidths.every((w, i) => w >= c0.tiles[i].w - 3), JSON.stringify({ imgWidths: c0.imgWidths, tiles: c0.tiles }));
+  ok('  and a portrait photograph still overflows and is cropped on its own height, never squeezed to fit',
+     c0.imgHeights.every((h, i) => h >= c0.tiles[i].h - 3), JSON.stringify({ imgHeights: c0.imgHeights, tiles: c0.tiles }));
 
   console.log('\nENG.EXS (one portrait photograph alone on its own row)');
   const c1 = geo.cells[1];
   ok('one photograph found', c1.imgWidths.length === 1, JSON.stringify(c1));
-  ok('it keeps its own ~137px width — not stretched wider to fill the line',
-     c1.imgWidths[0] > 100 && c1.imgWidths[0] < 180, 'width=' + c1.imgWidths[0]);
+  ok('THE FIX: tiled, the same standard square a four-photograph row would use — not its own natural size, not stretched to the line',
+     /\bg3plus\b/.test(c1.phgClass || '') && c1.tiles.length === 1
+       && Math.abs(c1.tiles[0].w - c1.tiles[0].h) <= 1 && Math.abs(c1.tiles[0].w - c0.tiles[0].w) <= 1,
+     JSON.stringify({ phgClass: c1.phgClass, tile: c1.tiles[0], matchesOtherRow: c0.tiles[0] }));
   ok('  and it starts flush at the left margin, not centred in the row',
-     c1.imgLefts[0] < 10, 'leftMargin=' + Math.round(c1.imgLefts[0]));
+     c1.tiles[0].l < 10, 'leftMargin=' + c1.tiles[0].l);
 
   console.log(fails.length ? '\nFAILED: ' + fails.length : '\nall passed');
   await b.close();

@@ -4835,84 +4835,42 @@
          photographs it made one frame four times the size of the rest for no
          reason, and left the right half of the sheet empty. */
       if (gallery) {
+        /* EVERY ROW ON THE PHOTOGRAPHS SHEET IS TILED NOW, ONE PHOTOGRAPH
+           INCLUDED — the gallery board is always the sheet's own full
+           746px width (`.board.gal.b1`, one finding per row), so there is
+           no "too narrow to tile" case here the way a packed mpEvidence
+           board can have. This used to stop at three or four (`gcols>=3`)
+           and pack one or two photographs at their own natural width
+           instead, deliberately, with the reasoning kept below — and a
+           real TK112 report circled exactly why that inconsistency reads
+           badly: "if you check the attached screenshot there is 2 photos
+           (circled), different sizes... can we standardize the width and
+           height of all photos in all components inspected, for all type
+           of inspections." A single photograph is now tile #1 of the same
+           four-slot row a full set would use — the same square footprint,
+           the same cover-fit crop, the same hairline gap — with slots 2-4
+           simply empty rather than the photograph being stretched to fill
+           them (`tileSize`/`GAL_TILE_COLS` never scaled with the row's own
+           count in the first place; only the THRESHOLD for using them did,
+           and that threshold is what is gone). */
         var gcols = gridCols(ph.length);
-        if (gcols >= 3) {
-          /* A FULL ROW OF THREE OR FOUR IS TILED TO FILL THE LINE, EVERY
-             TILE THE SAME SIZE — see tiledRow's own comment above cell()
-             for the uniform-tile rule and the TK126 trade-off it accepts.
-             Every row is built at the SAME tile size, from `gcols`, not
-             from its own count — a remainder past a full row of four gets
-             the identical tile a full row's photograph would have, not a
-             size of its own, so a lone fifth photograph reads as this
-             finding's own standard tile rather than independently sized. */
-          var galRows = chunkPh(ph, gcols);
-          /* grid-template-columns:1fr, stated inline, is load-bearing and not
-             decoration: the older #rptRoot .cel .phg.gallery{grid-template-
-             columns:repeat(auto-fill,minmax(200px,1fr))} rule (this file's own
-             CSS, further down) was already dead by the time this branch was
-             written, kept alive only by every OTHER branch always setting its
-             own inline override — this one did not, the first time it was
-             written, and that dead rule woke back up: three implicit ~250px
-             auto-fill columns instead of one full-width column, the row's own
-             flex content overflowing the narrow track it was squeezed into.
-             One column, explicit, closes the same trap the backtick comment
-             two files over in this project keeps warning about in a different
-             shape — a rule assumed inert because nothing currently reaches it
-             is one new branch away from reaching it. */
-          top = '<div class="phg gallery g3plus" style="grid-template-columns:1fr">'
-            + galRows.map(function (r) { return tiledRow(r, GAL_ROW_W, GAL_GAP, 0).html; }).join("")
-            + '</div>';
-        } else {
-          /* ONE OR TWO PHOTOGRAPHS PACK TOGETHER AND START AT THE LEFT
-             MARGIN, NOT STRETCHED TO FILL THE LINE AND NOT CENTRED IN IT.
-             `auto` columns, each sized to its OWN photograph rather than to
-             a forced equal share of the row, is what makes a portrait frame
-             keep its own width instead of sitting stranded in a wide 1fr
-             column with white on both sides of it (TK126, INSP, 2026-09-19:
-             two 720x1600 photographs read off the printed sheet as "the
-             spacing is too much" when this used equal 1fr columns) — and a
-             genuinely LONE photograph is a standard tile, not the whole
-             line stretched to hold one frame (photogallerysize.cjs).
-             Justifying to fill the line, correct at three or four, would be
-             exactly that defect again at one or two: a single photograph
-             the width of the sheet, or a pair blown out to fill it, neither
-             of which this project has ever asked for.
-
-             CENTRING them as a group was the fix's own first cut, and it
-             was wrong for the same reason every OTHER row on this sheet
-             starts flush left — the tiled three/four-photograph row above,
-             the checklist table beside it, the masthead itself: a reader's
-             eye tracks one consistent left edge down the page, and a lone
-             or paired photograph sitting in the middle of its line was the
-             one shape on the sheet that did not. Asked for by name: "when 1
-             or 2 photo is taken it should start from left-justify, not in
-             the center." `justify-content:start` on `.phg.gallery` (the
-             tiled three/four-photo row's own outer div carries the
-             identical class for its CSS but is positioned by tiledRow's
-             absolute-offset math, which this rule cannot reach either way)
-             replaces the centring `tests/galportrait.cjs` used to assert;
-             `justify-items` moved with it for the same reason, though with
-             auto-sized single-row tracks it has no visible effect on its
-             own.
-
-             This was shipped once here, on the standalone gallery page,
-             and left the BASE `.cel .phg` rule (above `cell()`'s own
-             comment block, still centred) untouched — which is the rule
-             the OTHER `.phg` board on this sheet actually reads: the
-             per-position "Equipment and component evidence" cards
-             (mpEvidence, ph.length>1 branch below, non-gallery). Read off
-             a real TK112 Magnetic Plug report the same day: FRD's two
-             photographs sat centred in a wide grey card, directly above
-             CTR's own four photographs on the row beneath it, packed
-             correctly and starting flush left — the identical shape this
-             comment's own fix already existed for, on a board this fix
-             never reached. The base rule is `start`/`start` now too, so
-             both boards read the fact once, not the gallery's own copy of
-             it. */
-          top = '<div class="phg gallery" style="grid-template-columns:repeat(' + gcols + ',auto)">'
-            + ph.map(function (u) { return '<img src="' + u + '">'; }).join("")
-            + '</div>';
-        }
+        var galRows = chunkPh(ph, gcols);
+        /* grid-template-columns:1fr, stated inline, is load-bearing and not
+           decoration: the older #rptRoot .cel .phg.gallery{grid-template-
+           columns:repeat(auto-fill,minmax(200px,1fr))} rule (this file's own
+           CSS, further down) was already dead by the time this branch was
+           written, kept alive only by every OTHER branch always setting its
+           own inline override — this one did not, the first time it was
+           written, and that dead rule woke back up: three implicit ~250px
+           auto-fill columns instead of one full-width column, the row's own
+           flex content overflowing the narrow track it was squeezed into.
+           One column, explicit, closes the same trap the backtick comment
+           two files over in this project keeps warning about in a different
+           shape — a rule assumed inert because nothing currently reaches it
+           is one new branch away from reaching it. */
+        top = '<div class="phg gallery g3plus" style="grid-template-columns:1fr">'
+          + galRows.map(function (r) { return tiledRow(r, GAL_ROW_W, GAL_GAP, 0).html; }).join("")
+          + '</div>';
       } else if (ph.length > 1) {
         /* ONE SIZE, IN ROWS — the layout the magnetic plug sheet already used,
            now used wherever a position carries more than one frame.
@@ -4948,17 +4906,32 @@
            Asked for again, by name, against that same report: "4 photos
            MUST be perfectly align, fill the horizontal line" — pointing at
            the standalone gallery's own EX016 report as the standard to
-           match. A wide board's row of three or four is now tiled exactly
-           the way the gallery page already does, correctly, with the
-           identical function and the identical 746px target width: cover-fit
-           squares that fill the line edge to edge, sharing one proven
-           implementation instead of a second copy that could drift from it.
-           A wide board's row of one or two photographs, and every row on a
-           NARROW multi-column board regardless of count, keep the `auto`
-           column sizing above unchanged — this is additive, not a
-           replacement of the existing rule. */
+           match.
+
+           A THIRD report, the identical TK112 sheet, circled FRD's own two
+           photographs again — this time next to CTR's and RRD's four,
+           both now correctly tiled — and asked for the fix to go all the
+           way down: "if a photo is 1 to 3, it will follow the height and
+           width of the photos that has already 4... standardize the width
+           and height of all photos in all components inspected, for all
+           type of inspections." A wide board's row of ONE, TWO, THREE or
+           FOUR photographs is now tiled exactly the way the gallery page
+           already does, with the identical function and the identical
+           746px target width: cover-fit squares that fill the SAME tile
+           footprint a complete four-photograph position would use, whether
+           this position holds one photograph or four — `tileSize` always
+           solves the tile from the sheet's own fixed width and column
+           count, never from how many photographs this particular position
+           happens to carry, so a lone photograph simply occupies the
+           first of that same four-slot row, flush left. Every row on a
+           NARROW multi-column board (several positions packed side by
+           side) keeps the `auto` column sizing below unchanged — cramming
+           a full-size tile into a quarter-width column would make an
+           already-small photograph unreadable, and this ask was about one
+           report's cards sitting in a single, wide column, not about that
+           narrower shape. */
         var ncols = gridCols(ph.length);
-        if (sh && sh.wide && ncols >= 3) {
+        if (sh && sh.wide) {
           var mpRows = chunkPh(ph, ncols);
           top = '<div class="phg gallery g3plus" style="grid-template-columns:1fr">'
             + mpRows.map(function (r) { return tiledRow(r, GAL_ROW_W, GAL_GAP, 0).html; }).join("")
@@ -4969,6 +4942,22 @@
             + ph.map(function (u) { return '<img src="' + u + '">'; }).join("")
             + '</div>';
         }
+      } else if (sh && sh.wide) {
+        /* A LONE PHOTOGRAPH ON A WIDE BOARD IS THE SAME TILE A COMPLETE
+           FOUR-PHOTOGRAPH POSITION WOULD USE, NOT ITS OWN UNCONSTRAINED
+           SIZE. The `.ph` treatment below (own proportions, up to 330px)
+           is right for a board where every position is single-photograph
+           and nothing else on the sheet suggests a different size — but on
+           a wide mpEvidence board sitting beside sibling positions that DO
+           carry several photographs (TK112's FRD beside CTR and RRD), a
+           lone photograph at its own, larger size read as yet another
+           inconsistent size, the same complaint one tile size up. Reusing
+           tiledRow with a single-element row gives it the identical
+           184px-ish square footprint every other tile on this wide board
+           uses, cropped rather than padded, the same as two, three or
+           four. */
+        top = '<div class="phg gallery g3plus" style="grid-template-columns:1fr">'
+          + tiledRow(ph, GAL_ROW_W, GAL_GAP, 0).html + '</div>';
       } else {
         top = '<img class="ph" src="' + ph[0] + '">';
       }
