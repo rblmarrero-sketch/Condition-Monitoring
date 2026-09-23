@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-09-23T04:38:32+00:00",
+  "generated": "2026-09-23T05:53:42+00:00",
   "source": "https://askpi.94-131-94-152.sslip.io/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 677,
@@ -400,12 +400,12 @@ window.CM_WO_DATA = {
     "wo": "Work order number"
   },
   "cmDateFrom": {
-    "raised": 70,
+    "raised": 71,
     "detected": 0,
     "planStart": 0
   },
   "cmCauseFrom": {
-    "wo": 37,
+    "wo": 38,
     "wr": 33,
     "cert": 0,
     "none": 0
@@ -419,6 +419,28 @@ window.CM_WO_DATA = {
     "Bekzhan"
   ],
   "cmWorkOrders": [
+    {
+      "date": "2026-09-23",
+      "dateFrom": "raised",
+      "raised": "2026-09-23",
+      "detected": "2026-09-23",
+      "planStart": null,
+      "asset": "EX019",
+      "defect": "DD-00013195",
+      "requestNo": "DD-00013195",
+      "eqType": "EXCAVATOR, BUCKET",
+      "system": "EX019.HS.MP (Hydraulic Pumps / Гидронасосы)",
+      "priority": "P4 Planned (Repair)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Поврежден прокладки",
+      "causeFrom": "wr",
+      "descr": "Течь под насосом.",
+      "status": "Registered",
+      "by": "Irek",
+      "woNumber": null,
+      "maintType": null,
+      "planned": false
+    },
     {
       "date": "2026-09-22",
       "dateFrom": "raised",
@@ -1797,12 +1819,12 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "defectType": "5.08 Third‑party damage / Повреждение третьими лицами",
       "cause": "Некачественное выполнение",
-      "causeFrom": "wr",
+      "causeFrom": "wo",
       "descr": "Отсутствует дворник на переднем стекле",
       "status": "Registered",
       "by": "Zhomart",
       "woNumber": null,
-      "maintType": null,
+      "maintType": "P4 Planned Repair",
       "planned": false
     },
     {
@@ -8998,8 +9020,8 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-10-03",
-      "planStartDt": "2026-10-03T00:00:00",
+      "planStart": "2026-10-02",
+      "planStartDt": "2026-10-02T00:00:00",
       "planEnd": "2026-10-04",
       "actualStart": null,
       "actualStartDt": null,
