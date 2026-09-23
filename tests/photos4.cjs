@@ -134,30 +134,45 @@ const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
   console.log('\n  what the printed page does with them');
   const html = await p.evaluate(async () => (await buildReportSections()).map(s => s.html).join('\n'));
   const imgs = (html.match(/<img[^>]+src="blob:|<img[^>]+src="data:/g) || []).length;
-  console.log('        images printed for ' + (CAP*3) + ' captured: ' + imgs);
+  /* CAP*3 position photographs PLUS the one machine-overview photo every
+     round now carries (PLANT, above) and prints of its own accord — see
+     "Unit report prints the visit's photographs, not only findings'" in
+     CLAUDE.md. This suite predates that, and predates the tiled/cover-fit
+     gallery redesign below it: it asserted CSS grid markup
+     (`class="phg g4"`, `grid-template-columns:repeat(N,auto)`) that the
+     current engine has not emitted since report-core.js's `tiledRow`
+     replaced it with absolutely-positioned square tiles in `.phgrow` rows
+     (see CLAUDE.md's "THE GALLERY ROW WAS DELIBERATELY CHANGED..." and
+     "FILL THE LINE AT FOUR" entries) — so `imgs`, the grid check and the
+     column check below are rewritten against that current contract,
+     verified against this scenario's own real raster-free HTML rather than
+     re-guessed. */
+  console.log('        images printed for ' + (CAP*3 + 1) + ' captured (+1 machine overview): ' + imgs);
   ok('every photograph taken reaches the page, not the first four',
-    imgs === CAP*3, imgs + ' of ' + CAP*3);
-  /* ONE SIZE, IN ROWS. This used to require the opposite — a lead frame four
-     times the size of the rest with the remainder in a strip beneath — and that
-     hierarchy is one nobody meant: the first photograph an inspector happened to
-     take is not the important one. On a filter cut, where six frames are the
-     same filter from six angles, it printed one big picture and a ragged
-     three-then-two strip with an empty cell in it. */
+    imgs === CAP*3 + 1, imgs + ' of ' + (CAP*3 + 1));
+  /* ONE SIZE, IN ROWS — now literally: every tile in every `.phgrow` is the
+     identical square (report-core.js's `tileSize`), never a lead frame four
+     times the size of the rest with the remainder in a strip beneath (the
+     older, retired failure mode this test originally caught). */
+  const rows = (html.match(/class="phgrow"/g) || []).length;
+  const tileSizes = new Set([...html.matchAll(/width:(\d+)px;height:(\d+)px;background/g)]
+    .map(m => m[1] + 'x' + m[2]));
   ok('every frame is the same size, in rows',
-    (html.match(/class="phg( g4)?"/g) || []).length === 3 && !/class="phx"/.test(html),
-    (html.match(/class="phg( g4)?"/g) || []).length + ' grids, '
-      + (html.match(/class="phx"/g) || []).length + ' strips');
-  /* Four across, capped — never a wider three-column row chosen because it
-     divides a remainder more evenly (report-core.js's gridCols, fixed for
+    rows === 9 && tileSizes.size === 1,
+    rows + ' rows, ' + tileSizes.size + ' distinct tile size(s)');
+  /* Four across, capped — never a wider row chosen because it divides a
+     remainder more evenly (report-core.js's GAL_TILE_COLS, fixed for
      TK109's Rear Differential plug — see galorphan.cjs). CAP is 10 here, so
-     each position is four full rows of four... no: 10 = 4+4+2, and the
-     LAST row is deliberately allowed to be short — the whole point of the
-     fix is that a remainder occupies fewer of the SAME four columns rather
-     than the grid hunting for a column count with no remainder at all. */
-  const cols = [...html.matchAll(/grid-template-columns:repeat\((\d+),auto\)/g)].map(m => +m[1]);
+     each position is 4+4+2: two full rows of four tiles and one short row
+     of two, the SAME tile size as the full rows — never re-flowed into,
+     say, two rows of five. Tiles are positioned by `left:Npx`, not a CSS
+     grid, so "how many columns" is read off how many distinct left-offsets
+     appear in one row's own markup. */
+  const rowBodies = html.split('class="phgrow"').slice(1)
+    .map(s => [...s.matchAll(/<div style="position:absolute;left:(\d+)px/g)].length);
   ok('every position renders at four columns once past four photographs, not a wider row chosen to avoid a remainder',
-    cols.length > 0 && cols.every(c => c === Math.min(CAP, 4)),
-    CAP + ' photos into ' + [...new Set(cols)].join('/') + ' columns');
+    rowBodies.length === 9 && rowBodies.filter(n => n === 4).length === 6 && rowBodies.filter(n => n === 2).length === 3,
+    CAP + ' photos into rows of ' + rowBodies.join(','));
   /* The "+6" badge was the failure mode, not the fallback: it turned up on
      exactly the positions with the most photographs, which are the positions
      where something is wrong. */

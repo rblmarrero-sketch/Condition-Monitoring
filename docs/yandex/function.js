@@ -700,7 +700,7 @@ async function saveOne(b) {
       name = variantName(fileName, dev);
     }
   }
-  const key = (path ? path + '/' : '') + name;
+  let key = (path ? path + '/' : '') + name;
   const buf = Buffer.from(String(b.file), 'base64');
   const want = sha256(buf);
 
@@ -749,16 +749,20 @@ async function saveOne(b) {
      If the read-back fails or disagrees, that is reported rather than hidden:
      a receipt is a promise, and a promise nobody checked is what this whole
      system already has too much of. */
-  let storedSize = null, storedSha = '', verifyError = '';
-  try {
-    const back = await getObj(key);
-    const body = back && back.body ? Buffer.from(back.body) : null;
-    if (!body) verifyError = 'stored object could not be read back';
-    else { storedSize = body.length; storedSha = sha256(body); }
-  } catch (e) { verifyError = 'read-after-write failed: ' + String(e.message || e); }
-  if (!verifyError && storedSha !== want) {
-    verifyError = 'stored bytes do not match what was sent';
-  }
+  const verifyStored = async (k) => {
+    let storedSize = null, storedSha = '', verifyError = '', owner = '';
+    try {
+      const back = await getObj(k);
+      const body = back && back.body ? Buffer.from(back.body) : null;
+      if (!body) verifyError = 'stored object could not be read back';
+      else { storedSize = body.length; storedSha = sha256(body);
+             owner = String((back.headers || {})['x-amz-meta-cm-dev'] || ''); }
+    } catch (e) { verifyError = 'read-after-write failed: ' + String(e.message || e); }
+    if (!verifyError && storedSha !== want) verifyError = 'stored bytes do not match what was sent';
+    return { storedSize, storedSha, verifyError, owner };
+  };
+  let v = await verifyStored(key);
+  let { storedSize, storedSha, verifyError } = v;
   /* A DUPLICATE THAT DOES NOT READ BACK IS NOT A DUPLICATE. The shortcut
      above trusts the hash the previous PUT wrote as metadata; if that
      object's read-back fails or disagrees now, the object is not what the
@@ -768,14 +772,56 @@ async function saveOne(b) {
   if (duplicate && verifyError) {
     duplicate = false;
     await putObj(key, buf, b.contentType || 'application/octet-stream', dev, { 'x-amz-meta-cm-sha': want });
-    storedSize = null; storedSha = ''; verifyError = '';
+    v = await verifyStored(key);
+    ({ storedSize, storedSha, verifyError } = v);
+  }
+  /* A WRITE THAT WAS NEVER A KNOWN RIVAL AT HEAD-CHECK TIME CAN STILL LOSE A
+     RACE ITS OWN VERIFY DID NOT CATCH.
+
+     Two phones inspecting the same unit close enough in time can both call
+     headObj(key0) before either PUT lands — both see no owner, both write
+     straight to the primary key, and rival detection above (built for the
+     sequential hand-over case) never fires for either of them. Whichever
+     device's read-after-write happens to run AFTER the other device's PUT
+     lands gets back bytes it did not send.
+
+     The common shape of that is NOT a hash match: two inspectors' own
+     findings differ, so the read-back disagrees with `want` and the block
+     above already labels it `verifyError: 'stored bytes do not match what
+     was sent'` — which is true, and also the wrong diagnosis. Read that way
+     alone, it says "corruption," tells the phone to retry, and a retry
+     re-fetches HEAD, finds a hash that still is not its own, and writes
+     straight over the rival again — the two devices ping-ponging the same
+     key with neither ever told a second person is involved. (A same-hash
+     coincidence — two devices happening to send byte-identical content — is
+     the one case that verifies clean and slips through with no error at
+     all; it needed catching too, which is why this does not gate on
+     `verifyError` being clear.)
+
+     The discriminator is the owner metadata, not the hash: if the object's
+     CURRENT owner is a real device that is not this one, someone else's
+     write landed in between, whether or not its bytes happen to match this
+     one's. Not fixable by trusting the pre-write HEAD any harder — the same
+     rival handling the sequential case already uses is applied here too,
+     one step later, on this device's OWN bytes: they move to their own
+     ~dev variant and a conflict is raised, exactly as if the rival had been
+     seen before the write instead of after it. A genuine duplicate
+     (identical bytes THIS device already stored, verified clean before this
+     block runs) is excluded — nothing was lost there, so nothing needs
+     moving; and a read-back that failed outright rather than disagreeing
+     carries no owner at all, so it is left as a plain read failure, not
+     guessed at as a rival. */
+  if (!duplicate && !rival && v.owner && dev && v.owner !== dev) {
+    rival = v.owner;
+    name = variantName(fileName, dev);
+    key = (path ? path + '/' : '') + name;
     try {
-      const back = await getObj(key);
-      const body = back && back.body ? Buffer.from(back.body) : null;
-      if (!body) verifyError = 'stored object could not be read back';
-      else { storedSize = body.length; storedSha = sha256(body); }
-    } catch (e) { verifyError = 'read-after-write failed: ' + String(e.message || e); }
-    if (!verifyError && storedSha !== want) verifyError = 'stored bytes do not match what was sent';
+      await putObj(key, buf, b.contentType || 'application/octet-stream', dev, { 'x-amz-meta-cm-sha': want });
+      v = await verifyStored(key);
+      ({ storedSize, storedSha, verifyError } = v);
+    } catch (e) {
+      verifyError = 'read-after-write failed: ' + String((e && e.message) || e);
+    }
   }
 
   const out = { ok: true, req: b.name, id: key, name, url: '', folder: path || '/' };

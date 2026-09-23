@@ -63,9 +63,34 @@ function stripBreaker(src) {
   return cut;
 }
 
-const brokenIdx = stripBreaker(good)
-  .replace(/    schedKick = true;\n    schedEnsureLoaded\(\)\.then\(changed=>\{\n      schedKick = false;\n      if\(changed && \(dueSched \|\| dueView==="week"\)\) renderDue\(\);\n    \}, \(\)=>\{ schedKick = false; \}\);/,
-    '    schedEnsureLoaded().then(()=>{ if(dueSched || dueView==="week") renderDue(); });')
+/* AND THE OLD, ALWAYS-REPAINT-ON-RESOLVE SCHEDULE KICK PUT BACK, or this no
+   longer builds a page that CAN loop even with the breaker gone.
+
+   Build 328's breaker was the cure for a repaint that fired on every
+   schedEnsureLoaded() resolution, changed or not; reproducing the freeze
+   needs THAT shape back, not merely the breaker's absence. The exact text
+   here has already drifted once — RTW's own entry card later needed the
+   same "the fetch landed, repaint" signal (see CLAUDE.md's "AND THE PHONE
+   IS THE THIRD END" and "A THIRD REASON..." entries), which added a
+   comment and simplified `if(changed && (dueSched || dueView==="week"))`
+   to a bare `if(changed)` — an exact-text regex that predated that stopped
+   matching, .replace() no-opped in total silence, and this suite went on
+   "proving" a freeze against a broken build that could never actually
+   freeze, because the very re-arm it exists to reproduce was left as its
+   modern, already-fixed self. Matched by SHAPE now, the same reasoning
+   stripBreaker already uses above, with the same loud failure if the
+   shape ever moves again. */
+function stripSchedGate(src) {
+  const cut = src.replace(/    schedKick = true;\n    schedEnsureLoaded\(\)\.then\(changed=>\{[\s\S]*?\n    \}, \(\)=>\{ schedKick = false; \}\);/,
+    '    schedEnsureLoaded().then(()=>{ if(dueSched || dueView==="week") renderDue(); });');
+  if (cut === src) {
+    console.error('FAIL  the schedule kick could not be reverted — its shape has moved, this suite is blind');
+    process.exit(1);
+  }
+  return cut;
+}
+
+const brokenIdx = stripSchedGate(stripBreaker(good))
   .replace(new RegExp('const BUILD="' + NOW + '"'), 'const BUILD="900"')
   .replace(new RegExp('v=' + NOW, 'g'), 'v=900');
 const brokenSw = goodSw.replace(new RegExp('const BUILD = "' + NOW + '"'), 'const BUILD = "900"')

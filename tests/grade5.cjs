@@ -141,7 +141,15 @@ const J = o => JSON.stringify(o).slice(0, 420);
     draft.positions[curItem].target = '2026-12-25';
     renderGradeReq(); await new Promise(r => setTimeout(r, 80));
     out.kept = rd();
-    out.want = { g3: day(out.insp), g4: day(7), g5: day(1) };
+    /* want.g3 asks defaultTargetFor(3) itself rather than re-deriving the
+       interval and re-shifting it by hand — that copy left out the cap
+       "AND NEVER LATER THAN THE NEXT TIME THE MACHINE IS ACTUALLY OPEN"
+       defaultTargetFor(3) applies from 1C's own schedule, so it silently
+       agreed with the app only for as long as this fixture's equipment
+       happened to have nothing booked before the raw interval date — the
+       exact "a suite carrying its own copy" trap the comment above already
+       names for the interval itself, one layer further in. */
+    out.want = { g3: defaultTargetFor(3), g4: day(7), g5: day(1) };
     return out;
   });
   ok('a 3 defaults to the next planned service for this round on this machine',

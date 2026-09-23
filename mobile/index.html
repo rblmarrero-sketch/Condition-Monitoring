@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=450">
+<link rel="manifest" href="manifest.webmanifest?v=451">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=450">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=450">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=450">
+<link rel="apple-touch-icon" href="icon-192.png?v=451">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=451">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=451">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2758,16 +2758,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=450"></script>
-<script src="upload-defaults.js?v=450"></script>
-<script src="hme.js?v=450"></script>
-<script src="mp-fc.js?v=450"></script>
-<script src="rtw.js?v=450"></script>
-<script src="hme-cascade.js?v=450"></script>
-<script src="assets.js?v=450"></script>
-<script src="temp-limits.js?v=450"></script>
-<script src="normalize.js?v=450"></script>
-<script src="terms.js?v=450"></script>
+<script src="native.js?v=451"></script>
+<script src="upload-defaults.js?v=451"></script>
+<script src="hme.js?v=451"></script>
+<script src="mp-fc.js?v=451"></script>
+<script src="rtw.js?v=451"></script>
+<script src="hme-cascade.js?v=451"></script>
+<script src="assets.js?v=451"></script>
+<script src="temp-limits.js?v=451"></script>
+<script src="normalize.js?v=451"></script>
+<script src="terms.js?v=451"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2786,25 +2786,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=450"></script>
-<script src="edits.js?v=450"></script>
-<script src="due.js?v=450"></script>
-<script src="wear.js?v=450"></script>
-<script src="wear-figs.js?v=450"></script>
-<script src="wear-map.js?v=450"></script>
-<script src="machine-photos.js?v=450"></script>
-<script src="machine-fig.js?v=450"></script>
-<script src="get.js?v=450"></script>
-<script src="points.js?v=450"></script>
-<script src="uc-points.js?v=450"></script>
-<script src="inspect-guide.js?v=450"></script>
-<script src="get-figs.js?v=450"></script>
-<script src="body-points.js?v=450"></script>
-<script src="body-map.js?v=450"></script>
-<script src="lube.js?v=450"></script>
-<script src="lube-overrides.js?v=450"></script>
-<script src="lube2027.js?v=450"></script>
-<script src="report-core.js?v=450"></script>
+<script src="grade.js?v=451"></script>
+<script src="edits.js?v=451"></script>
+<script src="due.js?v=451"></script>
+<script src="wear.js?v=451"></script>
+<script src="wear-figs.js?v=451"></script>
+<script src="wear-map.js?v=451"></script>
+<script src="machine-photos.js?v=451"></script>
+<script src="machine-fig.js?v=451"></script>
+<script src="get.js?v=451"></script>
+<script src="points.js?v=451"></script>
+<script src="uc-points.js?v=451"></script>
+<script src="inspect-guide.js?v=451"></script>
+<script src="get-figs.js?v=451"></script>
+<script src="body-points.js?v=451"></script>
+<script src="body-map.js?v=451"></script>
+<script src="lube.js?v=451"></script>
+<script src="lube-overrides.js?v=451"></script>
+<script src="lube2027.js?v=451"></script>
+<script src="report-core.js?v=451"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -7483,7 +7483,18 @@ function normDecAll(){ ["ucMM","tempV","tempA"].forEach(id=>{ const el=$(id); if
    disappears the moment the inspector moves to the next compartment — the
    reading was taken, it was on screen, and it is gone with nothing to say so.
    p.prod / p.other are the lubrication round's whole answer. */
-function hasData(p){ return (p.mm!=null&&p.mm!=="")||p.reason||p.grade||p.sev||p.action||p.prio||p.wo||(p.photos&&p.photos.length)||p.video||p.particle||p.comp||p.oil||p.comment||p.defect||p.cause||p.tempV||p.prod||p.other||p.samp||p.resp||p.target||p.opstat; }
+/* p.wo is NOT evidence — it is schedOrdersFor()'s own auto-stamp (see
+   loadPos()'s `if(!p.wo){ const w=roundWO(); ... }`), written onto whatever
+   position happens to be open the instant a round has a matching 1C order,
+   whether or not the inspector records anything there. Counting it as data
+   meant a position merely visited on a scheduled round, then reconsidered
+   and cleared back to nothing, could never become empty again: "has" stuck
+   on the position card for ever, the done/of-N count stayed inflated, and
+   tapping the same reason a second time silently failed to undo it — a
+   position nobody actually answered permanently read as one that was. The
+   report engine already got this right (mpEvidence()'s own `walked` filter
+   never checks `wo`); this brings the phone's live state into line with it. */
+function hasData(p){ return (p.mm!=null&&p.mm!=="")||p.reason||p.grade||p.sev||p.action||p.prio||(p.photos&&p.photos.length)||p.video||p.particle||p.comp||p.oil||p.comment||p.defect||p.cause||p.tempV||p.prod||p.other||p.samp||p.resp||p.target||p.opstat; }
 /* The ISO class that applies: derived from the grade, or the stored class on
    a record from before grades decided it. Everything that reasons about how
    bad a finding is in ISO terms — the priority hint, the 1C export code, the
@@ -7643,8 +7654,21 @@ function loadPos(){ causeGate();
      of a screen they have left. Filled from 1C's own plan for this machine
      and this round, only into an empty field, written into the record the
      same instant it appears (the pattern the target date uses) so what is on
-     screen and what is saved can never disagree, and overtyped freely. */
-  if(!p.wo){ const w=roundWO(); if(w){ curP().wo=w; p.wo=w; } }
+     screen and what is saved can never disagree, and overtyped freely.
+
+     But merely OPENING a position must not be what creates it. curP() is
+     the WRITE path — it materialises draft.positions[curItem] — and until
+     now this was the one call to it with no real inspector data behind it:
+     every position on a round tied to a 1C order got an entry the instant
+     it was looked at and left with nothing recorded, "has" lit on the card
+     forever, the done/of-N count inflated, and (per hasData()'s own note
+     above) a reason picked and un-picked on that position could never go
+     back to empty. The #wo field still shows the stamp immediately (p.wo=w,
+     read below) and saveCur() re-applies it from that field the moment the
+     position gains real data — so stamp it, then apply the SAME hasData
+     cleanup every other write to curP() already uses. */
+  if(!p.wo){ const w=roundWO(); if(w){ const cp=curP(); cp.wo=w; p.wo=w;
+    if(!hasData(cp)) delete draft.positions[curItem]; } }
   $("comment").value=p.comment||""; $("wo").value=p.wo||"";
   $("tempV").value=p.tempV||""; $("tempA").value=p.tempA||""; $("tempM").value=p.tempM||"IR";
   renderGrade(); renderSev(); updateActionBtn(); updatePrioBtn(); updateDetectBtn(); renderMedia(); updateDefectCauseBtns(); renderTempHint(); renderISOFold(); toggleCapture(); }
@@ -14371,7 +14395,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="450";
+const BUILD="451";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

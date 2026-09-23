@@ -158,7 +158,13 @@ async function phone(b, withDrive) {
     n.items.forEach(it => { if (map[it.key] && map[it.key].length) it.photos = map[it.key]; });
     const html = CMR.sections({ lang, mode:'unit', title:'x', titleAlt:'x', stamp:new Date(),
       sevLabel:s => s, sevLabelAlt:s => s, records:[n] }).map(s => s.html).join('');
-    return { imgs: (html.match(/<img[^>]+src="data:image/g) || []).length,
+    /* Excludes the masthead's own letterhead logo (mastHead(), every page) —
+       also an <img src="data:image/..."> (class="brand"), and always there
+       whether or not any real photograph is. A bare count over-counts the
+       round's own photographs by exactly one on every page it appears. */
+    const real = [...html.matchAll(/<img\s[^>]*src="data:image[^"]*"[^>]*>/g)]
+      .filter(m => !/class="brand"/.test(m[0]));
+    return { imgs: real.length,
              note: /offline|офлайн|could not be fetched/i.test(html) };
   });
   ok('all four are drawn on the pages', drawn.imgs === 4, drawn.imgs + ' images');
@@ -291,7 +297,10 @@ async function phone(b, withDrive) {
     else { n.note = t('rep_nophoto_off'); n.noteAlt = inOtherLang(() => t('rep_nophoto_off')); }
     const html = CMR.sections({ lang, mode:'unit', title:'x', titleAlt:'x', stamp:new Date(),
       sevLabel:s => s, sevLabelAlt:s => s, records:[n] }).map(s => s.html).join('');
-    return { reached: map !== null, imgs: (html.match(/<img[^>]+src="data:image/g) || []).length,
+    // excludes the masthead's own logo — see the identical note above.
+    const real = [...html.matchAll(/<img\s[^>]*src="data:image[^"]*"[^>]*>/g)]
+      .filter(m => !/class="brand"/.test(m[0]));
+    return { reached: map !== null, imgs: real.length,
              /* The drawing is built from files this phone already holds. It has
                 no business waiting on a folder, and it must survive one that
                 never answers — layout on a weak link, pictures too on a good

@@ -741,6 +741,21 @@
   .drwshots{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--s2);margin-bottom:var(--s3);}
   .drwshots img,.drwshots video{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:6px;
     background:var(--surface-2);cursor:zoom-in;display:block;}
+  /* The finding/position detail drawer (openPos()) reuses the gallery card's
+     OWN .pk/.pl/.cm/dl class names, since it renders the same shape of data
+     — but it is never inside a .pos .body ancestor, so every one of those
+     scoped rules (below, under .pos) silently never matched it: the key line,
+     the label, and a 20-row plain dl all fell back to unstyled default text.
+     Scoped here to #drwBody instead of wrapping the drawer in an actual
+     .pos card (which would also add that card's own border/background where
+     the drawer never had one) — the same visual treatment, without a nested
+     card the drawer never asked for. */
+  #drwBody .pk{font-weight:640;font-size:13px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+  #drwBody .pl{color:var(--muted);font-size:11.5px;margin-bottom:6px;}
+  #drwBody dl{margin:6px 0 0;display:grid;grid-template-columns:auto 1fr;gap:3px 10px;font-size:12px;}
+  #drwBody dt{color:var(--muted);} #drwBody dd{margin:0;text-align:right;}
+  #drwBody dd.warnv{color:var(--serious);font-weight:600;}
+  #drwBody .cm{margin-top:6px;font-size:12px;color:var(--ink-2);font-style:italic;}
   @media (prefers-reduced-motion:reduce){ .drw{transition:none;} }
   /* The machine drawer. Everything a reader wanted the tab-jump for, in the
      place they were already standing. */
@@ -3146,7 +3161,14 @@
     <div class="section">
       <div class="secthd"><h2 data-i18n="cw_h2">Defect work orders</h2>
         <span class="pgsub" data-i18n="cw_h2sub">One row per defect. 1C repeats a work order per line item, so a defect with two parts booked against it is shown once.</span></div>
-      <div class="toolbar">
+      <!-- .ddbar, not .toolbar — the class the two sibling tabs' own filter
+           rows use (Inspection Schedule, Plan vs Actual, above). .toolbar
+           has no CSS rule anywhere in this file, so this row stacked as
+           separate block lines (Status, Search, the checkbox, Export CSV
+           each on their own line) instead of one compact filter bar, the
+           same class-applied-to-nothing shape CLAUDE.md documents for
+           .btn.danger. -->
+      <div class="ddbar">
         <span class="spacer"></span>
         <label class="fld"><span data-i18n="cw_status">Status</span><select id="cwStatus"></select></label>
         <label class="fld"><span data-i18n="cw_find">Search</span>
@@ -3437,6 +3459,27 @@
         </div>
         <div class="secthd" style="margin-top:var(--s4)"><h2 data-i18n="sy_diag_h">Field diagnostics</h2></div>
         <ul class="synone" id="syDiag"></ul>
+        <!-- WHICH PHONES ARE ACTUALLY OUT THERE, WITHOUT A LOGIN THIS APP HAS
+             NEVER HAD. Identity here is the device, not a person — an
+             inspector types their own name on every round, never a username
+             — so this answers "is DEV_xxx still reaching the folder, on what
+             build, with what queue" rather than "who is logged in", which is
+             a question this app's architecture cannot ask. Built from what is
+             already collected for other reasons: every synced round already
+             carries `dev` and `created` (last activity, no network call);
+             the per-device diagnostic trace (_meta/diag, the same folder the
+             hourly review Routine already reads) adds the build and storage
+             figures on request, because fetching every device's own trace
+             file on every render would be one request per phone on every
+             paint — asked for once when this panel is opened, not kept
+             running. -->
+        <div class="secthd" style="margin-top:var(--s4)"><h2 data-i18n="sy_dev_h">Device activity</h2>
+          <span class="spacer"></span>
+          <button class="btn ghost sm" id="syDevRefresh" type="button" data-i18n="sy_dev_refresh">Check builds &amp; storage</button></div>
+        <div class="sub" id="syDevSub"></div>
+        <div class="tblwrap scrollbox" style="--sb:260px"><table class="grid" id="syDevTbl"></table></div>
+        <details class="method"><summary data-i18n="methodology">Methodology</summary>
+          <div class="sub" data-i18n="sy_dev_sub">Last activity and the last round sent come from every inspection already on the server — no extra request. Build and storage come from that phone's own diagnostic trace, fetched only when asked, because it is one request per phone rather than one per page load. A phone that has never sent a diagnostic trace shows activity with no build or storage figure, not zero.</div></details>
         <div class="secthd" style="margin-top:var(--s4)"><h2 data-i18n="sy_unknown">What this dashboard cannot check</h2></div>
         <ul class="synone" id="syUnknown"></ul>
         <details class="method"><summary data-i18n="methodology">Methodology</summary>
@@ -3677,23 +3720,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=450"></script>
+<script src="../data/magnetic_plug.js?v=451"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=450"></script>
-<script src="../mobile/hme.js?v=450"></script>
-<script src="../mobile/mp-fc.js?v=450"></script>
-<script src="../mobile/rtw.js?v=450"></script>
-<script src="../mobile/hme-cascade.js?v=450"></script>
-<script src="../mobile/temp-limits.js?v=450"></script>
+<script src="../data/work_orders.js?v=451"></script>
+<script src="../mobile/hme.js?v=451"></script>
+<script src="../mobile/mp-fc.js?v=451"></script>
+<script src="../mobile/rtw.js?v=451"></script>
+<script src="../mobile/hme-cascade.js?v=451"></script>
+<script src="../mobile/temp-limits.js?v=451"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=450"></script>
-<script src="../mobile/normalize.js?v=450"></script>
-<script src="../mobile/terms.js?v=450"></script>
+<script src="../mobile/assets.js?v=451"></script>
+<script src="../mobile/normalize.js?v=451"></script>
+<script src="../mobile/terms.js?v=451"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -3712,19 +3755,19 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=450"></script>
-<script src="../mobile/edits.js?v=450"></script>
-<script src="../mobile/due.js?v=450"></script>
-<script src="../mobile/wear.js?v=450"></script>
-<script src="../mobile/wear-map.js?v=450"></script>
-<script src="../mobile/lube.js?v=450"></script>
-<script src="../mobile/lube-overrides.js?v=450"></script>
-<script src="../mobile/lube2027.js?v=450"></script>
-<script src="../mobile/lube-tds.js?v=450"></script>
+<script src="../mobile/grade.js?v=451"></script>
+<script src="../mobile/edits.js?v=451"></script>
+<script src="../mobile/due.js?v=451"></script>
+<script src="../mobile/wear.js?v=451"></script>
+<script src="../mobile/wear-map.js?v=451"></script>
+<script src="../mobile/lube.js?v=451"></script>
+<script src="../mobile/lube-overrides.js?v=451"></script>
+<script src="../mobile/lube2027.js?v=451"></script>
+<script src="../mobile/lube-tds.js?v=451"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=450"></script>
-<script src="../mobile/machine-photos.js?v=450"></script>
+<script src="../mobile/upload-defaults.js?v=451"></script>
+<script src="../mobile/machine-photos.js?v=451"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3733,17 +3776,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=450"></script>
-<script src="../mobile/get.js?v=450"></script>
-<script src="../mobile/points.js?v=450"></script>
-<script src="../mobile/uc-points.js?v=450"></script>
-<script src="../mobile/inspect-guide.js?v=450"></script>
-<script src="../mobile/get-figs.js?v=450"></script>
-<script src="../mobile/body-points.js?v=450"></script>
-<script src="../mobile/body-map.js?v=450"></script>
-<script src="../mobile/jspdf.umd.min.js?v=450"></script>
-<script src="../mobile/html2canvas.min.js?v=450"></script>
-<script src="../mobile/report-core.js?v=450"></script>
+<script src="../mobile/machine-fig.js?v=451"></script>
+<script src="../mobile/get.js?v=451"></script>
+<script src="../mobile/points.js?v=451"></script>
+<script src="../mobile/uc-points.js?v=451"></script>
+<script src="../mobile/inspect-guide.js?v=451"></script>
+<script src="../mobile/get-figs.js?v=451"></script>
+<script src="../mobile/body-points.js?v=451"></script>
+<script src="../mobile/body-map.js?v=451"></script>
+<script src="../mobile/jspdf.umd.min.js?v=451"></script>
+<script src="../mobile/html2canvas.min.js?v=451"></script>
+<script src="../mobile/report-core.js?v=451"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -4106,6 +4149,15 @@ const I18N={
   sy_gap_none:"Every attachment is accounted for",
   sy_gap_none_s:"Each photograph and video these records name is on the server.",
   sy_diag:"Admin diagnostics", sy_diag_h:"Field diagnostics",
+  sy_dev_h:"Device activity", sy_dev_refresh:"Check builds & storage",
+  sy_dev_sub:"Last activity and the last round sent come from every inspection already on the server — no extra request. Build and storage come from that phone's own diagnostic trace, fetched only when asked, because it is one request per phone rather than one per page load. A phone that has never sent a diagnostic trace shows activity with no build or storage figure, not zero.",
+  sy_dev_col_dev:"Device", sy_dev_col_last:"Last activity", sy_dev_col_round:"Last round",
+  sy_dev_col_build:"Build", sy_dev_col_storage:"Storage",
+  sy_dev_none:"No device has synced a round yet.",
+  sy_dev_nodiag:"no trace received", sy_dev_checking:"Checking…",
+  sy_dev_err:"Could not fetch device diagnostics: {why}",
+  sy_dev_shown:"{n} device(s), by most recent activity",
+  sy_dev_stale:"{t} ago — over a day since this device was heard from",
   sy_d_empty:"Removed {n} completely empty inspection row(s) during import, across {r} inspection(s). No recorded information was affected.",
   sy_d_none:"Nothing to report — no records needed repair on import.",
   sy_d_unknown:"{n} field name(s) this build does not classify — {f}. Not treated as findings; reported so they can be classified.",
@@ -4993,6 +5045,15 @@ const I18N={
   sy_gap_none:"Все вложения на месте",
   sy_gap_none_s:"Каждое фото и видео, указанное в этих записях, есть на сервере.",
   sy_diag:"Диагностика (администратор)", sy_diag_h:"Диагностика полей",
+  sy_dev_h:"Активность устройств", sy_dev_refresh:"Проверить сборки и память",
+  sy_dev_sub:"Последняя активность и последний отправленный осмотр берутся из осмотров, уже находящихся на сервере — без дополнительного запроса. Сборка и объём памяти берутся из диагностического отчёта телефона и запрашиваются только по нажатию, потому что это один запрос на телефон, а не один на каждую загрузку страницы. Телефон, ни разу не отправивший диагностический отчёт, показывает активность без сборки и памяти, а не ноль.",
+  sy_dev_col_dev:"Устройство", sy_dev_col_last:"Последняя активность", sy_dev_col_round:"Последний осмотр",
+  sy_dev_col_build:"Сборка", sy_dev_col_storage:"Память",
+  sy_dev_none:"Ни одно устройство ещё не отправляло осмотр.",
+  sy_dev_nodiag:"отчёт не получен", sy_dev_checking:"Проверка…",
+  sy_dev_err:"Не удалось получить диагностику: {why}",
+  sy_dev_shown:"{n} устройств, по последней активности",
+  sy_dev_stale:"{t} назад — от этого устройства нет вестей больше суток",
   sy_d_empty:"При импорте удалено полностью пустых строк осмотра: {n}, в {r} осмотр(ах). Записанные данные не затронуты.",
   sy_d_none:"Сообщать нечего — при импорте ничего исправлять не потребовалось.",
   sy_d_unknown:"Неклассифицированных имён полей: {n} — {f}. Находками не считаются; сообщается для классификации.",
@@ -16357,6 +16418,63 @@ function bundledMedia(rec, m){
   const n = m && m.name;
   return !!(n && /^assets\/photos\//i.test(String(n)));
 }
+/* WHICH PHONES ARE ACTUALLY REACHING THE FOLDER — identity here is the
+   DEVICE, not a person (this app has no login; an inspector types their own
+   name on every round, never an account). Every synced round already
+   carries `dev` and `created`, so "last activity" and "last round" per
+   device cost nothing extra to compute — no network call, works offline,
+   as current as RECS itself. A round this browser only IMPORTED (no `dev`,
+   the sixteen bundled rounds and anything added by hand) is not a device's
+   activity — it never came off a phone. */
+function deviceActivity(){
+  const by=new Map();
+  (RECS||[]).forEach(r=>{
+    if(!r || !r.dev || r._void) return;
+    const at=Date.parse(r.created||"")||Date.parse(r.date||"")||0;
+    const cur=by.get(r.dev);
+    if(!cur || at>cur.at) by.set(r.dev, { dev:r.dev, at, equip:r.equip||"", type:r.type||"", date:r.date||"" });
+  });
+  return [...by.values()].sort((a,b)=>b.at-a.at);
+}
+/* THE PART THAT NEEDS A NETWORK CALL, KEPT SEPARATE AND ASKED FOR ONLY ONCE.
+   Build and storage are not on the round record — they only ever reach the
+   server on the phone's own diagnostic trace (_meta/diag, the same folder
+   the hourly diagnostic-review Routine reads). Fetching every device's own
+   trace on every paint of this admin panel would be one request per phone
+   on every render; this asks once, when the panel's own button is pressed,
+   and caches the answer until asked again. */
+let DEV_DIAG={}, DEV_DIAG_STATE={ tried:false, at:0, err:"" };
+async function refreshDeviceDiag(){
+  DEV_DIAG_STATE.tried=true; DEV_DIAG_STATE.err="";
+  if(!window.CMDrive || !CMDrive.configured()){ DEV_DIAG_STATE.err=t("sy_notlinked"); return; }
+  try{
+    const base=CMDrive.url, sec=CMDrive.secret;
+    const listUrl=new URL(base);
+    listUrl.searchParams.set("action","list"); listUrl.searchParams.set("folder","_meta/diag");
+    if(sec) listUrl.searchParams.set("secret",sec);
+    const lr=await fetch(listUrl.toString()); const lj=await lr.json();
+    if(!lj || lj.ok===false || !Array.isArray(lj.files)) throw new Error((lj&&lj.error)||"bad reply");
+    // the NEWEST trace per device — one fetch per device below, not one per file
+    const latest=new Map();
+    lj.files.forEach(f=>{
+      const dev=String(f.name||"").split("_")[0]; if(!dev) return;
+      const cur=latest.get(dev);
+      if(!cur || f.updated>cur.updated) latest.set(dev, f);
+    });
+    await Promise.all([...latest.entries()].map(async([dev,f])=>{
+      try{
+        const fu=new URL(base);
+        fu.searchParams.set("action","file"); fu.searchParams.set("id", f.id||f.path);
+        if(sec) fu.searchParams.set("secret",sec);
+        const fr=await fetch(fu.toString()); const fj=await fr.json();
+        if(!fj || !fj.data) return;
+        const trace=JSON.parse(atob(fj.data));
+        DEV_DIAG[dev]={ build:trace.build||"", pct:(trace.storage&&trace.storage.pct!=null)?trace.storage.pct:null, at:f.updated };
+      }catch(e){ /* one device's unreadable trace must not cost every other device its own */ }
+    }));
+    DEV_DIAG_STATE.at=Date.now();
+  }catch(e){ DEV_DIAG_STATE.err=String((e&&e.message)||e); }
+}
 function mediaPopulations(){
   const held=(()=>{ try{ return new Set(window.CMDrive&&CMDrive.names?CMDrive.names():[]); }
                     catch(e){ return new Set(); } })();
@@ -17061,6 +17179,35 @@ function renderSync(){
       const tr=e.target.closest("[data-quargo]"); if(!tr) return;
       e.preventDefault(); go(tr); });
   }
+  {
+    const devTbl=$("syDevTbl"), devSub=$("syDevSub");
+    if(devTbl){
+      const list=deviceActivity();
+      const STALE_MS=24*3600*1000;
+      const rows=list.map(d=>{
+        const diag=DEV_DIAG[d.dev];
+        const stale=d.at>0 && (Date.now()-d.at)>STALE_MS;
+        const lastTxt=esc(ago(d.at));
+        const lastCell=stale
+          ? `<span class="bad" title="${esc(t("sy_dev_stale",{t:ago(d.at)}))}">${lastTxt}</span>`
+          : lastTxt;
+        const roundCell=[d.equip, TYPE_LABEL[d.type]||d.type, d.date].filter(Boolean).map(esc).join(" · ");
+        const buildCell=diag ? esc(diag.build||"—") : `<span class="muted">${esc(t("sy_dev_nodiag"))}</span>`;
+        const pctCell=diag && diag.pct!=null ? esc(diag.pct)+"%" : (diag ? "—" : "");
+        return `<tr><td>${esc(d.dev)}</td><td>${lastCell}</td><td>${roundCell}</td><td>${buildCell}</td><td>${pctCell}</td></tr>`;
+      });
+      devTbl.innerHTML = rows.length
+        ? `<thead><tr><th>${esc(t("sy_dev_col_dev"))}</th><th>${esc(t("sy_dev_col_last"))}</th>`
+          + `<th>${esc(t("sy_dev_col_round"))}</th><th>${esc(t("sy_dev_col_build"))}</th>`
+          + `<th>${esc(t("sy_dev_col_storage"))}</th></tr></thead><tbody>${rows.join("")}</tbody>`
+        : `<tbody><tr><td class="empty">${esc(t("sy_dev_none"))}</td></tr></tbody>`;
+      if(devSub){
+        let msg=list.length ? t("sy_dev_shown",{n:list.length}) : "";
+        if(DEV_DIAG_STATE.err) msg += (msg?" · ":"") + t("sy_dev_err",{why:DEV_DIAG_STATE.err});
+        devSub.textContent=msg;
+      }
+    }
+  }
 }
 function renderNavCounts(){
   const nb=(id,n)=>{ const el=$(id); if(el) el.textContent=n>0?(n>99?"99+":String(n)):""; };
@@ -17359,6 +17506,16 @@ if($("cwPlanned")) $("cwPlanned").onchange=renderCmWoTab;
    quietly ignores the filters above it is the same number meaning two
    things depending on where you read it. */
 if($("cwCsv")) $("cwCsv").onclick=cwCsv;
+/* Fetched only on request, not on every render of this admin-only panel —
+   one GET for the folder listing plus one per device with a trace, never on
+   a page that never opens "Admin diagnostics" at all. */
+if($("syDevRefresh")) $("syDevRefresh").onclick=async()=>{
+  const b=$("syDevRefresh"); if(!b) return;
+  const was=b.textContent; b.disabled=true; b.textContent=t("sy_dev_checking");
+  await refreshDeviceDiag();
+  b.disabled=false; b.textContent=was;
+  if(CUR_TAB==="sync") renderSync();
+};
 if($("paQ")) $("paQ").oninput=renderPlanActualTab;
 if($("paWindow")) $("paWindow").onchange=renderPlanActualTab;
 if($("paType")) $("paType").onchange=renderPlanActualTab;
@@ -17514,8 +17671,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=450"></script>
-<script src="sync-adapter.js?v=450"></script>
-<script src="report.js?v=450"></script>
+<script src="drive.js?v=451"></script>
+<script src="sync-adapter.js?v=451"></script>
+<script src="report.js?v=451"></script>
 </body>
 </html>

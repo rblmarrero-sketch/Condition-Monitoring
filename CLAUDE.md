@@ -2355,6 +2355,158 @@ a non-RTW type, RTW's own strip staying untouched, and the office's own
 `normalizeRecs()` carrying the same three fields off a real sidecar — the
 same shape `tests/rtwoffice.cjs` already proved for RTW's four.
 
+**VIEWING A POSITION CAPTURED IT.** A multi-user/scale audit asked to test what
+50 inspectors doing ~70 rounds a day would do to this app found a machine that
+counted a plug as "captured" the moment its screen was opened, whether or not
+the inspector ever touched it. `loadPos()` stamps 1C's own work order onto
+whatever position is open — `roundWO()`, "only into an empty field" — and to
+do that it calls `curP()`, which unconditionally creates
+`draft.positions[curItem]` if nothing is there yet. That phantom entry then
+had `p.wo` set and nothing else, and `hasData(p)` counted `p.wo` as evidence:
+a round on any machine with a 1C work order open against it inflated its own
+"N of M done" count for every position an inspector so much as looked at on
+the way to the one they actually meant, and a reason picked and then picked
+again to un-pick it never actually returned the position to empty, because
+the `wo`-only entry was still sitting there counting as "has." `hasData()` no
+longer counts `p.wo`, and `loadPos()` deletes the entry it just created for
+the WO stamp alone if `hasData()` still says there is nothing else on it.
+One root cause, three previously-failing suites: `tests/uc.cjs` ("tapping the
+same reason again undoes it"), `tests/audit.cjs` ("no entry created by merely
+viewing"), `tests/iso.cjs` (the undercarriage fold, which depends on a
+position genuinely starting and returning to empty).
+
+**FIVE SUITES WERE READING A PAGE THAT HAD MOVED ON WITHOUT THEM.** The same
+audit pass, checking whether the test suite itself still describes the app,
+found five assertions asleep at the wheel — none a real defect, all of them
+a test that had quietly stopped testing anything:
+- `tests/photos4.cjs`, `tests/dashrpt.cjs`, `tests/rptmiss.cjs`,
+  `tests/teamphoto.cjs` all counted photographs with a bare
+  `<img src="data:image...">` match, which also matches the masthead's own
+  letterhead logo (`class="brand"`) on every report page — every one of
+  these suites was one photo over its true count on every assertion that
+  touched a rendered document. Fixed by excluding `class="brand"` (regex for
+  string HTML, `:not(.brand)` for live DOM). `photos4.cjs` also still
+  asserted the RETIRED CSS-grid gallery markup (`class="phg g4"`,
+  `grid-template-columns`) from before the cover-fit/4-column tile redesign
+  further up this file — rewritten against the current `.phgrow` /
+  `position:absolute;left:` markup, confirmed against real rendered output
+  (30 photographs + 1 logo = 31 images, 9 rows, all tiles the same 184×184).
+- `tests/rptfit.cjs` held a flat "narrow to 90% of full height" target for
+  its synthetic too-tight-room case, and unrelated report content had grown
+  enough since that number was chosen that 90% had become unreachable —
+  `CMR.fitPage` narrows a `.ucmaps` block to `CMR.FIT_MIN` (0.6) and gives
+  up, and the frames in this fixture are only ~168px of a 758px block, so
+  the achievable floor is ~689px, not the 682px the test still asked for.
+  Fixed by deriving the target from the actual measured frame height and
+  `CMR.FIT_MIN` — the app's own constant, not a copy of it, per this file's
+  own "ask the app, don't keep your own copy" rule.
+- `tests/grade5.cjs` re-derived grade 3's default target date with
+  `day(DUE.days(...))`, missing the "capped by 1C's next planned service"
+  rule `defaultTargetFor(3)` actually applies — invisible until live 1C
+  schedule data (refreshed hourly by this project's own automated job)
+  happened to move the real capped date earlier than the raw interval date
+  for this fixture's equipment. Fixed by calling `defaultTargetFor(3)`
+  directly.
+- `tests/swrescue.cjs` reverted the schedule-kick code back to a pre-328
+  shape with an exact-text `.replace()`, and a later, unrelated fix (RTW's
+  own entry card, which needed the same repaint signal) had changed that
+  code's exact shape — the `.replace()` silently no-op'd, so the "broken"
+  build under test was actually already running the modern, non-looping
+  code, and the freeze this suite exists to reproduce never happened; the
+  suite still reported PASS because nothing it checked contradicted that.
+  Fixed with a shape-based match (mirroring the file's own `stripBreaker`)
+  and a loud failure guard — `console.error` + `process.exit(1)` — if the
+  shape it is looking for ever moves again.
+
+**THE SAME TOCTOU RACE HAD TWO CHANCES TO STAY HIDDEN AND TOOK BOTH.** The
+multi-user audit's live question — 50 inspectors, ~70 rounds a day,
+synchronising together — pointed at `saveOne()` (`docs/yandex/function.js`):
+its only rival check is `headObj(key0)` BEFORE this device writes. Two
+phones filing the same round close enough together can both pass that check
+seeing no owner, both write straight to the primary key, and the existing
+hand-over rival handling never fires for either. Whichever device's own
+read-after-write verify happens to run AFTER the other device's write lands
+gets back bytes it did not send.
+
+The first fix written for this gated the new check on `!verifyError` —
+reasoning that "verify after storage" would only be fooled by a race where
+both devices happened to write byte-identical content (the one case that
+verifies clean with no error at all). That reasoning solved a case that
+almost never happens and missed the one that does: two inspectors' findings
+on the same plug are not identical, so the read-back disagrees with `want`
+and the EXISTING code already labels it `verifyError: 'stored bytes do not
+match what was sent'` — true, and the wrong diagnosis. Read that way alone,
+it tells the phone to retry; a retry re-heads the same key, still finds a
+hash that is not its own, and writes straight over the rival again, with
+neither device ever told a second person is involved. Gating the new check
+on `!verifyError` excluded exactly the race it was written to catch — found
+by writing the test for it (`tests/toctou.cjs`), not by inspection: the
+fixture's own two devices sending genuinely different content failed 7 of
+12 assertions the first time it ran, against the "fixed" code.
+
+The corrected condition drops `!verifyError` and reads the owner metadata
+as the discriminator instead of the hash: if the object's CURRENT owner is a
+real device that is not this one, someone else's write landed in between,
+whether or not the bytes also happen to differ. This device's own bytes
+move to their own `~dev` variant and a conflict is raised — the same
+hand-over mechanism the sequential case already uses, applied one step
+later, on this device's own bytes, exactly as if the rival had been seen
+before the write instead of after it. A genuine duplicate (this SAME device
+resending bytes it already stored, verified clean before this check ever
+runs) is still excluded — nothing was lost there, so nothing needs moving —
+and a read-back that failed outright rather than disagreeing carries no
+owner at all, so it is left as a plain read failure, never guessed at as a
+rival.
+
+`tests/toctou.cjs` cannot force a genuine two-connection race reliably (the
+interleaving needed depends on which microtask slot two independent fetches
+happen to resume on — exactly what makes a naive `Promise.all()` version of
+this pass on one machine and miss the window on the next), so it loads the
+real `docs/yandex/function.js` the way `ya-srv.cjs` does and instruments
+`getObj()` to inject "the other device's write already landed" at the one
+instant that matters — inside this device's own first post-write verify
+read for a chosen key — instead of hoping two real requests line up.
+Confirmed non-vacuous: reverted to the pre-fix code, the same fixture fails
+7 of its 12 assertions. A second control proves the `!duplicate` guard is
+not dead code (a real resend, with the owner metadata flipped mid-verify to
+someone else's, is still answered as a duplicate, never as a rival), and a
+third proves the instrumentation itself does not disturb an ordinary solo
+save. `docs/google-upload.gs` needs no equivalent change: this project's own
+"field-for-field" rule for that retired backend is about the RECEIPT shape
+agreeing, not internal race-handling, and this fix changes neither the
+receipt's fields nor their meaning.
+
+**TWO DASHBOARD SCREENS WERE STYLED FOR A CLASS THEY DID NOT CARRY.** The
+same audit's visual pass found the Data & Sync tab's Defect-work-orders
+filter row (`#cwStatus`/search/Export CSV) stacked as four separate block
+rows instead of one compact bar — it used `class="ddbar"`... no, it used
+`class="toolbar"`, and `.toolbar` has no CSS rule anywhere in this file; the
+two sibling tabs' own filter rows (Inspection Schedule, Plan vs Actual) both
+use `.ddbar`, which does. Fixed by matching the sibling tabs' own class.
+Separately, `openPos()`'s finding-detail drawer (`#drwBody`) renders the
+exact same `.pk`/`.pl`/`.cm`/`<dl>` markup the Equipment History gallery
+card (`.pos .body`) uses — but every one of those rules is scoped under
+`.pos .body`, which the drawer is not inside, so none of them ever matched
+and the drawer fell back to unstyled browser-default `dl`/`dt`/`dd`. Given
+`#drwBody`-scoped copies of the same rules (not a `.pos` wrapper, which
+would also add that card's own border/background the drawer never had).
+Both confirmed visually via Playwright screenshot.
+
+**A DEVICE ACTIVITY PANEL, BUILT FROM WHAT THE APP ALREADY COLLECTS.** The
+same multi-user audit asked whether the office can see who is using the app
+and when — this fleet has no login, an inspector types a name per round and
+the phone's own device id is the only durable identity. Rather than build a
+login system, the Data & Sync tab's Admin diagnostics section gained a
+**Device activity** table: last-seen time and last round PER DEVICE, derived
+entirely from `RECS` already loaded (`deviceActivity()`, no network call,
+so it costs nothing to show), plus an on-demand "Check builds & storage"
+button that lazily fetches each device's newest `_meta/diag` trace for its
+BUILD number and storage percentage (`refreshDeviceDiag()`) — never
+automatic, since it is a folder listing plus one file per device and this
+tab already has enough automatic traffic. A device silent for more than a
+day is flagged in the "Last activity" column, the same way a stale queue is
+flagged elsewhere on this page.
+
 ---
 
 ## Secrets

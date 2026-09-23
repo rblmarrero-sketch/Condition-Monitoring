@@ -151,9 +151,17 @@ const SEED=fs.readFileSync('e2e.cjs','utf8').match(/const SEED = `([\s\S]*?)`;/)
       records: window.CMReport.normalise([rec], { photos: true }) });
     const html = secs.map(s => s.html).join('');
     /* A photograph now sits in the position it belongs to rather than in a
-       gallery at the end — one page, the picture beside its own findings. */
-    return { on, off, blocks: secs.filter(s => /<img[^>]+src="data:image/.test(s.html)).length,
-      imgs: (html.match(/<img[^>]+src="data:image/g) || []).length };
+       gallery at the end — one page, the picture beside its own findings.
+       The masthead's own brand logo (mastHead(), every page, every round)
+       is ALSO an <img src="data:image/..."> — class="brand" — so a bare
+       "does this section have any data: image" regex counts the letterhead
+       as a captured photograph on every single-round report ever generated.
+       Excluded here by name, not by position, so it can never silently
+       start matching again if the masthead markup is reordered. */
+    const isPhoto = html => [...html.matchAll(/<img\s[^>]*src="data:image[^"]*"[^>]*>/g)]
+      .filter(m => !/class="brand"/.test(m[0]));
+    return { on, off, blocks: secs.filter(s => isPhoto(s.html).length).length,
+      imgs: isPhoto(html).length };
   });
   ok('a photograph on the shared drive is found by name', !ph.err && ph.on.length === 2,
     JSON.stringify(ph.on || ph.err));

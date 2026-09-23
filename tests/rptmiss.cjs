@@ -111,10 +111,15 @@ const GOOD = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJ
     d.style.cssText = "position:fixed;left:-99999px;top:0;width:760px;";
     d.innerHTML = secs.map(s => '<div class="secwrap">' + s.html + "</div>").join("");
     document.body.appendChild(d);
-    const before = d.querySelectorAll("img").length;
+    /* :not(.brand) — the masthead's own letterhead logo (mastHead(), every
+       page) is an <img> too, and always loads (it is an embedded data URI),
+       so a bare "img" count both over-counts the position's own photographs
+       and can never reach 0 after settling, no matter how many broken
+       photos are dropped. Excluded by its own class, not by position. */
+    const before = d.querySelectorAll("img:not(.brand)").length;
     const dropped = await window.CMR.settleImages(d, 6000);
     const r = { before, dropped, after: d.querySelectorAll("figure").length,
-                imgs: d.querySelectorAll("img").length,
+                imgs: d.querySelectorAll("img:not(.brand)").length,
                 gap: /not reached|Evidence/i.test(d.textContent) };
     d.remove();
     return r;

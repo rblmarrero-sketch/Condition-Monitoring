@@ -153,8 +153,25 @@ const LAY = ([bi]) => {
     const el = d.children[0], full = el.getBoundingClientRect().height;
     const maps = el.querySelector(".ucmaps");
     const r = {};
-    /* A room a little under what it needs: it must narrow, and land inside. */
-    const tight = Math.round(full * 0.9);
+    /* A room a little under what it needs: it must narrow, and land inside.
+       "A little under" cannot be a flat percentage of the WHOLE block —
+       fitPage() only ever narrows the .ucmap frames themselves, never the
+       key or caption text beneath them, and on this fixture the two frames
+       are ~168px of a 758px block. A flat 90%-of-full target (682px) asks
+       for 76px of headroom the frames' own floor (CMR.FIT_MIN) can supply
+       at most ~67px of — a target that was reachable when this test was
+       written and stopped being reachable the day unrelated key/caption
+       text grew, with fitPage() correctly reporting "cannot be done" for a
+       block it never actually failed to narrow as far as it could. Derived
+       instead from what the frames can ACTUALLY give up — the read the
+       app's own FIT_MIN off CMR rather than copying it, per this project's
+       own "tests must ask the app, not keep their own copy" rule — so the
+       target self-adjusts with the fixture instead of eroding out from
+       under it. */
+    const frameH = Math.max(...[...maps.querySelectorAll(".ucmap")]
+      .map(f => f.getBoundingClientRect().height));
+    const maxReach = frameH * (1 - CMR.FIT_MIN);
+    const tight = Math.round(full - maxReach * 0.5);   // half the achievable range — narrowing required, floor nowhere near
     r.took = CMR.fitPage(el, tight);
     r.h = Math.round(el.getBoundingClientRect().height); r.tight = tight;
     r.width = maps.style.width;
