@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-09-24T10:43:03+00:00",
+  "generated": "2026-09-24T10:58:02+00:00",
   "source": "https://askpi.94-131-94-152.sslip.io/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 680,
@@ -400,13 +400,13 @@ window.CM_WO_DATA = {
     "wo": "Work order number"
   },
   "cmDateFrom": {
-    "raised": 72,
+    "raised": 74,
     "detected": 0,
     "planStart": 0
   },
   "cmCauseFrom": {
     "wo": 42,
-    "wr": 30,
+    "wr": 32,
     "cert": 0,
     "none": 0
   },
@@ -419,6 +419,50 @@ window.CM_WO_DATA = {
     "Bekzhan"
   ],
   "cmWorkOrders": [
+    {
+      "date": "2026-09-24",
+      "dateFrom": "raised",
+      "raised": "2026-09-24",
+      "detected": "2026-09-24",
+      "planStart": null,
+      "asset": "TK151",
+      "defect": "DD-00013292",
+      "requestNo": "DD-00013292",
+      "eqType": "TRUCK, DUMP",
+      "system": "TK151.CH.AL (Central Lubrication System / Централизованная система смазки)",
+      "priority": "P4 Planned (Repair)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "cause": "Хрупкое разрушение",
+      "causeFrom": "wr",
+      "descr": "Оторван штуцер ЦСС реактивной тяги.",
+      "status": "Registered",
+      "by": "Slam",
+      "woNumber": null,
+      "maintType": null,
+      "planned": false
+    },
+    {
+      "date": "2026-09-24",
+      "dateFrom": "raised",
+      "raised": "2026-09-24",
+      "detected": "2026-09-24",
+      "planStart": null,
+      "asset": "TK103",
+      "defect": "DD-00013290",
+      "requestNo": "DD-00013290",
+      "eqType": "TRUCK, ARTICULATED",
+      "system": "TK103.CH.BED (Bed / Кузов)",
+      "priority": "P4 Planned (Repair)",
+      "defectType": "2.01 Wear / Износ",
+      "cause": "Абразивный износ",
+      "causeFrom": "wr",
+      "descr": "По сварным швам и на наружной поверхности кузова выявлены трещины",
+      "status": "Registered",
+      "by": "Slam",
+      "woNumber": null,
+      "maintType": null,
+      "planned": false
+    },
     {
       "date": "2026-09-23",
       "dateFrom": "raised",
@@ -10555,15 +10599,15 @@ window.CM_WO_DATA = {
       "cmLabel": "500h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-09-22",
-      "planStartDt": "2026-09-22T00:00:00",
+      "planStartDt": "2026-09-22T08:30:00",
       "planEnd": "2026-09-23",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-09-22",
+      "actualStartDt": "2026-09-22T08:30:00",
+      "actualEnd": "2026-09-23"
     },
     {
       "equip": "DZ010",
