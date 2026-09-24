@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-24T18:43:13+00:00",
+  "generated": "2026-09-24T19:18:06+00:00",
   "byUnit": {
     "BL001": [
       {
@@ -2939,18 +2939,6 @@
       "plan": "2026-08-01"
     },
     {
-      "wo": "GD-023130",
-      "equip": "CD009",
-      "cls": "GEN",
-      "comp": "",
-      "desc": "250h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-08-01",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-08-01"
-    },
-    {
       "wo": "GD-023133",
       "equip": "CD009",
       "cls": "GEN",
@@ -2960,6 +2948,18 @@
       "raised": "2026-08-01",
       "type": "1000 Hours service Planned",
       "hours": 1000,
+      "plan": "2026-08-01"
+    },
+    {
+      "wo": "GD-023130",
+      "equip": "CD009",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-08-01",
+      "type": "250 Hours service Planned",
+      "hours": 250,
       "plan": "2026-08-01"
     },
     {
