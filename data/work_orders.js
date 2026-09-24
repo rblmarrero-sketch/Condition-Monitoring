@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-09-24T02:38:17+00:00",
+  "generated": "2026-09-24T03:33:06+00:00",
   "source": "https://askpi.94-131-94-152.sslip.io/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 677,
@@ -317,7 +317,7 @@ window.CM_WO_DATA = {
     "WE011"
   ],
   "duplicateRowsCollapsed": 206,
-  "roundsDedupedWithinVisit": 2,
+  "roundsDedupedWithinVisit": 6,
   "columns": [
     "Asset description",
     "Asset old no",
@@ -2011,8 +2011,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015796",
       "maintType": "4000 Hours service Planned",
       "hours": 4000,
-      "cmLabel": "4000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -2030,8 +2032,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016315",
       "maintType": "4000 Hours service Planned",
       "hours": 4000,
-      "cmLabel": "4000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -2049,8 +2053,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002975",
       "maintType": "4000 Hours service Planned",
       "hours": 4000,
-      "cmLabel": "4000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -2068,8 +2074,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010173",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "PCNF",
       "cmmsStatus": "In progress",
@@ -2106,8 +2114,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-017742",
       "maintType": "4000 Hours service Planned",
       "hours": 4000,
-      "cmLabel": "4000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -2144,8 +2154,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002976",
       "maintType": "4000 Hours service Planned",
       "hours": 4000,
-      "cmLabel": "4000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -2163,8 +2175,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015337",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -2277,8 +2291,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023358",
       "maintType": "4000 Hours service Planned",
       "hours": 4000,
-      "cmLabel": "4000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -2315,8 +2331,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-001587",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -2353,8 +2371,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007952",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -2391,8 +2411,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012933",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -2467,8 +2489,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022919",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -2486,8 +2510,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024930",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -2524,8 +2550,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003773",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -2562,8 +2590,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-011244",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -2581,8 +2611,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013919",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -2619,8 +2651,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024259",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -2657,8 +2691,10 @@ window.CM_WO_DATA = {
       "woNumber": null,
       "maintType": "4000 Hours service Planned",
       "hours": 4000,
-      "cmLabel": "4000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": null,
       "cmmsStatus": "Registered",
@@ -2676,8 +2712,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023354",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -2695,8 +2733,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-001306",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -2733,8 +2773,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-005055",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -2771,8 +2813,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010202",
       "maintType": "4000 Hours service Planned",
       "hours": 4000,
-      "cmLabel": "4000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -2790,8 +2834,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006903",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -2847,8 +2893,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013888",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -2961,8 +3009,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024258",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -3037,8 +3087,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023088",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -3075,8 +3127,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013889",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CRTD",
       "cmmsStatus": "Elimination scheduled",
@@ -3094,8 +3148,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-014384",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -3227,8 +3283,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024931",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -3284,8 +3342,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023112",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -3360,8 +3420,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016916",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -3398,8 +3460,10 @@ window.CM_WO_DATA = {
       "woNumber": null,
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": null,
       "cmmsStatus": "Registered",
@@ -3455,8 +3519,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024926",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -3474,8 +3540,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-009871",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P4 Planned (Repair)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -3512,8 +3580,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023133",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -3588,8 +3658,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-014356",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -3683,8 +3755,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025448",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -3759,8 +3833,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023195",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -3854,8 +3930,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016935",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -3892,8 +3970,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000737",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -3930,8 +4010,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024914",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -3968,8 +4050,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003787",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -3987,8 +4071,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008653",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4006,8 +4092,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015854",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4063,8 +4151,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023639",
       "maintType": "4000 Hours service Planned",
       "hours": 4000,
-      "cmLabel": "4000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4101,8 +4191,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003792",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4120,8 +4212,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002195",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4139,8 +4233,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015359",
       "maintType": "4000 Hours service Planned",
       "hours": 4000,
-      "cmLabel": "4000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4158,8 +4254,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-017397",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -4177,8 +4275,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-017741",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -4196,8 +4296,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010185",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4215,8 +4317,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015856",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4272,8 +4376,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-014871",
       "maintType": "4000 Hours service Planned",
       "hours": 4000,
-      "cmLabel": "4000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4291,8 +4397,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016888",
       "maintType": "4000 Hours service Planned",
       "hours": 4000,
-      "cmLabel": "4000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -4310,8 +4418,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022115",
       "maintType": "4000 Hours service Planned",
       "hours": 4000,
-      "cmLabel": "4000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4329,8 +4439,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024908",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4367,8 +4479,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008654",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4386,8 +4500,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015954",
       "maintType": "4000 Hours service Planned",
       "hours": 4000,
-      "cmLabel": "4000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4462,8 +4578,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024893",
       "maintType": "4000 Hours service Planned",
       "hours": 4000,
-      "cmLabel": "4000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4481,8 +4599,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015953",
       "maintType": "4000 Hours service Planned",
       "hours": 4000,
-      "cmLabel": "4000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4500,8 +4620,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-020555",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -4519,8 +4641,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022230",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4576,8 +4700,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002197",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -4595,8 +4721,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003790",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4633,8 +4761,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015371",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4652,8 +4782,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021587",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4671,8 +4803,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024513",
       "maintType": "4000 Hours service Planned",
       "hours": 4000,
-      "cmLabel": "4000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4709,8 +4843,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-011248",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4747,8 +4883,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016268",
       "maintType": "4000 Hours service Planned",
       "hours": 4000,
-      "cmLabel": "4000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CNF",
       "cmmsStatus": "Completed",
@@ -4785,8 +4923,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021061",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4823,8 +4963,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025934",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4861,8 +5003,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008011",
       "maintType": "4000 Hours service Planned",
       "hours": 4000,
-      "cmLabel": "4000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4880,8 +5024,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016282",
       "maintType": "4000 Hours service Planned",
       "hours": 4000,
-      "cmLabel": "4000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CNF",
       "cmmsStatus": "Completed",
@@ -4918,8 +5064,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022879",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4956,8 +5104,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-004720",
       "maintType": "4000 Hours service Planned",
       "hours": 4000,
-      "cmLabel": "4000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -4994,8 +5144,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016926",
       "maintType": "3000 Hours service Planned",
       "hours": 3000,
-      "cmLabel": "3000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -5013,8 +5165,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-014376",
       "maintType": "4000 Hours service Planned",
       "hours": 4000,
-      "cmLabel": "4000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -5051,8 +5205,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016936",
       "maintType": "3000 Hours service Planned",
       "hours": 3000,
-      "cmLabel": "3000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -5108,8 +5264,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000053",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -5146,8 +5304,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010186",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -5203,8 +5363,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024939",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -5241,8 +5403,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-005086",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -17821,8 +17985,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007401",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -17859,8 +18025,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023641",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -17897,8 +18065,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-001338",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -17935,8 +18105,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007390",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -17992,8 +18164,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022881",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -18030,8 +18204,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006268",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -18068,8 +18244,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016885",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CNF",
       "cmmsStatus": "Completed",
@@ -18087,8 +18265,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-004504",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -18144,8 +18324,10 @@ window.CM_WO_DATA = {
       "woNumber": null,
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": null,
       "cmmsStatus": "Registered",
@@ -18163,8 +18345,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021528",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -18201,8 +18385,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025582",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -18239,8 +18425,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006875",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -18258,8 +18446,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016910",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "PCNF",
       "cmmsStatus": "In progress",
@@ -18277,8 +18467,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022126",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -18315,8 +18507,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025593",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -18372,8 +18566,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003803",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -18391,8 +18587,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016246",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "MACH",
       "cmmsStatus": "Elimination scheduled",
@@ -18524,8 +18722,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016313",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CNF",
       "cmmsStatus": "Completed",
@@ -18543,8 +18743,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021533",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -18600,8 +18802,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000607",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -18676,8 +18880,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006245",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -18752,8 +18958,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-009166",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -18847,8 +19055,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013508",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -18980,8 +19190,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000608",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -19113,8 +19325,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-009167",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -19151,8 +19365,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-017549",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -19227,8 +19443,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021534",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -19360,8 +19578,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003794",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -19417,8 +19637,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007976",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -19721,8 +19943,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006904",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -19797,8 +20021,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-009602",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -19930,8 +20156,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015799",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -19987,8 +20215,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-017695",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -20063,8 +20293,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025590",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -20120,8 +20352,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003772",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -20196,8 +20430,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007978",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -20272,8 +20508,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-011262",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -20367,8 +20605,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015328",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -20424,8 +20664,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-017386",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -20481,8 +20723,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023666",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -20500,8 +20744,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024488",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -20633,8 +20879,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006887",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -20652,8 +20900,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008625",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -20671,8 +20921,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010758",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -20766,8 +21018,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016933",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -20785,8 +21039,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-001352",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -20823,8 +21079,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-004496",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -20975,8 +21233,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025447",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -21089,8 +21349,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012345",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -21184,8 +21446,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016271",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CNF",
       "cmmsStatus": "Completed",
@@ -21222,8 +21486,10 @@ window.CM_WO_DATA = {
       "woNumber": null,
       "maintType": "4000 Hours service Planned",
       "hours": 4000,
-      "cmLabel": "4000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": null,
       "cmmsStatus": "Registered",
@@ -21241,8 +21507,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013805",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -21260,8 +21528,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015101",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -21317,8 +21587,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016852",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -21412,8 +21684,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021712",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -21450,8 +21724,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025920",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -21488,8 +21764,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003774",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -21526,8 +21804,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007979",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -21659,8 +21939,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000611",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -21697,8 +21979,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-005075",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -21735,8 +22019,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-009170",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -21773,8 +22059,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016898",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -21792,8 +22080,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-020505",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -21830,8 +22120,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024933",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -21868,8 +22160,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002160",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -21906,8 +22200,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007423",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -21944,8 +22240,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022371",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -22001,8 +22299,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023657",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -22039,8 +22339,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-001359",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -22115,8 +22417,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-009552",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -22172,8 +22476,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006247",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -22210,8 +22516,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022891",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -22248,8 +22556,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022886",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -22609,8 +22919,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025570",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -22647,8 +22959,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-004719",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -22685,8 +22999,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008616",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -22723,8 +23039,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-011851",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -22761,8 +23079,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-014838",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -22856,8 +23176,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002149",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -22894,8 +23216,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006880",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -23065,8 +23389,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025861",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -23103,8 +23429,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-001346",
       "maintType": "4000 Hours service Planned",
       "hours": 4000,
-      "cmLabel": "4000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -23179,8 +23507,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006250",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -23274,8 +23604,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-011245",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -23331,8 +23663,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025862",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -23369,8 +23703,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-001347",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -23445,8 +23781,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006907",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -23521,8 +23859,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010756",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -23597,8 +23937,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016887",
       "maintType": "4000 Hours service Planned",
       "hours": 4000,
-      "cmLabel": "4000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CNF",
       "cmmsStatus": "Completed",
@@ -23616,8 +23958,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025863",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -23711,8 +24055,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016923",
       "maintType": "4000 Hours service Planned",
       "hours": 4000,
-      "cmLabel": "4000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -23730,8 +24076,10 @@ window.CM_WO_DATA = {
       "woNumber": null,
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": null,
       "cmmsStatus": "Registered",
@@ -23749,8 +24097,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025865",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -23768,8 +24118,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025866",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -23787,8 +24139,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012343",
       "maintType": "4000 Hours service Planned",
       "hours": 4000,
-      "cmLabel": "4000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -23825,8 +24179,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016867",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CNF",
       "cmmsStatus": "Completed",
@@ -23901,8 +24257,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012934",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -23977,8 +24335,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015809",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -24110,8 +24470,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-017369",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -24224,8 +24586,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012953",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -29820,8 +30184,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-020507",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -29839,8 +30205,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023663",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -29858,8 +30226,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-004513",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -29896,8 +30266,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015811",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -29915,8 +30287,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-020508",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -29953,8 +30327,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024492",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -29972,8 +30348,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025445",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -30010,8 +30388,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-020509",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -30048,8 +30428,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002786",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -30067,8 +30449,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-020991",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -30105,8 +30489,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025426",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -30181,8 +30567,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015814",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -30219,8 +30607,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024508",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -30295,8 +30685,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008629",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -30371,8 +30763,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022094",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -30466,8 +30860,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006258",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -30504,8 +30900,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022225",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -30542,8 +30940,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025554",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -30599,8 +30999,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-004502",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -30637,8 +31039,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-017399",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -30675,8 +31079,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022231",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -30713,8 +31119,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025557",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -30751,8 +31159,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021538",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -30789,8 +31199,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025454",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -30846,8 +31258,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003778",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -30903,8 +31317,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-017381",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "MACH",
       "cmmsStatus": "Elimination scheduled",
@@ -30941,8 +31357,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-020993",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -30979,8 +31397,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024895",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -31074,8 +31494,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-004512",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -31112,8 +31534,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007982",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -31169,8 +31593,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022902",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -31188,8 +31614,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024480",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -31207,8 +31635,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025763",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -31226,8 +31656,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-001369",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -31264,8 +31696,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-020994",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -31321,8 +31755,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000056",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -31397,8 +31833,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-004509",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -31416,8 +31854,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008630",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -31454,8 +31894,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-020995",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -31625,8 +32067,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022237",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -31644,8 +32088,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024494",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -31663,8 +32109,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025563",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -31758,8 +32206,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016870",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CNF",
       "cmmsStatus": "Completed",
@@ -31777,8 +32227,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-020996",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -31815,8 +32267,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025441",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -31910,8 +32364,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023664",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -31929,8 +32385,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025237",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -31967,8 +32425,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-001374",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -31986,8 +32446,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003784",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -32100,8 +32562,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008655",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -32157,8 +32621,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-017372",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -32461,8 +32927,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015277",
       "maintType": "4000 Hours service Planned",
       "hours": 4000,
-      "cmLabel": "4000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -33343,8 +33811,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025450",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -33362,8 +33832,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006872",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -33419,8 +33891,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016930",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -33438,8 +33912,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021547",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -33476,8 +33952,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025935",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -33514,8 +33992,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-004491",
       "maintType": "4000 Hours service Planned",
       "hours": 4000,
-      "cmLabel": "4000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -33533,8 +34013,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007998",
       "maintType": "4000 Hours service Planned",
       "hours": 4000,
-      "cmLabel": "4000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -50349,8 +50831,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007963",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -50368,8 +50852,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021531",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -50406,8 +50892,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025439",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -50444,8 +50932,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006878",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -50501,8 +50991,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016881",
       "maintType": "4000 Hours service Planned",
       "hours": 4000,
-      "cmLabel": "4000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CNF",
       "cmmsStatus": "Completed",
@@ -50539,8 +51031,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-020977",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -50577,8 +51071,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024923",
       "maintType": "4000 Hours service Planned",
       "hours": 4000,
-      "cmLabel": "4000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -50615,8 +51111,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002778",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -50634,8 +51132,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010178",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -50672,8 +51172,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-017390",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -50710,8 +51212,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-014859",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -53807,8 +54311,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021008",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -53845,8 +54351,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024898",
       "maintType": "4000 Hours service Planned",
       "hours": 4000,
-      "cmLabel": "4000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -53883,8 +54391,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003782",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -53921,8 +54431,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-009556",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -53959,8 +54471,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008637",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -54035,8 +54549,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024509",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -54073,8 +54589,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002179",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -54111,8 +54629,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007394",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -54149,8 +54669,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-005053",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -54187,8 +54709,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012294",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -54225,8 +54749,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021033",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -54263,8 +54789,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024903",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -54301,8 +54829,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003780",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -54358,8 +54888,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-009514",
       "maintType": "4000 Hours service Planned",
       "hours": 4000,
-      "cmLabel": "4000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -54396,8 +54928,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016921",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CNF",
       "cmmsStatus": "Completed",
@@ -54434,8 +54968,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022893",
       "maintType": "4000 Hours service Planned",
       "hours": 4000,
-      "cmLabel": "4000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -54472,8 +55008,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-026134",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -54510,8 +55048,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006920",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
-      "cmLabel": "2000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -54548,8 +55088,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010198",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -54586,8 +55128,10 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015423",
       "maintType": "4000 Hours service Planned",
       "hours": 4000,
-      "cmLabel": "4000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -54719,8 +55263,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-020464",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "1000h service",
-      "cmTypes": null,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
