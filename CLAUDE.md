@@ -2618,6 +2618,45 @@ match against the exact three-record shape (a real drill, a legitimate
 DR-prefixed system code, and the Hydraulic decoy) that reproduced the
 field report.
 
+**A SINGLE SEARCH BOX CANNOT ASK FOR ONE COLUMN, SO THE COLUMN GOT ITS OWN.**
+Read plainly, the same day, once `DRS` turned out to be a fleet-wide
+system-code prefix (Engine, Cooling, Fuel, Power Take-Off — not a
+drill-specific one): "still not working. We need filter and sort as well
+why cant we just put a search/filter on top of the header." The
+word-boundary fix above was correct as far as it went — it closed the
+"Hydraulic" collision — but a free-text search across nine fields, asked to
+find "the DR machines," has no way to prefer the Asset column over a system
+code that also happens to start with the same two letters, because it was
+never told there IS an Asset column to prefer.
+
+Defect work orders now carries the same sortable-column header the Fleet
+table (`fleetSort`) and Plan vs Actual (`paSort`) already use — click a
+header, `cwSort` flips its direction, the arrow says which — plus a SECOND
+header row, one plain filter input per column (`cwColQ`, keyed the same way
+`CW_COLS` names them), each reading only its OWN column through the same
+`cwWordMatch()` the free-text box already uses. Typing "DR" into the Asset
+column's own input now finds DR007/DR009/DR010 and nothing else — a system
+code elsewhere on the row is a different column's fact, and a different
+column's filter, matching what "on top of the header" actually asked for.
+`cwQ` (the single free-text box) is kept, unchanged — it is still the
+fastest way to find one defect by any of its words when the reader does not
+yet know which column it is in.
+
+The one real risk a filter INSIDE a table this function already rebuilds
+wholesale on every keystroke introduces: an input a rebuild replaces out
+from under the reader's own cursor reads as a box that accepts one letter
+and then stops responding — this project's own "a button that refuses a
+press must look like one" shape, one layer further in, for typing instead
+of tapping. `renderCmWoTab()` now captures which `.cwcf` input holds focus
+and where its caret sits BEFORE replacing `#cwList`'s markup, and restores
+both onto the newly built input of the same column afterward.
+`tests/cmwo.cjs` §9 proves the sort (and its reversal), that an Asset-column
+filter of "DR" excludes a System-component match the free-text box would
+have included, and — with `page.type()`, the one way to actually dispatch
+one keystroke at a time rather than setting a value in one step — that
+three keystrokes typed in sequence all land in the input and the input never
+loses focus across the rebuilds in between.
+
 ---
 
 ## Secrets

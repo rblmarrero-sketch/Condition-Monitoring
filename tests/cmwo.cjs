@@ -143,8 +143,14 @@ const cells = p => p.$$eval('#cwList tbody tr', rs => rs.map(r =>
      name under nothing. Reported from the office with the table circled.
      Read by what the cells ARE: the heading count must equal the cell
      count, and the heading over the description cell must SAY description. */
+  /* Since the sort/filter header (§7b below) the label row is the FIRST of
+     two <tr>s in <thead> — the second carries one bare filter <input> per
+     column, no text of its own — so the label count is read off that first
+     row alone, and its own arrow glyph (▲/▼/↕) is stripped before comparing
+     text, the same reason fleetTbl's own tests read `.dataset.sort` rather
+     than trusting textContent verbatim. */
   const hdr = await p.evaluate(() => ({
-    ths: [...document.querySelectorAll('#cwList thead th')].map(x => x.textContent.trim()),
+    ths: [...document.querySelectorAll('#cwList thead tr:first-child th')].map(x => x.textContent.replace(/[▲▼↕]$/,'').trim()),
     tds: document.querySelector('#cwList tbody tr') ? document.querySelector('#cwList tbody tr').querySelectorAll('td').length : 0,
     want: t('cw_c_descr'), cause: t('cw_c_cause'), by: t('cw_c_by') }));
   ok('  every column has a heading — as many headings as cells', hdr.ths.length === hdr.tds && hdr.tds > 0,
@@ -295,6 +301,61 @@ const cells = p => p.$$eval('#cwList tbody tr', rs => rs.map(r =>
   ok('  exactly the two real matches, nothing else', rows.length === 2, rows.length + ' rows');
   await p.fill('#cwQ', '');
   await p.waitForTimeout(150);
+
+  console.log('\n9. SORT AND A FILTER PER COLUMN, IN THE HEADER ITSELF');
+  /* "we need filter and sor as well why cant we just put a searh/filer on
+     top of the header" — cwQ (§8) searches nine fields at once and cannot
+     ask for the Asset column alone; a filter typed into the Asset header
+     reads ONLY the Asset column, so "DR" there finds DR007 without also
+     pulling in EX004's unrelated "DRS.ENG" system code. Still using
+     WORDMATCH's three rows (DR007, EX019, EX004). */
+  await p.evaluate(() => { document.querySelector('.cwcf[data-k="asset"]').value = 'DR'; document.querySelector('.cwcf[data-k="asset"]').dispatchEvent(new Event('input')); });
+  await p.waitForTimeout(150);
+  rows = await cells(p);
+  ok('an Asset-column filter of "DR" finds only the asset actually named DR007',
+     rows.length === 1 && rows[0][1] === 'DR007', rows.map(r => r[1]).join(' '));
+  ok('  EX004\'s own DRS.ENG system code does not leak into a different column\'s filter',
+     !rows.some(r => r[1] === 'EX004'), rows.map(r => r[1]).join(' '));
+  await p.evaluate(() => { document.querySelector('.cwcf[data-k="asset"]').value = ''; document.querySelector('.cwcf[data-k="asset"]').dispatchEvent(new Event('input')); });
+  await p.waitForTimeout(150);
+
+  console.log('\n  clicking a column header sorts by it, reusing the fleet table\'s own sortable-column pattern');
+  await p.click('#cwList th[data-sort="asset"]');
+  await p.waitForTimeout(150);
+  rows = await cells(p);
+  ok('ascending by Asset', rows.map(r => r[1]).join(',') === 'DR007,EX004,EX019', rows.map(r => r[1]).join(' '));
+  await p.click('#cwList th[data-sort="asset"]');
+  await p.waitForTimeout(150);
+  rows = await cells(p);
+  ok('  clicking again reverses it', rows.map(r => r[1]).join(',') === 'EX019,EX004,DR007', rows.map(r => r[1]).join(' '));
+  await p.click('#cwList th[data-sort="date"]');
+  await p.waitForTimeout(150);
+
+  console.log('\n  a filter input survives its own rebuild — typing a second character does not land on thin air');
+  /* This table is rebuilt wholesale (innerHTML) on every keystroke, the same
+     way it always has been for cwQ — the one new risk a filter INSIDE that
+     rebuilt table adds is losing focus after the first character, which
+     would read to an inspector as a box that accepts one letter and then
+     stops responding. page.type() dispatches one real keystroke at a time,
+     the only way to catch that class of bug. */
+  await p.click('.cwcf[data-k="system"]');
+  await p.type('.cwcf[data-k="system"]', 'DRS', { delay: 60 });
+  await p.waitForTimeout(150);
+  const typed = await p.evaluate(() => {
+    const el = document.querySelector('.cwcf[data-k="system"]');
+    return { value: el ? el.value : null, focused: document.activeElement === el };
+  });
+  ok('all three keystrokes landed in the input, not just the first',
+     typed.value === 'DRS', JSON.stringify(typed));
+  ok('  and the input still holds focus after rebuilding around it',
+     typed.focused === true, JSON.stringify(typed));
+  rows = await cells(p);
+  ok('  and it actually filtered — EX004\'s own DRS.ENG system code, not the other two',
+     rows.length === 1 && rows[0][1] === 'EX004', rows.map(r => r[1]).join(' '));
+  await p.evaluate(() => { document.querySelector('.cwcf[data-k="system"]').value = ''; document.querySelector('.cwcf[data-k="system"]').dispatchEvent(new Event('input')); });
+  await p.waitForTimeout(150);
+
+  await p.evaluate(() => { cwColQ = {}; cwSort = { k: 'date', dir: -1 }; });
   await p.evaluate(d => { Object.assign(window.CM_WO_DATA, d); cwWho = ''; renderCmWoTab(); }, CM);
 
   ok('no page errors', errs.length === 0, errs.slice(0, 3).join(' | ') || 'none');

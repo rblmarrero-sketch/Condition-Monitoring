@@ -1437,6 +1437,14 @@
   .prow.sel .pfill{outline:2px solid var(--ink);outline-offset:1px;}
   table.grid th.sortable{cursor:pointer;user-select:none;} table.grid th.sortable:hover{color:var(--ink);}
   table.grid th .arrow{opacity:.4;font-size:11px;margin-left:3px;} table.grid th.on .arrow{opacity:1;}
+  /* A filter per column, in the header itself, not a single box searching
+     everything at once — asked for by name: "why cant we just put a
+     search/filter on top of the header". th.cwfh is a second header row,
+     not a data row, so it never sorts and never gets the zebra shading. */
+  table.grid th.cwfh{padding:3px 6px;background:var(--surface);}
+  table.grid th.cwfh input.cwcf{width:100%;box-sizing:border-box;font:inherit;font-size:11.5px;
+    padding:3px 6px;border:1px solid var(--border);border-radius:6px;background:var(--surface-2);color:var(--ink);}
+  table.grid th.cwfh input.cwcf:focus{outline:2px solid var(--accent);outline-offset:0;}
   .note{font-size:12px;color:var(--ink-2);background:color-mix(in srgb,var(--warning) 14%,var(--surface));border:1px solid color-mix(in srgb,var(--warning) 45%,var(--border));border-radius:8px;padding:8px 11px;margin-top:12px;}
   /* data-source sheet */
   /* The disagreement between two phones' versions of one round, under the
@@ -3720,23 +3728,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=456"></script>
+<script src="../data/magnetic_plug.js?v=457"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=456"></script>
-<script src="../mobile/hme.js?v=456"></script>
-<script src="../mobile/mp-fc.js?v=456"></script>
-<script src="../mobile/rtw.js?v=456"></script>
-<script src="../mobile/hme-cascade.js?v=456"></script>
-<script src="../mobile/temp-limits.js?v=456"></script>
+<script src="../data/work_orders.js?v=457"></script>
+<script src="../mobile/hme.js?v=457"></script>
+<script src="../mobile/mp-fc.js?v=457"></script>
+<script src="../mobile/rtw.js?v=457"></script>
+<script src="../mobile/hme-cascade.js?v=457"></script>
+<script src="../mobile/temp-limits.js?v=457"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=456"></script>
-<script src="../mobile/normalize.js?v=456"></script>
-<script src="../mobile/terms.js?v=456"></script>
+<script src="../mobile/assets.js?v=457"></script>
+<script src="../mobile/normalize.js?v=457"></script>
+<script src="../mobile/terms.js?v=457"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -3755,19 +3763,19 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=456"></script>
-<script src="../mobile/edits.js?v=456"></script>
-<script src="../mobile/due.js?v=456"></script>
-<script src="../mobile/wear.js?v=456"></script>
-<script src="../mobile/wear-map.js?v=456"></script>
-<script src="../mobile/lube.js?v=456"></script>
-<script src="../mobile/lube-overrides.js?v=456"></script>
-<script src="../mobile/lube2027.js?v=456"></script>
-<script src="../mobile/lube-tds.js?v=456"></script>
+<script src="../mobile/grade.js?v=457"></script>
+<script src="../mobile/edits.js?v=457"></script>
+<script src="../mobile/due.js?v=457"></script>
+<script src="../mobile/wear.js?v=457"></script>
+<script src="../mobile/wear-map.js?v=457"></script>
+<script src="../mobile/lube.js?v=457"></script>
+<script src="../mobile/lube-overrides.js?v=457"></script>
+<script src="../mobile/lube2027.js?v=457"></script>
+<script src="../mobile/lube-tds.js?v=457"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=456"></script>
-<script src="../mobile/machine-photos.js?v=456"></script>
+<script src="../mobile/upload-defaults.js?v=457"></script>
+<script src="../mobile/machine-photos.js?v=457"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3776,17 +3784,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=456"></script>
-<script src="../mobile/get.js?v=456"></script>
-<script src="../mobile/points.js?v=456"></script>
-<script src="../mobile/uc-points.js?v=456"></script>
-<script src="../mobile/inspect-guide.js?v=456"></script>
-<script src="../mobile/get-figs.js?v=456"></script>
-<script src="../mobile/body-points.js?v=456"></script>
-<script src="../mobile/body-map.js?v=456"></script>
-<script src="../mobile/jspdf.umd.min.js?v=456"></script>
-<script src="../mobile/html2canvas.min.js?v=456"></script>
-<script src="../mobile/report-core.js?v=456"></script>
+<script src="../mobile/machine-fig.js?v=457"></script>
+<script src="../mobile/get.js?v=457"></script>
+<script src="../mobile/points.js?v=457"></script>
+<script src="../mobile/uc-points.js?v=457"></script>
+<script src="../mobile/inspect-guide.js?v=457"></script>
+<script src="../mobile/get-figs.js?v=457"></script>
+<script src="../mobile/body-points.js?v=457"></script>
+<script src="../mobile/body-map.js?v=457"></script>
+<script src="../mobile/jspdf.umd.min.js?v=457"></script>
+<script src="../mobile/html2canvas.min.js?v=457"></script>
+<script src="../mobile/report-core.js?v=457"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -4738,6 +4746,7 @@ const I18N={
   cw_c_system:"System component", cw_c_prio:"Priority", cw_c_dtype:"Defect type",
   cw_c_descr:"Defect description", cw_c_cause:"Cause of defect",
   cw_c_status:"Status", cw_c_by:"Raised by",
+  cw_colfilter_ph:"Filter…",
   pa_st_ontime:"On time", pa_st_late:"Late", pa_st_early:"Early", pa_st_missing:"No CM round",
   pa_st_off:"Held off", pa_k_off:"Held off", pa_k_off_s:"rounds the site has taken off these machines",
   pa_st_preinsp:"Pre-PM check due",
@@ -5612,6 +5621,7 @@ const I18N={
   cw_c_system:"Узел / система", cw_c_prio:"Приоритет", cw_c_dtype:"Тип дефекта",
   cw_c_descr:"Описание дефекта", cw_c_cause:"Причина дефекта",
   cw_c_status:"Статус", cw_c_by:"Заявил",
+  cw_colfilter_ph:"Фильтр…",
   pa_st_ontime:"В срок", pa_st_late:"Позже", pa_st_early:"Раньше", pa_st_missing:"Нет обхода CM",
   pa_st_off:"Сняты", pa_k_off:"Сняты с обхода", pa_k_off_s:"обходы, снятые площадкой с этих машин",
   pa_st_preinsp:"Нужна проверка перед ТО",
@@ -17278,6 +17288,33 @@ function renderAll(all){
    file is how two screens come to disagree about one count. */
 let cwWho = "";              // "" = everyone on the team
 let cwStatusSel = "";
+/* Sort and per-column filters, asked for by name: "we need filter and sort
+   as well, why cant we just put a search/filter on top of the header" — a
+   single free-text box (cwQ, kept, it is still the fastest way to find one
+   defect by any of its words) cannot ask for the ASSET column specifically,
+   so "DR" for the DR007/DR009/DR010 drills also matched every OTHER
+   machine's "DRS.*" system-component code (Engine, Cooling, Fuel, Power
+   Take-Off — a fleet-wide prefix, not a drill-specific one). A filter typed
+   into the Asset column only reads the Asset column. */
+let cwSort = { k:"date", dir:-1 };
+let cwColQ = {};
+const CW_COLS = [
+  ["date","cw_c_date"], ["asset","cw_c_asset"], ["defect","cw_c_defect"],
+  ["eqType","cw_c_eqtype"], ["system","cw_c_system"], ["priority","cw_c_prio"],
+  ["defectType","cw_c_dtype"], ["descr","cw_c_descr"], ["cause","cw_c_cause"],
+  ["status","cw_c_status"], ["by","cw_c_by"],
+];
+/* What a column actually reads and sorts by — matching what the cell shows,
+   including the two fields (defect type, description, cause) that print as
+   "planned service" / an em-dash on a planned-service row rather than 1C's
+   raw (and here, meaningless) values. */
+function cwColVal(r, k){
+  if(k==="defect") return r.defect || r.requestNo || "";
+  if(k==="defectType") return r.planned ? "planned service" : (r.defectType||"");
+  if(k==="descr") return r.planned ? "" : (r.descr||"");
+  if(k==="cause") return r.planned ? "" : (r.cause||"");
+  return r[k] || "";
+}
 function cwAll(){
   const D = window.CM_WO_DATA || {};
   return Array.isArray(D.cmWorkOrders) ? D.cmWorkOrders : null;   // null = not generated yet
@@ -17305,16 +17342,36 @@ function cwRows(){
   const all = cwAll() || [];
   const planned = !!($("cwPlanned")||{}).checked;
   const q = (($("cwQ")||{}).value||"").trim().toUpperCase();
-  return all
+  const rows = all
     .filter(r => planned || !r.planned)
     .filter(r => !cwWho || r.by === cwWho)
     .filter(r => !cwStatusSel || (r.status||"") === cwStatusSel)
     .filter(r => !q || [r.asset, r.defect, r.requestNo, r.cause, r.defectType, r.eqType,
                         r.system, r.descr, r.woNumber]
-      .some(v => cwWordMatch(v, q)));
+      .some(v => cwWordMatch(v, q)))
+    .filter(r => CW_COLS.every(([k]) => {
+      const fq = (cwColQ[k]||"").trim().toUpperCase();
+      return !fq || cwWordMatch(cwColVal(r,k), fq);
+    }));
+  return rows.slice().sort((a,b) => {
+    const x = cwColVal(a, cwSort.k), y = cwColVal(b, cwSort.k);
+    const c = String(x).localeCompare(String(y), undefined, {numeric:true, sensitivity:"base"});
+    return (c || String(a.asset||"").localeCompare(String(b.asset||"")) || (a.defect||"").localeCompare(b.defect||"")) * cwSort.dir;
+  });
 }
 function renderCmWoTab(){
   const box = $("cwList"); if(!box) return;
+  /* A column filter lives INSIDE the table this function rebuilds wholesale
+     on every keystroke — the same way cwQ already drives a rebuild on every
+     keystroke, just one level further in. Capture which cwcf input (if any)
+     currently holds focus, and where the caret sits, before the rebuild, so
+     typing a second character does not land on an input that no longer
+     exists — the disabled-button-that-looks-live shape one level removed. */
+  const focusCap = (() => {
+    const el = document.activeElement;
+    if(!el || !box.contains(el) || !el.classList || !el.classList.contains("cwcf")) return null;
+    return { k: el.dataset.k, start: el.selectionStart, end: el.selectionEnd };
+  })();
   const D = window.CM_WO_DATA || {};
   const all = cwAll();
 
@@ -17394,17 +17451,23 @@ function renderCmWoTab(){
     cwStatusSel = sel.value;
   }
 
-  if(!shown.length){ box.innerHTML = `<div class="sub">${esc(t("cw_none"))}</div>`; return; }
+  /* paged() is called even at zero rows — it still registers the pager's
+     own click wiring for this key, and returns the empty shape cleanly. */
   const pg = paged("cmwo", shown, renderCmWoTab);
   const cell = v => v ? esc(v) : `<span class="muted">—</span>`;
-  box.innerHTML = `<div class="tblwrap"><table class="grid"><thead><tr>
-      <th data-i18n="cw_c_date">Date</th><th data-i18n="cw_c_asset">Asset</th>
-      <th data-i18n="cw_c_defect">Defect no</th><th data-i18n="cw_c_eqtype">Equipment type</th>
-      <th data-i18n="cw_c_system">System component</th><th data-i18n="cw_c_prio">Priority</th><th data-i18n="cw_c_dtype">Defect type</th>
-      <th data-i18n="cw_c_descr">Defect description</th>
-      <th data-i18n="cw_c_cause">Cause of defect</th><th data-i18n="cw_c_status">Status</th>
-      <th data-i18n="cw_c_by">Raised by</th></tr></thead><tbody>`
-    + pg.rows.map(r=>`<tr${r.planned?' class="muted"':''}>
+  /* SORT and a FILTER PER COLUMN, in the header itself — reusing the exact
+     sortable-column pattern the Fleet and Plan-vs-Actual tables already use
+     (class="sortable", data-sort, the same arrow glyphs), plus a second
+     header row of plain text inputs, one per column, each reading only ITS
+     OWN column via cwColVal/cwWordMatch. The filter row is still rendered
+     even when nothing currently matches — otherwise clearing a bad query
+     would mean retyping it into an input that no longer exists. */
+  const thead = `<tr>` + CW_COLS.map(([k,labelKey]) =>
+      `<th class="sortable${cwSort.k===k?" on":""}" data-sort="${esc(k)}" data-i18n="${esc(labelKey)}">${esc(t(labelKey))}<span class="arrow">${cwSort.k===k?(cwSort.dir>0?"▲":"▼"):"↕"}</span></th>`).join("")
+    + `</tr><tr>` + CW_COLS.map(([k]) =>
+      `<th class="cwfh"><input type="text" class="cwcf" data-k="${esc(k)}" value="${esc(cwColQ[k]||"")}" placeholder="${esc(t("cw_colfilter_ph"))}"></th>`).join("")
+    + `</tr>`;
+  const tbody = shown.length ? pg.rows.map(r=>`<tr${r.planned?' class="muted"':''}>
         <td class="mono" title="${esc(r.planStart ? t("cw_plan_on",{d:r.planStart}) : t("cw_plan_none"))}">${cell(r.date)}</td>
         <td><b>${cell(r.asset)}</b></td>
         <td class="mono">${r.defect ? esc(r.defect)
@@ -17415,7 +17478,8 @@ function renderCmWoTab(){
         <td class="wrapcell">${r.planned ? `<span class="muted">—</span>` : cell(r.descr)}</td>
         <td>${r.planned ? `<span class="muted">—</span>` : cell(r.cause)}</td>
         <td>${cell(r.status)}</td><td>${cell(r.by)}</td></tr>`).join("")
-    + `</tbody></table></div>`
+    : `<tr><td colspan="${CW_COLS.length}" class="empty">${esc(t("cw_none"))}</td></tr>`;
+  box.innerHTML = `<div class="tblwrap"><table class="grid"><thead>${thead}</thead><tbody>${tbody}</tbody></table></div>`
     /* The pager's own strip, and the count in the words every other table on
        this page uses — "{n} matching · showing a–b". Written once in t(),
        never restated here. */
@@ -17423,6 +17487,21 @@ function renderCmWoTab(){
        second thing is a style collision waiting for the next edit. */
     + `<div class="sub">${esc(t("pg_of",{n:String(shown.length),
          a:String(pg.from||0), b:String(pg.to||0)}))}</div>${pg.strip||""}`;
+
+  box.querySelectorAll("th.sortable[data-sort]").forEach(th=>th.onclick=()=>{
+    const k = th.dataset.sort;
+    if(cwSort.k===k) cwSort.dir*=-1;
+    else cwSort = { k, dir: k==="date" ? -1 : 1 };   // a new column starts newest/A→Z, dates newest-first
+    renderCmWoTab();
+  });
+  box.querySelectorAll("input.cwcf").forEach(inp=>inp.oninput=()=>{
+    cwColQ[inp.dataset.k] = inp.value;
+    renderCmWoTab();
+  });
+  if(focusCap){
+    const el = box.querySelector(`.cwcf[data-k="${focusCap.k}"]`);
+    if(el){ el.focus(); try{ el.setSelectionRange(focusCap.start, focusCap.end); }catch(e){} }
+  }
 }
 const TAB_RENDER={
   overview:()=>{ renderKpis(); renderCoverage(); renderTrend(); renderFleet(); },
@@ -17699,8 +17778,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=456"></script>
-<script src="sync-adapter.js?v=456"></script>
-<script src="report.js?v=456"></script>
+<script src="drive.js?v=457"></script>
+<script src="sync-adapter.js?v=457"></script>
+<script src="report.js?v=457"></script>
 </body>
 </html>
