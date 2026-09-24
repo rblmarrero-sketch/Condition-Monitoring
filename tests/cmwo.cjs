@@ -237,6 +237,66 @@ const cells = p => p.$$eval('#cwList tbody tr', rs => rs.map(r =>
      await p.evaluate(() => { document.getElementById('cwQ').value = 'EX021'; renderCmWoTab();
                               return cwRows().length; }) === 1);
 
+  console.log('\n7. THE GLOBAL FILTER BAR DOES NOT SIT ABOVE A TABLE IT DOES NOT TOUCH');
+  /* Reported from the field as "filters and search are not working": the
+     Type/Class/Grade/Period/Status/Search bar at the top of every page reads
+     RECS, and this tab reads 1C's own work-order export instead — so the bar
+     stayed visible showing "N of M inspections" and an active search chip
+     that touched nothing on the table below. showTab()'s own `own` list
+     already puts that bar away for Due/Lube/Sync/Reports/Plan vs Actual;
+     cmwo was left off it. */
+  let barState = await p.evaluate(() => ({
+    bar: document.querySelector('main > .controls:not(.more)').classList.contains('hidden'),
+    chips: document.getElementById('chips').classList.contains('hidden') }));
+  ok('the global bar is put away on Defects raised, the same as Due/Lube/Sync',
+     barState.bar === true, JSON.stringify(barState));
+  ok('  and so are its filter chips', barState.chips === true, JSON.stringify(barState));
+  await p.click('[data-tab="overview"]');
+  await p.waitForTimeout(150);
+  barState = await p.evaluate(() => ({
+    bar: document.querySelector('main > .controls:not(.more)').classList.contains('hidden') }));
+  ok('  and it comes back on a tab the bar actually narrows',
+     barState.bar === false, JSON.stringify(barState));
+  await p.click('[data-tab="cmwo"]');
+  await p.waitForTimeout(150);
+
+  console.log('\n8. A SHORT QUERY MATCHES A WORD, NOT THE MIDDLE OF ONE');
+  /* "DR" for the DR-prefixed drills also pulled in machines with nothing to
+     do with drills, because "DR" sits inside "Hydraulic Pumps" and inside
+     "EX004.DRS.ENG" is a legitimate word-start match (a real system code)
+     while the same two letters landing mid-"Hydraulic" is not. */
+  const WORDMATCH = {
+    cmSince: '2026-07-01', cmPeople: ['Nurbol', 'Slam', 'Irek', 'Zhomart', 'Bekzhan'],
+    cmColumns: CM.cmColumns,
+    cmWorkOrders: [
+      { date: '2026-09-23', asset: 'DR007', defect: 'DD-00012847', requestNo: 'DD-00012847',
+        eqType: 'DRILL, BLASTING', system: 'DR007.CH (Structure & Chassis)', priority: 'P2 Urgent',
+        defectType: 'Excessive play', descr: 'Play in the mast frame joint', cause: 'Fatigue crack',
+        status: 'Registered', by: 'Irek', woNumber: null, maintType: null, planned: false },
+      { date: '2026-09-23', asset: 'EX019', defect: 'DD-00013195', requestNo: 'DD-00013195',
+        eqType: 'EXCAVATOR, BUCKET', system: 'EX019.HS.MP (Hydraulic Pumps)', priority: 'P4 Planned (Repair)',
+        defectType: 'Leakage', descr: 'Leak under the pump', cause: 'Seal damaged',
+        status: 'Registered', by: 'Irek', woNumber: null, maintType: null, planned: false },
+      { date: '2026-09-23', asset: 'EX004', defect: 'DD-00013198', requestNo: 'DD-00013198',
+        eqType: 'EXCAVATOR, BUCKET', system: 'EX004.DRS.ENG (Engine)', priority: 'P4 Planned (Repair)',
+        defectType: 'Crack', descr: 'Cracks in the alternator belts', cause: 'Fatigue crack',
+        status: 'Registered', by: 'Irek', woNumber: null, maintType: null, planned: false },
+    ],
+  };
+  await p.evaluate(d => { Object.assign(window.CM_WO_DATA, d); cwWho = ''; renderCmWoTab(); }, WORDMATCH);
+  await p.fill('#cwQ', 'DR');
+  await p.waitForTimeout(200);
+  rows = await cells(p);
+  ok('a drill named DR007 matches', rows.some(r => r[1] === 'DR007'), rows.map(r => r[1]).join(' '));
+  ok('  a system code that genuinely starts with DR (EX004.DRS.ENG) matches too',
+     rows.some(r => r[1] === 'EX004'), rows.map(r => r[1]).join(' '));
+  ok('  but "Hydraulic Pumps" does not — DR sits mid-word, not at its start',
+     !rows.some(r => r[1] === 'EX019'), rows.map(r => r[1]).join(' '));
+  ok('  exactly the two real matches, nothing else', rows.length === 2, rows.length + ' rows');
+  await p.fill('#cwQ', '');
+  await p.waitForTimeout(150);
+  await p.evaluate(d => { Object.assign(window.CM_WO_DATA, d); cwWho = ''; renderCmWoTab(); }, CM);
+
   ok('no page errors', errs.length === 0, errs.slice(0, 3).join(' | ') || 'none');
   await b.close(); server.close();
   console.log(fails.length ? '\nFAILED ' + fails.length + ': ' + fails.join(' | ') : '\nall passed');

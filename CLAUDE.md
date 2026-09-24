@@ -2585,6 +2585,39 @@ ordinary case is untouched, that a `toBlob()` failure alone is invisible
 failure on a pad that WAS drawn on blocks Save and creates no record, and
 that redrawing after readers recover saves cleanly.
 
+**A FILTER BAR SHOWING "N OF M INSPECTIONS" ABOVE A TABLE IT NEVER TOUCHES
+IS THE SAME CONTROL-THAT-DOES-NOTHING DEFECT ONE LEVEL UP.** Reported
+plainly: "Filters and search are not working" on Defects Raised. Two
+separate things were true at once.
+
+`showTab()` already carries the exact fix this needed, for five OTHER
+tabs: the global Type/Class/Grade/Period/Status/Search bar at the top of
+every page reads `RECS`, and Due, Lubrication, Sync, Reports and Plan vs
+Actual each read something else entirely — so each was added to an `own`
+list that puts the bar (and its filter chips) away while that tab is open,
+"rather than sitting there inert above a list it does not touch," in the
+comment's own words. Defects Raised reads 1C's own work-order export
+(`window.CM_WO_DATA.cmWorkOrders`), exactly the same shape as Plan vs
+Actual — and was simply never added to the list. The bar sat there showing
+"N of M inspections" and an active "Search DR" chip that filtered nothing
+below it, on every visit, since the tab shipped.
+
+Separately, the panel's OWN search box (`cwQ`) does filter — narrowed 72
+defects down correctly by person and status — but as a bare substring
+match across nine free-text fields, including the system-component
+description. Searching "DR" for the DR007/DR009/DR010 drills also matched
+EX019 and EX004, because "DR" sits inside "Hydraulic Pumps" and inside
+"EX004.DRS.ENG" (an engine system code) — confirmed against the real,
+live `data/work_orders.js`, not a synthetic fixture. `cwWordMatch()`
+requires the query to start at the beginning of a word (position 0, or
+right after a non-alphanumeric character) rather than anywhere inside one:
+a system code that genuinely STARTS with "DR" (`DRS.ENG`) still matches,
+"Hydraulic" no longer does. `tests/cmwo.cjs` §7 proves the bar is hidden
+on this tab and returns on one it actually narrows; §8 proves the word
+match against the exact three-record shape (a real drill, a legitimate
+DR-prefixed system code, and the Hydraulic decoy) that reproduced the
+field report.
+
 ---
 
 ## Secrets
