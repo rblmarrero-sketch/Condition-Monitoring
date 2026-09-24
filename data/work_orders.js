@@ -2,10 +2,10 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-09-24T08:38:10+00:00",
+  "generated": "2026-09-24T08:53:05+00:00",
   "source": "https://askpi.94-131-94-152.sslip.io/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
-  "unitsInWorkbook": 677,
+  "unitsInWorkbook": 680,
   "unitsKept": [
     "BL001",
     "BL002",
@@ -2212,6 +2212,25 @@ window.CM_WO_DATA = {
     {
       "equip": "BSL003",
       "cls": null,
+      "woNumber": null,
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "250h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": null,
+      "cmmsStatus": "Registered",
+      "open": true,
+      "planStart": null,
+      "planStartDt": null,
+      "planEnd": null,
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
+      "equip": "BSL003",
+      "cls": null,
       "woNumber": "WO-016836",
       "maintType": "250 Hours service Planned",
       "hours": 250,
@@ -2243,25 +2262,6 @@ window.CM_WO_DATA = {
       "planStart": "2026-09-23",
       "planStartDt": "2026-09-23T00:00:00",
       "planEnd": "2026-09-24",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
-    },
-    {
-      "equip": "BSL003",
-      "cls": null,
-      "woNumber": "WO-017305",
-      "maintType": "250 Hours service Planned",
-      "hours": 250,
-      "cmLabel": "250h service",
-      "cmTypes": null,
-      "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
-      "planStart": "2026-10-04",
-      "planStartDt": "2026-10-04T00:00:00",
-      "planEnd": "2026-10-04",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -2825,7 +2825,7 @@ window.CM_WO_DATA = {
       "planStartDt": "2026-06-22T00:00:00",
       "planEnd": "2026-06-22",
       "actualStart": "2026-06-22",
-      "actualStartDt": "2026-06-22T07:00:00",
+      "actualStartDt": "2026-06-22T00:00:00",
       "actualEnd": "2026-06-22"
     },
     {
@@ -52397,15 +52397,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-09-22",
-      "planStartDt": "2026-09-22T00:00:00",
-      "planEnd": "2026-09-23",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "planStartDt": "2026-09-22T08:55:00",
+      "planEnd": "2026-09-22",
+      "actualStart": "2026-09-22",
+      "actualStartDt": "2026-09-22T08:55:00",
+      "actualEnd": "2026-09-22"
     },
     {
       "equip": "TK147",
