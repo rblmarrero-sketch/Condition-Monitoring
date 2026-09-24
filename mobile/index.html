@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=454">
+<link rel="manifest" href="manifest.webmanifest?v=455">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=454">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=454">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=454">
+<link rel="apple-touch-icon" href="icon-192.png?v=455">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=455">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=455">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2758,16 +2758,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=454"></script>
-<script src="upload-defaults.js?v=454"></script>
-<script src="hme.js?v=454"></script>
-<script src="mp-fc.js?v=454"></script>
-<script src="rtw.js?v=454"></script>
-<script src="hme-cascade.js?v=454"></script>
-<script src="assets.js?v=454"></script>
-<script src="temp-limits.js?v=454"></script>
-<script src="normalize.js?v=454"></script>
-<script src="terms.js?v=454"></script>
+<script src="native.js?v=455"></script>
+<script src="upload-defaults.js?v=455"></script>
+<script src="hme.js?v=455"></script>
+<script src="mp-fc.js?v=455"></script>
+<script src="rtw.js?v=455"></script>
+<script src="hme-cascade.js?v=455"></script>
+<script src="assets.js?v=455"></script>
+<script src="temp-limits.js?v=455"></script>
+<script src="normalize.js?v=455"></script>
+<script src="terms.js?v=455"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2786,25 +2786,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=454"></script>
-<script src="edits.js?v=454"></script>
-<script src="due.js?v=454"></script>
-<script src="wear.js?v=454"></script>
-<script src="wear-figs.js?v=454"></script>
-<script src="wear-map.js?v=454"></script>
-<script src="machine-photos.js?v=454"></script>
-<script src="machine-fig.js?v=454"></script>
-<script src="get.js?v=454"></script>
-<script src="points.js?v=454"></script>
-<script src="uc-points.js?v=454"></script>
-<script src="inspect-guide.js?v=454"></script>
-<script src="get-figs.js?v=454"></script>
-<script src="body-points.js?v=454"></script>
-<script src="body-map.js?v=454"></script>
-<script src="lube.js?v=454"></script>
-<script src="lube-overrides.js?v=454"></script>
-<script src="lube2027.js?v=454"></script>
-<script src="report-core.js?v=454"></script>
+<script src="grade.js?v=455"></script>
+<script src="edits.js?v=455"></script>
+<script src="due.js?v=455"></script>
+<script src="wear.js?v=455"></script>
+<script src="wear-figs.js?v=455"></script>
+<script src="wear-map.js?v=455"></script>
+<script src="machine-photos.js?v=455"></script>
+<script src="machine-fig.js?v=455"></script>
+<script src="get.js?v=455"></script>
+<script src="points.js?v=455"></script>
+<script src="uc-points.js?v=455"></script>
+<script src="inspect-guide.js?v=455"></script>
+<script src="get-figs.js?v=455"></script>
+<script src="body-points.js?v=455"></script>
+<script src="body-map.js?v=455"></script>
+<script src="lube.js?v=455"></script>
+<script src="lube-overrides.js?v=455"></script>
+<script src="lube2027.js?v=455"></script>
+<script src="report-core.js?v=455"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -3086,6 +3086,8 @@ const I18N = {
     ph_guide:"Fill the frame, hold the phone still, keep the subject in focus and evenly lit. Wipe the lens.",
     m_need_photo_t:"Photographs missing",
     m_need_photo_m:"This inspection still needs: {x}. The round is kept as a draft until they are taken.",
+    m_sign_fail_t:"Signature could not be captured",
+    m_sign_fail_m:"The signature pad shows ink, but it could not be captured. Please sign again before saving.",
     lbl_prio:"Work request priority (1C)",
     opt_prio_none:"— not set —", opt_prio_fit:"Fits what was found", opt_prio_other:"All priorities",
     lbl_comment:"Finding or comment", ph_comment:"notes…",
@@ -3752,6 +3754,8 @@ const I18N = {
     ph_guide:"Заполните кадр, держите телефон неподвижно, объект в фокусе и равномерно освещён. Протрите объектив.",
     m_need_photo_t:"Не хватает фотографий",
     m_need_photo_m:"Для этого осмотра ещё нужны: {x}. Осмотр сохраняется как черновик, пока они не сняты.",
+    m_sign_fail_t:"Не удалось сохранить подпись",
+    m_sign_fail_m:"На панели для подписи есть след, но её не удалось сохранить. Пожалуйста, распишитесь ещё раз перед сохранением.",
     lbl_prio:"Приоритет заявки (1С)",
     opt_prio_none:"— не указан —", opt_prio_fit:"Подходит к находке", opt_prio_other:"Все приоритеты",
     lbl_comment:"Находка или комментарий", ph_comment:"заметки…",
@@ -8438,7 +8442,24 @@ function clearSign(){ signDirty=false; const c=signPad.getContext("2d");
 $("signClear").onclick=clearSign;
 $("supName").value=localStorage.getItem("supervisor")||"";
 $("supName").addEventListener("input",()=>lsSet("supervisor",$("supName").value.trim()));
-function signBlob(){ return signDirty ? new Promise(r=>signPad.toBlob(r,"image/png")) : Promise.resolve(null); }
+function signBlob(){
+  if(!signDirty) return Promise.resolve(null);
+  return new Promise(res=>{
+    signPad.toBlob(b=>{
+      if(b && b.size>0) return res(b);
+      /* toBlob() itself failed (returned null) or produced an empty blob --
+         the one capture in this app with no read-back of what it produced,
+         until now. toDataURL() is a different code path over the same
+         pixels; try it before giving up, the same "more than one reader"
+         rule ownBytes/readBlobBytes already hold every photograph to. */
+      try{
+        const durl=signPad.toDataURL("image/png");
+        const bytes=dataUrlBytes(durl);
+        res(bytes && bytes.length ? new Blob([bytes],{type:"image/png"}) : null);
+      }catch(e){ res(null); }
+    }, "image/png");
+  });
+}
 function loadSign(blob){ clearSign(); if(!blob) return;
   signOpen=true; renderSignFold();
   const url=URL.createObjectURL(blob);
@@ -8659,6 +8680,16 @@ $("saveBtn").onclick=async ()=>{
   if(!editing || (editing.phv||1)>=2){ const missP=photoGaps(draft, type);
     if(missP.length){ renderMachinePhotos(); openMachinePhotos();
       dlg([t("m_need_photo_t"), t("m_need_photo_m",{x:missP.map(c=>photoCatLabel(c)).join(", ")})]); return; } }
+  /* A signature the inspector actually drew cannot become nothing with no
+     one told. signBlob() already tries a second reader when canvas.toBlob()
+     fails; if the pad was dirty and both attempts still came back empty,
+     refuse the save instead of filing the round with sign:null. */
+  const wasSigned = signDirty;
+  const signResult = await signBlob();
+  if(wasSigned && !signResult){
+    dlg([t("m_sign_fail_t"), t("m_sign_fail_m")]);
+    return;
+  }
   const id = editing ? editing.id : `${type}__${equip}__${date}__${DEVICE}__${Date.now()}`;
   const created = editing ? (editing.created||new Date().toISOString()) : new Date().toISOString();
   if(!gps) await getGps(true);   // best effort — never blocks the save
@@ -8668,7 +8699,7 @@ $("saveBtn").onclick=async ()=>{
      on printing the plan it was actually walked against. */
   const schedO = editing ? null : schedOrdersFor(equip, type).near;
   const rec={ id, cls:eqClass, type, equip, date, smu:$("smu").value.trim(), by:$("inspector").value.trim(),
-    sup:$("supName").value.trim(), sign:await signBlob(), gps:gps||null, dev:DEVICE, positions:{}, created, up:0, upTo:{},
+    sup:$("supName").value.trim(), sign:signResult, gps:gps||null, dev:DEVICE, positions:{}, created, up:0, upTo:{},
     rev:(editing?(editing.rev||0)+1:1),
     /* Which photograph rules this round was captured under. 2 = the machine
        overview (and sides, tray, assembly) is required. A round from before
@@ -14519,7 +14550,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="454";
+const BUILD="455";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

@@ -2552,6 +2552,39 @@ tab already has enough automatic traffic. A device silent for more than a
 day is flagged in the "Last activity" column, the same way a stale queue is
 flagged elsewhere on this page.
 
+**A SIGNATURE DRAWN ON THE PAD CAN STILL BECOME NOTHING, WITH NO ONE TOLD.**
+Read plainly from the field: "no we put signiture but nothing on the pdf" —
+for CN002 (INSP, 2026-09-24, device DMYLFQ), confirmed directly against the
+server: `signed:0`, no `_SIGN.png` anywhere in that round's folder, on
+BOTH surfaces, not a dashboard-fetch bug. Every other explanation was ruled
+out against the real code first — filename and date-format formulas are
+byte-identical between the phone and the office, the backend's own media
+index already includes PNG, `runReport()` already awaits the fetch before
+generating, and `reArmForSave()`'s not touching `rec.sign` is correct
+rather than a gap, because a signature is captured fresh at Save and was
+never previously written to IndexedDB the way a photograph is, so it was
+never exposed to the shared-Blob-identity mechanism that function exists to
+defeat. What was left: `signBlob()` handed `canvas.toBlob()` a callback and
+trusted whatever came back, including nothing — the one piece of evidence
+capture in this whole app with no read-back of what it produced, the exact
+gap `ownBytes`/`readBlobBytes` closed for every photograph long ago, and
+this project's own stated rule ("nothing reaches storage that this page has
+not read end to end") never reached. `signBlob()` now tries `toDataURL()` —
+a different code path over the same pixels — when `toBlob()` returns null
+or empty, the identical "more than one reader before you call it gone" rule
+photographs already get; and if a pad the inspector actually drew on still
+produces nothing usable after both, Save refuses outright (`m_sign_fail_t`/
+`m_sign_fail_m`) instead of filing the round with `sign:null` and letting it
+surface, silently, as a blank line on a printed document days later. The
+underlying WHY `toBlob()` might fail on a real device is unconfirmed — this
+ships the same net-not-cure this file has already applied to `reArmForSave`,
+`ownBytes` and `holdAwake` for the identical reason: the fix does not depend
+on knowing the platform-level cause. `tests/signfail.cjs` proves the
+ordinary case is untouched, that a `toBlob()` failure alone is invisible
+(the fallback rescues it, no dialog, a real signature saved), that a total
+failure on a pad that WAS drawn on blocks Save and creates no record, and
+that redrawing after readers recover saves cleanly.
+
 ---
 
 ## Secrets
