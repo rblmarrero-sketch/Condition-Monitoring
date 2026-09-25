@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-25T05:43:03+00:00",
+  "generated": "2026-09-25T07:13:07+00:00",
   "byUnit": {
     "BL001": [
       {
@@ -20,6 +20,17 @@
           "INSP"
         ],
         "plan": "2026-09-24",
+        "priority": "P3 Planned (PM)"
+      }
+    ],
+    "BL015": [
+      {
+        "wo": "WO-017979",
+        "hours": 4000,
+        "types": [
+          "INSP"
+        ],
+        "plan": "2026-09-30",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -147,6 +158,17 @@
         "priority": "P3 Planned (PM)"
       }
     ],
+    "CN018": [
+      {
+        "wo": "WO-017996",
+        "hours": 4000,
+        "types": [
+          "INSP"
+        ],
+        "plan": "2026-09-28",
+        "priority": "P3 Planned (PM)"
+      }
+    ],
     "CN019": [
       {
         "wo": "WO-004720",
@@ -155,6 +177,15 @@
           "INSP"
         ],
         "plan": "2026-04-25",
+        "priority": "P3 Planned (PM)"
+      },
+      {
+        "wo": "WO-017982",
+        "hours": 4000,
+        "types": [
+          "INSP"
+        ],
+        "plan": "2026-09-30",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -203,6 +234,18 @@
           "UC"
         ],
         "plan": "2026-10-02",
+        "priority": "P3 Planned (PM)"
+      }
+    ],
+    "EX003": [
+      {
+        "wo": "WO-017970",
+        "hours": 1000,
+        "types": [
+          "FC",
+          "INSP"
+        ],
+        "plan": "2026-10-03",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -265,6 +308,17 @@
         "priority": "P3 Planned (PM)"
       }
     ],
+    "GE012": [
+      {
+        "wo": "WO-018006",
+        "hours": 1000,
+        "types": [
+          "INSP"
+        ],
+        "plan": "2026-10-02",
+        "priority": "P3 Planned (PM)"
+      }
+    ],
     "GE025": [
       {
         "wo": "WO-017549",
@@ -317,6 +371,17 @@
           "INSP"
         ],
         "plan": "2026-09-16",
+        "priority": "P3 Planned (PM)"
+      }
+    ],
+    "GE100": [
+      {
+        "wo": "WO-018001",
+        "hours": 1000,
+        "types": [
+          "INSP"
+        ],
+        "plan": "2026-09-28",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -430,6 +495,26 @@
         ],
         "plan": "2026-09-20",
         "priority": "P3 Planned (PM)"
+      },
+      {
+        "wo": "WO-018002",
+        "hours": 500,
+        "types": [
+          "MP"
+        ],
+        "plan": "2026-09-28",
+        "priority": "P3 Planned (PM)"
+      }
+    ],
+    "TK004": [
+      {
+        "wo": "WO-017969",
+        "hours": 500,
+        "types": [
+          "MP"
+        ],
+        "plan": "2026-10-04",
+        "priority": "P3 Planned (PM)"
       }
     ],
     "TK005": [
@@ -465,6 +550,31 @@
           "MP"
         ],
         "plan": "2026-09-17",
+        "priority": "P3 Planned (PM)"
+      }
+    ],
+    "TK033": [
+      {
+        "wo": "WO-018003",
+        "hours": 500,
+        "types": [
+          "MP"
+        ],
+        "plan": "2026-09-29",
+        "priority": "P3 Planned (PM)"
+      }
+    ],
+    "TK034": [
+      {
+        "wo": "WO-017992",
+        "hours": 2000,
+        "types": [
+          "FC",
+          "INSP",
+          "MP",
+          "TB"
+        ],
+        "plan": "2026-09-30",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -536,6 +646,28 @@
           "MP"
         ],
         "plan": "2026-10-22",
+        "priority": "P3 Planned (PM)"
+      }
+    ],
+    "TK041": [
+      {
+        "wo": "WO-017975",
+        "hours": 500,
+        "types": [
+          "MP"
+        ],
+        "plan": "2026-10-02",
+        "priority": "P3 Planned (PM)"
+      }
+    ],
+    "TK043": [
+      {
+        "wo": "WO-017971",
+        "hours": 500,
+        "types": [
+          "MP"
+        ],
+        "plan": "2026-10-03",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -1301,6 +1433,18 @@
       "plan": "2026-10-05"
     },
     {
+      "wo": "WO-017988",
+      "equip": "CD007",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-04",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-10-04"
+    },
+    {
       "wo": "WO-017877",
       "equip": "EX009",
       "cls": "EXC",
@@ -1310,6 +1454,30 @@
       "raised": "2026-10-04",
       "type": "250 Hours service Planned",
       "hours": 250,
+      "plan": "2026-10-04"
+    },
+    {
+      "wo": "WO-017967",
+      "equip": "GE111",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "500h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-04",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-10-04"
+    },
+    {
+      "wo": "WO-017969",
+      "equip": "TK004",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-04",
+      "type": "500 Hours service Planned",
+      "hours": 500,
       "plan": "2026-10-04"
     },
     {
@@ -1349,6 +1517,54 @@
       "plan": "2026-10-04"
     },
     {
+      "wo": "WO-017970",
+      "equip": "EX003",
+      "cls": "EXC",
+      "comp": "",
+      "desc": "Filter Cut / General Inspection",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-03",
+      "type": "1000 Hours service Planned",
+      "hours": 1000,
+      "plan": "2026-10-03"
+    },
+    {
+      "wo": "WO-017999",
+      "equip": "GE034",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-03",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-10-03"
+    },
+    {
+      "wo": "WO-017971",
+      "equip": "TK043",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-03",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-10-03"
+    },
+    {
+      "wo": "WO-017984",
+      "equip": "CN023",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-02",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-10-02"
+    },
+    {
       "wo": "WO-016659",
       "equip": "DZ006",
       "cls": "DOZ",
@@ -1359,6 +1575,54 @@
       "type": "1000 Hours service Planned",
       "hours": 1000,
       "plan": "2026-10-02"
+    },
+    {
+      "wo": "WO-017983",
+      "equip": "EX008",
+      "cls": "EXC",
+      "comp": "",
+      "desc": "500h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-02",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-10-02"
+    },
+    {
+      "wo": "WO-018006",
+      "equip": "GE012",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "General Inspection",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-02",
+      "type": "1000 Hours service Planned",
+      "hours": 1000,
+      "plan": "2026-10-02"
+    },
+    {
+      "wo": "WO-017975",
+      "equip": "TK041",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-02",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-10-02"
+    },
+    {
+      "wo": "WO-017976",
+      "equip": "CD004",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "500h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-01",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-10-01"
     },
     {
       "wo": "WO-017886",
@@ -1373,6 +1637,66 @@
       "plan": "2026-10-01"
     },
     {
+      "wo": "WO-017979",
+      "equip": "BL015",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "General Inspection",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-09-30",
+      "type": "4000 Hours service Planned",
+      "hours": 4000,
+      "plan": "2026-09-30"
+    },
+    {
+      "wo": "WO-017997",
+      "equip": "CD010",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-09-30",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-09-30"
+    },
+    {
+      "wo": "WO-017982",
+      "equip": "CN019",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "General Inspection",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-09-30",
+      "type": "4000 Hours service Planned",
+      "hours": 4000,
+      "plan": "2026-09-30"
+    },
+    {
+      "wo": "WO-018005",
+      "equip": "GE109",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-09-30",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-09-30"
+    },
+    {
+      "wo": "WO-017992",
+      "equip": "TK034",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Filter Cut / General Inspection / Magnetic Plug / Dump Body Liner",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-09-30",
+      "type": "2000 Hours service Planned",
+      "hours": 2000,
+      "plan": "2026-09-30"
+    },
+    {
       "wo": "WO-017890",
       "equip": "TK106",
       "cls": "AT",
@@ -1385,6 +1709,42 @@
       "plan": "2026-09-30"
     },
     {
+      "wo": "WO-017986",
+      "equip": "TK168",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "500h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-09-30",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-09-30"
+    },
+    {
+      "wo": "WO-018003",
+      "equip": "TK033",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-09-29",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-09-29"
+    },
+    {
+      "wo": "WO-017996",
+      "equip": "CN018",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "General Inspection",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-09-28",
+      "type": "4000 Hours service Planned",
+      "hours": 4000,
+      "plan": "2026-09-28"
+    },
+    {
       "wo": "WO-017896",
       "equip": "EX015",
       "cls": "EXC",
@@ -1394,6 +1754,42 @@
       "raised": "2026-09-28",
       "type": "250 Hours service Planned",
       "hours": 250,
+      "plan": "2026-09-28"
+    },
+    {
+      "wo": "WO-018010",
+      "equip": "GE099",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-09-28",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-09-28"
+    },
+    {
+      "wo": "WO-018001",
+      "equip": "GE100",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "General Inspection",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-09-28",
+      "type": "1000 Hours service Planned",
+      "hours": 1000,
+      "plan": "2026-09-28"
+    },
+    {
+      "wo": "WO-018002",
+      "equip": "TK003",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-09-28",
+      "type": "500 Hours service Planned",
+      "hours": 500,
       "plan": "2026-09-28"
     },
     {
@@ -1790,18 +2186,6 @@
       "raised": "2026-09-24",
       "type": "500 Hours service Planned",
       "hours": 500,
-      "plan": "2026-09-24"
-    },
-    {
-      "wo": "WO-016579",
-      "equip": "GR016",
-      "cls": "GRD",
-      "comp": "",
-      "desc": "250h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-09-24",
-      "type": "250 Hours service Planned",
-      "hours": 250,
       "plan": "2026-09-24"
     },
     {
@@ -2667,18 +3051,6 @@
       "type": "250 Hours service Planned",
       "hours": 250,
       "plan": "2026-09-10"
-    },
-    {
-      "wo": "WO-016856",
-      "equip": "DR008",
-      "cls": "",
-      "comp": "DR008.CH.MT (Mast / Мачта)",
-      "desc": "Трещина крепления цилиндра мачты",
-      "priority": "P2 Urgent",
-      "raised": "2026-09-10",
-      "type": "6.02 Crack at weld / HAZ / Трещина по шву / зоне терм. влияния",
-      "hours": null,
-      "plan": "2026-09-22"
     },
     {
       "wo": "WO-016246",
