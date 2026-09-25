@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-25T07:38:08+00:00",
+  "generated": "2026-09-25T08:48:13+00:00",
   "byUnit": {
     "BL001": [
       {
@@ -1008,19 +1008,6 @@
         "priority": "P3 Planned (PM)"
       }
     ],
-    "TK154": [
-      {
-        "wo": "WO-016590",
-        "hours": 1000,
-        "types": [
-          "FC",
-          "INSP",
-          "MP"
-        ],
-        "plan": "2026-09-23",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
     "TK156": [
       {
         "wo": "WO-017892",
@@ -1551,18 +1538,6 @@
       "type": "500 Hours service Planned",
       "hours": 500,
       "plan": "2026-10-03"
-    },
-    {
-      "wo": "WO-017984",
-      "equip": "CN023",
-      "cls": "GEN",
-      "comp": "",
-      "desc": "250h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-10-02",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-10-02"
     },
     {
       "wo": "WO-016659",
@@ -2333,18 +2308,6 @@
       "plan": "2026-09-23"
     },
     {
-      "wo": "WO-016590",
-      "equip": "TK154",
-      "cls": "HT",
-      "comp": "",
-      "desc": "Filter Cut / General Inspection / Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-09-23",
-      "type": "1000 Hours service Planned",
-      "hours": 1000,
-      "plan": "2026-09-23"
-    },
-    {
       "wo": "WO-017397",
       "equip": "CN005",
       "cls": "GEN",
@@ -2950,30 +2913,6 @@
       "cls": "",
       "comp": "DR008.PS.CO (Air Compressor / Воздушный компрессор)",
       "desc": "Обнаружена течь на основной линии трубопровода винтового компрессора в месте установки зажимного хомута.",
-      "priority": "P2 Urgent",
-      "raised": "2026-09-11",
-      "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "hours": null,
-      "plan": "2026-09-22"
-    },
-    {
-      "wo": "WO-016861",
-      "equip": "DR008",
-      "cls": "",
-      "comp": "DR008.DRS.COO (Cooling System / Система охлаждения)",
-      "desc": "Наружная течь о/ж",
-      "priority": "P2 Urgent",
-      "raised": "2026-09-11",
-      "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "hours": null,
-      "plan": "2026-09-22"
-    },
-    {
-      "wo": "WO-016860",
-      "equip": "DR008",
-      "cls": "",
-      "comp": "DR008.DRS.FUE (Fuel System / Топливная система)",
-      "desc": "Наружная утечка топлива. Требуется диагностика",
       "priority": "P2 Urgent",
       "raised": "2026-09-11",
       "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
