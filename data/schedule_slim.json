@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-25T19:44:17+00:00",
+  "generated": "2026-09-25T20:48:00+00:00",
   "byUnit": {
     "BL001": [
       {
@@ -2832,18 +2832,6 @@
       "priority": "P2 Urgent",
       "raised": "2026-09-11",
       "type": "2.01 Wear / Износ",
-      "hours": null,
-      "plan": "2026-09-24"
-    },
-    {
-      "wo": "WO-016863",
-      "equip": "DR009",
-      "cls": "",
-      "comp": "DR009.CH.MT (Mast / Мачта)",
-      "desc": "Повреждение кожуха коннектора",
-      "priority": "P2 Urgent",
-      "raised": "2026-09-11",
-      "type": "4.12 Cable / harness damage / Повреждение кабеля / жгута",
       "hours": null,
       "plan": "2026-09-24"
     },

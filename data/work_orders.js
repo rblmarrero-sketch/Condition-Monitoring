@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-09-25T19:44:17+00:00",
+  "generated": "2026-09-25T20:48:00+00:00",
   "source": "https://askpi.94-131-94-152.sslip.io/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 681,
@@ -1271,7 +1271,7 @@ window.CM_WO_DATA = {
       "cause": "Плохая прокладка",
       "causeFrom": "wo",
       "descr": "Повреждение кожуха коннектора",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "by": "Irek",
       "woNumber": "WO-016863",
       "maintType": "P4 Planned Repair",
