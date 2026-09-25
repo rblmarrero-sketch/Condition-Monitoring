@@ -793,38 +793,21 @@
 #rptRoot .quiet b{color:#12161a;font-weight:700;}
 #rptRoot .shsign{display:flex;gap:34px;align-items:flex-end;margin-top:16px;
   border-top:1px solid #dfe4e9;padding-top:11px;}
-/* Three frames to the width of the sheet, each the WHOLE photograph, never
-   cropped — a cropped 150 px stamp is what management called "distorted":
-   object-fit cover cut the evidence and the small tile rasterised soft.
-   That fix left the FIGURE itself uncapped (max-width:none), which was
-   fine while every general-evidence photo happened to be landscape enough
-   to fit one track. A wider landscape frame has no cap to stop it, so its
-   figure — the actual grid item — grows past its own track into the row's
-   free space, and the same three-photo row prints as two oversized tiles
-   with a gap where the third belongs, no longer a row of standard tiles.
-   Capped now to one tile's own footprint (three tiles across a 760px sheet
-   at this gap is 248px; 240 leaves it room), with the image fitted inside
-   by max-width/max-height and auto on both dimensions — the classic
-   fit-inside-a-box technique that predates object-fit/aspect-ratio
-   entirely and asks html2canvas for nothing it does not already do
-   correctly for a plain img tag (this file's own note above: an explicit
-   dimension with the other left auto is the one sizing method it honours).
-   A portrait frame and a landscape one now occupy the identical box. */
-#rptRoot .shots{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px 8px;}
-#rptRoot .shots figure{width:auto;max-width:240px;margin:0;}
-#rptRoot .shots{justify-items:center;align-items:center;}
-#rptRoot .shots img{display:block;width:auto;height:auto;max-width:240px;max-height:182px;background:#fff;
-  border-radius:3px;border:1px solid #dfe4e9;}
-#rptRoot .shots figcaption{font-size:9.5px;color:#3d474f;margin-top:4px;line-height:1.3;}
-/* General evidence: the same size and rhythm as the point galleries, so a
-   reader does not read "different size" as "different importance" — and
-   the same standard-tile fix as .shots above, for the identical reason. */
-#rptRoot .genrow{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px 8px;}
-#rptRoot .genrow figure{width:auto;max-width:240px;margin:0;}
-#rptRoot .genrow{justify-items:center;align-items:center;}
-#rptRoot .genrow img{display:block;width:auto;height:auto;max-width:240px;max-height:182px;background:#fff;
-  border-radius:3px;border:1px solid #dfe4e9;}
-#rptRoot .genrow figcaption{font-size:9.5px;color:#3d474f;margin-top:4px;line-height:1.3;}
+/* Every captioned photo board — general evidence, the fleet path's "selected
+   evidence" and its per-round appendix boards — used to be its own
+   fit-inside-a-box (.shots/.genrow) grid, each figure capped to whatever size
+   its own aspect ratio happened to leave it, CONTAIN rather than COVER. Read
+   off a real TK500 report, general evidence circled: eleven photographs at
+   eleven different sizes, none of them filling a line edge to edge — the
+   exact shape already retired for a finding's own gallery (tiledRow/tileSize,
+   see the note above capTile/capGallery), just never carried to this board.
+   capTile()/capGallery() draw every one of these boards with the identical
+   square, cover-fit tile now; the caption is the one thing a finding's own
+   gallery never needed, since here every photograph is its own distinct fact
+   rather than four angles of one finding sharing a single caption above the
+   row. */
+#rptRoot .capgal-row{align-items:flex-start;}
+#rptRoot .capgal figcaption{font-size:9.5px;color:#3d474f;margin-top:4px;line-height:1.3;}
 #rptRoot .genwhy{font-size:9.5px;color:#5b6670;margin-top:6px;line-height:1.4;}
 /* Said plainly and without alarm. A missing file is a synchronisation problem,
    and a reader who cannot tell that from a bad measurement will distrust the
@@ -2415,9 +2398,8 @@
     if (keepGeneral && (rec.general || []).length) {
       out.push({ nb: false, html: '<div class="sec">'
         + '<div class="subhd">' + T.I("gen_t") + '</div>'
-        + '<div class="genrow">'
-        + rec.general.map(function (u) { return genShot(T, u); }).join("")
-        + '</div></div>' });
+        + capGallery(rec.general.map(function (u) { return genShotItem(T, u); }))
+        + '</div>' });
     }
     if (rec.gap && rec.gap.missing > 0) {
       out.push({ nb: false, html: '<div class="sec"><div class="evgap">'
@@ -2795,9 +2777,8 @@
     if (!(rec.general || []).length) return "";
     return '<div class="genwrap" style="margin-top:14px">'
       + '<div class="subhd">' + T.I("gen_t") + '</div>'
-      + '<div class="genrow">'
-      + rec.general.map(function (u) { return genShot(T, u); }).join("")
-      + '</div></div>';
+      + capGallery(rec.general.map(function (u) { return genShotItem(T, u); }))
+      + '</div>';
   }
 
   /* ── The single-inspection type bodies, to the v2 templates ───────────────
@@ -4884,6 +4865,54 @@
     }).join("");
     return { html: '<div class="phgrow" style="position:relative;width:100%;height:' + side + 'px;">' + cells + '</div>', h: side };
   }
+  /* THE RULE APPLIED TO A COMPONENT'S OWN GALLERY APPLIES TO EVERY OTHER
+     CAPTIONED PHOTO BOARD TOO — Machine overview, additional photos and
+     every other "general evidence" board printed a photograph at whatever
+     size and shape its own figure happened to grow to (`.shots`/`.genrow`,
+     the older fit-inside-a-box technique: `max-width:240px;max-height:182px`,
+     CONTAIN not COVER), while a component's findings board next to it on the
+     same page was already the standard square, cover-fit tile this file's
+     own history spent several field reports settling on. Read off a real
+     TK500 report, general evidence circled: eleven photographs at eleven
+     different sizes and aspect ratios, none of them filling a line edge to
+     edge — the exact shape "standardize the width and height of all photos
+     in all components inspected, for all type of inspections" already
+     retired for a finding's own gallery, just never carried to this board.
+
+     `capTile`/`capGallery` are `tiledRow`'s own math — `tileSize()` for the
+     side, the identical cover-fit crop — with the one thing a finding's
+     gallery never needed added back: a caption UNDER each tile, because
+     here every photograph is its own distinct fact ("Equipment overview",
+     "Identification plate", a component's own name), not four angles of
+     one finding sharing a single caption above the row. */
+  function capTile(u, side, capHtml) {
+    var ratio = photoRatio(u);
+    var inner = side - PH_BORDER * 2, dispW, dispH;
+    if (ratio >= 1) { dispH = inner; dispW = inner * ratio; }
+    else { dispW = inner; dispH = inner / ratio; }
+    var ox = (inner - dispW) / 2, oy = (inner - dispH) / 2;
+    return '<figure style="width:' + side + 'px;margin:0;">'
+      + '<div style="position:relative;width:' + side + 'px;height:' + side
+      + 'px;background:#fff;border:' + PH_BORDER + 'px solid #dfe4e9;border-radius:3px;overflow:hidden;">'
+      + '<img src="' + u + '" style="position:absolute;left:' + ox + 'px;top:' + oy
+      + 'px;width:' + dispW + 'px;height:' + dispH + 'px;max-width:none;max-height:none;display:block;">'
+      + '</div>'
+      + (capHtml ? '<figcaption>' + capHtml + '</figcaption>' : "")
+      + '</figure>';
+  }
+  /* shots: [{u, capHtml}]. Rows of GAL_TILE_COLS, flush left, a short final
+     row left short by design rather than stretched to the line — the same
+     "falls short of the line by design" rule tiledRow already keeps for a
+     finding's own remainder row. */
+  function capGallery(shots) {
+    var side = tileSize(GAL_ROW_W, GAL_GAP);
+    var rows = chunkPh(shots, GAL_TILE_COLS);
+    return '<div class="capgal">' + rows.map(function (r) {
+      return '<div class="capgal-row" style="display:flex;gap:' + GAL_GAP + 'px;margin-bottom:' + GAL_GAP + 'px;">'
+        + r.map(function (s) { return capTile(s.u, side, s.capHtml); }).join("")
+        + '</div>';
+    }).join("") + '</div>';
+  }
   function cell(ctx, T, it, sh, gallery) {
     sh = sh || {};
     /* EVERY photograph the inspector took. Somebody walked to the machine for
@@ -5246,11 +5275,15 @@
     });
   }
   /* A general photograph is a URL, or a {u, cat} pair when the phone said
-     what it is of. One reader for both shapes. */
-  function genShot(T, x) {
+     what it is of. One reader for both shapes, returning what capGallery()
+     needs — the tile's own bytes and its caption's markup — rather than a
+     finished <figure>, since the tile itself is now drawn by capTile() at
+     the sheet's own standard size, the same rule a component's gallery
+     already gets. */
+  function genShotItem(T, x) {
     var u = (x && typeof x === "object") ? x.u : x;
     var cat = (x && typeof x === "object" && x.cat) ? x.cat : "";
-    return '<figure><img src="' + esc(u) + '">' + (cat ? '<figcaption>' + T.I("cat_" + cat) + '</figcaption>' : "") + '</figure>';
+    return { u: esc(u), capHtml: cat ? T.I("cat_" + cat) : "" };
   }
   /* The rule, reachable by the suite. It decides what a document calls
      itself, so it is asked directly rather than inferred from rendered text —
@@ -5620,10 +5653,8 @@
       notableC.forEach(function(it){ if(selC.length<4 && it.photos && it.photos.length)
         selC.push({it:it,u:it.photos[0]}); });
       if(selC.length){
-        m2 += '<div class="subhd" style="margin-top:11px;">'+T.I("photos")+'</div><div class="shots">';
-        selC.forEach(function(s){ m2+='<figure><img src="'+s.u+'"><figcaption>'
-          + esc(s.it.name||s.it.key)+'</figcaption></figure>'; });
-        m2 += '</div>';
+        m2 += '<div class="subhd" style="margin-top:11px;">'+T.I("photos")+'</div>'
+          + capGallery(selC.map(function(s){ return { u: esc(s.u), capHtml: esc(s.it.name||s.it.key) }; }));
       }
       if(rec.gap && rec.gap.missing>0) m2 += '<div class="evgap" style="margin-top:11px;"><b>'
         + T.I("ev_gap_t")+'</b> '+T.I("ev_gap",{n:rec.gap.missing, e:rec.gap.expected, r:rec.gap.received})+'</div>';
@@ -5720,19 +5751,18 @@
       var shots=[];
       rec.items.forEach(function(it){ (it.photos||[]).forEach(function(u){ shots.push({it:it,u:u}); }); });
       if(shots.length){
-        var ph=cont+'<div class="subhd" style="margin-top:11px;">'+T.I("photos")+'</div><div class="shots">';
-        shots.forEach(function(s){ ph+='<figure><img src="'+s.u+'"><figcaption>'
-          + esc(s.it.name||s.it.key)+'</figcaption></figure>'; });
-        extra.push({nb:false, html:ph+'</div></div></div>'});
+        var ph=cont+'<div class="subhd" style="margin-top:11px;">'+T.I("photos")+'</div>'
+          + capGallery(shots.map(function(s){ return { u: esc(s.u), capHtml: esc(s.it.name||s.it.key) }; }));
+        extra.push({nb:false, html:ph+'</div></div>'});
       }
       /* The fleet path prints one block per round too, so the same two facts
          belong here. A general photograph that appears in the unit report and
          vanishes from the fleet one is two documents disagreeing about the
          same inspection. */
       if((rec.general||[]).length){
-        var gp=cont+'<div class="subhd" style="margin-top:11px;">'+T.I("gen_t")+'</div><div class="shots">';
-        rec.general.forEach(function(u){ gp+=genShot(T,u); });
-        extra.push({nb:false, html:gp+'</div></div></div>'});
+        var gp=cont+'<div class="subhd" style="margin-top:11px;">'+T.I("gen_t")+'</div>'
+          + capGallery(rec.general.map(function(u){ return genShotItem(T, u); }));
+        extra.push({nb:false, html:gp+'</div></div>'});
       }
       if(rec.gap && rec.gap.missing>0){
         extra.push({nb:false, html:cont+'<div class="evgap" style="margin-top:11px;"><b>'

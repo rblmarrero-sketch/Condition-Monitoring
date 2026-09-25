@@ -237,13 +237,10 @@ const SEED = () => {
       const i = css.indexOf(sel); if (i < 0) return null;
       return css.slice(i, css.indexOf('}', i));
     };
-    return { gal: of('.cel .phg.gallery{'), shots: of('.shots{'), genrow: of('.genrow{'),
-             galImg: of('.cel .phg.gallery img{'), shotsImg: of('.shots img{'), genImg: of('.genrow img{') };
+    return { gal: of('.cel .phg.gallery{'), galImg: of('.cel .phg.gallery img{') };
   });
-  ['gal', 'shots', 'genrow'].forEach(k => {
-    ok('  ' + k + ' lays out as a grid, so a row cannot go ragged',
-       cells[k] && /display:grid/.test(cells[k]), (cells[k] || '').slice(0, 70));
-  });
+  ok('  gal lays out as a grid, so a row cannot go ragged',
+     cells.gal && /display:grid/.test(cells.gal), (cells.gal || '').slice(0, 70));
   /* galImg IS the grid item — .cel .phg.gallery has no figure wrapper — so
      capping its own width to the track (max-width:100%) is enough. It fits
      inside a box (max-height, both dimensions auto) rather than a fixed
@@ -255,23 +252,65 @@ const SEED = () => {
   ok('  galImg fits inside a box, at the photograph\'s own width',
      /max-height:182px/.test(c) && /width:auto/.test(c) && /height:auto/.test(c) && /max-width:100%/.test(c),
      c.slice(0, 90));
-  /* shots/genrow wrap the img in a figure that IS the grid item, and a wide
-     landscape frame at a fixed height has no reason to stay inside its own
-     track — nothing capped the figure, so it grew into the row's free space
-     and the same three-photo row printed as two oversized tiles with a gap
-     where the third belonged (2026-09-16, general evidence). Fitted inside a
-     box now — max-width AND max-height, both dimensions auto — the classic
-     technique that predates object-fit/aspect-ratio and asks html2canvas for
-     nothing beyond what it already does correctly for a plain img: derive
-     size from the photo's own ratio. A portrait frame and a landscape one
-     now occupy the identical box regardless of which way round they are. */
-  ['shotsImg', 'genImg'].forEach(k => {
-    const c = cells[k] || '';
-    ok('  ' + k + ' fits inside a fixed box, not a fixed height alone',
-       /max-width:240px/.test(c) && /max-height:182px/.test(c)
-         && /width:auto/.test(c) && /height:auto/.test(c),
-       c.slice(0, 90));
+  /* General evidence, the fleet path's "selected evidence" and every other
+     captioned photo board (.shots/.genrow, the older fit-inside-a-box/CONTAIN
+     technique) are drawn by capTile()/capGallery() now — the identical
+     square, COVER-fit tile a finding's own gallery already uses, with a
+     caption under each one because here every photograph is its own
+     distinct fact rather than four angles of one finding sharing a single
+     caption above the row. Measured on the real rendered page, not a CSS
+     string: capGallery's rows are flex (not the old CSS grid), and each
+     tile is a FIXED SQUARE — the exact side tileSize() gives a finding's own
+     gallery — with its img absolutely positioned and cropped to fill it,
+     never fitted-inside-a-box the way .shots/.genrow used to. */
+  const tileGeo = await p.evaluate(async () => {
+    /* rptmirror's own section 6 host is already gone by this point (removed
+       right after its own measurement) — a fresh, self-contained record with
+       general evidence is built here instead, the same way unitgenphoto.cjs
+       proves the machine's own photographs reach the document at all. Two
+       GENUINELY different frames, not one repeated: identical data URIs
+       collapse to one on ingest (histwide.cjs's own lesson), which would
+       leave only one tile to measure a "row" from. */
+    const solid = (w, h, rgb) => { const c = document.createElement('canvas'); c.width = w; c.height = h;
+      const x = c.getContext('2d'); x.fillStyle = 'rgb(' + rgb.join(',') + ')'; x.fillRect(0, 0, w, h); return c.toDataURL('image/png'); };
+    const recs = [{ equip: 'DZ002', clsLabel: 'DOZ', model: 'X', type: 'FC', typeLabel: 'FC', date: '2026-09-14', by: 'R', smu: '27908',
+      items: [
+        { key: 'ENG', name: 'Engine Oil Filter', grade: 1, photos: [] },
+        { key: '__general', name: 'Machine', general: true, cats: ['OVERVIEW', 'LEFT'],
+          photos: [solid(900, 600, [80, 120, 200]), solid(600, 900, [200, 90, 40])] },
+      ] }];
+    const secs = window.CMR.sections({ lang: 'en', bi: false, mode: 'unit', title: 'x', titleAlt: 'y', stamp: new Date(),
+      sevLabel: s => s, sevLabelAlt: s => s, records: recs });
+    const host = document.createElement('div'); host.id = 'rptRoot2';
+    host.style.cssText = 'position:fixed;left:0;top:0;width:760px;background:#fff;';
+    host.innerHTML = secs.map(s => s.html).join('');
+    document.body.appendChild(host);
+    await new Promise(r => setTimeout(r, 400));
+    const rows = Array.from(host.querySelectorAll('.capgal-row'));
+    if (!rows.length) { host.remove(); return null; }
+    const row = rows[0];
+    const figs = Array.from(row.querySelectorAll(':scope > figure'));
+    const out = {
+      rowDisplay: getComputedStyle(row).display,
+      tiles: figs.map(f => {
+        const box = f.querySelector('div');
+        const img = f.querySelector('img');
+        const bb = box.getBoundingClientRect(), ib = img.getBoundingClientRect();
+        return { side: bb.width, sameSquare: Math.abs(bb.width - bb.height) < 1,
+                 imgOverflows: ib.width > bb.width + 1 || ib.height > bb.height + 1,
+                 clipped: getComputedStyle(box).overflow === 'hidden' };
+      })
+    };
+    host.remove();
+    return out;
   });
+  ok('  capgal-row lays out as flex, so tiles sit evenly on the line',
+     tileGeo && tileGeo.rowDisplay === 'flex', tileGeo && tileGeo.rowDisplay);
+  ok('  every general-evidence tile is the same fixed square, cover-fit and clipped — not fitted inside a box',
+     tileGeo && tileGeo.tiles.length > 0 &&
+     tileGeo.tiles.every(t => t.sameSquare && t.clipped) &&
+     new Set(tileGeo.tiles.map(t => Math.round(t.side))).size === 1,
+     tileGeo && JSON.stringify(tileGeo.tiles));
 
   console.log('\n8. AND THE PHONE MAKES THE SAME DOCUMENT, MEASURED THE SAME WAY');
   /* The office half above is measured off a real file. This is the other

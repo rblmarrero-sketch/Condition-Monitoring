@@ -58,7 +58,7 @@ const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
     return {
       sectionsCount: secs.length,
       hasOverviewImgTag: html.includes(overviewPhoto.slice(0, 60)),
-      hasGenRowClass: /genrow/.test(html),
+      hasGenRowClass: /class="capgal"/.test(html),
       hasGenHeading: /General evidence|Общий фотоматериал/.test(html),
       hasFindingPhotos: /Rear Differential|Задний дифференциал/.test(html),
     };
@@ -67,7 +67,7 @@ const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
   ok('the compact document still carries the finding\'s own photographs', r.hasFindingPhotos, JSON.stringify(r));
   ok('THE FIX: the machine\'s own overview photograph is ALSO in the document, even though a significant finding exists',
      r.hasOverviewImgTag, JSON.stringify(r));
-  ok('  under its own "General evidence" heading, in its own genrow board', r.hasGenRowClass && r.hasGenHeading, JSON.stringify(r));
+  ok('  under its own "General evidence" heading, in its own standard-tile capgal board', r.hasGenRowClass && r.hasGenHeading, JSON.stringify(r));
 
   ok(fails.filter(f => f.startsWith('PAGEERROR')).length === 0, 'no page errors throughout');
   await b.close();

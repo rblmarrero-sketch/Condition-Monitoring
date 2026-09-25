@@ -3058,3 +3058,63 @@ readers each covering one subsystem. Eight held up under verification:
   the identical "a wrong [type] is a lie the next reader believes" shape this
   function's own comment already warns against for a photograph, one call
   away.
+
+**"MACHINE OVERVIEW AND ADDITIONAL PHOTOS" NEVER GOT THE RULE ALREADY SETTLED
+FOR A COMPONENT'S OWN GALLERY.** Read off a real TK500 report, both pages
+circled: "Chec photos from Machine overview and additional photos. Apply the
+rule we have on photos with the components." A finding's own photo gallery
+(`tiledRow`/`tileSize`, see the note above `capTile`/`capGallery`) has been
+the standard, square, COVER-fit tile for a while — every photograph the same
+size, filling a line edge to edge, cropped rather than padded. General
+evidence — the machine's overview, plate and additional photographs — never
+got it: `.shots`/`.genrow`, the older fit-inside-a-box (CONTAIN) technique,
+sized each figure to whatever its own aspect ratio happened to leave it.
+Eleven photographs on the real report printed at eleven different sizes,
+none of them filling a line.
+
+Four call sites carried the old shape, not one: `generalBlock()` (the
+single-round report's own "General evidence"), `evidenceSections()`'s
+`keepGeneral` branch (a wear round's trailing machine photographs), the
+fleet/management summary's "selected evidence" card (up to four flagged
+findings' lead photos), and the technical appendix's per-round
+"photographs" and "general evidence" boards — the same "one fact fixed in
+one place, not everywhere the shape recurs" gap this file has hit before.
+
+`capTile()`/`capGallery()` are `tiledRow`'s own square, cover-fit math, with
+the one thing a finding's own gallery never needed added back: a caption
+UNDER each tile, because here every photograph is its own distinct fact
+("Equipment overview", a component's own name) rather than four angles of
+one finding sharing a single caption above the row. `genShot()` — which
+returned a finished `<figure>` string — became `genShotItem()`, returning
+`{u, capHtml}` instead, the bytes and the caption's own markup, so the tile
+itself is drawn by `capTile()` at the sheet's standard size like everything
+else on the page. All four call sites now build their board through
+`capGallery()`; the retired `.shots`/`.genrow` CSS is gone, replaced by one
+rule for the new `figcaption`.
+
+Fixing the closing call sites cost the exact div-count mistake this file's
+own rules warn against making twice: `.shots`/`.genrow` opened their own
+wrapper div that `capGallery()`'s self-contained markup no longer needs, and
+the two appendix call sites' surrounding `cont` string was written assuming
+that wrapper existed — the first pass left one `</div>` short at both,
+caught by counting the open tags in `cont` by hand rather than trusting the
+old close count to still be right.
+
+`tests/rptmirror.cjs`'s own "ONE PHOTOGRAPH CELL, ON EVERY CONTAINER" section
+had encoded the OLD `.shots`/`.genrow` CSS-grid rules as part of its own
+contract — asserting a `display:grid` rule that no longer exists is not a
+passing test, it is a test that stopped testing anything the moment the
+selectors it read went away silently. Rewritten to measure the real rendered
+geometry instead of a CSS string: `.capgal-row` lays out as flex, and every
+tile in it is the same fixed square, clipped (cover-fit), matching the
+finding gallery's own tile size — built from a record `sectionsFor`'s
+temporary host had already discarded by the time this section runs, so the
+check now builds its own record and its own host rather than reading a DOM
+node a prior section had already removed. `tests/unitgenphoto.cjs`'s
+`hasGenRowClass` check (`/genrow/.test(html)`) is the same shape one call
+site over, updated to check for `class="capgal"` instead. New
+`tests/genevtile.cjs` proves the two call sites neither of those suites
+reached — the fleet path's "selected evidence" card and the technical
+appendix's own photo boards — render through the same function, at the
+same tile size, each tile with its own distinct caption, and that no board
+anywhere in the document still uses the retired markup.
