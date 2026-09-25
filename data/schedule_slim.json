@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-25T03:43:09+00:00",
+  "generated": "2026-09-25T03:58:18+00:00",
   "byUnit": {
     "BL001": [
       {
@@ -655,15 +655,6 @@
     ],
     "TK105": [
       {
-        "wo": "WO-016569",
-        "hours": 500,
-        "types": [
-          "MP"
-        ],
-        "plan": "2026-09-24",
-        "priority": "P3 Planned (PM)"
-      },
-      {
         "wo": "WO-017887",
         "hours": 250,
         "types": [
@@ -769,17 +760,6 @@
         "priority": "P3 Planned (PM)"
       }
     ],
-    "TK120": [
-      {
-        "wo": "WO-016568",
-        "hours": 250,
-        "types": [
-          "MP"
-        ],
-        "plan": "2026-09-23",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
     "TK121": [
       {
         "wo": "WO-017854",
@@ -845,17 +825,6 @@
           "TB"
         ],
         "plan": "2026-10-05",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "TK147": [
-      {
-        "wo": "WO-015361",
-        "hours": 250,
-        "types": [
-          "MP"
-        ],
-        "plan": "2026-09-16",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -1872,18 +1841,6 @@
       "plan": "2026-09-24"
     },
     {
-      "wo": "WO-016569",
-      "equip": "TK105",
-      "cls": "AT",
-      "comp": "",
-      "desc": "Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-09-24",
-      "type": "500 Hours service Planned",
-      "hours": 500,
-      "plan": "2026-09-24"
-    },
-    {
       "wo": "WO-016655",
       "equip": "TK159",
       "cls": "HT",
@@ -1944,18 +1901,6 @@
       "plan": "2026-09-23"
     },
     {
-      "wo": "WO-016582",
-      "equip": "LD008",
-      "cls": "LDR",
-      "comp": "",
-      "desc": "500h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-09-23",
-      "type": "500 Hours service Planned",
-      "hours": 500,
-      "plan": "2026-09-23"
-    },
-    {
       "wo": "WO-017399",
       "equip": "LS012",
       "cls": "GEN",
@@ -1982,18 +1927,6 @@
     {
       "wo": "WO-017797",
       "equip": "TK111",
-      "cls": "AT",
-      "comp": "",
-      "desc": "Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-09-23",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-09-23"
-    },
-    {
-      "wo": "WO-016568",
-      "equip": "TK120",
       "cls": "AT",
       "comp": "",
       "desc": "Magnetic Plug",
@@ -2037,18 +1970,6 @@
       "raised": "2026-09-22",
       "type": "1000 Hours service Planned",
       "hours": 1000,
-      "plan": "2026-09-22"
-    },
-    {
-      "wo": "WO-016615",
-      "equip": "EX011",
-      "cls": "EXC",
-      "comp": "",
-      "desc": "500h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-09-22",
-      "type": "500 Hours service Planned",
-      "hours": 500,
       "plan": "2026-09-22"
     },
     {
@@ -2505,18 +2426,6 @@
       "raised": "2026-09-16",
       "type": "2000 Hours service Planned",
       "hours": 2000,
-      "plan": "2026-09-16"
-    },
-    {
-      "wo": "WO-015361",
-      "equip": "TK147",
-      "cls": "HT",
-      "comp": "",
-      "desc": "Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-09-16",
-      "type": "250 Hours service Planned",
-      "hours": 250,
       "plan": "2026-09-16"
     },
     {
