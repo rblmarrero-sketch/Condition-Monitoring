@@ -1,216 +1,6 @@
 {
-  "generated": "2026-09-25T21:43:13+00:00",
+  "generated": "2026-09-25T22:43:13+00:00",
   "byUnit": {
-    "BL001": [
-      {
-        "wo": "WO-016315",
-        "hours": 4000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-09-13",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "BL004": [
-      {
-        "wo": "WO-017742",
-        "hours": 4000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-09-24",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "BL015": [
-      {
-        "wo": "WO-017979",
-        "hours": 4000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-09-30",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "CD007": [
-      {
-        "wo": "GD-023088",
-        "hours": 1000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-08-01",
-        "priority": "P3 Planned (PM)"
-      },
-      {
-        "wo": "WO-013889",
-        "hours": 1000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-08-09",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "CD008": [
-      {
-        "wo": "GD-023112",
-        "hours": 1000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-08-01",
-        "priority": "P3 Planned (PM)"
-      },
-      {
-        "wo": "WO-016916",
-        "hours": 1000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-09-17",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "CD009": [
-      {
-        "wo": "GD-023133",
-        "hours": 1000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-08-01",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "CD010": [
-      {
-        "wo": "GD-023195",
-        "hours": 1000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-08-01",
-        "priority": "P3 Planned (PM)"
-      },
-      {
-        "wo": "WO-016935",
-        "hours": 1000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-09-19",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "CN005": [
-      {
-        "wo": "WO-017397",
-        "hours": 1000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-09-22",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "CN007": [
-      {
-        "wo": "WO-017741",
-        "hours": 2000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-09-24",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "CN009": [
-      {
-        "wo": "WO-016888",
-        "hours": 4000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-09-15",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "CN013": [
-      {
-        "wo": "GD-020555",
-        "hours": 1000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2025-12-30",
-        "priority": "P3 Planned (PM)"
-      },
-      {
-        "wo": "WO-002197",
-        "hours": 1000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-03-26",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "CN018": [
-      {
-        "wo": "WO-017996",
-        "hours": 4000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-09-28",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "CN019": [
-      {
-        "wo": "WO-004720",
-        "hours": 4000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-04-25",
-        "priority": "P3 Planned (PM)"
-      },
-      {
-        "wo": "WO-017982",
-        "hours": 4000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-09-30",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "CN020": [
-      {
-        "wo": "WO-016926",
-        "hours": 3000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-09-18",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "CN023": [
-      {
-        "wo": "WO-016936",
-        "hours": 3000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-09-19",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
     "DZ001": [
       {
         "wo": "WO-016580",
@@ -297,116 +87,6 @@
         "priority": "P3 Planned (PM)"
       }
     ],
-    "FL015": [
-      {
-        "wo": "WO-016246",
-        "hours": 2000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-09-07",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "GE012": [
-      {
-        "wo": "WO-018006",
-        "hours": 1000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-10-02",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "GE025": [
-      {
-        "wo": "WO-017549",
-        "hours": 2000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-09-20",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "GE031": [
-      {
-        "wo": "WO-017386",
-        "hours": 1000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-09-25",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "GE032": [
-      {
-        "wo": "WO-016933",
-        "hours": 1000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-09-19",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "GE057": [
-      {
-        "wo": "WO-016852",
-        "hours": 2000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-09-12",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "GE064": [
-      {
-        "wo": "WO-016898",
-        "hours": 2000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-09-16",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "GE100": [
-      {
-        "wo": "WO-018001",
-        "hours": 1000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-09-28",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "GE102": [
-      {
-        "wo": "WO-016923",
-        "hours": 4000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-09-18",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "GE110": [
-      {
-        "wo": "WO-017369",
-        "hours": 2000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-09-27",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
     "GR004": [
       {
         "wo": "WO-017871",
@@ -437,39 +117,6 @@
           "FC"
         ],
         "plan": "2026-10-05",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "LS012": [
-      {
-        "wo": "WO-017399",
-        "hours": 1000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-09-23",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "LS021": [
-      {
-        "wo": "WO-017381",
-        "hours": 1000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-09-24",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "PU004": [
-      {
-        "wo": "WO-017372",
-        "hours": 1000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-09-26",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -528,17 +175,6 @@
           "TB"
         ],
         "plan": "2026-09-23",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "TK006": [
-      {
-        "wo": "WO-016930",
-        "hours": 1000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-09-18",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -668,19 +304,6 @@
           "MP"
         ],
         "plan": "2026-10-03",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "TK044": [
-      {
-        "wo": "WO-017413",
-        "hours": 1000,
-        "types": [
-          "FC",
-          "INSP",
-          "MP"
-        ],
-        "plan": "2026-09-21",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -927,17 +550,6 @@
         "priority": "P3 Planned (PM)"
       }
     ],
-    "TK134": [
-      {
-        "wo": "WO-017390",
-        "hours": 1000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-09-23",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
     "TK143": [
       {
         "wo": "WO-016573",
@@ -1079,17 +691,6 @@
           "MP"
         ],
         "plan": "2026-10-04",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "TK164": [
-      {
-        "wo": "WO-008637",
-        "hours": 2000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-07-01",
         "priority": "P3 Planned (PM)"
       }
     ]
@@ -1568,7 +1169,7 @@
       "equip": "GE012",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "1000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-10-02",
       "type": "1000 Hours service Planned",
@@ -1616,7 +1217,7 @@
       "equip": "BL015",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "4000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-30",
       "type": "4000 Hours service Planned",
@@ -1640,7 +1241,7 @@
       "equip": "CN019",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "4000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-30",
       "type": "4000 Hours service Planned",
@@ -1712,7 +1313,7 @@
       "equip": "CN018",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "4000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-28",
       "type": "4000 Hours service Planned",
@@ -1748,7 +1349,7 @@
       "equip": "GE100",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "1000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-28",
       "type": "1000 Hours service Planned",
@@ -1784,7 +1385,7 @@
       "equip": "GE110",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "2000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-27",
       "type": "2000 Hours service Planned",
@@ -1964,7 +1565,7 @@
       "equip": "PU004",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "1000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-26",
       "type": "1000 Hours service Planned",
@@ -2048,7 +1649,7 @@
       "equip": "GE031",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "1000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-25",
       "type": "1000 Hours service Planned",
@@ -2108,7 +1709,7 @@
       "equip": "BL004",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "4000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-24",
       "type": "4000 Hours service Planned",
@@ -2132,7 +1733,7 @@
       "equip": "CN007",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "2000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-24",
       "type": "2000 Hours service Planned",
@@ -2156,7 +1757,7 @@
       "equip": "LS021",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "1000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-24",
       "type": "1000 Hours service Planned",
@@ -2252,7 +1853,7 @@
       "equip": "LS012",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "1000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-23",
       "type": "1000 Hours service Planned",
@@ -2288,7 +1889,7 @@
       "equip": "TK134",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "1000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-23",
       "type": "1000 Hours service Planned",
@@ -2300,7 +1901,7 @@
       "equip": "CN005",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "1000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-22",
       "type": "1000 Hours service Planned",
@@ -2404,18 +2005,6 @@
       "plan": "2026-09-21"
     },
     {
-      "wo": "WO-017413",
-      "equip": "TK044",
-      "cls": "HT",
-      "comp": "",
-      "desc": "Filter Cut / General Inspection / Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-09-21",
-      "type": "1000 Hours service Planned",
-      "hours": 1000,
-      "plan": "2026-09-21"
-    },
-    {
       "wo": "WO-016622",
       "equip": "TK149",
       "cls": "HT",
@@ -2444,7 +2033,7 @@
       "equip": "GE025",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "2000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-20",
       "type": "2000 Hours service Planned",
@@ -2480,7 +2069,7 @@
       "equip": "CD010",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "1000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-19",
       "type": "1000 Hours service Planned",
@@ -2492,7 +2081,7 @@
       "equip": "CN023",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "3000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-19",
       "type": "3000 Hours service Planned",
@@ -2504,7 +2093,7 @@
       "equip": "GE032",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "1000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-19",
       "type": "1000 Hours service Planned",
@@ -2552,7 +2141,7 @@
       "equip": "CN020",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "3000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-18",
       "type": "3000 Hours service Planned",
@@ -2588,7 +2177,7 @@
       "equip": "GE102",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "4000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-18",
       "type": "4000 Hours service Planned",
@@ -2624,7 +2213,7 @@
       "equip": "TK006",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "1000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-18",
       "type": "1000 Hours service Planned",
@@ -2648,7 +2237,7 @@
       "equip": "CD008",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "1000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-17",
       "type": "1000 Hours service Planned",
@@ -2708,7 +2297,7 @@
       "equip": "GE064",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "2000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-16",
       "type": "2000 Hours service Planned",
@@ -2732,7 +2321,7 @@
       "equip": "CN009",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "4000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-15",
       "type": "4000 Hours service Planned",
@@ -2744,7 +2333,7 @@
       "equip": "BL001",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "4000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-13",
       "type": "4000 Hours service Planned",
@@ -2780,7 +2369,7 @@
       "equip": "GE057",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "2000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-12",
       "type": "2000 Hours service Planned",
@@ -2912,7 +2501,7 @@
       "equip": "FL015",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "2000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-07",
       "type": "2000 Hours service Planned",
@@ -2936,7 +2525,7 @@
       "equip": "CD007",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "1000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-08-09",
       "type": "1000 Hours service Planned",
@@ -2972,7 +2561,7 @@
       "equip": "CD007",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "1000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-08-01",
       "type": "1000 Hours service Planned",
@@ -3020,7 +2609,7 @@
       "equip": "CD008",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "1000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-08-01",
       "type": "1000 Hours service Planned",
@@ -3056,7 +2645,7 @@
       "equip": "CD009",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "1000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-08-01",
       "type": "1000 Hours service Planned",
@@ -3116,7 +2705,7 @@
       "equip": "CD010",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "1000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-08-01",
       "type": "1000 Hours service Planned",
@@ -3200,7 +2789,7 @@
       "equip": "TK164",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "2000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-07-01",
       "type": "2000 Hours service Planned",
@@ -3212,7 +2801,7 @@
       "equip": "CN019",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "4000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-04-25",
       "type": "4000 Hours service Planned",
@@ -3224,7 +2813,7 @@
       "equip": "CN013",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "1000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-03-26",
       "type": "1000 Hours service Planned",
@@ -3236,7 +2825,7 @@
       "equip": "CN013",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "1000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2025-12-30",
       "type": "1000 Hours service Planned",
