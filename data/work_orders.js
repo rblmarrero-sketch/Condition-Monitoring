@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-09-25T15:48:16+00:00",
+  "generated": "2026-09-25T16:23:26+00:00",
   "source": "https://askpi.94-131-94-152.sslip.io/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 681,
@@ -809,7 +809,7 @@ window.CM_WO_DATA = {
       "cause": "Усталостная трещина",
       "causeFrom": "wo",
       "descr": "Трешина по шву на передвижной раме мачты.",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "by": "Irek",
       "woNumber": "WO-017458",
       "maintType": "P4 Planned Repair",
@@ -1282,7 +1282,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-09-11",
       "detected": "2026-09-11",
-      "planStart": "2026-09-22",
+      "planStart": "2026-09-24",
       "asset": "DR008",
       "defect": "DD-00012417",
       "requestNo": "DD-00012417",
@@ -1293,7 +1293,7 @@ window.CM_WO_DATA = {
       "cause": "Поврежден прокладки",
       "causeFrom": "wo",
       "descr": "Обнаружена течь на основной линии трубопровода винтового компрессора в месте установки зажимного хомута.",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "by": "Slam",
       "woNumber": "WO-016862",
       "maintType": "P4 Planned Repair",
