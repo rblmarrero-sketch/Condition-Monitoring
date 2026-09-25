@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=461">
+<link rel="manifest" href="manifest.webmanifest?v=462">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=461">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=461">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=461">
+<link rel="apple-touch-icon" href="icon-192.png?v=462">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=462">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=462">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2760,16 +2760,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=461"></script>
-<script src="upload-defaults.js?v=461"></script>
-<script src="hme.js?v=461"></script>
-<script src="mp-fc.js?v=461"></script>
-<script src="rtw.js?v=461"></script>
-<script src="hme-cascade.js?v=461"></script>
-<script src="assets.js?v=461"></script>
-<script src="temp-limits.js?v=461"></script>
-<script src="normalize.js?v=461"></script>
-<script src="terms.js?v=461"></script>
+<script src="native.js?v=462"></script>
+<script src="upload-defaults.js?v=462"></script>
+<script src="hme.js?v=462"></script>
+<script src="mp-fc.js?v=462"></script>
+<script src="rtw.js?v=462"></script>
+<script src="hme-cascade.js?v=462"></script>
+<script src="assets.js?v=462"></script>
+<script src="temp-limits.js?v=462"></script>
+<script src="normalize.js?v=462"></script>
+<script src="terms.js?v=462"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2788,25 +2788,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=461"></script>
-<script src="edits.js?v=461"></script>
-<script src="due.js?v=461"></script>
-<script src="wear.js?v=461"></script>
-<script src="wear-figs.js?v=461"></script>
-<script src="wear-map.js?v=461"></script>
-<script src="machine-photos.js?v=461"></script>
-<script src="machine-fig.js?v=461"></script>
-<script src="get.js?v=461"></script>
-<script src="points.js?v=461"></script>
-<script src="uc-points.js?v=461"></script>
-<script src="inspect-guide.js?v=461"></script>
-<script src="get-figs.js?v=461"></script>
-<script src="body-points.js?v=461"></script>
-<script src="body-map.js?v=461"></script>
-<script src="lube.js?v=461"></script>
-<script src="lube-overrides.js?v=461"></script>
-<script src="lube2027.js?v=461"></script>
-<script src="report-core.js?v=461"></script>
+<script src="grade.js?v=462"></script>
+<script src="edits.js?v=462"></script>
+<script src="due.js?v=462"></script>
+<script src="wear.js?v=462"></script>
+<script src="wear-figs.js?v=462"></script>
+<script src="wear-map.js?v=462"></script>
+<script src="machine-photos.js?v=462"></script>
+<script src="machine-fig.js?v=462"></script>
+<script src="get.js?v=462"></script>
+<script src="points.js?v=462"></script>
+<script src="uc-points.js?v=462"></script>
+<script src="inspect-guide.js?v=462"></script>
+<script src="get-figs.js?v=462"></script>
+<script src="body-points.js?v=462"></script>
+<script src="body-map.js?v=462"></script>
+<script src="lube.js?v=462"></script>
+<script src="lube-overrides.js?v=462"></script>
+<script src="lube2027.js?v=462"></script>
+<script src="report-core.js?v=462"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -10189,8 +10189,32 @@ function roundsOnClass(){
      A class the fleet's own records say nothing about gets no programme
      invented for it. It is counted instead — see unclassedCount — so no
      machine is ever silently absent from this screen. */
+  /* GEN (and its dropdown alias ALL) is not a fleet, it is the fleet's own
+     "nobody has assigned this a programme" bucket — a mobile crane, a
+     generator, a compactor and a manlift share it for no reason beyond
+     having nothing else to share. "If a haul truck has had a plug round,
+     every haul truck is on the plug round" is sound for HT because due.js's
+     own onClass/byClass tables already say HT is one fleet; it is not sound
+     for GEN, which is two hundred unrelated machines wearing one label.
+
+     Raising the bar to "more than one machine" was tried first and was not
+     enough: the live folder already held a General Inspection on CN002 (a
+     mobile crane) AND TK500 (a water truck), both dated 2026-09-24 — two
+     genuinely different equipment types, but two, on one day, the first
+     GEN has ever had, is still a coincidence-shaped signal for a bucket
+     this size, not "the fleet's own practice." It put every GEN machine
+     (CN018, GE100, CD007, CD008, BL001 among them) onto a General
+     Inspection programme nobody ever stated and only two members have ever
+     walked. CATCHALL_MIN (3) is the number of distinct machines a
+     catch-all class needs before the "done" rule treats a round as a real,
+     fleet-wide pairing rather than a handful of one-offs; a named class
+     keeps the original single-round rule untouched, because due.js's own
+     onClass/byClass tables already say who is on it. */
+  const CATCHALL={GEN:1, ALL:1};
+  const CATCHALL_MIN=3;
   try{
     const h=histAll(), gated=histGated();
+    const seen={};                          // "class|type" -> Set of units, catch-all only
     for(const key of Object.keys(h)){
       const [ty,unit]=key.split("|");
       /* RTW is triggered by a work order, not "this class does this round" —
@@ -10202,7 +10226,20 @@ function roundsOnClass(){
       if(ty==="RTW") continue;
       if(!histFirm(histEntry(h[key]),gated)) continue;
       const a=ASSET_BY[unit]; if(!a) continue;
-      add(PTS.classOf(a.cls||a.cat||""), ty);
+      const k=PTS.classOf(a.cls||a.cat||"");
+      if(!k) continue;
+      if(CATCHALL[k]){
+        const sk=k+"|"+ty;
+        (seen[sk]||(seen[sk]=new Set())).add(unit);
+      }else{
+        add(k,ty);
+      }
+    }
+    for(const sk of Object.keys(seen)){
+      if(seen[sk].size>=CATCHALL_MIN){       // a real practice, not a handful of one-offs
+        const i=sk.indexOf("|");
+        add(sk.slice(0,i), sk.slice(i+1));
+      }
     }
   }catch(e){}
   /* A remembered-pairings cache lived here for one build, so that dropping a
@@ -14554,7 +14591,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="461";
+const BUILD="462";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

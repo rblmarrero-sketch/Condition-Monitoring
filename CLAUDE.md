@@ -3174,3 +3174,65 @@ default, the standing percentage, the per-row dot in both toggle states,
 that `paCsv()` is untouched by the toggle and carries `cm_covered`, that the
 setting survives a reload, and that both phone views carry the identical
 note.
+
+**A CATCH-ALL CLASS IS NOT A FLEET, AND ONE ROUND ON IT IS NOT THE FLEET
+SAYING SO.** Read plainly, with two screenshots: CN018 (a mobile crane),
+GE100 (a generator), CD007/CD008 (compactors) and BL001 (a manlift) all
+carrying a General Inspection / Filter Cut badge on 1C's own plan, on
+handsets that have never walked a round of either kind. All five are class
+GEN — the fleet's explicit "nobody has assigned this a programme" bucket
+(`mobile/assets.js`'s own comment: "940 of the 1,128 machines here carry no
+class at all"). Traced to `roundsOnClass()`'s own "done" rule, working
+exactly as designed and exactly as it was fixed for the CD001/LD003 case
+(see that entry, above): "a round walked on any machine of a class is that
+class demonstrating the pairing." That is sound for a NAMED class — due.js
+already states who is on HT or DOZ, so a genuinely homogeneous fleet's first
+walked round is real evidence for the rest — and it is not sound for GEN,
+which is two hundred unrelated machines wearing one label for no reason
+beyond having nowhere else to go. One General Inspection walked on CN002 (a
+crane, 2026-09-24) put the entire GEN bucket on a General Inspection
+programme nobody had ever stated.
+
+"More than one machine" was tried first and was not enough: the live folder
+already held a SECOND real GEN round, on TK500 (a water truck), on the
+SAME day — two genuinely different equipment types, but two, on the one
+day GEN has ever had any history at all, is still coincidence-shaped
+evidence for a bucket this size, not "the fleet's own practice."
+`CATCHALL_MIN` (3) is the number of distinct machines a catch-all class
+(GEN and its dropdown alias ALL) needs before `roundsOnClass()`'s "done"
+rule treats a round as real, fleet-wide practice rather than a handful of
+one-offs; a named class keeps the original single-round rule, unchanged,
+because due.js's own onClass/byClass tables already say who is on it. The
+fix lives at the one place this rule is actually evaluated for real —
+`roundsOnClass()` in `mobile/index.html`, which `ingest/gen_class_rounds.cjs`
+calls live (never a hand-copied table) to write
+`ingest/class_rounds.generated.json`, which `ingest_work_orders.py` reads to
+resolve every work order's `cmTypes` — the exact chain that painted the
+badges CN018/GE100/CD007/CD008/BL001 carried. The dashboard's own
+`dueNeverRows()` carries an inline reimplementation of the identical
+"stated + done" rule (its own comment already says so) and got the same
+`CATCHALL_MIN` bar, so the two screens cannot drift back apart, even though
+that particular branch is presently masked by dueNeverRows()'s own
+pre-existing, separate rule that a GEN/ALL machine is never proposed as
+"never inspected" at all — a different, older rule, reasserted rather than
+touched.
+
+**NOTHING IN THE OVERDUE LIST IS NOT THE SAME DEFECT.** Asked in the same
+report — Overdue is `dueRows()`, the phone's own interval math against ITS
+OWN locally-held history, structurally unrelated to 1C's plan or to the GEN
+fix above. Run against the fleet's real synced history it is not empty:
+nine machines are genuinely overdue right now (seven Magnetic Plug rounds
+including two forty-five days over, one Undercarriage round twenty days
+over, one General Inspection). A phone that shows zero there most likely
+has a stale local pull of the shared history, not a broken interval — this
+was reported for a different phone than the one carrying the GEN badges and
+was not chased further here.
+
+`tests/gencatchall.cjs` proves the bar directly against `roundsOnClass()`:
+no history at all puts GEN on nothing; one machine (the CN002 shape) is not
+enough; two machines (the CN002+TK500 shape, same day) is still not enough;
+a third distinct machine crosses the bar; the same machine recorded once is
+still one machine, not three; a named class keeps the original single-round
+rule; and the pre-existing GEN exclusion from "never inspected" is
+unaffected either way — proven so a future change to the catch-all bar is
+never confused with that separate, older rule.
