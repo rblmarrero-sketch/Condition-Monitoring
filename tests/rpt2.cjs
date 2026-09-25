@@ -174,14 +174,20 @@ const SEED = `(async () => {
   ok('and nothing undefined', !/undefined|NaN/.test(rutext));
 
   console.log('\n  the report carries what the inspector saw');
-  const shots = sec.filter(h => h.includes('class="shots"'));
+  /* The appendix's own "photographs" board was .shots (a fit-inside-a-box
+     grid) until it was brought to the same standard, square, cover-fit tile
+     a component's own gallery already uses (capTile/capGallery, see
+     report-core.js) — the exact rule "Chec photos from Machine overview and
+     additional photos. Apply the rule we have on photos with the
+     components" asked to have applied everywhere the older shape appeared. */
+  const shots = sec.filter(h => h.includes('class="capgal"'));
   ok('a round with a photograph prints one', shots.length === 1, shots.length + ' photo blocks');
   ok('and it is a real image, not an empty frame',
     (shots.join('').match(/<img src="data:image\/(jpeg|png)/g) || []).length === 1,
     String((shots.join('').match(/<img src="data:image/g) || []).length));
   ok('captioned with the point it belongs to', /<figcaption>[^<]{2,}<\/figcaption>/.test(shots.join('')));
   ok('a round with no photograph prints no empty block',
-    !(sec.filter(h => h.includes('TK146') && /class="machhd"/.test(h))[0] || '').includes('class="shots"'));
+    !(sec.filter(h => h.includes('TK146') && /class="machhd"/.test(h))[0] || '').includes('class="capgal"'));
 
   console.log('\n  the machine is drawn, not just tabulated');
   /* A red puck at roller 6 is a place a fitter can walk to; a row in a table is

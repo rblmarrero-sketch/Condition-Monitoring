@@ -203,7 +203,7 @@ const say = (p, k, v) => p.evaluate(([k, v]) => t(k, v || undefined), [k, v]);
         stamp: new Date(), sevLabel: s => s, sevLabelAlt: s => s,
         title: "x", titleAlt: "x", sub: "", subAlt: "" });
       const html = secs.map(s => s.html).join("");
-      out[kind] = { gen: html.indexOf("genrow") >= 0, gap: html.indexOf("evgap") >= 0 };
+      out[kind] = { gen: html.indexOf("capgal") >= 0, gap: html.indexOf("evgap") >= 0 };
     });
     return out;
   }, "data:image/gif;base64,R0lGODlhAQABAAAAACw=");

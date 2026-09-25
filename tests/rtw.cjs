@@ -386,10 +386,12 @@ const jpg = p => p.evaluate(() => {
   // rec.general before this branch ever runs, exactly as it does for every
   // graded type — but the RTW branch never called generalBlock() to read
   // rec.general back out, so this photograph was captured, saved and synced
-  // and never printed anywhere. It must appear via the same genwrap/genrow
-  // markup every other round type's machine evidence uses.
+  // and never printed anywhere. It must appear via the same genwrap/capgal
+  // markup every other round type's machine evidence uses (genrow/.shots
+  // were the older fit-inside-a-box boards, since replaced everywhere by the
+  // standard, square, cover-fit tile — capTile/capGallery).
   ok('the general/overall evidence photo reaches the report, through the same generalBlock() every other type uses',
-    /class="genwrap"/.test(html) && (html.match(/class="genrow"[^>]*>[\s\S]*?<img src="data:/g) || []).length > 0);
+    /class="genwrap"/.test(html) && (html.match(/class="capgal"[^>]*>[\s\S]*?<img src="data:/g) || []).length > 0);
   ok('the Senior Mechanic\'s name and signature reach the approval table', html.includes('A. Ivanov') && /<img src="data:image\/png/.test(html));
   // The row's own role label is "Senior Mechanic" (rtw_senior), not
   // "Maintenance Supervisor" (ap_sup) — RTW's checklist is signed on the
