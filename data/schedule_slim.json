@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-25T13:43:12+00:00",
+  "generated": "2026-09-25T14:18:19+00:00",
   "byUnit": {
     "BL001": [
       {
@@ -56,7 +56,7 @@
     ],
     "CD008": [
       {
-        "wo": "GD-023122",
+        "wo": "GD-023112",
         "hours": 1000,
         "types": [
           "INSP"
@@ -2536,18 +2536,6 @@
       "plan": "2026-09-19"
     },
     {
-      "wo": "WO-017553",
-      "equip": "TK126",
-      "cls": "",
-      "comp": "TK126.DRS.ENG (Engine / Двигатель)",
-      "desc": "Гофрированная труба вышла из посадочного места",
-      "priority": "P4 Planned (Repair)",
-      "raised": "2026-09-19",
-      "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "hours": null,
-      "plan": "2026-09-21"
-    },
-    {
       "wo": "WO-016932",
       "equip": "BL006",
       "cls": "GEN",
@@ -3040,7 +3028,19 @@
       "plan": "2026-08-01"
     },
     {
-      "wo": "GD-023121",
+      "wo": "GD-023109",
+      "equip": "CD008",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "500h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-08-01",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-08-01"
+    },
+    {
+      "wo": "GD-023110",
       "equip": "CD008",
       "cls": "GEN",
       "comp": "",
@@ -3052,7 +3052,7 @@
       "plan": "2026-08-01"
     },
     {
-      "wo": "GD-023122",
+      "wo": "GD-023112",
       "equip": "CD008",
       "cls": "GEN",
       "comp": "",
@@ -3061,18 +3061,6 @@
       "raised": "2026-08-01",
       "type": "1000 Hours service Planned",
       "hours": 1000,
-      "plan": "2026-08-01"
-    },
-    {
-      "wo": "GD-023109",
-      "equip": "CD008",
-      "cls": "GEN",
-      "comp": "",
-      "desc": "500h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-08-01",
-      "type": "500 Hours service Planned",
-      "hours": 500,
       "plan": "2026-08-01"
     },
     {
