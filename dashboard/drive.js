@@ -886,17 +886,47 @@
      from the folder with nothing to say who took it out or why. */
   const deleteFile = (p2) => post(Object.assign({ op: "delfile" }, p2));
 
+  /* Base64 of raw bytes, 32 KB at a time — String.fromCharCode over a whole
+     photograph overruns the argument limit. Mirrors mobile/index.html's own
+     bytesToB64, kept as its own small copy here rather than a cross-file
+     dependency between the two surfaces' upload paths. */
+  function bytesToB64(u) { let s = ""; for (let i = 0; i < u.length; i += 0x8000) s += String.fromCharCode.apply(null, u.subarray(i, i + 0x8000)); return btoa(s); }
+  /* NOTHING REACHES THE WIRE THAT THIS PAGE HAS NOT READ END TO END. A photo
+     added from a desk is read by ONE method (FileReader as a data URL) and
+     whatever it returned — including nothing — used to go straight onto the
+     wire; the server's own "Missing file content" was the first anyone heard
+     that the read had failed. `file.arrayBuffer()` is a different code path
+     over the same bytes, the identical "more than one reader before you call
+     it gone" rule mobile/index.html's readBlobBytes already holds every
+     photograph to, and a file reported as 0 bytes is refused before either
+     reader is even tried. */
+  async function readFileB64(file) {
+    if (!file || !file.size) return "";
+    try {
+      const durl = await new Promise((res, rej) => {
+        const r = new FileReader();
+        r.onload = () => res(String(r.result || ""));
+        r.onerror = () => rej(r.error || new Error("FileReader failed"));
+        r.readAsDataURL(file);
+      });
+      const i = durl.indexOf(",");
+      const b64 = i >= 0 ? durl.slice(i + 1) : "";
+      if (b64) return b64;
+    } catch (e) {}
+    try {
+      const buf = await file.arrayBuffer();
+      if (buf && buf.byteLength) return bytesToB64(new Uint8Array(buf));
+    } catch (e) {}
+    return "";
+  }
   /* Put one picture into Drive under a name the dashboard will find again.
      The same `batch` op the phones use, so nothing new has to be deployed to
      the Apps Script for a photograph added from a desk. */
   async function putMedia(name, file) {
-    const data = await new Promise((res, rej) => {
-      const r = new FileReader();
-      r.onload = () => res(String(r.result).split(",")[1] || "");
-      r.onerror = () => rej(new Error("Could not read the file"));
-      r.readAsDataURL(file);
-    });
-    const j = await post({ op: "batch", files: [{ name, mime: file.type || "image/jpeg", data }] });
+    if (!file || !file.size) throw new Error("This file is empty (0 bytes) — pick it again.");
+    const data = await readFileB64(file);
+    if (!data) throw new Error("Could not read this file's contents — pick it again.");
+    const j = await post({ op: "batch", files: [{ name, mime: file.type || "image/jpeg", file: data }] });
     if (j && j.failed && j.failed.length) throw new Error(j.failed[0].error || "Upload refused");
     /* Into the index and the cache at once, so it is on screen before the next
        refresh rather than after it. */
@@ -1018,7 +1048,7 @@
        syncDefer() on the phone does. Same shape, same place, same reader. */
     async putDoc(name, obj) {
       const data = btoa(unescape(encodeURIComponent(JSON.stringify(obj, null, 2))));
-      const j = await post({ op: "batch", files: [{ name, mime: "application/json", data }] });
+      const j = await post({ op: "batch", files: [{ name, mime: "application/json", file: data }] });
       if (j && j.failed && j.failed.length) throw new Error(j.failed[0].error || "Refused");
       index[name] = { id: (j && j.saved && j.saved[0] && j.saved[0].id) || "", size: data.length };
       return j;

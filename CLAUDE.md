@@ -2657,6 +2657,57 @@ one keystroke at a time rather than setting a value in one step — that
 three keystrokes typed in sequence all land in the input and the input never
 loses focus across the rebuilds in between.
 
+**A PHOTOGRAPH ADDED FROM THE OFFICE NEVER REACHED THE SERVER, ON ANY
+ATTEMPT, SINCE THE DAY THE FEATURE SHIPPED.** Read off the office: TK500's
+Equipment History, a photo picked from the "+" tile under Machine
+photographs, "Upload failed: Missing file content" — not a flaky link, not
+a bad file, every single time. `putMedia()` (`dashboard/drive.js`) builds
+the same `op:"batch"` request the phones use and sends each file as
+`{name, mime, data}` — the base64 sits under `data`. `saveOne()`
+(`docs/yandex/function.js`), the function the batch op calls once per file,
+has only ever read `b.file`: `if (!b.file) return {ok:false, error:'Missing
+file content'}`. The phone's own equivalent (`filesForRecord`/`putAll`)
+sends `file: await blobToB64(f.blob)` — the correct field, which is why the
+identical backend has worked flawlessly for every phone upload the whole
+time this office path sent the wrong one. Confirmed directly: posting the
+exact `data`-keyed shape at the real function returns the exact error read
+off the field, on demand, not a guess about the mechanism.
+
+The office's OWN deferral save — `putDoc()`, `dfSave()`'s "not being done"
+for a machine, found investigating the same function — carried the
+identical `data` field and has been failing and silently rolling back
+since it shipped too, one feature over from the one that was actually
+reported. Both are `file:` now, unchanged otherwise.
+
+**Two things had to be true for this to reach the field undetected.** The
+backend was never wrong — it has rejected exactly what its own contract
+says to reject, for as long as it has existed. And neither existing test of
+this path ever built a real request: `tests/media.cjs`, `tests/edall.cjs`
+and `tests/duework.cjs` all REPLACE `CMDrive.putMedia`/`putDoc` outright
+with a stub that returns success unconditionally, so none of them had ever
+asked the real `docs/yandex/function.js` whether the shape this page sends
+is one it accepts — the identical "the mock accepted it and forgot" shape
+this file's own Tests section already warns `tests/mock.cjs` against, one
+layer up, in a different suite's own stub. `tests/putmedia.cjs` is the
+first test of this path to run against the real function, over the same
+in-memory bucket `tests/toctou.cjs` and `tests/dashswap.cjs` already use:
+it posts the OLD `data`-keyed shape directly and gets back "Missing file
+content" from the genuine backend (the mechanism, proven, not asserted),
+then proves `putMedia()` and `putDoc()` now land their file for real — the
+bucket actually holds it afterward, not just "the call didn't throw".
+
+**NOTHING REACHES THE WIRE THAT THIS PAGE HAS NOT READ END TO END, applied
+to the desk.** `putMedia()` read a picked file by exactly one method
+(`FileReader` as a data URL) and sent back whatever it produced, including
+nothing, with no check — the office-side version of the same gap
+`ownBytes`/`readBlobBytes` closed for the phone build after build after
+build. It now refuses a file reporting 0 bytes before either reader is even
+tried, and falls back to `file.arrayBuffer()` — a different code path over
+the same bytes — if the primary reader comes back empty, the identical
+"more than one reader before you call it gone" rule. `tests/putmedia.cjs`
+proves a 0-byte file is refused with an actual reason before any request is
+made, never round-tripped to the server for an opaque answer.
+
 ---
 
 ## Secrets
