@@ -3218,6 +3218,7 @@
     </div>
     <div class="section">
       <div class="secthd"><h2 data-i18n="pa_h2">Planned service vs. actual round</h2>
+        <span class="pgsub" id="paCoverage"></span>
         <span class="spacer"></span>
         <details class="defs" id="paDefs">
           <summary data-i18n="ov_defs">Definitions</summary>
@@ -3238,6 +3239,10 @@
           <option value="30" data-i18n="pa_win_30">Next 30 days</option>
         </select></label>
         <label class="fld"><span data-i18n="dd_round">Round</span><select id="paType"></select></label>
+        <label class="fld chk" id="paCmOnlyFld" data-i18n-title="pa_cmonly_t"
+            title="Hides 1C work orders that Condition Monitoring does not yet track. The full 1C plan is one click away — nothing is hidden from the export.">
+          <input type="checkbox" id="paCmOnly" checked>
+          <span data-i18n="pa_cmonly">Show only Condition Monitoring coverage</span></label>
         <span class="spacer"></span>
         <label class="fld"><span data-i18n="dd_find">Search this table</span>
           <input id="paQ" type="search" data-i18n-ph="dd_findph" placeholder="unit number"></label>
@@ -3728,23 +3733,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=460"></script>
+<script src="../data/magnetic_plug.js?v=461"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=460"></script>
-<script src="../mobile/hme.js?v=460"></script>
-<script src="../mobile/mp-fc.js?v=460"></script>
-<script src="../mobile/rtw.js?v=460"></script>
-<script src="../mobile/hme-cascade.js?v=460"></script>
-<script src="../mobile/temp-limits.js?v=460"></script>
+<script src="../data/work_orders.js?v=461"></script>
+<script src="../mobile/hme.js?v=461"></script>
+<script src="../mobile/mp-fc.js?v=461"></script>
+<script src="../mobile/rtw.js?v=461"></script>
+<script src="../mobile/hme-cascade.js?v=461"></script>
+<script src="../mobile/temp-limits.js?v=461"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=460"></script>
-<script src="../mobile/normalize.js?v=460"></script>
-<script src="../mobile/terms.js?v=460"></script>
+<script src="../mobile/assets.js?v=461"></script>
+<script src="../mobile/normalize.js?v=461"></script>
+<script src="../mobile/terms.js?v=461"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -3763,19 +3768,19 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=460"></script>
-<script src="../mobile/edits.js?v=460"></script>
-<script src="../mobile/due.js?v=460"></script>
-<script src="../mobile/wear.js?v=460"></script>
-<script src="../mobile/wear-map.js?v=460"></script>
-<script src="../mobile/lube.js?v=460"></script>
-<script src="../mobile/lube-overrides.js?v=460"></script>
-<script src="../mobile/lube2027.js?v=460"></script>
-<script src="../mobile/lube-tds.js?v=460"></script>
+<script src="../mobile/grade.js?v=461"></script>
+<script src="../mobile/edits.js?v=461"></script>
+<script src="../mobile/due.js?v=461"></script>
+<script src="../mobile/wear.js?v=461"></script>
+<script src="../mobile/wear-map.js?v=461"></script>
+<script src="../mobile/lube.js?v=461"></script>
+<script src="../mobile/lube-overrides.js?v=461"></script>
+<script src="../mobile/lube2027.js?v=461"></script>
+<script src="../mobile/lube-tds.js?v=461"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=460"></script>
-<script src="../mobile/machine-photos.js?v=460"></script>
+<script src="../mobile/upload-defaults.js?v=461"></script>
+<script src="../mobile/machine-photos.js?v=461"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3784,17 +3789,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=460"></script>
-<script src="../mobile/get.js?v=460"></script>
-<script src="../mobile/points.js?v=460"></script>
-<script src="../mobile/uc-points.js?v=460"></script>
-<script src="../mobile/inspect-guide.js?v=460"></script>
-<script src="../mobile/get-figs.js?v=460"></script>
-<script src="../mobile/body-points.js?v=460"></script>
-<script src="../mobile/body-map.js?v=460"></script>
-<script src="../mobile/jspdf.umd.min.js?v=460"></script>
-<script src="../mobile/html2canvas.min.js?v=460"></script>
-<script src="../mobile/report-core.js?v=460"></script>
+<script src="../mobile/machine-fig.js?v=461"></script>
+<script src="../mobile/get.js?v=461"></script>
+<script src="../mobile/points.js?v=461"></script>
+<script src="../mobile/uc-points.js?v=461"></script>
+<script src="../mobile/inspect-guide.js?v=461"></script>
+<script src="../mobile/get-figs.js?v=461"></script>
+<script src="../mobile/body-points.js?v=461"></script>
+<script src="../mobile/body-map.js?v=461"></script>
+<script src="../mobile/jspdf.umd.min.js?v=461"></script>
+<script src="../mobile/html2canvas.min.js?v=461"></script>
+<script src="../mobile/report-core.js?v=461"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -4752,6 +4757,9 @@ const I18N={
   pa_st_preinsp:"Pre-PM check due",
   pa_seg_open:"Open", pa_seg_done:"Completed", pa_seg_all:"All",
   pa_csv:"Export CSV",
+  pa_cmonly:"Show only Condition Monitoring coverage",
+  pa_cmonly_t:"Hides 1C work orders that Condition Monitoring does not yet track. The full 1C plan is one click away — nothing is hidden from the export.",
+  pa_coverage:"Condition Monitoring covers {pct}% of these work orders — {n} of {of}.",
   pa_none:"Nothing in this view.",
   pa_k_total:"Open work orders", pa_k_total_s:"not yet marked complete in 1C",
   pa_k_preinsp:"General Inspection due soon", pa_k_preinsp_s:"a P3/P4 PM is within {n} d and no pre-check has been carried out",
@@ -5627,6 +5635,9 @@ const I18N={
   pa_st_preinsp:"Нужна проверка перед ТО",
   pa_seg_open:"Открыто", pa_seg_done:"Завершено", pa_seg_all:"Все",
   pa_csv:"Выгрузить CSV",
+  pa_cmonly:"Показывать только охват Condition Monitoring",
+  pa_cmonly_t:"Скрывает наряды 1С, которые Condition Monitoring пока не отслеживает. Полный план 1С открывается одним нажатием — из выгрузки CSV ничего не скрыто.",
+  pa_coverage:"Condition Monitoring охватывает {pct}% этих нарядов — {n} из {of}.",
   pa_none:"В этом представлении пусто.",
   pa_k_total:"Открытых нарядов", pa_k_total_s:"ещё не закрыты в 1С",
   pa_k_preinsp:"Скоро общий осмотр", pa_k_preinsp_s:"ТО с приоритетом P3/P4 в пределах {n} дн., предварительный осмотр ещё не проведён",
@@ -15781,6 +15792,25 @@ function paInWindow(r, win){
   if(win==="over") return r.daysUntilPlan<0 && r.w.open;
   return r.daysUntilPlan>=0 && r.daysUntilPlan<=Number(win);
 }
+/* IS CONDITION MONITORING ACTUALLY WATCHING THIS WORK ORDER, RIGHT NOW.
+   info.types is null for a 1C maintenance type nothing in due.js resolves to
+   at all (a tyre change, an engine overhaul -- CM was never going to have an
+   opinion on it) and an EMPTY array for one that WOULD resolve but every
+   round it named has been taken off this machine by the site (paHeldOff) --
+   CM is not watching either shape today, which is the one fact this tab kept
+   answering by making the reader count rows themselves. Read off the office,
+   2026-09-25: "the list of schedule includes all the schedule in 1C... we
+   should be only putting in the list the coverage of condition monitoring."
+   The table below still lists every work order -- hiding one is still a
+   different decision from not tracking it (see paHeldOff's own comment) --
+   but now it says which is which, and can filter to just the ones CM owns. */
+function paCovered(r){ return !!(r.info && r.info.types && r.info.types.length); }
+const PA_CMONLY_KEY="cm_pa_cmonly";
+function paCmOnlyGet(){
+  let v=null; try{ v=localStorage.getItem(PA_CMONLY_KEY); }catch(e){}
+  return v===null ? true : v==="1";      // on by default -- see the note above
+}
+function paCmOnlySet(v){ try{ localStorage.setItem(PA_CMONLY_KEY, v?"1":"0"); }catch(e){} }
 /* CLICK A HEADER, SORT BY IT -- same pattern as the fleet table (fleetSort).
    Plan date first, soonest due first, matches the tab's own default order
    below when nothing has been clicked yet. */
@@ -16097,18 +16127,30 @@ function renderPlanActualTab(){
   renderPaWeek(qtyRows);
   const rows=qtyRows.filter(r=>paInWindow(r,win))
                       .filter(r=>paInType(r,ty));
+  /* THE PERCENTAGE STANDS REGARDLESS OF THE TOGGLE BELOW -- it answers "how
+     much of 1C's own plan is CM's job today", off the same search/type/window
+     filters the KPI tiles use, so narrowing to one machine or one round type
+     narrows the percentage the same way. Turning "show only CM coverage" off
+     to look at the rest of 1C's plan must not also blank out the one number
+     that says what fraction that rest actually is. */
+  const covN=rows.filter(paCovered).length;
+  if($("paCoverage")) $("paCoverage").textContent = rows.length
+    ? t("pa_coverage",{pct:Math.round(covN/rows.length*100), n:covN, of:rows.length}) : "";
+  const cmOnlyEl=$("paCmOnly");
+  const cmOnly = cmOnlyEl ? cmOnlyEl.checked : paCmOnlyGet();
+  const rowsView = cmOnly ? rows.filter(paCovered) : rows;
   const scope=paScopeGet();
-  const nOpen=rows.filter(r=>r.w.open).length, nDone=rows.length-nOpen;
-  const nOntime=rows.filter(r=>r.status==="ontime").length;
-  const nLateEarly=rows.filter(r=>r.status==="late"||r.status==="early").length;
-  const nMissing=rows.filter(r=>r.status==="missing").length;
-  const nPreInsp=rows.filter(r=>r.preInspNeeded).length;
+  const nOpen=rowsView.filter(r=>r.w.open).length, nDone=rowsView.length-nOpen;
+  const nOntime=rowsView.filter(r=>r.status==="ontime").length;
+  const nLateEarly=rowsView.filter(r=>r.status==="late"||r.status==="early").length;
+  const nMissing=rowsView.filter(r=>r.status==="missing").length;
+  const nPreInsp=rowsView.filter(r=>r.preInspNeeded).length;
   /* Rounds this tab is no longer proposing, COUNTED. Work that stops being
      proposed is invisible by nature — the grid simply gets shorter, which
      reads as "there is less to do" rather than "we decided not to do it".
      Counted per ROUND rather than per row, because one work order can carry
      two and only one of them may have been taken off. */
-  const nOff=rows.reduce((n,r)=>n+((r.info&&r.info.off)?r.info.off.length:0),0);
+  const nOff=rowsView.reduce((n,r)=>n+((r.info&&r.info.off)?r.info.off.length:0),0);
   const card=(sc,lab,val,sub,cls)=>
     `<button type="button" class="kpi ${cls||""}${scope===sc?" on":""}" data-pa="${esc(sc)}">
        <span class="k">${esc(lab)}</span><span class="v">${esc(String(val))}</span>
@@ -16132,7 +16174,7 @@ function renderPlanActualTab(){
      and the KPI card itself still shows its own "on" state independently. */
   const segScope = scope==="preinsp" ? "open" : scope;
   if(seg){
-    const views=[["open","pa_seg_open",nOpen],["done","pa_seg_done",nDone],["all","pa_seg_all",rows.length]];
+    const views=[["open","pa_seg_open",nOpen],["done","pa_seg_done",nDone],["all","pa_seg_all",rowsView.length]];
     seg.innerHTML=views.map(([k,lab,n])=>
       `<button type="button" role="tab" id="paTab-${k}" data-pa="${k}"
         aria-controls="paList" aria-selected="${segScope===k?"true":"false"}"
@@ -16141,7 +16183,7 @@ function renderPlanActualTab(){
     if(box){ box.setAttribute("role","tabpanel"); box.setAttribute("aria-labelledby","paTab-"+segScope); }
     seg.querySelectorAll("[data-pa]").forEach(b=>b.onclick=()=>paGo(b.dataset.pa));
   }
-  const show = rows.filter(r=> scope==="preinsp" ? r.preInspNeeded
+  const show = rowsView.filter(r=> scope==="preinsp" ? r.preInspNeeded
                              : scope==="open" ? r.w.open : scope==="done" ? !r.w.open : true)
     /* Sortable on any column (paSort, click a header) -- defaults to plan
        date, soonest first, which is what the tab opens on: a scheduling
@@ -16169,6 +16211,19 @@ function renderPlanActualTab(){
     return `<span class="pill ${cls}">${esc(lab)}</span>`
       + (r.preInspNeeded ? ` <span class="pill w" title="${esc(t("pa_k_preinsp_s",{n:PA_PREINSP_DAYS}))}">${esc(t("pa_st_preinsp"))}</span>` : "");
   };
+  /* THE DOT STANDS EVEN WHEN THE TOGGLE ABOVE IS HIDING EVERYTHING IT MARKS
+     GREY -- with cmOnly on, every row here already is covered and the dot is
+     the same green on every one; turn the toggle off to see the rest of 1C's
+     plan and the dot is what tells a covered row from one CM was never going
+     to have an opinion on, at a glance, in the one column already carrying
+     the service name. */
+  const svcCell=r=>{
+    const covered=paCovered(r);
+    const dot=`<span style="display:inline-block;width:6px;height:6px;border-radius:50%;`
+      +`background:${covered?"var(--good-ink)":"var(--muted)"};margin-right:6px;flex:none"></span>`;
+    return `<td title="${esc(r.w.maintType||"")}" style="${covered?"":"color:var(--muted)"}">`
+      + `<span style="display:inline-flex;align-items:center">${dot}${esc(r.info.label)}</span></td>`;
+  };
   const deltaTxt=r=>{
     if(r.status==="unsched") return "—";
     if(r.delta==null) return "—";
@@ -16187,7 +16242,7 @@ function renderPlanActualTab(){
     + kept.map(r=>`<tr>
         <td>${esc(r.w.equip)}</td>
         <td>${esc(r.w.woNumber||"—")}</td>
-        <td title="${esc(r.w.maintType||"")}">${esc(r.info.label)}</td>
+        ${svcCell(r)}
         <td class="r mono">${r.w.hours==null?"—":esc(String(r.w.hours))}</td>
         <td>${esc(r.w.planStart||"—")}</td>
         <td>${esc(r.w.actualStart||"—")}</td>
@@ -16224,7 +16279,7 @@ function cwCsv(){
   setTimeout(()=>URL.revokeObjectURL(a.href),4000);
 }
 function paCsv(){
-  const rows=[["equip","work_order","maint_type","hours","cm_round_label","priority","wo_open",
+  const rows=[["equip","work_order","maint_type","hours","cm_round_label","cm_covered","priority","wo_open",
                "plan_date","wo_actual_date","nearest_cm_round_date","nearest_cm_round_type",
                "cm_vs_plan_days","status","preinsp_days_out","preinsp_needed"]];
   const q=(($("paQ")||{}).value||"").trim().toUpperCase();
@@ -16237,7 +16292,7 @@ function paCsv(){
     .filter(r=> scope==="preinsp" ? r.preInspNeeded
              : scope==="open" ? r.w.open : scope==="done" ? !r.w.open : true)
     .forEach(r=>rows.push([r.w.equip, r.w.woNumber||"", r.w.maintType||"", r.w.hours==null?"":r.w.hours, r.info.label,
-      r.w.priority||"", r.w.open?1:0, r.w.planStart||"", r.w.actualStart||"",
+      paCovered(r)?1:0, r.w.priority||"", r.w.open?1:0, r.w.planStart||"", r.w.actualStart||"",
       r.last?r.last.date:"", r.last?r.last.type:"", r.delta==null?"":r.delta, r.status,
       r.daysUntilPlan==null?"":r.daysUntilPlan, r.preInspNeeded?1:0]));
   const csv=rows.map(r=>r.map(v=>{ const x=String(v==null?"":v);
@@ -17626,6 +17681,10 @@ if($("syDevRefresh")) $("syDevRefresh").onclick=async()=>{
 if($("paQ")) $("paQ").oninput=renderPlanActualTab;
 if($("paWindow")) $("paWindow").onchange=renderPlanActualTab;
 if($("paType")) $("paType").onchange=renderPlanActualTab;
+if($("paCmOnly")){
+  $("paCmOnly").checked=paCmOnlyGet();
+  $("paCmOnly").onchange=()=>{ paCmOnlySet($("paCmOnly").checked); renderPlanActualTab(); };
+}
 if($("paCsv")) $("paCsv").onclick=paCsv;
 $("wBand").onchange=renderWearTab;
 $("follX").onclick=closeFollow;
@@ -17778,8 +17837,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=460"></script>
-<script src="sync-adapter.js?v=460"></script>
-<script src="report.js?v=460"></script>
+<script src="drive.js?v=461"></script>
+<script src="sync-adapter.js?v=461"></script>
+<script src="report.js?v=461"></script>
 </body>
 </html>

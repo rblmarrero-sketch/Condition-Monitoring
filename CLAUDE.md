@@ -3118,3 +3118,59 @@ reached — the fleet path's "selected evidence" card and the technical
 appendix's own photo boards — render through the same function, at the
 same tile size, each tile with its own distinct caption, and that no board
 anywhere in the document still uses the retired markup.
+
+**"THE LIST OF SCHEDULE INCLUDES ALL THE SCHEDULE IN 1C... WE SHOULD BE ONLY
+PUTTING IN THE LIST THE COVERAGE OF CONDITION MONITORING."** Plan vs Actual's
+main table (`renderPlanActualTab`/`paRows`) always listed every 1C work
+order in one table — a tyre change or an engine overhaul sat in the same
+rows, scored by the identical columns, as a Magnetic Plug round, with
+nothing on the page saying which was which. Three design options were put to
+the maintainer as a mockup (colour every row; hide the ones CM doesn't
+track; both together) and the third was chosen.
+
+`paCovered(r)` is the one new question — `info.types` truthy and non-empty —
+and it says two different "no"s apart for the first time: a 1C maintenance
+type nothing in `due.js` resolves to at all (`types: null`, a tyre or an
+engine overhaul), and one that WOULD resolve but every round it named has
+been taken off this machine by the site (`types: []`, `paHeldOff`'s own
+shape) are both "not covered today", for different reasons, and neither was
+ever a row CM was watching. `#paCmOnly` (persisted as `cm_pa_cmonly`, on by
+default) filters the main table and its KPI tiles to covered rows only;
+`#paCoverage` states the percentage from the SAME search/type/window-filtered
+set the KPI tiles read, and — deliberately — does not move when the toggle
+is flipped, because "how much of 1C's plan is CM's job" is a fact about the
+plan, not about what happens to be on screen. Every row's own Service cell
+carries a small coloured dot regardless of the toggle, so turning it off to
+check the rest of 1C's plan never leaves a row ambiguous. `paCsv()` was
+never filtered by scope in the first place and still isn't — the toggle is a
+screen preference, not a data policy, so hiding a row from the table must
+never also hide it from the export; a new `cm_covered` column says the same
+fact there. `paWeekData` (the "Two weeks" grid) already excluded an
+unmatched work order on its own, for its own stated reason — nothing about
+it needed to change; only the main table and its KPI tiles had ever mixed
+the two questions.
+
+**AND THE PHONE WAS NEVER PART OF THIS DEFECT, WHICH IS ITS OWN THING WORTH
+SAYING PLAINLY.** The natural next question — "this in mobile app also
+right?" — has a real answer that isn't "yes, copy the toggle over":
+`ingest_work_orders.py` cuts `data/schedule_slim.json` to open, CM-matched
+work orders AT INGEST TIME (`if not w["cmTypes"]: continue` — 116 of 2,535
+rows on the live fleet, by the ingester's own count), specifically so every
+phone in the fleet isn't pulling the ~2,400 rows CM was never going to have
+an opinion on, hourly, over what is often a poor signal. The phone's List
+and Two Weeks views are therefore ALREADY, structurally, Condition
+Monitoring's own list — there is no non-CM row on the phone to hide, so a
+toggle there would always read 100% and do nothing. Read that way, "the
+phone is what's confusing, the toggle is... in a different place" pointed at
+a real but different gap: the phone's own "Show 1C schedule" checkbox
+(`dueSchedOn`) is a genuinely smaller feature (it annotates a round already
+in the list with 1C's plan date; it does not and cannot add rows), and nothing
+on either the List or Two Weeks screen ever SAID that this list already is
+CM's own coverage. A plain, static line (`due_cm_note`, "This is Condition
+Monitoring's own list — 1C's other maintenance work is not shown here.")
+now sits above both, echoing the dashboard's wording without sending a
+single extra byte to a handset. `tests/pacover.cjs` proves the toggle
+default, the standing percentage, the per-row dot in both toggle states,
+that `paCsv()` is untouched by the toggle and carries `cm_covered`, that the
+setting survives a reload, and that both phone views carry the identical
+note.
