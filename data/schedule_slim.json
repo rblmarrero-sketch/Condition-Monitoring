@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-26T02:18:20+00:00",
+  "generated": "2026-09-26T02:53:16+00:00",
   "byUnit": {
     "DZ001": [
       {
@@ -367,17 +367,6 @@
     ],
     "TK103": [
       {
-        "wo": "WO-016611",
-        "hours": 4000,
-        "types": [
-          "INSP",
-          "MP",
-          "TB"
-        ],
-        "plan": "2026-09-24",
-        "priority": "P3 Planned (PM)"
-      },
-      {
         "wo": "WO-017878",
         "hours": 250,
         "types": [
@@ -672,18 +661,6 @@
       }
     ],
     "TK159": [
-      {
-        "wo": "WO-016655",
-        "hours": 4000,
-        "types": [
-          "FC",
-          "INSP",
-          "MP",
-          "TB"
-        ],
-        "plan": "2026-09-24",
-        "priority": "P3 Planned (PM)"
-      },
       {
         "wo": "WO-017881",
         "hours": 250,
@@ -1657,18 +1634,6 @@
       "plan": "2026-09-25"
     },
     {
-      "wo": "WO-016571",
-      "equip": "GR013",
-      "cls": "GRD",
-      "comp": "",
-      "desc": "250h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-09-25",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-09-25"
-    },
-    {
       "wo": "WO-017379",
       "equip": "TK047",
       "cls": "HT",
@@ -1767,30 +1732,6 @@
     {
       "wo": "WO-017393",
       "equip": "TK092",
-      "cls": "HT",
-      "comp": "",
-      "desc": "Filter Cut / General Inspection / Magnetic Plug / Dump Body Liner",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-09-24",
-      "type": "4000 Hours service Planned",
-      "hours": 4000,
-      "plan": "2026-09-24"
-    },
-    {
-      "wo": "WO-016611",
-      "equip": "TK103",
-      "cls": "AT",
-      "comp": "",
-      "desc": "General Inspection / Magnetic Plug / Dump Body Liner",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-09-24",
-      "type": "4000 Hours service Planned",
-      "hours": 4000,
-      "plan": "2026-09-24"
-    },
-    {
-      "wo": "WO-016655",
-      "equip": "TK159",
       "cls": "HT",
       "comp": "",
       "desc": "Filter Cut / General Inspection / Magnetic Plug / Dump Body Liner",

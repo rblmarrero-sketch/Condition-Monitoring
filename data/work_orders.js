@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-09-26T02:18:20+00:00",
+  "generated": "2026-09-26T02:53:16+00:00",
   "source": "https://askpi.94-131-94-152.sslip.io/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 681,
@@ -26731,15 +26731,15 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
-      "planStart": "2026-09-25",
-      "planStartDt": "2026-09-25T00:00:00",
-      "planEnd": "2026-09-26",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
+      "planStart": "2026-09-24",
+      "planStartDt": "2026-09-24T19:30:00",
+      "planEnd": "2026-09-24",
+      "actualStart": "2026-09-24",
+      "actualStartDt": "2026-09-24T19:30:00",
+      "actualEnd": "2026-09-24"
     },
     {
       "equip": "GR013",
@@ -40283,15 +40283,15 @@ window.CM_WO_DATA = {
         "TB"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-09-24",
-      "planStartDt": "2026-09-24T00:00:00",
-      "planEnd": "2026-09-25",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "planStartDt": "2026-09-24T01:00:00",
+      "planEnd": "2026-09-24",
+      "actualStart": "2026-09-24",
+      "actualStartDt": "2026-09-24T01:00:00",
+      "actualEnd": "2026-09-24"
     },
     {
       "equip": "TK103",
@@ -54614,15 +54614,15 @@ window.CM_WO_DATA = {
         "TB"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-09-24",
-      "planStartDt": "2026-09-24T00:00:00",
+      "planStartDt": "2026-09-24T13:00:00",
       "planEnd": "2026-09-25",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-09-24",
+      "actualStartDt": "2026-09-24T13:00:00",
+      "actualEnd": "2026-09-25"
     },
     {
       "equip": "TK159",
