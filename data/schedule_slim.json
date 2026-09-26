@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-26T04:43:25+00:00",
+  "generated": "2026-09-26T04:58:20+00:00",
   "byUnit": {
     "DZ001": [
       {
@@ -1475,18 +1475,6 @@
       "raised": "2026-09-26",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-09-26"
-    },
-    {
-      "wo": "WO-016563",
-      "equip": "DZ003",
-      "cls": "DOZ",
-      "comp": "",
-      "desc": "500h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-09-26",
-      "type": "500 Hours service Planned",
-      "hours": 500,
       "plan": "2026-09-26"
     },
     {
