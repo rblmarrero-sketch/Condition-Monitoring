@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=467">
+<link rel="manifest" href="manifest.webmanifest?v=468">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=467">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=467">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=467">
+<link rel="apple-touch-icon" href="icon-192.png?v=468">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=468">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=468">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2225,6 +2225,11 @@
     <div class="viewseg" role="tablist" aria-label="Due view">
       <button type="button" role="tab" id="dueViewPM" data-dv="pm" aria-controls="duePmWrap" data-i18n="due_pm_seg">1C PM</button>
       <button type="button" role="tab" id="dueViewCM" data-dv="cm" aria-controls="dueCmWrap" data-i18n="due_cm_seg">CM</button>
+      <!-- A third question, not a filter on either of the first two: "how
+           many releases has THIS PHONE actually signed off" — this device's
+           own saved RTW rounds, the same "this phone's own history" meaning
+           every other count on this screen already carries. -->
+      <button type="button" role="tab" id="dueViewRTW" data-dv="rtw" aria-controls="dueRtwWrap" data-i18n="due_rtw_seg">RTW</button>
     </div>
     <div id="duePmWrap" role="tabpanel" aria-labelledby="dueViewPM">
       <!-- P1..P5, only where one of them has a row behind it. A dropdown
@@ -2232,6 +2237,11 @@
            so "how many are Critical" and "show me the Critical ones" are the
            same glance and the same tap. -->
       <div class="tfilter dfilter" id="pmPrioF" aria-label="Priority"></div>
+      <!-- A second, independent axis — open / in progress / complete — 1C's
+           own CMMS status text, never a narrowing of the priority chips
+           above (see renderDuePM's own comment). Hidden outright when 1C's
+           data gives it nothing to split (one bucket only). -->
+      <div class="tfilter dfilter" id="pmStatusF" aria-label="Status"></div>
       <div id="duePmList"></div>
       <div class="hint" id="pmSchedAge" style="margin-top:8px"></div>
     </div>
@@ -2247,6 +2257,17 @@
       <div class="hint" id="dueCmSub" style="margin:0 0 12px"></div>
       <div class="tfilter dfilter" id="dueSpanF" aria-label="Span"></div>
       <div id="dueCmList"></div>
+    </div>
+    <div id="dueRtwWrap" class="hidden" role="tabpanel" aria-labelledby="dueViewRTW">
+      <!-- THIS PHONE'S OWN RELEASES. Every RTW checklist this device has
+           actually saved and signed — dbAll()'s own store, the same records
+           the Saved queue reads, not the last-done index dueRows() walks
+           (that keeps one date per unit/round pair, and a unit released more
+           than once would undercount). A count and a plain list, because a
+           screen with only a number sits oddly next to two screens that are
+           both lists. -->
+      <div class="hint" id="dueRtwCount"></div>
+      <div id="dueRtwList"></div>
     </div>
     <!-- THE ONE-TAP ANSWER TO "WHY IS THIS MACHINE NOT ON MY LIST".
 
@@ -2725,16 +2746,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=467"></script>
-<script src="upload-defaults.js?v=467"></script>
-<script src="hme.js?v=467"></script>
-<script src="mp-fc.js?v=467"></script>
-<script src="rtw.js?v=467"></script>
-<script src="hme-cascade.js?v=467"></script>
-<script src="assets.js?v=467"></script>
-<script src="temp-limits.js?v=467"></script>
-<script src="normalize.js?v=467"></script>
-<script src="terms.js?v=467"></script>
+<script src="native.js?v=468"></script>
+<script src="upload-defaults.js?v=468"></script>
+<script src="hme.js?v=468"></script>
+<script src="mp-fc.js?v=468"></script>
+<script src="rtw.js?v=468"></script>
+<script src="hme-cascade.js?v=468"></script>
+<script src="assets.js?v=468"></script>
+<script src="temp-limits.js?v=468"></script>
+<script src="normalize.js?v=468"></script>
+<script src="terms.js?v=468"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2753,25 +2774,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=467"></script>
-<script src="edits.js?v=467"></script>
-<script src="due.js?v=467"></script>
-<script src="wear.js?v=467"></script>
-<script src="wear-figs.js?v=467"></script>
-<script src="wear-map.js?v=467"></script>
-<script src="machine-photos.js?v=467"></script>
-<script src="machine-fig.js?v=467"></script>
-<script src="get.js?v=467"></script>
-<script src="points.js?v=467"></script>
-<script src="uc-points.js?v=467"></script>
-<script src="inspect-guide.js?v=467"></script>
-<script src="get-figs.js?v=467"></script>
-<script src="body-points.js?v=467"></script>
-<script src="body-map.js?v=467"></script>
-<script src="lube.js?v=467"></script>
-<script src="lube-overrides.js?v=467"></script>
-<script src="lube2027.js?v=467"></script>
-<script src="report-core.js?v=467"></script>
+<script src="grade.js?v=468"></script>
+<script src="edits.js?v=468"></script>
+<script src="due.js?v=468"></script>
+<script src="wear.js?v=468"></script>
+<script src="wear-figs.js?v=468"></script>
+<script src="wear-map.js?v=468"></script>
+<script src="machine-photos.js?v=468"></script>
+<script src="machine-fig.js?v=468"></script>
+<script src="get.js?v=468"></script>
+<script src="points.js?v=468"></script>
+<script src="uc-points.js?v=468"></script>
+<script src="inspect-guide.js?v=468"></script>
+<script src="get-figs.js?v=468"></script>
+<script src="body-points.js?v=468"></script>
+<script src="body-map.js?v=468"></script>
+<script src="lube.js?v=468"></script>
+<script src="lube-overrides.js?v=468"></script>
+<script src="lube2027.js?v=468"></script>
+<script src="report-core.js?v=468"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -3374,9 +3395,16 @@ const I18N = {
     due_healed:"This screen was repainting itself without stopping, so its settings were put back to their defaults to free the app. Nothing else was changed — every round and photograph on this phone is still here.",
     due_pm_seg:"1C PM",
     due_cm_seg:"CM",
+    due_rtw_seg:"RTW",
     pm_info_sub:"Work order details",
     pm_start_rtw:"Start Return to Work",
     pm_all:"All",
+    pm_stat_open:"Open",
+    pm_stat_inprogress:"In progress",
+    pm_stat_complete:"Complete",
+    rtw_done_count:"{n} release(s) completed on this phone",
+    rtw_done_empty:"No RTW checklist has been completed on this phone yet.",
+    rtw_done_err:"Could not read this phone's saved rounds.",
     pm_equip:"Equipment no.",
     pm_component:"Component",
     pm_request:"Work request number",
@@ -4051,9 +4079,16 @@ const I18N = {
     due_healed:"Этот экран перерисовывался без остановки, поэтому его настройки возвращены к значениям по умолчанию, чтобы освободить приложение. Больше ничего не менялось — все обходы и фотографии на этом телефоне на месте.",
     due_pm_seg:"1С ПМ",
     due_cm_seg:"КМ",
+    due_rtw_seg:"ВВР",
     pm_info_sub:"Сведения о наряде",
     pm_start_rtw:"Начать возврат в работу",
     pm_all:"Все",
+    pm_stat_open:"Открыт",
+    pm_stat_inprogress:"В работе",
+    pm_stat_complete:"Завершён",
+    rtw_done_count:"Возвратов в работу на этом телефоне: {n}",
+    rtw_done_empty:"На этом телефоне ещё не завершён ни один осмотр возврата в работу.",
+    rtw_done_err:"Не удалось прочитать сохранённые обходы на этом телефоне.",
     pm_equip:"№ оборудования",
     pm_component:"Узел / компонент",
     pm_request:"№ заявки",
@@ -9772,8 +9807,11 @@ function schedRowHtml(unit,ty){
    the List toggle already fetches. Two views of two different sources,
    never blended into one — see the toggle's own header for why that
    matters here more than most places. */
-let dueView = "pm";                   // pm | cm
-try{ dueView = localStorage.getItem("cm_due_view")==="cm" ? "cm" : "pm"; }catch(e){}
+let dueView = "pm";                   // pm | cm | rtw
+try{
+  const v0=localStorage.getItem("cm_due_view");
+  dueView = (v0==="cm"||v0==="rtw") ? v0 : "pm";
+}catch(e){}
 /* today | all — how much of the agenda the week view draws. Defaults to the
    whole fortnight, which is what it has always shown; "today" is the narrower
    answer an inspector asked for at the start of a shift. Remembered per
@@ -9852,6 +9890,23 @@ function pmPrioOf(row){
   const m=/^P[1-5]\b/i.exec(String((row&&row.priority)||"").trim());
   return m ? m[0].toUpperCase() : "";
 }
+/* open / inprogress / complete — build_rtw_open's own bucket, trusted
+   directly when the row carries it. A row from a schedule_slim.json the
+   hourly ingest refresh has not reached yet (that file moves on 1C's own
+   clock, not this app's build clock) carries `status` — 1C's raw CMMS text —
+   but not yet `pmStatus`, so this falls back to reading the text itself,
+   the identical rule ingest/ingest_work_orders.py's _pm_status_bucket
+   applies, kept in step with it by hand the same way docs/google-upload.gs
+   is kept in step with function.js: two readers of one fact must not
+   silently disagree about what the fact is. */
+function pmStatusOf(row){
+  const p=row&&row.pmStatus;
+  if(p==="inprogress"||p==="complete"||p==="open") return p;
+  const s=String((row&&row.status)||"").trim().toLowerCase();
+  if(s.indexOf("complete")>=0 || s.indexOf("closed")>=0) return "complete";
+  if(s.indexOf("progress")>=0) return "inprogress";
+  return "open";
+}
 function pmInfoRows(row){
   const rows=[[t("pm_equip"), row.equip]];
   if(row.comp) rows.push([t("pm_component"), row.comp]);
@@ -9904,7 +9959,29 @@ function renderDuePM(){
       renderDuePM();
     });
   }
+  /* THE STATUS FILTER — open / in progress / complete — a second, independent
+     axis, never a narrowing of the priority chips above: a mechanic asking
+     "what have I already started" wants that across every priority, not
+     inside whichever one happens to be selected. Counted from the full list
+     the same way the priority chips are, so switching one filter never makes
+     the other's own counts move under a thumb already reading them. */
+  const sbox=$("pmStatusF");
+  if(sbox){
+    const scounts={open:0,inprogress:0,complete:0};
+    all.forEach(r=>{ scounts[pmStatusOf(r)]++; });
+    const sorder=["open","inprogress","complete"].filter(s=>scounts[s]);
+    sbox.innerHTML = sorder.length<2 ? "" :
+      [`<button type="button" data-ps="" class="${pmStat?"":"on"}">${esc(t("pm_all"))}<span class="n">${all.length}</span></button>`]
+        .concat(sorder.map(s=>`<button type="button" data-ps="${s}" class="${pmStat===s?"on":""}">${esc(t("pm_stat_"+s))}<span class="n">${scounts[s]}</span></button>`))
+        .join("");
+    sbox.querySelectorAll("[data-ps]").forEach(b=>b.onclick=()=>{
+      pmStat=b.dataset.ps;
+      try{ lsSet("pm_status", pmStat); }catch(e){}
+      renderDuePM();
+    });
+  }
   let rows = pmPrio ? all.filter(r=>pmPrioOf(r)===pmPrio) : all.slice();
+  if(pmStat) rows=rows.filter(r=>pmStatusOf(r)===pmStat);
   /* A SEARCH ANSWERS ABOUT THE MACHINE OR THE WORK ORDER, NOT THE PRIORITY —
      the same rule dueFind's own header states for the CM tab. */
   const q=(dueFind||"").trim().toUpperCase();
@@ -10151,25 +10228,56 @@ function renderDueCm(){
     selectEquip(b.dataset.u); showPane("paneCapture"); });
   box.querySelectorAll("[data-f]").forEach(b=>b.onclick=()=>dueNotDoing(b.dataset.ft,b.dataset.f));
 }
+/* THIS PHONE'S OWN RELEASES — "how many RTW is done", asked for by name.
+   dbAll() is the actual saved-record store, read fresh on every paint the
+   same way renderPending() already reads it for the Saved tab — never
+   histAll()'s last-done index, which keeps exactly one date per unit/round
+   pair and would undercount a unit released more than once against
+   different work orders. Fire-and-forget from renderDue() (async, no
+   await) the same way the SCHED fetch already is — it targets only its own
+   #dueRtwList/#dueRtwCount, so the rest of that render never waits on it. */
+async function renderDueRtw(){
+  const box=$("dueRtwList"); if(!box) return;
+  let rows;
+  try{ rows=(await dbAll()).filter(r=>r&&r.type==="RTW"); }
+  catch(e){ box.innerHTML=`<div class="empty">${esc(t("rtw_done_err"))}</div>`; return; }
+  rows.sort((a,b)=>(b.date||"").localeCompare(a.date||"") || String(b.id||"").localeCompare(String(a.id||"")));
+  const cnt=$("dueRtwCount");
+  if(cnt) cnt.textContent=t("rtw_done_count",{n:rows.length});
+  if(!rows.length){ box.innerHTML=`<div class="empty">${esc(t("rtw_done_empty"))}</div>`; return; }
+  box.innerHTML=rows.map(r=>`<div class="duerow agrow">
+      <button type="button" class="agitem" data-id="${esc(r.id)}">
+        <span class="tag">✓</span>
+        <span class="body">
+          <span class="u">${esc(r.equip||"")}</span>
+          <span class="m">${esc(r.rtwWo||"—")}${r.date?" · "+esc(r.date):""}</span>
+        </span></button></div>`).join("");
+  box.querySelectorAll("[data-id]").forEach(b=>b.onclick=()=>{
+    const rec=rows.find(x=>x.id===b.dataset.id);
+    if(rec) rtwOpenForEdit(rec);
+  });
+}
 (function initDueViewSeg(){
-  const bl=$("dueViewPM"), bw=$("dueViewCM"); if(!bl||!bw) return;
+  const btns={pm:$("dueViewPM"), cm:$("dueViewCM"), rtw:$("dueViewRTW")};
+  const order=["pm","cm","rtw"].filter(k=>btns[k]);
+  if(order.length<2) return;
   const go=async v=>{
     dueView=v; try{ lsSet("cm_due_view", v); }catch(e){}
     renderDue();
   };
-  bl.onclick=()=>go("pm");
-  bw.onclick=()=>go("cm");
-  /* Two tabs, so the arrow keys just swap and take focus with them — the
+  order.forEach(k=>{ btns[k].onclick=()=>go(k); });
+  /* The arrow keys cycle through however many tabs actually exist, so the
      one-stop-in-the-tab-order rule (see renderDue()'s own tabIndex lines)
-     is only real if arrowing between tabs still works once Tab itself
-     stops landing on the unselected one. */
+     stays true whether this build has two of these or three. */
   const arrow=e=>{
     if(!["ArrowLeft","ArrowRight","ArrowUp","ArrowDown"].includes(e.key)) return;
     e.preventDefault();
-    const other=e.currentTarget===bl?bw:bl;
-    other.focus(); go(other.dataset.dv);
+    const i=order.findIndex(k=>btns[k]===e.currentTarget);
+    const back=e.key==="ArrowLeft"||e.key==="ArrowUp";
+    const nextK=order[(i+(back?-1:1)+order.length)%order.length];
+    btns[nextK].focus(); go(nextK);
   };
-  bl.onkeydown=arrow; bw.onkeydown=arrow;
+  order.forEach(k=>{ btns[k].onkeydown=arrow; });
 })();
 
 /* ---- what is due, and what was missed -----------------------------------
@@ -10560,6 +10668,11 @@ let dueFind="";
    morning before it does anything for them. */
 let pmPrio=(localStorage.getItem("pm_prio")||"").toUpperCase();
 if(!/^P[1-5]$/.test(pmPrio)) pmPrio="";
+/* The same tab's SECOND filter — open / in progress / complete, or "" for
+   all — 1C's own CMMS status text (`pmStatusOf`), never a second copy of
+   the priority filter's own mechanics. Remembered the same way. */
+let pmStat=(localStorage.getItem("pm_status")||"");
+if(!/^(open|inprogress|complete)$/.test(pmStat)) pmStat="";
 const DUE_SCOPES=[["over","due_missed","over"],["soon","due_soon","soon"],
                   ["never","due_never_p","never"],
                   /* 1C's own plan, beside CM's judgement rather than mixed
@@ -11065,15 +11178,15 @@ function renderDue(){
   }
   renderDuePM();
   renderDueCm();
-  const wrapP=$("duePmWrap"), wrapC=$("dueCmWrap");
-  if(wrapP) wrapP.classList.toggle("hidden", dueView==="cm");
-  if(wrapC) wrapC.classList.toggle("hidden", dueView!=="cm");
-  const dvp=$("dueViewPM"), dvc=$("dueViewCM");
-  if(dvp && dvc){
-    const onPM=dueView!=="cm";
-    dvp.classList.toggle("on", onPM); dvp.setAttribute("aria-selected", onPM?"true":"false"); dvp.tabIndex=onPM?0:-1;
-    dvc.classList.toggle("on", !onPM); dvc.setAttribute("aria-selected", (!onPM)?"true":"false"); dvc.tabIndex=onPM?-1:0;
-  }
+  renderDueRtw();
+  const wraps={pm:$("duePmWrap"), cm:$("dueCmWrap"), rtw:$("dueRtwWrap")};
+  Object.keys(wraps).forEach(k=>{ if(wraps[k]) wraps[k].classList.toggle("hidden", dueView!==k); });
+  const tabs={pm:$("dueViewPM"), cm:$("dueViewCM"), rtw:$("dueViewRTW")};
+  Object.keys(tabs).forEach(k=>{
+    const b=tabs[k]; if(!b) return;
+    const on=dueView===k;
+    b.classList.toggle("on", on); b.setAttribute("aria-selected", on?"true":"false"); b.tabIndex=on?0:-1;
+  });
 }
 
 /* ---- "we are not doing this one, and here is why" -----------------------
@@ -14379,7 +14492,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="467";
+const BUILD="468";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

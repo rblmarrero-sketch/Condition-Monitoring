@@ -515,6 +515,45 @@ const jpg = p => p.evaluate(() => {
   });
   ok('editing never leaves a second, duplicate RTW round on this equipment behind', allRtwCount === 1);
 
+  console.log('\n15. the Due screen\'s own RTW tab counts this phone\'s releases, from the real store');
+  // "another tab RTW how many is done" — this phone's own saved RTW rounds
+  // (dbAll(), the same store the Saved queue reads), not histAll()'s
+  // last-done index, which would undercount a unit released more than once.
+  // Two by now — TK112/WO-016635 (this section's own rec, edited once in
+  // section 14) and TK126/WO-016620 (saved in the "D — not released" section
+  // above) — proving the count is a real read of the store, not a copy of
+  // whatever this test happened to be looking at last.
+  await p.evaluate(() => { showPane('paneDue'); });
+  await p.waitForTimeout(150);
+  await p.click('#dueViewRTW');
+  await p.waitForTimeout(300);
+  const rtwTabState = await p.evaluate(() => ({
+    panelVisible: !document.getElementById('dueRtwWrap').classList.contains('hidden'),
+    pmHidden: document.getElementById('duePmWrap').classList.contains('hidden'),
+    count: document.getElementById('dueRtwCount').textContent,
+    rows: [...document.querySelectorAll('#dueRtwList [data-id]')].length,
+    rowText: document.getElementById('dueRtwList').textContent,
+  }));
+  ok('the RTW tab is selected and its own panel is showing, 1C PM is not',
+    rtwTabState.panelVisible && rtwTabState.pmHidden);
+  ok('the count names both releases this phone has actually saved', /2/.test(rtwTabState.count), rtwTabState.count);
+  ok('exactly two rows are listed, one per round', rtwTabState.rows === 2, String(rtwTabState.rows));
+  ok('the rows name both pieces of equipment and both work orders',
+    rtwTabState.rowText.includes('TK112') && rtwTabState.rowText.includes('WO-016635')
+    && rtwTabState.rowText.includes('TK126') && rtwTabState.rowText.includes('WO-016620'));
+
+  console.log('\n16. tapping a row reopens that saved round, the same as the queue\'s own edit does');
+  await p.click(`#dueRtwList [data-id="${rec.id}"]`);
+  await p.waitForTimeout(300);
+  const reopenedFromRtwTab = await p.evaluate(() => ({
+    checklistOpen: !document.getElementById('rtwChecklistScr').classList.contains('hidden'),
+    wo: (typeof rtwDraft !== 'undefined' && rtwDraft) ? rtwDraft.wo : '',
+  }));
+  ok('the checklist opens directly on the saved round, no picker in between',
+    reopenedFromRtwTab.checklistOpen && reopenedFromRtwTab.wo === 'WO-016635');
+  await p.click('#rtwChecklistBack');
+  await p.waitForTimeout(150);
+
   await b.close();
   srv.close();
   console.log(fails.length ? `\n${fails.length} FAILED:\n- ${fails.join('\n- ')}` : '\nall passed');

@@ -410,6 +410,45 @@ def find_header_row(ws, must_have=("Asset description", "Equip no")):
                       "in the first 20 rows) -- the workbook's layout may have changed.")
 
 
+# A "COMPLETE" ROW STAYS ON THE MECHANIC'S OWN LIST FOR A WHILE, NOT FOR
+# EVER. 1C's own history holds 2,379 completed work orders against 279 open
+# ones on the live fleet -- sending all of them to a phone that asked "what
+# do I still have to do" would bury the open ones the list exists for. A
+# mechanic asking "what did I just finish" wants the recent ones, not the
+# whole archive, so a completed row is kept only while it is within this
+# many days of its own completion date.
+PM_COMPLETE_WINDOW_DAYS = 30
+
+
+def _pm_status_bucket(status_text):
+    """1C's own CMMS status text, read directly rather than guessed from a
+    date. The office's own vocabulary has four shapes on the live fleet --
+    Registered, Elimination scheduled, In progress, Completed -- and asking
+    the text is simpler and more honest than the "no actual-start date yet"
+    heuristic `is_open` uses elsewhere in this file for a different purpose
+    (see the `open` field above): an "In progress" work order already has an
+    actual-start date, which made it read as closed under that heuristic and
+    kept it off the phone's list entirely, even though 1C itself still calls
+    it in progress."""
+    s = (status_text or "").strip().lower()
+    if "complete" in s or "closed" in s:
+        return "complete"
+    if "progress" in s:
+        return "inprogress"
+    return "open"
+
+
+def _completed_recently(date_iso, as_of, window_days):
+    if not date_iso:
+        return False
+    try:
+        d = datetime.fromisoformat(date_iso).date()
+    except ValueError:
+        return False
+    age = (as_of.date() - d).days
+    return 0 <= age <= window_days
+
+
 # RETURN TO WORK'S OWN SLICE. mobile/index.html has no <script> tag for
 # data/work_orders.js at all -- that file is dashboard-only (see this
 # module's own docstring) and was never in the phone's precache on purpose,
@@ -419,12 +458,14 @@ def find_header_row(ws, must_have=("Asset description", "Equip no")):
 # working only in a test that fabricated the global by hand (see
 # tests/rtw.cjs). The filter and shape here are what rtwWorkOrders() (mobile/
 # index.html) used to do itself, moved to the one place that already builds
-# both source lists -- a planned service still open on the calendar, or a
-# defect work order 1C has actually numbered and not yet closed. Deduped by
-# work order number, newest first. A standalone function, not inlined into
-# main(), so it can be unit-tested without the openpyxl/network dependencies
-# the rest of this script needs (see tests/rtwopen.py).
-def build_rtw_open(work_orders, cm_dedup):
+# both source lists -- a planned service still open on the calendar, one 1C
+# calls "in progress", or one it has completed inside the last
+# PM_COMPLETE_WINDOW_DAYS days, or a defect work order in any of those three
+# states. Deduped by work order number, newest first. A standalone function,
+# not inlined into main(), so it can be unit-tested without the
+# openpyxl/network dependencies the rest of this script needs (see
+# tests/rtwopen.py).
+def build_rtw_open(work_orders, cm_dedup, as_of=None):
     # `type`/`hours`/`plan` feed Return to Work's own header strip (the work
     # order, its maintenance type, its scheduled hour tier and 1C's own plan
     # date) -- asked for so a released round can be checked against what was
@@ -446,10 +487,29 @@ def build_rtw_open(work_orders, cm_dedup):
     # then certification), so this does not re-decide that question, only
     # carries the answer through. A planned PM service is not a defect and
     # has none of these; they stay "" rather than borrowed from anywhere.
+    #
+    # `pmStatus` is the phone's OWN filter axis -- open / inprogress /
+    # complete -- read from `status`'s own text, never a second copy of it;
+    # `completed` carries the date a "complete" row actually finished on, for
+    # the one case (a completed row) where a date other than `plan`/`raised`
+    # matters to the reader.
+    as_of = as_of or datetime.now(timezone.utc)
     seen, out = set(), []
     for w in work_orders:
         wo = w.get("woNumber")
-        if not wo or not w.get("open") or wo in seen:
+        if not wo or wo in seen:
+            continue
+        bucket = _pm_status_bucket(w.get("cmmsStatus"))
+        completed = ""
+        if bucket == "complete":
+            completed = w.get("actualEnd") or ""
+            if not _completed_recently(completed, as_of, PM_COMPLETE_WINDOW_DAYS):
+                continue
+        elif bucket == "open" and not w.get("open"):
+            # Neither "in progress" nor "complete" by its own status text,
+            # and not open by the actual-start heuristic either -- some
+            # other closed shape (e.g. cancelled) that was never meant to
+            # reach this list.
             continue
         seen.add(wo)
         out.append({
@@ -459,11 +519,18 @@ def build_rtw_open(work_orders, cm_dedup):
             "type": w.get("maintType") or w.get("cmLabel") or "",
             "hours": w.get("hours"), "plan": w.get("planStart") or "",
             "status": w.get("cmmsStatus") or "", "request": "", "defType": "", "cause": "",
+            "pmStatus": bucket, "completed": completed,
         })
     for r in cm_dedup:
         wo = r.get("woNumber")
-        if not wo or wo in seen or re.search(r"closed|completed", r.get("status") or "", re.I):
+        if not wo or wo in seen:
             continue
+        bucket = _pm_status_bucket(r.get("status"))
+        completed = ""
+        if bucket == "complete":
+            completed = r.get("closed") or ""
+            if not _completed_recently(completed, as_of, PM_COMPLETE_WINDOW_DAYS):
+                continue
         seen.add(wo)
         out.append({
             "wo": wo, "equip": (r.get("asset") or "").upper(), "cls": "",
@@ -473,6 +540,7 @@ def build_rtw_open(work_orders, cm_dedup):
             "hours": None, "plan": r.get("planStart") or "",
             "status": r.get("status") or "", "request": r.get("requestNo") or "",
             "defType": r.get("defectType") or "", "cause": r.get("cause") or "",
+            "pmStatus": bucket, "completed": completed,
         })
     out.sort(key=lambda r: r["raised"] or "", reverse=True)
     return out
@@ -555,6 +623,13 @@ def main():
             raised_iso, _ = parse_1c_date(cm_get("date"))
             det_iso, _ = parse_1c_date(cm_get("detected"))
             plan_iso, _ = parse_1c_date(cm_get("planStart"))
+            # A defect has no completion date of its own field in CM_FIELDS
+            # -- "End date actual" is the same required main-sheet column
+            # the planned-service side of this same row already reads a few
+            # lines below, shared by every row on the sheet. Read here for
+            # build_rtw_open()'s "recently completed" window, which a defect
+            # otherwise has no date to judge by.
+            closed_iso, _ = parse_1c_date(row[col["End date actual"]])
             # WHICH DATE THIS ROW IS FILED UNDER, AND SAID OUT LOUD. The
             # raised date is the answer to "what has the team written up";
             # the other two are stand-ins for a workbook that stops carrying
@@ -580,6 +655,7 @@ def main():
                     "raised": raised_iso,
                     "detected": det_iso,
                     "planStart": plan_iso,
+                    "closed": closed_iso,
                     "asset": str(cm_get("asset") or equip).strip(),
                     # The code when the cell carries one, and the cell itself
                     # when it does not — never a row dropped for the shape of
@@ -684,8 +760,12 @@ def main():
 
     work_orders.sort(key=lambda w: (w["equip"], w["planStart"] or ""))
 
+    # One "now" for this whole run -- build_rtw_open's own recently-completed
+    # window is measured against it too, a few lines below, rather than a
+    # second `datetime.now()` call landing a moment later.
+    now = datetime.now(timezone.utc)
     out = {
-        "generated": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "generated": now.isoformat(timespec="seconds"),
         "source": source,
         "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in "
                   + json.dumps(fleet if fleet else ["<all>"]),
@@ -758,7 +838,7 @@ def main():
         })
     for rows in slim_by_unit.values():
         rows.sort(key=lambda r: r["plan"])
-    rtw_open = build_rtw_open(work_orders, cm_dedup)
+    rtw_open = build_rtw_open(work_orders, cm_dedup, as_of=now)
 
     slim_path = out_file.parent / "schedule_slim.json"
     slim_path.write_text(json.dumps({

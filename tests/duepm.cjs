@@ -134,6 +134,38 @@ const server = http.createServer((req, res) => {
   await p.click('#pmPrioF [data-pp=""]');
   await p.waitForTimeout(200);
 
+  console.log('\n4b. the status filter — open / in progress / complete, a second axis, never a narrowing of priority');
+  // "The Status In progress and Complete" — asked for as chips inside this
+  // tab, not a second tab (see this tab's own history in CLAUDE.md). This
+  // fixture predates ingest/ingest_work_orders.py's own pmStatus field, so
+  // it also proves pmStatusOf()'s fallback: read straight from 1C's own
+  // status text (DEF1's "In Progress") when the bucket itself has not
+  // reached this phone yet.
+  const schips = await p.evaluate(() => [...document.querySelectorAll('#pmStatusF [data-ps]')]
+    .map(b => ({ ps: b.dataset.ps, n: (b.querySelector('.n') || {}).textContent })));
+  ok('open and in-progress both appear, complete does not (none in this fixture)',
+     JSON.stringify(schips.map(c => c.ps).sort()) === JSON.stringify(['', 'inprogress', 'open']), JSON.stringify(schips));
+  ok('the All chip counts every open WO, same total the priority chips show',
+     schips.find(c => c.ps === '').n === '5', JSON.stringify(schips));
+  ok('DEF1 — the only row 1C calls "In Progress" — is the one row in that bucket',
+     schips.find(c => c.ps === 'inprogress').n === '1', JSON.stringify(schips));
+  await p.click('#pmStatusF [data-ps="inprogress"]');
+  await p.waitForTimeout(200);
+  ok('filtering to In progress shows only DEF1\'s work order', JSON.stringify(
+    await p.evaluate(() => [...document.querySelectorAll('#duePmList [data-wo]')].map(b => b.dataset.wo))
+  ) === '["WO-2"]');
+  await p.reload({ waitUntil: 'load' });
+  await p.waitForFunction(() => (document.getElementById('verNum') || {}).textContent !== '?', null, { timeout: 20000 });
+  await p.evaluate(() => showPane('paneDue'));
+  await p.waitForFunction(() => typeof SCHED !== 'undefined' && SCHED && SCHED.rtwOpen && SCHED.rtwOpen.length === 5,
+    null, { timeout: 25000 });
+  await p.waitForTimeout(300);
+  ok('the choice survives a reload, remembered the same way the priority filter is', JSON.stringify(
+    await p.evaluate(() => [...document.querySelectorAll('#duePmList [data-wo]')].map(b => b.dataset.wo))
+  ) === '["WO-2"]');
+  await p.click('#pmStatusF [data-ps=""]');
+  await p.waitForTimeout(200);
+
   console.log('\n5. the info sheet — a repair work order carries every defect field named');
   await p.click('#duePmList [data-wo="WO-2"]');
   await p.waitForTimeout(150);

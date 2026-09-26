@@ -3170,6 +3170,86 @@ so the fix is to stop asking a single row and start asking the live data
 for whichever row currently fits the shape, instead of one chosen once and
 left to rot.
 
+**1C PM GOT A SECOND FILTER, AND "IN PROGRESS" TURNED OUT TO BE INVISIBLE TO
+THE PHONE ALREADY.** Asked for by name: "in the 1C PM can we a tab. The
+Status In progress and Complete, also another tab RTW how many is done?"
+Read as two separate asks, confirmed with the maintainer before anything
+moved (the same three-question discipline the 1C PM/CM redesign itself used,
+above): Status as chips inside 1C PM — not a third tab, so a mechanic asking
+"what have I started" never loses the priority filter beside it — Complete
+scoped to a recent window rather than 1C's whole archive, "In progress"
+actually reaching the phone, and "how many is done" meaning this phone's own
+saved RTW rounds.
+
+Checking what `build_rtw_open()` actually sends turned up a real gap before
+any UI work started: 1C's own CMMS status carries a genuine "In progress"
+value (4 work orders fleet-wide the day this was checked), and every one of
+them was invisible to the phone — not filtered by choice, but because
+`is_open` (`act_start_d is None`) reads an actual-start date as "closed," and
+a job 1C calls in progress already has one. `_pm_status_bucket()` reads the
+status TEXT instead — Registered/Elimination scheduled/null still bucket
+`open`, anything containing "progress" buckets `inprogress`, anything
+containing "complete" or "closed" buckets `complete` — the same "ask 1C what
+it actually said, don't infer it from a date" rule `pmStatus`'s own history
+already states for the office's Defects register. A completed row is kept
+only inside `PM_COMPLETE_WINDOW_DAYS` (30) of its own completion date — the
+live fleet carries 2,379 completed work orders against 279 open ones, and
+sending the whole archive to a mechanic asking "what did I just finish"
+would bury the ones the list exists for. A defect work order has no
+completion date of its own in `CM_FIELDS` — "End date actual" is the same
+required main-sheet column the planned-service side of the identical row
+already reads, so the defect's own dict now carries it too (`closed`), one
+line up from where the planned-service half reads it.
+
+`pmStatusOf()` (mobile/index.html) trusts a row's own `pmStatus` field
+directly once it has one, and falls back to the identical text rule
+otherwise — `schedule_slim.json` refreshes on 1C's hourly clock, not this
+app's build clock, so a phone can run the code that reads `pmStatus` before
+the data that carries it has been regenerated, and a filter that only works
+after the next hourly job would read as broken for up to an hour on every
+phone that updates before then. The fallback is kept in step with the
+Python rule by hand, the same reason `docs/google-upload.gs` is kept
+field-for-field with `function.js`: two readers of one fact must not
+silently disagree about what the fact is. The chips themselves
+(`#pmStatusF`) are counted from the same unfiltered list the priority chips
+already use — a second, independent axis, never a narrowing of the first —
+and hide outright when 1C's own data gives them nothing to split.
+`tests/rtwopen.py` proves the bucketing and the window directly against the
+real function, with a fixed `as_of` so this suite never drifts the way
+`tests/progchg.cjs` already has, twice; `tests/duepm.cjs` §4b proves the
+chips render, count, filter and persist across a reload, and that the
+fallback derivation reads a real "In Progress" row correctly with no
+`pmStatus` field on the fixture at all.
+
+**"RTW HOW MANY IS DONE" IS THIS PHONE'S OWN STORE, NOT THE LAST-DONE
+INDEX.** A third tab, `#dueViewRTW`, sits beside 1C PM and CM — the
+maintainer's own word was "tab," not "chip," for this one, and it answers a
+different kind of question from either: not what 1C has open, not what
+due.js says is due, but how many release checklists THIS DEVICE has actually
+signed. `dueRows()`'s own comment already explains why RTW carries no
+interval and is excluded from due.js's machinery entirely; `histAll()`
+(`cm_hist`) is a LAST-DONE index for the same reason — one date per
+unit/round pair — and a unit released against two different work orders
+over time would undercount to one. `renderDueRtw()` reads `dbAll()` instead,
+the actual saved-record store `renderPending()`'s own Saved tab already
+reads fresh on every paint, filtered to `type==="RTW"` — a real count of
+every release this phone holds, not a proxy for it. Fire-and-forget from
+`renderDue()`, the same pattern the SCHED fetch there already uses, since it
+paints only its own `#dueRtwList`/`#dueRtwCount` and the rest of that render
+never needs to wait on it.
+
+Three tabs meant `initDueViewSeg()`'s own two-button swap-on-arrow-key logic
+(built for exactly two) needed to cycle through however many exist, not be
+special-cased a third time, and `renderDue()`'s own binary
+`dueView==="cm"`-else-`"pm"` visibility toggle needed the same generalising —
+both rewritten to read an ordered list of whatever tabs are actually present
+rather than two named ones, so a fourth tab later costs adding one entry to
+each map, not another rewrite. `tests/rtw.cjs` §15-16 prove the count is a
+real read of the store (two releases from two different equipment, saved
+earlier in that same suite, not a fixture built to match), that tapping a
+row reopens the exact round `rtwOpenForEdit` already knows how to open, and
+that the RTW panel and 1C PM's are never both showing at once.
+
 ---
 
 ## Secrets
