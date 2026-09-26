@@ -1086,9 +1086,6 @@
       dec_4:"Repair soon; control operation",
       dec_5:"Maintenance decision required",
       dec_0:"No condition rating recorded",
-      ss_data:"DATA", ss_evidence:"EVIDENCE", ss_review:"REVIEW", ss_approval:"APPROVAL",
-      ss_pending:"Pending", ss_recv:"{r}/{e} received", ss_ev_none:"None expected",
-      ss_delivered:"Received", ss_held:"On the phone",
       ap_role:"ROLE", ap_name:"NAME", ap_status:"STATUS", ap_date:"DATE / SIGNATURE",
       ap_tech:"CM Technician", ap_rel:"Reliability Engineer", ap_sup:"Maintenance Supervisor",
       ap_tech_s:"Inspection complete", ap_rel_s:"Reviewed / returned",
@@ -1137,8 +1134,6 @@
       mon_critical:"Critical",
       ac_head:"Action control", ac_open:"Open", ac_overdue:"Overdue",
       ac_noowner:"No owner", ac_nowo:"No work order", ac_verified:"Verified", ac_na:"Not available",
-      rc_head:"Report controls", rc_source:"Source identified",
-      rc_rev_req:"Reviewer required", rc_appr_req:"Approval required",
       ap_sec:"Approval and sign-off",
       sm_title:"Equipment Condition Summary", sm_sub:"One machine · latest of each inspection type",
       sm_over:"Equipment overview", sm_latest_smu:"Latest SMU", sm_report_date:"Report date",
@@ -1288,9 +1283,6 @@
       dec_4:"Скорый ремонт; ограничить эксплуатацию",
       dec_5:"Требуется решение по обслуживанию",
       dec_0:"Оценка состояния не записана",
-      ss_data:"ДАННЫЕ", ss_evidence:"ФОТО", ss_review:"ПРОВЕРКА", ss_approval:"УТВЕРЖДЕНИЕ",
-      ss_pending:"Ожидает", ss_recv:"{r}/{e} получено", ss_ev_none:"Не ожидается",
-      ss_delivered:"Получено", ss_held:"На телефоне",
       ap_role:"РОЛЬ", ap_name:"ИМЯ", ap_status:"СТАТУС", ap_date:"ДАТА / ПОДПИСЬ",
       ap_tech:"Техник CM", ap_rel:"Инженер по надёжности", ap_sup:"Мастер по обслуживанию",
       ap_tech_s:"Осмотр завершён", ap_rel_s:"Проверено / возвращено",
@@ -1337,8 +1329,6 @@
       mon_critical:"Критическое",
       ac_head:"Контроль действий", ac_open:"Открыто", ac_overdue:"Просрочено",
       ac_noowner:"Без ответственного", ac_nowo:"Без наряда", ac_verified:"Проверено", ac_na:"Нет данных",
-      rc_head:"Контроль отчёта", rc_source:"Источник определён",
-      rc_rev_req:"Требуется проверка", rc_appr_req:"Требуется утверждение",
       ap_sec:"Утверждение и подпись",
       sm_title:"Сводка состояния техники", sm_sub:"Одна машина · последний осмотр каждого типа",
       sm_over:"Обзор техники", sm_latest_smu:"Последняя наработка", sm_report_date:"Дата отчёта",
@@ -1981,21 +1971,6 @@
         + '<td>'+next+'</td></tr>';
     }).join("");
   }
-  /* DATA · EVIDENCE · REVIEW · APPROVAL for the whole report — the reference's
-     report-controls strip. Honest: the source is identified and evidence is
-     counted, but a review and an approval are required, not done. */
-  function fleetControls(T, recs){
-    var st=docStatus(recs), exp=0, got=0;
-    recs.forEach(function(r){ if(r.gap){ exp+=r.gap.expected||0; got+=r.gap.received||0; } });
-    function cell(k,v,cls){ return '<div class="sc"><div class="sk">'+esc(k)
-      +'</div><div class="sv '+(cls||"")+'">'+esc(v)+'</div></div>'; }
-    return '<div class="sstrip" style="margin-top:16px">'
-      + cell(T("ss_data"), T("rc_source"), st.undelivered?"pend":"ok")
-      + cell(T("ss_evidence"), exp?T("ss_recv",{r:got,e:exp}):T("ss_ev_none"), (exp&&got<exp)?"pend":"ok")
-      + cell(T("ss_review"), T("rc_rev_req"), "pend")
-      + cell(T("ss_approval"), T("rc_appr_req"), "pend")
-      + '</div>';
-  }
   /* OPEN · OVERDUE · NO OWNER · NO WORK ORDER · VERIFIED — the reference's
      action-control summary. Open is every finding that needs a maintenance
      response; the rest are counted from what the records do and do not carry.
@@ -2580,34 +2555,13 @@
         + '<div class="rv">' + dec + '</div></div>'
       + '</div>' + (compact ? "" : scale);
   }
-  /* DATA · EVIDENCE · REVIEW · APPROVAL — honest about what the office holds
-     versus what it has approved. A synchronised round is not an approved one,
-     and there is no field in the record that records a review or an approval,
-     so those two read Pending rather than borrow the delivery state. */
-  function statusStrip(T, rec) {
-    var g = rec.gap;
-    var dataOk = rec.delivered;
-    var ev = !g || !g.expected ? { txt: T("ss_ev_none"), ok: true }
-           : { txt: T("ss_recv", { r: g.received, e: g.expected }),
-               ok: g.missing === 0 };
-    function cell(k, txt, cls) {
-      return '<div class="sc"><div class="sk">' + esc(k) + '</div>'
-        + '<div class="sv ' + (cls || "") + '">' + esc(txt) + '</div></div>';
-    }
-    return '<div class="sstrip">'
-      + cell(T("ss_data"), dataOk ? T("ss_delivered") : T("ss_held"), dataOk ? "ok" : "pend")
-      + cell(T("ss_evidence"), ev.txt, ev.ok ? "ok" : "pend")
-      + cell(T("ss_review"), T("ss_pending"), "pend")
-      + cell(T("ss_approval"), T("ss_pending"), "pend")
-      + '</div>';
-  }
   /* The maintenance-action strip, on EVERY single-inspection sheet, in the
-     template's own position — under the type body, above the DATA/EVIDENCE/
-     REVIEW/APPROVAL status strip and the approval table. Driven by the round's
-     worst finding; each control field honest as "Not recorded" when the round
-     does not carry it, never invented. The template shows it even on a clean
-     round (five "Not recorded" cells), because "no action was required" is
-     itself a fact the sheet states rather than an empty space. */
+     template's own position — under the type body, above the approval table.
+     Driven by the round's worst finding; each control field honest as "Not
+     recorded" when the round does not carry it, never invented. The template
+     shows it even on a clean round (five "Not recorded" cells), because "no
+     action was required" is itself a fact the sheet states rather than an
+     empty space. */
   function actionStrip(T, rec) {
     /* WHAT COUNTS AS A MAINTENANCE ACTION, AND "MONITOR" DOES NOT.
        This read `it.action || it.defect || it.cause || grade >= 3`, and every
@@ -2875,9 +2829,18 @@
        heights had nothing in common; stacked full width, every card starts
        and ends at the same edge and the photographs inside it are the only
        thing that decides how tall it is. */
+    /* A COMMENT PRINTED TWICE IS NOT TWO FACTS. Every type that reaches this
+       gallery (FC, INSP, TEMP, GET) has already put the same it.comment on
+       its own row under the position in the findings table above (typeTable's
+       .rnote) — "Трещины, отломило левый адаптер ковша" read once under
+       CH.BUC's row and again under CH.BUC's own photo card, word for word, on
+       a real EX004 report. {comment:true} is cell()'s existing "already shown
+       elsewhere" signal (see sh.defect/sh.cause/sh.action, used the same way
+       for a shared-finding band) — it costs nothing new, it only tells the
+       card the sentence is already on the page. */
     return '<div class="subhd" style="margin-top:12px;">' + T.I(headKey) + '</div>'
       + '<div class="board gal b1">'
-      + ph.map(function (it) { return cell(ctx, T, it, null, true); }).join("") + '</div>';
+      + ph.map(function (it) { return cell(ctx, T, it, { comment: true }, true); }).join("") + '</div>';
   }
   /* MP — every plug as a card, photograph first, then code/component, grade,
      the particle finding and component/oil hours, the defect and action. A
@@ -3572,8 +3535,11 @@
         var rtwGen = generalBlock(T, rec);
         if (rtwPh.length || rtwGen) {
           secs.push({ nb: false, html: '<div class="sec">' + rtwGen
+            /* rtwChecklist has already printed each line's comment in its own
+               .rtw-cm column, above — {comment:true} stops it landing a
+               second time under the same line's photo card. */
             + (rtwPh.length ? '<div class="subhd">' + T.I("rtw_photos") + '</div>'
-              + '<div class="board gal b1">' + rtwPh.map(function (it) { return cell(ctx, T, it, null, true); }).join("") + '</div>' : "")
+              + '<div class="board gal b1">' + rtwPh.map(function (it) { return cell(ctx, T, it, { comment: true }, true); }).join("") + '</div>' : "")
             + '</div>' });
         }
         secs.push({ nb: false, html: '<div class="sec">' + approvalBlock(T, rec, true) + '</div>' });
@@ -3634,15 +3600,27 @@
         body = notableTable(ctx, T, board) + restLine(T, rest, false);
       }
       /* The sign-off closes every sheet in the template's own order: the
-         maintenance-action strip, then the DATA/EVIDENCE/REVIEW/APPROVAL status
-         strip, then the three-role approval table. Threaded through the one
-         `sign` string every branch already appends to its final section, so a
-         graded sheet and a wear round's register page both end the same way.
-         Honest throughout: the action strip reads "Not recorded" where the
-         round carries no action, the status strip says what the office holds,
-         and the table leaves review and approval as open lines because no field
-         records them. */
-      var sign = actionStrip(T, rec) + statusStrip(T, rec) + approvalBlock(T, rec);
+         maintenance-action strip, then the three-role approval table.
+         Threaded through the one `sign` string every branch already appends
+         to its final section, so a graded sheet and a wear round's register
+         page both end the same way. The action strip reads "Not recorded"
+         where the round carries no action, and the table leaves review and
+         approval as open lines because no field records them.
+
+         THE DATA/EVIDENCE/REVIEW/APPROVAL STRIP USED TO SIT BETWEEN THOSE TWO.
+         Asked for by name, against a real report with the strip circled:
+         "lets remove that circled part to all report." REVIEW and APPROVAL
+         were always the same two words on every sheet ever printed — nothing
+         in the record feeds them, so they could only ever read "Pending" —
+         and both facts are already stated, in the reader's own words rather
+         than a status word, by the approval table directly beneath: an open
+         signature line already means "not yet reviewed," a filled one already
+         means "reviewed." DATA and EVIDENCE were the two cells that carried a
+         fact printed nowhere else on the sheet (whether the office holds this
+         round, how many of its expected photographs arrived) — gone now too,
+         since the strip was asked for as one row, not as four cells to weigh
+         separately; statusStrip() itself is retired along with its call. */
+      var sign = actionStrip(T, rec) + approvalBlock(T, rec);
 
       /* A lubrication round has nothing to MEASURE and is still not one page.
          The audit is the compartment table - what is actually in each one, how
@@ -4068,8 +4046,6 @@
         + '<th style="width:92px">' + T.L("uh_since") + '</th></tr>' + rows + '</table>' + notCoveredNote + '</div>'
       + '<div class="verdict v-' + (worst >= 5 ? "act" : worst >= 3 ? "watch" : "ok") + '" style="margin-top:14px">'
         + '<b>' + T.I("sm_decision") + '.</b> ' + T.S(decKey) + '</div>'
-      + '<div style="margin-top:14px;"><div class="eyebrow" style="margin-bottom:8px;">' + T.I("rc_head") + '</div>'
-        + fleetControls(T, recs) + '</div>'
       + '</div>';
     secs.push({ nb: false, html: head });
 
@@ -4263,8 +4239,6 @@
         + '<th>' + T.L("sm_next") + '</th></tr>' + rows + '</table></div>'
       + '<div class="verdict v-' + (worst >= 5 ? "act" : worst >= 3 ? "watch" : "ok") + '" style="margin-top:16px">'
         + '<b>' + T.I("sm_decision") + '.</b> ' + T.S(decKey) + '</div>'
-      + '<div style="margin-top:16px;"><div class="eyebrow" style="margin-bottom:8px;">' + T.I("rc_head") + '</div>'
-        + fleetControls(T, recs) + '</div>'
       + '</div>';
     secs.push({ nb: false, html: head });
 
@@ -5127,8 +5101,18 @@
          grade.js's TEXT ramp: the amber fill set as 10.5 px type is 1.83:1
          and simply is not on the page. A card with no grade keeps the
          default near-black rather than borrowing a colour that would mean
-         something it does not. */
-      + (it.comment
+         something it does not.
+
+         UNLESS THE PAGE ALREADY SAID IT. sh.comment is set only by a caller
+         whose own table (typeTable's .rnote, RTW's .rtw-cm) already printed
+         this exact sentence a few lines above this same card — a real EX004
+         report had "Трещины, отломило левый адаптер ковша" once under CH.BUC's
+         table row and again under CH.BUC's own photo card. Every OTHER caller
+         (mpEvidence, the graded-findings board, Equipment History's own
+         cards) never shows the comment anywhere but here, so this is the one
+         and only place it prints for them — sh.comment stays unset and the
+         sentence is never dropped. */
+      + (it.comment && !sh.comment
           ? '<div class="cm"' + (gnum(it.grade)
               ? ' style="color:' + GRADE_TEXT[gnum(it.grade)] + '"' : "")
             + '>' + esc(it.comment) + '</div>' : "")
@@ -5525,11 +5509,6 @@
           + '<span class="i"><span class="sw" style="background:'+GRADE_HEX[3]+'"></span><b>'+X.wear.watch+'</b> '+T.I("band_watch")+'</span>'
           + '<span class="i"><span class="sw" style="background:'+GRADE_HEX[5]+'"></span><b>'+X.wear.act+'</b> '+T.I("band_act")+'</span>'
           + '</div></div>' : "")
-      /* THE REPORT CONTROLS — the reference's DATA / EVIDENCE / REVIEW /
-         APPROVAL strip, honest about what is identified versus what a reviewer
-         and a planner still owe. */
-      + '<div style="margin-top:20px;"><div class="eyebrow" style="margin-bottom:8px;">'+T.I("rc_head")+'</div>'
-        + fleetControls(T, recs) + '</div>'
       + '</div>'});
 
     /* ---------- 2. the work ---------- */

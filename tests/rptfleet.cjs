@@ -8,8 +8,6 @@
      · a PERIOD on the cover;
      · an inspection-programme table BY TYPE — completed count, worst rating,
        main issue, next action, one row per round type present;
-     · a DATA / EVIDENCE / REVIEW / APPROVAL report-controls strip, honest that
-       a review and an approval are required rather than done;
      · an action-control summary — open, overdue, no owner, no work order, and
        verified as Not available because no field records a verification;
      · a three-role sign-off, all lines open on a fleet document.
@@ -80,13 +78,7 @@ const textOf = (p, target, lang) => p.evaluate(({ target, lang }) => {
   ok(/Repair soon|Maintenance decision required/.test(t),
      "  and the next action follows the rating", 1);
 
-  console.log("\n3. THE REPORT-CONTROLS STRIP");
-  ok(/Report controls/.test(t) && /DATA/.test(t) && /EVIDENCE/.test(t)
-     && /REVIEW/.test(t) && /APPROVAL/.test(t), "DATA / EVIDENCE / REVIEW / APPROVAL present");
-  ok(/Reviewer required/.test(t) && /Approval required/.test(t),
-     "  honest: a review and an approval are required, not done", 1);
-
-  console.log("\n4. THE ACTION-CONTROL SUMMARY");
+  console.log("\n3. THE ACTION-CONTROL SUMMARY");
   ok(/Action control/.test(t), "the summary is present");
   /* Three findings need action (MP 4C grade5, FC ENG grade3, UC grade5); the MP
      is past due; two carry no owner and no work order. */
@@ -97,15 +89,14 @@ const textOf = (p, target, lang) => p.evaluate(({ target, lang }) => {
   ok(/Verified\s*Not available/.test(t),
      "  verified is Not available — no field records it, so no number is invented", 1);
 
-  console.log("\n5. THE THREE-ROLE SIGN-OFF");
+  console.log("\n4. THE THREE-ROLE SIGN-OFF");
   ok(/CM Technician/.test(t) && /Reliability Engineer/.test(t) && /Maintenance Supervisor/.test(t),
      "all three roles present", 1);
 
-  console.log("\n6. IN RUSSIAN");
+  console.log("\n5. IN RUSSIAN");
   const ru = await textOf(p, target, "ru");
   ok(/Программа осмотров/.test(ru), "the programme table is translated", 1);
   ok(/Контроль действий/.test(ru) && /Открыто\s*4/.test(ru), "the action control is translated", 1);
-  ok(/Контроль отчёта/.test(ru), "the report controls are translated", 1);
 
   ok(errs.length === 0, "no page errors", errs.slice(0, 3).join(" | ") || "none");
   await b.close();

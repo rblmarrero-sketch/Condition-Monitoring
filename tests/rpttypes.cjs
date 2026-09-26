@@ -6,10 +6,12 @@
    with honest empty states — "Not recorded", "Not measured", "No finding" —
    where a field the template prints was not captured. Common to every sheet:
    the CONDITION RATING / SEVERITY / DECISION strip, the Maintenance action
-   strip, the DATA/EVIDENCE/REVIEW/APPROVAL status strip and the three-role
-   approval table. The MODEL/SMU/INSPECTED BY/LOCATION strip was common
-   furniture until 2026-09-14 and is not any more — the office struck it out
-   as three facts the sheet already carried; see section 0.
+   strip and the three-role approval table. The MODEL/SMU/INSPECTED BY/
+   LOCATION strip was common furniture until 2026-09-14 and is not any more —
+   the office struck it out as three facts the sheet already carried; see
+   section 0. The DATA/EVIDENCE/REVIEW/APPROVAL status strip that used to sit
+   between the action strip and the approval table is gone the same way —
+   asked for by name, against a real report with it circled; see CLAUDE.md.
 
    Run: node tests/rpttypes.cjs [port]   (needs tests/ed-srv.cjs on 8093) */
 const { chromium } = require(require("./pw.cjs"));
@@ -139,11 +141,8 @@ const textOf = (p, key, lang) => p.evaluate(({ key, lang }) => {
   ok(/TK900/.test(mp) && /2026-08-10/.test(mp), "  the unit and the date are on the masthead");
   ok(/Ivanov/.test(mp), "  and the inspector is on the approval table");
   ok(/Maintenance action/.test(mp), "the maintenance-action strip");
-  ok(/DATA[\s\S]*EVIDENCE[\s\S]*REVIEW[\s\S]*APPROVAL/.test(mp), "the DATA/EVIDENCE/REVIEW/APPROVAL status strip");
   ok(/CM Technician/.test(mp) && /Reliability Engineer/.test(mp) && /Maintenance Supervisor/.test(mp),
      "the three-role approval table");
-  ok(/Reliability Engineer[\s\S]*Pending/.test(mp) || /Pending/.test(mp),
-     "  review and approval left as open/pending, never printed approved");
 
   console.log("\n1. MAGNETIC PLUG — equipment and component evidence, every plug a card");
   ok(/Equipment and component evidence/.test(mp), "the template subheading");

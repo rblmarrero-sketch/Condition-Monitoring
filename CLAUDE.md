@@ -2708,6 +2708,67 @@ the same bytes — if the primary reader comes back empty, the identical
 proves a 0-byte file is refused with an actual reason before any request is
 made, never round-tripped to the server for an opaque answer.
 
+**A FINDING'S OWN WORDS WERE PRINTED TWICE, AND A ROW THAT COULD ONLY EVER
+SAY "PENDING" WAS ASKED FOR BY NAME TO GO.** A real EX004 report, sent back
+with two things circled: an inspector's comment ("Трещины, отломило левый
+адаптер ковша") appearing once under CH.BUC's row in "FINDINGS BY COMPONENT
+OR SYSTEM" and again, word for word, under CH.BUC's own card in "PHOTOGRAPHS
+WITH FINDINGS" — and the DATA/EVIDENCE/REVIEW/APPROVAL strip above the
+approval table. "your job is to optimize the report... we have duplicate
+comments (check on that)... lets remove that circled part to all report."
+
+The duplicate was real and had one root cause reached from two directions.
+`typeTable()` — the findings summary FC/INSP/TEMP/GET print — has carried a
+`.rnote` row under each position since the day it shipped, comment included.
+`photoGallery()`'s own board, printed straight after that table for the same
+four types, calls `cell()` for each photographed position, and `cell()`
+prints `it.comment` again on the card (`.cm`) — correct on its own, since
+`cell()` is also `mpEvidence`'s ONLY place a Magnetic Plug position's comment
+ever appears, and dropping it there unconditionally would have made the
+comment vanish rather than repeat, this project's other named defect. RTW's
+own gallery carried the identical shape one function over: `rtwChecklist`
+already prints each line's comment in its own `.rtw-cm` column, and its
+photo board (its own `cell()` call, not `photoGallery()`) said it again.
+
+`cell()` already had the mechanism for exactly this — `sh.defect`/`sh.cause`/
+`sh.action`, the "already shown on a shared band above" signals `commonBand`
+sets when three or more positions agree on the same finding. `sh.comment`
+joins them: `photoGallery()` and RTW's own gallery call now pass
+`{comment:true}`, and `cell()` skips the `.cm` div only when it is set. Every
+OTHER caller — `mpEvidence`, the graded-findings board, Equipment History's
+own older-round cards — never shows a position's comment anywhere but the
+card, so `sh.comment` stays unset for them and nothing is lost; a wear
+round's measured-station table has no comment column at all, so its own
+`cell()` call is the same "only place" case.
+
+The status strip was simpler: REVIEW and APPROVAL have never had a record
+field behind them and could only ever print "Pending," a fact the approval
+table directly beneath already states in the reader's own words — an open
+signature line already means not yet reviewed. Asked for as one row, not as
+four cells to weigh separately, so `statusStrip()` (the single-round report)
+and `fleetControls()` (the fleet/management summary and Equipment History
+head, three call sites) are retired along with every call to them, and the
+now-unused `ss_*`/`rc_*` label keys go with them. DATA and EVIDENCE were the
+two cells with a fact printed nowhere else on the sheet — whether the office
+holds the round, how many of its expected photographs arrived — and they go
+too, on the same instruction; a decision the maintainer can revisit by asking
+for either fact to reappear somewhere else on the document, since removing it
+was the ask, not a judgement that the fact was worthless. `rtwHeaderStrip`,
+`schedStrip` and `ucCondSummary` keep their own, unrelated `.sstrip` bands —
+this removes two specific functions, not the CSS class every strip on the
+sheet shares.
+
+Every report type that ends in the shared sign-off loses one row's height off
+every sheet it prints (FC, INSP, TEMP, GET, MP, UC, TB, LUBE — RTW never had
+the strip in the first place, only its own richer header strip), and every
+table-bodied type with more than a short comment stops paying for that
+comment twice. `tests/rptfleet.cjs` and `tests/rpthybrid.cjs` — which had
+asserted the strip as part of their own contract — are updated to its
+absence instead of its presence; `tests/schedstrip.cjs` and
+`tests/rtwoffice.cjs`'s own `.sstrip` checks are untouched, since both were
+already reading `schedStrip`/`rtwHeaderStrip`'s own bands, never
+`statusStrip`'s.
+
 ---
 
 ## Secrets

@@ -3,9 +3,15 @@
    The field reports were a compact one-machine round summary. The reference
    templates (01_Single_Inspection_Report_Templates.pdf) are a formal
    reliability document: a report number, a condition-rating / level / decision
-   block with the 1-5 scale, a maintenance-action strip, a DATA / EVIDENCE /
-   REVIEW / APPROVAL status strip, and a three-role sign-off. The build keeps
-   the compact density and adds the formal blocks — a hybrid.
+   block with the 1-5 scale, a maintenance-action strip, and a three-role
+   sign-off. The build keeps the compact density and adds the formal blocks —
+   a hybrid.
+
+   (The DATA / EVIDENCE / REVIEW / APPROVAL status strip that used to sit
+   between the action strip and the sign-off is gone — asked for by name,
+   against a real report with it circled: "lets remove that circled part to
+   all report." REVIEW/APPROVAL only ever read "Pending," a fact the approval
+   table beneath it already states in the reader's own words.)
 
    Every block is driven by the saved record. This suite proves:
 
@@ -16,8 +22,6 @@
      · the maintenance-action strip prints the round's action/cause/owner/WO/due
        and reads "Not recorded" for what the round does not carry, never a
        fabricated value;
-     · the status strip is honest — a delivered round is not an approved one,
-       and review and approval read Pending because no field records them;
      · the three approval roles are the reference's own, the technician filled
        from the record and the other two left as open lines;
      · both surfaces build the identical blocks from the identical round;
@@ -123,18 +127,13 @@ const textOf = (p, key, lang) => p.evaluate(({ key, lang }) => {
      "  and reads Not recorded for what the round does not carry — never invented",
      (noAct.match(/Owner\s*\w[\w .]*/) || [""])[0].slice(0, 24));
 
-  console.log("\n5. THE STATUS STRIP SAYS ONLY WHAT IS TRUE");
-  ok(/REVIEW\s*Pending/.test(r.text) && /APPROVAL\s*Pending/.test(r.text),
-     "review and approval are Pending — no field records them", 1);
-  ok(/DATA\s*Received/.test(r.text), "  the office holds the round (data received)", 1);
-
-  console.log("\n6. THE THREE APPROVAL ROLES, THE REFERENCE'S OWN");
+  console.log("\n5. THE THREE APPROVAL ROLES, THE REFERENCE'S OWN");
   ok(/CM Technician/.test(r.text) && /Reliability Engineer/.test(r.text)
      && /Maintenance Supervisor/.test(r.text), "all three roles present", 1);
   ok(/CM Technician\s*S\. Volkov/.test(r.text) || r.text.indexOf("S. Volkov") >= 0,
      "  the technician is filled from the record", 1);
 
-  console.log("\n7. BOTH SURFACES BUILD THE IDENTICAL BLOCKS");
+  console.log("\n6. BOTH SURFACES BUILD THE IDENTICAL BLOCKS");
   /* The phone loads the same report-core.js; the section builder is the engine,
      not the surface. Proven by asking the engine directly — the same function
      both call — for the mobile-shaped record, and matching the rating block. */
@@ -147,7 +146,7 @@ const textOf = (p, key, lang) => p.evaluate(({ key, lang }) => {
   ok(same.ratingBlock.indexOf("Severe") >= 0 && same.ratingBlock.indexOf("Repair soon") >= 0,
      "the engine both surfaces call yields the rating + decision block", same.ratingBlock.slice(0, 60));
 
-  console.log("\n8. IN RUSSIAN, WITH NO ENGLISH LEAKING INTO THE SINGLE-LANGUAGE BLOCKS");
+  console.log("\n7. IN RUSSIAN, WITH NO ENGLISH LEAKING INTO THE SINGLE-LANGUAGE BLOCKS");
   const ru = (await textOf(p, key, "ru")).text;
   ok(/ОЦЕНКА СОСТОЯНИЯ/.test(ru) && /РЕШЕНИЕ/.test(ru), "the rating block is in Russian", 1);
   ok(ru.indexOf("Скорый ремонт") >= 0, "  the decision is translated", 1);

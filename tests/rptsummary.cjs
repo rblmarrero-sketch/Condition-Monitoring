@@ -11,9 +11,13 @@
        point of that type, the same 1-5 source as everywhere else;
      · a type with no round reads "Not inspected", never Normal;
      · an equipment decision that follows the worst rating across the machine;
-     · a report-controls strip and a consolidated action list over all its
-       rounds, deduped, with the missing control fields left visible;
+     · a consolidated action list over all its rounds, deduped, with the
+       missing control fields left visible;
      · a three-role sign-off.
+
+   (The DATA/EVIDENCE/REVIEW/APPROVAL report-controls strip that used to sit
+   above the action list is gone, on request, against a real report with it
+   circled — see CLAUDE.md.)
 
    Run: node tests/rptsummary.cjs [port]   (needs tests/ed-srv.cjs on 8093) */
 const { chromium } = require(require("./pw.cjs"));
@@ -90,8 +94,7 @@ const textOf = (p, target, lang) => p.evaluate(({ target, lang }) => {
   ok(/require planned maintenance/.test(t),
      "  worst is Severe, so it reads plan — not critical, not all-clear", 1);
 
-  console.log("\n6. CONTROLS, CONSOLIDATED ACTIONS, AND THE SIGN-OFF");
-  ok(/Report controls/.test(t), "the report-controls strip", 1);
+  console.log("\n6. CONSOLIDATED ACTIONS, AND THE SIGN-OFF");
   ok(/Consolidated actions/.test(t), "the consolidated action list", 1);
   ok(/WO-9001/.test(t) && /A\. Ivanov/.test(t), "  it carries the recorded owner and work order", 1);
   ok(/CM Technician/.test(t) && /Reliability Engineer/.test(t) && /Maintenance Supervisor/.test(t),
