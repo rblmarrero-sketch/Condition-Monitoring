@@ -48,6 +48,21 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
    this question. tests/ ships to nobody. */
 const SHIPPED = ["mobile/", "dashboard/", "data/"];
 
+/* TWO FILES UNDER data/ ARE DELIBERATELY EXEMPT — CLAUDE.md's own "THE 1C
+   PULL REFRESHES ITSELF" entry states why at length: data/work_orders.js
+   (dashboard, woRefresh()) and data/schedule_slim.json (phone,
+   schedEnsureLoaded()) are both fetched again at runtime on their own timer
+   and swapped in when 1C's own `generated` timestamp has moved — the SAME
+   mechanism that lets an hourly ingest refresh reach a page or a phone
+   already open, with no BUILD bump and no reload. The bot that regenerates
+   them runs hourly, every hour, forever, and never bumps BUILD (correctly —
+   see that entry), so treating them the same as data/magnetic_plug.js (no
+   such refresh; genuinely stuck at the BUILD it shipped in until a new one
+   ships) would fail this guard after every single one of those commits,
+   turning this project's most safety-critical check into exactly the noise
+   CLAUDE.md's own rules warn a real failure hides behind. */
+const SELF_REFRESHING = ["data/work_orders.js", "data/schedule_slim.json"];
+
 (() => {
   const sw = fs.readFileSync(path.join(ROOT, "mobile/sw.js"), "utf8");
   const m = sw.match(/const BUILD\s*=\s*"([^"]+)"/);
@@ -112,7 +127,7 @@ const SHIPPED = ["mobile/", "dashboard/", "data/"];
     .map(l => (l.match(/^\s?\S{1,2}\s+(.*)$/) || [, l])[1])
     .map(p2 => p2.includes(" -> ") ? p2.split(" -> ").pop() : p2)   // renames
     .map(p2 => p2.replace(/^"|"$/g, "").trim());
-  const all = [...new Set(changed.concat(dirty))];
+  const all = [...new Set(changed.concat(dirty))].filter(f => !SELF_REFRESHING.includes(f));
 
   ok(all.length === 0,
     "no shipped file has changed since the build number was set",

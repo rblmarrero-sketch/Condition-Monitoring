@@ -3250,6 +3250,32 @@ earlier in that same suite, not a fixture built to match), that tapping a
 row reopens the exact round `rtwOpenForEdit` already knows how to open, and
 that the RTW panel and 1C PM's are never both showing at once.
 
+**THE MOST SAFETY-CRITICAL GUARD IN THIS FILE WAS ABOUT TO GO RED EVERY
+SINGLE HOUR, FOREVER.** Found running the full sweep after the feature
+above, not from a field trace: `tests/bump.cjs`'s `SHIPPED` list is
+`["mobile/", "dashboard/", "data/"]`, unconditionally — and the automated
+hourly ingest job (`[skip ci]`, "Refresh work_orders.js from a fresh
+WO.xlsx pull") commits to `data/work_orders.js` and
+`data/schedule_slim.json` on the hour, every hour, and — correctly, per
+this file's own "THE 1C PULL REFRESHES ITSELF" entry — never bumps BUILD,
+because both files are read again at runtime on their own timer
+(`woRefresh()`, `schedEnsureLoaded()`) and swapped in the instant 1C's own
+`generated` timestamp moves, with no reload and no cache to bust. `bump.cjs`
+had no way to tell that apart from `data/magnetic_plug.js`, which really
+does need the blanket rule (loaded once, at page load, with no refresh of
+its own) — so the guard that exists specifically to catch invisible work
+was itself one hourly bot commit away from reporting a false "stale" on
+every run, for ever. This is precisely the shape this file's own rules
+warn about — "A RED SUITE THAT NOBODY READS IS THE NOISE THE NEXT FAILURE
+HIDES IN" — one level up, on the guard meant to catch that shape in
+everything else. `SELF_REFRESHING` names the two files by path and filters
+them out of the changed/dirty set before the assertion; every other file
+under `data/`, `mobile/` and `dashboard/` is still covered exactly as
+before. Confirmed non-vacuous both ways: with the exclusion in place,
+`bump.cjs` passes clean against the live post-ingest state (only those two
+files had changed since BUILD 468 was set); touching `data/magnetic_plug.js`
+by hand and re-running still correctly fails, naming it.
+
 ---
 
 ## Secrets
