@@ -2769,6 +2769,48 @@ absence instead of its presence; `tests/schedstrip.cjs` and
 already reading `schedStrip`/`rtwHeaderStrip`'s own bands, never
 `statusStrip`'s.
 
+**A CORRECTION THAT WORKED COULD NEVER REGISTER AS ONE.** "can you finally fix
+this thing its comming back all the time" — TK115 and DZ007, the exact two
+units `quarflash.cjs`'s own history already names from 2026-09-15, back on
+the Data & Sync correction panel reading "10 photo file(s) missing" — but
+this time confirmed directly against the live folder, the live media index
+freshly refreshed, and `generalMedia()`'s own output: all ten files were on
+the server, correctly re-filed weeks earlier to general (machine) evidence,
+and showing there. The 2026-09-15 stale-cache flash was real and it was
+fixed; this was a second, different mechanism wearing the same two unit
+numbers.
+
+`orphanPhotos()`'s per-item shortfall (`n` claimed vs `roll.length` found)
+read `roll`, which comes from `serverMediaOf()` — right for DISPLAY, since a
+photograph re-filed to general evidence or another point must stop showing
+under the point it left, or it prints twice — as the photograph's whole
+existence. A file `assignPlan()` correctly excluded from `roll` because an
+engineer had already filed it elsewhere was therefore read as "never
+arrived," and the shortfall loop manufactured a fresh unnamed placeholder
+for it, every render, forever. The correction panel's own fix could never
+take effect on the panel that made it: apply it, and the exact same round
+reappeared with the exact same accusation, because succeeding at the
+re-filing is what emptied `roll` in the first place. This is the identical
+shape `serverMediaOfAll()`'s own comment already names for a different
+reader ("an office that tidied a plug photograph onto the machine overview
+turned a complete round into '1 attachment has not arrived'") — re-filing
+read as loss, the third time this project has hit that exact error in three
+different functions.
+
+The fix reads `serverNamesOf()` — the raw, pre-move list `serverMediaOf()`
+itself starts from — alongside `roll` when deciding how many of an item's
+claimed photographs are still genuinely outstanding, so a file confirmed on
+the server counts as accounted-for whether it is currently shown here or
+filed somewhere else. The DISPLAY list (`roll`, hence the visible photograph
+roll on the panel) is untouched — a re-filed photograph still correctly
+stops appearing under its old point — only the SHORTFALL count changes.
+`tests/quarflash.cjs`'s own fixture (TK115's keyless six) gets a new
+section: seeds the exact assignment doc `saveAssign()` writes when an
+engineer files all six as the machine's own, and proves the round leaves the
+correction panel afterward — confirmed non-vacuous, failing on the pre-fix
+code with the identical shape read live (`missing:6`, `stillQuarantined:
+true`).
+
 ---
 
 ## Secrets

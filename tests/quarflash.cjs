@@ -183,6 +183,58 @@ const RECS = [
   await p3.close();
 
   ok(errs.length === 0, 'no page errors', errs.slice(0, 3).join(' | '));
+
+  console.log('\nA RE-FILED PHOTOGRAPH IS NOT A LOST ONE — THE CORRECTION ITSELF');
+  console.log('MUST NOT REOPEN THE SAME ROUND');
+  /* Read live on 2026-09-26: TK115 and DZ007, corrected weeks earlier — all
+     six/four photographs re-filed to general (machine) evidence, showing
+     correctly in Equipment History — were STILL on this exact panel,
+     accused of the same "10 photo file(s) missing" every reload. The stale-
+     cache flash above was already fixed; this is a different mechanism.
+
+     orphanPhotos()'s per-item shortfall counted only serverMediaOf() — the
+     DISPLAY list, which correctly drops a photograph the moment it is
+     re-filed elsewhere, so nothing shows twice. But the shortfall math read
+     that same drop as "never arrived" and manufactured a fresh placeholder
+     for every one of them, forever: the correction could never register as
+     one, because applying it only ever produced a new round of identical
+     accusations against the fix's own effect. */
+  INDEXED = true;
+  const p4 = await b.newPage({ viewport: { width: 1440, height: 900 } });
+  await p4.addInitScript(u => { localStorage.setItem('cm_drive_url', u); localStorage.setItem('cm_drive_sec', ''); },
+    `http://127.0.0.1:${PORT}/live`);
+  await p4.goto(`http://127.0.0.1:${PORT}/dashboard/index.html`, { waitUntil: 'load' });
+  await p4.waitForFunction(() => window.CMDrive && typeof CMDrive.mediaIndexState === 'function', null, { timeout: 20000 });
+  const refiled = await p4.evaluate(async recs => {
+    CMDrive.configured = () => true;
+    CMDash.importRecords(recs);
+    await CMDrive.refreshMediaIndex();
+    const rec = RECS.find(r => r.equip === 'TK115');
+    const before = photoTally(rec);
+    /* The exact correction an engineer makes from this panel: all six
+       photographs on the keyless point filed as the machine's own — the
+       same doc shape saveAssign() writes, without the network round trip. */
+    const at = new Date().toISOString();
+    const assign = {};
+    for (let n = 1; n <= 6; n++)
+      assign[`TK115._05.08.2026_TB_${n}.jpg`] = { by: 'R. Marrero', at, general: true, cat: 'MACHINE' };
+    CMDash.setEdits([{ key: ekOf(rec), by: 'R. Marrero', at, void: false, reason: '', note: '', items: {}, fields: {}, assign }]);
+    const after = photoTally(rec);
+    showTab('sync'); renderSync();
+    const stillQuarantined = [...document.querySelectorAll('#syQuarTbl [data-quargo]')]
+      .some(r => /TK115/.test(r.textContent));
+    const gen = generalMedia(rec).map(m => m.name);
+    return { before, after, stillQuarantined, generalCount: gen.length };
+  }, RECS);
+  ok(refiled.before.missing === 0 && refiled.before.received === 6,
+     'before the correction: still on the point, none manufactured as missing', JSON.stringify(refiled.before));
+  ok(refiled.after.missing === 0,
+     'after filing them as general evidence, none is manufactured as a fresh shortfall',
+     JSON.stringify(refiled.after));
+  ok(refiled.generalCount === 6, 'and all six are genuinely on the general-evidence roll', refiled.generalCount);
+  ok(!refiled.stillQuarantined, 'the round leaves the correction panel — the fix registers as one', JSON.stringify(refiled));
+  await p4.close();
+
   await b.close(); srv.close();
   console.log(fails.length ? `\n${fails.length} FAILED: ` + fails.join(' | ') : '\nall passed');
   process.exit(fails.length ? 1 : 0);
