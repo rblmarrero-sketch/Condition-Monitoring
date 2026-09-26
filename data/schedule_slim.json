@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-26T13:43:05+00:00",
+  "generated": "2026-09-26T14:38:09+00:00",
   "byUnit": {
     "DZ001": [
       {
@@ -641,7 +641,11 @@
       "raised": "2026-11-01",
       "type": "500 Hours service Planned",
       "hours": 500,
-      "plan": "2026-11-01"
+      "plan": "2026-11-01",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-016283",
@@ -653,7 +657,11 @@
       "raised": "2026-10-22",
       "type": "500 Hours service Planned",
       "hours": 500,
-      "plan": "2026-10-22"
+      "plan": "2026-10-22",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017859",
@@ -665,7 +673,11 @@
       "raised": "2026-10-11",
       "type": "500 Hours service Planned",
       "hours": 500,
-      "plan": "2026-10-11"
+      "plan": "2026-10-11",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017871",
@@ -677,7 +689,11 @@
       "raised": "2026-10-11",
       "type": "4000 Hours service Planned",
       "hours": 4000,
-      "plan": "2026-10-11"
+      "plan": "2026-10-11",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017846",
@@ -689,7 +705,11 @@
       "raised": "2026-10-11",
       "type": "1000 Hours service Planned",
       "hours": 1000,
-      "plan": "2026-10-11"
+      "plan": "2026-10-11",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017888",
@@ -701,7 +721,11 @@
       "raised": "2026-10-11",
       "type": "3000 Hours service Planned",
       "hours": 3000,
-      "plan": "2026-10-11"
+      "plan": "2026-10-11",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017865",
@@ -713,7 +737,11 @@
       "raised": "2026-10-11",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-10-11"
+      "plan": "2026-10-11",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017849",
@@ -725,7 +753,11 @@
       "raised": "2026-10-10",
       "type": "500 Hours service Planned",
       "hours": 500,
-      "plan": "2026-10-10"
+      "plan": "2026-10-10",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017847",
@@ -737,7 +769,11 @@
       "raised": "2026-10-10",
       "type": "500 Hours service Planned",
       "hours": 500,
-      "plan": "2026-10-10"
+      "plan": "2026-10-10",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017852",
@@ -749,7 +785,11 @@
       "raised": "2026-10-09",
       "type": "8000 Hours service Planned",
       "hours": 8000,
-      "plan": "2026-10-09"
+      "plan": "2026-10-09",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017854",
@@ -761,7 +801,11 @@
       "raised": "2026-10-09",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-10-09"
+      "plan": "2026-10-09",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017882",
@@ -773,7 +817,11 @@
       "raised": "2026-10-09",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-10-09"
+      "plan": "2026-10-09",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017864",
@@ -785,7 +833,11 @@
       "raised": "2026-10-08",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-10-08"
+      "plan": "2026-10-08",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017885",
@@ -797,7 +849,11 @@
       "raised": "2026-10-08",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-10-08"
+      "plan": "2026-10-08",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017856",
@@ -809,7 +865,11 @@
       "raised": "2026-10-08",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-10-08"
+      "plan": "2026-10-08",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017870",
@@ -821,7 +881,11 @@
       "raised": "2026-10-07",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-10-07"
+      "plan": "2026-10-07",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017878",
@@ -833,7 +897,11 @@
       "raised": "2026-10-07",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-10-07"
+      "plan": "2026-10-07",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017863",
@@ -845,7 +913,11 @@
       "raised": "2026-10-06",
       "type": "500 Hours service Planned",
       "hours": 500,
-      "plan": "2026-10-06"
+      "plan": "2026-10-06",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017869",
@@ -857,7 +929,11 @@
       "raised": "2026-10-06",
       "type": "500 Hours service Planned",
       "hours": 500,
-      "plan": "2026-10-06"
+      "plan": "2026-10-06",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017867",
@@ -869,7 +945,11 @@
       "raised": "2026-10-06",
       "type": "500 Hours service Planned",
       "hours": 500,
-      "plan": "2026-10-06"
+      "plan": "2026-10-06",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017876",
@@ -881,7 +961,11 @@
       "raised": "2026-10-05",
       "type": "1000 Hours service Planned",
       "hours": 1000,
-      "plan": "2026-10-05"
+      "plan": "2026-10-05",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017874",
@@ -893,7 +977,11 @@
       "raised": "2026-10-05",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-10-05"
+      "plan": "2026-10-05",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017887",
@@ -905,7 +993,11 @@
       "raised": "2026-10-05",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-10-05"
+      "plan": "2026-10-05",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017880",
@@ -917,7 +1009,11 @@
       "raised": "2026-10-05",
       "type": "1000 Hours service Planned",
       "hours": 1000,
-      "plan": "2026-10-05"
+      "plan": "2026-10-05",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017872",
@@ -929,7 +1025,11 @@
       "raised": "2026-10-05",
       "type": "4000 Hours service Planned",
       "hours": 4000,
-      "plan": "2026-10-05"
+      "plan": "2026-10-05",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017892",
@@ -941,7 +1041,11 @@
       "raised": "2026-10-05",
       "type": "500 Hours service Planned",
       "hours": 500,
-      "plan": "2026-10-05"
+      "plan": "2026-10-05",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017988",
@@ -953,7 +1057,11 @@
       "raised": "2026-10-04",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-10-04"
+      "plan": "2026-10-04",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017877",
@@ -965,7 +1073,11 @@
       "raised": "2026-10-04",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-10-04"
+      "plan": "2026-10-04",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017967",
@@ -977,7 +1089,11 @@
       "raised": "2026-10-04",
       "type": "500 Hours service Planned",
       "hours": 500,
-      "plan": "2026-10-04"
+      "plan": "2026-10-04",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017969",
@@ -989,7 +1105,11 @@
       "raised": "2026-10-04",
       "type": "500 Hours service Planned",
       "hours": 500,
-      "plan": "2026-10-04"
+      "plan": "2026-10-04",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017879",
@@ -1001,7 +1121,11 @@
       "raised": "2026-10-04",
       "type": "1000 Hours service Planned",
       "hours": 1000,
-      "plan": "2026-10-04"
+      "plan": "2026-10-04",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017883",
@@ -1013,7 +1137,11 @@
       "raised": "2026-10-04",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-10-04"
+      "plan": "2026-10-04",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017881",
@@ -1025,7 +1153,11 @@
       "raised": "2026-10-04",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-10-04"
+      "plan": "2026-10-04",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017970",
@@ -1037,7 +1169,11 @@
       "raised": "2026-10-03",
       "type": "1000 Hours service Planned",
       "hours": 1000,
-      "plan": "2026-10-03"
+      "plan": "2026-10-03",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017999",
@@ -1049,7 +1185,11 @@
       "raised": "2026-10-03",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-10-03"
+      "plan": "2026-10-03",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017971",
@@ -1061,7 +1201,11 @@
       "raised": "2026-10-03",
       "type": "500 Hours service Planned",
       "hours": 500,
-      "plan": "2026-10-03"
+      "plan": "2026-10-03",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-016659",
@@ -1073,7 +1217,11 @@
       "raised": "2026-10-02",
       "type": "1000 Hours service Planned",
       "hours": 1000,
-      "plan": "2026-10-02"
+      "plan": "2026-10-02",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017983",
@@ -1085,7 +1233,11 @@
       "raised": "2026-10-02",
       "type": "500 Hours service Planned",
       "hours": 500,
-      "plan": "2026-10-02"
+      "plan": "2026-10-02",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-018006",
@@ -1097,7 +1249,11 @@
       "raised": "2026-10-02",
       "type": "1000 Hours service Planned",
       "hours": 1000,
-      "plan": "2026-10-02"
+      "plan": "2026-10-02",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017975",
@@ -1109,7 +1265,11 @@
       "raised": "2026-10-02",
       "type": "500 Hours service Planned",
       "hours": 500,
-      "plan": "2026-10-02"
+      "plan": "2026-10-02",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017976",
@@ -1121,7 +1281,11 @@
       "raised": "2026-10-01",
       "type": "500 Hours service Planned",
       "hours": 500,
-      "plan": "2026-10-01"
+      "plan": "2026-10-01",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017886",
@@ -1133,7 +1297,11 @@
       "raised": "2026-10-01",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-10-01"
+      "plan": "2026-10-01",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017979",
@@ -1145,7 +1313,11 @@
       "raised": "2026-09-30",
       "type": "4000 Hours service Planned",
       "hours": 4000,
-      "plan": "2026-09-30"
+      "plan": "2026-09-30",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017997",
@@ -1157,7 +1329,11 @@
       "raised": "2026-09-30",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-09-30"
+      "plan": "2026-09-30",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017982",
@@ -1169,7 +1345,11 @@
       "raised": "2026-09-30",
       "type": "4000 Hours service Planned",
       "hours": 4000,
-      "plan": "2026-09-30"
+      "plan": "2026-09-30",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-018005",
@@ -1181,7 +1361,11 @@
       "raised": "2026-09-30",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-09-30"
+      "plan": "2026-09-30",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017992",
@@ -1193,7 +1377,11 @@
       "raised": "2026-09-30",
       "type": "2000 Hours service Planned",
       "hours": 2000,
-      "plan": "2026-09-30"
+      "plan": "2026-09-30",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017890",
@@ -1205,7 +1393,11 @@
       "raised": "2026-09-30",
       "type": "500 Hours service Planned",
       "hours": 500,
-      "plan": "2026-09-30"
+      "plan": "2026-09-30",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017986",
@@ -1217,7 +1409,11 @@
       "raised": "2026-09-30",
       "type": "500 Hours service Planned",
       "hours": 500,
-      "plan": "2026-09-30"
+      "plan": "2026-09-30",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-018003",
@@ -1229,7 +1425,11 @@
       "raised": "2026-09-29",
       "type": "500 Hours service Planned",
       "hours": 500,
-      "plan": "2026-09-29"
+      "plan": "2026-09-29",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017996",
@@ -1241,7 +1441,11 @@
       "raised": "2026-09-28",
       "type": "4000 Hours service Planned",
       "hours": 4000,
-      "plan": "2026-09-28"
+      "plan": "2026-09-28",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017896",
@@ -1253,7 +1457,11 @@
       "raised": "2026-09-28",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-09-28"
+      "plan": "2026-09-28",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-018010",
@@ -1265,7 +1473,11 @@
       "raised": "2026-09-28",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-09-28"
+      "plan": "2026-09-28",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-018001",
@@ -1277,7 +1489,11 @@
       "raised": "2026-09-28",
       "type": "1000 Hours service Planned",
       "hours": 1000,
-      "plan": "2026-09-28"
+      "plan": "2026-09-28",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-018002",
@@ -1289,7 +1505,11 @@
       "raised": "2026-09-28",
       "type": "500 Hours service Planned",
       "hours": 500,
-      "plan": "2026-09-28"
+      "plan": "2026-09-28",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-016580",
@@ -1301,7 +1521,11 @@
       "raised": "2026-09-27",
       "type": "1000 Hours service Planned",
       "hours": 1000,
-      "plan": "2026-09-27"
+      "plan": "2026-09-27",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017369",
@@ -1313,7 +1537,11 @@
       "raised": "2026-09-27",
       "type": "2000 Hours service Planned",
       "hours": 2000,
-      "plan": "2026-09-27"
+      "plan": "2026-09-27",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017364",
@@ -1325,7 +1553,11 @@
       "raised": "2026-09-27",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-09-27"
+      "plan": "2026-09-27",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017365",
@@ -1337,7 +1569,11 @@
       "raised": "2026-09-27",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-09-27"
+      "plan": "2026-09-27",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-016646",
@@ -1349,7 +1585,11 @@
       "raised": "2026-09-27",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-09-27"
+      "plan": "2026-09-27",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017367",
@@ -1361,7 +1601,11 @@
       "raised": "2026-09-27",
       "type": "4000 Hours service Planned",
       "hours": 4000,
-      "plan": "2026-09-27"
+      "plan": "2026-09-27",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-016617",
@@ -1373,7 +1617,11 @@
       "raised": "2026-09-27",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-09-27"
+      "plan": "2026-09-27",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-016560",
@@ -1385,7 +1633,11 @@
       "raised": "2026-09-27",
       "type": "500 Hours service Planned",
       "hours": 500,
-      "plan": "2026-09-27"
+      "plan": "2026-09-27",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-016573",
@@ -1397,7 +1649,11 @@
       "raised": "2026-09-27",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-09-27"
+      "plan": "2026-09-27",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017340",
@@ -1409,7 +1665,11 @@
       "raised": "2026-09-27",
       "type": "1000 Hours service Planned",
       "hours": 1000,
-      "plan": "2026-09-27"
+      "plan": "2026-09-27",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017409",
@@ -1421,7 +1681,11 @@
       "raised": "2026-09-26",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-09-26"
+      "plan": "2026-09-26",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-016583",
@@ -1433,7 +1697,11 @@
       "raised": "2026-09-26",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-09-26"
+      "plan": "2026-09-26",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017375",
@@ -1445,7 +1713,11 @@
       "raised": "2026-09-26",
       "type": "2000 Hours service Planned",
       "hours": 2000,
-      "plan": "2026-09-26"
+      "plan": "2026-09-26",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-016558",
@@ -1457,7 +1729,11 @@
       "raised": "2026-09-26",
       "type": "1000 Hours service Planned",
       "hours": 1000,
-      "plan": "2026-09-26"
+      "plan": "2026-09-26",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-016654",
@@ -1469,7 +1745,11 @@
       "raised": "2026-09-26",
       "type": "2000 Hours service Planned",
       "hours": 2000,
-      "plan": "2026-09-26"
+      "plan": "2026-09-26",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017372",
@@ -1481,7 +1761,11 @@
       "raised": "2026-09-26",
       "type": "1000 Hours service Planned",
       "hours": 1000,
-      "plan": "2026-09-26"
+      "plan": "2026-09-26",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017389",
@@ -1493,7 +1777,11 @@
       "raised": "2026-09-26",
       "type": "500 Hours service Planned",
       "hours": 500,
-      "plan": "2026-09-26"
+      "plan": "2026-09-26",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-016591",
@@ -1505,7 +1793,11 @@
       "raised": "2026-09-26",
       "type": "500 Hours service Planned",
       "hours": 500,
-      "plan": "2026-09-26"
+      "plan": "2026-09-26",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-016593",
@@ -1517,7 +1809,11 @@
       "raised": "2026-09-25",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-09-25"
+      "plan": "2026-09-25",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017416",
@@ -1529,7 +1825,11 @@
       "raised": "2026-09-25",
       "type": "500 Hours service Planned",
       "hours": 500,
-      "plan": "2026-09-25"
+      "plan": "2026-09-25",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017382",
@@ -1541,7 +1841,11 @@
       "raised": "2026-09-25",
       "type": "1000 Hours service Planned",
       "hours": 1000,
-      "plan": "2026-09-25"
+      "plan": "2026-09-25",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017386",
@@ -1553,7 +1857,11 @@
       "raised": "2026-09-25",
       "type": "1000 Hours service Planned",
       "hours": 1000,
-      "plan": "2026-09-25"
+      "plan": "2026-09-25",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017379",
@@ -1565,7 +1873,11 @@
       "raised": "2026-09-25",
       "type": "1000 Hours service Planned",
       "hours": 1000,
-      "plan": "2026-09-25"
+      "plan": "2026-09-25",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-016561",
@@ -1577,7 +1889,11 @@
       "raised": "2026-09-25",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-09-25"
+      "plan": "2026-09-25",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017742",
@@ -1589,7 +1905,11 @@
       "raised": "2026-09-24",
       "type": "4000 Hours service Planned",
       "hours": 4000,
-      "plan": "2026-09-24"
+      "plan": "2026-09-24",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017417",
@@ -1601,7 +1921,11 @@
       "raised": "2026-09-24",
       "type": "500 Hours service Planned",
       "hours": 500,
-      "plan": "2026-09-24"
+      "plan": "2026-09-24",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017741",
@@ -1613,7 +1937,11 @@
       "raised": "2026-09-24",
       "type": "2000 Hours service Planned",
       "hours": 2000,
-      "plan": "2026-09-24"
+      "plan": "2026-09-24",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-016633",
@@ -1625,7 +1953,11 @@
       "raised": "2026-09-24",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-09-24"
+      "plan": "2026-09-24",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017381",
@@ -1637,7 +1969,11 @@
       "raised": "2026-09-24",
       "type": "1000 Hours service Planned",
       "hours": 1000,
-      "plan": "2026-09-24"
+      "plan": "2026-09-24",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017393",
@@ -1649,7 +1985,11 @@
       "raised": "2026-09-24",
       "type": "4000 Hours service Planned",
       "hours": 4000,
-      "plan": "2026-09-24"
+      "plan": "2026-09-24",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017380",
@@ -1661,7 +2001,11 @@
       "raised": "2026-09-24",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-09-24"
+      "plan": "2026-09-24",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-016837",
@@ -1673,7 +2017,11 @@
       "raised": "2026-09-23",
       "type": "500 Hours service Planned",
       "hours": 500,
-      "plan": "2026-09-23"
+      "plan": "2026-09-23",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017387",
@@ -1685,7 +2033,11 @@
       "raised": "2026-09-23",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-09-23"
+      "plan": "2026-09-23",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017388",
@@ -1697,7 +2049,11 @@
       "raised": "2026-09-23",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-09-23"
+      "plan": "2026-09-23",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017399",
@@ -1709,7 +2065,11 @@
       "raised": "2026-09-23",
       "type": "1000 Hours service Planned",
       "hours": 1000,
-      "plan": "2026-09-23"
+      "plan": "2026-09-23",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017415",
@@ -1721,7 +2081,11 @@
       "raised": "2026-09-23",
       "type": "2000 Hours service Planned",
       "hours": 2000,
-      "plan": "2026-09-23"
+      "plan": "2026-09-23",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017797",
@@ -1733,7 +2097,11 @@
       "raised": "2026-09-23",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-09-23"
+      "plan": "2026-09-23",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017390",
@@ -1745,7 +2113,11 @@
       "raised": "2026-09-23",
       "type": "1000 Hours service Planned",
       "hours": 1000,
-      "plan": "2026-09-23"
+      "plan": "2026-09-23",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017397",
@@ -1757,7 +2129,11 @@
       "raised": "2026-09-22",
       "type": "1000 Hours service Planned",
       "hours": 1000,
-      "plan": "2026-09-22"
+      "plan": "2026-09-22",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017412",
@@ -1769,7 +2145,11 @@
       "raised": "2026-09-22",
       "type": "500 Hours service Planned",
       "hours": 500,
-      "plan": "2026-09-22"
+      "plan": "2026-09-22",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017410",
@@ -1781,7 +2161,11 @@
       "raised": "2026-09-22",
       "type": "500 Hours service Planned",
       "hours": 500,
-      "plan": "2026-09-22"
+      "plan": "2026-09-22",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017403",
@@ -1793,7 +2177,11 @@
       "raised": "2026-09-22",
       "type": "500 Hours service Planned",
       "hours": 500,
-      "plan": "2026-09-22"
+      "plan": "2026-09-22",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-012166",
@@ -1805,7 +2193,11 @@
       "raised": "2026-09-21",
       "type": "500 Hours service Planned",
       "hours": 500,
-      "plan": "2026-09-21"
+      "plan": "2026-09-21",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017419",
@@ -1817,7 +2209,11 @@
       "raised": "2026-09-21",
       "type": "2000 Hours service Planned",
       "hours": 2000,
-      "plan": "2026-09-21"
+      "plan": "2026-09-21",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017339",
@@ -1829,7 +2225,11 @@
       "raised": "2026-09-21",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-09-21"
+      "plan": "2026-09-21",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-009622",
@@ -1841,7 +2241,11 @@
       "raised": "2026-09-21",
       "type": "500 Hours service Planned",
       "hours": 500,
-      "plan": "2026-09-21"
+      "plan": "2026-09-21",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017404",
@@ -1853,7 +2257,11 @@
       "raised": "2026-09-21",
       "type": "1000 Hours service Planned",
       "hours": 1000,
-      "plan": "2026-09-21"
+      "plan": "2026-09-21",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-016944",
@@ -1865,7 +2273,11 @@
       "raised": "2026-09-20",
       "type": "500 Hours service Planned",
       "hours": 500,
-      "plan": "2026-09-20"
+      "plan": "2026-09-20",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017549",
@@ -1877,7 +2289,11 @@
       "raised": "2026-09-20",
       "type": "2000 Hours service Planned",
       "hours": 2000,
-      "plan": "2026-09-20"
+      "plan": "2026-09-20",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-016939",
@@ -1889,7 +2305,11 @@
       "raised": "2026-09-20",
       "type": "500 Hours service Planned",
       "hours": 500,
-      "plan": "2026-09-20"
+      "plan": "2026-09-20",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-016946",
@@ -1901,7 +2321,11 @@
       "raised": "2026-09-20",
       "type": "500 Hours service Planned",
       "hours": 500,
-      "plan": "2026-09-20"
+      "plan": "2026-09-20",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-016935",
@@ -1913,7 +2337,11 @@
       "raised": "2026-09-19",
       "type": "1000 Hours service Planned",
       "hours": 1000,
-      "plan": "2026-09-19"
+      "plan": "2026-09-19",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-016936",
@@ -1925,7 +2353,11 @@
       "raised": "2026-09-19",
       "type": "3000 Hours service Planned",
       "hours": 3000,
-      "plan": "2026-09-19"
+      "plan": "2026-09-19",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-016933",
@@ -1937,7 +2369,11 @@
       "raised": "2026-09-19",
       "type": "1000 Hours service Planned",
       "hours": 1000,
-      "plan": "2026-09-19"
+      "plan": "2026-09-19",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-016934",
@@ -1949,7 +2385,11 @@
       "raised": "2026-09-19",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-09-19"
+      "plan": "2026-09-19",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-016938",
@@ -1961,7 +2401,11 @@
       "raised": "2026-09-19",
       "type": "1000 Hours service Planned",
       "hours": 1000,
-      "plan": "2026-09-19"
+      "plan": "2026-09-19",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-016932",
@@ -1973,7 +2417,11 @@
       "raised": "2026-09-18",
       "type": "500 Hours service Planned",
       "hours": 500,
-      "plan": "2026-09-18"
+      "plan": "2026-09-18",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-016926",
@@ -1985,7 +2433,11 @@
       "raised": "2026-09-18",
       "type": "3000 Hours service Planned",
       "hours": 3000,
-      "plan": "2026-09-18"
+      "plan": "2026-09-18",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-016929",
@@ -1997,7 +2449,11 @@
       "raised": "2026-09-18",
       "type": "500 Hours service Planned",
       "hours": 500,
-      "plan": "2026-09-18"
+      "plan": "2026-09-18",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-016922",
@@ -2009,7 +2465,11 @@
       "raised": "2026-09-18",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-09-18"
+      "plan": "2026-09-18",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-016923",
@@ -2021,7 +2481,11 @@
       "raised": "2026-09-18",
       "type": "4000 Hours service Planned",
       "hours": 4000,
-      "plan": "2026-09-18"
+      "plan": "2026-09-18",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-016924",
@@ -2033,7 +2497,11 @@
       "raised": "2026-09-18",
       "type": "500 Hours service Planned",
       "hours": 500,
-      "plan": "2026-09-18"
+      "plan": "2026-09-18",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-016925",
@@ -2045,7 +2513,11 @@
       "raised": "2026-09-18",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-09-18"
+      "plan": "2026-09-18",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-016930",
@@ -2057,7 +2529,11 @@
       "raised": "2026-09-18",
       "type": "1000 Hours service Planned",
       "hours": 1000,
-      "plan": "2026-09-18"
+      "plan": "2026-09-18",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-016931",
@@ -2069,7 +2545,11 @@
       "raised": "2026-09-18",
       "type": "1000 Hours service Planned",
       "hours": 1000,
-      "plan": "2026-09-18"
+      "plan": "2026-09-18",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-016916",
@@ -2081,7 +2561,11 @@
       "raised": "2026-09-17",
       "type": "1000 Hours service Planned",
       "hours": 1000,
-      "plan": "2026-09-17"
+      "plan": "2026-09-17",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-016911",
@@ -2093,7 +2577,11 @@
       "raised": "2026-09-17",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-09-17"
+      "plan": "2026-09-17",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-016912",
@@ -2105,7 +2593,11 @@
       "raised": "2026-09-17",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-09-17"
+      "plan": "2026-09-17",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-016920",
@@ -2117,7 +2609,11 @@
       "raised": "2026-09-17",
       "type": "500 Hours service Planned",
       "hours": 500,
-      "plan": "2026-09-17"
+      "plan": "2026-09-17",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-016897",
@@ -2129,7 +2625,11 @@
       "raised": "2026-09-16",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-09-16"
+      "plan": "2026-09-16",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-016898",
@@ -2141,7 +2641,11 @@
       "raised": "2026-09-16",
       "type": "2000 Hours service Planned",
       "hours": 2000,
-      "plan": "2026-09-16"
+      "plan": "2026-09-16",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-016884",
@@ -2153,7 +2657,11 @@
       "raised": "2026-09-15",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-09-15"
+      "plan": "2026-09-15",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-016888",
@@ -2165,7 +2673,11 @@
       "raised": "2026-09-15",
       "type": "4000 Hours service Planned",
       "hours": 4000,
-      "plan": "2026-09-15"
+      "plan": "2026-09-15",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-016315",
@@ -2177,7 +2689,11 @@
       "raised": "2026-09-13",
       "type": "4000 Hours service Planned",
       "hours": 4000,
-      "plan": "2026-09-13"
+      "plan": "2026-09-13",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017165",
@@ -2189,7 +2705,11 @@
       "raised": "2026-09-13",
       "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "hours": null,
-      "plan": "2026-09-27"
+      "plan": "2026-09-27",
+      "status": "Elimination scheduled",
+      "request": "DD-00012594",
+      "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Поврежден шланга/линии"
     },
     {
       "wo": "WO-015354",
@@ -2201,7 +2721,11 @@
       "raised": "2026-09-12",
       "type": "500 Hours service Planned",
       "hours": 500,
-      "plan": "2026-09-12"
+      "plan": "2026-09-12",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-016852",
@@ -2213,7 +2737,11 @@
       "raised": "2026-09-12",
       "type": "2000 Hours service Planned",
       "hours": 2000,
-      "plan": "2026-09-12"
+      "plan": "2026-09-12",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017023",
@@ -2225,7 +2753,11 @@
       "raised": "2026-09-11",
       "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "hours": null,
-      "plan": "2026-09-25"
+      "plan": "2026-09-25",
+      "status": "Elimination scheduled",
+      "request": "DD-00012443",
+      "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Поврежден шланга/линии"
     },
     {
       "wo": "WO-017024",
@@ -2237,7 +2769,11 @@
       "raised": "2026-09-11",
       "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "hours": null,
-      "plan": "2026-09-25"
+      "plan": "2026-09-25",
+      "status": "Elimination scheduled",
+      "request": "DD-00012441",
+      "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Износ уплотнения"
     },
     {
       "wo": "WO-016865",
@@ -2249,7 +2785,11 @@
       "raised": "2026-09-11",
       "type": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
       "hours": null,
-      "plan": "2026-09-24"
+      "plan": "2026-09-24",
+      "status": "Elimination scheduled",
+      "request": "DD-00012413",
+      "defType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "cause": "Крепеж ослаблен"
     },
     {
       "wo": "WO-016864",
@@ -2261,7 +2801,11 @@
       "raised": "2026-09-11",
       "type": "2.01 Wear / Износ",
       "hours": null,
-      "plan": "2026-09-24"
+      "plan": "2026-09-24",
+      "status": "Elimination scheduled",
+      "request": "DD-00012407",
+      "defType": "2.01 Wear / Износ",
+      "cause": "Задиры/царапины"
     },
     {
       "wo": "WO-016858",
@@ -2273,7 +2817,11 @@
       "raised": "2026-09-11",
       "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "hours": null,
-      "plan": "2026-09-22"
+      "plan": "2026-09-22",
+      "status": "Elimination scheduled",
+      "request": "DD-00012409",
+      "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Поврежден шланга/линии"
     },
     {
       "wo": "WO-016859",
@@ -2285,7 +2833,11 @@
       "raised": "2026-09-11",
       "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "hours": null,
-      "plan": "2026-09-22"
+      "plan": "2026-09-22",
+      "status": "Elimination scheduled",
+      "request": "DD-00012408",
+      "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Поврежден шланга/линии"
     },
     {
       "wo": "WO-016857",
@@ -2297,7 +2849,11 @@
       "raised": "2026-09-11",
       "type": "2.01 Wear / Износ",
       "hours": null,
-      "plan": "2026-09-22"
+      "plan": "2026-09-22",
+      "status": "Elimination scheduled",
+      "request": "DD-00012406",
+      "defType": "2.01 Wear / Износ",
+      "cause": "Задиры/царапины"
     },
     {
       "wo": "WO-016854",
@@ -2309,7 +2865,11 @@
       "raised": "2026-09-11",
       "type": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "hours": null,
-      "plan": "2026-09-21"
+      "plan": "2026-09-21",
+      "status": "Elimination scheduled",
+      "request": "DD-00012421",
+      "defType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "cause": "Усталостная трещина"
     },
     {
       "wo": "WO-016855",
@@ -2321,7 +2881,11 @@
       "raised": "2026-09-11",
       "type": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "hours": null,
-      "plan": "2026-09-21"
+      "plan": "2026-09-21",
+      "status": "Elimination scheduled",
+      "request": "DD-00012419",
+      "defType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "cause": "Износ/трещина диска"
     },
     {
       "wo": "WO-008615",
@@ -2333,7 +2897,11 @@
       "raised": "2026-09-10",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-09-10"
+      "plan": "2026-09-10",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-016246",
@@ -2345,7 +2913,11 @@
       "raised": "2026-09-07",
       "type": "2000 Hours service Planned",
       "hours": 2000,
-      "plan": "2026-09-07"
+      "plan": "2026-09-07",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-017446",
@@ -2357,7 +2929,11 @@
       "raised": "2026-08-24",
       "type": "2.01 Wear / Износ",
       "hours": null,
-      "plan": "2026-08-24"
+      "plan": "2026-08-24",
+      "status": "Elimination scheduled",
+      "request": "DD-00011479",
+      "defType": "2.01 Wear / Износ",
+      "cause": "Абразивный износ"
     },
     {
       "wo": "WO-013889",
@@ -2369,7 +2945,11 @@
       "raised": "2026-08-09",
       "type": "1000 Hours service Planned",
       "hours": 1000,
-      "plan": "2026-08-09"
+      "plan": "2026-08-09",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "GD-023083",
@@ -2381,7 +2961,11 @@
       "raised": "2026-08-01",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-08-01"
+      "plan": "2026-08-01",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "GD-023085",
@@ -2393,7 +2977,11 @@
       "raised": "2026-08-01",
       "type": "500 Hours service Planned",
       "hours": 500,
-      "plan": "2026-08-01"
+      "plan": "2026-08-01",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "GD-023088",
@@ -2405,7 +2993,11 @@
       "raised": "2026-08-01",
       "type": "1000 Hours service Planned",
       "hours": 1000,
-      "plan": "2026-08-01"
+      "plan": "2026-08-01",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "GD-023091",
@@ -2417,7 +3009,11 @@
       "raised": "2026-08-01",
       "type": "2000 Hours service Planned",
       "hours": 2000,
-      "plan": "2026-08-01"
+      "plan": "2026-08-01",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "GD-023121",
@@ -2429,7 +3025,11 @@
       "raised": "2026-08-01",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-08-01"
+      "plan": "2026-08-01",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "GD-023122",
@@ -2441,7 +3041,11 @@
       "raised": "2026-08-01",
       "type": "1000 Hours service Planned",
       "hours": 1000,
-      "plan": "2026-08-01"
+      "plan": "2026-08-01",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "GD-023109",
@@ -2453,7 +3057,11 @@
       "raised": "2026-08-01",
       "type": "500 Hours service Planned",
       "hours": 500,
-      "plan": "2026-08-01"
+      "plan": "2026-08-01",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "GD-023117",
@@ -2465,7 +3073,11 @@
       "raised": "2026-08-01",
       "type": "2000 Hours service Planned",
       "hours": 2000,
-      "plan": "2026-08-01"
+      "plan": "2026-08-01",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "GD-023130",
@@ -2477,7 +3089,11 @@
       "raised": "2026-08-01",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-08-01"
+      "plan": "2026-08-01",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "GD-023133",
@@ -2489,7 +3105,11 @@
       "raised": "2026-08-01",
       "type": "1000 Hours service Planned",
       "hours": 1000,
-      "plan": "2026-08-01"
+      "plan": "2026-08-01",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "GD-023135",
@@ -2501,7 +3121,11 @@
       "raised": "2026-08-01",
       "type": "500 Hours service Planned",
       "hours": 500,
-      "plan": "2026-08-01"
+      "plan": "2026-08-01",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "GD-023145",
@@ -2513,7 +3137,11 @@
       "raised": "2026-08-01",
       "type": "2000 Hours service Planned",
       "hours": 2000,
-      "plan": "2026-08-01"
+      "plan": "2026-08-01",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "GD-023192",
@@ -2525,7 +3153,11 @@
       "raised": "2026-08-01",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-08-01"
+      "plan": "2026-08-01",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "GD-023193",
@@ -2537,7 +3169,11 @@
       "raised": "2026-08-01",
       "type": "500 Hours service Planned",
       "hours": 500,
-      "plan": "2026-08-01"
+      "plan": "2026-08-01",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "GD-023195",
@@ -2549,7 +3185,11 @@
       "raised": "2026-08-01",
       "type": "1000 Hours service Planned",
       "hours": 1000,
-      "plan": "2026-08-01"
+      "plan": "2026-08-01",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "GD-023200",
@@ -2561,7 +3201,11 @@
       "raised": "2026-08-01",
       "type": "2000 Hours service Planned",
       "hours": 2000,
-      "plan": "2026-08-01"
+      "plan": "2026-08-01",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "GD-023284",
@@ -2573,7 +3217,11 @@
       "raised": "2026-08-01",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-08-01"
+      "plan": "2026-08-01",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "GD-023285",
@@ -2585,7 +3233,11 @@
       "raised": "2026-08-01",
       "type": "500 Hours service Planned",
       "hours": 500,
-      "plan": "2026-08-01"
+      "plan": "2026-08-01",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "GD-023287",
@@ -2597,7 +3249,11 @@
       "raised": "2026-08-01",
       "type": "1000 Hours service Planned",
       "hours": 1000,
-      "plan": "2026-08-01"
+      "plan": "2026-08-01",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "GD-023291",
@@ -2609,7 +3265,11 @@
       "raised": "2026-08-01",
       "type": "2000 Hours service Planned",
       "hours": 2000,
-      "plan": "2026-08-01"
+      "plan": "2026-08-01",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "GD-023292",
@@ -2621,7 +3281,11 @@
       "raised": "2026-08-01",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-08-01"
+      "plan": "2026-08-01",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-008637",
@@ -2633,7 +3297,11 @@
       "raised": "2026-07-01",
       "type": "2000 Hours service Planned",
       "hours": 2000,
-      "plan": "2026-07-01"
+      "plan": "2026-07-01",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-004720",
@@ -2645,7 +3313,11 @@
       "raised": "2026-04-25",
       "type": "4000 Hours service Planned",
       "hours": 4000,
-      "plan": "2026-04-25"
+      "plan": "2026-04-25",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "WO-002197",
@@ -2657,7 +3329,11 @@
       "raised": "2026-03-26",
       "type": "1000 Hours service Planned",
       "hours": 1000,
-      "plan": "2026-03-26"
+      "plan": "2026-03-26",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     },
     {
       "wo": "GD-020555",
@@ -2669,7 +3345,11 @@
       "raised": "2025-12-30",
       "type": "1000 Hours service Planned",
       "hours": 1000,
-      "plan": "2025-12-30"
+      "plan": "2025-12-30",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": ""
     }
   ]
 }
