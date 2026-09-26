@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=462">
+<link rel="manifest" href="manifest.webmanifest?v=463">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=462">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=462">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=462">
+<link rel="apple-touch-icon" href="icon-192.png?v=463">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=463">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=463">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2760,16 +2760,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=462"></script>
-<script src="upload-defaults.js?v=462"></script>
-<script src="hme.js?v=462"></script>
-<script src="mp-fc.js?v=462"></script>
-<script src="rtw.js?v=462"></script>
-<script src="hme-cascade.js?v=462"></script>
-<script src="assets.js?v=462"></script>
-<script src="temp-limits.js?v=462"></script>
-<script src="normalize.js?v=462"></script>
-<script src="terms.js?v=462"></script>
+<script src="native.js?v=463"></script>
+<script src="upload-defaults.js?v=463"></script>
+<script src="hme.js?v=463"></script>
+<script src="mp-fc.js?v=463"></script>
+<script src="rtw.js?v=463"></script>
+<script src="hme-cascade.js?v=463"></script>
+<script src="assets.js?v=463"></script>
+<script src="temp-limits.js?v=463"></script>
+<script src="normalize.js?v=463"></script>
+<script src="terms.js?v=463"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2788,25 +2788,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=462"></script>
-<script src="edits.js?v=462"></script>
-<script src="due.js?v=462"></script>
-<script src="wear.js?v=462"></script>
-<script src="wear-figs.js?v=462"></script>
-<script src="wear-map.js?v=462"></script>
-<script src="machine-photos.js?v=462"></script>
-<script src="machine-fig.js?v=462"></script>
-<script src="get.js?v=462"></script>
-<script src="points.js?v=462"></script>
-<script src="uc-points.js?v=462"></script>
-<script src="inspect-guide.js?v=462"></script>
-<script src="get-figs.js?v=462"></script>
-<script src="body-points.js?v=462"></script>
-<script src="body-map.js?v=462"></script>
-<script src="lube.js?v=462"></script>
-<script src="lube-overrides.js?v=462"></script>
-<script src="lube2027.js?v=462"></script>
-<script src="report-core.js?v=462"></script>
+<script src="grade.js?v=463"></script>
+<script src="edits.js?v=463"></script>
+<script src="due.js?v=463"></script>
+<script src="wear.js?v=463"></script>
+<script src="wear-figs.js?v=463"></script>
+<script src="wear-map.js?v=463"></script>
+<script src="machine-photos.js?v=463"></script>
+<script src="machine-fig.js?v=463"></script>
+<script src="get.js?v=463"></script>
+<script src="points.js?v=463"></script>
+<script src="uc-points.js?v=463"></script>
+<script src="inspect-guide.js?v=463"></script>
+<script src="get-figs.js?v=463"></script>
+<script src="body-points.js?v=463"></script>
+<script src="body-map.js?v=463"></script>
+<script src="lube.js?v=463"></script>
+<script src="lube-overrides.js?v=463"></script>
+<script src="lube2027.js?v=463"></script>
+<script src="report-core.js?v=463"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -3399,6 +3399,11 @@ const I18N = {
     due_sched_nofile:"1C's schedule has not been downloaded yet on this phone.",
     due_plan_p:"1C plan",
     due_plan_row:"1C asked for this — {p}",
+    due_cmp_p:"Compare",
+    due_cmp_row:"Ours {cm} · 1C {c1}",
+    due_cmp_same:"same date",
+    due_cmp_later:"1C {n} d later",
+    due_cmp_earlier:"1C {n} d earlier",
     saved_also:"{u} needs {n} more round(s) at this visit. Start one and the hours, the photographs of the machine, your name and the fix carry over — you do not walk it again.",
     saved_also_go:"Start {ty}",
     due_healed:"This screen was repainting itself without stopping, so its settings were put back to their defaults to free the app. Nothing else was changed — every round and photograph on this phone is still here.",
@@ -4052,6 +4057,11 @@ const I18N = {
     due_sched_nofile:"График 1С ещё не загружен на этот телефон.",
     due_plan_p:"План 1С",
     due_plan_row:"Запрошено 1С — {p}",
+    due_cmp_p:"Сравнение",
+    due_cmp_row:"У нас {cm} · 1С {c1}",
+    due_cmp_same:"даты совпадают",
+    due_cmp_later:"1С на {n} дн. позже",
+    due_cmp_earlier:"1С на {n} дн. раньше",
     saved_also:"{u}: на этот выезд осталось обходов — {n}. Начните следующий: моточасы, фотографии машины, ваше имя и координаты перенесутся — обходить заново не нужно.",
     saved_also_go:"Начать: {ty}",
     due_healed:"Этот экран перерисовывался без остановки, поэтому его настройки возвращены к значениям по умолчанию, чтобы освободить приложение. Больше ничего не менялось — все обходы и фотографии на этом телефоне на месте.",
@@ -10341,6 +10351,59 @@ function planRows(only){
     || x.ty.localeCompare(y.ty));
 }
 
+/* ═══════════ WHERE BOTH SCHEDULES HAVE AN OPINION ═════════════════════════
+   Two clocks tell an inspector when a round is due: this app's own interval
+   table (dueRows()'s schedule — 250 h, 500 h, 1000 h... rendered to a
+   calendar) and 1C's own planned work orders (planRows()'s schedule). They
+   are deliberately never folded into one — "1C plan" is its own scope for
+   exactly that reason, see planRows()'s own header — because 1C only has an
+   opinion where it has actually opened a work order, and CM's own schedule
+   would otherwise silently inherit 1C's gaps.
+
+   This asks a different, narrower question: not "how much does each cover"
+   but "where they BOTH have an opinion, do they agree". So it is scoped to
+   the INTERSECTION on purpose — a row here needs a CM-computed due date
+   (this app has walked the round on this machine before, so DUE.next() has
+   something to say) AND 1C's own nearest planned date for the SAME machine
+   and round (schedOrdersFor's own "near" — the closest work order by day
+   gap, not narrowed to a calendar window the way planRows()'s agenda is,
+   because a plan two months out still answers "does 1C's plan agree with
+   ours", even outside the fortnight the List's own agenda shows). A machine
+   only one schedule mentions answers a coverage question, not this one, and
+   mixing the two in would read as a disagreement where there is none. */
+const CMP_AGREE_DAYS=7;               // how close counts as "the two schedules agree"
+function scheduleCompareRows(only){
+  const out=[];
+  if(!SCHED || !SCHED.byUnit || !window.DUE) return out;
+  const h=histAll(), gated=histGated();
+  const today=todayISO();
+  for(const k of Object.keys(h)){
+    const [ty,unit]=k.split("|");
+    if(only && ty!==only) continue;
+    if(ty==="RTW") continue;            // triggered by a work order, not a clock
+    if(!DUE.EVERY[ty] && !TYPE_META[ty]) continue;
+    const last=histEntry(h[k]);
+    if(!histFirm(last,gated)) continue;
+    const a=ASSET_BY[unit];
+    if(DUE.offRound && DUE.offRound(ty,a)) continue;
+    const cls=assetClassOf(unit);
+    const n=DUE.next({type:ty, last:last, today:today, rate:unitRate(unit), cls:cls, unit:unit});
+    if(!n) continue;
+    const s=schedOrdersFor(unit, ty);
+    const near=s && s.near;
+    if(!near || !near.plan) continue;   // 1C has no opinion here -- not comparable
+    const cmDate=DUE.shift(today, n.dueInDays);
+    const gap=DUE.dayDiff(cmDate, near.plan);   // + : 1C later than ours · - : 1C earlier
+    out.push({ cmp:true, ty, unit, cat:(a&&a.cat)||"", cls, cmDate, cmOver:n.over,
+               theirDate:near.plan, wo:near.wo||"", hours:near.hours!=null?near.hours:null,
+               gap, st:Math.abs(gap)<=CMP_AGREE_DAYS?"ok":"soon" });
+  }
+  out.sort((x,y)=>Math.abs(y.gap)-Math.abs(x.gap)
+                || x.unit.localeCompare(y.unit,undefined,{numeric:true})
+                || x.ty.localeCompare(y.ty));
+  return out;
+}
+
 /* Machines the register knows and no programme covers. Counted, never listed
    as work — nobody can walk a round that has not been defined.
 
@@ -10384,6 +10447,10 @@ const DUE_SCOPES=[["over","due_missed","over"],["soon","due_soon","soon"],
                      into it — see planRows for why the other counts must go
                      on meaning what they meant. */
                   ["plan","due_plan_p","plan"],
+                  /* Where BOTH schedules have an opinion — see
+                     scheduleCompareRows' own header for why this is a fifth
+                     population, not a filter on the other four. */
+                  ["cmp","due_cmp_p","cmp"],
                   ["put","due_putoff","put"],["all","due_all","" ]];
 /* ============ THE GUARD THAT MAKES THIS CLASS OF FAULT SURVIVABLE ============
    Build 321 repainted the Due screen whenever schedEnsureLoaded RESOLVED
@@ -10963,12 +11030,14 @@ function renderDue(){
     .concat(everyPlan.filter(r=>!cmKeys.has(r.unit+"|"+r.ty)));
   const rows=dueRows(dueType).concat(neverRows(dueType));
   const planned=planRows(dueType);
+  const compared=scheduleCompareRows(dueType);
   const scope=dueScope;
   const nOver=rows.filter(r=>r.st==="over").length;
   const nSoon=rows.filter(r=>r.st==="soon").length;
   const nPut =rows.filter(r=>r.st==="put"||r.st==="off").length;
   const nNever=rows.filter(r=>r.st==="never").length;
   const nPlan=planned.length;
+  const nCmp=compared.length;
   const inScope=(list,sc)=> sc==="all" ? list
     : sc==="over" ? list.filter(r=>r.st==="over")
     : sc==="soon" ? list.filter(r=>r.st==="soon")
@@ -10988,10 +11057,14 @@ function renderDue(){
   const searching=!!q;
   const hit=r=>r.unit.toUpperCase().indexOf(q)>=0
              || String((ASSET_BY[r.unit]||{}).cat||"").toUpperCase().indexOf(q)>=0;
-  /* 1C's rows are their own population, so the scope selects between two
-     lists rather than filtering one — mixing them would make "All" count
-     the same machine twice, once as CM sees it and once as 1C does. */
-  let show = q ? every.filter(hit) : (scope==="plan" ? planned : inScope(rows, scope));
+  /* 1C's rows, and the compared rows, are each their own population, so the
+     scope selects between lists rather than filtering one — mixing them in
+     would make "All" count the same machine twice, once as CM sees it and
+     once as 1C does. */
+  let show = q ? every.filter(hit)
+    : scope==="plan" ? planned
+    : scope==="cmp"  ? compared
+    : inScope(rows, scope);
   /* A MACHINE IN THE REGISTER THAT NO ROUND REACHES.
 
      The rule that decides which rounds a class is on is deliberately narrow —
@@ -11016,10 +11089,10 @@ function renderDue(){
      somebody has actually put something off. */
   const sbox=$("dueScopeF");
   if(sbox){
-    const cnt={over:nOver, soon:nSoon, never:nNever, plan:nPlan, put:nPut, all:rows.length};
+    const cnt={over:nOver, soon:nSoon, never:nNever, plan:nPlan, cmp:nCmp, put:nPut, all:rows.length};
     sbox.innerHTML=DUE_SCOPES
       .filter(([k])=> (k!=="put" || nPut>0) && (k!=="never" || nNever>0)
-                   && (k!=="plan" || nPlan>0))
+                   && (k!=="plan" || nPlan>0) && (k!=="cmp" || nCmp>0))
       .map(([k,lab,cls])=>`<button type="button" data-sc="${esc(k)}" class="${
         (scope===k?"on ":"")+(cls||"")}">${esc(t(lab))}<span class="n">${cnt[k]}</span></button>`)
       .join("");
@@ -11173,6 +11246,21 @@ function renderDue(){
         <span class="u">${esc(r.unit)}${
           r.cat?` · <span style="color:var(--muted);font-weight:400">${esc(r.cat)}</span>`:""}</span>
         <span class="d">${esc(t("due_reg_row"))}</span></button></div>`;
+    /* WHERE BOTH SCHEDULES HAVE AN OPINION. Neither date wins over the other
+       here — the row states both, plainly, and the gap between them, so an
+       inspector (or a planner reading the same screen) can see for
+       themselves whether the two agree rather than being told a verdict. */
+    if(r.cmp){
+      const gapTxt = r.gap===0 ? t("due_cmp_same")
+        : r.gap>0 ? t("due_cmp_later").replace("{n}",num(r.gap))
+        : t("due_cmp_earlier").replace("{n}",num(-r.gap));
+      return `<div class="duerow">
+      <button class="dueitem ${r.st}" data-u="${esc(r.unit)}" data-t="${esc(r.ty)}">
+        <span class="u"><span class="tag t-${esc(r.ty)}">${esc(r.ty)}</span> ${esc(r.unit)}${
+          r.cat?` · <span style="color:var(--muted);font-weight:400">${esc(r.cat)}</span>`:""}</span>
+        <span class="d">${esc(t("due_cmp_row",{cm:schedShortDate(r.cmDate),c1:schedShortDate(r.theirDate)}))} · ${esc(gapTxt)}</span>
+      </button></div>`;
+    }
     /* A ROUND 1C HAS ASKED FOR. No last-done date and no clock — there may
        be no CM history for this machine at all — so it says what 1C said
        and when, and nothing it cannot support. A plan date already gone is
@@ -14591,7 +14679,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="462";
+const BUILD="463";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

@@ -3236,3 +3236,51 @@ still one machine, not three; a named class keeps the original single-round
 rule; and the pre-existing GEN exclusion from "never inspected" is
 unaffected either way — proven so a future change to the catch-all bar is
 never confused with that separate, older rule.
+
+**"CAN WE USE 1C LIST FOR THE MEANTIME... OR WE HAVE A COMPARISON."** Asked
+plainly after the GEN fix above: is the schedule the established interval
+table (`due.js`) or 1C, and could 1C simply replace it. Both are real, and
+neither should replace the other for now — the established schedule covers
+350 machine/round pairs on a live phone where 1C's own plan covers 25, and
+1C only ever has an opinion once it has actually raised a work order, which
+this project's own "1C plan" tab entry (above) already explains is usually
+slower than CM's own cadence. What the site actually asked for, once that
+tradeoff was on the table, was a way to SEE whether the two agree rather
+than pick one.
+
+`scheduleCompareRows()` (mobile/index.html, and the office's own mirror in
+dashboard/index.html) answers that, deliberately scoped to the
+INTERSECTION — the same shape `duePlanRows()`/`planRows()` already use for
+"1C plan" as a scope of its own rather than a filter on Overdue/Due soon: a
+row needs BOTH a CM-computed due date (this app has walked the round on
+this machine before) AND 1C's own nearest planned date for the SAME machine
+and round, searched across 1C's WHOLE plan rather than the agenda's
+one-week-back-to-one-week-ahead window, because a plan two months out still
+answers "does 1C agree with us." `CMP_AGREE_DAYS` (7) is the bar between
+"the two schedules agree" and "they diverge," on both surfaces identically.
+A new "Compare" scope sits beside Overdue / Due soon /
+Never inspected / 1C plan / Deferred / (Completed) / All, adding to none of
+them, for the identical reason 1C plan does not: two questions answered by
+one number trust neither. Each row states both dates and the gap in words —
+"Ours 04.10 · 1C 26.10 · 1C 22 d later" — because the point is to let a
+reader judge for themselves, not to hand down a verdict.
+
+**AND BUILDING IT FOUND A TAB THAT HAD NEVER ACTUALLY WORKED.** The office's
+Inspection Schedule reads its scope off `#ddScope`, a visually-hidden
+`<select>` the segmented tab row writes to (`$("ddScope").value =
+b.dataset.dd`) — and that `<select>` had `<option>` elements for over, soon,
+due, never, put, done and all, but **never for `plan`**. Assigning a
+`<select>`'s `.value` to a string with no matching `<option>` is not an
+error and not a no-op: the DOM silently resets it to `""`, so every click on
+"1C plan" set `scope` to nothing, `renderDueTab()` fell back to its own
+`||"over"` default, and the segmented control repainted itself showing
+*Overdue* highlighted — the tab looked like it worked and always showed
+overdue rows instead. `duePlanRows()` itself was never wrong, and every test
+of it (`progchg.cjs`, and the phone's own `dueplan.cjs`) called the function
+directly rather than clicking the real control, which is exactly why this
+survived as long as it did — found here only because adding "Compare" meant
+adding its own `<option>` and asking why "plan"'s wasn't already there.
+Fixed the same way: `<option value="plan">`/`<option value="cmp">` added
+to `#ddScope`. `tests/schedcompare.cjs` proves both tabs by clicking the
+real segmented buttons, not by calling the render function, which is the
+one thing that would have caught this the first time.

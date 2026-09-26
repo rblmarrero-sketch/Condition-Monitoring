@@ -140,15 +140,16 @@ const shown = (p, sel) => p.evaluate(s => { const e = document.querySelector(s);
   ok('the page is called Inspection Schedule', /Inspection Schedule/.test(D.title || ''), D.title);
   /* The page size, from the page: 25 since build 271, and never a number this suite owns. */
   const PAGE_SIZE_DEFAULT_T = await p.evaluate(() => PAGE_SIZE_DEFAULT);
-  /* Seven since build 354: the six of Phase 4 plus 1C plan, which the phone
-     has carried since 339. FIVE of them still add up to All — 1C plan is
-     somebody else's schedule, not this programme's arithmetic, and folding it
-     into All would leave two questions answered by one number. Counts are read
-     by KEY, never by position. */
+  /* Seven since build 354, eight since Compare: the six of Phase 4 plus 1C
+     plan (carried by the phone since 339) plus Compare, where both schedules
+     have an opinion. FIVE still add up to All — 1C plan and Compare are each
+     their own question, not this programme's arithmetic, and folding either
+     into All would leave two questions answered by one number. Counts are
+     read by KEY, never by position. */
   const tb = k => D.tabs.find(x => x.k === k) || { n: -1 };
-  ok('seven named tabs: Overdue, Due soon, Never inspected, 1C plan, Deferred, Completed, All',
-     D.tabs.map(x => x.k).join(',') === 'over,soon,never,plan,put,done,all'
-     && D.tabs.map(x => x.label).join('|') === 'Overdue|Due soon|Never inspected|1C plan|Deferred|Completed|All', D.tabs.map(x => x.label).join('|'));
+  ok('eight named tabs: Overdue, Due soon, Never inspected, 1C plan, Compare, Deferred, Completed, All',
+     D.tabs.map(x => x.k).join(',') === 'over,soon,never,plan,cmp,put,done,all'
+     && D.tabs.map(x => x.label).join('|') === 'Overdue|Due soon|Never inspected|1C plan|Compare|Deferred|Completed|All', D.tabs.map(x => x.label).join('|'));
   ok('the Overview door lands on the Overdue tab', D.scope === 'over' && D.tabs[0].on, D.scope);
   ok('  and the address says so', /^#due/.test(D.hash), D.hash);
   ok('Overdue counts what the schedule calls overdue', tb('over').n === (D.st.over || 0), tb('over').n + ' vs ' + (D.st.over || 0));

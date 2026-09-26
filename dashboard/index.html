@@ -3125,6 +3125,14 @@
           <option value="soon" data-i18n="dd_soon">Due soon</option>
           <option value="due" data-i18n="dd_due">Overdue &amp; due soon</option>
           <option value="never" data-i18n="dd_never">Never inspected</option>
+          <!-- "plan" and "cmp" were missing here, so the segmented control's
+               own `$("ddScope").value = "plan"` / "cmp" silently reset to ""
+               (the DOM refuses a value with no matching <option>) and the
+               tab it was clicked FROM re-rendered with Overdue's rows —
+               found probing the real click, not reading the code. See
+               CLAUDE.md's own entry on this. -->
+          <option value="plan" data-i18n="dd_plan">1C plan</option>
+          <option value="cmp" data-i18n="dd_cmp">Compare</option>
           <option value="put" data-i18n="dd_put">Deferred</option>
           <option value="done" data-i18n="dd_done">Completed</option>
           <option value="all" data-i18n="dd_all">All</option>
@@ -3733,23 +3741,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=462"></script>
+<script src="../data/magnetic_plug.js?v=463"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=462"></script>
-<script src="../mobile/hme.js?v=462"></script>
-<script src="../mobile/mp-fc.js?v=462"></script>
-<script src="../mobile/rtw.js?v=462"></script>
-<script src="../mobile/hme-cascade.js?v=462"></script>
-<script src="../mobile/temp-limits.js?v=462"></script>
+<script src="../data/work_orders.js?v=463"></script>
+<script src="../mobile/hme.js?v=463"></script>
+<script src="../mobile/mp-fc.js?v=463"></script>
+<script src="../mobile/rtw.js?v=463"></script>
+<script src="../mobile/hme-cascade.js?v=463"></script>
+<script src="../mobile/temp-limits.js?v=463"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=462"></script>
-<script src="../mobile/normalize.js?v=462"></script>
-<script src="../mobile/terms.js?v=462"></script>
+<script src="../mobile/assets.js?v=463"></script>
+<script src="../mobile/normalize.js?v=463"></script>
+<script src="../mobile/terms.js?v=463"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -3768,19 +3776,19 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=462"></script>
-<script src="../mobile/edits.js?v=462"></script>
-<script src="../mobile/due.js?v=462"></script>
-<script src="../mobile/wear.js?v=462"></script>
-<script src="../mobile/wear-map.js?v=462"></script>
-<script src="../mobile/lube.js?v=462"></script>
-<script src="../mobile/lube-overrides.js?v=462"></script>
-<script src="../mobile/lube2027.js?v=462"></script>
-<script src="../mobile/lube-tds.js?v=462"></script>
+<script src="../mobile/grade.js?v=463"></script>
+<script src="../mobile/edits.js?v=463"></script>
+<script src="../mobile/due.js?v=463"></script>
+<script src="../mobile/wear.js?v=463"></script>
+<script src="../mobile/wear-map.js?v=463"></script>
+<script src="../mobile/lube.js?v=463"></script>
+<script src="../mobile/lube-overrides.js?v=463"></script>
+<script src="../mobile/lube2027.js?v=463"></script>
+<script src="../mobile/lube-tds.js?v=463"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=462"></script>
-<script src="../mobile/machine-photos.js?v=462"></script>
+<script src="../mobile/upload-defaults.js?v=463"></script>
+<script src="../mobile/machine-photos.js?v=463"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3789,17 +3797,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=462"></script>
-<script src="../mobile/get.js?v=462"></script>
-<script src="../mobile/points.js?v=462"></script>
-<script src="../mobile/uc-points.js?v=462"></script>
-<script src="../mobile/inspect-guide.js?v=462"></script>
-<script src="../mobile/get-figs.js?v=462"></script>
-<script src="../mobile/body-points.js?v=462"></script>
-<script src="../mobile/body-map.js?v=462"></script>
-<script src="../mobile/jspdf.umd.min.js?v=462"></script>
-<script src="../mobile/html2canvas.min.js?v=462"></script>
-<script src="../mobile/report-core.js?v=462"></script>
+<script src="../mobile/machine-fig.js?v=463"></script>
+<script src="../mobile/get.js?v=463"></script>
+<script src="../mobile/points.js?v=463"></script>
+<script src="../mobile/uc-points.js?v=463"></script>
+<script src="../mobile/inspect-guide.js?v=463"></script>
+<script src="../mobile/get-figs.js?v=463"></script>
+<script src="../mobile/body-points.js?v=463"></script>
+<script src="../mobile/body-map.js?v=463"></script>
+<script src="../mobile/jspdf.umd.min.js?v=463"></script>
+<script src="../mobile/html2canvas.min.js?v=463"></script>
+<script src="../mobile/report-core.js?v=463"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -4668,6 +4676,9 @@ const I18N={
   dd_plan:"1C plan", dd_plan_row:"1C asked for this — {p}", dd_plan_late:"planned {d}, not yet inspected",
   dd_plan_none:"Every round 1C has planned in this fortnight has been inspected.",
   dd_plan_nofile:"The 1C plan has not been pulled into this page yet.",
+  dd_cmp:"Compare", dd_cmp_row:"1C plans {p} · {wo} · {g}",
+  dd_cmp_same:"same date", dd_cmp_later:"1C {n} d later", dd_cmp_earlier:"1C {n} d earlier",
+  dd_cmp_none:"No machine has both a CM due date and an open 1C work order for the same round right now.",
   dd_h2:"Rounds by due date", dd_purpose:"Which rounds are overdue, due soon or never inspected, from the same intervals the phones use.",
   a_h2:"Action register", a_purpose:"Every finding that needs work: who owns it, by when, and what is still missing.",
   w_h2:"Measured positions", w_purpose:"Every measured position with its projected remaining life, so a worn component is replaced before it fails.",
@@ -5550,6 +5561,9 @@ const I18N={
   dd_plan:"План 1С", dd_plan_row:"Запрошено 1С — {p}", dd_plan_late:"план на {d}, обход не выполнен",
   dd_plan_none:"Все обходы, запланированные 1С на эти две недели, уже выполнены.",
   dd_plan_nofile:"План 1С ещё не загружен на эту страницу.",
+  dd_cmp:"Сравнение", dd_cmp_row:"1С планирует {p} · {wo} · {g}",
+  dd_cmp_same:"даты совпадают", dd_cmp_later:"1С на {n} дн. позже", dd_cmp_earlier:"1С на {n} дн. раньше",
+  dd_cmp_none:"Сейчас нет машины, для которой есть и своя дата CM, и открытый наряд 1С по тому же обходу.",
   dd_h2:"Обходы по сроку", dd_purpose:"Какие обходы просрочены, скоро или ещё ни разу не проводились — по тем же интервалам, что и на телефонах.",
   a_h2:"Реестр работ", a_purpose:"Каждая находка, требующая работ: кто отвечает, к какому сроку и чего ещё не хватает.",
   w_h2:"Замеренные точки", w_purpose:"Каждая замеренная точка с прогнозом остаточного ресурса, чтобы заменить изношенный узел до отказа.",
@@ -15345,6 +15359,55 @@ function duePlanRows(only){
     || x.unit.localeCompare(y.unit,undefined,{numeric:true})
     || x.ty.localeCompare(y.ty));
 }
+/* ═══════════ WHERE BOTH SCHEDULES HAVE AN OPINION ═════════════════════════
+   The office's own mirror of the phone's scheduleCompareRows() — see that
+   function's own header for why this asks a narrower question than
+   duePlanRows() ("do the two AGREE", not "how much does each cover") and why
+   it is scoped to the intersection: a row here needs a CM-computed due date
+   (dueTabRows() already has one) AND 1C's own nearest planned date for the
+   SAME machine and round — searched across 1C's WHOLE plan, not narrowed to
+   the agenda window duePlanRows() uses, because a plan two months out still
+   answers "does 1C agree with us" even outside the fortnight that tab shows.
+   Kept as a tab of its own for the identical reason duePlanRows() is: mixing
+   it into Overdue/Due soon/Never inspected/Deferred/Completed/All would
+   leave two questions answered by one number and neither of them
+   trustworthy. */
+const CMP_AGREE_DAYS=7;               // mirrors the phone's own constant
+function scheduleCompareRows(only){
+  const out=[];
+  const data=(window.CM_WO_DATA && window.CM_WO_DATA.workOrders)||[];
+  if(!data.length || !window.DUE) return out;
+  const today=todayISO();
+  const cmByKey={};
+  dueTabRows().forEach(r=>{ cmByKey[r.ty+"|"+r.unit]=r; });
+  const nearByKey={};
+  data.forEach(w=>{
+    if(!w || !w.equip || !w.planStart) return;
+    const info=paHourInfo(w);
+    (info.types||[]).forEach(ty=>{
+      if(only && ty!==only) return;
+      const unit=String(w.equip).toUpperCase();
+      const gap=DUE.dayDiff(today, w.planStart);
+      if(gap==null) return;
+      const k=ty+"|"+unit, cur=nearByKey[k];
+      if(!cur || Math.abs(gap)<cur.gap0)
+        nearByKey[k]={ plan:w.planStart, wo:w.woNumber||"", hours:info.hours, gap0:Math.abs(gap) };
+    });
+  });
+  Object.keys(nearByKey).forEach(k=>{
+    const cm=cmByKey[k]; if(!cm) return;      // CM has no opinion here -- not comparable
+    const near=nearByKey[k];
+    const cmDate=DUE.shift(today, cm.n.dueInDays);
+    const gap=DUE.dayDiff(cmDate, near.plan);   // + : 1C later than ours · - : 1C earlier
+    out.push({ ty:cm.ty, unit:cm.unit, last:cm.last, n:cm.n,
+               theirDate:near.plan, wo:near.wo, hours:near.hours, gap,
+               st:Math.abs(gap)<=CMP_AGREE_DAYS?"ok":"soon" });
+  });
+  out.sort((x,y)=>Math.abs(y.gap)-Math.abs(x.gap)
+                || x.unit.localeCompare(y.unit,undefined,{numeric:true})
+                || x.ty.localeCompare(y.ty));
+  return out;
+}
 /* The Due tab, opened already narrowed to the thing that was pressed. */
 function dueGo(scope){
   if($("ddScope")) $("ddScope").value=scope;
@@ -15364,6 +15427,7 @@ function renderDueTab(){
   const never=dueNeverRows(only).filter(r=>!q || r.unit.indexOf(q)>=0);
   const nNever=never.length;
   const plan=duePlanRows(only).filter(r=>!q || r.unit.indexOf(q)>=0);
+  const compared=scheduleCompareRows(only).filter(r=>!q || r.unit.indexOf(q)>=0);
   const nDone=all.filter(r=>r.st==="ok").length;
   const nOver=all.filter(r=>r.st==="over").length;
   const nSoon=all.filter(r=>r.st==="soon").length;
@@ -15403,6 +15467,10 @@ function renderDueTab(){
                  /* 1C's own plan, beside CM's judgement rather than mixed into
                     it — see duePlanRows for why the other counts must not move. */
                  ["plan","dd_plan",plan.length],
+                 /* Where BOTH schedules have an opinion — see
+                    scheduleCompareRows' own header for why this is its own
+                    tab too, not a filter on the other six. */
+                 ["cmp","dd_cmp",compared.length],
                  ["put","dd_put",nPut+nOff],["done","dd_done",nDone],["all","dd_all",all.length+nNever]];
     /* SIX TABS OVER ONE PANEL, and every one of them says so. Until now these
        carried role="tab" and nothing else: no aria-controls, so a screen
@@ -15432,6 +15500,7 @@ function renderDueTab(){
   }
   const show = scope==="all" ? all.concat(never)
              : scope==="plan" ? plan
+             : scope==="cmp" ? compared
              : scope==="never" ? never
              : scope==="done" ? all.filter(r=>r.st==="ok")
              : scope==="put" ? all.filter(r=>r.st==="put"||r.st==="off")
@@ -15439,7 +15508,8 @@ function renderDueTab(){
              : scope==="soon" ? all.filter(r=>r.st==="soon")
              : all.filter(r=>r.st==="over");
   if(!show.length){ box.innerHTML=`<div class="sub">${esc(
-      scope!=="plan" ? t("dd_none")
+      scope==="cmp" ? t("dd_cmp_none")
+      : scope!=="plan" ? t("dd_none")
       : ((window.CM_WO_DATA&&(window.CM_WO_DATA.workOrders||[]).length) ? t("dd_plan_none") : t("dd_plan_nofile"))
     )}</div>`; return; }
   /* Fifty at a time, not five hundred: the cap was there to stop the browser
@@ -15484,7 +15554,14 @@ function renderDueTab(){
         </td></tr>`;
       const when = n.over ? `<b style="color:var(--critical)">${esc(t("due_over",{n:numAbs(n.dueInDays)}))}</b>`
                           : esc(t("due_in",{n:numAbs(n.dueInDays)}));
-      const why = r.d
+      /* A compare row (scope "cmp") carries 1C's own nearest date instead of
+         a deferral — the two never coexist on one row, since
+         scheduleCompareRows() builds its own rows from dueTabRows(), never
+         from a deferred one's `d`. */
+      const why = r.theirDate
+        ? esc(t("dd_cmp_row",{p:r.theirDate, wo:r.wo||"—",
+            g: r.gap===0 ? t("dd_cmp_same") : r.gap>0 ? t("dd_cmp_later",{n:numAbs(r.gap)}) : t("dd_cmp_earlier",{n:numAbs(r.gap)})}))
+        : r.d
         ? `${esc(r.d.until?t("dd_put_to",{d:r.d.until}):t("dd_not_doing"))} — ${esc(deferWhy(r.d))}${
             r.d.by?` <span class="muted">· ${esc(r.d.by)}</span>`:""}`
         : (n.why==="wear" ? `<span class="muted">${esc(t("due_why_wear"))}</span>` : "");
@@ -17866,8 +17943,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=462"></script>
-<script src="sync-adapter.js?v=462"></script>
-<script src="report.js?v=462"></script>
+<script src="drive.js?v=463"></script>
+<script src="sync-adapter.js?v=463"></script>
+<script src="report.js?v=463"></script>
 </body>
 </html>
