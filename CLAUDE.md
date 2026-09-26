@@ -2811,6 +2811,221 @@ correction panel afterward — confirmed non-vacuous, failing on the pre-fix
 code with the identical shape read live (`missing:6`, `stillQuarantined:
 true`).
 
+**THE DUE TAB WAS REDESIGNED — LIST/TWO WEEKS BECOME 1C PM/CM — AND THE
+REDESIGN ITSELF ALMOST REPEATED THIS FILE'S OWN SIGNATURE DEFECT SIX TIMES
+OVER.** Asked for by name, with an annotated screenshot: "First remove those
+text. Second make it simple. List put List=1C PM and Two Weeks=CM. Inside
+1C is P1 P2 P3 P4 P5; Inside CM This day and All 14 days... The goal is for
+Mechanics to use this app to see their Repair jobs... In that list I want to
+see the CMMSWork order status. If we can view the small information on the
+WO would be good (we can tap and View or RTW). In the Information view,
+Equipment no, Component, Work request number, Type of Defect, Defect
+description, WODefect cause." Three design questions were put to the
+maintainer before any code moved (the CM tab's scope, whether 1C PM shows
+services alone or repairs too, and what a tap on a row does), all three
+answered directly: one merged agenda for CM, both services and repairs in
+1C PM organised by priority, and a tap opens an info sheet with a "Start
+Return to Work" button rather than the checklist directly.
+
+**1C PM** (`renderDuePM`) replaces the small "Return to Work" entry card and
+its own Pick screen outright — it reads `SCHED.rtwOpen` exactly as that
+screen did (`ingest_work_orders.py`'s `build_rtw_open`, proven directly in
+`tests/rtwopen.py`), day-grouped and chronological the way the old fortnight
+view was, filterable by the P1–P5 priority parsed off 1C's own text
+(`pmPrioOf`), and never clipped to a fixed window — a job 1C still calls
+open is shown however overdue it is, the identical principle the CM tab
+already holds for its own overdue rounds, because clipping either one is
+exactly this file's stated defect (a real value silently hidden). Tapping a
+row opens `#pmOv`, an info sheet naming the six fields asked for — Equipment
+no., Component, Work request number, Type of Defect, Defect description,
+WODefect cause, plus the CMMS status and priority — sourced from the same
+upstream `cm_dedup` computation the dashboard's own Defect work-orders panel
+already reads, extended into `build_rtw_open`'s per-row shape rather than
+re-derived. "Start Return to Work" on that sheet hands the row straight to
+the existing RTW checklist (`rtwPickRow`), unchanged.
+
+**CM** (`renderDueCm`) merges what used to be four separate scope pills —
+Overdue, Due soon, Never inspected, Deferred — into one list, colour-coded,
+filtered only by a This day/All 14 days span, exactly as `tests/duecm.cjs`
+documents: an overdue round is never bounded by the span (a round forty-five
+days late is still shown under "This day"), "All 14 days" only ever adds
+what is coming up, and a deferred or never-inspected round is shown
+regardless of span because neither is bounded by a date the span could
+clip. `dueRows()`/`neverRows()` themselves are UNCHANGED — this is a merge
+of the DISPLAY, not new arithmetic.
+
+**A DUPLICATE-ROW BUG, FOUND BY THE NEW TEST WRITTEN FOR THE MERGE, NOT BY A
+FIELD REPORT.** `dueCmToday(r)` first read `r.st==="over" || (r.n &&
+r.n.dueInDays<=0)` — and a round given an INDEFINITE deferral (`until:
+null`, `st` becomes `"off"`) keeps its underlying `dueInDays` unchanged
+(deferring a round does not alter the interval math underneath it), so a
+deferred-but-still-numerically-overdue round satisfied both the overdue
+bucket AND the separate put-off bucket in the same render, printing itself
+twice on the same screen. Fixed by excluding `st==="put"||"off"` from
+`dueCmToday`, making the three buckets (overdue, ahead, put/off) a true
+partition rather than an overlapping guess — the identical shape this
+file's own rules already state ("Read cells by what they ARE"). Confirmed
+non-vacuous: reverting the fix and re-running `tests/duecm.cjs` finds the
+row rendered twice, exactly as predicted, before the fix is restored.
+
+**RETIRED, WITH NO SUCCESSOR NEEDED:** the "Return to Work" entry card and
+its Pick screen (`rtwOpenPick`/`rtwRenderPickList`/`rtwFilterRows`/
+`rtwOpenCount`/`rtwRenderDueEntry`) — 1C PM IS that list now, reached with
+no extra tap. `dueWeekRows()`/`renderDueWeek()` — the 1C-schedule-based
+fortnight agenda — is gone; its day-grouped, chronological layout was
+reused for 1C PM's own rendering rather than its 1C-plan-matched-to-CM-round
+logic, which had no equivalent ask in this redesign. The four scope pills
+and their `#dueScopeF`/`#dueList` markup, the "Show 1C schedule" toggle
+(`dueSchedOn`), and scan-mode `"wo"` are all gone with them.
+`planRows()`/`scheduleCompareRows()` ("1C plan" and "Compare", two OLDER
+scopes already retired from the UI before this redesign) are untouched and
+still directly tested (`tests/dueplan.cjs`, `tests/schedcompare.cjs`) —
+this redesign did not touch them, only the screen they no longer appear on.
+
+**AND SIX SMALL FACTS LOST THEIR ONLY HOME WHEN THE OLD `#dueBasis`
+PARAGRAPH THAT CARRIED THEM WAS DELETED WITH IT — FOUND FIXING THE TESTS,
+NOT BEFORE.** `#dueBasis` was one paragraph assembling several independent,
+unrelated facts (how stale this phone's own history is, how many machines
+the fleet's dates cover, dates on this device the folder has never
+confirmed, unreadable files the backend reported, machines with no
+programme at all, a round type this screen cannot schedule, classes held
+off a round on purpose) — and deleting the div to simplify the screen
+deleted every caller of `histAge()`, `dueCoverage()`, `dueVsFolder()`,
+`dueStray()`, `dueBad()`, `dueNoProgramme()`, `dueUnknown()` and
+`heldOffNote()` along with it, leaving eight functions that still compute a
+real answer and print it nowhere — this file's own defect class, six years
+running: a real value rendered as nothing, this time by the redesign that
+was trying to remove noise, not by an oversight in new code. Found only
+because `tests/foldbad.cjs`, `tests/truestamp.cjs`, `tests/histage.cjs`,
+`tests/histfull.cjs`, `tests/histgap.cjs`, `tests/histsrc.cjs`,
+`tests/agree.cjs` and `tests/neverdone.cjs` still asserted these strings
+appeared SOMEWHERE on the Due screen — updating the tests to point at the
+redesign's own markup surfaced that nothing painted them at all. The MOST
+important of the eight — `histAge()` — is the exact line this file's own
+"MISSED 0 ON A PHONE THAT HAS NOT HEARD FROM THE FLEET" entry (above) was
+written to guarantee always speaks: a phone that has never synced must
+never read as "nothing due" with nothing said about why. All eight are
+joined into one `#dueStrayNote` line at the bottom of the CM tab — carrying
+the `.hint.warn` styling `histStale()` already defines, so a stale or
+never-synced phone's line is still visibly red, not just present — except
+`schedAge()` (1C's own plan freshness), which is now specific to the 1C PM
+tab it actually describes and shown there instead (`#pmSchedAge`), since
+"a line about a feed nobody is reading is noise" (this function's own
+original comment) is truer than ever now that 1C's data has its own tab.
+
+**AND THE FREEZE-BREAKER'S OWN TRIP LOST ITS VOICE THE SAME WAY.** Build
+328's circuit breaker (`renderDue()`'s own repaint-runaway guard,
+documented at length above) used to reset two settings and tell the
+inspector so, on screen, in words (`due_healed`, via `#dueSchedNote`, the
+same paragraph). The redesign's breaker still trips correctly — `!
+dueRunaway` still vetoes every future kick for the session, the one thing
+that actually stops the loop — but resetting `dueView` to its own new
+default ("pm") had nowhere left to announce itself, so a tripped breaker
+went back to being silent about what it had just done, the identical
+"repainting itself, nothing else was changed" sentence this file's own
+build-328 entry says a phone at −40 needs to see. `tests/thawkey.cjs`'s
+case 2 caught it the moment its own assertions were updated to read the new
+tab names instead of the retired ones. `#dueRunawayNote` now shows
+`due_healed` — unused since the div holding it was deleted, still correct
+word for word — the moment `dueRunaway` is true, and stays shown for the
+rest of that session.
+
+**A KNIFE-EDGE TEST FIXTURE, NOT A BUG.** `tests/duecm.cjs`'s own "ahead,
+not yet due" row was originally 12 days into a 12.5-day (250 h at 20 h/day)
+interval — a margin of twelve hours either side of the interval's own
+boundary, decided once, at whatever time of day the file was first
+written, and never revisited. `D.status`'s "soon" window (`soonH =
+max(20, round(interval*0.2))`, the last 20% of the interval, floored at
+20 h) does not start until the LAST 2.5 days of that 12.5-day interval —
+so 12 days out was actually inside `over`'s own rounding on one run and
+inside plain `ok` (comfortably not due, not "soon" at all) on another,
+depending on nothing more than what hour of the day the suite happened to
+run. Fixed by choosing 11 days — the middle of the actual 10-to-12.5-day
+"soon" window `D.status` defines, not a number guessed at the interval's
+edge — the same "ask the app, don't keep your own copy" rule this file's
+Tests section already states, applied to a TIME window a test picked by
+eye instead of by asking `due.js` what its own threshold actually is.
+
+**THE TEST SUITE'S OWN FOOTPRINT MOVED WITH THE SCREEN.** `tests/duetoday.cjs`,
+`tests/dueweek.cjs` and `tests/duesched.cjs` — whose entire subject was the
+retired fortnight agenda and schedule toggle — are deleted; the one still
+genuinely load-bearing check they carried (the schedule file's own
+auto-refresh timer, throttle and silent-repaint-on-change behaviour) moved
+into `tests/duepm.cjs`, the screen that now actually depends on it. Two new
+suites, `tests/duepm.cjs` and `tests/duecm.cjs`, prove the two tabs
+directly. `tests/duetab.cjs`, `tests/duelist.cjs`, `tests/deferwhy.cjs`,
+`tests/thawkey.cjs` and `tests/thawsync.cjs` were rewritten in place rather
+than replaced — each carried real, still-relevant coverage (a due.js
+interval regression across four round types at once, the defer dialog's
+own disabled-button and computed-style mechanics, the freeze-breaker's
+three cases) that the newer, narrower suites do not repeat, adapted to the
+merged screen's own selectors rather than the retired ones. `tests/s3.cjs`,
+`tests/team.cjs`, `tests/bigday.cjs`, `tests/agree.cjs`, `tests/pacover.cjs`
+and the six `#dueBasis`-reading suites needed smaller, surgical fixes —
+a container id here, a search instead of a retired "show everything" pill
+there. Every one of these files, before being touched, was read in full and
+zeroing `ASSETS` where a fixture's own small history was being drowned by
+the whole fleet's never-inspected rows was applied only where the file's
+own assertion actually needed the isolation, following the same technique
+`tests/histage.cjs`'s `emptyPure` had already established.
+
+One pre-existing, unrelated failure surfaced while rerunning
+`tests/histfull.cjs`/`tests/histgap.cjs`/`tests/histsrc.cjs`
+("and the flag is retired by a read that actually stored") — confirmed, by
+running the identical suite against the untouched `HEAD` commit, to fail
+there too: the mock server's own page size is smaller than the fixture's
+own record count, so a "full" read can never actually complete in one call
+in this specific reconstruction. Left as found; it predates this session
+and is orthogonal to the Due tab.
+
+**THE FULL SWEEP CAUGHT FOUR MORE CASUALTIES A GREP PASS COULD NOT.** Every
+grep for the retired names had come back clean before the redesign was
+believed finished; the 150-suite sweep still found four things wrong,
+because each one was a name that still existed somewhere, just not where
+the code that touched it expected.
+
+- `tests/audit-scan.cjs` FAILED on dead code, not a broken feature:
+  `initDueSchedToggle()` still called `$("dueSchedOn")`, the "Show 1C
+  schedule" checkbox the redesign deleted from the markup. The guard
+  (`if(!el) return;`) meant nothing actually broke — the IIFE just ran and
+  did nothing, forever — but this project's own static-analysis tool exists
+  specifically to catch exactly this shape, and it did. The whole IIFE and
+  its `dueSched` variable are deleted; the toggle's job (letting the CM tab
+  see 1C's schedule) is now unconditional, since the merged agenda always
+  wants it.
+- `tests/fe.cjs` FAILED on orphaned CSS: `.rtw-entry`/`.rtw-entry-ic`/
+  `.rtw-entry-chev` (the deleted RTW entry card) and `.agitem.pre`/
+  `.agitem.done`/`.agitem.deferred` and their `.prenote`/`.donenote`/
+  `.defnote` sub-rules (the old fortnight agenda's richer row states, from
+  the retired `renderDueWeek()`) were still sitting in the stylesheet with
+  no markup left anywhere to select. Deleted, along with the two comment
+  blocks explaining rules that no longer exist.
+- `tests/swrescue.cjs` FAILED as a direct, second-order consequence of the
+  `dueSchedOn` cleanup above: its own freeze-reproduction technique
+  string-patches the CURRENT `mobile/index.html` to reintroduce build 321's
+  repaint loop, and its injected replacement text read `dueSched ||
+  dueView==="week"` — both already gone. That is not a silent no-op the way
+  the app's own dead code was: inside the injected code it is a
+  `ReferenceError`, thrown instead of looping, so the freeze this suite
+  exists to prove never happened and the suite reported the wrong thing
+  passing. Fixed in the test itself — the injected line is now a bare
+  `schedEnsureLoaded().then(()=>{ renderDue(); });`, matching
+  `tests/thawkey.cjs`'s own `LOOP_BAD` shape, since build 321's actual bug
+  needed no gate at all.
+- `tests/deldue.cjs` crashed outright: `document.getElementById('dueList')`
+  is `null` now (renamed `#dueCmList` by the redesign), so `.textContent`
+  threw instead of returning a string. This file was missed by every earlier
+  grep pass — a plain oversight, not a subtler gap — caught only once the
+  sweep actually executed it. Fixed by reading `#dueCmList` and switching
+  `dueScope='all'` (a retired variable) to `dueView='cm'`.
+
+None of the four is a real defect in the shipped app — the checkbox's own
+guard, and the CSS's own lack of any selector match, both mean nothing an
+inspector could see was ever wrong. They are exactly this file's own
+standing complaint about a "red suite nobody reads": four places where a
+rename left something behind, caught only because this project keeps tools
+whose one job is to notice that, and runs them.
+
 ---
 
 ## Secrets

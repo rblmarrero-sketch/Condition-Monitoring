@@ -162,17 +162,27 @@ const srv = http.createServer((req, res) => {
      dataRows.some(r => r[covCol] === '1') && dataRows.some(r => r[covCol] === '0'));
 
   console.log('\n7. THE PHONE\'S OWN LIST NEEDED NO TOGGLE — IT SAYS SO PLAINLY INSTEAD');
+  /* The static "This is Condition Monitoring's own list — 1C's other
+     maintenance work is not shown here." note (#dueCmNote/#dueWeekCmNote,
+     one copy under List, a second word-for-word under Two weeks) is retired:
+     the redesign that replaced List/Two weeks with 1C PM/CM tabs
+     (tests/duepm.cjs, tests/duecm.cjs) states the same distinction as the
+     tabs' own names now, permanently on screen rather than in a paragraph —
+     "before adding a second place to say something, check what the FIRST one
+     already says" (CLAUDE.md). What survives here is the fact the note
+     existed to protect: the CM tab is never 1C's plan wearing CM's label. */
   const ctx2 = await b.newContext({ viewport: { width: 412, height: 915 }, isMobile: true, hasTouch: true, serviceWorkers: 'block' });
   const p2 = await ctx2.newPage();
   await p2.addInitScript(() => { try { localStorage.setItem('up_dests', '[]'); } catch (e) {} });
   await p2.goto(`http://127.0.0.1:${PORT}/mobile/index.html`, { waitUntil: 'load' });
   await p2.waitForFunction(() => (document.getElementById('verNum') || {}).textContent !== '?', null, { timeout: 25000 });
-  const phoneNote = await p2.evaluate(() => ({
-    list: (document.getElementById('dueCmNote') || {}).textContent || '',
-    week: (document.getElementById('dueWeekCmNote') || {}).textContent || '',
+  await p2.evaluate(() => showPane('paneDue'));
+  const tabs = await p2.evaluate(() => ({
+    pm: (document.getElementById('dueViewPM') || {}).textContent || '',
+    cm: (document.getElementById('dueViewCM') || {}).textContent || '',
   }));
-  ok('the List view says this is Condition Monitoring\'s own list', /Condition Monitoring/i.test(phoneNote.list), phoneNote.list);
-  ok('the Two weeks view says the same thing, word for word', phoneNote.week === phoneNote.list, phoneNote.week);
+  ok('the 1C tab is named for 1C, plainly, permanently on screen', /1C/.test(tabs.pm), tabs.pm);
+  ok('and the CM tab is named for Condition Monitoring, not left to a note', /CM/.test(tabs.cm), tabs.cm);
   await ctx2.close();
 
   ok('no page errors throughout', errs.length === 0, errs.slice(0, 3).join(' | ') || 'none');

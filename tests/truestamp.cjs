@@ -26,7 +26,7 @@ const fails = [];
 const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !== undefined ? '   ' + d : '')); if (!c) fails.push(n); };
 const say = (p, k, v) => p.evaluate(([k, v]) => t(k, v || undefined), [k, v]);
 const reset = q => fetch(BASE + '/__reset?' + q).then(r => r.text());
-const note = p => p.evaluate(() => (document.getElementById('dueBasis') || {}).textContent || '');
+const note = p => p.evaluate(() => (document.getElementById('dueStrayNote') || {}).textContent || '');
 
 /* What a handset off 183-187 is actually holding. The mock's folder is TK101
    at 2026-07-02, TK102 at 2026-07-03, TK103, TK104 — all MP. */

@@ -81,8 +81,22 @@ function stripBreaker(src) {
    stripBreaker already uses above, with the same loud failure if the
    shape ever moves again. */
 function stripSchedGate(src) {
+  /* The gate this used to revert to (`dueSched || dueView==="week"`) is gone
+     along with the toggle and the retired fortnight view it read — the Due
+     tab redesign (List/Two Weeks -> 1C PM/CM) deleted `dueSched` entirely,
+     and `dueView` can no longer equal "week". Injecting a condition against
+     a variable that no longer exists anywhere in the file would throw
+     ReferenceError inside the resolve handler instead of looping — silently
+     breaking the very freeze this suite exists to reproduce, exactly the
+     "this suite went on proving a freeze against a build that could never
+     actually freeze" failure mode this function's own comment already
+     names once. build 321's actual bug needed no gate at all — every
+     resolution repainted, changed or not — so the reconstruction now
+     matches that unconditional shape directly (the same one
+     tests/thawkey.cjs's own LOOP_BAD already uses) rather than a
+     since-deleted condition that happened to usually be false anyway. */
   const cut = src.replace(/    schedKick = true;\n    schedEnsureLoaded\(\)\.then\(changed=>\{[\s\S]*?\n    \}, \(\)=>\{ schedKick = false; \}\);/,
-    '    schedEnsureLoaded().then(()=>{ if(dueSched || dueView==="week") renderDue(); });');
+    '    schedEnsureLoaded().then(()=>{ renderDue(); });');
   if (cut === src) {
     console.error('FAIL  the schedule kick could not be reverted — its shape has moved, this suite is blind');
     process.exit(1);

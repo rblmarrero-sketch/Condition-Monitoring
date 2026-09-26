@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=465">
+<link rel="manifest" href="manifest.webmanifest?v=466">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=465">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=465">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=465">
+<link rel="apple-touch-icon" href="icon-192.png?v=466">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=466">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=466">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -310,12 +310,6 @@
   .cards button.on{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent) inset;}
 
   /* ===================== Return to Work ===================== */
-  .rtw-entry{width:100%;display:flex;align-items:center;gap:12px;cursor:pointer;text-align:left;font:inherit;}
-  .rtw-entry-ic{flex:none;width:38px;height:38px;border-radius:10px;background:var(--accent-soft);color:var(--accent);
-    display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:750;}
-  .rtw-entry-t{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:2px;}
-  .rtw-entry-t b{font-size:15px;color:var(--ink);}
-  .rtw-entry-chev{flex:none;color:var(--muted);font-size:18px;}
   .rtw-ov{position:fixed;inset:0;background:var(--page);z-index:60;display:flex;flex-direction:column;}
   .rtw-ov.hidden{display:none;}
   .rtw-screen{display:flex;flex-direction:column;height:100%;min-height:0;}
@@ -588,37 +582,12 @@
   .agrow:last-child{margin-bottom:0;}
   .agrow .agitem{margin-bottom:0;}
   .agrow .dueforget{align-self:stretch;}
-  .agitem.pre{border-left-color:var(--warn-ink);}
   .agitem .tag{flex:none;font-size:10.5px;font-weight:700;padding:2px 7px;border-radius:6px;
     background:var(--good);color:#fff;}
-  .agitem.pre .tag{background:var(--warning);color:#111;}
   .agitem .body{flex:1 1 auto;min-width:0;}
   .agitem .u{font-weight:700;font-size:14px;}
   .agitem .u .cat{color:var(--muted);font-weight:400;}
   .agitem .m{font-size:11.5px;color:var(--muted);margin-top:1px;font-variant-numeric:tabular-nums;}
-  .agitem .prenote{color:var(--warn-ink);font-weight:650;}
-  /* WALKED. Quieter than the work still to do and still perfectly readable:
-     the unit stands down to the secondary ink rather than the muted grey —
-     nothing on this screen goes lighter than that, by the same rule the
-     report's type scale follows — and the row keeps its full tap target,
-     because it is still the way onto the machine. Struck through would say
-     "cancelled"; a tick and a date say "done". The tag is the same green as
-     an outstanding round on purpose: a second colour here would be a fourth
-     state on a row that has three. */
-  .agitem.done{background:transparent;border-left-color:var(--border);}
-  .agitem.done .u{color:var(--ink-2);font-weight:600;}
-  .agitem.done .tag{background:var(--surface-2);color:var(--ink-2);
-    border:1px solid var(--border);}
-  .daygroup.past .agitem.done{border-left-color:var(--border);}
-  .agitem .donenote{color:var(--good);font-weight:650;}
-  /* A round somebody said isn't happening is answered, not outstanding — the
-     same visual demotion .done gets, in the report's own amber rather than
-     green, because "not now" is not the same news as "walked". */
-  .agitem.deferred{background:transparent;border-left-color:var(--border);}
-  .agitem.deferred .u{color:var(--ink-2);font-weight:600;}
-  .agitem.deferred .tag{background:var(--surface-2);color:var(--ink-2);
-    border:1px solid var(--border);}
-  .agitem .defnote{color:var(--warn-ink);font-weight:650;}
   /* A recovery action, offered as a line of text rather than a second button
      of the same weight as the one used every day. */
   .linkrow{display:block;width:100%;text-align:left;background:none;border:0;padding:10px 0 2px;
@@ -2200,36 +2169,9 @@
      what to do now. The archive and the worklist are different questions and
      one of them is asked at the start of every shift. -->
 <div class="pane" id="paneDue">
-  <!-- RETURN TO WORK'S ENTRY POINT — a sibling of the existing .card, before
-       it, not inside it. Its own search (rtwWoList) is a different index
-       from #dueFind below (open 1C work orders, not the CM schedule), so it
-       gets its own control rather than overloading that one. -->
-  <button type="button" class="card rtw-entry" id="rtwEntryBtn" hidden>
-    <div class="rtw-entry-ic">✓</div>
-    <div class="rtw-entry-t">
-      <b data-i18n="rtw_due_card_t">Return to Work</b>
-      <span id="rtwEntrySub" class="hint"></span>
-    </div>
-    <div class="rtw-entry-chev">›</div>
-  </button>
   <div class="card">
     <h2><span data-i18n="sec_due">Inspection due</span> <span class="count-badge" id="dueCount">0</span></h2>
-    <!-- A round filter, not an interval box.
-
-         The box used to hold the interval for whatever round the capture screen
-         happened to be set to, which made it look like the control for this
-         list. It was not: to see what undercarriage rounds were due you had to
-         go and change the round type at the top of the app, and an interval
-         somebody retyped here quietly put that phone out of step with the
-         fleet. The schedule is the fleet's now — due.js — and this list shows
-         EVERY round unless you narrow it. -->
-    <!-- Pills, not dropdowns, and the same pills the card above uses.
-
-         A dropdown hides its options until you open it and still cannot tell
-         you how many rounds are behind each one. These carry the count on the
-         control that filters to it, so "how bad is it" and "show me" are the
-         same glance and the same tap. A state nobody is in gets no pill: a
-         control that leads to an empty list is a control that lies. -->
+    <div class="hint warn hidden" id="dueRunawayNote" data-i18n="due_healed"></div>
     <!-- ONE MACHINE, ASKED DIRECTLY.
 
          "Never done" can be three hundred rows, and there has never been a way
@@ -2238,59 +2180,46 @@
          hundred rows across four scopes, so in practice it was unanswerable
          and the answer got guessed at instead.
 
-         A search bypasses the scope pills on purpose. Filtering a search by
-         the state you happened to be looking at is how a machine that IS on
-         the list comes back as "not found". -->
+         Searches both tabs at once — 1C PM by work order or unit, CM by
+         unit — because somebody who typed a number is asking what this app
+         knows about it, not what the tab they happened to be on knows. -->
     <input id="dueFind" class="findbox" type="search" inputmode="search"
            data-i18n-ph="due_find" placeholder="Find a machine — CR006, DZ003…">
     <div class="quiet hidden" id="dueFindMsg" style="margin:-2px 0 8px"></div>
-    <!-- LIST vs THIS WEEK — a segmented pair, not a checkbox, because it is
-         a different QUESTION ("which view"), not an on/off. List answers
-         "is this machine due" one row at a time, from due.js and this
-         phone's own history; This week answers "what does my week look
-         like", built entirely from 1C's own schedule (schedule_slim.json)
-         — a completely different source, on purpose, never blended into
-         one number. See dueweekRows()'s own header for the rest. -->
+    <!-- TWO QUESTIONS, TWO TABS, NEITHER A FILTER ON THE OTHER.
+
+         "1C PM" answers "what has the office raised against my machines" —
+         every open work order 1C holds, service and repair alike, the
+         mechanic's own repair queue. "CM" answers "what does Condition
+         Monitoring's own programme say is due" — due.js's intervals against
+         this phone's history, exactly what the List used to track under five
+         separate pills (Overdue / Due soon / Never inspected / Deferred),
+         now one list a row's own colour already tells apart. Two different
+         sources, on purpose, never blended into one number — see
+         renderDuePM()/dueCmRows()'s own headers for the rest. -->
     <div class="viewseg" role="tablist" aria-label="Due view">
-      <button type="button" role="tab" id="dueViewList" data-dv="list" aria-controls="dueListWrap" data-i18n="due_list_seg">List</button>
-      <button type="button" role="tab" id="dueViewWeek" data-dv="week" aria-controls="dueWeekWrap" data-i18n="due_week_seg">Two weeks</button>
+      <button type="button" role="tab" id="dueViewPM" data-dv="pm" aria-controls="duePmWrap" data-i18n="due_pm_seg">1C PM</button>
+      <button type="button" role="tab" id="dueViewCM" data-dv="cm" aria-controls="dueCmWrap" data-i18n="due_cm_seg">CM</button>
     </div>
-    <div id="dueListWrap" role="tabpanel" aria-labelledby="dueViewList">
-      <div class="quiet" id="dueCmNote" data-i18n="due_cm_note" style="margin:0 0 8px">This is Condition Monitoring's own list — 1C's other maintenance work is not shown here.</div>
-      <div class="tfilter dfilter" id="dueScopeF"></div>
-      <div class="tfilter dfilter tfrounds" id="dueTypeF"></div>
-      <!-- OFF BY DEFAULT, AND ADDITIVE ONLY. This is the one new row on the
-           screen an inspector checks first every shift — see mobile/due.js's
-           own interval table for why that screen has to stay trustworthy on
-           its own. Nothing here changes what is overdue or due soon; it just
-           prints 1C's own plan date under a round that has one, when asked. -->
-      <label style="display:flex;align-items:center;gap:10px;padding:9px 12px;
-          border:1px solid var(--border);border-radius:10px;background:var(--surface-2);
-          margin:0 0 10px;cursor:pointer;min-height:var(--tap)">
-        <input type="checkbox" id="dueSchedOn" style="flex:none;width:20px;height:20px;">
-        <span style="flex:1 1 auto;min-width:0;">
-          <b data-i18n="due_sched_t" style="display:block;font-size:14px;">Show 1C schedule</b>
-          <span class="hint" data-i18n="due_sched_s" style="margin-top:2px;display:block;">Adds the office's own planned date under a round that has one. Off by default — nothing changes unless you turn it on.</span>
-        </span>
-      </label>
-      <div class="quiet" id="dueSchedNote" style="margin:-4px 0 8px"></div>
-      <div class="quiet" id="dueBasis" style="margin:-4px 0 10px"></div>
-      <div class="duelist" id="dueList"></div>
+    <div id="duePmWrap" role="tabpanel" aria-labelledby="dueViewPM">
+      <!-- P1..P5, only where one of them has a row behind it. A dropdown
+           hides its own count; this carries it on the chip that leads to it,
+           so "how many are Critical" and "show me the Critical ones" are the
+           same glance and the same tap. -->
+      <div class="tfilter dfilter" id="pmPrioF" aria-label="Priority"></div>
+      <div id="duePmList"></div>
+      <div class="hint" id="pmSchedAge" style="margin-top:8px"></div>
     </div>
-    <div id="dueWeekWrap" class="hidden" role="tabpanel" aria-labelledby="dueViewWeek">
-      <!-- TODAY, OR THE WHOLE FORTNIGHT. Asked for from the field: an
-           inspector standing in the yard at the start of a shift wants the
-           list they are about to walk, and fourteen days of it — most of it
-           work for next week — is a list they have to read past to find it.
-           It narrows the DAYS DRAWN and nothing else: the same rows, the
-           same source, the same late marking, so the two settings can never
-           disagree about what is on a day. Not a third tab, because it is
-           not a different question or a different panel — it is the span of
-           one, which is what a chip row is for. -->
-      <div class="quiet" id="dueWeekCmNote" data-i18n="due_cm_note" style="margin:0 0 8px">This is Condition Monitoring's own list — 1C's other maintenance work is not shown here.</div>
+    <div id="dueCmWrap" class="hidden" role="tabpanel" aria-labelledby="dueViewCM">
+      <!-- TODAY, OR THE WHOLE FORTNIGHT. It narrows the DAYS AHEAD and
+           nothing else: the same rows, the same source, the same late
+           marking, so the two settings can never disagree about what is
+           outstanding. Not a second tab, because it is the span of one
+           question, not a different one. -->
       <div class="tfilter dfilter" id="dueSpanF" aria-label="Span"></div>
-      <div class="hint" id="dueWeekSub" style="margin:0 0 12px" data-i18n="due_week_sub">Open work orders from one week ago to one week ahead, grouped by the day something has to happen. Days before today are marked late — that is work the plan wanted and nobody has recorded. General Inspection is listed on the day it should be carried out — ahead of the plan date, not on it.</div>
-      <div id="dueWeekList"></div>
+      <div class="tfilter dfilter tfrounds" id="dueTypeF"></div>
+      <div class="hint hidden" id="dueIntervalNote"></div>
+      <div id="dueCmList"></div>
     </div>
     <!-- THE ONE-TAP ANSWER TO "WHY IS THIS MACHINE NOT ON MY LIST".
 
@@ -2304,6 +2233,7 @@
     <!-- Only offered where there is something to drop. A control for a state
          nobody is in is a control that teaches people to ignore controls. -->
     <button class="btn ghost hidden" id="dueOnly" style="margin-top:8px">🧹 <span data-i18n="btn_due_only">Keep only what the system has</span></button>
+    <div class="hint hidden" id="dueStrayNote" style="margin:6px 0 0"></div>
     <button class="btn ghost" id="dueImport" style="margin-top:8px">📥 <span data-i18n="btn_due_import">Load history file</span></button>
     <div class="hint" style="margin-top:8px" data-i18n="due_hint">Built from what this phone has recorded and what the team has sent. A history file from the dashboard fills in the rest of the fleet.</div>
     <input id="dueFile" type="file" accept=".json,application/json" class="hidden">
@@ -2457,26 +2387,7 @@
      goes through (reArmForSave/attSync/dbPut/noteDone/verifySavedRec), so
      "saved/queued/sent" is exactly as real for this as for every other type. -->
 <div id="rtwOv" class="rtw-ov hidden">
-  <div id="rtwPick" class="rtw-screen">
-    <div class="rtw-ov-head">
-      <button type="button" class="rtw-ov-back" id="rtwPickBack" data-i18n-title="back_title" title="Back">‹</button>
-      <div>
-        <b data-i18n="rtw_pick_title">Return to Work</b>
-        <div class="hint" data-i18n="rtw_pick_sub">Pick the work order — this fills in the equipment</div>
-      </div>
-    </div>
-    <div class="rtw-ov-body">
-      <div class="rtw-search-row">
-        <input id="rtwPickQ" type="search" inputmode="search" data-i18n-ph="rtw_pick_ph" placeholder="WO number or unit…">
-        <button type="button" class="btn ghost" id="rtwScanBtn">🔳 <span data-i18n="rtw_pick_scan">Scan unit</span></button>
-      </div>
-      <div class="hint" data-i18n="rtw_pick_hint">Scanning narrows this list to that unit's own open work orders — either way ends here.</div>
-      <div style="font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:6px 2px 0;" data-i18n="rtw_pick_list_t">Open work orders — repair complete, awaiting release</div>
-      <div id="rtwPickList"></div>
-      <div class="hint" id="rtwPickNote" data-i18n="rtw_pick_note">Only records with a formal work order number — a defect still awaiting one doesn't show up here until 1C assigns it.</div>
-    </div>
-  </div>
-  <div id="rtwChecklistScr" class="rtw-screen hidden">
+  <div id="rtwChecklistScr" class="rtw-screen">
     <div class="rtw-ov-head">
       <button type="button" class="rtw-ov-back" id="rtwChecklistBack" data-i18n-title="back_title" title="Back">‹</button>
       <div>
@@ -2493,6 +2404,33 @@
 </div>
 <input type="file" id="rtwPhotoInput" accept="image/*" class="hidden">
 <input type="file" id="rtwGeneralPhotoInput" accept="image/*" multiple class="hidden">
+
+<!-- THE 1C PM ROW'S OWN DETAIL — "View", the half of "tap and View or RTW"
+     that stays put. A work order is picked from the 1C PM tab itself now
+     (see duePmList's own rows); this is what a tap opens first: the six
+     office-side facts asked for by name (equipment, component, work
+     REQUEST number, defect type, description, cause) plus the CMMS status
+     the row's own pill already carries, before committing to fill out a
+     release. "Start Return to Work" hands the same row straight to
+     rtwPickRow() — the one working checklist flow, never a second copy of
+     it. Reuses the RTW overlay's own shell classes (rtw-ov/rtw-screen/
+     rtw-ov-head/rtw-ov-body) rather than inventing a second sheet style for
+     what is, structurally, the same kind of full-screen panel. -->
+<div id="pmOv" class="rtw-ov hidden">
+  <div class="rtw-screen">
+    <div class="rtw-ov-head">
+      <button type="button" class="rtw-ov-back" id="pmInfoBack" data-i18n-title="back_title" title="Back">‹</button>
+      <div>
+        <b id="pmInfoWo">—</b>
+        <div class="hint" data-i18n="pm_info_sub">Work order details</div>
+      </div>
+    </div>
+    <div class="rtw-ov-body" id="pmInfoBody"></div>
+    <div class="rtw-footer">
+      <button type="button" class="btn primary" id="pmStartRtwBtn" data-i18n="pm_start_rtw">Start Return to Work</button>
+    </div>
+  </div>
+</div>
 
 <!-- Not doing a round, and saying why.
 
@@ -2760,16 +2698,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=465"></script>
-<script src="upload-defaults.js?v=465"></script>
-<script src="hme.js?v=465"></script>
-<script src="mp-fc.js?v=465"></script>
-<script src="rtw.js?v=465"></script>
-<script src="hme-cascade.js?v=465"></script>
-<script src="assets.js?v=465"></script>
-<script src="temp-limits.js?v=465"></script>
-<script src="normalize.js?v=465"></script>
-<script src="terms.js?v=465"></script>
+<script src="native.js?v=466"></script>
+<script src="upload-defaults.js?v=466"></script>
+<script src="hme.js?v=466"></script>
+<script src="mp-fc.js?v=466"></script>
+<script src="rtw.js?v=466"></script>
+<script src="hme-cascade.js?v=466"></script>
+<script src="assets.js?v=466"></script>
+<script src="temp-limits.js?v=466"></script>
+<script src="normalize.js?v=466"></script>
+<script src="terms.js?v=466"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2788,25 +2726,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=465"></script>
-<script src="edits.js?v=465"></script>
-<script src="due.js?v=465"></script>
-<script src="wear.js?v=465"></script>
-<script src="wear-figs.js?v=465"></script>
-<script src="wear-map.js?v=465"></script>
-<script src="machine-photos.js?v=465"></script>
-<script src="machine-fig.js?v=465"></script>
-<script src="get.js?v=465"></script>
-<script src="points.js?v=465"></script>
-<script src="uc-points.js?v=465"></script>
-<script src="inspect-guide.js?v=465"></script>
-<script src="get-figs.js?v=465"></script>
-<script src="body-points.js?v=465"></script>
-<script src="body-map.js?v=465"></script>
-<script src="lube.js?v=465"></script>
-<script src="lube-overrides.js?v=465"></script>
-<script src="lube2027.js?v=465"></script>
-<script src="report-core.js?v=465"></script>
+<script src="grade.js?v=466"></script>
+<script src="edits.js?v=466"></script>
+<script src="due.js?v=466"></script>
+<script src="wear.js?v=466"></script>
+<script src="wear-figs.js?v=466"></script>
+<script src="wear-map.js?v=466"></script>
+<script src="machine-photos.js?v=466"></script>
+<script src="machine-fig.js?v=466"></script>
+<script src="get.js?v=466"></script>
+<script src="points.js?v=466"></script>
+<script src="uc-points.js?v=466"></script>
+<script src="inspect-guide.js?v=466"></script>
+<script src="get-figs.js?v=466"></script>
+<script src="body-points.js?v=466"></script>
+<script src="body-map.js?v=466"></script>
+<script src="lube.js?v=466"></script>
+<script src="lube-overrides.js?v=466"></script>
+<script src="lube2027.js?v=466"></script>
+<script src="report-core.js?v=466"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -3407,8 +3345,26 @@ const I18N = {
     saved_also:"{u} needs {n} more round(s) at this visit. Start one and the hours, the photographs of the machine, your name and the fix carry over — you do not walk it again.",
     saved_also_go:"Start {ty}",
     due_healed:"This screen was repainting itself without stopping, so its settings were put back to their defaults to free the app. Nothing else was changed — every round and photograph on this phone is still here.",
-    due_list_seg:"List",
-    due_week_seg:"Two weeks",
+    due_pm_seg:"1C PM",
+    due_cm_seg:"CM",
+    pm_info_sub:"Work order details",
+    pm_start_rtw:"Start Return to Work",
+    pm_all:"All",
+    pm_equip:"Equipment no.",
+    pm_component:"Component",
+    pm_request:"Work request number",
+    pm_deftype:"Type of defect",
+    pm_defdesc:"Defect description",
+    pm_desc:"Description",
+    pm_cause:"Cause",
+    pm_status:"Status",
+    pm_priority:"Priority",
+    pm_date:"Date",
+    pm_no_date:"No date",
+    pm_empty:"Nothing open — 1C has no work orders raised against this fleet right now.",
+    pm_none_found:"Nothing open matches that search.",
+    pm_found:"{n} work order(s) for “{q}”",
+    pm_search_none:"No open work order matches “{q}”.",
     due_week_sub:"Open work orders from one week ago to one week ahead, grouped by the day something has to happen. Days before today are marked late — that is work the plan wanted and nobody has recorded. General Inspection is listed on the day it should be carried out — ahead of the plan date, not on it.",
     due_week_today:"Today",
     due_week_late:"late",
@@ -4065,8 +4021,26 @@ const I18N = {
     saved_also:"{u}: на этот выезд осталось обходов — {n}. Начните следующий: моточасы, фотографии машины, ваше имя и координаты перенесутся — обходить заново не нужно.",
     saved_also_go:"Начать: {ty}",
     due_healed:"Этот экран перерисовывался без остановки, поэтому его настройки возвращены к значениям по умолчанию, чтобы освободить приложение. Больше ничего не менялось — все обходы и фотографии на этом телефоне на месте.",
-    due_list_seg:"Список",
-    due_week_seg:"Две недели",
+    due_pm_seg:"1С ПМ",
+    due_cm_seg:"КМ",
+    pm_info_sub:"Сведения о наряде",
+    pm_start_rtw:"Начать возврат в работу",
+    pm_all:"Все",
+    pm_equip:"№ оборудования",
+    pm_component:"Узел / компонент",
+    pm_request:"№ заявки",
+    pm_deftype:"Тип дефекта",
+    pm_defdesc:"Описание дефекта",
+    pm_desc:"Описание",
+    pm_cause:"Причина",
+    pm_status:"Статус",
+    pm_priority:"Приоритет",
+    pm_date:"Дата",
+    pm_no_date:"Без даты",
+    pm_empty:"Открытых работ нет — 1С не выставила ни одного наряда по этому парку.",
+    pm_none_found:"По этому запросу ничего не найдено.",
+    pm_found:"Найдено нарядов: {n} по «{q}»",
+    pm_search_none:"По «{q}» открытых нарядов не найдено.",
     due_week_sub:"Открытые наряды за неделю назад и на неделю вперёд, по дням. Дни до сегодняшнего помечены как просроченные — это работа, которую план требовал, а записи о ней нет. Общий осмотр указан на дне, когда его нужно провести — до даты ТО, а не в этот день.",
     due_week_today:"Сегодня",
     due_week_late:"просрочено",
@@ -9278,16 +9252,15 @@ function badNote(n,whole,keys){
   else if(v){ const o=badRead(); if(o.keys) return; badSet(Math.max(o.n,v), null); }
 }
 function dueBad(){ const n=badGet(); return n ? t("due_bad",{n}) : ""; }
-/* HOW OLD 1C'S HALF OF THIS SCREEN IS. The Due list is this phone's own
-   arithmetic and says its own age (histAge); the 1C plan beside it is a file
-   pulled off Pages and said nothing at all about itself, so a plan from
-   breakfast and a plan from five minutes ago looked identical. Said only
-   where 1C is actually on screen — under the plan scope, or with the
-   schedule line switched on — because a line about a feed nobody is reading
-   is noise. Nothing is assumed: no copy at all, or a stamp that will not
-   parse, says exactly that rather than "just now". */
+/* HOW OLD 1C'S HALF OF THIS SCREEN IS. The 1C PM tab is entirely 1C's own
+   work-order file pulled off Pages, which says nothing at all about itself,
+   so a plan from breakfast and a plan from five minutes ago looked
+   identical. It is 1C's own tab now, so this always applies there — unlike
+   the retired "plan" scope / schedule-toggle days, when 1C's data was a
+   sometimes-visible extra on a screen mostly about something else. Nothing
+   is assumed: no copy at all, or a stamp that will not parse, says exactly
+   that rather than "just now". */
 function schedAge(){
-  if(!(dueScope==="plan" || dueSched || dueView==="week")) return "";
   if(!SCHED) return t("sched_none");
   const at = SCHED.generated ? Date.parse(SCHED.generated) : NaN;
   if(!isFinite(at)) return t("sched_nodate");
@@ -9597,8 +9570,6 @@ const SCHED_URL = "../data/schedule_slim.json";
    20 kB a pull this costs a handset nothing worth counting. */
 const SCHED_STALE_MS = 900000;
 const SCHED_PREINSP_DAYS = 3;        // mirrors the dashboard's PA_PREINSP_DAYS
-let dueSched = false;                 // the toggle's own state
-try{ dueSched = localStorage.getItem("cm_due_sched")==="1"; }catch(e){}
 let SCHED = null;                     // {generated, byUnit, rtwOpen} once loaded
 /* KEYED BY BUILD, NOT JUST BY AGE. schedule_slim.json's own SHAPE is this
    app's to version, even though its CONTENT is on 1C's clock (the "moved"
@@ -9763,17 +9734,6 @@ function schedRowHtml(unit,ty){
   }
   return `<div class="duesched">🗓 ${esc(line)}${note}</div>`;
 }
-(function initDueSchedToggle(){
-  const el=$("dueSchedOn"); if(!el) return;
-  el.checked=dueSched;
-  el.onchange=async()=>{
-    dueSched=el.checked;
-    try{ lsSet("cm_due_sched", dueSched?"1":"0"); }catch(e){}
-    if(dueSched) await schedEnsureLoaded();
-    renderDue();
-  };
-})();
-
 /* ---- This week: the same schedule, laid out by day instead of by row ----
 
    LIST answers "is this machine due" one row at a time, from due.js and
@@ -9783,8 +9743,8 @@ function schedRowHtml(unit,ty){
    the List toggle already fetches. Two views of two different sources,
    never blended into one — see the toggle's own header for why that
    matters here more than most places. */
-let dueView = "list";                 // list | week
-try{ dueView = localStorage.getItem("cm_due_view")==="week" ? "week" : "list"; }catch(e){}
+let dueView = "pm";                   // pm | cm
+try{ dueView = localStorage.getItem("cm_due_view")==="cm" ? "cm" : "pm"; }catch(e){}
 /* today | all — how much of the agenda the week view draws. Defaults to the
    whole fortnight, which is what it has always shown; "today" is the narrower
    answer an inspector asked for at the start of a shift. Remembered per
@@ -9838,214 +9798,303 @@ function schedPreInspDone(unit, planDate){
     return days!=null && days>=0 && days<=SCHED_PREINSP_LOOKBACK;
   }catch(e){ return false; }
 }
-/* One entry per OBLIGATION, not per work order — a 500h service that
-   resolves to Filter Cut + General Inspection is two separate things on
-   two separate days, same split the dashboard's Next 7 days grid already
-   makes (see paWeekData's own header there for the full reasoning): the
-   Filter Cut stays on the PM's own plan date; the General Inspection gets
-   its own entry PA_PREINSP_DAYS earlier, clamped forward to today if that
-   day has already passed and nothing has been walked yet — never dropped,
-   never pushed past today. */
-function dueWeekRows(){
-  const today=todayISO(), out=[];
-  if(!SCHED || !SCHED.byUnit || !window.DUE) return out;
-  /* One week back as well as one forward — the days already gone are where
-     the work that did not happen is. See DUE.AGENDA_BACK/FWD; both surfaces
-     draw the same window from those two numbers. */
-  const inWindow=d=>DUE.inAgenda(today,d);
-  /* A ROUND THE SITE HAS TAKEN OFF THIS MACHINE IS NOT ON THE CALENDAR
-     EITHER. This was the one reader of the schedule with no hold-off check:
-     planRows had it, dueRows had it, neverRows had it, the office's
-     duePlanRows had it — the agenda did not. So from the day the KAMAZ
-     trucks came off General Inspection the List stopped proposing it and
-     this screen went on drawing INSP rows for the same trucks on the same
-     days. Two screens, one fact, two answers, and the wrong one is the one
-     somebody walks off to do — the identical shape as schedWalkedFor, in the
-     identical pair of functions. Reported from the field with TK030 and
-     TK041 circled on the agenda two days after they came off the round.
+/* ═══════════ THE 1C PM TAB — A MECHANIC'S OWN REPAIR QUEUE ═══════════════
 
-     Dropped, not struck through: `done` is struck through because a walked
-     round is work that happened, and a blank day would hide it. A held-off
-     round is not work at all — it was never proposed — so showing it as
-     "not done" would state the opposite of the decision. */
-  const heldOff=(unit,ty)=>!!(DUE.offRound && DUE.offRound(ty, ASSET_BY[unit]));
-  /* A ROUND THIS INSPECTOR ALREADY ANSWERED IS NOT SILENTLY DUE AGAIN EITHER.
-     dueWeekRows() consulted the site's own hold-off list (above) and
-     schedWalkedFor (below), and never deferOf() — so pressing OK in
-     dueNotDoing() saved the deferral correctly, closed the dialog correctly,
-     and the row it was pressed on sat on the agenda completely unchanged,
-     because nothing that builds this list had ever asked. Read off a
-     handset the same day the dialog itself was fixed: "when I press OK it
-     doesn't do anything — it should update then synchronize." It already
-     WAS synchronising (syncDefer sends it on the next run); the update it
-     never did was to its own screen. The flat List asks deferOf() and has
-     for as long as deferrals have existed — this is the identical gap as
-     the hold-off note above, in the identical function, and the rule below
-     is the List's own (dueRows(), DUE.status), not a second copy of it: a
-     deferral answers a round it was written for or later, same as the List
-     reads "live"; a dated one holds the row only while its date is still
-     ahead, same as the List turns "put" back into ordinary due the day it
-     arrives. */
-  Object.keys(SCHED.byUnit).forEach(unit=>{
-    (SCHED.byUnit[unit]||[]).forEach(w=>{
-      const types=(w.types||[]).filter(ty=>!heldOff(unit,ty));
-      const hasInsp=types.includes("INSP");
-      const shiftInsp=hasInsp && /P3|P4/i.test(w.priority||"");
-      const onDate=shiftInsp ? types.filter(ty=>ty!=="INSP") : types;
-      if(onDate.length && w.plan && inWindow(w.plan)){
-        /* One row per ROUND. It took the first of them and dropped the
-           rest, which mattered the moment a 4,000 h order began resolving
-           to four rounds — see the office's copy of this for the case. */
-        /* WORK ALREADY WALKED IS MARKED, NOT DROPPED. This is a calendar,
-           and a day whose work is struck off is the answer to "did we do
-           it" — dropping the row would give the same blank as a day nobody
-           had planned anything on. The rule is schedWalkedFor's, the same
-           one the List's 1C scope uses to leave it out; the two screens now
-           differ in what they DO with the fact, never in the fact. */
-        [...onDate].sort().forEach(code=>out.push({ unit, day:w.plan, code, isPre:false, w,
-          done: schedWalkedFor(unit, code, w.plan), defer: deferState(unit,code) }));
-      }
-      if(shiftInsp && w.plan && !schedPreInspDone(unit,w.plan)){
-        const wanted=DUE.shift(w.plan,-SCHED_PREINSP_DAYS);
-        /* A pre-check whose day has passed used to be pulled forward to
-           today so it could not vanish off the front of a forward-only
-           window. Now that the window reaches a week back it sits on the
-           day it was actually wanted, which says "this is late" instead of
-           "do this today" — the truer of the two. Only one that has fallen
-           off the BACK of the window is still pulled forward, because the
-           rule it was written for stands: do not go silent on an overdue
-           thing. */
-        const day=inWindow(wanted) ? wanted : (DUE.dayDiff(today,wanted)<0 ? today : wanted);
-        /* The pre-check has its own "done" — schedPreInspDone, three lines
-           up, already keeps a walked one out entirely. Reaching here means
-           it is outstanding, so it is never marked done. */
-        if(inWindow(day)) out.push({ unit, day, code:"INSP", isPre:true, w, done:null, defer: deferState(unit,"INSP") });
-      }
-    });
-  });
-  return out;
+   Answers a different question from dueWeekRows() used to (retired with
+   this screen, along with schedWalkedFor/schedPreInspDone/deferState's own
+   caller here — those are still used by planRows(), untouched, below):
+   "what does 1C want me to do about CM's own rounds" versus this tab's own
+   "what has the office raised against my machines, full stop." rtwWorkOrders()
+   (SCHED.rtwOpen) is already every open work order 1C holds — service and
+   repair alike, deduped, excluded of anything closed or never formally
+   raised (ingest/ingest_work_orders.py's build_rtw_open) — so this tab does
+   not narrow it further by round type; it only filters by priority, because
+   that is the one axis a mechanic actually triages a repair queue by.
+
+   Grouped by day and sorted chronologically — the same convention the old
+   two-week agenda used for 1C's plan, asked for again here in as many words
+   ("sorted same as you did in the 14 days, with dates") — but the window
+   itself is not clamped to fourteen days the way that agenda's forward side
+   was: an OPEN work order stays on this list for as long as 1C says it is
+   open, however far its date sits from today, because a repair queue that
+   silently drops a job past some fixed horizon is a queue that has quietly
+   stopped being the mechanic's own account of what 1C actually wants done. */
+function pmPrioOf(row){
+  const m=/^P[1-5]\b/i.exec(String((row&&row.priority)||"").trim());
+  return m ? m[0].toUpperCase() : "";
 }
-function renderDueWeek(){
-  const box=$("dueWeekList"); if(!box) return;
-  const entries=dueWeekRows();
+function pmInfoRows(row){
+  const rows=[[t("pm_equip"), row.equip]];
+  if(row.comp) rows.push([t("pm_component"), row.comp]);
+  if(row.request) rows.push([t("pm_request"), row.request]);
+  if(row.defType) rows.push([t("pm_deftype"), row.defType]);
+  /* `desc` is the defect's own description for a repair row, and the
+     service's own label ("4000h service") for a planned one — build_rtw_
+     open's own field, never a second copy of the choice it already made.
+     The heading says which it is by whether this row carries any defect
+     field at all. */
+  const isDefect=!!(row.defType || row.request || row.cause);
+  if(row.desc) rows.push([t(isDefect?"pm_defdesc":"pm_desc"), row.desc]);
+  if(row.cause) rows.push([t("pm_cause"), row.cause]);
+  if(row.status) rows.push([t("pm_status"), row.status]);
+  if(row.priority) rows.push([t("pm_priority"), row.priority]);
+  const dt=row.plan||row.raised;
+  if(dt) rows.push([t("pm_date"), schedShortDate(dt)||dt]);
+  return rows;
+}
+let pmInfoRow=null;
+function pmOpenInfo(row){
+  if(!row) return;
+  pmInfoRow=row;
+  $("pmInfoWo").textContent=row.wo;
+  $("pmInfoBody").innerHTML=pmInfoRows(row).map(([k,v])=>`
+    <div class="rtw-summary-card">
+      <div style="font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);">${esc(k)}</div>
+      <div style="font-size:14px;color:var(--ink);">${esc(v)}</div>
+    </div>`).join("");
+  $("pmOv").classList.remove("hidden");
+}
+function pmCloseInfo(){ $("pmOv").classList.add("hidden"); pmInfoRow=null; }
+function renderDuePM(){
+  const box=$("duePmList"); if(!box) return;
+  const ageEl=$("pmSchedAge");
+  if(ageEl) ageEl.textContent=schedAge();
+  const all=rtwWorkOrders();
+  const pbox=$("pmPrioF");
+  if(pbox){
+    const counts=new Map();
+    all.forEach(r=>{ const p=pmPrioOf(r); if(p) counts.set(p,(counts.get(p)||0)+1); });
+    const order=["P1","P2","P3","P4","P5"].filter(p=>counts.has(p));
+    pbox.innerHTML = !order.length ? "" :
+      [`<button type="button" data-pp="" class="${pmPrio?"":"on"}">${esc(t("pm_all"))}<span class="n">${all.length}</span></button>`]
+        .concat(order.map(p=>`<button type="button" data-pp="${p}" class="${pmPrio===p?"on":""}">${esc(p)}<span class="n">${counts.get(p)}</span></button>`))
+        .join("");
+    pbox.querySelectorAll("[data-pp]").forEach(b=>b.onclick=()=>{
+      pmPrio=b.dataset.pp;
+      try{ lsSet("pm_prio", pmPrio); }catch(e){}
+      renderDuePM();
+    });
+  }
+  let rows = pmPrio ? all.filter(r=>pmPrioOf(r)===pmPrio) : all.slice();
+  /* A SEARCH ANSWERS ABOUT THE MACHINE OR THE WORK ORDER, NOT THE PRIORITY —
+     the same rule dueFind's own header states for the CM tab. */
+  const q=(dueFind||"").trim().toUpperCase();
+  if(q) rows=rows.filter(r=>r.equip.toUpperCase().indexOf(q)>=0 || r.wo.toUpperCase().indexOf(q)>=0);
+  if(dueView==="pm"){
+    const fnote=$("dueFindMsg");
+    if(fnote){
+      fnote.textContent = !q ? "" : rows.length ? t("pm_found",{n:rows.length,q:dueFind.trim()}) : t("pm_search_none",{q:dueFind.trim()});
+      fnote.classList.toggle("hidden", !q);
+    }
+  }
+  if(!rows.length){ box.innerHTML=`<div class="empty">${esc(t(q?"pm_none_found":"pm_empty"))}</div>`; return; }
   const today=todayISO();
-  /* The fortnight, or just the day being walked. Counted off the SAME
-     entries either way — the chip only chooses which days are drawn, so
-     "Today 3" on the chip and three rows under the heading are one fact,
-     not two. */
-  const allDays=DUE.agendaDays(today);
-  const days=dueSpan==="today" ? [today] : allDays;
+  const byDay={};
+  rows.forEach(r=>(byDay[r.plan||r.raised||""]=byDay[r.plan||r.raised||""]||[]).push(r));
+  const dayLabel=d=>{
+    const dt=new Date(d+"T00:00:00Z");
+    const wd=dt.toLocaleDateString(lang==="ru"?"ru-RU":"en-US",{weekday:"short",timeZone:"UTC"}).replace(/\.$/,"");
+    const base=wd+" "+dt.getUTCDate();
+    if(d===today) return t("due_week_today")+" · "+base;
+    return DUE.agendaPast(today,d) ? base+" · "+t("due_week_late") : base;
+  };
+  const rowHtml=r=>`<div class="duerow agrow">
+      <button type="button" class="agitem" data-wo="${esc(r.wo)}">
+        <span class="tag">${esc(pmPrioOf(r)||"—")}</span>
+        <span class="body">
+          <span class="u">${esc(r.equip)}${r.comp?` <span class="cat">${esc(r.comp)}</span>`:""}</span>
+          <span class="m">${esc(r.wo)}${r.status?" · "+esc(r.status):""}</span>
+        </span></button></div>`;
+  const days=Object.keys(byDay).filter(Boolean).sort();
+  const groupsHtml=days.map(d=>{
+    const past=DUE.agendaPast(today,d);
+    const rs=[...byDay[d]].sort((a,b)=>(pmPrioOf(a)||"P9").localeCompare(pmPrioOf(b)||"P9") || a.equip.localeCompare(b.equip));
+    return `<div class="daygroup${past?" past":""}">
+      <div class="dayhd"><b${d===today?' class="today"':past?' class="late"':""}>${esc(dayLabel(d))}</b><span>${rs.length}</span></div>
+      ${rs.map(rowHtml).join("")}
+    </div>`;
+  }).join("");
+  const noDate=byDay[""]||[];
+  const noDateHtml = noDate.length ? `<div class="daygroup">
+      <div class="dayhd"><b>${esc(t("pm_no_date"))}</b><span>${noDate.length}</span></div>
+      ${noDate.map(rowHtml).join("")}
+    </div>` : "";
+  box.innerHTML=groupsHtml+noDateHtml;
+  box.querySelectorAll("[data-wo]").forEach(b=>b.onclick=()=>pmOpenInfo(rows.find(r=>r.wo===b.dataset.wo)));
+}
+
+/* ═══════════ THE CM TAB — CONDITION MONITORING'S OWN QUEUE, ONE LIST ═════
+
+   Used to be five separate pills (Overdue / Due soon / Never inspected /
+   Deferred, plus 1C plan and Compare — both of which now live on the 1C PM
+   tab beside the office's own data instead of interleaved with CM's own
+   judgement, and neither is rewired to any control here; planRows() and
+   scheduleCompareRows() are unchanged and still directly tested — see
+   tests/dueplan.cjs, tests/schedcompare.cjs — they simply have no caller
+   left on this screen). Rows are dueRows()+neverRows() UNCHANGED — the
+   interval math, the held-off rule, the catch-all-class threshold, the
+   deferral check, the search-falls-back-to-the-register rule, none of it
+   moved — only the SCREEN merges what used to be four separate scopes into
+   one, colour-coded by the row's own .dueitem class exactly as it always
+   was. This day/All 14 days narrows the FORWARD side only: an overdue round
+   is never dropped for being more than a day or two past due (some run to
+   forty-five), so "This day" still means "everything overdue, plus what's
+   due today" and "All 14 days" adds what's coming in the fortnight on top —
+   never the other way round, and a deferred or never-inspected round is
+   always shown regardless of the span, the same as it always was. */
+/* A DEFERRED ROUND IS THE `put` BUCKET'S OWN, NEVER ALSO THE OVERDUE ONE.
+   An indefinite defer (until:null) sets st to "put"/"off" but changes
+   nothing about n.dueInDays — the round underneath is still, correctly,
+   as overdue as it always was — so testing dueInDays<=0 alone caught a
+   deferred round twice: once here, once in the `put` filter below, and
+   printed its row twice. Excluding put/off here is what keeps the three
+   buckets a PARTITION instead of an overlapping guess. */
+function dueCmToday(r){ return r.st!=="put" && r.st!=="off" && (r.st==="over" || (r.n && r.n.dueInDays<=0)); }
+function dueCmAhead(r){ return r.st==="soon" && r.n && r.n.dueInDays>0 && r.n.dueInDays<=14; }
+/* "In 12 d" means nothing until somebody is told the machine is assumed to run
+   20 hours a day — and narrowed to ONE round it can be stated as a single
+   figure; widened to every round it cannot, because eight round types are not
+   the same interval, so this is silent unless dueType picks exactly one. */
+function dueIntervalNote(){
+  if(!dueType || typeof DUE==="undefined") return "";
+  const s=DUE.spec(dueType);
+  if(s.h!=null) return t("due_basis",{h:s.h, r:DUE.HOURS_PER_DAY});
+  if(s.d!=null) return t("due_basis_cal",{n:s.d});
+  return "";
+}
+function renderDueCm(){
+  const box=$("dueCmList"); if(!box) return;
+  const everyDue=dueRows(""), everyNever=neverRows("");
+  const every=everyDue.concat(everyNever);
+  const rows=dueRows(dueType), never=neverRows(dueType);
+  const overdue=rows.filter(dueCmToday);
+  const ahead=rows.filter(dueCmAhead);
+  const put=rows.filter(r=>r.st==="put"||r.st==="off");
+
+  const tbox=$("dueTypeF");
+  if(tbox){
+    const counts=new Map();
+    every.forEach(r=>counts.set(r.ty,(counts.get(r.ty)||0)+1));
+    if(dueType && !counts.has(dueType)) counts.set(dueType,0);
+    const order=Object.keys(TYPE_META).filter(k=>counts.has(k));
+    tbox.innerHTML = order.length<2 ? "" :
+      [`<button type="button" data-dt="" class="${dueType?"":"on"}">${esc(t("due_all_rounds"))}<span class="n">${every.length}</span></button>`]
+        .concat(order.map(k=>`<button type="button" data-dt="${esc(k)}" class="${dueType===k?"on":""}" title="${esc(t("type_"+k))}">${esc(k)}<span class="n">${counts.get(k)}</span></button>`))
+        .join("");
+    tbox.querySelectorAll("[data-dt]").forEach(b=>b.onclick=()=>{ dueType=b.dataset.dt; renderDueCm(); });
+  }
+  const ibox=$("dueIntervalNote");
+  if(ibox){
+    const iv=dueIntervalNote();
+    ibox.textContent=iv;
+    ibox.classList.toggle("hidden", !iv);
+  }
   const spanBox=$("dueSpanF");
   if(spanBox){
-    /* The chip counts WORK, so a round already walked is not in it — the
-       number an inspector reads off a chip has to be the number of things
-       they still have to do. The day heading beside it says both, in words,
-       so the two figures can be told apart rather than silently disagreeing. */
-    /* Nor is a deferred round work still to do — it is answered, the same
-       way a walked one is, just answered with "not now" instead of "done".
-       Left in here, "Not being done" would tick down nothing on the one
-       badge an inspector actually watches, which is the exact shape of the
-       bug this counts for. */
-    const todo=entries.filter(e=>!e.done && !e.defer);
-    const nToday=todo.filter(e=>e.day===today).length;
-    const nAll=todo.filter(e=>allDays.indexOf(e.day)>=0).length;
+    const nToday=overdue.length, nAll=nToday+ahead.length;
     spanBox.innerHTML=[["today","due_span_today",nToday],["all","due_span_all",nAll]]
       .map(([k,lab,n])=>`<button type="button" data-dw="${k}" class="${dueSpan===k?"on":""}">${
         esc(t(lab))}<span class="n">${n}</span></button>`).join("");
     spanBox.querySelectorAll("[data-dw]").forEach(b=>b.onclick=()=>{
       dueSpan=b.dataset.dw;
       try{ lsSet("cm_due_span", dueSpan); }catch(e){}
-      renderDueWeek();
+      renderDueCm();
     });
   }
-  /* The KEY moves with the chip, not just the text: applyLang() repaints
-     every [data-i18n] node on a language change, so a text-only update
-     would be silently replaced by the fortnight's wording the first time
-     somebody switched to Russian while Today was on. */
-  const sub=$("dueWeekSub");
-  if(sub){ const k = dueSpan==="today" ? "due_week_sub_today" : "due_week_sub";
-           sub.dataset.i18n=k; sub.textContent=t(k); }
-  const dayLabel=d=>{
-    const dt=new Date(d+"T00:00:00Z");
-    const wd=dt.toLocaleDateString(lang==="ru"?"ru-RU":"en-US",{weekday:"short",timeZone:"UTC"}).replace(/\.$/,"");
-    const base=wd+" "+dt.getUTCDate();
-    if(d===today) return t("due_week_today")+" · "+base;
-    /* A day already gone is SAID to be gone. Drawn the same as a future one
-       it reads as work still to come, which is the opposite of what it is. */
-    return DUE.agendaPast(today,d) ? base+" · "+t("due_week_late") : base;
-  };
-  const byDay={};
-  entries.forEach(e=>(byDay[e.day]=byDay[e.day]||[]).push(e));
-  const groups=days.filter(d=>byDay[d] && byDay[d].length);
-  if(!groups.length){ box.innerHTML=`<div class="empty">${esc(t(
-      dueSpan==="today" ? "due_week_none_today" : "due_week_none"))}</div>`; return; }
-  box.innerHTML=groups.map(d=>{
-    const past=DUE.agendaPast(today,d);
-    /* Outstanding first, then a round somebody said isn't happening, then
-       what has been walked — a list read top-down on a phone puts the work
-       still to do at the top, and a deferral is an ANSWER, same shelf as
-       done, just not the same answer. Within each third, by unit. */
-    const rank=e=>e.done?2:e.defer?1:0;
-    const rows=[...byDay[d]].sort((a,b)=>
-      rank(a)-rank(b) || (a.unit<b.unit?-1:a.unit>b.unit?1:0));
-    const nDone=rows.filter(e=>e.done).length;
-    const nDeferred=rows.filter(e=>e.defer).length;
-    const nTodo=rows.length-nDone-nDeferred;
-    /* Unchanged wording when nothing is deferred — the common case, and the
-       one every existing suite already reads — with a third segment that
-       only appears once there is something to say. */
-    const hdCount = nDeferred
-      ? [nTodo && t("due_week_seg_todo",{n:nTodo}), t("due_week_seg_deferred",{n:nDeferred}), nDone && t("due_week_seg_done",{n:nDone})]
-          .filter(Boolean).join(" · ")
-      : (nDone ? t("due_week_n_done",{n:nTodo, m:nDone}) : t("due_week_n",{n:nTodo}));
-    return `<div class="daygroup${past?" past":""}">
-      <div class="dayhd"><b${d===today?' class="today"':past?' class="late"':""}>${esc(dayLabel(d))}</b><span>${esc(hdCount)}</span></div>
-      ${rows.map(e=>{
-        const a=ASSET_BY[e.unit];
-        const hrs=e.w.hours!=null?e.w.hours+"h":"";
-        const pre=e.isPre?` <span class="prenote">· ${esc(t("due_week_pmnote",{d:schedShortDate(e.w.plan)}))}</span>`:"";
-        /* WALKED. Said in words and not only in a colour: "done" as a tick
-           with the date it was recorded, so the row answers the question
-           without anybody having to know what grey means. */
-        const done=e.done?` <span class="donenote">· ${esc(t("due_week_done",{d:schedShortDate(e.done.d)}))}</span>`:"";
-        /* PUT OFF, AND BY WHOM AND WHY — same sentence the flat List prints
-           on its own row (see dueRows()'s "put" div), because a deferral
-           without its reason visible is the exact fact this rebuilds: a real
-           decision an inspector made, showing on screen as nothing. */
-        const defer=e.defer?` <span class="defnote">· ${esc(e.defer.until
-            ? t("due_put_to").replace("{d}", e.defer.until) : t("due_off"))}${
-            e.defer.why?" — "+esc(e.defer.why):""}</span>`:"";
-        const item=`<button type="button" class="agitem${e.isPre?" pre":""}${e.done?" done":""}${e.defer?" deferred":""}" data-u="${esc(e.unit)}" data-t="${esc(e.code)}">
-          <span class="tag">${e.done?"✓ ":e.defer?"⋯ ":""}${esc(e.code)}</span>
-          <span class="body">
-            <span class="u">${esc(e.unit)}${a&&a.cat?` <span class="cat">${esc(a.cat)}</span>`:""}</span>
-            <span class="m">${esc(e.w.wo||"—")}${hrs?" · "+esc(hrs):""}${pre}${done}${defer}</span>
-          </span></button>`;
-        /* Walked rounds keep the plain row — see the .agrow note in the CSS. */
-        if(e.done) return `<div class="duerow agrow">${item}</div>`;
-        return `<div class="duerow agrow">${item}<button class="dueforget" data-f="${esc(e.unit)}" data-ft="${esc(e.code)}"
-          aria-label="${esc(t("due_not"))}" title="${esc(t("due_not"))}">⋯</button></div>`;
-      }).join("")}
-    </div>`;
-  }).join("");
+  const badge=$("dueCount");
+  if(badge){ badge.textContent=overdue.length; badge.className="count-badge"+(overdue.length?" crit":""); }
+
+  const q=(dueFind||"").trim().toUpperCase();
+  const hit=r=>r.unit.toUpperCase().indexOf(q)>=0
+             || String((ASSET_BY[r.unit]||{}).cat||"").toUpperCase().indexOf(q)>=0;
+  let show = q ? every.filter(hit) : overdue.concat(dueSpan==="all"?ahead:[]).concat(put).concat(never);
+  if(q && !show.length && typeof ASSETS!=="undefined"){
+    show=ASSETS.filter(a=>a && a.n && (a.n.toUpperCase().indexOf(q)>=0 || String(a.cat||"").toUpperCase().indexOf(q)>=0))
+      .slice(0,20).map(a=>({unit:a.n, cat:a.cat||"", ty:"", reg:true, st:"never"}));
+  }
+  if(dueView==="cm"){
+    const fnote=$("dueFindMsg");
+    if(fnote){
+      fnote.textContent = !q ? "" : show.length ? t("due_found",{n:show.length,q:dueFind.trim()}) : t("due_none_found",{q:dueFind.trim()});
+      fnote.classList.toggle("hidden", !q);
+    }
+  }
+  const strayBtn=$("dueOnly");
+  if(strayBtn) strayBtn.classList.toggle("hidden", histStrays()===0);
+  const strayNote=$("dueStrayNote");
+  if(strayNote){
+    /* histAge() always says something ("Missed 0" is not a blank the reader
+       will question — it is a reassurance they will act on, so silence here
+       is exactly the bug this line exists to prevent). The rest are
+       data-quality facts about this phone's OWN history that only speak up
+       when there is something to say. Joined, not stacked, so a phone with
+       more than one of these does not grow a wall of warnings a person stops
+       reading. */
+    const sn=[histAge(), dueVsFolder(), dueCoverage(), dueStray(), dueBad(), dueNoProgramme(), dueUnknown(), heldOffNote()]
+      .filter(Boolean).join(" · ");
+    strayNote.textContent=sn;
+    strayNote.classList.toggle("hidden", !sn);
+    strayNote.classList.toggle("warn", histStale());
+  }
+
+  const num=n=>Math.abs(n).toLocaleString(lang==="ru"?"ru-RU":"en-GB");
+  if(!show.length){
+    const w=histWhen();
+    box.innerHTML=`<div class="empty">${
+      histIsShort() ? t("due_short")
+      : !w ? t("due_no_hist")
+      : histStale() ? t("due_stale",{t:agoWords(w.at)})
+      : t("due_empty")}</div>`;
+    return;
+  }
+  box.innerHTML=show.slice(0,200).map(r=>{
+    if(r.reg) return `<div class="duerow">
+      <button class="dueitem never" data-u="${esc(r.unit)}">
+        <span class="u">${esc(r.unit)}${
+          r.cat?` · <span style="color:var(--muted);font-weight:400">${esc(r.cat)}</span>`:""}</span>
+        <span class="d">${esc(t("due_reg_row"))}</span></button></div>`;
+    if(r.never){
+      return `<div class="duerow">
+      <button class="dueitem never" data-u="${esc(r.unit)}" data-t="${esc(r.ty)}">
+        <span class="u"><span class="tag t-${esc(r.ty)}">${esc(r.ty)}</span> ${esc(r.unit)}${
+          r.cat?` · <span style="color:var(--muted);font-weight:400">${esc(r.cat)}</span>`:""}</span>
+        <span class="d">${esc(t("due_never_row"))}</span></button></div>`;
+    }
+    const a=ASSET_BY[r.unit], n=r.n;
+    const cal = DUE.hours(r.ty)==null && !n.why;
+    const days = n.over ? t("due_over").replace("{n}",num(n.dueInDays))
+                        : t("due_in").replace("{n}",num(n.dueInDays));
+    const hrs = cal ? "" : " · "+t("due_h").replace("{n}",num(n.dueInHours));
+    const why = n.why==="wear" ? ` <span class="duewhy">${esc(t("due_why_wear"))}</span>` : "";
+    const put2 = r.d ? `<div class="dueput">${esc(r.d.until
+        ? t("due_put_to").replace("{d}",r.d.until) : t("due_off"))} — ${esc(r.d.why||"")}${
+        r.d.by?` · ${esc(r.d.by)}`:""}</div>` : "";
+    return `<div class="duerow">
+      <button class="dueitem ${r.st}" data-u="${esc(r.unit)}" data-t="${esc(r.ty)}">
+        <span class="u"><span class="tag t-${esc(r.ty)}">${esc(r.ty)}</span> ${esc(r.unit)}${
+          a&&a.cat?` · <span style="color:var(--muted);font-weight:400">${esc(a.cat)}</span>`:""}</span>
+        <span class="d">${t("due_days").replace("{n}",num(n.daysSince))} · ${days}${hrs}${why}</span>
+        ${put2}</button>
+      <button class="dueforget" data-f="${esc(r.unit)}" data-ft="${esc(r.ty)}"
+        aria-label="${esc(t("due_not"))}" title="${esc(t("due_not"))}">⋯</button></div>`; }).join("");
+  if(show.length>200){
+    box.insertAdjacentHTML("beforeend",
+      `<div class="quiet" style="padding:8px 2px 0">${esc(t("due_more",{n:show.length-200}))}</div>`);
+  }
   box.querySelectorAll("[data-u]").forEach(b=>b.onclick=()=>{
     const sel=$("typeSel");
     if(b.dataset.t && sel && sel.value!==b.dataset.t){ sel.value=b.dataset.t; sel.dispatchEvent(new Event("change")); }
-    selectEquip(b.dataset.u); showPane("paneCapture");
-  });
-  /* The same call the list makes, so the two views cannot come to mean
-     different things by the same control. */
+    selectEquip(b.dataset.u); showPane("paneCapture"); });
   box.querySelectorAll("[data-f]").forEach(b=>b.onclick=()=>dueNotDoing(b.dataset.ft,b.dataset.f));
 }
 (function initDueViewSeg(){
-  const bl=$("dueViewList"), bw=$("dueViewWeek"); if(!bl||!bw) return;
+  const bl=$("dueViewPM"), bw=$("dueViewCM"); if(!bl||!bw) return;
   const go=async v=>{
     dueView=v; try{ lsSet("cm_due_view", v); }catch(e){}
-    if(v==="week") await schedEnsureLoaded();
     renderDue();
   };
-  bl.onclick=()=>go("list");
-  bw.onclick=()=>go("week");
+  bl.onclick=()=>go("pm");
+  bw.onclick=()=>go("cm");
   /* Two tabs, so the arrow keys just swap and take focus with them — the
      one-stop-in-the-tab-order rule (see renderDue()'s own tabIndex lines)
      is only real if arrowing between tabs still works once Tab itself
@@ -10441,6 +10490,12 @@ let dueType="";
 /* Not remembered between sessions. A filter that survives a restart is a
    filter somebody will be looking through without knowing it. */
 let dueFind="";
+/* The 1C PM tab's own filter — P1..P5, or "" for all. Remembered per device
+   like every other choice on this screen (see dueScope, above), because a
+   filter that resets every morning is one a mechanic has to set every
+   morning before it does anything for them. */
+let pmPrio=(localStorage.getItem("pm_prio")||"").toUpperCase();
+if(!/^P[1-5]$/.test(pmPrio)) pmPrio="";
 const DUE_SCOPES=[["over","due_missed","over"],["soon","due_soon","soon"],
                   ["never","due_never_p","never"],
                   /* 1C's own plan, beside CM's judgement rather than mixed
@@ -10516,45 +10571,17 @@ let rtwSignCanvas=null, rtwSigning=false, rtwSignDirty=false;
    SCHED.rtwOpen, the same schedule_slim.json fetch the Due tab's own 1C
    toggle already keeps current (ingest/ingest_work_orders.py builds it with
    the identical rule, so a work order counted here is counted the same way
-   there). */
+   there).
+
+   This used to feed a small "Return to Work" entry card and its own Pick
+   overlay, reached by a second tap off the Due tab. The 1C PM tab (below,
+   duePmRows/renderDuePM) IS that list now, richer (priority, status, the
+   office's own defect fields) and reached with no extra tap — so the entry
+   card and the standalone Pick screen are retired; rtwPickRow() is called
+   directly from the PM tab's own info sheet instead of from a picker that
+   duplicated it. */
 function rtwWorkOrders(){
   return (SCHED && SCHED.rtwOpen) || [];
-}
-function rtwOpenCount(){ return rtwWorkOrders().length; }
-function rtwRenderDueEntry(){
-  const btn=$("rtwEntryBtn"); if(!btn) return;
-  const n=rtwOpenCount();
-  btn.hidden = !n;
-  if(n) $("rtwEntrySub").textContent = t("rtw_due_card_s",{n});
-}
-function rtwFilterRows(rows,q){
-  q=String(q||"").trim().toUpperCase(); if(!q) return rows;
-  return rows.filter(r=>r.wo.toUpperCase().includes(q) || r.equip.includes(q));
-}
-function rtwRenderPickList(){
-  const q=($("rtwPickQ")||{}).value||"";
-  const rows=rtwFilterRows(rtwWorkOrders(),q).sort((a,b)=>String(b.raised||"").localeCompare(String(a.raised||"")));
-  const box=$("rtwPickList"); if(!box) return;
-  if(!rows.length){ box.innerHTML=`<div class="hint">${esc(t("rtw_pick_empty"))}</div>`; return; }
-  box.innerHTML=rows.map(r=>`
-    <button type="button" class="rtw-wo-card" data-wo="${esc(r.wo)}" style="margin-bottom:8px;">
-      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
-        <b class="wo">${esc(r.wo)}</b>
-        ${r.priority?`<span class="sev" style="background:var(--surface-3);color:var(--ink-2);">${esc(r.priority)}</span>`:""}
-      </div>
-      <div style="font-size:13px;color:var(--ink);"><b>${esc(r.equip)}</b>${r.comp?" · "+esc(r.comp):""}</div>
-      <div style="font-size:12px;color:var(--muted);">${esc(r.desc||"")}${r.raised?" · "+esc(r.raised):""}</div>
-    </button>`).join("");
-  box.querySelectorAll(".rtw-wo-card").forEach(el=>{
-    el.onclick=()=>rtwPickRow(rows.find(r=>r.wo===el.dataset.wo));
-  });
-}
-function rtwOpenPick(){
-  $("rtwOv").classList.remove("hidden");
-  $("rtwPick").classList.remove("hidden");
-  $("rtwChecklistScr").classList.add("hidden");
-  if($("rtwPickQ")) $("rtwPickQ").value="";
-  rtwRenderPickList();
 }
 function rtwClose(){
   $("rtwOv").classList.add("hidden");
@@ -10589,7 +10616,6 @@ async function rtwOpenForEdit(rec){
     general:{ photos:(gen.photos||[]).slice(), comment:gen.comment||"" } };
   rtwExpanded=new Set(Object.keys(items).filter(no=>items[no].mark==="attention"));
   $("rtwOv").classList.remove("hidden");
-  $("rtwPick").classList.add("hidden");
   $("rtwChecklistScr").classList.remove("hidden");
   let signUrl=null;
   if(isBlob(rec.sign)){ try{ signUrl=URL.createObjectURL(rec.sign); }catch(e){} }
@@ -10601,7 +10627,7 @@ function rtwPickRow(row){
   rtwDraft={ wo:row.wo, equip:row.equip, cls:row.cls||assetClassOf(row.equip)||"",
     component:row.comp||"", priority:row.priority||"", date:todayISO(), time:nowHHMM(),
     /* The work order's own type, hour tier and 1C plan date — carried from
-       the Pick row onto the record at Save, so the header can say what was
+       the picked row onto the record at Save, so the header can say what was
        actually scheduled, not just which WO number it closed against. A
        defect WO has no hour tier (build_rtw_open leaves it null); printed
        only when present, never guessed. */
@@ -10610,7 +10636,11 @@ function rtwPickRow(row){
     general:{photos:[], comment:""} };
   RTW_ITEMS.forEach(def=>{ rtwDraft.items[def.no]={mark:null, comment:"", photos:[]}; });
   rtwExpanded=new Set();
-  $("rtwPick").classList.add("hidden");
+  /* Called from the 1C PM tab's own info sheet now, not from a Pick screen
+     that already had this overlay open — so it opens itself, and closes
+     whichever sheet handed it the row. */
+  $("pmOv").classList.add("hidden");
+  $("rtwOv").classList.remove("hidden");
   $("rtwChecklistScr").classList.remove("hidden");
   rtwRenderChecklist();
 }
@@ -10931,20 +10961,14 @@ async function rtwSave(){
   } finally { rtwSaving=false; }
 }
 $("rtwSaveBtn").onclick=()=>rtwSave();
-$("rtwEntryBtn").onclick=()=>rtwOpenPick();
-$("rtwPickBack").onclick=()=>rtwClose();
-$("rtwChecklistBack").onclick=()=>{
-  /* Editing an already-saved round opened the checklist directly, with no
-     Pick step to go back to — "Back" there closes the overlay instead of
-     revealing an empty or irrelevant Pick screen. */
-  if(rtwEditing){ rtwClose(); return; }
-  $("rtwChecklistScr").classList.add("hidden"); $("rtwPick").classList.remove("hidden"); rtwRenderPickList();
-};
-$("rtwPickQ").oninput=()=>rtwRenderPickList();
-$("rtwScanBtn").onclick=()=>{ scanMode="wo"; startScan(); };
+/* The Pick screen is gone — a work order is picked from the 1C PM tab's own
+   info sheet now (pmOpenInfo/pmStartRtwBtn) — so Back always just closes the
+   overlay, the same thing it already did when editing a saved round. */
+$("rtwChecklistBack").onclick=()=>rtwClose();
+$("pmInfoBack").onclick=()=>pmCloseInfo();
+$("pmStartRtwBtn").onclick=()=>{ if(pmInfoRow) rtwPickRow(pmInfoRow); };
 
 function renderDue(){
-  rtwRenderDueEntry();
   {
     const nw = Date.now();
     if(nw - dueBurstT0 > DUE_BURST_MS){ dueBurstT0 = nw; dueBurstN = 0; }
@@ -10952,431 +10976,40 @@ function renderDue(){
       dueRunaway = true; dueBurstT0 = nw; dueBurstN = 0;
       /* Left where a diagnostic can read it, like window.__upd. */
       try{ window.__dueRunaway = { at:new Date().toISOString() }; }catch(e){}
-      dueSched = false; dueView = "list";
-      lsSet("cm_due_sched","0"); lsSet("cm_due_view","list");
-      const tg=$("dueSchedOn"); if(tg) tg.checked = false;
-      /* Deliberately does NOT return: with both reasons gone the paint below
-         cannot re-arm the cycle, and finishing it is what puts a working
-         screen — and the explanation — in front of the person holding it. */
+      dueView = "pm";
+      lsSet("cm_due_view","pm");
+      /* Deliberately does NOT return: finishing the paint below is what puts
+         a working screen in front of the person holding it. */
     }
   }
   renderTabs();
-  const box=$("dueList"); if(!box) return;
-  /* Never blocks the paint in front of it — rows below draw with whatever
-     SCHED already holds (nothing, the first time) and this repaints them
-     once the fetch lands, same shape as the sync card's own refresh. Three
-     independent reasons need SCHED now: the List toggle (dueSched), the
-     This week view, which needs it unconditionally since it IS 1C's
-     schedule, and Return to Work's own entry card (rtwRenderDueEntry,
-     above) — !SCHED covers a cold boot before the toggle is ever touched,
-     so the card does not sit hidden for up to SCHED_MS waiting on the
-     periodic timer alone.
-
-     !dueRunaway is the breaker's OWN veto, added when adding !SCHED above
-     exposed a gap in it: the burst breaker below only ever knew how to
-     re-arm ITSELF by clearing dueSched/dueView — the two reasons that
-     existed when it was written (build 328) and the only two localStorage
-     keys recover.html clears for a phone that is already stuck. !SCHED
-     answers to neither: a phone that cannot reach the schedule endpoint at
-     all keeps needSched true no matter what those two keys hold, so a
-     runaway repaint loop reintroduced on this reason alone would trip the
-     breaker's one-shot latch exactly once and then spin unthrottled
-     forever, the corrective action having reset nothing that mattered.
-     Vetoing on the latch itself, once tripped, stops the KICK — not merely
-     the two settings that used to be its only cause — for the rest of
-     this page's life, the same "once is enough" contract dueRunaway
-     already keeps everywhere else it is read. tests/thawkey.cjs proves
-     this against the current code, not the shape the breaker shipped
-     against. */
-  schedShown = 0;
-  const needSched = !dueRunaway && (dueSched || dueView==="week" || !SCHED);
-  if(needSched && !schedKick
+  const runawayNote=$("dueRunawayNote");
+  if(runawayNote) runawayNote.classList.toggle("hidden", !dueRunaway);
+  /* SCHED FEEDS BOTH TABS NOW — the 1C PM list IS SCHED.rtwOpen, so there is
+     no longer a toggle or a second tab that decides whether to bother
+     fetching it; the one thing left to gate on is staleness, the same
+     SCHED_STALE_MS check this always used. !dueRunaway is still the
+     breaker's own veto — see tests/thawkey.cjs — because a runaway repaint
+     loop must never re-arm its own cause. */
+  if(!dueRunaway && !schedKick
      && (!SCHED || Date.now()-(schedCacheGet()||{at:0}).at >= SCHED_STALE_MS)){
-    /* Repaint ONLY if the schedule actually became something new, and never
-       with a second request in flight — either guard alone stops the
-       runaway described above, and both are free. */
     schedKick = true;
     schedEnsureLoaded().then(changed=>{
       schedKick = false;
-      /* Repaint on any real change now, not only for the toggle/week
-         reasons — the RTW entry card (rtwRenderDueEntry, top of this
-         function) reads SCHED too and needs the same "the fetch landed,
-         now show it" repaint the List toggle already got. */
       if(changed) renderDue();
     }, ()=>{ schedKick = false; });
   }
-  /* Counted BEFORE the round filter, so the scope pills say how much there is
-     on the machine and not how much survives the other filter. Two filters
-     whose counts each move when the other is touched cannot be read. */
-  /* Never-done rows come from the REGISTER, not from the last-done index, so
-     they are a separate population and are concatenated rather than filtered
-     out of the other one. "All" means every machine this screen can say
-     anything about, which now includes the ones nobody has walked to. */
-  const everyDue=dueRows(""), everyNever=neverRows(""), everyPlan=planRows("");
-  /* The search reaches 1C's plan too: somebody typing a unit wants what this
-     app has for that machine, and "nothing" because the round is only in the
-     office's schedule is the same wrong answer in a new place.
-
-     ONE ROUND IS ONE ROW, THOUGH. TK002's plug round is both a round CM has
-     never walked and a round 1C wants on the 8th, and listing it twice — once
-     saying "no inspection on record", once saying "1C asked for this" — reads
-     as two jobs at one machine. The CM row wins because it is this app's own
-     account of the round, and 1C's line is put ON it (see below: a search
-     shows the schedule line whether or not the tick is on, because somebody
-     who typed a unit number is asking for everything about it). A plan row
-     survives only where CM has no row for that round at all. */
-  const cmKeys=new Set(everyDue.concat(everyNever).map(r=>r.unit+"|"+r.ty));
-  const every=everyDue.concat(everyNever)
-    .concat(everyPlan.filter(r=>!cmKeys.has(r.unit+"|"+r.ty)));
-  const rows=dueRows(dueType).concat(neverRows(dueType));
-  const planned=planRows(dueType);
-  const compared=scheduleCompareRows(dueType);
-  const scope=dueScope;
-  const nOver=rows.filter(r=>r.st==="over").length;
-  const nSoon=rows.filter(r=>r.st==="soon").length;
-  const nPut =rows.filter(r=>r.st==="put"||r.st==="off").length;
-  const nNever=rows.filter(r=>r.st==="never").length;
-  const nPlan=planned.length;
-  const nCmp=compared.length;
-  const inScope=(list,sc)=> sc==="all" ? list
-    : sc==="over" ? list.filter(r=>r.st==="over")
-    : sc==="soon" ? list.filter(r=>r.st==="soon")
-    : sc==="never"? list.filter(r=>r.st==="never")
-    : sc==="put"  ? list.filter(r=>r.st==="put"||r.st==="off")
-    : list.filter(r=>r.st==="over"||r.st==="soon");
-  /* A SEARCH ANSWERS ABOUT THE MACHINE, NOT ABOUT THE SCOPE.
-
-     Deliberately not filtered by the pills: somebody typing CR006 wants to
-     know what this app has for CR006, and returning "nothing" because they
-     happened to be on Missed is the same wrong answer this screen has been
-     giving all week, one control along. It searches every round and every
-     state, and the row's own colour says which state each one is in. */
-  const q=(dueFind||"").trim().toUpperCase();
-  /* Somebody who typed a unit number is asking for everything this app knows
-     about it, so the 1C line is not gated on the tick while a search is on. */
-  const searching=!!q;
-  const hit=r=>r.unit.toUpperCase().indexOf(q)>=0
-             || String((ASSET_BY[r.unit]||{}).cat||"").toUpperCase().indexOf(q)>=0;
-  /* 1C's rows, and the compared rows, are each their own population, so the
-     scope selects between lists rather than filtering one — mixing them in
-     would make "All" count the same machine twice, once as CM sees it and
-     once as 1C does. */
-  let show = q ? every.filter(hit)
-    : scope==="plan" ? planned
-    : scope==="cmp"  ? compared
-    : inScope(rows, scope);
-  /* A MACHINE IN THE REGISTER THAT NO ROUND REACHES.
-
-     The rule that decides which rounds a class is on is deliberately narrow —
-     stated per-class intervals, and rounds this fleet has actually walked on
-     that kind of machine. A jaw crusher nobody has ever walked an inspection
-     round on is therefore proposed for nothing, and searching for it came back
-     empty: a real machine, in the register, rendered as nothing.
-
-     Being unable to schedule it is not a reason to be unable to FIND it. The
-     search answers with the machine and a way onto it, and says plainly that
-     this is the register talking and not a schedule. */
-  if(q && !show.length && typeof ASSETS!=="undefined"){
-    show=ASSETS.filter(a=>a && a.n &&
-        (a.n.toUpperCase().indexOf(q)>=0 || String(a.cat||"").toUpperCase().indexOf(q)>=0))
-      .slice(0,20)
-      .map(a=>({unit:a.n, cat:a.cat||"", ty:"", reg:true, st:"never"}));
+  renderDuePM();
+  renderDueCm();
+  const wrapP=$("duePmWrap"), wrapC=$("dueCmWrap");
+  if(wrapP) wrapP.classList.toggle("hidden", dueView==="cm");
+  if(wrapC) wrapC.classList.toggle("hidden", dueView!=="cm");
+  const dvp=$("dueViewPM"), dvc=$("dueViewCM");
+  if(dvp && dvc){
+    const onPM=dueView!=="cm";
+    dvp.classList.toggle("on", onPM); dvp.setAttribute("aria-selected", onPM?"true":"false"); dvp.tabIndex=onPM?0:-1;
+    dvc.classList.toggle("on", !onPM); dvc.setAttribute("aria-selected", (!onPM)?"true":"false"); dvc.tabIndex=onPM?-1:0;
   }
-
-  /* ---- the scope pills ------------------------------------------------
-     Missed and Due soon are always offered: zero of either is news worth
-     seeing on the control that would show them. Put off appears only when
-     somebody has actually put something off. */
-  const sbox=$("dueScopeF");
-  if(sbox){
-    const cnt={over:nOver, soon:nSoon, never:nNever, plan:nPlan, cmp:nCmp, put:nPut, all:rows.length};
-    sbox.innerHTML=DUE_SCOPES
-      .filter(([k])=> (k!=="put" || nPut>0) && (k!=="never" || nNever>0)
-                   && (k!=="plan" || nPlan>0) && (k!=="cmp" || nCmp>0))
-      .map(([k,lab,cls])=>`<button type="button" data-sc="${esc(k)}" class="${
-        (scope===k?"on ":"")+(cls||"")}">${esc(t(lab))}<span class="n">${cnt[k]}</span></button>`)
-      .join("");
-    sbox.querySelectorAll("[data-sc]").forEach(b=>b.onclick=()=>{
-      dueScope=b.dataset.sc;
-      try{ lsSet("due_scope",dueScope); }catch(e){}
-      renderDue();
-    });
-  }
-  /* ---- the round pills ------------------------------------------------
-     Built from the rounds that are actually due, in the fixed TYPE_ORDER, so
-     the row never reorders under a thumb. Only when there is more than one
-     type to choose between — a single-type chip row is chrome for nothing. */
-  const tbox=$("dueTypeF");
-  if(tbox){
-    const counts=new Map();
-    inScope(every, scope).forEach(r=>counts.set(r.ty,(counts.get(r.ty)||0)+1));
-    /* A type the user has narrowed to keeps its pill even at zero, or the
-       control that got them here vanishes and the list looks broken. */
-    if(dueType && !counts.has(dueType)) counts.set(dueType,0);
-    const order=Object.keys(TYPE_META).filter(k=>counts.has(k));
-    tbox.innerHTML = order.length<2 ? "" :
-      [`<button type="button" data-dt="" class="${dueType?"":"on"}">${esc(t("due_all_rounds"))
-        }<span class="n">${inScope(every,scope).length}</span></button>`]
-      .concat(order.map(k=>`<button type="button" data-dt="${esc(k)}" class="${
-        dueType===k?"on":""}" title="${esc(t("type_"+k))}">${esc(k)}<span class="n">${counts.get(k)}</span></button>`))
-      .join("");
-    tbox.querySelectorAll("[data-dt]").forEach(b=>b.onclick=()=>{ dueType=b.dataset.dt; renderDue(); });
-  }
-  /* MISSED, the same number the tab shows. It used to be missed-and-due-soon
-     while the tab counted missed, so one card carried two totals for itself
-     and neither said which it was. */
-  const badge=$("dueCount");
-  badge.textContent=nOver;
-  badge.className="count-badge"+(nOver?" crit":"");
-
-  const num=n=>Math.abs(n).toLocaleString(lang==="ru"?"ru-RU":"en-GB");
-  /* The answer to "what did we miss" is a count, not a list to be measured by
-     eye. It goes above the rows, in the same three words every time. */
-  const note=$("dueBasis");
-  if(note){
-    /* A never-done row has no schedule behind it, so it has nothing to have
-       been measured or assumed FROM. Counting it either way would put a
-       machine with no readings into a figure about readings. */
-    const measured=rows.filter(r=>r.n && r.n.measured).length;
-    /* The counts moved onto the pills, which is where the tap is. What is left
-       here is what a count cannot say: the interval this round is walked on,
-       the rate the days were computed at, and how many machines were measured
-       rather than assumed. Repeating "7 missed" under a pill reading
-       "Missed 7" is a line of the sheet spent saying nothing new. */
-    note.textContent=[
-      /* THE ROUND'S FIGURE, AND THE CLASSES THAT DIFFER FROM IT. Undercarriage
-         is 1,000 h on a dozer and 4,000 on an excavator; this line printed
-         the round's own number over a list containing both, which is a
-         second interval table told as a sentence. `DUE.byClass` is the one
-         place a differing figure is stated. */
-      dueType ? (()=>{ const base=t("due_every").replace("{h}",num(DUE.hours(dueType)||0))
-                        .replace("{d}",DUE.spec(dueType).d||"");
-                 const per=(DUE.byClass&&DUE.byClass(dueType))||null;
-                 if(!per || !per.length) return base;
-                 const diff=per.filter(x=>Number(x.h)!==Number(DUE.hours(dueType)));
-                 return diff.length
-                   ? base+" ("+diff.map(x=>x.cls+" "+num(x.h)+" h").join(", ")+")"
-                   : base; })() : "",
-      t("due_at_rate").replace("{r}",DUE.HOURS_PER_DAY),
-      measured ? t("due_basis_own").replace("{n}",measured) : "",
-      /* HOW MUCH OF THE FLEET THIS NUMBER IS ABOUT.
-
-         dueRows can only speak about units it has a last-done date for. This
-         site has 1,128 machines and a phone typically holds a few dozen
-         rounds, so "Missed 0" has always meant "none of the machines I have
-         heard of is overdue" while reading as "nothing is overdue". The
-         difference is the whole question, and the count is one line. */
-      dueCoverage(),
-      /* Nine hundred and forty machines carry no class, so no round is
-         proposed for them. Saying nothing about that would make this screen
-         quietly about a fifth of the fleet while reading as all of it. */
-      dueNoProgramme(),
-      /* And the machines the site has deliberately taken OFF a round. Work
-         not proposed is invisible; a count with the reason on it is not. */
-      heldOffNote(),
-      /* A round that was walked and cannot be scheduled, because nothing here
-         knows what it is. Silently dropping it takes the machine off the
-         screen and looks exactly like a machine with nothing due. */
-      dueUnknown(),
-      /* The line that explains three copies of one app carrying three
-         different schedules. */
-      dueStray(),
-      /* Not about this phone at all: rounds the SYSTEM cannot read, which
-         reach no phone in the fleet and show up in no gap anywhere. */
-      dueBad(),
-      /* Not "how much of the register", which is a fact about the site — how
-         much of the FOLDER, which is a fact about this phone. */
-      dueVsFolder(),
-      /* The line that decides whether "Missed 0" can be believed. */
-      histAge(),
-      /* And the same question asked of 1C's half of the screen. */
-      schedAge(),
-    ].filter(Boolean).join(" · ");
-    note.classList.toggle("warn", histStale());
-  }
-
-  /* BEFORE THE EMPTY-LIST RETURN, not after it.
-
-     This sat below the rows, so it never ran on a phone whose list was empty —
-     which is precisely the phone carrying stray dates it needs to drop. The
-     one handset in the fleet that showed "Missed 0" over a schedule the folder
-     had never seen was the one handset that could not be offered the cleanup.
-     A control that hides itself from the only case it exists for is not a
-     control. */
-  /* What the search found, said plainly — including when it found nothing,
-     which for a machine in the register means no round is proposed for it. */
-  const fnote=$("dueFindMsg");
-  if(fnote){
-    fnote.textContent = !q ? ""
-      : show.length ? t("due_found",{n:show.length, q:dueFind.trim()})
-      : t("due_none_found",{q:dueFind.trim()});
-    fnote.classList.toggle("hidden", !q);
-  }
-  const strayBtn=$("dueOnly");
-  if(strayBtn) strayBtn.classList.toggle("hidden", histStrays()===0);
-
-  if(!show.length){
-    /* "Nothing due" and "this phone has never heard from the fleet" are
-       different sentences, and only one of them is reassuring.
-
-       This used to be a `return` — which meant an empty List (a fresh phone,
-       an empty scope, a search with no hits) skipped every line below it,
-       including the view-segment toggle and renderDueWeek(). This week's
-       agenda comes from 1C's own schedule, not from cm_hist, so a phone
-       with nothing to show on the List had a real week's schedule to show
-       and never reached the code that would show it. An `if/else` instead
-       of a `return` keeps the empty state on the List and still lets This
-       week render regardless of whether the List has anything to say. */
-    const w=histWhen();
-    box.innerHTML=`<div class="empty">${
-      histIsShort() ? t("due_short")
-      : !w ? t("due_no_hist")
-      : histStale() ? t("due_stale",{t:agoWords(w.at)})
-      : t("due_empty")}</div>`;
-  } else {
-  box.innerHTML=show.slice(0,200).map(r=>{
-    /* A machine with no round on record has no interval to be past and no
-       date to be counted from. Printing "0 d ago" over one would be inventing
-       an inspection; it says what is true instead, and the row still opens
-       the round so the answer is one tap away. */
-    /* No round to open, so no round tag and no round on the tap — the
-       capture screen asks which one, because this app does not know. */
-    if(r.reg) return `<div class="duerow">
-      <button class="dueitem never" data-u="${esc(r.unit)}">
-        <span class="u">${esc(r.unit)}${
-          r.cat?` · <span style="color:var(--muted);font-weight:400">${esc(r.cat)}</span>`:""}</span>
-        <span class="d">${esc(t("due_reg_row"))}</span></button></div>`;
-    /* WHERE BOTH SCHEDULES HAVE AN OPINION. Neither date wins over the other
-       here — the row states both, plainly, and the gap between them, so an
-       inspector (or a planner reading the same screen) can see for
-       themselves whether the two agree rather than being told a verdict. */
-    if(r.cmp){
-      const gapTxt = r.gap===0 ? t("due_cmp_same")
-        : r.gap>0 ? t("due_cmp_later").replace("{n}",num(r.gap))
-        : t("due_cmp_earlier").replace("{n}",num(-r.gap));
-      return `<div class="duerow">
-      <button class="dueitem ${r.st}" data-u="${esc(r.unit)}" data-t="${esc(r.ty)}">
-        <span class="u"><span class="tag t-${esc(r.ty)}">${esc(r.ty)}</span> ${esc(r.unit)}${
-          r.cat?` · <span style="color:var(--muted);font-weight:400">${esc(r.cat)}</span>`:""}</span>
-        <span class="d">${esc(t("due_cmp_row",{cm:schedShortDate(r.cmDate),c1:schedShortDate(r.theirDate)}))} · ${esc(gapTxt)}</span>
-      </button></div>`;
-    }
-    /* A ROUND 1C HAS ASKED FOR. No last-done date and no clock — there may
-       be no CM history for this machine at all — so it says what 1C said
-       and when, and nothing it cannot support. A plan date already gone is
-       marked late by the same rule the agenda uses, or a row from last
-       Tuesday reads exactly like one for next Tuesday. */
-    if(r.plan){
-      const w=r.w||{};
-      const late=DUE.agendaPast(todayISO(), r.plan);
-      const bits=[schedShortDate(r.plan), w.wo||"—", w.hours!=null?w.hours+"h":""].filter(Boolean);
-      return `<div class="duerow">
-      <button class="dueitem ${late?"over":"soon"}" data-u="${esc(r.unit)}" data-t="${esc(r.ty)}">
-        <span class="u"><span class="tag t-${esc(r.ty)}">${esc(r.ty)}</span> ${esc(r.unit)}${
-          r.cat?` · <span style="color:var(--muted);font-weight:400">${esc(r.cat)}</span>`:""}</span>
-        <span class="d">${esc(t("due_plan_row",{p:bits.join(" · ")}))}${
-          late?` · <span class="duewhy">${esc(t("due_week_late"))}</span>`:""}</span>
-      </button></div>`;
-    }
-    if(r.never){
-      /* A round CM has never walked is exactly where 1C's own schedule
-         matters most — a machine sitting under "never inspected" with a
-         work order already open for today is easy to miss otherwise, and
-         was missing this line entirely until now: this branch returns
-         before reaching the schedule lookup below. */
-      const neverSched = (dueSched||searching) ? schedRowHtml(r.unit, r.ty) : "";
-      return `<div class="duerow">
-      <button class="dueitem never" data-u="${esc(r.unit)}" data-t="${esc(r.ty)}">
-        <span class="u"><span class="tag t-${esc(r.ty)}">${esc(r.ty)}</span> ${esc(r.unit)}${
-          r.cat?` · <span style="color:var(--muted);font-weight:400">${esc(r.cat)}</span>`:""}</span>
-        <span class="d">${esc(t("due_never_row"))}</span>
-        ${neverSched}</button></div>`;
-    }
-    const a=ASSET_BY[r.unit], n=r.n;
-    const cal = DUE.hours(r.ty)==null && !n.why;
-    const days = n.over ? t("due_over").replace("{n}",num(n.dueInDays))
-                        : t("due_in").replace("{n}",num(n.dueInDays));
-    const hrs = cal ? "" : " · "+t("due_h").replace("{n}",num(n.dueInHours));
-    const why = n.why==="wear" ? ` <span class="duewhy">${esc(t("due_why_wear"))}</span>` : "";
-    /* Put off, and by whom. The reason is the whole point of having asked for
-       one, so it is on the row rather than behind a tap. */
-    const put = r.d ? `<div class="dueput">${esc(r.d.until
-        ? t("due_put_to").replace("{d}",r.d.until) : t("due_off"))} — ${esc(r.d.why||"")}${
-        r.d.by?` · ${esc(r.d.by)}`:""}</div>` : "";
-    const sched = (dueSched||searching) ? schedRowHtml(r.unit, r.ty) : "";
-    return `<div class="duerow">
-      <button class="dueitem ${r.st}" data-u="${esc(r.unit)}" data-t="${esc(r.ty)}">
-        <span class="u"><span class="tag t-${esc(r.ty)}">${esc(r.ty)}</span> ${esc(r.unit)}${
-          a&&a.cat?` · <span style="color:var(--muted);font-weight:400">${esc(a.cat)}</span>`:""}</span>
-        <span class="d">${t("due_days").replace("{n}",num(n.daysSince))} · ${days}${hrs}${why}</span>
-        ${put}${sched}</button>
-      <button class="dueforget" data-f="${esc(r.unit)}" data-ft="${esc(r.ty)}"
-        aria-label="${esc(t("due_not"))}" title="${esc(t("due_not"))}">⋯</button></div>`; }).join("");
-  /* A LIST THAT STOPS AT TWO HUNDRED HAS TO SAY SO.
-
-     The cap has always been here and has always been silent, which was
-     survivable while the list was a dozen overdue rounds and is not now that
-     it can carry every machine nobody has walked to. A pill reading 149 over a
-     list of 200 rows is fine; a pill reading 600 over the same list, with
-     nothing saying the rest exist, is the same failure this screen keeps
-     having. */
-  if(show.length>200){
-    box.insertAdjacentHTML("beforeend",
-      `<div class="quiet" style="padding:8px 2px 0">${esc(t("due_more",{n:show.length-200}))}</div>`);
-  }
-  box.querySelectorAll("[data-u]").forEach(b=>b.onclick=()=>{
-    /* Open the machine ON the round that is due, not on whatever the capture
-       screen was last set to — the list is now all rounds, so the row has to
-       carry its own. */
-    const sel=$("typeSel");
-    if(b.dataset.t && sel && sel.value!==b.dataset.t){ sel.value=b.dataset.t; sel.dispatchEvent(new Event("change")); }
-    selectEquip(b.dataset.u); showPane("paneCapture"); });
-  box.querySelectorAll("[data-f]").forEach(b=>b.onclick=()=>dueNotDoing(b.dataset.ft,b.dataset.f));
-  }
-
-  /* LIST vs THIS WEEK. Both are rendered every time, unconditionally — the
-     list above always was, and this week costs little enough (a fetch that
-     is already cached, a filter over at most a couple hundred entries) that
-     computing it every render and hiding one half with CSS is simpler and
-     safer than an early return that has to remember which parts of the
-     function above it is allowed to skip. Switching views is then just a
-     class toggle: instant, and neither view can go stale from having been
-     skipped. */
-  /* A TICK THAT APPEARS TO DO NOTHING IS THE DEFECT THIS PROJECT KEEPS
-     MAKING. "Show 1C schedule" annotates a row that is ALREADY in this
-     list and that 1C has an open work order for, on that same round.
-     Both halves can be true and the screen still not change: the list is
-     scoped to Overdue, or the rounds 1C planned are ones this machine's
-     class is not on, so they were never listed to be annotated. From the
-     inspector's side that is indistinguishable from a broken switch —
-     they tick it, nothing moves, and they stop trusting it. So it says
-     what it did; and when it did nothing it says why, and where the work
-     it does know about actually is. */
-  {
-    const note=$("dueSchedNote");
-    if(note){
-      /* The breaker turned this screen's settings off to stop a runaway
-         repaint. Say so — a tick box that is silently not where it was
-         left reads as a second fault, and the inspector's real question
-         ("is my work still here?") is answered in the same breath. */
-      if(dueRunaway){ note.textContent=t("due_healed"); }
-      else if(!dueSched || dueView==="week") note.textContent="";
-      else if(!SCHED) note.textContent=t("due_sched_nofile");
-      else note.textContent = schedShown
-        ? t("due_sched_on_n",{n:schedShown})
-        : t("due_sched_on_none",{n:(typeof dueWeekRows==="function"?dueWeekRows().length:0)});
-    }
-  }
-  const wrapL=$("dueListWrap"), wrapW=$("dueWeekWrap");
-  if(wrapL) wrapL.classList.toggle("hidden", dueView==="week");
-  if(wrapW) wrapW.classList.toggle("hidden", dueView!=="week");
-  const dvl=$("dueViewList"), dvw=$("dueViewWeek");
-  if(dvl && dvw){
-    const onList=dueView!=="week";
-    dvl.classList.toggle("on", onList); dvl.setAttribute("aria-selected", onList?"true":"false"); dvl.tabIndex=onList?0:-1;
-    dvw.classList.toggle("on", !onList); dvw.setAttribute("aria-selected", (!onList)?"true":"false"); dvw.tabIndex=onList?-1:0;
-  }
-  renderDueWeek();
 }
 
 /* ---- "we are not doing this one, and here is why" -----------------------
@@ -14528,15 +14161,6 @@ function onScanned(text){
     dlg(t(ok?"m_cfg_ok":"m_cfg_bad"));
     return true;
   }
-  /* Return to Work's own scan target — narrows the Pick screen to this unit's
-     open work orders rather than filling the round wizard's equipment field.
-     Same shape as "cfg" above: check the mode, act, reset scanMode to "unit"
-     so the very next plain scanBtn tap is not still in this mode. */
-  if(scanMode==="wo"){
-    const u=extractUnit(text); stopScan(); scanMode="unit";
-    if(u && $("rtwPickQ")){ $("rtwPickQ").value=u; rtwRenderPickList(); }
-    return true;
-  }
   const u=extractUnit(text); if(!u) return false;
   selectEquip(u); stopScan(); return true;
 }
@@ -14679,7 +14303,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="465";
+const BUILD="466";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

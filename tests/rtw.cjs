@@ -94,43 +94,48 @@ const jpg = p => p.evaluate(() => {
   }));
   ok('RTW_RESULTS carries S/R/N/D', await p.evaluate(() => ['S', 'R', 'N', 'D'].every(k => !!(window.RTW_RESULTS || {})[k])));
 
-  console.log('\n2. the Due tab entry point');
+  console.log('\n2. the 1C PM tab lists every open work order — no separate entry card');
   await p.click('[data-pane="paneDue"]');
   await p.waitForTimeout(200);
-  ok('the entry card is visible when open work orders exist', await p.isVisible('#rtwEntryBtn'));
-  const sub = (await p.textContent('#rtwEntrySub') || '').trim();
-  ok('it counts only records with a formal work order number', /\b2\b/.test(sub), sub);
+  /* 1C PM is the default tab now, and it IS the list — no small entry card
+     and no separate Pick overlay to open first; the tab's own rows are the
+     picker. */
+  ok('the 1C PM tab is showing', await p.evaluate(() => $('dueViewPM').classList.contains('on')));
+  let woCards = await p.$$('#duePmList [data-wo]');
+  ok('every entry rtwOpen carries is listed', woCards.length === 2, 'count=' + woCards.length);
 
-  console.log('\n3. the Pick screen — bidirectional search over SCHED.rtwOpen');
-  await p.click('#rtwEntryBtn');
-  await p.waitForTimeout(150);
-  ok('the overlay opens on the Pick screen', await p.isVisible('#rtwPick'));
-  let cards = await p.$$('.rtw-wo-card');
-  ok('every entry rtwOpen carries is listed', cards.length === 2, 'count=' + cards.length);
+  console.log('\n3. searching the 1C PM tab — bidirectional, over SCHED.rtwOpen');
   /* A defect with no work order number, or one already closed, is EXCLUDED
      before it ever reaches this file — build_rtw_open() in ingest/
      ingest_work_orders.py, proven directly (no browser needed) by
-     tests/rtwopen.py. This screen's own job is only to search and pick from
+     tests/rtwopen.py. This tab's own job is only to search and list
      whatever SCHED.rtwOpen already holds. */
-  await p.fill('#rtwPickQ', 'TK126');
-  await p.waitForTimeout(100);
-  cards = await p.$$('.rtw-wo-card');
-  ok('typing the EQUIPMENT narrows to its own work order', cards.length === 1 && (await p.textContent('.rtw-wo-card')).includes('WO-016620'));
-  await p.fill('#rtwPickQ', 'WO-016635');
-  await p.waitForTimeout(100);
-  cards = await p.$$('.rtw-wo-card');
-  ok('typing the WO NUMBER finds the same record the other way', cards.length === 1 && (await p.textContent('.rtw-wo-card')).includes('TK112'));
+  await p.fill('#dueFind', 'TK126');
+  await p.waitForTimeout(200);
+  woCards = await p.$$('#duePmList [data-wo]');
+  ok('typing the EQUIPMENT narrows to its own work order', woCards.length === 1 && (await p.textContent('#duePmList [data-wo]')).includes('WO-016620'));
+  await p.fill('#dueFind', 'WO-016635');
+  await p.waitForTimeout(200);
+  woCards = await p.$$('#duePmList [data-wo]');
+  ok('typing the WO NUMBER finds the same record the other way', woCards.length === 1 && (await p.textContent('#duePmList [data-wo]')).includes('TK112'));
 
-  console.log('\n4. picking a work order fills in equipment and component');
-  await p.fill('#rtwPickQ', '');
-  await p.waitForTimeout(100);
-  await p.click('.rtw-wo-card[data-wo="WO-016635"]');
+  console.log('\n4. tapping a work order opens its info sheet, and Start Return to Work fills in the checklist');
+  await p.click('#duePmList [data-wo="WO-016635"]');
   await p.waitForTimeout(150);
+  ok('the info sheet opens with the work order named', (await p.textContent('#pmInfoWo') || '').trim() === 'WO-016635');
+  const infoBody = await p.textContent('#pmInfoBody');
+  ok('it shows the equipment', infoBody.includes('TK112'));
+  ok('it shows the component', infoBody.includes('Rear Differential'));
+  await p.click('#pmStartRtwBtn');
+  await p.waitForTimeout(150);
+  ok('the info sheet closes', !(await p.isVisible('#pmOv')));
   ok('the Checklist screen opens', await p.isVisible('#rtwChecklistScr'));
   const summary = await p.textContent('#rtwChecklistBody');
   ok('the work order number is shown', summary.includes('WO-016635'));
   ok('the equipment is filled in from the work order, not typed', summary.includes('TK112'));
   ok('the component is filled in from the work order', summary.includes('Rear Differential'));
+  await p.fill('#dueFind', '');
+  await p.waitForTimeout(100);
   const resultOptions = await p.$$eval('#rtwResult option', os => os.map(o => o.textContent.trim()));
   ok('the four release results read exactly as the document states them', JSON.stringify(resultOptions) === JSON.stringify([
     'S — Safe to use', 'R — Repaired and safe to use',
@@ -267,11 +272,11 @@ const jpg = p => p.evaluate(() => {
   console.log('\n9. "D — not released" does not wait on a clean pass');
   await p.click('[data-pane="paneDue"]');
   await p.waitForTimeout(150);
-  await p.click('#rtwEntryBtn');
+  await p.fill('#dueFind', 'TK126');
+  await p.waitForTimeout(200);
+  await p.click('#duePmList [data-wo="WO-016620"]');
   await p.waitForTimeout(150);
-  await p.fill('#rtwPickQ', 'TK126');
-  await p.waitForTimeout(100);
-  await p.click('.rtw-wo-card[data-wo="WO-016620"]');
+  await p.click('#pmStartRtwBtn');
   await p.waitForTimeout(150);
   await p.selectOption('#rtwResult', 'D');
   await p.dispatchEvent('#rtwResult', 'change');
@@ -282,19 +287,10 @@ const jpg = p => p.evaluate(() => {
   await draw(p);
   await p.waitForTimeout(100);
   ok('but NOT gated on every checklist item being marked, for D', !(await p.isDisabled('#rtwSaveBtn')));
-
-  console.log('\n10. scanning narrows the Pick list, same shape as the existing "cfg" mode');
   await p.click('#rtwChecklistBack');
   await p.waitForTimeout(100);
-  await p.fill('#rtwPickQ', '');
+  await p.fill('#dueFind', '');
   await p.waitForTimeout(100);
-  await p.evaluate(() => { scanMode = 'wo'; });
-  await p.evaluate(() => onScanned('TK112'));
-  await p.waitForTimeout(100);
-  ok('a scan while scanMode="wo" fills the search with the decoded unit', await p.inputValue('#rtwPickQ') === 'TK112');
-  ok('and resets scanMode back to "unit" afterward', await p.evaluate(() => scanMode) === 'unit');
-  const scanCards = await p.$$('.rtw-wo-card');
-  ok('narrowing to the scanned unit shows only its own open work order', scanCards.length === 1);
 
   console.log('\n11. the report engine — RTW\'s own page 1 form, page 2 photos');
   // buildReportSections() is the exact function the phone's own "make PDF"
@@ -418,9 +414,11 @@ const jpg = p => p.evaluate(() => {
   console.log('\n12. "D — not released" is unmistakable on the printed sheet');
   // Reopen TK126's WO-016620 (the D case from section 9) and actually save it
   // this time — section 9 only proved the button unlocks, never pressed it.
-  await p.fill('#rtwPickQ', '');
-  await p.waitForTimeout(100);
-  await p.click('.rtw-wo-card[data-wo="WO-016620"]');
+  await p.click('[data-pane="paneDue"]');
+  await p.waitForTimeout(150);
+  await p.click('#duePmList [data-wo="WO-016620"]');
+  await p.waitForTimeout(150);
+  await p.click('#pmStartRtwBtn');
   await p.waitForTimeout(150);
   await p.selectOption('#rtwResult', 'D');
   await p.dispatchEvent('#rtwResult', 'change');
@@ -479,14 +477,14 @@ const jpg = p => p.evaluate(() => {
   const editState = await p.evaluate(() => ({
     rtwOvOpen: !document.getElementById('rtwOv').classList.contains('hidden'),
     checklistOpen: !document.getElementById('rtwChecklistScr').classList.contains('hidden'),
-    pickHidden: document.getElementById('rtwPick').classList.contains('hidden'),
+    pmOvHidden: document.getElementById('pmOv').classList.contains('hidden'),
     onCapturePane: document.getElementById('paneCapture')?.classList.contains('on') || false,
     sup: document.getElementById('rtwSup')?.value || '',
     wo: (rtwDraft || {}).wo || '',
     editingId: (typeof rtwEditing !== 'undefined' && rtwEditing) ? rtwEditing.id : null,
   }));
   ok('the RTW overlay is open', editState.rtwOvOpen);
-  ok('the checklist screen is showing, with the Pick screen skipped', editState.checklistOpen && editState.pickHidden);
+  ok('the checklist screen is showing directly, with no info sheet or picker in between', editState.checklistOpen && editState.pmOvHidden);
   ok('the generic capture/inspection pane was never activated', !editState.onCapturePane);
   ok('the draft was rebuilt from the SAVED record — same senior mechanic, same work order',
     editState.sup === 'A. Ivanov' && editState.wo === 'WO-016635');

@@ -322,24 +322,33 @@ const srv = http.createServer((req, res) => {
       showPane('paneDue');
       await new Promise(r2 => setTimeout(r2, 2500));
       return {
-        sched: localStorage.getItem('cm_due_sched'),
+        /* cm_due_sched is fully retired dead weight now — the toggle it once
+           armed has no UI left at all — so the breaker no longer has any
+           reason to touch it; putting dueView back to its own safe default
+           ("pm") is what the current re-arm veto (!dueRunaway, below) no
+           longer even strictly needs, since that veto alone stops the loop
+           regardless of any setting, but it still leaves the screen on a
+           sane view rather than whatever it happened to be pegged on. */
         view: localStorage.getItem('cm_due_view'),
         keep: localStorage.getItem('cm_keep_probe'),
-        note: (document.getElementById('dueSchedNote') || {}).textContent || '',
+        note: (document.getElementById('dueRunawayNote') || {}).textContent || '',
+        noteHidden: (document.getElementById('dueRunawayNote') || {}).classList
+          ? document.getElementById('dueRunawayNote').classList.contains('hidden') : true,
         tripped: !!window.__dueRunaway,
       };
     }), 12000, {});
-    ok(st.sched === '0' && st.view === 'list',
-       '  by putting back the only two settings that can re-arm the cycle');
+    ok(st.view === 'pm',
+       '  by putting back the view — its own safe default — so the screen it changed is not left mid-loop');
     ok(st.tripped === true, '  the breaker is what did it, and says so where a diagnostic can read it');
     ok(st.keep === 'do-not-touch', '  and nothing else — the work on the phone is not its business');
+    ok(st.noteHidden === false, '  the note that explains it is actually shown, not just present in the DOM');
     ok(/repainting itself|перерисовывался/.test(st.note || ''),
        '  and it SAYS so, on the screen it changed, in the phone\'s language');
     ok(/still here|на месте/.test(st.note || ''),
        '  answering the only question the inspector actually has');
     /* And the screen is not merely unfrozen, it works. */
     const rows = await within(c.p.evaluate(() =>
-      document.querySelectorAll('#dueList .duerow').length), 8000, -1);
+      document.querySelectorAll('#duePmList .agitem, #dueCmList .dueitem').length), 8000, -1);
     ok(rows >= 0, '  the Due list still draws (' + rows + ' rows)');
     await c.p.close();
     await ctx.close();
@@ -354,15 +363,19 @@ const srv = http.createServer((req, res) => {
     await seed(ctx);
     const a = await launch(ctx, 'an ordinary launch:');
     ok(a.v === '901', '  the app opens, as it should');
-    /* Work the screen hard — every filter, every scope, a search — so the
-       breaker is given a real chance to fire on ordinary use. */
+    /* Work the screen hard — both tabs, every span, every round-type pill, a
+       search — so the breaker is given a real chance to fire on ordinary
+       use. #dueScopeF is retired (tests/duetab.cjs); #dueTypeF/#dueSpanF and
+       the two tab buttons are its replacements on the actual screen. */
     const worked = await within(a.p.evaluate(async () => {
       showPane('paneDue');
       await new Promise(r => setTimeout(r, 800));
       for (let i = 0; i < 30; i++) {
         const f = document.getElementById('dueFind');
         if (f) { f.value = 'TK0' + (i % 10); f.dispatchEvent(new Event('input', { bubbles: true })); }
-        [].forEach.call(document.querySelectorAll('#dueScopeF [data-sc]'), (b, j) => { if (j === i % 5) b.click(); });
+        [].forEach.call(document.querySelectorAll('#dueTypeF [data-dt]'), (b, j) => { if (j === i % 5) b.click(); });
+        [].forEach.call(document.querySelectorAll('#dueSpanF [data-dw]'), (b, j) => { if (j === i % 2) b.click(); });
+        (i % 2 === 0 ? document.getElementById('dueViewCM') : document.getElementById('dueViewPM')).click();
         await new Promise(r => setTimeout(r, 30));
       }
       await new Promise(r => setTimeout(r, 800));
@@ -376,8 +389,16 @@ const srv = http.createServer((req, res) => {
       sched: localStorage.getItem('cm_due_sched'),
       view: localStorage.getItem('cm_due_view'),
     }));
-    ok(st.sched === '1' && st.view === 'week',
-       '  and the inspector\'s screen is exactly as they left it');
+    /* cm_due_sched is dead weight nothing in this loop ever touches, so it
+       must still carry the seed untouched. cm_due_view is NOT the same kind
+       of proof any more: tapping the two real tab buttons is exactly the
+       ordinary interaction this loop is proving safe, and each tap
+       legitimately persists the tab it switched to (the last of the thirty
+       iterations lands on 1C PM) — so the inspector's screen being "exactly
+       as they left it" now means the breaker never forced it to anything
+       else, not that thirty real taps left no trace. */
+    ok(st.sched === '1' && st.view === 'pm',
+       '  and the inspector\'s screen holds what they actually did, not something the breaker forced');
     await kept.close();
     await ctx.close();
   }

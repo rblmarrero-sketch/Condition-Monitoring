@@ -252,14 +252,14 @@ function unguardedWrites() {
        landing mid-test would do exactly that. */
     await a.p.evaluate(() => { localStorage.setItem('cm_hist_short', '1'); renderDue(); });
     await a.p.waitForTimeout(200);
-    const note = await a.p.evaluate(() => (document.getElementById('dueBasis') || {}).textContent || '');
+    const note = await a.p.evaluate(() => (document.getElementById('dueStrayNote') || {}).textContent || '');
     ok('the note names running out of room', note.includes(await say(a.p, 'hist_short')), note.slice(-70));
     /* Out of room outranks everything else on that line: a full phone goes on
        reaching the system perfectly well and goes on being wrong. */
     ok('and not a network failure it did not have',
        !note.includes(await say(a.p, 'hist_fail')));
     ok('the note is marked as a warning',
-       await a.p.evaluate(() => document.getElementById('dueBasis').classList.contains('warn')));
+       await a.p.evaluate(() => document.getElementById('dueStrayNote').classList.contains('warn')));
     await a.ctx.close();
   }
   {
@@ -270,12 +270,17 @@ function unguardedWrites() {
        key without clearing it would leave the list rendering from a history
        that is no longer there - which is, in miniature, the bug this whole
        file is about. */
+    /* The merged CM tab also folds in every never-inspected register machine
+       now, so zeroing ASSETS is what isolates "this phone's own history is
+       gone" from "the fleet register still proposes hundreds of never-walked
+       machines regardless" — see tests/histage.cjs's emptyPure for the same
+       reasoning. */
     await a.p.evaluate(() => { localStorage.setItem('cm_hist_short', '1');
                                localStorage.removeItem('cm_hist');
-                               histCache = null; renderDue(); });
+                               histCache = null; ASSETS.length = 0; renderDue(); });
     await a.p.waitForTimeout(300);
     const empty = await a.p.evaluate(() => {
-      const e = document.querySelector('#dueList .empty'); return e ? e.textContent.trim() : null; });
+      const e = document.querySelector('#dueCmList .empty'); return e ? e.textContent.trim() : null; });
     ok('an empty list explains the loss', empty === await say(a.p, 'due_short'), String(empty).slice(0, 70));
     ok('rather than saying nothing is due', empty !== await say(a.p, 'due_empty'));
     await a.ctx.close();

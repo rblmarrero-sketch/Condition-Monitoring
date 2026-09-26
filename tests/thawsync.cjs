@@ -78,7 +78,12 @@ const within = (pr, ms, late) => Promise.race([
   const errs = [];
   p.on('pageerror', e => errs.push(e.message));
   await p.addInitScript(u => {
-    /* Exactly the state that froze: both switches remembered. */
+    /* "Show 1C schedule" and This week are both fully retired now — SCHED
+       is fetched unconditionally whenever the Due tab opens and its cache is
+       stale (mobile/index.html's renderDue()), toggle or not, so the branch
+       that used to need these two switches armed is exercised on every
+       ordinary open. Left in place only so a stale phone carrying them from
+       before this redesign is still proven harmless. */
     localStorage.setItem('cm_due_sched', '1');
     localStorage.setItem('cm_due_view', 'week');
     localStorage.setItem('up_dests', JSON.stringify([
@@ -96,9 +101,15 @@ const within = (pr, ms, late) => Promise.race([
   await within(p.evaluate(() => showPane('paneDue')), 10000, 'late');
   const alive = await within(p.evaluate(() => 1 + 1), 8000, 'FROZEN');
   ok('the screen that froze is answerable', alive === 2, String(alive));
-  const weekOpen = await within(p.evaluate(() => !!document.getElementById('dueWeekWrap')
-    && !document.getElementById('dueWeekWrap').classList.contains('hidden')), 8000, 'FROZEN');
-  ok('  and it is genuinely on This week, so the branch really was entered', weekOpen === true, String(weekOpen));
+  /* The branch that used to freeze is "SCHED wanted, fetch fails, retry
+     keeps re-arming" — proven not by which tab happens to be open (SCHED
+     is fetched for both now) but by the fetch genuinely having been tried
+     and genuinely having failed against the 404 this suite serves, with
+     the screen still answerable afterward. */
+  await p.waitForTimeout(1500);
+  const sched = await within(p.evaluate(() => (typeof SCHED !== 'undefined' ? SCHED : 'undef')), 8000, 'FROZEN');
+  ok('  and the schedule fetch genuinely failed against the 404, not skipped',
+     sched === null, JSON.stringify(sched));
 
   console.log('\n3. AND THE WORK STILL GETS AWAY');
   await within(p.evaluate(() => showPane('paneCapture')), 8000, 'late');

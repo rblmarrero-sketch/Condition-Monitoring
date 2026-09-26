@@ -1,25 +1,34 @@
 /* The due list gets a tab, and its filters become pills.
 
-   Two things a phone screenshot made obvious.
+   Two things a phone screenshot made obvious, back when this suite was
+   written for the FIRST due-tab design (Phase 2, four scope pills — Overdue /
+   Due soon / Never inspected / Put off — under one #dueList).
 
    The due list lived at the bottom of System, under "In the system" — which on
    a phone that has pulled the team's work means scrolling past forty-two rounds
    of archive to reach the one list that says what to walk. The archive and the
    worklist are different questions, and one of them is asked at the start of
    every shift. So: four tabs, and Due is second, after the app's own job and
-   before everything that is about looking backwards.
+   before everything that is about looking backwards. THAT part never moved and
+   is still what section 1 proves.
 
-   And the filters were two dropdowns. A dropdown hides its options until it is
-   opened and cannot say how many rounds are behind each one — so the counts had
-   to be printed again as a sentence underneath ("6 missed · 7 due soon"),
-   which put the number in one place and the tap that acts on it in another. The
-   card above already used pills. Now both do, and the count rides on the
-   control that filters to it.
+   That first design's scope pills (#dueScopeF, #dueList) were retired by the
+   redesign this file now follows: "List=1C PM and Two Weeks=CM... one merged
+   agenda, color-coded" (tests/duecm.cjs, tests/duepm.cjs). The CM tab folds
+   Overdue/Due soon/Never inspected/Put off into ONE list under a This day/All
+   14 days span, so there is no separate "over" pill to click any more — a row
+   is simply shown or not, by state, the same way tests/duecm.cjs proves for
+   its own smaller (all-MP) fixture.
 
-   What this suite guards is that they agree. A badge, a card heading and a pill
-   all counting the same thing must all say the same number — the badge used to
-   count magnetic plugs while the list beside it counted undercarriage rounds,
-   and nothing anywhere reported an error.
+   What THIS suite still owns and duecm.cjs's simpler fixture does not: the
+   real due.js interval bug regression across FOUR round types at once, and a
+   badge/heading agreement check against a genuinely mixed fleet. Six machines
+   are past their interval; one of them — DZ004 — was put off on purpose, which
+   is a decision and not a miss; EX005 is deliberately NOT among the six (see
+   the note on the fixture) — a build that reads an undercarriage round's
+   interval without asking which MACHINE it is walking would put it there
+   anyway, which is how every excavator on this site once got scheduled on the
+   dozer's number.
 
    Run: node tests/duetab.cjs   (needs tests/mock.cjs on 8098) */
 const { chromium } = require(require('./pw.cjs'));
@@ -34,9 +43,9 @@ const on  = n => new Date(Date.now() + n * 86400000).toISOString().slice(0, 10);
    intervals the fleet actually stated, at 20 h/day:
 
      MP    250 h   magnetic plugs, every machine
-     INSP  500 h
+     INSP  1000 h
      UC   1000 h   dozers       ·  4000 h  excavators (and drills)
-     TB   2000 h   both truck types this round fits (4,000 h until 2026-09-12)
+     TB   2000 h   both truck types this round fits
 
    UC is TWO figures, not one, and EX005 is here to prove it: at
    2,400 hours it is comfortably inside an excavator's 4,000 and comfortably
@@ -53,30 +62,18 @@ const HIST = {
   'MP|TK160':   { d: ago(14),  h: '7725' },  // 280 h on a 250 h round — missed
   'MP|TK158':   { d: ago(20),  h: '7900' },  // 400 h — missed
   'MP|TK154':   { d: ago(5),   h: '7300' },  // fine
-  /* Placed INSIDE the body round and near its end, so this row proves "due
-     soon" rather than "missed". It sat at 170 days — 3,400 h at the fleet
-     rate — which was 85% of the old 4,000 h figure and is 170% of the
-     2,000 h the site moved it to on 2026-09-12, so the same fixture flipped
-     from due-soon to overdue and every count in this suite moved with it.
-     90 days is 1,800 h: the same 90% of the interval, against the figure
-     that is actually stated. */
-  'TB|TK105':   { d: ago(90),  h: '12400' }, // 1800 h on a truck's 2000 — due soon
-  /* Just past the interval, so this row proves "missed". It sat at 26 days —
-     520 h, 104% of the 500 h INSP was then — and the site moved the general
-     inspection to 1,000 h on 2026-09-13, at which 26 days is barely half way
-     and the row went quietly from missed to fine, taking a count in this
-     suite with it. 52 days is 1,040 h: the same 104%, against the figure that
-     is actually stated. Same reasoning as the TB row above. */
+  'TB|TK105':   { d: ago(90),  h: '12400' }, // 1800 h on a truck's 2000 — due soon, not missed
   'INSP|TK101': { d: ago(52),  h: '10200' }, // 1040 h on a 1000 h round — missed
 };
 const DEFER = { 'UC|DZ004': { u: 'DZ004', t: 'UC', until: on(6),
   why: 'on a low-loader to the workshop', by: 'S. Volkov', at: ago(2) } };
 
 const pills = (p, sel) => p.$$eval(sel + ' button',
-  a => a.map(b => ({ k: b.dataset.sc || b.dataset.dt, on: b.classList.contains('on'),
+  a => a.map(b => ({ k: b.dataset.sc || b.dataset.dt || b.dataset.dw, on: b.classList.contains('on'),
                      txt: b.textContent.replace(/\s+/g, ' ').trim(),
                      n: Number((b.querySelector('.n') || {}).textContent || -1) })));
-const rows = p => p.$$eval('#dueList .duerow', a => a.length);
+const rows = p => p.$$eval('#dueCmList .duerow', a => a.length);
+const rowTypes = p => p.$$eval('#dueCmList .dueitem', a => a.map(b => b.dataset.t).filter(Boolean));
 
 (async () => {
   const b = await chromium.launch();
@@ -87,6 +84,7 @@ const rows = p => p.$$eval('#dueList .duerow', a => a.length);
   await p.addInitScript(([h, d]) => {
     localStorage.setItem('cm_hist', JSON.stringify(h));
     localStorage.setItem('cm_due_defer', JSON.stringify(d));
+    localStorage.setItem('cm_due_view', 'cm');
     /* upload-defaults.js carries the real endpoint; pin it somewhere dead. */
     localStorage.setItem('up_dests', JSON.stringify(
       [{ id: 'gas', on: true, url: 'http://127.0.0.1:9/dead', sec: '', folder: '' }]));
@@ -105,24 +103,23 @@ const rows = p => p.$$eval('#dueList .duerow', a => a.length);
      await p.evaluate(t => t.every(x => !!document.getElementById(x)), tabs));
   /* It used to be three screens down inside System. */
   ok('the due list is no longer buried in the archive',
-     await p.evaluate(() => !document.querySelector('#paneSystem #dueList')
-                         && !!document.querySelector('#paneDue #dueList')));
+     await p.evaluate(() => !document.querySelector('#paneSystem #dueCmList')
+                         && !!document.querySelector('#paneDue #dueCmList')));
   ok('the archive is still its own tab', tabs.includes('paneSystem'));
 
-  console.log('\nthe badge, the heading and the pill agree');
-  await p.evaluate(() => showPane('paneDue'));
+  console.log('\nthe badge, the CM heading and the merged list agree');
+  await p.evaluate(() => { showPane('paneDue'); }); await p.waitForTimeout(200);
+  await p.evaluate(() => { dueView = 'cm'; renderDue(); });
   await p.waitForTimeout(400);
-  const sc = await pills(p, '#dueScopeF');
-  const missed = sc.find(x => x.k === 'over') || {};
   const badge = await p.evaluate(() => document.getElementById('tabD').textContent.trim());
   const head  = await p.evaluate(() => document.getElementById('dueCount').textContent.trim());
+  const trueOver = await p.evaluate(() => dueRows('').filter(dueCmToday).length);
   /* Six machines are past their interval; one of them was put off on purpose,
      which is a decision and not a miss. EX005 is deliberately NOT among the
      six — see the note on the fixture. */
-  ok('the missed pill counts what nobody explained away', missed.n === 5,
-     missed.txt + '  (expected 5)');
-  ok('the tab badge says the same', Number(badge) === missed.n, badge + ' vs ' + missed.n);
-  ok('and so does the card heading', Number(head) === missed.n, head + ' vs ' + missed.n);
+  ok('the true overdue count (the app\'s own rule) is 5, not 6', trueOver === 5, String(trueOver));
+  ok('the tab badge says the same', Number(badge) === trueOver, badge + ' vs ' + trueOver);
+  ok('and so does the CM heading badge', Number(head) === trueOver, head + ' vs ' + trueOver);
   /* The badge counted only the round type the capture screen was armed with,
      so it read 1 beside a list of six. */
   ok('the badge is not scoped to whichever round Capture is set to',
@@ -140,78 +137,59 @@ const rows = p => p.$$eval('#dueList .duerow', a => a.length);
      scheduling, so every excavator on site was walked on the dozer's number.
      A count of five catches that too, but only this says which machine and
      why, which is the difference between a failing test and a fixed bug. */
-  await p.click('#dueScopeF [data-sc="over"]'); await p.waitForTimeout(300);
-  const missedUnits = await p.$$eval('#dueList .duerow',
+  const missedUnits = await p.$$eval('#dueCmList .duerow',
     a => a.map(x => x.textContent.replace(/\s+/g, ' ').trim()));
-  ok('an excavator inside its own 4,000 h is not on the missed list',
+  ok('an excavator inside its own 4,000 h is comfortably not due, and absent',
      !missedUnits.some(t => /EX005/.test(t)),
-     missedUnits.map(t => (t.match(/[A-Z]{2}\d{3}|TK\d{3}/) || [t])[0]).join(' '));
+     missedUnits.find(t => /EX005/.test(t)) || 'not present (correct)');
   ok('and the excavator that is genuinely past 4,000 h is',
      missedUnits.some(t => /EX004/.test(t)));
 
   console.log('\npills, not dropdowns');
   ok('the two <select>s are gone',
      await p.evaluate(() => !document.getElementById('dueScope') && !document.getElementById('dueType')));
-  ok('every scope pill carries its own count', sc.every(x => x.n >= 0),
-     sc.map(x => x.txt).join(' | '));
+  const span = await pills(p, '#dueSpanF');
+  ok('the span pills carry their own counts', span.every(x => x.n >= 0), span.map(x => x.txt).join(' | '));
   ok('one of them is lit, so the reader knows which list this is',
-     sc.filter(x => x.on).length === 1, sc.filter(x => x.on).map(x => x.k).join(','));
-  ok('and it is the one the badge counts', (sc.find(x => x.on) || {}).k === 'over');
-  ok('pressing a pill shows exactly what it counted', await (async () => {
-    await p.click('#dueScopeF [data-sc="soon"]'); await p.waitForTimeout(300);
-    const soon = (sc.find(x => x.k === 'soon') || {}).n;
-    return (await rows(p)) === soon;
-  })(), (sc.find(x => x.k === 'soon') || {}).txt);
+     span.filter(x => x.on).length === 1, span.filter(x => x.on).map(x => x.k).join(','));
+  ok('and the badge counts overdue work regardless of which span is lit',
+     (span.find(x => x.k === 'today') || {}).n === trueOver);
 
-  console.log('\na pill never leads to an empty list');
-  await p.click('#dueScopeF [data-sc="over"]'); await p.waitForTimeout(300);
+  console.log('\nthe round-type pills describe every round in Due, not one scope\'s worth');
   let ty = await pills(p, '#dueTypeF');
-  ok('the round pills are built from the rounds that are actually due',
+  ok('the round pills are built from the rounds that actually appear',
      ty.length > 1 && ty.filter(x => x.k).every(x => x.n > 0),
      ty.map(x => x.txt).join(' | '));
-  /* TB has one round due soon and none missed, so under Missed it has no pill. */
-  ok('a round type with nothing in this scope gets no pill',
-     !ty.some(x => x.k === 'TB'), ty.map(x => x.k).join(','));
-  ok('and their counts add up to the scope they sit under',
-     ty.filter(x => x.k).reduce((s, x) => s + x.n, 0) === missed.n,
+  /* Unlike the retired scope-pill design, a round due only SOON still gets a
+     pill — the merged agenda has no separate "missed" scope for the pill
+     counts to be relative to any more. */
+  ok('TB gets a pill even though it is only due soon, not missed',
+     ty.some(x => x.k === 'TB' && x.n > 0), ty.map(x => x.txt).join(' | '));
+  ok('and their counts add up to the "all rounds" total',
+     ty.filter(x => x.k).reduce((s, x) => s + x.n, 0) === (ty.find(x => !x.k) || {}).n,
      ty.filter(x => x.k).map(x => x.txt).join(' + '));
-  ok('pressing one narrows the list to its own count', await (async () => {
-    const uc = ty.find(x => x.k === 'UC');
+  ok('pressing one narrows the list to that type alone', await (async () => {
     await p.click('#dueTypeF [data-dt="UC"]'); await p.waitForTimeout(300);
-    return (await rows(p)) === uc.n;
-  })(), (ty.find(x => x.k === 'UC') || {}).txt);
-  /* Narrowed to a type, then widened to a scope it has nothing in: the pill
-     that got you here must not vanish, or the list looks broken with no way
-     back. */
-  await p.click('#dueScopeF [data-sc="soon"]'); await p.waitForTimeout(300);
-  ty = await pills(p, '#dueTypeF');
-  ok('the pill you are standing on survives a scope that empties it',
-     ty.some(x => x.k === 'UC' && x.on), ty.map(x => x.txt + (x.on ? '*' : '')).join(' | '));
+    const seen = await rowTypes(p);
+    return seen.length > 0 && seen.every(t => t === 'UC');
+  })());
+  await p.click('#dueTypeF [data-dt=""]'); await p.waitForTimeout(200);
 
   console.log('\nput off on purpose');
-  await p.click('#dueTypeF [data-dt=""]'); await p.waitForTimeout(200);
-  await p.click('#dueScopeF [data-sc="put"]'); await p.waitForTimeout(300);
-  const txt = await p.textContent('#dueList');
+  const txt = await p.textContent('#dueCmList');
   ok('the put-off pill lists the machine and the reason it was put off',
-     /DZ004/.test(txt) && /low-loader/.test(txt), txt.replace(/\s+/g, ' ').trim().slice(0, 90));
-  ok('and that machine is not on the missed list', await (async () => {
-    await p.click('#dueScopeF [data-sc="over"]'); await p.waitForTimeout(300);
-    return !/DZ004/.test(await p.textContent('#dueList'));
-  })());
-
-  console.log('\nthe counts do not repeat themselves under the pills');
-  const basis = (await p.textContent('#dueBasis')).trim();
-  ok('the basis line says what a count cannot', /20 h\/day/.test(basis), basis);
-  ok('and does not restate the pills', !/\d+ missed/.test(basis), basis);
+     /DZ004/.test(txt) && /low-loader/.test(txt), txt.replace(/\s+/g, ' ').trim().slice(0, 200));
+  ok('and that machine is not counted as missed',
+     !(await p.evaluate(() => dueRows('').filter(dueCmToday).map(r => r.unit))).includes('DZ004'));
 
   console.log('\nRussian');
   await p.evaluate(() => { lang = 'ru'; applyLang(); renderDue(); });
   await p.waitForTimeout(300);
   const ruTabs = await p.$$eval('#tabbar button', a => a.map(x => x.textContent.replace(/\s+/g, ' ').trim()));
   ok('the new tab is translated', /[А-Яа-я]/.test(ruTabs[1] || ''), ruTabs.join(' | '));
-  const ruSc = await pills(p, '#dueScopeF');
-  ok('and so are the pills', ruSc.every(x => /[А-Яа-я]/.test(x.txt)), ruSc.map(x => x.txt).join(' | '));
-  ok('with the counts still on them', ruSc.every(x => x.n >= 0));
+  const ruSpan = await pills(p, '#dueSpanF');
+  ok('and so are the span pills', ruSpan.every(x => /[А-Яа-я]/.test(x.txt)), ruSpan.map(x => x.txt).join(' | '));
+  ok('with the counts still on them', ruSpan.every(x => x.n >= 0));
   await p.evaluate(() => { lang = 'en'; applyLang(); renderDue(); });
 
   console.log('\nthe screen fits the phone it is read on');
@@ -221,15 +199,15 @@ const rows = p => p.$$eval('#dueList .duerow', a => a.length);
     const over = await p.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
     ok(tag + ': the page does not scroll sideways', over <= 0, over + ' px over');
     /* The pills scroll INSIDE their own row; that is the point of the row. */
-    const small = await p.$$eval('#dueScopeF button, #dueTypeF button, #tabbar button',
+    const small = await p.$$eval('#dueSpanF button, #dueTypeF button, #tabbar button',
       a => a.map(x => x.getBoundingClientRect())
             .filter(r => r.height < 44 && r.height > 0).length);
     ok(tag + ': nothing a gloved thumb must hit is under 44 px', small === 0, small + ' too small');
     const lines = await p.evaluate(() => {
-      const r = [...document.querySelectorAll('#dueScopeF button')].map(b => Math.round(b.getBoundingClientRect().top));
+      const r = [...document.querySelectorAll('#dueSpanF button')].map(b => Math.round(b.getBoundingClientRect().top));
       return new Set(r).size;
     });
-    ok(tag + ': the scope pills stay on one line', lines === 1, lines + ' line(s)');
+    ok(tag + ': the span pills stay on one line', lines === 1, lines + ' line(s)');
   }
 
   console.log(fails.length ? '\nFAILURES:\n  ' + [...new Set(fails)].join('\n  ')

@@ -434,6 +434,18 @@ def build_rtw_open(work_orders, cm_dedup):
     # stays null there rather than guessed, and `type` falls back to the
     # defect's own system/description -- the same "say what is known, never
     # what is guessed" rule this file applies everywhere else.
+    #
+    # `status`/`request`/`defType`/`cause` were added for the phone's own
+    # "1C PM" list (mobile/index.html) -- a mechanic tapping a row wants the
+    # same office-side facts the dashboard's Defect work orders panel already
+    # shows (CM_FIELDS, above): the CMMS status 1C itself tracks, the work
+    # REQUEST number (not the work order number -- the request is raised
+    # before a WO exists and is what an inspector actually wrote on the
+    # defect), the defect's own type code, and its cause -- already resolved
+    # upstream, in CM_FIELDS["cause"]'s own order (work order, then request,
+    # then certification), so this does not re-decide that question, only
+    # carries the answer through. A planned PM service is not a defect and
+    # has none of these; they stay "" rather than borrowed from anywhere.
     seen, out = set(), []
     for w in work_orders:
         wo = w.get("woNumber")
@@ -446,6 +458,7 @@ def build_rtw_open(work_orders, cm_dedup):
             "priority": w.get("priority") or "", "raised": w.get("planStart") or "",
             "type": w.get("maintType") or w.get("cmLabel") or "",
             "hours": w.get("hours"), "plan": w.get("planStart") or "",
+            "status": w.get("cmmsStatus") or "", "request": "", "defType": "", "cause": "",
         })
     for r in cm_dedup:
         wo = r.get("woNumber")
@@ -458,6 +471,8 @@ def build_rtw_open(work_orders, cm_dedup):
             "priority": r.get("priority") or "", "raised": r.get("date") or "",
             "type": r.get("defectType") or r.get("system") or "",
             "hours": None, "plan": r.get("planStart") or "",
+            "status": r.get("status") or "", "request": r.get("requestNo") or "",
+            "defType": r.get("defectType") or "", "cause": r.get("cause") or "",
         })
     out.sort(key=lambda r: r["raised"] or "", reverse=True)
     return out

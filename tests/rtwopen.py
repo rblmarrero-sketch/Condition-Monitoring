@@ -27,7 +27,8 @@ def ok(name, cond, detail=""):
 WORK_ORDERS = [
     {"woNumber": "WO-016635", "equip": "TK112", "cls": "HT", "open": True,
      "cmLabel": "4000h service", "maintType": "4000 Hours service Planned",
-     "priority": "P3 Planned (PM)", "planStart": "2026-09-18", "hours": 4000},
+     "priority": "P3 Planned (PM)", "planStart": "2026-09-18", "hours": 4000,
+     "cmmsStatus": "Released"},
     # Not open -- must be excluded.
     {"woNumber": "WO-000001", "equip": "TK500", "cls": "HT", "open": False,
      "cmLabel": "1000h service", "maintType": "1000 Hours service Planned",
@@ -40,7 +41,8 @@ WORK_ORDERS = [
 CM_DEDUP = [
     {"woNumber": "WO-016620", "asset": "TK126", "system": "Frame / guards",
      "descr": "Abnormal wear", "defectType": "2.1", "priority": "P2 Severe",
-     "status": "In Progress", "date": "2026-09-19"},
+     "status": "In Progress", "date": "2026-09-19",
+     "requestNo": "DR-000412", "cause": "Fatigue cracking"},
     # Still Registered, no work order number yet -- must be excluded.
     {"woNumber": None, "asset": "TK900", "system": "Boom",
      "descr": "Crack reported", "defectType": "1.1", "priority": "P3",
@@ -70,17 +72,21 @@ ok("a planned service with no work order number is excluded", "TK777" not in {r[
 ok("a defect still Registered with no work order number is excluded", "TK900" not in {r["equip"] for r in rows})
 ok("a CLOSED defect is excluded, case-insensitively", "WO-000002" not in by_wo)
 ok("a Completed defect is excluded", "WO-000003" not in by_wo)
-ok("a planned service keeps its own shape, now with its type/hours/schedule",
+ok("a planned service keeps its own shape, now with its type/hours/schedule "
+   "and the office's own CMMS status -- but no defect fields, since it isn't one",
    by_wo.get("WO-016635") == {
        "wo": "WO-016635", "equip": "TK112", "cls": "HT", "comp": "",
        "desc": "4000h service", "priority": "P3 Planned (PM)", "raised": "2026-09-18",
        "type": "4000 Hours service Planned", "hours": 4000, "plan": "2026-09-18",
+       "status": "Released", "request": "", "defType": "", "cause": "",
    }, str(by_wo.get("WO-016635")))
-ok("a defect work order keeps its own shape -- no hour tier, since a defect isn't one",
+ok("a defect work order keeps its own shape -- no hour tier, since a defect isn't one -- "
+   "and now carries its status, work REQUEST number, type and cause",
    by_wo.get("WO-016620") == {
        "wo": "WO-016620", "equip": "TK126", "cls": "", "comp": "Frame / guards",
        "desc": "Abnormal wear", "priority": "P2 Severe", "raised": "2026-09-19",
        "type": "2.1", "hours": None, "plan": "",
+       "status": "In Progress", "request": "DR-000412", "defType": "2.1", "cause": "Fatigue cracking",
    }, str(by_wo.get("WO-016620")))
 ok("a work order number seen once is never repeated by a later, colliding row",
    sum(1 for r in rows if r["wo"] == "WO-016635") == 1)

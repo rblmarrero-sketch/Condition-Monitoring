@@ -92,41 +92,57 @@ const R = f => fs.readFileSync(path.join(__dirname, "..", f), "utf8");
 
   const b = await chromium.launch();
 
-  console.log("\n4. THE PHONE: THE FORTNIGHT HAS THE LIST'S SIDE MENU");
+  console.log("\n4. THE PHONE: THE MERGED CM AGENDA HAS THE MENU");
+  /* The Overdue/Due soon "List" and the 1C-schedule "Two Weeks" agenda this
+     section was written against are both retired, replaced by ONE merged CM
+     agenda (tests/duecm.cjs) — asked for by name, "one merged agenda,
+     color-coded" — so there is no longer a second view for .dueforget to be
+     "the same control" as; there is exactly one now, on the one screen. What
+     survives, unchanged, is the dialog and disabled-button mechanics below,
+     which this file is actually about. */
   const p = await b.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
   const perr = []; p.on("pageerror", e => perr.push(e.message));
-  await p.addInitScript(() => { localStorage.setItem("cm_lang", "en"); localStorage.setItem("cm_due_view", "week"); });
+  await p.addInitScript(() => {
+    localStorage.setItem("cm_lang", "en");
+    localStorage.setItem("cm_due_view", "cm");
+    const ago = n => new Date(Date.now() - n * 864e5).toISOString().slice(0, 10);
+    /* MP is 250 h = 12.5 d at the fleet rate; both machines are well past it. */
+    localStorage.setItem("cm_hist", JSON.stringify({
+      "MP|TK146": { d: ago(30), h: 9000 }, "MP|TK147": { d: ago(28), h: 9000 },
+    }));
+    localStorage.setItem("cm_hist_at", JSON.stringify({ at: Date.now(), n: 1 }));
+  });
   await p.goto(BASE + "/mobile/index.html", { waitUntil: "load" });
   await p.waitForTimeout(1800);
-  /* A schedule of this phone's own, so the fortnight has rows to draw
-     whatever the fixture folder happens to hold. */
   const seeded = await p.evaluate(() => {
-    const iso = d => new Date(Date.now() + d * 864e5).toISOString().slice(0, 10);
-    SCHED = { generated: new Date().toISOString(), byUnit: {
-      TK146: [{ plan: iso(0), wo: "WO-000001", hours: 250, priority: "P2", types: ["MP"] }],
-      TK147: [{ plan: iso(1), wo: "WO-000002", hours: 250, priority: "P2", types: ["MP"] }],
-    } };
-    showPane("paneDue"); dueView = "week"; dueSpan = "all"; renderDue();
-    return document.querySelectorAll("#dueWeekList .agitem").length;
+    /* Never-inspected register machines have no dueforget button of their
+       own (nothing to defer on a round nobody has started) — zeroing ASSETS
+       isolates the two deliberately-aged rows this file is actually about
+       from the whole fleet's never-inspected rows, the same technique
+       tests/histage.cjs's emptyPure uses. */
+    ASSETS.length = 0;
+    showPane("paneDue"); dueView = "cm"; dueSpan = "all"; renderDue();
+    return document.querySelectorAll("#dueCmList .dueitem").length;
   });
-  ok("the fortnight draws rows", seeded >= 2, seeded + " row(s)");
+  ok("the agenda draws rows", seeded >= 2, seeded + " row(s)");
   const menus = await p.evaluate(() => ({
-    rows: document.querySelectorAll("#dueWeekList .agrow").length,
-    menus: document.querySelectorAll("#dueWeekList .dueforget").length,
-    label: (document.querySelector("#dueWeekList .dueforget") || {}).getAttribute
-      ? document.querySelector("#dueWeekList .dueforget").getAttribute("aria-label") : "",
+    rows: document.querySelectorAll("#dueCmList .duerow").length,
+    menus: document.querySelectorAll("#dueCmList .dueforget").length,
+    label: (document.querySelector("#dueCmList .dueforget") || {}).getAttribute
+      ? document.querySelector("#dueCmList .dueforget").getAttribute("aria-label") : "",
   }));
   ok("every row has one", menus.menus === menus.rows && menus.rows >= 2,
      menus.menus + " menu(s) on " + menus.rows + " row(s)");
   ok("  and it is named for a screen reader", !!menus.label, menus.label);
-  /* The same control as the List's — one name, so the two views cannot come
-     to mean different things by the same press. */
-  ok("  it is the same control the List uses",
-     (mobRaw.match(/class="dueforget"/g) || []).length >= 2,
-     (mobRaw.match(/class="dueforget"/g) || []).length + " uses of .dueforget");
+  /* One template now renders every row on the one screen — the count that
+     used to prove "the same control as the List's" (two uses, one per view)
+     instead proves there is only the one view left to duplicate it. */
+  ok("  one dueforget template serves the one screen, not two copies of it",
+     (mobRaw.match(/class="dueforget"/g) || []).length === 1,
+     (mobRaw.match(/class="dueforget"/g) || []).length + " use(s) of .dueforget");
 
   console.log("\n5. IT OPENS THE SAME DIALOG, WITH THE TEN IN IT");
-  await p.evaluate(() => document.querySelector("#dueWeekList .dueforget").click());
+  await p.evaluate(() => document.querySelector("#dueCmList .dueforget").click());
   await p.waitForTimeout(400);
   const dlg = await p.evaluate(() => ({
     open: document.getElementById("dueDlg").open,
@@ -192,7 +208,7 @@ const R = f => fs.readFileSync(path.join(__dirname, "..", f), "utf8");
      must LOOK unpressable rather than silently refuse a real press, and a
      real press is what this asserts — page.click(), which fails the way a
      finger does when the element cannot be interacted with. */
-  await p.evaluate(() => document.querySelector('#dueWeekList [data-f="TK147"]').click());
+  await p.evaluate(() => document.querySelector('#dueCmList [data-f="TK147"]').click());
   await p.waitForTimeout(300);
   ok("the dialog opens on the second row", await p.evaluate(() => document.getElementById("dueDlg").open));
   /* THE BUTTON SAYS WHAT IT WILL DO, NOT JUST "OK". Read off the field
@@ -251,14 +267,14 @@ const R = f => fs.readFileSync(path.join(__dirname, "..", f), "utf8");
      no visible sign the round had been answered at all. */
   const agenda = await p.evaluate(() => ({
     span: document.getElementById("dueSpanF").textContent.replace(/\s+/g, " "),
-    stillOnScreen: !!document.querySelector('#dueWeekList [data-u="TK147"]'),
-    rowClasses: (document.querySelector('#dueWeekList [data-u="TK147"]') || {}).className || "",
-    rowText: (document.querySelector('#dueWeekList [data-u="TK147"]') || {}).textContent
+    stillOnScreen: !!document.querySelector('#dueCmList [data-u="TK147"]'),
+    rowClasses: (document.querySelector('#dueCmList [data-u="TK147"]') || {}).className || "",
+    rowText: (document.querySelector('#dueCmList [data-u="TK147"]') || {}).textContent
       .replace(/\s+/g, " ") || "",
   }));
   ok("the round is not silently dropped — it is still on the agenda",
      agenda.stillOnScreen, agenda.rowText);
-  ok("  visibly marked as answered, not outstanding", /deferred/.test(agenda.rowClasses),
+  ok("  visibly marked as answered, not outstanding", /\boff\b/.test(agenda.rowClasses),
      agenda.rowClasses);
   ok("  with the reason on the row, the same as the flat List prints its own",
      /no access, gate locked/.test(agenda.rowText), agenda.rowText);

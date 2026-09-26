@@ -64,7 +64,7 @@ async function phone(b, seed) {
   return { ctx, p };
 }
 const src = p => p.evaluate(() => histSources());
-const note = p => p.evaluate(() => (document.getElementById('dueBasis') || {}).textContent || '');
+const note = p => p.evaluate(() => (document.getElementById('dueStrayNote') || {}).textContent || '');
 const btn = p => p.evaluate(() => !document.getElementById('dueOnly').classList.contains('hidden'));
 
 (async () => {
@@ -185,10 +185,16 @@ const btn = p => p.evaluate(() => !document.getElementById('dueOnly').classList.
     const today = new Date().toISOString().slice(0, 10);
     const a = await phone(b, { offline: true,
       hist: { 'MP|TK001': { d: today, s: 'f' }, 'MP|BS001': { d: today } } });
-    await a.p.evaluate(() => { dueScope = 'over'; renderDue(); });
+    /* The merged CM tab folds in every never-inspected register machine too,
+       so ASSETS is zeroed to isolate "nothing overdue" from "the fleet
+       register still proposes hundreds of never-walked machines regardless"
+       — see tests/histage.cjs's emptyPure for the same reasoning. dueScope is
+       retired (no UI reads it any more; planRows()/scheduleCompareRows() are
+       tested directly elsewhere), so it is dropped rather than set here. */
+    await a.p.evaluate(() => { ASSETS.length = 0; renderDue(); });
     await a.p.waitForTimeout(300);
     ok('the list really is empty',
-       await a.p.evaluate(() => !!document.querySelector('#dueList .empty')));
+       await a.p.evaluate(() => !!document.querySelector('#dueCmList .empty')));
     ok('and the stray is still counted', await a.p.evaluate(() => histStrays()) === 1);
     ok('the cleanup is offered anyway', await btn(a.p));
     await a.p.click('#dueOnly');
@@ -208,12 +214,15 @@ const btn = p => p.evaluate(() => !document.getElementById('dueOnly').classList.
     const a = await phone(b, {});
     await a.p.click('#dueFull');
     await a.p.waitForTimeout(2800);
-    await a.p.evaluate(() => { dueScope = 'over'; renderDue(); });
+    /* dueScope is retired — renderDue() no longer reads it — and both tabs'
+       lists are built on every render regardless of which is visible, so
+       #dueCmList below is already populated without switching to it. */
+    await a.p.evaluate(() => { renderDue(); });
     await a.p.waitForTimeout(300);
     const find = async q => { await a.p.fill('#dueFind', q); await a.p.waitForTimeout(300);
       return a.p.evaluate(() => ({
         msg: document.getElementById('dueFindMsg').textContent,
-        rows: [...document.querySelectorAll('#dueList .dueitem')]
+        rows: [...document.querySelectorAll('#dueCmList .dueitem')]
                 .map(r => ({ u: r.dataset.u, t: r.dataset.t,
                              txt: r.textContent.replace(/\s+/g, ' ').trim() })) })); };
     const known = await a.p.evaluate(() => (neverRows('')[0] || {}).unit || '');

@@ -77,7 +77,8 @@ const pane = p => p.evaluate(() => [...document.querySelectorAll('main > .pane')
 
   await p.click('#tabbar [data-pane="paneDue"]');
   await p.waitForTimeout(200);
-  ok('the due list is a screen of its own now', await vis(p, '#dueList'));
+  ok('the due list is a screen of its own now',
+     (await vis(p, '#duePmWrap')) || (await vis(p, '#dueCmWrap')));
   ok('and nothing else is on it', JSON.stringify(await pane(p)) === '["paneDue"]');
 
   await p.click('#tabbar [data-pane="paneSystem"]');
@@ -171,7 +172,8 @@ const pane = p => p.evaluate(() => [...document.querySelectorAll('main > .pane')
      to the machine with the form open — on its own tab now, beside the archive
      rather than buried under it. */
   await p.click('#tabbar [data-pane="paneDue"]'); await p.waitForTimeout(300);
-  const dueRow = await p.$('#dueList [data-u]');
+  await p.click('#dueViewCM'); await p.waitForTimeout(300);
+  const dueRow = await p.$('#dueCmList [data-u]');
   ok('the due list offers a unit to go and inspect', !!dueRow);
   if (dueRow) {
     const want = await dueRow.getAttribute('data-u');

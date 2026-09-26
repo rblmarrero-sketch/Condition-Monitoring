@@ -171,7 +171,7 @@ const OFFICE_RUN = `(async function(){
   const P = await m.evaluate(() => {
     const T = {}; const time = (k, f) => { const t0 = performance.now(); f(); T[k] = Math.round(performance.now() - t0); };
     time("due", () => { showPane("paneDue"); });
-    T.dueRows = document.querySelectorAll("#dueList .duerow, #dueList tr, #dueList .row").length;
+    T.dueRows = document.querySelectorAll("#paneDue .duerow, #paneDue tr, #paneDue .row").length;
     showPane("paneCapture");
     const unit = (window.ASSETS || [])[500];
     time("pick", () => { selectEquip(unit && (unit.n || unit.u)); });
@@ -209,7 +209,7 @@ const OFFICE_RUN = `(async function(){
   console.log("\n4. AND THE PHONE DOES NOT DRAW THE FLEET IT KNOWS");
   const mb = await m.evaluate(() => {
     showPane("paneDue");
-    const due = document.querySelectorAll("#dueList *").length;
+    const due = document.querySelectorAll("#paneDue *").length;
     showPane("paneCapture");
     const sel = [...document.querySelectorAll("select")].map(s => s.options.length);
     return { due, opts: Math.max(...sel, 0), nodes: document.querySelectorAll("*").length };

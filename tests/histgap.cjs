@@ -75,7 +75,7 @@ async function phone(b, seed) {
 const missed = p => p.evaluate(() => dueRows('').filter(r => r.st === 'over').length);
 const badge = p => p.evaluate(() => { const el = document.getElementById('tabD');
   return el.className.indexOf('hidden') >= 0 ? '' : el.textContent.trim(); });
-const note = p => p.evaluate(() => (document.getElementById('dueBasis') || {}).textContent || '');
+const note = p => p.evaluate(() => (document.getElementById('dueStrayNote') || {}).textContent || '');
 const histKeys = p => p.evaluate(() => Object.keys(JSON.parse(localStorage.getItem('cm_hist') || '{}')));
 
 (async () => {
@@ -293,7 +293,7 @@ const histKeys = p => p.evaluate(() => Object.keys(JSON.parse(localStorage.getIt
     ok('and says what it changed, counted in machines',
        msg === await say(pg, 'due_full_ok', { n: after - before, m: after }), msg);
     ok('the list is redrawn from it',
-       (await pg.evaluate(() => (document.getElementById('dueBasis') || {}).textContent || ''))
+       (await pg.evaluate(() => (document.getElementById('dueStrayNote') || {}).textContent || ''))
          .includes(await say(pg, 'due_cover', { n: after, m: 1128 })));
     await pg.click('#dueFull');
     await pg.waitForTimeout(2600);
@@ -354,7 +354,7 @@ const histKeys = p => p.evaluate(() => Object.keys(JSON.parse(localStorage.getIt
        JSON.stringify(folder));
     /* Silent while they agree: a number that never changes is furniture. */
     ok('and says nothing while the phone has all of it',
-       !(await pg.evaluate(() => (document.getElementById('dueBasis') || {}).textContent || ''))
+       !(await pg.evaluate(() => (document.getElementById('dueStrayNote') || {}).textContent || ''))
          .includes('missing'));
     /* A read that did not cover the folder knows a prefix, and must never
        report it as the whole - or the phone would announce it is behind a
@@ -381,13 +381,13 @@ const histKeys = p => p.evaluate(() => Object.keys(JSON.parse(localStorage.getIt
     });
     await pg.waitForTimeout(300);
     const n = await pg.evaluate(() => Object.keys(histAll()).length);
-    const line = await pg.evaluate(() => (document.getElementById('dueBasis') || {}).textContent || '');
+    const line = await pg.evaluate(() => (document.getElementById('dueStrayNote') || {}).textContent || '');
     /* THE LINE THAT ENDS THE ARGUMENT — a statement this phone can make on its
        own, with no second phone to compare against. */
     ok('and names the shortfall the moment they part company',
        line.includes(await say(pg, 'due_behind', { n: gone, f: folder.p, m: n })), line.slice(-90));
     ok('with the note marked as a warning',
-       await pg.evaluate(() => document.getElementById('dueBasis').classList.contains('warn')));
+       await pg.evaluate(() => document.getElementById('dueStrayNote').classList.contains('warn')));
     await ctx.close();
   }
 

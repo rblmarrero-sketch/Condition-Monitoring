@@ -74,15 +74,19 @@ const reset = q => fetch(BASE + '/__reset' + (q || '')).then(r => r.text());
   const hist = await p.evaluate(() => Object.keys(histAll()).length);
   ok('team inspections feed the last-done index', hist === 25, `${hist} entries`);
   // At the 90-day MP interval nothing from this month is actually due yet, so an
-  // empty "overdue & due soon" list is the correct answer — switch to "all units
-  // with history" to prove the team's rounds really did land in it.
+  // empty This day/All 14 days list is the correct answer — dueRows('') still
+  // returns an "ok" (comfortably not due) row for every unit with history, and
+  // the CM tab's search reaches every state, so searching is what proves the
+  // team's rounds really did land in it (the old "all units" scope pill this
+  // suite used is retired — see tests/duecm.cjs).
   await p.evaluate(() => showPane('paneSystem'));
-  /* A pill now, not a dropdown — pressed the way an inspector would. */
   await p.evaluate(() => showPane('paneDue'));
-  await p.click('#dueScopeF [data-sc="all"]'); await p.waitForTimeout(300);
-  const dueTxt = await p.textContent('#dueList');
+  await p.click('#dueViewCM'); await p.waitForTimeout(200);
+  await p.fill('#dueFind', 'TK1'); await p.waitForTimeout(300);
+  const dueTxt = await p.textContent('#dueCmList');
   ok('team rounds appear in the due list', /TK1\d\d/.test(dueTxt) && !/Nothing due/.test(dueTxt),
      dueTxt.trim().replace(/\s+/g, ' ').slice(0, 70));
+  await p.fill('#dueFind', ''); await p.waitForTimeout(200);
 
   console.log('\nstanding at a unit someone else just did');
   await p.evaluate(() => selectEquip('TK105'));
@@ -118,8 +122,11 @@ const reset = q => fetch(BASE + '/__reset' + (q || '')).then(r => r.text());
   ok('the team list still shows from cache', (await p.evaluate(() => teamAll().length)) === 26,
      String(await p.evaluate(() => teamAll().length)));
   ok('and is rendered, not blank', /TK1\d\d/.test(await p.textContent('#teamList')));
-  ok('the due list still works offline', /TK1\d\d/.test(await p.textContent('#dueList')),
-     (await p.textContent('#dueList')).trim().replace(/\s+/g, ' ').slice(0, 60));
+  await p.evaluate(() => showPane('paneDue'));
+  await p.fill('#dueFind', 'TK1'); await p.waitForTimeout(300);
+  ok('the due list still works offline', /TK1\d\d/.test(await p.textContent('#dueCmList')),
+     (await p.textContent('#dueCmList')).trim().replace(/\s+/g, ' ').slice(0, 60));
+  await p.fill('#dueFind', ''); await p.waitForTimeout(200);
   await p.evaluate(() => showPane('paneSystem'));
   await p.click('#teamRefresh'); await p.waitForTimeout(400);
   ok('refresh says offline rather than failing', /Offline/.test(await p.textContent('#teamMsg')),

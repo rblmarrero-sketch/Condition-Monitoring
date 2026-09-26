@@ -215,10 +215,10 @@ const mk = `((id,ty,u,d,smu,pos)=>({id,type:ty,equip:u,date:d,by:'S. Volkov',sup
     histSave(JSON.parse(localStorage.getItem('cm_hist')));
     const s = document.getElementById('typeSel'); s.value = 'MP'; s.dispatchEvent(new Event('change'));
     await new Promise(r => setTimeout(r, 300));
-    showPane('paneDue'); renderDue();
+    showPane('paneDue'); dueView = 'cm'; renderDue();
     await new Promise(r => setTimeout(r, 200));
     return { entry: histEntry(histAll()['MP|TK150']),
-             list: document.getElementById('dueList').textContent.replace(/\s+/g, ' ').trim() };
+             list: document.getElementById('dueCmList').textContent.replace(/\s+/g, ' ').trim() };
   });
   ok('an entry written by an older build still reads',
     old.entry && old.entry.d === '2026-07-20', JSON.stringify(old.entry));
@@ -228,7 +228,7 @@ const mk = `((id,ty,u,d,smu,pos)=>({id,type:ty,equip:u,date:d,by:'S. Volkov',sup
   const basis = await p.evaluate(async () => {
     dueType = 'MP';
     renderDue(); await new Promise(r => setTimeout(r, 150));
-    return document.getElementById('dueBasis').textContent;
+    return document.getElementById('dueIntervalNote').textContent;
   });
   /* Narrowed to one round, the line names its interval; across all of them it
      cannot, because they are not the same. The rate is stated either way — "in
@@ -236,20 +236,19 @@ const mk = `((id,ty,u,d,smu,pos)=>({id,type:ty,equip:u,date:d,by:'S. Volkov',sup
      the machine is assumed to run 20 hours a day. */
   ok('the interval and the assumed rate are on the screen',
     /250 h/.test(basis) && /20 h\/day/.test(basis), basis);
-  /* Widened to every round, the interval line drops the per-round figure — no
-     single interval covers eight round types — and the counting moves to the
-     pills, which carry one per state. */
+  /* Widened to every round, the interval line drops entirely — no single
+     interval covers eight round types — and the counting moves to the This
+     day/All 14 days span pill, which is what the tab's own badge counts too. */
   const all = await p.evaluate(async () => {
     dueType = '';
     renderDue(); await new Promise(r => setTimeout(r, 150));
-    return { basis: document.getElementById('dueBasis').textContent,
-             pills: [...document.querySelectorAll('#dueScopeF button')]
+    return { basis: document.getElementById('dueIntervalNote').textContent,
+             pills: [...document.querySelectorAll('#dueSpanF button')]
                       .map(b => b.textContent.replace(/\s+/g, ' ').trim()) };
   });
-  const I18Nover = await p.evaluate(() => I18N.en.due_missed);
+  ok('the interval line is silent across every round', all.basis === '', JSON.stringify(all.basis));
   ok('and across every round it counts what was missed instead',
-    all.pills.some(x => new RegExp('^' + I18Nover + ' ?\\d').test(x)) && /20 h\/day/.test(all.basis),
-    all.pills.join(' | ') + '  —  ' + all.basis);
+    all.pills.some(x => /^Today ?\d/.test(x)), all.pills.join(' | '));
 
   console.log('\n  the second measurement brings the round forward');
   const wear = await p.evaluate(async ([MK]) => {
@@ -278,7 +277,7 @@ const mk = `((id,ty,u,d,smu,pos)=>({id,type:ty,equip:u,date:d,by:'S. Volkov',sup
     renderDue();
     await new Promise(r => setTimeout(r, 200));
     return { last, plain, withF,
-             list: document.getElementById('dueList').textContent.replace(/\s+/g, ' ').trim() };
+             list: document.getElementById('dueCmList').textContent.replace(/\s+/g, ' ').trim() };
   }, [mk]);
 
   ok('a round with two measurements records what it forecast',

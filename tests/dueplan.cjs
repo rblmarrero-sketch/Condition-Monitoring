@@ -7,23 +7,27 @@
    a calendar: fifteen day-columns, no search, no sort by urgency. Reported
    from the field as "still 0 in the list" while 1C had 139 waiting.
 
-   So 1C's plan gets a scope of its own. What this suite is really guarding
-   is that it stays a SEPARATE population:
+   The "1C plan" pill this scope lived behind is gone from the Due tab's own
+   UI now — 1C's own data has a first-class tab of its own ("1C PM", built
+   from SCHED.rtwOpen, see tests/duepm.cjs) and the CM tab's merged agenda
+   never mixed CM's own judgement with 1C's, so there is nothing left on
+   screen to click through to planRows()'s own output. planRows() itself is
+   UNCHANGED — nothing about its logic moved — so what remains worth testing
+   here is asserted directly against the function, the way this project's own
+   rules ask for ("ask the app, not keep your own copy") rather than through
+   a control that no longer exists:
 
-   1. THE OTHER COUNTS DO NOT MOVE. Overdue, Due soon, Never inspected and
-      All are statements about CM's own programme. If adding 1C's plan
-      changes any of them, two different questions are being answered by one
-      number and neither can be trusted afterwards.
-   2. IT IS REAL WORK, NOT A COPY OF THE WORK-ORDER FILE. A round already
+   1. IT IS REAL WORK, NOT A COPY OF THE WORK-ORDER FILE. A round already
       walked since 1C asked for it is not work and must not be listed; a
       round the site has taken off a machine is never proposed here either,
       or the KAMAZ exclusion holds everywhere except the screen an inspector
       reads first.
-   3. ONE ROW PER MACHINE AND ROUND. Two work orders in the window can
+   2. ONE ROW PER MACHINE AND ROUND. Two work orders in the window can
       resolve to the same round — the 1,000 h and the 4,000 h both carry the
       filter cut — and a list that counts one round twice cannot be counted.
-   4. AND IT SAYS WHOSE IT IS. A row with no last-done date and no clock
-      that looked like CM's own judgement would be the worst of both.
+   3. A ROUND AN INSPECTOR HAS DEFERRED IS NOT PROPOSED AS 1C'S PLAN EITHER —
+      the identical gap the KAMAZ hold-off check above was written for, one
+      function over.
 
    Run: node tests/dueplan.cjs   (starts its own server) */
 const http = require('http');
@@ -80,17 +84,15 @@ const server = http.createServer((req, res) => {
     /* TK003's plug round was walked two days ago, after 1C asked for it. */
     localStorage.setItem('cm_hist', JSON.stringify(h));
     localStorage.setItem('cm_hist_at', JSON.stringify({ at: Date.now(), n: 1 }));
-    /* The agenda is what fetches the schedule; the List alone does not. */
-    localStorage.setItem('cm_due_view', 'week');
   }, { ['MP|TK003']: { d: day(-2), h: '5000' } });
   await p.goto(`http://127.0.0.1:${PORT}/mobile/index.html`, { waitUntil: 'load' });
   await p.waitForFunction(() => (document.getElementById('verNum') || {}).textContent !== '?', null, { timeout: 20000 });
   await p.evaluate(() => showPane('paneDue'));
-  /* NOT window.SCHED — a top-level let is not a property of window. */
+  /* NOT window.SCHED — a top-level let is not a property of window. Both Due
+     tabs fetch the schedule unconditionally now (renderDue()'s own SCHED
+     kick), so simply opening the pane is enough to populate it. */
   await p.waitForFunction(() => typeof SCHED !== 'undefined' && SCHED && SCHED.byUnit && SCHED.byUnit.TK001,
     null, { timeout: 25000 });
-  await p.evaluate(() => { dueView = 'list'; lsSet('cm_due_view', 'list'); renderDue(); });
-  await p.waitForTimeout(400);
 
   console.log('\n1. WHAT 1C HAS ASKED FOR, AND ONLY THAT');
   const rows = await p.evaluate(() => planRows('').map(r => r.unit + '|' + r.ty + '|' + r.plan));
@@ -131,66 +133,7 @@ const server = http.createServer((req, res) => {
      km && km.onAny.length === 0 && km.got.length === 0,
      km && 'still on ' + JSON.stringify(km.onAny));
 
-  console.log('\n3. THE OTHER COUNTS DO NOT MOVE');
-  const counts = await p.evaluate(() => {
-    const pills = {};
-    document.querySelectorAll('#dueScopeF [data-sc]').forEach(b => {
-      pills[b.dataset.sc] = Number((b.querySelector('.n') || {}).textContent || '0');
-    });
-    return { pills,
-             over: dueRows('').filter(r => r.st === 'over').length,
-             never: neverRows('').length,
-             all: dueRows('').length + neverRows('').length,
-             plan: planRows('').length };
-  });
-  ok('there is a 1C plan pill and it counts the planned rounds',
-     counts.pills.plan === counts.plan && counts.plan > 0,
-     JSON.stringify(counts.pills));
-  ok('  All still counts CM\'s own rows only — 1C is not folded in',
-     counts.pills.all === counts.all, counts.pills.all + ' vs ' + counts.all);
-  ok('  Overdue still means overdue against CM\'s own programme',
-     counts.pills.over === counts.over, counts.pills.over + ' vs ' + counts.over);
-
-  console.log('\n4. AND THE LIST SAYS WHOSE PLAN IT IS');
-  const shown = await p.evaluate(() => {
-    const b = [...document.querySelectorAll('#dueScopeF [data-sc]')].find(x => x.dataset.sc === 'plan');
-    if (!b) return null;
-    b.click();
-    return null;
-  });
-  await p.waitForTimeout(400);
-  const list = await p.evaluate(() => ({
-    n: document.querySelectorAll('#dueList .duerow').length,
-    texts: [...document.querySelectorAll('#dueList .duerow')].map(r => r.innerText.replace(/\s+/g, ' ').trim()),
-  }));
-  ok('pressing the pill shows those rounds', list.n === counts.plan, list.n + ' rows');
-  ok('  every row names 1C rather than reading as CM\'s own judgement',
-     list.texts.length > 0 && list.texts.every(x => /1C|1С/.test(x)), list.texts[0]);
-  ok('  a row carries the work order and the date 1C wants it',
-     list.texts.some(x => /WO-0300/.test(x)), list.texts[0]);
-  const lateWord = await p.evaluate(() => t('due_week_late'));
-  ok('  and a plan date already gone is marked late',
-     list.texts.some(x => x.includes('TK002') && x.toLowerCase().includes(lateWord.toLowerCase())),
-     list.texts.find(x => x.includes('TK002')) || '(no TK002 row)');
-
-  console.log('\n5. SEARCH REACHES IT — AS ONE ROW PER ROUND, NOT TWO');
-  /* TK002's plug round is BOTH a round CM has never walked and a round 1C
-     wants on the 8th. The first version of this listed it twice — "no
-     inspection on record" and "1C asked for this" — which reads as two jobs
-     at one machine and is exactly how a round gets walked twice. */
-  await p.fill('#dueFind', 'TK002');
-  await p.waitForTimeout(600);
-  const found = await p.evaluate(() =>
-    [...document.querySelectorAll('#dueList .duerow')].map(r => r.innerText.replace(/\s+/g, ' ').trim()));
-  const mpRows = found.filter(x => /(^|\s)MP\s/.test(x) && x.includes('TK002'));
-  ok('the plug round appears once, not once per source', mpRows.length === 1,
-     mpRows.length + ' rows: ' + mpRows.join(' | '));
-  ok('  and that one row carries 1C\'s date without the tick being on',
-     mpRows[0] && /1C plan|план 1С|WO-030002/i.test(mpRows[0]), mpRows[0]);
-  ok('  the other rounds on the machine are still listed',
-     found.length > 1, found.length + ' rows');
-
-  console.log('\n6. A ROUND AN INSPECTOR HAS DEFERRED IS NOT PROPOSED AS 1C\'S PLAN EITHER');
+  console.log('\n3. A ROUND AN INSPECTOR HAS DEFERRED IS NOT PROPOSED AS 1C\'S PLAN EITHER');
   /* dueRows() and dueWeekRows() both ask deferOf()/deferState() before
      listing a round; planRows() -- the THIRD reader of the same schedule --
      never did, so "Not being done" recorded on the List went on being

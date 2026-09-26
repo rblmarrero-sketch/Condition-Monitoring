@@ -95,10 +95,10 @@ const post = body => fetch(B + '/exec', { method: 'POST',
   const due = await p.evaluate(async () => {
     const s = document.getElementById('typeSel'); s.value = 'MP'; s.dispatchEvent(new Event('change'));
     await new Promise(r => setTimeout(r, 300));
-    dueScope = 'all';
+    dueView = 'cm';
     showPane('paneDue'); renderDue();
     await new Promise(r => setTimeout(r, 200));
-    return document.getElementById('dueList').textContent.replace(/\s+/g, ' ').trim();
+    return document.getElementById('dueCmList').textContent.replace(/\s+/g, ' ').trim();
   });
   /* This section is headed "so the machine comes back onto the due list", and
      it used to assert the opposite — that TK146 VANISHED. That was the only

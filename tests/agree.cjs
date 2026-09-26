@@ -87,7 +87,7 @@ const shape = p => p.evaluate(() => ({
      number, which is the exact absence this line exists to catch. */
   seen:   new Set(neverRows().concat(dueRows()).map(r => r.unit)).size + unclassedCount()
           + (typeof heldOffCount === 'function' ? heldOffCount() : 0),
-  cover:  (document.getElementById('dueBasis').textContent.match(/covering (\d+) of/) || [])[1],
+  cover:  (document.getElementById('dueStrayNote').textContent.match(/covering (\d+) of/) || [])[1],
 }));
 
 (async () => {
@@ -130,8 +130,8 @@ const shape = p => p.evaluate(() => ({
      JSON.stringify(await dirty.p.evaluate(w => Object.keys(w).map(x =>
        x + '=' + ((histAll()[x] || {}).d || '-') + (((histAll()[x] || {}).d === w[x]) ? '' : ' WANTED ' + w[x])), want)));
   ok('and says how many it is declining to plan on',
-     /not in the system/.test(await dirty.p.evaluate(() => document.getElementById('dueBasis').textContent)),
-     (await dirty.p.evaluate(() => document.getElementById('dueBasis').textContent)).slice(-120));
+     /not in the system/.test(await dirty.p.evaluate(() => document.getElementById('dueStrayNote').textContent)),
+     (await dirty.p.evaluate(() => document.getElementById('dueStrayNote').textContent)).slice(-120));
   /* And the machines are still work. Declining to trust a date must never take
      a machine off the list — that is the same failure wearing the other face. */
   ok('every one of those machines is accounted for on both copies',

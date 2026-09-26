@@ -159,11 +159,20 @@ function dictKeys() {
      holding its own copy of a label is a second source of truth that drifts —
      six of them were found doing exactly that. */
   const say = (p, k, v) => p.evaluate(([k, v]) => t(k, v || undefined), [k, v]);
-  const note = p => p.evaluate(() => (document.getElementById('dueBasis') || {}).textContent || '');
-  const warn = p => p.evaluate(() => !!(document.getElementById('dueBasis') || {}).classList
-                                     && document.getElementById('dueBasis').classList.contains('warn'));
+  const note = p => p.evaluate(() => (document.getElementById('dueStrayNote') || {}).textContent || '');
+  const warn = p => p.evaluate(() => !!(document.getElementById('dueStrayNote') || {}).classList
+                                     && document.getElementById('dueStrayNote').classList.contains('warn'));
   const empty = p => p.evaluate(() => {
-    const e = document.querySelector('#dueList .empty'); return e ? e.textContent.trim() : null; });
+    const e = document.querySelector('#dueCmList .empty'); return e ? e.textContent.trim() : null; });
+  /* The merged CM tab folds never-inspected machines into the SAME list as
+     overdue ones now — asked for by name ("one merged agenda") — so a phone
+     with real history but nothing due is not actually EMPTY any more unless
+     the fleet register also has nothing to propose. ASSETS is what
+     neverRows() walks; zeroing it in this one tab is how the "truly nothing
+     to do" case is isolated from "every register machine reads as never
+     inspected", which is what an untouched register actually shows and is
+     not what this specific check is about. */
+  const emptyPure = async p => { await p.evaluate(() => { ASSETS.length = 0; renderDue(); }); return empty(p); };
 
   console.log('\na phone that has never heard from the fleet says so');
   {
@@ -180,7 +189,7 @@ function dictKeys() {
        not because the fleet is in good order. Those are different sentences
        and only one of them is reassuring. */
     const { ctx, p } = await mk({});
-    const e = await empty(p);
+    const e = await emptyPure(p);
     ok('the empty list explains that there is no history yet', e === await say(p, 'due_no_hist'), e);
     ok('it is not the reassuring one', e !== await say(p, 'due_empty'));
     ok('and it is not the row label for a machine never done', e !== await say(p, 'due_never'));
@@ -208,14 +217,14 @@ function dictKeys() {
     /* Fresh stamp, nothing due: this is the only case where "Nothing due" is
        a true statement, and it is the only case that may say it. */
     const { ctx, p } = await mk({ at: { at: Date.now() - 60000, n: 0 } });
-    const e = await empty(p);
+    const e = await emptyPure(p);
     ok('a fresh phone with nothing due may say nothing is due', e === await say(p, 'due_empty'), e);
     await ctx.close();
   }
   {
     const at = { at: Date.now() - 40 * 3600 * 1000, n: 0 };
     const { ctx, p } = await mk({ at });
-    const e = await empty(p);
+    const e = await emptyPure(p);
     ok('a stale phone with nothing due says when it last looked',
        e === await say(p, 'due_stale', { t: await say(p, 'hist_hr', { n: 40 }) }), e);
     await ctx.close();

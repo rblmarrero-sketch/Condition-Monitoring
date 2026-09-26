@@ -16,6 +16,18 @@
    So: every round in one list, worst first, counted; and a round that is not
    being done says so, with a reason, either put off to a date or not at all.
 
+   The separate Overdue/Due soon/Put off scope pills (#dueScopeF, #dueList)
+   this suite was originally written against are retired — folded into the
+   CM tab's own merged agenda (This day/All 14 days, tests/duecm.cjs) — but
+   the DEFER DIALOG itself (#dueForget → the reason sheet → OK disabled until
+   typed → "put off N days" vs "not at all") and the worst-first ordering
+   across every state at once are not covered by that suite's own smaller,
+   single-state fixture, and are kept here, adapted to the merged list.
+   ASSETS is zeroed once the fixture is seeded so the whole fleet's
+   never-inspected rows do not drown out the five deliberately-aged ones this
+   suite is actually about — see tests/histage.cjs's emptyPure for the same
+   technique.
+
    Run: node tests/duelist.cjs   (needs tests/ed-srv.cjs on 8093) */
 const { chromium } = require(require('./pw.cjs'));
 const PORT = Number(process.argv[2] || 8093);
@@ -49,7 +61,8 @@ const SEED = `(() => {
              'INSP|TK150':'${ago(57)}', 'TB|TK101':'${ago(250)}' });
   deferSave({}); smuSave({});
   dueType = '';
-  dueScope = 'over';
+  dueView = 'cm'; dueSpan = 'all';
+  ASSETS.length = 0;
   showPane('paneDue'); renderDue();
 })()`;
 
@@ -83,56 +96,43 @@ const SEED = `(() => {
   ok('the tray round is the most overdue of them', /^TB TK101/.test(all[0]), all[0]);
 
   console.log('\n  and it says how many were missed');
-  /* The count sits ON the control that filters to it. It used to be a sentence
-     under the controls — "7 missed · 3 due soon" — which answered "how bad is
-     it" in one place and "show me" in another, two taps apart. */
-  /* The labels, from the app's own dictionary — they have been "Missed" and
-     "Put off" and are "Overdue" and "Deferred"; the count is what matters. */
-  const L = await p.evaluate(() => ({ over: I18N.en.due_missed, soon: I18N.en.due_soon, put: I18N.en.due_putoff }));
-  const isOver = x => new RegExp('^' + L.over).test(x);
-  const pills = await p.$$eval('#dueScopeF button',
+  /* The count sits ON the control that filters to it — the This day/All 14
+     days span pill now, in place of the retired Overdue/Due soon pair, and
+     it is the same figure the tab badge carries. */
+  const spanPills = await p.$$eval('#dueSpanF button',
     a => a.map(b => b.textContent.replace(/\s+/g, ' ').trim()));
   ok('the count is on the screen, not left to be measured by eye',
-    pills.some(x => new RegExp('^' + L.over + ' ?\\d').test(x)) && pills.some(x => new RegExp('^' + L.soon + ' ?\\d').test(x)),
-    pills.join(' | '));
-  ok('and pressing one narrows the list to exactly what it counted',
-    await (async () => {
-      const n = Number((pills.find(isOver) || '').replace(/\D+/g, ''));
-      await p.click('#dueScopeF [data-sc="over"]'); await p.waitForTimeout(250);
-      const got = await p.$$eval('#dueList .duerow', a => a.length);
-      await p.click('#dueScopeF [data-sc="over"]'); await p.waitForTimeout(250);
-      return got === n;
-    })(), pills.find(isOver));
+    spanPills.some(x => /^Today ?\d/.test(x)), spanPills.join(' | '));
   const badge = await p.evaluate(() => document.getElementById('dueCount').textContent);
-  const nMissed = Number((pills.find(isOver) || '').replace(/\D+/g, ''));
-  /* One number, one meaning. The badge counted overdue-and-due-soon while the
-     tab beside it counted overdue, so the same card carried two totals for
-     itself and nothing said which was which. */
-  ok('and the badge says the same thing the tab does', Number(badge) === nMissed,
-    badge + ' vs ' + nMissed + ' missed');
+  const nToday = Number((spanPills.find(x => /^Today/.test(x)) || '').replace(/\D+/g, ''));
+  /* One number, one meaning: the badge, the pill and the app's own rule agree. */
+  const trueOver = await p.evaluate(() => dueRows('').filter(dueCmToday).length);
+  ok('and the badge says the same thing the pill does',
+    Number(badge) === nToday && nToday === trueOver, badge + ' vs ' + nToday + ' vs ' + trueOver);
 
   console.log('\n  narrowed to one round when that is what you want');
   const uc = await p.evaluate(async () => { dueType = 'UC';
     renderDue(); await new Promise(r => setTimeout(r, 150));
-    return [...document.querySelectorAll('.dueitem')].map(x => x.textContent.replace(/\s+/g, ' ').trim()); });
+    return [...document.querySelectorAll('#dueCmList .dueitem')].map(x => x.textContent.replace(/\s+/g, ' ').trim()); });
   ok('only that round is listed', uc.length && uc.every(r => /^UC /.test(r)), uc.join(' | ') || 'none');
   /* Undercarriage is 1,000 h on a dozer and 4,000 on an excavator now, so the
-     header names whichever the fixture's machine is walked on rather than one
+     line names whichever the fixture's machine is walked on rather than one
      figure that was wrong for half the fleet. */
   ok('and its own interval is named', /(1,?000|4,?000) h/.test(
-    await p.evaluate(() => document.getElementById('dueBasis').textContent)),
-    await p.evaluate(() => document.getElementById('dueBasis').textContent));
+    await p.evaluate(() => document.getElementById('dueIntervalNote').textContent)),
+    await p.evaluate(() => document.getElementById('dueIntervalNote').textContent));
   await p.evaluate(async () => { dueType = '';
     renderDue(); await new Promise(r => setTimeout(r, 150)); });
 
-  console.log('\n  "missed only" is the same list, without the ones still in hand');
-  const missed = await p.evaluate(async () => { dueScope = 'over';
+  console.log('\n  "This day" is the same list, without what is only coming up');
+  const missed = await p.evaluate(async () => { dueSpan = 'today';
     renderDue(); await new Promise(r => setTimeout(r, 150));
-    return [...document.querySelectorAll('.dueitem')].map(x => x.textContent.replace(/\s+/g, ' ').trim()); });
-  ok('every row on it is overdue', missed.length && missed.every(r => /overdue/.test(r)),
+    return [...document.querySelectorAll('#dueCmList .dueitem')].map(x => x.textContent.replace(/\s+/g, ' ').trim()); });
+  /* FC EX005 (9 d, inside its 25 d interval) is due soon, not yet overdue —
+     the one row in this fixture that "This day" must leave out. */
+  ok('every row on it is overdue, not merely coming up', missed.length && missed.every(r => /overdue/.test(r)),
     missed.length + ' rows');
-  await p.evaluate(async () => { dueScope = 'over';
-    renderDue(); await new Promise(r => setTimeout(r, 150)); });
+  ok('and the one only due soon is left out', !missed.some(r => /EX005/.test(r)), missed.join(' | '));
 
   console.log('\n  a round that is not being done says why');
   await p.evaluate(() => { document.getElementById('inspector').value = 'S. Volkov'; });
@@ -166,27 +166,20 @@ const SEED = `(() => {
   await p.waitForTimeout(300);
   const put = await p.evaluate(() => ({
     defer: JSON.parse(localStorage.getItem('cm_due_defer') || '{}'),
-    basis: document.getElementById('dueBasis').textContent,
-    pills: [...document.querySelectorAll('#dueScopeF button')]
-             .map(x => x.textContent.replace(/\s+/g, ' ').trim()),
-    rows: [...document.querySelectorAll('.dueitem')].map(x => x.textContent.replace(/\s+/g, ' ').trim()) }));
+    rows: [...document.querySelectorAll('#dueCmList .dueitem')].map(x => x.textContent.replace(/\s+/g, ' ').trim()) }));
   const d = put.defer['TB|TK101'];
   ok('the reason is kept', d && d.why === 'in the workshop, wheel motor out', JSON.stringify(d));
   ok('with who gave it and when', d && d.by === 'S. Volkov' && !!d.at, JSON.stringify(d));
   ok('and a date to come back on', d && /^\d{4}-\d{2}-\d{2}$/.test(d.until || ''), String(d && d.until));
-  ok('the machine leaves the working list', !put.rows.some(r => /TK101/.test(r)),
-    put.rows.length + ' rows');
-  /* Counted, not forgotten — and the count is a control. The whole reason for
-     asking for a reason is that somebody can find out later what was put off
-     and why, so the number is on the pill that shows them. */
-  ok('but it is still counted, as put off',
-    put.pills.some(x => new RegExp('^' + L.put + ' ?[1-9]').test(x)), put.pills.join(' | '));
-  const shown = await p.evaluate(async () => { dueScope = 'all';
-    renderDue(); await new Promise(r => setTimeout(r, 150));
-    const r = [...document.querySelectorAll('.dueitem')].find(x => /TK101/.test(x.textContent));
-    return r ? r.textContent.replace(/\s+/g, ' ').trim() : ''; });
-  ok('and the reason is on its row, not behind a tap',
-    /wheel motor out/.test(shown) && /S\. Volkov/.test(shown), shown.slice(0, 110));
+  /* The merged agenda never drops a put-off round the way the old "working
+     list" scope did — it is shown with its reason attached, on the spot,
+     the same principle tests/duecm.cjs proves for a deferral: "shown, not
+     dropped". No scope switch is needed to see it. */
+  const tk101Row = put.rows.find(r => /TK101/.test(r)) || '';
+  ok('the machine stays on the list, marked with its reason, not dropped',
+    !!tk101Row && /wheel motor out/.test(tk101Row) && /S\. Volkov/.test(tk101Row), tk101Row.slice(0, 110));
+  ok('and it no longer counts as overdue',
+    !(await p.evaluate(() => dueRows('').filter(dueCmToday).map(r => r.unit))).includes('TK101'));
 
   console.log('\n  and a round that is walked answers it');
   const cleared = await p.evaluate(async () => {
@@ -199,31 +192,29 @@ const SEED = `(() => {
   ok('and the date it was put off over is the round\'s', cleared.last === '2026-08-24', cleared.last);
 
   console.log('\n  a round nobody is going to do at all');
-  await p.evaluate(async () => { dueScope = 'over';
+  await p.evaluate(async () => { dueType = '';
     renderDue(); await new Promise(r => setTimeout(r, 150)); });
-  await p.click('.dueforget');
+  await p.click('#dueCmList .dueforget');
   await p.waitForTimeout(250);
   await p.fill('#dueWhy', 'unit sold, off site permanently');
   await p.click('[data-w="off"]');
   await p.click('#dueDlgOk');
   await p.waitForTimeout(300);
   const off = await p.evaluate(() => ({
-    defer: JSON.parse(localStorage.getItem('cm_due_defer') || '{}'),
-    basis: document.getElementById('dueBasis').textContent }));
+    defer: JSON.parse(localStorage.getItem('cm_due_defer') || '{}') }));
   const anyOff = Object.values(off.defer).find(x => x && x.until === null);
   ok('it is recorded with no date to come back on', !!anyOff, JSON.stringify(off.defer));
   ok('and its reason', anyOff && /unit sold/.test(anyOff.why), anyOff && anyOff.why);
 
   console.log('\n  the row opens the round it is due for');
-  await p.evaluate(async () => { dueScope = 'over';
-    dueType = '';
+  await p.evaluate(async () => { dueType = '';
     renderDue(); await new Promise(r => setTimeout(r, 150)); });
   const want = await p.evaluate(() => {
-    const el = document.querySelector('.dueitem'); return el ? el.dataset.t : ''; });
-  await p.click('.dueitem');
+    const el = document.querySelector('#dueCmList .dueitem'); return el ? el.dataset.t : ''; });
+  await p.click('#dueCmList .dueitem');
   await p.waitForTimeout(400);
   const landed = await p.evaluate(() => document.getElementById('typeSel').value);
-  ok('tapping an undercarriage row opens an undercarriage round',
+  ok('tapping a row opens capture on that round',
     want && landed === want, 'row ' + want + ' → capture ' + landed);
 
   await b.close();

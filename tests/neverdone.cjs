@@ -155,7 +155,7 @@ const pick = p => p.evaluate(() => {
        rounds on record was in neither the count nor any row, and so was
        silently absent from a screen that accounts for the whole fleet. */
     ok('but they are counted and named, not silently dropped',
-       (await a.p.evaluate(() => (document.getElementById('dueBasis') || {}).textContent || ''))
+       (await a.p.evaluate(() => (document.getElementById('dueStrayNote') || {}).textContent || ''))
          .includes(await say(a.p, 'due_noprog', { n: await a.p.evaluate(() => unclassedCount()) })),
        'no programme: ' + await a.p.evaluate(() => unclassedCount()));
     /* THE INVARIANT THAT MAKES THAT COUNT MEAN SOMETHING. Every machine in the
@@ -220,28 +220,32 @@ const pick = p => p.evaluate(() => {
 
   console.log('\nthe screen offers it, and a tap starts the round');
   {
+    /* The merged CM tab shows a never-inspected row unconditionally now — it
+       is not bounded by a date the This day/All 14 days span could clip, the
+       same way a deferred round is not (tests/duecm.cjs) — so there is no
+       separate "never" pill to count or click any more. */
     const probe = await phone(b); const f = await pick(probe.p); await probe.ctx.close();
     const a = await phone(b, { ['MP|' + f.one.HT]: { d: '2026-08-01' } });
-    const pill = await a.p.evaluate(() => {
-      const el = document.querySelector('#dueScopeF [data-sc="never"]');
-      return el ? el.textContent.trim() : null; });
-    ok('a pill appears with the count on it', !!pill && /\d/.test(pill), String(pill));
-    await a.p.evaluate(() => document.querySelector('#dueScopeF [data-sc="never"]').click());
-    await a.p.waitForTimeout(400);
+    await a.p.click('#dueViewCM');
+    await a.p.waitForTimeout(300);
     const row = await a.p.evaluate(() => {
-      const r = document.querySelector('#dueList .duerow .dueitem');
+      const r = document.querySelector('#dueCmList .duerow .dueitem.never');
       return r ? { txt: r.textContent.replace(/\s+/g, ' ').trim(), u: r.dataset.u, t: r.dataset.t,
                    never: r.classList.contains('never') } : null; });
-    ok('the rows are marked as a state of their own', !!row && row.never, JSON.stringify(row && row.txt));
+    ok('a never-inspected row appears, offered on the merged list', !!row && row.never, JSON.stringify(row && row.txt));
     /* No date to print and none invented: "0 d ago" over a machine with no
        record would be the app describing an inspection that never happened. */
     ok('and say what is true rather than a date they do not have',
        !!row && row.txt.includes(await say(a.p, 'due_never_row')), row && row.txt);
     ok('there is nothing to put off on a round nobody has started',
-       await a.p.evaluate(() => !document.querySelector('#dueList .duerow .dueforget')));
+       await a.p.evaluate(() => {
+         const el = document.querySelector('#dueCmList .duerow .dueitem.never');
+         const row = el && el.closest('.duerow');
+         return !!row && !row.querySelector('.dueforget');
+       }));
     /* The point of the list: one tap and you are on that round, on that
        machine. */
-    await a.p.evaluate(() => document.querySelector('#dueList .dueitem').click());
+    await a.p.evaluate(() => document.querySelector('#dueCmList .dueitem.never').click());
     await a.p.waitForTimeout(500);
     const opened = await a.p.evaluate(() => ({
       pane: (document.querySelector('#tabbar button.on') || {}).dataset.pane,
@@ -268,19 +272,23 @@ const pick = p => p.evaluate(() => {
     const a = await phone(b, hist);
     const n = await a.p.evaluate(() => neverRows('').length);
     ok('the list is longer than the cap', n > 200, n + ' rows');
-    await a.p.evaluate(() => document.querySelector('#dueScopeF [data-sc="never"]').click());
+    await a.p.click('#dueViewCM');
     await a.p.waitForTimeout(400);
-    const shown = await a.p.evaluate(() => document.querySelectorAll('#dueList .duerow').length);
-    const tail = await a.p.evaluate(() => (document.getElementById('dueList') || {}).textContent || '');
+    const shown = await a.p.evaluate(() => document.querySelectorAll('#dueCmList .duerow').length);
+    const tail = await a.p.evaluate(() => (document.getElementById('dueCmList') || {}).textContent || '');
     ok('it draws two hundred of them', shown === 200, String(shown));
+    /* The merged list also carries whatever is overdue/deferred alongside the
+       never-inspected rows, so the "more" count is off the list's own total,
+       not neverRows('') alone. */
+    const total = await a.p.evaluate(() => dueRows('').filter(dueCmToday).length + neverRows('').length);
     ok('and says how many it is not showing',
-       tail.includes(await say(a.p, 'due_more', { n: n - 200 })), n - 200 + ' more');
+       tail.includes(await say(a.p, 'due_more', { n: total - 200 })), (total - 200) + ' more');
     /* Narrowing by round is the way through, and the message says so. */
     await a.p.evaluate(() => { const t2 = document.querySelector('#dueTypeF [data-dt="MP"]');
                                if (t2) t2.click(); });
     await a.p.waitForTimeout(400);
     ok('and narrowing by round brings it back under the cap',
-       await a.p.evaluate(() => document.querySelectorAll('#dueList .duerow').length) <= 200);
+       await a.p.evaluate(() => document.querySelectorAll('#dueCmList .duerow').length) <= 200);
     await a.ctx.close();
   }
 

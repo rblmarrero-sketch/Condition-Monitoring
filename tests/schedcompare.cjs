@@ -78,26 +78,19 @@ const ago = n => DUE.shift(TODAY, -n);
     ok('a machine 1C mentions and CM has never walked is not comparable',
        !r.some(x => x.unit === 'ZZ002'), JSON.stringify(r));
 
-    console.log('\n  a real disagreement, and the pill/row on screen');
+    console.log('\n  a real disagreement');
+    /* The phone's own "Compare" pill is gone from the Due tab now — 1C's
+       data has its own tab (1C PM, tests/duepm.cjs) and the CM tab's merged
+       agenda never mixed CM's own judgement with 1C's — so scheduleCompareRows()
+       has no caller left on this screen. It is unchanged, still directly
+       tested here; the dashboard's own Compare tab below is untouched. */
     await p.evaluate(sched => { SCHED = sched; }, {
       generated: new Date().toISOString(),
       byUnit: { ZZ001: [{ wo: 'WO-1', hours: 250, types: ['MP'], plan: on(30), priority: 'P3 Planned (PM)' }] },
     });
-    await p.evaluate(() => showPane('paneDue'));
-    await p.waitForTimeout(300);
     const r2 = await p.evaluate(() => scheduleCompareRows(''));
     ok('1C 22 days later than our own date diverges (past the 7-day bar)',
        r2[0] && r2[0].gap === 22 && r2[0].st === 'soon', JSON.stringify(r2[0]));
-    const pill = await p.evaluate(() => {
-      const el = document.querySelector('#dueScopeF [data-sc="cmp"]');
-      return el ? el.textContent.trim() : null;
-    });
-    ok('the Compare pill appears with the count on it', pill === 'Compare1', pill);
-    await p.evaluate(() => document.querySelector('#dueScopeF [data-sc="cmp"]').click());
-    await p.waitForTimeout(300);
-    const rowTxt = (await p.evaluate(() => (document.querySelector('#dueList .duerow') || {}).textContent || '')).replace(/\s+/g, ' ').trim();
-    ok('the row states BOTH dates, plainly', rowTxt.includes('Ours') && rowTxt.includes('1C'), rowTxt);
-    ok('and says which way they disagree', /later/.test(rowTxt), rowTxt);
 
     console.log('\n  it never changes what Overdue/Due soon/1C plan already meant');
     const others = await p.evaluate(() => ({
