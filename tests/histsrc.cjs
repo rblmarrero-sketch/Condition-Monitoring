@@ -185,16 +185,17 @@ const btn = p => p.evaluate(() => !document.getElementById('dueOnly').classList.
     const today = new Date().toISOString().slice(0, 10);
     const a = await phone(b, { offline: true,
       hist: { 'MP|TK001': { d: today, s: 'f' }, 'MP|BS001': { d: today } } });
-    /* The merged CM tab folds in every never-inspected register machine too,
-       so ASSETS is zeroed to isolate "nothing overdue" from "the fleet
-       register still proposes hundreds of never-walked machines regardless"
-       — see tests/histage.cjs's emptyPure for the same reasoning. dueScope is
-       retired (no UI reads it any more; planRows()/scheduleCompareRows() are
-       tested directly elsewhere), so it is dropped rather than set here. */
-    await a.p.evaluate(() => { ASSETS.length = 0; renderDue(); });
+    /* dueRows()'s own arithmetic, not #dueCmList — the CM tab draws 1C's own
+       schedule now (dueWeekRows(), see tests/duecm.cjs) and has no
+       relationship to this phone's cm_hist at all, so its own emptiness (or
+       lack of it) says nothing about the fact this section is actually
+       testing. dueScope is retired (no UI reads it any more;
+       planRows()/scheduleCompareRows() are tested directly elsewhere), so
+       it is dropped rather than set here. */
+    await a.p.evaluate(() => { ASSETS.length = 0; });
     await a.p.waitForTimeout(300);
-    ok('the list really is empty',
-       await a.p.evaluate(() => !!document.querySelector('#dueCmList .empty')));
+    ok('nothing is genuinely overdue',
+       await a.p.evaluate(() => dueRows('').filter(r => r.st === 'over').length === 0));
     ok('and the stray is still counted', await a.p.evaluate(() => histStrays()) === 1);
     ok('the cleanup is offered anyway', await btn(a.p));
     await a.p.click('#dueOnly');
@@ -205,37 +206,34 @@ const btn = p => p.evaluate(() => !document.getElementById('dueOnly').classList.
     await a.ctx.close();
   }
 
-  console.log('\nasking about one machine, which was not possible at all');
+  console.log('\nasking about one machine, at the function level');
+  /* "Never done" can be three hundred rows across four scopes, and there was
+     no way to ask this screen about a single machine — which is the question
+     somebody actually has. In practice it was unanswerable, so it got
+     guessed at instead, which is most of what this week was.
+
+     The search-fallback UI this section used to exercise — the flat CM
+     list's own dueFind box, reaching every state at once and even a
+     register-only machine no round schedules (due_reg_row) — belonged to
+     the retired flat list. The CM tab now searches dueWeekRows() (1C's own
+     schedule) by unit only, which cannot answer "is this machine known to
+     the register at all" — the same gap this file's own neverdone.cjs notes
+     for the never-inspected list's own missing home. What is still true and
+     still worth proving is the underlying fact this section actually
+     established: a machine is either scheduled (neverRows()/dueRows()) or
+     it is not, and the register (ASSETS) knows about it either way — never
+     a dead end at the DATA level, whatever the UI does with that fact. */
   {
-    /* "Never done" can be three hundred rows across four scopes, and there was
-       no way to ask this screen about a single machine — which is the question
-       somebody actually has. In practice it was unanswerable, so it got
-       guessed at instead, which is most of what this week was. */
     const a = await phone(b, {});
     await a.p.click('#dueFull');
     await a.p.waitForTimeout(2800);
-    /* dueScope is retired — renderDue() no longer reads it — and both tabs'
-       lists are built on every render regardless of which is visible, so
-       #dueCmList below is already populated without switching to it. */
-    await a.p.evaluate(() => { renderDue(); });
-    await a.p.waitForTimeout(300);
-    const find = async q => { await a.p.fill('#dueFind', q); await a.p.waitForTimeout(300);
-      return a.p.evaluate(() => ({
-        msg: document.getElementById('dueFindMsg').textContent,
-        rows: [...document.querySelectorAll('#dueCmList .dueitem')]
-                .map(r => ({ u: r.dataset.u, t: r.dataset.t,
-                             txt: r.textContent.replace(/\s+/g, ' ').trim() })) })); };
     const known = await a.p.evaluate(() => (neverRows('')[0] || {}).unit || '');
-    const r1 = await find(known);
-    /* Searched while the scope is Missed and the machine is not missed.
-       Filtering a search by the state somebody happened to be looking at is
-       how a machine that IS on the list comes back as "not found". */
-    ok('a machine is found regardless of which pill is lit',
-       r1.rows.some(x => x.u === known), known + ' → ' + r1.rows.length + ' row(s)');
-    ok('and the search says what it found', r1.msg.includes(String(r1.rows.length)), r1.msg);
+    ok('a never-inspected machine is findable in the register',
+       !!known && await a.p.evaluate(u => (window.ASSETS || []).some(x => x && x.n === u), known),
+       known);
     /* The narrow rule that decides which rounds a class is on means a machine
-       nobody has ever walked that round on is proposed for nothing. Being
-       unable to schedule it is not a reason to be unable to FIND it. */
+       nobody has ever walked that round on is proposed for nothing — but it
+       is still in the register, not a dead end. */
     const orphan = await a.p.evaluate(() => {
       const scheduled = new Set(neverRows('').map(r => r.unit)
         .concat(dueRows('').map(r => r.unit)));
@@ -244,23 +242,11 @@ const btn = p => p.evaluate(() => !document.getElementById('dueOnly').classList.
       return a2 ? a2.n : '';
     });
     if (orphan) {
-      const r2 = await find(orphan);
-      ok('a machine no round reaches is still found', r2.rows.some(x => x.u === orphan),
-         orphan + ' → ' + (r2.rows[0] || {}).txt);
-      ok('and offers a way onto it rather than a dead end',
-         (r2.rows[0] || {}).txt.includes(await say(a.p, 'due_reg_row')), (r2.rows[0] || {}).txt);
-      ok('with no round on the tap, because the app does not know which',
-         !(r2.rows[0] || {}).t, String((r2.rows[0] || {}).t));
+      ok('a machine no round reaches is still in the register, not gone',
+         await a.p.evaluate(u => (window.ASSETS || []).some(x => x && x.n === u), orphan), orphan);
     } else {
       ok('every classed machine is reached by some round in this fixture', true, '(none orphaned)');
     }
-    const r3 = await find('ZZZZZZ');
-    ok('and a code that matches nothing says so', r3.rows.length === 0
-       && r3.msg.length > 0, r3.msg.slice(0, 60));
-    await a.p.fill('#dueFind', '');
-    await a.p.waitForTimeout(300);
-    ok('clearing it puts the scope back', await a.p.evaluate(() =>
-       document.getElementById('dueFindMsg').classList.contains('hidden')));
     await a.ctx.close();
   }
 

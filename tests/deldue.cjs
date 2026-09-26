@@ -95,10 +95,7 @@ const post = body => fetch(B + '/exec', { method: 'POST',
   const due = await p.evaluate(async () => {
     const s = document.getElementById('typeSel'); s.value = 'MP'; s.dispatchEvent(new Event('change'));
     await new Promise(r => setTimeout(r, 300));
-    dueView = 'cm';
-    showPane('paneDue'); renderDue();
-    await new Promise(r => setTimeout(r, 200));
-    return document.getElementById('dueCmList').textContent.replace(/\s+/g, ' ').trim();
+    return neverRows('MP').some(r => r.unit === 'TK146');
   });
   /* This section is headed "so the machine comes back onto the due list", and
      it used to assert the opposite — that TK146 VANISHED. That was the only
@@ -109,11 +106,12 @@ const post = body => fetch(B + '/exec', { method: 'POST',
      A machine that has never been inspected is now a row of its own, so the
      heading can finally be checked as written. Deleting a round does not
      remove a haul truck from the fleet; it puts it back on the list with
-     nothing on record, which is where somebody can act on it. */
-  ok('TK146 is back on the list rather than vanishing from it',
-    /TK146/.test(due), due.slice(0, 140));
-  const never = await p.evaluate(() => neverRows('MP').some(r => r.unit === 'TK146'));
-  ok('  as a machine with no plug round on record', never);
+     nothing on record, which is where somebody can act on it. neverRows() is
+     the arithmetic the CM tab drew this fact from before its own redesign —
+     the CM tab itself now shows 1C's own schedule, not this list (see
+     tests/duecm.cjs), so the fact is checked at its own function rather than
+     on a screen that no longer renders it. */
+  ok('TK146 is back on the never-inspected list rather than vanishing from it', due);
 
   await b.close();
   console.log(fails.length ? '\n' + fails.length + ' FAILED' : '\nall good');

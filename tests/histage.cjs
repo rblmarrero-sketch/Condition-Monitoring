@@ -162,17 +162,23 @@ function dictKeys() {
   const note = p => p.evaluate(() => (document.getElementById('dueStrayNote') || {}).textContent || '');
   const warn = p => p.evaluate(() => !!(document.getElementById('dueStrayNote') || {}).classList
                                      && document.getElementById('dueStrayNote').classList.contains('warn'));
-  const empty = p => p.evaluate(() => {
-    const e = document.querySelector('#dueCmList .empty'); return e ? e.textContent.trim() : null; });
-  /* The merged CM tab folds never-inspected machines into the SAME list as
-     overdue ones now — asked for by name ("one merged agenda") — so a phone
-     with real history but nothing due is not actually EMPTY any more unless
-     the fleet register also has nothing to propose. ASSETS is what
-     neverRows() walks; zeroing it in this one tab is how the "truly nothing
-     to do" case is isolated from "every register machine reads as never
-     inspected", which is what an untouched register actually shows and is
-     not what this specific check is about. */
-  const emptyPure = async p => { await p.evaluate(() => { ASSETS.length = 0; renderDue(); }); return empty(p); };
+  /* histAge() ITSELF, NOT THE CM TAB'S OWN EMPTY STATE. The CM tab used to
+     be the merged Overdue/Due-soon/Never-inspected/Deferred list, and its
+     own empty-list text once carried these distinctions (never-loaded /
+     fresh-and-clean / stale-and-clean) directly. The maintainer's own
+     correction — "Same as the Two weeks before, only CM we change the
+     name" — restores the CM tab to dueWeekRows(), 1C's own schedule, whose
+     empty state is about 1C's plan, not this phone's own history; asking
+     it "hist_never" would be asking the wrong function's answer. histAge()
+     — read here exactly as #dueStrayNote reads it — still carries the
+     identical three distinctions and is asserted directly, the same
+     function this file's other sections already prove through the stray
+     note (see "a phone that has never heard from the fleet says so",
+     above). ASSETS is zeroed so a full register's own never-inspected
+     count cannot appear here — it plays no part in histAge() at all, but
+     zeroing keeps this section's fixture as narrow as the rest of the
+     file's. */
+  const histAgeText = async p => { await p.evaluate(() => { ASSETS.length = 0; }); return p.evaluate(() => histAge()); };
 
   console.log('\na phone that has never heard from the fleet says so');
   {
@@ -183,14 +189,13 @@ function dictKeys() {
     await ctx.close();
   }
 
-  console.log('\nand with nothing due, it does not say "nothing due"');
+  console.log('\nand with no history at all, it says so, not nothing');
   {
-    /* No history at all: the list is empty because this phone knows nothing,
-       not because the fleet is in good order. Those are different sentences
-       and only one of them is reassuring. */
+    /* No history at all: histAge() (fed into #dueStrayNote) has to say the
+       phone knows nothing, not stay silent about it. */
     const { ctx, p } = await mk({});
-    const e = await emptyPure(p);
-    ok('the empty list explains that there is no history yet', e === await say(p, 'due_no_hist'), e);
+    const e = await histAgeText(p);
+    ok('histAge() explains that there is no history yet', e === await say(p, 'hist_never'), e);
     ok('it is not the reassuring one', e !== await say(p, 'due_empty'));
     ok('and it is not the row label for a machine never done', e !== await say(p, 'due_never'));
     await ctx.close();
@@ -214,19 +219,19 @@ function dictKeys() {
     await ctx.close();
   }
   {
-    /* Fresh stamp, nothing due: this is the only case where "Nothing due" is
-       a true statement, and it is the only case that may say it. */
+    /* Fresh stamp: histAge() reads the time it last looked, in minutes. */
     const { ctx, p } = await mk({ at: { at: Date.now() - 60000, n: 0 } });
-    const e = await emptyPure(p);
-    ok('a fresh phone with nothing due may say nothing is due', e === await say(p, 'due_empty'), e);
+    const e = await histAgeText(p);
+    ok('a fresh phone says when it looked, in words',
+       e === await say(p, 'hist_at', { t: await say(p, 'hist_now') }), e);
     await ctx.close();
   }
   {
     const at = { at: Date.now() - 40 * 3600 * 1000, n: 0 };
     const { ctx, p } = await mk({ at });
-    const e = await emptyPure(p);
-    ok('a stale phone with nothing due says when it last looked',
-       e === await say(p, 'due_stale', { t: await say(p, 'hist_hr', { n: 40 }) }), e);
+    const e = await histAgeText(p);
+    ok('a stale phone says how long ago it last looked, not just that it is stale',
+       e === await say(p, 'hist_at', { t: await say(p, 'hist_hr', { n: 40 }) }), e);
     await ctx.close();
   }
 

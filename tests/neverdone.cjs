@@ -218,51 +218,55 @@ const pick = p => p.evaluate(() => {
     await a.ctx.close();
   }
 
-  console.log('\nthe screen offers it, and a tap starts the round');
+  console.log('\nthe never-inspected list itself, and the point of it: one tap opens the round');
+  /* NEITHER TAB DRAWS neverRows() ANY MORE — WORTH SAYING PLAINLY. The merged
+     CM tab this section used to test (a never-inspected row shown
+     unconditionally, tap to open, no dueforget on a round nobody has
+     started) was itself replaced: the maintainer's own correction, "Same as
+     the Two weeks before, only CM we change the name," restores the CM tab
+     to dueWeekRows() — 1C's own schedule — which has no concept of a
+     machine nobody has ever walked to, the same as the "Two weeks" screen
+     never did before this session's redesign touched it. neverRows() itself
+     is unchanged and still exhaustively proven above (every stated pairing,
+     every held-off exclusion, the accounting invariant) and by
+     tests/gencatchall.cjs's own catch-all-class rule — what is asserted here
+     now is that the underlying facts (which round, which unit, and that
+     opening it lands on the capture screen) still hold, decoupled from a
+     screen that no longer shows them. A visible home for this list is a
+     real, open question for whoever owns the redesign next, not something
+     to invent unasked here. */
   {
-    /* The merged CM tab shows a never-inspected row unconditionally now — it
-       is not bounded by a date the This day/All 14 days span could clip, the
-       same way a deferred round is not (tests/duecm.cjs) — so there is no
-       separate "never" pill to count or click any more. */
     const probe = await phone(b); const f = await pick(probe.p); await probe.ctx.close();
     const a = await phone(b, { ['MP|' + f.one.HT]: { d: '2026-08-01' } });
-    await a.p.click('#dueViewCM');
-    await a.p.waitForTimeout(300);
-    const row = await a.p.evaluate(() => {
-      const r = document.querySelector('#dueCmList .duerow .dueitem.never');
-      return r ? { txt: r.textContent.replace(/\s+/g, ' ').trim(), u: r.dataset.u, t: r.dataset.t,
-                   never: r.classList.contains('never') } : null; });
-    ok('a never-inspected row appears, offered on the merged list', !!row && row.never, JSON.stringify(row && row.txt));
-    /* No date to print and none invented: "0 d ago" over a machine with no
-       record would be the app describing an inspection that never happened. */
-    ok('and say what is true rather than a date they do not have',
-       !!row && row.txt.includes(await say(a.p, 'due_never_row')), row && row.txt);
-    ok('there is nothing to put off on a round nobody has started',
-       await a.p.evaluate(() => {
-         const el = document.querySelector('#dueCmList .duerow .dueitem.never');
-         const row = el && el.closest('.duerow');
-         return !!row && !row.querySelector('.dueforget');
-       }));
-    /* The point of the list: one tap and you are on that round, on that
-       machine. */
-    await a.p.evaluate(() => document.querySelector('#dueCmList .dueitem.never').click());
-    await a.p.waitForTimeout(500);
+    const row = await a.p.evaluate(() => neverRows('')[0] || null);
+    ok('a never-inspected row exists, correctly, for a machine not yet walked',
+       !!row, JSON.stringify(row));
+    /* The point of the list: selecting that unit and round lands on the
+       capture screen for it, whichever screen the selection came from. */
+    await a.p.evaluate(r => { const s = document.getElementById('typeSel');
+      s.value = r.ty; s.dispatchEvent(new Event('change'));
+      selectEquip(r.unit); showPane('paneCapture'); }, row);
+    await a.p.waitForTimeout(400);
     const opened = await a.p.evaluate(() => ({
       pane: (document.querySelector('#tabbar button.on') || {}).dataset.pane,
       type: (document.getElementById('typeSel') || {}).value,
+      equip: typeof curEquip !== 'undefined' ? curEquip : null,
     }));
-    ok('tapping one opens the capture screen on that round',
-       opened.pane === 'paneCapture' && opened.type === row.t,
-       opened.pane + ' · ' + opened.type + ' (row said ' + (row && row.t) + ')');
+    ok('opens the capture screen on that round and that machine',
+       opened.pane === 'paneCapture' && opened.type === row.ty && opened.equip === row.unit,
+       JSON.stringify(opened) + ' (row said ' + row.ty + ' ' + row.unit + ')');
     await a.ctx.close();
   }
 
-  console.log('\nand the list stops saying two hundred is all there is');
+  console.log('\nand the list itself has no cap to fall silent behind');
   {
     /* The fleet as it will be once the programme is running: each round walked
-       at least once on each kind of machine. That is when the list grows past
-       the cap, and the cap has been silent since this screen was written — it
-       only became a lie when there was something behind it. */
+       at least once on each kind of machine. This is when a screen that caps
+       what it draws would need to say what it left out — checked here at the
+       function level, since neither tab renders this list any more (see the
+       note above); the cap and "N more" wording this section used to prove
+       belonged to the retired flat list and is not carried over to either
+       replacement screen. */
     const probe = await phone(b); const f = await pick(probe.p); await probe.ctx.close();
     const hist = {};
     Object.keys(f.one).forEach(k => {
@@ -271,24 +275,8 @@ const pick = p => p.evaluate(() => {
     });
     const a = await phone(b, hist);
     const n = await a.p.evaluate(() => neverRows('').length);
-    ok('the list is longer than the cap', n > 200, n + ' rows');
-    await a.p.click('#dueViewCM');
-    await a.p.waitForTimeout(400);
-    const shown = await a.p.evaluate(() => document.querySelectorAll('#dueCmList .duerow').length);
-    const tail = await a.p.evaluate(() => (document.getElementById('dueCmList') || {}).textContent || '');
-    ok('it draws two hundred of them', shown === 200, String(shown));
-    /* The merged list also carries whatever is overdue/deferred alongside the
-       never-inspected rows, so the "more" count is off the list's own total,
-       not neverRows('') alone. */
-    const total = await a.p.evaluate(() => dueRows('').filter(dueCmToday).length + neverRows('').length);
-    ok('and says how many it is not showing',
-       tail.includes(await say(a.p, 'due_more', { n: total - 200 })), (total - 200) + ' more');
-    /* Narrowing by round is the way through, and the message says so. */
-    await a.p.evaluate(() => { const t2 = document.querySelector('#dueTypeF [data-dt="MP"]');
-                               if (t2) t2.click(); });
-    await a.p.waitForTimeout(400);
-    ok('and narrowing by round brings it back under the cap',
-       await a.p.evaluate(() => document.querySelectorAll('#dueCmList .duerow').length) <= 200);
+    ok('the list genuinely grows past the old cap once the programme fills in',
+       n > 200, n + ' rows');
     await a.ctx.close();
   }
 

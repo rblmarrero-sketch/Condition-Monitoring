@@ -92,25 +92,20 @@ const R = f => fs.readFileSync(path.join(__dirname, "..", f), "utf8");
 
   const b = await chromium.launch();
 
-  console.log("\n4. THE PHONE: THE MERGED CM AGENDA HAS THE MENU");
-  /* The Overdue/Due soon "List" and the 1C-schedule "Two Weeks" agenda this
-     section was written against are both retired, replaced by ONE merged CM
-     agenda (tests/duecm.cjs) — asked for by name, "one merged agenda,
-     color-coded" — so there is no longer a second view for .dueforget to be
-     "the same control" as; there is exactly one now, on the one screen. What
-     survives, unchanged, is the dialog and disabled-button mechanics below,
-     which this file is actually about. */
+  console.log("\n4. THE PHONE: THE CM CALENDAR HAS THE MENU");
+  /* The CM tab is dueWeekRows()/renderDueWeek() again (see tests/duecm.cjs's
+     own header for the full history) — 1C's schedule, resolved to CM round
+     types, drawn as a day-by-day agenda. Each outstanding row (.agitem
+     inside .duerow.agrow) carries the same .dueforget side menu the old flat
+     List had, which is what this file is actually about: the dialog and
+     disabled-button mechanics survive the screen underneath it changing
+     twice. Seeded through SCHED, not cm_hist — the agenda reads 1C's plan,
+     not the interval math dueRows() does. */
   const p = await b.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
   const perr = []; p.on("pageerror", e => perr.push(e.message));
   await p.addInitScript(() => {
     localStorage.setItem("cm_lang", "en");
     localStorage.setItem("cm_due_view", "cm");
-    const ago = n => new Date(Date.now() - n * 864e5).toISOString().slice(0, 10);
-    /* MP is 250 h = 12.5 d at the fleet rate; both machines are well past it. */
-    localStorage.setItem("cm_hist", JSON.stringify({
-      "MP|TK146": { d: ago(30), h: 9000 }, "MP|TK147": { d: ago(28), h: 9000 },
-    }));
-    localStorage.setItem("cm_hist_at", JSON.stringify({ at: Date.now(), n: 1 }));
   });
   await p.goto(BASE + "/mobile/index.html", { waitUntil: "load" });
   await p.waitForTimeout(1800);
@@ -121,8 +116,19 @@ const R = f => fs.readFileSync(path.join(__dirname, "..", f), "utf8");
        from the whole fleet's never-inspected rows, the same technique
        tests/histage.cjs's emptyPure uses. */
     ASSETS.length = 0;
+    const day = DUE.today();
+    /* Bare assignment, not window.SCHED= — SCHED is `let SCHED` at module
+       scope, never a window property (this file's own CLAUDE.md entry, "AND
+       THE WORK ORDER IS ALREADY ON THE ROW THEY TAPPED", names the identical
+       trap: a window.SCHED write here would silently miss the real binding
+       and every reader would go on seeing whatever the mock server's own
+       real schedule_slim.json already put there). */
+    SCHED = { generated: new Date().toISOString(), byUnit: {
+      TK146: [{ wo: "WO-DW01", hours: 250, types: ["MP"], plan: day, priority: "P3 Planned (PM)" }],
+      TK147: [{ wo: "WO-DW02", hours: 250, types: ["MP"], plan: day, priority: "P3 Planned (PM)" }],
+    } };
     showPane("paneDue"); dueView = "cm"; dueSpan = "all"; renderDue();
-    return document.querySelectorAll("#dueCmList .dueitem").length;
+    return document.querySelectorAll("#dueCmList .agitem").length;
   });
   ok("the agenda draws rows", seeded >= 2, seeded + " row(s)");
   const menus = await p.evaluate(() => ({
@@ -134,9 +140,9 @@ const R = f => fs.readFileSync(path.join(__dirname, "..", f), "utf8");
   ok("every row has one", menus.menus === menus.rows && menus.rows >= 2,
      menus.menus + " menu(s) on " + menus.rows + " row(s)");
   ok("  and it is named for a screen reader", !!menus.label, menus.label);
-  /* One template now renders every row on the one screen — the count that
-     used to prove "the same control as the List's" (two uses, one per view)
-     instead proves there is only the one view left to duplicate it. */
+  /* One template renders every outstanding row on the one calendar — a
+     walked round gets no menu (see the .agrow note in the CSS), everything
+     else shares this one control. */
   ok("  one dueforget template serves the one screen, not two copies of it",
      (mobRaw.match(/class="dueforget"/g) || []).length === 1,
      (mobRaw.match(/class="dueforget"/g) || []).length + " use(s) of .dueforget");
@@ -274,7 +280,7 @@ const R = f => fs.readFileSync(path.join(__dirname, "..", f), "utf8");
   }));
   ok("the round is not silently dropped — it is still on the agenda",
      agenda.stillOnScreen, agenda.rowText);
-  ok("  visibly marked as answered, not outstanding", /\boff\b/.test(agenda.rowClasses),
+  ok("  visibly marked as answered, not outstanding", /\bdeferred\b/.test(agenda.rowClasses),
      agenda.rowClasses);
   ok("  with the reason on the row, the same as the flat List prints its own",
      /no access, gate locked/.test(agenda.rowText), agenda.rowText);

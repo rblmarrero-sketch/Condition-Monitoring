@@ -579,23 +579,33 @@ const srv = http.createServer((req, res) => {
      rendered as nothing, produced by the fix for the previous one.
 
      WO-015691 (TK156) was the order this was originally caught on; by
-     2026-09-20 1C has marked it CNF/Completed, so it correctly no longer
-     appears on a forward-looking plan grid at all — that emptied `entries`
-     here for a reason that has nothing to do with the rule being tested.
-     WO-016655 (TK159, the same 4,000 h/four-round shape) is 1C's current
-     OPEN stand-in; swap it for whichever order is open and carries more
-     than one resolved round type if this drifts again the same way. */
+     2026-09-20 1C had marked it CNF/Completed, so it correctly no longer
+     appeared on a forward-looking plan grid at all — that emptied `entries`
+     for a reason that had nothing to do with the rule being tested. Its
+     stand-in, WO-016655 (TK159), drifted the identical way days later —
+     1C's clock closes a work order out from under a hardcoded number no
+     matter how it is chosen. Pinning a THIRD literal WO would only buy this
+     suite a few more days before the same failure returns, so this no
+     longer names one: it asks 1C's OWN current plan, at test time, for
+     whichever OPEN order carries the most resolved round types and includes
+     the General Inspection among them — the exact shape (a multi-round tier
+     with a pre-check inside it) the rule is about, wherever in the live
+     plan it currently sits. */
   const pills = await d.evaluate(() => {
-    const W = (window.CM_WO_DATA || {}).workOrders || [];
-    const w = W.find(x => x.woNumber === 'WO-016655') || {};
     const rows = paRows();
-    const r = rows.find(x => x.w.woNumber === 'WO-016655');
+    const open = rows.filter(r => r.w.open && Array.isArray(r.info.types) &&
+      r.info.types.length >= 3 && r.info.types.includes('INSP'));
+    open.sort((a, b) => b.info.types.length - a.info.types.length);
+    const r = open[0];
+    if (!r) return { skip: true };
+    const w = r.w;
     /* Draw the grid on a day when that visit is inside the window, so this
        does not quietly pass by testing an empty grid in three weeks' time. */
     DUE.setToday(w.planStart);
-    const entries = paWeekData(rows).filter(e => e.r && e.r.w.woNumber === 'WO-016655');
+    const entries = paWeekData(rows).filter(e => e.r && e.r.w.woNumber === w.woNumber);
     const out = {
-      resolved: (r && r.info.types || []).slice().sort(),
+      wo: w.woNumber,
+      resolved: (r.info.types || []).slice().sort(),
       drawn: entries.map(e => e.code).sort(),
       pre: entries.filter(e => e.isPreCheck).map(e => e.code),
       /* Nothing may be drawn twice either. */
@@ -604,14 +614,19 @@ const srv = http.createServer((req, res) => {
     DUE.setToday(null);
     return out;
   });
-  ok(pills.resolved.length === 4, 'TK156\'s 4,000 h visit resolves to four rounds',
-    pills.resolved.join('+'));
-  ok(JSON.stringify(pills.drawn) === JSON.stringify(pills.resolved),
-    '  and the week grid draws every one of them, not just the first',
-    'drawn ' + pills.drawn.join('+'));
-  ok(pills.pre.length === 1 && pills.pre[0] === 'INSP',
-    '  with the General Inspection still split out as the pre-check', pills.pre.join('+'));
-  ok(pills.dupes === 0, '  and nothing is drawn twice on one day', String(pills.dupes));
+  if (pills.skip) {
+    ok(false, 'a multi-round open work order exists to test the grid against',
+      'none of 1C\'s currently open orders resolve >=3 CM round types with INSP among them');
+  } else {
+    ok(pills.resolved.length >= 3, pills.wo + '\'s visit resolves to more than one round',
+      pills.resolved.join('+'));
+    ok(JSON.stringify(pills.drawn) === JSON.stringify(pills.resolved),
+      '  and the week grid draws every one of them, not just the first',
+      'drawn ' + pills.drawn.join('+'));
+    ok(pills.pre.length === 1 && pills.pre[0] === 'INSP',
+      '  with the General Inspection still split out as the pre-check', pills.pre.join('+'));
+    ok(pills.dupes === 0, '  and nothing is drawn twice on one day', String(pills.dupes));
+  }
 
   await d.close(); await dctx.close();
 

@@ -348,7 +348,7 @@ const srv = http.createServer((req, res) => {
        '  answering the only question the inspector actually has');
     /* And the screen is not merely unfrozen, it works. */
     const rows = await within(c.p.evaluate(() =>
-      document.querySelectorAll('#duePmList .agitem, #dueCmList .dueitem').length), 8000, -1);
+      document.querySelectorAll('#duePmList .agitem, #dueCmList .agitem').length), 8000, -1);
     ok(rows >= 0, '  the Due list still draws (' + rows + ' rows)');
     await c.p.close();
     await ctx.close();
@@ -363,17 +363,16 @@ const srv = http.createServer((req, res) => {
     await seed(ctx);
     const a = await launch(ctx, 'an ordinary launch:');
     ok(a.v === '901', '  the app opens, as it should');
-    /* Work the screen hard — both tabs, every span, every round-type pill, a
-       search — so the breaker is given a real chance to fire on ordinary
-       use. #dueScopeF is retired (tests/duetab.cjs); #dueTypeF/#dueSpanF and
-       the two tab buttons are its replacements on the actual screen. */
+    /* Work the screen hard — both tabs, every span, a search — so the
+       breaker is given a real chance to fire on ordinary use. #dueScopeF
+       and #dueTypeF are both retired (tests/duetab.cjs); #dueSpanF and the
+       two tab buttons are what remain on the actual screen. */
     const worked = await within(a.p.evaluate(async () => {
       showPane('paneDue');
       await new Promise(r => setTimeout(r, 800));
       for (let i = 0; i < 30; i++) {
         const f = document.getElementById('dueFind');
         if (f) { f.value = 'TK0' + (i % 10); f.dispatchEvent(new Event('input', { bubbles: true })); }
-        [].forEach.call(document.querySelectorAll('#dueTypeF [data-dt]'), (b, j) => { if (j === i % 5) b.click(); });
         [].forEach.call(document.querySelectorAll('#dueSpanF [data-dw]'), (b, j) => { if (j === i % 2) b.click(); });
         (i % 2 === 0 ? document.getElementById('dueViewCM') : document.getElementById('dueViewPM')).click();
         await new Promise(r => setTimeout(r, 30));

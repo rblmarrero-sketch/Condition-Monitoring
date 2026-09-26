@@ -73,20 +73,16 @@ const reset = q => fetch(BASE + '/__reset' + (q || '')).then(r => r.text());
   console.log('\nthe due list now knows about other people\'s rounds');
   const hist = await p.evaluate(() => Object.keys(histAll()).length);
   ok('team inspections feed the last-done index', hist === 25, `${hist} entries`);
-  // At the 90-day MP interval nothing from this month is actually due yet, so an
-  // empty This day/All 14 days list is the correct answer — dueRows('') still
-  // returns an "ok" (comfortably not due) row for every unit with history, and
-  // the CM tab's search reaches every state, so searching is what proves the
-  // team's rounds really did land in it (the old "all units" scope pill this
-  // suite used is retired — see tests/duecm.cjs).
-  await p.evaluate(() => showPane('paneSystem'));
-  await p.evaluate(() => showPane('paneDue'));
-  await p.click('#dueViewCM'); await p.waitForTimeout(200);
-  await p.fill('#dueFind', 'TK1'); await p.waitForTimeout(300);
-  const dueTxt = await p.textContent('#dueCmList');
-  ok('team rounds appear in the due list', /TK1\d\d/.test(dueTxt) && !/Nothing due/.test(dueTxt),
-     dueTxt.trim().replace(/\s+/g, ' ').slice(0, 70));
-  await p.fill('#dueFind', ''); await p.waitForTimeout(200);
+  /* MP is 250 h = 12.5 d at the fleet rate, and this fixture's rounds run 60-90
+     days back — genuinely overdue, not merely "ok". The CM tab itself no
+     longer draws dueRows() at all (it is 1C's own schedule now, see
+     tests/duecm.cjs) — this asks the function the app actually consumes
+     team history through, rather than a screen that has moved on to a
+     different question. */
+  const teamRows = await p.evaluate(() => dueRows('').filter(r => /^TK1\d\d$/.test(r.unit)));
+  ok('and dueRows() has picked every one of them up',
+     teamRows.length === 25 && teamRows.every(r => r.st === 'over'),
+     `${teamRows.length} row(s), states: ${[...new Set(teamRows.map(r => r.st))].join(',')}`);
 
   console.log('\nstanding at a unit someone else just did');
   await p.evaluate(() => selectEquip('TK105'));
@@ -123,10 +119,13 @@ const reset = q => fetch(BASE + '/__reset' + (q || '')).then(r => r.text());
      String(await p.evaluate(() => teamAll().length)));
   ok('and is rendered, not blank', /TK1\d\d/.test(await p.textContent('#teamList')));
   await p.evaluate(() => showPane('paneDue'));
-  await p.fill('#dueFind', 'TK1'); await p.waitForTimeout(300);
-  ok('the due list still works offline', /TK1\d\d/.test(await p.textContent('#dueCmList')),
-     (await p.textContent('#dueCmList')).trim().replace(/\s+/g, ' ').slice(0, 60));
-  await p.fill('#dueFind', ''); await p.waitForTimeout(200);
+  await p.waitForTimeout(300);
+  /* dueRows() is built from the cached last-done index, which is unaffected
+     by the radio — this proves the arithmetic still works with the network
+     gone, not any one screen's own rendering of it. */
+  const offlineRows = await p.evaluate(() => dueRows('').filter(r => /^TK1\d\d$/.test(r.unit)));
+  ok('the due list still works offline', offlineRows.length === 25,
+     `${offlineRows.length} row(s)`);
   await p.evaluate(() => showPane('paneSystem'));
   await p.click('#teamRefresh'); await p.waitForTimeout(400);
   ok('refresh says offline rather than failing', /Offline/.test(await p.textContent('#teamMsg')),

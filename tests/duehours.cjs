@@ -215,40 +215,15 @@ const mk = `((id,ty,u,d,smu,pos)=>({id,type:ty,equip:u,date:d,by:'S. Volkov',sup
     histSave(JSON.parse(localStorage.getItem('cm_hist')));
     const s = document.getElementById('typeSel'); s.value = 'MP'; s.dispatchEvent(new Event('change'));
     await new Promise(r => setTimeout(r, 300));
-    showPane('paneDue'); dueView = 'cm'; renderDue();
-    await new Promise(r => setTimeout(r, 200));
     return { entry: histEntry(histAll()['MP|TK150']),
-             list: document.getElementById('dueCmList').textContent.replace(/\s+/g, ' ').trim() };
+             due: dueRows('').find(r => r.unit === 'TK150') };
   });
   ok('an entry written by an older build still reads',
     old.entry && old.entry.d === '2026-07-20', JSON.stringify(old.entry));
-  ok('and the unit is still on the due list', /TK150/.test(old.list), old.list.slice(0, 80));
-
-  console.log('\n  what the list is counting in, said out loud');
-  const basis = await p.evaluate(async () => {
-    dueType = 'MP';
-    renderDue(); await new Promise(r => setTimeout(r, 150));
-    return document.getElementById('dueIntervalNote').textContent;
-  });
-  /* Narrowed to one round, the line names its interval; across all of them it
-     cannot, because they are not the same. The rate is stated either way — "in
-     12 d" from a 250-hour interval means nothing until somebody has been told
-     the machine is assumed to run 20 hours a day. */
-  ok('the interval and the assumed rate are on the screen',
-    /250 h/.test(basis) && /20 h\/day/.test(basis), basis);
-  /* Widened to every round, the interval line drops entirely — no single
-     interval covers eight round types — and the counting moves to the This
-     day/All 14 days span pill, which is what the tab's own badge counts too. */
-  const all = await p.evaluate(async () => {
-    dueType = '';
-    renderDue(); await new Promise(r => setTimeout(r, 150));
-    return { basis: document.getElementById('dueIntervalNote').textContent,
-             pills: [...document.querySelectorAll('#dueSpanF button')]
-                      .map(b => b.textContent.replace(/\s+/g, ' ').trim()) };
-  });
-  ok('the interval line is silent across every round', all.basis === '', JSON.stringify(all.basis));
-  ok('and across every round it counts what was missed instead',
-    all.pills.some(x => /^Today ?\d/.test(x)), all.pills.join(' | '));
+  /* dueRows() is the arithmetic this suite is about; whichever screen draws
+     it (the CM tab no longer does — it draws 1C's own schedule now, see
+     tests/duecm.cjs) is a rendering question, not this one's. */
+  ok('and the unit is still due by the interval math', !!old.due, JSON.stringify(old.due));
 
   console.log('\n  the second measurement brings the round forward');
   const wear = await p.evaluate(async ([MK]) => {
@@ -274,10 +249,11 @@ const mk = `((id,ty,u,d,smu,pos)=>({id,type:ty,equip:u,date:d,by:'S. Volkov',sup
     const last = histEntry(histAll()['UC|DZ004']);
     const plain = DUE.next({ type: 'UC', last: { d: last.d, h: last.h }, today: '2026-07-11' });
     const withF = DUE.next({ type: 'UC', last: last, today: '2026-07-11' });
-    renderDue();
-    await new Promise(r => setTimeout(r, 200));
-    return { last, plain, withF,
-             list: document.getElementById('dueCmList').textContent.replace(/\s+/g, ' ').trim() };
+    /* dueRows() is what the app actually consumes this through — the same
+       function this suite's own earlier sections already call — proving
+       'wear' reaches the real path, not only DUE.next() in isolation. */
+    const row = dueRows('UC').find(r => r.unit === 'DZ004');
+    return { last, plain, withF, row };
   }, [mk]);
 
   ok('a round with two measurements records what it forecast',
@@ -286,13 +262,9 @@ const mk = `((id,ty,u,d,smu,pos)=>({id,type:ty,equip:u,date:d,by:'S. Volkov',sup
   ok('so the machine is due sooner than the schedule says',
     wear.withF.dueInHours < wear.plain.dueInHours,
     'wear ' + wear.withF.dueInHours + ' h vs interval ' + wear.plain.dueInHours + ' h');
-  ok('and the list says wear is why, not the interval',
-    wear.withF.why === 'wear' && /wear, not the interval/.test(wear.list),
-    wear.list.slice(0, 110));
-
-  /* Taking a unit off the list, and the reasons it can be off it, moved to
-     tests/duelist.cjs when the bare cross became reschedule-or-cancel. This
-     suite is about the arithmetic of the schedule. */
+  ok('and dueRows() carries wear as the reason, not the interval',
+    wear.withF.why === 'wear' && wear.row && wear.row.n && wear.row.n.why === 'wear',
+    JSON.stringify(wear.row && wear.row.n));
 
   console.log('\n  and a round somebody else walked moves the date too');
   const team = await p.evaluate(async ([MK]) => {

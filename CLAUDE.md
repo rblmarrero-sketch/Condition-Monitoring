@@ -3026,6 +3026,150 @@ standing complaint about a "red suite nobody reads": four places where a
 rename left something behind, caught only because this project keeps tools
 whose one job is to notice that, and runs them.
 
+**THE CM TAB WAS CORRECTED THE SAME DAY IT SHIPPED.** The redesign above
+read "one merged agenda, color-coded" as license to build something new for
+CM: fold Overdue/Due soon/Never inspected/Deferred (dueRows()/neverRows(),
+CM's own interval math) into one flat, searchable, type-filterable list. The
+maintainer's own correction, read plainly, the day it went live: "in the CM
+only CM that are covered for now... Also in the 14 days before it was
+divided in days, now its gone... CM contains only CM that are covered. Also
+in today, its a long lisf [list]" — followed, once the shape of the fix was
+confirmed by three rounds of clarifying questions, by: "Same as the Two
+weeks before, only CM we change the name. But I like the additional tab you
+put." That is the whole correction in one sentence: CM is `dueWeekRows()`/
+`renderDueWeek()` again — 1C's own schedule (`SCHED`), resolved to the CM
+round types that cover each work order, drawn as a day-by-day calendar,
+exactly as it was under the name "Two weeks" before this session's redesign
+ever touched it — renamed, and sitting next to the NEW "1C PM" tab (built
+fresh this session, priority-based, from `SCHED.rtwOpen`) which the
+maintainer explicitly kept: "I like the additional tab you put."
+
+**"COVERED" WAS 1C's OWN SCHEDULE, RESOLVED TO CM ROUND TYPES, ALL ALONG.**
+`dueWeekRows()` only ever draws a row for a work order whose `types` array
+(computed by `ingest_work_orders.py`'s own `cmTypes` filter, the same one
+`roundsOnClass()`/`gen_class_rounds.cjs` maintains) actually resolves to a
+CM round — a tyre change or an engine overhaul was never drawn, the same as
+Plan vs Actual's own `paCovered()` toggle already states for the office. The
+flat interval list the redesign substituted read "CM" as "everything CM's
+own math has an opinion about," including machines 1C has said nothing
+about this fortnight — a broader, different question, and the wrong one for
+this tab.
+
+**THE FULL FORTNIGHT, DAY BY DAY, AND ITS OWN ROW STATES.** Restoring
+`dueWeekRows()` also restored what the flat list's redesign had quietly
+dropped: past days drawn AND marked late (a week back as well as a week
+ahead, `DUE.AGENDA_BACK`/`AGENDA_FWD`), a walked round struck down to a
+quiet tick with its own date rather than vanishing, and a deferred round
+demoted with its reason on the row rather than folded into an undifferentiated
+"put" bucket. The CSS these three row states need (`.agitem.pre`,
+`.agitem.done`, `.agitem.deferred`, `.prenote`/`.donenote`/`.defnote`) had
+been deleted as orphaned by this session's own `fe.cjs` pass, on the correct
+reading that nothing referenced them **at the time** — restored now that
+`renderDueCm()` emits them again.
+
+**THE HEADING BADGE AND THE BOTTOM-TAB BADGE HAD QUIETLY COME TO DISAGREE.**
+`renderTabs()`'s own comment already states the rule it exists to keep:
+"From the list itself, not from a second copy of its arithmetic... a badge
+counted magnetic plugs while the list beside it counted eight undercarriage
+rounds." Before ANY of this session's redesign, `#dueCount` (the Due pane's
+own h2 badge) and `#tabD` (the bottom nav's badge) were the SAME figure by
+construction — both `dueRows("").filter(r=>r.st==="over").length`, the flat
+"List" screen's own count, read regardless of which tab was actually
+visible. The flat-CM-list redesign moved `#dueCount`'s own computation into
+`renderDueCm()`, sourced from that screen's own outstanding count — and
+restoring `dueWeekRows()` under the same tab meant `#dueCount` now read
+1C's own schedule while `#tabD`, two lines of code away in `renderTabs()`,
+went on reading `dueRows()` — the exact "one number on the tab, a different
+one on the card it opens" defect `renderTabs()`'s own comment names, this
+time between the tab bar and the pane it opens rather than between two
+panes. Caught writing `tests/duetab.cjs`'s own badge-agreement check, not
+from the field: a real fixture returned "0 vs 85". Fixed by moving
+`#dueCount`'s assignment into `renderTabs()` itself, right beside `#tabD`,
+reading the identical `nOver` value — the Due pane's heading is a standing
+fact about CM's own overdue count, not a property of whichever tab happens
+to be open, the same as it was before either tab existed.
+
+**TWO REAL CAPABILITIES HAVE NO SCREEN LEFT TO LIVE ON, AND THAT IS A GAP
+WORTH NAMING RATHER THAN QUIETLY PATCHING OVER.** The flat CM list this
+session tried and reverted had two genuine strengths the restored "Two
+weeks" shape does not: a machine **never inspected at all** had a row of its
+own, and a search reached **any** machine in the register — even one no
+round has ever been walked on — rather than only machines 1C currently has
+a work order against. Neither `dueWeekRows()` (1C's schedule) nor the 1C PM
+tab (also 1C's schedule, just work-order-shaped) can answer either
+question, and neither could the original pre-redesign "Two weeks" screen —
+this is not a regression this session introduced so much as a capability
+the flat list briefly had and gave back. `neverRows()` itself is unchanged
+and still exhaustively tested (`tests/neverdone.cjs`, `tests/gencatchall.cjs`)
+— what has no home any more is a PLACE an inspector taps to see it. Left as
+an open question for whoever next touches this screen, not invented here
+unasked, per this file's own "a fix must change only what was asked" rule.
+
+**THE TEST SUITE'S OWN FOOTPRINT MOVED A SECOND TIME.** `tests/duecm.cjs`
+is rewritten wholesale — its fixture is now `dueWeekRows()`'s own SCHED
+shape (ported from the deleted `tests/dueweek.cjs`, adapted onto the CM
+tab's own ids) rather than the flat list's `cm_hist` shape.
+`tests/duetab.cjs` is trimmed to what it still owns (tab order, the
+retired dropdowns staying retired, `#dueSpanF`'s presence/translation/
+sizing) — the round-type-pill and put-off-on-purpose sections it grew this
+session are gone with `#dueTypeF`, which no longer exists. `tests/duelist.cjs`
+— the flat list's own dedicated suite — is deleted outright; its load-bearing
+regression coverage (the four-round-type interval math, the dozer-vs-
+excavator UC figure) was already independently and more directly proven at
+the function level in `tests/duehours.cjs`, which needed no UI to prove it
+and is not repeated by a screen that no longer exists.
+`tests/deferwhy.cjs`, `tests/deldue.cjs`, `tests/duehours.cjs`,
+`tests/team.cjs`, `tests/neverdone.cjs`, `tests/histage.cjs`,
+`tests/histfull.cjs`, `tests/histsrc.cjs` and `tests/thawkey.cjs` each had
+one or more sections asserting text or `.dueitem` markup the CM tab no
+longer renders (an interval note, a type-filtered row, a never-inspected
+row, a stray-cleanup empty state, a `dueRows()`-driven search fallback) —
+each is re-pointed at the underlying function (`dueRows()`, `neverRows()`,
+`histAge()`) directly where the UI it used to read is gone, rather than
+weakened or deleted outright, so the fact each one proves is still proven.
+`histAge()` in particular already carries the exact three distinctions
+(never-loaded / fresh / stale) the flat list's own empty-state text used to
+narrate — asked for directly now, the same function `#dueStrayNote` already
+reads, instead of a screen that answers a different question.
+
+**A TEST PINNED TO A LIVE WORK ORDER DRIFTS FOR AS LONG AS 1C KEEPS
+UPDATING, AND IT HAS NOW DONE IT TWICE.** Running the full sweep after the
+Due tab redesign above turned up `tests/progchg.cjs` failing on the office's
+plan grid: "the week grid draws every one of them, not just the first" and
+"the General Inspection still split out as the pre-check" both FAILed, with
+nothing drawn at all. Not a regression from the redesign — the grid code
+itself (`paWeekData`, `paRows`, `paHourInfo` in `dashboard/index.html`)
+carried no change this session — and not new, either: the test's own
+comment already narrates the identical failure happening once before,
+to a DIFFERENT hardcoded work order. It was written against WO-015691
+(TK156's 4,000 h visit), which 1C marked CNF/Completed by 2026-09-20 and
+was swapped for WO-016655 (TK159, the same shape) as "1C's current OPEN
+stand-in." The hourly `[skip ci]` refresh of `data/work_orders.js` — visible
+in this repository's own commit history as a standing automated job — has
+now closed WO-016655 out from under the test the identical way, confirmed
+directly: its live record reads `woStatus:"CNF"`, `cmmsStatus:"Completed"`,
+`open:false`. A forward-looking plan grid correctly draws nothing for a
+closed order, so `entries` came back empty for a reason that has nothing to
+do with the rule under test — exactly what the file's own comment predicted
+would happen "if this drifts again the same way."
+
+Swapping in a third literal WO number would only have bought this suite a
+few more days: any single work order this fleet raises eventually gets
+confirmed and closed, and the test needs a MULTI-ROUND tier to be currently
+open, which is a moving target by the nature of what is being tested. The
+fix stops naming one: `tests/progchg.cjs` now asks `paRows()` at test time
+for whichever OPEN order currently resolves the most CM round types
+(three or more, General Inspection among them) — the exact shape the rule
+is about — wherever in 1C's live plan it happens to sit, and asserts the
+grid draws everything THAT order resolves to rather than a hardcoded count
+of four. This is the same lesson this file already states for
+`tests/audit.cjs`/`tests/iso.cjs`/`tests/uc.cjs` ("plant a fixture, don't
+read live data for an assertion about the CODE") applied to a suite that
+cannot plant a fixture — `paWeekData` reads `window.CM_WO_DATA` directly —
+so the fix is to stop asking a single row and start asking the live data
+for whichever row currently fits the shape, instead of one chosen once and
+left to rot.
+
 ---
 
 ## Secrets

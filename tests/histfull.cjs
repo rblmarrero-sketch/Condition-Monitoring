@@ -270,19 +270,19 @@ function unguardedWrites() {
        key without clearing it would leave the list rendering from a history
        that is no longer there - which is, in miniature, the bug this whole
        file is about. */
-    /* The merged CM tab also folds in every never-inspected register machine
-       now, so zeroing ASSETS is what isolates "this phone's own history is
-       gone" from "the fleet register still proposes hundreds of never-walked
-       machines regardless" — see tests/histage.cjs's emptyPure for the same
-       reasoning. */
+    /* histAge() ITSELF, not the CM tab's own empty state — the CM tab is
+       dueWeekRows() now (1C's own schedule, see tests/duecm.cjs), whose
+       empty state answers a different question than this phone's own
+       history being lost. histAge() (fed into #dueStrayNote) still carries
+       this exact distinction and is asserted directly — see
+       tests/histage.cjs's histAgeText for the same reasoning. */
     await a.p.evaluate(() => { localStorage.setItem('cm_hist_short', '1');
                                localStorage.removeItem('cm_hist');
-                               histCache = null; ASSETS.length = 0; renderDue(); });
+                               histCache = null; });
     await a.p.waitForTimeout(300);
-    const empty = await a.p.evaluate(() => {
-      const e = document.querySelector('#dueCmList .empty'); return e ? e.textContent.trim() : null; });
-    ok('an empty list explains the loss', empty === await say(a.p, 'due_short'), String(empty).slice(0, 70));
-    ok('rather than saying nothing is due', empty !== await say(a.p, 'due_empty'));
+    const age = await a.p.evaluate(() => histAge());
+    ok('histAge() explains the loss', age === await say(a.p, 'hist_short'), String(age).slice(0, 70));
+    ok('rather than saying nothing is due', age !== await say(a.p, 'due_empty'));
     await a.ctx.close();
   }
 
