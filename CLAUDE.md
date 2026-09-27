@@ -3383,6 +3383,80 @@ the muted metadata line it already sits on; `#fleetTbl .need.q` drops the
 same properties from the quiet chip while keeping the warning ink — the
 one thing that was ever the actual signal.
 
+**DASHBOARD REDESIGN, PHASE 4: A FILTER PER COLUMN ON THE MAINTENANCE
+ACTIONS REGISTER.** The next table in the "search/filter on top of the
+column" ask, and the second to get it — Defects Raised already carries
+this pattern (`cwColQ`/`cwWordMatch`/`CW_COLS`, one plain-text input per
+column in a second header row, asked for by name: "why cant we just put a
+search/filter on top of the header"). The register's own table view
+already sorted by column; it had nothing to narrow one. `actColQ` is the
+register's own state, keyed the same as the sort (`actSort.k`); `actColVal`
+reads each column's actual displayed text (the sort's own `val()` returns
+a numeric rank for Priority and a `9999-99-99` sentinel for a blank due
+date — neither is what a reader would type to search for it) and the
+matching itself calls the EXISTING `cwWordMatch` directly rather than
+re-deriving the word-boundary rule a second time. The filter row reuses
+the identical `cwfh`/`cwcf` CSS classes Defects Raised already has —
+`table.grid th.cwfh input.cwcf` was never scoped to that one screen's
+container, so no new CSS was needed, only the JS wiring
+(`renderActions`'s own focus/caret capture-and-restore, the identical
+technique `renderCmWoTab`'s own comment already documents, for the
+identical reason: a rebuild mid-keystroke must not land the next character
+on an input that no longer exists). A query matching nothing still leaves
+the filter row on screen with an explanation row beneath it, never a table
+that looks broken with no way to tell why.
+
+One authoring mistake caught before it ever reached a browser: the first
+draft of the "no rows match" fallback left a stray `}` behind when an
+existing `+` between two template-literal segments was changed to `||` —
+harmless-looking, and it broke the WHOLE inline script block, the same
+"one syntax error early in the file reads as failures everywhere after it"
+shape this file has hit with a stray backtick more than once. Caught by
+`node --check` against the page's own extracted `<script>` content before
+any test ran, exactly the reflex this file already recommends after the
+backtick incidents — six separate Actions-register test files threw
+`ReferenceError: CMDash/renderActions/showTab is not defined` from the
+SAME root cause, which is what "one syntax error reads as failures
+everywhere" looks like from the test runner's side. `tests/actcolq.cjs` is
+the new suite: the filter row's shape, that a column filter narrows only
+its own column and never a neighbour's, the word-boundary rule, the empty
+state, keystroke-by-keystroke typing that never loses focus mid-rebuild
+(`page.type()`, not a single value set — the one thing a programmatic
+value-set can never catch), that a column filter survives a header click
+(sort and filter are independent), and the Russian placeholder (reusing
+the existing key, no new translation needed).
+
+**A FILTER BOX WITH A PLACEHOLDER AND NO NAME IS SILENT TO A SCREEN
+READER, AND THE FULL SWEEP IS WHAT CAUGHT IT, NOT THE NEW SUITE.**
+`tests/phase6.cjs` — the accessibility pass, which walks every tab
+including Actions — failed on the new filter row the moment it existed:
+`<input class="cwcf" placeholder="Filter…">` has a placeholder, which
+disappears the instant something is typed and was never an accessible
+name to begin with, and no `aria-label`/`aria-labelledby`/`<label>` gave
+it one either. Six identical inputs on the Actions register (`sev`,
+`unit`, `comp`, `act`, `owner`, `wo` — one per visible column) were
+therefore nameless to a screen reader, distinguishable from each other
+only by position. This was true of the ORIGINAL Defects Raised filter row
+too, since build 442 — it just went uncaught, because `tests/phase6.cjs`'s
+own `TABS` list never includes the Defects Raised tab (`cmwo`), so nothing
+had ever asked that specific row the question. `tests/actcolq.cjs` itself
+never asked it either — it drives every input directly by CSS selector,
+which works whether or not the input has a name. Fixed at the one function
+both tables build their filter row from: each `<input class="cwcf">` now
+carries `aria-label="Filter {column name}"` (`cw_colfilter_aria`, a new,
+shared key), reading the same column label the header above it already
+shows — the accessible name and the visible name are the same fact, not
+two. Confirmed non-vacuous by stashing the change and re-running
+`tests/phase6.cjs` alone, which reproduces the exact failure
+(`actions: cwcf,cwcf,cwcf,cwcf,cwcf,cwcf`) against the pre-fix code, then
+passes clean after it. The same regression sweep also reproduced two
+already-known, unrelated failures — `tests/tray.cjs`'s A4-fit (confirmed
+pre-existing earlier this session) and `tests/perfuc.cjs`'s DOM-node-count
+check on the phone's own Undercarriage screen (confirmed pre-existing by
+running it against the identical HEAD with this session's changes
+stashed out) — neither touched by this change, left as found rather than
+folded into an unrelated fix.
+
 ---
 
 ## Secrets

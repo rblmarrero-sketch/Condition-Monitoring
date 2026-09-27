@@ -3759,23 +3759,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=472"></script>
+<script src="../data/magnetic_plug.js?v=473"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=472"></script>
-<script src="../mobile/hme.js?v=472"></script>
-<script src="../mobile/mp-fc.js?v=472"></script>
-<script src="../mobile/rtw.js?v=472"></script>
-<script src="../mobile/hme-cascade.js?v=472"></script>
-<script src="../mobile/temp-limits.js?v=472"></script>
+<script src="../data/work_orders.js?v=473"></script>
+<script src="../mobile/hme.js?v=473"></script>
+<script src="../mobile/mp-fc.js?v=473"></script>
+<script src="../mobile/rtw.js?v=473"></script>
+<script src="../mobile/hme-cascade.js?v=473"></script>
+<script src="../mobile/temp-limits.js?v=473"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=472"></script>
-<script src="../mobile/normalize.js?v=472"></script>
-<script src="../mobile/terms.js?v=472"></script>
+<script src="../mobile/assets.js?v=473"></script>
+<script src="../mobile/normalize.js?v=473"></script>
+<script src="../mobile/terms.js?v=473"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -3794,19 +3794,19 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=472"></script>
-<script src="../mobile/edits.js?v=472"></script>
-<script src="../mobile/due.js?v=472"></script>
-<script src="../mobile/wear.js?v=472"></script>
-<script src="../mobile/wear-map.js?v=472"></script>
-<script src="../mobile/lube.js?v=472"></script>
-<script src="../mobile/lube-overrides.js?v=472"></script>
-<script src="../mobile/lube2027.js?v=472"></script>
-<script src="../mobile/lube-tds.js?v=472"></script>
+<script src="../mobile/grade.js?v=473"></script>
+<script src="../mobile/edits.js?v=473"></script>
+<script src="../mobile/due.js?v=473"></script>
+<script src="../mobile/wear.js?v=473"></script>
+<script src="../mobile/wear-map.js?v=473"></script>
+<script src="../mobile/lube.js?v=473"></script>
+<script src="../mobile/lube-overrides.js?v=473"></script>
+<script src="../mobile/lube2027.js?v=473"></script>
+<script src="../mobile/lube-tds.js?v=473"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=472"></script>
-<script src="../mobile/machine-photos.js?v=472"></script>
+<script src="../mobile/upload-defaults.js?v=473"></script>
+<script src="../mobile/machine-photos.js?v=473"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3815,17 +3815,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=472"></script>
-<script src="../mobile/get.js?v=472"></script>
-<script src="../mobile/points.js?v=472"></script>
-<script src="../mobile/uc-points.js?v=472"></script>
-<script src="../mobile/inspect-guide.js?v=472"></script>
-<script src="../mobile/get-figs.js?v=472"></script>
-<script src="../mobile/body-points.js?v=472"></script>
-<script src="../mobile/body-map.js?v=472"></script>
-<script src="../mobile/jspdf.umd.min.js?v=472"></script>
-<script src="../mobile/html2canvas.min.js?v=472"></script>
-<script src="../mobile/report-core.js?v=472"></script>
+<script src="../mobile/machine-fig.js?v=473"></script>
+<script src="../mobile/get.js?v=473"></script>
+<script src="../mobile/points.js?v=473"></script>
+<script src="../mobile/uc-points.js?v=473"></script>
+<script src="../mobile/inspect-guide.js?v=473"></script>
+<script src="../mobile/get-figs.js?v=473"></script>
+<script src="../mobile/body-points.js?v=473"></script>
+<script src="../mobile/body-map.js?v=473"></script>
+<script src="../mobile/jspdf.umd.min.js?v=473"></script>
+<script src="../mobile/html2canvas.min.js?v=473"></script>
+<script src="../mobile/report-core.js?v=473"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -4781,6 +4781,7 @@ const I18N={
   cw_c_descr:"Defect description", cw_c_cause:"Cause of defect",
   cw_c_status:"Status", cw_c_by:"Raised by",
   cw_colfilter_ph:"Filter…",
+  cw_colfilter_aria:"Filter {c}",
   pa_st_ontime:"On time", pa_st_late:"Late", pa_st_early:"Early", pa_st_missing:"No CM round",
   pa_st_off:"Held off", pa_k_off:"Held off", pa_k_off_s:"rounds the site has taken off these machines",
   pa_st_preinsp:"Pre-PM check due",
@@ -5662,6 +5663,7 @@ const I18N={
   cw_c_descr:"Описание дефекта", cw_c_cause:"Причина дефекта",
   cw_c_status:"Статус", cw_c_by:"Заявил",
   cw_colfilter_ph:"Фильтр…",
+  cw_colfilter_aria:"Фильтр: {c}",
   pa_st_ontime:"В срок", pa_st_late:"Позже", pa_st_early:"Раньше", pa_st_missing:"Нет обхода CM",
   pa_st_off:"Сняты", pa_k_off:"Сняты с обхода", pa_k_off_s:"обходы, снятые площадкой с этих машин",
   pa_st_preinsp:"Нужна проверка перед ТО",
@@ -7341,6 +7343,29 @@ let actView=(function(){ try{ return localStorage.getItem(AVK)==="unit"?"unit":"
    for ninety days — so the default is a composite, and pressing any header
    leaves it for that column. */
 let actSort={k:"queue", dir:-1};
+/* A FILTER PER COLUMN, IN THE HEADER — the same asked-for-by-name pattern
+   Defects Raised already has (cwColQ/cwWordMatch), reused rather than
+   reinvented: the register's own table already sorts by column, so a reader
+   who wants "just this owner" or "just this unit" should not have to leave
+   the column to find a box for it. actColQ is keyed by the same column key
+   the header/sort already use; the text each key reads is actColVal, since
+   the sort's own val() returns a numeric rank for Priority — useless to
+   search — and a raw due-date sentinel, not what a reader would type. */
+let actColQ={};
+function actColVal(x,k){
+  switch(k){
+    case "queue": case "sev": { const sv=sevOf(x.r,x.i); return sv?SEV[sv].l:""; }
+    case "unit": return x.r.equip||"";
+    case "comp": return ptLabel(x.r,x.i)||x.i.key||"";
+    case "act": return x.i.defect||"";
+    case "req": return x.i.actionLabel||(x.i.action?actionName(x.i.action):"");
+    case "owner": return x.i.owner||"";
+    case "due": return x.i.due||"";
+    case "st": return stName(x.i.status);
+    case "wo": return x.i.wo||"";
+    default: return "";
+  }
+}
 /* What is ticked. Kept across a repaint so a save that redraws the table does
    not silently drop a selection somebody spent a minute building.
 
@@ -7547,6 +7572,16 @@ function renderActCols(){
 }
 function renderActions(){
   renderActCols();
+  /* Capture which column-filter input holds focus, and where its caret sits,
+     before this function rebuilds the table wholesale — the identical
+     technique cwList's own column filters use, for the identical reason: a
+     rebuild mid-keystroke must not land the next character on an input that
+     no longer exists. */
+  const actFocusCap=(()=>{
+    const box=$("actionTbl"), el=document.activeElement;
+    if(!box || !el || !box.contains(el) || !el.classList || !el.classList.contains("cwcf")) return null;
+    return { k: el.dataset.k, start: el.selectionStart, end: el.selectionEnd };
+  })();
   const rows=actionRows();
   /* The tracker answers the meeting's question before the table does. */
   let overdue=0, oldest=0, owned=0, triage=0, required=0, disposed=0;
@@ -7649,17 +7684,6 @@ function renderActions(){
       date:x.r.date||"", act:(x.i.defect||""), req:(x.i.actionLabel||(x.i.action?actionName(x.i.action):"")||"￿"),
       owner:x.i.owner||"￿", wo:x.i.wo||"￿",
       due:x.i.due||"9999-99-99", age:(fAgeDays(x.r,x.i)||0), st:stName(x.i.status) }[k]);
-    const list=shown.slice().sort((a,b)=>{
-      if(actSort.k==="queue"){
-        const c = sevRank(sevOf(a.r,a.i)) - sevRank(sevOf(b.r,b.i))
-               || (fOverdue(a.i)?1:0) - (fOverdue(b.i)?1:0)
-               || (fAgeDays(a.r,a.i)||0) - (fAgeDays(b.r,b.i)||0);
-        return (c || b.r.equip.localeCompare(a.r.equip)) * actSort.dir;
-      }
-      const p1=val(a,actSort.k), p2=val(b,actSort.k);
-      const c=typeof p1==="number"?p1-p2:String(p1).localeCompare(String(p2));
-      return (c || a.r.equip.localeCompare(b.r.equip))*actSort.dir;
-    });
     /* Priority · Equipment · Component · Finding · Required action · Owner ·
        Due · Status · Work order. The date and the age ride on the component
        cell's title and in the drawer; the work order has a column because it
@@ -7671,6 +7695,26 @@ function renderActions(){
     /* A sort on a column that has just been hidden is a sort nobody can see;
        the register falls back to the queue it opens in. */
     if(actSort.k!=="queue" && !acolOn(actSort.k)) actSort={k:"queue",dir:-1};
+    /* Filtered by whichever visible column has something typed into it,
+       THEN sorted — a filter on a column that has just been hidden keeps
+       narrowing (its own input is simply gone until the column returns),
+       exactly like Defects Raised's cwColQ. */
+    const filtByCol=shown.filter(x=>cols.every(([k])=>{
+      if(!k) return true;
+      const fq=(actColQ[k]||"").trim().toUpperCase();
+      return !fq || cwWordMatch(actColVal(x,k), fq);
+    }));
+    const list=filtByCol.slice().sort((a,b)=>{
+      if(actSort.k==="queue"){
+        const c = sevRank(sevOf(a.r,a.i)) - sevRank(sevOf(b.r,b.i))
+               || (fOverdue(a.i)?1:0) - (fOverdue(b.i)?1:0)
+               || (fAgeDays(a.r,a.i)||0) - (fAgeDays(b.r,b.i)||0);
+        return (c || b.r.equip.localeCompare(a.r.equip)) * actSort.dir;
+      }
+      const p1=val(a,actSort.k), p2=val(b,actSort.k);
+      const c=typeof p1==="number"?p1-p2:String(p1).localeCompare(String(p2));
+      return (c || a.r.equip.localeCompare(b.r.equip))*actSort.dir;
+    });
     /* Everything on screen, ticked or cleared in one press. It is scoped to what
        is SHOWN, not to the whole register — a select-all that silently reaches
        past the filter is how somebody reassigns four hundred findings meaning to
@@ -7693,8 +7737,11 @@ function renderActions(){
           title="${esc(t("a_sel_all"))}" aria-label="${esc(t("a_sel_all"))}"></th>${cols.map(([k,l])=> !k ? `<th class="go"></th>` :
         `<th class="sortable${actSort.k===k?" on":""}" data-asort="${k}"${
           k==="queue"?` title="${esc(t("a_queue_tip"))}"`:""}>${esc(l)}<span class="arrow">${
-          actSort.k===k?(actSort.dir>0?"▲":"▼"):"↕"}</span></th>`).join("")}</tr></thead><tbody>`
-      + page.map(({r,i})=>{
+          actSort.k===k?(actSort.dir>0?"▲":"▼"):"↕"}</span></th>`).join("")}</tr>
+      <tr><th class="cwfh"></th>${cols.map(([k,l])=> !k ? `<th class="cwfh"></th>` :
+        `<th class="cwfh"><input type="text" class="cwcf" data-k="${esc(k)}" value="${esc(actColQ[k]||"")}" placeholder="${esc(t("cw_colfilter_ph"))}" aria-label="${esc(t("cw_colfilter_aria",{c:l}))}"></th>`).join("")}</tr>
+      </thead><tbody>`
+      + (page.map(({r,i})=>{
           const sv=sevOf(r,i), od=fOverdue(i), dd=i.due?daysTo0(i.due):null, age=fAgeDays(r,i);
           const ast=actionState(r,i);
           const sc=sv?SEVC[sv]:"";
@@ -7743,7 +7790,12 @@ function renderActions(){
                 : (woWanted(i) ? `<span class="need">${esc(TERMS.t(lang,"need_wo"))}</span>` : '<span class="muted">—</span>')}</td>`}
             <td class="go" aria-hidden="true">›</td>
           </tr>`;
-        }).join("")+`</tbody></table></div>` + pgT.strip;
+        }).join("")
+      /* A column filter that matches nothing still leaves its own input on
+         screen to clear — the empty row explains why the table under it
+         is blank instead of it just looking broken. */
+      || `<tr><td colspan="${1+cols.length}" class="empty">${esc(t("e_nofilter"))}</td></tr>`
+      )+`</tbody></table></div>` + pgT.strip;
     /* A row opens the drawer — the one place a finding is edited. The tick
        box does its own job and must not also open the drawer under the
        reader's hands. */
@@ -7783,6 +7835,14 @@ function renderActions(){
       else { actSort.k=k; actSort.dir=(k==="sev"||k==="age"||k==="queue")?-1:1; }
       renderActions();
     });
+    $("actionTbl").querySelectorAll("input.cwcf").forEach(inp=>inp.oninput=()=>{
+      actColQ[inp.dataset.k]=inp.value;
+      renderActions();
+    });
+    if(actFocusCap){
+      const el=$("actionTbl").querySelector(`.cwcf[data-k="${actFocusCap.k}"]`);
+      if(el){ el.focus(); try{ el.setSelectionRange(actFocusCap.start, actFocusCap.end); }catch(e){} }
+    }
     return;
   }
 
@@ -17670,8 +17730,8 @@ function renderCmWoTab(){
      would mean retyping it into an input that no longer exists. */
   const thead = `<tr>` + CW_COLS.map(([k,labelKey]) =>
       `<th class="sortable${cwSort.k===k?" on":""}" data-sort="${esc(k)}" data-i18n="${esc(labelKey)}">${esc(t(labelKey))}<span class="arrow">${cwSort.k===k?(cwSort.dir>0?"▲":"▼"):"↕"}</span></th>`).join("")
-    + `</tr><tr>` + CW_COLS.map(([k]) =>
-      `<th class="cwfh"><input type="text" class="cwcf" data-k="${esc(k)}" value="${esc(cwColQ[k]||"")}" placeholder="${esc(t("cw_colfilter_ph"))}"></th>`).join("")
+    + `</tr><tr>` + CW_COLS.map(([k,labelKey]) =>
+      `<th class="cwfh"><input type="text" class="cwcf" data-k="${esc(k)}" value="${esc(cwColQ[k]||"")}" placeholder="${esc(t("cw_colfilter_ph"))}" aria-label="${esc(t("cw_colfilter_aria",{c:t(labelKey)}))}"></th>`).join("")
     + `</tr>`;
   const tbody = shown.length ? pg.rows.map(r=>`<tr${r.planned?' class="muted"':''}>
         <td class="mono" title="${esc(r.planStart ? t("cw_plan_on",{d:r.planStart}) : t("cw_plan_none"))}">${cell(r.date)}</td>
@@ -17988,8 +18048,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=472"></script>
-<script src="sync-adapter.js?v=472"></script>
-<script src="report.js?v=472"></script>
+<script src="drive.js?v=473"></script>
+<script src="sync-adapter.js?v=473"></script>
+<script src="report.js?v=473"></script>
 </body>
 </html>
