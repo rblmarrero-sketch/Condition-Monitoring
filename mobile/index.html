@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=479">
+<link rel="manifest" href="manifest.webmanifest?v=480">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=479">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=479">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=479">
+<link rel="apple-touch-icon" href="icon-192.png?v=480">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=480">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=480">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2746,16 +2746,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=479"></script>
-<script src="upload-defaults.js?v=479"></script>
-<script src="hme.js?v=479"></script>
-<script src="mp-fc.js?v=479"></script>
-<script src="rtw.js?v=479"></script>
-<script src="hme-cascade.js?v=479"></script>
-<script src="assets.js?v=479"></script>
-<script src="temp-limits.js?v=479"></script>
-<script src="normalize.js?v=479"></script>
-<script src="terms.js?v=479"></script>
+<script src="native.js?v=480"></script>
+<script src="upload-defaults.js?v=480"></script>
+<script src="hme.js?v=480"></script>
+<script src="mp-fc.js?v=480"></script>
+<script src="rtw.js?v=480"></script>
+<script src="hme-cascade.js?v=480"></script>
+<script src="assets.js?v=480"></script>
+<script src="temp-limits.js?v=480"></script>
+<script src="normalize.js?v=480"></script>
+<script src="terms.js?v=480"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2774,25 +2774,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=479"></script>
-<script src="edits.js?v=479"></script>
-<script src="due.js?v=479"></script>
-<script src="wear.js?v=479"></script>
-<script src="wear-figs.js?v=479"></script>
-<script src="wear-map.js?v=479"></script>
-<script src="machine-photos.js?v=479"></script>
-<script src="machine-fig.js?v=479"></script>
-<script src="get.js?v=479"></script>
-<script src="points.js?v=479"></script>
-<script src="uc-points.js?v=479"></script>
-<script src="inspect-guide.js?v=479"></script>
-<script src="get-figs.js?v=479"></script>
-<script src="body-points.js?v=479"></script>
-<script src="body-map.js?v=479"></script>
-<script src="lube.js?v=479"></script>
-<script src="lube-overrides.js?v=479"></script>
-<script src="lube2027.js?v=479"></script>
-<script src="report-core.js?v=479"></script>
+<script src="grade.js?v=480"></script>
+<script src="edits.js?v=480"></script>
+<script src="due.js?v=480"></script>
+<script src="wear.js?v=480"></script>
+<script src="wear-figs.js?v=480"></script>
+<script src="wear-map.js?v=480"></script>
+<script src="machine-photos.js?v=480"></script>
+<script src="machine-fig.js?v=480"></script>
+<script src="get.js?v=480"></script>
+<script src="points.js?v=480"></script>
+<script src="uc-points.js?v=480"></script>
+<script src="inspect-guide.js?v=480"></script>
+<script src="get-figs.js?v=480"></script>
+<script src="body-points.js?v=480"></script>
+<script src="body-map.js?v=480"></script>
+<script src="lube.js?v=480"></script>
+<script src="lube-overrides.js?v=480"></script>
+<script src="lube2027.js?v=480"></script>
+<script src="report-core.js?v=480"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -5173,9 +5173,27 @@ function dbWriteFail(why){ dbFailStreak++; if(dbFailStreak>=DB_RECONNECT_AT) dbR
    `.phase` records which event actually fired (abort vs error) and whether
    a request-level error was ever seen — three bits of information this
    project had literally none of an hour ago. */
-async function dbPut(rec){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readwrite"); let reqErr=null; const rq=t.objectStore(STORE).put(rec); rq.onerror=()=>{ reqErr=rq.error||null; };
-  const fail=(phase,fallbackMsg)=>{ dbWriteFail("dbPut:"+phase); const e=reqErr||t.error||new Error(fallbackMsg); try{ e.phase=phase; e.hadReqErr=!!reqErr; }catch(_){} rej(e); };
-  t.oncomplete=()=>{ dbVer++; dbWriteOk(); res(); }; t.onerror=()=>fail("error","save failed — storage may be full"); t.onabort=()=>fail("abort","save aborted — storage may be full"); }); }
+/* A TRANSACTION CAN FIRE BOTH error AND abort FOR ONE FAILURE, AND fail()
+   HAD NO GUARD AGAINST RUNNING TWICE. Found instrumenting tests/sync-
+   writeback-race.cjs's own §7 (three forced failures should reset
+   dbFailStreak to exactly 0 at the reconnect threshold) after it started
+   failing intermittently with the streak landing at 1: logging every
+   IDBObjectStore.put() call showed exactly three calls, three aborts — but
+   the THIRD transaction's abort fired dbWriteFail twice, crossing the
+   threshold, reconnecting (streak back to 0), and then incrementing again
+   to 1 before the promise ever settled. An explicitly-aborted transaction
+   with a request already in flight can fire the request's own bubbled
+   "error" and the transaction's own "abort" for the identical failure —
+   both wired here to the same fail() — so dbWriteFail() (and therefore
+   dbReconnect(), the force-close-and-reopen this project ships specifically
+   because a live device kept failing 19 writes in a row on one connection)
+   ran twice for one write that failed once. `done` makes fail() (and the
+   success path beside it) a one-shot: the FIRST terminal event a
+   transaction reports is the one this code acts on, whichever of
+   complete/error/abort it turns out to be. */
+async function dbPut(rec){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readwrite"); let reqErr=null, done=false; const rq=t.objectStore(STORE).put(rec); rq.onerror=()=>{ reqErr=rq.error||null; };
+  const fail=(phase,fallbackMsg)=>{ if(done) return; done=true; dbWriteFail("dbPut:"+phase); const e=reqErr||t.error||new Error(fallbackMsg); try{ e.phase=phase; e.hadReqErr=!!reqErr; }catch(_){} rej(e); };
+  t.oncomplete=()=>{ if(done) return; done=true; dbVer++; dbWriteOk(); res(); }; t.onerror=()=>fail("error","save failed — storage may be full"); t.onabort=()=>fail("abort","save aborted — storage may be full"); }); }
 /* The round being typed lives in this store too, under a reserved id, so it
    gets IndexedDB's durability and can hold photographs. It is NOT an
    inspection: filtered out here, once, so that the queue, the sync, the
@@ -5200,9 +5218,9 @@ async function dbAll(){ const d=await idb(); return new Promise((res,rej)=>{ con
 /* The team rounds only — the other side of that same filter. */
 async function dbTeam(){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readonly"); const rq=t.objectStore(STORE).getAll(); rq.onsuccess=()=>res((rq.result||[]).filter(r=>r&&isTeamId(r.id))); rq.onerror=()=>rej(rq.error||new Error("could not read the shared rounds")); }); }
 async function dbGet(id){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readonly"); const rq=t.objectStore(STORE).get(id); rq.onsuccess=()=>res(rq.result||null); rq.onerror=()=>rej(rq.error||new Error("could not read this record")); }); }
-async function dbDel(id){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readwrite"); let reqErr=null; const rq=t.objectStore(STORE).delete(id); rq.onerror=()=>{ reqErr=rq.error||null; };
-  const fail=(phase,fallbackMsg)=>{ dbWriteFail("dbDel:"+phase); const e=reqErr||t.error||new Error(fallbackMsg); try{ e.phase=phase; e.hadReqErr=!!reqErr; }catch(_){} rej(e); };
-  t.oncomplete=()=>{ dbVer++; dbWriteOk(); res(); }; t.onerror=()=>fail("error","delete failed"); t.onabort=()=>fail("abort","delete aborted"); }); }
+async function dbDel(id){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readwrite"); let reqErr=null, done=false; const rq=t.objectStore(STORE).delete(id); rq.onerror=()=>{ reqErr=rq.error||null; };
+  const fail=(phase,fallbackMsg)=>{ if(done) return; done=true; dbWriteFail("dbDel:"+phase); const e=reqErr||t.error||new Error(fallbackMsg); try{ e.phase=phase; e.hadReqErr=!!reqErr; }catch(_){} rej(e); };
+  t.oncomplete=()=>{ if(done) return; done=true; dbVer++; dbWriteOk(); res(); }; t.onerror=()=>fail("error","delete failed"); t.onabort=()=>fail("abort","delete aborted"); }); }
 
 /* ===================== class + type + component chips ===================== */
 function fillClassSel(){ $("classBtn").textContent = eqCat==="ALL"
@@ -14564,7 +14582,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="479";
+const BUILD="480";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

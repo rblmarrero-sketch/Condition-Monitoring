@@ -4511,3 +4511,53 @@ row stays at one line (measured -392 vs -352, both suites' own tolerance is
 60px) where the sixth legend entry was not. `overview2.cjs`, `cover.cjs`,
 `queue.cjs` and `layout.cjs`'s own first-row-in-view check all pass clean
 against the pill in place.
+
+**A TRANSACTION CAN FIRE BOTH `error` AND `abort` FOR ONE FAILURE, AND
+`dbPut`/`dbDel`'S `fail()` HAD NO GUARD AGAINST RUNNING TWICE.** Found
+running the full sweep after the trend-pill build above, not from a field
+trace — the routine, targeted regression pass around it had already gone
+clean. `tests/sync-writeback-race.cjs` §7 (three forced write failures
+must cross `DB_RECONNECT_AT` and land `dbFailStreak` back at exactly 0,
+"evidence a reconnect fired") started failing intermittently, at streak 1
+instead of 0, on code this session had not touched — `git diff` on
+`mobile/index.html` across both commits showed nothing but the `?v=` bump.
+Reproduced 2 of 3 runs even standalone, ruling out sweep-only system load
+as the cause.
+
+Instrumented directly rather than guessed at: logging every
+`IDBObjectStore.put()` call and its transaction's terminal event showed
+exactly the three calls the test makes, three explicit aborts — and the
+THIRD transaction's `onabort` AND `onerror` both fired for the identical
+failure. `dbPut`'s `fail(phase, fallbackMsg)` calls `dbWriteFail(...)`
+unconditionally on every invocation, with no guard against being called
+twice for one transaction — a `Promise` only ever settles once, so the
+REJECTION looked idempotent from outside, but `dbWriteFail()` runs
+synchronously inside `fail()`, BEFORE the (harmlessly idempotent) `rej(e)`
+call, so its side effect — `dbFailStreak++`, and past `DB_RECONNECT_AT`,
+`dbReconnect()` — fired twice for a write that failed once: the first
+event crossed the threshold and reset the streak to 0, the second
+incremented it straight back to 1, before the test (or a real caller) ever
+saw either.
+
+This is not only a test artifact. An explicitly-aborted transaction with a
+request already in flight firing both the request's bubbled `error` and
+the transaction's own `abort` for the same underlying failure is ordinary
+IndexedDB behaviour, not a browser bug or a Playwright quirk — a real
+device hitting one genuine write failure could double-count it, reaching
+`DB_RECONNECT_AT` (3) after only two actual failures, or reconnecting the
+live connection this project already ships specifically because D1ZMK6
+kept failing the same write 19 times in a row on one connection (see the
+watching-build-420 entry above) sooner and more often than the threshold
+was ever meant to fire it. `done` (a one-shot flag, set on the FIRST
+terminal event — `complete`, `error`, or `abort`, whichever the browser
+reports first — and checked before `fail()` or the success path do
+anything) makes both `dbPut` and `dbDel` act on exactly one outcome per
+transaction, matching what every caller of `dbFailStreak`/`dbWriteFail`
+has always assumed was already true. `dbnullerr.cjs`, `recovery.cjs`,
+`confirm.cjs`, `redraft.cjs`, `upload-recovery-edge.cjs`,
+`upload-chunk-merge.cjs`, `postsave.cjs`, `wakehold.cjs`,
+`curitemrace.cjs`, `videoown.cjs`, `static.cjs`, `lint.cjs`,
+`audit-scan.cjs`, `crawl.cjs` and `norej.cjs` — every suite exercising
+`dbPut`/`dbDel` in any way — pass clean against the fix; `sync-writeback-
+race.cjs` §7 itself passed four consecutive runs after it, having failed
+two of three before.
