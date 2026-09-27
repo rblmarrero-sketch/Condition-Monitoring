@@ -4082,3 +4082,175 @@ all. `tests/edcomp.cjs` proves both halves against a real register round
 with no manifest: the select offers a real, distinct, unused component;
 saving moves the finding and marks `_from`; and the photograph is still
 found under its old name afterward.
+
+**A DEEP AUDIT OF THE MOBILE CODEBASE, NOT PROMPTED BY A FIELD REPORT.** Asked
+plainly to keep checking the app for bugs until none were left, six parallel
+readers each covered one subsystem of `mobile/index.html`, cross-checked
+against this file's own defect history so nothing already fixed was
+re-reported. One reader (bootstrap/state/asset code) found nothing solid
+after a careful pass, confirmed against real fleet data rather than
+inspection alone. The other five surfaced real, previously-unfixed defects,
+verified against the running code before anything was changed:
+
+**A QUEUE THIS PHONE CANNOT READ WAS REPORTED AS "READY."** `yardVerdict()`
+— the readiness card's own verdict — names every key it checks
+(`storage`/`offline`/`dest`/`refs`/`queue_recover`/`queue_stalled`/
+`storage_nowrite`/`queue`/`build`/`bg`/`camera`) and falls through to a
+generic `has("warn")` catch-all ("Ready — some data is old") for anything
+it does not name. `yardCheck()`'s own queue step already adds a row keyed
+`"queue_unknown"` when `dbAll()` fails — the exact "a queue that cannot be
+read is not an empty queue" case this file's own rules already state for
+the header pill (`net_qbad`, `netState()`'s own comment: "before failing,
+long before all sent... the one state in which no other verdict is
+available") — but `yardVerdict()` never named that key, so a phone whose
+IndexedDB queue read failed was told "Ready" on the one card built
+specifically to say when it is not. `yardVerdict()` now names it
+(`rdy_v_qerr`, ranked with the other queue verdicts, above the milder
+catch-all), matching the severity `netState()` already gives the identical
+fact one screen over.
+
+**A ONE-OFF SLOW ANSWER READ AS THE SAME "SETUP NEEDED" AS A PHONE NEVER
+INSTALLED AT ALL.** `yardVerdict()`'s `hasKey()` folds EVERY non-ok row
+under one key into that key's own fixed verdict, regardless of the row's
+own severity — so `swAsk()`'s 4-second health-probe timeout (a "warn" row,
+worded "Try again in a moment") shared the `"offline"` key with the
+genuinely bad case ("this phone was never installed for offline use"), and
+both produced the identical `rdy_v_setup` ("Setup needed before you go")
+headline and push notification. A slow reply under load — plausible, and
+explicitly anticipated by the row's own wording — read as a setup failure
+needing action before leaving, at the same urgency as one that actually
+does. The timeout case now gets its own key (`offline_slow`) and its own,
+milder verdict (`rdy_v_recheck`, "Ready — recheck in a moment"), which is
+not in `YARD_LOUD` and so never fires a notification either.
+
+**THE STALLED-QUEUE DETECTOR ASKED THE WRONG HOST WHETHER THE SERVER WAS
+REACHABLE.** `yardCheck()`'s `reach` (whether the queue's own "stalled, not
+merely waiting" verdict may fire) read `U.okAt` — stamped only when the
+BUILD check reaches GitHub Pages (`checkForNewBuild`) — instead of
+`netOkAt`, stamped only by a real reply from the upload backend. This file
+already states, at length, that Pages and the upload backend "fail
+independently" and a phone must never read one as evidence about the other
+(`UPD.dataOk`'s own comment, a few hundred lines further down the same
+file) — and the stalled-queue check did exactly that: Pages reachable while
+the upload backend had been down for hours could mislabel a merely-waiting
+queue as "stalled, needs assistance," and the reverse (Pages briefly
+unreachable, backend fine) could hide a genuinely stalled one. Reads
+`netOkAt` now, the same evidence `UPD.dataOk` already trusts for the
+identical distinction.
+
+**A DEFERRAL AND A COMPLETION ON THE SAME DAY COULD NEVER ANSWER ONE
+ANOTHER, IN EITHER ORDER.** `deferState()` compares `d.at` (the deferral's
+full ISO timestamp, stamped to the second on purpose — see its own history
+above) against `last.d` (a walked round's date, bare `YYYY-MM-DD`, no time
+of day) with a plain string `>=`. A longer string that shares a shorter
+one's own prefix always sorts as `>=` it, so on any SAME calendar day
+`"2026-09-20T09:00:00.000Z" >= "2026-09-20"` is true regardless of whether
+the round was actually walked before or after the deferral that morning —
+an inspector's own-shift deferral and a colleague's completion later the
+same day, in either order, left the round reading "put off" until a LATER
+date's round eventually superseded it, potentially for good if none came.
+Since `last.d` carries no time of day, the comparison can only ever be
+honest at day granularity: it now compares `last.d` against the DATE
+portion of `d.at`, so a round walked on or after the deferral's own day —
+same day included — answers it.
+
+**A STALE SEARCH RESULT FROM ONE TAB SURVIVED INTO ANOTHER.** `#dueFindMsg`
+is shared by the 1C PM and CM tabs, each writing it only `if(dueView===
+"pm"/"cm")` — and the RTW tab never touches it at all. Switching to RTW
+after searching on PM or CM left that tab's own "N found" / "nothing found
+matching X" sentence on screen, above a list it no longer describes.
+`renderDue()` now clears it before repainting all three tabs; the PM/CM
+branches still repopulate it a line later when they are the active view.
+
+**A TEAM ROUND'S FINDINGS PRINTED IN ENGLISH REGARDLESS OF THE REPORT'S OWN
+LANGUAGE.** `recToExport0` (the uploader) freezes a position's defect,
+cause, action and detection-method text to English at capture time,
+ALONGSIDE the raw code every other reader of a LOCAL round resolves fresh
+through `defectLabel()`/`causeLabel()`/`actionLabel()`/`detectLabel()` at
+report-build time, in whichever language the report is being made in
+(`rptRecords`, this phone's own PDF). `teamRecToReport` — the reader for a
+round SYNCED FROM ANOTHER PHONE — read the pre-baked English fields
+directly instead of the raw codes sitting right beside them
+(`defectCode`/`causeCode`/`action`/`detection`), so opening a colleague's
+round for a Russian or bilingual PDF printed every finding's defect, cause,
+action and detection method in English, while an identical finding on a
+LOCALLY-captured round on the same document read correctly. Now resolved
+fresh from the code, exactly like `rptRecords`, falling back to the baked
+English text only for a team round old enough to carry no code at all;
+`actionAlt` — which the Action cell's bilingual print depends on
+(`T.both`) and which `teamRecToReport` never set at all — is set the same
+way `rptRecords` sets it. `prioLabel` had the identical gap and got the
+identical fix.
+
+**THE ONE SENTENCE WARNING A TEAM REPORT IS INCOMPLETE COULD BE IN THE
+WRONG LANGUAGE.** Every string on a team round's PDF is built inside
+`withRepLang(fn)`, which swaps `lang` to the report's OWN chosen language
+only for the duration of that one call. The three `addNote(...,
+"rep_nophoto_part"/"rep_nophoto_net"/"rep_nophoto_off"/"rep_nophoto_nodrive"
+, ...)` calls in `$("roundRpt").onclick` ran as plain statements AFTER the
+preceding `withRepLang` calls had already restored `lang` to the phone's
+live UI language — so a Russian-UI phone building an English-only report
+for an English-speaking engineer wrote the one sentence warning the sheet
+might be missing photographs in Russian, the rest of the document in
+English. All three calls are now wrapped in `withRepLang`.
+
+**A REJECTED GALLERY PICK LEFT A PHANTOM POSITION BEHIND, AND SO DID A
+TOGGLED-OFF LUBRICATION CHIP.** Every position-mutating handler in this
+file cleans up an entry that ends up empty (`if(!hasData(p) && !p.wo)
+delete draft.positions[key]`) — except two. `addPicked()` pre-creates
+`draft.positions[posKey]` unconditionally before any file is processed;
+when the only thing picked is a video clip `acceptVideo()` then rejects
+(too long) and nothing else lands, the position is left as an empty `{}`
+with no cleanup. The `#lubeEvid` click handler has the same gap: `curP()`
+also creates the entry unconditionally, and toggling an evidence chip on
+then off again (a fitter correcting an accidental tap) left the same
+phantom behind. Neither is cosmetic: Save's own "nothing to record" gate
+(`if(!Object.keys(draft.positions).length)`) counts raw keys, not
+`hasData()`-filtered ones, so a round consisting solely of a rejected video
+attempt, or a toggled-then-untoggled evidence chip, saved and queued for
+upload as a real round instead of being refused. Both handlers now carry
+the same cleanup guard every other one already has.
+
+**A RECEIPT FROM A WRITE-ONLY MIRROR COULD OVERWRITE THE ONE FROM THE
+BACKEND EVERYTHING ELSE READS.** `RCPT`/`STORED` are reset once per RECORD
+and shared across every destination in that record's upload loop —
+`gas` AND `mirror` can both be active for a month at a time during a
+backend changeover (see `upload-defaults.js`'s swap/retire mechanism) — and
+`putOne`/`putBatch` wrote a destination's receipt into these shared maps
+keyed only by filename, with no destination of its own. Whichever
+destination finished LAST for a given file silently overwrote the other's
+entry, even though `gas` is, by this project's own stated design ("This is
+the ONLY destination the app reads from," the settings help text for that
+slot), the sole backend `attReceipt()`/`serverHolds()`/the dashboard/every
+report ever reads from. A mirror-only receipt — successful or a genuine
+verification failure — could therefore silently replace `gas`'s own true
+receipt for the identical file, corrupting the evidence `serverHolds()`
+uses to decide whether a now-locally-unreadable photograph can safely be
+skipped. Both write sites are now gated on `UP.id==="gas"` — a write-only
+mirror destination no longer touches either map.
+
+**TWO CONFIGURABLE DESTINATIONS NEVER GOT THE FIX FOR "PRESS SYNC FOUR
+TIMES."** This file documents at length that a flat `fetch()` timeout kills
+a real-size upload on a slow link before it finishes, and that `postT`
+(XMLHttpRequest, with separate idle/reply/max clocks) was built specifically
+to fix it — but only `putOne`'s `gas`/`mirror` branch ever calls `postT`.
+The `pa` (SharePoint/Power Automate) and generic `post` destinations — both
+real, user-configurable options in Settings, and neither ever batches, so
+every photograph to either goes through this single-file path — still call
+`fetchT` with no timeout argument, defaulting to the flat 90-second
+`UP_TIMEOUT`. A real-size photo or clip on a slow link reproduces the exact
+documented failure for either destination. `fetchT`'s single abort timer
+cannot be given `postT`'s finer idle-vs-reply distinction without changing
+these destinations' own request shape (their JSON body and headers, which a
+live Power Automate flow may already depend on) — so both now pass
+`UP_CLOCKS.max` (15 minutes) as their deadline instead, the same ceiling
+this project has already established as the correct one for how long a
+photo upload may reasonably take, without touching either request's shape.
+
+Targeted regression run (dbnullerr, curitemrace, gallerybatch, videoown,
+needgrade, tempgrade, duecm, duepm, thawkey, deferwhy, dueplan,
+schedcompare, onevisit, recovery, upload-recovery-edge, upload-chunk-merge,
+sync-writeback-race, teamedit, teamphoto, teamheal, teamtray, rtw, updretry,
+upidle, confirm, edcomp, orphan, orphanphoto, machphoto, refile, refile2,
+photomove, lint, static, audit-scan, crawl, norej, phase6, fe, tabsa11y,
+falang, terms, rtwoffice, schedstrip) passed clean.

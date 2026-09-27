@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=474">
+<link rel="manifest" href="manifest.webmanifest?v=475">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=474">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=474">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=474">
+<link rel="apple-touch-icon" href="icon-192.png?v=475">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=475">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=475">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2746,16 +2746,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=474"></script>
-<script src="upload-defaults.js?v=474"></script>
-<script src="hme.js?v=474"></script>
-<script src="mp-fc.js?v=474"></script>
-<script src="rtw.js?v=474"></script>
-<script src="hme-cascade.js?v=474"></script>
-<script src="assets.js?v=474"></script>
-<script src="temp-limits.js?v=474"></script>
-<script src="normalize.js?v=474"></script>
-<script src="terms.js?v=474"></script>
+<script src="native.js?v=475"></script>
+<script src="upload-defaults.js?v=475"></script>
+<script src="hme.js?v=475"></script>
+<script src="mp-fc.js?v=475"></script>
+<script src="rtw.js?v=475"></script>
+<script src="hme-cascade.js?v=475"></script>
+<script src="assets.js?v=475"></script>
+<script src="temp-limits.js?v=475"></script>
+<script src="normalize.js?v=475"></script>
+<script src="terms.js?v=475"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2774,25 +2774,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=474"></script>
-<script src="edits.js?v=474"></script>
-<script src="due.js?v=474"></script>
-<script src="wear.js?v=474"></script>
-<script src="wear-figs.js?v=474"></script>
-<script src="wear-map.js?v=474"></script>
-<script src="machine-photos.js?v=474"></script>
-<script src="machine-fig.js?v=474"></script>
-<script src="get.js?v=474"></script>
-<script src="points.js?v=474"></script>
-<script src="uc-points.js?v=474"></script>
-<script src="inspect-guide.js?v=474"></script>
-<script src="get-figs.js?v=474"></script>
-<script src="body-points.js?v=474"></script>
-<script src="body-map.js?v=474"></script>
-<script src="lube.js?v=474"></script>
-<script src="lube-overrides.js?v=474"></script>
-<script src="lube2027.js?v=474"></script>
-<script src="report-core.js?v=474"></script>
+<script src="grade.js?v=475"></script>
+<script src="edits.js?v=475"></script>
+<script src="due.js?v=475"></script>
+<script src="wear.js?v=475"></script>
+<script src="wear-figs.js?v=475"></script>
+<script src="wear-map.js?v=475"></script>
+<script src="machine-photos.js?v=475"></script>
+<script src="machine-fig.js?v=475"></script>
+<script src="get.js?v=475"></script>
+<script src="points.js?v=475"></script>
+<script src="uc-points.js?v=475"></script>
+<script src="inspect-guide.js?v=475"></script>
+<script src="get-figs.js?v=475"></script>
+<script src="body-points.js?v=475"></script>
+<script src="body-map.js?v=475"></script>
+<script src="lube.js?v=475"></script>
+<script src="lube-overrides.js?v=475"></script>
+<script src="lube2027.js?v=475"></script>
+<script src="report-core.js?v=475"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -3522,6 +3522,17 @@ const I18N = {
     rdy_v_storage:"Phone storage is almost full",
     rdy_v_update:"Update not finished",
     rdy_v_photos:"Photos still to send",
+    /* Not folded into rdy_v_old: a queue this phone cannot read right now is
+       "the one state in which no other verdict is available" (see netState's
+       own comment) — the same fact stated on the header pill must not read
+       as a milder headline here just because this card asks it differently. */
+    rdy_v_qerr:"Could not check the queue",
+    /* The offline-copy health probe timing out once is not a setup problem —
+       it is asked again on its own schedule and usually answers next time.
+       Folding it into rdy_v_setup told a technician to fix something that
+       needed nothing but a retry, at the same severity as a phone that was
+       never installed for offline use at all. */
+    rdy_v_recheck:"Ready — recheck in a moment",
     rdy_fix_retry:"Check again", rdy_fix_inv:"Open the inventory",
     /* Said to somebody standing at a machine, so the first thing it says is
        that nothing is lost. The rounds it counts have all been accepted AND
@@ -4196,6 +4207,8 @@ const I18N = {
     rdy_v_storage:"Память телефона почти заполнена",
     rdy_v_update:"Обновление не завершено",
     rdy_v_photos:"Фото ещё не отправлены",
+    rdy_v_qerr:"Не удалось проверить очередь",
+    rdy_v_recheck:"Готово — проверьте ещё раз через минуту",
     rdy_fix_retry:"Проверить снова", rdy_fix_inv:"Открыть опись",
     rdy_sto_nowrite:"На телефоне нет места. Обходов: {n} — они дошли до сервера и там проверены, но телефон не смог это записать, поэтому они по-прежнему числятся в очереди. Освободите место, удалив уже отправленные обходы: на сервере ничего не изменится.",
     rdy_q_unknown:"Не удалось прочитать очередь на телефоне. Работа не потеряна — проверьте снова.",
@@ -5737,6 +5750,14 @@ async function addPicked(picked){
       if(got.why) odd.push({name:f.name||"", why:got.why});
     }
     if(!p.photos.length) delete p.photos;
+    /* Every other position-mutating handler in this file cleans up an entry
+       that ended up empty (see the grade card's own comment on this); this
+       loop pre-creates the entry unconditionally at the top (posKey may be a
+       position an inspector has never touched) and, on a rejected clip with
+       no photograph landing either, never had a matching cleanup — leaving a
+       phantom {} in draft.positions that Save's own "nothing to record" gate
+       (Object.keys(draft.positions).length) then counts as a real position. */
+    if(!hasData(p) && !p.wo) delete draft.positions[posKey];
     renderMedia(); renderChips(); renderGrade();
     if(skipped) dlg([t("gal_full_t"), t("gal_full_b",{n:skipped, p:MAX_PHOTOS})]);
     /* KEPT, AND SAID. The file is in the round either way — nothing here ever
@@ -6228,6 +6249,10 @@ $("gNotify").addEventListener("change",()=>{ curP().notified=$("gNotify").checke
 $("lubeEvid").addEventListener("click",(e)=>{ const b=e.target.closest("button[data-e]"); if(!b) return;
   const p=curP(); p.evid=(p.evid===b.dataset.e)?null:b.dataset.e;
   if(!p.evid) delete p.evid;
+  /* curP() creates the entry unconditionally; deselecting the only thing on
+     an otherwise-untouched compartment must not leave a phantom {} behind —
+     the same guard every other position-mutating handler in this file uses. */
+  if(!hasData(p) && !p.wo) delete draft.positions[curItem];
   renderLube(); renderChips(); draftKeep(); });
 $("lubeProd").addEventListener("change",()=>{ saveCur(); renderLube(); renderChips(); });
 $("lubeOther").addEventListener("input",()=>{ saveCur(); renderLube(); renderChips(); });
@@ -9050,7 +9075,18 @@ function deferOf(ty,unit){ return deferAll()[ty+"|"+(unit||"").toUpperCase()]||n
 function deferState(unit,ty){
   const d=deferOf(ty,unit); if(!d) return null;
   const last=histEntry(histAll()[ty+"|"+unit]) || {};
-  if(!(String(d.at||"") >= String(last.d||""))) return null;   // answered by a round walked since
+  /* d.at is a full ISO timestamp; last.d (a walked round's date) is a bare
+     YYYY-MM-DD with no time of day. Comparing them directly as strings meant
+     a SAME-DAY completion could never answer a deferral: a longer string
+     that shares a shorter one's prefix always sorts as ">=" it, so
+     "2026-09-20T09:00:00.000Z" >= "2026-09-20" is true regardless of whether
+     the round was actually walked before or after the deferral that morning
+     — an inspector's deferral and a colleague's completion on the same day,
+     in either order, left the round reading "put off" until a LATER date's
+     round eventually superseded it. Since last.d carries no time of day, the
+     comparison can only ever be honest at day granularity: a round walked on
+     or after the deferral's OWN day answers it, same day included. */
+  if(String(last.d||"") >= String(d.at||"").slice(0,10)) return null;   // answered by a round walked since
   if(d.until){
     const left=DUE.dayDiff(todayISO(), d.until);
     if(left!=null && left>0) return d;
@@ -11176,6 +11212,14 @@ function renderDue(){
       if(changed) renderDue();
     }, ()=>{ schedKick = false; });
   }
+  /* dueFindMsg is shared by the PM and CM tabs (each writes it only for its
+     own dueView), and the RTW tab never writes it at all — so switching TO
+     the RTW tab left whichever tab's search result was showing before stuck
+     on screen, above a list search does not touch. Cleared here so a tab
+     with nothing to say about it starts silent; renderDuePM/renderDueCm
+     still repopulate it a line later when they are the active view. */
+  const fnote0=$("dueFindMsg");
+  if(fnote0){ fnote0.textContent=""; fnote0.classList.add("hidden"); }
   renderDuePM();
   renderDueCm();
   renderDueRtw();
@@ -14056,16 +14100,36 @@ function teamRecToReport(rec){
              mark:it.mark||"",
              grade:GRADE.num(it.grade)||"", sev:gradeIso(it.grade)||it.sev||"",
              resp:it.resp||"", target:it.target||"", opstat:it.opstat||"", gradeWhy:it.gradeWhy||"",
-             defect:it.defect||"", defectCode:it.defectCode||"", iso:it.iso||"",
-             cause:it.cause||"", action:it.actionLabel||it.action||"",
-             prio:it.prio||"", prioLabel:it.prioLabel||"", wo:it.wo||"",
+             /* recToExport0 (the uploader) freezes these to English at capture
+                time, alongside the raw code the app itself reads everywhere
+                else (defectCode/causeCode/it.action/it.detection) — this phone's
+                OWN rounds resolve the code through defectLabel()/causeLabel()/
+                actionLabel()/detectLabel() at report-build time, in whichever
+                language the report is being made in (see rptRecords, a few
+                hundred lines up). A round synced from another phone never did:
+                every finding on it printed in English regardless of the report's
+                own language, while an identical finding on a locally-captured
+                round read correctly beside it on the same bilingual/Russian
+                sheet. Resolved fresh from the code now, falling back to the
+                baked English text only for a team round old enough to carry no
+                code at all. */
+             defect:it.defectCode?defectLabel(it.defectCode):(it.defect||""),
+             defectCode:it.defectCode||"", iso:it.iso||"",
+             cause:it.causeCode?causeLabel(it.causeCode):(it.cause||""),
+             action:it.action?actionLabel(it.action):(it.actionLabel||it.action||""),
+             /* it.action is the raw code (see recToExport0); the sheet prints
+                both languages from it exactly as rptRecords does for its own
+                rounds — this was missing entirely, so a team round's Action
+                cell never carried a second language in a bilingual report. */
+             actionAlt:it.action?actionLabel(it.action, lang==="ru"?"en":"ru"):"",
+             prio:it.prio||"", prioLabel:it.prio?prioLabel(it.prio):(it.prioLabel||""), wo:it.wo||"",
              comment:it.comment||"", readings:read,
              /* The structured template columns, the same shape the office and
                 this phone's own drafts build, so a folder round reads identically
                 whichever surface renders it. */
              particle:it.particle||"", comp:it.comp||"", oil:it.oil||"",
              tempC:it.tempC||"", ambC:it.ambC||"", tempM:it.tempMethod||it.tempM||"",
-             detect:it.detectionLabel||"", opstatLabel:it.opstat||"",
+             detect:it.detection?detectLabel(it.detection):(it.detectionLabel||""), opstatLabel:it.opstat||"",
              zone:it.zone||"", zoneLabel:it.zoneLabel||"",
              /* Empty HERE, on purpose. They live in Drive under names this
                 record only references, and fetching them for the round SCREEN
@@ -14213,15 +14277,23 @@ $("roundRpt").onclick=async ()=>{
            the document's own status can see it. */
         const asked=Number(got.__asked||0), gotN=Number(got.__got||0);
         if(asked>gotN){
-          addNote(norm,"rep_nophoto_part",{n:asked-gotN, of:asked});
+          /* Every other string on this sheet is built inside withRepLang, which
+             swaps `lang` to the report's OWN choice only for the duration of
+             that one call. These three notes ran as plain statements after the
+             preceding withRepLang calls had already restored `lang` to the
+             phone's live UI language — so a Russian-UI phone building an
+             English-only report for an English-speaking engineer wrote this
+             one caveat, the sentence that says the sheet might be incomplete,
+             in Russian while the rest of the document was English. */
+          withRepLang(()=>addNote(norm,"rep_nophoto_part",{n:asked-gotN, of:asked}));
           norm.gap={expected:asked, received:gotN, missing:asked-gotN};
         }
       }
       /* Offline is a different sentence from "the folder would not answer",
          and until build 354 it could never be reached: it sat in the branch
          where there is no destination at all. */
-      else addNote(norm, navigator.onLine ? "rep_nophoto_net" : "rep_nophoto_off");
-    } else addNote(norm, "rep_nophoto_nodrive");
+      else withRepLang(()=>addNote(norm, navigator.onLine ? "rep_nophoto_net" : "rep_nophoto_off"));
+    } else withRepLang(()=>addNote(norm, "rep_nophoto_nodrive"));
     $("dlgMsg").textContent=t("rep_building")[1];
     const doc=await CMR.paginate({
       sections:withRepLang(()=>CMR.sections(repSpec({ mode:"unit", records:[norm] }))),
@@ -14492,7 +14564,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="474";
+const BUILD="475";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -15574,14 +15646,23 @@ async function putBatch(UP, files, rec, sent){
     ackd.add(nm);
     /* A backend that issues receipts hands one back per file. One that does
        not simply leaves this empty, and the evidence ladder stays where it
-       was — nothing here demands a receipt in order to work. */
-    if(x.receipt && RCPT) RCPT[nm]=x.receipt;
+       was — nothing here demands a receipt in order to work.
+       GATED ON "gas": RCPT/STORED are reset once per RECORD, not once per
+       destination, and shared across every destination in that record's
+       upload loop — gas AND mirror can both be active for a month at a time
+       (see upload-defaults.js's swap/retire changeover), and a receipt keyed
+       only by filename let whichever destination finished LAST silently
+       overwrite the other's entry. gas is "the ONLY destination the app
+       reads from" (its own settings help text) — attReceipt()/serverHolds()
+       must judge a file by what gas said, never by what a write-only mirror
+       said about the identical name. */
+    if(x.receipt && RCPT && UP.id==="gas") RCPT[nm]=x.receipt;
     /* THE STORE SAID IT COULD NOT VERIFY WHAT IT KEPT. That is not a
        delivery: the file is not marked sent, so it goes again, and the
        server re-writes an object whose read-back failed (function.js). */
     if(x.receipt && x.receipt.verified===false){ bad.push({name:nm, error:x.receipt.error||"the store could not verify what it kept"}); return; }
     sentMark(sent,nm);
-    if(x.req && x.name && x.name!==x.req && STORED) STORED[x.req]=x.name; });
+    if(x.req && x.name && x.name!==x.req && STORED && UP.id==="gas") STORED[x.req]=x.name; });
   /* A NAME THE REPLY NEVER MENTIONED IS NOT A NAME THAT LANDED. function.js
      always answers one file with one entry, in saved or in failed — but a
      client that assumes that contract holds on every reply that actually
@@ -16165,20 +16246,32 @@ async function putOne(UP, name, blob, type, ctx, aid){
     if(j && j.ok===false){ slog("one-refused", {name, ms:Date.now()-t0, err:String(j.error||"").slice(0,160)}); throw new Error(j.error||"Apps Script rejected the upload"); }
     if(!j){ slog("one-nojson", {name, ms:Date.now()-t0, status:r.status}); throw new Error("Unexpected reply — check the deployment is set to “Anyone”."); }
     slog("one-ok", {name, bytes:blob&&blob.size, ms:Date.now()-t0, stored:j.name||"", dup:!!(j.receipt&&j.receipt.duplicate), verified:j.receipt?j.receipt.verified:null});
-    if(j.receipt && RCPT) RCPT[name]=j.receipt;
+    /* Gated on "gas" — see the identical comment in putBatch above. */
+    if(j.receipt && RCPT && UP.id==="gas") RCPT[name]=j.receipt;
     /* The store could not verify what it kept: not a delivery (see putBatch). */
     if(j.receipt && j.receipt.verified===false) throw new Error(j.receipt.error||"the store could not verify what it kept");
-    if(j.name && j.name!==name && STORED) STORED[name]=j.name;
+    if(j.name && j.name!==name && STORED && UP.id==="gas") STORED[name]=j.name;
     return true;
   }
   if(UP.id==="pa"){
     const body={ name, folder, contentType:type||blob.type||"application/octet-stream",
                  file: await blobToB64(blob) };
-    const r=await fetchT(UP.url,{method:"POST",headers:upHeaders(UP.sec,{"Content-Type":"application/json"}),body:JSON.stringify(body)});
+    /* UP_CLOCKS.max, not the flat 90s UP_TIMEOUT default: fetch() cannot see
+       its own upload progress, so this can never get gas/mirror's own
+       idle-vs-reply distinction (postT, built for exactly this reason — see
+       its own comment, "an upload is dead when its bytes stop moving, not
+       when a clock runs out") without changing this destination's request
+       shape (JSON body, an explicit Content-Type header a live Power
+       Automate flow may already depend on). But a flat 90s abort is the
+       exact documented failure this project already fixed for gas/mirror —
+       a real-size photo or clip on a slow link dies here identically to how
+       it used to on the primary backend, for a destination that is real,
+       configurable, and just as reachable from the pit. */
+    const r=await fetchT(UP.url,{method:"POST",headers:upHeaders(UP.sec,{"Content-Type":"application/json"}),body:JSON.stringify(body)},UP_CLOCKS.max);
     if(!r.ok) throw new Error(await httpErr(r)); return true;
   }
   const fd=new FormData(); fd.append("file",blob,name); fd.append("name",name); fd.append("folder",folder);
-  const r=await fetchT(UP.url,{method:"POST",headers:upHeaders(UP.sec),body:fd});
+  const r=await fetchT(UP.url,{method:"POST",headers:upHeaders(UP.sec),body:fd},UP_CLOCKS.max);
   if(!r.ok) throw new Error(await httpErr(r)); return true;
 }
 // surface the server's own error text (Power Automate explains 400s in the body)
@@ -17478,6 +17571,15 @@ function yardVerdict(rows){
   if(hasKey("refs"))     return {k:"bad",  s:"rdy_v_setup"};
   if(hasKey("queue_recover")) return {k:"bad", s:"rdy_v_recover"};
   if(hasKey("queue_stalled")) return {k:"bad", s:"rdy_v_photos"};
+  /* A queue this phone cannot read is not a queue it can call empty — the
+     same "silence is not a verdict" rule netState() already keeps for the
+     header pill (its own comment: "before failing, long before all sent...
+     the one state in which no other verdict is available"). Without its own
+     key here, dbAll() failing added a plain "warn" row under "queue_unknown",
+     which hasKey never named, so it fell through to the generic has("warn")
+     catch-all below and this card said "Ready — some data is old" over a
+     phone that could not tell whether anything was even waiting to send. */
+  if(hasKey("queue_unknown")) return {k:"bad", s:"rdy_v_qerr"};
   /* A phone that cannot write down what it sent. Loud, and its own key: the
      quota estimate ("storage") is the browser's opinion and can read
      comfortable while the writes are already failing, so this is not folded
@@ -17489,6 +17591,14 @@ function yardVerdict(rows){
   if(hasKey("build"))    return {k:"warn", s:"rdy_v_update"};
   if(hasKey("bg"))       return {k:"warn", s:"rdy_v_bg"};
   if(hasKey("camera"))   return {k:"warn", s:"rdy_v_camera"};
+  /* A single slow answer from the offline-copy health probe (see swAsk's own
+     4s timeout) is not a setup problem — it is asked again on its own
+     schedule and usually answers next time. This used to share "offline"'s
+     own key, which hasKey folds into rdy_v_setup ("Setup needed before you
+     go") regardless of whether the underlying row was itself only a warn —
+     the same severity and the same push notification as a phone genuinely
+     never installed for offline use, over what is usually a one-off blip. */
+  if(hasKey("offline_slow")) return {k:"warn", s:"rdy_v_recheck"};
   if(has("warn"))        return {k:"warn", s:"rdy_v_old"};
   return {k:"ok", s:"rdy_v_ready"};
 }
@@ -17552,8 +17662,13 @@ async function yardCheck(){
     /* 1. is the whole app on the phone */
     const h=await within(5000, ()=>swAsk(), {slow:true});
     if(!h) add("warn",t("rdy_off_t"),t("rdy_off_none"),null,"offline");
+    /* Its own key, not "offline": yardVerdict() folds every non-ok row under
+       one key into that key's own fixed verdict, so a one-off 4s timeout on
+       the health probe was reaching the same "Setup needed before you go"
+       headline (and push notification) as a phone genuinely never installed
+       for offline use — see yardVerdict's own comment on offline_slow. */
     else if(h.slow) add("warn",t("rdy_off_t"),t("rdy_off_slow"),
-      { label:t("rdy_fix_retry"), run:async()=>{} },"offline");
+      { label:t("rdy_fix_retry"), run:async()=>{} },"offline_slow");
     else if(h.ok) add("ok",t("rdy_off_t"),t("rdy_off_ok",{n:h.have}),null,"offline");
     else add("bad",t("rdy_off_t"),t("rdy_off_part",{n:h.have,of:h.need}),
       { label:t("rdy_fix_heal"), run:async()=>{ try{
@@ -17643,7 +17758,18 @@ async function yardCheck(){
       pendRecs.forEach(r=>{ try{ attList(r).forEach(e=>{
         if(e.localState==="unreadable" && !e.serverHeld) needRec++;
         const a=Date.parse(e.lastAttemptAt||"")||0; if(a>lastTry) lastTry=a; }); }catch(e){} });
-      const reach=!!(U.okAt && Date.now()-U.okAt<3600000);
+      /* netOkAt, not U.okAt: this app talks to two independent hosts (the
+         upload backend and GitHub Pages, see the "they fail independently"
+         comment by UPD.dataOk below) and U.okAt is stamped only by the BUILD
+         check reaching Pages — a fact about a completely different host from
+         the one this queue actually uploads to. Reading it here meant Pages
+         being reachable while the upload backend had been down for hours
+         mislabelled a merely-waiting queue as "stalled," and the reverse —
+         Pages briefly unreachable while the backend was fine — could hide a
+         genuinely stalled queue. netOkAt is stamped only by a real reply
+         from the upload endpoint, the same evidence UPD.dataOk itself relies
+         on for the identical distinction. */
+      const reach=!!(netOkAt && Date.now()-netOkAt<3600000);
       const stalled=!!(pend && lastTry && reach && !syncing && (Date.now()-lastTry>STALL_MS));
       const sendNow={ label:t("rdy_fix_send"), run:async()=>{ retryAt=RETRY_MIN; await syncThenArm(true); } };
       if(needRec) add("bad",t("rdy_q_t"),t("rdy_q_recover",{n:needRec}),
