@@ -4033,3 +4033,52 @@ Fixed the same way: `<option value="plan">`/`<option value="cmp">` added
 to `#ddScope`. `tests/schedcompare.cjs` proves both tabs by clicking the
 real segmented buttons, not by calling the render function, which is the
 one thing that would have caught this the first time.
+
+**THE CORRECTION PANEL'S "COMPONENT (POINT)" SELECT HAD NOWHERE TO GO ON A
+REGISTER ROUND.** Read off a real INSP finding, circled: "cannot change the
+Component. we should be able to edit. And ensure that the photos inside will
+move or rename also, right?" `pointOptions()`/`orphanPointOptions()` built
+the select from `points.js`'s `PTS.CLASSES` catalogue alone — which has
+never carried INSP or TEMP's own vocabulary (`compNameOf`'s own comment
+already states it: "INSP and TEMP only... the rounds that address register
+components are these two"), only MP/FC's plug positions. So on any INSP/TEMP
+finding the picker had nothing to offer beyond whatever handful of points
+already happened to be on THIS round — the exact "component (point) cannot
+be selected" shape build 257 already fixed once for MP's own vocabulary
+(`tests/edswap.cjs`), recurring one layer over for the register's, because
+the fix was written at the older catalogue and never extended to the newer
+ISO 14224 one `mobile/hme.js` carries.
+
+The select now also offers the machine's own real components:
+`componentsForUnit(unit)` (dashboard/index.html) mirrors the identical
+lookup the phone's own capture-time picker already uses to build its own
+walk — `ASSET_BY[unit]` → `CLASS_BY[a.cat]` (or its class fallback via
+`HME.prefixClass`) → a model-specific `HME.models[a.mk]` list where one
+exists, else the class's own `.components` — so a technician correcting a
+finding chooses from the same catalogue an inspector would have picked from
+at the machine, not a hand-rolled subset. `orphanPointOptions()` is the one
+function both the Edit panel's Component select and the orphan-photo
+assignment picker (`openOrphan`) already share, so both screens gained the
+fix from one change rather than two.
+
+**AND A COMPONENT CORRECTION HAD NO MIRROR OF THE ROUND-LEVEL PROTECTION A
+RE-FILED ROUND ALREADY HAD.** `photoBases()`'s existing `_wasKey`/`_moved`
+mechanism generates filename candidates under BOTH a re-filed round's new
+AND old equip/date/type — so moving a WHOLE round never orphans its
+photographs. Moving one FINDING's own component never got the same
+treatment: `CMEdits.apply()` already marks a corrected item with `_from`,
+the key it moved away from (this is how the correction stays reversible and
+traceable at all), but `photoBasesFor()` — the legacy filename-PREDICTION
+fallback `mediaOf()` falls back to for any round with no attachment
+manifest — only ever built candidates under the item's CURRENT key. A
+Component correction on a pre-manifest round would have silently orphaned
+its own photograph, the exact loss the maintainer's own question was asking
+whether this project had already prevented. It had not. `photoBasesFor()`
+now also tries `_from` when it differs from the current key, appending
+those candidate names rather than replacing the current ones — a modern,
+manifest-carrying round (`attOf()`) was never at risk in the first place,
+since its filenames are explicit and were never derived from the key at
+all. `tests/edcomp.cjs` proves both halves against a real register round
+with no manifest: the select offers a real, distinct, unused component;
+saving moves the finding and marks `_from`; and the photograph is still
+found under its old name afterward.
