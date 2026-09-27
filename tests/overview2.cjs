@@ -244,7 +244,35 @@ const reset = q => fetch(BASE + '/__reset?' + q).then(r => r.text());
   ok('Escape closes it', esc2.afterEsc === false);
   ok('and so does a press outside it', esc2.afterOutside === false);
 
-  console.log('\n7. NOTHING ON THE PAGE DRAWS THE WHOLE DATASET');
+  console.log('\n7. A FILTER PER COLUMN ON THE FLEET TABLE (Phase 4, 2026-09-27)');
+  await p.evaluate(() => { showTab('overview'); clearFilters(); });
+  await p.waitForTimeout(300);
+  const cf1 = await p.evaluate(() => ({
+    cells: document.querySelectorAll('#fleetTbl th.cwfh').length,
+    aria: (document.querySelector('#fleetTbl input.cwcf[data-k="equip"]') || {}).getAttribute
+      ? document.querySelector('#fleetTbl input.cwcf[data-k="equip"]').getAttribute('aria-label') : null,
+  }));
+  ok('a filter input sits under every column header', cf1.cells > 0, String(cf1.cells));
+  ok('and it is labelled for a screen reader', /filter/i.test(cf1.aria || ''), cf1.aria);
+  const firstEquip = await p.evaluate(() => document.querySelector('#fleetTbl tbody tr td b').textContent.trim());
+  await p.click('#fleetTbl input.cwcf[data-k="equip"]');
+  await p.type('#fleetTbl input.cwcf[data-k="equip"]', firstEquip);
+  await p.waitForTimeout(150);
+  const cf2 = await p.evaluate(() => ({
+    equips: [...document.querySelectorAll('#fleetTbl tbody tr td b')].map(x => x.textContent.trim()),
+    focusedK: (document.activeElement || {}).dataset ? document.activeElement.dataset.k : null,
+  }));
+  ok('typing the exact unit into its own column narrows to that unit alone',
+     cf2.equips.length === 1 && cf2.equips[0] === firstEquip, cf2.equips.join(','));
+  ok('and the input keeps focus across the rebuild', cf2.focusedK === 'equip', String(cf2.focusedK));
+  await p.fill('#fleetTbl input.cwcf[data-k="equip"]', 'ZZZNOPE-NO-SUCH-UNIT');
+  await p.waitForTimeout(150);
+  const cf3 = await p.evaluate(() => (document.querySelector('#fleetTbl tbody td.empty') || {}).textContent || null);
+  ok('a query matching nothing says so, without breaking the table', !!cf3, String(cf3));
+  await p.fill('#fleetTbl input.cwcf[data-k="equip"]', '');
+  await p.waitForTimeout(150);
+
+  console.log('\n8. NOTHING ON THE PAGE DRAWS THE WHOLE DATASET');
   await reset('scale=600,600');
   await p.reload({ waitUntil: 'load' });
   await p.waitForFunction(() => typeof RECS !== 'undefined' && RECS.length > 500, null, { timeout: 90000 });
@@ -264,8 +292,15 @@ const reset = q => fetch(BASE + '/__reset?' + q).then(r => r.text());
   ok('the trend draws at most twelve months', big.months <= 12, String(big.months));
   /* Two screens on the live folder (checked at deployment); a fleet-sized
      folder adds rounds to the coverage table and months to the trend, and
-     that — not the table, which stays at ten rows — is the extra fifth. */
-  ok('the page stays near two screens at 1366 with 600 inspections loaded', big.tall <= 2.3, big.tall + ' screens');
+     that — not the table, which stays at ten rows — is the extra fifth.
+     Phase 4 (2026-09-27) added the per-column filter row to #fleetTbl, the
+     same `.cwfh`/`.cwcf` header Defects Raised and Actions already carry —
+     one FIXED row of chrome above the table, measured at 2.33 screens with
+     600 inspections loaded. It does not scale with data size (the table
+     still stops at ten rows, which is what this assertion actually guards
+     against), so the budget moves to admit it rather than the row being
+     shrunk to the point of being unusable. */
+  ok('the page stays near two screens at 1366 with 600 inspections loaded', big.tall <= 2.4, big.tall + ' screens');
   ok('and never scrolls sideways', !big.wide);
   ok('the strip still fits', big.stripH <= 120, big.stripH + 'px');
 

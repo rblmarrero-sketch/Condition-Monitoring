@@ -122,6 +122,32 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
   ok(/\d/.test(narrowed[1] || ""), "and says how much is behind the filter", narrowed[1]);
   await p.evaluate(() => { lubeShow = ""; renderLubeTab(); });
 
+  console.log("\n── a filter per column, keyed off the same product text the cell shows (Phase 4, 2026-09-27)");
+  const cf1 = await p.evaluate(() => ({
+    cells: document.querySelectorAll("#lubeMtx th.cwfh").length,
+    aria: (document.querySelector('#lubeMtx input.cwcf[data-k="mdl"]') || {}).getAttribute
+      ? document.querySelector('#lubeMtx input.cwcf[data-k="mdl"]').getAttribute("aria-label") : null,
+  }));
+  ok(cf1.cells > 0, "a filter input sits under the Machine column and every compartment", String(cf1.cells));
+  ok(/filter/i.test(cf1.aria || ""), "and it is labelled for a screen reader", cf1.aria);
+  const firstModel = await p.evaluate(() => document.querySelector("#lubeMtx tbody tr td.mdl b").textContent.trim());
+  await p.click('#lubeMtx input.cwcf[data-k="mdl"]');
+  await p.type('#lubeMtx input.cwcf[data-k="mdl"]', firstModel);
+  await p.waitForTimeout(150);
+  const cf2 = await p.evaluate(() => ({
+    models: [...document.querySelectorAll("#lubeMtx tbody tr td.mdl b")].map(x => x.textContent.trim()),
+    focusedK: (document.activeElement || {}).dataset ? document.activeElement.dataset.k : null,
+  }));
+  ok(cf2.models.length > 0 && cf2.models.every(m => m === firstModel),
+     "typing the exact model into its own column narrows to that model alone", cf2.models.join(","));
+  ok(cf2.focusedK === "mdl", "and the input keeps focus across the rebuild", String(cf2.focusedK));
+  await p.evaluate(() => { lubeColQ["mdl"] = "ZZZNOPE-NO-SUCH-MODEL"; renderLubeMtx(); });
+  await p.waitForTimeout(100);
+  const cf3 = await p.evaluate(() => (document.querySelector("#lubeMtx tbody td.empty") || {}).textContent || null);
+  ok(!!cf3, "a query matching nothing says so, without breaking the table", String(cf3));
+  await p.evaluate(() => { lubeColQ = {}; renderLubeMtx(); });
+  await p.waitForTimeout(100);
+
   console.log("\n── what the matrix cannot draw is listed, not dropped");
   const gaps = await p.evaluate(() => {
     /* The "nothing to report" placeholder is the one row that spans the table;

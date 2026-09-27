@@ -3759,23 +3759,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=475"></script>
+<script src="../data/magnetic_plug.js?v=476"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=475"></script>
-<script src="../mobile/hme.js?v=475"></script>
-<script src="../mobile/mp-fc.js?v=475"></script>
-<script src="../mobile/rtw.js?v=475"></script>
-<script src="../mobile/hme-cascade.js?v=475"></script>
-<script src="../mobile/temp-limits.js?v=475"></script>
+<script src="../data/work_orders.js?v=476"></script>
+<script src="../mobile/hme.js?v=476"></script>
+<script src="../mobile/mp-fc.js?v=476"></script>
+<script src="../mobile/rtw.js?v=476"></script>
+<script src="../mobile/hme-cascade.js?v=476"></script>
+<script src="../mobile/temp-limits.js?v=476"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=475"></script>
-<script src="../mobile/normalize.js?v=475"></script>
-<script src="../mobile/terms.js?v=475"></script>
+<script src="../mobile/assets.js?v=476"></script>
+<script src="../mobile/normalize.js?v=476"></script>
+<script src="../mobile/terms.js?v=476"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -3794,19 +3794,19 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=475"></script>
-<script src="../mobile/edits.js?v=475"></script>
-<script src="../mobile/due.js?v=475"></script>
-<script src="../mobile/wear.js?v=475"></script>
-<script src="../mobile/wear-map.js?v=475"></script>
-<script src="../mobile/lube.js?v=475"></script>
-<script src="../mobile/lube-overrides.js?v=475"></script>
-<script src="../mobile/lube2027.js?v=475"></script>
-<script src="../mobile/lube-tds.js?v=475"></script>
+<script src="../mobile/grade.js?v=476"></script>
+<script src="../mobile/edits.js?v=476"></script>
+<script src="../mobile/due.js?v=476"></script>
+<script src="../mobile/wear.js?v=476"></script>
+<script src="../mobile/wear-map.js?v=476"></script>
+<script src="../mobile/lube.js?v=476"></script>
+<script src="../mobile/lube-overrides.js?v=476"></script>
+<script src="../mobile/lube2027.js?v=476"></script>
+<script src="../mobile/lube-tds.js?v=476"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=475"></script>
-<script src="../mobile/machine-photos.js?v=475"></script>
+<script src="../mobile/upload-defaults.js?v=476"></script>
+<script src="../mobile/machine-photos.js?v=476"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3815,17 +3815,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=475"></script>
-<script src="../mobile/get.js?v=475"></script>
-<script src="../mobile/points.js?v=475"></script>
-<script src="../mobile/uc-points.js?v=475"></script>
-<script src="../mobile/inspect-guide.js?v=475"></script>
-<script src="../mobile/get-figs.js?v=475"></script>
-<script src="../mobile/body-points.js?v=475"></script>
-<script src="../mobile/body-map.js?v=475"></script>
-<script src="../mobile/jspdf.umd.min.js?v=475"></script>
-<script src="../mobile/html2canvas.min.js?v=475"></script>
-<script src="../mobile/report-core.js?v=475"></script>
+<script src="../mobile/machine-fig.js?v=476"></script>
+<script src="../mobile/get.js?v=476"></script>
+<script src="../mobile/points.js?v=476"></script>
+<script src="../mobile/uc-points.js?v=476"></script>
+<script src="../mobile/inspect-guide.js?v=476"></script>
+<script src="../mobile/get-figs.js?v=476"></script>
+<script src="../mobile/body-points.js?v=476"></script>
+<script src="../mobile/body-map.js?v=476"></script>
+<script src="../mobile/jspdf.umd.min.js?v=476"></script>
+<script src="../mobile/html2canvas.min.js?v=476"></script>
+<script src="../mobile/report-core.js?v=476"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -4072,7 +4072,12 @@ const I18N={
   lg_settled:"asked — cannot be told apart", lg_need:"needs {n}",
   lg_ahead:"A reference with no machine is not always a fault: several are for equipment specified or on order but not yet on site. It is listed so the reference and the fleet can be read against each other, not as a defect list.",
   lg_note:"{a} machines across {b} register models have no lubrication reference. {c} references cover no machine in the register. Most of both are the same problem seen from two sides: the two documents spell the model differently. Each one settled adds a standard to real machines — send the pairs to whoever maintains the reference.",
-  lg_hidden:"{n} hidden by the class filter",
+  /* Used only here (renderLubeMtx). It once named the class chip because
+     that was the only thing that could narrow the count -- the column
+     filters (lubeColQ) narrow the identical count now, so a label that
+     still named only one would lie the moment the other one is what
+     actually did it. "the filters" covers both, correctly, either way. */
+  lg_hidden:"{n} hidden by the filters",
   lpo_title:"Shop posters", lpo_sub:"The sheet that goes on the workshop wall. The preview is shown reduced \u2014 it prints at full size.",
   lpo_which:"Sheet", lpo_fleet:"Whole fleet", lpo_model:"One model", lpo_print:"🖨 Print",
   lpo_class:"One asset class", lpo_cls:"Class",
@@ -4981,7 +4986,7 @@ const I18N={
   lg_settled:"спрошено — не различить", lg_need:"нужно: {n}",
   lg_ahead:"Справочник без машины — не всегда ошибка: часть относится к технике, которая заказана, но ещё не на площадке. Список нужен, чтобы сверять справочник с парком, а не как перечень дефектов.",
   lg_note:"{a} машин по {b} моделям реестра не имеют норматива смазки. {c} справочников не относятся ни к одной машине реестра. В основном это одна и та же проблема с двух сторон: два документа пишут модель по-разному. Каждая решённая пара даёт норматив реальным машинам — передайте пары тому, кто ведёт справочник.",
-  lg_hidden:"{n} скрыто фильтром класса",
+  lg_hidden:"{n} скрыто фильтрами",
   lpo_title:"Плакаты для мастерской", lpo_sub:"Лист, который вешается на стену цеха. Предпросмотр уменьшен \u2014 печатается в полном размере.",
   lpo_which:"Лист", lpo_fleet:"Весь парк", lpo_model:"Одна модель", lpo_print:"🖨 Печать",
   lpo_class:"Один класс техники", lpo_cls:"Класс",
@@ -6714,6 +6719,10 @@ function complianceNow(){
 
 /* ---------- fleet table ---------- */
 let fleetSort={k:"prio",dir:1};
+/* A filter per column, on top of the global bar — the same pattern Defects
+   Raised and the Maintenance Actions register already carry (cwColQ/
+   cwWordMatch/cwfh/cwcf). Keyed the same way fleetSort already is. */
+let fleetColQ={};
 /* ATTENTION ORDER — one rule for "what needs me first", stated once.
      1 Critical  2 Severe  3 Overdue action  4 Unassigned action  5 Degraded  6 Incipient
    A critical finding outranks an overdue date on a lesser one; an action nobody
@@ -6799,16 +6808,27 @@ function renderFleet(){
     const u=r.equip, lead=leadOf(u), dd=due[String(u).toUpperCase()];
     const as=lead?actionState(lead.r,lead.i):null;
     const attn=attentionOf(itemsU[u]||[], worstOf(r));
+    const own=ownersOf(u), ad=actDueOf(u), topF=topFinding(r), findN=notable(r).length;
     KEY[u]={ equip:u, cls:clsOf(r), type:r.type, date:r.date||"",
       prio:attn.rank, attn,
-      sev:sevRank(worstOf(r)), find:notable(r).length,
+      sev:sevRank(worstOf(r)), find:findN,
       open:(itemsU[u]||[]).length,
-      owner:(ownersOf(u)[0]||"\uffff"),
+      owner:(own[0]||"\uffff"),
       due:(dd ? dd.n.dueInDays : 99999),
-      adue:(actDueOf(u)||"\uffff"),
+      adue:(ad||"\uffff"),
       act:(lead ? (lead.i.action ? actionName(lead.i.action) : "\ufffe") : "\uffff"),
       status:(as ? (as.k==="triage" ? "triage" : "st_"+String(lead.i.status||"")) : "\uffff"),
-      defect:topFinding(r), by:r.by||"", lead, as };
+      defect:topF, by:r.by||"", lead, as,
+      /* WHAT EACH CELL ACTUALLY SHOWS, for the column filter below \u2014 read
+         cells by what they ARE, not recomputed a second way that could
+         quietly disagree with the render loop a few lines down. */
+      disp:{ equip:u, prio:t(attn.key), cls:clsOf(r)||"", defect:topF||"",
+        date:r.date||"", find:String(findN),
+        act: lead ? (lead.i.action ? actionName(lead.i.action) : "") : "",
+        open: String((itemsU[u]||[]).length),
+        owner: own.length ? own.join(", ") : "",
+        adue: ad || "",
+        due: dd ? (TYPE_LABEL[dd.ty]||dd.ty) : "" } };
   });
   const val=(r,k)=>KEY[r.equip][k];
   const rows=Object.values(byU).sort((a,b)=>{
@@ -6829,8 +6849,24 @@ function renderFleet(){
               ["defect",t("th_defcomp"),""],["date",t("th_inspected"),"hide-m"],["find",t("th_find"),"r hide-m"],
               ["act",t("th_reqact"),""],["open",t("th_open"),"r"],
               ["owner",t("th_owner"),""],["adue",t("th_due"),""],["due",t("th_nextdue"),""]];
+  /* A filter row lives INSIDE a table this function rebuilds wholesale on
+     every keystroke -- the same focus/caret capture-and-restore Defects
+     Raised and the Actions register already carry, one level further in. */
+  const focusCap = (() => {
+    const box=$("fleetTbl"), el=document.activeElement;
+    if(!box || !el || !box.contains(el) || !el.classList || !el.classList.contains("cwcf")) return null;
+    return { k: el.dataset.k, start: el.selectionStart, end: el.selectionEnd };
+  })();
+  const shown = rows.filter(r => cols.every(([k]) => {
+    const fq=(fleetColQ[k]||"").trim().toUpperCase();
+    return !fq || cwWordMatch((KEY[r.equip].disp||{})[k]||"", fq);
+  }));
   let h=`<thead><tr>`+cols.map(([k,l,cl])=>
-    `<th class="sortable ${cl}${fleetSort.k===k?" on":""}" data-sort="${k}">${l}<span class="arrow">${fleetSort.k===k?(fleetSort.dir>0?"\u25b2":"\u25bc"):"\u2195"}</span></th>`).join("")+`</tr></thead><tbody>`;
+    `<th class="sortable ${cl}${fleetSort.k===k?" on":""}" data-sort="${k}">${l}<span class="arrow">${fleetSort.k===k?(fleetSort.dir>0?"\u25b2":"\u25bc"):"\u2195"}</span></th>`).join("")
+    + `</tr><tr>` + cols.map(([k,l]) =>
+      `<th class="cwfh"><input type="text" class="cwcf" data-k="${esc(k)}" value="${esc(fleetColQ[k]||"")}" placeholder="${esc(t("cw_colfilter_ph"))}" aria-label="${esc(t("cw_colfilter_aria",{c:l}))}"></th>`).join("")
+    + `</tr></thead><tbody>`;
+  if(!shown.length) h += `<tr><td class="empty" colspan="${cols.length}">${esc(t("e_nofilter"))}</td></tr>`;
   /* TEN, ON OVERVIEW — AND THE WHOLE REGISTER ONE CLICK AWAY.
 
      Overview answers "what needs me today". A full equipment register does not
@@ -6847,10 +6883,10 @@ function renderFleet(){
      rows, paginated, not a different query — the counts under the table are of
      the WHOLE filtered set either way. */
   const pgF = fleetAll
-    ? paged("fleet", rows, renderFleet)
-    : { rows: rows.slice(0, OVERVIEW_TOP),
-        strip: rows.length>OVERVIEW_TOP
-          ? `<div class="pager"><span class="muted">${esc(t("ov_top",{n:OVERVIEW_TOP, of:num(rows.length)}))}</span>
+    ? paged("fleet", shown, renderFleet)
+    : { rows: shown.slice(0, OVERVIEW_TOP),
+        strip: shown.length>OVERVIEW_TOP
+          ? `<div class="pager"><span class="muted">${esc(t("ov_top",{n:OVERVIEW_TOP, of:num(shown.length)}))}</span>
                <span class="spacer"></span>
                <button type="button" class="btn sm" id="fleetAllBtn">${esc(t("ov_all"))}</button></div>`
           : "" };
@@ -6901,13 +6937,21 @@ function renderFleet(){
   const fab=$("fleetAllBtn");
   if(fab) fab.onclick=()=>{ fleetAll=true; renderFleet(); };
   if($("fleetShown")) $("fleetShown").innerHTML=
-    `<span>${esc(t("shown_n",{n:pgF.rows.length, of:rows.length}))}</span>`;
+    `<span>${esc(t("shown_n",{n:pgF.rows.length, of:shown.length}))}</span>`;
   $("fleetTbl").querySelectorAll("th[data-sort]").forEach(th=>th.onclick=()=>{
     const k=th.dataset.sort;
     // a new column starts on the reading people expect: worst/newest first
     if(fleetSort.k===k) fleetSort.dir*=-1;
     else fleetSort={k,dir:(k==="sev"||k==="find"||k==="date"||k==="open")?-1:1};   // prio: rank 0 is most urgent, ascending
     renderFleet(); });
+  $("fleetTbl").querySelectorAll("input.cwcf").forEach(inp=>inp.oninput=()=>{
+    fleetColQ[inp.dataset.k]=inp.value;
+    renderFleet();
+  });
+  if(focusCap){
+    const el=$("fleetTbl").querySelector(`.cwcf[data-k="${focusCap.k}"]`);
+    if(el){ el.focus(); try{ el.setSelectionRange(focusCap.start, focusCap.end); }catch(e){} }
+  }
   /* The cross-filters have to claim the click before the row does, or pressing
      a class would open a machine's history instead of filtering by class. */
   $("fleetTbl").querySelectorAll("[data-xcls]").forEach(b=>b.onclick=e=>{
@@ -14826,9 +14870,23 @@ function lubeSeenByModel(){
 /* "" is every class, and it is what the tab lands on. See renderLubeTab for why
    it is no longer set to the biggest class on first render. */
 let lubeShow = null;
+/* A filter per column, same cwColQ/cwWordMatch pattern as Defects Raised,
+   Actions, Fleet and Plan vs Actual -- one difference: this table has no
+   fixed column list. Its columns are whichever compartments actually occur
+   in what is on screen (colSet, built below from the class-filtered rows),
+   so the filter row is built from that same colSet rather than a static
+   array. "mdl" (the Machine column) is the one column every class shares. */
+let lubeColQ={};
 function renderLubeMtx(){
   const tbl = $("lubeMtx"); if(!tbl) return;
   if(!window.LUBE){ tbl.innerHTML = ""; return; }
+  /* Same focus/caret capture-and-restore every cwColQ table needs -- this
+     one rebuilds its whole <table> on every keystroke too. */
+  const focusCap = (() => {
+    const el=document.activeElement;
+    if(!el || !tbl.contains(el) || !el.classList || !el.classList.contains("cwcf")) return null;
+    return { k: el.dataset.k, start: el.selectionStart, end: el.selectionEnd };
+  })();
 
   /* One row per model the reference covers, with the unit count from the
      register — not one row per machine. Forty identical trucks are one
@@ -14875,6 +14933,27 @@ function renderLubeMtx(){
   }));
   const mixed = k => Object.keys(colProd[k] || {}).length > 1;
 
+  /* The column FILTER row reads, per column, the same product text the cell
+     itself shows -- what is actually recorded (seen) or, failing that, what
+     the standard wants -- so typing "EXSOIL" under Engine finds every model
+     carrying it either way. "mdl" is the one column every class shares, and
+     is never a compartment. colSet itself never narrows while typing: it is
+     built above from the class-filtered list ONLY, same as every other
+     cwColQ table keeps its own column list fixed regardless of what is
+     typed into it. */
+  const lubeColVal = (r, k) => {
+    if(k==="mdl") return r.m + (r.alias ? " " + r.alias.is : "");
+    const c = r.comps.filter(x=>x.k===k)[0];
+    if(!c) return "";
+    const hit = seen[r.cls+"|"+r.m+"|"+c.k], std = lubeChosenFor(c);
+    return hit ? hit.product : (std ? std.p : "");
+  };
+  const lubeCols = ["mdl", ...colSet.map(c=>c.k)];
+  const shown = list.filter(r => lubeCols.every(k=>{
+    const fq=(lubeColQ[k]||"").trim().toUpperCase();
+    return !fq || cwWordMatch(lubeColVal(r,k), fq);
+  }));
+
   /* EIGHTY-SEVEN MODELS IS SIX SCREENS OF SHEET. Every other table on the
      dashboard pages at twenty-five and this one did not, so the fleet matrix
      was the one place a reader still scrolled past everything to reach
@@ -14884,10 +14963,10 @@ function renderLubeMtx(){
      below, so a compartment does not appear and disappear as you turn the
      page and a colour is explained wherever it is seen. A sheet whose shape
      changes underneath you is worse than a long one. */
-  const pgM = paged("lubeMtx", list, renderLubeMtx, PAGE_SIZE_DEFAULT);
-  const first = list.indexOf(pgM.rows[0]), last = first + pgM.rows.length;
+  const pgM = paged("lubeMtx", shown, renderLubeMtx, PAGE_SIZE_DEFAULT);
+  const first = shown.indexOf(pgM.rows[0]), last = first + pgM.rows.length;
   let lastCls = null, body = "";
-  list.forEach((r, ix)=>{
+  shown.forEach((r, ix)=>{
     const on = ix >= first && ix < last;
     /* A page that opens in the middle of a class still says which class it is
        in: the heading is repeated at the top of the page, not left behind on
@@ -14948,6 +15027,11 @@ function renderLubeMtx(){
       r.alias?` · ${esc(t("lm_alias",{m:r.alias.is}))}`:""}</i></td>${cells}</tr>`;
   });
 
+  const lubeColLabel = {mdl: t("lm_machine")};
+  colSet.forEach(c=>{ lubeColLabel[c.k] = lang==="ru"?c.ru:c.en; });
+  const cwfhRow = `<tr>${lubeCols.map(k=>
+    `<th class="cwfh"><input type="text" class="cwcf" data-k="${esc(k)}" value="${esc(lubeColQ[k]||"")}" placeholder="${esc(t("cw_colfilter_ph"))}" aria-label="${esc(t("cw_colfilter_aria",{c:lubeColLabel[k]}))}"></th>`
+  ).join("")}</tr>`;
   tbl.innerHTML =
     `<thead><tr><th>${esc(t("lm_machine"))}</th>${
       colSet.map(c=>{
@@ -14962,7 +15046,17 @@ function renderLubeMtx(){
             esc(lubeShort(one))}</span></i>` : "")+
           `</th>`;
       }).join("")
-    }</tr></thead><tbody>${body}</tbody>`;
+    }</tr>${cwfhRow}</thead><tbody>${
+      !shown.length ? `<tr><td class="empty" colspan="${colSet.length+1}">${esc(t("e_nofilter"))}</td></tr>` : body
+    }</tbody>`;
+  tbl.querySelectorAll("input.cwcf").forEach(inp=>inp.oninput=()=>{
+    lubeColQ[inp.dataset.k]=inp.value;
+    renderLubeMtx();
+  });
+  if(focusCap){
+    const el=tbl.querySelector(`.cwcf[data-k="${focusCap.k}"]`);
+    if(el){ el.focus(); try{ el.setSelectionRange(focusCap.start, focusCap.end); }catch(e){} }
+  }
 
   $("lubeLegend").innerHTML = used.sort().map(n=>{
     const hue = lubeHue(n) || LUBE_NOHUE;
@@ -14977,13 +15071,14 @@ function renderLubeMtx(){
 
   /* A table that shows some of its rows must say so. The count is in MACHINES as
      well as models, because "12 models" and "312 machines" are different answers
-     to "how much of the fleet am I looking at". */
-  const all = Object.values(rows), shownN = list.reduce((a,r)=>a+r.n,0),
+     to "how much of the fleet am I looking at". Reads `shown`, not `list` --
+     the column filters narrow the same count the class chip already does. */
+  const all = Object.values(rows), shownN = shown.reduce((a,r)=>a+r.n,0),
         allN = all.reduce((a,r)=>a+r.n,0);
   $("lmShown").innerHTML =
-    `<span>${esc(t("match_of",{n:list.length, of:all.length}))} \u00b7 ${
+    `<span>${esc(t("match_of",{n:shown.length, of:all.length}))} \u00b7 ${
       esc(t("lg_units"))} ${esc(fmtN(shownN))}</span>` +
-    (list.length < all.length
+    (shown.length < all.length
       ? `<span class="spacer"></span><span>${esc(t("lg_hidden",{n:allN-shownN}))}</span>`
       : "");
   /* Under the sheet, where every other paged table on the dashboard puts it —
@@ -15566,8 +15661,47 @@ function dueGo(scope){
   if($("ddScope")) $("ddScope").value=scope;
   renderDueTab(); urlWrite(false);
 }
+/* A filter per column, same cwColQ/cwWordMatch pattern as Defects Raised,
+   Actions, Fleet, Plan vs Actual and the Lubrication matrix. This table has
+   three row shapes ("plan", never-inspected, and an ordinary graded row) so
+   ddColVal reads plain text off whichever shape r actually is -- the same
+   fields the rendered row already shows, never a second, disagreeing
+   computation of them. The action column (Start/Defer) carries no text of
+   its own and is not one of these. */
+let ddColQ={};
+const DD_COLS=["unit","round","last","due","rate","why"];
+function ddColVal(r,k){
+  switch(k){
+    case "unit": return r.unit||"";
+    case "round": return (r.ty||"")+" "+(t("type_"+r.ty)||"");
+    case "last":
+      if(r.st==="plan") return r.last ? r.last.date : "";
+      if(!r.n) return TERMS.t(lang,"never_inspected");
+      return r.last.d;
+    case "due":
+      if(r.st==="plan") return r.plan||"";
+      if(!r.n) return "";
+      return r.n.over ? t("due_over",{n:numAbs(r.n.dueInDays)}) : t("due_in",{n:numAbs(r.n.dueInDays)});
+    case "rate":
+      if(!r.n) return "";
+      return String(r.n.rate)+(r.n.measured?"":"*");
+    case "why":
+      if(r.st==="plan") return t("dd_plan_row",{p:r.label||"—"})+(r.wo?(" "+r.wo):"")+(r.late?(" "+t("dd_plan_late",{d:r.plan})):"");
+      if(!r.n) return r.d ? (r.d.until?t("dd_put_to",{d:r.d.until}):t("dd_not_doing"))+" "+deferWhy(r.d) : "";
+      if(r.theirDate) return t("dd_cmp_row",{p:r.theirDate, wo:r.wo||"—",
+        g: r.gap===0?t("dd_cmp_same"):r.gap>0?t("dd_cmp_later",{n:numAbs(r.gap)}):t("dd_cmp_earlier",{n:numAbs(r.gap)})});
+      if(r.d) return (r.d.until?t("dd_put_to",{d:r.d.until}):t("dd_not_doing"))+" "+deferWhy(r.d)+(r.d.by?(" "+r.d.by):"");
+      return r.n.why==="wear" ? t("due_why_wear") : "";
+    default: return "";
+  }
+}
 function renderDueTab(){
   const box=$("ddList"); if(!box) return;
+  const focusCap = (() => {
+    const el=document.activeElement;
+    if(!el || !box.contains(el) || !el.classList || !el.classList.contains("cwcf")) return null;
+    return { k: el.dataset.k, start: el.selectionStart, end: el.selectionEnd };
+  })();
   const sel=$("ddType");
   if(sel && !sel.options.length){
     sel.innerHTML=`<option value="">${esc(t("dd_all_rounds"))}</option>`
@@ -15665,14 +15799,24 @@ function renderDueTab(){
       : scope!=="plan" ? t("dd_none")
       : ((window.CM_WO_DATA&&(window.CM_WO_DATA.workOrders||[]).length) ? t("dd_plan_none") : t("dd_plan_nofile"))
     )}</div>`; return; }
+  const shown = show.filter(r=>DD_COLS.every(k=>{
+    const fq=(ddColQ[k]||"").trim().toUpperCase();
+    return !fq || cwWordMatch(ddColVal(r,k), fq);
+  }));
   /* Fifty at a time, not five hundred: the cap was there to stop the browser
      dying and never to help anybody read. */
-  const pg=paged("due", show, renderDueTab);
+  const pg=paged("due", shown, renderDueTab);
   const kept=pg.rows;
+  const ddColLabel={unit:t("dd_c_unit"), round:t("dd_c_round"), last:t("dd_c_last"),
+    due:t("dd_c_due"), rate:t("dd_c_rate"), why:t("dd_c_why")};
+  const cwfhRow=`<tr>${DD_COLS.map(k=>
+    `<th class="cwfh"><input type="text" class="cwcf" data-k="${esc(k)}" value="${esc(ddColQ[k]||"")}" placeholder="${esc(t("cw_colfilter_ph"))}" aria-label="${esc(t("cw_colfilter_aria",{c:ddColLabel[k]}))}"></th>`
+  ).join("")}<th class="cwfh"></th></tr>`;
   box.innerHTML=`<div class="tblwrap scrollbox" style="--sb:560px"><table class="grid"><thead><tr>
     <th>${esc(t("dd_c_unit"))}</th><th>${esc(t("dd_c_round"))}</th><th>${esc(t("dd_c_last"))}</th>
     <th class="r">${esc(t("dd_c_due"))}</th><th class="r">${esc(t("dd_c_rate"))}</th>
-    <th>${esc(t("dd_c_why"))}</th><th></th></tr></thead><tbody>`
+    <th>${esc(t("dd_c_why"))}</th><th></th></tr>${cwfhRow}</thead><tbody>`
+    + (!shown.length ? `<tr><td class="empty" colspan="7">${esc(t("e_nofilter"))}</td></tr>` : "")
     + kept.map(r=>{
       const n=r.n;
       /* A 1C row is somebody else's plan, not this programme's arithmetic:
@@ -15739,10 +15883,18 @@ function renderDueTab(){
     /* What is on screen out of what exists. The list was capped at 500 rows in
        silence, which on a fleet this size reads as "that is all of them". */
     + pg.strip
-    + `<div class="shown"><span>${esc(t("shown_n",{n:kept.length, of:show.length}))}</span>
+    + `<div class="shown"><span>${esc(t("shown_n",{n:kept.length, of:shown.length}))}</span>
         <span class="spacer"></span>
         <span>${esc(t("dd_foot",{r:DUE.HOURS_PER_DAY}))}</span></div>`;
   box.querySelectorAll("[data-defer]").forEach(b=>b.onclick=()=>askDefer(b.dataset.defer));
+  box.querySelectorAll("input.cwcf").forEach(inp=>inp.oninput=()=>{
+    ddColQ[inp.dataset.k]=inp.value;
+    renderDueTab();
+  });
+  if(focusCap){
+    const el=box.querySelector(`.cwcf[data-k="${focusCap.k}"]`);
+    if(el){ el.focus(); try{ el.setSelectionRange(focusCap.start, focusCap.end); }catch(e){} }
+  }
 }
 /* The sheet somebody takes to the planning meeting has to be the list they were
    looking at when they pressed the button. An export that quietly widens back
@@ -16074,6 +16226,31 @@ function paCmOnlySet(v){ try{ localStorage.setItem(PA_CMONLY_KEY, v?"1":"0"); }c
    Plan date first, soonest due first, matches the tab's own default order
    below when nothing has been clicked yet. */
 let paSort={k:"plan", dir:1};
+/* A filter per column, same cwColQ/cwWordMatch pattern as Defects Raised,
+   Maintenance Actions and Fleet/Overview (see those for the history of why
+   a single free-text box can't ask for one column). Reads paColVal, the
+   DISPLAY text for that column, never a raw field that might carry a sort
+   sentinel like "9999-99-99" or -Infinity. */
+let paColQ={};
+const PA_COLS=["equip","wo","svc","hours","plan","actual","cmround","delta","status"];
+function paColVal(r,k){
+  switch(k){
+    case "equip": return r.w.equip||"";
+    case "wo": return r.w.woNumber||"";
+    case "svc": return r.info.label||"";
+    case "hours": return r.w.hours==null?"":String(r.w.hours);
+    case "plan": return r.w.planStart||"";
+    case "actual": return r.w.actualStart||"";
+    case "cmround": return r.last?(r.last.date+" "+r.last.type):"";
+    case "delta": return r.status==="unsched"||r.delta==null?"":
+      (r.delta===0?t("pa_days_same"):r.delta>0?t("pa_days_after",{n:r.delta}):t("pa_days_before",{n:-r.delta}));
+    case "status": return (r.status==="unsched"?"":
+      r.status==="off"?t("pa_st_off"):r.status==="missing"?t("pa_st_missing"):
+      r.status==="ontime"?t("pa_st_ontime"):r.status==="late"?t("pa_st_late"):t("pa_st_early"))
+      + (r.preInspNeeded?" "+t("pa_st_preinsp"):"");
+    default: return "";
+  }
+}
 function paSortKey(r,k){
   switch(k){
     case "equip": return r.w.equip||"";
@@ -16442,8 +16619,23 @@ function renderPlanActualTab(){
     if(box){ box.setAttribute("role","tabpanel"); box.setAttribute("aria-labelledby","paTab-"+segScope); }
     seg.querySelectorAll("[data-pa]").forEach(b=>b.onclick=()=>paGo(b.dataset.pa));
   }
-  const show = rowsView.filter(r=> scope==="preinsp" ? r.preInspNeeded
-                             : scope==="open" ? r.w.open : scope==="done" ? !r.w.open : true)
+  const preShow = rowsView.filter(r=> scope==="preinsp" ? r.preInspNeeded
+                             : scope==="open" ? r.w.open : scope==="done" ? !r.w.open : true);
+  /* An empty scope ("no open work orders right now") is a different fact
+     from "the column filters below matched nothing" -- the first replaces
+     the whole panel (nothing to filter), the second keeps the header and
+     filter row on screen with an empty-state ROW, same as Fleet/Overview
+     and the two cwColQ tables before it. */
+  if(!preShow.length){ box.innerHTML=`<div class="sub">${esc(t("pa_none"))}</div>`; return; }
+  const focusCap = (() => {
+    const el=document.activeElement;
+    if(!box || !el || !box.contains(el) || !el.classList || !el.classList.contains("cwcf")) return null;
+    return { k: el.dataset.k, start: el.selectionStart, end: el.selectionEnd };
+  })();
+  const show = preShow.filter(r=>PA_COLS.every(k=>{
+      const fq=(paColQ[k]||"").trim().toUpperCase();
+      return !fq || cwWordMatch(paColVal(r,k), fq);
+    }))
     /* Sortable on any column (paSort, click a header) -- defaults to plan
        date, soonest first, which is what the tab opens on: a scheduling
        list first and a compliance record second. Unscheduled rows (no plan
@@ -16453,7 +16645,6 @@ function renderPlanActualTab(){
       const x=paSortKey(a,paSort.k), y=paSortKey(b,paSort.k);
       const c = typeof x==="number" ? x-y : String(x).localeCompare(String(y));
       return (c || a.w.equip.localeCompare(b.w.equip)) * paSort.dir; });
-  if(!show.length){ box.innerHTML=`<div class="sub">${esc(t("pa_none"))}</div>`; return; }
   const pg=paged("planact", show, renderPlanActualTab);
   const kept=pg.rows;
   const stChip=r=>{
@@ -16493,11 +16684,17 @@ function renderPlanActualTab(){
     const on=paSort.k===k;
     return `<th class="sortable${cls?" "+cls:""}${on?" on":""}" data-sort="${esc(k)}">${esc(lab)}<span class="arrow">${on?(paSort.dir>0?"▲":"▼"):"↕"}</span></th>`;
   };
+  const PA_COL_LABEL={equip:t("pa_c_unit"), wo:t("pa_c_wo"), svc:t("pa_c_type"), hours:t("pa_c_hours"),
+    plan:t("pa_c_plan"), actual:t("pa_c_woactual"), cmround:t("pa_c_cmround"), delta:t("pa_c_delta"),
+    status:t("pa_c_status")};
+  const cwfhRow=`<tr>`+PA_COLS.map(k=>
+    `<th class="cwfh"><input type="text" class="cwcf" data-k="${esc(k)}" value="${esc(paColQ[k]||"")}" placeholder="${esc(t("cw_colfilter_ph"))}" aria-label="${esc(t("cw_colfilter_aria",{c:PA_COL_LABEL[k]}))}"></th>`).join("")+`</tr>`;
   box.innerHTML=`<div class="tblwrap scrollbox" style="--sb:560px"><table class="grid"><thead><tr>
     ${th("equip",t("pa_c_unit"))}${th("wo",t("pa_c_wo"))}${th("svc",t("pa_c_type"))}${th("hours",t("pa_c_hours"),"r")}
     ${th("plan",t("pa_c_plan"))}${th("actual",t("pa_c_woactual"))}
     ${th("cmround",t("pa_c_cmround"))}${th("delta",t("pa_c_delta"),"r")}
-    ${th("status",t("pa_c_status"))}</tr></thead><tbody>`
+    ${th("status",t("pa_c_status"))}</tr>${cwfhRow}</thead><tbody>`
+    + (!show.length ? `<tr><td class="empty" colspan="${PA_COLS.length}">${esc(t("e_nofilter"))}</td></tr>` : "")
     + kept.map(r=>`<tr>
         <td>${esc(r.w.equip)}</td>
         <td>${esc(r.w.woNumber||"—")}</td>
@@ -16512,6 +16709,14 @@ function renderPlanActualTab(){
     + `</tbody></table></div>`
     + (pg.strip||"");
   box.querySelectorAll("th[data-sort]").forEach(el=>el.onclick=()=>paSortGo(el.dataset.sort));
+  box.querySelectorAll("input.cwcf").forEach(inp=>inp.oninput=()=>{
+    paColQ[inp.dataset.k]=inp.value;
+    renderPlanActualTab();
+  });
+  if(focusCap){
+    const el=box.querySelector(`.cwcf[data-k="${focusCap.k}"]`);
+    if(el){ el.focus(); try{ el.setSelectionRange(focusCap.start, focusCap.end); }catch(e){} }
+  }
 }
 /* Machine-readable headings, like every other export on this page — a CSV
    opened in a spreadsheet six months from now should not depend on which
@@ -18096,8 +18301,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=475"></script>
-<script src="sync-adapter.js?v=475"></script>
-<script src="report.js?v=475"></script>
+<script src="drive.js?v=476"></script>
+<script src="sync-adapter.js?v=476"></script>
+<script src="report.js?v=476"></script>
 </body>
 </html>

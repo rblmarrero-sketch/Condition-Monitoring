@@ -129,6 +129,32 @@ const srv = http.createServer((req, res) => {
   ok('  and both colours actually appear once uncovered rows are shown',
      new Set(dots).size >= 2, [...new Set(dots)].join(' | '));
 
+  console.log('\n4b. A FILTER PER COLUMN, SAME cwColQ/cwWordMatch PATTERN (Phase 4, 2026-09-27)');
+  const cf1 = await p1.evaluate(() => ({
+    cells: document.querySelectorAll('#paList th.cwfh').length,
+    aria: (document.querySelector('#paList input.cwcf[data-k="equip"]') || {}).getAttribute
+      ? document.querySelector('#paList input.cwcf[data-k="equip"]').getAttribute('aria-label') : null,
+  }));
+  ok('a filter input sits under every column header', cf1.cells > 0, String(cf1.cells));
+  ok('and it is labelled for a screen reader', /filter/i.test(cf1.aria || ''), cf1.aria);
+  const firstUnit = await p1.evaluate(() => document.querySelector('#paList table.grid tbody tr td').textContent.trim());
+  await p1.click('#paList input.cwcf[data-k="equip"]');
+  await p1.type('#paList input.cwcf[data-k="equip"]', firstUnit);
+  await p1.waitForTimeout(150);
+  const cf2 = await p1.evaluate(() => ({
+    units: [...document.querySelectorAll('#paList table.grid tbody tr td:first-child')].map(x => x.textContent.trim()),
+    focusedK: (document.activeElement || {}).dataset ? document.activeElement.dataset.k : null,
+  }));
+  ok('typing the exact unit into its own column narrows to that unit alone',
+     cf2.units.length > 0 && cf2.units.every(u => u === firstUnit), cf2.units.join(','));
+  ok('and the input keeps focus across the rebuild', cf2.focusedK === 'equip', String(cf2.focusedK));
+  await p1.fill('#paList input.cwcf[data-k="equip"]', 'ZZZNOPE-NO-SUCH-UNIT');
+  await p1.waitForTimeout(150);
+  const cf3 = await p1.evaluate(() => (document.querySelector('#paList table.grid tbody td.empty') || {}).textContent || null);
+  ok('a query matching nothing says so, without breaking the table', !!cf3, String(cf3));
+  await p1.fill('#paList input.cwcf[data-k="equip"]', '');
+  await p1.waitForTimeout(150);
+
   console.log('\n5. THE TOGGLE PERSISTS ACROSS A RELOAD, LIKE EVERY OTHER SETTING ON THIS PAGE');
   await p1.reload({ waitUntil: 'load' });
   await p1.waitForFunction(() => !!window.CM_WO_DATA && typeof paCovered === 'function', null, { timeout: 25000 });

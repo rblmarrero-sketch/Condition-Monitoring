@@ -4254,3 +4254,111 @@ sync-writeback-race, teamedit, teamphoto, teamheal, teamtray, rtw, updretry,
 upidle, confirm, edcomp, orphan, orphanphoto, machphoto, refile, refile2,
 photomove, lint, static, audit-scan, crawl, norej, phase6, fe, tabsa11y,
 falang, terms, rtwoffice, schedstrip) passed clean.
+
+**DASHBOARD REDESIGN, PHASE 4 CONTINUED: THE COLUMN FILTER REACHES FOUR MORE
+TABLES.** Defects Raised and the Maintenance Actions register got the
+per-column filter row (`cwColQ`/`cwWordMatch`/`.cwfh`/`.cwcf`, see those
+entries above) first; asked to "start the column filters for the remaining
+tables," the same pattern is extended to Fleet/Overview, Plan vs Actual, the
+Lubrication fleet matrix and the Inspection Schedule (Due) tab — every table
+on the dashboard wide enough to need one now has the identical row: a second
+header `<tr>` under the sortable one, one plain-text input per column,
+focus/caret capture-and-restore around the wholesale rebuild, an
+`aria-label` built from `cw_colfilter_aria` (no new i18n key needed — the
+same label works for every column on every table), and an `e_nofilter` empty
+row when a query matches nothing rather than replacing the whole panel.
+
+**Equipment History was investigated and deliberately left out.** Its list
+view is not one flat table — `renderHistList` builds a SEPARATE `<table
+class="grid">` per visit (one round, its own positions as rows), stacked
+under a heading with the date, inspector and signature for THAT round. A
+column filter answers "narrow this one big list to rows matching X"; this
+page already answers a different question ("show me one machine's own
+history"), through the equipment combobox and the existing global filter
+bar (type/class/grade/period/status/search), which already narrows the
+rounds and positions shown. Forcing a filter row onto every one of a
+machine's dozen small per-visit tables would repeat the same six inputs a
+dozen times down the page for no reader benefit — the wrong shape for the
+question this screen answers, not an oversight.
+
+**FLEET/OVERVIEW'S FILTER ROW MOVED THE PAGE PAST ITS OWN HEIGHT BUDGET, AND
+THE BUDGET WAS WRONG TO KEEP.** `tests/overview2.cjs` asserts the whole
+Overview tab stays under 2.3 "screens" at 1366×768 with 600 inspections
+loaded, specifically because nothing on the page may draw the whole
+dataset — the Fleet table itself was always meant to stay at ten rows
+regardless of scale, which the same assertion still proves. Adding the
+`.cwfh` filter row (one FIXED row of chrome, not one per data row) pushed
+the real number to 2.33: a small, foreseeable, one-time cost from a
+deliberately-requested feature, not a regression in the thing the test
+actually guards against. The budget moved to 2.4, with a comment recording
+what changed it and why — the same "ask the app, don't keep a stale copy of
+its own arithmetic" reasoning `tests/rptfit.cjs` and `tests/progchg.cjs`
+already carry for the identical situation (a real, asked-for change that
+legitimately moves a number a test had pinned).
+
+**KEY[u]'S SORT VALUES AND ITS DISPLAY TEXT WERE NEVER THE SAME THING, AND
+FILTERING NEEDED THE SECOND ONE.** `renderFleet`'s existing `KEY[u]` object
+holds SORT keys — a numeric attention rank, a day-count, a sentinel string
+like `"￿"` for "nothing here" — chosen so `Array.prototype.sort` orders
+rows correctly, never meant to be read by a person. Filtering by column text
+needed the actual rendered words ("Priority required", an owner's name, a
+due date), so `KEY[u]` gained a `disp` sub-object, computed once per machine
+alongside the sort keys from the exact same source values (`ownersOf`,
+`actDueOf`, `topFinding`, `TYPE_LABEL`) rather than re-derived a second,
+possibly-disagreeing way — this project's own "read cells by what they ARE"
+rule, applied to a table that had never needed a second reading of itself
+before. The `OVERVIEW_TOP`-truncation-to-ten and the "N of M" text both
+now read the FILTERED set (`shown`), matching how the existing "Show all"
+button already treats the class/type/grade/search bar's own filtering.
+
+**PLAN VS ACTUAL'S THREE ROW SHAPES EACH NEEDED THEIR OWN COLUMN TEXT.**
+`paColVal(r,k)` mirrors the same fields `stChip`/`svcCell`/`deltaTxt` already
+render, in plain text rather than marked-up HTML — an ordinary CM row, a "no
+CM round anywhere near this" row, and (on the Compare scope) a row carrying
+1C's own nearest date all answer the six columns differently, and the filter
+reads whichever shape the row actually is rather than assuming one.
+
+**THE LUBRICATION MATRIX HAS NO FIXED COLUMN LIST, SO THE FILTER ROW ISN'T
+ONE EITHER.** Every other table's columns are a static array; this one's are
+whichever compartments the class-filtered machines actually carry
+(`colSet`), so the filter row is built from that same `colSet` — one input
+for "Machine" (`mdl`, the one column every class shares) plus one per
+compartment actually on screen. `lubeColVal(r,k)` reads the identical
+product text the cell already shows (what is recorded, or failing that what
+the standard wants), so typing a product name into a compartment's own
+column finds every model carrying it, on standard or not. **A pre-existing
+label was reused into a lie and caught before shipping**: the "N hidden"
+line under the sheet said "hidden by the class filter" — true when the
+class chip was the only thing that could ever narrow the count, false the
+moment the new column filters can narrow it too. Fixed by widening the
+wording ("hidden by the filters") rather than leaving a label that names
+only one of two possible causes.
+
+**THE DUE TAB'S THREE ROW SHAPES (1C PLAN, NEVER-INSPECTED, ORDINARY) EACH
+GOT A TEXT READING TOO, AND ONE BUG SURFACED WRITING THE TEST FOR IT.**
+`ddColVal(r,k)` reads whichever of the tab's three row shapes `r` actually
+is for each of six columns (unit, round, last, due, rate, why) — the "why"
+column in particular carries a work order's plan-vs-actual note, a
+deferral's own reason, 1C's compare note, or a wear-round hint depending on
+shape, and the filter reads all four rather than only the ordinary case. The
+action column (Start/Defer buttons) carries no text of its own and was
+correctly left out. Writing `tests/dashdue.cjs`'s own assertion for this
+caught a TEST bug, not an app one: a `document.querySelectorAll('...td b')`
+selector meant to read the Unit column's bold text also matched the Due
+column's own `<b>` (used for styling an overdue date red), so a one-row
+result read back as two — `td:first-child` narrows the query to the column
+actually being asserted about, the same "read the cell you mean, not every
+bold tag on the row" lesson this file already states for the app's own code
+applied to a test reading the DOM back.
+
+Extended `tests/overview2.cjs`, `tests/pacover.cjs`, `tests/lubemtx.cjs` and
+`tests/dashdue.cjs` (each screen's own existing suite, not four new files)
+with a section proving: the filter row exists with one input per column,
+each is `aria-label`led for a screen reader, typing an exact value into its
+own column narrows to only matching rows, focus and caret survive the
+wholesale table rebuild on every keystroke, and a query matching nothing
+shows the `e_nofilter` empty row rather than breaking the table. All four
+suites, plus `phase4`, `phase6`, `dashui`, `lint`, `static`, `tabsa11y`,
+`schedcompare`, `dueplan`, `progchg`, `gencatchall`, `lube`, `lubegap`,
+`lubeovr`, `lubecap`, `lubesync`, `lubetab`, `luberef`, `lubestd`, `lubrpt`
+and `lubekeep`, passed clean.

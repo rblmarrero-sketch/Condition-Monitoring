@@ -184,6 +184,43 @@ const rows = p => p.$$eval('#ddList tbody tr', a => a.map(tr => ({
     return (await p.evaluate(() => document.getElementById('ddScope').value)) === 'put';
   })());
 
+  console.log('\na filter per column, same cwColQ/cwWordMatch pattern as Fleet/PA/the lube matrix (Phase 4, 2026-09-27)');
+  await p.selectOption('#ddScope', 'all'); await p.waitForTimeout(200);
+  const cf1 = await p.evaluate(() => ({
+    cells: document.querySelectorAll('#ddList th.cwfh').length,
+    aria: (document.querySelector('#ddList input.cwcf[data-k="unit"]') || {}).getAttribute
+      ? document.querySelector('#ddList input.cwcf[data-k="unit"]').getAttribute('aria-label') : null,
+  }));
+  ok('a filter input sits under every column header', cf1.cells > 0, String(cf1.cells));
+  ok('and it is labelled for a screen reader', /filter/i.test(cf1.aria || ''), cf1.aria);
+  await p.click('#ddList input.cwcf[data-k="unit"]');
+  await p.type('#ddList input.cwcf[data-k="unit"]', 'TK101');
+  await p.waitForTimeout(150);
+  const cf2 = await p.evaluate(() => ({
+    units: [...document.querySelectorAll('#ddList table.grid tbody tr td:first-child b')].map(x => x.textContent.trim()),
+    focusedK: (document.activeElement || {}).dataset ? document.activeElement.dataset.k : null,
+  }));
+  ok('typing an exact unit into its own column narrows to that unit alone',
+     cf2.units.length > 0 && cf2.units.every(u => u === 'TK101'), cf2.units.join(','));
+  ok('and the input keeps focus across the rebuild', cf2.focusedK === 'unit', String(cf2.focusedK));
+  await p.fill('#ddList input.cwcf[data-k="unit"]', 'ZZZNOPE-NO-SUCH-UNIT');
+  await p.waitForTimeout(150);
+  const cf3 = await p.evaluate(() => (document.querySelector('#ddList table.grid tbody td.empty') || {}).textContent || null);
+  ok('a query matching nothing says so, without breaking the table', !!cf3, String(cf3));
+  await p.fill('#ddList input.cwcf[data-k="unit"]', '');
+  await p.waitForTimeout(150);
+  /* The "why" column carries a deferral's own reason on the never-inspected
+     shape as well as the ordinary one -- typing a fragment of TK102's own
+     reason must find it there too. */
+  await p.selectOption('#ddScope', 'put'); await p.waitForTimeout(200);
+  await p.fill('#ddList input.cwcf[data-k="why"]', 'low-loader');
+  await p.waitForTimeout(150);
+  const cf4 = await p.evaluate(() => [...document.querySelectorAll('#ddList table.grid tbody tr td:first-child b')].map(x => x.textContent.trim()));
+  ok('the "why" column filter finds a deferral by its own reason text',
+     cf4.length === 1 && cf4[0] === 'TK102', cf4.join(','));
+  await p.fill('#ddList input.cwcf[data-k="why"]', '');
+  await p.waitForTimeout(150);
+
   console.log('\nnarrowing to one round');
   await p.selectOption('#ddScope', 'all');
   await p.selectOption('#ddType', 'MP'); await p.waitForTimeout(200);
