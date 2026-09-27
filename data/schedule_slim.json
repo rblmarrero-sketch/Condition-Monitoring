@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-27T21:43:26+00:00",
+  "generated": "2026-09-27T22:58:17+00:00",
   "byUnit": {
     "DZ001": [
       {
@@ -2709,6 +2709,24 @@
       "request": "",
       "defType": "",
       "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-018263",
+      "equip": "DR007",
+      "cls": "",
+      "comp": "DR007.HS.DL (Hydraulic Lines / Гидролинии)",
+      "desc": "Механическое разрушение РВД.",
+      "priority": "P2 Urgent",
+      "raised": "2026-09-28",
+      "type": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "hours": null,
+      "plan": "2026-10-05",
+      "status": "Elimination scheduled",
+      "request": "DD-00013559",
+      "defType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "cause": "Износ/трещина диска",
       "pmStatus": "open",
       "completed": ""
     },

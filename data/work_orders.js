@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-09-27T21:43:26+00:00",
+  "generated": "2026-09-27T22:58:17+00:00",
   "source": "https://askpi.94-131-94-152.sslip.io/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 681,
@@ -316,7 +316,7 @@ window.CM_WO_DATA = {
     "WE009",
     "WE011"
   ],
-  "duplicateRowsCollapsed": 229,
+  "duplicateRowsCollapsed": 231,
   "roundsDedupedWithinVisit": 3,
   "columns": [
     "Asset description",
@@ -400,12 +400,12 @@ window.CM_WO_DATA = {
     "wo": "Work order number"
   },
   "cmDateFrom": {
-    "raised": 78,
+    "raised": 79,
     "detected": 0,
     "planStart": 0
   },
   "cmCauseFrom": {
-    "wo": 42,
+    "wo": 43,
     "wr": 36,
     "cert": 0,
     "none": 0
@@ -419,6 +419,29 @@ window.CM_WO_DATA = {
     "Bekzhan"
   ],
   "cmWorkOrders": [
+    {
+      "date": "2026-09-28",
+      "dateFrom": "raised",
+      "raised": "2026-09-28",
+      "detected": "2026-09-11",
+      "planStart": "2026-10-05",
+      "closed": null,
+      "asset": "DR007",
+      "defect": "DD-00013559",
+      "requestNo": "DD-00013559",
+      "eqType": "DRILL, BLASTING",
+      "system": "DR007.HS.DL (Hydraulic Lines / Гидролинии)",
+      "priority": "P2 Urgent",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "cause": "Износ/трещина диска",
+      "causeFrom": "wo",
+      "descr": "Механическое разрушение РВД.",
+      "status": "Elimination scheduled",
+      "by": "Irek",
+      "woNumber": "WO-018263",
+      "maintType": "P4 Planned Repair",
+      "planned": false
+    },
     {
       "date": "2026-09-27",
       "dateFrom": "raised",
