@@ -323,6 +323,18 @@
     background:var(--surface-2);border-left:3px solid var(--accent);
     font-size:var(--t-small);color:var(--ink-2);line-height:1.4;}
   .insight:empty{display:none;}
+  /* The one-glance verdict a manager actually wants before the sentence that
+     explains it — "is this better or worse", in a colour, not a paragraph.
+     Reuses the same status inks the severity chips already carry, so a
+     reader who has learned those colours anywhere else on the page reads
+     this one for free. */
+  .tdelta{display:inline-flex;align-items:center;gap:4px;padding:2px 9px;
+    border-radius:999px;font-weight:700;font-size:var(--t-micro);
+    font-variant-numeric:tabular-nums;white-space:nowrap;}
+  .tdelta:empty{display:none;}
+  .tdelta.worse{background:color-mix(in srgb,var(--critical) 14%,transparent);color:var(--crit-ink);}
+  .tdelta.better{background:color-mix(in srgb,var(--good) 16%,transparent);color:var(--good-ink);}
+  .tdelta.flat{background:var(--surface-2);color:var(--muted);}
   table.grid td.num,table.grid th.num{text-align:right;font-variant-numeric:tabular-nums;}
   .grid12{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--s4);align-items:start;}
   .g4{grid-column:span 4;} .g5{grid-column:span 5;} .g6{grid-column:span 6;}
@@ -2895,6 +2907,7 @@
       </div>
       <div class="section g5">
         <div class="secthd"><h2 data-i18n="tr_title2">Condition trend</h2>
+          <span class="tdelta" id="trendDelta"></span>
           <span class="spacer"></span><span class="lgnd" id="trendKey"></span></div>
         <div id="trendChart"></div>
         <div class="insight" id="trendNote"></div>
@@ -3768,23 +3781,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=478"></script>
+<script src="../data/magnetic_plug.js?v=479"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=478"></script>
-<script src="../mobile/hme.js?v=478"></script>
-<script src="../mobile/mp-fc.js?v=478"></script>
-<script src="../mobile/rtw.js?v=478"></script>
-<script src="../mobile/hme-cascade.js?v=478"></script>
-<script src="../mobile/temp-limits.js?v=478"></script>
+<script src="../data/work_orders.js?v=479"></script>
+<script src="../mobile/hme.js?v=479"></script>
+<script src="../mobile/mp-fc.js?v=479"></script>
+<script src="../mobile/rtw.js?v=479"></script>
+<script src="../mobile/hme-cascade.js?v=479"></script>
+<script src="../mobile/temp-limits.js?v=479"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=478"></script>
-<script src="../mobile/normalize.js?v=478"></script>
-<script src="../mobile/terms.js?v=478"></script>
+<script src="../mobile/assets.js?v=479"></script>
+<script src="../mobile/normalize.js?v=479"></script>
+<script src="../mobile/terms.js?v=479"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -3803,19 +3816,19 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=478"></script>
-<script src="../mobile/edits.js?v=478"></script>
-<script src="../mobile/due.js?v=478"></script>
-<script src="../mobile/wear.js?v=478"></script>
-<script src="../mobile/wear-map.js?v=478"></script>
-<script src="../mobile/lube.js?v=478"></script>
-<script src="../mobile/lube-overrides.js?v=478"></script>
-<script src="../mobile/lube2027.js?v=478"></script>
-<script src="../mobile/lube-tds.js?v=478"></script>
+<script src="../mobile/grade.js?v=479"></script>
+<script src="../mobile/edits.js?v=479"></script>
+<script src="../mobile/due.js?v=479"></script>
+<script src="../mobile/wear.js?v=479"></script>
+<script src="../mobile/wear-map.js?v=479"></script>
+<script src="../mobile/lube.js?v=479"></script>
+<script src="../mobile/lube-overrides.js?v=479"></script>
+<script src="../mobile/lube2027.js?v=479"></script>
+<script src="../mobile/lube-tds.js?v=479"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=478"></script>
-<script src="../mobile/machine-photos.js?v=478"></script>
+<script src="../mobile/upload-defaults.js?v=479"></script>
+<script src="../mobile/machine-photos.js?v=479"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3824,17 +3837,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=478"></script>
-<script src="../mobile/get.js?v=478"></script>
-<script src="../mobile/points.js?v=478"></script>
-<script src="../mobile/uc-points.js?v=478"></script>
-<script src="../mobile/inspect-guide.js?v=478"></script>
-<script src="../mobile/get-figs.js?v=478"></script>
-<script src="../mobile/body-points.js?v=478"></script>
-<script src="../mobile/body-map.js?v=478"></script>
-<script src="../mobile/jspdf.umd.min.js?v=478"></script>
-<script src="../mobile/html2canvas.min.js?v=478"></script>
-<script src="../mobile/report-core.js?v=478"></script>
+<script src="../mobile/machine-fig.js?v=479"></script>
+<script src="../mobile/get.js?v=479"></script>
+<script src="../mobile/points.js?v=479"></script>
+<script src="../mobile/uc-points.js?v=479"></script>
+<script src="../mobile/inspect-guide.js?v=479"></script>
+<script src="../mobile/get-figs.js?v=479"></script>
+<script src="../mobile/body-points.js?v=479"></script>
+<script src="../mobile/body-map.js?v=479"></script>
+<script src="../mobile/jspdf.umd.min.js?v=479"></script>
+<script src="../mobile/html2canvas.min.js?v=479"></script>
+<script src="../mobile/report-core.js?v=479"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -4502,6 +4515,7 @@ const I18N={
   tr_sub:"Findings per inspection, worst on top — so a busier month never reads as a worse one. The dashed line is the trailing 3-month average; read the shape, not the last bar.",
   tr_rounds:"the number under each bar is inspections that month",
   tr_baseline:"trailing 3-month average",
+  tr_delta_flat:"steady",
   tr_tip:"{rate} finding(s) per inspection — {f} finding(s) from {r} inspection(s) on {u} unit(s)",
   tr_none:"Not enough months yet", tr_none_s:"Two months of inspections and this draws itself.",
   tr_short:"Not enough history behind this month to call a direction yet.",
@@ -5395,6 +5409,7 @@ const I18N={
   tr_sub:"Дефектов на один осмотр, худшее сверху — чтобы месяц с бо́льшим числом осмотров не выглядел хуже. Пунктир — среднее за предыдущие три месяца; смотрите на форму, а не на последний столбец.",
   tr_rounds:"число под столбцом — осмотров за месяц",
   tr_baseline:"среднее за предыдущие 3 месяца",
+  tr_delta_flat:"стабильно",
   tr_tip:"{rate} дефект(ов) на осмотр — дефектов: {f}, осмотров: {r}, единиц: {u}",
   tr_none:"Пока мало месяцев", tr_none_s:"Двух месяцев осмотров достаточно, чтобы график построился.",
   tr_short:"Истории пока недостаточно, чтобы говорить о направлении.",
@@ -9716,7 +9731,7 @@ function renderTrend(){
   const ms=trendMonths();
   if(ms.length<2){
     $("trendChart").innerHTML=`<div class="empty"><b>${esc(t("tr_none"))}</b><span>${esc(t("tr_none_s"))}</span></div>`;
-    $("trendKey").innerHTML=""; $("trendNote").textContent=""; return; }
+    $("trendKey").innerHTML=""; $("trendNote").textContent=""; $("trendDelta").innerHTML=""; return; }
   const f=x=>x[5]+x[4]+x[3]+x[2];
   /* FINDINGS PER INSPECTION, NOT FINDINGS. A raw count is a chart of how many
      rounds were walked that month wearing a chart of condition's clothes —
@@ -9769,7 +9784,7 @@ function renderTrend(){
      chart nobody acts on. Compares the last month's RATE with the rate of the
      three before it, and says plainly when there is not enough to say. */
   const last=ms[ms.length-1];
-  if(!prior.length){ $("trendNote").textContent=t("tr_short"); return; }
+  if(!prior.length){ $("trendNote").textContent=t("tr_short"); $("trendDelta").innerHTML=""; return; }
   const now=f(last), avgN=prior.reduce((a,x)=>a+f(x),0)/prior.length;
   /* A percentage on a handful of findings is noise wearing a decimal point.
      One month with a single finding and the next with none is "100% better",
@@ -9779,13 +9794,26 @@ function renderTrend(){
      because a rate built from three findings is exactly as noisy as three
      findings themselves. */
   if(avgN < 1 || Math.max(avgN, now) < 5){
-    $("trendNote").textContent=t("tr_thin",{m:last.k, n:now, r:last.rounds}); return; }
+    $("trendNote").textContent=t("tr_thin",{m:last.k, n:now, r:last.rounds});
+    $("trendDelta").innerHTML=""; return; }
   const nowR=rate(last);
   const d = Math.round((nowR-baseline)/baseline*100);
   $("trendNote").textContent = Math.abs(d)<10
     ? t("tr_flat",{m:last.k, rate:fmt1(nowR), f:now, r:last.rounds})
     : t(d>0?"tr_worse":"tr_better",{m:last.k, rate:fmt1(nowR), f:now, r:last.rounds, p:Math.abs(d),
         a:fmt1(baseline)});
+  /* THE VERDICT, IN A COLOUR, BEFORE THE SENTENCE THAT EARNS IT. A manager
+     scanning the page reads a pill the same way they already read the grade
+     mix and the compliance figure — this is that same habit applied to the
+     one panel that used to make them read a paragraph to find out whether
+     the fleet is doing better or worse. The sentence stays: it carries the
+     numbers a pill cannot. */
+  const cls = Math.abs(d)<10 ? "flat" : d>0 ? "worse" : "better";
+  const arrow = cls==="flat" ? "≈" : cls==="worse" ? "▲" : "▼";
+  const tdEl=$("trendDelta");
+  tdEl.className = "tdelta " + cls;
+  tdEl.title = t("tr_baseline")+": "+fmt1(baseline);
+  tdEl.textContent = arrow + " " + (cls==="flat" ? t("tr_delta_flat") : Math.abs(d)+"%");
 }
 
 /* ---------- the follow-up panel ---------- */
@@ -18337,8 +18365,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=478"></script>
-<script src="sync-adapter.js?v=478"></script>
-<script src="report.js?v=478"></script>
+<script src="drive.js?v=479"></script>
+<script src="sync-adapter.js?v=479"></script>
+<script src="report.js?v=479"></script>
 </body>
 </html>

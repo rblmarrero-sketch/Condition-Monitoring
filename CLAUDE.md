@@ -4466,3 +4466,48 @@ corner to an invisible dashed line instead of the visible top segment on
 every bar. Moved after the four severity `<i>` elements in source order;
 paints identically either way since it is positioned absolutely, and the
 real first child stays the real first child.
+
+**THE METRIC WAS FIXED AND THE PANEL LOOKED THE SAME, WHICH READ AS "NOTHING
+CHANGED."** Read plainly, after the rate-based redesign above shipped:
+"thats it you did not even change visual?" — a fair reading of the screen.
+The fix corrected the number the chart was built from; it left the chart
+LOOKING like the same five stacked bars in the same five colours, because
+the direction the maintainer was actually asking about — better or worse —
+had never had a shape on screen of its own. A reader had to read the
+sentence under the chart to get it, every time, and a paragraph is not a
+glance. `#trendDelta` (`.tdelta`, next to the "Condition trend" title, same
+row) is that shape: a small coloured pill — green "▼ 48%", red "▲ 63%", or
+a neutral "≈ steady" — carrying the identical verdict `tr_worse`/
+`tr_better`/`tr_flat` already compute, read the way this page already
+teaches a reader to read a verdict (the grade mix strip, the compliance
+figure) rather than a new convention invented for one panel. It is empty,
+not present-but-blank, in every state that already withholds a direction
+(`tr_none`, `tr_short`, `tr_thin`) — a pill with nothing in it would be a
+verdict about data too thin to have one. The sentence stays underneath,
+unchanged: the pill is the one-glance answer, the sentence is where the
+numbers a pill cannot hold still live, the same "hero figure plus its own
+description" pairing the Compliance panel's own `cpv`/description pairing
+beside it already uses — reused, not invented twice.
+
+**THE PILL'S OWN CSS CLASS COULD NOT LIVE WHERE THE FIRST DRAFT PUT IT.**
+`.tdelta.worse`/`.tdelta.better`/`.tdelta.flat` are compound selectors — both
+classes on the SAME element — and the first draft built the coloured state
+as a nested `<span class="worse">` inside the `#trendDelta` container that
+already carries `class="tdelta"`, which needed a descendant selector
+(`.tdelta .worse`) to ever match anything. Caught before it shipped by
+reading the rendered `className`/computed colour rather than trusting the
+markup looked right: the fix sets the state class directly on `#trendDelta`
+itself (`tdEl.className = "tdelta " + cls`) — one element, one class list,
+the compound selector it was written for.
+
+**THE PILL ADDS TO THE HEADER ROW THE FIVE-ENTRY LEGEND ALREADY FILLS, AND
+GOT THE SAME REGRESSION CHECK BEFORE SHIPPING RATHER THAN AFTER.** The
+identical trap the dashed-line legend entry hit two entries above this one
+— `.secthd{flex-wrap:wrap}`, and a wrap here pushes `#trendChart` a row
+below `#covTbl`, tripping `tests/overview2.cjs`'s "compliance and trend sit
+on one row" check. Run deliberately before calling this done, not
+discovered by it: a short pill ("▼ 48%", "▲ 63%") is narrow enough that the
+row stays at one line (measured -392 vs -352, both suites' own tolerance is
+60px) where the sixth legend entry was not. `overview2.cjs`, `cover.cjs`,
+`queue.cjs` and `layout.cjs`'s own first-row-in-view check all pass clean
+against the pill in place.
