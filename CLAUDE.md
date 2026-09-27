@@ -3354,6 +3354,35 @@ row's `.tag` round-type badge and the Required-Action column's amber
 "Priority required" pill — real pills, on the same table, out of scope
 for the grade-column fix specifically asked about this pass.
 
+**DASHBOARD REDESIGN, PHASE 3: THE FLEET TABLE'S LAST TWO PILLS.** The
+increment deliberately deferred above. Two shapes remained on the same
+Overview table after the Priority column went to plain text: the
+Component/Defect cell's round-type label (`class="tag"` — "Magnetic Plug",
+"Filter Cut" — a filled grey badge) and the Required-Action cell's quiet
+"Priority required" note (`needChips(as.miss, 1, true)`, the one call site
+that ever passes `quiet:true`), a warning-coloured pill with its own
+background and border. Neither is an alert needing a badge shape — the
+round type is the same kind of fact as the date and inspector's name
+beside it, and the "needs X" note already carries its meaning in its
+warning-coloured ink, which is the flag the maintainer's own rule keeps
+("flagged text is ok"); the pill shape around it was spending width the
+column doesn't have for no reading a plain coloured word doesn't already
+give.
+
+Both are scoped to `#fleetTbl` only, not the shared `.tag`/`.need` classes
+— `.tag` labels the round type on a dozen other screens (Equipment History
+cards, the reports list, the register) that have not been through this
+redesign pass yet, and `.need`'s own base rule is the Maintenance Actions
+register's louder, multi-chip list of missing fields, a different table
+with a different reading (several gaps named at once, not one quiet note
+under a status word). Changing the shared class would have redesigned
+screens nobody asked about yet, the same "one screen at a time" discipline
+the Priority-column fix already followed. `#fleetTbl .tag` drops the
+background/border/radius/padding and reads inline, taking its colour from
+the muted metadata line it already sits on; `#fleetTbl .need.q` drops the
+same properties from the quiet chip while keeping the warning ink — the
+one thing that was ever the actual signal.
+
 ---
 
 ## Secrets
