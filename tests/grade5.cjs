@@ -273,7 +273,7 @@ const J = o => JSON.stringify(o).slice(0, 420);
     const numbers = RECS.reduce((n, r) => n + r.items.filter(i => typeof i.grade === 'number').length, 0);
     const tiles = [...document.querySelectorAll('#kpis .kpi')].map(k => k.id);
     const legend = [...document.querySelectorAll('#kpiMix .legend button')].map(x => x.textContent.trim());
-    const pills = [...document.querySelectorAll('#fleetTbl td:nth-child(2) .pill')].map(x => x.textContent.trim());
+    const pills = [...document.querySelectorAll('#fleetTbl td:nth-child(2) .sevtxt')].map(x => x.textContent.trim());
     return { letters, numbers, tiles, legend, pills: pills.slice(0, 3), drill: drill.sev, chip: [...document.querySelectorAll('#chips .chip b')].map(x => x.textContent), last: renderKpis.last };
   });
   ok('every grade off the folder is a number (the fixture ships letters on every seventh round)', d1.letters === 0 && d1.numbers > 30, J({ l: d1.letters, n: d1.numbers }));
@@ -284,7 +284,7 @@ const J = o => JSON.stringify(o).slice(0, 420);
     setDrill('sev', 5); await new Promise(r => setTimeout(r, 200));       // clear
     const all = document.querySelectorAll('#fleetTbl tbody tr').length;
     kpiGo('deg'); await new Promise(r => setTimeout(r, 300));
-    const deg = { rows: document.querySelectorAll('#fleetTbl tbody tr').length, hash: location.hash, pills: [...document.querySelectorAll('#fleetTbl td:nth-child(2) .pill')].map(x => x.textContent.trim()) };
+    const deg = { rows: document.querySelectorAll('#fleetTbl tbody tr').length, hash: location.hash, pills: [...document.querySelectorAll('#fleetTbl td:nth-child(2) .sevtxt')].map(x => x.textContent.trim()) };
     setDrill('sev', 3); await new Promise(r => setTimeout(r, 200));
     const s = gSearch('grade 5'), s2 = gSearch('severe'), s3 = gSearch('critical');
     return { all, deg, find5: s ? s.hit.find.length : -1, findSevere: s2 ? s2.hit.find.length : -1, findCrit: s3 ? s3.hit.find.length : -1, last: renderKpis.last };

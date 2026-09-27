@@ -3322,6 +3322,38 @@ four sites just never used it. All four now read `SEVC[n]` directly.
 confirmed non-vacuous against the pre-fix code, which fails with exactly
 `var(--good)`.
 
+**DASHBOARD REDESIGN, PHASE 2: THE OVERVIEW PRIORITY COLUMN LOSES ITS
+BADGE.** The same maintainer-requested overhaul's first table conversion.
+The Fleet/Attention table's Priority cell carried a filled, uppercase
+`.pill` for the grade — five swatch colours a reader has to learn before
+the busiest column on the page means anything — stacked over a second,
+mostly-hidden `.attn` label for the two reasons (overdue action, unassigned
+owner) a grade alone doesn't explain. Confirmed by the maintainer's own
+choice when asked how to redraw it: plain text, colour spent once, on the
+one grade that means "stop." `#fleetTbl`'s Priority cell now prints the
+grade as plain bold text (`.sevtxt`) in the row's own ink for grades 1–4,
+and only grade 5 (Critical) takes colour (`var(--crit-ink)`, the same token
+`.duec.over` already uses for a genuinely overdue date) — the `.attn`
+label underneath is untouched, since that part (a visible tag only for the
+two reasons a grade doesn't already say, screen-reader text otherwise) was
+never the complaint. The now-orphaned `#fleetTbl .pill{white-space:nowrap}`
+scoped rule is deleted with it, rather than left for `tests/lint.cjs`'s
+"paints something that no longer exists" scan to eventually name.
+`tests/overview2.cjs` and `tests/grade5.cjs` — which read the fleet
+severity off `.pill` — are repointed at `.sevtxt`; both suites' own
+assertions (grade text matches the severity word, drilling to a KPI shows
+only that grade, sort order) needed no other change, because the fact
+being checked never depended on the badge shape. Rendered and screenshotted
+against a live fixture spanning all five grades to confirm the fix from
+the earlier entry holds visually too: grade 4 now reads in plain dark
+text, not the green a missing ternary branch used to paint it.
+
+Left for the next screen, deliberately not touched in this pass (this
+project's own "a fix must change only what was asked" rule): the same
+row's `.tag` round-type badge and the Required-Action column's amber
+"Priority required" pill — real pills, on the same table, out of scope
+for the grade-column fix specifically asked about this pass.
+
 ---
 
 ## Secrets

@@ -1915,7 +1915,13 @@
   #rRecent li .sp{flex:1;}
   details.admin>summary{font-size:var(--t-small);font-weight:700;color:var(--ink-2);}
   details.admin{border-top:0;margin-top:var(--s2);}
-  #fleetTbl .pill{white-space:nowrap;}
+  /* THE PRIORITY CELL IS A WORD, NOT A BADGE. A grade of 2, 3 or 4 prints in
+     the row's own ink — a reader who is not a reliability engineer should
+     not have to learn five swatch colours to read the busiest column on the
+     page. Colour is spent once, on the one grade that means "stop": grade 5,
+     Critical. */
+  #fleetTbl .sevtxt{font-weight:700;white-space:nowrap;}
+  #fleetTbl .sevtxt.crit{color:var(--crit-ink);}
   #fleetTbl .fstat{font-size:var(--t-tiny);}
   /* Ten columns on a 1366 screen, in Russian, whose column names run to
      "ТРЕБУЕМОЕ ДЕЙСТВИЕ": a heading may take two lines; a table may not take
@@ -3741,23 +3747,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=470"></script>
+<script src="../data/magnetic_plug.js?v=471"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=470"></script>
-<script src="../mobile/hme.js?v=470"></script>
-<script src="../mobile/mp-fc.js?v=470"></script>
-<script src="../mobile/rtw.js?v=470"></script>
-<script src="../mobile/hme-cascade.js?v=470"></script>
-<script src="../mobile/temp-limits.js?v=470"></script>
+<script src="../data/work_orders.js?v=471"></script>
+<script src="../mobile/hme.js?v=471"></script>
+<script src="../mobile/mp-fc.js?v=471"></script>
+<script src="../mobile/rtw.js?v=471"></script>
+<script src="../mobile/hme-cascade.js?v=471"></script>
+<script src="../mobile/temp-limits.js?v=471"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=470"></script>
-<script src="../mobile/normalize.js?v=470"></script>
-<script src="../mobile/terms.js?v=470"></script>
+<script src="../mobile/assets.js?v=471"></script>
+<script src="../mobile/normalize.js?v=471"></script>
+<script src="../mobile/terms.js?v=471"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -3776,19 +3782,19 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=470"></script>
-<script src="../mobile/edits.js?v=470"></script>
-<script src="../mobile/due.js?v=470"></script>
-<script src="../mobile/wear.js?v=470"></script>
-<script src="../mobile/wear-map.js?v=470"></script>
-<script src="../mobile/lube.js?v=470"></script>
-<script src="../mobile/lube-overrides.js?v=470"></script>
-<script src="../mobile/lube2027.js?v=470"></script>
-<script src="../mobile/lube-tds.js?v=470"></script>
+<script src="../mobile/grade.js?v=471"></script>
+<script src="../mobile/edits.js?v=471"></script>
+<script src="../mobile/due.js?v=471"></script>
+<script src="../mobile/wear.js?v=471"></script>
+<script src="../mobile/wear-map.js?v=471"></script>
+<script src="../mobile/lube.js?v=471"></script>
+<script src="../mobile/lube-overrides.js?v=471"></script>
+<script src="../mobile/lube2027.js?v=471"></script>
+<script src="../mobile/lube-tds.js?v=471"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=470"></script>
-<script src="../mobile/machine-photos.js?v=470"></script>
+<script src="../mobile/upload-defaults.js?v=471"></script>
+<script src="../mobile/machine-photos.js?v=471"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3797,17 +3803,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=470"></script>
-<script src="../mobile/get.js?v=470"></script>
-<script src="../mobile/points.js?v=470"></script>
-<script src="../mobile/uc-points.js?v=470"></script>
-<script src="../mobile/inspect-guide.js?v=470"></script>
-<script src="../mobile/get-figs.js?v=470"></script>
-<script src="../mobile/body-points.js?v=470"></script>
-<script src="../mobile/body-map.js?v=470"></script>
-<script src="../mobile/jspdf.umd.min.js?v=470"></script>
-<script src="../mobile/html2canvas.min.js?v=470"></script>
-<script src="../mobile/report-core.js?v=470"></script>
+<script src="../mobile/machine-fig.js?v=471"></script>
+<script src="../mobile/get.js?v=471"></script>
+<script src="../mobile/points.js?v=471"></script>
+<script src="../mobile/uc-points.js?v=471"></script>
+<script src="../mobile/inspect-guide.js?v=471"></script>
+<script src="../mobile/get-figs.js?v=471"></script>
+<script src="../mobile/body-points.js?v=471"></script>
+<script src="../mobile/body-map.js?v=471"></script>
+<script src="../mobile/jspdf.umd.min.js?v=471"></script>
+<script src="../mobile/html2canvas.min.js?v=471"></script>
+<script src="../mobile/report-core.js?v=471"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -6833,7 +6839,7 @@ function renderFleet(){
     h+=`<tr data-u="${esc(r.equip)}" style="cursor:pointer">
       <td><b>${esc(r.equip)}</b></td>
       <td class="nw" title="${esc(t(attn.key))}">${
-        attn.sev?`<span class="pill ${SEV[attn.sev].c}" title="${esc(t("th_worst"))}">${SEV[attn.sev].l}</span>`:'<span class="muted">\u2014</span>'
+        attn.sev?`<span class="sevtxt${attn.sev>=5?" crit":""}" title="${esc(t("th_worst"))}">${esc(SEV[attn.sev].l)}</span>`:'<span class="muted">\u2014</span>'
         }<span class="attn a${attn.rank}${attn.rank===2||attn.rank===3?" tag":" sr"}">${esc(t(attn.key))}</span></td>
       <td>${clsOf(r)?`<button class="xf" data-xcls="${esc(clsOf(r))}" title="${esc(t("xf_cls"))}">${esc(clsOf(r))}</button>`:'<span class="muted">\u2014</span>'}</td>
       <td>${top?esc(top):'<span class="muted">\u2014</span>'}<div class="muted" style="font-size:11px;margin-top:2px"><span class="tag">${esc(TYPE_LABEL[r.type]||r.type)}</span><span class="mono">${esc(r.date||"")}</span>${r.by?` · ${esc(r.by)}`:""}</div></td>
@@ -17970,8 +17976,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=470"></script>
-<script src="sync-adapter.js?v=470"></script>
-<script src="report.js?v=470"></script>
+<script src="drive.js?v=471"></script>
+<script src="sync-adapter.js?v=471"></script>
+<script src="report.js?v=471"></script>
 </body>
 </html>

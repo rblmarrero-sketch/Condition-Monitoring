@@ -118,8 +118,9 @@ const reset = q => fetch(BASE + '/__reset?' + q).then(r => r.text());
                actRows: pagerTotal(),
                dueRows: document.querySelectorAll('#ddList tbody tr, #ddList .duerow, #ddList tr').length,
                fleetRows: document.querySelectorAll('#fleetTbl tbody tr').length,
-               /* The grade is the pill, wherever its column sits — Priority leads the row since Phase 4. */
-               fleetSevs: [...document.querySelectorAll('#fleetTbl tbody tr')].map(tr => ((tr.querySelector('.pill') || {}).textContent || '').trim()) };
+               /* The grade is plain text in the Priority column, coloured only when
+                  Critical — Priority leads the row since Phase 4. */
+               fleetSevs: [...document.querySelectorAll('#fleetTbl tbody tr')].map(tr => ((tr.querySelector('.sevtxt') || {}).textContent || '').trim()) };
     }, id);
   };
   let r = await press('kpiCrit');
@@ -173,8 +174,8 @@ const reset = q => fetch(BASE + '/__reset?' + q).then(r => r.text());
              compBtn: !!(comp && comp.querySelector('button')),
              cols, rows: rows.length, machines,
              firstRowY: rows[0] ? Math.round(rows[0].getBoundingClientRect().top) : null,
-             /* The grade rides in the Priority column since Phase 4 (rank, then pill). */
-             sample: rows.slice(0, 3).map(tr => ({ u: cell(tr, 'equip').trim(), g: ((tr.querySelector('.pill') || {}).textContent || '').trim(),
+             /* The grade rides in the Priority column since Phase 4 (rank, then plain text). */
+             sample: rows.slice(0, 3).map(tr => ({ u: cell(tr, 'equip').trim(), g: ((tr.querySelector('.sevtxt') || {}).textContent || '').trim(),
                act: cell(tr, 'act').replace(/\s+/g, ' ').trim().slice(0, 60),
                st: ((tr.children[cols.indexOf('act')] || {}).querySelector
                     ? ((tr.children[cols.indexOf('act')].querySelector('.fstat') || {}).textContent || cell(tr, 'act')) : '').trim() })),
