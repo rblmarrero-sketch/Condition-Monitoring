@@ -3646,6 +3646,21 @@ Three dashboard conventions a suite has to respect since build 271:
   per unit and round dated by the earlier work order. Folding it into Overdue
   or All would leave two questions answered by one number and neither of them
   trustworthy. Read tab counts by `data-dd` key, never by position.
+- **Equipment History has no column filter, on purpose** (see "Equipment
+  History was investigated and deliberately left out" above) — its list view
+  is one `<table class="grid">` PER VISIT, not one flat table, so the
+  `cwColQ`/`cwWordMatch`/`.cwfh`/`.cwcf` pattern the other five tables share
+  cannot be dropped in unchanged. If this is ever asked for, the filter has
+  to narrow across ALL of a machine's visit-tables at once, not just the
+  currently-open one — `renderHistList()` builds every visit's `<table>` in a
+  single call, so a naive per-table filter row would need its own `cwColQ`
+  keyed by visit, which is the wrong shape; the right one filters the
+  POSITIONS feeding every table before any of them are built, the same
+  place `histShown()` already narrows the gallery view. A suite for it must
+  render a machine with at least two visits and prove a query narrows rows
+  in BOTH tables, not only the first one built — a suite that opens a
+  fixture with a single visit cannot tell "filters every table" from
+  "filters the one table that happens to exist."
 - **Reports are made in ONE language or both** (`#rLang` / `cm_dash_rlang`
   on the dashboard, `#repLang` / `cm_rep_lang` on the phone). The bilingual
   switch is `ctx.bi`; `report.js` swaps the screen's `lang` for the report's
