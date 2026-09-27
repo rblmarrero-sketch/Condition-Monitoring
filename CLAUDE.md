@@ -4362,3 +4362,22 @@ suites, plus `phase4`, `phase6`, `dashui`, `lint`, `static`, `tabsa11y`,
 `schedcompare`, `dueplan`, `progchg`, `gencatchall`, `lube`, `lubegap`,
 `lubeovr`, `lubecap`, `lubesync`, `lubetab`, `luberef`, `lubestd`, `lubrpt`
 and `lubekeep`, passed clean.
+
+**AND THE FULL SWEEP FOUND THE ONE THING THE TARGETED RUN NEVER LOOKED
+AT: "THE OVERVIEW ANSWERS BEFORE IT SCROLLS."** `tests/layout.cjs` — not
+one of the suites re-run above, because nothing about the column filters
+looked like it would touch layout at a glance — asserts the Fleet table's
+FIRST DATA ROW sits above 768px with no scrolling at 1366×768, a stricter,
+more literal promise than `overview2.cjs`'s own "stays near two screens"
+scroll-height budget (which that suite's own budget move already covered).
+The new `.cwfh` row pushed it to 771 of 768 — three pixels of scroll a
+reader would need to do that this table has never asked for before. Fixed
+at the row's own CSS, not the test: `th.cwfh`/`input.cwcf`'s padding
+dropped to 1px and the input's font to 11px with an explicit 1.3 line
+height, shaving the row to where the first data row lands at 763 of 768 —
+comfortable margin, not a hairline pass. This is shared CSS, so the same
+saving applies to all four tables that carry the row, not only Fleet.
+`layout.cjs` passed clean afterward; the full sweep was restarted from a
+clean state rather than trusted with one already-known failure sitting in
+its log, so the final result is an honest all-pass, not a pass with an
+asterisk.
