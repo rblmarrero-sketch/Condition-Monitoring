@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-09-27T03:48:56+00:00",
+  "generated": "2026-09-27T05:03:31+00:00",
   "source": "https://askpi.94-131-94-152.sslip.io/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 681,
@@ -316,8 +316,8 @@ window.CM_WO_DATA = {
     "WE009",
     "WE011"
   ],
-  "duplicateRowsCollapsed": 205,
-  "roundsDedupedWithinVisit": 2,
+  "duplicateRowsCollapsed": 213,
+  "roundsDedupedWithinVisit": 3,
   "columns": [
     "Asset description",
     "Asset old no",
@@ -11829,6 +11829,25 @@ window.CM_WO_DATA = {
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
+    },
+    {
+      "equip": "DZ019",
+      "cls": "DOZ",
+      "woNumber": "WO-016583",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "250h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
+      "planStart": "2026-09-26",
+      "planStartDt": "2026-09-26T13:00:00",
+      "planEnd": "2026-09-26",
+      "actualStart": "2026-09-26",
+      "actualStartDt": "2026-09-26T13:00:00",
+      "actualEnd": "2026-09-26"
     },
     {
       "equip": "DZ019",
@@ -26386,6 +26405,25 @@ window.CM_WO_DATA = {
     {
       "equip": "GR009",
       "cls": "GRD",
+      "woNumber": "WO-016558",
+      "maintType": "1000 Hours service Planned",
+      "hours": 1000,
+      "cmLabel": "1000h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
+      "planStart": "2026-09-26",
+      "planStartDt": "2026-09-26T07:35:00",
+      "planEnd": "2026-09-26",
+      "actualStart": "2026-09-26",
+      "actualStartDt": "2026-09-26T07:35:00",
+      "actualEnd": "2026-09-26"
+    },
+    {
+      "equip": "GR009",
+      "cls": "GRD",
       "woNumber": "WO-017870",
       "maintType": "250 Hours service Planned",
       "hours": 250,
@@ -39853,6 +39891,27 @@ window.CM_WO_DATA = {
       "actualStart": "2026-09-17",
       "actualStartDt": "2026-09-17T09:15:00",
       "actualEnd": "2026-09-18"
+    },
+    {
+      "equip": "TK101",
+      "cls": "AT",
+      "woNumber": "WO-016617",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "Magnetic Plug",
+      "cmTypes": [
+        "MP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
+      "planStart": "2026-09-26",
+      "planStartDt": "2026-09-26T21:20:00",
+      "planEnd": "2026-09-27",
+      "actualStart": "2026-09-26",
+      "actualStartDt": "2026-09-26T21:20:00",
+      "actualEnd": "2026-09-27"
     },
     {
       "equip": "TK101",
