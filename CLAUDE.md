@@ -3276,6 +3276,33 @@ before. Confirmed non-vacuous both ways: with the exclusion in place,
 files had changed since BUILD 468 was set); touching `data/magnetic_plug.js`
 by hand and re-running still correctly fails, naming it.
 
+**A TEAM REPORT'S OWN "SOME OF THEM DID NOT ARRIVE" NOTE PRINTED THE
+TEMPLATE, NOT THE NUMBERS.** Reported plainly: pressing a colleague's round's
+PDF button on the Team screen said "Fetching photograph…" while it worked and
+then produced a sheet with no photographs — with, on inspection, no readable
+explanation of why. `addNote(o,key)` has never taken a third argument; the one
+call site that needed one — `roundRpt`'s own partial-fetch handling, when
+`teamPhotosFor`'s deadline expires mid-batch or a batch comes back dead after
+an earlier one landed — called `addNote(norm,"rep_nophoto_part",{n:asked-gotN,
+of:asked})` believing the numbers would reach the sentence. They never did:
+the third argument was silently discarded, `t(key)` ran with no `vars`, and
+`rep_nophoto_part`'s own `{n}`/`{of}` placeholders reached the printed sheet
+as the literal four characters, in both languages, on every team report this
+call site has ever produced — the exact "real value rendered as nothing" this
+file's own rules describe, one function away from where CLAUDE.md already
+lists it as the whole of this project's recurring defect. No suite had ever
+driven this path at all: `tests/teamphoto.cjs` proves the happy path and the
+total-failure path (no destination, offline) but never the PARTIAL one, so a
+call site with a bug in its own signature usage shipped and stayed for as
+long as `rep_nophoto_part` has existed. `addNote(o,key,vars)` now takes and
+forwards `vars` to both `t(key,vars)` calls (the primary language and, through
+`inOtherLang`, the alternate one) — the other three call sites pass no third
+argument and are unaffected. `tests/teamphoto.cjs` calls `addNote` directly
+with a real gap (`{n:2,of:5}`) and asserts the printed sentence carries "2 of
+5" in both languages and never the bare `{n}`/`{of}` template; reverting the
+fix alone (keeping the new test) fails it exactly as predicted, against the
+literal pre-fix sentence.
+
 ---
 
 ## Secrets

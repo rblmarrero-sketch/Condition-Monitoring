@@ -314,6 +314,26 @@ async function phone(b, withDrive) {
   ok('  in both languages, like everything else on it', gone.en && gone.ru);
   await C.ctx.setOffline(false);
 
+  /* THE PARTIAL-FETCH NOTE HAS TO CARRY THE ACTUAL COUNT, NOT THE TEMPLATE'S
+     OWN PLACEHOLDER TEXT. addNote(o,key) never took a third argument, so the
+     one call site that tried to pass one — rep_nophoto_part's {n} of {of} —
+     had it silently discarded: t(key) ran with no vars, and the literal
+     braces reached the printed sheet instead of the real numbers. A round
+     whose fetch stalled partway printed "{n} of {of} photographs could not
+     be fetched" verbatim, on every language, forever — the exact "real value
+     rendered as nothing" defect this project's own history is full of, one
+     function away from where it always shows up. */
+  console.log('\nthe partial-fetch note names the real count, not "{n} of {of}"');
+  const partNote = await C.p.evaluate(() => {
+    const o = { note:'', noteAlt:'' };
+    addNote(o, 'rep_nophoto_part', { n:2, of:5 });
+    return o;
+  });
+  ok('the note carries the real numbers', /2 of 5/.test(partNote.note), JSON.stringify(partNote.note));
+  ok('  never the unsubstituted template', !/\{n\}|\{of\}/.test(partNote.note), JSON.stringify(partNote.note));
+  ok('  in the other language too', /2.*5|5.*2/.test(partNote.noteAlt) && !/\{n\}|\{of\}/.test(partNote.noteAlt),
+     JSON.stringify(partNote.noteAlt));
+
   await b.close();
   console.log(fail ? `\n${fail} FAILED` : "\na colleague's round prints with the pictures on it");
   process.exit(fail ? 1 : 0);
