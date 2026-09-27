@@ -245,6 +245,29 @@ const rowsOf = () => [...document.querySelectorAll('#actionTbl .wlu')].flatMap(u
   ok('the owner is still there tomorrow', /A\. Sokolov/.test(back));
   ok('so is the state', /Done/i.test(back));
 
+  /* A GRADE OF 4 (SEVERE) MUST NOT PAINT AS THE SAME COLOUR AS A CLEAN
+     READING. The row's severity swatch (--sc) is built from a ternary that
+     only ever named "critical"/"serious"/"warning", falling through to
+     "good" for anything else — including a Severe finding, which has its
+     own colour (var(--severe)) and never reaches it. Proven against the
+     real grouped register row, not the CSS var in isolation. */
+  console.log('\na Severe (grade 4) finding gets its own colour, not the clean one');
+  await p.evaluate(() => {
+    CMDash.importRecords([{ equip: 'TK804', date: '2026-07-05', type: 'MP', cls: 'HT', by: 'R. Marrero',
+      items: [{ key: '4C', label: 'LR Final Drive', grade: 'D', defect: 'Cracked housing',
+                action: 'REP', actionLabel: 'Repair now' }] }]);
+    const q = document.getElementById('fQ'); q.value = 'TK804'; q.dispatchEvent(new Event('input'));
+    actView = 'unit'; renderActions(); showTab('actions');
+  });
+  await p.waitForTimeout(300);
+  const sevColor = await p.evaluate(() => {
+    const row = document.querySelector('#actionTbl .wlu .wlr[data-fu]');
+    return row ? row.style.getPropertyValue('--sc').trim() : null;
+  });
+  ok('the row carries a --sc colour at all', !!sevColor, sevColor);
+  ok('it is the Severe colour', sevColor === 'var(--severe)', sevColor);
+  ok('  never the clean-reading colour', sevColor !== 'var(--good)', sevColor);
+
   await b.close();
   console.log(fails.length ? '\nFAILED ' + fails.length + ': ' + fails.join(' | ') : '\nall passed');
   process.exit(fails.length ? 1 : 0);

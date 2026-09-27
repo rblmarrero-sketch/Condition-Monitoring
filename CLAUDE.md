@@ -3303,6 +3303,25 @@ with a real gap (`{n:2,of:5}`) and asserts the printed sentence carries "2 of
 fix alone (keeping the new test) fails it exactly as predicted, against the
 literal pre-fix sentence.
 
+**A DASHBOARD REDESIGN AUDIT FOUND A GRADE 4 FINDING PAINTS AS GREEN.** The
+first pass of a maintainer-requested visual/UX overhaul (typography, tables,
+pills, the Condition Trend/PF-curve/Gantt charts — see the design plan for the
+rest) turned up a real correctness bug before touching any layout: four call
+sites building a severity colour from `SEV[n].c` re-derived the grade→colour
+map by hand with a ternary that named `"critical"`/`"serious"`/`"warning"`
+and fell through to `"good"` for anything else — including `"e"` (Severe,
+grade 4), which has its own colour (`var(--severe)`) the ternary never named.
+A Severe finding on the action register row, the grouped register's `.wlr`
+row, and two follow-up-drawer `.urow` lists (open findings, recent rounds)
+all rendered with the SAME colour as a clean grade-1 reading. The fix is not
+a new rule — `SEVC={1:...,2:...,3:...,4:"var(--severe)",5:...}` already
+existed, a few hundred lines above, doing this exact mapping correctly; the
+four sites just never used it. All four now read `SEVC[n]` directly.
+`tests/follow.cjs` adds a grade-4 (`'D'`) fixture and asserts the rendered
+`.wlr` row's `--sc` custom property is `var(--severe)`, never `var(--good)`;
+confirmed non-vacuous against the pre-fix code, which fails with exactly
+`var(--good)`.
+
 ---
 
 ## Secrets
