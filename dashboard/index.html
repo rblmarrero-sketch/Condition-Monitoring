@@ -572,11 +572,16 @@
     background:none;border:1px solid transparent;border-radius:6px;padding:2px 1px;cursor:pointer;}
   .tmon:hover,.tmon:focus-visible{border-color:var(--accent);outline:none;}
   .tmon.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,transparent);}
-  .tstack{width:100%;height:120px;display:flex;flex-direction:column;justify-content:flex-end;
+  .tstack{width:100%;height:120px;position:relative;display:flex;flex-direction:column;justify-content:flex-end;
     background:var(--surface-2);border-radius:4px;overflow:hidden;}
   .tstack i{display:block;width:100%;}
   .tstack i.s-cri{background:var(--critical);} .tstack i.s-sev{background:var(--severe);} .tstack i.s-deg{background:var(--serious);}
   .tstack i.s-inc{background:var(--warning);}
+  /* The trailing-3-month baseline, drawn once on every bar's own track so a
+     reader sees "above/below the recent norm" without reading the sentence
+     under the chart — the same figure that sentence names in words. */
+  .tstack i.tref{position:absolute;left:0;right:0;width:auto;height:0;cursor:default;
+    border-top:1.5px dashed color-mix(in srgb,var(--ink) 45%,transparent);z-index:1;}
   .tmon b{font:700 12px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--ink-2);min-height:12px;}
   .tmon span{font-size:var(--t-micro);color:var(--muted);font-variant-numeric:tabular-nums;}
   .tmon u{font-size:var(--t-micro);color:var(--muted);text-decoration:none;
@@ -3763,23 +3768,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=477"></script>
+<script src="../data/magnetic_plug.js?v=478"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=477"></script>
-<script src="../mobile/hme.js?v=477"></script>
-<script src="../mobile/mp-fc.js?v=477"></script>
-<script src="../mobile/rtw.js?v=477"></script>
-<script src="../mobile/hme-cascade.js?v=477"></script>
-<script src="../mobile/temp-limits.js?v=477"></script>
+<script src="../data/work_orders.js?v=478"></script>
+<script src="../mobile/hme.js?v=478"></script>
+<script src="../mobile/mp-fc.js?v=478"></script>
+<script src="../mobile/rtw.js?v=478"></script>
+<script src="../mobile/hme-cascade.js?v=478"></script>
+<script src="../mobile/temp-limits.js?v=478"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=477"></script>
-<script src="../mobile/normalize.js?v=477"></script>
-<script src="../mobile/terms.js?v=477"></script>
+<script src="../mobile/assets.js?v=478"></script>
+<script src="../mobile/normalize.js?v=478"></script>
+<script src="../mobile/terms.js?v=478"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -3798,19 +3803,19 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=477"></script>
-<script src="../mobile/edits.js?v=477"></script>
-<script src="../mobile/due.js?v=477"></script>
-<script src="../mobile/wear.js?v=477"></script>
-<script src="../mobile/wear-map.js?v=477"></script>
-<script src="../mobile/lube.js?v=477"></script>
-<script src="../mobile/lube-overrides.js?v=477"></script>
-<script src="../mobile/lube2027.js?v=477"></script>
-<script src="../mobile/lube-tds.js?v=477"></script>
+<script src="../mobile/grade.js?v=478"></script>
+<script src="../mobile/edits.js?v=478"></script>
+<script src="../mobile/due.js?v=478"></script>
+<script src="../mobile/wear.js?v=478"></script>
+<script src="../mobile/wear-map.js?v=478"></script>
+<script src="../mobile/lube.js?v=478"></script>
+<script src="../mobile/lube-overrides.js?v=478"></script>
+<script src="../mobile/lube2027.js?v=478"></script>
+<script src="../mobile/lube-tds.js?v=478"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=477"></script>
-<script src="../mobile/machine-photos.js?v=477"></script>
+<script src="../mobile/upload-defaults.js?v=478"></script>
+<script src="../mobile/machine-photos.js?v=478"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3819,17 +3824,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=477"></script>
-<script src="../mobile/get.js?v=477"></script>
-<script src="../mobile/points.js?v=477"></script>
-<script src="../mobile/uc-points.js?v=477"></script>
-<script src="../mobile/inspect-guide.js?v=477"></script>
-<script src="../mobile/get-figs.js?v=477"></script>
-<script src="../mobile/body-points.js?v=477"></script>
-<script src="../mobile/body-map.js?v=477"></script>
-<script src="../mobile/jspdf.umd.min.js?v=477"></script>
-<script src="../mobile/html2canvas.min.js?v=477"></script>
-<script src="../mobile/report-core.js?v=477"></script>
+<script src="../mobile/machine-fig.js?v=478"></script>
+<script src="../mobile/get.js?v=478"></script>
+<script src="../mobile/points.js?v=478"></script>
+<script src="../mobile/uc-points.js?v=478"></script>
+<script src="../mobile/inspect-guide.js?v=478"></script>
+<script src="../mobile/get-figs.js?v=478"></script>
+<script src="../mobile/body-points.js?v=478"></script>
+<script src="../mobile/body-map.js?v=478"></script>
+<script src="../mobile/jspdf.umd.min.js?v=478"></script>
+<script src="../mobile/html2canvas.min.js?v=478"></script>
+<script src="../mobile/report-core.js?v=478"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -4494,15 +4499,16 @@ const I18N={
   cv_note:"Against a register of {n} unit(s), over {p}. \u201cNever inspected\u201d and \u201coverdue\u201d look at the whole history, not just the period, because a machine is overdue whatever window you are reading.",
   cv_empty:"Nothing to measure coverage against in this selection.",
   tr_title:"Direction — is the fleet getting better or worse",
-  tr_sub:"Findings by month, worst on top. Read the shape, not the last bar: one month is a sample, three is a trend.",
+  tr_sub:"Findings per inspection, worst on top — so a busier month never reads as a worse one. The dashed line is the trailing 3-month average; read the shape, not the last bar.",
   tr_rounds:"the number under each bar is inspections that month",
-  tr_tip:"{f} finding(s) from {r} inspection(s) on {u} unit(s)",
+  tr_baseline:"trailing 3-month average",
+  tr_tip:"{rate} finding(s) per inspection — {f} finding(s) from {r} inspection(s) on {u} unit(s)",
   tr_none:"Not enough months yet", tr_none_s:"Two months of inspections and this draws itself.",
   tr_short:"Not enough history behind this month to call a direction yet.",
-  tr_thin:"{m}: {n} finding(s). Too few a month to read a direction from \u2014 a percentage on numbers this small is noise.",
-  tr_flat:"{m}: {n} finding(s) — about the same as the months before it.",
-  tr_worse:"{m}: {n} finding(s), {p}% above the previous three months (about {a}). Worth asking what changed.",
-  tr_better:"{m}: {n} finding(s), {p}% below the previous three months (about {a}). Check coverage held up before calling it an improvement.",
+  tr_thin:"{m}: {n} finding(s) from {r} inspection(s) \u2014 too few to read a rate from. A percentage on numbers this small is noise.",
+  tr_flat:"{m}: {rate} finding(s) per inspection ({f} from {r} inspections) — about the same as the trailing three months.",
+  tr_worse:"{m}: {rate} finding(s) per inspection ({f} from {r} inspections), {p}% above the trailing three months (about {a} per inspection). Worth asking what changed.",
+  tr_better:"{m}: {rate} finding(s) per inspection ({f} from {r} inspections), {p}% below the trailing three months (about {a} per inspection). Check coverage held up before calling it an improvement.",
   a_plan_hint:"Who owns it and when it is due. Everything else on this page is a description of a problem; this is the part that changes it.",
   a_fold:"Collapse all", a_unfold:"Expand all",
   a_st_open:"Not started", a_st_PLAN:"Planned", a_st_WIP:"In progress", a_st_DONE:"Closed",
@@ -5386,15 +5392,16 @@ const I18N={
   cv_note:"По реестру из {n} ед., за {p}. «Не проводился» и «просрочено» считаются по всей истории, а не только по периоду.",
   cv_empty:"В этой выборке нечего сопоставить с охватом.",
   tr_title:"Динамика — парк улучшается или ухудшается?",
-  tr_sub:"Дефекты по месяцам, худшее сверху. Смотрите на форму, а не на последний столбец: один месяц — это выборка, три — тенденция.",
+  tr_sub:"Дефектов на один осмотр, худшее сверху — чтобы месяц с бо́льшим числом осмотров не выглядел хуже. Пунктир — среднее за предыдущие три месяца; смотрите на форму, а не на последний столбец.",
   tr_rounds:"число под столбцом — осмотров за месяц",
-  tr_tip:"дефектов: {f}, осмотров: {r}, единиц: {u}",
+  tr_baseline:"среднее за предыдущие 3 месяца",
+  tr_tip:"{rate} дефект(ов) на осмотр — дефектов: {f}, осмотров: {r}, единиц: {u}",
   tr_none:"Пока мало месяцев", tr_none_s:"Двух месяцев осмотров достаточно, чтобы график построился.",
   tr_short:"Истории пока недостаточно, чтобы говорить о направлении.",
-  tr_thin:"{m}: дефектов {n}. Слишком мало в месяц, чтобы говорить о динамике — процент на таких числах это шум.",
-  tr_flat:"{m}: дефектов {n} — примерно как в предыдущие месяцы.",
-  tr_worse:"{m}: дефектов {n}, на {p}% выше предыдущих трёх месяцев (около {a}). Стоит разобраться, что изменилось.",
-  tr_better:"{m}: дефектов {n}, на {p}% ниже предыдущих трёх месяцев (около {a}). Сначала проверьте, что охват не упал.",
+  tr_thin:"{m}: дефектов {n} из {r} осмотр(ов) — слишком мало, чтобы считать показатель. Процент на таких числах это шум.",
+  tr_flat:"{m}: {rate} дефект(ов) на осмотр ({f} из {r} осмотров) — примерно как в предыдущие три месяца.",
+  tr_worse:"{m}: {rate} дефект(ов) на осмотр ({f} из {r} осмотров), на {p}% выше предыдущих трёх месяцев (около {a} на осмотр). Стоит разобраться, что изменилось.",
+  tr_better:"{m}: {rate} дефект(ов) на осмотр ({f} из {r} осмотров), на {p}% ниже предыдущих трёх месяцев (около {a} на осмотр). Сначала проверьте, что охват не упал.",
   a_plan_hint:"Кто отвечает и к какому сроку. Всё остальное на этой странице описывает проблему; это — то, что её меняет.",
   a_fold:"Свернуть все", a_unfold:"Развернуть все",
   a_st_open:"Не начато", a_st_PLAN:"Запланировано", a_st_WIP:"В работе", a_st_DONE:"Закрыто",
@@ -9711,53 +9718,74 @@ function renderTrend(){
     $("trendChart").innerHTML=`<div class="empty"><b>${esc(t("tr_none"))}</b><span>${esc(t("tr_none_s"))}</span></div>`;
     $("trendKey").innerHTML=""; $("trendNote").textContent=""; return; }
   const f=x=>x[5]+x[4]+x[3]+x[2];
-  const worst=Math.max(1,...ms.map(f));
+  /* FINDINGS PER INSPECTION, NOT FINDINGS. A raw count is a chart of how many
+     rounds were walked that month wearing a chart of condition's clothes —
+     July's 60 findings from 3 rounds and September's 311 from 27 rounds read
+     as "three times worse" when the honest number, findings PER round, fell
+     by more than half (20.0 to 11.5). Stacking is still by severity and
+     "worst on top" still holds; only the denominator changed. */
+  const rate=x=>x.rounds ? f(x)/x.rounds : 0;
+  const worst=Math.max(.01,...ms.map(rate));
+  /* The dashed reference line is the same trailing 3-month average the
+     sentence below states in words — drawn once, on every bar, so a reader
+     sees a bar sitting above or below the recent baseline without having to
+     read the sentence to know it. */
+  const prior=ms.slice(-4,-1);
+  const baseline = prior.length ? prior.reduce((a,x)=>a+rate(x),0)/prior.length : null;
+  const basePct = baseline!=null ? Math.min(100, baseline/worst*100) : null;
   const bars=ms.map(x=>{
-    const tot=f(x);
+    const tot=f(x), r=rate(x);
     /* A month with one finding beside a month with sixty-seven is 1.5% of the
        track — an empty box, indistinguishable from a month with none. Anything
        that happened gets a sliver you can see; nothing stays nothing. */
-    const h=v=>v<=0?"0":`${Math.max(4,(v/worst*100)).toFixed(1)}%`;
+    const h=v=>v<=0?"0":`${Math.max(4,(v/(x.rounds||1)/worst*100)).toFixed(1)}%`;
     return `<button type="button" class="tmon${drill.month===x.k?" on":""}" data-tm="${esc(x.k)}"
       aria-pressed="${drill.month===x.k?"true":"false"}"
-      title="${esc(x.k+" · "+t("tr_tip",{f:tot,r:x.rounds,u:x.units.size})+" · "+t("tr_click"))}">
+      title="${esc(x.k+" · "+t("tr_tip",{rate:fmt1(r),f:tot,r:x.rounds,u:x.units.size})+" · "+t("tr_click"))}">
       <div class="tstack">
         <i class="s-cri" style="height:${h(x[5])}"></i>
         <i class="s-sev" style="height:${h(x[4])}"></i>
         <i class="s-deg" style="height:${h(x[3])}"></i>
         <i class="s-inc" style="height:${h(x[2])}"></i>
+        ${basePct!=null?`<i class="tref" style="bottom:${basePct.toFixed(1)}%" title="${esc(t("tr_baseline"))}: ${fmt1(baseline)}"></i>`:""}
       </div>
-      <b>${tot||""}</b>
+      <b>${tot?fmt1(r):""}</b>
       <span>${esc(x.k.slice(2))}</span>
       <u>${x.rounds}</u></button>`;
   }).join("");
   /* The key rides on the title line. A legend of its own cost a row of the
      panel and pushed the columns into a shorter box — a chart that spends its
      height explaining its colours is a chart with less chart in it. */
+  /* The baseline dashed line is explained in the subtitle (Definitions) and
+     in each bar's own tooltip, not as a seventh entry here — this row is
+     already tight enough at five that a sixth wrapped it onto a second line
+     and pushed the chart a whole row below the compliance table beside it. */
   $("trendKey").innerHTML=
       [5,4,3,2].map(n=>`<span><i style="--c:${SEVC[n]}"></i>${esc(SEV[n].l)}</span>`).join("")
     + `<span>${esc(t("tr_rounds"))}</span>`;
   $("trendChart").innerHTML=`<div class="trend">${bars}</div>`;
   $("trendChart").querySelectorAll("[data-tm]").forEach(b=>b.onclick=()=>setDrill("month",b.dataset.tm));
   /* One sentence of direction, because a chart nobody reads out loud is a
-     chart nobody acts on. Compares the last month with the average of the
+     chart nobody acts on. Compares the last month's RATE with the rate of the
      three before it, and says plainly when there is not enough to say. */
-  const last=ms[ms.length-1], prior=ms.slice(-4,-1);
+  const last=ms[ms.length-1];
   if(!prior.length){ $("trendNote").textContent=t("tr_short"); return; }
-  const avg=prior.reduce((a,x)=>a+f(x),0)/prior.length;
-  const now=f(last);
+  const now=f(last), avgN=prior.reduce((a,x)=>a+f(x),0)/prior.length;
   /* A percentage on a handful of findings is noise wearing a decimal point.
      One month with a single finding and the next with none is "100% better",
      and that sentence ends up in a report. Below a real baseline this says
      what is actually true — the numbers are too small to carry a direction —
-     rather than computing one because it can. */
-  if(avg < 1 || Math.max(avg, now) < 5){
-    $("trendNote").textContent=t("tr_thin",{m:last.k, n:now}); return; }
-  const d = Math.round((now-avg)/avg*100);
+     rather than computing one because it can. Guarded on the raw counts,
+     because a rate built from three findings is exactly as noisy as three
+     findings themselves. */
+  if(avgN < 1 || Math.max(avgN, now) < 5){
+    $("trendNote").textContent=t("tr_thin",{m:last.k, n:now, r:last.rounds}); return; }
+  const nowR=rate(last);
+  const d = Math.round((nowR-baseline)/baseline*100);
   $("trendNote").textContent = Math.abs(d)<10
-    ? t("tr_flat",{m:last.k, n:now})
-    : t(d>0?"tr_worse":"tr_better",{m:last.k, n:now, p:Math.abs(d),
-        a:Math.round(avg)});
+    ? t("tr_flat",{m:last.k, rate:fmt1(nowR), f:now, r:last.rounds})
+    : t(d>0?"tr_worse":"tr_better",{m:last.k, rate:fmt1(nowR), f:now, r:last.rounds, p:Math.abs(d),
+        a:fmt1(baseline)});
 }
 
 /* ---------- the follow-up panel ---------- */
@@ -14062,6 +14090,10 @@ const W_SOON=1000;                     // hours: about one month of a 12h shift
 function wearDue(r){ return r.band==="act" || (r.pct!=null&&r.pct>=80) || (r.hours!=null&&r.hours<W_SOON); }
 function fmtN(n){ return (n==null||isNaN(n)) ? "—" :
   Math.round(n).toLocaleString(lang==="ru"?"ru-RU":"en-GB"); }
+/* One decimal, for a rate rather than a count — "findings per inspection"
+   is never a whole number and rounding it to one loses the only thing worth
+   showing (11.5 vs 25.6, not 12 vs 26). */
+function fmt1(n){ return (n==null||isNaN(n)) ? "—" : n.toFixed(1); }
 function fmtH(h){ return h==null?"" : h>=100000 ? "—" :
   Math.round(h).toLocaleString(lang==="ru"?"ru-RU":"en-GB"); }
 /* Hours are what parts are ordered against, but a date is what a shutdown is
@@ -18305,8 +18337,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=477"></script>
-<script src="sync-adapter.js?v=477"></script>
-<script src="report.js?v=477"></script>
+<script src="drive.js?v=478"></script>
+<script src="sync-adapter.js?v=478"></script>
+<script src="report.js?v=478"></script>
 </body>
 </html>

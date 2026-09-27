@@ -4396,3 +4396,73 @@ saving applies to all four tables that carry the row, not only Fleet.
 clean state rather than trusted with one already-known failure sitting in
 its log, so the final result is an honest all-pass, not a pass with an
 asterisk.
+
+**"CONDITION TREND" WAS A CHART OF HOW MANY ROUNDS WERE WALKED, WEARING A
+CHART OF CONDITION'S CLOTHES.** Asked plainly, with a screenshot: "the
+Condition trend is so not good to the eyes, not clear. Maybe change to
+condition by no of inspection." The panel's own three real months told the
+story on its own — July: 60 findings from 3 rounds; August: 384 from 15;
+September: 311 from 27 — and the note above it read September as "40% above
+the previous three months," a real number computed correctly off raw counts.
+It was still the wrong answer to the question a reliability manager actually
+asks. Findings per inspection — the honest rate — FELL over the same three
+months: 20.0, 25.6, then 11.5. September looked like the worst month on the
+chart and was, findings-per-round, the best of the three: the raw-count
+trend was almost entirely a chart of inspection VOLUME (3 → 15 → 27 rounds a
+month) wearing condition's clothes, the identical shape this file's own
+"Defects raised" and "1C plan" entries already name for a different pair of
+columns — one number answering a different question than the one printed
+above it.
+
+`renderTrend()` (dashboard/index.html) now stacks by RATE — `findings ÷
+rounds`, per severity, per month — never by raw count. Stacking order and
+"worst on top" are unchanged; only the denominator is. The bold number over
+each bar is the rate to one decimal (`fmt1`, new — a rate is never a whole
+number, and rounding 11.5 to 12 next to 25.6 rounded to 26 throws away the
+only thing worth showing); the inspection count that used to sit under the
+number as its only context is unchanged in place, now doubling as the
+rate's own denominator. The trailing-3-month comparison the sentence below
+the chart states in words is now the same rate, not the same raw count, and
+is ALSO drawn as a thin dashed reference line inside every bar's own track
+(`.tref`, CSS `.tstack{position:relative}` + an absolutely-positioned
+`border-top`) — so a bar sitting above or below the recent baseline reads
+at a glance, the same figure the sentence names, without requiring the
+sentence to be read first. The guard against calling a direction off too
+little data is unchanged in its basis (raw finding counts, because a rate
+built from three findings is exactly as noisy as three findings are) —
+only its wording moved from "too few a month" to naming the inspection
+count directly, since that is now the number the reader needs to judge
+the rate by.
+
+**THE FIRST DRAFT PUT THE DASHED LINE'S OWN LEGEND WHERE THE TREND KEY
+LIVES, AND REPRODUCED THE EXACT REGRESSION THIS FILE'S OWN COMMENT ALREADY
+WARNED ABOUT ON THE LINE ABOVE IT.** `renderTrend()`'s own comment already
+states the reason the severity key rides on the panel's title line rather
+than as a chart legend: "A legend of its own cost a row of the panel and
+pushed the columns into a shorter box." Adding a sixth entry ("trailing
+3-month average") to that five-entry row did precisely that: `#trendKey`
+wrapped onto a second line at the trend panel's own (narrower, `g5`) width,
+pushing `#trendChart` a full row below where `#covTbl` sits in the
+matching, wider (`g7`) panel beside it — `tests/overview2.cjs`'s own
+"compliance and trend sit on one row" check, which asserts the two panels'
+tables start within 60px of each other, caught it immediately (771 vs 339,
+well past the tolerance). The explanation moved to where it costs nothing:
+the panel's `tr_sub` text (read from the Definitions control) states the
+dashed line's meaning once, and the line itself now carries a native
+`title` tooltip with its own value — real information, delivered on
+hover, with no row of chart height spent explaining it. `overview2.cjs`,
+`cover.cjs` and `queue.cjs` — the three suites that read `#trendChart` at
+all — pass clean against the corrected version.
+
+**A LINE INSERTED BEFORE THE BARS IT SITS BEHIND WOULD HAVE STOLEN THE
+ROUNDED TOP CORNER FROM THE WRONG ELEMENT.** `.tstack i:first-child{
+border-radius:5px 5px 0 0}` rounds whichever element is the stack's first
+DOM child — ordinarily the critical (`s-cri`) segment, always rendered even
+at zero height, always first. The reference line was first drafted as the
+FIRST child of `.tstack`, ahead of the four severity segments — harmless to
+layout, since it is `position:absolute` and out of flow, but `:first-child`
+counts DOM order, not paint order, so it would have handed the rounded
+corner to an invisible dashed line instead of the visible top segment on
+every bar. Moved after the four severity `<i>` elements in source order;
+paints identically either way since it is positioned absolutely, and the
+real first child stays the real first child.
