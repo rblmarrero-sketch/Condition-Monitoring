@@ -614,8 +614,26 @@
   /* Fixed-width columns in a half-width panel meant twelve months scrolled
      sideways while four months left 300px of the panel empty. The columns are
      the flexible thing here; the panel is the fixed thing. */
-  .trend{display:flex;align-items:flex-end;gap:6px;padding:6px 0 0;}
-  .tmon{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:3px;
+  /* Stage 3c item 6: Main.dc.html's own bars stay a fixed, thin width
+     whatever the month count is -- two months of real data used to stretch
+     to fill the whole card, which reads as two giant blocks rather than a
+     trend. flex-grow is dropped so a bar never grows past --tmon-w; a wide
+     window with many months still shrinks below it (flex-shrink:1) rather
+     than overflowing, and justify-content:flex-start on .trend keeps a
+     short run of bars left-aligned instead of centred/stretched. */
+  :root{ --tmon-w: 40px; }
+  .trend{display:flex;align-items:stretch;gap:0;padding:6px 0 0;position:relative;}
+  /* The value axis: "max" over "0", against a track of three hairline
+     gridlines -- 0/50/100% of the tallest bar -- so a reader can place a bar
+     against a 0-to-max scale instead of only against its neighbours. */
+  .taxis{flex:none;width:30px;height:120px;display:flex;flex-direction:column;
+    justify-content:space-between;font-size:var(--t-micro);color:var(--muted);
+    text-align:right;padding-right:6px;box-sizing:border-box;}
+  .trackwrap{flex:1 1 auto;min-width:0;display:flex;align-items:flex-end;
+    justify-content:flex-start;gap:6px;position:relative;
+    background-image:repeating-linear-gradient(to top, var(--border) 0, var(--border) 1px, transparent 1px, transparent 50%);
+    background-size:100% 120px;background-repeat:no-repeat;background-position:0 0;}
+  .tmon{flex:0 1 var(--tmon-w);width:var(--tmon-w);min-width:22px;max-width:var(--tmon-w);display:flex;flex-direction:column;align-items:center;gap:3px;
     background:none;border:1px solid transparent;border-radius:6px;padding:2px 1px;cursor:pointer;}
   .tmon:hover,.tmon:focus-visible{border-color:var(--accent);outline:none;}
   .tmon.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,transparent);}
@@ -633,6 +651,30 @@
   .tmon span{font-size:var(--t-micro);color:var(--muted);font-variant-numeric:tabular-nums;}
   .tmon u{font-size:var(--t-micro);color:var(--muted);text-decoration:none;
     border-top:1px solid var(--border);width:100%;text-align:center;padding-top:2px;}
+  /* Stage 3c item 2: Main.dc.html's page header carries only the title, the
+     one-line purpose, Definitions and Generate report -- the inspection
+     count is not repeated there, because the filter bar's own #fCount
+     already states it ("N of N inspections"). #kpiInsp keeps computing and
+     writing its text (kept for #kpiVoid, the "N voided hidden" link, and
+     for tests/overview-next.cjs's own #kpiInsp .v/.s reads) but is not
+     painted a second time next to the title. */
+  #kpiInsp{display:none;}
+  .colsmenu{position:relative;}
+  .colsmenu summary{list-style:none;}
+  .colsmenu summary::-webkit-details-marker{display:none;}
+  .colsmenubody{position:absolute;right:0;top:calc(100% + 4px);z-index:12;
+    background:var(--surface);border:1px solid var(--border);border-radius:8px;
+    box-shadow:var(--e2);padding:8px 10px;display:flex;flex-direction:column;gap:6px;
+    min-width:170px;}
+  .colsmenubody label{display:flex;align-items:center;gap:7px;font-size:12.5px;
+    color:var(--ink-2);white-space:nowrap;cursor:pointer;}
+  .covdetails{margin-top:8px;}
+  .covdetails summary{cursor:pointer;color:var(--accent);font-size:12.5px;font-weight:600;list-style:none;}
+  .covdetails summary::-webkit-details-marker{display:none;}
+  .covdetails summary::before{content:"▸ ";}
+  .covdetails[open] summary::before{content:"▾ ";}
+  .covdetails[open] summary{margin-bottom:8px;}
+  .trendlgndrow{display:flex;justify-content:flex-end;margin-bottom:2px;}
   .tlegend{display:flex;gap:14px;flex-wrap:wrap;font-size:11.5px;color:var(--ink-2);margin-bottom:4px;}
   .tlegend span{display:flex;align-items:center;gap:5px;}
   .tlegend i{width:10px;height:10px;border-radius:2px;display:inline-block;}
@@ -2275,8 +2317,13 @@
      had not been laid out. One surface, one row, aligned. */
   .controls{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
     box-shadow:var(--e1);padding:12px 16px;gap:16px;align-items:end;margin-bottom:16px;}
-  .controls .field{gap:5px;}
-  .controls .field label{font-weight:700;font-size:var(--t-micro);line-height:1.2;font-family:inherit;letter-spacing:.08em;color:var(--muted);}
+  /* Stage 3c item 3/10: Main.dc.html/FilterBar.dc.html put the label ABOVE
+     its control, not beside it -- overriding the row layout an earlier pass
+     chose (see the comment on the base .controls .field rule above, which
+     this more specific selector wins over). Shared by every tab's filter
+     bar, since .controls is the one filter row every screen uses. */
+  .controls .field{flex-direction:column;align-items:flex-start;gap:4px;}
+  .controls .field label{font-weight:700;font-size:var(--t-micro);line-height:1.2;font-family:inherit;letter-spacing:.08em;color:var(--muted);white-space:nowrap;}
   .controls select,.controls input[type=search],.controls input[type=text]{
     background:var(--surface-2);border:1px solid var(--border);border-radius:9px;
     padding:8px 11px;font:inherit;font-size:13px;color:var(--ink);min-height:36px;
@@ -2984,44 +3031,42 @@
 </nav>
 
 <main>
+  <!-- Stage 3c item 3: the mockup's first filter row is exactly Grade / Type /
+       Class / Period, then "Show voided", "Clear all" and the count -- nothing
+       else. Status, the search box and Data quality are real, load-bearing
+       filters this app already had that the mockup's own screen list (brief
+       §16: "Not in the canvas ... the Columns picker ... represented by a
+       labelled panel, not designed in full") never showed at all, so they
+       move behind the existing "More filters" toggle (row 2) rather than
+       being dropped -- the task's own §3 explicitly allows "behind a popover
+       or toggle" as the alternative to a second row. -->
   <div class="controls">
-    <div class="field"><label for="fType" data-i18n="f_type_s" data-i18n-title="f_type" title="Inspection type">Type</label><select id="fType"></select></div>
-    <div class="field"><label for="fClass" data-i18n="f_class_s" data-i18n-title="f_class" title="Equipment class">Class</label><select id="fClass"></select></div>
     <!-- The grade, 1 to 5, as a filter of its own. It is the same drill the
          headlines and the mix legend set, so the chip, the address and this
          box always agree. -->
     <div class="field"><label for="fGrade" data-i18n="f_grade_s" data-i18n-title="f_grade" title="Condition grade">Grade</label><select id="fGrade"></select></div>
+    <div class="field"><label for="fType" data-i18n="f_type_s" data-i18n-title="f_type" title="Inspection type">Type</label><select id="fType"></select></div>
+    <div class="field"><label for="fClass" data-i18n="f_class_s" data-i18n-title="f_class" title="Equipment class">Class</label><select id="fClass"></select></div>
     <div class="field"><label for="fRange" data-i18n="f_period">Period</label><select id="fRange">
       <option value="0" data-i18n="f_alltime">All time</option><option value="30" data-i18n="f_30">Last 30 days</option>
       <option value="90" data-i18n="f_90">Last 90 days</option><option value="365" data-i18n="f_365">Last 12 months</option></select></div>
-    <!-- The state of the work a finding raised: open, planned, in progress,
-         closed, no action required. A record survives when any of its
-         findings is in that state; the register narrows to the finding. -->
-    <div class="field"><label for="fStatus" data-i18n="f_status_s" data-i18n-title="f_status" title="Maintenance action status">Status</label><select id="fStatus"></select></div>
-    <!-- Not wrapped in a .field: the wrapper was the flex child, so the grow
-         factor on the input did nothing and a 26-character query still scrolled
-         inside a 200px box. The label is visually hidden either way. -->
-    <label class="vh" for="fQ" data-i18n="f_search">Search</label>
-    <input id="fQ" type="search" data-i18n-ph="f_qph" placeholder="Unit, defect, action, inspector…">
-    <!-- Not a filter on what was found, but on what is MISSING from what was
-         found. Several Overview rows carried a findings count with no worst
-         severity and no top defect, which reads as a clean machine and is
-         actually a record nobody can act on. -->
-    <!-- The eighth control on a bar whose whole point is that it stays one row.
-         A full-width select fitted, but only by taking the search field below
-         the width of its own placeholder — so the newcomer yields: at rest it
-         is a 34px toggle, and it opens into the select when somebody wants it
-         or whenever it is actually filtering something. -->
-    <!-- The rarer filters — data quality, voided rounds — behind one control
-         that says how many of them are set, so the row stays one row. -->
+    <label class="voidtog" data-i18n-title="f_voidtip" title="Voided inspections are withdrawn from every count, but nothing is deleted">
+      <input type="checkbox" id="fVoid"><span data-i18n="f_void">Show voided</span></label>
+    <!-- The rarer filters -- status, search, data quality -- behind one
+         control that says how many of them are set, so the first row stays
+         exactly the mockup's own set. -->
     <button type="button" class="btn dqtog" id="fMore" aria-expanded="false" aria-controls="fMoreRow"><span data-i18n="f_more">More filters</span><span class="n hidden" id="fMoreN"></span></button>
-    <span class="fcount" id="fCount"></span>
     <!-- Always here, so "how do I get back to the whole fleet" is answered by
          looking rather than by remembering. -->
     <button class="btn resetb" id="fReset" data-i18n="f_reset"
       data-i18n-title="f_reset_t" title="Clear every filter and drill-down">Clear all</button>
+    <span class="fcount" id="fCount"></span>
   </div>
   <div class="controls more hidden" id="fMoreRow">
+    <!-- The state of the work a finding raised: open, planned, in progress,
+         closed, no action required. A record survives when any of its
+         findings is in that state; the register narrows to the finding. -->
+    <div class="field"><label for="fStatus" data-i18n="f_status_s" data-i18n-title="f_status" title="Maintenance action status">Status</label><select id="fStatus"></select></div>
     <div class="field dqf"><label for="fDq" data-i18n="f_dq_s" data-i18n-title="f_dq" title="Data quality — what is missing from what was found">Data quality</label><select id="fDq" data-i18n-title="f_dq" title="Data quality — what is missing from what was found">
         <option value="" data-i18n="dq_all">Everything</option>
         <option value="any" data-i18n="dq_any">Anything missing</option>
@@ -3031,8 +3076,11 @@
         <option value="owner" data-i18n="dq_owner">Owner not assigned</option>
         <option value="due" data-i18n="dq_due">Due date missing</option>
       </select></div>
-    <label class="voidtog" data-i18n-title="f_voidtip" title="Voided inspections are withdrawn from every count, but nothing is deleted">
-      <input type="checkbox" id="fVoid"><span data-i18n="f_void">Show voided</span></label>
+    <!-- Not wrapped in a .field: the wrapper was the flex child, so the grow
+         factor on the input did nothing and a 26-character query still scrolled
+         inside a 200px box. The label is visually hidden either way. -->
+    <label class="vh" for="fQ" data-i18n="f_search">Search</label>
+    <input id="fQ" type="search" data-i18n-ph="f_qph" placeholder="Unit, defect, action, inspector…">
   </div>
   <div class="chips" id="chips"></div>
 
@@ -3050,18 +3098,21 @@
          contract — #kpiInsp and #kpiVoid are how the page explains a gap
          between "loaded" and "counted" when a round has been voided. -->
     <div class="pagehd">
+      <!-- Stage 3c item 2: Main.dc.html's own header row is title + a
+           one-line purpose sentence + Definitions inline on the left, and
+           Generate report on the right -- the inspection count is not
+           repeated here (it already lives in the filter bar's #fCount, and
+           #kpiInsp keeps computing but is not painted, see the #kpiInsp{
+           display:none} rule). ov_purpose is a real string this page never
+           had a home for before; the mockup's own wording is used verbatim. -->
       <div class="pgt"><h1 data-i18n="ov_title">Overview</h1>
-        <span class="pgsub" id="kpiInsp"><b class="v"></b> <span class="s"></span></span></div>
-      <span class="spacer"></span>
-      <!-- GENERATE REPORT (brief §5.1). Reuses the one Reports tab everything
-           else builds a report through (see the comment above REPORTS_KEY) --
-           no second report path is added here. -->
-      <button class="btn" id="ovGenRpt" data-i18n="ov_genrpt">Generate report</button>
-      <!-- ONE "DEFINITIONS" FOR THE PAGE. Every card used to carry its own
-           "How this is counted", which is the same sentence read past six
-           times. One control, one list, every number on the page explained
-           in the order the page shows them. -->
-      <details class="defs" id="ovDefs">
+        <span class="pgsub" data-i18n="ov_purpose">Which machines need attention first, and why</span>
+        <span class="pgsub" id="kpiInsp"><b class="v"></b> <span class="s"></span></span>
+        <!-- ONE "DEFINITIONS" FOR THE PAGE. Every card used to carry its own
+             "How this is counted", which is the same sentence read past six
+             times. One control, one list, every number on the page
+             explained in the order the page shows them. -->
+        <details class="defs" id="ovDefs">
         <summary data-i18n="ov_defs">Definitions</summary>
         <div class="defsbody">
           <dl>
@@ -3077,7 +3128,13 @@
             <dt data-i18n="s_fleet2">Equipment requiring attention</dt><dd data-i18n="s_fleet_sub">Worst finding on each machine's most recent inspection, highest priority first. Click a machine to open its history.</dd>
           </dl>
         </div>
-      </details>
+        </details>
+      </div>
+      <span class="spacer"></span>
+      <!-- GENERATE REPORT (brief §5.1). Reuses the one Reports tab everything
+           else builds a report through (see the comment above REPORTS_KEY) --
+           no second report path is added here. -->
+      <button class="btn" id="ovGenRpt" data-i18n="ov_genrpt">Generate report</button>
     </div>
     <div class="kpis" id="kpis"></div>
     <!-- Compliance and direction answer one question between them — is the
@@ -3089,8 +3146,12 @@
     <div class="grid12">
       <div class="section g7">
         <div class="secthd"><h2 data-i18n="tr_title2">Condition trend</h2>
-          <span class="tdelta" id="trendDelta"></span>
-          <span class="spacer"></span><span class="lgnd" id="trendKey"></span></div>
+          <span class="tdelta" id="trendDelta"></span></div>
+        <!-- Stage 3c item 6: the legend rides its own row, right-aligned, so
+             it never has to share width with the title + delta pill on a
+             narrow g7 column -- the crowding that used to wrap it under the
+             title and over the chart area. -->
+        <div class="trendlgndrow"><span class="lgnd" id="trendKey"></span></div>
         <div id="trendChart"></div>
         <div class="insight" id="trendNote"></div>
       </div>
@@ -3099,8 +3160,17 @@
           <div class="secthd"><h2 data-i18n="cv_title2">Inspection compliance</h2>
             <span class="spacer"></span><span class="hint" id="covFleet"></span></div>
           <div class="compline" id="covComp"></div>
-          <div class="tblwrap"><table class="grid" id="covTbl"></table></div>
-          <div class="shown" id="covMore"></div>
+          <!-- Stage 3c item 7: Main.dc.html's own compliance card holds only
+               the percentage, the caption and the progress bar -- the
+               per-round breakdown (covTbl, already the shared tk* filter/sort
+               kit) moves behind a details/summary so it is one press away
+               rather than shown by default in a card this small. covTbl's
+               own filter/sort wiring (tkApply/tkWire) is untouched; it just
+               renders inside a closed <details> now. -->
+          <details class="covdetails"><summary data-i18n="cv_details">Details</summary>
+            <div class="tblwrap"><table class="grid" id="covTbl"></table></div>
+            <div class="shown" id="covMore"></div>
+          </details>
           <div class="sub" id="covNote" style="margin-top:6px"></div>
         </div>
         <div class="section" style="margin-bottom:0">
@@ -3114,7 +3184,15 @@
          one press away and never drawn here. -->
     <div class="section">
       <div class="secthd"><h2 data-i18n="s_fleet2">Equipment requiring attention</h2>
-        <span class="spacer"></span><span class="legend" id="sevLegend"></span></div>
+        <span id="sevReviewLink"></span>
+        <span class="spacer"></span><span class="legend" id="sevLegend"></span>
+        <!-- Stage 3c item 8: the columns this table does not show by default
+             (Class, Inspected, Findings, Required action, Open, Next due)
+             move behind this picker rather than being shown at all times. -->
+        <details class="colsmenu">
+          <summary class="btn sm" data-i18n="th_cols_btn" data-i18n-title="th_cols_t" title="Show or hide columns">Columns</summary>
+          <div class="colsmenubody" id="fleetColsPicker"></div>
+        </details></div>
       <div class="tblwrap scrollbox" style="--sb:340px"><table class="grid" id="fleetTbl"></table></div>
       <div class="shown" id="fleetShown"></div>
     </div>
@@ -4715,6 +4793,8 @@ const I18N={
   tr_sub:"Findings per inspection, worst on top — so a busier month never reads as a worse one. The dashed line is the trailing 3-month average; read the shape, not the last bar.",
   tr_rounds:"the number under each bar is inspections that month",
   tr_baseline:"trailing 3-month average",
+  tr_axis_max:"max", tr_axis_zero:"0",
+  cv_details:"Details",
   tr_delta_flat:"steady",
   tr_tip:"{rate} finding(s) per inspection — {f} finding(s) from {r} inspection(s) on {u} unit(s)",
   tr_none:"Not enough months yet", tr_none_s:"Two months of inspections and this draws itself.",
@@ -4730,6 +4810,9 @@ const I18N={
   a_none:"Nothing here", a_none_s:"No finding matches this filter — try Everything.",
   th_owner:TERMS.en.owner, th_due:"Due", th_status:TERMS.en.status,
   th_class:"Class", th_open:"Open", th_nextdue:"Next due", th_noowner:"unassigned",
+  th_sync:"Sync", th_sync_ok:"Synced", th_sync_conflict:"Needs attention",
+  th_sync_conflict_t:"Two devices sent this round — open Equipment history to resolve",
+  th_cols_btn:"Columns", th_cols_t:"Show or hide columns in this table",
   xf_cls:"Show only this class", xf_open:"Open the register for this machine",
   xf_open_over:"{n} past its date \u2014 open the register for this machine",
   a_show:"Show", a_f_open:"Still open", a_f_over:"Overdue", a_f_owned:"Has an owner", a_f_all:"Everything",
@@ -4967,6 +5050,7 @@ const I18N={
   ov_top:"Showing the {n} highest-priority of {of} machines",
   ov_all:"View all equipment",
   ov_title:"Overview", ov_defs:"Definitions", ov_of:"inspections on {n} machine(s)",
+  ov_purpose:"Which machines need attention first, and why",
   ov_k_crit:"Critical equipment", ov_s_crit:"stop or repair before next use", ov_t_crit:"Show the machines with a Critical finding",
   ov_k_deg:"Degraded equipment", ov_s_deg:"plan the repair", ov_t_deg:"Show the machines with a Degraded finding",
   ov_k_sev:"Severe equipment", ov_s_sev:"repair soon", ov_t_sev:"Show the machines with a Severe finding",
@@ -5613,6 +5697,8 @@ const I18N={
   tr_sub:"Дефектов на один осмотр, худшее сверху — чтобы месяц с бо́льшим числом осмотров не выглядел хуже. Пунктир — среднее за предыдущие три месяца; смотрите на форму, а не на последний столбец.",
   tr_rounds:"число под столбцом — осмотров за месяц",
   tr_baseline:"среднее за предыдущие 3 месяца",
+  tr_axis_max:"макс.", tr_axis_zero:"0",
+  cv_details:"Подробнее",
   tr_delta_flat:"стабильно",
   tr_tip:"{rate} дефект(ов) на осмотр — дефектов: {f}, осмотров: {r}, единиц: {u}",
   tr_none:"Пока мало месяцев", tr_none_s:"Двух месяцев осмотров достаточно, чтобы график построился.",
@@ -5628,6 +5714,9 @@ const I18N={
   a_none:"Здесь пусто", a_none_s:"Под этот фильтр ничего не подходит — попробуйте «Все».",
   th_owner:TERMS.ru.owner, th_due:"Срок", th_status:TERMS.ru.status,
   th_class:"Класс", th_open:"В работе", th_nextdue:"След. срок", th_noowner:"не назначен",
+  th_sync:"Синхр.", th_sync_ok:"Синхронизировано", th_sync_conflict:"Требует внимания",
+  th_sync_conflict_t:"Два устройства прислали этот обход — откройте историю техники, чтобы разрешить",
+  th_cols_btn:"Столбцы", th_cols_t:"Показать или скрыть столбцы таблицы",
   xf_cls:"Показать только этот класс", xf_open:"Открыть реестр по этой машине",
   xf_open_over:"{n} просрочено \u2014 открыть реестр по этой машине",
   a_show:"Показать", a_f_open:"Открытые", a_f_over:"Просроченные",
@@ -5859,6 +5948,7 @@ const I18N={
   ov_top:"Показаны {n} самых приоритетных из {of} машин",
   ov_all:"Показать всё оборудование",
   ov_title:"Обзор", ov_defs:"Определения", ov_of:"осмотров, машин: {n}",
+  ov_purpose:"Какая техника требует внимания в первую очередь и почему",
   ov_k_crit:"Критичная техника", ov_s_crit:"остановить или отремонтировать", ov_t_crit:"Показать машины с критической находкой",
   ov_k_deg:"Ухудшенная техника", ov_s_deg:"запланировать ремонт", ov_t_deg:"Показать машины с оценкой 3 – Ухудшенное",
   ov_k_sev:"Техника с серьёзным дефектом", ov_s_sev:"ремонт в ближайшее время", ov_t_sev:"Показать машины с оценкой 4 – Серьёзное",
@@ -6901,11 +6991,23 @@ function renderKpis(){
     + tile({ id:"kpiNoown", k:t("ov_k_noown"), v:nNoown,
              s: esc(nNoown ? t("ov_s_noown") : t("ov_s_owned")),
              cls:"warn"+(nNoown?"":" zero"),
-             go:"noown", title:t("ov_t_noown") })
-    + tile({ id:"kpiReview", k:t("ov_k_review"), v:nReview,
-             s: esc(nReview ? t("sy_k_grade_s") : t("ov_s_none")),
-             cls:(nReview?"warn":"good"),
-             go:"review", title:t("sy_k_grade_go") });
+             go:"noown", title:t("ov_t_noown") });
+  /* STAGE 3C ITEM 4: SIX TILES, NOT SEVEN. Main.dc.html states exactly six --
+     Critical, Severe, Degraded, Overdue, Open maintenance actions, Unassigned
+     actions -- so "Grade review required" (kpiReview) is no longer rendered
+     into #kpis. Its function is untouched: kpiGo("review") still opens Data &
+     Sync and flashes the identical #sySevBox panel that already lives there
+     (see the "sy_sev" / "Grade review required" section on that tab), and the
+     count itself now sits as a quiet door on the Equipment requiring
+     attention header instead of an eighth headline -- see #sevReviewLink,
+     wired a few lines below. */
+  const rl=$("sevReviewLink");
+  if(rl){
+    rl.innerHTML = nReview
+      ? `<button type="button" class="xf warn" id="kpiReview" title="${esc(t("sy_k_grade_go"))}">${esc(t("ov_k_review"))}: ${nReview}</button>`
+      : "";
+    const rb=$("kpiReview"); if(rb) rb.onclick=()=>kpiGo("review");
+  }
   /* THE GRADE MIX MOVED OUT OF THE HEADLINE STRIP.
      Main.dc.html's own right column carries a standalone "Severity mix"
      panel next to Inspection compliance, one row per grade -- not an eighth
@@ -7001,6 +7103,11 @@ let fleetSort={k:"prio",dir:1};
    Raised and the Maintenance Actions register already carry (cwColQ/
    cwWordMatch/cwfh/cwcf). Keyed the same way fleetSort already is. */
 let fleetColQ={};
+/* Stage 3c item 8: which of the attention table's columns are hidden behind
+   the Columns picker. Starts at the mockup's own non-default set (Class,
+   Inspected, Findings count, Required action, Open, Next due); toggling a
+   checkbox in #fleetColsPicker edits this Set directly and re-renders. */
+let fleetHidden=new Set(["cls","date","find","act","open","due"]);
 /* ATTENTION ORDER — one rule for "what needs me first", stated once.
      1 Critical  2 Severe  3 Overdue action  4 Unassigned action  5 Degraded  6 Incipient
    A critical finding outranks an overdue date on a lesser one; an action nobody
@@ -7123,10 +7230,20 @@ function renderFleet(){
   /* Priority and grade are ONE column: the rank in the attention order, then
      the grade pill the rank is mostly made of. As two columns the Russian
      table ran 180px past a 1366 screen (tests/overview2.cjs). */
-  const cols=[["equip",t("th_unit"),""],["prio",t("th_priority"),""],["cls",t("th_class"),""],
-              ["defect",t("th_defcomp"),""],["date",t("th_inspected"),"hide-m"],["find",t("th_find"),"r hide-m"],
-              ["act",t("th_reqact"),""],["open",t("th_open"),"r"],
-              ["owner",t("th_owner"),""],["adue",t("th_due"),""],["due",t("th_nextdue"),""]];
+  /* Stage 3c item 8: Main.dc.html's own attention table shows exactly six
+     columns by default -- Machine, Priority, Finding, Action owner, Due,
+     Sync -- with everything else (Class, Inspected, Findings count, the
+     Required-action text, Open count, Next due) behind a Columns picker
+     rather than shown by default. `dflt` marks the six; the sort/filter kit
+     (fleetSort/fleetColQ/cwWordMatch) is untouched and still runs over every
+     column, hidden or not, so a column that gets switched back on already
+     carries its own working filter box and sort arrow. */
+  const cols=[["equip",t("th_unit"),"",true],["prio",t("th_priority"),"",true],["cls",t("th_class"),"",false],
+              ["defect",t("th_defcomp"),"",true],["date",t("th_inspected"),"hide-m",false],["find",t("th_find"),"r hide-m",false],
+              ["act",t("th_reqact"),"",false],["open",t("th_open"),"r",false],
+              ["owner",t("th_owner"),"",true],["adue",t("th_due"),"",true],["due",t("th_nextdue"),"",false],
+              ["sync",t("th_sync"),"",true]];
+  const visCols=cols.filter(([k])=>!fleetHidden.has(k));
   /* A filter row lives INSIDE a table this function rebuilds wholesale on
      every keystroke -- the same focus/caret capture-and-restore Defects
      Raised and the Actions register already carry, one level further in. */
@@ -7139,12 +7256,26 @@ function renderFleet(){
     const fq=(fleetColQ[k]||"").trim().toUpperCase();
     return !fq || cwWordMatch((KEY[r.equip].disp||{})[k]||"", fq);
   }));
-  let h=`<thead><tr>`+cols.map(([k,l,cl])=>
+  /* THE COLUMNS PICKER. A plain checklist, not a new widget family -- reuses
+     the .field/label vocabulary the filter bar already has. Toggling a box
+     re-renders the whole table (same "one function, one source of truth"
+     pattern every table on this page already follows for sort/filter). */
+  const colsPicker=$("fleetColsPicker");
+  if(colsPicker){
+    colsPicker.innerHTML=cols.map(([k,l,,d])=>
+      `<label><input type="checkbox" data-colk="${esc(k)}"${fleetHidden.has(k)?"":" checked"}> ${esc(l)}${d?"":""}</label>`).join("");
+    colsPicker.querySelectorAll("[data-colk]").forEach(cb=>cb.onchange=()=>{
+      const k=cb.dataset.colk;
+      if(cb.checked) fleetHidden.delete(k); else fleetHidden.add(k);
+      renderFleet();
+    });
+  }
+  let h=`<thead><tr>`+visCols.map(([k,l,cl])=>
     `<th class="sortable ${cl}${fleetSort.k===k?" on":""}" data-sort="${k}">${l}<span class="arrow">${fleetSort.k===k?(fleetSort.dir>0?"\u25b2":"\u25bc"):"\u2195"}</span></th>`).join("")
-    + `</tr><tr>` + cols.map(([k,l]) =>
+    + `</tr><tr>` + visCols.map(([k,l]) =>
       `<th class="cwfh"><input type="text" class="cwcf" data-k="${esc(k)}" value="${esc(fleetColQ[k]||"")}" placeholder="${esc(t("cw_colfilter_ph"))}" aria-label="${esc(t("cw_colfilter_aria",{c:l}))}"></th>`).join("")
     + `</tr></thead><tbody>`;
-  if(!shown.length) h += `<tr><td class="empty" colspan="${cols.length}">${esc(t("e_nofilter"))}</td></tr>`;
+  if(!shown.length) h += `<tr><td class="empty" colspan="${visCols.length}">${esc(t("e_nofilter"))}</td></tr>`;
   /* TEN, ON OVERVIEW — AND THE WHOLE REGISTER ONE CLICK AWAY.
 
      Overview answers "what needs me today". A full equipment register does not
@@ -7182,31 +7313,44 @@ function renderFleet(){
        A class you can read but not click is a class you then go and find in a
        dropdown, which is the same information costing two more actions. */
     const attn=KEY[r.equip].attn;
-    h+=`<tr data-u="${esc(r.equip)}" style="cursor:pointer">
-      <td><b>${esc(r.equip)}</b></td>
-      <td class="nw" title="${esc(t(attn.key))}">${
+    /* Stage 3c item 8: the "Sync" state, read from the same #_conflict flag
+       the Equipment History tab already shows a CONFLICT badge from
+       (cf_flag) -- coloured text only, per this project's permanent
+       pill/chip ban. Every record on screen already reached the office
+       through the adapter it was pulled with, so the honest default is
+       Synced; a live, unresolved conflict is the one real "needs attention"
+       this reskin has data for. */
+    const syncCell = r._conflict
+      ? `<span class="sevtxt crit" title="${esc(t("th_sync_conflict_t"))}">${esc(t("th_sync_conflict"))}</span>`
+      : `<span class="sevtxt" style="font-weight:600">${esc(t("th_sync_ok"))}</span>`;
+    const CELLS={
+      equip:`<td><b>${esc(r.equip)}</b></td>`,
+      prio:`<td class="nw" title="${esc(t(attn.key))}">${
         attn.sev?`<span class="sevtxt${attn.sev>=5?" crit":""}" title="${esc(t("th_worst"))}">${esc(SEV[attn.sev].l)}</span>`:'<span class="muted">\u2014</span>'
-        }<span class="attn a${attn.rank}${attn.rank===2||attn.rank===3?" tag":" sr"}">${esc(t(attn.key))}</span></td>
-      <td>${clsOf(r)?`<button class="xf" data-xcls="${esc(clsOf(r))}" title="${esc(t("xf_cls"))}">${esc(clsOf(r))}</button>`:'<span class="muted">\u2014</span>'}</td>
-      <td>${top?esc(top):'<span class="muted">\u2014</span>'}<div class="muted" style="font-size:11px;margin-top:2px"><span class="tag">${esc(TYPE_LABEL[r.type]||r.type)}</span><span class="mono">${esc(r.date||"")}</span>${r.by?` · ${esc(r.by)}`:""}</div></td>
-      <td class="hide-m"><span class="mono">${esc(r.date||"")}</span><div class="muted" style="font-size:11px;margin-top:2px">${esc(r.by||"")}</div></td>
-      <td class="mono r hide-m">${fs.length}</td>
-      <td>${lead
-          ? (lead.i.action ? esc(actionName(lead.i.action)) : `<span class="muted">—</span>`)
+        }<span class="attn a${attn.rank}${attn.rank===2||attn.rank===3?" tag":" sr"}">${esc(t(attn.key))}</span></td>`,
+      cls:`<td>${clsOf(r)?`<button class="xf" data-xcls="${esc(clsOf(r))}" title="${esc(t("xf_cls"))}">${esc(clsOf(r))}</button>`:'<span class="muted">\u2014</span>'}</td>`,
+      defect:`<td>${top?esc(top):'<span class="muted">\u2014</span>'}<div class="muted" style="font-size:11px;margin-top:2px"><span class="tag">${esc(TYPE_LABEL[r.type]||r.type)}</span><span class="mono">${esc(r.date||"")}</span>${r.by?` · ${esc(r.by)}`:""}</div></td>`,
+      date:`<td class="hide-m"><span class="mono">${esc(r.date||"")}</span><div class="muted" style="font-size:11px;margin-top:2px">${esc(r.by||"")}</div></td>`,
+      find:`<td class="mono r hide-m">${fs.length}</td>`,
+      act:`<td>${lead
+          ? (lead.i.action ? esc(actionName(lead.i.action)) : `<span class="muted">\u2014</span>`)
             + `<div class="fstat" style="margin-top:3px">${as && as.k==="triage"
                 ? needChips(as.miss, 1, true)
                 : `<span class="muted">${esc(stName(lead.i.status))}</span>`}</div>`
-          : `<span class="muted">${esc(t("ov_noact"))}</span>`}</td>
-      <td class="mono r">${open.length
+          : `<span class="muted">${esc(t("ov_noact"))}</span>`}</td>`,
+      open:`<td class="mono r">${open.length
           ? `<button class="xf num${nOver?" bad":""}" data-xact="${esc(r.equip)}" title="${esc(nOver?t("xf_open_over",{n:nOver}):t("xf_open"))}">${open.length}${nOver?`<i>\u25cf</i>`:""}</button>`
-          : '<span class="muted">0</span>'}</td>
-      <td>${own.length
+          : '<span class="muted">0</span>'}</td>`,
+      owner:`<td>${own.length
           ? `<button class="xf who" data-xown="${esc(own[0])}" title="${esc(t("xf_own",{o:own.join(", ")}))}"><i>${esc(ini(own[0]))}</i><span>${esc(own[0])}${own.length>1?` +${own.length-1}`:""}</span></button>`
-          : (open.length ? `<span class="bad">${esc(t("th_noowner"))}</span>` : `<span class="muted">\u2014</span>`)}</td>
-      <td>${ad
+          : (open.length ? `<span class="bad">${esc(t("th_noowner"))}</span>` : `<span class="muted">\u2014</span>`)}</td>`,
+      adue:`<td>${ad
           ? `<span class="duec${adOver?" over":(adDays<=7?" soon":"")}" title="${esc(ad)}">${esc(adOver?t("ov_act_over",{n:Math.abs(adDays)}):t("ov_act_due",{d:ad}))}</span>`
-          : '<span class="muted">\u2014</span>'}</td>
-      <td>${d ? dueCell(d) : '<span class="muted">\u2014</span>'}</td></tr>`;
+          : '<span class="muted">\u2014</span>'}</td>`,
+      due:`<td>${d ? dueCell(d) : '<span class="muted">\u2014</span>'}</td>`,
+      sync:`<td>${syncCell}</td>`,
+    };
+    h+=`<tr data-u="${esc(r.equip)}" style="cursor:pointer">`+visCols.map(([k])=>CELLS[k]).join("")+`</tr>`;
   });
   $("fleetTbl").innerHTML=h+"</tbody>";
   const fw=$("fleetTbl").parentNode;
@@ -10162,7 +10306,12 @@ function renderTrend(){
   $("trendKey").innerHTML=
       [5,4,3,2].map(n=>`<span><i style="--c:${SEVC[n]}"></i>${esc(SEV[n].l)}</span>`).join("")
     + `<span>${esc(t("tr_rounds"))}</span>`;
-  $("trendChart").innerHTML=`<div class="trend">${bars}</div>`;
+  /* Stage 3c item 6: a real value axis -- "max" over "0" beside a track of
+     gridlines -- and the bars themselves live in their own flex row so the
+     axis column never shrinks along with them. */
+  $("trendChart").innerHTML=`<div class="trend">`
+    + `<div class="taxis" aria-hidden="true"><span>${esc(t("tr_axis_max"))}</span><span>${esc(t("tr_axis_zero"))}</span></div>`
+    + `<div class="trackwrap">${bars}</div></div>`;
   $("trendChart").querySelectorAll("[data-tm]").forEach(b=>b.onclick=()=>setDrill("month",b.dataset.tm));
   /* One sentence of direction, because a chart nobody reads out loud is a
      chart nobody acts on. Compares the last month's RATE with the rate of the
@@ -14434,8 +14583,11 @@ function refreshControls(){
   fillEquip();
   $("sevLegend").innerHTML=Object.entries(SEV).map(([k,v])=>`<span><span class="sw" style="background:${SEVC[k]}"></span>${v.l}</span>`).join("");
   refreshReportTargets();
-  $("sub").textContent=t("sub_count",{n:RECS.length,u:units.length})
-    +(imported.length?t("sub_imported",{n:imported.length}):"");
+  /* Stage 3c item 1: the sidebar brand block is identity, not a live counter --
+     "N inspections / N units" duplicated the exact figure the top-bar source
+     chip already states (refreshSources() -> #srcText). #sub keeps its static
+     "Fleet dashboard" subtitle (data-i18n="sub") on every load now; the count
+     lives in one place. */
 }
 /* ---------- wear and remaining life, across the fleet ----------
 
@@ -18557,7 +18709,11 @@ if($("fGrade")) $("fGrade").onchange=()=>{ const v=Number($("fGrade").value)||nu
 let moreOpen=false;
 function moreSync(){
   const row=$("fMoreRow"), tog=$("fMore"), n=$("fMoreN"); if(!row||!tog) return;
-  const set=(($("fDq")&&$("fDq").value)?1:0)+(($("fVoid")&&$("fVoid").checked)?1:0);
+  /* Stage 3c item 3: Show voided moved out to the first row, so it no longer
+     counts toward "how many of the rarer filters are set" -- that count is
+     now Status, Data quality and the search box, the three still gated
+     behind this toggle. */
+  const set=(($("fDq")&&$("fDq").value)?1:0)+(($("fStatus")&&$("fStatus").value)?1:0)+(($("fQ")&&$("fQ").value.trim())?1:0);
   const own=!!document.querySelector("main > .controls.hidden:not(.more)");
   const open=(moreOpen||set>0) && !own;
   row.classList.toggle("hidden", !open);
