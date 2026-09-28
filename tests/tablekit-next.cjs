@@ -40,6 +40,14 @@ const TABLES = [['failure', 'failAffTbl'], ['wear', 'wearTbl'], ['overview', 'co
 
   for (const [tab, id] of TABLES) {
     await go(tab);
+    /* Stage 3c item 7: covTbl now sits behind a closed <details class="covdetails">
+       on the Overview page (Main.dc.html's own compliance card holds only the
+       percentage, caption and bar by default) -- open it before touching the
+       filter box inside, the same way a person would. */
+    if (id === 'covTbl') {
+      await p.evaluate(() => { const d = document.querySelector('.covdetails'); if (d) d.open = true; });
+      await p.waitForTimeout(150);
+    }
     console.log(`\n${id}`);
     const ths = await p.$$(`#${id} thead tr:first-child th`);
     const fin = await p.$$(`#${id} thead input.cwcf`);
