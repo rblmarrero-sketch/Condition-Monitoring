@@ -778,6 +778,14 @@
      against. Where it still cannot fit, the first column stays put so the row
      never loses its name. */
   .grid12 .tblwrap table.grid th{white-space:normal;}
+  /* Plan.dc.html's own nine columns include two genuinely long headers
+     ("1C actual (WO closed)", "Nearest CM round") that real dates and unit
+     numbers -- narrower than the header text itself -- do not stretch wide
+     enough to hold on one line, so the sheet edged past 1366px by a few
+     tens of pixels. Letting THIS table's header wrap is the same escape
+     valve .grid12 already uses elsewhere, scoped to the one table that
+     needs it rather than loosened for every worksheet on the page. */
+  #paList table.grid th{white-space:normal;}
   .grid12 .tblwrap table.grid th:first-child,
   .grid12 .tblwrap table.grid td:first-child{position:sticky;left:0;background:var(--surface);}
   .grid12 .tblwrap table.grid thead th:first-child{background:var(--surface-2);z-index:3;}
@@ -2069,6 +2077,25 @@
   @media (min-width:1100px){
     #kpis{grid-template-columns:repeat(6,1fr);}
   }
+  /* Due.dc.html: four tiles, one row, equal columns. Plan.dc.html: six.
+     Same reasoning as #kpis above -- auto-fit alone leaves an unfilled
+     trailing gap once the column count no longer divides the row's own
+     width evenly. */
+  @media (min-width:900px){ #dueKpis{grid-template-columns:repeat(4,1fr);} }
+  @media (min-width:1100px){ #paKpis{grid-template-columns:repeat(6,1fr);} }
+  /* Defects.dc.html: one hero tile beside a "By person" panel, 1fr/2fr --
+     not six identical cards (a fleet with more inspectors would otherwise
+     keep stretching the whole tile row sideways). */
+  .kpis.cwtiles{grid-template-columns:minmax(0,1fr);}
+  @media (min-width:760px){ .kpis.cwtiles{grid-template-columns:minmax(0,1fr) minmax(0,2fr);} }
+  .cwpeople{gap:10px;}
+  .cwplist{display:flex;flex-wrap:wrap;gap:8px;margin:2px 0 0;}
+  .cwpbtn{min-height:40px;padding:0 12px;border-radius:6px;border:1px solid var(--border);
+    background:var(--surface);font:500 14px/1 inherit;color:var(--ink);cursor:pointer;
+    display:inline-flex;align-items:center;gap:8px;font-family:inherit;}
+  .cwpbtn:hover{background:var(--surface-2);}
+  .cwpbtn.on{background:var(--surface-2);box-shadow:0 0 0 1px var(--accent) inset;}
+  .cwpbtn .n{font:600 12px 'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--ink-2);}
   #kpiMix .legend{gap:0 8px;line-height:1.25;}
   #kpiMix .legend button{padding:1px 4px;}
   /* Item 4 / Main.dc.html line 70: the percentage and its caption sit on
@@ -3604,7 +3631,7 @@
          reads as "1C did not fill this in"; it must never be able to mean
          "the ingester looked for a header that is not there". -->
     <div id="cwWarn"></div>
-    <div class="kpis" id="cwKpis"></div>
+    <div class="kpis cwtiles" id="cwKpis"></div>
     <div class="section">
       <div class="secthd"><h2 data-i18n="cw_h2">Defect work orders</h2>
         <span class="pgsub" data-i18n="cw_h2sub">One row per defect. 1C repeats a work order per line item, so a defect with two parts booked against it is shown once.</span></div>
@@ -5213,7 +5240,7 @@ const I18N={
   cw_sub:"Defect work orders raised by {who}, from {d} onward. Read from 1C's own export — the date, the number, the type, the cause and the status are as 1C holds them.",
   cw_h2:"Defect work orders",
   cw_h2sub:"One row per defect. 1C repeats a work order per line item, so a defect with two parts booked against it is shown once.",
-  cw_k_total:"Defects raised", cw_k_total_s:"since {d}", cw_k_person_s:"tap to show only theirs",
+  cw_k_total:"Defects raised", cw_k_total_s:"since {d}", cw_k_person_s:"Press a name to show only theirs.", cw_k_people:"By person",
   cw_status:"Status", cw_status_all:"Any status", cw_find:"Search", cw_findph:"unit, defect no, cause",
   cw_showplanned:"Show planned services too", cw_csv:"Export CSV",
   cw_is_planned:"planned service",
@@ -6107,7 +6134,7 @@ const I18N={
   cw_sub:"Наряды по дефектам, заявленные: {who}, начиная с {d}. Данные из выгрузки 1С — дата, номер, тип, причина и статус приведены так, как их хранит 1С.",
   cw_h2:"Наряды по дефектам",
   cw_h2sub:"Одна строка на дефект. 1С повторяет наряд по каждой позиции, поэтому дефект с двумя позициями показан один раз.",
-  cw_k_total:"Заявлено дефектов", cw_k_total_s:"с {d}", cw_k_person_s:"нажмите, чтобы показать только его",
+  cw_k_total:"Заявлено дефектов", cw_k_total_s:"с {d}", cw_k_person_s:"Нажмите на имя, чтобы показать только его.", cw_k_people:"По сотрудникам",
   cw_status:"Статус", cw_status_all:"Любой статус", cw_find:"Поиск", cw_findph:"ед., № дефекта, причина",
   cw_showplanned:"Показывать и плановые ТО", cw_csv:"Экспорт CSV",
   cw_is_planned:"плановое ТО",
@@ -17214,8 +17241,14 @@ function renderPaWeek(qtyRows){
               : gap > 0    ? t("pa_week_pm",{ n:gap, d:shortDate(r.w.planStart) })
               : gap === 0  ? t("pa_week_pm_today")
               :              t("pa_week_pm_past",{ d:shortDate(r.w.planStart) });
+            /* white-space:normal, not nowrap -- Plan.dc.html's 14-day grid
+               is fixed-width (1440px, 110px unit column + 14 equal tracks),
+               and "3 d before service 29.09" forced wide by nowrap was
+               pushing the whole sheet a few tens of pixels past 1366/1280
+               (CLAUDE.md: no sideways scroller on desktop). Wrapping the
+               note onto its own second line costs nothing it says. */
             const preLine=preTxt
-              ? `<div class="mono" style="font-size:11px;line-height:1.4;white-space:nowrap;color:var(--warn-ink);font-weight:650">${
+              ? `<div class="mono" style="font-size:11px;line-height:1.4;white-space:normal;color:var(--warn-ink);font-weight:650">${
                   esc(preTxt)}</div>` : "";
             /* A pill on a day already gone is late, and its title says so —
                a shaded column is not readable to somebody who cannot see
@@ -17239,7 +17272,7 @@ function renderPaWeek(qtyRows){
                     110 of them at seven columns, 214 once the agenda
                     widened to a fortnight. Doubling the count is what made
                     it worth looking at; the size was wrong at either. */
-                 + `<div class="mono muted" style="font-size:11px;line-height:1.4;white-space:nowrap">${esc(r.w.woNumber||"—")}</div>`
+                 + `<div class="mono muted" style="font-size:11px;line-height:1.4;white-space:normal;word-break:break-word">${esc(r.w.woNumber||"—")}</div>`
                  + (sub2?`<div class="mono muted" style="font-size:11px;line-height:1.4;white-space:nowrap">${sub2}</div>`:"")
                  + preLine
                  + `</div>`;
@@ -18726,14 +18759,22 @@ function renderCmWoTab(){
   (D.cmPeople||[]).forEach(n=>per[n]=0);
   defects.forEach(r=>{ per[r.by]=(per[r.by]||0)+1; });
 
+  /* Defects.dc.html: one hero tile (the total) beside a SEPARATE "By
+     person" panel of pill buttons -- not six equal-sized cards. The total
+     keeps the same .kpi/.tile surface every other tab's tiles use; the
+     by-person panel is its own bordered box so a fleet with many names
+     grows sideways inside its own column instead of stretching the tile
+     row (a "Fifth person" would otherwise have widened five near-identical
+     cards, exactly the shape Tile.dc.html never draws). */
   if($("cwKpis")) $("cwKpis").innerHTML =
       `<div class="kpi info"><span class="k">${esc(t("cw_k_total"))}</span>
          <span class="v">${defects.length}</span>
          <span class="s">${esc(t("cw_k_total_s",{d:D.cmSince||"—"}))}</span></div>`
-    + Object.keys(per).map(n=>
-      `<button type="button" class="kpi${cwWho===n?" on":""}" data-cwwho="${esc(n)}">
-         <span class="k">${esc(n)}</span><span class="v">${per[n]}</span>
-         <span class="s">${esc(t("cw_k_person_s"))}</span></button>`).join("");
+    + `<div class="tile cwpeople"><div class="k" data-i18n="cw_k_people">${esc(t("cw_k_people"))}</div>
+        <div class="cwplist">` + Object.keys(per).map(n=>
+      `<button type="button" class="cwpbtn${cwWho===n?" on":""}" data-cwwho="${esc(n)}">
+         <span>${esc(n)}</span><span class="n">${per[n]}</span></button>`).join("")
+      + `</div><div class="s">${esc(t("cw_k_person_s"))}</div></div>`;
   if($("cwKpis")) $("cwKpis").querySelectorAll("[data-cwwho]").forEach(b=>
     b.onclick=()=>{ cwWho = (cwWho===b.dataset.cwwho) ? "" : b.dataset.cwwho; renderCmWoTab(); });
 
