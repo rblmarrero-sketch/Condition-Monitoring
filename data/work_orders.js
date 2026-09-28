@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-09-28T21:43:32+00:00",
+  "generated": "2026-09-28T21:58:22+00:00",
   "source": "https://askpi.94-131-94-152.sslip.io/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 681,
@@ -26022,6 +26022,28 @@ window.CM_WO_DATA = {
       "actualStart": "2026-08-15",
       "actualStartDt": "2026-08-15T07:00:00",
       "actualEnd": "2026-08-15"
+    },
+    {
+      "equip": "GR003",
+      "cls": "GRD",
+      "woNumber": "WO-016587",
+      "maintType": "4000 Hours service Planned",
+      "hours": 4000,
+      "cmLabel": "Filter Cut / General Inspection",
+      "cmTypes": [
+        "FC",
+        "INSP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
+      "planStart": "2026-09-27",
+      "planStartDt": "2026-09-27T09:10:00",
+      "planEnd": "2026-09-27",
+      "actualStart": "2026-09-27",
+      "actualStartDt": "2026-09-27T09:10:00",
+      "actualEnd": "2026-09-27"
     },
     {
       "equip": "GR003",

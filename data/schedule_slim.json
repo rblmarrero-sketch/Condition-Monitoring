@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-28T21:43:32+00:00",
+  "generated": "2026-09-28T21:58:22+00:00",
   "byUnit": {
     "BL001": [
       {
@@ -2708,24 +2708,6 @@
       "completed": ""
     },
     {
-      "wo": "WO-016587",
-      "equip": "GR003",
-      "cls": "GRD",
-      "comp": "",
-      "desc": "Filter Cut / General Inspection",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-09-30",
-      "type": "4000 Hours service Planned",
-      "hours": 4000,
-      "plan": "2026-09-30",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
       "wo": "WO-017992",
       "equip": "TK034",
       "cls": "HT",
@@ -3174,6 +3156,24 @@
       "cause": "",
       "pmStatus": "open",
       "completed": ""
+    },
+    {
+      "wo": "WO-016587",
+      "equip": "GR003",
+      "cls": "GRD",
+      "comp": "",
+      "desc": "Filter Cut / General Inspection",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-09-27",
+      "type": "4000 Hours service Planned",
+      "hours": 4000,
+      "plan": "2026-09-27",
+      "status": "Completed",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "complete",
+      "completed": "2026-09-27"
     },
     {
       "wo": "WO-017365",
