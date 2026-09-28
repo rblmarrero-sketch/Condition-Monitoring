@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-28T04:48:26+00:00",
+  "generated": "2026-09-28T05:48:17+00:00",
   "byUnit": {
     "DZ001": [
       {
@@ -143,7 +143,8 @@
         "wo": "WO-017332",
         "hours": 4000,
         "types": [
-          "FC"
+          "FC",
+          "INSP"
         ],
         "plan": "2026-10-04",
         "priority": "P3 Planned (PM)"
@@ -154,7 +155,8 @@
         "wo": "WO-016587",
         "hours": 4000,
         "types": [
-          "FC"
+          "FC",
+          "INSP"
         ],
         "plan": "2026-09-30",
         "priority": "P3 Planned (PM)"
@@ -165,7 +167,8 @@
         "wo": "WO-017871",
         "hours": 4000,
         "types": [
-          "FC"
+          "FC",
+          "INSP"
         ],
         "plan": "2026-10-11",
         "priority": "P3 Planned (PM)"
@@ -176,7 +179,8 @@
         "wo": "WO-016558",
         "hours": 1000,
         "types": [
-          "FC"
+          "FC",
+          "INSP"
         ],
         "plan": "2026-09-26",
         "priority": "P3 Planned (PM)"
@@ -187,7 +191,8 @@
         "wo": "WO-017876",
         "hours": 1000,
         "types": [
-          "FC"
+          "FC",
+          "INSP"
         ],
         "plan": "2026-10-05",
         "priority": "P3 Planned (PM)"
@@ -1007,7 +1012,7 @@
       "equip": "GR004",
       "cls": "GRD",
       "comp": "",
-      "desc": "Filter Cut",
+      "desc": "Filter Cut / General Inspection",
       "priority": "P3 Planned (PM)",
       "raised": "2026-10-11",
       "type": "4000 Hours service Planned",
@@ -1367,7 +1372,7 @@
       "equip": "GR016",
       "cls": "GRD",
       "comp": "",
-      "desc": "Filter Cut",
+      "desc": "Filter Cut / General Inspection",
       "priority": "P3 Planned (PM)",
       "raised": "2026-10-05",
       "type": "1000 Hours service Planned",
@@ -1547,7 +1552,7 @@
       "equip": "GR001",
       "cls": "GRD",
       "comp": "",
-      "desc": "Filter Cut",
+      "desc": "Filter Cut / General Inspection",
       "priority": "P3 Planned (PM)",
       "raised": "2026-10-04",
       "type": "4000 Hours service Planned",
@@ -2321,7 +2326,7 @@
       "equip": "GR003",
       "cls": "GRD",
       "comp": "",
-      "desc": "Filter Cut",
+      "desc": "Filter Cut / General Inspection",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-30",
       "type": "4000 Hours service Planned",
@@ -2951,7 +2956,7 @@
       "equip": "GR009",
       "cls": "GRD",
       "comp": "",
-      "desc": "Filter Cut",
+      "desc": "Filter Cut / General Inspection",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-26",
       "type": "1000 Hours service Planned",
@@ -4751,7 +4756,7 @@
       "equip": "GR012",
       "cls": "GRD",
       "comp": "",
-      "desc": "Filter Cut",
+      "desc": "Filter Cut / General Inspection",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-18",
       "type": "1000 Hours service Planned",
@@ -6677,7 +6682,7 @@
       "equip": "GR013",
       "cls": "GRD",
       "comp": "",
-      "desc": "Filter Cut",
+      "desc": "Filter Cut / General Inspection",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-10",
       "type": "1000 Hours service Planned",
@@ -8135,7 +8140,7 @@
       "equip": "GR005",
       "cls": "GRD",
       "comp": "",
-      "desc": "Filter Cut",
+      "desc": "Filter Cut / General Inspection",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-02",
       "type": "2000 Hours service Planned",
@@ -8243,7 +8248,7 @@
       "equip": "GR014",
       "cls": "GRD",
       "comp": "",
-      "desc": "Filter Cut",
+      "desc": "Filter Cut / General Inspection",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-01",
       "type": "1000 Hours service Planned",
@@ -8531,7 +8536,7 @@
       "equip": "GR015",
       "cls": "GRD",
       "comp": "",
-      "desc": "Filter Cut",
+      "desc": "Filter Cut / General Inspection",
       "priority": "P3 Planned (PM)",
       "raised": "2026-08-30",
       "type": "1000 Hours service Planned",
