@@ -46,6 +46,14 @@
        showing one grade in two different greens was its own small bug. */
     /* Five steps for five grades: green, amber, orange, red-orange, red. */
     --good:#0a7134; --warning:#fab219; --serious:#ec835a; --severe:#d9511f; --critical:#c8232c; --none:#898781;
+    /* Tile.dc.html/Main.dc.html: each headline's number carries its own fixed
+       ink, not the generic three-way good/warn/bad ramp -- Critical, Severe
+       and Degraded each get their own darker step of the grade ramp (not the
+       lighter bar/chip tone), Overdue is the accent blue, Open maintenance
+       actions is plain ink (a neutral count, not a status), Unassigned
+       actions is the same red as Critical. */
+    --tile-crit:#b31a24; --tile-sev:#b03a14; --tile-deg:#a8451b; --tile-over:#1F5C7A;
+    --tile-act:#1B1F23; --tile-noown:#b31a24;
     /* ── STATUS AS FILL, AND STATUS AS INK ────────────────────────────────
        They are not the same colour and cannot be. A fill sits in a bar or a
        chip where a saturated hue is exactly right; the same hue as TEXT on the
@@ -90,11 +98,15 @@
     --ink:#fff; --ink-2:#b6c3cb; --muted:#8a979e; --grid:#243039; --axis:#31414b;
     --border:rgba(255,255,255,.10); --accent:#ce8256; --shadow:0 1px 2px rgba(0,0,0,.4),0 4px 20px rgba(0,0,0,.4);
     --good-ink:#3fbf6a; --warn-ink:#fab219; --serious-ink:#ec835a; --crit-ink:#ef6a6a;
+    --tile-crit:#ef6a6a; --tile-sev:#ec835a; --tile-deg:#fab219; --tile-over:#ce8256;
+    --tile-act:#fff; --tile-noown:#ef6a6a;
     --rail:#0d151b; } }
   :root[data-theme="dark"]{ color-scheme:dark; --page:#0b1116; --surface:#141c22; --surface-2:#1b252c; --surface-3:#243039;
     --ink:#fff; --ink-2:#b6c3cb; --muted:#8a979e; --grid:#243039; --axis:#31414b;
     --border:rgba(255,255,255,.10); --accent:#ce8256; --shadow:0 1px 2px rgba(0,0,0,.4),0 4px 20px rgba(0,0,0,.4);
     --good-ink:#3fbf6a; --warn-ink:#fab219; --serious-ink:#ec835a; --crit-ink:#ef6a6a;;
+    --tile-crit:#ef6a6a; --tile-sev:#ec835a; --tile-deg:#fab219; --tile-over:#ce8256;
+    --tile-act:#fff; --tile-noown:#ef6a6a;
     --rail:#0d151b; }
   *{box-sizing:border-box;} html,body{margin:0;padding:0;}
   body{background:var(--page);color:var(--ink);
@@ -170,9 +182,11 @@
   nav.tabs .brand .t1{font-weight:750;font-size:13.5px;letter-spacing:-.01em;
     color:var(--rail-ink);line-height:1.2;}
   nav.tabs .brand .t2{color:var(--rail-muted);font-size:var(--t-micro);margin-top:2px;}
+  /* Nav.dc.html: 44px min-height items, 14px regular weight labels (600 only
+     on the active item), 6px radius. */
   nav.tabs button{position:relative;display:flex;align-items:center;gap:10px;width:100%;
-    border:0;background:none;color:var(--rail-muted);padding:6px 9px;
-    border-radius:7px;cursor:pointer;font-size:12.5px;font-weight:600;
+    min-height:44px;border:0;background:none;color:var(--rail-muted);padding:0 9px;
+    border-radius:6px;cursor:pointer;font-size:14px;font-weight:400;
     font-family:inherit;text-align:left;white-space:nowrap;
     transition:background .13s,color .13s;}
   /* Nav.dc.html's own sidebar carries no icons -- plain text items, grouped
@@ -183,24 +197,51 @@
   @media (max-width:1100px){ nav.tabs button svg{display:block;} }
   body.railshut nav.tabs button svg{display:block;}
   nav.tabs button span[data-i18n]{flex:1;overflow:hidden;text-overflow:ellipsis;}
+  /* Item 6: Russian labels run longer than English ones -- "Maintenance
+     Actions" becomes "Работы по обслуживанию", "Data & Sync" becomes
+     "Данные и синхронизация" -- and at 14px/9px both were clipped with an
+     ellipsis inside the same 240px rail at 1280px. Per-language tuning
+     (:lang(ru), set from document.documentElement.lang in applyLang()):
+     one size step down and a touch less side padding buys back enough width
+     that every Russian label prints in full at 1280px and wider, while
+     English keeps the mockup's own 14px/9px exactly. */
+  html:lang(ru) nav.tabs button{font-size:11.5px;padding-left:6px;padding-right:6px;gap:6px;}
+  html:lang(ru) nav.tabs .navgrp{padding-left:6px;padding-right:6px;}
+  html:lang(ru) nav.tabs .nb{font-size:11px;min-width:20px;height:19px;padding:0 5px;}
   nav.tabs button:hover{background:var(--rail-hov);color:var(--rail-ink);}
+  /* Item 6: an 8px-radius highlight box, not the 3px accent bar this carried
+     before -- Nav.dc.html's active row is a filled, rounded box with no side
+     rule at all. font-weight 600 only on the active label, per the mockup's
+     own it.fw (600 active / 400 otherwise). */
   nav.tabs button.active{background:var(--rail-on);color:var(--rail-ink);
-    box-shadow:inset 3px 0 0 var(--accent);}
+    font-weight:600;border-radius:8px;}
   /* what is waiting, on the door to it — set by renderNavCounts() */
   /* A count on the door to the thing it counts. It is a number a person
      reads, so it lives at the floor like every other number. */
-  nav.tabs .nb{flex:none;min-width:20px;padding:1px 6px;border-radius:99px;text-align:center;
-    font:700 var(--t-micro)/1.4 'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
-    background:var(--critical);color:#fff;}
-  nav.tabs .nb.warn{background:var(--warning);color:#3a2a00;}
+  /* Item 6: Nav.dc.html's own count badge is a tinted pill (min-width 24,
+     height 22, radius 11, 12px mono, weight 600) with dark ink on a light
+     tint -- not the solid-colour-plus-white-text dot this carried before.
+     This is a deliberate, scoped exception to "status/priority is text, no
+     pill" (CLAUDE.md): a small sidebar COUNT, never a status or priority
+     chip, and it is the one place this reskin uses a pill on purpose. */
+  nav.tabs .nb{flex:none;min-width:24px;height:22px;padding:0 6px;border-radius:11px;
+    display:inline-flex;align-items:center;justify-content:center;
+    font:600 12px/1 'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+    background:#FDF0CC;color:#5C3D00;}
+  nav.tabs .nb.warn{background:#F8DDD1;color:#7A2A0E;}
+  nav.tabs .nb.crit{background:#F6D6D8;color:#7A1119;}
   nav.tabs .nb:empty{display:none;}
   /* SECTION LABEL, NOT A CONTROL. Monitor / Act / Assets / System group the
      existing buttons visually (brief §4) without touching a single data-tab
      id, so every hash route keeps working exactly as before. Not a button,
      not focusable, not role="tab" -- see the comment above the markup. */
-  nav.tabs .navgrp{padding:14px 9px 4px;font-size:10px;font-weight:700;
-    letter-spacing:.08em;text-transform:uppercase;color:var(--rail-muted);
-    opacity:.75;}
+  /* Nav.dc.html: 12px, uppercase + 0.08em tracking (not font-variant:
+     small-caps -- the mockup's own CSS is plain uppercase text, smaller and
+     letter-spaced, read from its source rather than guessed), full opacity
+     at the mockup's own muted colour rather than a second, dimmer layer on
+     top of it. */
+  nav.tabs .navgrp{padding:14px 8px 4px;font-size:12px;font-weight:700;
+    letter-spacing:.08em;text-transform:uppercase;color:var(--rail-muted);}
   nav.tabs .navgrp:first-of-type{padding-top:2px;}
   body.railshut nav.tabs .navgrp{padding:14px 0 4px;text-align:center;
     font-size:0;}
@@ -629,10 +670,19 @@
   .taxis{flex:none;width:30px;height:120px;display:flex;flex-direction:column;
     justify-content:space-between;font-size:var(--t-micro);color:var(--muted);
     text-align:right;padding-right:6px;box-sizing:border-box;}
+  /* Item 3: trendMonths() now always hands back exactly six calendar-month
+     slots (real or empty), so the row is spread across the card's full width
+     -- space-between, not the old flex-start-and-a-6px-gap that was written
+     for a variable, often-short run of real months only. */
   .trackwrap{flex:1 1 auto;min-width:0;display:flex;align-items:flex-end;
-    justify-content:flex-start;gap:6px;position:relative;
+    justify-content:space-between;position:relative;
     background-image:repeating-linear-gradient(to top, var(--border) 0, var(--border) 1px, transparent 1px, transparent 50%);
     background-size:100% 120px;background-repeat:no-repeat;background-position:0 0;}
+  /* A slot with no data for that month: no stack fill, no rate/round-count
+     text, quieter month label -- present and labelled, never blank space
+     with nothing saying which month it is. */
+  .tmon.empty .tstack{background:var(--surface-2);}
+  .tmon.empty span{color:var(--axis);}
   .tmon{flex:0 1 var(--tmon-w);width:var(--tmon-w);min-width:22px;max-width:var(--tmon-w);display:flex;flex-direction:column;align-items:center;gap:3px;
     background:none;border:1px solid transparent;border-radius:6px;padding:2px 1px;cursor:pointer;}
   .tmon:hover,.tmon:focus-visible{border-color:var(--accent);outline:none;}
@@ -1873,14 +1923,36 @@
   /* Label + small tag on one line, per Tile.dc.html -- normal case, not the
      small-caps micro label the original strip used. */
   .kpi .k,.tile .k{font-weight:600;font-size:13.5px;line-height:1.25;font-family:inherit;color:var(--ink);}
-  /* 34px and 42px were the sizes of a marketing page. A number a reliability
-     engineer reads fifty times a day needs to be unmistakable, not enormous —
-     and the four lines under it are what make it mean anything. Raised from
-     26px toward the mockup's 44px; 34px is the largest that still keeps
-     seven tiles on one row at 1366px with no wrap. */
+  /* Tile.dc.html: 44px, weight 600. The six-tiles-only strip (#kpis) now has
+     the room for the mockup's own size -- kept at 34px on every OTHER tile
+     strip (Actions/Wear/Due/Plan/Sync, which were never part of this stage's
+     punch list and were tuned to their own tile counts). */
   .kpi .v,.tile .v{font:700 34px/1.05 'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
     letter-spacing:-.02em;font-variant-numeric:tabular-nums;margin-top:6px;color:var(--ink);}
+  #kpis .kpi .v{font-size:44px;font-weight:600;}
   #kpiComp .v{font-size:28px;}
+  /* Item 2: each Overview headline's own fixed ink, per Tile.dc.html/
+     Main.dc.html -- overrides the generic good/warn/bad ramp for THESE six
+     tiles only. "Zero of these" stays plain ink (below), which the mockup's
+     static preview data has no opinion on either way. */
+  #kpiCrit .v{color:var(--tile-crit);}
+  #kpiSev .v{color:var(--tile-sev);}
+  #kpiDeg .v{color:var(--tile-deg);}
+  #kpiOver .v{color:var(--tile-over);}
+  #kpiAct .v{color:var(--tile-act);}
+  #kpiNoown .v{color:var(--tile-noown);}
+  #kpis .kpi.zero .v{color:var(--ink);}
+  /* Same source, for the top-edge tone: Tile.dc.html's own "tone" per
+     headline, which does not match the generic bad/warn/good 3-colour ramp
+     these tiles' classes were built from (Severe's tone is --severe, not
+     --critical; Degraded's is --serious, not --warning; Overdue and Open
+     actions are the accent, not a status colour; Unassigned is critical). */
+  #kpiCrit{--kc:var(--critical);}
+  #kpiSev{--kc:var(--severe);}
+  #kpiDeg{--kc:var(--serious);}
+  #kpiOver{--kc:var(--accent);}
+  #kpiAct{--kc:var(--accent);}
+  #kpiNoown{--kc:var(--critical);}
   /* Two lines of context, clamped. "37 of 52 rounds walked before they were
      overdue" is the sentence that makes 71% mean something and it must not be
      allowed to become four lines on a narrow tile. */
@@ -1945,8 +2017,16 @@
      one control instead of under every card. */
   .pagehd{position:relative;display:flex;align-items:flex-end;gap:var(--s3);
     margin:0 0 var(--s3);min-width:0;flex-wrap:wrap;}
-  .pagehd .pgt{display:flex;align-items:baseline;gap:var(--s3);flex-wrap:wrap;min-width:0;}
-  .pagehd h1{margin:0;font-size:17px;font-weight:800;line-height:1.2;letter-spacing:-.01em;color:var(--ink);}
+  /* Head.dc.html: the title is alone on its own line, the purpose sentence
+     (and Definitions, where a tab has one) on the line under it -- both left
+     aligned with the title, never inline with it. The markup keeps h1 and
+     every .pgsub/.defs as flat siblings of .pgt (unchanged across all eleven
+     tabs that share this header), so the break is a flex-wrap trick: h1 is
+     forced to its own full line, and whatever comes after it wraps onto the
+     next line as one inline group -- no per-tab markup edits needed. */
+  .pagehd .pgt{display:flex;align-items:baseline;gap:var(--s3);row-gap:4px;flex-wrap:wrap;min-width:0;}
+  .pagehd .pgt>h1{flex:0 0 100%;}
+  .pagehd h1{margin:0;font-size:28px;font-weight:600;line-height:1.2;letter-spacing:-.01em;color:var(--ink);}
   .pgsub{font-size:var(--t-small);color:var(--muted);}
   /* A pull that is late is said in amber, with the way to run it now. */
   .pgsub.stale{color:var(--warn-ink);}
@@ -1975,23 +2055,35 @@
   .defsbody dt{font-weight:700;color:var(--ink);}
   .defsbody dd{margin:0;color:var(--ink-2);}
   @media (max-width:640px){ .defsbody dl{grid-template-columns:1fr;} .defsbody dd{margin-bottom:4px;} }
-  /* Six headlines and the severity mix on ONE row on a laptop. 152px min put
-     the seventh on a second row at 1366 and doubled the strip's height. */
+  /* Six headlines, full width, one row, equal columns -- Main.dc.html's own
+     strip. #kpiMix (a seventh/eighth "severity mix" cell inside this same
+     grid) was retired to its own standalone .sevmix panel in row 2 when the
+     strip dropped to six tiles (Stage 3c item 4) -- this rule kept sizing a
+     phantom 1.6fr trailing column for it, which is exactly why the strip
+     stopped reaching the row's right edge: six real tiles filled the first
+     six tracks and the empty, never-filled 1.6fr track sat blank beside
+     them. `repeat(6,1fr)` is the whole strip now; auto-fit's job (wrap
+     below 1100px) still needs a minmax, so the narrow rule below stays. */
   #kpis{grid-template-columns:repeat(auto-fit,minmax(132px,1fr));}
   #kpis .kpi .s{-webkit-line-clamp:1;}
-  /* Five grades in the mix, not four: two columns made three rows and the
-     strip grew past its 120px budget. On a laptop the mix tile takes three
-     columns of the strip and lays its five steps out three across — two
-     rows again, and seven headlines still on one row at 1366. */
   @media (min-width:1100px){
-    #kpis{grid-template-columns:repeat(7,minmax(112px,1fr)) minmax(200px,1.6fr);}
+    #kpis{grid-template-columns:repeat(6,1fr);}
   }
   #kpiMix .legend{gap:0 8px;line-height:1.25;}
   #kpiMix .legend button{padding:1px 4px;}
-  /* The compliance headline, on the panel that explains it. */
-  .compline{display:flex;align-items:baseline;gap:var(--s2);flex-wrap:wrap;margin:0 0 var(--s2);
+  /* Item 4 / Main.dc.html line 70: the percentage and its caption sit on
+     ONE row, number then caption beside it — a grid, not a wrapping flex
+     row, because this caption is a real sentence ("26 of 58 rounds completed
+     before they were overdue"), not the mockup's four-word placeholder, and
+     a flex row drops an item that cannot fit whole onto the number's own
+     line entirely to a new line. Grid keeps the caption in its own column,
+     beside the number, wrapping within that column instead of underneath
+     it. The bar (#covBar, in the markup right after #covComp) stays under
+     both, unchanged. */
+  .compline{display:grid;grid-template-columns:auto 1fr;align-items:baseline;
+    column-gap:var(--s2);margin:0 0 var(--s2);
     font-size:var(--t-small);color:var(--muted);}
-  .compline .cpv{font:800 22px/1.05 'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  .compline .cpv{font:600 34px/1.05 'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
     letter-spacing:-.03em;font-variant-numeric:tabular-nums;color:var(--ink);
     background:none;border:0;padding:0;cursor:pointer;font-family:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;}
   .compline .cpv.good{color:var(--good-ink);} .compline .cpv.warn{color:var(--warn-ink);}
@@ -2031,8 +2123,19 @@
      not have to learn five swatch colours to read the busiest column on the
      page. Colour is spent once, on the one grade that means "stop": grade 5,
      Critical. */
+  /* Item 7: ~44px row height on the Equipment requiring attention table --
+     scoped to this one table, not the shared table.grid td rule every other
+     (denser) register on the page also uses. */
+  #fleetTbl td{padding:13px 7px;}
+  #fleetTbl td:first-child{font-family:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:700;}
   #fleetTbl .sevtxt{font-weight:700;white-space:nowrap;}
   #fleetTbl .sevtxt.crit{color:var(--crit-ink);}
+  /* Item 7: the Sync column's own dot + text, amber for a conflict, green
+     for the honest default -- still text, never a pill background. */
+  #fleetTbl .sevtxt.syncst{display:inline-flex;align-items:center;gap:6px;font-weight:600;}
+  #fleetTbl .sevtxt.syncst.good{color:var(--good-ink);}
+  #fleetTbl .sevtxt.syncst.warn{color:var(--warn-ink);}
+  #fleetTbl .syncdot{width:7px;height:7px;border-radius:99px;flex:none;background:currentColor;}
   #fleetTbl .fstat{font-size:var(--t-tiny);}
   /* THE ROUND TYPE IS A FACT, NOT AN ALERT. A filled grey badge next to the
      date and the inspector's name made one plain metadata fact look like it
@@ -2066,6 +2169,10 @@
     .cbar{display:block;width:100%;height:8px;border-radius:999px;background:var(--surface-3);
     overflow:hidden;box-shadow:inset 0 1px 2px rgba(0,0,0,.12);}
   .cbar i{display:block;height:100%;border-radius:999px;transition:width .3s var(--ease);}
+  /* Item 4 / Main.dc.html line 71: one 12px bar for the headline compliance
+     percentage itself, under the number+caption row and above Details. */
+  .covheadbar{height:12px;border-radius:6px;background:var(--surface-3);overflow:hidden;margin:0 0 var(--s2);}
+  .covheadfill{height:100%;border-radius:6px;background:var(--accent);transition:width .3s var(--ease);}
 
   /* ── folding a long register ───────────────────────────────────────────── */
   .wlh{width:100%;text-align:left;font-family:inherit;color:inherit;cursor:pointer;
@@ -2503,9 +2610,12 @@
   .b-act{color:var(--crit-ink) !important;} .b-none{color:var(--muted) !important;}
   .tdelta{font-weight:700;}
   .tdelta.worse{color:var(--crit-ink);} .tdelta.better{color:var(--good-ink);} .tdelta.flat{color:var(--muted);}
-  nav.tabs .nb{background:transparent !important;padding:0 !important;border-radius:0 !important;
-    color:var(--crit-ink);min-width:0;}
-  nav.tabs .nb.warn{color:var(--warn-ink);}
+  /* Item 6: the sidebar's own count badge is this reskin's ONE deliberate,
+     scoped exception to the "status/priority is text, never a pill" rule
+     above (Nav.dc.html shows it as a rounded, tinted pill on purpose) -- so,
+     unlike every selector in that block, nav.tabs .nb is never forced back
+     to transparent/no-radius here. Its real styling lives with the rest of
+     the nav rail CSS, earlier in this file. */
 
   /* no scrolling boxes on a desktop; the page scrolls, headers stick to it */
   @media (max-width:820px){ .scrollbox{max-height:none;} }
@@ -3026,7 +3136,7 @@
   <button data-tab="equipment"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3L4.5 8.9"/><path d="M4.5 4.5v4.4h4.4"/></svg><span data-i18n="tab_equipment">Equipment history</span></button>
   <button data-tab="lube"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5s5.8 6.3 5.8 10.2a5.8 5.8 0 0 1-11.6 0C6.2 9.8 12 3.5 12 3.5Z"/></svg><span data-i18n="tab_lube">Lubrication</span></button>
   <div class="navgrp" data-i18n="nav_grp_system">System</div>
-  <button data-tab="sync"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12a7.5 7.5 0 0 1 12.8-5.3L20 9.5"/><path d="M20 4.5v5h-5"/><path d="M19.5 12a7.5 7.5 0 0 1-12.8 5.3L4 14.5"/><path d="M4 19.5v-5h5"/></svg><span data-i18n="tab_sync">Sync operations</span><span class="nb warn" id="nbSync"></span></button>
+  <button data-tab="sync"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12a7.5 7.5 0 0 1 12.8-5.3L20 9.5"/><path d="M20 4.5v5h-5"/><path d="M19.5 12a7.5 7.5 0 0 1-12.8 5.3L4 14.5"/><path d="M4 19.5v-5h5"/></svg><span data-i18n="tab_sync">Sync operations</span><span class="nb crit" id="nbSync"></span></button>
   <button data-tab="reports"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3.5h6.5L18 8v12.5H7Z"/><path d="M13.5 3.5V8H18"/></svg><span data-i18n="tab_reports">Reports</span></button>
 </nav>
 
@@ -3134,7 +3244,7 @@
       <!-- GENERATE REPORT (brief §5.1). Reuses the one Reports tab everything
            else builds a report through (see the comment above REPORTS_KEY) --
            no second report path is added here. -->
-      <button class="btn" id="ovGenRpt" data-i18n="ov_genrpt">Generate report</button>
+      <button class="btn primary" id="ovGenRpt" data-i18n="ov_genrpt">Generate report</button>
     </div>
     <div class="kpis" id="kpis"></div>
     <!-- Compliance and direction answer one question between them — is the
@@ -3160,6 +3270,13 @@
           <div class="secthd"><h2 data-i18n="cv_title2">Inspection compliance</h2>
             <span class="spacer"></span><span class="hint" id="covFleet"></span></div>
           <div class="compline" id="covComp"></div>
+          <!-- Item 4: Main.dc.html's own compliance card is number+caption on
+               one line, THEN a single horizontal bar for that headline
+               percentage, THEN Details -- the bar itself (one fleet-wide
+               fraction filled) was missing from this card entirely; only the
+               per-round breakdown table (covTbl, below, one press away
+               behind Details) ever carried a bar, one per row. -->
+          <div class="covheadbar" role="presentation"><div class="covheadfill" id="covHeadBar"></div></div>
           <!-- Stage 3c item 7: Main.dc.html's own compliance card holds only
                the percentage, the caption and the progress bar -- the
                per-round breakdown (covTbl, already the shared tk* filter/sort
@@ -7320,9 +7437,13 @@ function renderFleet(){
        through the adapter it was pulled with, so the honest default is
        Synced; a live, unresolved conflict is the one real "needs attention"
        this reskin has data for. */
+    /* Item 7: a small dot ahead of the word -- amber for a live conflict,
+       green otherwise -- still coloured TEXT underneath (CLAUDE.md's
+       permanent status/priority rule), the dot is a second, redundant
+       signal for colour-blind readers, never the only one. */
     const syncCell = r._conflict
-      ? `<span class="sevtxt crit" title="${esc(t("th_sync_conflict_t"))}">${esc(t("th_sync_conflict"))}</span>`
-      : `<span class="sevtxt" style="font-weight:600">${esc(t("th_sync_ok"))}</span>`;
+      ? `<span class="sevtxt syncst warn" title="${esc(t("th_sync_conflict_t"))}"><i class="syncdot"></i>${esc(t("th_sync_conflict"))}</span>`
+      : `<span class="sevtxt syncst good" style="font-weight:600"><i class="syncdot"></i>${esc(t("th_sync_ok"))}</span>`;
     const CELLS={
       equip:`<td><b>${esc(r.equip)}</b></td>`,
       prio:`<td class="nw" title="${esc(t(attn.key))}">${
@@ -10152,13 +10273,16 @@ function renderCoverage(){
      The number is still a door to the schedule. */
   try{
     const comp=complianceNow(), cc=$("covComp");
+    const cls = comp.pct==null ? "" : comp.pct>=90 ? "good" : comp.pct>=75 ? "warn" : "bad";
     if(cc){
-      const cls = comp.pct==null ? "" : comp.pct>=90 ? "good" : comp.pct>=75 ? "warn" : "bad";
       cc.innerHTML=`<button type="button" class="cpv ${cls}" id="kpiComp" title="${esc(t("k_comp_t"))}">${
           comp.pct==null?"—":comp.pct+"%"}</button><span>${esc(t("k_comp"))} · ${
           comp.pct==null ? esc(t("k_comp_none")) : esc(t("k_comp_s",{n:comp.onTime, of:comp.due}))}</span>`;
       const kb=$("kpiComp"); if(kb) kb.onclick=()=>kpiGo("due");
     }
+    const hb=$("covHeadBar");
+    if(hb){ hb.style.width=(comp.pct==null?0:comp.pct)+"%";
+      hb.style.background = cls==="bad" ? "var(--crit-ink)" : cls==="warn" ? "var(--warn-ink)" : "var(--accent)"; }
   }catch(e){}
   if(!rows.length){
     $("covTbl").innerHTML=`<tbody><tr><td class="muted" style="padding:16px">${esc(t("cv_empty"))}</td></tr></tbody>`;
@@ -10253,11 +10377,31 @@ function trendMonths(){
     (r.items||[]).forEach(i=>{ const s=sevOf(r,i); if(s && e[s]!=null) e[s]++; });
     m.set(k,e);
   });
-  return [...m.values()].sort((a,b)=>a.k.localeCompare(b.k)).slice(-12);
+  const real=[...m.values()].sort((a,b)=>a.k.localeCompare(b.k));
+  if(!real.length) return real;
+  /* Item 3: ALWAYS six evenly-spaced calendar-month slots across the chart's
+     full width, even with 1-5 real months of data -- a missing month is an
+     empty slot with its own label, never simply left out (which used to jump
+     straight from, say, February to August with nothing on screen saying six
+     months were silent) and never compressed down to only the months that
+     happen to have data (which read as "always six" only by coincidence).
+     The window is the six calendar months ending at the most recent month
+     that actually has data, so a live fleet's trailing-3-month baseline
+     (below) still reads off real, contiguous history. */
+  const last=real[real.length-1].k;
+  const [ly,lm]=last.split("-").map(Number);
+  const out=[];
+  for(let i=5;i>=0;i--){
+    let y=ly, mo=lm-i;
+    while(mo<1){ mo+=12; y--; }
+    const k=y+"-"+String(mo).padStart(2,"0");
+    out.push(m.get(k) || {k, rounds:0, units:new Set(), 5:0, 4:0, 3:0, 2:0, 1:0});
+  }
+  return out;
 }
 function renderTrend(){
   const ms=trendMonths();
-  if(ms.length<2){
+  if(!ms.length){
     $("trendChart").innerHTML=`<div class="empty"><b>${esc(t("tr_none"))}</b><span>${esc(t("tr_none_s"))}</span></div>`;
     $("trendKey").innerHTML=""; $("trendNote").textContent=""; $("trendDelta").innerHTML=""; return; }
   const f=x=>x[5]+x[4]+x[3]+x[2];
@@ -10277,14 +10421,18 @@ function renderTrend(){
   const baseline = prior.length ? prior.reduce((a,x)=>a+rate(x),0)/prior.length : null;
   const basePct = baseline!=null ? Math.min(100, baseline/worst*100) : null;
   const bars=ms.map(x=>{
-    const tot=f(x), r=rate(x);
+    const tot=f(x), r=rate(x), empty=!x.rounds;
     /* A month with one finding beside a month with sixty-seven is 1.5% of the
        track — an empty box, indistinguishable from a month with none. Anything
        that happened gets a sliver you can see; nothing stays nothing. */
     const h=v=>v<=0?"0":`${Math.max(4,(v/(x.rounds||1)/worst*100)).toFixed(1)}%`;
-    return `<button type="button" class="tmon${drill.month===x.k?" on":""}" data-tm="${esc(x.k)}"
-      aria-pressed="${drill.month===x.k?"true":"false"}"
-      title="${esc(x.k+" · "+t("tr_tip",{rate:fmt1(r),f:tot,r:x.rounds,u:x.units.size})+" · "+t("tr_click"))}">
+    /* Item 3: an empty calendar-month slot still prints its own month label
+       (below) but carries no stack fill, no rate/round-count text and is not
+       a pressable drill-down (there is nothing recorded that month to drill
+       into) — present and labelled, never blank space. */
+    return `<${empty?"div":"button type=\"button\""} class="tmon${empty?" empty":""}${drill.month===x.k?" on":""}"${empty?"":` data-tm="${esc(x.k)}"`}
+      ${empty?"":`aria-pressed="${drill.month===x.k?"true":"false"}"`}
+      title="${esc(x.k+(empty?"":" · "+t("tr_tip",{rate:fmt1(r),f:tot,r:x.rounds,u:x.units.size})+" · "+t("tr_click")))}">
       <div class="tstack">
         <i class="s-cri" style="height:${h(x[5])}"></i>
         <i class="s-sev" style="height:${h(x[4])}"></i>
@@ -10294,7 +10442,7 @@ function renderTrend(){
       </div>
       <b>${tot?fmt1(r):""}</b>
       <span>${esc(x.k.slice(2))}</span>
-      <u>${x.rounds}</u></button>`;
+      <u>${empty?"":x.rounds}</u></${empty?"div":"button"}>`;
   }).join("");
   /* The key rides on the title line. A legend of its own cost a row of the
      panel and pushed the columns into a shorter box — a chart that spends its
