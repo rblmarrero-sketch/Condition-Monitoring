@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=481">
+<link rel="manifest" href="manifest.webmanifest?v=482">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=481">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=481">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=481">
+<link rel="apple-touch-icon" href="icon-192.png?v=482">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=482">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=482">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -433,6 +433,7 @@
   .mprow .mpt .req{color:var(--crit-ink);font-weight:650;}
   .mprow .mpt .has{color:var(--good);font-weight:650;}
   .mprow img{width:52px;height:52px;object-fit:cover;border-radius:8px;background:var(--surface-3);flex:0 0 52px;}
+  .mprow .thumb-bad{width:52px;height:52px;flex:0 0 52px;}
   .mprow .mpb{flex:0 0 auto;min-height:44px;padding:8px 12px;border-radius:10px;border:1px solid var(--border);
     background:var(--surface-2);color:var(--ink);font-weight:700;font-size:13.5px;cursor:pointer;font-family:inherit;}
   .mprow .mpb.pri{background:var(--accent);color:var(--accent-ink);border-color:transparent;}
@@ -480,9 +481,14 @@
   .pitem .thumb{width:52px;height:52px;border-radius:8px;object-fit:cover;background:var(--surface-3);flex:none;}
   /* A thumbnail the phone cannot paint is a DIAGNOSIS, not a rendering glitch:
      Safari's own "?" glyph is what a blob URL looks like when the file behind
-     it has been reclaimed. Say it in the app's words instead. */
-  .pitem .thumb.bad{display:flex;align-items:center;justify-content:center;
-    font-size:22px;color:var(--warn-ink);border:1px dashed var(--warn-ink);}
+     it has been reclaimed. Say it in the app's words instead — here, and
+     wherever else a stored photograph is shown while editing (.mtile/.mprow
+     below), since the technician deciding whether to retake is looking at
+     THOSE screens, not this list. */
+  .thumb-bad{display:flex;align-items:center;justify-content:center;
+    font-size:22px;color:var(--warn-ink);border:1px dashed var(--warn-ink);
+    border-radius:8px;background:var(--surface-3);cursor:pointer;}
+  .pitem .thumb-bad{width:52px;height:52px;flex:none;}
   .pitem .meta{min-width:0;} .pitem .meta .a{font-weight:700;} .pitem .meta .b{font-size:12.5px;color:var(--muted);}
   .tag{display:inline-block;font-size:10.5px;font-weight:700;padding:1px 6px;border-radius:6px;background:var(--accent);color:#fff;margin-right:6px;vertical-align:middle;}
   /* A queue of nine rounds across four types is where the colour earns its
@@ -1621,6 +1627,7 @@
   .mediastrip{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:6px;}
   .mtile{position:relative;width:calc(25% - 6px);aspect-ratio:1;border-radius:10px;overflow:hidden;background:var(--surface-2);border:1px solid var(--border);}
   .mtile img,.mtile video{width:100%;height:100%;object-fit:cover;display:block;}
+  .mtile .thumb-bad{width:100%;height:100%;border-radius:0;}
   .mtile .mdel{position:absolute;top:2px;right:2px;width:22px;height:22px;border-radius:50%;border:none;background:rgba(0,0,0,.65);color:#fff;font-size:13px;cursor:pointer;line-height:22px;padding:0;}
   .mtile .vbadge{position:absolute;left:0;right:0;bottom:0;background:rgba(0,0,0,.55);color:#fff;font-size:10px;text-align:center;padding:1px;}
   .mediastrip .empty-m{color:var(--muted);font-size:13px;padding:10px 2px;}
@@ -2746,16 +2753,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=481"></script>
-<script src="upload-defaults.js?v=481"></script>
-<script src="hme.js?v=481"></script>
-<script src="mp-fc.js?v=481"></script>
-<script src="rtw.js?v=481"></script>
-<script src="hme-cascade.js?v=481"></script>
-<script src="assets.js?v=481"></script>
-<script src="temp-limits.js?v=481"></script>
-<script src="normalize.js?v=481"></script>
-<script src="terms.js?v=481"></script>
+<script src="native.js?v=482"></script>
+<script src="upload-defaults.js?v=482"></script>
+<script src="hme.js?v=482"></script>
+<script src="mp-fc.js?v=482"></script>
+<script src="rtw.js?v=482"></script>
+<script src="hme-cascade.js?v=482"></script>
+<script src="assets.js?v=482"></script>
+<script src="temp-limits.js?v=482"></script>
+<script src="normalize.js?v=482"></script>
+<script src="terms.js?v=482"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2774,25 +2781,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=481"></script>
-<script src="edits.js?v=481"></script>
-<script src="due.js?v=481"></script>
-<script src="wear.js?v=481"></script>
-<script src="wear-figs.js?v=481"></script>
-<script src="wear-map.js?v=481"></script>
-<script src="machine-photos.js?v=481"></script>
-<script src="machine-fig.js?v=481"></script>
-<script src="get.js?v=481"></script>
-<script src="points.js?v=481"></script>
-<script src="uc-points.js?v=481"></script>
-<script src="inspect-guide.js?v=481"></script>
-<script src="get-figs.js?v=481"></script>
-<script src="body-points.js?v=481"></script>
-<script src="body-map.js?v=481"></script>
-<script src="lube.js?v=481"></script>
-<script src="lube-overrides.js?v=481"></script>
-<script src="lube2027.js?v=481"></script>
-<script src="report-core.js?v=481"></script>
+<script src="grade.js?v=482"></script>
+<script src="edits.js?v=482"></script>
+<script src="due.js?v=482"></script>
+<script src="wear.js?v=482"></script>
+<script src="wear-figs.js?v=482"></script>
+<script src="wear-map.js?v=482"></script>
+<script src="machine-photos.js?v=482"></script>
+<script src="machine-fig.js?v=482"></script>
+<script src="get.js?v=482"></script>
+<script src="points.js?v=482"></script>
+<script src="uc-points.js?v=482"></script>
+<script src="inspect-guide.js?v=482"></script>
+<script src="get-figs.js?v=482"></script>
+<script src="body-points.js?v=482"></script>
+<script src="body-map.js?v=482"></script>
+<script src="lube.js?v=482"></script>
+<script src="lube-overrides.js?v=482"></script>
+<script src="lube2027.js?v=482"></script>
+<script src="report-core.js?v=482"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -3019,6 +3026,8 @@ const I18N = {
     gal_odd_b:"{n} photograph(s) could not be converted to the standard format on this phone, so they were kept exactly as they are ({names}). They may not display in the office. Taking the shot with the camera button here always works.",
     gal_odd_heic:"{n} photograph(s) are in Apple's HEIC format and this phone cannot convert them ({names}). They were kept as they are, but the office may not be able to open them. Either take the shot with the camera button here, or set iPhone Settings \u2192 Camera \u2192 Formats to \u201cMost Compatible\u201d.",
     thumb_unread:"This photograph cannot be read on this phone. The round and its readings are intact — open it and take the position again.",
+    thumb_unread_t:"Photograph unreadable",
+    thumb_unread_here:"This photograph cannot be read on this phone anymore. Nothing else about this round is affected — take it again.",
     gal_odd_own:"This phone handed the app a photograph and then could not read it back ({names}). It has been kept, but it may not survive to the upload. Take it again with the camera button here — that copy is held by the app itself and cannot be reclaimed by the phone.",
     video_odd_own:"This phone handed the app a video clip and then could not read it back ({names}). It has been kept, but it may not survive to the upload. Record it again with the video button here — that copy is held by the app itself and cannot be reclaimed by the phone.",
     verify_fail_t:"Saved — but retake this now",
@@ -3731,6 +3740,8 @@ const I18N = {
     gal_odd_b:"Не удалось привести к стандартному формату фотографий: {n} ({names}). Они сохранены как есть; в офисе они могут не открыться. Съёмка кнопкой камеры в приложении работает всегда.",
     gal_odd_heic:"Фотографий в формате Apple HEIC: {n} ({names}). Этот телефон не может их преобразовать — они сохранены как есть, но в офисе могут не открыться. Снимайте кнопкой камеры в приложении или переключите на iPhone: Настройки \u2192 Камера \u2192 Форматы \u2192 \u00abНаиболее совместимые\u00bb.",
     thumb_unread:"Эту фотографию телефон прочитать не может. Обход и замеры целы — откройте его и снимите точку заново.",
+    thumb_unread_t:"Фотография не читается",
+    thumb_unread_here:"Эту фотографию телефон больше не может прочитать. На остальной части обхода это не влияет — снимите её заново.",
     gal_odd_own:"Телефон передал приложению фотографию и тут же не смог прочитать её обратно ({names}). Она сохранена, но может не дойти до выгрузки. Сделайте снимок заново кнопкой камеры в приложении — такая копия хранится самим приложением, и телефон её не удалит.",
     video_odd_own:"Телефон передал приложению видеоролик и тут же не смог прочитать его обратно ({names}). Он сохранён, но может не дойти до выгрузки. Запишите заново кнопкой видео в приложении — такая копия хранится самим приложением, и телефон её не удалит.",
     verify_fail_t:"Сохранено — но переснимите это сейчас",
@@ -5796,6 +5807,37 @@ function urlPool(){ let held=[];
   return { url(b){ const u=URL.createObjectURL(b); held.push(u); return u; },
            free(){ held.forEach(u=>{ try{ URL.revokeObjectURL(u); }catch(_){ } }); held=[]; } }; }
 const mediaPool=urlPool(), pendPool=urlPool();
+/* THE "?" A RECLAIMED BLOB PAINTS IS NAMED WHEREVER A STORED PHOTOGRAPH IS
+   SHOWN WHILE EDITING, NOT ONLY ON THE SAVED LIST.
+
+   Read plainly from the field: an inspector takes every photograph, saves,
+   then goes back to add the one they forgot — and an ALREADY-TAKEN photo in
+   the very position they are correcting shows Safari's own bare "?" instead
+   of the picture. Nothing on that screen said what it meant, so the reading
+   was "this one is broken too," and a perfectly good photograph got retaken
+   for nothing. The Saved list already turns this exact failure (a blob URL
+   onto a File whose backing item iOS has reclaimed) into a named, dashed
+   placeholder rather than Safari's own glyph — but that fix lived only on
+   the ROW a technician taps to get here, never on the screen they are
+   actually looking at while deciding whether a retake is needed: the
+   position's own photo strip (renderMedia) and the machine-photo grid
+   (renderMachinePhotos). Same failure, same fix, the one place it was
+   missing. A tap shows the explanation as a dialog, not only a title
+   attribute — a hover tooltip is invisible on a touchscreen. */
+function thumbUnreadableEl(msgKey){
+  const d=document.createElement("div");
+  d.className="thumb-bad"; d.textContent="⚠";
+  const m=t(msgKey||"thumb_unread");
+  d.title=m; d.setAttribute("aria-label",m);
+  return d;
+}
+function markThumbUnreadableHere(imgEl){
+  const d=thumbUnreadableEl("thumb_unread_here");
+  d.tabIndex=0;
+  d.onclick=()=>dlg([t("thumb_unread_t"), t("thumb_unread_here")]);
+  imgEl.replaceWith(d);
+  return d;
+}
 /* ===================== photograph categories =====================
    Every photograph says what it is of. A point's photographs are of the
    component by construction; the inspector can relabel one as the defect
@@ -5901,6 +5943,7 @@ function renderMachinePhotos(){
       <button type="button" class="mpb${s.req&&!ph.length?" pri":""}" data-take="${s.cat}">${esc(ph.length?t("ph_retake"):t("ph_take"))}</button>
     </div>`; }).join("");
   const c=$("mpCount"); if(c){ c.textContent=t("ph_done",{n:have,r:need}); c.classList.toggle("miss", have<need); }
+  box.querySelectorAll(".mprow img").forEach(img=>{ img.onerror=()=>markThumbUnreadableHere(img); });
   box.querySelectorAll("[data-take]").forEach(b=>b.onclick=guard(()=>takeMachinePhoto(b.dataset.take)));
   box.querySelectorAll("[data-drop]").forEach(b=>b.onclick=()=>dropMachinePhoto(b.dataset.drop,0));
   /* ONCE THE ROUND HAS THE PHOTOGRAPHS IT OWES, THE LIST FOLDS ITSELF. Five
@@ -5946,6 +5989,7 @@ function renderMedia(){ const p=draft.positions[curItem]||{}; const ph=p.photos|
   $("mediaHint").textContent=t("media_hint",{p:MAX_PHOTOS, s:MAX_VIDEO_SEC});
   $("takeBtn").disabled = ph.length>=MAX_PHOTOS;
   $("videoBtn").disabled = !!p.video;
+  $("mediastrip").querySelectorAll(".mtile img").forEach(img=>{ img.onerror=()=>markThumbUnreadableHere(img); });
   $("mediastrip").querySelectorAll(".mcat").forEach(btn=>btn.onclick=()=>pickPhotoCat(+btn.dataset.cat));
   $("mediastrip").querySelectorAll(".mdel").forEach(btn=>btn.onclick=()=>{ const p=curP();
     if(btn.dataset.ph!==undefined){ p.photos.splice(+btn.dataset.ph,1); if(!p.photos.length) delete p.photos; }
@@ -13338,12 +13382,14 @@ async function renderPending(){
        app being broken and tells nobody what happened or what to do. Since
        `ownBytes` nothing new can land in this state, but rounds captured
        before it still can, so name it: the round still opens, the readings
-       are intact, and the position can be retaken from the editor. */
+       are intact, and the position can be retaken from the editor.
+       thumbUnreadableEl() is the shared placeholder — renderMedia() and
+       renderMachinePhotos() use the identical one for the same failure,
+       found where a technician is actually looking while re-opening a round
+       to add a missed photo (see the note above thumbUnreadableEl). */
     const timg=row.querySelector("img.thumb");
     if(timg) timg.onerror=()=>{
-      const d=document.createElement("div");
-      d.className="thumb bad"; d.textContent="⚠";
-      d.title=t("thumb_unread"); d.setAttribute("aria-label",t("thumb_unread"));
+      const d=thumbUnreadableEl("thumb_unread"); d.classList.add("thumb");
       d.onclick=openEdit; timg.replaceWith(d);
     };
     /* Deleting here is final — the record lives nowhere else until it has been
@@ -14582,7 +14628,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="481";
+const BUILD="482";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

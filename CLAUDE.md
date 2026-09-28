@@ -3513,6 +3513,53 @@ not `deleteDatabase()` — this page already holds an open connection from path
 2's save, which would leave `deleteDatabase()` blocked) so the scenario it
 names is the scenario it actually creates.
 
+**A FINE PHOTOGRAPH GOT RETAKEN FOR NOTHING, BECAUSE THE FIX ALREADY SHIPPED
+FOR THIS LIVED ON THE WRONG SCREEN.** Read plainly: an inspector takes every
+photograph for a round, saves, then goes back to add the one they forgot —
+and an ALREADY-TAKEN photograph in the position they are correcting shows a
+bare "?" instead of the picture. Reading that as "this one is broken too,"
+they retake a photograph that was never actually lost. The Saved list has
+turned this exact failure (a blob URL onto a File whose backing item iOS has
+reclaimed — the long-tracked `ownBytes`/NotFoundError class this file
+documents at length above) into a named, dashed placeholder since build
+~372, with a message saying plainly that the round is intact and only that
+one position needs retaking. That fix lived on the ONE row a technician taps
+to get INTO a round — never on the screen they are actually looking at while
+deciding whether a retake is needed: `renderMedia()`, the position's own
+photo strip, and `renderMachinePhotos()`, the machine-photo grid. Both drew
+a bare `<img>` with no error handling at all, so the identical failure on
+either of those two screens fell straight through to Safari's own broken-
+image glyph — no explanation, no reassurance, nothing to tell it apart from
+a photograph that really is gone.
+
+The fix is the same one, reached from the two places it was missing:
+`thumbUnreadableEl()` is now the one shared placeholder-builder all three
+sites use (the Saved list's own handler was refactored to call it too,
+rather than keeping a third hand-copied version of the same markup), and
+`markThumbUnreadableHere()` wires it onto `renderMedia()`/
+`renderMachinePhotos()` specifically, with wording written for being already
+inside the editor ("take it again" — no "open it," since there is nowhere
+left to open) and a tap that shows the explanation as a DIALOG, not only a
+`title` attribute — a hover tooltip is invisible on a touchscreen, and this
+is exactly the screen an inspector is standing in front of, deciding.
+
+Refactoring the shared placeholder to a single `.thumb-bad` CSS class (in
+place of the Saved list's own `.pitem .thumb.bad`) found the fix's own test
+had a copy of the OLD markup baked into it: `tests/ownbytes.cjs` section 6
+reimplemented `renderPending()`'s handler by hand rather than calling it,
+and kept passing right up until the class rename — then failed on "it is
+visibly not a photograph," which is exactly the shape this file's own Tests
+section warns about ("Tests must ask the app, not keep their own copy").
+Fixed by having that section call the real `thumbUnreadableEl()` too, so a
+future rename can never again drift a test that looks like it is testing
+the real thing. New section 6b drives `renderMedia()` and
+`renderMachinePhotos()` directly — a real position opened through the real
+equipment/component pickers, a photograph typed `image/jpeg` but carrying no
+real image bytes (which fails to decode exactly the way a reclaimed blob
+does, with no need to fake WebKit's own reclaim mechanism) — and proves both
+screens now mark it the same dashed, named way the Saved list already did,
+and that tapping it raises the explanatory dialog.
+
 ---
 
 ## Secrets
