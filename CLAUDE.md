@@ -3560,6 +3560,59 @@ does, with no need to fake WebKit's own reclaim mechanism) — and proves both
 screens now mark it the same dashed, named way the Saved list already did,
 and that tapping it raises the explanatory dialog.
 
+**AND THE SAME "?" WAS ALSO FLIPPING BACK AND FORTH ON THE SAVED LIST
+ITSELF, WORST RIGHT WHEN SYNCHRONISING AT THE OFFICE.** The fix above closed
+the case of a genuinely unreadable photo saying nothing useful. The very next
+report named a different shape of the same complaint: photographs in the
+Saved list showing the ⚠ placeholder, and then NOT — the same round's
+thumbnail changing from one look to the next, worst right after arriving at
+the office and starting to synchronise. That timing is the tell: the Saved
+list repaints in full after every file that lands during a sync burst, which
+is the one moment this phone is decoding the most thumbnails at once, and a
+single failed decode was treated as a final, permanent verdict for that
+render — flapping back to a real photo only once the NEXT repaint happened
+to try again and the browser was no longer contending with a dozen other
+decodes at once. A verdict that reverses itself is worse than a slow one: it
+teaches an inspector to stop trusting the mark in EITHER direction, on a
+screen whose whole purpose is "your work is safe here."
+
+This project's own rule for a failed READ of one of these blobs has been on
+the books since the CD001 field test ("a `NotFoundError` photograph is not
+always gone for good... don't call a photograph gone until retries have
+actually been exhausted") — it had simply never reached the THUMBNAIL, which
+called one failed `<img>` decode final instead of applying the same
+patience. `attachThumbRetry()` gives a failing decode up to three more
+chances, spaced out (`THUMB_RETRY_MS`, 300 ms/900 ms/2 s — worst case a
+little over three seconds), each with a FRESH object URL from the same blob,
+since a browser will not re-attempt a URL it has already failed. A file that
+really is gone still ends up marked — the retries just make that verdict
+arrive a few seconds later, nothing more — but one that merely lost a race
+against every other thumbnail decoding at once now has room to actually win
+it before anything alarming is shown. Wired into all three places a stored
+photograph is rendered: `renderPending()` (the Saved list), `renderMedia()`
+and `renderMachinePhotos()` (the two editor screens the build above already
+fixed) — the identical mechanism, since it is the identical `<img onerror>`
+failure everywhere it appears.
+
+`renderMedia()` needed one extra step to make the retry possible at all: the
+placeholder-wiring pass ran AFTER `innerHTML` had already thrown away which
+blob belonged to which `<img>`, so each photo's tile now carries its own
+index (`data-bi`) to look the blob back up for a retry attempt.
+`renderMachinePhotos()` reads its own row's already-present `data-cat`
+attribute the same way, since its retry needs to re-fetch that category's
+current photo, not the one a stale closure captured before the round could
+have changed underneath it.
+
+`tests/ownbytes.cjs`'s own section 6/6b needed their wait times lengthened
+past the new retry budget (400 ms was long enough to prove the OLD
+immediate-fallback behaviour and too short to prove the NEW one, which
+deliberately takes longer before giving up) — the exact "a test that used to
+pass proves nothing about the fix it is meant to guard" trap this file's own
+Tests section warns about. New section 6c proves the actual fix directly and
+in isolation: a decode rigged to fail on its first attempt and succeed on
+its second — a stand-in for a lost race, not a lost file — is retried and
+never shown as unreadable at all, not even for a flash.
+
 ---
 
 ## Secrets

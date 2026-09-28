@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=482">
+<link rel="manifest" href="manifest.webmanifest?v=483">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=482">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=482">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=482">
+<link rel="apple-touch-icon" href="icon-192.png?v=483">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=483">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=483">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2753,16 +2753,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=482"></script>
-<script src="upload-defaults.js?v=482"></script>
-<script src="hme.js?v=482"></script>
-<script src="mp-fc.js?v=482"></script>
-<script src="rtw.js?v=482"></script>
-<script src="hme-cascade.js?v=482"></script>
-<script src="assets.js?v=482"></script>
-<script src="temp-limits.js?v=482"></script>
-<script src="normalize.js?v=482"></script>
-<script src="terms.js?v=482"></script>
+<script src="native.js?v=483"></script>
+<script src="upload-defaults.js?v=483"></script>
+<script src="hme.js?v=483"></script>
+<script src="mp-fc.js?v=483"></script>
+<script src="rtw.js?v=483"></script>
+<script src="hme-cascade.js?v=483"></script>
+<script src="assets.js?v=483"></script>
+<script src="temp-limits.js?v=483"></script>
+<script src="normalize.js?v=483"></script>
+<script src="terms.js?v=483"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2781,25 +2781,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=482"></script>
-<script src="edits.js?v=482"></script>
-<script src="due.js?v=482"></script>
-<script src="wear.js?v=482"></script>
-<script src="wear-figs.js?v=482"></script>
-<script src="wear-map.js?v=482"></script>
-<script src="machine-photos.js?v=482"></script>
-<script src="machine-fig.js?v=482"></script>
-<script src="get.js?v=482"></script>
-<script src="points.js?v=482"></script>
-<script src="uc-points.js?v=482"></script>
-<script src="inspect-guide.js?v=482"></script>
-<script src="get-figs.js?v=482"></script>
-<script src="body-points.js?v=482"></script>
-<script src="body-map.js?v=482"></script>
-<script src="lube.js?v=482"></script>
-<script src="lube-overrides.js?v=482"></script>
-<script src="lube2027.js?v=482"></script>
-<script src="report-core.js?v=482"></script>
+<script src="grade.js?v=483"></script>
+<script src="edits.js?v=483"></script>
+<script src="due.js?v=483"></script>
+<script src="wear.js?v=483"></script>
+<script src="wear-figs.js?v=483"></script>
+<script src="wear-map.js?v=483"></script>
+<script src="machine-photos.js?v=483"></script>
+<script src="machine-fig.js?v=483"></script>
+<script src="get.js?v=483"></script>
+<script src="points.js?v=483"></script>
+<script src="uc-points.js?v=483"></script>
+<script src="inspect-guide.js?v=483"></script>
+<script src="get-figs.js?v=483"></script>
+<script src="body-points.js?v=483"></script>
+<script src="body-map.js?v=483"></script>
+<script src="lube.js?v=483"></script>
+<script src="lube-overrides.js?v=483"></script>
+<script src="lube2027.js?v=483"></script>
+<script src="report-core.js?v=483"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -5838,6 +5838,39 @@ function markThumbUnreadableHere(imgEl){
   imgEl.replaceWith(d);
   return d;
 }
+/* A THUMBNAIL THAT FLIPS BETWEEN A PHOTO AND "?" FROM ONE LOOK TO THE NEXT IS
+   NOT THE SAME QUESTION AS A GENUINELY GONE FILE.
+
+   Read plainly from the field: rounds in the Saved list show the ⚠
+   placeholder for a photograph that is fine a moment later — worst right
+   after arriving at the office and starting to synchronise, which is the one
+   time this phone is decoding, and re-decoding, the most thumbnails at once,
+   on a repaint that runs again after every file that lands. This project's
+   own history already states the rule for a failed READ of one of these
+   blobs — "a NotFoundError photograph is not always gone for good... don't
+   call a photograph gone until retries have actually been exhausted" — but
+   that rule never reached the THUMBNAIL, which turned one failed decode into
+   a permanent verdict for that render, flapping back to a normal photo only
+   once the NEXT full repaint happened to try again and succeed. A verdict
+   that reverses itself is worse than a slow one: it teaches an inspector to
+   stop trusting the mark either way.
+
+   THUMB_RETRY_MS gives a failing decode a few, growing chances — a fresh
+   object URL each time, since the browser will not retry a URL it has
+   already failed — before calling it the same named "?" thumbUnreadableEl
+   already gives a genuinely unreadable one. A file that really is gone still
+   ends up marked, only a couple of seconds later than before; one that
+   merely lost a race against every other thumbnail decoding at once now has
+   room to actually win it. */
+const THUMB_RETRY_MS=[300,900,2000];
+function attachThumbRetry(imgEl,blob,pool,onFinalFail){
+  let tries=0;
+  imgEl.onerror=()=>{
+    if(!blob || tries>=THUMB_RETRY_MS.length){ onFinalFail(); return; }
+    const wait=THUMB_RETRY_MS[tries]; tries++;
+    setTimeout(()=>{ try{ imgEl.src=pool.url(blob); }catch(e){ onFinalFail(); } }, wait);
+  };
+}
 /* ===================== photograph categories =====================
    Every photograph says what it is of. A point's photographs are of the
    component by construction; the inspector can relabel one as the defect
@@ -5943,7 +5976,10 @@ function renderMachinePhotos(){
       <button type="button" class="mpb${s.req&&!ph.length?" pri":""}" data-take="${s.cat}">${esc(ph.length?t("ph_retake"):t("ph_take"))}</button>
     </div>`; }).join("");
   const c=$("mpCount"); if(c){ c.textContent=t("ph_done",{n:have,r:need}); c.classList.toggle("miss", have<need); }
-  box.querySelectorAll(".mprow img").forEach(img=>{ img.onerror=()=>markThumbUnreadableHere(img); });
+  box.querySelectorAll(".mprow img").forEach(img=>{
+    const cat=img.closest(".mprow").dataset.cat;
+    attachThumbRetry(img, genPhotos(draft,cat)[0], mpPool, ()=>markThumbUnreadableHere(img));
+  });
   box.querySelectorAll("[data-take]").forEach(b=>b.onclick=guard(()=>takeMachinePhoto(b.dataset.take)));
   box.querySelectorAll("[data-drop]").forEach(b=>b.onclick=()=>dropMachinePhoto(b.dataset.drop,0));
   /* ONCE THE ROUND HAS THE PHOTOGRAPHS IT OWES, THE LIST FOLDS ITSELF. Five
@@ -5980,7 +6016,7 @@ function renderMedia(){ const p=draft.positions[curItem]||{}; const ph=p.photos|
      — and an inspector counting photographs cannot tell an empty strip from a
      broken one. */
   ph.forEach((b,i)=>{ const c=attCat(p,b)||"COMPONENT";
-    h+=`<div class="mtile"><img src="${mediaPool.url(b)}" alt="${esc(t("media_photo_n",{n:i+1}))}"><button class="mdel" data-ph="${i}" aria-label="${esc(t("media_del"))}">✕</button><button type="button" class="mcat" data-cat="${i}" title="${esc(t("ph_cat"))}">${esc(photoCatLabel(c))}</button></div>`; });
+    h+=`<div class="mtile"><img data-bi="${i}" src="${mediaPool.url(b)}" alt="${esc(t("media_photo_n",{n:i+1}))}"><button class="mdel" data-ph="${i}" aria-label="${esc(t("media_del"))}">✕</button><button type="button" class="mcat" data-cat="${i}" title="${esc(t("ph_cat"))}">${esc(photoCatLabel(c))}</button></div>`; });
   if(p.video) h+=`<div class="mtile"><video src="${mediaPool.url(p.video)}" muted playsinline></video><span class="vbadge">▶ video</span><button class="mdel" data-vid="1" aria-label="${esc(t("media_del"))}">✕</button></div>`;
   if(!ph.length && !p.video) h=`<div class="empty-m">${t("media_empty")}</div>`;
   $("mediastrip").innerHTML=h;
@@ -5989,7 +6025,9 @@ function renderMedia(){ const p=draft.positions[curItem]||{}; const ph=p.photos|
   $("mediaHint").textContent=t("media_hint",{p:MAX_PHOTOS, s:MAX_VIDEO_SEC});
   $("takeBtn").disabled = ph.length>=MAX_PHOTOS;
   $("videoBtn").disabled = !!p.video;
-  $("mediastrip").querySelectorAll(".mtile img").forEach(img=>{ img.onerror=()=>markThumbUnreadableHere(img); });
+  $("mediastrip").querySelectorAll(".mtile img[data-bi]").forEach(img=>{
+    attachThumbRetry(img, ph[+img.dataset.bi], mediaPool, ()=>markThumbUnreadableHere(img));
+  });
   $("mediastrip").querySelectorAll(".mcat").forEach(btn=>btn.onclick=()=>pickPhotoCat(+btn.dataset.cat));
   $("mediastrip").querySelectorAll(".mdel").forEach(btn=>btn.onclick=()=>{ const p=curP();
     if(btn.dataset.ph!==undefined){ p.photos.splice(+btn.dataset.ph,1); if(!p.photos.length) delete p.photos; }
@@ -13386,12 +13424,16 @@ async function renderPending(){
        thumbUnreadableEl() is the shared placeholder — renderMedia() and
        renderMachinePhotos() use the identical one for the same failure,
        found where a technician is actually looking while re-opening a round
-       to add a missed photo (see the note above thumbUnreadableEl). */
+       to add a missed photo (see the note above thumbUnreadableEl).
+       attachThumbRetry() is the same section's own fix for the OTHER report,
+       one row up: this list repaints on every file that lands during a sync
+       burst, and a thumbnail that lost one decode race against all the
+       others called it final rather than trying again (see its own note). */
     const timg=row.querySelector("img.thumb");
-    if(timg) timg.onerror=()=>{
+    if(timg) attachThumbRetry(timg, first, pendPool, ()=>{
       const d=thumbUnreadableEl("thumb_unread"); d.classList.add("thumb");
       d.onclick=openEdit; timg.replaceWith(d);
-    };
+    });
     /* Deleting here is final — the record lives nowhere else until it has been
        uploaded. Name the unit and say which case this is, because "are you sure?"
        does not tell anyone what they are about to lose. */
@@ -14628,7 +14670,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="482";
+const BUILD="483";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
