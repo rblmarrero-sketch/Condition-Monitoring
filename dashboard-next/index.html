@@ -7989,11 +7989,14 @@ function renderActions(){
     `<button type="button" class="kpi ${cls||""}${filt===id?" on":""}" data-af="${esc(id)}">
        <span class="k">${esc(lab)}</span><span class="v">${esc(String(val))}</span>
        <span class="s">${esc(sub)}</span></button>`;
+  /* Order matches Actions.dc.html: still open, overdue, unassigned, needs
+     planning, oldest open, closed out — the same six numbers this register
+     has always kept, in the mockup's own reading order. */
   $("actKpis").innerHTML=
       card("open", t("a_k_open"), required, t("a_k_open_s",{n:rows.length}), "info")
     + card("over", t("a_k_overdue"), overdue, t("a_k_overdue_s"), "bad"+(overdue?"":" zero"))
-    + card("triage", t("a_k_triage"), triage, t("a_k_triage_s"), "warn"+(triage?"":" zero"))
     + card("noown", t("a_k_unowned"), rows.length-owned, t("a_k_unowned_s"), "warn")
+    + card("triage", t("a_k_triage"), triage, t("a_k_triage_s"), "warn"+(triage?"":" zero"))
     + `<div class="kpi"><span class="k">${esc(t("a_k_oldest"))}</span>
         <span class="v">${oldest?esc(oldest+" d"):"—"}</span>
         <span class="s">${esc(t("a_k_oldest_s"))}</span></div>`
@@ -14483,8 +14486,13 @@ function renderWearTab(){
       class="kpi${cls?" "+cls:""}${mode===go?" on":""}" title="${esc(t("w_k_go"))}">
     <span class="k">${esc(lab)}</span>
     <span class="v">${esc(String(val))}</span><span class="s">${esc(sub)}</span></button>`;
+  /* Six tiles, matching Wear.dc.html: the total measured, then each of the
+     five sets it can be narrowed to. "Measured positions" is its own tile
+     because a reader asking "how much of the fleet is even measured" had no
+     number for it — only the five subsets of it. */
   $("wearKpis").innerHTML =
-      kp("act",  t("w_k_act"), act, t("w_k_act_s"), act?"bad":"good")
+      kp("all",  t("w_k_meas"), all.length, t("w_k_meas_s",{n:fmtN(new Set(all.map(r=>r.equip)).size)}), "info")
+    + kp("act",  t("w_k_act"), act, t("w_k_act_s"), act?"bad":"good")
     + kp("watch",t("w_k_watch"), watch, t("w_k_watch_s"), watch?"warn":"good")
     + kp("soon", t("w_k_soon",{h:W_SOON.toLocaleString(lang==="ru"?"ru-RU":"en-GB")}), soon,
          t("w_k_soon_s"), soon?"warn":"good")
