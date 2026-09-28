@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Equipment History</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F4F2ED;font-family:'IBM Plex Sans',system-ui,sans-serif;color:#1B1F23}
+a{color:inherit;text-decoration:none}
+a:hover{color:#1F5C7A}
+button{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 1440px; min-height: 1200px; box-sizing: border-box; display: flex; background: #F4F2ED">
+<div style="width: 240px; flex-shrink: 0; background: #1B1F23">
+<dc-import name="Nav" active="history" lang="en" hint-size="240px,700px"></dc-import>
+</div>
+<main style="flex-grow: 1; min-width: 0; box-sizing: border-box; padding: 16px 32px 40px; display: flex; flex-direction: column; gap: 20px">
+<dc-import name="TopBar" lang="en" hint-size="100%,48px"></dc-import>
+<dc-import name="Head" title="Equipment History" sub="One machine at a time: every inspection, every position" defs="Definitions" primary="" secondary="" last-sync="" hint-size="100%,76px"></dc-import>
+<div style="display: flex; align-items: flex-end; gap: 16px; flex-wrap: wrap">
+<label style="display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: #5A6169">Find a machine<input type="search" placeholder="unit number, e.g. [Unit A]" style="height: 44px; box-sizing: border-box; padding: 0 12px; border: 1px solid #C9C4B8; border-radius: 6px; background: #FBFAF7; font: 14px 'IBM Plex Sans', sans-serif; color: #1B1F23; width: 320px"></label>
+<dc-import name="Seg" label="View" opts="{{views}}" active="0" hint-size="100%,72px"></dc-import>
+</div>
+<section style="background: #FBFAF7; border: 1px solid #DAD6CC; border-radius: 8px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 16px">
+<div><div style="font-family: 'IBM Plex Mono', monospace; font-size: 22px; font-weight: 600">[Unit A]</div>
+<div style="font-size: 14px; color: #5A6169">[Model] &middot; [Equipment class] &middot; 0000 h &middot; 00 inspections</div></div>
+<div style="display: flex; gap: 12px"><button style="min-height: 44px; padding: 0 16px; border-radius: 6px; border: 0; background: #1F5C7A; font-size: 14px; font-weight: 500; color: #FFFFFF; cursor: pointer">Report on this machine</button></div>
+</div>
+</section>
+<section style="display: flex; flex-direction: column; gap: 10px">
+<h2 style="margin: 0; font-size: 16px; font-weight: 600">Inspections, newest first</h2>
+<sc-for list="{{cards}}" as="c" hint-placeholder-count="3">
+<div style="background: #FBFAF7; border: 1px solid #DAD6CC; border-radius: 8px; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 4px; min-width: 0">
+<div style="display: flex; align-items: center; gap: 10px"><span style="font-family: 'IBM Plex Mono', monospace; font-weight: 600">{{c.date}}</span>
+<span style="padding: 2px 10px; border-radius: 10px; background: {{c.bg}}; color: {{c.fg}}; font-size: 12px; font-weight: 600">{{c.grade}}</span>
+<span style="display: {{c.voidShow}}; padding: 2px 10px; border-radius: 10px; background: #E4DFD3; color: #3D474F; font-size: 12px; font-weight: 600">Withdrawn</span></div>
+<div style="font-size: 13px; color: #5A6169">{{c.meta}}</div>
+</div>
+<div style="display: flex; gap: 8px; flex-shrink: 0"><button style="min-height: 44px; padding: 0 16px; border-radius: 6px; border: 1px solid #C9C4B8; background: #FBFAF7; font-size: 14px; font-weight: 500; color: #1B1F23; cursor: pointer">Report</button><a href="EditRound.dc.html" style="min-height: 44px; padding: 0 16px; border-radius: 6px; border: 1px solid #C9C4B8; background: #FBFAF7; font-size: 14px; font-weight: 500; color: #1B1F23; cursor: pointer; display: inline-flex; align-items: center">Edit</a></div>
+</div>
+</sc-for>
+</section>
+<section style="display: flex; flex-direction: column; gap: 10px">
+<h2 style="margin: 0; font-size: 16px; font-weight: 600">Position by position</h2>
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px">
+<sc-for list="{{pos}}" as="p" hint-placeholder-count="8">
+<a href="Detail.dc.html" style="display: flex; flex-direction: column; gap: 6px; padding: 14px; background: #FBFAF7; border: 1px solid #DAD6CC; border-left: 6px solid {{p.line}}; border-radius: 8px">
+<span style="font-size: 14px; font-weight: 600">{{p.name}}</span>
+<span style="font-size: 12px; color: {{p.line}}; font-weight: 600">{{p.state}}</span>
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #5A6169">{{p.last}}</span>
+</a>
+</sc-for>
+</div>
+<div style="font-size: 13px; color: #5A6169">Band status: In order, Watch, Act, or No reading yet. Open a position to see its photographs and the last finding.</div>
+</section>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1200}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const R = (...c) => ({ cells: c.map((x) => (typeof x === 'string' ? { t: x } : x)) });
+    const id = (t) => ({ t, mono: true, ink: true });
+    const views = [{ t: 'List' }, { t: 'Photos' }];
+    const cards = [
+      { date: '[Date]', grade: '5 Critical', bg: '#F6D6D8', fg: '#8E1520', meta: '[Round type] · 0000 h · WO [no.] · [Inspector]', voidShow: 'none' },
+      { date: '[Date]', grade: '3 Degraded', bg: '#FBE3D8', fg: '#8A3312', meta: '[Round type] · 0000 h · [Inspector]', voidShow: 'none' },
+      { date: '[Date]', grade: '2 Incipient', bg: '#FDF0CC', fg: '#7A5A00', meta: '[Round type] · 0000 h · [Inspector]', voidShow: 'inline-block' }
+    ];
+    const S = { ok: ['In order', '#0a7134'], watch: ['Watch', '#a8621b'], act: ['Act', '#b31a24'], none: ['No reading yet', '#6B7A86'] };
+    const kinds = ['ok', 'watch', 'act', 'none', 'ok', 'ok', 'watch', 'none'];
+    const pos = kinds.map((k, i) => ({ name: '[Position ' + (i + 1) + ']', state: S[k][0], line: S[k][1], last: 'last [date]' }));
+    return { views, cards, pos };
+  }
+}
+</script>
+</body>
+</html>

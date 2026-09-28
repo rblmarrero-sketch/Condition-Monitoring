@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Data and Sync</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F4F2ED;font-family:'IBM Plex Sans',system-ui,sans-serif;color:#1B1F23}
+a{color:inherit;text-decoration:none}
+a:hover{color:#1F5C7A}
+button{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 1440px; min-height: 2300px; box-sizing: border-box; display: flex; background: #F4F2ED">
+<div style="width: 240px; flex-shrink: 0; background: #1B1F23">
+<dc-import name="Nav" active="sync" lang="en" hint-size="240px,700px"></dc-import>
+</div>
+<main style="flex-grow: 1; min-width: 0; box-sizing: border-box; padding: 16px 32px 40px; display: flex; flex-direction: column; gap: 20px">
+<dc-import name="TopBar" lang="en" hint-size="100%,48px"></dc-import>
+<dc-import name="Head" title="Data &amp; Sync" sub="Everything that needs a person to decide before it is counted" defs="Definitions" primary="" secondary="Data sources" last-sync="Last pull [time]" hint-size="100%,76px"></dc-import>
+<section style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px">
+<dc-import name="Tile" label="Grade review" tag="required" value="00" note="waiting for a second look" tone="#d9511f" ink="#b03a14" hint-size="100%,150px"></dc-import>
+<dc-import name="Tile" label="Conflicts" tag="two phones" value="00" note="same round, different answers" tone="#c8232c" ink="#b31a24" hint-size="100%,150px"></dc-import>
+<dc-import name="Tile" label="Waiting on media" tag="photos" value="00" note="record here, picture not yet uploaded" tone="#ec835a" ink="#a8451b" hint-size="100%,150px"></dc-import>
+<dc-import name="Tile" label="Critical waiting" tag="KPIs" value="00" note="Critical findings held out of the KPIs" tone="#6B7A86" ink="#1B1F23" hint-size="100%,150px"></dc-import>
+</section>
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; background: #FDF0CC; border: 1px solid #E4C766; border-radius: 8px; padding: 10px 16px; min-height: 52px; box-sizing: border-box; font-size: 14px; color: #5A4300"><span><b>One round was sent by two phones.</b> Decide which one counts before it is reported.</span><a href="Conflict.dc.html" style="min-height: 44px; padding: 0 16px; border-radius: 6px; border: 1px solid #C9C4B8; background: #FBFAF7; font-size: 14px; font-weight: 500; color: #1B1F23; cursor: pointer; display: inline-flex; align-items: center">Decide</a></div>
+<section style="background: #FBFAF7; border: 1px solid #DAD6CC; border-radius: 8px; padding: 20px; display: flex; flex-direction: column; gap: 12px; "><h2 style="margin: 0; font-size: 16px; font-weight: 600">Grade review required</h2>
+<div style="display: flex; flex-direction: column; gap: 8px"><sc-for list="{{reviews}}" as="r" hint-placeholder-count="3"><div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid #E4DFD3"><span style="font-size: 14px"><b style="font-family: IBM Plex Mono, monospace">{{r.unit}}</b> &middot; {{r.what}}</span><a href="Disposition.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border-radius: 6px; border: 1px solid #1F5C7A; color: #1F5C7A; font-size: 14px; font-weight: 500">Review</a></div></sc-for></div>
+</section>
+<dc-import name="DataTable" title="Inspections requiring correction" cols="{{corCols}}" rows="{{corRows}}"  hint-size="100%,320px"></dc-import>
+<dc-import name="DataTable" title="Records waiting on evidence" cols="{{evCols}}" rows="{{evRows}}"  hint-size="100%,320px"></dc-import>
+<div style="display: flex; gap: 12px; flex-wrap: wrap"><a href="AssignPhotos.dc.html" style="min-height: 44px; padding: 0 16px; border-radius: 6px; border: 1px solid #C9C4B8; background: #FBFAF7; font-size: 14px; font-weight: 500; color: #1B1F23; cursor: pointer; display: inline-flex; align-items: center">Assign photos</a><a href="MissingPhotos.dc.html" style="min-height: 44px; padding: 0 16px; border-radius: 6px; border: 1px solid #C9C4B8; background: #FBFAF7; font-size: 14px; font-weight: 500; color: #1B1F23; cursor: pointer; display: inline-flex; align-items: center">Missing photo files</a></div>
+<section style="background: #FBFAF7; border: 1px solid #DAD6CC; border-radius: 8px; padding: 20px; display: flex; flex-direction: column; gap: 12px; "><h2 style="margin: 0; font-size: 16px; font-weight: 600">1C work-order feed</h2>
+<div style="font-size: 14px; color: #3D474F">Inspections are planned against 1C work orders. 1C exports WO.xlsx, the pipeline turns it into the work-order file this dashboard reads (about hourly, and again as soon as the export changes), and the dashboard re-reads that file every 10 minutes and whenever this tab comes back into view. Phones read their own slice of it on the same timer.</div><div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px"><div><div style="font-size: 12px; color: #5A6169">Pulled from 1C</div><div style="font-family: IBM Plex Mono, monospace; font-weight: 600">[time]</div></div><div><div style="font-size: 12px; color: #5A6169">Work orders in file</div><div style="font-family: IBM Plex Mono, monospace; font-weight: 600">0000</div></div><div><div style="font-size: 12px; color: #5A6169">Defects, date filed under</div><div style="font-family: IBM Plex Mono, monospace; font-weight: 600">00 created · 00 plan · 00 detected</div></div><div><div style="font-size: 12px; color: #5A6169">Defects, cause read from</div><div style="font-family: IBM Plex Mono, monospace; font-weight: 600">00 order · 00 request · 00 certified</div></div></div><div style="background: #FDF0CC; border: 1px solid #E4C766; border-radius: 6px; padding: 10px 12px; font-size: 13px; color: #5A4300">The scheduled pull is late; work orders raised since are not on this page yet.</div><div style="display: flex; gap: 8px"><button style="min-height: 44px; padding: 0 16px; border-radius: 6px; border: 1px solid #C9C4B8; background: #FBFAF7; font-size: 14px; font-weight: 500; color: #1B1F23; cursor: pointer">Refresh now</button></div><div style="font-size: 12px; color: #5A6169">If the file has not been generated yet, this panel says so and names the step that produces it, instead of showing an empty table.</div>
+</section>
+<section style="background: #FBFAF7; border: 1px solid #DAD6CC; border-radius: 8px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+<h2 style="margin: 0; font-size: 16px; font-weight: 600">Admin diagnostics</h2>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+<section style="background: #FBFAF7; border: 1px solid #DAD6CC; border-radius: 8px; padding: 20px; display: flex; flex-direction: column; gap: 12px; "><h2 style="margin: 0; font-size: 16px; font-weight: 600">Server status</h2>
+<div style="font-size: 14px; color: #3D474F">Connection, last response, records held.</div>
+</section>
+<section style="background: #FBFAF7; border: 1px solid #DAD6CC; border-radius: 8px; padding: 20px; display: flex; flex-direction: column; gap: 12px; "><h2 style="margin: 0; font-size: 16px; font-weight: 600">Record reconciliation</h2>
+<div style="font-size: 14px; color: #3D474F">Records on the server against records shown here.</div>
+</section>
+<section style="background: #FBFAF7; border: 1px solid #DAD6CC; border-radius: 8px; padding: 20px; display: flex; flex-direction: column; gap: 12px; "><h2 style="margin: 0; font-size: 16px; font-weight: 600">Where the photographs are</h2>
+<div style="font-size: 14px; color: #3D474F">On the phone, on the server, or both.</div>
+</section>
+<section style="background: #FBFAF7; border: 1px solid #DAD6CC; border-radius: 8px; padding: 20px; display: flex; flex-direction: column; gap: 12px; "><h2 style="margin: 0; font-size: 16px; font-weight: 600">Field diagnostics</h2>
+<div style="font-size: 14px; color: #3D474F">Reports the phones sent about themselves.</div>
+</section>
+</div>
+<dc-import name="DataTable" title="Device activity" cols="{{devCols}}" rows="{{devRows}}"  hint-size="100%,320px"></dc-import>
+<div><button style="min-height: 44px; padding: 0 16px; border-radius: 6px; border: 1px solid #C9C4B8; background: #FBFAF7; font-size: 14px; font-weight: 500; color: #1B1F23; cursor: pointer">Check builds &amp; storage</button></div>
+<div style="background: #EEF3F6; border: 1px solid #A9C1D0; border-radius: 8px; padding: 14px 16px; font-size: 13px; color: #14384D"><b>What this dashboard cannot check.</b> It cannot see a phone that has never connected, a photograph that was never taken, or a reading that was typed wrongly but looks plausible.</div>
+</section>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2300}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const R = (...c) => ({ cells: c.map((x) => (typeof x === 'string' ? { t: x } : x)) });
+    const id = (t) => ({ t, mono: true, ink: true });
+    const reviews = [{ unit: '[Unit A]', what: 'grade [n] set, [reason]' }, { unit: '[Unit B]', what: 'grade [n] set, [reason]' }, { unit: '[Unit C]', what: 'grade [n] set, [reason]' }];
+    const corCols = [{ label: 'Unit' }, { label: 'Date' }, { label: 'Round' }, { label: 'Why' }, { label: 'Still counted' }, { label: 'Who corrects' }, { label: 'Action' }, { label: 'Affects' }];
+    const corRows = [
+      R(id('[Unit A]'), '[Date]', '[Round]', '[Why]', { t: 'Yes', chip: 'warn' }, '[Owner]', { t: 'Correct', chip: 'info' }, '[KPI]'),
+      R(id('[Unit B]'), '[Date]', '[Round]', '[Why]', { t: 'No', chip: 'neutral' }, '[Owner]', { t: 'Correct', chip: 'info' }, '[KPI]')
+    ];
+    const evCols = [{ label: 'Unit' }, { label: 'Date' }, { label: 'Missing' }, { label: 'Waiting' }, { label: 'Status' }];
+    const evRows = [R(id('[Unit A]'), '[Date]', '[Photograph]', id('00 d'), { t: 'Waiting', chip: 'warn' }), R(id('[Unit B]'), '[Date]', '[Sign-off]', id('00 d'), { t: 'Waiting', chip: 'warn' })];
+    const devCols = [{ label: 'Device' }, { label: 'Last activity' }, { label: 'Last round' }, { label: 'Build' }, { label: 'Storage' }];
+    const devRows = [R(id('[Phone A]'), '[Time]', '[Date]', id('[n]'), id('00%')), R(id('[Phone B]'), '[Time]', '[Date]', id('[n]'), id('00%'))];
+    return { reviews, corCols, corRows, evCols, evRows, devCols, devRows };
+  }
+}
+</script>
+</body>
+</html>

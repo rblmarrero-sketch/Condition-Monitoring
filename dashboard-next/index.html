@@ -127,6 +127,11 @@
   .gres .gd{color:var(--ink-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .gres .gnone{padding:12px 10px;color:var(--muted);font-size:13px;}
   @media (max-width:900px){ .gsearch{flex-basis:180px;} }
+  .wintog{display:flex;border:1px solid var(--border);border-radius:7px;overflow:hidden;flex:none;}
+  .wintog button{border:0;background:var(--surface);color:var(--ink-2);cursor:pointer;
+    font:600 12px/1 inherit;padding:0 11px;min-height:30px;white-space:nowrap;}
+  .wintog button.on{background:var(--accent);color:#fff;}
+  .wintog button:not(.on):hover{background:var(--surface-2);}
   .ver{font:600 var(--t-micro)/1 ui-monospace,SFMono-Regular,Menlo,monospace;
     color:var(--muted);letter-spacing:.02em;padding:3px 7px;border-radius:5px;
     background:var(--surface-2);border:1px solid var(--border);cursor:help;
@@ -175,6 +180,17 @@
     background:var(--critical);color:#fff;}
   nav.tabs .nb.warn{background:var(--warning);color:#3a2a00;}
   nav.tabs .nb:empty{display:none;}
+  /* SECTION LABEL, NOT A CONTROL. Monitor / Act / Assets / System group the
+     existing buttons visually (brief §4) without touching a single data-tab
+     id, so every hash route keeps working exactly as before. Not a button,
+     not focusable, not role="tab" -- see the comment above the markup. */
+  nav.tabs .navgrp{padding:14px 9px 4px;font-size:10px;font-weight:700;
+    letter-spacing:.08em;text-transform:uppercase;color:var(--rail-muted);
+    opacity:.75;}
+  nav.tabs .navgrp:first-of-type{padding-top:2px;}
+  body.railshut nav.tabs .navgrp{padding:14px 0 4px;text-align:center;
+    font-size:0;}
+  body.railshut nav.tabs .navgrp::before{content:"\2014";font-size:10px;}
   main{max-width:var(--page-max);margin:0 0 0 var(--sbw);padding:var(--s3) var(--mainpad) var(--s6);}
   /* The rail folds twice: to an icon rail on a laptop, to a top strip on a
      phone — the same buttons, never a second navigation. */
@@ -2472,6 +2488,16 @@
   <div class="spacer"></div>
   <input type="file" id="importFile" accept=".json,application/json" hidden multiple>
   <button class="src" id="srcChip" data-i18n-title="srctitle" title="Where the dashboard is reading from"><span class="dot"></span><span id="srcText">No data yet</span></button><span class="syncflash" id="syncFlash"></span>
+  <!-- THE DEFAULT DATA WINDOW (brief §3/§9 scale finding). Every KPI, table
+       and chart that reads filtered()/RECS is scoped to the last 90 days by
+       default -- the load-time fix the audit recommended -- with an explicit
+       switch to the whole folder. "All time" must read exactly what an
+       unwindowed pull already does: see dataWindowCutoff() and its one call
+       site inside filtered(), the single place a cutoff is ever computed. -->
+  <div class="wintog" id="winTog" role="group" data-i18n-aria="win_tip" aria-label="Data window">
+    <button type="button" data-win="90" data-i18n="win_90">90 days</button>
+    <button type="button" data-win="0" data-i18n="win_all">All time</button>
+  </div>
   <button class="btn primary" id="dataBtn" data-i18n="datasources">Data sources</button>
   <div class="lang"><button data-lang="en">EN</button><button data-lang="ru">RU</button></div>
   <button class="btn" id="themeBtn" data-i18n-title="theme" title="Light / dark">◐</button>
@@ -2875,16 +2901,30 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 6 8.5 12l6 6"/></svg>
     </button></div>
+  <!-- GROUPED, NOT RENAMED. Every data-tab id, every hash route, stays exactly
+       as it was -- the URL and query parameters are a public contract (brief
+       §4). These headers are pure presentation: a plain, non-interactive
+       label above each existing run of buttons, in the same order the
+       buttons already sat in. Nothing here is role="tab"/"tablist" (this is
+       a nav that says where you are with .active/aria-current, not a set of
+       views of one thing -- tests/tabsa11y.cjs's own header comment states
+       that rule for the phone's bottom bar; the same rule applies here), so
+       a label div adds nothing to the keyboard/tab order and cannot trip its
+       four rules. -->
+  <div class="navgrp" data-i18n="nav_grp_monitor">Monitor</div>
   <button data-tab="overview" class="active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></svg><span data-i18n="tab_overview">Overview</span></button>
   <button data-tab="failure"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4 21.5 20h-19Z"/><path d="M12 10.5v4"/><path d="M12 17.6h.01"/></svg><span data-i18n="tab_failure">Failure modes</span></button>
   <button data-tab="wear"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 15a7.5 7.5 0 1 1 15 0"/><path d="m12 15 3.5-4"/><path d="M4.5 19h15"/></svg><span data-i18n="tab_wear">Wear &amp; life</span></button>
+  <div class="navgrp" data-i18n="nav_grp_act">Act</div>
   <button data-tab="actions"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5.5" y="4.5" width="13" height="16" rx="2"/><path d="M9 4.5a3 3 0 0 1 6 0"/><path d="m8.8 13.5 2.2 2.2 4.2-4.4"/></svg><span data-i18n="tab_actions">Action register</span><span class="nb warn" id="nbAct"></span></button>
   <button data-tab="due"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><span data-i18n="tab_due">Due &amp; missed</span><span class="nb" id="nbDue"></span></button>
   <button data-tab="planact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.5" y="5.5" width="15" height="14" rx="2"/><path d="M8 3.5v3M16 3.5v3M4.5 10h15"/><path d="m8.3 14.6 2 2 5-5.4"/></svg><span data-i18n="tab_planact">Plan vs Actual</span><span class="nb warn" id="nbPlanAct"></span></button>
   <button data-tab="cmwo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4.5h7l4 4V19a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V5.5a1 1 0 0 1 1-1z"/><path d="M13.5 4.5V9H18"/><path d="M9 13h6M9 16.5h4"/></svg><span data-i18n="cw_tab">Defects raised</span><span class="nb" id="nbCmWo"></span></button>
 
+  <div class="navgrp" data-i18n="nav_grp_assets">Assets</div>
   <button data-tab="equipment"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3L4.5 8.9"/><path d="M4.5 4.5v4.4h4.4"/></svg><span data-i18n="tab_equipment">Equipment history</span></button>
   <button data-tab="lube"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5s5.8 6.3 5.8 10.2a5.8 5.8 0 0 1-11.6 0C6.2 9.8 12 3.5 12 3.5Z"/></svg><span data-i18n="tab_lube">Lubrication</span></button>
+  <div class="navgrp" data-i18n="nav_grp_system">System</div>
   <button data-tab="sync"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12a7.5 7.5 0 0 1 12.8-5.3L20 9.5"/><path d="M20 4.5v5h-5"/><path d="M19.5 12a7.5 7.5 0 0 1-12.8 5.3L4 14.5"/><path d="M4 19.5v-5h5"/></svg><span data-i18n="tab_sync">Sync operations</span><span class="nb warn" id="nbSync"></span></button>
   <button data-tab="reports"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3.5h6.5L18 8v12.5H7Z"/><path d="M13.5 3.5V8H18"/></svg><span data-i18n="tab_reports">Reports</span></button>
 </nav>
@@ -2959,6 +2999,10 @@
       <div class="pgt"><h1 data-i18n="ov_title">Overview</h1>
         <span class="pgsub" id="kpiInsp"><b class="v"></b> <span class="s"></span></span></div>
       <span class="spacer"></span>
+      <!-- GENERATE REPORT (brief §5.1). Reuses the one Reports tab everything
+           else builds a report through (see the comment above REPORTS_KEY) --
+           no second report path is added here. -->
+      <button class="btn" id="ovGenRpt" data-i18n="ov_genrpt">Generate report</button>
       <!-- ONE "DEFINITIONS" FOR THE PAGE. Every card used to carry its own
            "How this is counted", which is the same sentence read past six
            times. One control, one list, every number on the page explained
@@ -4036,6 +4080,10 @@ const I18N={
   sub:"Fleet dashboard", srcnone:"No data yet — click to connect",
   datasources:"Data sources", close:"Close", theme:"Light / dark",
   srctitle:"Where the dashboard is reading from",
+  nav_grp_monitor:"Monitor", nav_grp_act:"Act", nav_grp_assets:"Assets", nav_grp_system:"System",
+  win_90:"90 days", win_all:"All time",
+  win_tip:"How much history feeds every tile, table and chart. All time matches the unwindowed folder exactly.",
+  ov_genrpt:"Generate report",
 
   g_ph:"Global search: unit, component, defect, action, person, WO\u2026",
   g_equipment:"Equipment", g_inspections:"Inspections", g_findings:"Findings",
@@ -4952,6 +5000,10 @@ const I18N={
   sub:"Панель парка", srcnone:"Нет данных — нажмите, чтобы подключить",
   datasources:"Источники данных", close:"Закрыть", theme:"Светлая / тёмная",
   srctitle:"Откуда панель читает данные",
+  nav_grp_monitor:"Мониторинг", nav_grp_act:"Действия", nav_grp_assets:"Активы", nav_grp_system:"Система",
+  win_90:"90 дней", win_all:"Всё время",
+  win_tip:"Сколько истории учитывается в каждой плитке, таблице и графике. «Всё время» точно совпадает с полной, неограниченной папкой.",
+  ov_genrpt:"Сформировать отчёт",
 
   g_ph:"\u0413\u043b\u043e\u0431\u0430\u043b\u044c\u043d\u044b\u0439 \u043f\u043e\u0438\u0441\u043a: \u0435\u0434\u0438\u043d\u0438\u0446\u0430, \u0443\u0437\u0435\u043b, \u0434\u0435\u0444\u0435\u043a\u0442, \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u0435, \u0447\u0435\u043b\u043e\u0432\u0435\u043a, \u0417\u041d\u2026",
   g_equipment:"\u0422\u0435\u0445\u043d\u0438\u043a\u0430", g_inspections:"\u041e\u0441\u043c\u043e\u0442\u0440\u044b", g_findings:"\u041d\u0430\u0445\u043e\u0434\u043a\u0438",
@@ -6481,11 +6533,52 @@ function statusIs(r,i,st){
   return s===st;
 }
 const fStatusVal=()=>($("fStatus")&&$("fStatus").value)||"";
+/* ── THE DEFAULT DATA WINDOW ──────────────────────────────────────────────
+   The scale finding in CLAUDE.md/the redesign brief §9: rebuilding every
+   screen on every refresh cost about 16 s at ~2,100 rounds, climbing toward
+   25,000 a year at 70 inspections a day. Recommendation: window the
+   dashboard to the last 90 days by default, with an explicit "all time"
+   load.
+
+   This is ONE MORE TERM ANDed into filtered()'s own cutoff -- never a
+   second copy of the date logic, and never a filter a caller has to
+   remember to apply for itself. "All time" (dataWindowDays()===0) drops the
+   term entirely, so it reads exactly what filtered() already read before
+   this feature existed: the identical cutoff the unwindowed /dashboard/
+   computes from the Period select alone. That is what makes All time a
+   provable match rather than a second, hand-kept copy of "unwindowed". */
+const DATA_WINDOW_KEY="cm_dash_window";
+const DATA_WINDOW_DEFAULT=90;
+function dataWindowDays(){
+  let v=null; try{ v=localStorage.getItem(DATA_WINDOW_KEY); }catch(e){}
+  if(v==="0") return 0;                       // explicit "All time"
+  if(v==null) return DATA_WINDOW_DEFAULT;     // never chosen yet: the default
+  const n=+v;
+  return Number.isFinite(n) && n>0 ? n : DATA_WINDOW_DEFAULT;
+}
+function dataWindowSet(days){ try{ localStorage.setItem(DATA_WINDOW_KEY, String(days||0)); }catch(e){} }
+function dataWindowCutoff(){ const d=dataWindowDays(); return d ? DUE.daysAgo(d) : null; }
+function renderWindowTog(){
+  const el=$("winTog"); if(!el) return;
+  const on = dataWindowDays()>0;
+  el.querySelectorAll("button").forEach(b=>{
+    const active = (b.dataset.win==="0") ? !on : on;
+    b.classList.toggle("on", active);
+    b.setAttribute("aria-pressed", active?"true":"false");
+  });
+}
 function filtered(inclVoid){
   const ty=$("fType").value, c=$("fClass").value, days=+$("fRange").value;   // not "t" — that is t()
   const dq=($("fDq")&&$("fDq").value)||"";
   const st=fStatusVal();
-  const cutoff=days? DUE.daysAgo(days):null;
+  /* The Period select (fRange) and the default window are two different
+     questions -- "show me a chosen slice" against "how much history loads
+     at all" -- and a reader can ask both at once. Both cutoffs are dates as
+     ISO strings, so the LATER (more recent, more restrictive) one wins;
+     either half being absent just leaves the other in force. */
+  const rangeCutoff = days? DUE.daysAgo(days) : null;
+  const winCutoff = dataWindowCutoff();
+  const cutoff = rangeCutoff && winCutoff ? (rangeCutoff>winCutoff?rangeCutoff:winCutoff) : (rangeCutoff||winCutoff);
   const q=($("fQ").value||"").trim().toLowerCase();
   const showVoid=inclVoid||($("fVoid")&&$("fVoid").checked);
   return RECS.filter(r=>{
@@ -18361,6 +18454,18 @@ function passMemo(key, mk){
   return m;
 }
 ["fType","fClass","fRange","fDq"].forEach(id=>{ const el=$(id); if(el) el.onchange=renderAll; });
+/* Default 90-day window vs. All time -- see dataWindowDays()'s own comment.
+   A whole-page re-render, not just Overview: every TAB_RENDER entry that
+   reads filtered()/RECS is scoped by the same cutoff, so switching windows
+   must repaint whichever tab is open, not only the one this control sits
+   above. */
+if($("winTog")){
+  renderWindowTog();
+  $("winTog").querySelectorAll("button").forEach(b=>{
+    b.onclick=()=>{ dataWindowSet(+b.dataset.win); renderWindowTog(); renderAll(true); };
+  });
+}
+if($("ovGenRpt")) $("ovGenRpt").onclick=()=>showTab("reports", true);
 /* The grade box IS the grade drill: one state, three doors (box, headline, legend). */
 if($("fGrade")) $("fGrade").onchange=()=>{ const v=Number($("fGrade").value)||null;
   if((drill.sev||null)!==v){ drill.sev=v; renderAll(); } };

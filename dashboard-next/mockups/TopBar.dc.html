@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Top bar</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit}
+</style>
+</helmet>
+<header style="width: 100%; height: 48px; box-sizing: border-box; display: flex; align-items: center; gap: 12px; font-family: 'IBM Plex Sans', system-ui, sans-serif; color: #1B1F23">
+<label style="position: relative; flex-grow: 1; max-width: 480px; display: block">
+<span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">{{searchLabel}}</span>
+<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#5A6169" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="position: absolute; left: 12px; top: 15px"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4-4"/></svg>
+<input type="search" placeholder="{{searchPh}}" style="width: 100%; height: 44px; box-sizing: border-box; padding: 0 12px 0 38px; border: 1px solid #C9C4B8; border-radius: 6px; background: #FBFAF7; font: 14px 'IBM Plex Sans', sans-serif; color: #1B1F23">
+</label>
+<div style="flex-grow: 1"></div>
+<a href="DataSources.dc.html" aria-label="{{sourceLabel}}" style="display: flex; align-items: center; gap: 8px; min-height: 44px; box-sizing: border-box; padding: 0 14px; border: 1px solid #C9C4B8; border-radius: 22px; background: #FBFAF7; font-size: 13px; font-weight: 500">
+<span style="width: 8px; height: 8px; border-radius: 4px; background: #0a7134; display: inline-block"></span>{{source}}
+</a>
+<button aria-label="{{themeLabel}}" style="width: 44px; height: 44px; border-radius: 6px; border: 1px solid #C9C4B8; background: #FBFAF7; color: #1B1F23; cursor: pointer; display: flex; align-items: center; justify-content: center">
+<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg>
+</button>
+<div role="group" aria-label="Language" style="display: flex; border: 1px solid #C9C4B8; border-radius: 6px; overflow: hidden">
+<a href="Main.dc.html" style="min-width: 44px; min-height: 44px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; background: {{enBg}}; color: {{enFg}}">EN</a>
+<a href="OverviewRU.dc.html" style="min-width: 44px; min-height: 44px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; background: {{ruBg}}; color: {{ruFg}}">RU</a>
+</div>
+<div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #5A6169">build [n]</div>
+</header>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"lang":{"editor":"enum","default":"en","options":["en","ru"]},"$preview":{"width":1136,"height":48}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const ru = this.props.lang === 'ru';
+    return {
+      searchLabel: ru ? 'Поиск по всем данным' : 'Search everything',
+      searchPh: ru ? 'Поиск: техника, дефект, действие, инспектор…' : 'Search: unit, defect, action, inspector…',
+      source: ru ? '[Источник] · [n] осмотров · синхронизировано [время]' : '[Source] · [n] inspections · synced [time]',
+      sourceLabel: ru ? 'Источники данных' : 'Data sources',
+      themeLabel: ru ? 'Переключить тему' : 'Switch light or dark theme',
+      enBg: ru ? '#FBFAF7' : '#1F5C7A', enFg: ru ? '#1B1F23' : '#FFFFFF',
+      ruBg: ru ? '#1F5C7A' : '#FBFAF7', ruFg: ru ? '#FFFFFF' : '#1B1F23'
+    };
+  }
+}
+</script>
+</body>
+</html>

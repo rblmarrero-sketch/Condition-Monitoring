@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>KPI tile</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="width: 100%; box-sizing: border-box; background: #FBFAF7; border: 1px solid #DAD6CC; border-top: 6px solid {{tone}}; border-radius: 8px; padding: 20px; display: flex; flex-direction: column; gap: 8px; font-family: 'IBM Plex Sans', system-ui, sans-serif; color: #1B1F23">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px">
+<div style="font-size: 14px; font-weight: 600">{{label}}</div>
+<div style="font-size: 12px; font-family: 'IBM Plex Mono', monospace; color: #5A6169">{{tag}}</div>
+</div>
+<div style="font-family: 'IBM Plex Mono', monospace; font-size: 44px; font-weight: 600; line-height: 1; color: {{ink}}">{{value}}</div>
+<div style="font-size: 13px; color: #5A6169">{{note}}</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"label":{"editor":"text","default":"Critical"},"tag":{"editor":"text","default":"Grade 5"},"value":{"editor":"text","default":"00"},"note":{"editor":"text","default":"machines"},"tone":{"editor":"color","default":"#B3261E"},"ink":{"editor":"color","default":"#B3261E"},"$preview":{"width":300,"height":150}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const p = this.props;
+    return { label: p.label ?? '', tag: p.tag ?? '', value: p.value ?? '00', note: p.note ?? '', tone: p.tone ?? '#B3261E', ink: p.ink ?? '#1B1F23' };
+  }
+}
+</script>
+</body>
+</html>

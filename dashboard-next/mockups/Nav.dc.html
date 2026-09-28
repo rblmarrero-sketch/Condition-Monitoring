@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Navigation</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit}
+</style>
+</helmet>
+<nav aria-label="Pages" style="width: 240px; box-sizing: border-box; background: #1B1F23; color: #E8E6DF; font-family: 'IBM Plex Sans', system-ui, sans-serif; padding: 20px 16px 24px; display: flex; flex-direction: column; gap: 20px">
+<div style="display: flex; align-items: center; gap: 12px; padding: 0 4px">
+<div style="width: 36px; height: 36px; border-radius: 8px; background: #2E353C; display: flex; align-items: center; justify-content: center; font-family: 'IBM Plex Mono', monospace; font-size: 14px; font-weight: 600; color: #FFFFFF; flex-shrink: 0">CM</div>
+<div style="display: flex; flex-direction: column; gap: 1px; flex-grow: 1; min-width: 0">
+<div style="font-size: 15px; font-weight: 600; color: #FFFFFF">{{brand}}</div>
+<div style="font-size: 12px; color: #A9AEB4">{{site}}</div>
+</div>
+<button aria-label="{{collapse}}" aria-expanded="true" style="width: 36px; height: 36px; border-radius: 6px; border: 1px solid #4A535B; background: transparent; color: #E8E6DF; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0">
+<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 6 8.5 12l6 6"/></svg>
+</button>
+</div>
+<sc-for list="{{groups}}" as="g" hint-placeholder-count="4">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<div style="font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: #A9AEB4; padding: 0 8px 4px">{{g.title}}</div>
+<sc-for list="{{g.items}}" as="it" hint-placeholder-count="3">
+<a href="{{it.href}}" aria-current="{{it.cur}}" style="display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 44px; box-sizing: border-box; padding: 0 8px; border-radius: 6px; font-size: 14px; font-weight: {{it.fw}}; background: {{it.bg}}; color: {{it.fg}}">
+<span>{{it.label}}</span>
+<sc-if value="{{it.badge}}" hint-placeholder-val="{{ false }}"><span style="min-width: 24px; height: 22px; padding: 0 6px; box-sizing: border-box; border-radius: 11px; background: {{it.badgeBg}}; color: {{it.badgeFg}}; font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center">{{it.badge}}</span></sc-if>
+</a>
+</sc-for>
+</div>
+</sc-for>
+</nav>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"active":{"editor":"enum","default":"overview","options":["overview","failure","wear","actions","due","plan","defects","history","lube","sync","reports"]},"lang":{"editor":"enum","default":"en","options":["en","ru"]},"$preview":{"width":240,"height":700}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const ru = this.props.lang === 'ru';
+    const active = this.props.active || 'overview';
+    const T = ru ? {
+      site: 'Парк техники', brand: 'Мониторинг состояния', collapse: 'Свернуть меню',
+      g: ['Мониторинг', 'Работы', 'Техника', 'Система'],
+      overview: 'Обзор', failure: 'Анализ отказов', wear: 'Износ и остаточный ресурс',
+      actions: 'Работы по обслуживанию', due: 'График осмотров', plan: 'План и факт', defects: 'Заявленные дефекты',
+      history: 'История по технике', lube: 'Смазочные материалы', sync: 'Данные и синхронизация', reports: 'Отчёты'
+    } : {
+      site: 'Fleet dashboard', brand: 'Condition Monitoring', collapse: 'Collapse the menu',
+      g: ['Monitor', 'Act', 'Assets', 'System'],
+      overview: 'Overview', failure: 'Failure Analysis', wear: 'Wear & Remaining Life',
+      actions: 'Maintenance Actions', due: 'Inspection Schedule', plan: 'Plan vs Actual', defects: 'Defects raised',
+      history: 'Equipment History', lube: 'Lubrication', sync: 'Data & Sync', reports: 'Reports'
+    };
+    const file = { overview: ru ? 'OverviewRU.dc.html' : 'Main.dc.html', failure: 'Failure.dc.html', wear: 'Wear.dc.html',
+      actions: 'Actions.dc.html', due: 'Due.dc.html', plan: 'Plan.dc.html', defects: 'Defects.dc.html',
+      history: 'History.dc.html', lube: 'Lube.dc.html', sync: 'Sync.dc.html', reports: 'Reports.dc.html' };
+    const badges = { actions: ['00', '#F8DDD1', '#7A2A0E'], due: ['00', '#FDF0CC', '#5C3D00'], sync: ['00', '#F6D6D8', '#7A1119'] };
+    const item = (k) => {
+      const on = k === active;
+      const b = badges[k];
+      return { label: T[k], href: file[k], cur: on ? 'page' : 'false', fw: on ? 600 : 400, bg: on ? '#2E353C' : 'transparent', fg: on ? '#FFFFFF' : '#E8E6DF',
+        badge: b ? b[0] : '', badgeBg: b ? b[1] : 'transparent', badgeFg: b ? b[2] : 'transparent' };
+    };
+    const groups = [
+      { title: T.g[0], items: ['overview', 'failure', 'wear'].map(item) },
+      { title: T.g[1], items: ['actions', 'due', 'plan', 'defects'].map(item) },
+      { title: T.g[2], items: ['history', 'lube'].map(item) },
+      { title: T.g[3], items: ['sync', 'reports'].map(item) }
+    ];
+    return { site: T.site, brand: T.brand, collapse: T.collapse, groups };
+  }
+}
+</script>
+</body>
+</html>

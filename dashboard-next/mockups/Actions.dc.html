@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Maintenance Actions</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F4F2ED;font-family:'IBM Plex Sans',system-ui,sans-serif;color:#1B1F23}
+a{color:inherit;text-decoration:none}
+a:hover{color:#1F5C7A}
+button{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 1440px; min-height: 1040px; box-sizing: border-box; display: flex; background: #F4F2ED">
+<div style="width: 240px; flex-shrink: 0; background: #1B1F23">
+<dc-import name="Nav" active="actions" lang="en" hint-size="240px,700px"></dc-import>
+</div>
+<main style="flex-grow: 1; min-width: 0; box-sizing: border-box; padding: 16px 32px 40px; display: flex; flex-direction: column; gap: 20px">
+<dc-import name="TopBar" lang="en" hint-size="100%,48px"></dc-import>
+<dc-import name="Head" title="Maintenance Actions" sub="Every finding that needs work: who owns it, by when, and what is still missing" defs="Definitions" primary="Export CSV" secondary="Columns" last-sync="" hint-size="100%,76px"></dc-import>
+<section style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px">
+<dc-import name="Tile" label="Still open" tag="findings" value="00" note="of 00 finding(s)" tone="#1F5C7A" ink="#1B1F23" hint-size="100%,150px"></dc-import>
+<dc-import name="Tile" label="Overdue" tag="past date" value="00" note="past the date, still open" tone="#c8232c" ink="#b31a24" hint-size="100%,150px"></dc-import>
+<dc-import name="Tile" label="Unassigned actions" tag="no owner" value="00" note="no responsible person named" tone="#d9511f" ink="#b03a14" hint-size="100%,150px"></dc-import>
+<dc-import name="Tile" label="Needs planning" tag="triage" value="00" note="missing an action, an owner or a due date" tone="#ec835a" ink="#a8451b" hint-size="100%,150px"></dc-import>
+<dc-import name="Tile" label="Oldest open" tag="days" value="00" note="since it was found" tone="#6B7A86" ink="#1B1F23" hint-size="100%,150px"></dc-import>
+<dc-import name="Tile" label="Closed out" tag="done" value="00" note="done, verified or not needed" tone="#0a7134" ink="#0a7134" hint-size="100%,150px"></dc-import>
+</section>
+<div style="background: #FBFAF7; border: 1px solid #DAD6CC; border-radius: 8px; padding: 16px 20px; display: flex; flex-direction: column; gap: 8px">
+<div style="font-size: 13px; color: #3D474F">00 of 00 closed out, 00%</div>
+<div style="height: 12px; border-radius: 6px; background: #E4DFD3; overflow: hidden"><div style="width: 38%; height: 100%; background: #0a7134"></div></div>
+</div>
+<div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 16px">
+<dc-import name="Seg" label="Show" opts="{{opts}}" active="0" hint-size="100%,72px"></dc-import>
+<dc-import name="Seg" label="View" opts="{{views}}" active="0" hint-size="240px,72px"></dc-import>
+</div>
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; background: #DCE7EE; border: 1px solid #A9C1D0; border-radius: 8px; padding: 8px 16px; min-height: 52px; box-sizing: border-box; font-size: 14px; color: #14384D">
+<span style="font-weight: 600">00 selected</span>
+<div style="display: flex; align-items: center; gap: 8px">
+<span style="font-size: 13px">Owner: leave unchanged</span><span style="font-size: 13px">Due: leave unchanged</span><span style="font-size: 13px">Status: leave unchanged</span>
+<button style="min-height: 44px; padding: 0 14px; border-radius: 6px; border: 0; background: #1F5C7A; color: #FFFFFF; font-size: 14px; font-weight: 500; cursor: pointer">Apply to selected</button>
+<button style="min-height: 44px; padding: 0 14px; border-radius: 6px; border: 1px solid #1F5C7A; background: #FBFAF7; color: #1F5C7A; font-size: 14px; font-weight: 500; cursor: pointer">Clear</button>
+</div>
+</div>
+<dc-import name="DataTable" title="Action register" link-label="Open the plan" link-href="FollowUp.dc.html" cols="{{cols}}" rows="{{rows}}" hint-size="100%,380px"></dc-import>
+<div style="font-size: 13px; color: #5A6169">Press an owner, a date or a status to edit it in place. Enter saves and Escape cancels. The order is: Critical first, then overdue, then longest open.</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1040}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const R = (...c) => ({ cells: c.map((x) => (typeof x === 'string' ? { t: x } : x)) });
+    const id = (t) => ({ t, mono: true, ink: true });
+    const opts = [{ t: 'Planning required', n: '00' }, { t: 'Still open', n: '00' }, { t: 'Overdue', n: '00' }, { t: 'Critical', n: '00' }, { t: 'Due this week', n: '00' }, { t: 'Unassigned', n: '00' }, { t: 'Everything', n: '00' }];
+    const views = [{ t: 'Table' }, { t: 'By machine' }];
+    const cols = [{ label: 'Age', align: 'right' }, { label: 'Unit' }, { label: 'Component' }, { label: 'Finding' }, { label: 'Grade' }, { label: 'Owner' }, { label: 'Due' }, { label: 'Status' }];
+    const rows = [
+      R(id('00 d'), id('[Unit A]'), '[Component]', '[Finding]', { t: '5 Critical', chip: 'g5' }, '[Owner]', { t: '[Date] overdue', chip: 'bad' }, { t: 'In progress', chip: 'info' }),
+      R(id('00 d'), id('[Unit B]'), '[Component]', '[Finding]', { t: '4 Severe', chip: 'g4' }, { t: 'Assign', chip: 'warn' }, '[Date]', { t: 'Not started', chip: 'neutral' }),
+      R(id('00 d'), id('[Unit C]'), '[Component]', '[Finding]', { t: '3 Degraded', chip: 'g3' }, '[Owner]', 'in 00 d', { t: 'Not started', chip: 'neutral' }),
+      R(id('00 d'), id('[Unit D]'), '[Component]', '[Finding]', { t: '3 Degraded', chip: 'g3' }, '[Owner]', '[Date]', { t: 'Done', chip: 'ok' })
+    ];
+    return { opts, views, cols, rows };
+  }
+}
+</script>
+</body>
+</html>

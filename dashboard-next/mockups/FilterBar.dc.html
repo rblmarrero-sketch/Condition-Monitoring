@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Filter bar</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+button{font-family:inherit}
+</style>
+</helmet>
+<section aria-label="Filters" style="width: 100%; box-sizing: border-box; display: flex; align-items: flex-end; gap: 12px; flex-wrap: wrap; font-family: 'IBM Plex Sans', system-ui, sans-serif; color: #1B1F23">
+<sc-for list="{{fields}}" as="f" hint-placeholder-count="4">
+<label style="display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: #5A6169">{{f.label}}
+<select style="height: 44px; min-width: 160px; padding: 0 12px; border: 1px solid #C9C4B8; border-radius: 6px; background: #FBFAF7; font: 14px 'IBM Plex Sans', sans-serif; color: #1B1F23"><option>{{f.value}}</option></select></label>
+</sc-for>
+<sc-if value="{{voidLabel}}" hint-placeholder-val="{{ false }}">
+<label style="display: flex; align-items: center; gap: 8px; min-height: 44px; font-size: 14px"><input type="checkbox" style="width: 22px; height: 22px">{{voidLabel}}</label>
+</sc-if>
+<sc-if value="{{resetLabel}}" hint-placeholder-val="{{ false }}">
+<button style="min-height: 44px; padding: 0 14px; border-radius: 6px; border: 1px solid #C9C4B8; background: #FBFAF7; font-size: 14px; font-weight: 500; color: #1B1F23; cursor: pointer">{{resetLabel}}</button>
+</sc-if>
+<sc-if value="{{chip}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; align-items: center; min-height: 32px; margin-bottom: 6px; padding: 0 12px; border-radius: 16px; background: #E4DFD3; font-size: 13px">{{chip}}</div>
+</sc-if>
+<sc-if value="{{countLabel}}" hint-placeholder-val="{{ false }}">
+<div style="margin: 0 0 14px auto; font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #5A6169">{{countLabel}}</div>
+</sc-if>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"fields":{"editor":null,"default":[{"label":"Period","value":"Last 90 days"},{"label":"Type","value":"All types"},{"label":"Class","value":"All classes"},{"label":"Grade","value":"All grades"}]},"chip":{"editor":"text","default":""},"voidLabel":{"editor":"text","default":""},"resetLabel":{"editor":"text","default":""},"countLabel":{"editor":"text","default":""},"$preview":{"width":1136,"height":72}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const p = this.props;
+    return { fields: p.fields ?? [], chip: p.chip ?? '', voidLabel: p.voidLabel ?? '', resetLabel: p.resetLabel ?? '', countLabel: p.countLabel ?? '' };
+  }
+}
+</script>
+</body>
+</html>

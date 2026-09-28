@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Defer inspection</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F4F2ED;font-family:'IBM Plex Sans',system-ui,sans-serif;color:#1B1F23}
+a{color:inherit;text-decoration:none}
+a:hover{color:#1F5C7A}
+button{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 1440px; min-height: 900px; box-sizing: border-box; display: flex; align-items: flex-start; justify-content: center; padding: 48px 0; background: #8D9095">
+<div style="width: 560px; background: #FBFAF7; border-radius: 10px; box-shadow: 0 12px 40px rgba(0,0,0,0.3); display: flex; flex-direction: column">
+<div style="padding: 20px 24px 12px; display: flex; justify-content: space-between; align-items: flex-start; gap: 16px">
+<div><h1 style="margin: 0; font-size: 20px; font-weight: 600">Put this round off</h1>
+<div style="font-size: 14px; color: #5A6169; margin-top: 4px">The round stops counting as overdue until the review date.</div></div>
+<button aria-label="Close" style="width: 44px; height: 44px; border: 0; background: transparent; font-size: 22px; color: #5A6169; cursor: pointer">&times;</button>
+</div>
+<div style="padding: 8px 24px 20px; display: flex; flex-direction: column; gap: 14px">
+<div style="font-size: 14px; color: #3D474F">[Unit A] &middot; [Round] &middot; due [Date]</div>
+<label style="display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: #5A6169">Reason<select style="height: 44px; box-sizing: border-box; padding: 0 12px; border: 1px solid #C9C4B8; border-radius: 6px; background: #FBFAF7; font: 14px 'IBM Plex Sans', sans-serif; color: #1B1F23; width: 100%"><option>Machine in workshop</option></select></label>
+<label style="display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: #5A6169">Or write your own<input type="text" placeholder="[Reason]" style="height: 44px; box-sizing: border-box; padding: 0 12px; border: 1px solid #C9C4B8; border-radius: 6px; background: #FBFAF7; font: 14px 'IBM Plex Sans', sans-serif; color: #1B1F23; width: 100%" ></label>
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px"><label style="display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: #5A6169">Review on<input type="text" placeholder="[Date]" style="height: 44px; box-sizing: border-box; padding: 0 12px; border: 1px solid #C9C4B8; border-radius: 6px; background: #FBFAF7; font: 14px 'IBM Plex Sans', sans-serif; color: #1B1F23; width: 100%" ></label><label style="display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: #5A6169">Deferred by<input type="text" placeholder="[Name]" style="height: 44px; box-sizing: border-box; padding: 0 12px; border: 1px solid #C9C4B8; border-radius: 6px; background: #FBFAF7; font: 14px 'IBM Plex Sans', sans-serif; color: #1B1F23; width: 100%" ></label></div>
+</div>
+<div style="padding: 14px 24px; border-top: 1px solid #DAD6CC; display: flex; justify-content: flex-end; gap: 12px">
+<button style="min-height: 44px; padding: 0 16px; border-radius: 6px; border: 1px solid #C9C4B8; background: #FBFAF7; font-size: 14px; font-weight: 500; color: #1B1F23; cursor: pointer">Cancel the deferral</button><button style="min-height: 44px; padding: 0 16px; border-radius: 6px; border: 1px solid #C9C4B8; background: #FBFAF7; font-size: 14px; font-weight: 500; color: #1B1F23; cursor: pointer">Cancel</button><button style="min-height: 44px; padding: 0 16px; border-radius: 6px; border: 0; background: #1F5C7A; font-size: 14px; font-weight: 500; color: #FFFFFF; cursor: pointer">Save</button>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const R = (...c) => ({ cells: c.map((x) => (typeof x === 'string' ? { t: x } : x)) });
+    const id = (t) => ({ t, mono: true, ink: true });
+
+  }
+}
+</script>
+</body>
+</html>

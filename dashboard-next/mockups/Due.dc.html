@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Inspection Schedule</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F4F2ED;font-family:'IBM Plex Sans',system-ui,sans-serif;color:#1B1F23}
+a{color:inherit;text-decoration:none}
+a:hover{color:#1F5C7A}
+button{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 1440px; min-height: 1040px; box-sizing: border-box; display: flex; background: #F4F2ED">
+<div style="width: 240px; flex-shrink: 0; background: #1B1F23">
+<dc-import name="Nav" active="due" lang="en" hint-size="240px,700px"></dc-import>
+</div>
+<main style="flex-grow: 1; min-width: 0; box-sizing: border-box; padding: 16px 32px 40px; display: flex; flex-direction: column; gap: 20px">
+<dc-import name="TopBar" lang="en" hint-size="100%,48px"></dc-import>
+<dc-import name="Head" title="Inspection Schedule" sub="Which rounds are overdue, due soon or never inspected" defs="Definitions" primary="Export CSV" secondary="Refresh now" last-sync="Pulled from 1C [time]" hint-size="100%,76px"></dc-import>
+<section style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px">
+<dc-import name="Tile" label="Overdue" tag="rounds" value="00" note="of 00 unit-rounds with history" tone="#c8232c" ink="#b31a24" hint-size="100%,150px"></dc-import>
+<dc-import name="Tile" label="Due soon" tag="rounds" value="00" note="inside the last fifth of the interval" tone="#ec835a" ink="#a8451b" hint-size="100%,150px"></dc-import>
+<dc-import name="Tile" label="Deferred" tag="rounds" value="00" note="deferred by an inspector, reason recorded" tone="#6B7A86" ink="#1B1F23" hint-size="100%,150px"></dc-import>
+<dc-import name="Tile" label="Explained" tag="past due" value="00" note="of 00 past due carry a reason" tone="#1F5C7A" ink="#1B1F23" hint-size="100%,150px"></dc-import>
+</section>
+<div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap">
+<dc-import name="Seg" label="Show" opts="{{opts}}" active="0" hint-size="100%,72px"></dc-import>
+</div>
+<div style="display: flex; align-items: flex-end; gap: 12px">
+<dc-import name="FilterBar" fields="{{filters}}" hint-size="320px,72px"></dc-import>
+<label style="display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: #5A6169">Search this table
+<input type="search" placeholder="unit number" style="height: 44px; width: 240px; box-sizing: border-box; padding: 0 12px; border: 1px solid #C9C4B8; border-radius: 6px; background: #FBFAF7; font: 14px 'IBM Plex Sans', sans-serif; color: #1B1F23"></label>
+</div>
+<dc-import name="DataTable" title="Rounds by due date" cols="{{cols}}" rows="{{rows}}" hint-size="100%,380px"></dc-import>
+<div style="background: #FBFAF7; border: 1px solid #DAD6CC; border-radius: 8px; padding: 16px 20px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; font-size: 13px; color: #3D474F">
+<span><b>Start inspection</b> opens this machine and this round in the phone app.</span>
+<span><b>Defer inspection</b> puts this round off, with a reason.</span>
+<a href="Defer.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border-radius: 6px; border: 1px solid #1F5C7A; color: #1F5C7A; font-size: 14px; font-weight: 500">Open the deferral dialog</a>
+<span>Due dates use each machine's own hours per day, from two hour-meter readings (20 h/day where it has not been measured).</span>
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1040}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const R = (...c) => ({ cells: c.map((x) => (typeof x === 'string' ? { t: x } : x)) });
+    const id = (t) => ({ t, mono: true, ink: true });
+    const opts = [{ t: 'Overdue & due soon', n: '00' }, { t: 'Overdue', n: '00' }, { t: 'Due soon', n: '00' }, { t: 'Never inspected', n: '00' }, { t: '1C plan', n: '00' }, { t: 'Compare', n: '00' }, { t: 'Deferred', n: '00' }, { t: 'Completed', n: '00' }, { t: 'All', n: '00' }];
+    const filters = [{ label: 'Round', value: 'All rounds' }];
+    const cols = [{ label: 'Unit' }, { label: 'Round' }, { label: 'Last done' }, { label: 'Due' }, { label: 'Status' }, { label: 'Why or 1C plan' }];
+    const rows = [
+      R(id('[Unit A]'), '[Round]', '[Date]', '[Date]', { t: 'Overdue', chip: 'bad' }, 'Planned [date], not yet inspected'),
+      R(id('[Unit B]'), '[Round]', '[Date]', '[Date]', { t: 'Due soon', chip: 'warn' }, '1C asked for this: [plan date]'),
+      R(id('[Unit C]'), '[Round]', 'Never', '[Date]', { t: 'Never inspected', chip: 'info' }, '-'),
+      R(id('[Unit D]'), '[Round]', '[Date]', 'deferred to [date]', { t: 'Deferred', chip: 'neutral' }, 'Reason: [reason]')
+    ];
+    return { opts, filters, cols, rows };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Follow-up plan</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F4F2ED;font-family:'IBM Plex Sans',system-ui,sans-serif;color:#1B1F23}
+a{color:inherit;text-decoration:none}
+a:hover{color:#1F5C7A}
+button{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 1440px; min-height: 1300px; box-sizing: border-box; display: flex; align-items: flex-start; justify-content: center; padding: 48px 0; background: #8D9095">
+<div style="width: 640px; background: #FBFAF7; border-radius: 10px; box-shadow: 0 12px 40px rgba(0,0,0,0.3); display: flex; flex-direction: column">
+<div style="padding: 20px 24px 12px; display: flex; justify-content: space-between; align-items: flex-start; gap: 16px">
+<div><h1 style="margin: 0; font-size: 20px; font-weight: 600">Follow-up plan: [Unit A]</h1>
+<div style="font-size: 14px; color: #5A6169; margin-top: 4px">[Component] &middot; [Finding]</div></div>
+<button aria-label="Close" style="width: 44px; height: 44px; border: 0; background: transparent; font-size: 22px; color: #5A6169; cursor: pointer">&times;</button>
+</div>
+<div style="padding: 8px 24px 20px; display: flex; flex-direction: column; gap: 14px">
+<h2 style="margin: 0; font-size: 15px; font-weight: 600">The plan</h2>
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px"><label style="display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: #5A6169">Responsible<input type="text" placeholder="[Name]" style="height: 44px; box-sizing: border-box; padding: 0 12px; border: 1px solid #C9C4B8; border-radius: 6px; background: #FBFAF7; font: 14px 'IBM Plex Sans', sans-serif; color: #1B1F23; width: 100%" ></label><label style="display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: #5A6169">Due<input type="text" placeholder="[Date]" style="height: 44px; box-sizing: border-box; padding: 0 12px; border: 1px solid #C9C4B8; border-radius: 6px; background: #FBFAF7; font: 14px 'IBM Plex Sans', sans-serif; color: #1B1F23; width: 100%" ></label></div>
+<label style="display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: #5A6169">Status<select style="height: 44px; box-sizing: border-box; padding: 0 12px; border: 1px solid #C9C4B8; border-radius: 6px; background: #FBFAF7; font: 14px 'IBM Plex Sans', sans-serif; color: #1B1F23; width: 100%"><option>Not started</option></select></label>
+<label style="display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: #5A6169">What will be done<textarea placeholder="[Action]" style="height: 44px; box-sizing: border-box; padding: 0 12px; border: 1px solid #C9C4B8; border-radius: 6px; background: #FBFAF7; font: 14px 'IBM Plex Sans', sans-serif; color: #1B1F23; height: 88px; padding: 10px 12px; resize: vertical; width: 100%"></textarea></label>
+<h2 style="margin: 6px 0 0; font-size: 15px; font-weight: 600">Why it happened</h2>
+<label style="display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: #5A6169">Direct cause<select style="height: 44px; box-sizing: border-box; padding: 0 12px; border: 1px solid #C9C4B8; border-radius: 6px; background: #FBFAF7; font: 14px 'IBM Plex Sans', sans-serif; color: #1B1F23; width: 100%"><option>[Cause]</option></select></label>
+<label style="display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: #5A6169">Why 1<input type="text" placeholder="[Why]" style="height: 44px; box-sizing: border-box; padding: 0 12px; border: 1px solid #C9C4B8; border-radius: 6px; background: #FBFAF7; font: 14px 'IBM Plex Sans', sans-serif; color: #1B1F23; width: 100%" ></label>
+<label style="display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: #5A6169">Why 2<input type="text" placeholder="[Why]" style="height: 44px; box-sizing: border-box; padding: 0 12px; border: 1px solid #C9C4B8; border-radius: 6px; background: #FBFAF7; font: 14px 'IBM Plex Sans', sans-serif; color: #1B1F23; width: 100%" ></label>
+<button style="min-height: 44px; padding: 0 16px; border-radius: 6px; border: 1px solid #C9C4B8; background: #FBFAF7; font-size: 14px; font-weight: 500; color: #1B1F23; cursor: pointer; align-self: flex-start">Add another why</button>
+<label style="display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: #5A6169">Root cause<input type="text" placeholder="[Root cause]" style="height: 44px; box-sizing: border-box; padding: 0 12px; border: 1px solid #C9C4B8; border-radius: 6px; background: #FBFAF7; font: 14px 'IBM Plex Sans', sans-serif; color: #1B1F23; width: 100%" ></label>
+<label style="display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: #5A6169">Corrective, for this machine<textarea placeholder="[Corrective]" style="height: 44px; box-sizing: border-box; padding: 0 12px; border: 1px solid #C9C4B8; border-radius: 6px; background: #FBFAF7; font: 14px 'IBM Plex Sans', sans-serif; color: #1B1F23; height: 88px; padding: 10px 12px; resize: vertical; width: 100%"></textarea></label>
+<label style="display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: #5A6169">Preventive, for the rest of the fleet<textarea placeholder="[Preventive]" style="height: 44px; box-sizing: border-box; padding: 0 12px; border: 1px solid #C9C4B8; border-radius: 6px; background: #FBFAF7; font: 14px 'IBM Plex Sans', sans-serif; color: #1B1F23; height: 88px; padding: 10px 12px; resize: vertical; width: 100%"></textarea></label>
+<label style="display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: #5A6169">Your name<input type="text" placeholder="[Name]" style="height: 44px; box-sizing: border-box; padding: 0 12px; border: 1px solid #C9C4B8; border-radius: 6px; background: #FBFAF7; font: 14px 'IBM Plex Sans', sans-serif; color: #1B1F23; width: 260px" ></label>
+</div>
+<div style="padding: 14px 24px; border-top: 1px solid #DAD6CC; display: flex; justify-content: flex-end; gap: 12px">
+<button style="min-height: 44px; padding: 0 16px; border-radius: 6px; border: 1px solid #C9C4B8; background: #FBFAF7; font-size: 14px; font-weight: 500; color: #1B1F23; cursor: pointer">Cancel</button><button style="min-height: 44px; padding: 0 16px; border-radius: 6px; border: 0; background: #1F5C7A; font-size: 14px; font-weight: 500; color: #FFFFFF; cursor: pointer">Save the plan</button>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1300}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const R = (...c) => ({ cells: c.map((x) => (typeof x === 'string' ? { t: x } : x)) });
+    const id = (t) => ({ t, mono: true, ink: true });
+
+  }
+}
+</script>
+</body>
+</html>
