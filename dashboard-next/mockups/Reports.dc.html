@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Reports</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F4F2ED;font-family:'IBM Plex Sans',system-ui,sans-serif;color:#1B1F23}
+a{color:inherit;text-decoration:none}
+a:hover{color:#1F5C7A}
+button{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 1440px; min-height: 900px; box-sizing: border-box; display: flex; background: #F4F2ED">
+<div style="width: 240px; flex-shrink: 0; background: #1B1F23">
+<dc-import name="Nav" active="reports" lang="en" hint-size="240px,700px"></dc-import>
+</div>
+<main style="flex-grow: 1; min-width: 0; box-sizing: border-box; padding: 16px 32px 40px; display: flex; flex-direction: column; gap: 20px">
+<dc-import name="TopBar" lang="en" hint-size="100%,48px"></dc-import>
+<dc-import name="Head" title="Reports" sub="Print-ready PDF reports for one inspection, one machine or the whole fleet" defs="Definitions" primary="" secondary="" last-sync="" hint-size="100%,76px"></dc-import>
+<section style="display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 16px">
+<div style="background: #FBFAF7; border: 1px solid #DAD6CC; border-radius: 8px; padding: 20px; display: flex; flex-direction: column; gap: 12px; gap: 16px">
+<h2 style="margin: 0; font-size: 16px; font-weight: 600">New report</h2>
+<dc-import name="Seg" label="Scope" opts="{{scopes}}" active="0" hint-size="100%,72px"></dc-import>
+<label style="display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: #5A6169">Machine or date<input type="text" placeholder="[Unit A] or [Date]" style="height: 44px; box-sizing: border-box; padding: 0 12px; border: 1px solid #C9C4B8; border-radius: 6px; background: #FBFAF7; font: 14px 'IBM Plex Sans', sans-serif; color: #1B1F23; width: 320px" ></label>
+<div style="display: flex; gap: 16px; flex-wrap: wrap">
+<dc-import name="Seg" label="Language" opts="{{langs}}" active="0" hint-size="100%,72px"></dc-import>
+<dc-import name="Seg" label="Photos" opts="{{photos}}" active="0" hint-size="100%,72px"></dc-import>
+</div>
+<dc-import name="Seg" label="Quality" opts="{{quals}}" active="0" hint-size="100%,72px"></dc-import>
+<label style="display: flex; align-items: center; gap: 8px; min-height: 44px; font-size: 14px"><input type="checkbox" style="width: 22px; height: 22px">Include the appendix</label>
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-top: 12px; border-top: 1px solid #DAD6CC">
+<div style="font-size: 13px; color: #5A6169">About 00 pages, 0.0 MB. Provisional until a Controlled final is issued.</div>
+<div style="display: flex; gap: 12px; align-items: flex-end"><dc-import name="Seg" label="Status" opts="{{states}}" active="0" hint-size="100%,72px"></dc-import><button style="min-height: 44px; padding: 0 16px; border-radius: 6px; border: 0; background: #1F5C7A; font-size: 14px; font-weight: 500; color: #FFFFFF; cursor: pointer">Generate PDF</button></div>
+</div>
+</div>
+<dc-import name="DataTable" title="Recent reports" cols="{{recCols}}" rows="{{recRows}}"  hint-size="100%,320px"></dc-import>
+</section>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const R = (...c) => ({ cells: c.map((x) => (typeof x === 'string' ? { t: x } : x)) });
+    const id = (t) => ({ t, mono: true, ink: true });
+    const scopes = [{ t: 'This inspection' }, { t: 'Equipment' }, { t: 'Equipment condition summary' }, { t: 'Round' }, { t: 'Fleet summary' }];
+    const langs = [{ t: 'English' }, { t: 'Русский' }, { t: 'English + Russian' }];
+    const photos = [{ t: 'Include photos' }, { t: 'No photos' }];
+    const quals = [{ t: 'Standard' }, { t: 'High (larger file)' }, { t: 'Small file (slow link)' }];
+    const states = [{ t: 'Provisional' }, { t: 'Controlled final' }];
+    const recCols = [{ label: 'When' }, { label: 'Scope' }, { label: 'Language' }, { label: 'Status' }, { label: '' }];
+    const recRows = [
+      R('[Time]', '[Scope]', 'English', { t: 'Provisional', chip: 'warn' }, { t: 'Generate again', chip: 'info' }),
+      R('[Time]', '[Scope]', 'Русский', { t: 'Controlled', chip: 'ok' }, { t: 'Generate again', chip: 'info' })
+    ];
+    return { scopes, langs, photos, quals, states, recCols, recRows };
+  }
+}
+</script>
+</body>
+</html>

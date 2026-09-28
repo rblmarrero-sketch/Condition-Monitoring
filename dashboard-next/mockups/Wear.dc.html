@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Wear and Remaining Life</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F4F2ED;font-family:'IBM Plex Sans',system-ui,sans-serif;color:#1B1F23}
+a{color:inherit;text-decoration:none}
+a:hover{color:#1F5C7A}
+</style>
+</helmet>
+<div style="width: 1440px; min-height: 1040px; box-sizing: border-box; display: flex; background: #F4F2ED">
+<div style="width: 240px; flex-shrink: 0; background: #1B1F23">
+<dc-import name="Nav" active="wear" lang="en" hint-size="240px,700px"></dc-import>
+</div>
+<main style="flex-grow: 1; min-width: 0; box-sizing: border-box; padding: 16px 32px 40px; display: flex; flex-direction: column; gap: 20px">
+<dc-import name="TopBar" lang="en" hint-size="100%,48px"></dc-import>
+<dc-import name="Head" title="Wear and remaining life" sub="Every measured position, soonest to run out first" defs="Definitions" primary="Export CSV" secondary="" last-sync="" hint-size="100%,76px"></dc-import>
+<section style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px">
+<dc-import name="Tile" label="Measured positions" tag="units" value="00" note="on 00 units" tone="#1F5C7A" ink="#1B1F23" hint-size="100%,150px"></dc-import>
+<dc-import name="Tile" label="At or past condemn" tag="now" value="00" note="change now" tone="#c8232c" ink="#b31a24" hint-size="100%,150px"></dc-import>
+<dc-import name="Tile" label="Over 80% worn" tag="watch" value="00" note="watch list" tone="#d9511f" ink="#b03a14" hint-size="100%,150px"></dc-import>
+<dc-import name="Tile" label="Under 1,000 h left" tag="hours" value="00" note="order the parts" tone="#ec835a" ink="#a8451b" hint-size="100%,150px"></dc-import>
+<dc-import name="Tile" label="Planning required" tag="no action" value="00" note="needs work, no action against it yet" tone="#1F5C7A" ink="#1B1F23" hint-size="100%,150px"></dc-import>
+<dc-import name="Tile" label="Second reading" tag="pending" value="00" note="no life until measured again" tone="#6B7A86" ink="#1B1F23" hint-size="100%,150px"></dc-import>
+</section>
+<dc-import name="Seg" label="Show" opts="{{opts}}" active="0" hint-size="100%,72px"></dc-import>
+<dc-import name="DataTable" title="Measured positions" cols="{{cols}}" rows="{{rows}}" hint-size="100%,380px"></dc-import>
+<div style="background: #FBFAF7; border: 1px solid #DAD6CC; border-radius: 8px; padding: 16px 20px; font-size: 13px; color: #3D474F; display: flex; flex-direction: column; gap: 6px">
+<div><b>Reading the table.</b> Life is projected from each position's own readings, in millimetres per 1,000 hours. It needs at least two readings that are far enough apart.</div>
+<div>A position with one reading, readings too close together, no movement, or readings moving away from the limit shows the reason instead of a life.</div>
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1040}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const R = (...c) => ({ cells: c.map((x) => (typeof x === 'string' ? { t: x } : x)) });
+    const id = (t) => ({ t, mono: true, ink: true });
+    const opts = [{ t: 'Needs planning', n: '00' }, { t: 'At or past condemn', n: '00' }, { t: 'Every measured position', n: '00' }];
+    const cols = [{ label: 'Unit' }, { label: 'Position' }, { label: 'mm', align: 'right' }, { label: 'Worn', align: 'right' }, { label: 'mm left', align: 'right' }, { label: 'mm/1000h', align: 'right' }, { label: 'Life left', align: 'right' }, { label: 'Reaches condemn' }, { label: 'Readings', align: 'right' }];
+    const rows = [
+      R(id('[Unit A]'), '[Position]', id('00.0'), id('00%'), id('00.0'), id('0.00'), { t: 'At condemn', chip: 'g5' }, '[Date]', id('0')),
+      R(id('[Unit B]'), '[Position]', id('00.0'), id('00%'), id('00.0'), id('0.00'), id('0000 h'), '[Date]', id('0')),
+      R(id('[Unit C]'), '[Position]', id('00.0'), id('00%'), id('00.0'), id('0.00'), { t: 'one reading', chip: 'neutral' }, '[Date]', id('1')),
+      R(id('[Unit D]'), '[Position]', id('00.0'), id('00%'), id('00.0'), id('0.00'), { t: 'no movement', chip: 'neutral' }, '[Date]', id('0'))
+    ];
+    return { opts, cols, rows };
+  }
+}
+</script>
+</body>
+</html>

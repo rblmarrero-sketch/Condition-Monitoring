@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Plan vs Actual</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F4F2ED;font-family:'IBM Plex Sans',system-ui,sans-serif;color:#1B1F23}
+a{color:inherit;text-decoration:none}
+a:hover{color:#1F5C7A}
+button{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 1440px; min-height: 1040px; box-sizing: border-box; display: flex; background: #F4F2ED">
+<div style="width: 240px; flex-shrink: 0; background: #1B1F23">
+<dc-import name="Nav" active="plan" lang="en" hint-size="240px,700px"></dc-import>
+</div>
+<main style="flex-grow: 1; min-width: 0; box-sizing: border-box; padding: 16px 32px 40px; display: flex; flex-direction: column; gap: 20px">
+<dc-import name="TopBar" lang="en" hint-size="100%,48px"></dc-import>
+<dc-import name="Head" title="Plan vs Actual" sub="1C's planned service date for each PM work order, matched to the nearest Condition Monitoring round" defs="Definitions" primary="Export CSV" secondary="Refresh now" last-sync="Pulled from 1C [time]" hint-size="100%,76px"></dc-import>
+<section style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px">
+<dc-import name="Tile" label="Open work orders" tag="1C" value="00" note="not yet marked complete in 1C" tone="#1F5C7A" ink="#1B1F23" hint-size="100%,150px"></dc-import>
+<dc-import name="Tile" label="General Inspection due soon" tag="pre-check" value="00" note="P3/P4 PM within 00 d, no pre-check yet" tone="#ec835a" ink="#a8451b" hint-size="100%,150px"></dc-import>
+<dc-import name="Tile" label="On time" tag="in window" value="00" note="CM round within 00 d of the plan date" tone="#0a7134" ink="#0a7134" hint-size="100%,150px"></dc-import>
+<dc-import name="Tile" label="Late or early" tag="outside" value="00" note="CM round found, outside 00 d of plan" tone="#d9511f" ink="#b03a14" hint-size="100%,150px"></dc-import>
+<dc-import name="Tile" label="No CM round" tag="missed" value="00" note="nothing recorded on the unit" tone="#c8232c" ink="#b31a24" hint-size="100%,150px"></dc-import>
+<dc-import name="Tile" label="Held off" tag="site" value="00" note="rounds the site has taken off these machines" tone="#6B7A86" ink="#1B1F23" hint-size="100%,150px"></dc-import>
+</section>
+<div style="display: flex; align-items: flex-end; gap: 16px; flex-wrap: wrap">
+<dc-import name="FilterBar" fields="{{filters}}" hint-size="420px,72px"></dc-import>
+<dc-import name="Seg" label="Work orders" opts="{{segs}}" active="0" hint-size="320px,72px"></dc-import>
+<label style="display: flex; align-items: center; gap: 8px; min-height: 44px; font-size: 14px"><input type="checkbox" style="width: 22px; height: 22px">Show only Condition Monitoring coverage</label>
+<label style="display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: #5A6169">Search this table
+<input type="search" placeholder="unit, work order" style="height: 44px; width: 200px; box-sizing: border-box; padding: 0 12px; border: 1px solid #C9C4B8; border-radius: 6px; background: #FBFAF7; font: 14px 'IBM Plex Sans', sans-serif; color: #1B1F23"></label>
+</div>
+<div style="font-size: 13px; color: #3D474F">Condition Monitoring covers 00% of these work orders: 00 of 00.</div>
+<section style="background: #FBFAF7; border: 1px solid #DAD6CC; border-radius: 8px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; align-items: center; justify-content: space-between"><h2 style="margin: 0; font-size: 16px; font-weight: 600">Two weeks</h2>
+<div style="display: flex; gap: 16px; font-size: 12px; color: #3D474F"><span>Solid pill: round on the day</span><span>Dashed pill: carried out ahead of the service</span></div></div>
+<div style="display: grid; grid-template-columns: 110px repeat(14, minmax(0, 1fr)); gap: 2px; font-size: 12px">
+<div></div>
+<sc-for list="{{days}}" as="d" hint-placeholder-count="14"><div style="text-align: center; padding: 6px 0; font-family: 'IBM Plex Mono', monospace; color: {{d.fg}}; font-weight: {{d.fw}}; border-bottom: 2px solid {{d.line}}">{{d.t}}</div></sc-for>
+<sc-for list="{{grid}}" as="r" hint-placeholder-count="4">
+<div style="display: contents">
+<div style="padding: 10px 0; font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 13px">{{r.unit}}</div>
+<sc-for list="{{r.cells}}" as="c" hint-placeholder-count="14"><div style="min-height: 40px; display: flex; align-items: center; justify-content: center; background: {{c.bg}}"><span style="display: {{c.show}}; padding: 2px 6px; border-radius: 10px; border: 1px {{c.style}} #1F5C7A; background: {{c.fill}}; color: {{c.ink}}; font-size: 11px; font-weight: 600">WO</span></div></sc-for>
+</div>
+</sc-for>
+</div>
+</section>
+<dc-import name="DataTable" title="Planned service vs. actual round" cols="{{cols}}" rows="{{rows}}" hint-size="100%,320px"></dc-import>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1040}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const R = (...c) => ({ cells: c.map((x) => (typeof x === 'string' ? { t: x } : x)) });
+    const id = (t) => ({ t, mono: true, ink: true });
+    const filters = [{ label: '1C plan date', value: 'Next 14 days' }, { label: 'Round', value: 'All rounds' }];
+    const segs = [{ t: 'Open' }, { t: 'Completed' }, { t: 'All' }];
+    const days = Array.from({ length: 14 }, (_, i) => ({ t: i === 7 ? 'Today' : 'D' + (i - 7 > 0 ? '+' + (i - 7) : i - 7), fg: i === 7 ? '#1F5C7A' : '#5A6169', fw: i === 7 ? 700 : 500, line: i === 7 ? '#1F5C7A' : '#DAD6CC' }));
+    const at = { 0: [3, 'solid'], 1: [8, 'solid'], 2: [10, 'dashed'], 3: [5, 'solid'] };
+    const grid = ['[Unit A]', '[Unit B]', '[Unit C]', '[Unit D]'].map((unit, r) => ({
+      unit,
+      cells: Array.from({ length: 14 }, (_, i) => {
+        const hit = at[r] && at[r][0] === i;
+        return { bg: i === 7 ? '#EEF3F6' : 'transparent', show: hit ? 'inline-block' : 'none', style: hit ? at[r][1] : 'solid', fill: hit && at[r][1] === 'solid' ? '#DCE7EE' : 'transparent', ink: '#14384D' };
+      })
+    }));
+    const cols = [{ label: 'Unit' }, { label: 'Work order' }, { label: 'Service' }, { label: '1C plan date' }, { label: '1C actual (WO closed)' }, { label: 'Nearest CM round' }, { label: 'CM vs plan', align: 'right' }, { label: 'Status' }, { label: 'Hours', align: 'right' }];
+    const rows = [
+      R(id('[Unit A]'), id('[WO no.]'), '[Service]', '[Date]', '[Date]', '[Date]', id('00 d after'), { t: 'On time', chip: 'ok' }, id('0000')),
+      R(id('[Unit B]'), id('[WO no.]'), '[Service]', '[Date]', '-', '[Date]', id('00 d before'), { t: 'Early', chip: 'info' }, id('0000')),
+      R(id('[Unit C]'), id('[WO no.]'), '[Service]', '[Date]', '-', '[Date]', id('00 d after'), { t: 'Late', chip: 'warn' }, id('0000')),
+      R(id('[Unit D]'), id('[WO no.]'), '[Service]', '[Date]', '-', 'None', id('-'), { t: 'No CM round', chip: 'bad' }, id('0000'))
+    ];
+    return { filters, segs, days, grid, cols, rows };
+  }
+}
+</script>
+</body>
+</html>

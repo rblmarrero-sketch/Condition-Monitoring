@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Failure Analysis</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F4F2ED;font-family:'IBM Plex Sans',system-ui,sans-serif;color:#1B1F23}
+a{color:inherit;text-decoration:none}
+a:hover{color:#1F5C7A}
+</style>
+</helmet>
+<div style="width: 1440px; min-height: 1040px; box-sizing: border-box; display: flex; background: #F4F2ED">
+<div style="width: 240px; flex-shrink: 0; background: #1B1F23">
+<dc-import name="Nav" active="failure" lang="en" hint-size="240px,700px"></dc-import>
+</div>
+<main style="flex-grow: 1; min-width: 0; box-sizing: border-box; padding: 16px 32px 40px; display: flex; flex-direction: column; gap: 20px">
+<dc-import name="TopBar" lang="en" hint-size="100%,48px"></dc-import>
+<dc-import name="Head" title="Failure Analysis" sub="What fails most, why, and how it is classified" defs="Definitions" primary="" secondary="" last-sync="" hint-size="100%,76px"></dc-import>
+<dc-import name="FilterBar" fields="{{filters}}" reset-label="Reset filters" count-label="00 of 00 inspections" hint-size="100%,72px"></dc-import>
+<section style="display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 16px">
+<div style="background: #FBFAF7; border: 1px solid #DAD6CC; border-radius: 8px; padding: 20px; display: flex; flex-direction: column; gap: 14px">
+<h2 style="margin: 0; font-size: 16px; font-weight: 600">Top failure modes (Pareto)</h2>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<sc-for list="{{bars}}" as="b" hint-placeholder-count="6">
+<button aria-label="Filter to {{b.label}}" style="display: grid; grid-template-columns: 190px minmax(0, 1fr) 44px 52px; align-items: center; gap: 12px; min-height: 44px; padding: 0 8px; border-radius: 6px; border: 1px solid transparent; background: transparent; font-size: 14px; color: #1B1F23; text-align: left; cursor: pointer">
+<span>{{b.label}}</span>
+<span style="height: 18px; background: #E4DFD3; border-radius: 4px; overflow: hidden; display: block"><span style="display: block; width: {{b.w}}; height: 100%; background: #1F5C7A"></span></span>
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; font-weight: 500; text-align: right">00</span>
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #5A6169; text-align: right">00%</span>
+</button>
+</sc-for>
+</div>
+<div style="font-size: 12px; color: #5A6169">Bar length is the count. The last column is the cumulative share. Press a bar to narrow the equipment list below.</div>
+</div>
+<div style="background: #FBFAF7; border: 1px solid #DAD6CC; border-radius: 8px; padding: 20px; display: flex; flex-direction: column; gap: 14px">
+<h2 style="margin: 0; font-size: 16px; font-weight: 600">Why it happened</h2>
+<div style="font-size: 13px; color: #5A6169">Why those defects occurred, as recorded at inspection.</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<sc-for list="{{causes}}" as="b" hint-placeholder-count="5">
+<div style="display: grid; grid-template-columns: 170px minmax(0, 1fr) 40px; align-items: center; gap: 12px; min-height: 36px; font-size: 14px">
+<span>{{b.label}}</span>
+<span style="height: 14px; background: #E4DFD3; border-radius: 4px; overflow: hidden; display: block"><span style="display: block; width: {{b.w}}; height: 100%; background: #6B7A86"></span></span>
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; font-weight: 500; text-align: right">00</span>
+</div>
+</sc-for>
+</div>
+</div>
+</section>
+<dc-import name="DataTable" title="Mechanism classes (ISO 14224 Table B.2)" cols="{{mcols}}" rows="{{mrows}}" hint-size="100%,260px"></dc-import>
+<dc-import name="DataTable" title="Affected equipment" cols="{{cols}}" rows="{{rows}}" hint-size="100%,300px"></dc-import>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1040}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const R = (...c) => ({ cells: c.map((x) => (typeof x === 'string' ? { t: x } : x)) });
+    const id = (t) => ({ t, mono: true, ink: true });
+    const bars = [92, 74, 58, 41, 30, 18].map((n, i) => ({ label: '[Failure mode ' + (i + 1) + ']', w: n + '%' }));
+    const causes = [88, 64, 47, 30, 16].map((n, i) => ({ label: '[Direct cause ' + (i + 1) + ']', w: n + '%' }));
+    const mcols = [{ label: 'Mechanism class' }, { label: 'Failures', align: 'right' }, { label: 'Share', align: 'right' }, { label: 'Comparable with' }];
+    const mrows = [R('[Mechanism class]', id('00'), id('00%'), 'Other sites and benchmarks'), R('[Mechanism class]', id('00'), id('00%'), 'Other sites and benchmarks'), R('[Mechanism class]', id('00'), id('00%'), 'Other sites and benchmarks')];
+    const cols = [{ label: 'Unit' }, { label: 'Class' }, { label: 'Position' }, { label: 'Defect' }, { label: 'Grade' }, { label: 'Direct cause' }];
+    const rows = [
+      R(id('[Unit A]'), '[Class]', '[Position]', '[Defect]', { t: '5 Critical', chip: 'g5' }, '[Cause]'),
+      R(id('[Unit B]'), '[Class]', '[Position]', '[Defect]', { t: '4 Severe', chip: 'g4' }, '[Cause]'),
+      R(id('[Unit C]'), '[Class]', '[Position]', '[Defect]', { t: '3 Degraded', chip: 'g3' }, '[Cause]')
+    ];
+    const filters = [{ label: 'Inspection type', value: 'All types' }, { label: 'Equipment class', value: 'All classes' }, { label: 'Period', value: 'Last 12 months' }];
+    return { bars, causes, mcols, mrows, cols, rows, filters };
+  }
+}
+</script>
+</body>
+</html>

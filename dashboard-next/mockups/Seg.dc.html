@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Segmented filter</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+button{font-family:inherit}
+</style>
+</helmet>
+<div style="display: flex; flex-direction: column; gap: 4px; font-family: 'IBM Plex Sans', system-ui, sans-serif; color: #1B1F23">
+<sc-if value="{{label}}" hint-placeholder-val="{{ true }}"><div style="font-size: 12px; color: #5A6169">{{label}}</div></sc-if>
+<div role="group" aria-label="{{label}}" style="display: flex; flex-wrap: wrap; gap: 8px">
+<sc-for list="{{opts}}" as="o" hint-placeholder-count="4">
+<button onClick="{{o.pick}}" aria-pressed="{{o.on}}" style="min-height: 44px; padding: 0 14px; border-radius: 6px; border: 1px solid {{o.border}}; background: {{o.bg}}; color: {{o.fg}}; font-size: 14px; font-weight: 500; cursor: pointer">{{o.t}}<span style="margin-left: 8px; font-family: 'IBM Plex Mono', monospace; font-size: 12px">{{o.n}}</span></button>
+</sc-for>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"label":{"editor":"text","default":"Show"},"opts":{"editor":null,"default":[{"t":"All","n":"00"}]},"active":{"editor":"int","default":0},"$preview":{"width":800,"height":72}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { sel: null };
+  }
+  renderVals() {
+    const self = this;
+    const cur = this.state.sel === null ? (this.props.active ?? 0) : this.state.sel;
+    const opts = (this.props.opts ?? []).map((o, i) => {
+      const on = i === cur;
+      return { t: o.t, n: o.n ?? '', on, border: on ? '#1F5C7A' : '#C9C4B8', bg: on ? '#1F5C7A' : '#FBFAF7', fg: on ? '#FFFFFF' : '#1B1F23',
+        pick: () => self.setState({ sel: i }) };
+    });
+    return { label: this.props.label ?? '', opts };
+  }
+}
+</script>
+</body>
+</html>

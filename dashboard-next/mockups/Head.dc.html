@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Page header</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+button{font-family:inherit}
+</style>
+</helmet>
+<header style="width: 100%; height: 76px; box-sizing: border-box; display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; font-family: 'IBM Plex Sans', system-ui, sans-serif; color: #1B1F23">
+<div style="display: flex; flex-direction: column; gap: 4px; min-width: 0">
+<h1 style="margin: 0; font-size: 28px; font-weight: 600; letter-spacing: -0.01em">{{title}}</h1>
+<div style="display: flex; align-items: center; gap: 16px; font-size: 14px; color: #5A6169"><span>{{sub}}</span>
+<button style="min-height: 44px; padding: 0; border: 0; background: transparent; font-size: 14px; font-weight: 500; color: #1F5C7A; text-decoration: underline; cursor: pointer; flex-shrink: 0">{{defs}}</button></div>
+</div>
+<div style="display: flex; align-items: center; gap: 12px; flex-shrink: 0">
+<div style="font-size: 13px; color: #5A6169">{{lastSync}}</div>
+<sc-if value="{{secondary}}" hint-placeholder-val="{{ true }}">
+<button style="height: 44px; padding: 0 16px; border-radius: 6px; border: 1px solid #C9C4B8; background: #FBFAF7; font-family: inherit; font-size: 14px; font-weight: 500; color: #1B1F23">{{secondary}}</button>
+</sc-if>
+<sc-if value="{{primary}}" hint-placeholder-val="{{ true }}">
+<button style="height: 44px; padding: 0 16px; border-radius: 6px; border: 0; background: #1F5C7A; font-family: inherit; font-size: 14px; font-weight: 500; color: #FFFFFF">{{primary}}</button>
+</sc-if>
+</div>
+</header>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"title":{"editor":"text","default":"Overview"},"sub":{"editor":"text","default":"What needs action first"},"defs":{"editor":"text","default":"Definitions"},"primary":{"editor":"text","default":"Export CSV"},"secondary":{"editor":"text","default":""},"lastSync":{"editor":"text","default":""},"$preview":{"width":1136,"height":76}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const p = this.props;
+    return { title: p.title ?? '', sub: p.sub ?? '', defs: p.defs ?? 'Definitions', primary: p.primary ?? '', secondary: p.secondary ?? '', lastSync: p.lastSync ?? '' };
+  }
+}
+</script>
+</body>
+</html>

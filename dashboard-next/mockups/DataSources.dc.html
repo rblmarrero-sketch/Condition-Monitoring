@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Data sources</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F4F2ED;font-family:'IBM Plex Sans',system-ui,sans-serif;color:#1B1F23}
+a{color:inherit;text-decoration:none}
+a:hover{color:#1F5C7A}
+button{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 1440px; min-height: 900px; box-sizing: border-box; display: flex; align-items: flex-start; justify-content: center; padding: 48px 0; background: #8D9095">
+<div style="width: 640px; background: #FBFAF7; border-radius: 10px; box-shadow: 0 12px 40px rgba(0,0,0,0.3); display: flex; flex-direction: column">
+<div style="padding: 20px 24px 12px; display: flex; justify-content: space-between; align-items: flex-start; gap: 16px">
+<div><h1 style="margin: 0; font-size: 20px; font-weight: 600">Data sources</h1>
+<div style="font-size: 14px; color: #5A6169; margin-top: 4px">Where this dashboard reads the phones' records from</div></div>
+<button aria-label="Close" style="width: 44px; height: 44px; border: 0; background: transparent; font-size: 22px; color: #5A6169; cursor: pointer">&times;</button>
+</div>
+<div style="padding: 8px 24px 20px; display: flex; flex-direction: column; gap: 14px">
+<div style="background: #FBFAF7; border: 1px solid #DAD6CC; border-radius: 8px; padding: 20px; display: flex; flex-direction: column; gap: 12px; background: #F4F2ED">
+<h2 style="margin: 0; font-size: 15px; font-weight: 600">Google Drive</h2>
+<label style="display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: #5A6169">Apps Script /exec URL<input type="text" placeholder="https://script.google.com/macros/s/[id]/exec" style="height: 44px; box-sizing: border-box; padding: 0 12px; border: 1px solid #C9C4B8; border-radius: 6px; background: #FBFAF7; font: 14px 'IBM Plex Sans', sans-serif; color: #1B1F23; width: 100%" ></label>
+<label style="display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: #5A6169">Shared secret<input type="text" placeholder="[secret]" style="height: 44px; box-sizing: border-box; padding: 0 12px; border: 1px solid #C9C4B8; border-radius: 6px; background: #FBFAF7; font: 14px 'IBM Plex Sans', sans-serif; color: #1B1F23; width: 100%" ></label>
+<div style="display: flex; gap: 8px; flex-wrap: wrap"><button style="min-height: 44px; padding: 0 16px; border-radius: 6px; border: 0; background: #1F5C7A; font-size: 14px; font-weight: 500; color: #FFFFFF; cursor: pointer">Load from Drive</button><button style="min-height: 44px; padding: 0 16px; border-radius: 6px; border: 1px solid #C9C4B8; background: #FBFAF7; font-size: 14px; font-weight: 500; color: #1B1F23; cursor: pointer">Test connection</button><button style="min-height: 44px; padding: 0 16px; border-radius: 6px; border: 1px solid #C9C4B8; background: #FBFAF7; font-size: 14px; font-weight: 500; color: #1B1F23; cursor: pointer">Reload everything</button></div>
+</div>
+<div style="background: #FBFAF7; border: 1px solid #DAD6CC; border-radius: 8px; padding: 20px; display: flex; flex-direction: column; gap: 12px; background: #F4F2ED">
+<h2 style="margin: 0; font-size: 15px; font-weight: 600">Server</h2>
+<label style="display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: #5A6169">Server address<input type="text" placeholder="https://[server]/api" style="height: 44px; box-sizing: border-box; padding: 0 12px; border: 1px solid #C9C4B8; border-radius: 6px; background: #FBFAF7; font: 14px 'IBM Plex Sans', sans-serif; color: #1B1F23; width: 100%" ></label>
+<div style="display: flex; gap: 8px"><button style="min-height: 44px; padding: 0 16px; border-radius: 6px; border: 1px solid #C9C4B8; background: #FBFAF7; font-size: 14px; font-weight: 500; color: #1B1F23; cursor: pointer">Test connection</button></div>
+</div>
+<div style="background: #FBFAF7; border: 1px solid #DAD6CC; border-radius: 8px; padding: 20px; display: flex; flex-direction: column; gap: 12px; background: #F4F2ED">
+<h2 style="margin: 0; font-size: 15px; font-weight: 600">Folder on this PC</h2>
+<div style="font-size: 13px; color: #5A6169">Works in Chrome and Edge only.</div>
+<div><button style="min-height: 44px; padding: 0 16px; border-radius: 6px; border: 1px solid #C9C4B8; background: #FBFAF7; font-size: 14px; font-weight: 500; color: #1B1F23; cursor: pointer">Open folder…</button></div>
+</div>
+<div style="background: #FBFAF7; border: 1px solid #DAD6CC; border-radius: 8px; padding: 20px; display: flex; flex-direction: column; gap: 12px; background: #F4F2ED">
+<h2 style="margin: 0; font-size: 15px; font-weight: 600">Import a file</h2>
+<div style="font-size: 13px; color: #5A6169">Choose an entries.json exported from the phone.</div>
+<div style="display: flex; gap: 8px"><button style="min-height: 44px; padding: 0 16px; border-radius: 6px; border: 1px solid #C9C4B8; background: #FBFAF7; font-size: 14px; font-weight: 500; color: #1B1F23; cursor: pointer">Choose file…</button><button style="min-height: 44px; padding: 0 16px; border-radius: 6px; border: 1px solid #C9C4B8; background: #FBFAF7; font-size: 14px; font-weight: 500; color: #1B1F23; cursor: pointer">Clear imported data</button></div>
+</div>
+</div>
+<div style="padding: 14px 24px; border-top: 1px solid #DAD6CC; display: flex; justify-content: flex-end; gap: 12px">
+<button style="min-height: 44px; padding: 0 16px; border-radius: 6px; border: 1px solid #C9C4B8; background: #FBFAF7; font-size: 14px; font-weight: 500; color: #1B1F23; cursor: pointer">Cancel</button><button style="min-height: 44px; padding: 0 16px; border-radius: 6px; border: 0; background: #1F5C7A; font-size: 14px; font-weight: 500; color: #FFFFFF; cursor: pointer">Done</button>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const R = (...c) => ({ cells: c.map((x) => (typeof x === 'string' ? { t: x } : x)) });
+    const id = (t) => ({ t, mono: true, ink: true });
+
+  }
+}
+</script>
+</body>
+</html>

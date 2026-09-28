@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Photo editor</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F4F2ED;font-family:'IBM Plex Sans',system-ui,sans-serif;color:#1B1F23}
+a{color:inherit;text-decoration:none}
+a:hover{color:#1F5C7A}
+button{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 1440px; min-height: 1500px; box-sizing: border-box; display: flex; align-items: flex-start; justify-content: center; padding: 48px 0; background: #8D9095">
+<div style="width: 680px; background: #FBFAF7; border-radius: 10px; box-shadow: 0 12px 40px rgba(0,0,0,0.3); display: flex; flex-direction: column">
+<div style="padding: 20px 24px 12px; display: flex; justify-content: space-between; align-items: flex-start; gap: 16px">
+<div><h1 style="margin: 0; font-size: 20px; font-weight: 600">Edit photo</h1>
+<div style="font-size: 14px; color: #5A6169; margin-top: 4px">Edits are saved as a copy beside the original. The original is never overwritten.</div></div>
+<button aria-label="Close" style="width: 44px; height: 44px; border: 0; background: transparent; font-size: 22px; color: #5A6169; cursor: pointer">&times;</button>
+</div>
+<div style="padding: 8px 24px 20px; display: flex; flex-direction: column; gap: 14px">
+<div style="height: 360px; border-radius: 8px; background: #3D474F; display: flex; align-items: center; justify-content: center; color: #C9C4B8; font-size: 14px; position: relative">[Photograph]<span style="position: absolute; top: 12px; left: 12px; padding: 4px 10px; border-radius: 10px; background: #E4DFD3; color: #1B1F23; font-size: 12px; font-weight: 600">edited</span></div>
+<div style="display: flex; gap: 8px; flex-wrap: wrap"><button style="min-height: 44px; padding: 0 16px; border-radius: 6px; border: 1px solid #C9C4B8; background: #FBFAF7; font-size: 14px; font-weight: 500; color: #1B1F23; cursor: pointer">Show original</button><button style="min-height: 44px; padding: 0 16px; border-radius: 6px; border: 1px solid #C9C4B8; background: #FBFAF7; font-size: 14px; font-weight: 500; color: #1B1F23; cursor: pointer">Undo</button><button style="min-height: 44px; padding: 0 16px; border-radius: 6px; border: 1px solid #C9C4B8; background: #FBFAF7; font-size: 14px; font-weight: 500; color: #1B1F23; cursor: pointer">Redo</button><button style="min-height: 44px; padding: 0 16px; border-radius: 6px; border: 1px solid #C9C4B8; background: #FBFAF7; font-size: 14px; font-weight: 500; color: #1B1F23; cursor: pointer">Reset to original</button></div>
+<div style="display: flex; flex-direction: column; gap: 4px"><span style="font-size: 12px; color: #5A6169">Rotate</span><div style="display: flex; gap: 6px; flex-wrap: wrap"><button aria-pressed="false" style="min-height: 44px; padding: 0 12px; border-radius: 6px; border: 1px solid #C9C4B8; background: #FBFAF7; font-size: 13px; font-weight: 500; cursor: pointer">Rotate left</button><button aria-pressed="false" style="min-height: 44px; padding: 0 12px; border-radius: 6px; border: 1px solid #C9C4B8; background: #FBFAF7; font-size: 13px; font-weight: 500; cursor: pointer">Rotate right</button></div></div>
+<label style="display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: #5A6169">Straighten<input type="range" min="-15" max="15" value="0" style="width: 100%; height: 32px"></label>
+<label style="display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: #5A6169">Zoom<input type="range" min="100" max="300" value="100" style="width: 100%; height: 32px"></label>
+<div style="display: flex; flex-direction: column; gap: 4px"><span style="font-size: 12px; color: #5A6169">Crop</span><div style="display: flex; gap: 6px; flex-wrap: wrap"><button aria-pressed="true" style="min-height: 44px; padding: 0 12px; border-radius: 6px; border: 2px solid #1F5C7A; background: #FBFAF7; font-size: 13px; font-weight: 500; cursor: pointer">Full frame</button><button aria-pressed="false" style="min-height: 44px; padding: 0 12px; border-radius: 6px; border: 1px solid #C9C4B8; background: #FBFAF7; font-size: 13px; font-weight: 500; cursor: pointer">Freeform</button><button aria-pressed="false" style="min-height: 44px; padding: 0 12px; border-radius: 6px; border: 1px solid #C9C4B8; background: #FBFAF7; font-size: 13px; font-weight: 500; cursor: pointer">1:1</button><button aria-pressed="false" style="min-height: 44px; padding: 0 12px; border-radius: 6px; border: 1px solid #C9C4B8; background: #FBFAF7; font-size: 13px; font-weight: 500; cursor: pointer">4:3</button><button aria-pressed="false" style="min-height: 44px; padding: 0 12px; border-radius: 6px; border: 1px solid #C9C4B8; background: #FBFAF7; font-size: 13px; font-weight: 500; cursor: pointer">16:9</button></div></div>
+<div style="display: flex; flex-direction: column; gap: 4px"><span style="font-size: 12px; color: #5A6169">Mark</span><div style="display: flex; gap: 6px; flex-wrap: wrap"><button aria-pressed="false" style="min-height: 44px; padding: 0 12px; border-radius: 6px; border: 1px solid #C9C4B8; background: #FBFAF7; font-size: 13px; font-weight: 500; cursor: pointer">Ring: draw around it</button><button aria-pressed="false" style="min-height: 44px; padding: 0 12px; border-radius: 6px; border: 1px solid #C9C4B8; background: #FBFAF7; font-size: 13px; font-weight: 500; cursor: pointer">Arrow: point at it</button><button style="min-height: 44px; padding: 0 16px; border-radius: 6px; border: 1px solid #C9C4B8; background: #FBFAF7; font-size: 14px; font-weight: 500; color: #1B1F23; cursor: pointer">Clear marks</button></div></div>
+<div style="font-size: 12px; color: #5A6169">Drag on the photograph to draw it. [n] marks on this photograph.</div>
+<label style="display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: #5A6169">Caption<input type="text" placeholder="[What the photograph shows]" style="height: 44px; box-sizing: border-box; padding: 0 12px; border: 1px solid #C9C4B8; border-radius: 6px; background: #FBFAF7; font: 14px 'IBM Plex Sans', sans-serif; color: #1B1F23; width: 100%" ></label>
+<div style="display: flex; flex-direction: column; gap: 4px"><span style="font-size: 12px; color: #5A6169">Use in the report</span><div style="display: flex; gap: 6px; flex-wrap: wrap"><button aria-pressed="true" style="min-height: 44px; padding: 0 12px; border-radius: 6px; border: 2px solid #1F5C7A; background: #FBFAF7; font-size: 13px; font-weight: 500; cursor: pointer">Include</button><button aria-pressed="false" style="min-height: 44px; padding: 0 12px; border-radius: 6px; border: 1px solid #C9C4B8; background: #FBFAF7; font-size: 13px; font-weight: 500; cursor: pointer">Exclude</button></div></div>
+<label style="display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: #5A6169">Reason<input type="text" placeholder="blurred · duplicate · nothing in frame" style="height: 44px; box-sizing: border-box; padding: 0 12px; border: 1px solid #C9C4B8; border-radius: 6px; background: #FBFAF7; font: 14px 'IBM Plex Sans', sans-serif; color: #1B1F23; width: 100%" ></label>
+<div style="font-size: 12px; color: #5A6169">Say why it is being left out. The report is what somebody else reads. An excluded photograph is marked "not in the report" and stays on the record.</div>
+<div style="border-top: 1px solid #DAD6CC; padding-top: 12px; display: flex; flex-direction: column; gap: 8px">
+<b style="font-size: 14px">Remove from the record</b>
+<div style="font-size: 12px; color: #5A6169">It comes off every screen and every report. The file itself is kept, so it can be put back. The reason and your name are stored with it.</div>
+<label style="display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: #5A6169">Why it is being taken off<input type="text" placeholder="[Reason]" style="height: 44px; box-sizing: border-box; padding: 0 12px; border: 1px solid #C9C4B8; border-radius: 6px; background: #FBFAF7; font: 14px 'IBM Plex Sans', sans-serif; color: #1B1F23; width: 100%" ></label>
+<div style="display: flex; gap: 8px"><button style="min-height: 44px; padding: 0 16px; border-radius: 6px; border: 1px solid #C9C4B8; background: #FBFAF7; font-size: 14px; font-weight: 500; color: #1B1F23; cursor: pointer">Confirm: take it off the record</button><button style="min-height: 44px; padding: 0 16px; border-radius: 6px; border: 1px solid #C9C4B8; background: #FBFAF7; font-size: 14px; font-weight: 500; color: #1B1F23; cursor: pointer">Put it back</button></div>
+<b style="font-size: 14px; color: #8E1520; margin-top: 6px">Delete the file…</b>
+<div style="font-size: 12px; color: #5A6169">This permanently deletes the file from the folder. Nothing brings it back. Say why first, then type the file name to confirm.</div>
+<label style="display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: #5A6169">Type the file name to confirm<input type="text" placeholder="[file name]" style="height: 44px; box-sizing: border-box; padding: 0 12px; border: 1px solid #C9C4B8; border-radius: 6px; background: #FBFAF7; font: 14px 'IBM Plex Sans', sans-serif; color: #1B1F23; width: 100%" ></label>
+</div>
+<div style="font-size: 12px; color: #5A6169">If the original is still uploading, the edit waits for it.</div>
+</div>
+<div style="padding: 14px 24px; border-top: 1px solid #DAD6CC; display: flex; justify-content: flex-end; gap: 12px">
+<button style="min-height: 44px; padding: 0 16px; border-radius: 6px; border: 1px solid #C9C4B8; background: #FBFAF7; font-size: 14px; font-weight: 500; color: #1B1F23; cursor: pointer">Cancel</button><button style="min-height: 44px; padding: 0 16px; border-radius: 6px; border: 0; background: #1F5C7A; font-size: 14px; font-weight: 500; color: #FFFFFF; cursor: pointer">Save edit</button>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1500}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const R = (...c) => ({ cells: c.map((x) => (typeof x === 'string' ? { t: x } : x)) });
+    const id = (t) => ({ t, mono: true, ink: true });
+
+  }
+}
+</script>
+</body>
+</html>

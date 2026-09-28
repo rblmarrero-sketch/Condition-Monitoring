@@ -1,0 +1,340 @@
+{
+ "v": 3,
+ "createdOnFiles": {
+  "v": 1,
+  "at": "2026-09-28T00:00:00Z"
+ },
+ "title": "Condition Monitoring Dashboard Redesign",
+ "launch": {
+  "view": "canvas"
+ },
+ "pages": [],
+ "boards": {
+  "Main.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 1440,
+   "h": 1500,
+   "title": "Overview, with edit-inspection drawer and grade-5 confirmation",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "OverviewRU.dc.html": {
+   "x": 1520,
+   "y": 0,
+   "w": 1440,
+   "h": 1500,
+   "title": "Overview in Russian",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "Failure.dc.html": {
+   "x": 3040,
+   "y": 0,
+   "w": 1440,
+   "h": 1300,
+   "title": "Failure Analysis",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "Wear.dc.html": {
+   "x": 4560,
+   "y": 0,
+   "w": 1440,
+   "h": 1100,
+   "title": "Wear and Remaining Life",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "Actions.dc.html": {
+   "x": 0,
+   "y": 1860,
+   "w": 1440,
+   "h": 1100,
+   "title": "Maintenance Actions",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "Due.dc.html": {
+   "x": 1520,
+   "y": 1860,
+   "w": 1440,
+   "h": 1100,
+   "title": "Inspection Schedule",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "Plan.dc.html": {
+   "x": 3040,
+   "y": 1860,
+   "w": 1440,
+   "h": 1250,
+   "title": "Plan vs Actual",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "Defects.dc.html": {
+   "x": 4560,
+   "y": 1860,
+   "w": 1440,
+   "h": 1100,
+   "title": "Defects raised",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "History.dc.html": {
+   "x": 0,
+   "y": 3420,
+   "w": 1440,
+   "h": 1250,
+   "title": "Equipment History",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "Lube.dc.html": {
+   "x": 1520,
+   "y": 3420,
+   "w": 1440,
+   "h": 1450,
+   "title": "Lubrication",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "LubeMatrix.dc.html": {
+   "x": 3040,
+   "y": 3420,
+   "w": 1440,
+   "h": 1100,
+   "title": "Lubrication matrix and shop posters",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "Sync.dc.html": {
+   "x": 4560,
+   "y": 3420,
+   "w": 1440,
+   "h": 2350,
+   "title": "Data and Sync",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "Reports.dc.html": {
+   "x": 6080,
+   "y": 3420,
+   "w": 1440,
+   "h": 1000,
+   "title": "Reports",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "DataSources.dc.html": {
+   "x": 0,
+   "y": 6180,
+   "w": 1440,
+   "h": 1150,
+   "title": "Dialog: Data sources",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "FollowUp.dc.html": {
+   "x": 1520,
+   "y": 6180,
+   "w": 1440,
+   "h": 1350,
+   "title": "Dialog: Follow-up plan",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "Defer.dc.html": {
+   "x": 3040,
+   "y": 6180,
+   "w": 1440,
+   "h": 1000,
+   "title": "Dialog: Defer inspection",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "Disposition.dc.html": {
+   "x": 4560,
+   "y": 6180,
+   "w": 1440,
+   "h": 1000,
+   "title": "Dialog: No action required",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "Conflict.dc.html": {
+   "x": 0,
+   "y": 7680,
+   "w": 1440,
+   "h": 1000,
+   "title": "Dialog: Two phones sent this inspection",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "PhotoEditor.dc.html": {
+   "x": 1520,
+   "y": 7680,
+   "w": 1440,
+   "h": 1750,
+   "title": "Dialog: Photo editor",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "Detail.dc.html": {
+   "x": 3040,
+   "y": 7680,
+   "w": 1440,
+   "h": 1000,
+   "title": "Drawer: Position detail",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "Nav.dc.html": {
+   "x": 0,
+   "y": 14350,
+   "w": 240,
+   "h": 700,
+   "title": "Component: Navigation"
+  },
+  "TopBar.dc.html": {
+   "w": 1136,
+   "h": 48,
+   "title": "TopBar",
+   "x": 360,
+   "y": 14350
+  },
+  "Seg.dc.html": {
+   "w": 800,
+   "h": 72,
+   "title": "Seg",
+   "x": 1616,
+   "y": 14350
+  },
+  "Head.dc.html": {
+   "x": 2536,
+   "y": 14350,
+   "w": 1136,
+   "h": 76,
+   "title": "Component: Page header"
+  },
+  "Tile.dc.html": {
+   "x": 3792,
+   "y": 14350,
+   "w": 300,
+   "h": 150,
+   "title": "Component: KPI tile"
+  },
+  "FilterBar.dc.html": {
+   "x": 4212,
+   "y": 14350,
+   "w": 1136,
+   "h": 72,
+   "title": "Component: Filter bar"
+  },
+  "DataTable.dc.html": {
+   "x": 5468,
+   "y": 14350,
+   "w": 1136,
+   "h": 420,
+   "title": "Component: Data table"
+  },
+  "EditRound.dc.html": {
+   "x": 4560,
+   "y": 7680,
+   "w": 1440,
+   "h": 4850,
+   "title": "Drawer: Edit inspection, full (positions, photos, location, re-file, void, delete)",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "AssignPhotos.dc.html": {
+   "x": 0,
+   "y": 12890,
+   "w": 1440,
+   "h": 1050,
+   "title": "Dialog: Assign photographs",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "MissingPhotos.dc.html": {
+   "x": 1520,
+   "y": 12890,
+   "w": 1440,
+   "h": 850,
+   "title": "Dialog: Missing photo files",
+   "expand": "fill",
+   "is_interactive": true
+  }
+ },
+ "order": [
+  "Main.dc.html",
+  "OverviewRU.dc.html",
+  "Failure.dc.html",
+  "Wear.dc.html",
+  "Actions.dc.html",
+  "Due.dc.html",
+  "Plan.dc.html",
+  "Defects.dc.html",
+  "History.dc.html",
+  "Lube.dc.html",
+  "LubeMatrix.dc.html",
+  "Sync.dc.html",
+  "Reports.dc.html",
+  "DataSources.dc.html",
+  "FollowUp.dc.html",
+  "Defer.dc.html",
+  "Disposition.dc.html",
+  "Conflict.dc.html",
+  "PhotoEditor.dc.html",
+  "Detail.dc.html",
+  "Nav.dc.html",
+  "TopBar.dc.html",
+  "Seg.dc.html",
+  "Head.dc.html",
+  "Tile.dc.html",
+  "FilterBar.dc.html",
+  "DataTable.dc.html",
+  "EditRound.dc.html",
+  "AssignPhotos.dc.html",
+  "MissingPhotos.dc.html"
+ ],
+ "notes": {
+  "n1": {
+   "x": 0,
+   "y": -300,
+   "text": "Monitor",
+   "kind": "title1",
+   "maxW": 8000
+  },
+  "n2": {
+   "x": 0,
+   "y": 1560,
+   "text": "Act",
+   "kind": "title1",
+   "maxW": 8000
+  },
+  "n3": {
+   "x": 0,
+   "y": 3120,
+   "text": "Assets and System",
+   "kind": "title1",
+   "maxW": 8000
+  },
+  "n4": {
+   "x": 0,
+   "y": 5880,
+   "text": "Dialogs and drawers",
+   "kind": "title1",
+   "maxW": 8000
+  },
+  "n5": {
+   "x": 0,
+   "y": 14050,
+   "text": "Shared components",
+   "kind": "title1",
+   "maxW": 8000
+  }
+ },
+ "designSystems": []
+}

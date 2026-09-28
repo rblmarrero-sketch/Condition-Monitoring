@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Data table</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:inherit;text-decoration:none}
+a:hover{color:#1F5C7A}
+</style>
+</helmet>
+<section style="width: 100%; box-sizing: border-box; background: #FBFAF7; border: 1px solid #DAD6CC; border-radius: 8px; display: flex; flex-direction: column; font-family: 'IBM Plex Sans', system-ui, sans-serif; color: #1B1F23">
+<div style="display: flex; align-items: center; justify-content: space-between; padding: 20px 20px 12px">
+<h2 style="margin: 0; font-size: 16px; font-weight: 600">{{title}}</h2>
+<sc-if value="{{linkLabel}}" hint-placeholder-val="{{ true }}">
+<a href="{{linkHref}}" style="font-size: 14px; font-weight: 500; color: #1F5C7A">{{linkLabel}}</a>
+</sc-if>
+</div>
+<table style="width: 100%; border-collapse: collapse; font-size: 13px; font-variant-numeric: tabular-nums">
+<thead>
+<tr style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: #5A6169">
+<sc-for list="{{cols}}" as="c" hint-placeholder-count="6">
+<th style="padding: 6px 10px; font-weight: 600; text-align: {{c.align}}; border-right: 1px solid #E8E4DA; white-space: nowrap">{{c.label}} <span style="color: #9AA0A6; font-size: 10px">&#8597;</span></th>
+</sc-for>
+</tr>
+<tr>
+<sc-for list="{{cols}}" as="c" hint-placeholder-count="6">
+<th style="padding: 2px 4px; border-right: 1px solid #E8E4DA; background: #F3F0E8"><div style="height: 20px; border: 1px solid #DAD6CC; border-radius: 3px; background: #FBFAF7; font-size: 11px; font-weight: 400; text-transform: none; letter-spacing: 0; color: #9AA0A6; line-height: 20px; padding: 0 6px">Filter&#8230;</div></th>
+</sc-for>
+</tr>
+</thead>
+<tbody>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="5">
+<tr style="border-top: 1px solid #E8E4DA; height: 28px">
+<sc-for list="{{r.cells}}" as="c" hint-placeholder-count="6">
+<td style="padding: 4px 10px; border-right: 1px solid #EFEBE1; white-space: nowrap; text-align: {{c.align}}; font-family: {{c.ff}}; font-weight: {{c.fw}}; color: {{c.color}}">
+<sc-if value="{{c.chip}}" hint-placeholder-val="{{ false }}"><span style="font-family: 'IBM Plex Sans', sans-serif; font-size: 13px; font-weight: 700; color: {{c.fg}}">{{c.t}}</span></sc-if>
+<sc-if value="{{c.plain}}" hint-placeholder-val="{{ true }}">{{c.t}}</sc-if>
+</td>
+</sc-for>
+</tr>
+</sc-for>
+</tbody>
+</table>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"title":{"editor":"text","default":"Table"},"linkLabel":{"editor":"text","default":""},"linkHref":{"editor":"text","default":"#"},"cols":{"editor":null,"default":[{"label":"Machine"},{"label":"Grade"},{"label":"Finding"}]},"rows":{"editor":null,"default":[{"cells":[{"t":"[Unit A]","mono":true,"ink":true},{"t":"Grade 5 Critical","chip":"g5"},{"t":"[Finding]"}]}]},"$preview":{"width":1136,"height":420}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const K = {
+      g5: ['#F6D6D8', '#b31a24'], g4: ['#F8DDD1', '#b03a14'], g3: ['#FBE3D8', '#a8451b'], g2: ['#FDF0CC', '#8a5a00'], g1: ['#E1F0E6', '#0a7134'],
+      ok: ['#E1F0E6', '#0a7134'], warn: ['#FDF0CC', '#8a5a00'], bad: ['#F6D6D8', '#b31a24'], info: ['#DCE7EE', '#1F4A63'], neutral: ['#E4DFD3', '#3D474F']
+    };
+    const cols = (this.props.cols ?? []).map((c, i, a) => ({
+      label: c.label, align: c.align || 'left',
+      pad: i === 0 ? '8px 12px 8px 20px' : i === a.length - 1 ? '8px 20px 8px 12px' : '8px 12px'
+    }));
+    const n = cols.length;
+    const rows = (this.props.rows ?? []).map((r) => ({
+      cells: r.cells.map((c, i) => {
+        const k = K[c.chip];
+        return {
+          t: c.t, chip: !!k, plain: !k, bg: k ? k[0] : 'transparent', fg: k ? k[1] : '#1B1F23',
+          align: (cols[i] && cols[i].align) || 'left',
+          pad: i === 0 ? '14px 12px 14px 20px' : i === n - 1 ? '14px 20px 14px 12px' : '14px 12px',
+          ff: c.mono ? "'IBM Plex Mono', monospace" : "'IBM Plex Sans', sans-serif",
+          fw: c.mono || c.ink ? 500 : 400,
+          color: c.ink ? '#1B1F23' : '#5A6169'
+        };
+      })
+    }));
+    return { title: this.props.title ?? '', linkLabel: this.props.linkLabel ?? '', linkHref: this.props.linkHref ?? '#', cols, rows };
+  }
+}
+</script>
+</body>
+</html>
