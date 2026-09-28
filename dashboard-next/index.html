@@ -3185,8 +3185,20 @@
     <div class="field"><label for="fType" data-i18n="f_type_s" data-i18n-title="f_type" title="Inspection type">Type</label><select id="fType"></select></div>
     <div class="field"><label for="fClass" data-i18n="f_class_s" data-i18n-title="f_class" title="Equipment class">Class</label><select id="fClass"></select></div>
     <div class="field"><label for="fRange" data-i18n="f_period">Period</label><select id="fRange">
-      <option value="0" data-i18n="f_alltime">All time</option><option value="30" data-i18n="f_30">Last 30 days</option>
-      <option value="90" data-i18n="f_90">Last 90 days</option><option value="365" data-i18n="f_365">Last 12 months</option></select></div>
+      <option value="0" data-i18n="f_alltime">All time</option>
+      <option value="today" data-i18n="f_today">Today</option>
+      <option value="yesterday" data-i18n="f_yesterday">Yesterday</option>
+      <option value="30" data-i18n="f_30">Last 30 days</option>
+      <option value="90" data-i18n="f_90">Last 90 days</option><option value="365" data-i18n="f_365">Last 12 months</option>
+      <option value="custom" data-i18n="f_custom">Custom range…</option></select></div>
+    <!-- Only for the "custom" preset -- two plain date pickers, narrowing
+         filtered()/RECS the identical way every other Period preset does
+         (see periodRange(), the one place this select's value turns into a
+         cutoff). Hidden otherwise so the first row keeps its mockup shape. -->
+    <div class="field hidden" id="fRangeCustom" style="flex-direction:row;gap:8px;align-items:flex-end">
+      <span style="display:flex;flex-direction:column;gap:5px"><label for="fRangeFrom" data-i18n="f_from">From</label><input type="date" id="fRangeFrom"></span>
+      <span style="display:flex;flex-direction:column;gap:5px"><label for="fRangeTo" data-i18n="f_to">To</label><input type="date" id="fRangeTo"></span>
+    </div>
     <label class="voidtog" data-i18n-title="f_voidtip" title="Voided inspections are withdrawn from every count, but nothing is deleted">
       <input type="checkbox" id="fVoid"><span data-i18n="f_void">Show voided</span></label>
     <!-- The rarer filters -- status, search, data quality -- behind one
@@ -3198,6 +3210,11 @@
     <button class="btn resetb" id="fReset" data-i18n="f_reset"
       data-i18n-title="f_reset_t" title="Clear every filter and drill-down">Clear all</button>
     <span class="fcount" id="fCount"></span>
+    <!-- Gap 1's own edge case: a Period reaching further back than the
+         current data-load window (cm_dash_window/dataWindowDays) would
+         otherwise show zero rows with no explanation. periodWindowCheck()
+         widens the window automatically and says so here -- never silence. -->
+    <span class="hint" id="fPeriodWinNote" style="color:var(--warn-ink)"></span>
   </div>
   <div class="controls more hidden" id="fMoreRow">
     <!-- The state of the work a finding raised: open, planned, in progress,
@@ -4580,6 +4597,9 @@ const I18N={
 
   f_type:"Inspection type", f_class:"Equipment class", f_period:"Period", f_search:"Search",
   f_alltime:"All time", f_30:"Last 30 days", f_90:"Last 90 days", f_365:"Last 12 months",
+  f_today:"Today", f_yesterday:"Yesterday", f_custom:"Custom range…", f_from:"From", f_to:"To",
+  f_period_widened:"Data window widened to All time to show this period.",
+  f_customrange:"{from} – {to}",
   f_alltypes:"All types", f_allclasses:"All classes", f_allgrades:"All grades", f_grade_s:"Grade", f_grade:"Condition grade",
   f_qph:"Filter records: unit, defect, action, inspector…",
   f_void:"Show voided",
@@ -5501,6 +5521,9 @@ const I18N={
 
   f_type:"Тип осмотра", f_class:"Класс техники", f_period:"Период", f_search:"Поиск",
   f_alltime:"За всё время", f_30:"Последние 30 дней", f_90:"Последние 90 дней", f_365:"Последние 12 мес.",
+  f_today:"Сегодня", f_yesterday:"Вчера", f_custom:"Свой период…", f_from:"С", f_to:"По",
+  f_period_widened:"Окно данных расширено до «за всё время», чтобы показать этот период.",
+  f_customrange:"{from} – {to}",
   f_alltypes:"Все типы", f_allclasses:"Все классы", f_allgrades:"Все оценки", f_grade_s:"Оценка", f_grade:"Оценка состояния",
   f_qph:"Фильтр записей: единица, дефект, действие, инспектор…",
   f_void:"Показать отозванные",
@@ -6865,16 +6888,106 @@ function renderWindowTog(){
     b.setAttribute("aria-pressed", active?"true":"false");
   });
 }
+/* ── THE PERIOD FILTER'S OWN RANGE ────────────────────────────────────────
+   fRange used to hold nothing but a day count (0/30/90/365), read as
+   `+$("fRange").value` in half a dozen places. Today / Yesterday / a custom
+   From-To range are not day counts, so this is the ONE place that select's
+   value turns into an actual {from,to} pair of ISO dates (or a day length),
+   and every caller that used to read the number reads this instead --
+   never a second copy of what each option means. `to` is null for every
+   preset except Today/Yesterday/Custom, meaning "no upper bound" exactly as
+   it always did. */
+function periodRange(){
+  const v=$("fRange")?$("fRange").value:"0";
+  if(v==="today"){ const d=todayISO(); return {from:d, to:d, days:1}; }
+  if(v==="yesterday"){ const d=DUE.shift(todayISO(),-1); return {from:d, to:d, days:1}; }
+  if(v==="custom"){
+    const from=($("fRangeFrom")&&$("fRangeFrom").value)||null;
+    const to=($("fRangeTo")&&$("fRangeTo").value)||null;
+    const days = (from && to) ? (DUE.dayDiff(from,to)+1) : null;
+    return {from, to, days: days>0?days:null};
+  }
+  const days=+v;
+  return { from: days? DUE.daysAgo(days) : null, to:null, days: days||null };
+}
+function periodActive(){ const pr=periodRange(); return !!(pr.from||pr.to); }
+/* The chip/label text for whatever the Period select currently holds -- the
+   option's own text for a preset, a real sentence for Today/Yesterday
+   (their day is computed, never printed literally as "today" twice), and
+   the two dates for a custom range. */
+function periodLabel(){
+  const v=$("fRange")?$("fRange").value:"0";
+  if(v==="today"||v==="yesterday") return $("fRange").selectedOptions[0].textContent;
+  if(v==="custom"){
+    const pr=periodRange();
+    return t("f_customrange",{from:pr.from||"…", to:pr.to||"…"});
+  }
+  return $("fRange").selectedOptions[0].textContent;
+}
+/* GAP 1's OWN EDGE CASE: a Period reaching further back than the current
+   data-load window would otherwise filter everything out with nothing on
+   screen to say why -- this project's own signature defect, one control
+   away. The load-window presets are only 90 days and All time (winTog), so
+   the one real trigger is a custom From older than 90 days; Today and
+   Yesterday can never be older than the window's own default. Widens
+   automatically rather than leaving the reader to guess which of two
+   controls to change, and SAYS so, because a widened window that happened
+   silently is the same defect from the other side.
+
+   A custom range is filled in TWO separate fields, each with its OWN change
+   event (fRangeFrom, then fRangeTo), and this function runs once per field.
+   The first call (From alone, To still empty) sees the window is too narrow,
+   widens it and shows the note -- correctly. The SECOND call (To filled)
+   used to re-run the same `winDays>0` check, find the window ALREADY at
+   All time from the first call, fall through its own guard, and overwrite
+   the note with "" -- so the message this function exists to show flashed
+   for one field and vanished before the reader could act on custom range
+   they were still typing. PERIOD_WIDENED remembers that THIS function is
+   the reason the window is wide open, so the note stays shown for as long
+   as the current period still needs it, however many fields fire in
+   between. */
+let PERIOD_WIDENED=false;
+function periodWindowCheck(){
+  const note=$("fPeriodWinNote"); if(!note) return;
+  const pr=periodRange();
+  if(!pr.from){ PERIOD_WIDENED=false; note.textContent=""; return; }
+  const winDays=dataWindowDays();
+  if(winDays>0){
+    const wcut=DUE.daysAgo(winDays);
+    if(pr.from<wcut){
+      dataWindowSet(0);          // widen to All time -- see dataWindowCutoff()
+      renderWindowTog();
+      PERIOD_WIDENED=true;
+      note.textContent=t("f_period_widened");
+      return;
+    }
+  }else if(PERIOD_WIDENED && pr.from<DUE.daysAgo(DATA_WINDOW_DEFAULT)){
+    // Already widened by an earlier call for this same reaches-back-further
+    // period; a later field's own change event must not silently clear it.
+    note.textContent=t("f_period_widened");
+    return;
+  }
+  PERIOD_WIDENED=false;
+  note.textContent="";
+}
+function syncPeriodCustom(){
+  const box=$("fRangeCustom"); if(!box) return;
+  box.classList.toggle("hidden", !($("fRange")&&$("fRange").value==="custom"));
+}
 function filtered(inclVoid){
-  const ty=$("fType").value, c=$("fClass").value, days=+$("fRange").value;   // not "t" — that is t()
+  const ty=$("fType").value, c=$("fClass").value;   // not "t" — that is t()
   const dq=($("fDq")&&$("fDq").value)||"";
   const st=fStatusVal();
   /* The Period select (fRange) and the default window are two different
      questions -- "show me a chosen slice" against "how much history loads
      at all" -- and a reader can ask both at once. Both cutoffs are dates as
      ISO strings, so the LATER (more recent, more restrictive) one wins;
-     either half being absent just leaves the other in force. */
-  const rangeCutoff = days? DUE.daysAgo(days) : null;
+     either half being absent just leaves the other in force. A period also
+     carries its own upper bound now (Today/Yesterday/a custom To) -- the
+     window never had one and still doesn't. */
+  const pr = periodRange();
+  const rangeCutoff = pr.from;
+  const rangeCeil = pr.to;
   const winCutoff = dataWindowCutoff();
   const cutoff = rangeCutoff && winCutoff ? (rangeCutoff>winCutoff?rangeCutoff:winCutoff) : (rangeCutoff||winCutoff);
   const q=($("fQ").value||"").trim().toLowerCase();
@@ -6886,6 +6999,7 @@ function filtered(inclVoid){
     if(ty&&r.type!==ty) return false;
     if(c&&r.cls!==c) return false;
     if(cutoff&&(r.date||"")<cutoff) return false;
+    if(rangeCeil&&(r.date||"")>rangeCeil) return false;
     if(drill.unit&&r.equip!==drill.unit) return false;
     /* A record survives if ANY of its findings has the gap being asked about —
        the register, which lists findings, narrows it the rest of the way. */
@@ -6941,7 +7055,11 @@ function renderChips(){
   const add=(label,val,onX)=>c.push({label,val,onX});
   if($("fType").value)  add(t("c_type"), TYPE_LABEL[$("fType").value]||$("fType").value, ()=>{ $("fType").value=""; renderAll(); });
   if($("fClass").value) add(t("c_class"), $("fClass").value, ()=>{ $("fClass").value=""; renderAll(); });
-  if(+$("fRange").value) add(t("c_period"), $("fRange").selectedOptions[0].textContent, ()=>{ $("fRange").value="0"; renderAll(); });
+  if(periodActive()) add(t("c_period"), periodLabel(), ()=>{
+    $("fRange").value="0";
+    if($("fRangeFrom")) $("fRangeFrom").value="";
+    if($("fRangeTo")) $("fRangeTo").value="";
+    syncPeriodCustom(); periodWindowCheck(); renderAll(); });
   if(fStatusVal()) add(t("c_status"), $("fStatus").selectedOptions[0].textContent, ()=>{ $("fStatus").value=""; renderAll(); });
   if(($("fQ").value||"").trim()) add(t("c_search"), $("fQ").value.trim(), ()=>{ $("fQ").value=""; renderAll(); });
   if($("fDq")&&$("fDq").value) add(t("c_dq"), $("fDq").selectedOptions[0].textContent,
@@ -6976,6 +7094,9 @@ function renderChips(){
    toolbar. Two clear controls that clear different amounts is worse than one. */
 function clearFilters(){
   $("fType").value=""; $("fClass").value=""; $("fRange").value="0"; $("fQ").value="";
+  if($("fRangeFrom")) $("fRangeFrom").value="";
+  if($("fRangeTo")) $("fRangeTo").value="";
+  syncPeriodCustom(); periodWindowCheck();
   if($("fStatus")) $("fStatus").value="";
   if($("fDq")) $("fDq").value="";
   if($("fGrade")) $("fGrade").value="";
@@ -7032,10 +7153,14 @@ function worstOf(rec){ let w="",n=-1; rec.items.forEach(i=>{ const s=sevOf(rec,i
 function prevWindow(){
   /* The same length of time, immediately before the one on screen. With no
      period chosen there is nothing to compare against and the tiles say so
-     rather than inventing a baseline. */
-  const days=+$("fRange").value;
-  if(!days) return null;
-  const a=DUE.daysAgo(days*2), b=DUE.daysAgo(days);
+     rather than inventing a baseline. Generalised off periodRange() so
+     Today/Yesterday/a custom range get a real "immediately before" baseline
+     too, not just the three day-count presets this used to read alone --
+     shifted from the period's own start, never from "today", so a baseline
+     for Yesterday is the day before it, not another look at yesterday. */
+  const pr=periodRange();
+  if(!pr.days || !pr.from) return null;
+  const b=pr.from, a=DUE.shift(pr.from, -pr.days);
   return RECS.filter(r=>!r._void && String(r.date||"")>=a && String(r.date||"")<b);
 }
 /* "12 more than the month before", in the reader's language, coloured by
@@ -7249,9 +7374,17 @@ let fleetSort={k:"prio",dir:1};
 let fleetColQ={};
 /* Stage 3c item 8: which of the attention table's columns are hidden behind
    the Columns picker. Starts at the mockup's own non-default set (Class,
-   Inspected, Findings count, Required action, Open, Next due); toggling a
-   checkbox in #fleetColsPicker edits this Set directly and re-renders. */
-let fleetHidden=new Set(["cls","date","find","act","open","due"]);
+   Findings count, Required action, Open, Next due); toggling a checkbox in
+   #fleetColsPicker edits this Set directly and re-renders.
+   Stage 3e Gap 2: "date" (Inspected -- the machine's own last-round date,
+   already computed above from the identical `byU`/`r.date` the Defect
+   cell's own sub-line already prints, never a second date representation)
+   moved OUT of this set. A reader asking "what needs me today" also wants
+   to see, without a detour through the Columns picker, whether a Critical
+   row is from this morning or six weeks ago -- and the Period filter's
+   Today/Yesterday presets (see periodRange(), above) are close to useless
+   on a table that hides the one column proving they narrowed anything. */
+let fleetHidden=new Set(["cls","find","act","open","due"]);
 /* ATTENTION ORDER — one rule for "what needs me first", stated once.
      1 Critical  2 Severe  3 Overdue action  4 Unassigned action  5 Degraded  6 Incipient
    A critical finding outranks an overdue date on a lesser one; an action nobody
@@ -7376,14 +7509,17 @@ function renderFleet(){
      table ran 180px past a 1366 screen (tests/overview2.cjs). */
   /* Stage 3c item 8: Main.dc.html's own attention table shows exactly six
      columns by default -- Machine, Priority, Finding, Action owner, Due,
-     Sync -- with everything else (Class, Inspected, Findings count, the
-     Required-action text, Open count, Next due) behind a Columns picker
-     rather than shown by default. `dflt` marks the six; the sort/filter kit
-     (fleetSort/fleetColQ/cwWordMatch) is untouched and still runs over every
-     column, hidden or not, so a column that gets switched back on already
-     carries its own working filter box and sort arrow. */
+     Sync -- with everything else (Class, Findings count, the Required-action
+     text, Open count, Next due) behind a Columns picker rather than shown by
+     default. `dflt` marks those; the sort/filter kit (fleetSort/fleetColQ/
+     cwWordMatch) is untouched and still runs over every column, hidden or
+     not, so a column that gets switched back on already carries its own
+     working filter box and sort arrow.
+     Stage 3e Gap 2 adds a SEVENTH default column, Inspected (`date`) -- the
+     machine's own last-round date -- so it is visible and sortable without
+     a detour through the picker; see fleetHidden's own comment above. */
   const cols=[["equip",t("th_unit"),"",true],["prio",t("th_priority"),"",true],["cls",t("th_class"),"",false],
-              ["defect",t("th_defcomp"),"",true],["date",t("th_inspected"),"hide-m",false],["find",t("th_find"),"r hide-m",false],
+              ["defect",t("th_defcomp"),"",true],["date",t("th_inspected"),"",true],["find",t("th_find"),"r hide-m",false],
               ["act",t("th_reqact"),"",false],["open",t("th_open"),"r",false],
               ["owner",t("th_owner"),"",true],["adue",t("th_due"),"",true],["due",t("th_nextdue"),"",false],
               ["sync",t("th_sync"),"",true]];
@@ -7478,7 +7614,7 @@ function renderFleet(){
         }<span class="attn a${attn.rank}${attn.rank===2||attn.rank===3?" tag":" sr"}">${esc(t(attn.key))}</span></td>`,
       cls:`<td>${clsOf(r)?`<button class="xf" data-xcls="${esc(clsOf(r))}" title="${esc(t("xf_cls"))}">${esc(clsOf(r))}</button>`:'<span class="muted">\u2014</span>'}</td>`,
       defect:`<td>${top?esc(top):'<span class="muted">\u2014</span>'}<div class="muted" style="font-size:11px;margin-top:2px"><span class="tag">${esc(TYPE_LABEL[r.type]||r.type)}</span><span class="mono">${esc(r.date||"")}</span>${r.by?` · ${esc(r.by)}`:""}</div></td>`,
-      date:`<td class="hide-m"><span class="mono">${esc(r.date||"")}</span><div class="muted" style="font-size:11px;margin-top:2px">${esc(r.by||"")}</div></td>`,
+      date:`<td><span class="mono">${esc(r.date||"")}</span><div class="muted" style="font-size:11px;margin-top:2px">${esc(r.by||"")}</div></td>`,
       find:`<td class="mono r hide-m">${fs.length}</td>`,
       act:`<td>${lead
           ? (lead.i.action ? esc(actionName(lead.i.action)) : `<span class="muted">\u2014</span>`)
@@ -9963,7 +10099,7 @@ function renderHistList(recs){
        than silently becoming another machine;
      · removing the filter restores the whole history. */
 function anyFilterOn(){
-  return !!($("fType").value || $("fClass").value || +$("fRange").value || ($("fQ").value||"").trim() || fStatusVal()
+  return !!($("fType").value || $("fClass").value || periodActive() || ($("fQ").value||"").trim() || fStatusVal()
     || ($("fDq")&&$("fDq").value) || drill.sev || drill.defect || drill.cause || drill.unit || drill.owner || drill.month);
 }
 /* A position matches the finding-level filters the way filtered() decides a
@@ -9986,7 +10122,7 @@ function histRecs(unit){
 /* What to call the filter in the empty state: the grade's own name when the
    grade is the only filter, "matching" otherwise. */
 function histFilterName(){
-  const only = drill.sev && !(($("fType").value)||$("fClass").value||+$("fRange").value||($("fQ").value||"").trim()||fStatusVal()||($("fDq")&&$("fDq").value)||drill.defect||drill.cause||drill.unit||drill.owner||drill.month);
+  const only = drill.sev && !(($("fType").value)||$("fClass").value||periodActive()||($("fQ").value||"").trim()||fStatusVal()||($("fDq")&&$("fDq").value)||drill.defect||drill.cause||drill.unit||drill.owner||drill.month);
   return only ? (GRADE.name(Number(drill.sev), lang) || SEV[drill.sev].l) : t("hist_f_any");
 }
 function renderHistory(){
@@ -10196,7 +10332,7 @@ function elig(ty){
 const COV_TRACK_FROM_START=["GET"];
 function coverageRows(){
   const recs=filtered();
-  const days=+$("fRange").value;
+  const days=periodRange().days;
   const cls=$("fClass").value;
   const tyFilter=$("fType").value;
   /* The fleet this round could be walked on. The register is the denominator,
@@ -13884,6 +14020,7 @@ $("tabs").onclick=e=>{ const b=e.target.closest("button[data-tab]"); if(b) showT
    Kept short and readable, so the address bar stays something a person can
    look at: #actions?type=MP&unit=TK149 */
 const URL_KEYS=[["type","fType"],["class","fClass"],["range","fRange"],
+                ["from","fRangeFrom"],["to","fRangeTo"],
                 ["q","fQ"],["dq","fDq"],["st","fStatus"]];
 let urlQuiet=0;                       // set while applying, so writing does not loop
 /* THE ADDRESS SOMEBODY ARRIVED ON, CAPTURED BEFORE ANYTHING CAN OVERWRITE IT.
@@ -13967,6 +14104,8 @@ function urlRead(from){
        matching is shown empty and said so, not swapped for another. */
     const eq=q.get("eq");
     if(tab==="equipment" && eq && (window.__units||[]).includes(eq)) selectEquip(eq, true);
+    if(typeof syncPeriodCustom==="function") syncPeriodCustom();
+    if(typeof periodWindowCheck==="function") periodWindowCheck();
     renderAll();
     return true;
   }catch(e){ urlQuiet=0; return false; }
@@ -18873,7 +19012,20 @@ function passMemo(key, mk){
   if(m===undefined){ m=mk(); PASS_MEMO.set(key,m); }
   return m;
 }
-["fType","fClass","fRange","fDq"].forEach(id=>{ const el=$(id); if(el) el.onchange=renderAll; });
+["fType","fClass","fDq"].forEach(id=>{ const el=$(id); if(el) el.onchange=renderAll; });
+/* fRange gets its own handler rather than the plain renderAll the other
+   filters share: picking "custom" has to reveal fRangeFrom/fRangeTo
+   (syncPeriodCustom) and any Period change has to re-check the data-load
+   window (periodWindowCheck) before the render that reads it -- both were
+   built (periodRange() et al., above) but never wired to this event, which
+   is this project's own signature defect one control away: the code ran,
+   nothing on screen ever called it. */
+if($("fRange")) $("fRange").onchange=()=>{ syncPeriodCustom(); periodWindowCheck(); renderAll(); };
+["fRangeFrom","fRangeTo"].forEach(id=>{ const el=$(id); if(el) el.onchange=()=>{ periodWindowCheck(); renderAll(); }; });
+/* Boot: fRange may already read "custom" (restored from the URL/saved
+   filters below), and the box that shows it has to be in sync with that
+   from the very first paint, not only after the next change event. */
+syncPeriodCustom();
 /* Default 90-day window vs. All time -- see dataWindowDays()'s own comment.
    A whole-page re-render, not just Overview: every TAB_RENDER entry that
    reads filtered()/RECS is scoped by the same cutoff, so switching windows
