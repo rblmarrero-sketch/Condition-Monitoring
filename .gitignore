@@ -57,3 +57,8 @@ docs/uc-calib/
 tests/*.log
 srvmock.log
 srv*.log
+
+# Isolated agent worktrees — full duplicate checkouts the harness creates
+# under the repo root for background agents run with worktree isolation.
+# Scratch infrastructure, never a deliverable; never commit these.
+.claude/
