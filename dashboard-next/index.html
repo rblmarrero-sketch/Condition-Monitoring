@@ -18,7 +18,7 @@
 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
     color-scheme:light;
@@ -30,9 +30,15 @@
        a bright one, for exactly that reason: measured at dE 24.9 from the
        "serious" orange, where a brighter copper collides with it. 7.09:1 on
        white, both as ink and as a filled control. */
-    --page:#eef1f3; --surface:#ffffff; --surface-2:#f3f6f7; --surface-3:#e4e9ec;
-    --ink:#16242c; --ink-2:#41505a; --muted:#5a6b76; --grid:#e2e8ec; --axis:#c2ccd2;
-    --border:rgba(22,36,44,.10); --accent:#8a4526;
+    /* Retinted to the approved mockups (dashboard-next/mockups/*.dc.html):
+       warm paper background, warm off-white cards, warm grey borders, and
+       the mockup's own #1F5C7A blue as the one accent — read as exact hex
+       off Main.dc.html/Tile.dc.html/TopBar.dc.html, not eyeballed. The five
+       grade colours below were already identical to the mockup's and are
+       untouched. */
+    --page:#F4F2ED; --surface:#FBFAF7; --surface-2:#F3F0E8; --surface-3:#E4DFD3;
+    --ink:#1B1F23; --ink-2:#3D474F; --muted:#5A6169; --grid:#E8E4DA; --axis:#C9C4B8;
+    --border:#DAD6CC; --accent:#1F5C7A;
     /* Was #0ca30c — 3.36:1 as ink on white, well under the 4.5 body text needs,
        and it is ink in seven places here (the KPI value, the OK chip, the source
        state, the priority column). Same green as the phone now, measured the
@@ -65,15 +71,17 @@
        icon rail on a laptop, a top strip on a phone. 198px fits the longest
        label ("Equipment history") without the 34px of dead gutter the old
        232 carried. */
-    --sbw:198px; --sbw-shut:54px;
+    /* Mockup's Nav.dc.html states 240px exactly -- widened from 198px to
+       match it (see the "sidebar" gap in the stage 3b visual audit). */
+    --sbw:240px; --sbw-shut:54px;
     /* main's horizontal padding, as a token — the sticky filter bar cancels it
        with a negative margin so the bar reaches the edges, and the two have to
        be the same number. They were not below 900px, where main drops to 12px
        and the bar was still pulling 16, which put 4px of the page off the
        right edge on a tablet. */
     --mainpad:var(--s4);
-    --rail:#16242c; --rail-ink:#f2f6f8; --rail-muted:#9db0ba;
-    --rail-hov:rgba(255,255,255,.07); --rail-on:rgba(255,255,255,.12);
+    --rail:#1B1F23; --rail-ink:#FFFFFF; --rail-muted:#A9AEB4;
+    --rail-hov:rgba(255,255,255,.07); --rail-on:#2E353C;
     --rail-line:rgba(255,255,255,.12);
     --shadow:0 1px 2px rgba(22,36,44,.06),0 4px 16px rgba(22,36,44,.05);
   }
@@ -132,7 +140,7 @@
     font:600 12px/1 inherit;padding:0 11px;min-height:30px;white-space:nowrap;}
   .wintog button.on{background:var(--accent);color:#fff;}
   .wintog button:not(.on):hover{background:var(--surface-2);}
-  .ver{font:600 var(--t-micro)/1 ui-monospace,SFMono-Regular,Menlo,monospace;
+  .ver{font:600 var(--t-micro)/1 'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
     color:var(--muted);letter-spacing:.02em;padding:3px 7px;border-radius:5px;
     background:var(--surface-2);border:1px solid var(--border);cursor:help;
     white-space:nowrap;}
@@ -158,7 +166,7 @@
     border-bottom:1px solid var(--rail-line);margin-bottom:8px;}
   nav.tabs .brand .bmark{width:34px;height:34px;flex:none;border-radius:9px;
     background:var(--accent);color:#fff;display:grid;place-items:center;
-    font:800 13px/1 ui-monospace,SFMono-Regular,Menlo,monospace;}
+    font:800 13px/1 'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;}
   nav.tabs .brand .t1{font-weight:750;font-size:13.5px;letter-spacing:-.01em;
     color:var(--rail-ink);line-height:1.2;}
   nav.tabs .brand .t2{color:var(--rail-muted);font-size:var(--t-micro);margin-top:2px;}
@@ -167,7 +175,13 @@
     border-radius:7px;cursor:pointer;font-size:12.5px;font-weight:600;
     font-family:inherit;text-align:left;white-space:nowrap;
     transition:background .13s,color .13s;}
-  nav.tabs button svg{width:18px;height:18px;flex:none;}
+  /* Nav.dc.html's own sidebar carries no icons -- plain text items, grouped
+     under a section heading. The folded (icon) rail below 1100px is the one
+     place an icon is load-bearing (there is no label visible to replace it
+     with), so icons stay hidden only at full width. */
+  nav.tabs button svg{width:18px;height:18px;flex:none;display:none;}
+  @media (max-width:1100px){ nav.tabs button svg{display:block;} }
+  body.railshut nav.tabs button svg{display:block;}
   nav.tabs button span[data-i18n]{flex:1;overflow:hidden;text-overflow:ellipsis;}
   nav.tabs button:hover{background:var(--rail-hov);color:var(--rail-ink);}
   nav.tabs button.active{background:var(--rail-on);color:var(--rail-ink);
@@ -176,7 +190,7 @@
   /* A count on the door to the thing it counts. It is a number a person
      reads, so it lives at the floor like every other number. */
   nav.tabs .nb{flex:none;min-width:20px;padding:1px 6px;border-radius:99px;text-align:center;
-    font:700 var(--t-micro)/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;
+    font:700 var(--t-micro)/1.4 'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
     background:var(--critical);color:#fff;}
   nav.tabs .nb.warn{background:var(--warning);color:#3a2a00;}
   nav.tabs .nb:empty{display:none;}
@@ -426,7 +440,12 @@
      closed control only has to be readable. */
   /* 128, not 154: at 1920 five selects at their longest option left the search
      245px — narrower than a real query. Long options ellipsise. */
-  .controls .field select{min-width:0;max-width:128px;text-overflow:ellipsis;}
+  /* Was max-width:128px with ellipsis, which is exactly the truncation the
+     stage 3b visual pass was told never to leave in a filter control
+     ("All t...", "All c..."). 190px is the base select's own floor
+     (select,input[type=search] above), so nothing shorter than the widest
+     ordinary option ("All classes", "Last 12 months") clips. */
+  .controls .field select{min-width:0;max-width:190px;}
   /* Below 1500 the three selects, their labels, the void toggle and Reset left
      the search box at 220px — narrower than the placeholder it holds. Search is
      the control that has to carry a sentence, so it keeps its width and the
@@ -434,7 +453,7 @@
   /* Four selects now — the grade joined type, class and period — so each
      gives up a little more, and the search field keeps its sentence. */
   @media (max-width:1500px){
-    .controls .field select{max-width:88px;}
+    .controls .field select{max-width:150px;}
     .resetb{padding:0 10px;}
   }
   /* The field was 194px holding a 35-character placeholder, so the hint was
@@ -545,7 +564,7 @@
   .pfwrap{overflow:visible;}
   .pfsvg{width:100%;height:auto;display:block;}
   .pfax{stroke:var(--border);stroke-width:1;}
-  .pfl{fill:var(--muted);font:600 10px ui-monospace,SFMono-Regular,Menlo,monospace;}
+  .pfl{fill:var(--muted);font:600 10px 'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;}
   .pff{stroke:var(--critical);stroke-width:1.5;stroke-dasharray:6 4;}
   .pfp{stroke:var(--serious);stroke-width:1.5;stroke-dasharray:3 4;}
   .pft{stroke:var(--ink-2);stroke-width:1.5;stroke-dasharray:2 4;opacity:.7;}
@@ -610,7 +629,7 @@
      under the chart — the same figure that sentence names in words. */
   .tstack i.tref{position:absolute;left:0;right:0;width:auto;height:0;cursor:default;
     border-top:1.5px dashed color-mix(in srgb,var(--ink) 45%,transparent);z-index:1;}
-  .tmon b{font:700 12px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--ink-2);min-height:12px;}
+  .tmon b{font:700 12px/1 'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--ink-2);min-height:12px;}
   .tmon span{font-size:var(--t-micro);color:var(--muted);font-variant-numeric:tabular-nums;}
   .tmon u{font-size:var(--t-micro);color:var(--muted);text-decoration:none;
     border-top:1px solid var(--border);width:100%;text-align:center;padding-top:2px;}
@@ -1160,12 +1179,12 @@
     border-radius:5px;padding:1px 5px;margin:-1px -5px;cursor:pointer;text-align:left;}
   .xf:hover,.xf:focus-visible{border-color:var(--accent);color:var(--accent);
     background:color-mix(in srgb,var(--accent) 8%,transparent);outline:none;}
-  .xf.num{font:600 var(--t-small)/1.2 ui-monospace,SFMono-Regular,Menlo,monospace;
+  .xf.num{font:600 var(--t-small)/1.2 'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
     display:inline-flex;align-items:center;gap:4px;}
   .xf.num.bad{color:var(--crit-ink);}
   .xf.num i{width:5px;height:5px;border-radius:50%;background:var(--critical);}
   /* Days to the next round. Neutral unless it needs a decision this week. */
-  .duec{font:500 var(--t-small)/1.2 ui-monospace,SFMono-Regular,Menlo,monospace;
+  .duec{font:500 var(--t-small)/1.2 'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
     color:var(--ink-2);white-space:nowrap;}
   .duec.soon{color:var(--warn-ink);font-weight:600;}
   /* Needs triage. It is not an error and not a success: it is work that has
@@ -1310,7 +1329,7 @@
   .pxcap{flex:1;min-width:220px;}
   .pxcap input{flex:1;min-width:0;}
   .pxstr input[type=range]{width:120px;}
-  .pxstr b{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  .pxstr b{font-family:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
     font-size:var(--t-micro);color:var(--ink-2);min-width:34px;text-align:right;}
   .pxpref{text-transform:none;letter-spacing:0;color:var(--ink-2);}
   /* The tick that retires a superseded severity. Its own line under the
@@ -1438,7 +1457,7 @@
   .iedit:focus{border-color:var(--accent);background:var(--surface);outline:none;}
   .iedit.saving{border-color:var(--accent);opacity:.6;}
   .iown::placeholder{color:var(--muted);font-style:italic;}
-  .idue{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;}
+  .idue{font-family:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;}
   .idue.late{color:var(--crit-ink);font-weight:600;}
   .idue.soon{color:var(--warn-ink);font-weight:600;}
   .ist{-webkit-appearance:none;appearance:none;font-weight:600;cursor:pointer;}
@@ -1648,7 +1667,7 @@
      A position that holds six photographs now looks like six photographs. */
   .pos .shots{position:relative;}
   .pos .shotn{position:absolute;top:8px;right:8px;background:rgba(0,0,0,.66);color:#fff;
-    font:700 11px/1 ui-monospace,SFMono-Regular,Menlo,monospace;padding:4px 7px;border-radius:999px;}
+    font:700 11px/1 'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;padding:4px 7px;border-radius:999px;}
   /* Was overflow-x:auto — a horizontal slider inside a card, which is the one
      thing this redesign forbids. It wraps now; a position with nine frames
      shows nine, on as many rows as it needs. */
@@ -1705,7 +1724,7 @@
   table.paired col.cbar{width:62px;}
   table.paired th.side{text-align:center;letter-spacing:.1em;}
     .sidegap{display:inline-block;margin-left:6px;padding:0 5px;border-radius:4px;
-    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10.5px;font-weight:600;line-height:1.65;
+    font-family:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10.5px;font-weight:600;line-height:1.65;
     background:color-mix(in srgb,var(--warning) 24%,var(--surface));color:var(--ink);}
   table.grid.wear td{font-size:12px;padding:6px 8px;}
   .ucsum{margin:12px 16px 0;padding:8px 12px;border-radius:6px;font-size:12.5px;font-weight:650;}
@@ -1757,7 +1776,7 @@
     --t-head:19px;     /* a section title                               */
     --t-num:26px;      /* a KPI                                         */
     --t-hero:42px;     /* the three numbers that lead the page          */
-    --mono:ui-monospace,SFMono-Regular,Menlo,monospace;
+    --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
     /* How wide the page is allowed to get. It was pinned at 1240px, so a
        1600px screen — the one every office actually has — spent 360px on
        nothing while the tables below scrolled for forty screens. */
@@ -1793,36 +1812,33 @@
   /* Six tiles, one row. The floor was 196px, which fits five across the main
      column on a 1366 screen — so adding "Due this week" wrapped the strip onto
      a second row and doubled the chrome above the first fact. */
+  /* Tile.dc.html: discrete cards, ~12px apart, each its own border and its
+     own 3-4px coloured top edge -- not the joined single-panel-with-hairlines
+     shape this strip carried before the stage 3b visual pass. */
   .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(152px,1fr));
-    gap:1px;margin:0 0 var(--s5);border:1px solid var(--border);
-    background:var(--border);box-shadow:var(--e2);border-radius:var(--r-lg);
-    overflow:hidden;
-    /* Equal height. The note that used to sit here argued for hugging the
-       content, and it was right when one card was a tall severity list beside
-       four short numbers — stretching them left each 60% empty. The mix tile
-       is two columns now and the four numbers all carry a comparison line, so
-       they are the same object at the same size, and a row of five equal cards
-       reads as one instrument rather than as five. */
+    gap:var(--s3);margin:0 0 var(--s5);
     align-items:stretch;}
   .kpi,.tile{position:relative;display:flex;flex-direction:column;gap:1px;
-    background:var(--surface);border:0;border-radius:0;
-    padding:7px var(--s3) 9px;box-shadow:none;overflow:hidden;
+    background:var(--surface);border:1px solid var(--border);border-top:4px solid var(--kc,var(--border));
+    border-radius:var(--r-lg);
+    padding:14px var(--s3) 12px;box-shadow:var(--e1);overflow:hidden;
     text-align:left;font-family:inherit;color:inherit;
-    transition:background .15s;}
-  .kpi::before,.tile::before{content:"";position:absolute;left:0;top:0;right:0;height:3px;
-    background:var(--kc,transparent);transition:height .18s var(--ease);}
+    transition:background .15s,box-shadow .15s;}
   button.kpi{cursor:pointer;}
-  button.kpi:hover{background:var(--surface-2);}
-  button.kpi:hover::before{height:5px;}
+  button.kpi:hover{background:var(--surface-2);box-shadow:var(--e2);}
   .kpi.on{background:var(--surface-2);
     box-shadow:0 0 0 1px var(--kc,var(--accent)) inset;}
-  .kpi .k,.tile .k{font-weight:700;font-size:var(--t-micro);line-height:1.2;font-family:inherit;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);}
+  /* Label + small tag on one line, per Tile.dc.html -- normal case, not the
+     small-caps micro label the original strip used. */
+  .kpi .k,.tile .k{font-weight:600;font-size:13.5px;line-height:1.25;font-family:inherit;color:var(--ink);}
   /* 34px and 42px were the sizes of a marketing page. A number a reliability
      engineer reads fifty times a day needs to be unmistakable, not enormous —
-     and the four lines under it are what make it mean anything. */
-  .kpi .v,.tile .v{font:800 var(--t-num)/1.05 ui-monospace,SFMono-Regular,Menlo,monospace;
-    letter-spacing:-.03em;font-variant-numeric:tabular-nums;margin-top:3px;color:var(--ink);}
-  #kpiComp .v{font-size:30px;}
+     and the four lines under it are what make it mean anything. Raised from
+     26px toward the mockup's 44px; 34px is the largest that still keeps
+     seven tiles on one row at 1366px with no wrap. */
+  .kpi .v,.tile .v{font:700 34px/1.05 'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+    letter-spacing:-.02em;font-variant-numeric:tabular-nums;margin-top:6px;color:var(--ink);}
+  #kpiComp .v{font-size:28px;}
   /* Two lines of context, clamped. "37 of 52 rounds walked before they were
      overdue" is the sentence that makes 71% mean something and it must not be
      allowed to become four lines on a narrow tile. */
@@ -1835,6 +1851,22 @@
      four at 1366, and the tallest tile sets the height of the whole strip —
      so a 74px difference in one tile moved every headline down the page. */
   .tile .legend{margin-top:6px;display:grid;grid-template-columns:1fr 1fr;gap:3px 8px;}
+  /* Main.dc.html's standalone "Severity mix" panel: one grade per row, a
+     swatch, the name, the count in mono -- not the two-column legend the
+     KPI-tile version used, and not a pill: the swatch carries the colour,
+     the count is plain bold text (the same "text, never a chip" rule as
+     everywhere else on this page). */
+  .sevmix{display:flex;flex-direction:column;gap:6px;}
+  .sevmixrow{display:grid;grid-template-columns:14px 1fr auto;align-items:center;gap:10px;
+    min-height:44px;padding:0 10px;border-radius:var(--r-sm);border:1px solid var(--border);
+    background:var(--surface);font:inherit;font-size:14px;color:var(--ink);text-align:left;
+    cursor:pointer;}
+  .sevmixrow:hover:not(:disabled){background:var(--surface-2);}
+  .sevmixrow.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,transparent);}
+  .sevmixrow:disabled{cursor:default;opacity:.55;}
+  .sevmixrow i{width:14px;height:14px;border-radius:4px;}
+  .sevmixrow b{font:700 13px/1 'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+    color:var(--ink);text-align:right;}
   .kpi.good{--kc:var(--good);} .kpi.warn{--kc:var(--warning);}
   .kpi.bad{--kc:var(--critical);} .kpi.info{--kc:var(--accent);}
   .kpi.bad .v{color:var(--crit-ink);} .kpi.good .v{color:var(--good-ink);}
@@ -1862,7 +1894,7 @@
   .lcpart{border:1px solid var(--border);background:var(--surface-2);color:var(--ink-2);
     border-radius:99px;padding:3px 9px;font:inherit;font-size:var(--t-tiny);cursor:pointer;
     font-family:inherit;}
-  .lcpart b{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--ink);}
+  .lcpart b{font-family:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--ink);}
   .lcpart:hover{border-color:var(--accent);color:var(--ink);}
   .lcpart.off{cursor:default;opacity:.55;}
   .kpi .v .of{font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0;}
@@ -1877,7 +1909,7 @@
   /* A pull that is late is said in amber, with the way to run it now. */
   .pgsub.stale{color:var(--warn-ink);}
   .pgsub.stale a{color:inherit;font-weight:600;text-decoration:underline;}
-  .pgsub .v{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:700;color:var(--ink);
+  .pgsub .v{font-family:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:700;color:var(--ink);
     font-variant-numeric:tabular-nums;}
   .defs{position:relative;}
   .defs>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:6px;
@@ -1917,9 +1949,9 @@
   /* The compliance headline, on the panel that explains it. */
   .compline{display:flex;align-items:baseline;gap:var(--s2);flex-wrap:wrap;margin:0 0 var(--s2);
     font-size:var(--t-small);color:var(--muted);}
-  .compline .cpv{font:800 22px/1.05 ui-monospace,SFMono-Regular,Menlo,monospace;
+  .compline .cpv{font:800 22px/1.05 'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
     letter-spacing:-.03em;font-variant-numeric:tabular-nums;color:var(--ink);
-    background:none;border:0;padding:0;cursor:pointer;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;}
+    background:none;border:0;padding:0;cursor:pointer;font-family:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;}
   .compline .cpv.good{color:var(--good-ink);} .compline .cpv.warn{color:var(--warn-ink);}
   .compline .cpv.bad{color:var(--crit-ink);}
   .compline .cpv:hover{text-decoration:underline;}
@@ -1985,7 +2017,7 @@
   #fleetTbl .duec,#fleetTbl .triage{white-space:normal;}
     .covcell{min-width:180px;}
   .covrow{display:flex;align-items:center;gap:9px;}
-  .covpc{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:700;
+  .covpc{font-family:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:700;
     font-variant-numeric:tabular-nums;min-width:38px;text-align:right;color:var(--ink);}
   .covpc.bad{color:var(--crit-ink);}
   .covrow .cbar{flex:1;}
@@ -2008,7 +2040,7 @@
 
   /* 1C stoppage priority: what planning schedules against, so it stays on the
      row. A chip rather than a column — it is a code, not a sentence. */
-  .prio{display:inline-block;margin-left:7px;font:700 10px/1 ui-monospace,SFMono-Regular,Menlo,monospace;
+  .prio{display:inline-block;margin-left:7px;font:700 10px/1 'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
     letter-spacing:.04em;padding:3px 5px;border-radius:4px;vertical-align:1px;
     border:1px solid currentColor;}
   .prio.c{color:var(--critical);} .prio.s{color:var(--serious);}
@@ -2041,7 +2073,7 @@
   .wlh .u{font-weight:700;font-size:14px;line-height:1;font-family:inherit;letter-spacing:-.01em;}
   .wlh .m{font-size:11.5px;color:var(--muted);}
   .wlh .sp{flex:1;}
-  .wlh .cnt{font:700 11px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--muted);
+  .wlh .cnt{font:700 11px/1 'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--muted);
     background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:4px 9px;}
   .wlr{display:grid;grid-template-columns:4px minmax(150px,1.4fr) minmax(120px,1.1fr) 128px 104px 112px auto;
     gap:12px;align-items:center;padding:0 14px 0 0;border-top:1px solid var(--border);
@@ -2114,7 +2146,7 @@
   .who.none span{color:var(--warn-ink);font-weight:650;}
   tr.hrow:hover .who.none i{background:color-mix(in srgb,var(--warning) 16%,transparent);}
   .due{display:inline-flex;align-items:baseline;gap:6px;font-variant-numeric:tabular-nums;}
-  .due b{font:600 12px/1 ui-monospace,SFMono-Regular,Menlo,monospace;}
+  .due b{font:600 12px/1 'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;}
   .due i{font-style:normal;font-size:var(--t-micro);color:var(--muted);}
   .due.late b{color:var(--critical);} .due.late i{color:var(--critical);font-weight:700;}
   .due.soon b{color:var(--serious);}
@@ -2198,7 +2230,7 @@
   .whys .field::before{content:attr(data-n);position:absolute;left:-26px;top:16px;
     width:20px;height:20px;border-radius:50%;background:var(--surface-2);
     border:1px solid var(--border);color:var(--muted);
-    font:700 10px/18px ui-monospace,SFMono-Regular,Menlo,monospace;text-align:center;}
+    font:700 10px/18px 'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;text-align:center;}
   .whys .field.has::before{background:var(--accent);border-color:transparent;color:#fff;}
 
   @media (max-width:760px){
@@ -2277,7 +2309,7 @@
   table.grid tbody tr:hover td{background:color-mix(in srgb,var(--accent) 5%,var(--surface));}
   table.grid tbody tr:last-child td{border-bottom:0;}
   table.grid td.r,table.grid th.r{text-align:right;}
-  table.grid .mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;}
+  table.grid .mono{font-family:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;}
   /* a clickable row says so */
   #fleetTbl tbody tr,#wearTbl tbody tr{cursor:pointer;}
 
@@ -2455,10 +2487,32 @@
     table.grid td.wrapcell{max-width:22ch;min-width:0;white-space:nowrap;}
     table.grid td:has(input),table.grid td:has(select),table.grid td:has(button),table.grid td:has(.minibtn){max-width:none;overflow:visible;}
     #paWeek table.grid td{white-space:normal;max-width:none;overflow:visible;}
+    /* The sidebar widened from 198px to 240px in the stage 3b visual pass
+       (Nav.dc.html states 240px exactly), which took 42px off every tab's
+       content width -- and the nine-column action register, already the
+       tightest table on the page, went from fitting exactly to 13px over at
+       1366px (a real horizontal scrollbar, which this project's own rules
+       forbid at >=1100px). Its own columns give up one more character than
+       the shared 20ch cap above. */
+    #actionTbl td{max-width:17ch;}
     /* The widest registers (11+ columns) share the width equally instead of sliding. */
     #tab-cmwo table.grid,#covTbl{table-layout:fixed;width:100%;}
-    #tab-cmwo table.grid th,#covTbl th{overflow:hidden;text-overflow:ellipsis;}
+    #tab-cmwo table.grid th{overflow:hidden;text-overflow:ellipsis;}
     #tab-cmwo table.grid td,#covTbl td{max-width:none;}
+    /* #covTbl moved into the grid's narrow g5 column in the stage 3b visual
+       pass (Main.dc.html puts Inspection compliance beside Condition trend,
+       not opposite it), so its six headers now have less room than the
+       ellipsis rule above assumed. Wrap instead of truncating -- "ROUND"
+       becoming "ROUND…" is exactly the truncation the pass was told never
+       to leave in a table header. */
+    /* Tried letting the headers and the round-type name wrap instead of
+       truncating -- wrong fix: a compact worksheet row is the tested,
+       deliberate contract here ("most one line",
+       tests/tablekit-next.cjs), and wrapping "Ground engaging tools" over
+       three lines nearly tripled the row height. The column is wider now
+       (see the grid swap above); the full name still shows on hover via
+       the existing tkTitle wiring, same as every other worksheet table. */
+    #covTbl th{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
     #tab-due table.grid td{max-width:16ch;}
     #fleetTbl td{max-width:17ch;}
   }
@@ -3027,22 +3081,32 @@
     </div>
     <div class="kpis" id="kpis"></div>
     <!-- Compliance and direction answer one question between them — is the
-         programme being walked, and is it working — so they share a row. -->
+         programme being walked, and is it working — so they share a row.
+         Main.dc.html puts Condition trend on the wide left (2fr) and stacks
+         Inspection compliance with a standalone Severity mix panel in the
+         narrow right column (1fr) -- reversed from how this grid read before
+         the stage 3b visual pass, which led with compliance. -->
     <div class="grid12">
       <div class="section g7">
-        <div class="secthd"><h2 data-i18n="cv_title2">Inspection compliance</h2>
-          <span class="spacer"></span><span class="hint" id="covFleet"></span></div>
-        <div class="compline" id="covComp"></div>
-        <div class="tblwrap"><table class="grid" id="covTbl"></table></div>
-        <div class="shown" id="covMore"></div>
-        <div class="sub" id="covNote" style="margin-top:6px"></div>
-      </div>
-      <div class="section g5">
         <div class="secthd"><h2 data-i18n="tr_title2">Condition trend</h2>
           <span class="tdelta" id="trendDelta"></span>
           <span class="spacer"></span><span class="lgnd" id="trendKey"></span></div>
         <div id="trendChart"></div>
         <div class="insight" id="trendNote"></div>
+      </div>
+      <div class="g5" style="display:flex;flex-direction:column;gap:var(--s3)">
+        <div class="section" style="margin-bottom:0">
+          <div class="secthd"><h2 data-i18n="cv_title2">Inspection compliance</h2>
+            <span class="spacer"></span><span class="hint" id="covFleet"></span></div>
+          <div class="compline" id="covComp"></div>
+          <div class="tblwrap"><table class="grid" id="covTbl"></table></div>
+          <div class="shown" id="covMore"></div>
+          <div class="sub" id="covNote" style="margin-top:6px"></div>
+        </div>
+        <div class="section" style="margin-bottom:0">
+          <div class="secthd"><h2 data-i18n="k_mix">Severity mix</h2></div>
+          <div class="sevmix" id="sevMix"></div>
+        </div>
       </div>
     </div>
     <!-- Ten machines, highest priority first, with what was found, what has to
@@ -4106,13 +4170,13 @@ const I18N={
   w_show:"Show", w_csv:"\u2b07 Export CSV",
   w_due:"Needs planning \u2014 80% worn or under 1,000 h left",
   w_act:"At or past condemn", w_all:"Every measured position",
-  w_k_meas:"MEASURED POSITIONS", w_k_meas_s:"on {n} unit(s)",
-  w_k_act:"AT OR PAST CONDEMN", w_k_act_s:"change now",
-  w_k_watch:"OVER 80% WORN", w_k_watch_s:"watch list",
-  w_k_soon:"UNDER {h} H LEFT", w_k_soon_s:"order the parts",
-  w_k_life:"WITH A LIFE", w_k_life_s:"the rest need a second reading",
-  w_k_plan:"PLANNING REQUIRED", w_k_plan_s:"needs work, no action against it yet",
-  w_k_second:"SECOND READING", w_k_second_s:"no life until it is measured again",
+  w_k_meas:"Measured positions", w_k_meas_s:"on {n} unit(s)",
+  w_k_act:"At or past condemn", w_k_act_s:"change now",
+  w_k_watch:"Over 80% worn", w_k_watch_s:"watch list",
+  w_k_soon:"Under {h} h left", w_k_soon_s:"order the parts",
+  w_k_life:"With a life", w_k_life_s:"the rest need a second reading",
+  w_k_plan:"Planning required", w_k_plan_s:"needs work, no action against it yet",
+  w_k_second:"Second reading", w_k_second_s:"no life until it is measured again",
   w_lead:"{n} measured position(s) on {m} machine(s)", w_ref:"New → condemn",
   drw_hist:"Open the history of {u}",
   fa_reset:"Reset filters", fa_affected:"Affected equipment",
@@ -4563,7 +4627,7 @@ const I18N={
   lc_go:"Open this list",
   lc_settle:"Waiting to be settled",
   lc_settle_s:"one compartment, two of the site\u2019s documents disagreeing \u2014 each one an afternoon\u2019s work",
-  k_act:"Actions to plan", k_mix:"Grade mix",
+  k_act:"Actions to plan", k_mix:"Severity mix",
   k_units:"{n} unit(s)", k_finds:"items with a record", k_attsub:"degraded + critical",
   k_actsub:"excluding “monitor”", k_none_here:"None in this view", k_only:"Show only {x}",
   k_voidhid:"{n} voided, not counted", k_voidtip:"These rounds were withdrawn, not deleted. Click to show them.",
@@ -4669,11 +4733,11 @@ const I18N={
   xf_cls:"Show only this class", xf_open:"Open the register for this machine",
   xf_open_over:"{n} past its date \u2014 open the register for this machine",
   a_show:"Show", a_f_open:"Still open", a_f_over:"Overdue", a_f_owned:"Has an owner", a_f_all:"Everything",
-  a_k_open:"STILL OPEN", a_k_open_s:"of {n} finding(s)",
-  a_k_overdue:"OVERDUE", a_k_overdue_s:"past the date, still open",
+  a_k_open:"Still open", a_k_open_s:"of {n} finding(s)",
+  a_k_overdue:"Overdue", a_k_overdue_s:"past the date, still open",
   a_k_unowned:"Unassigned actions", a_k_unowned_s:"no responsible person named",
-  a_k_oldest:"OLDEST OPEN", a_k_oldest_s:"since it was found",
-  a_k_done:"CLOSED OUT", a_k_done_s:"done, verified or not needed",
+  a_k_oldest:"Oldest open", a_k_oldest_s:"since it was found",
+  a_k_done:"Closed out", a_k_done_s:"done, verified or not needed",
   a_bar:"{d} of {n} closed out \u2014 {p}%",
   a_late:"overdue", a_plan:"Plan", a_plan_h:"The plan", a_plan_what:"What will be done",
   a_owner_ph:"who owns it", a_save:"Save the plan",
@@ -5026,13 +5090,13 @@ const I18N={
   w_show:"\u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c", w_csv:"\u2b07 \u042d\u043a\u0441\u043f\u043e\u0440\u0442 CSV",
   w_due:"\u0422\u0440\u0435\u0431\u0443\u0435\u0442 \u043f\u043b\u0430\u043d\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u044f \u2014 \u0438\u0437\u043d\u043e\u0441 \u043e\u0442 80% \u0438\u043b\u0438 \u043c\u0435\u043d\u0435\u0435 1000 \u0447",
   w_act:"\u041d\u0430 \u043f\u0440\u0435\u0434\u0435\u043b\u0435 \u0438\u043b\u0438 \u0437\u0430 \u043d\u0438\u043c", w_all:"\u0412\u0441\u0435 \u0437\u0430\u043c\u0435\u0440\u0435\u043d\u043d\u044b\u0435 \u0442\u043e\u0447\u043a\u0438",
-  w_k_meas:"\u0417\u0410\u041c\u0415\u0420\u0415\u041d\u041d\u042b\u0425 \u0422\u041e\u0427\u0415\u041a", w_k_meas_s:"\u043d\u0430 {n} \u0435\u0434.",
-  w_k_act:"\u041d\u0410 \u041f\u0420\u0415\u0414\u0415\u041b\u0415", w_k_act_s:"\u043c\u0435\u043d\u044f\u0442\u044c \u0441\u0435\u0439\u0447\u0430\u0441",
-  w_k_watch:"\u0418\u0417\u041d\u041e\u0421 \u0421\u0412\u042b\u0428\u0415 80%", w_k_watch_s:"\u043f\u043e\u0434 \u043d\u0430\u0431\u043b\u044e\u0434\u0435\u043d\u0438\u0435\u043c",
-  w_k_soon:"\u041c\u0415\u041d\u0415\u0415 {h} \u0427", w_k_soon_s:"\u0437\u0430\u043a\u0430\u0437\u0430\u0442\u044c \u0437\u0430\u043f\u0447\u0430\u0441\u0442\u0438",
-  w_k_life:"\u0421 \u0420\u0410\u0421\u0427\u0401\u0422\u041d\u042b\u041c \u0420\u0415\u0421\u0423\u0420\u0421\u041e\u041c", w_k_life_s:"\u043e\u0441\u0442\u0430\u043b\u044c\u043d\u044b\u043c \u043d\u0443\u0436\u0435\u043d \u0432\u0442\u043e\u0440\u043e\u0439 \u0437\u0430\u043c\u0435\u0440",
-  w_k_plan:"\u0422\u0420\u0415\u0411\u0423\u0415\u0422 \u041f\u041b\u0410\u041d\u0418\u0420\u041e\u0412\u0410\u041d\u0418\u042f", w_k_plan_s:"\u043d\u0443\u0436\u043d\u044b \u0440\u0430\u0431\u043e\u0442\u044b, \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u0435 \u043d\u0435 \u043d\u0430\u0437\u043d\u0430\u0447\u0435\u043d\u043e",
-  w_k_second:"\u0412\u0422\u041e\u0420\u041e\u0419 \u0417\u0410\u041c\u0415\u0420", w_k_second_s:"\u0440\u0435\u0441\u0443\u0440\u0441 \u043d\u0435 \u0440\u0430\u0441\u0441\u0447\u0438\u0442\u0430\u0442\u044c \u0431\u0435\u0437 \u043f\u043e\u0432\u0442\u043e\u0440\u043d\u043e\u0433\u043e \u0437\u0430\u043c\u0435\u0440\u0430",
+  w_k_meas:"\u0417\u0430\u043c\u0435\u0440\u0435\u043d\u043d\u044b\u0445 \u0442\u043e\u0447\u0435\u043a", w_k_meas_s:"\u043d\u0430 {n} \u0435\u0434.",
+  w_k_act:"\u041d\u0430 \u043f\u0440\u0435\u0434\u0435\u043b\u0435", w_k_act_s:"\u043c\u0435\u043d\u044f\u0442\u044c \u0441\u0435\u0439\u0447\u0430\u0441",
+  w_k_watch:"\u0418\u0437\u043d\u043e\u0441 \u0441\u0432\u044b\u0448\u0435 80%", w_k_watch_s:"\u043f\u043e\u0434 \u043d\u0430\u0431\u043b\u044e\u0434\u0435\u043d\u0438\u0435\u043c",
+  w_k_soon:"\u041c\u0435\u043d\u0435\u0435 {h} \u0447", w_k_soon_s:"\u0437\u0430\u043a\u0430\u0437\u0430\u0442\u044c \u0437\u0430\u043f\u0447\u0430\u0441\u0442\u0438",
+  w_k_life:"\u0421 \u0440\u0430\u0441\u0447\u0451\u0442\u043d\u044b\u043c \u0440\u0435\u0441\u0443\u0440\u0441\u043e\u043c", w_k_life_s:"\u043e\u0441\u0442\u0430\u043b\u044c\u043d\u044b\u043c \u043d\u0443\u0436\u0435\u043d \u0432\u0442\u043e\u0440\u043e\u0439 \u0437\u0430\u043c\u0435\u0440",
+  w_k_plan:"\u0422\u0440\u0435\u0431\u0443\u0435\u0442 \u043f\u043b\u0430\u043d\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u044f", w_k_plan_s:"\u043d\u0443\u0436\u043d\u044b \u0440\u0430\u0431\u043e\u0442\u044b, \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u0435 \u043d\u0435 \u043d\u0430\u0437\u043d\u0430\u0447\u0435\u043d\u043e",
+  w_k_second:"\u0412\u0442\u043e\u0440\u043e\u0439 \u0437\u0430\u043c\u0435\u0440", w_k_second_s:"\u0440\u0435\u0441\u0443\u0440\u0441 \u043d\u0435 \u0440\u0430\u0441\u0441\u0447\u0438\u0442\u0430\u0442\u044c \u0431\u0435\u0437 \u043f\u043e\u0432\u0442\u043e\u0440\u043d\u043e\u0433\u043e \u0437\u0430\u043c\u0435\u0440\u0430",
   w_lead:"\u0437\u0430\u043c\u0435\u0440\u0435\u043d\u043d\u044b\u0445 \u0442\u043e\u0447\u0435\u043a: {n} \u043d\u0430 {m} \u043c\u0430\u0448\u0438\u043d\u0430\u0445", w_ref:"\u041d\u043e\u0432\u043e\u0435 \u2192 \u043f\u0440\u0435\u0434\u0435\u043b",
   drw_hist:"\u041e\u0442\u043a\u0440\u044b\u0442\u044c \u0438\u0441\u0442\u043e\u0440\u0438\u044e {u}",
   fa_reset:"\u0421\u0431\u0440\u043e\u0441\u0438\u0442\u044c \u0444\u0438\u043b\u044c\u0442\u0440\u044b", fa_affected:"\u0417\u0430\u0442\u0440\u043e\u043d\u0443\u0442\u0430\u044f \u0442\u0435\u0445\u043d\u0438\u043a\u0430",
@@ -5455,7 +5519,7 @@ const I18N={
   lc_go:"Открыть список",
   lc_settle:"Ждут решения",
   lc_settle_s:"один узел, два документа площадки расходятся \u2014 каждый случай на полдня работы",
-  k_act:"Действий к планированию", k_mix:"Распределение оценок",
+  k_act:"Действий к планированию", k_mix:"Структура по оценкам",
   k_units:"ед.: {n}", k_finds:"позиций с записью", k_attsub:"ухудшено + критично",
   k_actsub:"без «наблюдать»", k_none_here:"Нет в этой выборке", k_only:"Только {x}",
   k_voidhid:"отозвано: {n}, не учтено", k_voidtip:"Эти осмотры отозваны, а не удалены. Нажмите, чтобы показать.",
@@ -5568,11 +5632,11 @@ const I18N={
   xf_open_over:"{n} просрочено \u2014 открыть реестр по этой машине",
   a_show:"Показать", a_f_open:"Открытые", a_f_over:"Просроченные",
   a_f_owned:"С ответственным", a_f_all:"Все",
-  a_k_open:"ОТКРЫТО", a_k_open_s:"из {n}",
-  a_k_overdue:"ПРОСРОЧЕНО", a_k_overdue_s:"срок прошёл, ещё не закрыто",
+  a_k_open:"Открыто", a_k_open_s:"из {n}",
+  a_k_overdue:"Просрочено", a_k_overdue_s:"срок прошёл, ещё не закрыто",
   a_k_unowned:"Работы без ответственного", a_k_unowned_s:"ответственный не назначен",
-  a_k_oldest:"САМОЕ СТАРОЕ", a_k_oldest_s:"с момента обнаружения",
-  a_k_done:"ЗАКРЫТО", a_k_done_s:"выполнено, проверено или не требуется",
+  a_k_oldest:"Самое старое", a_k_oldest_s:"с момента обнаружения",
+  a_k_done:"Закрыто", a_k_done_s:"выполнено, проверено или не требуется",
   a_bar:"Закрыто {d} из {n} — {p}%",
   a_late:"просрочено", a_plan:"План", a_plan_h:"План",
   a_plan_what:"Что будет сделано", a_owner_ph:"кто отвечает",
@@ -6841,16 +6905,23 @@ function renderKpis(){
     + tile({ id:"kpiReview", k:t("ov_k_review"), v:nReview,
              s: esc(nReview ? t("sy_k_grade_s") : t("ov_s_none")),
              cls:(nReview?"warn":"good"),
-             go:"review", title:t("sy_k_grade_go") })
-    + `<div class="tile" id="kpiMix"><div class="k">${t("k_mix")}</div>
-     <div class="bar" style="margin-top:8px">${bar}</div>
-     <div class="legend">${[5,4,3,2,1].map(s=>
-       `<button type="button" data-sev="${s}" class="${String(drill.sev)===String(s)?"on":""}"${cnt[s]?"":" disabled"}
-          aria-pressed="${String(drill.sev)===String(s)?"true":"false"}"
-          title="${cnt[s]?esc(t("k_only",{x:SEV[s].l})):esc(t("k_none_here"))}"
-        ><i style="background:${SEVC[s]}"></i>${esc(SEV[s].l)}<b>${cnt[s]}</b></button>`).join("")}</div>
-   </div>`;
-  $("kpis").querySelectorAll("[data-sev]").forEach(b=>b.onclick=()=>setDrill("sev",Number(b.dataset.sev)));
+             go:"review", title:t("sy_k_grade_go") });
+  /* THE GRADE MIX MOVED OUT OF THE HEADLINE STRIP.
+     Main.dc.html's own right column carries a standalone "Severity mix"
+     panel next to Inspection compliance, one row per grade -- not an eighth
+     KPI tile. #kpiMix used to be the seventh/eighth cell of #kpis; it is
+     #sevMix now, in the Overview grid's right column (see markup), built
+     from the identical cnt[]/bar the strip used to carry so the numbers
+     cannot drift apart from what the strip itself would have said. */
+  const sm=$("sevMix");
+  if(sm){
+    sm.innerHTML=[5,4,3,2,1].map(s=>
+      `<button type="button" data-sev="${s}" class="sevmixrow ${String(drill.sev)===String(s)?"on":""}"${cnt[s]?"":" disabled"}
+         aria-pressed="${String(drill.sev)===String(s)?"true":"false"}"
+         title="${cnt[s]?esc(t("k_only",{x:SEV[s].l})):esc(t("k_none_here"))}"
+       ><i style="background:${SEVC[s]}"></i><span>${esc(SEV[s].l)}</span><b>${cnt[s]}</b></button>`).join("");
+    sm.querySelectorAll("[data-sev]").forEach(b=>b.onclick=()=>setDrill("sev",Number(b.dataset.sev)));
+  }
   /* EACH HEADLINE IS A DOOR, AND THE DOOR OPENS ON THE RIGHT ROOM.
 
      Pressing a number takes the reader to the page that holds the list behind

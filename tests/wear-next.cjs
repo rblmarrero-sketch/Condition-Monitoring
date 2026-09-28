@@ -24,11 +24,17 @@ const srv = http.createServer((q, r) => {
 });
 const FLEET = JSON.parse(fs.readFileSync(path.join(__dirname, 'fleet-fixture.json'), 'utf8'));
 
+/* Keyed lower-case: dashboard-next's stage 3b visual pass changed these
+   labels from shouting caps ("AT OR PAST CONDEMN") to sentence case ("At or
+   past condemn") to match Tile.dc.html -- a presentation change, not a
+   meaning change, so the parity check below compares case-insensitively
+   rather than by the exact string. The untouched /dashboard/ still renders
+   upper case; this is the one place that difference is expected. */
 const tileMap = async p => p.$$eval('#wearKpis .kpi, #wearKpis .tile', els => {
   const m = {};
   els.forEach(el => {
     const k = el.querySelector('.k'), v = el.querySelector('.v');
-    if (k && v) m[k.textContent.trim()] = v.textContent.trim();
+    if (k && v) m[k.textContent.trim().toLowerCase()] = v.textContent.trim();
   });
   return m;
 });
@@ -74,7 +80,7 @@ const openAll = async (p, mode) => {
   await n.click('#wearKpis [data-wgo="all"]');
   await n.waitForTimeout(300);
   const nextAllRows = await n.evaluate(() => window.wearRows(window.filtered()).length);
-  const measuredTileVal = nextTiles['MEASURED POSITIONS'];
+  const measuredTileVal = nextTiles['measured positions'];
 
   console.log('dashboard/     tiles=' + JSON.stringify(baseTiles) + ' allRows=' + baseAllRows);
   console.log('dashboard-next tiles=' + JSON.stringify(nextTiles) + ' allRows=' + nextAllRows);

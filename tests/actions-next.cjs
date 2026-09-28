@@ -26,11 +26,17 @@ const srv = http.createServer((q, r) => {
 });
 const FLEET = JSON.parse(fs.readFileSync(path.join(__dirname, 'fleet-fixture.json'), 'utf8'));
 
+/* Keyed lower-case: dashboard-next's stage 3b visual pass changed these
+   labels from shouting caps ("STILL OPEN") to sentence case ("Still open")
+   to match Tile.dc.html -- a presentation change, not a meaning change, so
+   the parity check below compares case-insensitively. The untouched
+   /dashboard/ still renders upper case; this is the one place that
+   difference is expected. */
 const tileMap = async p => p.$$eval('#actKpis .kpi, #actKpis > div', els => {
   const m = {};
   els.forEach(el => {
     const k = el.querySelector('.k'), v = el.querySelector('.v');
-    if (k && v) m[k.textContent.trim()] = v.textContent.trim();
+    if (k && v) m[k.textContent.trim().toLowerCase()] = v.textContent.trim();
   });
   return m;
 });
