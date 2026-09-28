@@ -3457,6 +3457,62 @@ running it against the identical HEAD with this session's changes
 stashed out) — neither touched by this change, left as found rather than
 folded into an unrelated fix.
 
+**THE DASHBOARD STOPPED LOADING ITS OWN CACHE THE DAY THE FLEET'S HISTORY
+OUTGREW THE BROWSER.** Read plainly: "in web dashboard, why when i refresh no
+data, i have to load everytime?" Confirmed directly against the live Yandex
+backend (`action=records`), not guessed at: at ~70 inspections a day for three
+months, this fleet's history is now several thousand records averaging 12.3 KB
+each — roughly 75 MB of JSON, many times past the 5–10 MB a browser grants ONE
+origin's `localStorage`. `saveDrive()` wrote the whole drive cache to
+`localStorage` on every change and caught a quota-exceeded write in silence,
+deleting BOTH the cache AND the sync cursor with only a `console.warn()` — a
+design that reads as self-healing while the fleet's own history still fits
+("losing this cache is survivable, it only means a re-read") and becomes a
+permanent, silent failure on EVERY SINGLE REFRESH the day it stops fitting,
+which is exactly what happened this week. Nothing on screen ever said why; a
+technician just learned that the dashboard "has to load every time" now.
+
+The fix moves the drive cache into IndexedDB, whose quota is the disk, not one
+browser tab's slice of one origin — the same reasoning that already sends every
+photograph to IndexedDB rather than `localStorage` on the phone. `ddbGet`/
+`ddbSet` (`dashboard/index.html`) carry the identical one-shot `done`-guard
+`dbPut`/`dbDel` already use on the phone (build 480, the double-fire
+transaction fix above) so an aborted write cannot double-count here either.
+`loadDriveCache()` reads IndexedDB first; a browser that has never written
+there yet (every desk on the day this ships) falls back to whatever the OLD
+`localStorage` key still holds, migrates it into IndexedDB once, and clears
+the old key — so nobody loses the cache they already had crossing the upgrade.
+A browser with no IndexedDB at all (never seen on this fleet, guarded anyway)
+falls back to the old `localStorage`-only read, no worse than before this fix.
+`saveDrive()` no longer wipes the sync cursor on a write failure — an
+IndexedDB write failing is now a rare, real problem worth investigating
+(`bad("drive-cache-save", e)`, the same non-silent error record `dashboard/
+index.html` already keeps), not the routine, expected outcome quota-exceeded
+used to be.
+
+This is purely the browser's own local convenience-cache — Yandex has held
+every one of these records safely the entire time regardless of what any
+single browser tab could cache; nothing about the fix touches what the backend
+stores or how a report is built from it, only how quickly a desk's OWN tab can
+redraw the fleet without asking the server again.
+
+`tests/drivecache.cjs` proves it at a fixture size (900 records, ~9.6 MB) many
+times past the old ceiling: every record renders immediately from memory, no
+`drive-cache-save` error is raised, `localStorage` itself never holds any of
+it, and the cache survives not one but two separate reloads unattended — then
+proves the migration path separately, seeding the pre-fix `localStorage`
+shape, confirming it is read once, cleared, and the migrated record survives a
+further reload on its own. `tests/normwire.cjs`'s own "path 3" (a pre-existing
+suite proving a v163-shaped cache is repaired by the normalizer on reload)
+needed one change to keep testing what it always meant to: it seeds the
+pre-fix `localStorage` key directly and reloads, which is a genuine first-boot
+migration only in a browser that has never written to IndexedDB — and by the
+time path 3 runs, this suite's OWN path 2 has already saved real data there.
+It now clears the specific IndexedDB key first (a plain `readwrite` delete,
+not `deleteDatabase()` — this page already holds an open connection from path
+2's save, which would leave `deleteDatabase()` blocked) so the scenario it
+names is the scenario it actually creates.
+
 ---
 
 ## Secrets
