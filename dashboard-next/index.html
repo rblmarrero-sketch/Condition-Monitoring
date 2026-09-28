@@ -1907,7 +1907,16 @@
   /* Tile.dc.html: discrete cards, ~12px apart, each its own border and its
      own 3-4px coloured top edge -- not the joined single-panel-with-hairlines
      shape this strip carried before the stage 3b visual pass. */
-  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(152px,1fr));
+  /* .kpirow is the identical grid, under its own name -- the Lubrication tab
+     already has an always-hidden-until-picked .kpis strip inside its
+     Recommendations subtab (#lcKpis), and a second, always-visible .kpis at
+     the top of the SAME tab (#lubeKpis, Tile.dc.html's own four tiles, added
+     this stage) would answer "how many KPI strips does #tab-lube contain" the
+     wrong way for anything still asking that question about the ORIGINAL,
+     un-tabbed /dashboard/ this class name was written for. Same look, own
+     selector, so the two strips can never be confused for one restating the
+     other. */
+  .kpis,.kpirow{display:grid;grid-template-columns:repeat(auto-fit,minmax(152px,1fr));
     gap:var(--s3);margin:0 0 var(--s5);
     align-items:stretch;}
   .kpi,.tile{position:relative;display:flex;flex-direction:column;gap:1px;
@@ -3735,6 +3744,10 @@
         </dl></div>
       </details>
     </div>
+    <!-- Tile.dc.html's own four tiles, read off lubeProgramme() and the "not
+         on the sheet" count the table below already computes -- no number
+         kept twice. -->
+    <div class="kpirow" id="lubeKpis"></div>
     <div class="subtabs" id="lubeSub" role="tablist" aria-label="Lubrication"></div>
 
 
@@ -4425,6 +4438,10 @@ const I18N={
   lp_sub:"How much of the fleet is audited, verified and standardised — against the register, not against the machines somebody happened to visit.",
   lp_note:"Below this line counts THE FLEET: {n} compartments across {u} units the reference covers, out of a site register of {s}. Everything above counts what was found when somebody looked. The two get mistaken for each other constantly.",
   lp_of:"of {n}",
+  lube_kt_cov:"Metrics covered", lube_kt_cov_tag:"programme", lube_kt_cov_note:"of {n} on the sheet",
+  lube_kt_src:"Sourced references", lube_kt_src_tag:"machine ref", lube_kt_src_note:"of {n} compartments have an OEM specification",
+  lube_kt_uns:"Unsourced", lube_kt_uns_note:"no manual page recorded",
+  lube_kt_gap:"Not on the sheet", lube_kt_gap_tag:"gap", lube_kt_gap_note:"measured in the field, absent from the programme",
   lp_covered:"Fleet in the reference", lp_covered_w:"Units whose model has a reference entry at all. A machine outside this line is not failing, it is unseen.",
   lp_sourced:"Reference sourced", lp_sourced_w:"Capacity and specification traced to a manual page, per model — so this one is short and finishable.",
   lp_audited:"Ever audited", lp_audited_w:"Somebody opened the compartment and recorded what was in it, at any time.",
@@ -5350,6 +5367,10 @@ const I18N={
   cls_DOZ:"Бульдозер", cls_LDR:"Погрузчик", cls_GRD:"Автогрейдер", cls_DRB:"Буровой станок",
   cls_DRE:"Разведочное бурение", cls_HRB:"Гидромолот", cls_CRJ:"Щековая дробилка",
   cls_CRC:"Конусная дробилка", cls_SCR:"Грохот", cls_GEN:"Вспомогательная техника",
+  lube_kt_cov:"Охват метрик", lube_kt_cov_tag:"программа", lube_kt_cov_note:"из {n} в реестре",
+  lube_kt_src:"Источник указан", lube_kt_src_tag:"справочник", lube_kt_src_note:"из {n} узлов есть заводская спецификация",
+  lube_kt_uns:"Без источника", lube_kt_uns_note:"страница руководства не указана",
+  lube_kt_gap:"Не в реестре", lube_kt_gap_tag:"пробел", lube_kt_gap_note:"измерено в поле, в программе отсутствует",
   lp_title:"Программа в честных цифрах",
   lp_sub:"Какая часть парка проверена, подтверждена и стандартизована — относительно реестра, а не тех машин, куда кто-то дошёл.",
   lp_note:"Ниже этой строки считается ПАРК: {n} узлов на {u} единицах, охваченных справочником, из {s} единиц реестра. Выше — то, что нашли, когда смотрели. Эти два числа постоянно путают.",
@@ -16000,6 +16021,18 @@ function renderLubeMtx(){
    The import has always known. build-lube-data.py writes every unmatched name to
    docs/lube-import-report.txt, a text file in a repository, which for a
    reliability engineer at Baimskaya is the same as not writing it at all. */
+/* The count the Lubrication tab's own "Not on the sheet" KPI tile reads --
+   pulled out so the tile and the table below it (renderLubeGaps' own "half
+   one") never keep two copies of the same dedup rule. */
+function lubeMissUnitsCount(){
+  const miss = {};
+  (window.ASSETS||[]).forEach(a=>{
+    if(lubeOf(a.m||"", a.cls||"")) return;
+    const m = (a.m||"").trim() || "\u2014", k = (a.cls||"") + "|" + m;
+    (miss[k] || (miss[k] = { cls:a.cls||"", m, n:0 })).n++;
+  });
+  return Object.values(miss).reduce((a,r)=>a+r.n,0);
+}
 function renderLubeGaps(){
   const noRef = $("lgNoRef"), noMach = $("lgNoMach");
   if(!noRef || !noMach) return;
@@ -17776,6 +17809,7 @@ function renderLubeTab(){
   $("lmSeg").querySelectorAll("button[data-c]").forEach(b=>{
     b.onclick = ()=>{ lubeShow = b.dataset.c; renderLubeTab(); };
   });
+  renderLubeKpis();
   renderLubeProg();
   renderLubeStd();
   renderLubeCat();
@@ -17784,6 +17818,25 @@ function renderLubeTab(){
   renderLubeGaps();
   renderLubePoster();
   renderLubeSub();
+}
+/* Tile.dc.html's four tiles, at the top of the tab -- Metrics covered,
+   Sourced references, Unsourced, Not on the sheet. Every value here is
+   already computed by lubeProgramme()/lubeMissUnitsCount(); nothing new is
+   counted for this row. */
+function renderLubeKpis(){
+  const box=$("lubeKpis"); if(!box) return;
+  const P=lubeProgramme();
+  const unsourced=Math.max(0,P.refTotal-P.refKnown);
+  const miss=lubeMissUnitsCount();
+  const tile=(k,tag,v,note,tone)=>`<div class="kpi" style="--kc:${tone}">
+    <div class="row" style="justify-content:space-between;align-items:center">
+      <span class="k">${esc(t(k))}</span><span class="hint">${esc(t(tag))}</span></div>
+    <div class="v">${fmtN(v)}</div><div class="sub" style="margin:0">${esc(note)}</div></div>`;
+  box.innerHTML =
+      tile("lube_kt_cov","lube_kt_cov_tag",P.covered, t("lube_kt_cov_note",{n:fmtN(P.siteUnits)}), "var(--accent)")
+    + tile("lube_kt_src","lube_kt_src_tag",P.refKnown, t("lube_kt_src_note",{n:fmtN(P.refTotal)}), "var(--good)")
+    + tile("lube_kt_uns","lube_kt_src_tag",unsourced, t("lube_kt_uns_note"), "var(--warning)")
+    + tile("lube_kt_gap","lube_kt_gap_tag",miss, t("lube_kt_gap_note"), "var(--muted)");
 }
 
 /* The clashes that are still open, named, with the decision one click away.
