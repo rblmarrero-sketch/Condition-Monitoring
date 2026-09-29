@@ -1676,6 +1676,16 @@
   .srchead .state{margin-left:auto;font-size:11px;color:var(--muted);white-space:nowrap;padding-top:2px;}
   .srccard.on .srchead .state{color:var(--good);font-weight:650;}
   .srcbody{padding:14px 16px;display:flex;flex-direction:column;gap:10px;}
+  /* Conflict dialog (Stage 6): one card per device, matched to
+     Conflict.dc.html's own side-by-side "Phone A / Phone B" shell. Presentation
+     only -- renderConflict() still writes the identical data into it, and
+     keepVersion(dev) (the write path) is unchanged. */
+  .cfgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:var(--s3);}
+  .cfcard{border:1px solid var(--border);border-radius:8px;padding:var(--s3);
+    display:flex;flex-direction:column;gap:var(--s2);background:var(--surface-2);}
+  .cfcard.on{border-color:var(--accent);}
+  .cfcardhd b{font-size:14px;}
+  .cfcardft{margin-top:auto;padding-top:4px;}
   /* THE TOOLBAR RULE THAT NEVER EXISTED. Twelve blocks on this page carry
      class="row" with inline gap and align-items — and .row was only ever
      defined as a flex container INSIDE the Data sources modal. Everywhere
@@ -12179,6 +12189,15 @@ function renderConflict(rec){
      version is compared against. */
   const winDev=String((rec._mine&&rec._mine.dev)||rec.dev||"");
   const winItems=(rec._mine&&rec._mine.items)||rec.items||[];
+  /* PRESENTATION ONLY (Stage 6, matched to Conflict.dc.html's own per-phone
+     card shell): the two/more device versions now sit in a card grid, one
+     card per device, instead of a flat stacked list -- so a reader compares
+     them the way the mockup lays them out, side by side. Nothing here
+     changes what is written: keepVersion(dev) is called with the identical
+     `dev` string either way, and cfDiff/cfDiffHTML (the actual comparison
+     logic) are untouched, called with the identical arguments. Only the
+     wrapping markup and its CSS class moved. */
+  box.className="cfgrid";
   box.innerHTML=all.map(v=>{
     const on=rec._keep&&rec._keep===v.dev;
     /* AND WHAT CHOOSING IT WOULD CHANGE. A row that says only "12 findings"
@@ -12188,17 +12207,18 @@ function renderConflict(rec){
     const isWin = v.dev===winDev;
     const diff = (!v.absent && !isWin && v.items)
       ? cfDiffHTML(cfDiff(winItems, v.items), winDev||"—", v.dev) : "";
-    return `<div style="margin-bottom:12px">
-      <div class="row" style="align-items:center;gap:10px">
-      <div style="flex:1">
+    return `<div class="cfcard${on?" on":""}">
+      <div class="cfcardhd">
         <b>${esc(t("cf_dev",{d:v.dev}))}</b>${on?` <span class="editflag">${esc(t("cf_inuse"))}</span>`:""}${
           isWin?` <span class="pill g">${esc(t("cf_standing"))}</span>`:""}
         <div class="muted" style="font-size:12px">${esc(v.absent
           ? t("cf_absent")
           : t("cf_by",{by:v.by||"—", n:v.n==null?"?":v.n}))}</div>
       </div>
-      <button class="btn${on?"":" primary"}" data-keep="${esc(v.dev)}"${on||v.absent?" disabled":""}>${esc(t("cf_use"))}</button>
-      </div>${diff}
+      ${diff}
+      <div class="cfcardft">
+        <button class="btn${on?"":" primary"}" data-keep="${esc(v.dev)}"${on||v.absent?" disabled":""}>${esc(t("cf_use"))}</button>
+      </div>
     </div>`;
   }).join("");
   box.querySelectorAll("[data-keep]").forEach(b=>b.onclick=()=>keepVersion(b.dataset.keep));
