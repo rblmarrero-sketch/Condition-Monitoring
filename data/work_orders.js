@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-09-29T02:26:57+00:00",
+  "generated": "2026-09-29T02:59:10+00:00",
   "source": "https://askpi.94-131-94-152.sslip.io/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 681,
@@ -316,7 +316,7 @@ window.CM_WO_DATA = {
     "WE009",
     "WE011"
   ],
-  "duplicateRowsCollapsed": 247,
+  "duplicateRowsCollapsed": 249,
   "roundsDedupedWithinVisit": 8,
   "columns": [
     "Asset description",
@@ -22362,6 +22362,27 @@ window.CM_WO_DATA = {
       "actualStart": "2026-08-20",
       "actualStartDt": "2026-08-20T00:00:00",
       "actualEnd": "2026-08-20"
+    },
+    {
+      "equip": "GE056",
+      "cls": "GEN",
+      "woNumber": "WO-018337",
+      "maintType": "2000 Hours service Planned",
+      "hours": 2000,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-10-03",
+      "planStartDt": "2026-10-03T00:00:00",
+      "planEnd": "2026-10-03",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
     },
     {
       "equip": "GE057",
