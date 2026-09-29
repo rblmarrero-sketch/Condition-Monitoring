@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-09-29T09:48:38+00:00",
+  "generated": "2026-09-29T10:03:38+00:00",
   "source": "https://askpi.94-131-94-152.sslip.io/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 681,
@@ -316,7 +316,7 @@ window.CM_WO_DATA = {
     "WE009",
     "WE011"
   ],
-  "duplicateRowsCollapsed": 256,
+  "duplicateRowsCollapsed": 257,
   "roundsDedupedWithinVisit": 9,
   "columns": [
     "Asset description",
@@ -12068,6 +12068,25 @@ window.CM_WO_DATA = {
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
+    },
+    {
+      "equip": "DZ014",
+      "cls": "DOZ",
+      "woNumber": "WO-012166",
+      "maintType": "500 Hours service Planned",
+      "hours": 500,
+      "cmLabel": "500h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
+      "planStart": "2026-09-24",
+      "planStartDt": "2026-09-24T09:00:00",
+      "planEnd": "2026-09-24",
+      "actualStart": "2026-09-24",
+      "actualStartDt": "2026-09-24T09:00:00",
+      "actualEnd": "2026-09-24"
     },
     {
       "equip": "DZ014",
@@ -50119,6 +50138,27 @@ window.CM_WO_DATA = {
     {
       "equip": "TK123",
       "cls": "AT",
+      "woNumber": null,
+      "maintType": "500 Hours service Planned",
+      "hours": 500,
+      "cmLabel": "Magnetic Plug",
+      "cmTypes": [
+        "MP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": null,
+      "cmmsStatus": "Registered",
+      "open": true,
+      "planStart": null,
+      "planStartDt": null,
+      "planEnd": null,
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
+      "equip": "TK123",
+      "cls": "AT",
       "woNumber": "GD-021067",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
@@ -52573,6 +52613,27 @@ window.CM_WO_DATA = {
       "actualStart": "2026-09-19",
       "actualStartDt": "2026-09-19T19:00:00",
       "actualEnd": "2026-09-20"
+    },
+    {
+      "equip": "TK127",
+      "cls": "AT",
+      "woNumber": "WO-016596",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "Magnetic Plug",
+      "cmTypes": [
+        "MP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
+      "planStart": "2026-09-27",
+      "planStartDt": "2026-09-27T19:00:00",
+      "planEnd": "2026-09-27",
+      "actualStart": "2026-09-27",
+      "actualStartDt": "2026-09-27T19:00:00",
+      "actualEnd": "2026-09-27"
     },
     {
       "equip": "TK127",
