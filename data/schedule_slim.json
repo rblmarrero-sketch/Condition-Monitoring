@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-29T21:43:32+00:00",
+  "generated": "2026-09-29T21:58:47+00:00",
   "byUnit": {
     "BL001": [
       {
@@ -2062,24 +2062,6 @@
       "completed": ""
     },
     {
-      "wo": "WO-017343",
-      "equip": "TK147",
-      "cls": "HT",
-      "comp": "",
-      "desc": "Filter Cut / General Inspection / Magnetic Plug / Dump Body Liner",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-10-04",
-      "type": "4000 Hours service Planned",
-      "hours": 4000,
-      "plan": "2026-10-04",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
       "wo": "WO-017881",
       "equip": "TK159",
       "cls": "HT",
@@ -3457,6 +3439,24 @@
       "raised": "2026-09-26",
       "type": "250 Hours service Planned",
       "hours": 250,
+      "plan": "2026-09-26",
+      "status": "Completed",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "complete",
+      "completed": "2026-09-27"
+    },
+    {
+      "wo": "WO-017343",
+      "equip": "TK147",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Filter Cut / General Inspection / Magnetic Plug / Dump Body Liner",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-09-26",
+      "type": "4000 Hours service Planned",
+      "hours": 4000,
       "plan": "2026-09-26",
       "status": "Completed",
       "request": "",
