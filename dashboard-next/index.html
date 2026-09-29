@@ -19233,6 +19233,32 @@ document.querySelector(".lang").addEventListener("click",e=>{
        filed, the editor. Reloading under them would discard it. */
     if([...document.querySelectorAll(".ov")].some(o=>!o.classList.contains("hidden"))) return true;
     const px=$("pxPanel"); if(px && !px.classList.contains("hidden")) return true;
+    /* THE MACHINE DRAWER IS AN OVERLAY TOO, AND IT NEVER CARRIED THE CLASS
+       THIS CHECK LOOKS FOR. #drw (openUnit's machine summary, openPos's
+       position detail — every "look at a machine without leaving the page"
+       panel on Overview and Wear & life) is `role="dialog" aria-modal="true"`
+       exactly like #editOv/#follOv/#opOv, but it was built with its own
+       class ("drw", for its own slide-in transform) instead of "ov", so this
+       selector never saw it as open work. Reported plainly: "View all
+       equipment" (or any machine row) opens the drawer, and it closes on its
+       own the moment anything is next clicked — because THIS preview branch's
+       own ?v= tag is behind the live mobile/sw.js build essentially always
+       (it is not kept in lockstep with the mainline's own constant BUILD
+       bumps the way the default branch is), so `look()` finds "newer" within
+       seconds of any real visit, `dashWaiting` is set, and the very next
+       click anywhere — document-level, capture phase, 300ms later — ran
+       straight through this gate and reloaded the page out from under
+       whatever the reader had just opened. */
+    const drw=$("drw"); if(drw && !drw.classList.contains("hidden")) return true;
+    /* AND "VIEW ALL EQUIPMENT" IS THE SAME LOSS WITH NO DIALOG TO CATCH IT.
+       Expanding the Overview register past its own top ten is not a modal,
+       so it was never going to satisfy an ".ov" check either way — but it is
+       just as much "the reader in the middle of something" as any dialog
+       here, and the same reload wiped it back to ten rows on the very next
+       click, which is this bug's literal report. `fleetAll` is the one flag
+       that state lives in; while it is set, the reload waits, the same way
+       it already waits for #pxPanel. */
+    if(typeof fleetAll!=="undefined" && fleetAll) return true;
     return false;
   };
   const applyIfIdle=()=>{
