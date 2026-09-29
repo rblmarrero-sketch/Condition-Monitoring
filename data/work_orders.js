@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-09-29T04:43:34+00:00",
+  "generated": "2026-09-29T04:58:15+00:00",
   "source": "https://askpi.94-131-94-152.sslip.io/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 681,
@@ -316,8 +316,8 @@ window.CM_WO_DATA = {
     "WE009",
     "WE011"
   ],
-  "duplicateRowsCollapsed": 251,
-  "roundsDedupedWithinVisit": 8,
+  "duplicateRowsCollapsed": 252,
+  "roundsDedupedWithinVisit": 9,
   "columns": [
     "Asset description",
     "Asset old no",
@@ -400,13 +400,13 @@ window.CM_WO_DATA = {
     "wo": "Work order number"
   },
   "cmDateFrom": {
-    "raised": 92,
+    "raised": 93,
     "detected": 0,
     "planStart": 0
   },
   "cmCauseFrom": {
     "wo": 43,
-    "wr": 49,
+    "wr": 50,
     "cert": 0,
     "none": 0
   },
@@ -419,6 +419,29 @@ window.CM_WO_DATA = {
     "Bekzhan"
   ],
   "cmWorkOrders": [
+    {
+      "date": "2026-09-29",
+      "dateFrom": "raised",
+      "raised": "2026-09-29",
+      "detected": "2026-09-29",
+      "planStart": null,
+      "closed": null,
+      "asset": "EX012",
+      "defect": "DD-00013627",
+      "requestNo": "DD-00013627",
+      "eqType": "EXCAVATOR, BUCKET",
+      "system": "EX012.CH.BUC (Bucket / Ковш)",
+      "priority": "P4 Planned (Repair)",
+      "defectType": "2.01 Wear / Износ",
+      "cause": "Абразивный износ",
+      "causeFrom": "wr",
+      "descr": "Критический абразивный износ и частичное отсутствие срыв/утеря элементов съёмной футеровки ковша.",
+      "status": "Registered",
+      "by": "Irek",
+      "woNumber": null,
+      "maintType": null,
+      "planned": false
+    },
     {
       "date": "2026-09-29",
       "dateFrom": "raised",
@@ -4025,6 +4048,25 @@ window.CM_WO_DATA = {
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
+    },
+    {
+      "equip": "CD008",
+      "cls": "GEN",
+      "woNumber": "WO-016916",
+      "maintType": "1000 Hours service Planned",
+      "hours": 1000,
+      "cmLabel": "1000h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
+      "planStart": "2026-09-17",
+      "planStartDt": "2026-09-17T19:00:00",
+      "planEnd": "2026-09-18",
+      "actualStart": "2026-09-17",
+      "actualStartDt": "2026-09-17T19:00:00",
+      "actualEnd": "2026-09-18"
     },
     {
       "equip": "CD008",
@@ -25021,6 +25063,27 @@ window.CM_WO_DATA = {
       "actualStart": "2026-09-01",
       "actualStartDt": "2026-09-01T19:00:00",
       "actualEnd": "2026-09-02"
+    },
+    {
+      "equip": "GE102",
+      "cls": "GEN",
+      "woNumber": "WO-016923",
+      "maintType": "4000 Hours service Planned",
+      "hours": 4000,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-09-17",
+      "planStartDt": "2026-09-17T15:00:00",
+      "planEnd": "2026-09-17",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
     },
     {
       "equip": "GE102",
