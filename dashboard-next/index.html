@@ -6533,7 +6533,86 @@ const asMap  = k => { try{ const v=JSON.parse(localStorage.getItem(k));
                       return (v && typeof v==="object" && !Array.isArray(v))?v:{}; }
                       catch(e){ return {}; } };
 let imported=asList(STORE);
-let driveRecs=asList(DSTORE);
+/* THE DRIVE CACHE LIVES IN INDEXEDDB, NOT LOCALSTORAGE.
+
+   Ported from dashboard/index.html's own fix (build 481): a fleet running
+   ~70 inspections a day for three months has a folder averaging ~12 KB of
+   JSON per record once positions, defects and readings are counted — call
+   it 6,000+ records, ~75 MB total. A browser gives one origin's
+   localStorage 5-10 MB, total, for every key it holds. saveDrive() used to
+   write the WHOLE cache there on every pull, and once the fleet's history
+   crossed that ceiling every single save started failing, silently, and
+   permanently — every reload paid for a full re-download for ever, because
+   the browser had nowhere left to remember that it had already done so.
+   This page was copied from dashboard/index.html before that fix existed,
+   so it still carried the original bug; ported here so it does not repeat
+   it the day dashboard-next's own cache crosses the same ceiling.
+   IndexedDB's quota is disk-sized, not origin-sized, so the same fleet at
+   ten times this size still fits. driveRecs itself is unchanged — every
+   reader in this file still sees a plain in-memory array; only where it is
+   PERSISTED moved. See loadDriveCache() (below) for the one-time migration
+   of whatever a browser already had cached in localStorage, and
+   saveDrive() (further down) for the write side. */
+const DDB_NAME="cm_dash_idb", DDB_STORE="kv", DDB_VER=1;
+let ddbP=null;
+function ddb(){
+  if(ddbP) return ddbP;
+  ddbP=new Promise((res,rej)=>{
+    if(!window.indexedDB){ rej(new Error("indexedDB unavailable")); return; }
+    let rq; try{ rq=indexedDB.open(DDB_NAME,DDB_VER); }catch(e){ rej(e); return; }
+    rq.onupgradeneeded=()=>{ if(!rq.result.objectStoreNames.contains(DDB_STORE)) rq.result.createObjectStore(DDB_STORE); };
+    rq.onsuccess=()=>res(rq.result);
+    rq.onerror=()=>rej(rq.error||new Error("indexedDB open failed"));
+  });
+  return ddbP;
+}
+/* One-shot `done` per transaction — an aborted/errored IndexedDB transaction
+   with a request already in flight can fire BOTH the request's own error and
+   the transaction's abort for the identical failure (see mobile/index.html's
+   dbPut/dbDel, build 480); without the guard a caller could see two
+   settlements for one write. */
+function ddbGet(key){
+  return ddb().then(d=>new Promise((res,rej)=>{
+    const t=d.transaction(DDB_STORE,"readonly"); let done=false;
+    const rq=t.objectStore(DDB_STORE).get(key);
+    t.oncomplete=()=>{ if(done) return; done=true; res(rq.result); };
+    t.onerror=()=>{ if(done) return; done=true; rej(t.error||new Error("indexedDB read failed")); };
+    t.onabort=()=>{ if(done) return; done=true; rej(t.error||new Error("indexedDB read aborted")); };
+  }));
+}
+function ddbSet(key,val){
+  return ddb().then(d=>new Promise((res,rej)=>{
+    const t=d.transaction(DDB_STORE,"readwrite"); let done=false;
+    t.objectStore(DDB_STORE).put(val,key);
+    t.oncomplete=()=>{ if(done) return; done=true; res(); };
+    t.onerror=()=>{ if(done) return; done=true; rej(t.error||new Error("indexedDB write failed")); };
+    t.onabort=()=>{ if(done) return; done=true; rej(t.error||new Error("indexedDB write aborted")); };
+  }));
+}
+/* Starts empty; loadDriveCache() (awaited at the very start of boot, below)
+   fills it in before the first render, so "empty" is never what the reader
+   actually sees — it is only ever true for the handful of milliseconds
+   before the IndexedDB read settles. */
+let driveRecs=[];
+/* Runs once, at boot, before the first render. Reads the new IndexedDB store;
+   if that is genuinely empty (never written here before) it looks for the
+   OLD localStorage cache — a browser upgrading from before this fix — carries
+   it across exactly once, and clears the localStorage copy so that quota-
+   limited space goes back to the other stores that still use it. A browser
+   with no IndexedDB at all falls back to the localStorage read this always
+   used to be — worse than the fix, never worse than before it. */
+async function loadDriveCache(){
+  try{
+    const v=await ddbGet(DSTORE);
+    if(v!==undefined) return Array.isArray(v)?v:[];
+    const legacy=localStorage.getItem(DSTORE);
+    if(!legacy) return [];
+    let migrated=[]; try{ const p=JSON.parse(legacy); if(Array.isArray(p)) migrated=p; }catch(e){}
+    try{ await ddbSet(DSTORE,migrated); localStorage.removeItem(DSTORE); }
+    catch(e){ bad("drive-cache-migrate",e); }
+    return migrated;
+  }catch(e){ bad("drive-cache-load",e); return asList(DSTORE); }
+}
 /* Corrections and voids made here, keyed UNIT|DATE|TYPE. They live in their own
    files in Drive rather than inside the inspection, because the phone that
    captured it still holds that record and re-syncing would overwrite anything
@@ -6823,12 +6902,16 @@ function rebuild(){
     .sort((a,b)=>(b.date||"").localeCompare(a.date||"")||a.equip.localeCompare(b.equip));
 }
 function saveImported(){ try{ localStorage.setItem(STORE,JSON.stringify(imported)); }catch(e){ alert("Storage full — clear old imports."); } }
-/* Losing this cache is survivable — it only means the next refresh re-reads the
-   folder, which is one request. Dropping the cursor is what makes that happen. */
+/* IndexedDB, not localStorage — see the note above driveRecs's own declaration
+   for why. Fire-and-forget on purpose, matching every call site: the render
+   already happened from the in-memory array before this is called. A failure
+   is rare now (IndexedDB is sized to the disk, not the origin) and is
+   recorded rather than silently dropped — the browser is never told to
+   forget its sync cursor over it, the way the old localStorage-quota catch
+   did: that was the right move for a ceiling this cache could actually
+   outgrow in an afternoon, and the wrong one for a failure this unusual. */
 function saveDrive(){
-  try{ localStorage.setItem(DSTORE,JSON.stringify(driveRecs)); }
-  catch(e){ localStorage.removeItem(DSTORE); localStorage.removeItem("cm_drive_cursor");
-            console.warn("Drive cache too big for localStorage — will re-read next time."); }
+  ddbSet(DSTORE,driveRecs).catch(e=>bad("drive-cache-save",e));
 }
 function saveConflicts(){
   try{ localStorage.setItem(CSTORE,JSON.stringify(conflicts)); }
@@ -19322,26 +19405,37 @@ document.querySelector(".lang").addEventListener("click",e=>{
   document.addEventListener("click", ()=>setTimeout(applyIfIdle, 300), true);
 })();
 
-rebuild(); refreshControls(); renderAll(); refreshSources();
+/* driveRecs now starts as [] (see loadDriveCache() above, ported from
+   dashboard/index.html's own build-481 fix) and is only populated by
+   awaiting the IndexedDB read — so boot has to wait for it before the first
+   render, exactly the way dashboard/index.html's own boot() does. IndexedDB
+   is fast (single-digit milliseconds for a cache this shape) and this await
+   is the only place that cost is paid; a browser with nothing cached yet
+   pays nothing extra, since loadDriveCache() resolves to an empty array as
+   fast as the old synchronous localStorage read did. */
+(async function boot(){
+  try{ driveRecs=await loadDriveCache(); }catch(e){ bad("drive-cache-boot",e); }
+  rebuild(); refreshControls(); renderAll(); refreshSources();
 
-/* AND THE ADDRESS IS READ BACK ON ARRIVAL — at the END of boot, deliberately.
+  /* AND THE ADDRESS IS READ BACK ON ARRIVAL — at the END of boot, deliberately.
 
-   The first version of this line went in beside an identical-looking call
-   inside a data-store method, because that string appears more than once and
-   the first match won. It then ran before `urlBooting` was even declared,
-   threw in the temporal dead zone, and took the boot sequence with it. The
-   address has to be applied after the page exists and once, here. */
-try{
-  urlBooting=false;
-  if(BOOT_HASH && BOOT_HASH.length>1) urlRead(BOOT_HASH); else urlWrite(false);
-}catch(e){ urlBooting=false; }
-applyLang();                          // paints the static markup and re-renders in the saved language
-/* First run shows where data comes from — but only when there is a question to
-   answer. A browser that picked its settings up from the defaults file or from
-   the link is already configured and is seconds away from filling itself, so
-   opening a setup panel over it asks somebody to solve a problem they do not
-   have. Deferred a beat so drive.js has loaded and can be asked. */
-setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
+     The first version of this line went in beside an identical-looking call
+     inside a data-store method, because that string appears more than once and
+     the first match won. It then ran before `urlBooting` was even declared,
+     threw in the temporal dead zone, and took the boot sequence with it. The
+     address has to be applied after the page exists and once, here. */
+  try{
+    urlBooting=false;
+    if(BOOT_HASH && BOOT_HASH.length>1) urlRead(BOOT_HASH); else urlWrite(false);
+  }catch(e){ urlBooting=false; }
+  applyLang();                          // paints the static markup and re-renders in the saved language
+  /* First run shows where data comes from — but only when there is a question to
+     answer. A browser that picked its settings up from the defaults file or from
+     the link is already configured and is seconds away from filling itself, so
+     opening a setup panel over it asks somebody to solve a problem they do not
+     have. Deferred a beat so drive.js has loaded and can be asked. */
+  setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
+})();
 </script>
 <script src="../dashboard/drive.js?v=482"></script>
 <script src="../dashboard/sync-adapter.js?v=482"></script>
