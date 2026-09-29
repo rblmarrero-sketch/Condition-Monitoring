@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-09-29T20:43:41+00:00",
+  "generated": "2026-09-29T20:58:34+00:00",
   "source": "https://askpi.94-131-94-152.sslip.io/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 681,
@@ -317,7 +317,7 @@ window.CM_WO_DATA = {
     "WE011"
   ],
   "duplicateRowsCollapsed": 258,
-  "roundsDedupedWithinVisit": 9,
+  "roundsDedupedWithinVisit": 11,
   "columns": [
     "Asset description",
     "Asset old no",
@@ -53614,6 +53614,25 @@ window.CM_WO_DATA = {
     {
       "equip": "TK143",
       "cls": "AT",
+      "woNumber": "WO-016573",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "250h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
+      "planStart": "2026-09-27",
+      "planStartDt": "2026-09-27T14:15:00",
+      "planEnd": "2026-09-27",
+      "actualStart": "2026-09-27",
+      "actualStartDt": "2026-09-27T14:15:00",
+      "actualEnd": "2026-09-27"
+    },
+    {
+      "equip": "TK143",
+      "cls": "AT",
       "woNumber": "WO-017872",
       "maintType": "4000 Hours service Planned",
       "hours": 4000,
@@ -55846,6 +55865,25 @@ window.CM_WO_DATA = {
       "planStart": "2026-09-26",
       "planStartDt": "2026-09-26T00:00:00",
       "planEnd": "2026-09-27",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
+      "equip": "TK158",
+      "cls": "HT",
+      "woNumber": "WO-016591",
+      "maintType": "500 Hours service Planned",
+      "hours": 500,
+      "cmLabel": "500h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-09-26",
+      "planStartDt": "2026-09-26T08:00:00",
+      "planEnd": "2026-09-26",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
