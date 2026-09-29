@@ -120,8 +120,31 @@ const probe = async (p) => p.evaluate(() => {
 
   console.log("\n  path 3 — a v163 cache reloaded by a v165 build");
   /* The migration case. A phone or desk that already held records from before
-     the normalizer existed must not carry the fault across the upgrade. */
+     the normalizer existed must not carry the fault across the upgrade.
+
+     A real v163 browser never wrote to IndexedDB at all — that store did not
+     exist yet. This same page, by this point in the suite, already has real
+     data in it from path 2's own setDriveRecords() call, and the drive cache
+     now lives there, not in localStorage (see the drive-cache-quota fix).
+     IndexedDB is source of truth once it holds anything, by design — a stale
+     localStorage key must never override real cached data — so simulating a
+     genuine first-boot-after-upgrade means clearing it before seeding the old
+     localStorage-shaped cache, the same technique tests/drivecache.cjs uses. */
   const migrated = await p.evaluate(async recs => {
+    /* A normal readwrite delete, not deleteDatabase() — this page already has
+       an open connection from path 2's own save, and deleteDatabase() would
+       block on it (no versionchange handler closes it). */
+    await new Promise(res => {
+      const rq = indexedDB.open("cm_dash_idb", 1);
+      rq.onupgradeneeded = () => { if (!rq.result.objectStoreNames.contains("kv")) rq.result.createObjectStore("kv"); };
+      rq.onsuccess = () => {
+        const db = rq.result;
+        const t = db.transaction("kv", "readwrite");
+        t.objectStore("kv").delete("cm_dash_drive");
+        t.oncomplete = t.onerror = () => { db.close(); res(); };
+      };
+      rq.onerror = () => res();
+    });
     localStorage.setItem("cm_dash_drive", JSON.stringify(recs));
     location.reload();
     return true;

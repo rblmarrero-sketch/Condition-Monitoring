@@ -778,6 +778,14 @@
      against. Where it still cannot fit, the first column stays put so the row
      never loses its name. */
   .grid12 .tblwrap table.grid th{white-space:normal;}
+  /* Plan.dc.html's own nine columns include two genuinely long headers
+     ("1C actual (WO closed)", "Nearest CM round") that real dates and unit
+     numbers -- narrower than the header text itself -- do not stretch wide
+     enough to hold on one line, so the sheet edged past 1366px by a few
+     tens of pixels. Letting THIS table's header wrap is the same escape
+     valve .grid12 already uses elsewhere, scoped to the one table that
+     needs it rather than loosened for every worksheet on the page. */
+  #paList table.grid th{white-space:normal;}
   .grid12 .tblwrap table.grid th:first-child,
   .grid12 .tblwrap table.grid td:first-child{position:sticky;left:0;background:var(--surface);}
   .grid12 .tblwrap table.grid thead th:first-child{background:var(--surface-2);z-index:3;}
@@ -2088,6 +2096,25 @@
   @media (min-width:1100px){
     #kpis{grid-template-columns:repeat(6,1fr);}
   }
+  /* Due.dc.html: four tiles, one row, equal columns. Plan.dc.html: six.
+     Same reasoning as #kpis above -- auto-fit alone leaves an unfilled
+     trailing gap once the column count no longer divides the row's own
+     width evenly. */
+  @media (min-width:900px){ #dueKpis{grid-template-columns:repeat(4,1fr);} }
+  @media (min-width:1100px){ #paKpis{grid-template-columns:repeat(6,1fr);} }
+  /* Defects.dc.html: one hero tile beside a "By person" panel, 1fr/2fr --
+     not six identical cards (a fleet with more inspectors would otherwise
+     keep stretching the whole tile row sideways). */
+  .kpis.cwtiles{grid-template-columns:minmax(0,1fr);}
+  @media (min-width:760px){ .kpis.cwtiles{grid-template-columns:minmax(0,1fr) minmax(0,2fr);} }
+  .cwpeople{gap:10px;}
+  .cwplist{display:flex;flex-wrap:wrap;gap:8px;margin:2px 0 0;}
+  .cwpbtn{min-height:40px;padding:0 12px;border-radius:6px;border:1px solid var(--border);
+    background:var(--surface);font:500 14px/1 inherit;color:var(--ink);cursor:pointer;
+    display:inline-flex;align-items:center;gap:8px;font-family:inherit;}
+  .cwpbtn:hover{background:var(--surface-2);}
+  .cwpbtn.on{background:var(--surface-2);box-shadow:0 0 0 1px var(--accent) inset;}
+  .cwpbtn .n{font:600 12px 'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--ink-2);}
   #kpiMix .legend{gap:0 8px;line-height:1.25;}
   #kpiMix .legend button{padding:1px 4px;}
   /* Item 4 / Main.dc.html line 70: the percentage and its caption sit on
@@ -3640,7 +3667,7 @@
          reads as "1C did not fill this in"; it must never be able to mean
          "the ingester looked for a header that is not there". -->
     <div id="cwWarn"></div>
-    <div class="kpis" id="cwKpis"></div>
+    <div class="kpis cwtiles" id="cwKpis"></div>
     <div class="section">
       <div class="secthd"><h2 data-i18n="cw_h2">Defect work orders</h2>
         <span class="pgsub" data-i18n="cw_h2sub">One row per defect. 1C repeats a work order per line item, so a defect with two parts booked against it is shown once.</span></div>
@@ -5260,7 +5287,7 @@ const I18N={
   cw_sub:"Defect work orders raised by {who}, from {d} onward. Read from 1C's own export — the date, the number, the type, the cause and the status are as 1C holds them.",
   cw_h2:"Defect work orders",
   cw_h2sub:"One row per defect. 1C repeats a work order per line item, so a defect with two parts booked against it is shown once.",
-  cw_k_total:"Defects raised", cw_k_total_s:"since {d}", cw_k_person_s:"tap to show only theirs",
+  cw_k_total:"Defects raised", cw_k_total_s:"since {d}", cw_k_person_s:"Press a name to show only theirs.", cw_k_people:"By person",
   cw_status:"Status", cw_status_all:"Any status", cw_find:"Search", cw_findph:"unit, defect no, cause",
   cw_showplanned:"Show planned services too", cw_csv:"Export CSV",
   cw_is_planned:"planned service",
@@ -6161,7 +6188,7 @@ const I18N={
   cw_sub:"Наряды по дефектам, заявленные: {who}, начиная с {d}. Данные из выгрузки 1С — дата, номер, тип, причина и статус приведены так, как их хранит 1С.",
   cw_h2:"Наряды по дефектам",
   cw_h2sub:"Одна строка на дефект. 1С повторяет наряд по каждой позиции, поэтому дефект с двумя позициями показан один раз.",
-  cw_k_total:"Заявлено дефектов", cw_k_total_s:"с {d}", cw_k_person_s:"нажмите, чтобы показать только его",
+  cw_k_total:"Заявлено дефектов", cw_k_total_s:"с {d}", cw_k_person_s:"Нажмите на имя, чтобы показать только его.", cw_k_people:"По сотрудникам",
   cw_status:"Статус", cw_status_all:"Любой статус", cw_find:"Поиск", cw_findph:"ед., № дефекта, причина",
   cw_showplanned:"Показывать и плановые ТО", cw_csv:"Экспорт CSV",
   cw_is_planned:"плановое ТО",
@@ -6516,7 +6543,86 @@ const asMap  = k => { try{ const v=JSON.parse(localStorage.getItem(k));
                       return (v && typeof v==="object" && !Array.isArray(v))?v:{}; }
                       catch(e){ return {}; } };
 let imported=asList(STORE);
-let driveRecs=asList(DSTORE);
+/* THE DRIVE CACHE LIVES IN INDEXEDDB, NOT LOCALSTORAGE.
+
+   Ported from dashboard/index.html's own fix (build 481): a fleet running
+   ~70 inspections a day for three months has a folder averaging ~12 KB of
+   JSON per record once positions, defects and readings are counted — call
+   it 6,000+ records, ~75 MB total. A browser gives one origin's
+   localStorage 5-10 MB, total, for every key it holds. saveDrive() used to
+   write the WHOLE cache there on every pull, and once the fleet's history
+   crossed that ceiling every single save started failing, silently, and
+   permanently — every reload paid for a full re-download for ever, because
+   the browser had nowhere left to remember that it had already done so.
+   This page was copied from dashboard/index.html before that fix existed,
+   so it still carried the original bug; ported here so it does not repeat
+   it the day dashboard-next's own cache crosses the same ceiling.
+   IndexedDB's quota is disk-sized, not origin-sized, so the same fleet at
+   ten times this size still fits. driveRecs itself is unchanged — every
+   reader in this file still sees a plain in-memory array; only where it is
+   PERSISTED moved. See loadDriveCache() (below) for the one-time migration
+   of whatever a browser already had cached in localStorage, and
+   saveDrive() (further down) for the write side. */
+const DDB_NAME="cm_dash_idb", DDB_STORE="kv", DDB_VER=1;
+let ddbP=null;
+function ddb(){
+  if(ddbP) return ddbP;
+  ddbP=new Promise((res,rej)=>{
+    if(!window.indexedDB){ rej(new Error("indexedDB unavailable")); return; }
+    let rq; try{ rq=indexedDB.open(DDB_NAME,DDB_VER); }catch(e){ rej(e); return; }
+    rq.onupgradeneeded=()=>{ if(!rq.result.objectStoreNames.contains(DDB_STORE)) rq.result.createObjectStore(DDB_STORE); };
+    rq.onsuccess=()=>res(rq.result);
+    rq.onerror=()=>rej(rq.error||new Error("indexedDB open failed"));
+  });
+  return ddbP;
+}
+/* One-shot `done` per transaction — an aborted/errored IndexedDB transaction
+   with a request already in flight can fire BOTH the request's own error and
+   the transaction's abort for the identical failure (see mobile/index.html's
+   dbPut/dbDel, build 480); without the guard a caller could see two
+   settlements for one write. */
+function ddbGet(key){
+  return ddb().then(d=>new Promise((res,rej)=>{
+    const t=d.transaction(DDB_STORE,"readonly"); let done=false;
+    const rq=t.objectStore(DDB_STORE).get(key);
+    t.oncomplete=()=>{ if(done) return; done=true; res(rq.result); };
+    t.onerror=()=>{ if(done) return; done=true; rej(t.error||new Error("indexedDB read failed")); };
+    t.onabort=()=>{ if(done) return; done=true; rej(t.error||new Error("indexedDB read aborted")); };
+  }));
+}
+function ddbSet(key,val){
+  return ddb().then(d=>new Promise((res,rej)=>{
+    const t=d.transaction(DDB_STORE,"readwrite"); let done=false;
+    t.objectStore(DDB_STORE).put(val,key);
+    t.oncomplete=()=>{ if(done) return; done=true; res(); };
+    t.onerror=()=>{ if(done) return; done=true; rej(t.error||new Error("indexedDB write failed")); };
+    t.onabort=()=>{ if(done) return; done=true; rej(t.error||new Error("indexedDB write aborted")); };
+  }));
+}
+/* Starts empty; loadDriveCache() (awaited at the very start of boot, below)
+   fills it in before the first render, so "empty" is never what the reader
+   actually sees — it is only ever true for the handful of milliseconds
+   before the IndexedDB read settles. */
+let driveRecs=[];
+/* Runs once, at boot, before the first render. Reads the new IndexedDB store;
+   if that is genuinely empty (never written here before) it looks for the
+   OLD localStorage cache — a browser upgrading from before this fix — carries
+   it across exactly once, and clears the localStorage copy so that quota-
+   limited space goes back to the other stores that still use it. A browser
+   with no IndexedDB at all falls back to the localStorage read this always
+   used to be — worse than the fix, never worse than before it. */
+async function loadDriveCache(){
+  try{
+    const v=await ddbGet(DSTORE);
+    if(v!==undefined) return Array.isArray(v)?v:[];
+    const legacy=localStorage.getItem(DSTORE);
+    if(!legacy) return [];
+    let migrated=[]; try{ const p=JSON.parse(legacy); if(Array.isArray(p)) migrated=p; }catch(e){}
+    try{ await ddbSet(DSTORE,migrated); localStorage.removeItem(DSTORE); }
+    catch(e){ bad("drive-cache-migrate",e); }
+    return migrated;
+  }catch(e){ bad("drive-cache-load",e); return asList(DSTORE); }
+}
 /* Corrections and voids made here, keyed UNIT|DATE|TYPE. They live in their own
    files in Drive rather than inside the inspection, because the phone that
    captured it still holds that record and re-syncing would overwrite anything
@@ -6806,12 +6912,16 @@ function rebuild(){
     .sort((a,b)=>(b.date||"").localeCompare(a.date||"")||a.equip.localeCompare(b.equip));
 }
 function saveImported(){ try{ localStorage.setItem(STORE,JSON.stringify(imported)); }catch(e){ alert("Storage full — clear old imports."); } }
-/* Losing this cache is survivable — it only means the next refresh re-reads the
-   folder, which is one request. Dropping the cursor is what makes that happen. */
+/* IndexedDB, not localStorage — see the note above driveRecs's own declaration
+   for why. Fire-and-forget on purpose, matching every call site: the render
+   already happened from the in-memory array before this is called. A failure
+   is rare now (IndexedDB is sized to the disk, not the origin) and is
+   recorded rather than silently dropped — the browser is never told to
+   forget its sync cursor over it, the way the old localStorage-quota catch
+   did: that was the right move for a ceiling this cache could actually
+   outgrow in an afternoon, and the wrong one for a failure this unusual. */
 function saveDrive(){
-  try{ localStorage.setItem(DSTORE,JSON.stringify(driveRecs)); }
-  catch(e){ localStorage.removeItem(DSTORE); localStorage.removeItem("cm_drive_cursor");
-            console.warn("Drive cache too big for localStorage — will re-read next time."); }
+  ddbSet(DSTORE,driveRecs).catch(e=>bad("drive-cache-save",e));
 }
 function saveConflicts(){
   try{ localStorage.setItem(CSTORE,JSON.stringify(conflicts)); }
@@ -17406,8 +17516,14 @@ function renderPaWeek(qtyRows){
               : gap > 0    ? t("pa_week_pm",{ n:gap, d:shortDate(r.w.planStart) })
               : gap === 0  ? t("pa_week_pm_today")
               :              t("pa_week_pm_past",{ d:shortDate(r.w.planStart) });
+            /* white-space:normal, not nowrap -- Plan.dc.html's 14-day grid
+               is fixed-width (1440px, 110px unit column + 14 equal tracks),
+               and "3 d before service 29.09" forced wide by nowrap was
+               pushing the whole sheet a few tens of pixels past 1366/1280
+               (CLAUDE.md: no sideways scroller on desktop). Wrapping the
+               note onto its own second line costs nothing it says. */
             const preLine=preTxt
-              ? `<div class="mono" style="font-size:11px;line-height:1.4;white-space:nowrap;color:var(--warn-ink);font-weight:650">${
+              ? `<div class="mono" style="font-size:11px;line-height:1.4;white-space:normal;color:var(--warn-ink);font-weight:650">${
                   esc(preTxt)}</div>` : "";
             /* A pill on a day already gone is late, and its title says so —
                a shaded column is not readable to somebody who cannot see
@@ -17431,7 +17547,7 @@ function renderPaWeek(qtyRows){
                     110 of them at seven columns, 214 once the agenda
                     widened to a fortnight. Doubling the count is what made
                     it worth looking at; the size was wrong at either. */
-                 + `<div class="mono muted" style="font-size:11px;line-height:1.4;white-space:nowrap">${esc(r.w.woNumber||"—")}</div>`
+                 + `<div class="mono muted" style="font-size:11px;line-height:1.4;white-space:normal;word-break:break-word">${esc(r.w.woNumber||"—")}</div>`
                  + (sub2?`<div class="mono muted" style="font-size:11px;line-height:1.4;white-space:nowrap">${sub2}</div>`:"")
                  + preLine
                  + `</div>`;
@@ -18938,14 +19054,22 @@ function renderCmWoTab(){
   (D.cmPeople||[]).forEach(n=>per[n]=0);
   defects.forEach(r=>{ per[r.by]=(per[r.by]||0)+1; });
 
+  /* Defects.dc.html: one hero tile (the total) beside a SEPARATE "By
+     person" panel of pill buttons -- not six equal-sized cards. The total
+     keeps the same .kpi/.tile surface every other tab's tiles use; the
+     by-person panel is its own bordered box so a fleet with many names
+     grows sideways inside its own column instead of stretching the tile
+     row (a "Fifth person" would otherwise have widened five near-identical
+     cards, exactly the shape Tile.dc.html never draws). */
   if($("cwKpis")) $("cwKpis").innerHTML =
       `<div class="kpi info"><span class="k">${esc(t("cw_k_total"))}</span>
          <span class="v">${defects.length}</span>
          <span class="s">${esc(t("cw_k_total_s",{d:D.cmSince||"—"}))}</span></div>`
-    + Object.keys(per).map(n=>
-      `<button type="button" class="kpi${cwWho===n?" on":""}" data-cwwho="${esc(n)}">
-         <span class="k">${esc(n)}</span><span class="v">${per[n]}</span>
-         <span class="s">${esc(t("cw_k_person_s"))}</span></button>`).join("");
+    + `<div class="tile cwpeople"><div class="k" data-i18n="cw_k_people">${esc(t("cw_k_people"))}</div>
+        <div class="cwplist">` + Object.keys(per).map(n=>
+      `<button type="button" class="cwpbtn${cwWho===n?" on":""}" data-cwwho="${esc(n)}">
+         <span>${esc(n)}</span><span class="n">${per[n]}</span></button>`).join("")
+      + `</div><div class="s">${esc(t("cw_k_person_s"))}</div></div>`;
   if($("cwKpis")) $("cwKpis").querySelectorAll("[data-cwwho]").forEach(b=>
     b.onclick=()=>{ cwWho = (cwWho===b.dataset.cwwho) ? "" : b.dataset.cwwho; renderCmWoTab(); });
 
@@ -19253,6 +19377,32 @@ document.querySelector(".lang").addEventListener("click",e=>{
        filed, the editor. Reloading under them would discard it. */
     if([...document.querySelectorAll(".ov")].some(o=>!o.classList.contains("hidden"))) return true;
     const px=$("pxPanel"); if(px && !px.classList.contains("hidden")) return true;
+    /* THE MACHINE DRAWER IS AN OVERLAY TOO, AND IT NEVER CARRIED THE CLASS
+       THIS CHECK LOOKS FOR. #drw (openUnit's machine summary, openPos's
+       position detail — every "look at a machine without leaving the page"
+       panel on Overview and Wear & life) is `role="dialog" aria-modal="true"`
+       exactly like #editOv/#follOv/#opOv, but it was built with its own
+       class ("drw", for its own slide-in transform) instead of "ov", so this
+       selector never saw it as open work. Reported plainly: "View all
+       equipment" (or any machine row) opens the drawer, and it closes on its
+       own the moment anything is next clicked — because THIS preview branch's
+       own ?v= tag is behind the live mobile/sw.js build essentially always
+       (it is not kept in lockstep with the mainline's own constant BUILD
+       bumps the way the default branch is), so `look()` finds "newer" within
+       seconds of any real visit, `dashWaiting` is set, and the very next
+       click anywhere — document-level, capture phase, 300ms later — ran
+       straight through this gate and reloaded the page out from under
+       whatever the reader had just opened. */
+    const drw=$("drw"); if(drw && !drw.classList.contains("hidden")) return true;
+    /* AND "VIEW ALL EQUIPMENT" IS THE SAME LOSS WITH NO DIALOG TO CATCH IT.
+       Expanding the Overview register past its own top ten is not a modal,
+       so it was never going to satisfy an ".ov" check either way — but it is
+       just as much "the reader in the middle of something" as any dialog
+       here, and the same reload wiped it back to ten rows on the very next
+       click, which is this bug's literal report. `fleetAll` is the one flag
+       that state lives in; while it is set, the reload waits, the same way
+       it already waits for #pxPanel. */
+    if(typeof fleetAll!=="undefined" && fleetAll) return true;
     return false;
   };
   const applyIfIdle=()=>{
@@ -19301,26 +19451,37 @@ document.querySelector(".lang").addEventListener("click",e=>{
   document.addEventListener("click", ()=>setTimeout(applyIfIdle, 300), true);
 })();
 
-rebuild(); refreshControls(); renderAll(); refreshSources();
+/* driveRecs now starts as [] (see loadDriveCache() above, ported from
+   dashboard/index.html's own build-481 fix) and is only populated by
+   awaiting the IndexedDB read — so boot has to wait for it before the first
+   render, exactly the way dashboard/index.html's own boot() does. IndexedDB
+   is fast (single-digit milliseconds for a cache this shape) and this await
+   is the only place that cost is paid; a browser with nothing cached yet
+   pays nothing extra, since loadDriveCache() resolves to an empty array as
+   fast as the old synchronous localStorage read did. */
+(async function boot(){
+  try{ driveRecs=await loadDriveCache(); }catch(e){ bad("drive-cache-boot",e); }
+  rebuild(); refreshControls(); renderAll(); refreshSources();
 
-/* AND THE ADDRESS IS READ BACK ON ARRIVAL — at the END of boot, deliberately.
+  /* AND THE ADDRESS IS READ BACK ON ARRIVAL — at the END of boot, deliberately.
 
-   The first version of this line went in beside an identical-looking call
-   inside a data-store method, because that string appears more than once and
-   the first match won. It then ran before `urlBooting` was even declared,
-   threw in the temporal dead zone, and took the boot sequence with it. The
-   address has to be applied after the page exists and once, here. */
-try{
-  urlBooting=false;
-  if(BOOT_HASH && BOOT_HASH.length>1) urlRead(BOOT_HASH); else urlWrite(false);
-}catch(e){ urlBooting=false; }
-applyLang();                          // paints the static markup and re-renders in the saved language
-/* First run shows where data comes from — but only when there is a question to
-   answer. A browser that picked its settings up from the defaults file or from
-   the link is already configured and is seconds away from filling itself, so
-   opening a setup panel over it asks somebody to solve a problem they do not
-   have. Deferred a beat so drive.js has loaded and can be asked. */
-setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
+     The first version of this line went in beside an identical-looking call
+     inside a data-store method, because that string appears more than once and
+     the first match won. It then ran before `urlBooting` was even declared,
+     threw in the temporal dead zone, and took the boot sequence with it. The
+     address has to be applied after the page exists and once, here. */
+  try{
+    urlBooting=false;
+    if(BOOT_HASH && BOOT_HASH.length>1) urlRead(BOOT_HASH); else urlWrite(false);
+  }catch(e){ urlBooting=false; }
+  applyLang();                          // paints the static markup and re-renders in the saved language
+  /* First run shows where data comes from — but only when there is a question to
+     answer. A browser that picked its settings up from the defaults file or from
+     the link is already configured and is seconds away from filling itself, so
+     opening a setup panel over it asks somebody to solve a problem they do not
+     have. Deferred a beat so drive.js has loaded and can be asked. */
+  setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
+})();
 </script>
 <script src="../dashboard/drive.js?v=482"></script>
 <script src="../dashboard/sync-adapter.js?v=482"></script>

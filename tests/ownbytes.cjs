@@ -212,15 +212,18 @@ const srv = http.createServer((q, s) => {
     row.innerHTML = '<img class="thumb" src="blob:nothing-here">';
     document.body.appendChild(row);
     const img = row.querySelector('img.thumb');
-    /* the page's own handler, applied exactly as renderPending applies it */
+    /* the page's own shared helper, applied exactly as renderPending applies
+       it (thumbUnreadableEl — also used by renderMedia/renderMachinePhotos
+       in section 6b below, so this is no longer a separate reimplementation
+       that can drift from the real one, as happened once already: renaming
+       the CSS class to .thumb-bad broke this section's own hand-copied
+       'thumb bad' until it called the real function instead). */
     img.onerror = () => {
-      const d = document.createElement('div');
-      d.className = 'thumb bad'; d.textContent = '⚠';
-      d.title = t('thumb_unread'); d.setAttribute('aria-label', t('thumb_unread'));
+      const d = thumbUnreadableEl('thumb_unread'); d.classList.add('thumb');
       img.replaceWith(d);
     };
     img.onerror();
-    const d = row.querySelector('.thumb.bad');
+    const d = row.querySelector('.thumb-bad');
     const cs = d && getComputedStyle(d);
     const out = { has: !!d, txt: d && d.textContent, lab: d && d.getAttribute('aria-label'),
                   dashed: cs && /dashed/.test(cs.borderStyle),
@@ -236,8 +239,105 @@ const srv = http.createServer((q, s) => {
   ok('  it is visibly not a photograph', qm.dashed === true);
   const rp = (src0 => src0)(fs.readFileSync(path.join(ROOT, 'mobile/index.html'), 'utf8'));
   ok('  and renderPending installs that handler on every row',
-     /img\.thumb"\);\s*if\(timg\)\s*timg\.onerror=/.test(rp.replace(/\n\s*/g, '')),
+     /img\.thumb"\);\s*if\(timg\)\s*attachThumbRetry\(timg,\s*first,\s*pendPool,/.test(rp.replace(/\n\s*/g, '')),
      'wired in renderPending');
+
+  console.log('\n6b. the SAME "?" is named on the two screens a technician actually looks at while deciding to retake');
+  /* Read plainly from the field: an inspector saves a round, goes back to add
+     the one photograph they missed, and an ALREADY-TAKEN photograph in the
+     position they are correcting shows Safari's bare "?" — not the Saved
+     list section 6 already covers, but the position's own photo strip
+     (renderMedia) and the machine-photo grid (renderMachinePhotos), the two
+     screens actually open while making that decision. A photograph typed
+     image/jpeg but carrying no real image bytes fails to decode exactly the
+     way a reclaimed blob does, without needing to fake WebKit's own reclaim. */
+  await p.evaluate(() => { const s = document.getElementById('typeSel'); s.value = 'MP'; s.dispatchEvent(new Event('change')); });
+  await p.waitForTimeout(200);
+  await p.evaluate(() => selectEquip('TK151'));
+  await p.waitForTimeout(400);
+  const firstPos = await p.evaluate(() => (document.querySelector('#posnav [data-pos]') || {}).dataset && document.querySelector('#posnav [data-pos]').dataset.pos);
+  ok('a real position exists to open', !!firstPos, firstPos);
+  await p.evaluate((pos) => pickComponent(pos), firstPos);
+  await p.waitForTimeout(200);
+
+  const editorMarks = await p.evaluate(async () => {
+    /* A genuinely unreadable photo must still exhaust its retries before it
+       is named — THUMB_RETRY_MS totals 3.2s worst case, so this waits past
+       all of it rather than catching the placeholder mid-retry. */
+    const bad = attWrap(new Blob(['not a real image'], { type: 'image/jpeg' }));
+    const pos = (draft.positions[curItem] ||= {});
+    addPos(pos, bad, 'COMPONENT');
+    renderMedia();
+    await new Promise(res => setTimeout(res, 3600));
+    const tile = document.querySelector('#mediastrip .mtile .thumb-bad');
+    const posOut = { has: !!tile, txt: tile && tile.textContent, lab: tile && tile.getAttribute('aria-label') };
+    delete pos.photos;
+    renderMedia();
+
+    const gen = (draft.positions[GEN_KEY] ||= {});
+    const bad2 = attWrap(new Blob(['not a real image'], { type: 'image/jpeg' }));
+    addPos(gen, bad2, 'OVERVIEW');
+    renderMachinePhotos();
+    await new Promise(res => setTimeout(res, 3600));
+    const row = document.querySelector('#mpRows .mprow .thumb-bad');
+    const genOut = { has: !!row, txt: row && row.textContent, lab: row && row.getAttribute('aria-label') };
+    delete gen.photos; delete draft.positions[GEN_KEY];
+    renderMachinePhotos();
+    return { pos: posOut, gen: genOut };
+  });
+  ok('the position\'s own photo strip marks an unreadable photograph, not Safari\'s bare "?"',
+     editorMarks.pos.has && editorMarks.pos.txt === '⚠', JSON.stringify(editorMarks.pos));
+  ok('  and says the round is not lost, in words a screen reader carries',
+     /cannot be read/i.test(editorMarks.pos.lab || '') && /nothing else/i.test(editorMarks.pos.lab || ''),
+     editorMarks.pos.lab);
+  ok('the machine-photo grid marks it the same way', editorMarks.gen.has && editorMarks.gen.txt === '⚠',
+     JSON.stringify(editorMarks.gen));
+  const dlgText = await p.evaluate(() => {
+    const bad = attWrap(new Blob(['not a real image'], { type: 'image/jpeg' }));
+    const pos = (draft.positions[curItem] ||= {});
+    addPos(pos, bad, 'COMPONENT');
+    renderMedia();
+    return new Promise(res => setTimeout(() => {
+      const tile = document.querySelector('#mediastrip .mtile .thumb-bad');
+      tile.click();
+      res({ title: document.getElementById('dlgTitle').textContent, msg: document.getElementById('dlgMsg').textContent });
+      delete pos.photos; renderMedia();
+    }, 3600));
+  });
+  ok('tapping the placeholder explains itself as a dialog, not only a tooltip',
+     /unreadable/i.test(dlgText.title) && /take it again/i.test(dlgText.msg), JSON.stringify(dlgText));
+
+  console.log('\n6c. a thumbnail that loses one decode race gets to try again before being called unreadable');
+  /* Read plainly: rounds in the Saved list flipped between a real thumbnail
+     and the "?" placeholder from one look to the next, worst right after
+     arriving at the office and starting to synchronise — the one moment this
+     phone is decoding the most thumbnails at once. This project's own rule
+     for a failed READ of one of these blobs ("don't call a photograph gone
+     until retries have actually been exhausted") never reached the
+     thumbnail before attachThumbRetry(); this proves a photo that merely
+     lost the first race, and decodes fine on the very next attempt, is
+     never shown as unreadable at all — not even for a flash. */
+  const retryOutcome = await p.evaluate(async () => {
+    const GOOD = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=';
+    const BAD = 'data:image/png;base64,bm90LWEtcmVhbC1pbWFnZQ==';
+    let calls = 0;
+    const pool = { url: () => { calls++; return calls === 1 ? BAD : GOOD; } };
+    let finalFailCalled = false;
+    const img = document.createElement('img');
+    document.body.appendChild(img);
+    img.src = pool.url();
+    attachThumbRetry(img, {}, pool, () => { finalFailCalled = true; });
+    /* Past the first retry (300ms), well short of the second (900ms) — if
+       the fix is working, attempt 2 already succeeded and there is no
+       second retry to wait for. */
+    await new Promise(res => setTimeout(res, 1500));
+    const out = { calls, finalFailCalled, srcOk: img.complete && img.naturalWidth > 0 };
+    img.remove();
+    return out;
+  });
+  ok('a photograph that fails once and decodes fine moments later is retried, not marked unreadable',
+     retryOutcome.calls === 2 && retryOutcome.srcOk && !retryOutcome.finalFailCalled,
+     JSON.stringify(retryOutcome));
 
   console.log('\n7. the rule is unconditional — no door back to a borrowed blob');
   const src = fs.readFileSync(path.join(ROOT, 'mobile/index.html'), 'utf8');

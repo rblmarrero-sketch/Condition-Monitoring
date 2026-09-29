@@ -3457,6 +3457,162 @@ running it against the identical HEAD with this session's changes
 stashed out) — neither touched by this change, left as found rather than
 folded into an unrelated fix.
 
+**THE DASHBOARD STOPPED LOADING ITS OWN CACHE THE DAY THE FLEET'S HISTORY
+OUTGREW THE BROWSER.** Read plainly: "in web dashboard, why when i refresh no
+data, i have to load everytime?" Confirmed directly against the live Yandex
+backend (`action=records`), not guessed at: at ~70 inspections a day for three
+months, this fleet's history is now several thousand records averaging 12.3 KB
+each — roughly 75 MB of JSON, many times past the 5–10 MB a browser grants ONE
+origin's `localStorage`. `saveDrive()` wrote the whole drive cache to
+`localStorage` on every change and caught a quota-exceeded write in silence,
+deleting BOTH the cache AND the sync cursor with only a `console.warn()` — a
+design that reads as self-healing while the fleet's own history still fits
+("losing this cache is survivable, it only means a re-read") and becomes a
+permanent, silent failure on EVERY SINGLE REFRESH the day it stops fitting,
+which is exactly what happened this week. Nothing on screen ever said why; a
+technician just learned that the dashboard "has to load every time" now.
+
+The fix moves the drive cache into IndexedDB, whose quota is the disk, not one
+browser tab's slice of one origin — the same reasoning that already sends every
+photograph to IndexedDB rather than `localStorage` on the phone. `ddbGet`/
+`ddbSet` (`dashboard/index.html`) carry the identical one-shot `done`-guard
+`dbPut`/`dbDel` already use on the phone (build 480, the double-fire
+transaction fix above) so an aborted write cannot double-count here either.
+`loadDriveCache()` reads IndexedDB first; a browser that has never written
+there yet (every desk on the day this ships) falls back to whatever the OLD
+`localStorage` key still holds, migrates it into IndexedDB once, and clears
+the old key — so nobody loses the cache they already had crossing the upgrade.
+A browser with no IndexedDB at all (never seen on this fleet, guarded anyway)
+falls back to the old `localStorage`-only read, no worse than before this fix.
+`saveDrive()` no longer wipes the sync cursor on a write failure — an
+IndexedDB write failing is now a rare, real problem worth investigating
+(`bad("drive-cache-save", e)`, the same non-silent error record `dashboard/
+index.html` already keeps), not the routine, expected outcome quota-exceeded
+used to be.
+
+This is purely the browser's own local convenience-cache — Yandex has held
+every one of these records safely the entire time regardless of what any
+single browser tab could cache; nothing about the fix touches what the backend
+stores or how a report is built from it, only how quickly a desk's OWN tab can
+redraw the fleet without asking the server again.
+
+`tests/drivecache.cjs` proves it at a fixture size (900 records, ~9.6 MB) many
+times past the old ceiling: every record renders immediately from memory, no
+`drive-cache-save` error is raised, `localStorage` itself never holds any of
+it, and the cache survives not one but two separate reloads unattended — then
+proves the migration path separately, seeding the pre-fix `localStorage`
+shape, confirming it is read once, cleared, and the migrated record survives a
+further reload on its own. `tests/normwire.cjs`'s own "path 3" (a pre-existing
+suite proving a v163-shaped cache is repaired by the normalizer on reload)
+needed one change to keep testing what it always meant to: it seeds the
+pre-fix `localStorage` key directly and reloads, which is a genuine first-boot
+migration only in a browser that has never written to IndexedDB — and by the
+time path 3 runs, this suite's OWN path 2 has already saved real data there.
+It now clears the specific IndexedDB key first (a plain `readwrite` delete,
+not `deleteDatabase()` — this page already holds an open connection from path
+2's save, which would leave `deleteDatabase()` blocked) so the scenario it
+names is the scenario it actually creates.
+
+**A FINE PHOTOGRAPH GOT RETAKEN FOR NOTHING, BECAUSE THE FIX ALREADY SHIPPED
+FOR THIS LIVED ON THE WRONG SCREEN.** Read plainly: an inspector takes every
+photograph for a round, saves, then goes back to add the one they forgot —
+and an ALREADY-TAKEN photograph in the position they are correcting shows a
+bare "?" instead of the picture. Reading that as "this one is broken too,"
+they retake a photograph that was never actually lost. The Saved list has
+turned this exact failure (a blob URL onto a File whose backing item iOS has
+reclaimed — the long-tracked `ownBytes`/NotFoundError class this file
+documents at length above) into a named, dashed placeholder since build
+~372, with a message saying plainly that the round is intact and only that
+one position needs retaking. That fix lived on the ONE row a technician taps
+to get INTO a round — never on the screen they are actually looking at while
+deciding whether a retake is needed: `renderMedia()`, the position's own
+photo strip, and `renderMachinePhotos()`, the machine-photo grid. Both drew
+a bare `<img>` with no error handling at all, so the identical failure on
+either of those two screens fell straight through to Safari's own broken-
+image glyph — no explanation, no reassurance, nothing to tell it apart from
+a photograph that really is gone.
+
+The fix is the same one, reached from the two places it was missing:
+`thumbUnreadableEl()` is now the one shared placeholder-builder all three
+sites use (the Saved list's own handler was refactored to call it too,
+rather than keeping a third hand-copied version of the same markup), and
+`markThumbUnreadableHere()` wires it onto `renderMedia()`/
+`renderMachinePhotos()` specifically, with wording written for being already
+inside the editor ("take it again" — no "open it," since there is nowhere
+left to open) and a tap that shows the explanation as a DIALOG, not only a
+`title` attribute — a hover tooltip is invisible on a touchscreen, and this
+is exactly the screen an inspector is standing in front of, deciding.
+
+Refactoring the shared placeholder to a single `.thumb-bad` CSS class (in
+place of the Saved list's own `.pitem .thumb.bad`) found the fix's own test
+had a copy of the OLD markup baked into it: `tests/ownbytes.cjs` section 6
+reimplemented `renderPending()`'s handler by hand rather than calling it,
+and kept passing right up until the class rename — then failed on "it is
+visibly not a photograph," which is exactly the shape this file's own Tests
+section warns about ("Tests must ask the app, not keep their own copy").
+Fixed by having that section call the real `thumbUnreadableEl()` too, so a
+future rename can never again drift a test that looks like it is testing
+the real thing. New section 6b drives `renderMedia()` and
+`renderMachinePhotos()` directly — a real position opened through the real
+equipment/component pickers, a photograph typed `image/jpeg` but carrying no
+real image bytes (which fails to decode exactly the way a reclaimed blob
+does, with no need to fake WebKit's own reclaim mechanism) — and proves both
+screens now mark it the same dashed, named way the Saved list already did,
+and that tapping it raises the explanatory dialog.
+
+**AND THE SAME "?" WAS ALSO FLIPPING BACK AND FORTH ON THE SAVED LIST
+ITSELF, WORST RIGHT WHEN SYNCHRONISING AT THE OFFICE.** The fix above closed
+the case of a genuinely unreadable photo saying nothing useful. The very next
+report named a different shape of the same complaint: photographs in the
+Saved list showing the ⚠ placeholder, and then NOT — the same round's
+thumbnail changing from one look to the next, worst right after arriving at
+the office and starting to synchronise. That timing is the tell: the Saved
+list repaints in full after every file that lands during a sync burst, which
+is the one moment this phone is decoding the most thumbnails at once, and a
+single failed decode was treated as a final, permanent verdict for that
+render — flapping back to a real photo only once the NEXT repaint happened
+to try again and the browser was no longer contending with a dozen other
+decodes at once. A verdict that reverses itself is worse than a slow one: it
+teaches an inspector to stop trusting the mark in EITHER direction, on a
+screen whose whole purpose is "your work is safe here."
+
+This project's own rule for a failed READ of one of these blobs has been on
+the books since the CD001 field test ("a `NotFoundError` photograph is not
+always gone for good... don't call a photograph gone until retries have
+actually been exhausted") — it had simply never reached the THUMBNAIL, which
+called one failed `<img>` decode final instead of applying the same
+patience. `attachThumbRetry()` gives a failing decode up to three more
+chances, spaced out (`THUMB_RETRY_MS`, 300 ms/900 ms/2 s — worst case a
+little over three seconds), each with a FRESH object URL from the same blob,
+since a browser will not re-attempt a URL it has already failed. A file that
+really is gone still ends up marked — the retries just make that verdict
+arrive a few seconds later, nothing more — but one that merely lost a race
+against every other thumbnail decoding at once now has room to actually win
+it before anything alarming is shown. Wired into all three places a stored
+photograph is rendered: `renderPending()` (the Saved list), `renderMedia()`
+and `renderMachinePhotos()` (the two editor screens the build above already
+fixed) — the identical mechanism, since it is the identical `<img onerror>`
+failure everywhere it appears.
+
+`renderMedia()` needed one extra step to make the retry possible at all: the
+placeholder-wiring pass ran AFTER `innerHTML` had already thrown away which
+blob belonged to which `<img>`, so each photo's tile now carries its own
+index (`data-bi`) to look the blob back up for a retry attempt.
+`renderMachinePhotos()` reads its own row's already-present `data-cat`
+attribute the same way, since its retry needs to re-fetch that category's
+current photo, not the one a stale closure captured before the round could
+have changed underneath it.
+
+`tests/ownbytes.cjs`'s own section 6/6b needed their wait times lengthened
+past the new retry budget (400 ms was long enough to prove the OLD
+immediate-fallback behaviour and too short to prove the NEW one, which
+deliberately takes longer before giving up) — the exact "a test that used to
+pass proves nothing about the fix it is meant to guard" trap this file's own
+Tests section warns about. New section 6c proves the actual fix directly and
+in isolation: a decode rigged to fail on its first attempt and succeed on
+its second — a stand-in for a lost race, not a lost file — is retried and
+never shown as unreadable at all, not even for a flash.
+
 ---
 
 ## Secrets

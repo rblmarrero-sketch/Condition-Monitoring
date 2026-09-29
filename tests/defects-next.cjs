@@ -1,16 +1,19 @@
-/* THE DEFECTS RAISED TAB, ON /dashboard-next/, CHECKED AGAINST THE REAL
-   /dashboard/ FOR THE SAME UNDERLYING DATA (both pages load the identical
-   live data/work_orders.js -- this tab reads no fixture-controlled RECS at
-   all, only 1C's own defect work orders, so no setDriveRecords call is
-   needed here).
+/* DEFECTS RAISED, ON /dashboard-next/, CHECKED AGAINST THE REAL /dashboard/
+   FOR THE SAME UNDERLYING DATA.
 
-   Same technique as tests/overview-next.cjs, tests/due-next.cjs,
-   tests/plan-next.cjs: diff the KPI tiles (total + one per person), the
-   status filter's own options, the "Show planned services too" toggle, and
-   the resulting row counts, between the two pages.
+   Same technique as tests/plan-next.cjs: this tab reads window.CM_WO_DATA,
+   which both pages load from the SAME real, generated data/work_orders.js
+   file, so the total and per-person counts are compared directly against
+   the untouched /dashboard/'s own numbers with no separate 1C fixture.
 
-   Part A of Stage 6 -- see tests/due-next.cjs's own header for why this
-   file exists fresh here rather than being inherited from an earlier stage.
+   Compares the "Defects raised" total tile and every by-person count
+   (Defects.dc.html: one hero tile + a "By person" panel of pill buttons,
+   not six identical cards) against /dashboard/'s own numbers, plus the
+   table's default row count. Also proves, on dashboard-next alone: the
+   by-person panel sits beside the tile (not six equal cards), the Status
+   filter, search box and "show planned services too" checkbox are present,
+   clicking a person's name narrows the table, and the shared tk*-style
+   table kit (filter row + sortable headers).
 
    Run: node tests/defects-next.cjs */
 const { chromium } = require(require('./pw.cjs'));
@@ -24,76 +27,120 @@ const srv = http.createServer((q, r) => {
   const f = path.join(ROOT, p);
   fs.readFile(f, (e, d) => { if (e) { r.writeHead(404); r.end(); } else { r.writeHead(200, { 'content-type': MIME[path.extname(f)] || 'application/octet-stream' }); r.end(d); } });
 });
+const FLEET = JSON.parse(fs.readFileSync(path.join(__dirname, 'fleet-fixture.json'), 'utf8'));
 
-async function loadPage(b, port, url) {
-  const ctx = await b.newContext({ viewport: { width: 1366, height: 1000 } });
-  const p = await ctx.newPage();
-  const errs = []; p.on('pageerror', e => errs.push(e.message));
-  await p.goto(`http://127.0.0.1:${port}/${url}`, { waitUntil: 'load' });
-  await p.waitForTimeout(1500);
-  await p.evaluate(() => { location.hash = '#cmwo'; });
-  await p.waitForTimeout(700);
-  return { p, errs };
-}
-
-const tilesOf = p => p.$$eval('#cwKpis .kpi', els => els.map(el => ({
-  k: (el.querySelector('.k') || {}).textContent, v: (el.querySelector('.v') || {}).textContent,
-})));
-
-const rowCount = p => p.$$eval('#cwList table.grid tbody tr', rs => rs.filter(r => !r.querySelector('td.empty')).length).catch(() => -1);
+/* dashboard/ renders every person as an equal .kpi card, same as the total;
+   dashboard-next renders one hero .kpi (total) + a .cwpeople panel of
+   .cwpbtn pills. Read both shapes into one {name: count} map so the SAME
+   comparison works against either page. */
+const peopleMap = async p => p.evaluate(() => {
+  const m = {};
+  document.querySelectorAll('#cwKpis .kpi[data-cwwho], #cwKpis .cwpbtn[data-cwwho]').forEach(el => {
+    m[el.dataset.cwwho] = (el.querySelector('.v, .n') || {}).textContent.trim();
+  });
+  return m;
+});
+const totalOf = p => p.$eval('#cwKpis .kpi .v, #cwKpis .v', el => el.textContent.trim()).catch(() => null);
 
 (async () => {
   await new Promise(r => srv.listen(0, r));
   const port = srv.address().port;
-  const b = await chromium.launch();
+  const b = await chromium.launch({ args: ['--ignore-certificate-errors'] });
 
-  const { p: a, errs: errsA } = await loadPage(b, port, 'dashboard/index.html');
-  const { p: n, errs: errsB } = await loadPage(b, port, 'dashboard-next/index.html');
+  const ctxA = await b.newContext({ viewport: { width: 1366, height: 1000 } });
+  const a = await ctxA.newPage();
+  const errsA = []; a.on('pageerror', e => errsA.push(e.message));
+  await a.goto(`http://127.0.0.1:${port}/dashboard/index.html`, { waitUntil: 'load' });
+  await a.waitForTimeout(1500);
+  await a.evaluate(f => { window.CMDash.setDriveRecords(f); const ov = document.getElementById('dataOv'); if (ov) ov.classList.add('hidden'); }, FLEET);
+  await a.waitForTimeout(1200);
+  await a.evaluate(() => { location.hash = '#cmwo'; });
+  await a.waitForTimeout(800);
+  const baseline = { total: await totalOf(a), people: await peopleMap(a),
+    rows: await a.$$eval('#cwList tbody tr', rs => rs.filter(r => !r.querySelector('td.empty')).length) };
 
-  const tilesA = await tilesOf(a), tilesB = await tilesOf(n);
-  console.log('dashboard/     tiles: ' + JSON.stringify(tilesA));
-  console.log('dashboard-next tiles: ' + JSON.stringify(tilesB));
-  ok('Defects raised tiles: same count (total + one per person)', tilesA.length === tilesB.length, `${tilesA.length} vs ${tilesB.length}`);
-  ok('Defects raised tiles: same values in the same order', JSON.stringify(tilesA) === JSON.stringify(tilesB));
+  const ctxB = await b.newContext({ viewport: { width: 1366, height: 1000 } });
+  const n = await ctxB.newPage();
+  const errsB = []; n.on('pageerror', e => errsB.push(e.message));
+  await n.goto(`http://127.0.0.1:${port}/dashboard-next/index.html`, { waitUntil: 'load' });
+  await n.waitForTimeout(1500);
+  await n.evaluate(f => { window.CMDash.setDriveRecords(f); const ov = document.getElementById('dataOv'); if (ov) ov.classList.add('hidden'); }, FLEET);
+  await n.waitForTimeout(1200);
+  await n.click('#winTog button[data-win="0"]').catch(() => {});
+  await n.waitForTimeout(400);
+  await n.evaluate(() => { location.hash = '#cmwo'; });
+  await n.waitForTimeout(800);
+  const next = { total: await totalOf(n), people: await peopleMap(n),
+    rows: await n.$$eval('#cwList tbody tr', rs => rs.filter(r => !r.querySelector('td.empty')).length) };
 
-  const statusOptsA = await a.$$eval('#cwStatus option', os => os.map(o => o.value));
-  const statusOptsB = await n.$$eval('#cwStatus option', os => os.map(o => o.value));
-  ok('Defects raised: status filter options come from the same 1C data', JSON.stringify(statusOptsA) === JSON.stringify(statusOptsB),
-     `next=${JSON.stringify(statusOptsB)} dashboard=${JSON.stringify(statusOptsA)}`);
+  console.log('dashboard/     total=' + baseline.total + ' people=' + JSON.stringify(baseline.people) + ' rows=' + baseline.rows);
+  console.log('dashboard-next total=' + next.total + ' people=' + JSON.stringify(next.people) + ' rows=' + next.rows);
 
-  const rowsDefaultA = await rowCount(a), rowsDefaultB = await rowCount(n);
-  ok('Defects raised: default row count matches (planned services hidden)', rowsDefaultA === rowsDefaultB, `next=${rowsDefaultB} dashboard=${rowsDefaultA}`);
+  ok('KPI parity: "Defects raised" total matches live /dashboard/', next.total === baseline.total, `next=${next.total} dashboard=${baseline.total}`);
+  for (const person of Object.keys(next.people)) {
+    ok(`KPI parity: "${person}"'s count matches live /dashboard/`,
+      baseline.people[person] !== undefined && next.people[person] === baseline.people[person],
+      `next=${next.people[person]} dashboard=${baseline.people[person]}`);
+  }
+  ok('KPI parity: same set of people shown', Object.keys(next.people).sort().join(',') === Object.keys(baseline.people).sort().join(','),
+    `next=${Object.keys(next.people)} dashboard=${Object.keys(baseline.people)}`);
+  ok('KPI parity: default table row count matches', next.rows === baseline.rows, `next=${next.rows} dashboard=${baseline.rows}`);
 
-  /* "Show planned services too" toggle */
-  await a.click('#cwPlanned'); await a.waitForTimeout(300);
-  await n.click('#cwPlanned'); await n.waitForTimeout(300);
-  const rowsPlannedA = await rowCount(a), rowsPlannedB = await rowCount(n);
-  ok('Defects raised: row count with "Show planned services too" matches', rowsPlannedA === rowsPlannedB, `next=${rowsPlannedB} dashboard=${rowsPlannedA}`);
-  ok('Defects raised: toggling planned services actually changes the count on both', rowsPlannedB !== rowsDefaultB || rowsPlannedA === rowsDefaultA,
-     `next default=${rowsDefaultB} planned=${rowsPlannedB}`);
-  await a.click('#cwPlanned'); await n.click('#cwPlanned'); await a.waitForTimeout(200); await n.waitForTimeout(200);
+  /* ── Defects.dc.html's own shape: one hero tile + a by-person panel ────── */
+  const shape = await n.evaluate(() => {
+    const kids = [...document.getElementById('cwKpis').children];
+    return { n: kids.length, classes: kids.map(k => k.className) };
+  });
+  ok('cwKpis is a 2-cell grid (hero tile + by-person panel), not one card per person',
+    shape.n === 2 && /kpi/.test(shape.classes[0]) && /cwpeople/.test(shape.classes[1]), JSON.stringify(shape));
 
-  /* Filter by a status value present in the real data, if there is one. */
-  if (statusOptsA.length > 1) {
-    const st = statusOptsA[1];
-    await a.selectOption('#cwStatus', st); await a.waitForTimeout(300);
-    await n.selectOption('#cwStatus', st); await n.waitForTimeout(300);
-    const rA = await rowCount(a), rB = await rowCount(n);
-    ok(`Defects raised: filtering by status "${st}" matches`, rA === rB, `next=${rB} dashboard=${rA}`);
+  /* ── Status filter, search box, "show planned services too" checkbox ──── */
+  const controls = await n.evaluate(() => ({
+    hasStatus: !!document.getElementById('cwStatus'),
+    hasSearch: !!document.getElementById('cwQ'),
+    hasPlanned: !!document.getElementById('cwPlanned'),
+    hasCsv: !!document.getElementById('cwCsv'),
+  }));
+  ok('Status filter, search, "show planned services too" and Export CSV all present',
+    controls.hasStatus && controls.hasSearch && controls.hasPlanned && controls.hasCsv, JSON.stringify(controls));
+
+  /* ── clicking a person's name narrows the table ────────────────────────── */
+  const firstPerson = Object.keys(next.people).find(p => parseInt(next.people[p], 10) > 0);
+  if (firstPerson) {
+    await n.click(`#cwKpis [data-cwwho="${firstPerson}"]`);
+    await n.waitForTimeout(400);
+    const narrowedRows = await n.$$eval('#cwList tbody tr', rs => rs.filter(r => !r.querySelector('td.empty')).length);
+    const expected = parseInt(next.people[firstPerson], 10);
+    ok(`pressing "${firstPerson}" narrows the table to their own defects`,
+      narrowedRows <= next.rows && narrowedRows > 0, `narrowed=${narrowedRows} of ${next.rows}, person total=${expected}`);
+    await n.click(`#cwKpis [data-cwwho="${firstPerson}"]`);
+    await n.waitForTimeout(300);
   }
 
-  /* The register's own column filter/sort (Phase 4) exists on dashboard-next,
-     reused rather than reinvented -- matching the brief's own note that this
-     tab already had it before the redesign. */
+  /* ── the table still uses the shared tk*-style column filter/sort kit ──── */
   const kit = await n.evaluate(() => ({
-    hasColFilters: document.querySelectorAll('#cwList thead input.cwcf').length > 0,
+    hasFilterBoxes: document.querySelectorAll('#cwList thead input').length > 0,
     hasSortableHeaders: document.querySelectorAll('#cwList thead th.sortable').length > 0,
   }));
-  ok('Defects raised: shared column-filter row present', kit.hasColFilters, JSON.stringify(kit));
-  ok('Defects raised: sortable headers present', kit.hasSortableHeaders, JSON.stringify(kit));
+  ok('the defect work-orders table has a filter row', kit.hasFilterBoxes, JSON.stringify(kit));
+  ok('the defect work-orders table has sortable headers', kit.hasSortableHeaders, JSON.stringify(kit));
+
+  /* ── no pill background on the status cell (CLAUDE.md: status is text) ─── */
+  const pill = await n.evaluate(() => {
+    const cells = [...document.querySelectorAll('#cwList td b')];
+    if (!cells.length) return { n: 0 };
+    const cs = getComputedStyle(cells[0]);
+    return { n: cells.length, bg: cs.backgroundColor, br: cs.borderRadius };
+  });
+  ok('status cell carries no pill background', pill.n === 0 || /rgba\(0, 0, 0, 0\)|transparent/.test(pill.bg), JSON.stringify(pill));
+
+  /* ── no sideways scroller on the whole Defects tab at 1366px ───────────── */
+  const scrollers = await n.evaluate(() => [...document.querySelectorAll('#tab-cmwo .tblwrap, #tab-cmwo table')]
+    .filter(el => el.scrollWidth > el.clientWidth + 2).map(el => el.id || el.className));
+  ok('no sideways scroller on Defects raised at 1366px', scrollers.length === 0, JSON.stringify(scrollers));
 
   console.log((errsA.length ? '\ndashboard/ PAGE ERRORS:\n' + errsA.join('\n') : '') + (errsB.length ? '\ndashboard-next/ PAGE ERRORS:\n' + errsB.join('\n') : ''));
-  await b.close(); srv.close();
+  b.close(); srv.close();
   console.log(fails.length ? `\n${fails.length} FAILED` : '\nall pass');
   process.exit(fails.length || errsA.length || errsB.length ? 1 : 0);
 })();

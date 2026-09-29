@@ -1,19 +1,22 @@
-/* THE INSPECTION SCHEDULE (DUE) TAB, ON /dashboard-next/, CHECKED AGAINST
-   THE REAL /dashboard/ FOR THE SAME UNDERLYING DATA.
+/* INSPECTION SCHEDULE (DUE), ON /dashboard-next/, CHECKED AGAINST THE REAL
+   /dashboard/ FOR THE SAME UNDERLYING DATA.
 
-   Same technique as tests/overview-next.cjs and tests/history-next.cjs:
-   load the IDENTICAL fixture into the untouched /dashboard/index.html and
-   into /dashboard-next/index.html, and diff every KPI tile and the row
-   count of every one of the six named views (Overdue, Due soon, Never
-   inspected, Deferred, Completed, All) between the two pages. Both pages
-   read the same live data/work_orders.js for 1C's own plan (see
-   CLAUDE.md's "1C plan"/"Compare" scopes), so those two scopes are
-   diffed too.
+   Same technique as tests/overview-next.cjs, tests/failure-next.cjs,
+   tests/wear-next.cjs and tests/actions-next.cjs: the IDENTICAL fixture goes
+   into the untouched /dashboard/index.html and into /dashboard-next/
+   index.html (window set to All time on the next tab), the Inspection
+   Schedule tab is opened on both, and the tiles /dashboard/ already computes
+   (dueRows/dueWeekRows/etc -- nothing here re-derives a count by hand) are
+   compared BY LABEL, not by position, since dashboard-next's tile order and
+   wording is the one Due.dc.html asks for (Overdue / Due soon / Deferred /
+   Explained) while /dashboard/'s own labels may differ in case or wording.
+   The Overdue table's row count (the tab's default scope) is also compared.
 
-   Part A of Stage 6: this suite was reported written on the (separate,
-   unmerged) Stage 4 branch/PR but never actually committed there, and does
-   not exist on this branch's own lineage (Stage 3e -> Stage 5 -> Stage 6).
-   Written fresh here, following overview-next.cjs's own pattern exactly.
+   Also proves, on dashboard-next alone: four tiles render (Due.dc.html:
+   repeat(4,minmax(0,1fr))), the nine-way Show segmented control with its own
+   counts, the Round filter and Search box, the shared tk* table kit (filter
+   row + sortable headers, not a new table component), and no pill background
+   on the Due cell's inline status colour.
 
    Run: node tests/due-next.cjs */
 const { chromium } = require(require('./pw.cjs'));
@@ -29,74 +32,102 @@ const srv = http.createServer((q, r) => {
 });
 const FLEET = JSON.parse(fs.readFileSync(path.join(__dirname, 'fleet-fixture.json'), 'utf8'));
 
-const SCOPES = ['over', 'soon', 'never', 'plan', 'cmp', 'put', 'done', 'all'];
-
-async function loadPage(b, port, url, vp) {
-  const ctx = await b.newContext({ viewport: vp || { width: 1366, height: 1000 } });
-  const p = await ctx.newPage();
-  const errs = []; p.on('pageerror', e => errs.push(e.message));
-  await p.goto(`http://127.0.0.1:${port}/${url}`, { waitUntil: 'load' });
-  await p.waitForTimeout(1500);
-  await p.evaluate(f => { window.CMDash.setDriveRecords(f); const ov = document.getElementById('dataOv'); if (ov) ov.classList.add('hidden'); }, FLEET);
-  await p.waitForTimeout(1200);
-  return { p, errs };
-}
-
-async function tilesOf(p) {
-  return p.$$eval('#dueKpis .kpi', els => els.map(el => ({
-    k: (el.querySelector('.k') || {}).textContent, v: (el.querySelector('.v') || {}).textContent,
-  })));
-}
-async function rowsFor(p, scope) {
-  await p.evaluate(s => {
-    const sel = document.getElementById('ddScope'); if (sel) sel.value = s;
-    const seg = document.getElementById('ddSeg');
-    const b = seg && seg.querySelector('[data-dd="' + s + '"]'); if (b) b.click();
-    if (window.renderDueTab) window.renderDueTab();
-  }, scope);
-  await p.waitForTimeout(250);
-  return p.$$eval('#ddList table.grid tbody tr', rs => rs.filter(r => !r.querySelector('td.empty')).length).catch(() => -1);
-}
+const tileMap = async p => p.$$eval('#dueKpis .kpi, #dueKpis .tile', els => {
+  const m = {};
+  els.forEach(el => {
+    const k = el.querySelector('.k'), v = el.querySelector('.v');
+    if (k && v) m[k.textContent.trim().toLowerCase()] = v.textContent.trim();
+  });
+  return m;
+});
 
 (async () => {
   await new Promise(r => srv.listen(0, r));
   const port = srv.address().port;
-  const b = await chromium.launch();
+  const b = await chromium.launch({ args: ['--ignore-certificate-errors'] });
 
-  const { p: a, errs: errsA } = await loadPage(b, port, 'dashboard/index.html');
-  const { p: n, errs: errsB } = await loadPage(b, port, 'dashboard-next/index.html');
+  /* ── page 1: the untouched /dashboard/ ─────────────────────────────────── */
+  const ctxA = await b.newContext({ viewport: { width: 1366, height: 1000 } });
+  const a = await ctxA.newPage();
+  const errsA = []; a.on('pageerror', e => errsA.push(e.message));
+  await a.goto(`http://127.0.0.1:${port}/dashboard/index.html`, { waitUntil: 'load' });
+  await a.waitForTimeout(1500);
+  await a.evaluate(f => { window.CMDash.setDriveRecords(f); const ov = document.getElementById('dataOv'); if (ov) ov.classList.add('hidden'); }, FLEET);
+  await a.waitForTimeout(1200);
+  await a.evaluate(() => { location.hash = '#due'; });
+  await a.waitForTimeout(600);
+  const baseline = { tiles: await tileMap(a),
+    rows: await a.$$eval('#ddList tbody tr', rs => rs.filter(r => !r.querySelector('td.empty')).length) };
 
-  await a.evaluate(() => { location.hash = '#due'; }); await a.waitForTimeout(500);
-  await n.evaluate(() => { location.hash = '#due'; }); await n.waitForTimeout(500);
+  /* ── page 2: /dashboard-next/, window explicitly set to All time ──────── */
+  const ctxB = await b.newContext({ viewport: { width: 1366, height: 1000 } });
+  const n = await ctxB.newPage();
+  const errsB = []; n.on('pageerror', e => errsB.push(e.message));
+  await n.goto(`http://127.0.0.1:${port}/dashboard-next/index.html`, { waitUntil: 'load' });
+  await n.waitForTimeout(1500);
+  await n.evaluate(f => { window.CMDash.setDriveRecords(f); const ov = document.getElementById('dataOv'); if (ov) ov.classList.add('hidden'); }, FLEET);
+  await n.waitForTimeout(1200);
+  await n.click('#winTog button[data-win="0"]').catch(() => {});
+  await n.waitForTimeout(400);
+  await n.evaluate(() => { location.hash = '#due'; });
+  await n.waitForTimeout(600);
+  const next = { tiles: await tileMap(n),
+    rows: await n.$$eval('#ddList tbody tr', rs => rs.filter(r => !r.querySelector('td.empty')).length) };
 
-  const tilesA = await tilesOf(a), tilesB = await tilesOf(n);
-  console.log('dashboard/     tiles: ' + JSON.stringify(tilesA));
-  console.log('dashboard-next tiles: ' + JSON.stringify(tilesB));
-  ok('Due tiles: same count of tiles', tilesA.length === tilesB.length, `${tilesA.length} vs ${tilesB.length}`);
-  ok('Due tiles: same values in the same order', JSON.stringify(tilesA) === JSON.stringify(tilesB));
+  console.log('dashboard/     tiles: ' + JSON.stringify(baseline.tiles) + '  rows=' + baseline.rows);
+  console.log('dashboard-next tiles: ' + JSON.stringify(next.tiles) + '  rows=' + next.rows);
 
-  for (const s of SCOPES) {
-    const rA = await rowsFor(a, s), rB = await rowsFor(n, s);
-    ok(`Due scope "${s}": row count matches live /dashboard/`, rA === rB, `next=${rB} dashboard=${rA}`);
+  /* Compare every tile dashboard-next shows against the SAME label on the
+     untouched /dashboard/ -- Due.dc.html renames none of the four tiles
+     relative to /dashboard/'s own Overdue/Due soon/Deferred/Explained. */
+  for (const label of Object.keys(next.tiles)) {
+    ok(`KPI parity (All time): "${label}" matches live /dashboard/`,
+      baseline.tiles[label] !== undefined && next.tiles[label] === baseline.tiles[label],
+      `next=${next.tiles[label]} dashboard=${baseline.tiles[label]}`);
   }
+  ok('KPI parity: dashboard-next renders exactly 4 tiles (Due.dc.html)', Object.keys(next.tiles).length === 4, JSON.stringify(next.tiles));
+  ok('KPI parity: default (Overdue) table row count matches', next.rows === baseline.rows, `next=${next.rows} dashboard=${baseline.rows}`);
 
-  /* Presentation-only checks on dashboard-next alone, matching the styled
-     shape every other converted tab already has (CLAUDE.md "Phase 4",
-     Stage 5's own pattern). */
-  const kit = await n.evaluate(() => ({
-    hasFilterBoxes: document.querySelectorAll('#ddList thead input.cwcf').length >= 0, // filter row is optional per-scope shape
-    hasKpis: document.querySelectorAll('#dueKpis .kpi').length >= 4,
-    noPillOnGrade: [...document.querySelectorAll('#ddList .pill')].length === 0,
+  /* ── the nine-way Show segmented control renders with counts ──────────── */
+  const seg = await n.$$eval('#ddSeg [role="tab"]', els => els.map(e => e.textContent.replace(/\s+/g, ' ').trim()));
+  /* Overdue, Due soon, Never inspected, 1C plan, Compare, Deferred,
+     Completed, All -- eight views as tabs ("Overdue & due soon" stays a
+     valid #ddScope value for an address that names it, but is not itself a
+     tab -- see the comment above the <select> markup in index.html). */
+  ok('Show segmented control has all eight views', seg.length === 8, JSON.stringify(seg));
+
+  /* ── Round filter and Search box are present ───────────────────────────── */
+  const controls = await n.evaluate(() => ({
+    hasRound: !!document.getElementById('ddType'),
+    hasSearch: !!document.getElementById('ddQ'),
+    hasCsv: !!document.getElementById('ddCsv'),
   }));
-  ok('Due: at least four KPI tiles render', kit.hasKpis, JSON.stringify(kit));
-  ok('Due: no pill-background chips left in the list (coloured text only)', kit.noPillOnGrade, JSON.stringify(kit));
+  ok('Round filter, search box and Export CSV all present', controls.hasRound && controls.hasSearch && controls.hasCsv, JSON.stringify(controls));
 
+  /* ── the table still uses the shared tk*-style column filter/sort kit ──── */
+  const kit = await n.evaluate(() => ({
+    hasFilterBoxes: document.querySelectorAll('#ddList thead input').length > 0,
+    hasSortableHeaders: document.querySelectorAll('#ddList thead th.sortable').length > 0,
+  }));
+  ok('the rounds table has a filter row', kit.hasFilterBoxes, JSON.stringify(kit));
+  ok('the rounds table has sortable headers', kit.hasSortableHeaders, JSON.stringify(kit));
+
+  /* ── no pill background anywhere on this tab (CLAUDE.md: status is text) ── */
+  const pill = await n.evaluate(() => {
+    const cells = [...document.querySelectorAll('#ddList td b, #ddList .duec')];
+    if (!cells.length) return { n: 0 };
+    const cs = getComputedStyle(cells[0]);
+    return { n: cells.length, bg: cs.backgroundColor, br: cs.borderRadius };
+  });
+  ok('due-date status carries no pill background', pill.n === 0 || /rgba\(0, 0, 0, 0\)|transparent/.test(pill.bg), JSON.stringify(pill));
+
+  /* ── no sideways scroller on the whole Due tab at 1366px ───────────────── */
   const scrollers = await n.evaluate(() => [...document.querySelectorAll('#tab-due .tblwrap, #tab-due table')]
     .filter(el => el.scrollWidth > el.clientWidth + 2).map(el => el.id || el.className));
-  ok('no sideways scroller on Due at 1366px', scrollers.length === 0, JSON.stringify(scrollers));
+  ok('no sideways scroller on Inspection Schedule at 1366px', scrollers.length === 0, JSON.stringify(scrollers));
 
   console.log((errsA.length ? '\ndashboard/ PAGE ERRORS:\n' + errsA.join('\n') : '') + (errsB.length ? '\ndashboard-next/ PAGE ERRORS:\n' + errsB.join('\n') : ''));
-  await b.close(); srv.close();
+  b.close(); srv.close();
   console.log(fails.length ? `\n${fails.length} FAILED` : '\nall pass');
   process.exit(fails.length || errsA.length || errsB.length ? 1 : 0);
 })();

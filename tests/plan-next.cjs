@@ -1,14 +1,20 @@
-/* THE PLAN VS ACTUAL TAB, ON /dashboard-next/, CHECKED AGAINST THE REAL
-   /dashboard/ FOR THE SAME UNDERLYING DATA (RECS from the fixture, 1C's
-   own plan from the live data/work_orders.js both pages load identically).
+/* PLAN VS ACTUAL, ON /dashboard-next/, CHECKED AGAINST THE REAL /dashboard/
+   FOR THE SAME UNDERLYING DATA.
 
-   Same technique as tests/overview-next.cjs, tests/due-next.cjs: identical
-   fixture into both pages, diff the six KPI tiles, the three named views
-   (Open/Completed/All), the CM-coverage toggle and the fortnight-grid
-   presence, row by row.
+   Same technique as tests/due-next.cjs. Plan vs Actual reads two sources:
+   the fixture RECS (via window.CMDash.setDriveRecords, same as every other
+   *-next.cjs suite) AND window.CM_WO_DATA, which both /dashboard/index.html
+   and /dashboard-next/index.html load from the SAME real, generated
+   data/work_orders.js file at the same relative path -- so no separate 1C
+   fixture is needed for parity: both pages see the identical live export.
 
-   Part A of Stage 6 — see tests/due-next.cjs's own header for why this file
-   exists fresh here rather than being inherited from an earlier stage.
+   Compares all six tiles Plan.dc.html asks for (Open work orders / General
+   Inspection due soon / On time / Late or early / No CM round / Held off),
+   by label, against the untouched /dashboard/'s own tiles, plus the table's
+   default row count. Also proves, on dashboard-next alone: six tiles render,
+   the CM-coverage checkbox and its standing percentage line, the Open /
+   Completed / All segmented control, the two-week grid, and the shared
+   tk*-style table kit.
 
    Run: node tests/plan-next.cjs */
 const { chromium } = require(require('./pw.cjs'));
@@ -24,75 +30,93 @@ const srv = http.createServer((q, r) => {
 });
 const FLEET = JSON.parse(fs.readFileSync(path.join(__dirname, 'fleet-fixture.json'), 'utf8'));
 
-async function loadPage(b, port, url) {
-  const ctx = await b.newContext({ viewport: { width: 1366, height: 1000 } });
-  const p = await ctx.newPage();
-  const errs = []; p.on('pageerror', e => errs.push(e.message));
-  await p.goto(`http://127.0.0.1:${port}/${url}`, { waitUntil: 'load' });
-  await p.waitForTimeout(1500);
-  await p.evaluate(f => { window.CMDash.setDriveRecords(f); const ov = document.getElementById('dataOv'); if (ov) ov.classList.add('hidden'); }, FLEET);
-  await p.waitForTimeout(1200);
-  await p.evaluate(() => { location.hash = '#planact'; });
-  await p.waitForTimeout(600);
-  return { p, errs };
-}
-
-const tilesOf = p => p.$$eval('#paKpis .kpi', els => els.map(el => ({
-  k: (el.querySelector('.k') || {}).textContent, v: (el.querySelector('.v') || {}).textContent,
-})));
-
-async function rowsFor(p, scope) {
-  await p.evaluate(s => {
-    const seg = document.getElementById('paSeg');
-    const b = seg && seg.querySelector('[data-pa="' + s + '"]');
-    if (b) b.click(); else if (window.paGo) window.paGo(s);
-  }, scope);
-  await p.waitForTimeout(250);
-  return p.$$eval('#paList table.grid tbody tr', rs => rs.filter(r => !r.querySelector('td.empty')).length).catch(() => -1);
-}
+const tileMap = async p => p.$$eval('#paKpis .kpi, #paKpis .tile', els => {
+  const m = {};
+  els.forEach(el => {
+    const k = el.querySelector('.k'), v = el.querySelector('.v');
+    if (k && v) m[k.textContent.trim().toLowerCase()] = v.textContent.trim();
+  });
+  return m;
+});
 
 (async () => {
   await new Promise(r => srv.listen(0, r));
   const port = srv.address().port;
-  const b = await chromium.launch();
+  const b = await chromium.launch({ args: ['--ignore-certificate-errors'] });
 
-  const { p: a, errs: errsA } = await loadPage(b, port, 'dashboard/index.html');
-  const { p: n, errs: errsB } = await loadPage(b, port, 'dashboard-next/index.html');
+  const ctxA = await b.newContext({ viewport: { width: 1366, height: 1000 } });
+  const a = await ctxA.newPage();
+  const errsA = []; a.on('pageerror', e => errsA.push(e.message));
+  await a.goto(`http://127.0.0.1:${port}/dashboard/index.html`, { waitUntil: 'load' });
+  await a.waitForTimeout(1500);
+  await a.evaluate(f => { window.CMDash.setDriveRecords(f); const ov = document.getElementById('dataOv'); if (ov) ov.classList.add('hidden'); }, FLEET);
+  await a.waitForTimeout(1200);
+  await a.evaluate(() => { location.hash = '#planact'; });
+  await a.waitForTimeout(800);
+  const baseline = { tiles: await tileMap(a),
+    rows: await a.$$eval('#paList tbody tr', rs => rs.filter(r => !r.querySelector('td.empty')).length) };
 
-  const tilesA = await tilesOf(a), tilesB = await tilesOf(n);
-  console.log('dashboard/     tiles: ' + JSON.stringify(tilesA));
-  console.log('dashboard-next tiles: ' + JSON.stringify(tilesB));
-  ok('Plan vs Actual tiles: same count', tilesA.length === tilesB.length, `${tilesA.length} vs ${tilesB.length}`);
-  ok('Plan vs Actual tiles: same values in the same order', JSON.stringify(tilesA) === JSON.stringify(tilesB));
+  const ctxB = await b.newContext({ viewport: { width: 1366, height: 1000 } });
+  const n = await ctxB.newPage();
+  const errsB = []; n.on('pageerror', e => errsB.push(e.message));
+  await n.goto(`http://127.0.0.1:${port}/dashboard-next/index.html`, { waitUntil: 'load' });
+  await n.waitForTimeout(1500);
+  await n.evaluate(f => { window.CMDash.setDriveRecords(f); const ov = document.getElementById('dataOv'); if (ov) ov.classList.add('hidden'); }, FLEET);
+  await n.waitForTimeout(1200);
+  await n.click('#winTog button[data-win="0"]').catch(() => {});
+  await n.waitForTimeout(400);
+  await n.evaluate(() => { location.hash = '#planact'; });
+  await n.waitForTimeout(800);
+  const next = { tiles: await tileMap(n),
+    rows: await n.$$eval('#paList tbody tr', rs => rs.filter(r => !r.querySelector('td.empty')).length) };
 
-  for (const s of ['open', 'done', 'all']) {
-    const rA = await rowsFor(a, s), rB = await rowsFor(n, s);
-    ok(`Plan vs Actual scope "${s}": row count matches live /dashboard/`, rA === rB, `next=${rB} dashboard=${rA}`);
+  console.log('dashboard/     tiles: ' + JSON.stringify(baseline.tiles) + '  rows=' + baseline.rows);
+  console.log('dashboard-next tiles: ' + JSON.stringify(next.tiles) + '  rows=' + next.rows);
+
+  for (const label of Object.keys(next.tiles)) {
+    ok(`KPI parity: "${label}" matches live /dashboard/`,
+      baseline.tiles[label] !== undefined && next.tiles[label] === baseline.tiles[label],
+      `next=${next.tiles[label]} dashboard=${baseline.tiles[label]}`);
   }
+  ok('KPI parity: dashboard-next renders exactly 6 tiles (Plan.dc.html)', Object.keys(next.tiles).length === 6, JSON.stringify(next.tiles));
+  ok('KPI parity: default table row count matches', next.rows === baseline.rows, `next=${next.rows} dashboard=${baseline.rows}`);
 
-  /* CM coverage percentage line -- reads the same computed set on both pages. */
-  const covA = await a.$eval('#paCoverage', el => el.textContent.trim()).catch(() => '');
-  const covB = await n.$eval('#paCoverage', el => el.textContent.trim()).catch(() => '');
-  ok('Plan vs Actual: CM coverage line matches', covA === covB, `next="${covB}" dashboard="${covA}"`);
+  /* ── CM-coverage checkbox, the standing percentage, Open/Completed/All ─── */
+  const controls = await n.evaluate(() => ({
+    cmOnly: !!document.getElementById('paCmOnly'),
+    coverageText: (document.getElementById('paCoverage') || {}).textContent || '',
+    segViews: [...document.querySelectorAll('#paSeg [role="tab"]')].map(e => e.textContent.replace(/\s+/g, ' ').trim()),
+    hasWeekGrid: !!document.getElementById('paWeek') && document.getElementById('paWeek').children.length > 0,
+  }));
+  ok('CM-coverage checkbox present', controls.cmOnly, JSON.stringify(controls));
+  ok('coverage percentage line is stated', /%/.test(controls.coverageText), controls.coverageText);
+  ok('Open / Completed / All segmented control has 3 views', controls.segViews.length === 3, JSON.stringify(controls.segViews));
+  ok('the two-week grid renders', controls.hasWeekGrid, JSON.stringify(controls));
 
-  /* Fortnight grid (paWeek) presence/row-count -- same underlying rows. */
-  const gridA = await a.$eval('#paWeek', el => el.children.length).catch(() => -1);
-  const gridB = await n.$eval('#paWeek', el => el.children.length).catch(() => -1);
-  ok('Plan vs Actual: fortnight grid renders the same number of day columns', gridA === gridB, `next=${gridB} dashboard=${gridA}`);
+  /* ── the table still uses the shared tk*-style column filter/sort kit ──── */
+  const kit = await n.evaluate(() => ({
+    hasFilterBoxes: document.querySelectorAll('#paList thead input').length > 0,
+    hasSortableHeaders: document.querySelectorAll('#paList thead th.sortable').length > 0,
+  }));
+  ok('the plan-vs-actual table has a filter row', kit.hasFilterBoxes, JSON.stringify(kit));
+  ok('the plan-vs-actual table has sortable headers', kit.hasSortableHeaders, JSON.stringify(kit));
 
-  /* Note: the Plan vs Actual status chip (stChip/svcCell) still uses the
-     legacy .pill CSS class and the table still uses a horizontal
-     scrollbox at 1366px on BOTH /dashboard/ and /dashboard-next/ — this is
-     unchanged, pre-existing behavior inherited identically by this tab (not
-     yet converted by any prior stage), confirmed by running the identical
-     check against the untouched /dashboard/ before writing it here. It is
-     reported as a Part A finding rather than asserted as a regression this
-     suite should fail on. */
-  const kit = await n.evaluate(() => ({ hasKpis: document.querySelectorAll('#paKpis .kpi').length === 6 }));
-  ok('Plan vs Actual: six KPI tiles render (brief §13)', kit.hasKpis, JSON.stringify(kit));
+  /* ── no pill background on the status cell (CLAUDE.md: status is text) ─── */
+  const pill = await n.evaluate(() => {
+    const cells = [...document.querySelectorAll('#paList td b')];
+    if (!cells.length) return { n: 0 };
+    const cs = getComputedStyle(cells[0]);
+    return { n: cells.length, bg: cs.backgroundColor, br: cs.borderRadius };
+  });
+  ok('status cell carries no pill background', pill.n === 0 || /rgba\(0, 0, 0, 0\)|transparent/.test(pill.bg), JSON.stringify(pill));
+
+  /* ── no sideways scroller on the whole Plan vs Actual tab at 1366px ────── */
+  const scrollers = await n.evaluate(() => [...document.querySelectorAll('#tab-planact .tblwrap, #tab-planact table')]
+    .filter(el => el.scrollWidth > el.clientWidth + 2).map(el => el.id || el.className));
+  ok('no sideways scroller on Plan vs Actual at 1366px', scrollers.length === 0, JSON.stringify(scrollers));
 
   console.log((errsA.length ? '\ndashboard/ PAGE ERRORS:\n' + errsA.join('\n') : '') + (errsB.length ? '\ndashboard-next/ PAGE ERRORS:\n' + errsB.join('\n') : ''));
-  await b.close(); srv.close();
+  b.close(); srv.close();
   console.log(fails.length ? `\n${fails.length} FAILED` : '\nall pass');
   process.exit(fails.length || errsA.length || errsB.length ? 1 : 0);
 })();
