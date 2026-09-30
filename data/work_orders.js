@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-09-30T00:55:32+00:00",
+  "generated": "2026-09-30T02:53:40+00:00",
   "source": "https://askpi.94-131-94-152.sslip.io/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 681,
@@ -316,8 +316,8 @@ window.CM_WO_DATA = {
     "WE009",
     "WE011"
   ],
-  "duplicateRowsCollapsed": 264,
-  "roundsDedupedWithinVisit": 12,
+  "duplicateRowsCollapsed": 268,
+  "roundsDedupedWithinVisit": 13,
   "columns": [
     "Asset description",
     "Asset old no",
@@ -3805,6 +3805,25 @@ window.CM_WO_DATA = {
       "cmLabel": "500h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
+      "planStart": "2026-09-19",
+      "planStartDt": "2026-09-19T19:00:00",
+      "planEnd": "2026-09-20",
+      "actualStart": "2026-09-19",
+      "actualStartDt": "2026-09-19T19:00:00",
+      "actualEnd": "2026-09-20"
+    },
+    {
+      "equip": "CD007",
+      "cls": "GEN",
+      "woNumber": "WO-016944",
+      "maintType": "500 Hours service Planned",
+      "hours": 500,
+      "cmLabel": "500h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
@@ -5063,6 +5082,25 @@ window.CM_WO_DATA = {
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
+    },
+    {
+      "equip": "CN009",
+      "cls": "GEN",
+      "woNumber": "WO-016888",
+      "maintType": "4000 Hours service Planned",
+      "hours": 4000,
+      "cmLabel": "4000h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
+      "planStart": "2026-09-15",
+      "planStartDt": "2026-09-15T07:00:00",
+      "planEnd": "2026-09-16",
+      "actualStart": "2026-09-15",
+      "actualStartDt": "2026-09-15T07:00:00",
+      "actualEnd": "2026-09-16"
     },
     {
       "equip": "CN010",
