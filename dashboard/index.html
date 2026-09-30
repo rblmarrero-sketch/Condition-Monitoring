@@ -3781,23 +3781,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=484"></script>
+<script src="../data/magnetic_plug.js?v=485"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=484"></script>
-<script src="../mobile/hme.js?v=484"></script>
-<script src="../mobile/mp-fc.js?v=484"></script>
-<script src="../mobile/rtw.js?v=484"></script>
-<script src="../mobile/hme-cascade.js?v=484"></script>
-<script src="../mobile/temp-limits.js?v=484"></script>
+<script src="../data/work_orders.js?v=485"></script>
+<script src="../mobile/hme.js?v=485"></script>
+<script src="../mobile/mp-fc.js?v=485"></script>
+<script src="../mobile/rtw.js?v=485"></script>
+<script src="../mobile/hme-cascade.js?v=485"></script>
+<script src="../mobile/temp-limits.js?v=485"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=484"></script>
-<script src="../mobile/normalize.js?v=484"></script>
-<script src="../mobile/terms.js?v=484"></script>
+<script src="../mobile/assets.js?v=485"></script>
+<script src="../mobile/normalize.js?v=485"></script>
+<script src="../mobile/terms.js?v=485"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -3816,19 +3816,19 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=484"></script>
-<script src="../mobile/edits.js?v=484"></script>
-<script src="../mobile/due.js?v=484"></script>
-<script src="../mobile/wear.js?v=484"></script>
-<script src="../mobile/wear-map.js?v=484"></script>
-<script src="../mobile/lube.js?v=484"></script>
-<script src="../mobile/lube-overrides.js?v=484"></script>
-<script src="../mobile/lube2027.js?v=484"></script>
-<script src="../mobile/lube-tds.js?v=484"></script>
+<script src="../mobile/grade.js?v=485"></script>
+<script src="../mobile/edits.js?v=485"></script>
+<script src="../mobile/due.js?v=485"></script>
+<script src="../mobile/wear.js?v=485"></script>
+<script src="../mobile/wear-map.js?v=485"></script>
+<script src="../mobile/lube.js?v=485"></script>
+<script src="../mobile/lube-overrides.js?v=485"></script>
+<script src="../mobile/lube2027.js?v=485"></script>
+<script src="../mobile/lube-tds.js?v=485"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=484"></script>
-<script src="../mobile/machine-photos.js?v=484"></script>
+<script src="../mobile/upload-defaults.js?v=485"></script>
+<script src="../mobile/machine-photos.js?v=485"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3837,17 +3837,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=484"></script>
-<script src="../mobile/get.js?v=484"></script>
-<script src="../mobile/points.js?v=484"></script>
-<script src="../mobile/uc-points.js?v=484"></script>
-<script src="../mobile/inspect-guide.js?v=484"></script>
-<script src="../mobile/get-figs.js?v=484"></script>
-<script src="../mobile/body-points.js?v=484"></script>
-<script src="../mobile/body-map.js?v=484"></script>
-<script src="../mobile/jspdf.umd.min.js?v=484"></script>
-<script src="../mobile/html2canvas.min.js?v=484"></script>
-<script src="../mobile/report-core.js?v=484"></script>
+<script src="../mobile/machine-fig.js?v=485"></script>
+<script src="../mobile/get.js?v=485"></script>
+<script src="../mobile/points.js?v=485"></script>
+<script src="../mobile/uc-points.js?v=485"></script>
+<script src="../mobile/inspect-guide.js?v=485"></script>
+<script src="../mobile/get-figs.js?v=485"></script>
+<script src="../mobile/body-points.js?v=485"></script>
+<script src="../mobile/body-map.js?v=485"></script>
+<script src="../mobile/jspdf.umd.min.js?v=485"></script>
+<script src="../mobile/html2canvas.min.js?v=485"></script>
+<script src="../mobile/report-core.js?v=485"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -18404,6 +18404,16 @@ document.querySelector(".lang").addEventListener("click",e=>{
        filed, the editor. Reloading under them would discard it. */
     if([...document.querySelectorAll(".ov")].some(o=>!o.classList.contains("hidden"))) return true;
     const px=$("pxPanel"); if(px && !px.classList.contains("hidden")) return true;
+    /* THE LIGHTBOX IS THE SAME LOSS, AND ITS OWN OPENING CLICK IS WHAT
+       TRIGGERS IT -- see dashboard-next/index.html's own fix for this, of
+       the identical shape: #lb tracks open/closed with its own "open"
+       class, not "hidden" like ".ov", so opening a photo (the history
+       cards, the report, the review) was never once caught by the query
+       above, and that same click is exactly what schedules the 300ms
+       applyIfIdle() check that then reloaded the page out from under the
+       viewer it had just opened. Reported plainly: "when i click photo, it
+       go back". */
+    const lb=$("lb"); if(lb && lb.classList.contains("open")) return true;
     /* THE MACHINE DRAWER IS THE SAME LOSS, ONE PANEL OVER. openUnit()'s own
        drawer (#drw) is not an ".ov" — it is toggled by its own hidden class —
        so a reader deep in a unit's open findings, mid-click, lost the drawer
@@ -18421,6 +18431,17 @@ document.querySelector(".lang").addEventListener("click",e=>{
        list is itself a click that, 300ms later, this same gate reloaded the
        page out from under. */
     if(typeof CMB==="object" && Object.values(CMB).some(c=>c && c.open)) return true;
+    /* AND A PLAIN, NATIVE <select>/<input>/<textarea> IS THE SAME LOSS ONE
+       CONTROL FURTHER IN AGAIN -- see dashboard-next/index.html's own fix
+       for this, of the identical shape: the Grade/Type/Class/Period filter
+       selects, the global search box, and every other ordinary form control
+       on this page are the browser's own native control, whose open listbox
+       is not a DOM node any query here can ever see. What IS visible is
+       that the control keeps document focus for as long as its listbox is
+       open, in every major browser. Reported plainly, again: "again we have
+       problem with dropdown". */
+    const af=document.activeElement;
+    if(af && /^(SELECT|INPUT|TEXTAREA)$/.test(af.tagName)) return true;
     return false;
   };
   const applyIfIdle=()=>{
@@ -18502,8 +18523,8 @@ document.querySelector(".lang").addEventListener("click",e=>{
   setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 })();
 </script>
-<script src="drive.js?v=484"></script>
-<script src="sync-adapter.js?v=484"></script>
-<script src="report.js?v=484"></script>
+<script src="drive.js?v=485"></script>
+<script src="sync-adapter.js?v=485"></script>
+<script src="report.js?v=485"></script>
 </body>
 </html>
