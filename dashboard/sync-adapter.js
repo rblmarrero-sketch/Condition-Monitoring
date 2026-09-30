@@ -60,6 +60,25 @@
   /* ---- adapter 2: the REST backend ------------------------------------------
      Cursor pull, idempotent push, and a live stream so the three-minute poll
      becomes a backstop rather than the mechanism. */
+  /* Same structural guard as dashboard/drive.js's prodWriteGuard, applied
+     here too: this adapter is inert today (nothing ships a default
+     cm_api_url/cm_api_token), but the day a real one is configured, its
+     push() is exactly the same class of risk that reached production via
+     drive.js on 2026-09-30 -- an automated browser writing to a real,
+     non-local host with nothing to stop it. */
+  function isLocalRestHost(u) {
+    try { var h = new URL(String(u), location.href).hostname;
+      return h === "localhost" || h === "127.0.0.1" || h === "::1" || h === "0.0.0.0" || /^127\./.test(h); }
+    catch (e) { return false; }
+  }
+  function restWriteGuard(u) {
+    if (typeof navigator !== "undefined" && navigator.webdriver && !isLocalRestHost(u)) {
+      var e = new Error("Blocked: an automated (navigator.webdriver) browser tried to write to a "
+        + "non-local host (" + u + "). Point cm_api_url at a local mock server to test writes.");
+      e.prodGuardBlocked = true;
+      throw e;
+    }
+  }
   function restAdapter(cfg) {
     if (!cfg || !cfg.url || !cfg.token) return null;
     var base = String(cfg.url).replace(/\/+$/, "");
@@ -122,6 +141,7 @@
          correction goes to the server rather than into a marker file, and the
          phones see it on their next pull. */
       async push(batch) {
+        restWriteGuard(base);
         return jsonOr(await fetch(base + "/v1/push", {
           method: "POST",
           headers: hdr({ "content-type": "application/json" }),

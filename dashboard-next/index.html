@@ -21187,7 +21187,39 @@ document.querySelector(".lang").addEventListener("click",e=>{
      something, and never take a half-finished correction away from them. */
   const BUILT=tag;
   let dashWaiting=null;
+  /* A TABLE THE READER IS ACTIVELY FILTERING OR SORTING IS THE SAME LOSS ONE
+     MORE TIME, AND IT HAS NO DIALOG TO CATCH IT. Every overlay this function
+     already recognizes shares one shape: a persistent DOM flag (".ov", a
+     "hidden" class, an open combobox, a focused form control) that stays
+     true for as long as the reader is genuinely mid-something. A sort-header
+     click and a filter keystroke have no such flag — a `<th>` does not hold
+     document focus the way an `<input>` does — and THIS page's own `?v=` tag
+     deliberately lags the mainline's constantly-bumped BUILD (unlike
+     dashboard/index.html's, kept in lockstep by bump.cjs discipline), so
+     `look()` finds "newer" here within seconds of any real visit and the
+     very next click — sorting a column, typing into a filter box — can
+     reload the page out from under an office worker with no warning.
+     docs/dashboard-next-parity.md named this the one gap left standing
+     after the conflict-detail and regression-sweep work, with two options:
+     extend this function, or make this page's tag track BUILD forever.
+     The second would need every future bump.cjs run — for a change that may
+     have nothing to do with this file — to also touch this file's ~59 `?v=`
+     tags, for as long as this redesign stays pre-cutover; forgetting once
+     brings the race straight back. Extending this function instead closes
+     it for BOTH dashboard/index.html and this file at once, permanently,
+     with nothing left to remember on any future bump.
+
+     A short grace window, not an indefinite hold like the dialogs below —
+     this is "just touched a table", not "has unsaved work" — so the update
+     still lands within seconds of the reader actually going idle. */
+  const TABLE_BUSY_MS=3000;
+  let lastTableTouch=0;
+  const touchTable=e=>{ if(e.target && e.target.closest
+    && e.target.closest('th[data-sort], .cwcf, input.cwcf')) lastTableTouch=Date.now(); };
+  document.addEventListener("click", touchTable, true);
+  document.addEventListener("input", touchTable, true);
   const busy=()=>{
+    if(Date.now()-lastTableTouch<TABLE_BUSY_MS) return true;
     /* An overlay open is somebody mid-decision — a correction, a photo being
        filed, the editor. Reloading under them would discard it. */
     if([...document.querySelectorAll(".ov")].some(o=>!o.classList.contains("hidden"))) return true;

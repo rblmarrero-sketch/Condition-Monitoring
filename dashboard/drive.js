@@ -238,6 +238,30 @@
      null  = nothing has ever been set here     → take the shared default
      ""    = somebody cleared it on purpose     → no Drive, and it stays that way
      a URL = this browser's own setting         → use it */
+  /* A TEST/AUTOMATED BROWSER MUST NEVER BE ABLE TO WRITE TO THE REAL BACKEND,
+     STRUCTURALLY, NOT BY REMEMBERING TO REDIRECT IT. Same fix, same reason,
+     as mobile/index.html's own prodWriteGuard (see its own comment for the
+     2026-09-30 incident this closes) -- this file is shared by BOTH
+     dashboard/index.html and dashboard-next/index.html, so one fix here
+     covers every write either page can make (saveEdit/resolve/putMedia all
+     funnel through post() below). `navigator.webdriver` is true for every
+     WebDriver-automated browser (Playwright, Puppeteer, Selenium) and false
+     for every genuine human session, by spec, with nothing for a test to
+     remember to set. Only a REMOTE host is ever blocked -- a test pointed at
+     its own local mock (127.0.0.1/localhost) is untouched. */
+  function isLocalDriveHost(u) {
+    try { const h = new URL(String(u), location.href).hostname;
+      return h === "localhost" || h === "127.0.0.1" || h === "::1" || h === "0.0.0.0" || /^127\./.test(h); }
+    catch (e) { return false; }
+  }
+  function prodWriteGuard(u) {
+    if (typeof navigator !== "undefined" && navigator.webdriver && !isLocalDriveHost(u)) {
+      const e = new Error("Blocked: an automated (navigator.webdriver) browser tried to write to a "
+        + "non-local host (" + u + "). Point cm_drive_url at a local mock server to test writes.");
+      e.prodGuardBlocked = true;
+      throw e;
+    }
+  }
   const cfg = () => {
     const saved = localStorage.getItem(LS_URL);
     if (saved !== null) return { url: saved.trim(), sec: localStorage.getItem(LS_SEC) || "" };
@@ -851,6 +875,7 @@
   async function post(body) {
     const c = cfg();
     if (!c.url) throw new Error("No Drive URL configured.");
+    prodWriteGuard(c.url);
     const r = await fetch(c.url, { method: "POST",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
       body: JSON.stringify(Object.assign({ secret: c.sec || "" }, body)) });

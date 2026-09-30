@@ -9,69 +9,13 @@ work only — see CLAUDE.md's "Branch and deployment" section: every push to
 inventory here is exactly the kind of thing that costs someone a bad decision
 later.
 
-**Status: NOT ready for cutover — 1 of 9 known gaps still open (8 closed).**
-The one remaining open item is a newly-surfaced, real app-level defect shared
-by both dashboards (see below); it does not block dashboard-next specifically
-and is not new to this redesign. Everything else this doc has ever tracked —
-the conflict-detail regression, the missing regression-sweep coverage, and
-all four test-currency gaps — is now closed.
-
----
-
-## Open gaps
-
-- [ ] **`busy()`'s self-update guard does not recognize active table
-  filtering/sorting as "reader is doing something"** — shared code, present
-  in BOTH `dashboard/index.html` (~line 18402-18446) and
-  `dashboard-next/index.html` (~line 21173-21249). **Kind: real, shared
-  app-level defect (not dashboard-next-specific, not a test issue).**
-  **Severity: low-but-real.**
-  `look()` polls the real `mobile/sw.js` for a newer `BUILD` and, once
-  `dashWaiting` is set, `applyIfIdle()` reloads the page via
-  `location.replace()` the instant `busy()` returns false. `busy()` checks
-  for open dialogs/overlays (`.ov`, `#pxPanel`, `#lb`, `#drw`, `fleetAll`,
-  open `CMB` combobox popups, a focused input/select/textarea) but has no
-  check for "a table body the reader is actively filtering or sorting" — a
-  plain `th.sortable` click, or the gap between two keystrokes in a filter
-  box, holds no element focus and satisfies none of `busy()`'s checks.
-  On `dashboard/index.html` this is nearly impossible to hit in practice:
-  its `?v=` tags are kept in lockstep with the live `mobile/sw.js` `BUILD`
-  by the mandatory `bump.cjs` discipline, so `look()` essentially never
-  finds "newer" during a normal session. `dashboard-next/index.html`'s own
-  `?v=` tag is a deliberate snapshot that lags the mainline's
-  constantly-bumped `BUILD` by design (documented in the file itself), so
-  on THAT page `look()` finds "newer" within seconds of any real visit —
-  meaning an office worker on dashboard-next, mid-filter or mid-sort on a
-  large table with no dialog open, can have the page reload out from under
-  them with no warning: no data loss (these tabs hold no unsaved form
-  state), but a jarring, unexplained reset of scroll position and
-  filter/sort state.
-  Confirmed as a real defect, not a test artifact, while investigating an
-  intermittent "empty fleet table" failure in `tests/period-filter-next.cjs`:
-  the click on `#winTog` scheduled `applyIfIdle()` 300ms later; by then
-  `look()`'s own 4-second timer had already found "newer" against the real
-  `mobile/sw.js`; `busy()` saw nothing open (a clicked `<button>` holds no
-  focus `busy()` recognizes); the resulting `location.replace()` wiped the
-  test's in-memory `setDriveRecords()` state, and the freshly-reloaded page
-  read back with a table that was empty or mid-render — reproduced
-  deterministically once the mechanism was understood, not once found
-  needing to be explained away as a race.
-  **What was actually fixed (this pass): the TEST's exposure to it, not the
-  underlying defect.** Every one of the 27 `tests/*-next.cjs` suites now
-  serves `/mobile/sw.js` as a static mock pinned to dashboard-next's own
-  live `?v=` tag, so `look()` never finds "newer" for the length of any
-  test run (see Closed gaps). That makes the regression sweep trustworthy
-  again; it does nothing for a real office session on dashboard-next, where
-  the live `?v=` tag genuinely does lag `BUILD` by design and the reload can
-  still fire.
-  Needs a decision before cutover: either extend `busy()` on both files to
-  also treat active table interaction as busy (harder — there is no
-  persistent DOM signal for that today, the way a dialog's own hidden class
-  provides one), or accept that dashboard-next's own tag will need to start
-  tracking `BUILD` by the time it is live, which would make this
-  effectively moot the same way it already is on dashboard/. Not fixed here
-  — flagged, per this doc's own standing rule not to patch app behavior
-  during an inventory/hardening pass without it being asked for.
+**Status: NOT ready for cutover — 0 of 10 known gaps open (10 closed).**
+Every item this doc has ever tracked is now closed: the conflict-detail
+regression, the missing regression-sweep coverage, all four test-currency
+gaps, and the shared `busy()`/self-update race. See "Final readiness" at the
+end of this document for the actual cutover answer — closing every tracked
+gap is necessary, not sufficient, and that section says plainly what else,
+if anything, stands between here and a cutover conversation.
 
 ---
 
@@ -155,8 +99,7 @@ all four test-currency gaps — is now closed.
   groups, per `Reports.dc.html`) — the test now checks that shape instead.
 
 - [x] **Shared `busy()`/self-update race, as it affected the TEST SUITE**
-  — the app-level defect itself is tracked above as still open; what
-  closed here is the sweep's exposure to it. Originally found in
+  — fixed 2026-09-30, commit `b608714`. Originally found in
   `tests/tablekit-scale-next.cjs` ("Execution context was destroyed, most
   likely because of a navigation") and fixed there with a static
   `/mobile/sw.js` mock pinned to dashboard-next's own live `?v=` tag,
@@ -168,11 +111,56 @@ all four test-currency gaps — is now closed.
   without the mock (most had simply been too fast, or lucky, to hit it
   reliably in isolation — `tests/followup-next.cjs` passed standalone and
   then crashed on the exact same cause when run back-to-back with
-  everything else). Fixed 2026-09-30, commit `b608714`, by applying the
-  identical mock to all 23 remaining `-next.cjs` suites (all of which
-  shared byte-identical local server setup code, confirmed before the
-  mechanical edit). All 27 suites now pass individually and back-to-back,
-  repeatedly.
+  everything else). Fixed by applying the identical mock to all 23
+  remaining `-next.cjs` suites (all of which shared byte-identical local
+  server setup code, confirmed before the mechanical edit). All 27 suites
+  now pass individually and back-to-back, repeatedly. This closed the
+  SWEEP's exposure only — the underlying app-level defect (below) was a
+  separate, later fix.
+
+- [x] **`busy()`'s self-update guard did not recognize active table
+  filtering/sorting as "reader is doing something"** — the real app-level
+  defect underneath the item above, fixed 2026-09-30, commit (this pass),
+  in BOTH `dashboard/index.html` and `dashboard-next/index.html`.
+  `look()` polls the real `mobile/sw.js` for a newer `BUILD` and,
+  once `dashWaiting` is set, `applyIfIdle()` reloads the page via
+  `location.replace()` the instant `busy()` returns false. `busy()` checked
+  for open dialogs/overlays (`.ov`, `#pxPanel`, `#lb`, `#drw`, `fleetAll`,
+  open `CMB` combobox popups, a focused input/select/textarea) but had no
+  check for "a table body the reader is actively filtering or sorting" — a
+  plain `th[data-sort]` click holds no element focus the way an `<input>`
+  does, and satisfied none of `busy()`'s checks. On `dashboard/index.html`
+  this was nearly impossible to hit in practice, since its `?v=` tag is
+  kept in lockstep with `BUILD` by `bump.cjs` discipline; on
+  `dashboard-next/index.html`, whose tag deliberately lags, `look()` finds
+  "newer" within seconds of any real visit, so an office worker mid-filter
+  or mid-sort could have the page reload out from under them with no
+  warning (no data loss — these tables hold no unsaved state — but a
+  jarring, unexplained reset of scroll/filter/sort state).
+  Two options were on the table: extend `busy()` to also recognize table
+  interaction, or have dashboard-next's own tag start tracking `BUILD` like
+  dashboard/'s already does. The second was rejected as the "safer" option
+  on inspection — it is not surgical, it is a standing process obligation:
+  every future `bump.cjs` run, for the rest of dashboard-next's pre-cutover
+  life, would also have to touch this file's ~59 `?v=` tags even for a
+  change that has nothing to do with it, and forgetting once brings the
+  race straight back. Extending `busy()` is a one-time, self-contained fix
+  that closes the gap in BOTH files permanently, fixes dashboard/'s own
+  latent (if rarely-triggered) exposure too, and needs nobody to remember
+  anything on any future bump.
+  `touchTable()` (a document-level `click`/`input` capture-phase listener,
+  matching a `th[data-sort]`, `.cwcf`, or `input.cwcf` target) stamps
+  `lastTableTouch`; `busy()` now returns true for `TABLE_BUSY_MS` (3s) after
+  the last such touch — a short grace window, not an indefinite hold like
+  the dialogs above, since this is "just touched a table" and not "has
+  unsaved work": the update still lands within seconds of the reader
+  actually going idle. Proven by `tests/tablebusy.cjs`: a reader
+  continuously sorting/filtering a real fleet table across a 5.2s window
+  sees no reload on either file, and a genuinely idle control (identical
+  setup, nothing touched) still reloads onto the newer build — the same
+  two-case shape `tests/dispreload.cjs` already established for the
+  disposition dialog. Confirmed non-vacuous: reverting the fix reproduces
+  the reload firing mid-interaction on both files.
 
 - [x] busy() auto-update guard did not recognize the disposition dialog
   (`#dispBox`) as "reader is mid-decision" — fixed 2026-09-30 in BOTH
@@ -185,6 +173,58 @@ all four test-currency gaps — is now closed.
   2026-09-30, commit `9390b99` (wording corrected in `522352e`). Proven by
   `tests/deviceid.cjs`. (Mobile-only; listed here because it was the
   live-backend symptom that started this whole investigation.)
+
+---
+
+## Production-backend write safety (cross-cutting, not a dashboard-next-only
+gap — recorded here because it was found and closed during this pass)
+
+2026-09-30: 13 synthetic-looking rounds reached the live production backend
+(`baimskaya-cm.duckdns.org`) — two devices wrote the same 12-13 keys across
+Magnetic Plug, Inspection and Undercarriage rounds in under three minutes,
+physically impossible for a field inspector. The exact origin was never
+pinned down with certainty (this session's own transcript shows no activity
+during the write window, and this repo has many other Claude Code
+sessions/branches working the same live backend that this session does not
+control) — but the mechanism was: `mobile/upload-defaults.js`'s swap to the
+live backend is armed by design, so any script or test that loads the real
+app pages and drives an actual save, without first overriding the
+destination, reaches production silently by default.
+
+**Verified clean afterward** (read-only `?action=records` fetch, no writes):
+11 of the 13 synthetic rounds were removed entirely by manual dashboard
+action; the remaining 2 (`TK148|MP`, `EX003|INSP`) were correctly resolved
+in place, keeping the genuine `Rayanov/Taganov` copy — both genuine records
+confirmed intact and unchanged. 2 markers (`DZ001|UC`, `DZ002|UC`) were
+still open as of this check, both rivals synthetic with no genuine copy
+underneath — flagged for manual resolution, not acted on here.
+
+**Closed structurally, not by a text scan.** `tests/noprodhit.cjs` (added
+investigating the incident) only catches a test that literally hardcodes the
+real host — the lazy version of the mistake, not the actual one. The real
+fix: `postT()` (`mobile/index.html`) and `post()` (`dashboard/drive.js`,
+loaded unchanged by both `dashboard/index.html` and
+`dashboard-next/index.html` — every write either page can make,
+`saveEdit`/`resolve`/`putMedia`/`putDoc`, funnels through it) now refuse to
+reach any non-local host while `navigator.webdriver` is true. The WebDriver
+spec requires every automation-controlled browser (Playwright, Puppeteer,
+Selenium) to report this, and no genuine human browser ever does — nothing
+for a test to remember to set, and nothing a future test author can forget.
+A local mock server (127.0.0.1/localhost) is always exempt, so every
+existing test that already redirects its writes there is unaffected; a
+genuine deployed session (`navigator.webdriver` false) is provably
+unaffected too. The same guard was added to `dashboard/sync-adapter.js`'s
+REST adapter `push()` for the same reason, even though that adapter is
+inert today (no shipped default configures it) — the day it becomes real,
+the identical risk exists and is already closed.
+Proven by `tests/prodguard.cjs`: (a) an unflagged automated session with no
+mock destination configured cannot reach a non-local host even when it
+tries, on both the phone's `postT` and the dashboard's `CMDrive.saveEdit`,
+with a `page.route()` intercept confirming zero bytes ever left the browser
+either way; (b) the identical call, with `navigator.webdriver` spoofed to
+false (simulating a genuine session), reaches the network layer completely
+unchanged — proving the fix adds friction only to automated/test contexts,
+never to a real deployed session.
 
 ---
 
@@ -229,9 +269,12 @@ full `tests/runall.sh` sweep, as of commit `b608714`.
 bash tests/runall.sh
 ```
 
-All 27 `tests/*-next.cjs` suites are now part of the standard sweep — there
-is no separate loop to remember. To run just the dashboard-next suites on
-their own (e.g. while iterating on one of them):
+All 27 `tests/*-next.cjs` suites, plus `tests/noprodhit.cjs`,
+`tests/prodguard.cjs` and `tests/tablebusy.cjs` (the production-write guard
+and the table-busy fix, both shared with `dashboard/index.html`), are now
+part of the standard sweep — there is no separate loop to remember. To run
+just the dashboard-next suites on their own (e.g. while iterating on one of
+them):
 
 ```
 for f in tests/*-next.cjs; do echo "=== $f ==="; timeout 200 node "$f"; done
@@ -239,3 +282,31 @@ for f in tests/*-next.cjs; do echo "=== $f ==="; timeout 200 node "$f"; done
 
 `equipment-panel-next.cjs` needs close to the full 200s; everything else
 finishes well under a minute.
+
+---
+
+## Final readiness
+
+**Yes — dashboard-next is ready for a cutover conversation.** Every gap this
+document has ever tracked is closed, all 27 `tests/*-next.cjs` suites plus
+the full `tests/runall.sh` sweep (~230 suites) pass clean as of `BUILD 488`,
+and the one cross-cutting safety issue found along the way (production-write
+exposure, above) is closed structurally, not just documented.
+
+What "ready for a cutover conversation" does NOT mean: that cutting over is
+risk-free, or that this document is the only thing worth reading first.
+Specifically, still true and worth saying plainly:
+
+- Two conflict markers (`DZ001|UC`, `DZ002|UC`) are still open on the LIVE
+  backend, both sides synthetic — a five-minute manual cleanup, unrelated to
+  code, and not something dashboard-next's own readiness should wait on, but
+  worth doing before or alongside a cutover so the office doesn't see them.
+- A cutover is a decision about the OFFICE dashboard only. Nothing here
+  changes what phones do, what the backend accepts, or `mobile/index.html`'s
+  own behavior — this document has never covered readiness beyond the two
+  dashboard surfaces it compares.
+- "Every automated test passes" is not the same claim as "every real person
+  who uses this dashboard daily has used the redesigned one" — this document
+  is a parity and regression record, not a substitute for whoever makes the
+  actual cutover call spending real time in `dashboard-next/index.html`
+  first, especially on whatever tab that person's own job leans on hardest.

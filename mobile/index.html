@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=487">
+<link rel="manifest" href="manifest.webmanifest?v=488">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=487">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=487">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=487">
+<link rel="apple-touch-icon" href="icon-192.png?v=488">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=488">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=488">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2753,16 +2753,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=487"></script>
-<script src="upload-defaults.js?v=487"></script>
-<script src="hme.js?v=487"></script>
-<script src="mp-fc.js?v=487"></script>
-<script src="rtw.js?v=487"></script>
-<script src="hme-cascade.js?v=487"></script>
-<script src="assets.js?v=487"></script>
-<script src="temp-limits.js?v=487"></script>
-<script src="normalize.js?v=487"></script>
-<script src="terms.js?v=487"></script>
+<script src="native.js?v=488"></script>
+<script src="upload-defaults.js?v=488"></script>
+<script src="hme.js?v=488"></script>
+<script src="mp-fc.js?v=488"></script>
+<script src="rtw.js?v=488"></script>
+<script src="hme-cascade.js?v=488"></script>
+<script src="assets.js?v=488"></script>
+<script src="temp-limits.js?v=488"></script>
+<script src="normalize.js?v=488"></script>
+<script src="terms.js?v=488"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2781,25 +2781,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=487"></script>
-<script src="edits.js?v=487"></script>
-<script src="due.js?v=487"></script>
-<script src="wear.js?v=487"></script>
-<script src="wear-figs.js?v=487"></script>
-<script src="wear-map.js?v=487"></script>
-<script src="machine-photos.js?v=487"></script>
-<script src="machine-fig.js?v=487"></script>
-<script src="get.js?v=487"></script>
-<script src="points.js?v=487"></script>
-<script src="uc-points.js?v=487"></script>
-<script src="inspect-guide.js?v=487"></script>
-<script src="get-figs.js?v=487"></script>
-<script src="body-points.js?v=487"></script>
-<script src="body-map.js?v=487"></script>
-<script src="lube.js?v=487"></script>
-<script src="lube-overrides.js?v=487"></script>
-<script src="lube2027.js?v=487"></script>
-<script src="report-core.js?v=487"></script>
+<script src="grade.js?v=488"></script>
+<script src="edits.js?v=488"></script>
+<script src="due.js?v=488"></script>
+<script src="wear.js?v=488"></script>
+<script src="wear-figs.js?v=488"></script>
+<script src="wear-map.js?v=488"></script>
+<script src="machine-photos.js?v=488"></script>
+<script src="machine-fig.js?v=488"></script>
+<script src="get.js?v=488"></script>
+<script src="points.js?v=488"></script>
+<script src="uc-points.js?v=488"></script>
+<script src="inspect-guide.js?v=488"></script>
+<script src="get-figs.js?v=488"></script>
+<script src="body-points.js?v=488"></script>
+<script src="body-map.js?v=488"></script>
+<script src="lube.js?v=488"></script>
+<script src="lube-overrides.js?v=488"></script>
+<script src="lube2027.js?v=488"></script>
+<script src="report-core.js?v=488"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -14696,7 +14696,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="487";
+const BUILD="488";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -16241,6 +16241,41 @@ async function putAll(dest, files, rec, sent){
    syncing=true, the strip stuck on "Uploading…" and Sync now dead until the app
    was force-closed. Every upload is now bounded; a timeout is just a failure,
    so the record stays pending and retries like any other. */
+/* A TEST/AUTOMATED BROWSER MUST NEVER BE ABLE TO WRITE TO THE REAL BACKEND,
+   STRUCTURALLY, NOT BY REMEMBERING TO REDIRECT IT.
+
+   2026-09-30: 13 synthetic rounds reached the live production backend,
+   written by two devices in under three minutes across three round
+   types -- physically impossible for a field inspector. The source was
+   never pinned down with certainty; the most likely mechanism is a
+   Playwright-driven session loading this real page and triggering a real
+   save without first overriding the upload destination, which
+   upload-defaults.js's own already-armed swap sends to production by
+   default. A text scan for the literal URL (tests/noprodhit.cjs) only
+   catches the lazy version of that mistake.
+
+   `navigator.webdriver` is the fix: the WebDriver spec requires every
+   automation-controlled browser (Playwright, Puppeteer, Selenium) to report
+   it `true`, and no genuine human browser -- the installed PWA on a real
+   phone, a real desk browser -- ever does. This needs no test to opt in and
+   nothing to remember: it is true by construction the instant a test loads
+   this page, and stays false for every real deployed session, so the one
+   thing this checks is exactly the one thing that failed here. A local mock
+   server always answers on 127.0.0.1/localhost, so only a REMOTE host is
+   ever blocked -- a test pointed at its own local server is untouched. */
+function isLocalUploadHost(u){
+  try{ const h=new URL(String(u), location.href).hostname;
+    return h==="localhost" || h==="127.0.0.1" || h==="::1" || h==="0.0.0.0" || /^127\./.test(h); }
+  catch(e){ return false; }
+}
+function prodWriteGuard(url){
+  if(typeof navigator!=="undefined" && navigator.webdriver && !isLocalUploadHost(url)){
+    const e=new Error("Blocked: an automated (navigator.webdriver) browser tried to upload to a "
+      +"non-local host ("+url+"). Point up_dests at a local mock server to test uploads.");
+    e.prodGuardBlocked=true;
+    throw e;
+  }
+}
 const UP_TIMEOUT=90000;         // generous: a full-size photo on weak signal
 function fetchT(url,opts,ms){
   const ac=new AbortController();
@@ -16272,6 +16307,7 @@ const t_up_timeout=()=>t("up_timeout");
 const UP_CLOCKS={ idle:45000, reply:180000, max:900000 };
 /* The three clocks are read off UP_CLOCKS (tests shorten them there). */
 function postT(url, body, idle, max, reply){
+  prodWriteGuard(url);
   if(typeof XMLHttpRequest==="undefined")
     return fetchT(url,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body}, max||UP_CLOCKS.max);
   return new Promise((res,rej)=>{
