@@ -109,12 +109,53 @@ async function loadAndSetup(b, port, url) {
   const cardsB = await n.$$eval('#edCfList .cfcard', els => els.length);
   ok('dashboard-next: conflict card grid uses the new .cfcard per-device shell', cardsB === 2, `cards=${cardsB}`);
 
-  /* The disagreement itself must be shown identically on both -- same finding
-     (1A) flagged as differing, same one each side only has (4D/3C). */
+  /* dashboard/'s own comparison table is always shown, inline, per non-
+     standing device -- cfDiffHTML(cfDiff(winItems, v.items), ...), read
+     straight off #edCfList's own text. dashboard-next's Stage-6 redesign
+     kept only the four-field summary card visible by default; the SAME
+     comparison (same functions, same arguments -- see renderConflict()'s
+     own comment) now lives behind a <details class="cfdetail"> under the
+     non-standing card, closed by default. This proves it is actually
+     there, actually openable, and actually shows the same disagreement --
+     not merely present in the DOM (a closed <details>'s content is still
+     part of .textContent, which would make this pass even unopened; the
+     point is proving a reader can GET to it, the way they would by hand). */
+  const detailCountB = await n.$$eval('#edCfList .cfdetail', els => els.length);
+  ok('dashboard-next: exactly one card offers the per-position detail (the non-standing one, matching dashboard/\'s own !isWin gate)',
+     detailCountB === 1, `count=${detailCountB}`);
+  const closedByDefaultB = await n.$eval('#edCfList .cfdetail', el => !el.open);
+  ok('dashboard-next: the detail is collapsed by default (summary card stays the mockup\'s at-a-glance shape)', closedByDefaultB);
+
+  /* Open it the way a reader would -- click the <summary>, not a script
+     setting .open directly. */
+  await n.click('#edCfList .cfdetail summary');
+  await n.waitForTimeout(50);
+  const openedB = await n.$eval('#edCfList .cfdetail', el => el.open);
+  ok('dashboard-next: a click on the summary opens it', openedB);
+
   const diffTextA = await a.$eval('#edCfList', el => el.textContent);
-  const diffTextB = await n.$eval('#edCfList', el => el.textContent);
+  const diffTextB = await n.$eval('#edCfList .cfdetail', el => el.textContent);
   const namesAgree = ['1A', '4D', '3C'].every(k => diffTextA.includes(k) === diffTextB.includes(k));
-  ok('the same findings are named in the comparison on both pages', namesAgree, `A has 1A/4D/3C: ${['1A','4D','3C'].map(k=>diffTextA.includes(k))}  B: ${['1A','4D','3C'].map(k=>diffTextB.includes(k))}`);
+  ok('the same findings are named in the comparison on both pages', namesAgree, `A has 1A/4D/3C: ${['1A','4D','3C'].map(k=>diffTextA.includes(k))}  B (opened detail): ${['1A','4D','3C'].map(k=>diffTextB.includes(k))}`);
+
+  /* Not just the same KEYS -- the same per-position VERDICT: 1A is a real
+     disagreement (grade C vs X, both sides named). cfDiff's own field-level
+     output ("Grade: <b>3 – Degraded</b> ≠ <b>5 – Critical</b>") should
+     actually name both grades, not merely mention "1A" somewhere nearby. */
+  const around1A = (diffTextB.match(/1A[\s\S]{0,200}/) || [''])[0];
+  ok('dashboard-next: the 1A disagreement itself (not just its key) is shown, both grade values named',
+     /grade/i.test(around1A) && /degraded/i.test(around1A) && /critical/i.test(around1A),
+     around1A.slice(0, 160));
+
+  /* Control: the STANDING card gets no detail at all -- there is nothing to
+     compare it against itself, exactly as dashboard/'s own !isWin check
+     already excludes it. */
+  const winCardHasDetail = await n.evaluate(() => {
+    const cards = [...document.querySelectorAll('#edCfList .cfcard')];
+    const win = cards.find(c => c.querySelector('.pill.g'));
+    return !!(win && win.querySelector('.cfdetail'));
+  });
+  ok('dashboard-next: the standing (winning) card offers no detail to compare itself against', !winCardHasDetail);
 
   /* Fill "your name" (required before keepVersion will act -- ed_needname
      guard), then choose DBBBB's version on both. */

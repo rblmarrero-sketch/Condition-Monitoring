@@ -5776,6 +5776,7 @@ const I18N={
   cf_absent:"Not in this browser yet — refresh from Drive to see it",
   cf_inuse:"in use", cf_use:"Use this one",
   cf_standing:"standing now",
+  cf_detail:"Show what differs, position by position",
   cf_identical:"Every finding matches — either version says the same thing.",
   cf_diff_n:"{n} difference(s) · {s} finding(s) identical",
   cf_only:"only on device {d}",
@@ -6764,6 +6765,7 @@ const I18N={
   cf_absent:"Ещё не загружено в этот браузер — обновите из Drive",
   cf_inuse:"используется", cf_use:"Взять эту",
   cf_standing:"сейчас принята",
+  cf_detail:"Показать различия по каждой позиции",
   cf_identical:"Все находки совпадают — обе версии говорят одно и то же.",
   cf_diff_n:"Расхождений: {n} · совпадает находок: {s}",
   cf_only:"только на устройстве {d}",
@@ -13505,9 +13507,9 @@ function renderConflict(rec){
      footer's own static sentence and Cancel button. Nothing here changes
      what is WRITTEN: keepVersion(dev) below is called with the identical
      `dev` string it always was, and cfDiff/cfDiffHTML (the real,
-     per-position comparison) are untouched and still available -- only how
-     a device's own item list is projected onto these four rows, and how
-     that projection is drawn, changed. */
+     per-position comparison) are untouched and still available -- and now
+     ARE used again, tucked behind their own <details> so the summary card
+     stays the mockup's own at-a-glance shape by default. */
   box.className="cfgrid";
   box.innerHTML=all.map((v,vi)=>{
     const on=rec._keep&&rec._keep===v.dev;
@@ -13517,6 +13519,20 @@ function renderConflict(rec){
         const val=r.get(vFields);
         return `<div class="cffield${rowBad[r.k]?" cfbad":""}"><span class="cffk">${esc(t(r.k))}</span><span class="cffv">${esc(r.fmt(val))}</span></div>`;
       }).join("")}</div>` : "";
+    /* THE FOUR SUMMARY ROWS CAN AGREE WHILE THE POSITIONS BEHIND THEM DO
+       NOT -- see cfRoundFields()'s own comment. This is exactly why the
+       shared cfDiff/cfDiffHTML pair still exists in this file at all: the
+       summary card is a fast read for the common case (one phone's own
+       repeated saves, where every position matches), and this disclosure
+       is where a reviewer actually resolving a genuine two-inspector
+       disagreement goes to see it, position by position, before picking
+       which copy to keep. Same condition dashboard/'s own always-shown
+       table uses (!absent, not the winner, items present) -- only WHETHER
+       it is open by default that changed. */
+    const detail = (!v.absent && !isWin && v.items)
+      ? `<details class="disc cfdetail"><summary>${esc(t("cf_detail"))}</summary>${
+          cfDiffHTML(cfDiff(winItems, v.items), winDev||"—", v.dev)}</details>`
+      : "";
     return `<div class="cfcard${on?" on":""}">
       <div class="cfcardhd">
         <b>${esc(t("cf_dev",{d:v.dev}))}</b>${on?` <span class="editflag">${esc(t("cf_inuse"))}</span>`:""}${
@@ -13526,6 +13542,7 @@ function renderConflict(rec){
           : t("cf_by",{by:v.by||"—", n:v.n==null?"?":v.n}))}</div>
       </div>
       ${rows}
+      ${detail}
       <div class="cfcardft">
         <button class="btn${on?"":" primary"}" data-keep="${esc(v.dev)}"${on||v.absent?" disabled":""}>${esc(t("cf_use"))}</button>
       </div>

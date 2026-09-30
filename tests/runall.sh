@@ -56,5 +56,23 @@ for t in bump.cjs audit-scan.cjs crawl.cjs norej.cjs noloop.cjs deferwhy.cjs rpt
   [ -f "$t" ] && run "$t"
 done
 pkill -f 'ed-srv.cjs|mock.cjs|stab-srv.cjs|hang.cjs|up-srv.cjs' 2>/dev/null
+
+# dashboard-next/index.html's own parity suite. Until docs/dashboard-next-
+# parity.md said so in so many words, NONE of these ran here -- the ~150
+# suites above proved mobile/ and dashboard/ still worked on every push to
+# this branch, and said nothing at all about whether dashboard-next did,
+# even though it loads the same mobile/report-core.js, dashboard/drive.js,
+# sync-adapter.js and report.js every one of those suites was busy proving
+# correct. Each -next suite starts its own ephemeral server (`srv.listen(0)`)
+# and needs none of the shared helpers ensure() starts above, so this loop
+# needs no `ensure` call of its own. equipment-panel-next.cjs alone takes
+# ~2 minutes (it deliberately reboots the page seven times to prove the
+# self-update guard holds off every kind of overlay) and tablekit-scale-
+# next.cjs takes ~80s (4,200 records) -- `run()` imposes no timeout on any
+# suite, here or above, so neither needs special-casing; they simply take as
+# long as they take, same as e.g. bigday.cjs already does above.
+for t in actions-next.cjs assignphotos-next.cjs conflict-next.cjs data-window-next.cjs datasources-next.cjs defects-next.cjs defer-next.cjs detail-next.cjs disposition-next.cjs due-next.cjs editround-next.cjs equipment-panel-next.cjs failure-next.cjs followup-next.cjs history-next.cjs lube-next.cjs missingphotos-next.cjs nav-shell-next.cjs overview-next.cjs period-filter-next.cjs photoeditor-next.cjs plan-next.cjs reports-next.cjs sync-next.cjs tablekit-next.cjs tablekit-scale-next.cjs wear-next.cjs; do
+  [ -f "$t" ] && run "$t"
+done
 [ -n "$SILENT" ] && echo "SILENT (asserted nothing):$SILENT"
 exit $BAD
