@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-30T12:58:53+00:00",
+  "generated": "2026-09-30T20:48:48+00:00",
   "byUnit": {
     "BL001": [
       {
@@ -162,6 +162,19 @@
         "priority": "P3 Planned (PM)"
       }
     ],
+    "DZ005": [
+      {
+        "wo": "WO-017850",
+        "hours": 2000,
+        "types": [
+          "FC",
+          "INSP",
+          "UC"
+        ],
+        "plan": "2026-10-09",
+        "priority": "P3 Planned (PM)"
+      }
+    ],
     "DZ006": [
       {
         "wo": "WO-016659",
@@ -185,6 +198,19 @@
           "UC"
         ],
         "plan": "2026-10-04",
+        "priority": "P3 Planned (PM)"
+      }
+    ],
+    "DZ012": [
+      {
+        "wo": "WO-016559",
+        "hours": 1000,
+        "types": [
+          "FC",
+          "INSP",
+          "UC"
+        ],
+        "plan": "2026-10-09",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -732,6 +758,17 @@
         "priority": "P3 Planned (PM)"
       }
     ],
+    "TK114": [
+      {
+        "wo": "WO-016605",
+        "hours": 500,
+        "types": [
+          "MP"
+        ],
+        "plan": "2026-10-02",
+        "priority": "P3 Planned (PM)"
+      }
+    ],
     "TK117": [
       {
         "wo": "WO-017311",
@@ -797,6 +834,17 @@
         "priority": "P3 Planned (PM)"
       }
     ],
+    "TK122": [
+      {
+        "wo": "WO-017298",
+        "hours": 250,
+        "types": [
+          "MP"
+        ],
+        "plan": "2026-10-01",
+        "priority": "P3 Planned (PM)"
+      }
+    ],
     "TK123": [
       {
         "wo": "WO-017335",
@@ -830,6 +878,19 @@
         "priority": "P3 Planned (PM)"
       }
     ],
+    "TK127": [
+      {
+        "wo": "WO-017853",
+        "hours": 8000,
+        "types": [
+          "INSP",
+          "MP",
+          "TB"
+        ],
+        "plan": "2026-10-08",
+        "priority": "P3 Planned (PM)"
+      }
+    ],
     "TK143": [
       {
         "wo": "WO-017872",
@@ -838,6 +899,17 @@
           "INSP",
           "MP",
           "TB"
+        ],
+        "plan": "2026-10-05",
+        "priority": "P3 Planned (PM)"
+      }
+    ],
+    "TK146": [
+      {
+        "wo": "WO-017307",
+        "hours": 250,
+        "types": [
+          "MP"
         ],
         "plan": "2026-10-05",
         "priority": "P3 Planned (PM)"
@@ -890,6 +962,17 @@
           "TB"
         ],
         "plan": "2026-10-08",
+        "priority": "P3 Planned (PM)"
+      }
+    ],
+    "TK151": [
+      {
+        "wo": "WO-017295",
+        "hours": 250,
+        "types": [
+          "MP"
+        ],
+        "plan": "2026-10-10",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -1184,6 +1267,60 @@
       "completed": ""
     },
     {
+      "wo": "WO-017295",
+      "equip": "TK151",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-10",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-10-10",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-017850",
+      "equip": "DZ005",
+      "cls": "DOZ",
+      "comp": "",
+      "desc": "Filter Cut / General Inspection / Undercarriage",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-09",
+      "type": "2000 Hours service Planned",
+      "hours": 2000,
+      "plan": "2026-10-09",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-016559",
+      "equip": "DZ012",
+      "cls": "DOZ",
+      "comp": "",
+      "desc": "Filter Cut / General Inspection / Undercarriage",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-09",
+      "type": "1000 Hours service Planned",
+      "hours": 1000,
+      "plan": "2026-10-09",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-017325",
       "equip": "DZ018",
       "cls": "DOZ",
@@ -1310,6 +1447,24 @@
       "completed": ""
     },
     {
+      "wo": "WO-017853",
+      "equip": "TK127",
+      "cls": "AT",
+      "comp": "",
+      "desc": "General Inspection / Magnetic Plug / Dump Body Liner",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-08",
+      "type": "8000 Hours service Planned",
+      "hours": 8000,
+      "plan": "2026-10-08",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-017327",
       "equip": "TK148",
       "cls": "HT",
@@ -1346,6 +1501,42 @@
       "completed": ""
     },
     {
+      "wo": "WO-017305",
+      "equip": "BSL003",
+      "cls": "",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-07",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-10-07",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-017324",
+      "equip": "DZ009",
+      "cls": "DOZ",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-07",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-10-07",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-017870",
       "equip": "GR009",
       "cls": "GRD",
@@ -1374,6 +1565,42 @@
       "type": "250 Hours service Planned",
       "hours": 250,
       "plan": "2026-10-07",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-017263",
+      "equip": "DZ011",
+      "cls": "DOZ",
+      "comp": "",
+      "desc": "500h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-06",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-10-06",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-017344",
+      "equip": "DZ017",
+      "cls": "DOZ",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-06",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-10-06",
       "status": "Elimination scheduled",
       "request": "",
       "defType": "",
@@ -1535,6 +1762,24 @@
       "raised": "2026-10-05",
       "type": "4000 Hours service Planned",
       "hours": 4000,
+      "plan": "2026-10-05",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-017307",
+      "equip": "TK146",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-05",
+      "type": "250 Hours service Planned",
+      "hours": 250,
       "plan": "2026-10-05",
       "status": "Elimination scheduled",
       "request": "",
@@ -2138,6 +2383,24 @@
       "completed": ""
     },
     {
+      "wo": "WO-016605",
+      "equip": "TK114",
+      "cls": "AT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-02",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-10-02",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-017311",
       "equip": "TK117",
       "cls": "AT",
@@ -2251,6 +2514,24 @@
       "cls": "LDR",
       "comp": "",
       "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-01",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-10-01",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-017298",
+      "equip": "TK122",
+      "cls": "AT",
+      "comp": "",
+      "desc": "Magnetic Plug",
       "priority": "P3 Planned (PM)",
       "raised": "2026-10-01",
       "type": "250 Hours service Planned",
@@ -8776,6 +9057,24 @@
       "request": "",
       "defType": "",
       "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-017752",
+      "equip": "DZ002",
+      "cls": "",
+      "comp": "DZ002.OC.GL (Glass / Стекла)",
+      "desc": "Отсутствует дворник на переднем стекле",
+      "priority": "P4 Planned (Repair)",
+      "raised": "2026-08-06",
+      "type": "5.08 Third‑party damage / Повреждение третьими лицами",
+      "hours": null,
+      "plan": "2026-10-13",
+      "status": "Elimination scheduled",
+      "request": "DD-00010352",
+      "defType": "5.08 Third‑party damage / Повреждение третьими лицами",
+      "cause": "Некачественное выполнение",
       "pmStatus": "open",
       "completed": ""
     },
