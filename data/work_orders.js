@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-09-30T03:19:02+00:00",
+  "generated": "2026-09-30T03:58:44+00:00",
   "source": "https://askpi.94-131-94-152.sslip.io/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 681,
@@ -316,7 +316,7 @@ window.CM_WO_DATA = {
     "WE009",
     "WE011"
   ],
-  "duplicateRowsCollapsed": 271,
+  "duplicateRowsCollapsed": 272,
   "roundsDedupedWithinVisit": 13,
   "columns": [
     "Asset description",
@@ -2662,6 +2662,25 @@ window.CM_WO_DATA = {
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
+    },
+    {
+      "equip": "BL002",
+      "cls": "GEN",
+      "woNumber": "WO-016884",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "250h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
+      "planStart": "2026-09-16",
+      "planStartDt": "2026-09-16T13:00:00",
+      "planEnd": "2026-09-16",
+      "actualStart": "2026-09-16",
+      "actualStartDt": "2026-09-16T13:00:00",
+      "actualEnd": "2026-09-16"
     },
     {
       "equip": "BL004",
@@ -34511,6 +34530,29 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
+      "planStart": "2026-09-17",
+      "planStartDt": "2026-09-17T19:00:00",
+      "planEnd": "2026-09-18",
+      "actualStart": "2026-09-17",
+      "actualStartDt": "2026-09-17T19:00:00",
+      "actualEnd": "2026-09-18"
+    },
+    {
+      "equip": "TK002",
+      "cls": "HT",
+      "woNumber": "WO-016938",
+      "maintType": "1000 Hours service Planned",
+      "hours": 1000,
+      "cmLabel": "Filter Cut / General Inspection / Magnetic Plug",
+      "cmTypes": [
+        "FC",
+        "INSP",
+        "MP"
+      ],
+      "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
@@ -35301,6 +35343,27 @@ window.CM_WO_DATA = {
       "actualStart": "2026-08-28",
       "actualStartDt": "2026-08-28T20:00:00",
       "actualEnd": "2026-08-29"
+    },
+    {
+      "equip": "TK006",
+      "cls": "GEN",
+      "woNumber": "WO-016930",
+      "maintType": "1000 Hours service Planned",
+      "hours": 1000,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
+      "planStart": "2026-09-17",
+      "planStartDt": "2026-09-17T20:00:00",
+      "planEnd": "2026-09-18",
+      "actualStart": "2026-09-17",
+      "actualStartDt": "2026-09-17T20:00:00",
+      "actualEnd": "2026-09-18"
     },
     {
       "equip": "TK006",
@@ -37611,6 +37674,29 @@ window.CM_WO_DATA = {
       "actualStart": "2026-08-29",
       "actualStartDt": "2026-08-29T19:00:00",
       "actualEnd": "2026-08-30"
+    },
+    {
+      "equip": "TK038",
+      "cls": "HT",
+      "woNumber": "WO-016931",
+      "maintType": "1000 Hours service Planned",
+      "hours": 1000,
+      "cmLabel": "Filter Cut / General Inspection / Magnetic Plug",
+      "cmTypes": [
+        "FC",
+        "INSP",
+        "MP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
+      "planStart": "2026-09-17",
+      "planStartDt": "2026-09-17T19:00:00",
+      "planEnd": "2026-09-18",
+      "actualStart": "2026-09-17",
+      "actualStartDt": "2026-09-17T19:00:00",
+      "actualEnd": "2026-09-18"
     },
     {
       "equip": "TK038",
