@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=485">
+<link rel="manifest" href="manifest.webmanifest?v=486">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=485">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=485">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=485">
+<link rel="apple-touch-icon" href="icon-192.png?v=486">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=486">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=486">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2753,16 +2753,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=485"></script>
-<script src="upload-defaults.js?v=485"></script>
-<script src="hme.js?v=485"></script>
-<script src="mp-fc.js?v=485"></script>
-<script src="rtw.js?v=485"></script>
-<script src="hme-cascade.js?v=485"></script>
-<script src="assets.js?v=485"></script>
-<script src="temp-limits.js?v=485"></script>
-<script src="normalize.js?v=485"></script>
-<script src="terms.js?v=485"></script>
+<script src="native.js?v=486"></script>
+<script src="upload-defaults.js?v=486"></script>
+<script src="hme.js?v=486"></script>
+<script src="mp-fc.js?v=486"></script>
+<script src="rtw.js?v=486"></script>
+<script src="hme-cascade.js?v=486"></script>
+<script src="assets.js?v=486"></script>
+<script src="temp-limits.js?v=486"></script>
+<script src="normalize.js?v=486"></script>
+<script src="terms.js?v=486"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2781,25 +2781,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=485"></script>
-<script src="edits.js?v=485"></script>
-<script src="due.js?v=485"></script>
-<script src="wear.js?v=485"></script>
-<script src="wear-figs.js?v=485"></script>
-<script src="wear-map.js?v=485"></script>
-<script src="machine-photos.js?v=485"></script>
-<script src="machine-fig.js?v=485"></script>
-<script src="get.js?v=485"></script>
-<script src="points.js?v=485"></script>
-<script src="uc-points.js?v=485"></script>
-<script src="inspect-guide.js?v=485"></script>
-<script src="get-figs.js?v=485"></script>
-<script src="body-points.js?v=485"></script>
-<script src="body-map.js?v=485"></script>
-<script src="lube.js?v=485"></script>
-<script src="lube-overrides.js?v=485"></script>
-<script src="lube2027.js?v=485"></script>
-<script src="report-core.js?v=485"></script>
+<script src="grade.js?v=486"></script>
+<script src="edits.js?v=486"></script>
+<script src="due.js?v=486"></script>
+<script src="wear.js?v=486"></script>
+<script src="wear-figs.js?v=486"></script>
+<script src="wear-map.js?v=486"></script>
+<script src="machine-photos.js?v=486"></script>
+<script src="machine-fig.js?v=486"></script>
+<script src="get.js?v=486"></script>
+<script src="points.js?v=486"></script>
+<script src="uc-points.js?v=486"></script>
+<script src="inspect-guide.js?v=486"></script>
+<script src="get-figs.js?v=486"></script>
+<script src="body-points.js?v=486"></script>
+<script src="body-map.js?v=486"></script>
+<script src="lube.js?v=486"></script>
+<script src="lube-overrides.js?v=486"></script>
+<script src="lube2027.js?v=486"></script>
+<script src="report-core.js?v=486"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -4512,8 +4512,34 @@ let type = localStorage.getItem("insp_type") || "MP";
 if(!TYPE_META[type]) type="MP";
 let editing=null;
 // Stable id for this phone — used to keep record ids unique and to attribute merged rounds.
+/* A LOST WRITE HERE DOES NOT LOSE A ROUND — IT MANUFACTURES A NEW PHONE.
+
+   lsSet() swallows a failed localStorage write, by design, everywhere else on
+   this page (a settings toggle that fails to persist is not worth a dialog).
+   This one write is different: DEVICE is baked into every record's id and
+   its `dev` field, and dashboard/index.html's own groupRivals() treats two
+   different dev ids on the same unit/date/round as two different phones —
+   the exact "sent by two phones" conflict banner. A phone whose write fails
+   here still gets a usable id for THIS load (the const below is fixed for
+   the life of the page, so nothing churns mid-session), but the id never
+   survives to the NEXT reload: every future load mints another fresh random
+   one, so one inspector's repeated saves of the same round pile up as a
+   dozen false rivals with nothing on the phone or in the folder saying why.
+   Nothing here can make the write succeed — that failure is the browser's,
+   not this page's — but swallowing it silently is what let that happen
+   invisibly. bad() records it the same non-silent way every other storage
+   failure on this page already is, so a diagnostic trace can finally tell
+   "this phone never got a device id" apart from "two inspectors walked the
+   same round." (tests/deviceid.cjs) */
 const DEVICE = (()=>{ let d=localStorage.getItem("cm_dev");
-  if(!d){ d="D"+Math.random().toString(36).slice(2,7).toUpperCase(); lsSet("cm_dev",d); } return d; })();
+  if(!d){
+    d="D"+Math.random().toString(36).slice(2,7).toUpperCase();
+    if(!lsSet("cm_dev",d)){
+      bad("device-id-persist", new Error("localStorage.setItem(cm_dev) failed — this id will not survive a reload"));
+    }
+  }
+  return d;
+})();
 const dlg=(pair)=>{ $("dlgTitle").textContent=pair[0]; $("dlgMsg").textContent=pair[1];
   $("dlgCancel").classList.add("hidden"); $("dlgOk").className="btn primary";
   $("dlgOk").textContent=t("dlg_ok"); $("dlg").showModal(); };
@@ -14670,7 +14696,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="485";
+const BUILD="486";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

@@ -64,6 +64,16 @@ async function loadAndSetup(b, port, url) {
   ok('dashboard-next: refused with no reason/approver', !!msgB0.trim());
   ok('the refusal message matches', msgA0 === msgB0, `A="${msgA0}" B="${msgB0}"`);
 
+  /* dashboard-next adds a preset-reason dropdown (#dispReasonSel, defaulting
+     to "checked_ok") that /dashboard/ does not have at all -- a real,
+     additive feature, not a gap. #dispReason/#dispReasonOwnWrap only becomes
+     visible and live once "other" is picked from it, so a page that has the
+     select must be told to pick "other" before the literal reason text below
+     is typed into #dispReason, or the fill hangs waiting on a hidden input
+     and, on dashboard-next, the saved reason would be the preset's own label
+     instead of what was actually typed. */
+  const pickOtherIfPresent = async p => { if (await p.$('#dispReasonSel')) await p.selectOption('#dispReasonSel', 'other'); };
+  await pickOtherIfPresent(a); await pickOtherIfPresent(n);
   await a.fill('#dispReason', 'Within limit, monitored at the next round'); await n.fill('#dispReason', 'Within limit, monitored at the next round');
   await a.fill('#dispBy', 'V. Petrov'); await n.fill('#dispBy', 'V. Petrov');
   await a.click('#dispSave'); await n.click('#dispSave');

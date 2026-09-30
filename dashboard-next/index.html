@@ -21245,6 +21245,19 @@ document.querySelector(".lang").addEventListener("click",e=>{
        trying to reload. */
     const af=document.activeElement;
     if(af && /^(SELECT|INPUT|TEXTAREA)$/.test(af.tagName)) return true;
+    /* AND THE DISPOSITION DIALOG IS THE SAME LOSS A FIFTH TIME. #dispBox
+       ("No action required") is toggled by its own "hidden" class too, not
+       ".ov" -- so it was only ever protected by accident, the moment the
+       native-control check above happened to catch a focused #dispReason or
+       #dispBy. Between opening the dialog and typing into it -- picking a
+       reason from #dispReasonSel, say -- nothing holds focus, busy() sees
+       nothing open, and the periodic check can reload the page out from
+       under a disposition the reader has not yet saved. Found writing
+       tests/disposition-next.cjs's own timing (a fill() that started just
+       after `look()`'s 4-second check fired), not reported from the field --
+       but /dashboard/'s identical #dispBox carries the identical gap, so
+       this is the same fix in both files, not a redesign-only one. */
+    const disp=$("dispBox"); if(disp && !disp.classList.contains("hidden")) return true;
     return false;
   };
   const applyIfIdle=()=>{
