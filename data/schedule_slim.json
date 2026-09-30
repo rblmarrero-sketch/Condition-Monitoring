@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-30T07:09:03+00:00",
+  "generated": "2026-09-30T08:58:47+00:00",
   "byUnit": {
     "BL001": [
       {
@@ -45,7 +45,7 @@
     ],
     "CD008": [
       {
-        "wo": "GD-023122",
+        "wo": "GD-023112",
         "hours": 1000,
         "types": [
           "INSP"
@@ -8816,15 +8816,15 @@
       "completed": "2026-09-20"
     },
     {
-      "wo": "GD-023085",
+      "wo": "GD-023083",
       "equip": "CD007",
       "cls": "GEN",
       "comp": "",
-      "desc": "500h service",
+      "desc": "250h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-08-01",
-      "type": "500 Hours service Planned",
-      "hours": 500,
+      "type": "250 Hours service Planned",
+      "hours": 250,
       "plan": "2026-08-01",
       "status": "Elimination scheduled",
       "request": "",
@@ -8834,15 +8834,15 @@
       "completed": ""
     },
     {
-      "wo": "GD-023086",
+      "wo": "GD-023085",
       "equip": "CD007",
       "cls": "GEN",
       "comp": "",
-      "desc": "250h service",
+      "desc": "500h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-08-01",
-      "type": "250 Hours service Planned",
-      "hours": 250,
+      "type": "500 Hours service Planned",
+      "hours": 500,
       "plan": "2026-08-01",
       "status": "Elimination scheduled",
       "request": "",
@@ -8888,7 +8888,25 @@
       "completed": ""
     },
     {
-      "wo": "GD-023121",
+      "wo": "GD-023109",
+      "equip": "CD008",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "500h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-08-01",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-08-01",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "GD-023110",
       "equip": "CD008",
       "cls": "GEN",
       "comp": "",
@@ -8906,7 +8924,7 @@
       "completed": ""
     },
     {
-      "wo": "GD-023122",
+      "wo": "GD-023112",
       "equip": "CD008",
       "cls": "GEN",
       "comp": "",
@@ -8942,25 +8960,7 @@
       "completed": ""
     },
     {
-      "wo": "GD-023120",
-      "equip": "CD008",
-      "cls": "GEN",
-      "comp": "",
-      "desc": "500h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-08-01",
-      "type": "500 Hours service Planned",
-      "hours": 500,
-      "plan": "2026-08-01",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
-      "wo": "GD-023132",
+      "wo": "GD-023130",
       "equip": "CD009",
       "cls": "GEN",
       "comp": "",
