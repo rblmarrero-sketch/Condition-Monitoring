@@ -6,16 +6,21 @@
    own live ?v= tag (read off the real file below, never a copied-in number --
    this file drifted forward once already between sessions). Without it this
    suite hits the exact gap docs/dashboard-next-parity.md logs under
-   tablekit-scale-next: dashboard-next's own tag is a snapshot that lags the
-   mainline's constantly-bumped BUILD by design, so the real /mobile/sw.js
-   almost always reports "newer", and this suite's own filter typing and
+   tablekit-scale-next: dashboard-next's own tag USED TO BE a snapshot that
+   deliberately lagged the mainline's constantly-bumped BUILD, back when it
+   was a redesign candidate nobody depended on -- so the real /mobile/sw.js
+   almost always reported "newer", and this suite's own filter typing and
    sort-header clicks hold no element focus busy() recognises -- so the
-   self-update reload can fire mid-run and destroy the page's JS context
+   self-update reload could fire mid-run and destroy the page's JS context
    ("Execution context was destroyed, most likely because of a navigation").
-   That reload risk is real on a live, long-idle dashboard-next session (see
-   the parity doc's own "shared pre-existing weakness" entry) -- it is simply
-   not what THIS suite exists to exercise (that is equipment-panel-next.cjs's
-   job, which mocks the opposite way, forcing dashWaiting on purpose). Pinning
+   dashboard-next is a second, permanent surface now, not a candidate, and
+   its tag is kept in the same BUILD lockstep dashboard/'s already is (see
+   CLAUDE.md's "TWO OFFICE DASHBOARDS, BOTH PERMANENT" entry, bump.cjs tracks
+   both) -- but the reload risk itself was never really about the lag, only
+   made easy to trigger by it: the busy() fix (tests/tablebusy.cjs) closes
+   the underlying gap, and this mock stays as a backstop for the one moment
+   the lockstep guarantee can still slip, between a mainline bump landing and
+   dashboard-next's own tag catching up in the same commit. Pinning
    the mock to the page's own real tag makes `newer` false for the length of
    this run, the same way dashboard/'s own tests never see it because its tag
    IS the live BUILD by the bump.cjs discipline. */

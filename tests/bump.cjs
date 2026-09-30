@@ -45,8 +45,19 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
 
 /* Everything served to a phone or a desk. docs/ is the backend and the setup
    notes — deployed by hand, on its own schedule, and deliberately not part of
-   this question. tests/ ships to nobody. */
-const SHIPPED = ["mobile/", "dashboard/", "data/"];
+   this question. tests/ ships to nobody.
+
+   dashboard-next/ joined this list the day it stopped being a redesign
+   candidate nobody depended on and became a second permanent surface a real
+   group uses daily, in parallel with dashboard/, indefinitely — see
+   CLAUDE.md's own "TWO OFFICE DASHBOARDS, BOTH PERMANENT" entry. Its own
+   `?v=` tag was deliberately allowed to lag BUILD while it was a candidate;
+   that exemption is retired along with the candidacy. A push that touches it
+   without bumping BUILD now fails this guard exactly as an un-bumped
+   dashboard/index.html change already does — dashboard-next's own daily
+   readers get exactly the same protection dashboard/'s already have, no
+   less. */
+const SHIPPED = ["mobile/", "dashboard/", "dashboard-next/", "data/"];
 
 /* TWO FILES UNDER data/ ARE DELIBERATELY EXEMPT — CLAUDE.md's own "THE 1C
    PULL REFRESHES ITSELF" entry states why at length: data/work_orders.js
@@ -139,7 +150,7 @@ const SELF_REFRESHING = ["data/work_orders.js", "data/schedule_slim.json"];
     console.log("  anybody while BUILD stays at " + BUILD + ". Bump it:");
     console.log("");
     console.log("    N=" + (Number(BUILD) + 1) + "; sed -i \"s/v=" + BUILD + "/v=$N/g; s/const BUILD = \\\"" + BUILD + "\\\"/const BUILD = \\\"$N\\\"/; s/const BUILD=\\\"" + BUILD + "\\\"/const BUILD=\\\"$N\\\"/\" \\");
-    console.log("      mobile/sw.js mobile/index.html dashboard/index.html");
+    console.log("      mobile/sw.js mobile/index.html dashboard/index.html dashboard-next/index.html");
     console.log("    node tests/ver.cjs   # then confirm all ~59 stamps agree");
     console.log("");
   }

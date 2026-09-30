@@ -50,6 +50,26 @@ const fails=[]; const ok=(n,c,d)=>{console.log((c?'  PASS  ':'  FAIL  ')+n+(d!==
      shared.some(t=>/report-core\.js\?v=/.test(t)), shared.join(' '));
   ok('the dashboard runs the same engine the phone does',
      await dash.evaluate(()=>!!(window.CMR&&CMR.sections)));
+
+  /* dashboard-next/index.html is a second, permanent surface now (see
+     CLAUDE.md's own "TWO OFFICE DASHBOARDS, BOTH PERMANENT" entry), not a
+     redesign candidate its own tag was once allowed to lag behind — it gets
+     the identical check dashboard/index.html just got, not a lesser one. */
+  const dnext = await ctx.newPage();
+  await dnext.setViewportSize({width:1440,height:960});
+  await dnext.goto('http://127.0.0.1:8093/dashboard-next/index.html',{waitUntil:'load'});
+  await dnext.waitForTimeout(1200);
+  const ntags = await dnext.$$eval('script[src]', s=>s.map(x=>x.getAttribute('src')));
+  const nshared = ntags.filter(t=>/^\.\.\/mobile\/|^\.\.\/data\/|^\.\.\/dashboard\//.test(t));
+  const nunver = nshared.filter(t=>!/[?&]v=/.test(t));
+  ok('every file dashboard-next shares with the phone/dashboard is versioned',
+     nshared.length>0 && nunver.length===0, nunver.join(' '));
+  const nvs=[...new Set(nshared.map(t=>(t.match(/[?&]v=([^&]+)/)||[])[1]).filter(Boolean))];
+  ok('and on the phone\'s build too, so dashboard-next cannot drift from the other two either',
+     nvs.length===1 && nvs[0]===BUILD, `dashboard-next=${nvs.join(',')} phone=${BUILD}`);
+  ok('dashboard-next runs the same report engine as the phone and dashboard/',
+     await dnext.evaluate(()=>!!(window.CMR&&CMR.sections)));
+
   await p.evaluate(()=>openSettings());   // the diagnostic line is written when settings open
   await p.waitForTimeout(400);
   const diag = await p.textContent('#setDiag').catch(()=>'');

@@ -57,21 +57,28 @@ const MIME = { '.html': 'text/html', '.js': 'application/javascript', '.json': '
    tests/tablekit-scale-next.cjs's own fix, for the identical reason. Without
    it, this suite's own #winTog click is a document-level click, which the
    page's self-update watcher (dashboard-next's IIFE near BUILT/look()/
-   applyIfIdle()) schedules a re-check on 300ms after -- and since dashboard-
-   next's own tag lags the mainline's constantly-bumped BUILD by design, the
-   real /mobile/sw.js served here (this repo's own, current) reports "newer"
-   essentially always, so a click that lands after look()'s first 4-second
-   timer fires triggers a real `location.replace()` navigation mid-test. A
-   clicked <button> holds no focus busy() recognises, so nothing held the
-   reload back. That reload wiped the records this suite had just set via
-   setDriveRecords() (never persisted, only in-memory), so the fleet table
-   read back empty or mid-render moments later -- this suite's own "the
-   table can render completely empty after clicking All time" finding,
-   confirmed by instrumenting the page directly: `window.__mutLog` (a
-   MutationObserver planted on #fleetTbl) came back `undefined` after the
-   click, which is what a full page reload -- a fresh JS context -- looks
-   like, not a DOM mutation. Pinning the mock to the page's own real tag
-   makes `newer` false for the length of this run. */
+   applyIfIdle()) schedules a re-check on 300ms after -- and at the time this
+   was found, dashboard-next's own tag deliberately lagged the mainline's
+   constantly-bumped BUILD (it was still a redesign candidate, not the
+   permanent second surface it is now), so the real /mobile/sw.js served
+   here (this repo's own, current) reported "newer" essentially always, and a
+   click that landed after look()'s first 4-second timer fired triggered a
+   real `location.replace()` navigation mid-test. A clicked <button> holds no
+   focus busy() recognises, so nothing held the reload back. That reload
+   wiped the records this suite had just set via setDriveRecords() (never
+   persisted, only in-memory), so the fleet table read back empty or
+   mid-render moments later -- this suite's own "the table can render
+   completely empty after clicking All time" finding, confirmed by
+   instrumenting the page directly: `window.__mutLog` (a MutationObserver
+   planted on #fleetTbl) came back `undefined` after the click, which is
+   what a full page reload -- a fresh JS context -- looks like, not a DOM
+   mutation. dashboard-next's tag is kept in the same BUILD lockstep
+   dashboard/'s already is now (CLAUDE.md's "TWO OFFICE DASHBOARDS, BOTH
+   PERMANENT" entry, bump.cjs tracks both), and tests/tablebusy.cjs closes
+   the underlying busy() gap directly -- this mock stays regardless, as a
+   backstop for the one moment the lockstep guarantee can still slip, and
+   because it costs nothing to keep. Pinning the mock to the page's own real
+   tag makes `newer` false for the length of this run. */
 const nextHtml = fs.readFileSync(path.join(ROOT, 'dashboard-next', 'index.html'), 'utf8');
 const pinnedBuild = (nextHtml.match(/magnetic_plug\.js\?v=([^"&]+)/) || [])[1];
 if (!pinnedBuild) throw new Error('could not read dashboard-next\'s own ?v= tag to pin the mobile/sw.js mock to');

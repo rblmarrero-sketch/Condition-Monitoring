@@ -343,6 +343,21 @@ function saveEdit_(b) {
   if (!name) return { ok: false, error: 'Bad record key: ' + b.key };
   indexTouch_();               // a correction is a change; clients must come and look
   var dir = folderPath_(rootFolder_(), META_DIR);
+  /* Field for field the same gap docs/yandex/function.js's own saveEdit() had
+     until it was fixed there: two dashboards saving the same key, one after
+     the other, and this function's own setTrashed()-then-create had no check
+     at all -- the second save silently erased the first's note, fields and
+     assignments for good. Neither backend is deployed both at once, but this
+     one is kept field-for-field with the live one regardless, per this
+     project's own two-backends-must-agree rule. The prior document is backed
+     up before it is trashed, the same _meta/backup/ pattern rewriteObject_()
+     already uses. */
+  var prior = null, overwrote = null;
+  var existing = dir.getFilesByName(name);
+  if (existing.hasNext()) {
+    try { prior = JSON.parse(existing.next().getBlob().getDataAsString()); }
+    catch (errP) { prior = null; }
+  }
   var doc = {
     type: 'cm-record-edit', version: 1,
     key: b.key,
@@ -374,10 +389,20 @@ function saveEdit_(b) {
     reports: (b.reports && b.reports.length) ? b.reports.slice(-20) : null,
     items: (b.items && typeof b.items === 'object') ? b.items : {},
   };
+  if (prior) {
+    var stamp = doc.at.replace(/[:.]/g, '-');
+    try {
+      var bdir = folderPath_(rootFolder_(), META_DIR + '/backup/' + stamp);
+      bdir.createFile(Utilities.newBlob(JSON.stringify(prior, null, 2), 'application/json', name));
+    } catch (errB) {}
+    if ((prior.by || '') !== (b.by || '')) overwrote = { by: prior.by || '', at: prior.at || '' };
+  }
   var old = dir.getFilesByName(name);
   while (old.hasNext()) old.next().setTrashed(true);      // one marker per record
   dir.createFile(Utilities.newBlob(JSON.stringify(doc, null, 2), 'application/json', name));
-  return { ok: true, saved: name, at: doc.at };
+  var out = { ok: true, saved: name, at: doc.at };
+  if (overwrote) out.overwrote = overwrote;
+  return out;
 }
 
 /* ── a phone's push subscription ────────────────────────────────────────────
@@ -556,6 +581,19 @@ function resolveConflict_(b) {
   for (var i = 0; i < devices.length; i++) if (devices[i].dev === keep) ok = true;
   if (!ok) return { ok: false, error: 'No version from device ' + (keep || '(blank)') + ' for ' + b.key };
 
+  /* The same gap as saveEdit_() above, one function over: a read-then-write
+     with nothing between them, so a second resolution silently replaced the
+     first's decision with no trace. Backed up for the same reason. */
+  var overwrote = null;
+  var stamp = new Date().toISOString().replace(/[:.]/g, '-');
+  try {
+    var bdir = folderPath_(rootFolder_(), META_DIR + '/backup/' + stamp);
+    bdir.createFile(Utilities.newBlob(JSON.stringify(doc, null, 2), 'application/json', name));
+  } catch (errB) {}
+  if (doc.resolved && (doc.keep !== keep || (doc.by || '') !== String(b.by || '').slice(0, 80))) {
+    overwrote = { by: doc.by || '', keep: doc.keep || '', at: doc.at || '' };
+  }
+
   doc.resolved = true;
   doc.keep = keep;
   doc.by = String(b.by || '').slice(0, 80);
@@ -563,7 +601,9 @@ function resolveConflict_(b) {
   var old = meta.getFilesByName(name);
   while (old.hasNext()) old.next().setTrashed(true);
   meta.createFile(Utilities.newBlob(JSON.stringify(doc, null, 2), 'application/json', name));
-  return { ok: true, key: doc.key, keep: keep, at: doc.at };
+  var out = { ok: true, key: doc.key, keep: keep, at: doc.at };
+  if (overwrote) out.overwrote = overwrote;
+  return out;
 }
 
 /* REWRITE ONE JSON DOCUMENT IN PLACE, WITH THE ORIGINAL KEPT.

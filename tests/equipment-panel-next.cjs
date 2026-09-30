@@ -14,23 +14,29 @@
    it: `#drw`, the machine/position drawer `openUnit()`/`openPos()` open (it
    uses its own `drw` class for its slide-in transform, never `ov`), and
    `fleetAll`, the flag "View all equipment" sets (no dialog at all — an
-   inline table expansion). Because dashboard-next's own `?v=` tag is a
-   preview-branch snapshot that lags the mainline's constantly-bumped
-   `mobile/sw.js` BUILD, `dashWaiting` is essentially always set on a real
-   visit — so the very next click after opening EITHER of these reloaded the
-   whole page out from under the reader, discarding whatever they had just
-   opened. Neither is what a real user would ever call "browsing normally" is
-   protected against here; this is the identical shape CLAUDE.md's mobile
-   history already states for `applyUpdateIfIdle`/`__swBusy()`: an update must
-   never apply while the reader is in the middle of something.
+   inline table expansion). At the time this was found, dashboard-next's own
+   `?v=` tag was a preview-branch snapshot that lagged the mainline's
+   constantly-bumped `mobile/sw.js` BUILD by design, so `dashWaiting` was
+   essentially always set on a real visit — the very next click after
+   opening EITHER of these reloaded the whole page out from under the
+   reader, discarding whatever they had just opened. That lag is retired now
+   that dashboard-next is a second permanent surface, not a preview branch
+   (see CLAUDE.md's "TWO OFFICE DASHBOARDS, BOTH PERMANENT" entry — bump.cjs
+   tracks both files' tags in lockstep), but the `busy()` gap this suite
+   exists to prove closed was never really about the lag; the lag only made
+   it easy to trigger. Neither drawer nor "View all equipment" is what a real
+   user would ever call "browsing normally" not protected against; this is
+   the identical shape CLAUDE.md's mobile history already states for
+   `applyUpdateIfIdle`/`__swBusy()`: an update must never apply while the
+   reader is in the middle of something.
 
-   This suite forces that exact condition (a live mock of mobile/sw.js
-   answering with a far larger BUILD than the page's own ?v= tag, the one
-   thing that is near-guaranteed true on a real preview-branch visit and
-   never true in this repo's other -next suites, which is why none of them
-   caught it) and proves the panel survives a REALISTIC wait, not a same-tick
-   assertion, after the reload's own 300ms-post-click trigger has had every
-   chance to fire.
+   This suite forces that exact condition directly (a live mock of
+   mobile/sw.js answering with a far larger BUILD than the page's own ?v=
+   tag) rather than depend on the tag lag that used to make it happen on its
+   own, so the gap stays proven closed even now that dashboard-next tracks
+   BUILD like dashboard/ does. It proves the panel survives a REALISTIC
+   wait, not a same-tick assertion, after the reload's own 300ms-post-click
+   trigger has had every chance to fire.
 
    Self-contained, same harness as tests/tablekit-next.cjs.
    Run: node tests/equipment-panel-next.cjs */

@@ -6,16 +6,19 @@
    way an open dialog's own "hidden" class does.
 
    docs/dashboard-next-parity.md named this the one gap left after the
-   conflict-detail and regression-sweep work. dashboard-next/index.html's
-   own `?v=` tag deliberately lags the mainline's constantly-bumped BUILD
-   (dashboard/index.html's tracks it, by bump.cjs discipline), so `look()`
-   finds "newer" there within seconds of any real visit -- but the gap in
-   busy() itself is identical in both files, so both are fixed and both are
-   proven here, with the SAME mocked-mobile/sw.js technique
-   tests/dispreload.cjs and tests/equipment-panel-next.cjs already
-   established (answering with a BUILD far ahead of the page's own tag is
-   the reliable way to force dashWaiting without depending on the
-   mainline's real, moving BUILD number).
+   conflict-detail and regression-sweep work, at a time when dashboard-next/
+   index.html's own `?v=` tag still deliberately lagged the mainline's
+   constantly-bumped BUILD, so `look()` found "newer" there within seconds of
+   any real visit. That lag is retired now that dashboard-next is a second,
+   permanent surface (CLAUDE.md's "TWO OFFICE DASHBOARDS, BOTH PERMANENT"
+   entry -- bump.cjs tracks both files' tags in lockstep), but the busy() gap
+   itself was never about the lag, only made easy to trigger by it, and it is
+   identical in both files -- so both are fixed and both are proven here,
+   with the SAME mocked-mobile/sw.js technique tests/dispreload.cjs and
+   tests/equipment-panel-next.cjs already established (answering with a
+   BUILD far ahead of the page's own tag is the reliable way to force
+   dashWaiting without depending on the mainline's real, moving BUILD
+   number, or on the two tags' own relationship to each other).
 
    Same shape as tests/dispreload.cjs: prove the busy signal holds off the
    reload for as long as the reader keeps touching the table, then a

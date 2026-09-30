@@ -446,6 +446,33 @@ async function markConflict(fileName, rival, dev) {
 async function saveEdit(b) {
   const name = keyFile(b.key, '.edit.json');
   if (!name) return { ok: false, error: 'Bad record key: ' + b.key };
+  const path = META_DIR + '/' + name;
+  /* TWO DASHBOARDS, ONE FILE, NO RIVAL MECHANISM. saveOne() detects a clash
+     with headObj() before it ever writes and files the loser under its own
+     ~dev name — but that needs a device id, and a dashboard has none, only
+     a typed-in name in cm_dash_who. Confirmed directly against this function
+     (not inferred from reading it): two saves of the same key, seconds
+     apart, and the second's putObj() below silently and permanently erased
+     every field of the first — its note, its fields, its assignments — with
+     no trace anywhere. The prior document is backed up here, the same
+     _meta/backup/ pattern rewriteObject() already uses for an admin rewrite,
+     so a losing edit is recoverable rather than gone; `overwrote` on the
+     response names who and when, so a future UI can warn instead of staying
+     silent. This does not make the two writes atomic — nothing here reads
+     the object back and refuses a change since it was read the way
+     rewriteObject()'s own `ifSha` can — it only guarantees the loser is
+     never destroyed outright. */
+  let prior = null;
+  try { prior = JSON.parse((await getObj(path)).body.toString('utf8')); } catch (e) { prior = null; }
+  let overwrote = null;
+  if (prior) {
+    const stamp = new Date().toISOString().replace(/[:.]/g, '-');
+    try {
+      await putObj(META_DIR + '/backup/' + stamp + '/' + name,
+                    Buffer.from(JSON.stringify(prior, null, 2)), 'application/json');
+    } catch (e) {}
+    if ((prior.by || '') !== (b.by || '')) overwrote = { by: prior.by || '', at: prior.at || '' };
+  }
   /* `note` was in the Apps Script's marker and not in this one, so an office
      that typed a note against a round and happened to be on Yandex lost it on
      save with no error anywhere. `fields` was the mirror image: a slot here
@@ -484,9 +511,11 @@ async function saveEdit(b) {
                 assign: (b.assign && typeof b.assign === 'object') ? b.assign : null,
                 reports: Array.isArray(b.reports) ? b.reports.slice(-20) : null,
                 items: b.items || null };
-  await putObj(META_DIR + '/' + name, Buffer.from(JSON.stringify(doc, null, 2)), 'application/json');
+  await putObj(path, Buffer.from(JSON.stringify(doc, null, 2)), 'application/json');
   await touchIndex();
-  return { ok: true, saved: name };
+  const out = { ok: true, saved: name };
+  if (overwrote) out.overwrote = overwrote;
+  return out;
 }
 
 async function deleteRecord(b) {
@@ -656,12 +685,32 @@ async function resolveConflict(b) {
      those undecidable for ever, so the decision is recorded rather than
      rejected, and the kept device joins the list. */
   if (!devices.some(d => d.dev === keep)) devices.push({ dev: keep, file: '' });
+  /* THE SAME GAP AS saveEdit(), ONE FUNCTION OVER. This reads `doc` and then
+     writes a new one with no check that nothing landed in between — a
+     read-then-write with no atomicity, confirmed directly against this
+     function to silently replace one dashboard's resolution with another's,
+     with the first decision left nowhere. Backed up for the identical
+     reason: not made atomic (that would need a device id and a rival-file
+     reader this format has never had), but never destroyed without a trace. */
+  let overwrote = null;
+  if (doc) {
+    const stamp = new Date().toISOString().replace(/[:.]/g, '-');
+    try {
+      await putObj(META_DIR + '/backup/' + stamp + '/' + file,
+                    Buffer.from(JSON.stringify(doc, null, 2)), 'application/json');
+    } catch (e) {}
+    if (doc.resolved && (doc.keep !== keep || (doc.by || '') !== String(b.by || '').slice(0, 80))) {
+      overwrote = { by: doc.by || '', keep: doc.keep || '', at: doc.at || '' };
+    }
+  }
   const out = { type: 'cm-record-conflict', version: 1, key: String(b.key),
                 at: new Date().toISOString(), devices,
                 resolved: true, keep, by: String(b.by || '').slice(0, 80) };
   await putObj(name, Buffer.from(JSON.stringify(out, null, 2)), 'application/json');
   await touchIndex();
-  return { ok: true, key: out.key, resolved: out.key, keep, at: out.at };
+  const res = { ok: true, key: out.key, resolved: out.key, keep, at: out.at };
+  if (overwrote) res.overwrote = overwrote;
+  return res;
 }
 
 /* When the folder last changed, so a client can ask "anything new?" for the

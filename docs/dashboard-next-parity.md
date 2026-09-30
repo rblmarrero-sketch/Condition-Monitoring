@@ -1,21 +1,35 @@
 # dashboard-next parity tracking
 
-Purpose: an honest, checkable record of where `dashboard-next/index.html` (the
-Stage-N redesign candidate) diverges from `dashboard/index.html` (the live
-production office dashboard), so nobody has to re-derive this from scratch
-before a cutover is considered. Nothing has been deactivated. This is prep
-work only — see CLAUDE.md's "Branch and deployment" section: every push to
-`claude/magnetic-plug-dashboard-llv4wc` is live immediately, so a wrong
-inventory here is exactly the kind of thing that costs someone a bad decision
-later.
+**This is no longer a cutover inventory.** `dashboard-next/index.html` is a
+second, permanent office dashboard — not a redesign candidate staged to
+replace `dashboard/index.html`, and no cutover is planned. Two different
+groups use the two surfaces daily, in parallel, indefinitely, against the
+same live backend. See CLAUDE.md's "TWO OFFICE DASHBOARDS, BOTH PERMANENT"
+entry for the standing policy this implies — `BUILD` lockstep for both
+files and mandatory triple-mirroring of every real bug fix across
+`mobile/`, `dashboard/` and `dashboard-next/`. This document stays as the
+historical record of how the two surfaces were brought to parity and kept
+that way, and as the place a genuine, deliberate difference between them
+(a UI/design choice, not a bug) gets written down so nobody "fixes" it by
+mistake later.
 
-**Status: NOT ready for cutover — 0 of 10 known gaps open (10 closed).**
-Every item this doc has ever tracked is now closed: the conflict-detail
-regression, the missing regression-sweep coverage, all four test-currency
-gaps, and the shared `busy()`/self-update race. See "Final readiness" at the
-end of this document for the actual cutover answer — closing every tracked
-gap is necessary, not sufficient, and that section says plainly what else,
-if anything, stands between here and a cutover conversation.
+Purpose, updated: an honest, checkable record of every difference ever
+found between the two dashboards — which were real bugs (closed, mirrored
+to both) and which were deliberate redesign choices (left alone, recorded
+so they're not re-opened as if they were bugs) — plus the operational
+disciplines (BUILD lockstep, the regression sweep, production-write safety)
+both surfaces now share as a matter of permanent policy, not a
+transition-period courtesy. See CLAUDE.md's "Branch and deployment" section:
+every push to `claude/magnetic-plug-dashboard-llv4wc` is live immediately,
+to BOTH dashboards, so a wrong record here is exactly the kind of thing
+that costs someone a bad decision later.
+
+**Status: 0 of 10 tracked functional gaps open (10 closed).** Every item
+this doc has ever tracked is closed: the conflict-detail regression, the
+missing regression-sweep coverage, all four test-currency gaps, and the
+shared `busy()`/self-update race. The operational-parity work that follows
+from dashboard-next's permanent status (`BUILD` lockstep, the cross-
+dashboard concurrent-edit check) is recorded in its own sections below.
 
 ---
 
@@ -130,24 +144,27 @@ if anything, stands between here and a cutover conversation.
   check for "a table body the reader is actively filtering or sorting" — a
   plain `th[data-sort]` click holds no element focus the way an `<input>`
   does, and satisfied none of `busy()`'s checks. On `dashboard/index.html`
-  this was nearly impossible to hit in practice, since its `?v=` tag is
-  kept in lockstep with `BUILD` by `bump.cjs` discipline; on
-  `dashboard-next/index.html`, whose tag deliberately lags, `look()` finds
-  "newer" within seconds of any real visit, so an office worker mid-filter
-  or mid-sort could have the page reload out from under them with no
-  warning (no data loss — these tables hold no unsaved state — but a
-  jarring, unexplained reset of scroll/filter/sort state).
+  this was nearly impossible to hit in practice, since its `?v=` tag was
+  already kept in lockstep with `BUILD` by `bump.cjs` discipline; on
+  `dashboard-next/index.html`, whose tag still deliberately lagged at the
+  time (it was a redesign candidate, not yet the permanent surface it is
+  now), `look()` found "newer" within seconds of any real visit, so an
+  office worker mid-filter or mid-sort could have the page reload out from
+  under them with no warning (no data loss — these tables hold no unsaved
+  state — but a jarring, unexplained reset of scroll/filter/sort state).
   Two options were on the table: extend `busy()` to also recognize table
   interaction, or have dashboard-next's own tag start tracking `BUILD` like
-  dashboard/'s already does. The second was rejected as the "safer" option
-  on inspection — it is not surgical, it is a standing process obligation:
-  every future `bump.cjs` run, for the rest of dashboard-next's pre-cutover
-  life, would also have to touch this file's ~59 `?v=` tags even for a
-  change that has nothing to do with it, and forgetting once brings the
-  race straight back. Extending `busy()` is a one-time, self-contained fix
-  that closes the gap in BOTH files permanently, fixes dashboard/'s own
-  latent (if rarely-triggered) exposure too, and needs nobody to remember
-  anything on any future bump.
+  dashboard/'s already does. `busy()` was extended FIRST, because the
+  tag-tracking option alone was, at the time, a standing process obligation
+  a redesign candidate had no business taking on: every future `bump.cjs`
+  run, for a change that may have nothing to do with dashboard-next, would
+  also have to touch its ~59 `?v=` tags, and forgetting once brings the
+  race straight back, whereas extending `busy()` closes the actual gap in
+  BOTH files permanently, fixes dashboard/'s own latent (if
+  rarely-triggered) exposure too, and needs nobody to remember anything on
+  any future bump. Both fixes stand today, for different reasons — see
+  "BUILD lockstep" below for why the tag-tracking option was adopted
+  AFTERWARD, once dashboard-next stopped being a candidate.
   `touchTable()` (a document-level `click`/`input` capture-phase listener,
   matching a `th[data-sort]`, `.cwcf`, or `input.cwcf` target) stamps
   `lastTableTouch`; `busy()` now returns true for `TABLE_BUSY_MS` (3s) after
@@ -173,6 +190,113 @@ if anything, stands between here and a cutover conversation.
   2026-09-30, commit `9390b99` (wording corrected in `522352e`). Proven by
   `tests/deviceid.cjs`. (Mobile-only; listed here because it was the
   live-backend symptom that started this whole investigation.)
+
+---
+
+## BUILD lockstep (permanent policy, not a redesign-period exemption)
+
+dashboard-next/index.html's own `?v=` tag was 483 while the mainline `BUILD`
+had already moved to 488 — a deliberate, documented gap while it was a
+redesign candidate nobody depended on for real work. That trade stopped
+being reasonable the moment a real group started using it daily: a stale
+`?v=` tag is a stale cache key, and CLAUDE.md's own standing rule ("BUMP
+`BUILD` OR THE WORK DOES NOT REACH ANYBODY") has never carried an exception
+for "unless it's the dashboard nobody's cut over to yet" — that exception
+existed only because nobody's daily work depended on dashboard-next
+catching every fix. It does now.
+
+**Closed, both ends.** `tests/bump.cjs`'s `SHIPPED` list now includes
+`dashboard-next/`, so a push that changes it without a fresh `BUILD` bump
+fails the guard exactly as an un-bumped `dashboard/index.html` change
+already does — no separate discipline, no separate thing to remember, the
+identical check. `tests/ver.cjs` (the live, in-browser confirmation that
+every tag actually agrees, as opposed to `bump.cjs`'s git-history check)
+was extended with the same three assertions it already runs for
+`dashboard/index.html`: every file dashboard-next shares with the phone
+and `dashboard/` is versioned, every one of those tags equals the running
+`BUILD`, and the report engine it loads is the same one the phone runs.
+Both confirmed non-vacuous (reverting the tag change reproduces the
+failure in each). dashboard-next's own 35 `?v=` tags are bumped to match
+`BUILD 489` as part of this change.
+
+The two-fixes-for-two-reasons framing above (`busy()`'s table-interaction
+gap) still holds: `busy()` was fixed because it closes a real gap
+regardless of what any tag does, and stays the correct defense even now
+that both tags track `BUILD` — it is what protects the single commit where
+a mainline bump has landed but dashboard-next's own tags have not yet
+caught up in the same push. BUILD lockstep does not replace that; it
+removes the reason the gap was easy to trigger in the first place.
+
+---
+
+## Cross-dashboard concurrent-edit safety
+
+Both dashboards write to the same live backend, from two different office
+desks, and this was checked directly against the deployed
+`docs/yandex/function.js` rather than assumed safe by analogy with the
+phone side — this project's own history of code that read correctly and
+was not is exactly why a bare code-read was never going to be enough here.
+
+**What was found.** `saveOne()` (a phone's round upload) has had rival
+detection since early in this project: a `headObj()` check before the
+write, a `~dev` variant name for whichever device loses the race, a
+conflict marker naming both. `saveEdit()` (a dashboard's correction/
+disposition save) and `resolveConflict()` (a dashboard's conflict
+resolution) never had any version of that — both are dashboard-only paths,
+and a dashboard has no device-id concept to build a rival filename from.
+Confirmed directly (two real POSTs to the real function, `by` differing to
+stand in for two desks, then confirmed again by driving it through two
+actual browser sessions — one on `dashboard/index.html`, one on
+`dashboard-next/index.html`, see `tests/crossdashedit.cjs` below): the
+second dashboard to save a given key silently and permanently erased
+everything the first had written — note, fields, assignments, or an
+already-recorded conflict resolution — with no trace, no marker, and no
+error shown to either desk. This was a real, live gap, not a hypothetical
+one this document is recording out of caution.
+
+**What shipped.** A full rival/device mechanism matching `saveOne()`'s own
+was considered and rejected — building and proving a device-id concept for
+two dashboard-only paths, under time pressure, was judged too large a
+change to make safely in this pass. Instead, `saveEdit()` and
+`resolveConflict()` (in both `docs/yandex/function.js`, the live backend,
+and `docs/google-upload.gs`, kept in field-for-field agreement per
+CLAUDE.md's own rule for the retired backend) now back up the document
+they are about to replace, to `_meta/backup/<stamp>/<key>`, before every
+overwrite — reusing the exact pattern `rewriteObject()` already used for an
+admin rewrite, into a location the reader already excludes from live
+records. The response also carries an `overwrote: {by, at}` (or
+`{by, keep, at}` for a resolution) field whenever a real prior document —
+from a different author, or an already-resolved conflict with a different
+decision — is what just got replaced.
+
+**What this does NOT do.** It does not make the two writes atomic, and it
+does not (today) surface any warning to either desk in real time — the
+second, later save still silently becomes the live document, exactly as
+before this fix. What changed is that the loser is now recoverable from
+`_meta/backup/` rather than destroyed without a trace, and the fact that an
+overwrite happened is on the wire the moment it does, ready for a future UI
+to show it — a smaller, certain fix rather than a larger, riskier one
+attempted under time pressure.
+
+Proven by `tests/crossdashedit.cjs`, which drives this through two real
+browser contexts — one loading `dashboard/index.html`, one loading
+`dashboard-next/index.html`, both pointed at the same real
+`docs/yandex/function.js` (via `tests/ya-srv.cjs`) — rather than a bare
+POST, so it exercises the actual `CMDrive.saveEdit`/`CMDrive.resolve` code
+path each dashboard actually runs, not a stand-in for it:
+  - a correction saved on `dashboard-next/` moments after `dashboard/`
+    saved its own is accepted, replaces the live document, names who it
+    overwrote, and backs up `dashboard/`'s original note intact and
+    readable;
+  - a conflict resolved on `dashboard/` moments after `dashboard-next/`
+    already resolved it the same way, in the other direction;
+  - a solo save (nothing to overwrite) carries no `overwrote` field and
+    creates no backup at all;
+  - the same desk re-saving its own prior note is not misread as a
+    cross-desk clash.
+Confirmed non-vacuous: reverting the `docs/yandex/function.js` half of the
+fix reproduces the exact original symptom (loser silently gone, no
+`overwrote` field, no backup) against the identical test.
 
 ---
 
@@ -285,28 +409,31 @@ finishes well under a minute.
 
 ---
 
-## Final readiness
+## Standing status
 
-**Yes — dashboard-next is ready for a cutover conversation.** Every gap this
-document has ever tracked is closed, all 27 `tests/*-next.cjs` suites plus
-the full `tests/runall.sh` sweep (~230 suites) pass clean as of `BUILD 488`,
-and the one cross-cutting safety issue found along the way (production-write
-exposure, above) is closed structurally, not just documented.
+**There is no cutover to be ready for — both surfaces run permanently, in
+parallel.** Every functional gap this document has ever tracked is closed;
+`BUILD` lockstep is closed on both ends; the cross-dashboard concurrent-edit
+question has been checked directly and the gap it found is closed (above);
+all 27 `tests/*-next.cjs` suites plus the full `tests/runall.sh` sweep pass
+clean as of `BUILD 489`. What that means going forward is not "done," it is
+"the standing bar every future change to either dashboard has to clear,"
+per CLAUDE.md's "TWO OFFICE DASHBOARDS, BOTH PERMANENT":
 
-What "ready for a cutover conversation" does NOT mean: that cutting over is
-risk-free, or that this document is the only thing worth reading first.
-Specifically, still true and worth saying plainly:
-
-- Two conflict markers (`DZ001|UC`, `DZ002|UC`) are still open on the LIVE
-  backend, both sides synthetic — a five-minute manual cleanup, unrelated to
-  code, and not something dashboard-next's own readiness should wait on, but
-  worth doing before or alongside a cutover so the office doesn't see them.
-- A cutover is a decision about the OFFICE dashboard only. Nothing here
-  changes what phones do, what the backend accepts, or `mobile/index.html`'s
-  own behavior — this document has never covered readiness beyond the two
-  dashboard surfaces it compares.
+- Every genuine bug fixed on either dashboard gets checked against, and
+  applied to, the other one (and `mobile/index.html`, where it applies) —
+  every time, indefinitely, with no "the other one will catch up eventually."
+- A deliberate design difference between the two — recorded in "Closed gaps"
+  and the sections above — is never "fixed" back into agreement; the
+  dividing line between a defect and a design choice is the same one this
+  project draws everywhere else, and this document is where that line gets
+  written down so nobody re-litigates it from scratch.
+- Two conflict markers (`DZ001|UC`, `DZ002|UC`) were still open on the LIVE
+  backend as of the production-write-safety investigation above, both sides
+  synthetic — a five-minute manual cleanup, unrelated to code, worth doing
+  on its own schedule rather than tied to any dashboard-next milestone,
+  since none is coming.
 - "Every automated test passes" is not the same claim as "every real person
-  who uses this dashboard daily has used the redesigned one" — this document
-  is a parity and regression record, not a substitute for whoever makes the
-  actual cutover call spending real time in `dashboard-next/index.html`
-  first, especially on whatever tab that person's own job leans on hardest.
+  who uses either dashboard daily has hit every path this document
+  checks" — this remains a parity and regression record, not a substitute
+  for real use, on either surface, surfacing something this document missed.

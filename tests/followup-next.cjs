@@ -17,9 +17,14 @@ const MIME = { '.html': 'text/html', '.js': 'application/javascript', '.json': '
    fix tests/tablekit-scale-next.cjs and tests/period-filter-next.cjs already
    carry, for the identical reason: dashboard-next's own self-update watcher
    (BUILT/look()/applyIfIdle() near the end of the file) fetches the real
-   /mobile/sw.js and reloads the page the moment it reads "newer" -- which,
-   since dashboard-next's own tag lags the mainline's constantly-bumped BUILD
-   by design, it almost always does. A document-level click (capture phase)
+   /mobile/sw.js and reloads the page the moment it reads "newer". dashboard-
+   next's own tag is now kept in the same BUILD lockstep dashboard/'s already
+   is -- bump.cjs tracks both files, see CLAUDE.md's "TWO OFFICE DASHBOARDS,
+   BOTH PERMANENT" entry -- but this mock stays as a backstop for the one
+   moment that guarantee can still slip: between a mainline bump landing and
+   dashboard-next's own tag catching up in the same commit, which is exactly
+   the gap that produced this incident once already. A document-level click
+   (capture phase)
    schedules that reload 300ms later, and a plain click on a button or row
    holds no focus busy() recognises, so nothing here held it back -- a real
    navigation mid-test, discarding whatever in-memory state (setDriveRecords,
@@ -29,9 +34,10 @@ const MIME = { '.html': 'text/html', '.js': 'application/javascript', '.json': '
    have already fired before a later click, so it is a genuine, if timing-
    dependent, race -- not a one-off flake -- and it can hit ANY -next.cjs
    suite that clicks around dashboard-next without this mock. Pinning it to
-   the page's own real (lower) tag makes `newer` false for the length of this
-   run, for both pages -- dashboard/'s own identical self-update check reads
-   the same mocked file and never sees a build higher than its own. */
+   the page's own real tag (now always equal to BUILD, not lower by design)
+   makes `newer` false for the length of this run, for both pages --
+   dashboard/'s own identical self-update check reads the same mocked file
+   and never sees a build higher than its own. */
 const nextHtmlForSw = fs.readFileSync(path.join(ROOT, 'dashboard-next', 'index.html'), 'utf8');
 const pinnedSwBuild = (nextHtmlForSw.match(/magnetic_plug\.js\?v=([^"&]+)/) || [])[1];
 if (!pinnedSwBuild) throw new Error('could not read dashboard-next\'s own ?v= tag to pin the mobile/sw.js mock to');

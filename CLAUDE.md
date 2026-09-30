@@ -1,9 +1,13 @@
 # Condition Monitoring — what anyone working on this has to know first
 
-Baimskaya, Chukotka. 1,128 machines. Two surfaces, one engine:
-`mobile/index.html` (the phone, offline-first PWA) and `dashboard/index.html`
-(the office). Both load `mobile/report-core.js`, so a report change lands in
-both or neither.
+Baimskaya, Chukotka. 1,128 machines. Three surfaces, one engine:
+`mobile/index.html` (the phone, offline-first PWA), `dashboard/index.html`
+(the office) and `dashboard-next/index.html` (a second, PERMANENT office
+surface — see "TWO OFFICE DASHBOARDS, BOTH PERMANENT" below; it is not a
+redesign staged to replace `dashboard/index.html` and no cutover is
+planned). All three load `mobile/report-core.js`, so a report change lands
+in all three or none — and the same is true of any genuine bug fix
+anywhere in the shared engine, not only the report path.
 
 ---
 
@@ -102,11 +106,105 @@ sudo systemctl status cm --no-pager
 
 ---
 
+## TWO OFFICE DASHBOARDS, BOTH PERMANENT
+
+`dashboard/index.html` and `dashboard-next/index.html` are both live,
+production office surfaces, used by two different groups for real work,
+indefinitely, in parallel, against the same live backend. **No cutover is
+planned.** `dashboard-next/index.html` started as a redesign candidate and
+that period is over — treating it as a staging area, a preview, or
+"the one nobody's depending on yet" is now simply wrong, and every rule
+below follows from that.
+
+**BUILD lockstep is not optional for either file.** `dashboard-next/index.html`'s
+own `?v=` tag used to be allowed to lag the mainline's `BUILD` on purpose —
+correct while it was a candidate nobody's daily work depended on, wrong the
+moment that stopped being true. Its tag now moves with `BUILD` exactly the
+way `dashboard/index.html`'s always has: `tests/bump.cjs`'s tracked file set
+includes `dashboard-next/`, and `tests/ver.cjs` checks its tags agree with
+`BUILD` the identical way it already checks `dashboard/index.html`'s. See
+"BUMP `BUILD` OR THE WORK DOES NOT REACH ANYBODY" below — there is one rule,
+not a stricter one for `dashboard/` and a looser one for `dashboard-next/`.
+
+**Every real bug fix goes to all three files, every time, with no
+exception for "the redesign will get it eventually."** A genuine bug fixed
+in `mobile/index.html`, `dashboard/index.html` or `dashboard-next/index.html`
+must be checked against, and applied to, the other two wherever it applies
+— not because a cutover is coming and the two dashboards need to match by
+some future date, but because two real groups are relying on their own
+dashboard being correct TODAY, and a bug fixed on one desk while the other
+desk silently keeps the bug is this project's own signature defect
+(a real fix rendered as nothing, for whoever is not looking at the copy
+that got it) wearing a second-surface costume. This applies whether the
+bug was found on `dashboard/` and needs porting to `dashboard-next/`, or
+the other way around — dashboard-next is not the perpetual downstream
+copy, either surface can be where a bug is found first.
+
+**This does NOT mean the two dashboards must look or behave identically.**
+`docs/dashboard-next-parity.md` carries the accumulated record of
+DELIBERATE differences between them — redesigned layouts, reorganized
+controls, a mockup's own chosen wording — found and confirmed, by direct
+code reading, to be intentional choices rather than accidents. Those are
+never "mirrored back" into agreement; doing so would silently undo a
+real design decision under the banner of consistency. The dividing line is
+the same this project already draws everywhere else: a DEFECT (the app
+does something wrong, or something different from what its own design
+intends) gets fixed on both; a DESIGN DIFFERENCE (the two pages were built
+to look or work differently, on purpose) gets left alone and recorded, so
+the next person reading the code does not mistake one for the other and
+"fix" a difference that was never a bug.
+
+**Both write to the same live backend, concurrently, from two different
+office desks — and, checked directly rather than assumed, this was a real
+gap, not an already-solved case of a familiar problem.** Two PHONES saving
+the same round concurrently is why `saveOne()`'s rival-file mechanism
+exists — a `headObj()` check before the write, a `~dev` variant name for
+the loser, a conflict marker naming both. Neither `saveEdit()` (a
+dashboard's correction/disposition save) nor `resolveConflict()` (a
+dashboard's conflict resolution) has ever had any version of that: both are
+dashboard-only paths with no device-id concept to build a rival filename
+from, and confirmed directly against the deployed `docs/yandex/function.js`
+(not inferred from reading it — see `tests/crossdashedit.cjs`, which drives
+this through two real browser sessions, one on each dashboard file) to
+silently and permanently destroy the loser's note, fields, assignments, or
+resolution the moment a second desk saved the same key. No trace, no
+marker, no error to either desk.
+
+The fix that shipped is smaller than `saveOne()`'s own mechanism, on
+purpose — turning these two into a full rival/device system was rejected as
+too large a change to make safely under time pressure. `saveEdit()` and
+`resolveConflict()` now back up the document they are about to replace to
+`_meta/backup/<stamp>/<key>` (the same pattern `rewriteObject()` already
+used for an admin rewrite, and a location the reader already excludes from
+live records) before every overwrite, and the response carries an
+`overwrote: {by, at}` (or `{by, keep, at}` for a resolution) field whenever
+a real prior document — from a different author, or an already-resolved
+conflict with a different decision — is what got replaced. **This does not
+make the two writes atomic, and does not (yet) surface a warning to either
+desk in real time** — a second, later save still wins and becomes the live
+document, exactly as before. What changed is that the loser is now
+recoverable from `_meta/backup/` rather than gone without a trace, and the
+fact that an overwrite happened is on the wire if a future UI wants to show
+it. `tests/crossdashedit.cjs` proves the backup and the `overwrote` field
+directly against the real backend, for both `saveEdit()` and
+`resolveConflict()`, plus that an ordinary solo save is untouched by any
+of it. `docs/google-upload.gs` carries the identical fix, unreached by
+this live traffic but kept in the field-for-field agreement CLAUDE.md
+requires of it.
+
+---
+
 ## BUMP `BUILD` OR THE WORK DOES NOT REACH ANYBODY
 
 `BUILD` lives in `mobile/index.html` and `mobile/sw.js`, and is repeated as the
-`?v=` tag on every shared script in `mobile/index.html` and `dashboard/index.html`
-— about 59 places. **Every change that touches those files has to bump it.**
+`?v=` tag on every shared script in `mobile/index.html`, `dashboard/index.html`
+**and `dashboard-next/index.html`** — about 59 places across the first two,
+plus dashboard-next's own ~35. **Every change that touches those files has to
+bump it.** dashboard-next joined this rule the day it stopped being a redesign
+candidate and became a second permanent office surface — see "TWO OFFICE
+DASHBOARDS, BOTH PERMANENT" below. There is no lesser tier of this rule for
+it; a stale cache key on a dashboard a real group uses daily is exactly the
+defect this section is named for.
 
 This is not a version label. It is the cache key:
 
@@ -129,20 +227,22 @@ To bump:
 
 ```
 sed -i 's/v=<old>/v=<new>/g; s/const BUILD = "<old>"/const BUILD = "<new>"/; s/const BUILD="<old>"/const BUILD="<new>"/' \
-  mobile/sw.js mobile/index.html dashboard/index.html
+  mobile/sw.js mobile/index.html dashboard/index.html dashboard-next/index.html
 node tests/ver.cjs
 ```
 
-`tests/ver.cjs` checks the stamps agree **with each other**. It cannot know
-whether a change should have bumped them, and it passed every run while the
-fleet sat on a stale build — agreement is not freshness.
+`tests/ver.cjs` checks the stamps agree **with each other**, on all three
+files — it runs the identical check against `dashboard-next/index.html` that
+it always has against `dashboard/index.html`, not a lighter one. It cannot
+know whether a change should have bumped them, and it passed every run while
+the fleet sat on a stale build — agreement is not freshness.
 
 **`tests/bump.cjs` is the guard.** It asks git instead of the page: since the
 commit that introduced the current BUILD, has any file under `mobile/`,
-`dashboard/` or `data/` changed — committed or still in the working tree? If so
-the number is stale and the work is invisible, and it prints the exact sed line
-to fix it. It runs in under a second, needs no browser, and is first in
-`tests/runall.sh`.
+`dashboard/`, `dashboard-next/` or `data/` changed — committed or still in the
+working tree? If so the number is stale and the work is invisible, and it
+prints the exact sed line to fix it. It runs in under a second, needs no
+browser, and is first in `tests/runall.sh`.
 
 **Run it before every push:**
 
