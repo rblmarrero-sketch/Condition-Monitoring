@@ -16,8 +16,32 @@ const ROOT = path.join(__dirname, '..');
 const fails = [];
 const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !== undefined ? '   ' + d : '')); if (!c) fails.push(n); };
 const MIME = { '.html': 'text/html', '.js': 'application/javascript', '.json': 'application/json', '.css': 'text/css' };
+/* /mobile/sw.js is served here as a STATIC MOCK, pinned to dashboard-next's own
+   live ?v= tag (read off the real file, never a copied-in number) -- the same
+   fix tests/tablekit-scale-next.cjs and tests/period-filter-next.cjs already
+   carry, for the identical reason: dashboard-next's own self-update watcher
+   (BUILT/look()/applyIfIdle() near the end of the file) fetches the real
+   /mobile/sw.js and reloads the page the moment it reads "newer" -- which,
+   since dashboard-next's own tag lags the mainline's constantly-bumped BUILD
+   by design, it almost always does. A document-level click (capture phase)
+   schedules that reload 300ms later, and a plain click on a button or row
+   holds no focus busy() recognises, so nothing here held it back -- a real
+   navigation mid-test, discarding whatever in-memory state (setDriveRecords,
+   a CMDrive stub, window.__writes) the test had just set up. Confirmed via
+   tests/period-filter-next.cjs's own investigation: the reload only shows up
+   once enough wall-clock time has passed for look()'s first 4-second timer to
+   have already fired before a later click, so it is a genuine, if timing-
+   dependent, race -- not a one-off flake -- and it can hit ANY -next.cjs
+   suite that clicks around dashboard-next without this mock. Pinning it to
+   the page's own real (lower) tag makes `newer` false for the length of this
+   run, for both pages -- dashboard/'s own identical self-update check reads
+   the same mocked file and never sees a build higher than its own. */
+const nextHtmlForSw = fs.readFileSync(path.join(ROOT, 'dashboard-next', 'index.html'), 'utf8');
+const pinnedSwBuild = (nextHtmlForSw.match(/magnetic_plug\.js\?v=([^"&]+)/) || [])[1];
+if (!pinnedSwBuild) throw new Error('could not read dashboard-next\'s own ?v= tag to pin the mobile/sw.js mock to');
 const srv = http.createServer((q, r) => {
   let p = decodeURIComponent(q.url.split('?')[0]); if (p.endsWith('/')) p += 'index.html';
+  if (p === '/mobile/sw.js') { r.writeHead(200, { 'content-type': 'application/javascript' }); r.end(`const BUILD = "${pinnedSwBuild}";`); return; }
   const f = path.join(ROOT, p);
   fs.readFile(f, (e, d) => { if (e) { r.writeHead(404); r.end(); } else { r.writeHead(200, { 'content-type': MIME[path.extname(f)] || 'application/octet-stream' }); r.end(d); } });
 });
@@ -67,14 +91,22 @@ async function boot(b, port, url) {
     await p.evaluate(() => { location.hash = '#reports'; });
     await p.waitForTimeout(300);
     await p.selectOption('#rScope', 'one');
-    await p.evaluate(() => window.cmbSet && window.cmbSet('rTarget', ''));
     await p.waitForTimeout(200);
-    // pick the first available target (rTarget's own <select> is populated
-    // by cmbAttach off RECS; read its first real option rather than assume
-    // a value the fixture may not carry for "one inspection" scope).
-    const firstVal = await p.$eval('#rTarget option', el => el.value).catch(() => '');
-    if (firstVal) await p.evaluate(v => { window.cmbSet('rTarget', v); }, firstVal);
-    await p.waitForTimeout(300);
+    /* #rTarget's own <select> is populated by cmbAttach off RECS, in
+       reportTargetOpts()'s own most-recent-first order -- both pages boot
+       it to the same default (the first real option), and both re-derive
+       that same order fresh from the identical fixture, so there is no
+       stale-previous-run value to guard against here and no need to reset
+       to "" and rediscover it: doing that round-trip was the bug -- cmbSet
+       inserts its own placeholder <option value=""> as the FIRST child of
+       the select, so ~rTarget option~ (the DOM's actual first option) then
+       reads back that manufactured placeholder instead of a real target,
+       and the test silently asserted the page's own "nothing chosen" text
+       against itself. Read the first REAL option directly and select it
+       explicitly, so both pages compare the identical target regardless of
+       whatever the control already happened to have picked. */
+    const firstVal = await p.$eval('#rTarget option[value]:not([value=""])', el => el.value).catch(() => '');
+    if (firstVal) { await p.evaluate(v => { window.cmbSet('rTarget', v); }, firstVal); await p.waitForTimeout(300); }
     return p.$eval('#rPreview', el => el.textContent.trim());
   };
   const prevA = await setAndRead(A.p);
@@ -100,14 +132,31 @@ async function boot(b, port, url) {
      JSON.stringify(opts.scale) === JSON.stringify(['2.4', '3']), JSON.stringify(opts.scale));
   ok('"Generate PDF" button renders', opts.goBtn);
 
-  /* ── 4. Recent reports list renders on both (empty in a fresh fixture) ──── */
+  /* ── 4. Recent reports list renders on both (empty in a fresh fixture) ────
+     dashboard/'s "Recent reports" is a plain <ul id="rRecent">; dashboard-
+     next's own redesign is a sortable <table class="grid" id="rRecentTbl">
+     (the same column-header-click sort every other Stage-6 table carries) --
+     a real id rename, not a loss, so each page is read off its own real
+     container rather than a shared selector neither page still fully owns. */
   const recentA = await A.p.$eval('#rRecent', el => el.textContent.trim());
-  const recentN = await N.p.$eval('#rRecent', el => el.textContent.trim());
+  const recentN = await N.p.$eval('#rRecentTbl', el => el.textContent.trim());
   ok('"Recent reports" panel renders the same empty-state text as /dashboard/', recentA === recentN, `next="${recentN}" dashboard="${recentA}"`);
 
-  /* ── 5. numbered-step layout (1 scope, 2 which, 3 options) preserved ─────── */
-  const steps = await N.p.$$eval('#tab-reports .rstep .rnum', els => els.map(e => e.textContent.trim()));
-  ok('the three numbered steps render', JSON.stringify(steps) === JSON.stringify(['1', '2', '3']), JSON.stringify(steps));
+  /* ── 5. the numbered "1 / 2 / 3" wizard is a DELIBERATE removal, per
+     dashboard-next's own header comment on #tab-reports: Reports.dc.html
+     shows Scope, Which, Language, Photos, Quality and Status as a flat set
+     of control groups (button-row "seg" toggles, not a numbered wizard) --
+     not a parity gap. Check the flat structure survives instead: every
+     control group renders, each with a visible label and its own button
+     row (segFromSelect's own markup) wired to the real backing <select>. */
+  const groups = await N.p.evaluate(() => [...document.querySelectorAll('#tab-reports .field')]
+    .filter(f => f.querySelector('.seg'))
+    .map(f => ({
+      label: (f.querySelector('label') || {}).textContent || '',
+      buttons: f.querySelectorAll('.seg button').length,
+    })));
+  ok('every control group (scope/language/photos/quality) renders as a labelled button row, not a numbered step',
+     groups.length >= 4 && groups.every(g => g.label && g.buttons > 0), JSON.stringify(groups));
 
   /* ── no sideways scroller at 1366px ──────────────────────────────────────── */
   const scrollers = await N.p.evaluate(() => [...document.querySelectorAll('#tab-reports .tblwrap, #tab-reports table')]

@@ -52,8 +52,32 @@ const ROOT = path.join(__dirname, '..');
 const fails = [];
 const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !== undefined ? '   ' + d : '')); if (!c) fails.push(n); };
 const MIME = { '.html': 'text/html', '.js': 'application/javascript', '.json': 'application/json', '.css': 'text/css' };
+/* /mobile/sw.js is served here as a STATIC MOCK, pinned to dashboard-next's own
+   live ?v= tag (read off the real file, never a copied-in number) -- exactly
+   tests/tablekit-scale-next.cjs's own fix, for the identical reason. Without
+   it, this suite's own #winTog click is a document-level click, which the
+   page's self-update watcher (dashboard-next's IIFE near BUILT/look()/
+   applyIfIdle()) schedules a re-check on 300ms after -- and since dashboard-
+   next's own tag lags the mainline's constantly-bumped BUILD by design, the
+   real /mobile/sw.js served here (this repo's own, current) reports "newer"
+   essentially always, so a click that lands after look()'s first 4-second
+   timer fires triggers a real `location.replace()` navigation mid-test. A
+   clicked <button> holds no focus busy() recognises, so nothing held the
+   reload back. That reload wiped the records this suite had just set via
+   setDriveRecords() (never persisted, only in-memory), so the fleet table
+   read back empty or mid-render moments later -- this suite's own "the
+   table can render completely empty after clicking All time" finding,
+   confirmed by instrumenting the page directly: `window.__mutLog` (a
+   MutationObserver planted on #fleetTbl) came back `undefined` after the
+   click, which is what a full page reload -- a fresh JS context -- looks
+   like, not a DOM mutation. Pinning the mock to the page's own real tag
+   makes `newer` false for the length of this run. */
+const nextHtml = fs.readFileSync(path.join(ROOT, 'dashboard-next', 'index.html'), 'utf8');
+const pinnedBuild = (nextHtml.match(/magnetic_plug\.js\?v=([^"&]+)/) || [])[1];
+if (!pinnedBuild) throw new Error('could not read dashboard-next\'s own ?v= tag to pin the mobile/sw.js mock to');
 const srv = http.createServer((q, r) => {
   let p = decodeURIComponent(q.url.split('?')[0]); if (p.endsWith('/')) p += 'index.html';
+  if (p === '/mobile/sw.js') { r.writeHead(200, { 'content-type': 'application/javascript' }); r.end(`const BUILD = "${pinnedBuild}";`); return; }
   const f = path.join(ROOT, p);
   fs.readFile(f, (e, d) => { if (e) { r.writeHead(404); r.end(); } else { r.writeHead(200, { 'content-type': MIME[path.extname(f)] || 'application/octet-stream' }); r.end(d); } });
 });

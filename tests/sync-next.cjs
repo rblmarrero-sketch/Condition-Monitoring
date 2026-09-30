@@ -18,8 +18,32 @@ const ROOT = path.join(__dirname, '..');
 const fails = [];
 const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !== undefined ? '   ' + d : '')); if (!c) fails.push(n); };
 const MIME = { '.html': 'text/html', '.js': 'application/javascript', '.json': 'application/json', '.css': 'text/css' };
+/* /mobile/sw.js is served here as a STATIC MOCK, pinned to dashboard-next's own
+   live ?v= tag (read off the real file, never a copied-in number) -- the same
+   fix tests/tablekit-scale-next.cjs and tests/period-filter-next.cjs already
+   carry, for the identical reason: dashboard-next's own self-update watcher
+   (BUILT/look()/applyIfIdle() near the end of the file) fetches the real
+   /mobile/sw.js and reloads the page the moment it reads "newer" -- which,
+   since dashboard-next's own tag lags the mainline's constantly-bumped BUILD
+   by design, it almost always does. A document-level click (capture phase)
+   schedules that reload 300ms later, and a plain click on a button or row
+   holds no focus busy() recognises, so nothing here held it back -- a real
+   navigation mid-test, discarding whatever in-memory state (setDriveRecords,
+   a CMDrive stub, window.__writes) the test had just set up. Confirmed via
+   tests/period-filter-next.cjs's own investigation: the reload only shows up
+   once enough wall-clock time has passed for look()'s first 4-second timer to
+   have already fired before a later click, so it is a genuine, if timing-
+   dependent, race -- not a one-off flake -- and it can hit ANY -next.cjs
+   suite that clicks around dashboard-next without this mock. Pinning it to
+   the page's own real (lower) tag makes `newer` false for the length of this
+   run, for both pages -- dashboard/'s own identical self-update check reads
+   the same mocked file and never sees a build higher than its own. */
+const nextHtmlForSw = fs.readFileSync(path.join(ROOT, 'dashboard-next', 'index.html'), 'utf8');
+const pinnedSwBuild = (nextHtmlForSw.match(/magnetic_plug\.js\?v=([^"&]+)/) || [])[1];
+if (!pinnedSwBuild) throw new Error('could not read dashboard-next\'s own ?v= tag to pin the mobile/sw.js mock to');
 const srv = http.createServer((q, r) => {
   let p = decodeURIComponent(q.url.split('?')[0]); if (p.endsWith('/')) p += 'index.html';
+  if (p === '/mobile/sw.js') { r.writeHead(200, { 'content-type': 'application/javascript' }); r.end(`const BUILD = "${pinnedSwBuild}";`); return; }
   const f = path.join(ROOT, p);
   fs.readFile(f, (e, d) => { if (e) { r.writeHead(404); r.end(); } else { r.writeHead(200, { 'content-type': MIME[path.extname(f)] || 'application/octet-stream' }); r.end(d); } });
 });
@@ -57,14 +81,30 @@ const kpiMap = async p => p.$$eval('#syncKpis [data-kpi]', els => {
   await N0.p.waitForTimeout(500);
   const N = N0;
 
-  /* ── 1. every KPI tile's number matches, keyed by data-kpi id ───────────── */
+  /* ── 1. the four SYNC.DC.HTML tiles match; the two retired ones (syRecs,
+     syMedia) are a deliberate reduction, not a loss -- renderSync()'s own
+     comment says so, and the figures they carried are still on screen,
+     just relocated (RECS.length via #srcText, the quarantine count via
+     #syHealth's own "Inspections requiring correction" row). ───────────── */
   const kA = await kpiMap(A.p), kN = await kpiMap(N.p);
   console.log('dashboard/     sync tiles=' + JSON.stringify(kA));
   console.log('dashboard-next sync tiles=' + JSON.stringify(kN));
-  const sharedKeys = Object.keys(kA);
-  ok('dashboard-next has the same set of KPI tile ids as /dashboard/',
-     JSON.stringify(sharedKeys.sort()) === JSON.stringify(Object.keys(kN).sort()), JSON.stringify(kN));
-  sharedKeys.forEach(k => ok(`sync tile [data-kpi="${k}"] matches live /dashboard/`, kA[k] === kN[k], `next=${kN[k]} dashboard=${kA[k]}`));
+  const MOCKUP_TILES = ['syGrade', 'syConf', 'syWait', 'syCrit'];
+  ok('dashboard-next shows exactly the four SYNC.DC.HTML mockup tiles',
+     JSON.stringify(Object.keys(kN).sort()) === JSON.stringify(MOCKUP_TILES.slice().sort()), JSON.stringify(kN));
+  MOCKUP_TILES.forEach(k => ok(`sync tile [data-kpi="${k}"] matches live /dashboard/`, kA[k] === kN[k], `next=${kN[k]} dashboard=${kA[k]}`));
+  const relocated = await N.p.evaluate(() => {
+    const dts = [...document.querySelectorAll('#syHealth dt')];
+    const heldDt = dts.find(dt => /requiring correction|исправлен/i.test(dt.textContent));
+    return {
+      srcText: (document.getElementById('srcText') || {}).textContent || '',
+      heldValue: heldDt ? (heldDt.nextElementSibling || {}).textContent || '' : null,
+    };
+  });
+  ok('dashboard-next: "Inspections loaded" (the retired syRecs tile\'s own figure) is still shown, via the header chip',
+     relocated.srcText.includes(String(kA.syRecs || '')), relocated.srcText);
+  ok('dashboard-next: the quarantine count (the retired syMedia tile\'s neighbour) is still shown, as #syHealth\'s own "Inspections requiring correction" row',
+     relocated.heldValue !== null && /^\d+$/.test(relocated.heldValue.trim()), JSON.stringify(relocated.heldValue));
 
   /* ── 2. Grade review required: clicking "Review grade" on the first row
      opens the SAME edit sheet, for the SAME record, on both pages ────────── */
@@ -77,9 +117,21 @@ const kpiMap = async p => p.$$eval('#syncKpis [data-kpi]', els => {
     const stateA = await A.p.evaluate(() => ({ open: !document.getElementById('editOv').classList.contains('hidden'), title: document.getElementById('edTitle').textContent }));
     await N.p.click('#sySev [data-sevgo]');
     await N.p.waitForTimeout(300);
-    const stateN = await N.p.evaluate(() => ({ open: !document.getElementById('editOv').classList.contains('hidden'), title: document.getElementById('edTitle').textContent }));
+    /* dashboard-next's own EditRound.dc.html mockup simplifies the bold
+       title to just the unit ("Edit inspection: TK001") and moves the
+       round type, date and grade into the adjacent #edSub subtitle
+       (openEdit()'s own comment) -- so the full identity is still on
+       screen, split across two elements instead of one. Compare the pair,
+       not the title alone. */
+    const stateN = await N.p.evaluate(() => ({
+      open: !document.getElementById('editOv').classList.contains('hidden'),
+      title: document.getElementById('edTitle').textContent,
+      full: document.getElementById('edTitle').textContent + ' ' + (document.getElementById('edSub') || {}).textContent,
+    }));
     ok('"Review grade" opens the edit sheet on dashboard/', stateA.open, JSON.stringify(stateA));
-    ok('"Review grade" opens the identical edit sheet (same title) on dashboard-next/', stateN.open && stateN.title === stateA.title, `next=${JSON.stringify(stateN)} dashboard=${JSON.stringify(stateA)}`);
+    ok('"Review grade" opens the identical edit sheet on dashboard-next/ (title simplified per its own mockup, but unit/type/date/grade all present between title+subtitle)',
+       stateN.open && [stateA.title.split(' · ')].flat().every(part => stateN.full.includes(part.trim())),
+       `next.full=${JSON.stringify(stateN.full)} dashboard.title=${JSON.stringify(stateA.title)}`);
     await A.p.click('#edClose').catch(() => {});
     await N.p.click('#edClose').catch(() => {});
     await A.p.waitForTimeout(200); await N.p.waitForTimeout(200);
