@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-09-30T05:48:52+00:00",
+  "generated": "2026-09-30T06:03:38+00:00",
   "source": "https://askpi.94-131-94-152.sslip.io/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 681,
@@ -316,7 +316,7 @@ window.CM_WO_DATA = {
     "WE009",
     "WE011"
   ],
-  "duplicateRowsCollapsed": 242,
+  "duplicateRowsCollapsed": 243,
   "roundsDedupedWithinVisit": 6,
   "columns": [
     "Asset description",
@@ -400,13 +400,13 @@ window.CM_WO_DATA = {
     "wo": "Work order number"
   },
   "cmDateFrom": {
-    "raised": 93,
+    "raised": 95,
     "detected": 0,
     "planStart": 0
   },
   "cmCauseFrom": {
-    "wo": 46,
-    "wr": 47,
+    "wo": 47,
+    "wr": 48,
     "cert": 0,
     "none": 0
   },
@@ -419,6 +419,52 @@ window.CM_WO_DATA = {
     "Bekzhan"
   ],
   "cmWorkOrders": [
+    {
+      "date": "2026-09-30",
+      "dateFrom": "raised",
+      "raised": "2026-09-30",
+      "detected": "2026-09-30",
+      "planStart": null,
+      "closed": null,
+      "asset": "EX024",
+      "defect": "DD-00013708",
+      "requestNo": "DD-00013708",
+      "eqType": "EXCAVATOR, BUCKET",
+      "system": "EX024.CH.AL (Central Lubrication System / Централизованная система смазки)",
+      "priority": "P4 Planned (Repair)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Поврежден шланга/линии",
+      "causeFrom": "wr",
+      "descr": "Зафиксирована срыв БРС/фитинга трубки ЦСС на блоке распределителя рукояти.",
+      "status": "Registered",
+      "by": "Irek",
+      "woNumber": null,
+      "maintType": null,
+      "planned": false
+    },
+    {
+      "date": "2026-09-30",
+      "dateFrom": "raised",
+      "raised": "2026-09-30",
+      "detected": "2026-09-30",
+      "planStart": null,
+      "closed": null,
+      "asset": "EX024",
+      "defect": "DD-00013699",
+      "requestNo": "DD-00013699",
+      "eqType": "EXCAVATOR, BUCKET",
+      "system": "EX024.HS.DL (Hydraulic Lines / Гидролинии)",
+      "priority": "P4 Planned (Repair)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Поврежден шланга/линии",
+      "causeFrom": "wr",
+      "descr": "Зафиксирована запотевание на РВД от основного гидронасоса к гидрораспределителю.",
+      "status": "Registered",
+      "by": "Irek",
+      "woNumber": null,
+      "maintType": null,
+      "planned": false
+    },
     {
       "date": "2026-09-29",
       "dateFrom": "raised",
@@ -769,7 +815,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-09-27",
       "detected": "2026-09-27",
-      "planStart": null,
+      "planStart": "2026-10-12",
       "closed": null,
       "asset": "TK161",
       "defect": "DD-00013536",
@@ -779,12 +825,12 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "cause": "Поврежден прокладки",
-      "causeFrom": "wr",
+      "causeFrom": "wo",
       "descr": "Течь масла из левого бортового редуктора",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "by": "Slam",
-      "woNumber": null,
-      "maintType": null,
+      "woNumber": "WO-018435",
+      "maintType": "P4 Planned Repair",
       "planned": false
     },
     {
@@ -53920,9 +53966,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-09-30",
-      "planStartDt": "2026-09-30T00:00:00",
-      "planEnd": "2026-10-01",
+      "planStart": "2026-10-08",
+      "planStartDt": "2026-10-08T00:00:00",
+      "planEnd": "2026-10-09",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -53943,9 +53989,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-10-11",
-      "planStartDt": "2026-10-11T00:00:00",
-      "planEnd": "2026-10-12",
+      "planStart": "2026-10-20",
+      "planStartDt": "2026-10-20T00:00:00",
+      "planEnd": "2026-10-21",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null

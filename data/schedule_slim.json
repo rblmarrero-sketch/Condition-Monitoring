@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-30T05:48:52+00:00",
+  "generated": "2026-09-30T06:03:38+00:00",
   "byUnit": {
     "BL001": [
       {
@@ -861,7 +861,7 @@
         "types": [
           "MP"
         ],
-        "plan": "2026-09-30",
+        "plan": "2026-10-08",
         "priority": "P3 Planned (PM)"
       },
       {
@@ -872,7 +872,7 @@
           "INSP",
           "MP"
         ],
-        "plan": "2026-10-11",
+        "plan": "2026-10-20",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -1051,6 +1051,24 @@
       "completed": ""
     },
     {
+      "wo": "WO-017888",
+      "equip": "TK148",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Filter Cut / General Inspection / Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-20",
+      "type": "3000 Hours service Planned",
+      "hours": 3000,
+      "plan": "2026-10-20",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-017859",
       "equip": "DZ019",
       "cls": "DOZ",
@@ -1114,24 +1132,6 @@
       "raised": "2026-10-11",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-10-11",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
-      "wo": "WO-017888",
-      "equip": "TK148",
-      "cls": "HT",
-      "comp": "",
-      "desc": "Filter Cut / General Inspection / Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-10-11",
-      "type": "3000 Hours service Planned",
-      "hours": 3000,
       "plan": "2026-10-11",
       "status": "Elimination scheduled",
       "request": "",
@@ -1306,6 +1306,24 @@
       "wo": "WO-017856",
       "equip": "TK108",
       "cls": "AT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-08",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-10-08",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-017327",
+      "equip": "TK148",
+      "cls": "HT",
       "comp": "",
       "desc": "Magnetic Plug",
       "priority": "P3 Planned (PM)",
@@ -2473,24 +2491,6 @@
       "completed": ""
     },
     {
-      "wo": "WO-017327",
-      "equip": "TK148",
-      "cls": "HT",
-      "comp": "",
-      "desc": "Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-09-30",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-09-30",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
       "wo": "WO-017317",
       "equip": "TK153",
       "cls": "HT",
@@ -2957,6 +2957,24 @@
       "cause": "",
       "pmStatus": "complete",
       "completed": "2026-09-28"
+    },
+    {
+      "wo": "WO-018435",
+      "equip": "TK161",
+      "cls": "",
+      "comp": "TK161.CH.UC (Undercarriage / Ходовая часть)",
+      "desc": "Течь масла из левого бортового редуктора",
+      "priority": "P4 Planned (Repair)",
+      "raised": "2026-09-27",
+      "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "hours": null,
+      "plan": "2026-10-12",
+      "status": "Elimination scheduled",
+      "request": "DD-00013536",
+      "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Поврежден прокладки",
+      "pmStatus": "open",
+      "completed": ""
     },
     {
       "wo": "WO-017409",
