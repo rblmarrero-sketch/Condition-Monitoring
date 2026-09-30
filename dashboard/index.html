@@ -3781,23 +3781,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=483"></script>
+<script src="../data/magnetic_plug.js?v=484"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=483"></script>
-<script src="../mobile/hme.js?v=483"></script>
-<script src="../mobile/mp-fc.js?v=483"></script>
-<script src="../mobile/rtw.js?v=483"></script>
-<script src="../mobile/hme-cascade.js?v=483"></script>
-<script src="../mobile/temp-limits.js?v=483"></script>
+<script src="../data/work_orders.js?v=484"></script>
+<script src="../mobile/hme.js?v=484"></script>
+<script src="../mobile/mp-fc.js?v=484"></script>
+<script src="../mobile/rtw.js?v=484"></script>
+<script src="../mobile/hme-cascade.js?v=484"></script>
+<script src="../mobile/temp-limits.js?v=484"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=483"></script>
-<script src="../mobile/normalize.js?v=483"></script>
-<script src="../mobile/terms.js?v=483"></script>
+<script src="../mobile/assets.js?v=484"></script>
+<script src="../mobile/normalize.js?v=484"></script>
+<script src="../mobile/terms.js?v=484"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -3816,19 +3816,19 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=483"></script>
-<script src="../mobile/edits.js?v=483"></script>
-<script src="../mobile/due.js?v=483"></script>
-<script src="../mobile/wear.js?v=483"></script>
-<script src="../mobile/wear-map.js?v=483"></script>
-<script src="../mobile/lube.js?v=483"></script>
-<script src="../mobile/lube-overrides.js?v=483"></script>
-<script src="../mobile/lube2027.js?v=483"></script>
-<script src="../mobile/lube-tds.js?v=483"></script>
+<script src="../mobile/grade.js?v=484"></script>
+<script src="../mobile/edits.js?v=484"></script>
+<script src="../mobile/due.js?v=484"></script>
+<script src="../mobile/wear.js?v=484"></script>
+<script src="../mobile/wear-map.js?v=484"></script>
+<script src="../mobile/lube.js?v=484"></script>
+<script src="../mobile/lube-overrides.js?v=484"></script>
+<script src="../mobile/lube2027.js?v=484"></script>
+<script src="../mobile/lube-tds.js?v=484"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=483"></script>
-<script src="../mobile/machine-photos.js?v=483"></script>
+<script src="../mobile/upload-defaults.js?v=484"></script>
+<script src="../mobile/machine-photos.js?v=484"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3837,17 +3837,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=483"></script>
-<script src="../mobile/get.js?v=483"></script>
-<script src="../mobile/points.js?v=483"></script>
-<script src="../mobile/uc-points.js?v=483"></script>
-<script src="../mobile/inspect-guide.js?v=483"></script>
-<script src="../mobile/get-figs.js?v=483"></script>
-<script src="../mobile/body-points.js?v=483"></script>
-<script src="../mobile/body-map.js?v=483"></script>
-<script src="../mobile/jspdf.umd.min.js?v=483"></script>
-<script src="../mobile/html2canvas.min.js?v=483"></script>
-<script src="../mobile/report-core.js?v=483"></script>
+<script src="../mobile/machine-fig.js?v=484"></script>
+<script src="../mobile/get.js?v=484"></script>
+<script src="../mobile/points.js?v=484"></script>
+<script src="../mobile/uc-points.js?v=484"></script>
+<script src="../mobile/inspect-guide.js?v=484"></script>
+<script src="../mobile/get-figs.js?v=484"></script>
+<script src="../mobile/body-points.js?v=484"></script>
+<script src="../mobile/body-map.js?v=484"></script>
+<script src="../mobile/jspdf.umd.min.js?v=484"></script>
+<script src="../mobile/html2canvas.min.js?v=484"></script>
+<script src="../mobile/report-core.js?v=484"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -12236,10 +12236,18 @@ function openUnit(unit){
   $("drwBody").querySelectorAll("[data-fu]").forEach(b=>b.onclick=()=>{
     ovLeave("drw"); drwClose(); showTab("actions"); openFollow(b.dataset.fu, b.dataset.fi); });
   $("drwBody").querySelectorAll("[data-rk]").forEach(b=>b.onclick=()=>{
-    ovLeave("drw"); drwClose(); showTab("equipment"); selectEquip(unit); renderHistory(); });
+    /* showTab("equipment") ends by writing the address (urlWrite), and at
+       that instant equipSel still holds whatever it had BEFORE this unit is
+       chosen — selectEquip runs one line later. The hash it wrote a moment
+       ago names the wrong machine, and anything that reads it back (Back,
+       a reload) restores that one instead. Re-writing it once more, after
+       the real selection is in, is what makes the address agree with the
+       screen. Mirrors dashboard-next/index.html's own fix for the identical
+       "Full history" report. */
+    ovLeave("drw"); drwClose(); showTab("equipment"); selectEquip(unit, true); renderHistory(); urlWrite(); });
   const uc=$("drwBody").querySelector("[data-ucls]");
   if(uc) uc.onclick=()=>{ ovLeave("drw"); drwClose(); $("fClass").value=uc.dataset.ucls; renderAll(); };
-  $("uHist").onclick=()=>{ ovLeave("drw"); drwClose(); showTab("equipment"); selectEquip(unit); renderHistory(); };
+  $("uHist").onclick=()=>{ ovLeave("drw"); drwClose(); showTab("equipment"); selectEquip(unit, true); renderHistory(); urlWrite(); };
   $("uActs").onclick=()=>{ ovLeave("drw"); drwClose(); setDrillTo("unit",unit); showTab("actions"); };
   if($("drw").classList.contains("hidden")) ovPush("drw");
   $("drw").classList.remove("hidden"); $("drwScrim").classList.remove("hidden");
@@ -17751,7 +17759,15 @@ function renderSync(){
     $("syGapShown").innerHTML=`<span>${esc(t("shown_n",{n:Math.min(CAP,s.gaps.length), of:s.gaps.length}))}</span>`;
     $("syGapTbl").querySelectorAll("[data-sygo]").forEach(tr=>{
       const go=()=>{ const rec=RECS.find(x=>ekOf(x)===tr.dataset.sygo);
-                     if(!rec) return; showTab("equipment"); $("equipSel").value=rec.equip; renderHistory(); };
+                     /* Setting .value directly leaves the machine unselected
+                        whenever it is not one of the capped rows currently
+                        drawn (see selectEquip's own comment), and writes the
+                        address before this unit is chosen the same way the
+                        drawer's own buttons used to — both fixed here the
+                        same way: selectEquip() forces the option in and pins
+                        it, and urlWrite() runs again once it has. Mirrors
+                        dashboard-next/index.html's own fix. */
+                     if(!rec) return; showTab("equipment"); selectEquip(rec.equip, true); renderHistory(); urlWrite(); };
       tr.onclick=go;
       tr.onkeydown=e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); } };
     });
@@ -18388,6 +18404,23 @@ document.querySelector(".lang").addEventListener("click",e=>{
        filed, the editor. Reloading under them would discard it. */
     if([...document.querySelectorAll(".ov")].some(o=>!o.classList.contains("hidden"))) return true;
     const px=$("pxPanel"); if(px && !px.classList.contains("hidden")) return true;
+    /* THE MACHINE DRAWER IS THE SAME LOSS, ONE PANEL OVER. openUnit()'s own
+       drawer (#drw) is not an ".ov" — it is toggled by its own hidden class —
+       so a reader deep in a unit's open findings, mid-click, lost the drawer
+       to a reload this check never knew to guard. */
+    const drw=$("drw"); if(drw && !drw.classList.contains("hidden")) return true;
+    /* AND THE EXPANDED FLEET TABLE IS THE SAME LOSS A THIRD TIME. "View all
+       equipment" (fleetAll) is a reader's own choice to see past the capped
+       ten rows; a reload silently drops them back to the capped view with no
+       warning, which reads as the list itself having forgotten their place. */
+    if(typeof fleetAll!=="undefined" && fleetAll) return true;
+    /* AND A SEARCHABLE PICKER'S OWN POPUP IS THE SAME LOSS AGAIN, ONE CONTROL
+       FURTHER IN — see dashboard-next/index.html's own fix for this, of the
+       identical shape: cmbAttach's dropdown (#equipSel and friends) is a
+       plain, unlisted div this check never knew to look for, so opening the
+       list is itself a click that, 300ms later, this same gate reloaded the
+       page out from under. */
+    if(typeof CMB==="object" && Object.values(CMB).some(c=>c && c.open)) return true;
     return false;
   };
   const applyIfIdle=()=>{
@@ -18469,8 +18502,8 @@ document.querySelector(".lang").addEventListener("click",e=>{
   setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 })();
 </script>
-<script src="drive.js?v=483"></script>
-<script src="sync-adapter.js?v=483"></script>
-<script src="report.js?v=483"></script>
+<script src="drive.js?v=484"></script>
+<script src="sync-adapter.js?v=484"></script>
+<script src="report.js?v=484"></script>
 </body>
 </html>
