@@ -7736,9 +7736,9 @@ let drill={ sev:"", defect:"", cause:"", unit:"", owner:"", month:"" };
 function setDrill(k,v){ drill[k] = (drill[k]===v ? "" : v); renderAll(); }
 function clearDrill(){ drill={sev:"",defect:"",cause:"",unit:"",owner:"",month:""}; renderAll(); }
 /* Condition trend: Monthly (the six-calendar-month view) or Weekly (the
-   current month broken into WK1..WK5, the week still in progress marked
-   "to date"). Remembered per browser, the same as every other lube/trend
-   toggle in this file. */
+   trailing five real ISO 8601 weeks, numbered per ISO's own week-of-year
+   rule, the week still in progress marked "to date"). Remembered per
+   browser, the same as every other lube/trend toggle in this file. */
 const TREND_PERIOD_KEY="cm_trend_period";
 let trendPeriod=(function(){
   try{ const v=localStorage.getItem(TREND_PERIOD_KEY); return v==="week"?"week":"month"; }
@@ -11741,15 +11741,28 @@ function trendMonths(){
   }
   return out;
 }
-/* Weekly: the CURRENT calendar month (the month of the most recent
-   inspection on record) broken into WK1..WK5 by day-of-month (1-7, 8-14,
-   15-21, 22-28, 29-end) -- the same seven-day-band convention the site's own
-   weekly reporting already uses. The week the most recent inspection falls
-   in is still open, so it is drawn like any other week but its own label and
-   tooltip say "to date" rather than pretending the month has finished. Weeks
-   are not drillable (a week has no filter of its own the rest of the page
-   understands) -- every bar renders as a plain block, never a button. */
-function weekOfMonth(day){ return Math.min(5, Math.ceil(day/7)); }
+/* Weekly: real ISO 8601 weeks (Monday-Sunday, numbered per ISO's own
+   week-of-year rule -- the week containing that year's first Thursday is
+   week 1), not a day-of-month band confined to one calendar month. An ISO
+   week can cross a month or even a year boundary, so it is keyed by ISO
+   year+week rather than by calendar month. The trailing five ISO weeks
+   ending on the week of the most recent inspection are shown; the current
+   week is still open, so it is drawn like any other week but its own label
+   and tooltip say "to date" rather than pretending the week has finished.
+   Weeks are not drillable (a week has no filter of its own the rest of the
+   page understands) -- every bar renders as a plain block, never a button. */
+function isoWeekInfo(dateStr){
+  const d=new Date(dateStr+"T00:00:00Z");
+  const dow=(d.getUTCDay()+6)%7; // 0=Mon .. 6=Sun
+  const thu=new Date(d); thu.setUTCDate(d.getUTCDate()-dow+3);
+  const isoYear=thu.getUTCFullYear();
+  const firstThu=new Date(Date.UTC(isoYear,0,4));
+  const firstDow=(firstThu.getUTCDay()+6)%7;
+  firstThu.setUTCDate(firstThu.getUTCDate()-firstDow+3);
+  const isoWeek=1+Math.round((thu-firstThu)/604800000);
+  const monday=new Date(d); monday.setUTCDate(d.getUTCDate()-dow);
+  return {isoYear, isoWeek, mondayKey:monday.toISOString().slice(0,10)};
+}
 function trendWeeks(){
   const recs=filtered();
   const m=new Map();
@@ -11758,19 +11771,22 @@ function trendWeeks(){
     const d=String(r.date||"");
     if(!/^\d{4}-\d{2}-\d{2}$/.test(d)) return;
     if(d>lastDate) lastDate=d;
-    const mo=d.slice(0,7), day=Number(d.slice(8,10));
-    const wk=weekOfMonth(day), k=mo+"-W"+wk;
-    const e=m.get(k)||{k, mo, wk, rounds:0, units:new Set(), 5:0, 4:0, 3:0, 2:0, 1:0};
+    const {isoYear,isoWeek,mondayKey}=isoWeekInfo(d);
+    const k=isoYear+"-W"+String(isoWeek).padStart(2,"0");
+    const e=m.get(k)||{k, isoYear, isoWeek:isoWeek, mondayKey, rounds:0, units:new Set(), 5:0, 4:0, 3:0, 2:0, 1:0};
     e.rounds++; e.units.add(r.equip);
     (r.items||[]).forEach(i=>{ const s=sevOf(r,i); if(s && e[s]!=null) e[s]++; });
     m.set(k,e);
   });
   if(!lastDate) return [];
-  const curMo=lastDate.slice(0,7), curWk=weekOfMonth(Number(lastDate.slice(8,10)));
+  const cur=isoWeekInfo(lastDate);
+  const curMonday=new Date(cur.mondayKey+"T00:00:00Z");
   const out=[];
-  for(let w=1; w<=curWk; w++){
-    const k=curMo+"-W"+w;
-    out.push(m.get(k) || {k, mo:curMo, wk:w, rounds:0, units:new Set(), 5:0, 4:0, 3:0, 2:0, 1:0});
+  for(let i=4; i>=0; i--){
+    const monday=new Date(curMonday); monday.setUTCDate(curMonday.getUTCDate()-7*i);
+    const info=isoWeekInfo(monday.toISOString().slice(0,10));
+    const k=info.isoYear+"-W"+String(info.isoWeek).padStart(2,"0");
+    out.push(m.get(k) || {k, isoYear:info.isoYear, isoWeek:info.isoWeek, mondayKey:info.mondayKey, rounds:0, units:new Set(), 5:0, 4:0, 3:0, 2:0, 1:0});
   }
   out[out.length-1].toDate=true;
   return out;
@@ -11821,8 +11837,8 @@ function renderTrend(){
        Anything that happened gets a sliver you can see; nothing stays
        nothing. */
     const h=v=>v<=0?"0":`${Math.max(4,(v/(x.rounds||1)/worst*100)).toFixed(1)}%`;
-    const label = wk ? t("tr_wk",{n:x.wk}) : x.k.slice(2);
-    const tipLabel = wk ? (t("tr_wk",{n:x.wk}) + (x.toDate?" ("+t("tr_todate")+")":"")) : x.k;
+    const label = wk ? t("tr_wk",{n:x.isoWeek}) : x.k.slice(2);
+    const tipLabel = wk ? (t("tr_wk",{n:x.isoWeek}) + (x.toDate?" ("+t("tr_todate")+")":"")) : x.k;
     /* Item 3: an empty slot still prints its own label (below) but carries no
        stack fill, no rate/round-count text and is not a pressable drill-down
        (there is nothing recorded that period to drill into) — present and
@@ -11863,7 +11879,7 @@ function renderTrend(){
      chart nobody acts on. Compares the last period's RATE with the rate of
      the three before it, and says plainly when there is not enough to say. */
   const last=ms[ms.length-1];
-  const lastLabel = wk ? (t("tr_wk",{n:last.wk}) + (last.toDate?" ("+t("tr_todate")+")":"")) : last.k;
+  const lastLabel = wk ? (t("tr_wk",{n:last.isoWeek}) + (last.toDate?" ("+t("tr_todate")+")":"")) : last.k;
   if(!prior.length){ $("trendNote").textContent=t(wk?"tr_short_wk":"tr_short"); $("trendDelta").innerHTML=""; return; }
   const now=f(last), avgN=prior.reduce((a,x)=>a+f(x),0)/prior.length;
   /* A percentage on a handful of findings is noise wearing a decimal point.
@@ -21159,6 +21175,20 @@ document.querySelector(".lang").addEventListener("click",e=>{
        filed, the editor. Reloading under them would discard it. */
     if([...document.querySelectorAll(".ov")].some(o=>!o.classList.contains("hidden"))) return true;
     const px=$("pxPanel"); if(px && !px.classList.contains("hidden")) return true;
+    /* THE LIGHTBOX IS THE SAME LOSS, AND ITS OWN OPENING CLICK IS WHAT
+       TRIGGERS IT. #lb (openLB, the photo/video viewer every history card,
+       the report and the review all share) tracks open/closed with its own
+       "open" class, not "hidden" like ".ov" -- so it was never once caught
+       by the query above. Reported plainly: "when i click photo, it go
+       back" -- opening a photo IS the click this file's own document-level
+       listener schedules applyIfIdle() from, 300ms later, and busy() had
+       no way to see the viewer that same click had just opened, so the
+       reload it ran straight into replaced the page out from under it,
+       landing back on whatever the address bar's own state was (often not
+       "this unit's history open," since that is not itself part of the
+       URL) -- which is exactly what "it go back" describes. The same shape
+       as the machine drawer below, one overlay later. */
+    const lb=$("lb"); if(lb && lb.classList.contains("open")) return true;
     /* THE MACHINE DRAWER IS AN OVERLAY TOO, AND IT NEVER CARRIED THE CLASS
        THIS CHECK LOOKS FOR. #drw (openUnit's machine summary, openPos's
        position detail — every "look at a machine without leaving the page"
@@ -21197,6 +21227,24 @@ document.querySelector(".lang").addEventListener("click",e=>{
        naming here by hand. Any open combobox popup (CMB, cmbAttach's own
        registry) now holds the reload exactly like an open overlay does. */
     if(typeof CMB==="object" && Object.values(CMB).some(c=>c && c.open)) return true;
+    /* AND A PLAIN, NATIVE <select>/<input>/<textarea> IS THE SAME LOSS ONE
+       CONTROL FURTHER IN AGAIN. The Grade/Type/Class/Period filter selects
+       (#fGrade/#fType/#fClass/#fRange), the global search box, and every
+       other ordinary form control on this page are not ".ov", not "#drw",
+       not "#pxPanel", not a cmbAttach popup -- they are the browser's own
+       native control, and a native <select>'s own open listbox is not a DOM
+       node any query here can ever see. What IS visible is that the control
+       keeps document focus for as long as its listbox is open, in every
+       major browser -- so a reader with a filter dropdown open, or mid-type
+       in a box, is read the same way this check already reads an open
+       overlay. Reported plainly, again: "again we have problem with
+       dropdown" -- the identical shape as the cmbAttach fix above, one kind
+       of control later, and it recurred now because dashboard-next's own
+       ?v= tag lagged the mobile BUILD bump this session shipped, which is
+       exactly the condition that makes `look()` find "newer" and start
+       trying to reload. */
+    const af=document.activeElement;
+    if(af && /^(SELECT|INPUT|TEXTAREA)$/.test(af.tagName)) return true;
     return false;
   };
   const applyIfIdle=()=>{
