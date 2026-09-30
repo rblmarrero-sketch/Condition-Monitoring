@@ -4535,7 +4535,7 @@ const DEVICE = (()=>{ let d=localStorage.getItem("cm_dev");
   if(!d){
     d="D"+Math.random().toString(36).slice(2,7).toUpperCase();
     if(!lsSet("cm_dev",d)){
-      bad("device-id-persist", new Error("localStorage.setItem(cm_dev) failed — this id will not survive a reload"));
+      bad("device-id-persist", new Error("cm_dev could not be saved to storage — this id will not survive a reload"));
     }
   }
   return d;
