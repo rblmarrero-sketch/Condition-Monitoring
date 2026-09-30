@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-09-30T04:48:29+00:00",
+  "generated": "2026-09-30T05:03:55+00:00",
   "source": "https://askpi.94-131-94-152.sslip.io/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 681,
@@ -316,7 +316,7 @@ window.CM_WO_DATA = {
     "WE009",
     "WE011"
   ],
-  "duplicateRowsCollapsed": 272,
+  "duplicateRowsCollapsed": 276,
   "roundsDedupedWithinVisit": 13,
   "columns": [
     "Asset description",
@@ -4606,6 +4606,27 @@ window.CM_WO_DATA = {
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
+      "planStart": "2026-09-18",
+      "planStartDt": "2026-09-18T22:00:00",
+      "planEnd": "2026-09-19",
+      "actualStart": "2026-09-18",
+      "actualStartDt": "2026-09-18T22:00:00",
+      "actualEnd": "2026-09-19"
+    },
+    {
+      "equip": "CD010",
+      "cls": "GEN",
+      "woNumber": "WO-016935",
+      "maintType": "1000 Hours service Planned",
+      "hours": 1000,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
+      "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
@@ -5909,6 +5930,27 @@ window.CM_WO_DATA = {
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
+    },
+    {
+      "equip": "CN020",
+      "cls": "GEN",
+      "woNumber": "WO-016926",
+      "maintType": "3000 Hours service Planned",
+      "hours": 3000,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
+      "planStart": "2026-09-20",
+      "planStartDt": "2026-09-20T13:00:00",
+      "planEnd": "2026-09-21",
+      "actualStart": "2026-09-20",
+      "actualStartDt": "2026-09-20T13:00:00",
+      "actualEnd": "2026-09-21"
     },
     {
       "equip": "CN021",
@@ -12427,6 +12469,29 @@ window.CM_WO_DATA = {
       "planStart": "2026-10-01",
       "planStartDt": "2026-10-01T00:00:00",
       "planEnd": "2026-10-02",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
+      "equip": "DZ018",
+      "cls": "DOZ",
+      "woNumber": "WO-017325",
+      "maintType": "1000 Hours service Planned",
+      "hours": 1000,
+      "cmLabel": "Filter Cut / General Inspection / Undercarriage",
+      "cmTypes": [
+        "FC",
+        "INSP",
+        "UC"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-10-09",
+      "planStartDt": "2026-10-09T00:00:00",
+      "planEnd": "2026-10-11",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null

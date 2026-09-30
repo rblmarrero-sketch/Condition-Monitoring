@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-30T04:48:29+00:00",
+  "generated": "2026-09-30T05:03:55+00:00",
   "byUnit": {
     "BL001": [
       {
@@ -260,6 +260,17 @@
           "UC"
         ],
         "plan": "2026-10-01",
+        "priority": "P3 Planned (PM)"
+      },
+      {
+        "wo": "WO-017325",
+        "hours": 1000,
+        "types": [
+          "FC",
+          "INSP",
+          "UC"
+        ],
+        "plan": "2026-10-09",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -4780,24 +4791,6 @@
       "completed": "2026-09-20"
     },
     {
-      "wo": "WO-016935",
-      "equip": "CD010",
-      "cls": "GEN",
-      "comp": "",
-      "desc": "General Inspection",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-09-19",
-      "type": "1000 Hours service Planned",
-      "hours": 1000,
-      "plan": "2026-09-19",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
       "wo": "WO-016595",
       "equip": "DZ018",
       "cls": "DOZ",
@@ -5012,6 +5005,24 @@
       "cause": "",
       "pmStatus": "open",
       "completed": ""
+    },
+    {
+      "wo": "WO-016935",
+      "equip": "CD010",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "General Inspection",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-09-18",
+      "type": "1000 Hours service Planned",
+      "hours": 1000,
+      "plan": "2026-09-18",
+      "status": "Completed",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "complete",
+      "completed": "2026-09-19"
     },
     {
       "wo": "WO-016926",
