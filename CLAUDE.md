@@ -3810,6 +3810,35 @@ still the inspector of record; the holder is whose phone it was, and
 the two disagreeing is information (a shared or borrowed phone), never an
 error (`tests/holder.cjs`).
 
+**ON THE WATCH LIST: THE OFFICE CACHE IN INDEXEDDB, AT FULL ROLLOUT VOLUME.**
+Audit item 10 (2026-10-01), flagged for watching, not changed. The dashboard's
+drive cache moved from `localStorage` to IndexedDB after the fleet's history
+outgrew the ~5–10 MB `localStorage` quota and every reload had to fetch
+everything again ("why when I refresh no data, I have to load every time").
+IndexedDB's quota is the disk, so it should hold at ~70 rounds a day for a
+long time. But `tests/drivecache.cjs` proves it at 900 records / ~9.6 MB, and
+the live folder at 20–50 users will pass that within weeks. What to look at
+through the first few weeks of full use, on both office pages:
+
+- **The symptom coming back.** A desk that reloads and sees "loading" for the
+  whole fleet again, instead of the page drawing from its cache at once, is
+  the first sign the cache stopped being written.
+- **The write failing in silence.** A failed save is recorded, not shown:
+  in the browser console on a desk, `__errs.filter(e => e.where === "drive-cache-save")`
+  should be empty. Any entry there is the cache failing to persist.
+- **How big it has got.** `navigator.storage.estimate()` in the same console
+  gives usage against quota. Hundreds of MB is expected and fine; the figure
+  only matters if `usage` gets near `quota`.
+- **Two desks, two caches.** Each browser keeps its own copy. One desk being
+  slow to reload while another is fine points at that browser's storage
+  (private window, cleared site data, a storage-pressure eviction), not at
+  the backend.
+
+If any of these turns up, the place to start is `saveDrive()` / `ddbSet()`
+and `loadDriveCache()` in `dashboard/index.html` (the same code in
+`dashboard-next/index.html`). Take this entry off the list once a month of
+full-volume use has gone by with none of the above.
+
 ---
 
 ## Secrets
