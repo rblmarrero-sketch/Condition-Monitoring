@@ -3789,6 +3789,27 @@ period, class and a CSV. `tests/reliability.cjs` holds the arithmetic to
 figures worked by hand and reads the panel on both pages in both languages;
 `tests/relingest.py` builds a real WO.xlsx and runs the ingester against it.
 
+**EVERY PHONE BELONGS TO A NAMED PERSON, AND EVERY ROUND SAYS WHOSE PHONE
+FILED IT.** Audit item 9 (2026-10-01): "Inspected by" and "Verified by" are
+typed per round and checked against nothing, and the durable identity under
+every record is a random device id, which names a phone, not a person. The
+decision, delegated: **assign each phone to a person once, at setup**, rather
+than validating typed names against a roster. The device id and the office's
+Device activity table already exist; a roster is a second list somebody has to
+keep for 20–50 people, and it still would not say whose phone a round came
+from. Settings carries "This phone is assigned to" (name and badge, `cm_holder`,
+`holderGet()`). Every round saved on the phone carries `holder` and
+`holderBadge` beside the typed `by`. They are captured at the first save and
+kept on an edit, the same rule as the schedule facts. They travel in the
+sidecar and the export unchanged, so no backend change is needed. A phone with
+no name typed starts "Inspected by" from its holder. The readiness card names
+the holder, or says the phone is assigned to nobody and offers Settings
+(`rdy_v_holder`, a warning, not loud). Both office pages add "Assigned to" to
+the Device activity table, from each device's newest round. The typed name is
+still the inspector of record; the holder is whose phone it was, and
+the two disagreeing is information (a shared or borrowed phone), never an
+error (`tests/holder.cjs`).
+
 ---
 
 ## Secrets

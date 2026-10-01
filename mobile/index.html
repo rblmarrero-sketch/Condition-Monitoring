@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=497">
+<link rel="manifest" href="manifest.webmanifest?v=498">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=497">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=497">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=497">
+<link rel="apple-touch-icon" href="icon-192.png?v=498">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=498">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=498">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -652,6 +652,11 @@
      have been taught; "In the cloud" and "Waiting to send" are not. The colour
      is the fast read and the word is the accurate one. */
   .yardlist{display:flex;flex-direction:column;gap:2px;}
+  /* A fix on the readiness card is a tap target like any other: 44 px, the
+     glove size. They were 38 and showed only in a failure state, which no
+     sweep fixture reached; the "whose phone" row shows one on every phone
+     nobody has assigned yet, which tests/fit.cjs caught. */
+  .yardlist .btn{min-height:44px;}
   .yardrow{display:flex;gap:9px;align-items:flex-start;padding:7px 0;border-bottom:1px solid var(--border);}
   .yardrow:last-child{border-bottom:0;}
   .yardrow .m{flex:none;width:16px;text-align:center;font-weight:800;line-height:1.35;}
@@ -2408,6 +2413,21 @@
       </div>
     </div>
 
+    <!-- WHOSE PHONE THIS IS. "Inspected by" is typed per round and nothing
+         checks it; the durable identity under every record is a device id,
+         which names a phone, not a person (audit of 2026-10-01). Set once when
+         the phone is issued; every round it saves carries the name and badge
+         beside "Inspected by", and the office's Device activity table names
+         the person against the device. -->
+    <div class="holder">
+      <div class="row">
+        <label class="fld"><span data-i18n="hold_name">This phone is assigned to</span>
+          <input id="holderName" type="text" data-i18n-ph="hold_name_ph" placeholder="full name" autocomplete="name"></label>
+        <label class="fld"><span data-i18n="hold_badge">Badge no.</span>
+          <input id="holderBadge" type="text" inputmode="numeric" autocomplete="off"></label>
+      </div>
+      <span class="hint" data-i18n="hold_help">Set once, when the phone is issued. Every round this phone saves carries it, so the office knows whose phone filed a round even when another name is typed under Inspected by.</span>
+    </div>
     <label class="fld"><span data-i18n="set_px">Photo size on upload</span>
       <select id="upPx">
         <option value="1600" data-i18n="set_px_1600">Medium — 1600 px (recommended)</option>
@@ -2774,16 +2794,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=497"></script>
-<script src="upload-defaults.js?v=497"></script>
-<script src="hme.js?v=497"></script>
-<script src="mp-fc.js?v=497"></script>
-<script src="rtw.js?v=497"></script>
-<script src="hme-cascade.js?v=497"></script>
-<script src="assets.js?v=497"></script>
-<script src="temp-limits.js?v=497"></script>
-<script src="normalize.js?v=497"></script>
-<script src="terms.js?v=497"></script>
+<script src="native.js?v=498"></script>
+<script src="upload-defaults.js?v=498"></script>
+<script src="hme.js?v=498"></script>
+<script src="mp-fc.js?v=498"></script>
+<script src="rtw.js?v=498"></script>
+<script src="hme-cascade.js?v=498"></script>
+<script src="assets.js?v=498"></script>
+<script src="temp-limits.js?v=498"></script>
+<script src="normalize.js?v=498"></script>
+<script src="terms.js?v=498"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2802,25 +2822,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=497"></script>
-<script src="edits.js?v=497"></script>
-<script src="due.js?v=497"></script>
-<script src="wear.js?v=497"></script>
-<script src="wear-figs.js?v=497"></script>
-<script src="wear-map.js?v=497"></script>
-<script src="machine-photos.js?v=497"></script>
-<script src="machine-fig.js?v=497"></script>
-<script src="get.js?v=497"></script>
-<script src="points.js?v=497"></script>
-<script src="uc-points.js?v=497"></script>
-<script src="inspect-guide.js?v=497"></script>
-<script src="get-figs.js?v=497"></script>
-<script src="body-points.js?v=497"></script>
-<script src="body-map.js?v=497"></script>
-<script src="lube.js?v=497"></script>
-<script src="lube-overrides.js?v=497"></script>
-<script src="lube2027.js?v=497"></script>
-<script src="report-core.js?v=497"></script>
+<script src="grade.js?v=498"></script>
+<script src="edits.js?v=498"></script>
+<script src="due.js?v=498"></script>
+<script src="wear.js?v=498"></script>
+<script src="wear-figs.js?v=498"></script>
+<script src="wear-map.js?v=498"></script>
+<script src="machine-photos.js?v=498"></script>
+<script src="machine-fig.js?v=498"></script>
+<script src="get.js?v=498"></script>
+<script src="points.js?v=498"></script>
+<script src="uc-points.js?v=498"></script>
+<script src="inspect-guide.js?v=498"></script>
+<script src="get-figs.js?v=498"></script>
+<script src="body-points.js?v=498"></script>
+<script src="body-map.js?v=498"></script>
+<script src="lube.js?v=498"></script>
+<script src="lube-overrides.js?v=498"></script>
+<script src="lube2027.js?v=498"></script>
+<script src="report-core.js?v=498"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -3578,6 +3598,14 @@ const I18N = {
     rdy_off_installing:"Downloading for offline use: {n} of {of} files. Keep the app open with signal until it finishes.",
     rdy_v_installing:"Getting ready for offline use — {n} of {of} files",
     rdy_inst_sub:"Keep the app open with signal; it finishes by itself.",
+    hold_name:"This phone is assigned to",
+    hold_name_ph:"full name",
+    hold_badge:"Badge no.",
+    hold_help:"Set once, when the phone is issued. Every round this phone saves carries it, so the office knows whose phone filed a round even when another name is typed under Inspected by.",
+    rdy_hold_t:"Whose phone",
+    rdy_hold_none:"Not assigned to anybody yet. Put the holder's name and badge in Settings.",
+    rdy_fix_holder:"Open Settings",
+    rdy_v_holder:"Ready — assign this phone to a person in Settings",
     rdy_off_none:"Not installed for offline use yet. Connect once before leaving.",
     rdy_off_slow:"The offline copy did not answer. Try again in a moment.",
     rdy_bld_t:"Up to date", rdy_bld_ok:"Build {n}, the newest there is (checked {t}).",
@@ -4255,6 +4283,14 @@ const I18N = {
     rdy_off_installing:"Загрузка для работы без связи: {n} из {of} файлов. Держите приложение открытым при наличии связи до завершения.",
     rdy_v_installing:"Подготовка к работе без связи — {n} из {of} файлов",
     rdy_inst_sub:"Держите приложение открытым при наличии связи — загрузка завершится сама.",
+    hold_name:"Телефон закреплён за",
+    hold_name_ph:"фамилия и имя",
+    hold_badge:"Табельный №",
+    hold_help:"Указывается один раз при выдаче телефона. Каждый обход, сохранённый на нём, несёт это имя, и в офисе видно, чей телефон отправил обход, даже если в поле «Осмотрел» указан другой человек.",
+    rdy_hold_t:"Чей телефон",
+    rdy_hold_none:"Ещё ни за кем не закреплён. Укажите имя и табельный номер в настройках.",
+    rdy_fix_holder:"Открыть настройки",
+    rdy_v_holder:"Готово — закрепите телефон за сотрудником в настройках",
     rdy_off_none:"Ещё не установлено для работы без связи. Подключитесь один раз до выезда.",
     rdy_off_slow:"Офлайн-копия не ответила. Повторите через мгновение.",
     rdy_bld_t:"Актуальная версия", rdy_bld_ok:"Сборка {n}, новее нет (проверено {t}).",
@@ -8726,7 +8762,25 @@ function nowHHMM(){
   return String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0");
 }
 $("date").value=todayISO();
+/* WHOSE PHONE THIS IS — see the Settings block. Stored as {name, badge, at};
+   null when nobody has been assigned. */
+const HOLDER_K="cm_holder";
+function holderGet(){
+  try{ const h=JSON.parse(localStorage.getItem(HOLDER_K)||"null");
+       return (h && String(h.name||"").trim()) ? {name:String(h.name).trim(), badge:String(h.badge||"").trim(), at:h.at||""} : null; }
+  catch(e){ return null; }
+}
+function holderSave(){
+  const name=$("holderName").value.trim(), badge=$("holderBadge").value.trim();
+  if(!name && !badge){ try{ localStorage.removeItem(HOLDER_K); }catch(e){} }
+  else lsSet(HOLDER_K, JSON.stringify({name, badge, at:new Date().toISOString()}));
+}
+{ const h=holderGet(); if(h){ $("holderName").value=h.name; $("holderBadge").value=h.badge; }
+  $("holderName").addEventListener("input", holderSave);
+  $("holderBadge").addEventListener("input", holderSave); }
 $("inspector").value=localStorage.getItem("inspector")||"";
+/* A phone with nobody's name typed yet starts from its own holder's. */
+if(!$("inspector").value){ const h=holderGet(); if(h) $("inspector").value=h.name; }
 $("inspector").addEventListener("input",()=>lsSet("inspector",$("inspector").value.trim()));
 $("hdrSum").onclick=openHdr;
 /* Folding is a thing that happens when you have finished with the card, not
@@ -8935,6 +8989,11 @@ $("saveBtn").onclick=async ()=>{
        overview (and sides, tray, assembly) is required. A round from before
        is not held to a photograph nobody at the crib room can take. */
     phv:(editing?(editing.phv||1):2),
+    /* Whose phone filed it — captured at the first save and kept on an edit,
+       the same way the schedule facts below are: a correction made on another
+       phone does not change whose phone walked the round. */
+    holder:(editing ? (editing.holder||"") : ((holderGet()||{}).name||"")),
+    holderBadge:(editing ? (editing.holderBadge||"") : ((holderGet()||{}).badge||"")),
     schedHours:(editing ? (editing.schedHours!=null?editing.schedHours:null) : (schedO && schedO.hours!=null ? schedO.hours : null)),
     schedDate:(editing ? (editing.schedDate||"") : (schedO && schedO.plan ? schedO.plan : "")),
     schedPriority:(editing ? (editing.schedPriority||"") : (schedO && schedO.priority ? String(schedO.priority) : "")) };
@@ -11292,6 +11351,8 @@ async function rtwSave(){
     const rec={ id, cls:d.cls||"", type:"RTW", equip, date, smu:"", by:(d.sup||"").trim(),
       sup:(d.sup||"").trim(), sign:await rtwSignBlob(), gps:gps||null, dev:DEVICE,
       positions:{}, created, up:0, upTo:{}, rev:(rtwEditing?(rtwEditing.rev||0)+1:1), phv:2,
+      holder:(rtwEditing ? (rtwEditing.holder||"") : ((holderGet()||{}).name||"")),
+      holderBadge:(rtwEditing ? (rtwEditing.holderBadge||"") : ((holderGet()||{}).badge||"")),
       rtwWo:d.wo||"", rtwResult:d.result||"R", rtwComment:(d.overallComment||"").trim(),
       rtwWoType:d.woType||"", rtwSchedHours:(d.woHours!=null?d.woHours:null), rtwSchedDate:d.woPlan||"",
       rtwWoPriority:d.priority||"", rtwTime:(d.time||"").trim() };
@@ -13763,6 +13824,8 @@ async function buildPackage(){
     attachments:(()=>{ try{ return attList(rec); }catch(e){ return []; } })(),
     equip:rec.equip, date:rec.date, type:rec.type||"MP", cls:rec.cls||"", by:rec.by||"", smu:rec.smu||"",
     sup:rec.sup||"", gps:rec.gps||null, dev:rec.dev||"", signed:rec.sign?1:0,
+    /* Whose phone this is (Settings), beside the typed "Inspected by". */
+    holder:rec.holder||"", holderBadge:rec.holderBadge||"",
     items:Object.entries(rec.positions).map(([k,p])=>{
       const d=DEFECT_BY[upDefect(p.defect)]||null;
       return { key:k, label:itemLabelFor(rec,k)||"", general:(k===GEN_KEY?1:0), grade:GRADE.num(p.grade)||"", sev:effSev(p), action:p.action||"",
@@ -14733,7 +14796,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="497";
+const BUILD="498";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -17448,6 +17511,8 @@ function recToExport0(rec){
   return { id:rec.id||"", rev:rec.rev||1,
     equip:rec.equip, date:rec.date, type:rec.type||"MP", cls:rec.cls||"", by:rec.by||"", smu:rec.smu||"",
     sup:rec.sup||"", gps:rec.gps||null, dev:rec.dev||"", signed:rec.sign?1:0,
+    /* Whose phone this is (Settings), beside the typed "Inspected by". */
+    holder:rec.holder||"", holderBadge:rec.holderBadge||"",
     /* Return to Work's own release verdict — a work order, an S/R/N/D result
        and an overall comment, none of which any other round type carries.
        Left off this export once, a teammate's phone could open a synced RTW
@@ -17867,6 +17932,7 @@ function yardVerdict(rows){
      the same severity and the same push notification as a phone genuinely
      never installed for offline use, over what is usually a one-off blip. */
   if(hasKey("offline_slow")) return {k:"warn", s:"rdy_v_recheck"};
+  if(hasKey("holder"))   return {k:"warn", s:"rdy_v_holder"};
   if(has("warn"))        return {k:"warn", s:"rdy_v_old"};
   return {k:"ok", s:"rdy_v_ready"};
 }
@@ -17948,6 +18014,11 @@ async function yardCheck(){
       { label:t("rdy_fix_heal"), run:async()=>{ try{
           navigator.serviceWorker.controller.postMessage({type:"sw-heal"}); }catch(e){}
         await new Promise(r=>setTimeout(r,6000)); } },"offline");
+
+    /* 1b. whose phone this is */
+    if(!holderGet()) add("warn",t("rdy_hold_t"),t("rdy_hold_none"),
+      { label:t("rdy_fix_holder"), run:async()=>{ openSettings(); } },"holder");
+    else { const h=holderGet(); add("ok",t("rdy_hold_t"),h.name+(h.badge?" · "+h.badge:""),null,"holder"); }
 
     /* 2. is it the newest build — from what the check actually observed, never
        from navigator.onLine. "Build N, the newest there is" used to be said on
