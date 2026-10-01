@@ -616,8 +616,17 @@ def rel_event(get, equip, since_iso):
         "mt": mt or None,
         "priority": str(get("Priority") or "").strip() or None,
         "start": s_d, "startDt": s_dt, "end": e_d, "endDt": e_dt,
-        "durH": dur, "downH": down if down is not None else reg,
-        "downFrom": "docs" if down is not None else ("register" if reg is not None else None),
+        # "Down time by documents" only. The accumulation-register column is
+        # NOT a figure for this work order: read off the first live pull
+        # (2026-10-01) it holds at most two distinct values per machine across
+        # thirteen months, the same 26.75 h on a P4 repair, a P1 breakdown and
+        # a P2 job on BL001 alike: a running total for the machine and period,
+        # repeated on every row. Used as each failure's downtime it put
+        # 926,206 h against 10,073 h of actual duration on the same 999
+        # breakdowns, and MTTR read 380 h where 1C's own durations say 20.
+        # It is still counted in relProfile; it is never a downtime.
+        "durH": dur, "downH": down,
+        "downFrom": "docs" if down is not None else None,
         "bd": int(bd) if bd else 0,
         "opH": op,
         "_shape": {"dur": dur_k, "down": down_k, "downReg": reg_k},

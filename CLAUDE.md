@@ -3789,6 +3789,24 @@ period, class and a CSV. `tests/reliability.cjs` holds the arithmetic to
 figures worked by hand and reads the panel on both pages in both languages;
 `tests/relingest.py` builds a real WO.xlsx and runs the ingester against it.
 
+**THE FIRST LIVE PULL SHOWED ONE OF THE THREE DOWNTIME SOURCES WAS NOT ONE.**
+`relProfile` was read the day it arrived, as the entry above asked. "Down
+time by documents" is blank on most recent rows, and the ingester fell back
+to "Down time by accamulation register per period", which is not a figure
+for the work order at all: at most two distinct values per machine across
+thirteen months, the same 26.75 h on BL001's P4 repair, P1 breakdown and P2
+job alike. It is a running total for the machine and period, repeated on
+every row. Taken as each failure's downtime it put 926,206 h against 10,073 h
+of actual duration on the same 999 breakdowns; the live panel read MTTR
+380 h over 90 days where 1C's own durations say 20 h, and availability
+84.4% over a year where they say 99.7%. Where "Down time by documents" IS
+filled it agrees with actual duration (17,226 h against 17,205 h over the
+year), so that source stands. The ingester no longer writes the register
+column as `downH` (it is still counted in `relProfile`), and `CMRel.downtime`
+refuses a `downFrom: "register"` figure from a pull made before that, so the
+office stops seeing it the moment the page updates rather than at the next
+hourly run (`tests/relingest.py`, `tests/reliability.cjs`).
+
 **EVERY PHONE BELONGS TO A NAMED PERSON, AND EVERY ROUND SAYS WHOSE PHONE
 FILED IT.** Audit item 9 (2026-10-01): "Inspected by" and "Verified by" are
 typed per round and checked against nothing, and the durable identity under

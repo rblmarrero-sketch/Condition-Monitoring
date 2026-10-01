@@ -60,6 +60,15 @@ console.log('\n1. THE ARITHMETIC, AGAINST FIGURES WORKED BY HAND');
   ok('a longer period takes in July\'s breakdown too', ninety.failures === 4 && near(ninety.downH, 116), JSON.stringify([ninety.failures, ninety.downH]));
   const quiet = R.compute(Object.assign({}, FIX, { relEvents: FIX.relEvents.filter(e => e.equip !== 'TK101' && e.equip !== 'TK102' && e.equip !== 'EX005') }), { days: 30, classOf: u => CLS[u] });
   ok('no failures: no MTBF, no MTTR, availability 100%', quiet.mtbf === null && quiet.mttr === null && quiet.avail === 1, JSON.stringify([quiet.mtbf, quiet.mttr, quiet.avail]));
+  /* A pull made before the ingester stopped writing it carries 1C's
+     accumulation-register total as downH (downFrom "register"): the machine's
+     running total for the period, repeated on every work order. It is never
+     a job's downtime; the job's own duration answers instead. */
+  const reg = R.downtime({ downH: 926, downFrom: 'register', durH: 3 });
+  ok('a register total is not a downtime: the job\'s own duration answers', reg.h === 3 && reg.from === 'duration', JSON.stringify(reg));
+  const regOnly = R.downtime({ downH: 926, downFrom: 'register' });
+  ok('and with nothing else it is unknown, not 926 h', regOnly.h === null, JSON.stringify(regOnly));
+  ok('1C\'s own document figure still counts', R.downtime({ downH: 12, downFrom: 'docs', durH: 3 }).h === 12);
   ok('no file at all is null, not zeros', R.compute(null, {}) === null && R.compute({ generated: 'x' }, {}) === null);
 }
 
