@@ -1,45 +1,39 @@
-/* TWO DASHBOARDS, ONE BACKEND, THE SAME RECORD.
+/* TWO DASHBOARDS, ONE BACKEND, THE SAME RECORD — AT THE SAME MOMENT.
 
-   dashboard/index.html and dashboard-next/index.html are now both permanent
+   dashboard/index.html and dashboard-next/index.html are both permanent
    (CLAUDE.md's "TWO OFFICE DASHBOARDS, BOTH PERMANENT") and both load the
    identical dashboard/drive.js, so both funnel a correction or a conflict
-   resolution through the exact same saveEdit()/resolveConflict() handlers in
-   the exact same deployed docs/yandex/function.js. Asked plainly: if one
-   desk edits a round's disposition while the other has the same round open,
-   or one resolves a conflict a moment after the other already did, is the
-   loser handled the way this project's revision/conflict machinery already
-   handles a clash, or silently destroyed?
+   resolution through the same saveEdit()/resolveConflict() in the deployed
+   docs/yandex/function.js.
 
-   Checked against the real function — not inferred from reading it, given
-   how many "looked correct, wasn't" bugs this project has already turned up
-   (see toctou.cjs, cf.cjs) — it was the latter. Two direct POSTs to the real
-   backend, `by` differing to stand in for two different desks, confirmed:
-   saveEdit()'s putObj() and resolveConflict()'s putObj() each unconditionally
-   replaced whatever was there, with no rival check, no trace, no marker —
-   the second dashboard to save simply erased the first's note, fields,
-   assignments, or resolution outright. saveOne() (the phone's own round
-   upload) has had a rival check since early in this project; these two
-   dashboard-only paths never did, because a dashboard has no device id to
-   build a rival filename from and no reader that would recognise one.
+   History. Build 489 found that the second desk to save simply erased the
+   first's correction, and added a backup of "the prior document" before every
+   overwrite. The audit of 2026-10-01 pointed out what that left open: the old
+   version of this suite fired its two saves ONE AFTER THE OTHER, so the second
+   always read what the first had written. Two saves that genuinely overlap —
+   B reads before A writes — both read the same prior, both back up the same
+   prior, and A's correction is in neither the live document nor any backup.
+   That is reproduced here (§2, run against the pre-fix function it loses A
+   outright) and closed by three things in function.js:
 
-   The fix does not make the two writes atomic — that would need a device
-   concept and a rival-file reader neither of these two documents has ever
-   had, and retrofitting one under time pressure was explicitly rejected in
-   favour of something smaller and certain: reuse rewriteObject()'s own
-   backup-before-overwrite pattern (_meta/backup/<stamp>/<key>, already
-   excluded from being read back as a live record). The prior document is
-   backed up before every overwrite in both functions, so the loser is
-   recoverable rather than gone, and the response carries an `overwrote`
-   field naming who and when it happened whenever a real prior document —
-   from a different author, or an already-resolved conflict with a different
-   decision — is what got replaced.
+     - every read-decide-write of an edit or conflict document runs under a
+       per-document lock (withDocLock), so overlapping requests are taken in
+       turn and the second reads what the first wrote;
+     - a client that names the version it edited (`ifAt`, the server-stamped
+       `at`) is REFUSED, loudly, if that is no longer the version on the
+       server — the same idea as rewriteObject()'s ifSha;
+     - whatever is replaced is still backed up first.
 
-   This drives it through two REAL dashboard pages, not through a bare POST:
-   dashboard/index.html and dashboard-next/index.html, each in its own
-   browser context, each calling its own loaded CMDrive.saveEdit()/
-   CMDrive.resolve() against the same tests/ya-srv.cjs backend — the exact
-   two-sessions-same-record scenario asked about, using the production code
-   path each dashboard actually runs, not a hand-rolled stand-in for it.
+   The in-memory bucket answers in the same tick, which makes a missing lock
+   invisible, so this suite runs tests/ya-srv.cjs with CM_BUCKET_DELAY_MS: each
+   read and write takes a few milliseconds, as Object Storage does, and two
+   requests fired together interleave exactly as two desks' saves do.
+
+   Driven through two REAL pages — dashboard/ and dashboard-next/, each in its
+   own browser context, each saving the way the page does (optimistic copy on
+   the page, then CMDrive.saveEdit/resolve) — plus raw POSTs for an older
+   client that sends no version, and for two phones' rival copies arriving
+   together (markConflict).
 
    Run: node tests/crossdashedit.cjs   (spawns tests/ya-srv.cjs) */
 const { chromium } = require(require('./pw.cjs'));
@@ -47,10 +41,12 @@ const { spawn } = require('child_process');
 const path = require('path');
 
 const PORT = 8146, B = `http://127.0.0.1:${PORT}`, EXEC = B + '/exec';
+const DELAY = 25;
 const fails = [];
 const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !== undefined ? '   ' + d : '')); if (!c) fails.push(n); };
 
-const srv = spawn(process.execPath, [path.join(__dirname, 'ya-srv.cjs'), String(PORT), 'NONE'], { stdio: 'ignore' });
+const srv = spawn(process.execPath, [path.join(__dirname, 'ya-srv.cjs'), String(PORT), 'NONE'],
+  { stdio: 'ignore', env: Object.assign({}, process.env, { CM_BUCKET_DELAY_MS: String(DELAY) }) });
 const bye = () => { try { srv.kill(); } catch (e) {} };
 process.on('exit', bye); process.on('SIGINT', () => { bye(); process.exit(1); });
 
@@ -62,6 +58,13 @@ const readKey = async k => {
 };
 const putRaw = (k, body) => fetch(B + '/__put?key=' + encodeURIComponent(k) + '&type=application/json', {
   method: 'POST', body: JSON.stringify(body) });
+const postRaw = async body => (await fetch(EXEC, { method: 'POST',
+  headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(body) })).json();
+const backupsOf = async re => {
+  const ks = (await keys()).filter(k => /^_meta\/backup\//.test(k) && re.test(k));
+  return (await Promise.all(ks.map(readKey))).filter(Boolean);
+};
+const wait = ms => new Promise(r => setTimeout(r, ms));
 
 async function boot(b, file) {
   const ctx = await b.newContext({ viewport: { width: 1280, height: 900 } });
@@ -69,102 +72,182 @@ async function boot(b, file) {
   const p = await ctx.newPage();
   const errs = []; p.on('pageerror', e => errs.push(e.message));
   await p.goto(B + '/' + file, { waitUntil: 'load' });
-  await p.waitForFunction(() => window.CMDrive && CMDrive.url, null, { timeout: 15000 });
+  await p.waitForFunction(() => window.CMDrive && CMDrive.url && window.CMDash && CMDash.editBase, null, { timeout: 15000 });
   return { ctx, p, errs };
 }
 
+/* A correction saved the way the page saves one (edPost): the page's own copy
+   first, then the upload. The reply — or the refusal — comes back as data. */
+const deskSave = (desk, payload) => desk.p.evaluate(async pl => {
+  CMDash.setEdits([Object.assign({ at: new Date().toISOString() }, pl)]);
+  try { return { ok: true, r: await CMDrive.saveEdit(pl) }; }
+  catch (e) { return { ok: false, conflict: !!e.conflict, current: e.current || null, msg: String(e.message || e) }; }
+}, payload);
+const deskResolve = (desk, k, keep, by) => desk.p.evaluate(async ({ k, keep, by }) => {
+  try { return { ok: true, r: await CMDrive.resolve(k, keep, by) }; }
+  catch (e) { return { ok: false, conflict: !!e.conflict, current: e.current || null, msg: String(e.message || e) }; }
+}, { k, keep, by });
+/* What this page now believes the server holds for a key. */
+const deskEdit = (desk, k) => desk.p.evaluate(k => {
+  const base = CMDash.editBase(k);
+  return { base };
+}, k);
+
 (async () => {
   for (let i = 0; i < 60; i++) {
-    try { await fetch(EXEC); break; } catch (e) { await new Promise(r => setTimeout(r, 250)); }
+    try { await fetch(EXEC); break; } catch (e) { await wait(250); }
   }
   const b = await chromium.launch();
-  const dashA = await boot(b, 'dashboard/index.html');       // dashboard/
-  const dashB = await boot(b, 'dashboard-next/index.html');  // dashboard-next/
+  const dashA = await boot(b, 'dashboard/index.html');
+  const dashB = await boot(b, 'dashboard-next/index.html');
+  const A_BY = 'R. Marrero (dashboard)', B_BY = 'B. Ivanov (dashboard-next)';
 
-  console.log('\n1. A CORRECTION SAVED ON dashboard-next/ MOMENTS AFTER dashboard/ SAVED ITS OWN');
-  const KEY = 'TK900|2026-01-15|MP';
-  const rA = await dashA.p.evaluate(payload => CMDrive.saveEdit(payload),
-    { key: KEY, by: 'R. Marrero (dashboard)', note: 'from dashboard classic' });
-  ok('  dashboard/\'s own save succeeds', rA && rA.ok === true, JSON.stringify(rA));
-  ok('  and is not itself flagged as overwriting anything (nothing existed yet)', !rA.overwrote, JSON.stringify(rA));
-
-  const rB = await dashB.p.evaluate(payload => CMDrive.saveEdit(payload),
-    { key: KEY, by: 'B. Ivanov (dashboard-next)', note: 'from dashboard-next' });
-  ok('  dashboard-next/\'s own save also succeeds — it is not refused or silently dropped',
-     rB && rB.ok === true, JSON.stringify(rB));
-  ok('  and the reply says whose edit it just replaced',
-     rB.overwrote && rB.overwrote.by === 'R. Marrero (dashboard)', JSON.stringify(rB.overwrote));
-
-  const liveEdit = await readKey('_meta/TK900_15.01.2026_MP.edit.json');
-  ok('  the live document is dashboard-next\'s — the later save, as intended',
-     liveEdit && liveEdit.by === 'B. Ivanov (dashboard-next)' && liveEdit.note === 'from dashboard-next',
-     JSON.stringify(liveEdit));
-
-  const allKeys = await keys();
-  const backupKey = allKeys.find(k => /^_meta\/backup\/.*TK900_15\.01\.2026_MP\.edit\.json$/.test(k));
-  ok('  dashboard/\'s own edit was backed up, not destroyed', !!backupKey, allKeys.filter(k => /backup/.test(k)).join(', '));
-  if (backupKey) {
-    const backedUp = await readKey(backupKey);
-    ok('  and the backup holds dashboard/\'s actual note, recoverable',
-       backedUp && backedUp.by === 'R. Marrero (dashboard)' && backedUp.note === 'from dashboard classic',
-       JSON.stringify(backedUp));
+  console.log('\n1. BOTH DESKS SAVE THE SAME ROUND IN THE SAME INSTANT — NEITHER HAS SEEN A CORRECTION');
+  {
+    const KEY = 'TK900|2026-01-15|MP', FILE = '_meta/TK900_15.01.2026_MP.edit.json';
+    const [rA, rB] = await Promise.all([
+      deskSave(dashA, { key: KEY, by: A_BY, note: 'from dashboard classic' }),
+      deskSave(dashB, { key: KEY, by: B_BY, note: 'from dashboard-next' })]);
+    const wins = [rA, rB].filter(r => r.ok), refused = [rA, rB].filter(r => !r.ok);
+    ok('exactly one of the two saves lands', wins.length === 1, JSON.stringify([rA.ok, rB.ok]));
+    ok('the other is REFUSED as a conflict, not silently written over the top',
+       refused.length === 1 && refused[0].conflict === true, JSON.stringify(refused[0]));
+    const live = await readKey(FILE);
+    const winner = rA.ok ? A_BY : B_BY, loser = rA.ok ? dashB : dashA;
+    ok('the live document is the one save that was accepted', live && live.by === winner, JSON.stringify(live));
+    ok('the refusal hands back what the server holds now — the winner\'s correction',
+       refused[0] && refused[0].current && refused[0].current.by === winner, JSON.stringify(refused[0] && refused[0].current));
+    ok('the refusal says who changed it, in words', refused[0] && /changed by/.test(refused[0].msg || ''), refused[0] && refused[0].msg);
+    await wait(100);
+    const lb = await deskEdit(loser, KEY);
+    ok('the refused desk now holds the server\'s version, so its next save names it',
+       lb.base === String(live && live.at), JSON.stringify(lb) + ' vs ' + (live && live.at));
+    const again = await deskSave(loser, { key: KEY, by: loser === dashA ? A_BY : B_BY, note: 're-applied on top' });
+    ok('re-applied on top of the version it was shown, the refused desk\'s save lands',
+       again.ok === true, JSON.stringify(again));
+    ok('and the reply says whose correction it replaced', again.r && again.r.overwrote && again.r.overwrote.by === winner,
+       JSON.stringify(again.r && again.r.overwrote));
+    const bk = await backupsOf(/TK900_15\.01\.2026_MP\.edit\.json$/);
+    ok('the replaced correction is in _meta/backup/, recoverable', bk.some(d => d.by === winner), JSON.stringify(bk.map(d => d.by)));
   }
 
-  console.log('\n2. A CONFLICT RESOLVED ON dashboard/ MOMENTS AFTER dashboard-next/ ALREADY RESOLVED IT');
-  const CKEY = 'TK901|2026-01-16|MP';
-  const CNAME = '_meta/TK901_16.01.2026_MP.conflict.json';
-  await putRaw(CNAME, { type: 'cm-record-conflict', version: 1, key: CKEY, at: new Date(0).toISOString(),
-    devices: [{ dev: 'DAAAA', file: 'TK901_16.01.2026_MP.json' }, { dev: 'DBBBB', file: 'TK901_16.01.2026_MP~DBBBB.json' }],
-    resolved: false, keep: '', by: '' });
+  console.log('\n2. AN OLDER CLIENT THAT SENDS NO VERSION: TWO SAVES THAT OVERLAP ARE TAKEN IN TURN');
+  {
+    // Before the lock, both requests read "no document", both backed up nothing,
+    // and the first correction was in neither the live file nor any backup.
+    const KEY = 'TK903|2026-01-18|MP', FILE = '_meta/TK903_18.01.2026_MP.edit.json';
+    await postRaw({ op: 'edit', key: KEY, by: 'seed', note: 'v0' });
+    const [r1, r2] = await Promise.all([
+      postRaw({ op: 'edit', key: KEY, by: 'Old desk 1', note: 'v1' }),
+      postRaw({ op: 'edit', key: KEY, by: 'Old desk 2', note: 'v2' })]);
+    ok('both legacy saves are accepted (an older client is never refused for not knowing the rule)',
+       r1.ok === true && r2.ok === true, JSON.stringify([r1, r2]));
+    const live = await readKey(FILE);
+    const other = live && live.note === 'v1' ? 'v2' : 'v1';
+    const bk = await backupsOf(/TK903_18\.01\.2026_MP\.edit\.json$/);
+    const notes = bk.map(d => d.note);
+    ok('the live document is one of the two', live && (live.note === 'v1' || live.note === 'v2'), JSON.stringify(live));
+    ok('and the OTHER is in _meta/backup/ — not lost between two reads of the same prior',
+       notes.includes(other), JSON.stringify(notes));
+    ok('the seed is backed up too: every version that was ever live is somewhere', notes.includes('v0'), JSON.stringify(notes));
+    ok('exactly one save reports overwriting the other desk', [r1, r2].filter(r => r.overwrote && /Old desk/.test(r.overwrote.by)).length === 1,
+       JSON.stringify([r1.overwrote, r2.overwrote]));
+  }
 
-  const rC = await dashB.p.evaluate(({ k, keep, by }) => CMDrive.resolve(k, keep, by),
-    { k: CKEY, keep: 'DBBBB', by: 'B. Ivanov (dashboard-next)' });
-  ok('  dashboard-next/\'s resolution succeeds', rC && rC.ok === true, JSON.stringify(rC));
-  ok('  and is not flagged as overwriting a real decision (there was none yet)', !rC.overwrote, JSON.stringify(rC));
+  console.log('\n3. A DESK THAT HAS NOT PULLED SINCE THE OTHER SAVED IS REFUSED, THEN SUCCEEDS AFTER A PULL');
+  {
+    const KEY = 'TK904|2026-01-19|MP', FILE = '_meta/TK904_19.01.2026_MP.edit.json';
+    const rA = await deskSave(dashA, { key: KEY, by: A_BY, note: 'first' });
+    ok('dashboard/ saves', rA.ok === true, JSON.stringify(rA));
+    const rB = await deskSave(dashB, { key: KEY, by: B_BY, note: 'from a stale screen' });
+    ok('dashboard-next/, still showing no correction, is refused', rB.ok === false && rB.conflict === true, JSON.stringify(rB));
+    const live = await readKey(FILE);
+    ok('and dashboard/\'s correction is untouched on the server', live && live.note === 'first', JSON.stringify(live));
+    await wait(100);
+    const rB2 = await deskSave(dashB, { key: KEY, by: B_BY, note: 'now on top of first' });
+    ok('after taking the server\'s copy, dashboard-next/ saves', rB2.ok === true, JSON.stringify(rB2));
+  }
 
-  const rD = await dashA.p.evaluate(({ k, keep, by }) => CMDrive.resolve(k, keep, by),
-    { k: CKEY, keep: 'DAAAA', by: 'R. Marrero (dashboard)' });
-  ok('  dashboard/\'s later resolution also succeeds — it is not refused', rD && rD.ok === true, JSON.stringify(rD));
-  ok('  and the reply says whose decision it just replaced',
-     rD.overwrote && rD.overwrote.by === 'B. Ivanov (dashboard-next)' && rD.overwrote.keep === 'DBBBB',
-     JSON.stringify(rD.overwrote));
+  console.log('\n4. ONE DESK SAVING THE SAME ROUND TWICE IN QUICK SUCCESSION IS NOT A CLASH WITH ITSELF');
+  {
+    const KEY = 'TK902|2026-01-17|MP', FILE = '_meta/TK902_17.01.2026_MP.edit.json';
+    const before = (await keys()).filter(k => /backup\/.*TK902/.test(k)).length;
+    const [s1, s2] = await Promise.all([
+      deskSave(dashA, { key: KEY, by: A_BY, note: 'first pass' }),
+      deskSave(dashA, { key: KEY, by: A_BY, note: 'second pass' })]);
+    ok('both saves from the same desk land', s1.ok === true && s2.ok === true, JSON.stringify([s1, s2]));
+    ok('neither reports a cross-desk overwrite', !(s1.r && s1.r.overwrote) && !(s2.r && s2.r.overwrote), JSON.stringify([s1.r, s2.r]));
+    const live = await readKey(FILE);
+    ok('the later one is what stands', live && live.note === 'second pass', JSON.stringify(live));
+    const after = (await keys()).filter(k => /backup\/.*TK902/.test(k)).length;
+    ok('the first save backed up nothing (there was nothing before it), the second backed up the first',
+       after - before === 1, `${before} -> ${after}`);
+    const base = await deskEdit(dashA, KEY);
+    ok('the page holds the server\'s own stamp for what it saved', base.base === String(live && live.at), JSON.stringify(base));
+  }
 
-  const liveConf = await readKey(CNAME);
-  ok('  the live marker reflects dashboard/\'s decision — the later write, as intended',
-     liveConf && liveConf.keep === 'DAAAA' && liveConf.by === 'R. Marrero (dashboard)', JSON.stringify(liveConf));
+  console.log('\n5. BOTH DESKS RESOLVE THE SAME CONFLICT IN THE SAME INSTANT');
+  {
+    const CKEY = 'TK901|2026-01-16|MP', CNAME = '_meta/TK901_16.01.2026_MP.conflict.json';
+    const seed = { type: 'cm-record-conflict', version: 1, key: CKEY, at: '2026-01-16T08:00:00.000Z',
+      devices: [{ dev: 'DAAAA', file: 'TK901_16.01.2026_MP.json' }, { dev: 'DBBBB', file: 'TK901_16.01.2026_MP~DBBBB.json' }],
+      resolved: false, keep: '', by: '' };
+    await putRaw(CNAME, seed);
+    // Both desks have read the open marker.
+    await Promise.all([dashA, dashB].map(d => d.p.evaluate(c => CMDash.setConflicts([c]), seed)));
+    const [rA, rB] = await Promise.all([
+      deskResolve(dashA, CKEY, 'DAAAA', A_BY), deskResolve(dashB, CKEY, 'DBBBB', B_BY)]);
+    const wins = [rA, rB].filter(r => r.ok), refused = [rA, rB].filter(r => !r.ok);
+    ok('exactly one decision is recorded', wins.length === 1, JSON.stringify([rA, rB]));
+    ok('the other is refused as a conflict, naming the decision that stands',
+       refused.length === 1 && refused[0].conflict && refused[0].current && refused[0].current.resolved === true,
+       JSON.stringify(refused[0]));
+    const live = await readKey(CNAME);
+    const keepWon = rA.ok ? 'DAAAA' : 'DBBBB';
+    ok('the live marker carries the accepted decision', live && live.resolved && live.keep === keepWon, JSON.stringify(live));
+    const bk = await backupsOf(/TK901_16\.01\.2026_MP\.conflict\.json$/);
+    ok('the open marker it replaced is backed up', bk.some(d => d.resolved === false), JSON.stringify(bk));
+  }
 
-  const allKeys2 = await keys();
-  /* TK901's key gets backed up TWICE here — once when dashboard-next/'s own
-     resolve() backed up the pre-existing, still-unresolved seed marker, and
-     again when dashboard/'s later resolve() backed up dashboard-next/'s now-
-     resolved one. Both are proof the mechanism runs on every overwrite; the
-     one this check needs is whichever backup actually HOLDS dashboard-next/'s
-     decision, found by content rather than by guessing which stamp is which. */
-  const confBackupKeys = allKeys2.filter(k => /^_meta\/backup\/.*TK901_16\.01\.2026_MP\.conflict\.json$/.test(k));
-  ok('  the resolution was backed up at least once, not destroyed', confBackupKeys.length >= 1, confBackupKeys.join(', '));
-  const confBackups = await Promise.all(confBackupKeys.map(readKey));
-  const backedUpConf = confBackups.find(d => d && d.keep === 'DBBBB' && d.by === 'B. Ivanov (dashboard-next)');
-  ok('  and one of the backups holds dashboard-next/\'s actual decision, recoverable',
-     !!backedUpConf, JSON.stringify(confBackups));
+  console.log('\n6. TWO PHONES\' RIVAL COPIES OF ONE ROUND ARRIVE TOGETHER — THE MARKER NAMES BOTH');
+  {
+    // DAAAA owns the round; DBBBB and DCCCC each send their own copy at once.
+    // Before the lock both read "no marker", each wrote [DAAAA, itself], and
+    // whichever wrote second erased the other's entry — a version on the
+    // server that the office was never told about.
+    const NAME = 'TK905_20.01.2026_MP.json', FOLDER = 'MP/2026-01';
+    const body = dev => Buffer.from(JSON.stringify({ type: 'cm-inspection-entries', version: 2,
+      records: [{ equip: 'TK905', date: '2026-01-20', type: 'MP', dev, items: [] }] })).toString('base64');
+    const r0 = await postRaw({ name: NAME, folder: FOLDER, dev: 'DAAAA', file: body('DAAAA'), mime: 'application/json' });
+    ok('the first phone files the round', r0.ok === true, JSON.stringify(r0));
+    const [rB, rC] = await Promise.all([
+      postRaw({ name: NAME, folder: FOLDER, dev: 'DBBBB', file: body('DBBBB'), mime: 'application/json' }),
+      postRaw({ name: NAME, folder: FOLDER, dev: 'DCCCC', file: body('DCCCC'), mime: 'application/json' })]);
+    ok('both rival copies are kept', rB.ok === true && rC.ok === true, JSON.stringify([rB, rC]));
+    const marker = await readKey('_meta/TK905_20.01.2026_MP.conflict.json');
+    const devs = ((marker && marker.devices) || []).map(d => d.dev).sort();
+    ok('the conflict marker lists all three devices', JSON.stringify(devs) === JSON.stringify(['DAAAA', 'DBBBB', 'DCCCC']),
+       JSON.stringify(devs));
+  }
 
-  console.log('\n3. CONTROL: A SOLO EDIT, TOUCHED ONCE, IS NOT FLAGGED AND BACKS UP NOTHING');
-  const before3 = await keys();
-  const soloKey = 'TK902|2026-01-17|MP';
-  const rSolo = await dashA.p.evaluate(payload => CMDrive.saveEdit(payload),
-    { key: soloKey, by: 'R. Marrero (dashboard)', note: 'only ever saved once' });
-  ok('  the solo save succeeds', rSolo && rSolo.ok === true, JSON.stringify(rSolo));
-  ok('  carries no overwrote field — nothing was actually replaced', !rSolo.overwrote, JSON.stringify(rSolo));
-  const after3 = await keys();
-  ok('  and creates no backup at all — there was nothing prior to preserve',
-     after3.filter(k => /backup/.test(k)).length === before3.filter(k => /backup/.test(k)).length,
-     `${before3.length} -> ${after3.length} total keys`);
+  console.log('\n7. CONTROL: A SOLO EDIT, TOUCHED ONCE, IS NOT FLAGGED AND BACKS UP NOTHING');
+  {
+    const before = (await keys()).filter(k => /backup/.test(k)).length;
+    const r = await deskSave(dashB, { key: 'TK906|2026-01-21|MP', by: B_BY, note: 'only ever saved once' });
+    ok('the solo save succeeds', r.ok === true, JSON.stringify(r));
+    ok('carries no overwrote field', !(r.r && r.r.overwrote), JSON.stringify(r.r));
+    ok('and returns the server\'s stamp', !!(r.r && r.r.at), JSON.stringify(r.r));
+    const after = (await keys()).filter(k => /backup/.test(k)).length;
+    ok('and creates no backup', after === before, `${before} -> ${after}`);
+  }
 
-  console.log('\n4. CONTROL: SAVING THE SAME EDIT AGAIN FROM THE SAME DESK IS NOT MISREAD AS A CLASH');
-  const rResave = await dashA.p.evaluate(payload => CMDrive.saveEdit(payload),
-    { key: soloKey, by: 'R. Marrero (dashboard)', note: 'a small correction to my own note' });
-  ok('  the re-save succeeds', rResave && rResave.ok === true, JSON.stringify(rResave));
-  ok('  same author overwriting their own prior note is not reported as a cross-desk clash',
-     !rResave.overwrote, JSON.stringify(rResave));
+  console.log('\n8. WHAT THE EDIT DRAWER SAYS WHEN A SAVE IS REFUSED');
+  for (const [name, d] of [['dashboard/', dashA], ['dashboard-next/', dashB]]) {
+    const m = await d.p.evaluate(() => edErr({ conflict: true, current: { by: 'A. Desk', at: '2026-10-01T06:07:08.000Z' } }));
+    ok(`${name}: names who changed it and when, in the page's own words`, /A\. Desk/.test(m) && /2026-10-01 06:07/.test(m) && !/\{by\}|\{at\}/.test(m), m);
+    const plain = await d.p.evaluate(() => edErr(new Error('HTTP 500 — boom')));
+    ok(`${name}: any other failure still reads as itself`, plain === 'HTTP 500 — boom', plain);
+  }
 
   const noErrs = dashA.errs.length === 0 && dashB.errs.length === 0;
   ok('no page errors on either dashboard', noErrs, dashA.errs.concat(dashB.errs).slice(0, 3).join(' | ') || 'none');

@@ -269,16 +269,20 @@ records. The response also carries an `overwrote: {by, at}` (or
 from a different author, or an already-resolved conflict with a different
 decision — is what just got replaced.
 
-**What this does NOT do.** It does not make the two writes atomic, and it
-does not (today) surface any warning to either desk in real time — the
-second, later save still silently becomes the live document, exactly as
-before this fix. What changed is that the loser is now recoverable from
-`_meta/backup/` rather than destroyed without a trace, and the fact that an
-overwrite happened is on the wire the moment it does, ready for a future UI
-to show it — a smaller, certain fix rather than a larger, riskier one
-attempted under time pressure.
+**Superseded 2026-10-01 — the write is now checked, not only backed up.**
+The backup alone missed two saves that overlap: both read the same prior,
+both backed it up, and the first desk's correction was in neither the live
+document nor any backup. `saveEdit()`, `resolveConflict()` and
+`markConflict()` now run under a per-document lock, and a save naming a
+stale version (`ifAt`) is refused with `conflict:true` and the server's
+current copy, which the page then shows with who changed it and when. Both
+dashboards load the same `dashboard/drive.js` and carry the same
+`editBase`/`stampEdit`/`adoptEdit`/`conflictBase` hooks and `ed_conflict_by`
+wording — no difference between the two surfaces here. See CLAUDE.md's
+"TWO OFFICE DASHBOARDS" section for the full account.
 
-Proven by `tests/crossdashedit.cjs`, which drives this through two real
+Proven (the original, sequential version — rewritten 2026-10-01 to fire
+concurrent saves; see above) by `tests/crossdashedit.cjs`, which drives this through two real
 browser contexts — one loading `dashboard/index.html`, one loading
 `dashboard-next/index.html`, both pointed at the same real
 `docs/yandex/function.js` (via `tests/ya-srv.cjs`) — rather than a bare

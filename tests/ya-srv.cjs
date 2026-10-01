@@ -66,14 +66,21 @@ const FN = require(path.join(ROOT, 'docs/yandex/function.js'));
    require() cannot reach. So the module is re-evaluated here with those four
    bound to the bucket above — same source, same closure, different floor. */
 const src = fs.readFileSync(path.join(ROOT, 'docs/yandex/function.js'), 'utf8');
+/* CM_BUCKET_DELAY_MS gives every read and write the round trip a real bucket
+   has. In memory a read and the write after it happen in one tick, so two
+   requests for one document can never interleave and a missing lock is
+   invisible; with a few milliseconds between them they interleave exactly as
+   two desks' saves do against Object Storage (tests/crossdashedit.cjs). */
 const shim = `
+  const NAP_ = Number(process.env.CM_BUCKET_DELAY_MS || 0);
+  const nap_ = () => NAP_ ? new Promise(r => setTimeout(r, NAP_)) : Promise.resolve();
   listAll = async prefix => BUCKET_.list(prefix || '');
-  getObj = async key => { const o = BUCKET_.get(key); if (!o) throw new Error('S3 404: ' + key);
+  getObj = async key => { await nap_(); const o = BUCKET_.get(key); if (!o) throw new Error('S3 404: ' + key);
     return { status: 200, body: o.buf, headers: Object.assign(
       { 'content-type': o.type, 'x-amz-meta-cm-dev': o.dev }, o.meta || {}) }; };
-  headObj = async key => { const o = BUCKET_.get(key); return o ? { status: 200, body: Buffer.alloc(0),
+  headObj = async key => { await nap_(); const o = BUCKET_.get(key); return o ? { status: 200, body: Buffer.alloc(0),
     headers: Object.assign({ 'content-type': o.type, 'x-amz-meta-cm-dev': o.dev }, o.meta || {}) } : null; };
-  putObj = async (key, buf, type, dev, meta) => { BUCKET_.put(key, buf, type, dev, meta); return { status: 200 }; };
+  putObj = async (key, buf, type, dev, meta) => { await nap_(); BUCKET_.put(key, buf, type, dev, meta); return { status: 200 }; };
   delObj = async key => { BUCKET_.del(key); return { status: 204 }; };
 `;
 const body = src

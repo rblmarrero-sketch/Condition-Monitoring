@@ -179,18 +179,45 @@ used for an admin rewrite, and a location the reader already excludes from
 live records) before every overwrite, and the response carries an
 `overwrote: {by, at}` (or `{by, keep, at}` for a resolution) field whenever
 a real prior document — from a different author, or an already-resolved
-conflict with a different decision — is what got replaced. **This does not
-make the two writes atomic, and does not (yet) surface a warning to either
-desk in real time** — a second, later save still wins and becomes the live
-document, exactly as before. What changed is that the loser is now
-recoverable from `_meta/backup/` rather than gone without a trace, and the
-fact that an overwrite happened is on the wire if a future UI wants to show
-it. `tests/crossdashedit.cjs` proves the backup and the `overwrote` field
-directly against the real backend, for both `saveEdit()` and
-`resolveConflict()`, plus that an ordinary solo save is untouched by any
-of it. `docs/google-upload.gs` carries the identical fix, unreached by
-this live traffic but kept in the field-for-field agreement CLAUDE.md
-requires of it.
+conflict with a different decision — is what got replaced.
+
+**The audit of 2026-10-01 showed that backup was not enough, and the write
+is now checked.** The backup above copied "the prior document" — but two
+saves that OVERLAP (B reads before A writes) both read the same prior, both
+back it up, and A's correction lands in neither the live file nor any
+backup. The old `tests/crossdashedit.cjs` fired its two saves one after the
+other, so it could never see this. Three things now hold in
+`docs/yandex/function.js`: every read-decide-write of an edit or conflict
+document — `saveEdit()`, `resolveConflict()` and the phones' own
+`markConflict()` — runs under `withDocLock(path)`, a per-document lock, so
+overlapping requests are taken in turn; a client that names the version it
+edited (`ifAt`, the server-stamped `at`; `""` = "I saw none") is REFUSED
+with `{ok:false, conflict:true, current}` when that is no longer the
+version on the server (`staleWrite()`, the same idea as `rewriteObject()`'s
+`ifSha`); and whatever is replaced is still backed up first. **The lock is
+per process** — true of this deployment (`server.js`, one Node process, one
+VM) and not true of a multi-instance cloud function; say so before ever
+moving it to one. A request with no `ifAt` is an older client and is let
+through (serialised and backed up), never refused for predating the rule.
+
+On the page: `CMDrive.saveEdit` reads the version from `CMDash.editBase(key)`
+at the moment the request goes out (a copy from the folder carries the
+server's `at` as `_srvAt`; an optimistic copy inherits it), queues saves of
+one key from one desk one after another so a desk never clashes with
+itself, and stamps the server's reply onto the page (`stampEdit`). A
+refusal rolls the optimistic copy back as any failure does, then puts the
+server's copy on the page (`adoptEdit`) and says who changed it and when
+(`ed_conflict_by`), in the page's language. `CMDrive.resolve` names the marker's
+`at` the same way (`conflictBase`). `tests/crossdashedit.cjs` runs
+`tests/ya-srv.cjs` with `CM_BUCKET_DELAY_MS` so reads and writes take real
+time and two requests genuinely interleave, and fires them with
+`Promise.all`: two desks saving at once (one lands, one is refused and
+then lands on top), two older clients at once (both kept, one live and one
+in backup), two desks resolving at once, two phones' rival copies at once
+(the marker names all three devices). Run against the pre-fix function it
+fails 14 assertions, two of them outright data loss. `docs/google-upload.gs`
+carries the identical check under `LockService`, unreached by live traffic
+but kept in the field-for-field agreement this file requires of it.
 
 ---
 

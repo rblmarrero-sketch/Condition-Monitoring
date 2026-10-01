@@ -380,6 +380,61 @@ async function readFiles(ids) {
   return { ok: true, files };
 }
 
+/* ONE WRITER AT A TIME PER DOCUMENT.
+
+   saveEdit(), resolveConflict() and markConflict() each read a small JSON
+   document, decide something from it, and write it back. Two requests for the
+   same document that interleave — B reads before A writes — leave A's write
+   with nothing to answer for it: B's backup (or B's device list) was built
+   from the copy A was about to replace. The Sep 30 backup fix narrowed that
+   to a window; this closes it. Every read-decide-write of one of these
+   documents runs inside withDocLock(path), so the second request reads what
+   the first wrote, and its version check (below) or its merged device list is
+   computed against the truth.
+
+   The lock is per process. That is the whole deployment: server.js runs this
+   file in ONE Node process on one VM (docs/yandex/VM-SETUP.md). Run it as a
+   multi-instance cloud function and this guarantee is gone — say so before
+   doing that. */
+/* A backup's name must be unique, not merely timestamped: two saves taken one
+   after the other inside the same millisecond would otherwise back up to the
+   same path, and the second backup would erase the first — the very loss the
+   backup exists to prevent. */
+let BACKUP_SEQ = 0;
+const backupPath = name => META_DIR + '/backup/' + new Date().toISOString().replace(/[:.]/g, '-')
+  + '-' + String(++BACKUP_SEQ % 1e6).padStart(6, '0') + '/' + name;
+const DOC_LOCKS = new Map();
+async function withDocLock(path, fn) {
+  const prev = DOC_LOCKS.get(path) || Promise.resolve();
+  let release;
+  const mine = new Promise(r => { release = r; });
+  const tail = prev.then(() => mine);
+  DOC_LOCKS.set(path, tail);
+  await prev;
+  try { return await fn(); }
+  finally { release(); if (DOC_LOCKS.get(path) === tail) DOC_LOCKS.delete(path); }
+}
+
+/* THE CLIENT SAYS WHICH VERSION IT EDITED, AND A STALE ONE IS REFUSED.
+
+   The same idea as rewriteObject()'s `ifSha`, on the field these documents
+   already carry: `at` is stamped by THIS backend on every write, so it names a
+   version as surely as a hash and the dashboard already holds it (it arrives
+   whole in every records pull). `ifAt: ""` means "I saw no document". A
+   request that does not send `ifAt` at all is an older client — it is let
+   through as before (serialised, backed up), never refused for not knowing a
+   rule it predates. */
+function staleWrite(b, prior, what) {
+  if (!b || !Object.prototype.hasOwnProperty.call(b, 'ifAt') || b.ifAt === null || b.ifAt === undefined) return null;
+  const curAt = prior ? String(prior.at || '') : '';
+  if (String(b.ifAt) === curAt) return null;
+  return { ok: false, conflict: true, current: prior || null,
+           error: prior
+             ? 'This ' + what + ' was changed by ' + (prior.by || 'someone') + ' at ' + curAt
+               + ' after this page read it. Nothing was saved — reload and re-apply your change.'
+             : 'This ' + what + ' was removed after this page read it. Nothing was saved — reload and re-apply your change.' };
+}
+
 /* "UNIT|2026-03-09|MP" -> "UNIT_09.03.2026_MP" + ext, matching the sidecars. */
 function keyFile(key, ext) {
   const p = String(key || '').split('|');
@@ -419,6 +474,11 @@ async function markConflict(fileName, rival, dev) {
   const key = keyFromSidecar(fileName);
   if (!key) return null;
   const name = META_DIR + '/' + fileName.replace(/\.json$/i, '.conflict.json');
+  /* Read-merge-write under the document's lock: two phones' rival copies
+     arriving together each read the marker, each added their own device, and
+     whichever wrote second erased the other's entry — a version on the server
+     that the marker, the office and every phone then never heard of. */
+  return withDocLock(name, async () => {
   let doc = null;
   try { doc = JSON.parse((await getObj(name)).body.toString('utf8')); } catch (e) { doc = null; }
   const devices = devList(doc);
@@ -436,6 +496,7 @@ async function markConflict(fileName, rival, dev) {
   try { await putObj(name, Buffer.from(JSON.stringify(out, null, 2)), 'application/json'); }
   catch (e) { return null; }
   return { key, devices };
+  });
 }
 
 /* A correction is its own small file that nothing else ever touches.
@@ -453,23 +514,28 @@ async function saveEdit(b) {
      a typed-in name in cm_dash_who. Confirmed directly against this function
      (not inferred from reading it): two saves of the same key, seconds
      apart, and the second's putObj() below silently and permanently erased
-     every field of the first — its note, its fields, its assignments — with
-     no trace anywhere. The prior document is backed up here, the same
-     _meta/backup/ pattern rewriteObject() already uses for an admin rewrite,
-     so a losing edit is recoverable rather than gone; `overwrote` on the
-     response names who and when, so a future UI can warn instead of staying
-     silent. This does not make the two writes atomic — nothing here reads
-     the object back and refuses a change since it was read the way
-     rewriteObject()'s own `ifSha` can — it only guarantees the loser is
-     never destroyed outright. */
+     every field of the first, with no trace anywhere.
+
+     Three things now hold, in this order. The whole read-check-write runs
+     under withDocLock(), so two saves that arrive together are taken one
+     after the other and the second reads what the first wrote — the Sep 30
+     fix backed up "the prior document", but a second request that READ
+     before the first WROTE backed up the wrong one, and the first was lost
+     with nothing in _meta/backup/ (the audit of 2026-10-01, reproduced in
+     tests/crossdashedit.cjs with real concurrent requests). A client that
+     says which version it edited (`ifAt`) is refused, loudly, if that is no
+     longer the version on the server — staleWrite(). And whatever is replaced
+     is still backed up first, so even an older client that sends no version
+     never destroys anybody's correction outright. */
+  return withDocLock(path, async () => {
   let prior = null;
   try { prior = JSON.parse((await getObj(path)).body.toString('utf8')); } catch (e) { prior = null; }
+  const refused = staleWrite(b, prior, 'correction');
+  if (refused) return refused;
   let overwrote = null;
   if (prior) {
-    const stamp = new Date().toISOString().replace(/[:.]/g, '-');
     try {
-      await putObj(META_DIR + '/backup/' + stamp + '/' + name,
-                    Buffer.from(JSON.stringify(prior, null, 2)), 'application/json');
+      await putObj(backupPath(name), Buffer.from(JSON.stringify(prior, null, 2)), 'application/json');
     } catch (e) {}
     if ((prior.by || '') !== (b.by || '')) overwrote = { by: prior.by || '', at: prior.at || '' };
   }
@@ -513,9 +579,13 @@ async function saveEdit(b) {
                 items: b.items || null };
   await putObj(path, Buffer.from(JSON.stringify(doc, null, 2)), 'application/json');
   await touchIndex();
-  const out = { ok: true, saved: name };
+  /* `at` goes back so the client can hold the version the SERVER stamped —
+     the next save from the same desk names it as its `ifAt`, and a desk that
+     kept its own clock's stamp would be refused against its own correction. */
+  const out = { ok: true, saved: name, at: doc.at };
   if (overwrote) out.overwrote = overwrote;
   return out;
+  });
 }
 
 async function deleteRecord(b) {
@@ -675,8 +745,17 @@ async function resolveConflict(b) {
   const keep = String(b.keep || b.dev || '').replace(/[^A-Za-z0-9_-]+/g, '').slice(0, 24);
   if (!keep) return { ok: false, error: 'No device named to keep for ' + b.key };
   const name = META_DIR + '/' + file;
+  /* THE SAME GAP AS saveEdit(), CLOSED THE SAME WAY. Under the marker's lock
+     (shared with markConflict(), so a phone's new copy and an office decision
+     cannot cross either); a decision made against a marker that has since
+     changed — another desk decided, or a new device's copy re-opened it — is
+     refused rather than recorded over the top; and whatever is replaced is
+     still backed up first. */
+  return withDocLock(name, async () => {
   let doc = null;
   try { doc = JSON.parse((await getObj(name)).body.toString('utf8')); } catch (e) { doc = null; }
+  const refused = staleWrite(b, doc, 'conflict');
+  if (refused) return refused;
   const devices = devList(doc);
   /* The Apps Script refuses a device the marker does not name. Here the marker
      may legitimately be missing — the dashboard also raises the question when
@@ -685,19 +764,10 @@ async function resolveConflict(b) {
      those undecidable for ever, so the decision is recorded rather than
      rejected, and the kept device joins the list. */
   if (!devices.some(d => d.dev === keep)) devices.push({ dev: keep, file: '' });
-  /* THE SAME GAP AS saveEdit(), ONE FUNCTION OVER. This reads `doc` and then
-     writes a new one with no check that nothing landed in between — a
-     read-then-write with no atomicity, confirmed directly against this
-     function to silently replace one dashboard's resolution with another's,
-     with the first decision left nowhere. Backed up for the identical
-     reason: not made atomic (that would need a device id and a rival-file
-     reader this format has never had), but never destroyed without a trace. */
   let overwrote = null;
   if (doc) {
-    const stamp = new Date().toISOString().replace(/[:.]/g, '-');
     try {
-      await putObj(META_DIR + '/backup/' + stamp + '/' + file,
-                    Buffer.from(JSON.stringify(doc, null, 2)), 'application/json');
+      await putObj(backupPath(file), Buffer.from(JSON.stringify(doc, null, 2)), 'application/json');
     } catch (e) {}
     if (doc.resolved && (doc.keep !== keep || (doc.by || '') !== String(b.by || '').slice(0, 80))) {
       overwrote = { by: doc.by || '', keep: doc.keep || '', at: doc.at || '' };
@@ -711,6 +781,7 @@ async function resolveConflict(b) {
   const res = { ok: true, key: out.key, resolved: out.key, keep, at: out.at };
   if (overwrote) res.overwrote = overwrote;
   return res;
+  });
 }
 
 /* When the folder last changed, so a client can ask "anything new?" for the
