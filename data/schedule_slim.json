@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-01T09:02:36+00:00",
+  "generated": "2026-10-01T09:32:53+00:00",
   "byUnit": {
     "BL001": [
       {
@@ -1549,6 +1549,24 @@
       "type": "250 Hours service Planned",
       "hours": 250,
       "plan": "2026-10-18",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-018639",
+      "equip": "DZ011",
+      "cls": "DOZ",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-17",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-10-17",
       "status": "Elimination scheduled",
       "request": "",
       "defType": "",
