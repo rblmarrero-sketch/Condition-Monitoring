@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-01T12:27:48+00:00",
+  "generated": "2026-10-01T12:57:38+00:00",
   "source": "https://askpi.94-131-94-152.sslip.io/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 682,
@@ -19274,9 +19274,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-10-02",
-      "planStartDt": "2026-10-02T00:00:00",
-      "planEnd": "2026-10-03",
+      "planStart": "2026-09-30",
+      "planStartDt": "2026-09-30T01:50:00",
+      "planEnd": "2026-09-30",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -51971,15 +51971,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
-      "planStart": "2026-10-01",
-      "planStartDt": "2026-10-01T00:00:00",
-      "planEnd": "2026-10-02",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
+      "planStart": "2026-09-30",
+      "planStartDt": "2026-09-30T20:20:00",
+      "planEnd": "2026-09-30",
+      "actualStart": "2026-09-30",
+      "actualStartDt": "2026-09-30T20:20:00",
+      "actualEnd": "2026-09-30"
     },
     {
       "equip": "TK122",
