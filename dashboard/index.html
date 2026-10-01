@@ -3789,23 +3789,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=497"></script>
+<script src="../data/magnetic_plug.js?v=498"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=497"></script>
-<script src="../mobile/hme.js?v=497"></script>
-<script src="../mobile/mp-fc.js?v=497"></script>
-<script src="../mobile/rtw.js?v=497"></script>
-<script src="../mobile/hme-cascade.js?v=497"></script>
-<script src="../mobile/temp-limits.js?v=497"></script>
+<script src="../data/work_orders.js?v=498"></script>
+<script src="../mobile/hme.js?v=498"></script>
+<script src="../mobile/mp-fc.js?v=498"></script>
+<script src="../mobile/rtw.js?v=498"></script>
+<script src="../mobile/hme-cascade.js?v=498"></script>
+<script src="../mobile/temp-limits.js?v=498"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=497"></script>
-<script src="../mobile/normalize.js?v=497"></script>
-<script src="../mobile/terms.js?v=497"></script>
+<script src="../mobile/assets.js?v=498"></script>
+<script src="../mobile/normalize.js?v=498"></script>
+<script src="../mobile/terms.js?v=498"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -3824,19 +3824,19 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=497"></script>
-<script src="../mobile/edits.js?v=497"></script>
-<script src="../mobile/due.js?v=497"></script>
-<script src="../mobile/wear.js?v=497"></script>
-<script src="../mobile/wear-map.js?v=497"></script>
-<script src="../mobile/lube.js?v=497"></script>
-<script src="../mobile/lube-overrides.js?v=497"></script>
-<script src="../mobile/lube2027.js?v=497"></script>
-<script src="../mobile/lube-tds.js?v=497"></script>
+<script src="../mobile/grade.js?v=498"></script>
+<script src="../mobile/edits.js?v=498"></script>
+<script src="../mobile/due.js?v=498"></script>
+<script src="../mobile/wear.js?v=498"></script>
+<script src="../mobile/wear-map.js?v=498"></script>
+<script src="../mobile/lube.js?v=498"></script>
+<script src="../mobile/lube-overrides.js?v=498"></script>
+<script src="../mobile/lube2027.js?v=498"></script>
+<script src="../mobile/lube-tds.js?v=498"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=497"></script>
-<script src="../mobile/machine-photos.js?v=497"></script>
+<script src="../mobile/upload-defaults.js?v=498"></script>
+<script src="../mobile/machine-photos.js?v=498"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3845,17 +3845,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=497"></script>
-<script src="../mobile/get.js?v=497"></script>
-<script src="../mobile/points.js?v=497"></script>
-<script src="../mobile/uc-points.js?v=497"></script>
-<script src="../mobile/inspect-guide.js?v=497"></script>
-<script src="../mobile/get-figs.js?v=497"></script>
-<script src="../mobile/body-points.js?v=497"></script>
-<script src="../mobile/body-map.js?v=497"></script>
-<script src="../mobile/jspdf.umd.min.js?v=497"></script>
-<script src="../mobile/html2canvas.min.js?v=497"></script>
-<script src="../mobile/report-core.js?v=497"></script>
+<script src="../mobile/machine-fig.js?v=498"></script>
+<script src="../mobile/get.js?v=498"></script>
+<script src="../mobile/points.js?v=498"></script>
+<script src="../mobile/uc-points.js?v=498"></script>
+<script src="../mobile/inspect-guide.js?v=498"></script>
+<script src="../mobile/get-figs.js?v=498"></script>
+<script src="../mobile/body-points.js?v=498"></script>
+<script src="../mobile/body-map.js?v=498"></script>
+<script src="../mobile/jspdf.umd.min.js?v=498"></script>
+<script src="../mobile/html2canvas.min.js?v=498"></script>
+<script src="../mobile/report-core.js?v=498"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -4243,7 +4243,7 @@ const I18N={
   sy_diag:"Admin diagnostics", sy_diag_h:"Field diagnostics",
   sy_dev_h:"Device activity", sy_dev_refresh:"Check builds & storage",
   sy_dev_sub:"Last activity and the last round sent come from every inspection already on the server — no extra request. Build and storage come from that phone's own diagnostic trace, fetched only when asked, because it is one request per phone rather than one per page load. A phone that has never sent a diagnostic trace shows activity with no build or storage figure, not zero.",
-  sy_dev_col_dev:"Device", sy_dev_col_last:"Last activity", sy_dev_col_round:"Last round",
+  sy_dev_col_holder:"Assigned to", sy_dev_noholder:"not assigned", sy_dev_col_dev:"Device", sy_dev_col_last:"Last activity", sy_dev_col_round:"Last round",
   sy_dev_col_build:"Build", sy_dev_col_storage:"Storage",
   sy_dev_none:"No device has synced a round yet.",
   sy_dev_nodiag:"no trace received", sy_dev_checking:"Checking…",
@@ -5150,7 +5150,7 @@ const I18N={
   sy_diag:"Диагностика (администратор)", sy_diag_h:"Диагностика полей",
   sy_dev_h:"Активность устройств", sy_dev_refresh:"Проверить сборки и память",
   sy_dev_sub:"Последняя активность и последний отправленный осмотр берутся из осмотров, уже находящихся на сервере — без дополнительного запроса. Сборка и объём памяти берутся из диагностического отчёта телефона и запрашиваются только по нажатию, потому что это один запрос на телефон, а не один на каждую загрузку страницы. Телефон, ни разу не отправивший диагностический отчёт, показывает активность без сборки и памяти, а не ноль.",
-  sy_dev_col_dev:"Устройство", sy_dev_col_last:"Последняя активность", sy_dev_col_round:"Последний осмотр",
+  sy_dev_col_holder:"Закреплён за", sy_dev_noholder:"не закреплён", sy_dev_col_dev:"Устройство", sy_dev_col_last:"Последняя активность", sy_dev_col_round:"Последний осмотр",
   sy_dev_col_build:"Сборка", sy_dev_col_storage:"Память",
   sy_dev_none:"Ни одно устройство ещё не отправляло осмотр.",
   sy_dev_nodiag:"отчёт не получен", sy_dev_checking:"Проверка…",
@@ -17216,7 +17216,9 @@ function deviceActivity(){
     if(!r || !r.dev || r._void) return;
     const at=Date.parse(r.created||"")||Date.parse(r.date||"")||0;
     const cur=by.get(r.dev);
-    if(!cur || at>cur.at) by.set(r.dev, { dev:r.dev, at, equip:r.equip||"", type:r.type||"", date:r.date||"" });
+    if(!cur || at>cur.at) by.set(r.dev, { dev:r.dev, at, equip:r.equip||"", type:r.type||"", date:r.date||"",
+      /* Whose phone it is, from its newest round (the phone's Settings). */
+      holder:r.holder||"", holderBadge:r.holderBadge||"" });
   });
   return [...by.values()].sort((a,b)=>b.at-a.at);
 }
@@ -17986,10 +17988,12 @@ function renderSync(){
         const roundCell=[d.equip, TYPE_LABEL[d.type]||d.type, d.date].filter(Boolean).map(esc).join(" · ");
         const buildCell=diag ? esc(diag.build||"—") : `<span class="muted">${esc(t("sy_dev_nodiag"))}</span>`;
         const pctCell=diag && diag.pct!=null ? esc(diag.pct)+"%" : (diag ? "—" : "");
-        return `<tr><td>${esc(d.dev)}</td><td>${lastCell}</td><td>${roundCell}</td><td>${buildCell}</td><td>${pctCell}</td></tr>`;
+        const holderCell=d.holder ? esc(d.holder)+(d.holderBadge?` <span class="muted">${esc(d.holderBadge)}</span>`:"")
+          : `<span class="muted">${esc(t("sy_dev_noholder"))}</span>`;
+        return `<tr><td>${esc(d.dev)}</td><td>${holderCell}</td><td>${lastCell}</td><td>${roundCell}</td><td>${buildCell}</td><td>${pctCell}</td></tr>`;
       });
       devTbl.innerHTML = rows.length
-        ? `<thead><tr><th>${esc(t("sy_dev_col_dev"))}</th><th>${esc(t("sy_dev_col_last"))}</th>`
+        ? `<thead><tr><th>${esc(t("sy_dev_col_dev"))}</th><th>${esc(t("sy_dev_col_holder"))}</th><th>${esc(t("sy_dev_col_last"))}</th>`
           + `<th>${esc(t("sy_dev_col_round"))}</th><th>${esc(t("sy_dev_col_build"))}</th>`
           + `<th>${esc(t("sy_dev_col_storage"))}</th></tr></thead><tbody>${rows.join("")}</tbody>`
         : `<tbody><tr><td class="empty">${esc(t("sy_dev_none"))}</td></tr></tbody>`;
@@ -18659,10 +18663,10 @@ document.querySelector(".lang").addEventListener("click",e=>{
   setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 })();
 </script>
-<script src="drive.js?v=497"></script>
-<script src="sync-adapter.js?v=497"></script>
-<script src="report.js?v=497"></script>
-<script src="reliability.js?v=497"></script>
+<script src="drive.js?v=498"></script>
+<script src="sync-adapter.js?v=498"></script>
+<script src="report.js?v=498"></script>
+<script src="reliability.js?v=498"></script>
 <script>
 /* THE CLOSED FILTER SAYS WHAT IS CHOSEN. A dropdown narrower than its option
    text ellipsises ("All t…", audit of 2026-10-01). Between 1331 and 1500 px
