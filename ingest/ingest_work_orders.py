@@ -87,7 +87,7 @@ import re
 import sys
 import urllib.request
 import ssl
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 DEFAULT_SOURCE = "https://askpi.94-131-94-152.sslip.io/WO.xlsx"
@@ -546,6 +546,120 @@ def build_rtw_open(work_orders, cm_dedup, as_of=None):
     return out
 
 
+
+# ---- RELIABILITY: THE CORRECTIVE WORK ORDERS ------------------------------
+# MTBF, MTTR and availability (dashboard/reliability.js) are worked out from
+# the work orders this script used to throw away: everything that is NOT a
+# planned hour-tier service. 1C carries what the three numbers need on the
+# same row -- the priority (P1 is a breakdown, and the workbook counts them:
+# "Count of break down from p1"), the actual start and end, the actual
+# duration and the downtime it booked. Nothing is decided here about what a
+# failure IS; every corrective row inside the window is kept with those
+# fields, and reliability.js applies one stated rule to them, so the rule can
+# be read and changed in one place. What 1C actually wrote in each column is
+# counted (`relProfile`) so a column that stops arriving, or arrives in a
+# shape this file does not read, is a number on the office screen and not a
+# silent zero.
+REL_WINDOW_DAYS = 400      # a year of history plus a margin for the 365-day view
+REL_COLUMNS = {
+    "dur": "Duration actual hours",
+    "down": "Down time by documents",
+    "downReg": "Down time by accamulation register per period",
+    "bd": "Count of break down from p1",
+    "op": "Operation time during defect registration",
+}
+_HHMM_RE = re.compile(r"^\s*(\d+)\s*:\s*(\d{1,2})(?::\d{1,2})?\s*$")
+
+
+def parse_hours(v):
+    """An hours cell, whatever 1C put in it. Returns (hours or None, shape)
+    where shape is one of num / hhmm / blank / other, for relProfile."""
+    if v is None or (isinstance(v, str) and not v.strip()):
+        return None, "blank"
+    if isinstance(v, bool):
+        return None, "other"
+    if isinstance(v, (int, float)):
+        return float(v), "num"
+    if isinstance(v, timedelta):
+        return v.total_seconds() / 3600.0, "num"
+    s = str(v).strip().replace(" ", "").replace(" ", "")
+    m = _HHMM_RE.match(s)
+    if m:
+        return int(m.group(1)) + int(m.group(2)) / 60.0, "hhmm"
+    try:
+        return float(s.replace(",", ".")), "num"
+    except ValueError:
+        return None, "other"
+
+
+def rel_event(get, equip, since_iso):
+    """One corrective work order as reliability.js reads it, or None when the
+    row is a planned service, has not started, or started before the window.
+    `get(name)` returns the raw cell for a workbook column (None if absent)."""
+    mt = str(get("Maintenence type") or "").strip()
+    if PLANNED_SERVICE_RE.match(mt):
+        return None
+    s_d, s_dt = parse_1c_date(get("Start date actual"))
+    if not s_d or s_d < since_iso:
+        return None
+    e_d, e_dt = parse_1c_date(get("End date actual"))
+    dur, dur_k = parse_hours(get(REL_COLUMNS["dur"]))
+    down, down_k = parse_hours(get(REL_COLUMNS["down"]))
+    reg, reg_k = parse_hours(get(REL_COLUMNS["downReg"]))
+    bd, _ = parse_hours(get(REL_COLUMNS["bd"]))
+    op, _ = parse_hours(get(REL_COLUMNS["op"]))
+    wo = str(get("Work order number") or "").strip() or None
+    wr = str(get("Work request number") or "").strip() or None
+    return {
+        "equip": equip.upper(),
+        "wo": wo, "wr": wr,
+        "mt": mt or None,
+        "priority": str(get("Priority") or "").strip() or None,
+        "start": s_d, "startDt": s_dt, "end": e_d, "endDt": e_dt,
+        "durH": dur, "downH": down if down is not None else reg,
+        "downFrom": "docs" if down is not None else ("register" if reg is not None else None),
+        "bd": int(bd) if bd else 0,
+        "opH": op,
+        "_shape": {"dur": dur_k, "down": down_k, "downReg": reg_k},
+    }
+
+
+def merge_rel(events):
+    """1C repeats a work order per line item (see the DEDUPE note): one
+    event per work order (or request, or unit+start+type when it has
+    neither), keeping the largest figure each repeat carried."""
+    by = {}
+    for e in events:
+        k = e["wo"] or e["wr"] or (e["equip"], e["startDt"], e["mt"])
+        cur = by.get(k)
+        if cur is None:
+            by[k] = dict(e)
+            continue
+        for f in ("durH", "downH", "opH"):
+            if e[f] is not None and (cur[f] is None or e[f] > cur[f]):
+                cur[f] = e[f]
+                if f == "downH":
+                    cur["downFrom"] = e["downFrom"]
+        cur["bd"] = max(cur["bd"], e["bd"])
+        if not cur["endDt"] and e["endDt"]:
+            cur["end"], cur["endDt"] = e["end"], e["endDt"]
+    out = sorted(by.values(), key=lambda e: (e["equip"], e["startDt"] or ""))
+    return out
+
+
+def rel_profile(events):
+    """What 1C wrote, counted: the maintenance types and priorities the
+    window holds, and the shape every hours cell arrived in."""
+    prof = {"maintType": {}, "priority": {}, "shape": {}}
+    for e in events:
+        prof["maintType"][e["mt"] or ""] = prof["maintType"].get(e["mt"] or "", 0) + 1
+        prof["priority"][e["priority"] or ""] = prof["priority"].get(e["priority"] or "", 0) + 1
+        for f, k in e.get("_shape", {}).items():
+            d = prof["shape"].setdefault(f, {})
+            d[k] = d.get(k, 0) + 1
+    return prof
+
+
 def main():
     args = sys.argv[1:]
     out_path = DEFAULT_OUT
@@ -606,6 +720,8 @@ def main():
     seen_units = set()
     seen_keys = {}   # dedupe_key -> True, see dedupe_key() below
     dup_count = 0
+    rel_since = (datetime.now(timezone.utc) - timedelta(days=REL_WINDOW_DAYS)).date().isoformat()
+    rel_raw, rel_units = [], set()
     for row in ws.iter_rows(min_row=hdr_row + 1, values_only=True):
         equip = row[col["Equip no"]]
         if not equip:
@@ -614,6 +730,13 @@ def main():
         seen_units.add(equip)
         if fleet and not any(equip.upper().startswith(p.upper()) for p in fleet):
             continue
+        # Every machine 1C keeps work orders for is in the reliability
+        # population, broken down or not -- a fleet's availability over its
+        # broken machines alone is not the fleet's availability.
+        rel_units.add(equip.upper())
+        _ev = rel_event(lambda name: row[col[name]] if name in col else None, equip, rel_since)
+        if _ev:
+            rel_raw.append(_ev)
         # THE CM TEAM'S OWN ROWS, TAKEN BEFORE THE SERVICE FILTER. Every
         # defect work order is dropped two lines below; this is the only
         # point in the pass where it can still be seen.
@@ -846,6 +969,32 @@ def main():
         "byUnit": slim_by_unit,
         "rtwOpen": rtw_open,
     }, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    # THE RELIABILITY FILE. Its own file, not more of work_orders.js: that is
+    # a <script> every office page loads at once, and this is read only when
+    # somebody opens the reliability panel (dashboard/reliability.js). No
+    # indent -- it is the largest thing in data/ and nobody diffs it by eye.
+    # Cell shapes are counted per ROW (each repeat is a cell 1C wrote); the
+    # maintenance types and priorities per WORK ORDER, after the repeats are
+    # collapsed, so the counts are the ones the panel's failures are taken from.
+    rel_events = merge_rel(rel_raw)
+    rel_profile_v = rel_profile(rel_raw)
+    _per_wo = rel_profile(rel_events)
+    rel_profile_v["maintType"], rel_profile_v["priority"] = _per_wo["maintType"], _per_wo["priority"]
+    for e in rel_events:
+        e.pop("_shape", None)
+    rel_path = out_file.parent / "reliability.json"
+    rel_path.write_text(json.dumps({
+        "generated": out["generated"],
+        "relSince": rel_since,
+        "relWindowDays": REL_WINDOW_DAYS,
+        "relColumns": {k: (v if v in col else None) for k, v in REL_COLUMNS.items()},
+        "relProfile": rel_profile_v,
+        "relUnits": sorted(rel_units),
+        "relEvents": rel_events,
+    }, ensure_ascii=False, separators=(",", ":")) + "\n", encoding="utf-8")
+    print(f"wrote {rel_path} -- {len(rel_events)} corrective work order(s) since {rel_since} "
+          f"across {len(rel_units)} unit(s)")
+
     print(f"wrote {slim_path} -- {sum(len(v) for v in slim_by_unit.values())} open, "
           f"CM-matched work order(s) across {len(slim_by_unit)} unit(s), "
           f"{len(rtw_open)} open work order(s) for Return to Work")
