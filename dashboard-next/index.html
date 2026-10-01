@@ -2032,6 +2032,8 @@
     color:var(--ink-2);border-radius:999px;padding:6px 13px;font-size:12.5px;cursor:pointer;font-family:inherit;}
   .src .dot{width:8px;height:8px;border-radius:50%;background:var(--muted);flex:none;}
   .src.live .dot{background:var(--good);} .src.live{color:var(--ink);}
+  /* Half connected: the 1C plan is here, the inspections are not. */
+  .src.half .dot{background:var(--warning);} .src.half{color:var(--ink);}
   .lb{position:fixed;inset:0;background:rgba(0,0,0,.86);display:none;align-items:center;justify-content:center;z-index:100;padding:30px;}
   .lb.open{display:flex;} .lb img,.lb video{max-width:100%;max-height:82vh;border-radius:8px;}
   .lb video{background:#000;}
@@ -4878,23 +4880,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=492"></script>
+<script src="../data/magnetic_plug.js?v=493"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=492"></script>
-<script src="../mobile/hme.js?v=492"></script>
-<script src="../mobile/mp-fc.js?v=492"></script>
-<script src="../mobile/rtw.js?v=492"></script>
-<script src="../mobile/hme-cascade.js?v=492"></script>
-<script src="../mobile/temp-limits.js?v=492"></script>
+<script src="../data/work_orders.js?v=493"></script>
+<script src="../mobile/hme.js?v=493"></script>
+<script src="../mobile/mp-fc.js?v=493"></script>
+<script src="../mobile/rtw.js?v=493"></script>
+<script src="../mobile/hme-cascade.js?v=493"></script>
+<script src="../mobile/temp-limits.js?v=493"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=492"></script>
-<script src="../mobile/normalize.js?v=492"></script>
-<script src="../mobile/terms.js?v=492"></script>
+<script src="../mobile/assets.js?v=493"></script>
+<script src="../mobile/normalize.js?v=493"></script>
+<script src="../mobile/terms.js?v=493"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -4913,19 +4915,19 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=492"></script>
-<script src="../mobile/edits.js?v=492"></script>
-<script src="../mobile/due.js?v=492"></script>
-<script src="../mobile/wear.js?v=492"></script>
-<script src="../mobile/wear-map.js?v=492"></script>
-<script src="../mobile/lube.js?v=492"></script>
-<script src="../mobile/lube-overrides.js?v=492"></script>
-<script src="../mobile/lube2027.js?v=492"></script>
-<script src="../mobile/lube-tds.js?v=492"></script>
+<script src="../mobile/grade.js?v=493"></script>
+<script src="../mobile/edits.js?v=493"></script>
+<script src="../mobile/due.js?v=493"></script>
+<script src="../mobile/wear.js?v=493"></script>
+<script src="../mobile/wear-map.js?v=493"></script>
+<script src="../mobile/lube.js?v=493"></script>
+<script src="../mobile/lube-overrides.js?v=493"></script>
+<script src="../mobile/lube2027.js?v=493"></script>
+<script src="../mobile/lube-tds.js?v=493"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=492"></script>
-<script src="../mobile/machine-photos.js?v=492"></script>
+<script src="../mobile/upload-defaults.js?v=493"></script>
+<script src="../mobile/machine-photos.js?v=493"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -4934,17 +4936,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=492"></script>
-<script src="../mobile/get.js?v=492"></script>
-<script src="../mobile/points.js?v=492"></script>
-<script src="../mobile/uc-points.js?v=492"></script>
-<script src="../mobile/inspect-guide.js?v=492"></script>
-<script src="../mobile/get-figs.js?v=492"></script>
-<script src="../mobile/body-points.js?v=492"></script>
-<script src="../mobile/body-map.js?v=492"></script>
-<script src="../mobile/jspdf.umd.min.js?v=492"></script>
-<script src="../mobile/html2canvas.min.js?v=492"></script>
-<script src="../mobile/report-core.js?v=492"></script>
+<script src="../mobile/machine-fig.js?v=493"></script>
+<script src="../mobile/get.js?v=493"></script>
+<script src="../mobile/points.js?v=493"></script>
+<script src="../mobile/uc-points.js?v=493"></script>
+<script src="../mobile/inspect-guide.js?v=493"></script>
+<script src="../mobile/get-figs.js?v=493"></script>
+<script src="../mobile/body-points.js?v=493"></script>
+<script src="../mobile/body-map.js?v=493"></script>
+<script src="../mobile/jspdf.umd.min.js?v=493"></script>
+<script src="../mobile/html2canvas.min.js?v=493"></script>
+<script src="../mobile/report-core.js?v=493"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -5042,7 +5044,7 @@ function causesFor(compCode,defectCode){
    a string is built in code. */
 const I18N={
  en:{
-  sub:"Fleet dashboard", srcnone:"No data yet — click to connect",
+  sub:"Fleet dashboard", srcnone:"No data connected — click to connect", srcnone_1c:"1C plan live · inspections not connected — click to connect", src_1c_t:"The 1C work-order plan (Plan vs Actual, Defects raised, Inspection Schedule) loads by itself and is current. Only the condition-monitoring rounds — grades, photographs, corrections — come from the inspection backend, and that is not connected in this browser.",
   datasources:"Data sources", close:"Close", theme:"Light / dark",
   srctitle:"Where this dashboard reads the phones' records from",
   nav_grp_monitor:"Monitor", nav_grp_act:"Act", nav_grp_assets:"Assets", nav_grp_system:"System",
@@ -6053,7 +6055,7 @@ const I18N={
   pa_week_today:"Today", pa_week_late:"Late — planned and not recorded",
  },
  ru:{
-  sub:"Панель парка", srcnone:"Нет данных — нажмите, чтобы подключить",
+  sub:"Панель парка", srcnone:"Нет подключённых данных — нажмите, чтобы подключить", srcnone_1c:"План 1С актуален · осмотры не подключены — нажмите, чтобы подключить", src_1c_t:"План заказ-нарядов 1С (План/факт, Зарегистрированные дефекты, График осмотров) загружается сам и актуален. Из системы осмотров приходят только обходы мониторинга состояния — оценки, фотографии, исправления, — и она в этом браузере не подключена.",
   datasources:"Источники данных", close:"Закрыть", theme:"Светлая / тёмная",
   srctitle:"Откуда эта панель читает записи с телефонов",
   nav_grp_monitor:"Мониторинг", nav_grp_act:"Действия", nav_grp_assets:"Активы", nav_grp_system:"Система",
@@ -14068,11 +14070,20 @@ function refreshSources(){
   const nVoid=RECS.filter(r=>r._void).length;
   const nPhotos=folderPhotos?Object.keys(folderPhotos).length:0;
   const where=[]; if(driveRecs.length) where.push("Drive"); if(folderName) where.push(folderName);
+  const has1C=!!(window.CM_WO_DATA && Array.isArray(window.CM_WO_DATA.workOrders) && window.CM_WO_DATA.workOrders.length);
   if(imported.length && !where.length) where.push(t("src_imported"));
   $("srcText").textContent = RECS.length
     ? `${t("ds_insp",{n:RECS.length})} · ${t("k_units",{n:units})}${nVoid?" · "+t("ds_voidn",{n:nVoid}):""}${nPhotos?" · "+t("ds_photosn",{n:nPhotos}):""}${where.length?` · ${where.join(" + ")}`:""}`
-    : t("srcnone");
+    : (has1C ? t("srcnone_1c") : t("srcnone"));
+  /* NAME WHAT IS MISSING. With no inspection backend attached this said "No
+     data yet" on every screen — while the 1C plan (a <script> refreshed by
+     the hourly job, attached to nothing) was live and current on three of
+     them. The audit of 2026-10-01: the pill overstated how empty the page
+     was. It now says the 1C half is there and only the inspection half is
+     not, and the title says which screens are which. */
+  $("srcChip").title = (!RECS.length && has1C) ? t("src_1c_t") : t("srctitle");
   $("srcChip").classList.toggle("live", RECS.length>0);
+  $("srcChip").classList.toggle("half", !RECS.length && has1C);
   const set=(card,state,on,text)=>{ $(card).classList.toggle("on",!!on); $(state).textContent=text; };
   // driveRecs is restored from localStorage at init, before drive.js exists
   const nIdx=drv()?drv().indexed():0;
@@ -21471,9 +21482,9 @@ document.querySelector(".lang").addEventListener("click",e=>{
   setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 })();
 </script>
-<script src="../dashboard/drive.js?v=492"></script>
-<script src="../dashboard/sync-adapter.js?v=492"></script>
-<script src="../dashboard/report.js?v=492"></script>
-<script src="../dashboard/reliability.js?v=492"></script>
+<script src="../dashboard/drive.js?v=493"></script>
+<script src="../dashboard/sync-adapter.js?v=493"></script>
+<script src="../dashboard/report.js?v=493"></script>
+<script src="../dashboard/reliability.js?v=493"></script>
 </body>
 </html>
