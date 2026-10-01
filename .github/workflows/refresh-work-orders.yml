@@ -4,7 +4,8 @@
 # class/round mapping live from due.js and that history (never hand-copied —
 # see ingest/gen_class_rounds.cjs's own header for why that matters, and
 # ingest/fetch_cm_history.cjs's for why the history pull matters), and
-# commits data/work_orders.js and data/schedule_slim.json only if anything
+# commits data/work_orders.js, data/schedule_slim.json and data/reliability.json
+# (MTBF/MTTR/availability, dashboard/reliability.js) only if anything
 # actually changed. schedule_slim.json is the phone's own trimmed slice of
 # the same pull — see ingest_work_orders.py's own write site for what it
 # keeps and why it is a separate file, not a smaller copy of the same one.
@@ -91,11 +92,13 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          if git diff --quiet -- data/work_orders.js data/schedule_slim.json ingest/class_rounds.generated.json ingest/cm_history.generated.json; then
+          # status, not diff: data/reliability.json is NEW on its first run,
+          # and `git diff` does not see an untracked file at all.
+          if [ -z "$(git status --porcelain -- data/work_orders.js data/schedule_slim.json data/reliability.json ingest/class_rounds.generated.json ingest/cm_history.generated.json)" ]; then
             echo "no change — the pull matched what is already committed"
             exit 0
           fi
-          git add data/work_orders.js data/schedule_slim.json ingest/class_rounds.generated.json ingest/cm_history.generated.json
+          git add data/work_orders.js data/schedule_slim.json data/reliability.json ingest/class_rounds.generated.json ingest/cm_history.generated.json
           # [skip ci] -- see the note at the top of this file for why this
           # job's own commits do not bump BUILD and should not trip the
           # Build freshness guard.

@@ -72,7 +72,7 @@ const SHIPPED = ["mobile/", "dashboard/", "dashboard-next/", "data/"];
    ships) would fail this guard after every single one of those commits,
    turning this project's most safety-critical check into exactly the noise
    CLAUDE.md's own rules warn a real failure hides behind. */
-const SELF_REFRESHING = ["data/work_orders.js", "data/schedule_slim.json"];
+const SELF_REFRESHING = ["data/work_orders.js", "data/schedule_slim.json", "data/reliability.json"];
 
 (() => {
   const sw = fs.readFileSync(path.join(ROOT, "mobile/sw.js"), "utf8");

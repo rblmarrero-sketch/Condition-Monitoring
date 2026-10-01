@@ -3740,6 +3740,44 @@ in isolation: a decode rigged to fail on its first attempt and succeed on
 its second — a stand-in for a lost race, not a lost file — is retried and
 never shown as unreadable at all, not even for a flash.
 
+**MTBF, MTTR AND AVAILABILITY COME FROM 1C's CORRECTIVE WORK ORDERS, AND
+ONE FILE WORKS THEM OUT.** The audit of 2026-10-01: Reports computed
+inspection compliance and programme coverage, and nothing in either office
+page computed MTBF, MTTR or availability, which are part of the job this app
+supports. Nothing had the data, either: `ingest_work_orders.py` kept the planned
+hour-tier services and the CM team's own defects and threw every other row of
+WO.xlsx away. It now also keeps every corrective work order that started in
+the last `REL_WINDOW_DAYS` (400). Each one carries its priority, actual start
+and end, "Duration actual hours", "Down time by documents" (falling back to
+the accumulation-register column) and "Count of break down from p1". These go
+to their own file, **`data/reliability.json`**. It is not part of
+`work_orders.js`: that is a `<script>` every office page loads whole, while
+this is fetched only when Reports is opened. The hourly job commits it, and
+`tests/bump.cjs` lists it as self-refreshing. Hours cells are read whatever
+shape 1C wrote them in (a number, `3:30`, `2,5`). An unreadable cell is null,
+never 0, and the shapes are COUNTED in `relProfile`, beside the maintenance
+types and priorities the window holds. If a column stops arriving, or
+arrives in a new shape, that shows up as a number instead of a silent zero.
+**The real vocabulary of 1C's corrective rows had not been seen when this was
+written** (WO.xlsx is not reachable from a development session). The first
+pull after merge is where `relProfile` says what is actually there. Read it
+before trusting the panel's first numbers.
+
+`dashboard/reliability.js` (`CMRel`) is the one place the definitions live,
+loaded by both office pages. Calendar hours, machines × days × 24, because
+1C's operating-hour figure is a meter reading at registration and not a
+running total. A failure is P1 or a counted breakdown, starting in the period.
+Downtime comes from 1C's own figure, then the actual duration, then the
+start–end dates. A failure with none of the three is counted, left out of
+MTTR, and said out loud. MTBF = (T − D) ÷ failures. Availability =
+(T − D) ÷ T, breakdown downtime only. The population is every machine 1C
+carries a work order for (`relUnits`), broken down or not. No failures means
+"no failures in N days", never an MTBF number. No file yet means a sentence,
+never a row of zeros. The panel is on Reports, below the PDF form, with
+period, class and a CSV. `tests/reliability.cjs` holds the arithmetic to
+figures worked by hand and reads the panel on both pages in both languages;
+`tests/relingest.py` builds a real WO.xlsx and runs the ingester against it.
+
 ---
 
 ## Secrets
