@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-01T04:48:36+00:00",
+  "generated": "2026-10-01T05:18:47+00:00",
   "byUnit": {
     "BL001": [
       {
@@ -299,6 +299,18 @@
           "UC"
         ],
         "plan": "2026-10-11",
+        "priority": "P3 Planned (PM)"
+      }
+    ],
+    "EX011": [
+      {
+        "wo": "WO-018501",
+        "hours": 1000,
+        "types": [
+          "FC",
+          "INSP"
+        ],
+        "plan": "2026-10-18",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -1216,6 +1228,42 @@
       "completed": ""
     },
     {
+      "wo": "WO-018501",
+      "equip": "EX011",
+      "cls": "EXC",
+      "comp": "",
+      "desc": "Filter Cut / General Inspection",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-18",
+      "type": "1000 Hours service Planned",
+      "hours": 1000,
+      "plan": "2026-10-18",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-018490",
+      "equip": "EX021",
+      "cls": "EXC",
+      "comp": "",
+      "desc": "500h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-17",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-10-17",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-018500",
       "equip": "DZ006",
       "cls": "DOZ",
@@ -1360,6 +1408,24 @@
       "completed": ""
     },
     {
+      "wo": "WO-018529",
+      "equip": "EX015",
+      "cls": "EXC",
+      "comp": "",
+      "desc": "500h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-11",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-10-11",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-017871",
       "equip": "GR004",
       "cls": "GRD",
@@ -1441,6 +1507,24 @@
       "raised": "2026-10-10",
       "type": "500 Hours service Planned",
       "hours": 500,
+      "plan": "2026-10-10",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-018537",
+      "equip": "EX012",
+      "cls": "EXC",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-10",
+      "type": "250 Hours service Planned",
+      "hours": 250,
       "plan": "2026-10-10",
       "status": "Elimination scheduled",
       "request": "",
@@ -6445,7 +6529,7 @@
       "raised": "2026-09-14",
       "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "hours": null,
-      "plan": "2026-10-16",
+      "plan": "2026-10-17",
       "status": "Elimination scheduled",
       "request": "DD-00012627",
       "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
@@ -7058,12 +7142,12 @@
       "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "hours": null,
       "plan": "2026-09-25",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "DD-00012443",
       "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "cause": "Поврежден шланга/линии",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-09-25"
     },
     {
       "wo": "WO-017024",
@@ -7076,12 +7160,12 @@
       "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "hours": null,
       "plan": "2026-09-25",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "DD-00012441",
       "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "cause": "Износ уплотнения",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-09-25"
     },
     {
       "wo": "WO-016865",
@@ -7111,13 +7195,13 @@
       "raised": "2026-09-11",
       "type": "2.01 Wear / Износ",
       "hours": null,
-      "plan": "2026-09-24",
-      "status": "Elimination scheduled",
+      "plan": "2026-09-25",
+      "status": "Completed",
       "request": "DD-00012407",
       "defType": "2.01 Wear / Износ",
       "cause": "Задиры/царапины",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-09-25"
     },
     {
       "wo": "WO-016863",
@@ -7201,13 +7285,13 @@
       "raised": "2026-09-11",
       "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "hours": null,
-      "plan": "2026-09-22",
-      "status": "Elimination scheduled",
+      "plan": "2026-09-27",
+      "status": "Completed",
       "request": "DD-00012409",
       "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "cause": "Поврежден шланга/линии",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-09-27"
     },
     {
       "wo": "WO-016859",
@@ -7237,13 +7321,13 @@
       "raised": "2026-09-11",
       "type": "2.01 Wear / Износ",
       "hours": null,
-      "plan": "2026-09-22",
-      "status": "Elimination scheduled",
+      "plan": "2026-09-27",
+      "status": "Completed",
       "request": "DD-00012406",
       "defType": "2.01 Wear / Износ",
       "cause": "Задиры/царапины",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-09-28"
     },
     {
       "wo": "WO-016854",
@@ -7273,13 +7357,13 @@
       "raised": "2026-09-11",
       "type": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "hours": null,
-      "plan": "2026-09-21",
-      "status": "Elimination scheduled",
+      "plan": "2026-09-25",
+      "status": "Completed",
       "request": "DD-00012419",
       "defType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "cause": "Износ/трещина диска",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-09-25"
     },
     {
       "wo": "WO-016853",
@@ -7903,7 +7987,7 @@
       "raised": "2026-09-08",
       "type": "1.27 Belt drive issue (slip/break) / Проблема ременного привода (проскальзывание/обрыв)",
       "hours": null,
-      "plan": "2026-09-28",
+      "plan": "2026-10-11",
       "status": "Elimination scheduled",
       "request": "DD-00012290",
       "defType": "1.27 Belt drive issue (slip/break) / Проблема ременного привода (проскальзывание/обрыв)",
