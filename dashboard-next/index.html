@@ -4880,23 +4880,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=495"></script>
+<script src="../data/magnetic_plug.js?v=496"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=495"></script>
-<script src="../mobile/hme.js?v=495"></script>
-<script src="../mobile/mp-fc.js?v=495"></script>
-<script src="../mobile/rtw.js?v=495"></script>
-<script src="../mobile/hme-cascade.js?v=495"></script>
-<script src="../mobile/temp-limits.js?v=495"></script>
+<script src="../data/work_orders.js?v=496"></script>
+<script src="../mobile/hme.js?v=496"></script>
+<script src="../mobile/mp-fc.js?v=496"></script>
+<script src="../mobile/rtw.js?v=496"></script>
+<script src="../mobile/hme-cascade.js?v=496"></script>
+<script src="../mobile/temp-limits.js?v=496"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=495"></script>
-<script src="../mobile/normalize.js?v=495"></script>
-<script src="../mobile/terms.js?v=495"></script>
+<script src="../mobile/assets.js?v=496"></script>
+<script src="../mobile/normalize.js?v=496"></script>
+<script src="../mobile/terms.js?v=496"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -4915,19 +4915,19 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=495"></script>
-<script src="../mobile/edits.js?v=495"></script>
-<script src="../mobile/due.js?v=495"></script>
-<script src="../mobile/wear.js?v=495"></script>
-<script src="../mobile/wear-map.js?v=495"></script>
-<script src="../mobile/lube.js?v=495"></script>
-<script src="../mobile/lube-overrides.js?v=495"></script>
-<script src="../mobile/lube2027.js?v=495"></script>
-<script src="../mobile/lube-tds.js?v=495"></script>
+<script src="../mobile/grade.js?v=496"></script>
+<script src="../mobile/edits.js?v=496"></script>
+<script src="../mobile/due.js?v=496"></script>
+<script src="../mobile/wear.js?v=496"></script>
+<script src="../mobile/wear-map.js?v=496"></script>
+<script src="../mobile/lube.js?v=496"></script>
+<script src="../mobile/lube-overrides.js?v=496"></script>
+<script src="../mobile/lube2027.js?v=496"></script>
+<script src="../mobile/lube-tds.js?v=496"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=495"></script>
-<script src="../mobile/machine-photos.js?v=495"></script>
+<script src="../mobile/upload-defaults.js?v=496"></script>
+<script src="../mobile/machine-photos.js?v=496"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -4936,17 +4936,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=495"></script>
-<script src="../mobile/get.js?v=495"></script>
-<script src="../mobile/points.js?v=495"></script>
-<script src="../mobile/uc-points.js?v=495"></script>
-<script src="../mobile/inspect-guide.js?v=495"></script>
-<script src="../mobile/get-figs.js?v=495"></script>
-<script src="../mobile/body-points.js?v=495"></script>
-<script src="../mobile/body-map.js?v=495"></script>
-<script src="../mobile/jspdf.umd.min.js?v=495"></script>
-<script src="../mobile/html2canvas.min.js?v=495"></script>
-<script src="../mobile/report-core.js?v=495"></script>
+<script src="../mobile/machine-fig.js?v=496"></script>
+<script src="../mobile/get.js?v=496"></script>
+<script src="../mobile/points.js?v=496"></script>
+<script src="../mobile/uc-points.js?v=496"></script>
+<script src="../mobile/inspect-guide.js?v=496"></script>
+<script src="../mobile/get-figs.js?v=496"></script>
+<script src="../mobile/body-points.js?v=496"></script>
+<script src="../mobile/body-map.js?v=496"></script>
+<script src="../mobile/jspdf.umd.min.js?v=496"></script>
+<script src="../mobile/html2canvas.min.js?v=496"></script>
+<script src="../mobile/report-core.js?v=496"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -21482,9 +21482,27 @@ document.querySelector(".lang").addEventListener("click",e=>{
   setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 })();
 </script>
-<script src="../dashboard/drive.js?v=495"></script>
-<script src="../dashboard/sync-adapter.js?v=495"></script>
-<script src="../dashboard/report.js?v=495"></script>
-<script src="../dashboard/reliability.js?v=495"></script>
+<script src="../dashboard/drive.js?v=496"></script>
+<script src="../dashboard/sync-adapter.js?v=496"></script>
+<script src="../dashboard/report.js?v=496"></script>
+<script src="../dashboard/reliability.js?v=496"></script>
+<script>
+/* THE CLOSED FILTER SAYS WHAT IS CHOSEN. A dropdown narrower than its option
+   text ellipsises ("All t…", audit of 2026-10-01). Between 1331 and 1500 px
+   the cap went from 88 to 100 px, which keeps the Russian bar on ONE row. At
+   1330 and below it stays 92: wider there squeezes the search field under the
+   260 px tests/layout.cjs holds it to. Wherever an option is still too long,
+   the control carries its whole text as a tooltip. */
+(function(){
+  /* Set when it can be seen: a tooltip only shows on hover or focus, so that
+     is when the title is brought up to date — however the value got there
+     (a click, a restored address, a reset). */
+  const tip=e=>{ const s=e.target; if(!s || !s.matches || !s.matches(".controls select")) return;
+    const o=s.options[s.selectedIndex]; s.title=o?o.text:""; };
+  document.addEventListener("mouseover",tip,true);
+  document.addEventListener("focusin",tip,true);
+  document.addEventListener("change",tip,true);
+})();
+</script>
 </body>
 </html>
