@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-01T02:54:56+00:00",
+  "generated": "2026-10-01T03:15:05+00:00",
   "source": "https://askpi.94-131-94-152.sslip.io/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 681,
@@ -43354,7 +43354,7 @@ window.CM_WO_DATA = {
     {
       "equip": "TK105",
       "cls": "AT",
-      "woNumber": "WO-010099",
+      "woNumber": "WO-010008",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
       "cmLabel": "General Inspection / Magnetic Plug",
@@ -43363,7 +43363,7 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "CLSD",
+      "woStatus": "REL",
       "cmmsStatus": "Completed",
       "open": false,
       "planStart": "2026-06-25",
@@ -43525,7 +43525,7 @@ window.CM_WO_DATA = {
     {
       "equip": "TK105",
       "cls": "AT",
-      "woNumber": "WO-010099",
+      "woNumber": "WO-010008",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
       "cmLabel": "General Inspection / Magnetic Plug",
@@ -43534,7 +43534,7 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "CLSD",
+      "woStatus": "REL",
       "cmmsStatus": "Completed",
       "open": false,
       "planStart": "2026-10-13",
