@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-01T16:42:56+00:00",
+  "generated": "2026-10-01T17:12:50+00:00",
   "source": "https://askpi.94-131-94-152.sslip.io/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 682,
@@ -4093,26 +4093,7 @@ window.CM_WO_DATA = {
     {
       "equip": "CD008",
       "cls": "GEN",
-      "woNumber": "GD-023109",
-      "maintType": "500 Hours service Planned",
-      "hours": 500,
-      "cmLabel": "500h service",
-      "cmTypes": null,
-      "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
-      "planStart": "2026-08-01",
-      "planStartDt": "2026-08-01T00:00:00",
-      "planEnd": "2026-08-01",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
-    },
-    {
-      "equip": "CD008",
-      "cls": "GEN",
-      "woNumber": "GD-023110",
+      "woNumber": "GD-023113",
       "maintType": "250 Hours service Planned",
       "hours": 250,
       "cmLabel": "250h service",
@@ -4131,7 +4112,26 @@ window.CM_WO_DATA = {
     {
       "equip": "CD008",
       "cls": "GEN",
-      "woNumber": "GD-023112",
+      "woNumber": "GD-023115",
+      "maintType": "500 Hours service Planned",
+      "hours": 500,
+      "cmLabel": "500h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-08-01",
+      "planStartDt": "2026-08-01T00:00:00",
+      "planEnd": "2026-08-01",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
+      "equip": "CD008",
+      "cls": "GEN",
+      "woNumber": "GD-023122",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
       "cmLabel": "General Inspection",
@@ -4369,7 +4369,7 @@ window.CM_WO_DATA = {
     {
       "equip": "CD009",
       "cls": "GEN",
-      "woNumber": "GD-023130",
+      "woNumber": "GD-023132",
       "maintType": "250 Hours service Planned",
       "hours": 250,
       "cmLabel": "250h service",
