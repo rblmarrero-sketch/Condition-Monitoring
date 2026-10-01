@@ -67,6 +67,14 @@ const FIX = [
   { equip: 'DZ001', date: '2026-08-20', type: 'UC', cls: 'DOZ', by: 'S. Volkov', smu: '9100',
     items: [{ key: 'IDLER.L', label: 'Left Idler', grade: '', sev: 'CRI',
               mm: 40, newMM: 60, condemnMM: 30 }] },
+  /* RTW IS A THIRD CASE, NOT A SPELLING OF "UNGRADED": a release checklist
+     never carries a grade or a severity on any item, by design — items carry
+     `mark` (pass/attention/n-a) only. 23 fully-passed items, none graded, is
+     this round's ordinary saved shape, not an abandoned assessment, and
+     listing it as "No grade on any of its 23 positions" was a standing false
+     alarm on every RTW round this fleet has ever filed. */
+  { equip: 'TK126', date: '2026-09-30', type: 'RTW', cls: 'HT', by: 'A. Ivanov', smu: '',
+    items: Array.from({ length: 23 }, (_, n) => ({ key: String(n + 1), label: String(n + 1), mark: 'pass' })) },
 ];
 
 const KEY = 'TK001|2026-08-22|MP';      // the conflict row
@@ -140,6 +148,8 @@ const LIST = `(function(){
      ![...set].some(x => x.startsWith('TK004:')));
   ok('a MEASURED round is NOT flagged — the band is the finding',
      ![...set].some(x => x.startsWith('DZ001:')));
+  ok('an RTW round is NOT flagged — a release checklist never grades at all',
+     ![...set].some(x => x.startsWith('TK126:')), [...set].filter(x => /^TK126/.test(x)).join(' '));
 
   console.log('\n2b. A POINT IS NAMED IN THE LANGUAGE ON SCREEN');
   /* The label is data, not UI: it arrives in whatever language the handset was
