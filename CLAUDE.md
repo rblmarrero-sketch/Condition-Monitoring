@@ -271,6 +271,17 @@ working tree? If so the number is stale and the work is invisible, and it
 prints the exact sed line to fix it. It runs in under a second, needs no
 browser, and is first in `tests/runall.sh`.
 
+**In CI both checks now block** (audit of 2026-10-01). `ver.cjs` ran in
+`build-freshness.yml` behind `|| echo "::warning::..."` because the runner had
+no browser, so it failed every run in silence; the job now installs Chromium
+and a failure stops the job. The post-publish check is `tests/livebuild.sh`
+(runnable by hand): it read the expected build with a pattern that wanted
+spaces round the `=` while `sw.js` writes `const BUILD="492"`, so it died on
+its first line on every push and never asked the live site anything, and it
+never looked at `dashboard-next/` at all. It now reads the build tolerantly,
+says so in words when it cannot, and checks the phone, both dashboards'
+`?v=` tags and the normalizer on the public URLs.
+
 **Run it before every push:**
 
 ```

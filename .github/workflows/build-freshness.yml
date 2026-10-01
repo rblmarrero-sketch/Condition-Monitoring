@@ -62,8 +62,28 @@ jobs:
             exit 1
           fi
 
-      - name: Every version stamp agrees with every other
-        run: node tests/ver.cjs || echo "::warning::ver.cjs needs a browser; consistency is re-checked in the full sweep"
+      # EVERY VERSION STAMP AGREES WITH EVERY OTHER — AND IT BLOCKS.
+      # This step used to end `|| echo "::warning::..."`: ver.cjs needs a
+      # browser, the runner had none, so it failed every run and the failure
+      # was turned into a warning nobody reads. A disagreement between the
+      # phone's BUILD and a dashboard's ?v= tags — dashboard-next's included,
+      # a permanent surface now — is exactly the stale-cache defect this
+      # workflow exists for, so the browser is installed and the check is a
+      # hard failure (audit of 2026-10-01).
+      - name: Install Playwright (Chromium) for ver.cjs
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+
+      - name: Every version stamp agrees with every other (blocking)
+        run: |
+          set -euo pipefail
+          (cd tests && node ed-srv.cjs 8093 letmein > /tmp/ed-srv.log 2>&1 &)
+          for i in $(seq 1 60); do
+            curl -fsS -o /dev/null http://127.0.0.1:8093/mobile/index.html && break
+            sleep 0.5
+          done
+          node tests/ver.cjs
 
   deployed:
     name: What the public URLs actually serve
@@ -76,122 +96,11 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - name: Wait for Pages to publish
-        # Pages is not synchronous with the push. Poll rather than sleep a fixed
-        # guess: a fixed wait is either wasted time or a false failure.
-        run: sleep 45
-
-      - name: The deployed service worker is on this commit's build
-        id: sw
-        run: |
-          set -euo pipefail
-          WANT=$(grep -o 'const BUILD = "[^"]*"' mobile/sw.js | sed 's/.*"\(.*\)"/\1/')
-          echo "expected build: $WANT"
-          BASE="https://rblmarrero-sketch.github.io/Condition-Monitoring"
-
-          fetch_build () {
-            # cache-bust, because the CDN edge is exactly what this is testing
-            curl -fsSL --max-time 30 "$1?ci=$GITHUB_SHA" \
-              | grep -o 'const BUILD = "[^"]*"' | sed 's/.*"\(.*\)"/\1/' || true
-          }
-
-          # Pages is not quick and not consistent: builds 242 and 243 both took
-          # about seven minutes from push to public, and a window of three gave
-          # this job a red tick both times for a build that was, in fact,
-          # published. A guard that cries wolf is the noise a real failure hides
-          # in, so the window is fifteen minutes — bounded, and long enough
-          # that a failure here means the build did not publish, not that the
-          # job stopped looking. It says which try succeeded.
-          GOT=""
-          for i in $(seq 1 45); do
-            GOT=$(fetch_build "$BASE/mobile/sw.js")
-            [ -n "$GOT" ] && [ "$GOT" = "$WANT" ] && { echo "matched on attempt $i"; break; }
-            echo "attempt $i: served '${GOT:-<nothing>}', want '$WANT'"
-            sleep 20
-          done
-
-          if [ "$GOT" != "$WANT" ]; then
-            echo "::error::The deployed service worker serves BUILD='${GOT:-<nothing>}' but this commit is '$WANT'. Phones will not update."
-            exit 1
-          fi
-          echo "want=$WANT" >> "$GITHUB_OUTPUT"
-
-      - name: The public mobile and dashboard pages are on that build too
-        run: |
-          set -euo pipefail
-          WANT="${{ steps.sw.outputs.want }}"
-          BASE="https://rblmarrero-sketch.github.io/Condition-Monitoring"
-
-          # The phone declares it in script; the dashboard carries it on every
-          # shared ?v= tag and shows it in #dashVer. Check the served bytes, not
-          # a rendered page — this job has no browser and does not need one.
-          M=$(curl -fsSL --max-time 30 "$BASE/mobile/index.html?ci=$GITHUB_SHA" \
-                | grep -o 'const BUILD="[^"]*"' | sed 's/.*"\(.*\)"/\1/' || true)
-          if [ "$M" != "$WANT" ]; then
-            echo "::error::Public mobile page serves BUILD='${M:-<nothing>}', expected '$WANT'."
-            exit 1
-          fi
-
-          D=$(curl -fsSL --max-time 30 "$BASE/dashboard/index.html?ci=$GITHUB_SHA" \
-                | grep -o 'report-core\.js?v=[^"]*' | head -1 | sed 's/.*v=//' || true)
-          if [ "$D" != "$WANT" ]; then
-            echo "::error::Public dashboard serves asset tag v='${D:-<nothing>}', expected '$WANT'."
-            exit 1
-          fi
-
-          echo "mobile=$M dashboard=$D — both on $WANT"
-
-      - name: Both public apps load the same normalizer, at this build
-        run: |
-          set -euo pipefail
-          WANT="${{ steps.sw.outputs.want }}"
-          BASE="https://rblmarrero-sketch.github.io/Condition-Monitoring"
-
-          # An independent audit found the dashboard loading normalize.js while
-          # the mobile app did not — a shared rule is not shared until BOTH ends
-          # have it, and "the dashboard is fine" is exactly the half-answer that
-          # let it ship. Checked separately, per app, on the public bytes.
-          for app in mobile dashboard; do
-            SRC=$(curl -fsSL --max-time 30 "$BASE/$app/index.html?ci=$GITHUB_SHA" \
-                   | grep -o 'normalize\.js?v=[0-9]*' | head -1 | sed 's/.*v=//' || true)
-            if [ -z "$SRC" ]; then
-              echo "::error::Public $app page does not load normalize.js at all."
-              exit 1
-            fi
-            if [ "$SRC" != "$WANT" ]; then
-              echo "::error::Public $app loads normalize.js?v=$SRC, expected $WANT."
-              exit 1
-            fi
-            echo "$app: normalize.js?v=$SRC"
-          done
-
-          # And the file itself has to be reachable, not merely referenced.
-          curl -fsSL --max-time 30 "$BASE/mobile/normalize.js?ci=$GITHUB_SHA" \
-            | grep -q "CMNorm" \
-            || { echo "::error::normalize.js is referenced but does not serve CMNorm."; exit 1; }
-          echo "normalize.js serves CMNorm"
-
-      - name: The service worker precaches the normalizer
-        run: |
-          set -euo pipefail
-          BASE="https://rblmarrero-sketch.github.io/Condition-Monitoring"
-          # Read the file first, THEN search it. Piped straight into grep -q,
-          # grep exits at the first match and closes the pipe while curl is
-          # still writing; curl reports "failure writing output" and, under
-          # pipefail, a build that WAS published got a red tick — builds 254
-          # to 262, every one of them fine on the public URLs, and the
-          # maintainer got a failure e-mail for each. A guard that cries wolf
-          # is the noise a real failure hides in.
-          SW=$(curl -fsSL --max-time 30 "$BASE/mobile/sw.js?ci=$GITHUB_SHA")
-          if ! grep -q "normalize.js" <<< "$SW"; then
-            echo "::error::The service worker does not precache normalize.js — an offline phone would run without it."
-            exit 1
-          fi
-          echo "sw.js precaches normalize.js"
-
-      - name: Summary
-        run: |
-          echo "### Deployed build verified" >> "$GITHUB_STEP_SUMMARY"
-          echo "" >> "$GITHUB_STEP_SUMMARY"
-          echo "Service worker, mobile page and dashboard assets on the public URLs" >> "$GITHUB_STEP_SUMMARY"
-          echo "all serve build \`${{ steps.sw.outputs.want }}\`." >> "$GITHUB_STEP_SUMMARY"
+      # Everything the old inline steps checked, in a script that can also be
+      # run by hand (tests/livebuild.sh). The inline version read the expected
+      # build with `grep -o 'const BUILD = "...'` — spaces round the "=" —
+      # while sw.js writes `const BUILD="492"`, so the step died on its first
+      # line on every push and never asked the live site anything. It now
+      # also checks dashboard-next/, which it never had.
+      - name: What the public URLs serve is this commit's build
+        run: bash tests/livebuild.sh

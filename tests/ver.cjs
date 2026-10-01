@@ -39,7 +39,7 @@ const fails=[]; const ok=(n,c,d)=>{console.log((c?'  PASS  ':'  FAIL  ')+n+(d!==
   await dash.goto('http://127.0.0.1:8093/dashboard/index.html',{waitUntil:'load'});
   await dash.waitForTimeout(1200);
   const dtags = await dash.$$eval('script[src]', s=>s.map(x=>x.getAttribute('src')));
-  const shared = dtags.filter(t=>/^\.\.\/mobile\/|^\.\.\/data\/|^drive\.js|^report\.js/.test(t));
+  const shared = dtags.filter(t=>/^\.\.\/mobile\/|^\.\.\/data\/|^drive\.js|^report\.js|^reliability\.js/.test(t));
   const unver = shared.filter(t=>!/[?&]v=/.test(t));
   ok('every file the dashboard shares with the phone is versioned',
      shared.length>0 && unver.length===0, unver.join(' '));
