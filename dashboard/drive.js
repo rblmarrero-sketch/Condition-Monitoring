@@ -332,7 +332,7 @@
       if (r.needsRebuild) return { needsRebuild: true };
       pages++;
       (r.records || []).forEach(x => recs.push(x));
-      (r.edits || []).forEach(x => eds.push(x));
+      (r.edits || []).forEach(x => eds.push(srvEdit(x)));
       (r.conflicts || []).forEach(x => cons.push(x));
       (r.deferrals || []).forEach(x => defs.push(x));
       (r.deleted || []).forEach(x => dels.push(x));
@@ -435,7 +435,7 @@
         const r = await api({ action: "records", after: at, index: pages === 0 ? 1 : 0 });
         pages++;
         (r.records || []).forEach(x => recs.push(x));
-        (r.edits || []).forEach(x => eds.push(x));
+        (r.edits || []).forEach(x => eds.push(srvEdit(x)));
         (r.conflicts || []).forEach(x => cons.push(x));
         (r.deferrals || []).forEach(x => defs.push(x));
         (r.deleted || []).forEach(x => dels.push(x));
@@ -872,6 +872,13 @@
     return new Error("HTTP " + status + " — " + String(text || "").slice(0, 160));
   }
 
+  /* A correction as the SERVER holds it carries the server's own `at` as
+     `_srvAt` — the version a later save from this desk names as its `ifAt`.
+     The page stamps its optimistic copy with the browser's clock, which is
+     not a version the server knows; only these docs (and stampEdit() after a
+     save) say which one the server has. */
+  const srvEdit = (x) => (x && typeof x === "object") ? Object.assign({}, x, { _srvAt: String(x.at || "") }) : x;
+
   async function post(body) {
     const c = cfg();
     if (!c.url) throw new Error("No Drive URL configured.");
@@ -891,14 +898,53 @@
       if (/bad or missing secret/i.test(j.error || "")) throw new Error(
         "The Shared secret in Data sources is empty or wrong. It must match SECRET in "
         + "the Apps Script — this is not the admin password.");
-      throw new Error(j.error || "Drive refused the request");
+      const err = new Error(j.error || "Drive refused the request");
+      /* A write refused because the document changed since this page read
+         it (the backend's staleWrite()). The caller can tell it apart from a
+         failure, and `current` is what the server holds now. */
+      if (j.conflict) { err.conflict = true; err.current = j.current || null; }
+      throw err;
     }
     return j;
   }
 
   /* A correction is stored as its own file, never written into the inspection's
      sidecar — the phone still holds that record and re-syncing would erase it. */
-  const saveEdit = (payload) => post(Object.assign({ op: "edit" }, payload));
+  /* ONE SAVE PER RECORD AT A TIME, EACH NAMING THE VERSION IT EDITED.
+
+     The backend refuses a correction whose `ifAt` is not the version it holds
+     (docs/yandex/function.js staleWrite()) — that is how two desks saving the
+     same round stop silently erasing each other. The version is read from the
+     page at the moment the request goes out, not when it was queued, and two
+     saves from THIS desk for one record go one after the other: sent together,
+     both would name the same version, and the second would be refused against
+     this desk's own first save. A refusal puts the server's copy on the page
+     (adoptEdit) after the caller has rolled its own optimistic copy back. */
+  const editQ = {};
+  const saveEdit = (payload) => {
+    const key = payload && payload.key;
+    const D = () => window.CMDash || {};
+    const prev = editQ[key] || Promise.resolve();
+    const run = prev.then(() => {}, () => {}).then(async () => {
+      const body = Object.assign({ op: "edit" }, payload);
+      if (!("ifAt" in body) && D().editBase) {
+        const base = D().editBase(key);
+        if (base !== null && base !== undefined) body.ifAt = base;
+      }
+      try {
+        const j = await post(body);
+        if (j && j.at && D().stampEdit) D().stampEdit(key, j.at);
+        return j;
+      } catch (e) {
+        if (e && e.conflict && D().adoptEdit) setTimeout(() => D().adoptEdit(key, e.current), 0);
+        throw e;
+      }
+    });
+    editQ[key] = run;
+    const clean = () => { if (editQ[key] === run) delete editQ[key]; };
+    run.then(clean, clean);
+    return run;
+  };
 
   /* Guarded by ADMIN_SECRET in the Apps Script, which is deliberately not the
      secret the phones carry. Files are trashed, not purged, and logged. */
@@ -970,7 +1016,16 @@
   /* Two phones sent the same unit, date and type. Both versions are in Drive;
      this records which one the reports should use. Nothing is deleted, so the
      decision is as reversible as a void. */
-  const resolve = (key, keep, by) => post({ op: "resolve", key, keep, by });
+  /* A decision names the marker it was made against (`ifAt`, the marker's
+     server-stamped `at`; "" when this page has none) — another desk deciding
+     first, or a new device's copy re-opening the question, is refused instead
+     of being recorded over the top. */
+  const resolve = (key, keep, by) => {
+    const body = { op: "resolve", key, keep, by };
+    const D = window.CMDash || {};
+    if (D.conflictBase) { const base = D.conflictBase(key); if (base !== null && base !== undefined) body.ifAt = base; }
+    return post(body);
+  };
 
   /* Health check without pulling anything: the bare /exec URL reports the folder.
      Also reports whether the fast path is deployed, since the usual reason it is

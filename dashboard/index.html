@@ -3781,23 +3781,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=490"></script>
+<script src="../data/magnetic_plug.js?v=491"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=490"></script>
-<script src="../mobile/hme.js?v=490"></script>
-<script src="../mobile/mp-fc.js?v=490"></script>
-<script src="../mobile/rtw.js?v=490"></script>
-<script src="../mobile/hme-cascade.js?v=490"></script>
-<script src="../mobile/temp-limits.js?v=490"></script>
+<script src="../data/work_orders.js?v=491"></script>
+<script src="../mobile/hme.js?v=491"></script>
+<script src="../mobile/mp-fc.js?v=491"></script>
+<script src="../mobile/rtw.js?v=491"></script>
+<script src="../mobile/hme-cascade.js?v=491"></script>
+<script src="../mobile/temp-limits.js?v=491"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=490"></script>
-<script src="../mobile/normalize.js?v=490"></script>
-<script src="../mobile/terms.js?v=490"></script>
+<script src="../mobile/assets.js?v=491"></script>
+<script src="../mobile/normalize.js?v=491"></script>
+<script src="../mobile/terms.js?v=491"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -3816,19 +3816,19 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=490"></script>
-<script src="../mobile/edits.js?v=490"></script>
-<script src="../mobile/due.js?v=490"></script>
-<script src="../mobile/wear.js?v=490"></script>
-<script src="../mobile/wear-map.js?v=490"></script>
-<script src="../mobile/lube.js?v=490"></script>
-<script src="../mobile/lube-overrides.js?v=490"></script>
-<script src="../mobile/lube2027.js?v=490"></script>
-<script src="../mobile/lube-tds.js?v=490"></script>
+<script src="../mobile/grade.js?v=491"></script>
+<script src="../mobile/edits.js?v=491"></script>
+<script src="../mobile/due.js?v=491"></script>
+<script src="../mobile/wear.js?v=491"></script>
+<script src="../mobile/wear-map.js?v=491"></script>
+<script src="../mobile/lube.js?v=491"></script>
+<script src="../mobile/lube-overrides.js?v=491"></script>
+<script src="../mobile/lube2027.js?v=491"></script>
+<script src="../mobile/lube-tds.js?v=491"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=490"></script>
-<script src="../mobile/machine-photos.js?v=490"></script>
+<script src="../mobile/upload-defaults.js?v=491"></script>
+<script src="../mobile/machine-photos.js?v=491"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3837,17 +3837,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=490"></script>
-<script src="../mobile/get.js?v=490"></script>
-<script src="../mobile/points.js?v=490"></script>
-<script src="../mobile/uc-points.js?v=490"></script>
-<script src="../mobile/inspect-guide.js?v=490"></script>
-<script src="../mobile/get-figs.js?v=490"></script>
-<script src="../mobile/body-points.js?v=490"></script>
-<script src="../mobile/body-map.js?v=490"></script>
-<script src="../mobile/jspdf.umd.min.js?v=490"></script>
-<script src="../mobile/html2canvas.min.js?v=490"></script>
-<script src="../mobile/report-core.js?v=490"></script>
+<script src="../mobile/machine-fig.js?v=491"></script>
+<script src="../mobile/get.js?v=491"></script>
+<script src="../mobile/points.js?v=491"></script>
+<script src="../mobile/uc-points.js?v=491"></script>
+<script src="../mobile/inspect-guide.js?v=491"></script>
+<script src="../mobile/get-figs.js?v=491"></script>
+<script src="../mobile/body-points.js?v=491"></script>
+<script src="../mobile/body-map.js?v=491"></script>
+<script src="../mobile/jspdf.umd.min.js?v=491"></script>
+<script src="../mobile/html2canvas.min.js?v=491"></script>
+<script src="../mobile/report-core.js?v=491"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -4596,6 +4596,7 @@ const I18N={
   ed_needconfirm:"Type “{x}” to confirm.",
   ed_sending:"✅ Saved — sending to Drive…", ed_saved:"✅ Saved.",
   ed_undone:"❌ Not saved — {e} The change has been undone.",
+  ed_conflict_by:"{by} changed this record at {at}, after this page last read it. Their version is now shown — re-apply your change on top of it.",
   ed_deleting:"Deleting…", ed_deleted:"✅ {n} file(s) moved to Drive's trash — recoverable there for 30 days.",
   ed_del_local:"✅ Removed from this dashboard. No Google Drive is set up here, so this round existed only in this browser and there was nothing else to delete.",
   ed_del_gone:"✅ Removed from this dashboard. Drive holds no files under that name, so nothing there was touched. If the files do exist under another name, Reload everything will bring the round back.",
@@ -5491,6 +5492,7 @@ const I18N={
   ed_needconfirm:"Введите «{x}» для подтверждения.",
   ed_sending:"✅ Сохранено — отправляем на Диск…", ed_saved:"✅ Сохранено.",
   ed_undone:"❌ Не сохранено — {e} Изменение отменено.",
+  ed_conflict_by:"{by} изменил(а) эту запись в {at}, после того как страница её прочитала. Теперь показана их версия — внесите своё изменение поверх неё.",
   ed_deleting:"Удаляем…", ed_deleted:"✅ Файлов в корзину Диска: {n} — восстановимо 30 дней.",
   ed_del_local:"✅ Удалено из этой панели. Google Диск здесь не подключён, поэтому осмотр существовал только в этом браузере — удалять больше нечего.",
   ed_del_gone:"✅ Удалено из этой панели. В Google Диске нет файлов с таким именем, там ничего не тронуто. Если файлы существуют под другим именем, «Перезагрузить всё» вернёт осмотр.",
@@ -8885,6 +8887,11 @@ window.CMDash={
     // Last write wins, and a stale one arriving late must not undo a newer edit.
     (list||[]).forEach(e=>{ if(!e||!e.key) return;
       const cur=edits[e.key];
+      /* Which SERVER version this copy stands on (see CMDrive.saveEdit). A
+         copy from the folder says so itself; an optimistic copy from this
+         page stands on whatever the one it replaces stood on, and on "no
+         document" when there was none. */
+      if(e._srvAt===undefined) e._srvAt = cur ? cur._srvAt : "";
       if(!cur || String(e.at||"")>=String(cur.at||"")){
         /* A writer that does not mention the photo recipes or the report log is
            saying nothing about them — not deleting them. Setting an owner on a
@@ -8917,6 +8924,23 @@ window.CMDash={
     saveEdits(); rebuild(); refreshControls(); renderAll(); refreshSources();
   },
   editCount(){ return Object.keys(edits).length; },
+  /* THE VERSION A SAVE NAMES (CMDrive.saveEdit's ifAt). "" = no correction
+     on the server as far as this page knows; null = a copy cached before the
+     server's version was recorded, so nothing is claimed and the save goes
+     as an older client's would (serialised and backed up, not checked). */
+  editBase(key){ const e=edits[key]; if(!e) return ""; return (e._srvAt===undefined)?null:String(e._srvAt||""); },
+  stampEdit(key,at){ const e=edits[key]; if(e){ e._srvAt=String(at||""); saveEdits(); } },
+  /* A save refused as stale: the folder's copy is the truth, whole, not merged
+     over what this page held. Runs after the caller has rolled its own copy
+     back, and keeps whatever that caller wrote in the drawer. */
+  adoptEdit(key,cur){
+    if(cur&&cur.key===key) edits[key]=Object.assign({},cur,{_srvAt:String(cur.at||"")}); else if(!cur) delete edits[key];
+    assignEpoch++;
+    saveEdits(); rebuild(); refreshControls(); renderAll(); refreshSources();
+    if(typeof edKey!=="undefined" && edKey===key && !$("editOv").classList.contains("hidden")){
+      const m=$("edMsg").textContent; openEdit(key,true); $("edMsg").textContent=m; }
+  },
+  conflictBase(key){ const c=conflicts[key]; return c?String(c.at||""):""; },
   /* Read access for the report engine and the tests: which renditions this
      record's photographs should be presented as. */
   mediaEdits(key){ const e=edits[key]; return (e&&e.media)||{}; },
@@ -10032,7 +10056,7 @@ function patchItems(targets, patch, msgEl){
     .catch(err=>{
       before.forEach((prev,rk)=>{ if(prev) edits[rk]=prev; else delete edits[rk]; });
       saveEdits(); rebuild(); refreshControls(); renderAll();
-      if(msgEl) msgEl.textContent=t("ed_undone",{e:(err&&err.message)||err});
+      if(msgEl) msgEl.textContent=t("ed_undone",{e:edErr(err)});
       throw err;
     });
 }
@@ -10073,7 +10097,7 @@ function saveFollow(){
     .catch(err=>{
       if(before) edits[follKey]=before; else delete edits[follKey];
       saveEdits(); rebuild(); refreshControls(); renderAll();
-      $("follMsg").textContent=t("ed_undone",{e:(err&&err.message)||err});
+      $("follMsg").textContent=t("ed_undone",{e:edErr(err)});
     });
 }
 
@@ -10130,7 +10154,7 @@ function mediaEditPost(rk, ik, hidden, msgEl, name, why){
     .catch(err=>{
       if(before) edits[rk]=before; else delete edits[rk];
       saveEdits(); rebuild(); refreshControls(); renderAll();
-      alert(t("ed_undone",{e:(err&&err.message)||err}));
+      alert(t("ed_undone",{e:edErr(err)}));
     });
 }
 /* The next free suffix, asked of the index rather than of the record: a photo
@@ -11199,7 +11223,7 @@ function saveAssign(patch, onDone, opts){
     .catch(err=>{
       if(before) edits[rk]=before; else delete edits[rk];
       saveEdits(); rebuild(); renderAll(); refreshSources();
-      msg.textContent=t("ed_undone",{e:(err&&err.message)||err});
+      msg.textContent=t("ed_undone",{e:edErr(err)});
       renderOrphan();
     });
 }
@@ -11375,7 +11399,10 @@ async function keepVersion(dev){
       {resolved:true, keep:dev, by, at:r.at||new Date().toISOString()})]);
     if(edKey===key){ openEdit(key,true); $("edMsg").textContent=t("cf_saved",{d:dev}); }
   }catch(err){
-    if(edKey===key){ openEdit(key,true); $("edMsg").textContent="❌ "+((err&&err.message)||err); }
+    /* Another desk decided first, or a new phone's copy re-opened the
+       question: take the marker as the server holds it, then say so. */
+    if(err&&err.conflict&&err.current&&err.current.key===key) window.CMDash.setConflicts([err.current]);
+    if(edKey===key){ openEdit(key,true); $("edMsg").textContent="❌ "+edErr(err); }
   }
 }
 const rec_devs=k=>{ const r=RECS.find(x=>ekOf(x)===k); return r&&r._devs; };
@@ -11516,6 +11543,17 @@ function mergedItems(){
    upload fails the local change is rolled back to exactly what was there
    before, and the failure is stated plainly — a correction that only ever
    existed in one browser would be worse than one that never saved. */
+/* A failed save in words. A refusal because somebody else's save landed
+   first (err.conflict, from CMDrive) is said in the page's own language with
+   who and when, not as the server's English sentence. */
+function edErr(err){
+  if(err&&err.conflict){
+    const c=err.current||{};
+    const at=c.at?String(c.at).replace("T"," ").slice(0,16)+" UTC":"—";
+    return t("ed_conflict_by",{by:c.by||"—",at});
+  }
+  return (err&&err.message)||String(err);
+}
 function edPost(extra){
   const msg=$("edMsg");
   if(!drvOn()){ msg.textContent=t("ed_needdrive"); return false; }
@@ -11538,7 +11576,7 @@ function edPost(extra){
       saveEdits(); rebuild(); refreshControls(); renderAll(); refreshSources();
       if(edKey===key){
         openEdit(key,true);
-        $("edMsg").textContent=t("ed_undone",{e:(err&&err.message)||err});
+        $("edMsg").textContent=t("ed_undone",{e:edErr(err)});
       }
     });
   return true;
@@ -12718,7 +12756,7 @@ $("pxOff").onclick=()=>{
     .catch(err=>{
       if(before) edits[rk]=before; else delete edits[rk];
       assignEpoch++; saveEdits(); rebuild(); refreshControls(); renderAll();
-      msg.textContent=t("ed_undone",{e:(err&&err.message)||err});
+      msg.textContent=t("ed_undone",{e:edErr(err)});
       pxOffArm(false);
     });
 };
@@ -13183,7 +13221,7 @@ $("pxSave").onclick=()=>{
     .catch(err=>{
       if(before) edits[rk]=before; else delete edits[rk];
       saveEdits(); rebuild(); refreshControls(); renderAll();
-      $("pxMsg").textContent=t("ed_undone",{e:(err&&err.message)||err});
+      $("pxMsg").textContent=t("ed_undone",{e:edErr(err)});
     });
 };
 $("lbPrev").onclick=e=>{ e.stopPropagation(); lbStep(-1); };
@@ -16172,7 +16210,7 @@ function dfSave(clear){
      .catch(err=>{
        if(before) deferrals[k]=before; else delete deferrals[k];
        saveDefer(); renderAll();
-       $("dfMsg").textContent=t("ed_undone",{e:(err&&err.message)||err});
+       $("dfMsg").textContent=t("ed_undone",{e:edErr(err)});
      });
 }
 function dueCsv(){
@@ -18588,8 +18626,8 @@ document.querySelector(".lang").addEventListener("click",e=>{
   setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 })();
 </script>
-<script src="drive.js?v=490"></script>
-<script src="sync-adapter.js?v=490"></script>
-<script src="report.js?v=490"></script>
+<script src="drive.js?v=491"></script>
+<script src="sync-adapter.js?v=491"></script>
+<script src="report.js?v=491"></script>
 </body>
 </html>

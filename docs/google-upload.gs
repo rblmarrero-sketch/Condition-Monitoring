@@ -338,10 +338,36 @@ function keyFile_(key, ext) {
   return p[0] + '_' + d[2] + '.' + d[1] + '.' + d[0] + '_' + p[2] + ext;
 }
 
+/* THE WRITE-RACE GUARD, field for field with docs/yandex/function.js's
+   withDocLock()/staleWrite(). The live backend serialises a read-then-write
+   on one document behind an in-process lock and refuses a write whose ifAt
+   (the 'at' of the version the client last read; "" = "I saw none") is not
+   the document's current 'at'. Here the lock is the script lock -- the same
+   one indexUpsert_() already takes -- and the compare is identical, so a
+   client written against one backend gets the same answer from the other.
+   An absent ifAt is a legacy client: allowed, serialised, backed up. */
+function withScriptLock_(fn) {
+  var lock = null;
+  try { lock = LockService.getScriptLock(); lock.waitLock(20000); } catch (err) { lock = null; }
+  try { return fn(); }
+  finally { if (lock) { try { lock.releaseLock(); } catch (err2) {} } }
+}
+function staleWrite_(b, prior, what) {
+  if (!b || !Object.prototype.hasOwnProperty.call(b, 'ifAt') || b.ifAt === null || b.ifAt === undefined) return null;
+  var curAt = prior ? String(prior.at || '') : '';
+  if (String(b.ifAt) === curAt) return null;
+  return { ok: false, conflict: true, current: prior || null,
+           error: prior ? 'This ' + what + ' was changed by ' + (prior.by || 'someone') + ' at ' + curAt
+             + ' after this page read it. Nothing was saved \u2014 reload and re-apply your change.'
+           : 'This ' + what + ' was removed after this page read it. Nothing was saved \u2014 reload and re-apply your change.' };
+}
+
 function saveEdit_(b) {
   var name = keyFile_(b.key, '.edit.json');
   if (!name) return { ok: false, error: 'Bad record key: ' + b.key };
-  indexTouch_();               // a correction is a change; clients must come and look
+  return withScriptLock_(function () { return saveEditLocked_(b, name); });
+}
+function saveEditLocked_(b, name) {
   var dir = folderPath_(rootFolder_(), META_DIR);
   /* Field for field the same gap docs/yandex/function.js's own saveEdit() had
      until it was fixed there: two dashboards saving the same key, one after
@@ -358,6 +384,9 @@ function saveEdit_(b) {
     try { prior = JSON.parse(existing.next().getBlob().getDataAsString()); }
     catch (errP) { prior = null; }
   }
+  var refused = staleWrite_(b, prior, 'correction');
+  if (refused) return refused;
+  indexTouch_();               // a correction is a change; clients must come and look
   var doc = {
     type: 'cm-record-edit', version: 1,
     key: b.key,
@@ -541,6 +570,9 @@ function markConflict_(sidecarName, rivalDev, dev) {
   var key = keyFromSidecar_(sidecarName);
   if (!key) return null;
   var name = sidecarName.replace(/\.json$/i, '') + '.conflict.json';
+  return withScriptLock_(function () { return markConflictLocked_(key, name, sidecarName, rivalDev, dev); });
+}
+function markConflictLocked_(key, name, sidecarName, rivalDev, dev) {
   var meta = folderPath_(rootFolder_(), META_DIR);
 
   var doc = null, it = meta.getFilesByName(name);
@@ -569,13 +601,21 @@ function resolveConflict_(b) {
   var stem = keyFile_(b.key, '');
   if (!stem) return { ok: false, error: 'Bad record key: ' + b.key };
   var name = stem + '.conflict.json';
+  return withScriptLock_(function () { return resolveConflictLocked_(b, name); });
+}
+function resolveConflictLocked_(b, name) {
   var meta = folderPath_(rootFolder_(), META_DIR);
   var it = meta.getFilesByName(name);
-  if (!it.hasNext()) return { ok: false, error: 'No conflict recorded for ' + b.key };
+  if (!it.hasNext()) {
+    var gone = staleWrite_(b, null, 'conflict');
+    return gone || { ok: false, error: 'No conflict recorded for ' + b.key };
+  }
 
   var doc;
   try { doc = JSON.parse(it.next().getBlob().getDataAsString()); }
   catch (err) { return { ok: false, error: 'The conflict marker for ' + b.key + ' is unreadable' }; }
+  var refusedR = staleWrite_(b, doc, 'conflict');
+  if (refusedR) return refusedR;
 
   var keep = cleanDev_(b.keep), devices = doc.devices || [], ok = false;
   for (var i = 0; i < devices.length; i++) if (devices[i].dev === keep) ok = true;
