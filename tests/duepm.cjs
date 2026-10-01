@@ -166,6 +166,27 @@ const server = http.createServer((req, res) => {
   await p.click('#pmStatusF [data-ps=""]');
   await p.waitForTimeout(200);
 
+  console.log('\n4c. each count says what it counts (audit of 2026-10-01: "0" above a list of LATE rows read as broken)');
+  const counts = await p.evaluate(() => ({
+    badge: $('dueCount').textContent, lbl: $('dueCountLbl').textContent, tip: $('dueCount').title,
+    sum: $('pmSummary').textContent, wantLbl: t('due_badge_lbl'), wantTip: t('due_badge_t'),
+    wantSum: t('pm_summary', { n: 5, late: 1 }) }));
+  ok('the heading badge is labelled as overdue CM rounds', counts.lbl === counts.wantLbl && /CM rounds overdue/i.test(counts.lbl), JSON.stringify(counts));
+  ok('  and its tooltip says the 1C list is counted separately', counts.tip === counts.wantTip && /1C/.test(counts.tip), counts.tip);
+  ok('the 1C list carries its own count: 5 work orders, 1 past its plan date (DEF3; DEF4 has no date)',
+     counts.sum === counts.wantSum, counts.sum);
+  await p.click('#pmPrioF [data-pp="P1"]');
+  await p.waitForTimeout(200);
+  ok('  counted from the whole list, not the chip selected', (await p.evaluate(() => $('pmSummary').textContent)) === counts.wantSum);
+  await p.click('#pmPrioF [data-pp=""]');
+  await p.waitForTimeout(200);
+  await p.click('header .lang button[data-lang="ru"]');
+  await p.waitForTimeout(300);
+  const ru = await p.evaluate(() => ({ lbl: $('dueCountLbl').textContent, sum: $('pmSummary').textContent }));
+  ok('  in Russian too', /просрочено/i.test(ru.lbl) && /Заказ-нарядов 1С в списке: 5/.test(ru.sum), JSON.stringify(ru));
+  await p.click('header .lang button[data-lang="en"]');
+  await p.waitForTimeout(300);
+
   console.log('\n5. the info sheet — a repair work order carries every defect field named');
   await p.click('#duePmList [data-wo="WO-2"]');
   await p.waitForTimeout(150);
