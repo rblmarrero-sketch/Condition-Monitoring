@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=494">
+<link rel="manifest" href="manifest.webmanifest?v=495">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=494">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=494">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=494">
+<link rel="apple-touch-icon" href="icon-192.png?v=495">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=495">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=495">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2761,16 +2761,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=494"></script>
-<script src="upload-defaults.js?v=494"></script>
-<script src="hme.js?v=494"></script>
-<script src="mp-fc.js?v=494"></script>
-<script src="rtw.js?v=494"></script>
-<script src="hme-cascade.js?v=494"></script>
-<script src="assets.js?v=494"></script>
-<script src="temp-limits.js?v=494"></script>
-<script src="normalize.js?v=494"></script>
-<script src="terms.js?v=494"></script>
+<script src="native.js?v=495"></script>
+<script src="upload-defaults.js?v=495"></script>
+<script src="hme.js?v=495"></script>
+<script src="mp-fc.js?v=495"></script>
+<script src="rtw.js?v=495"></script>
+<script src="hme-cascade.js?v=495"></script>
+<script src="assets.js?v=495"></script>
+<script src="temp-limits.js?v=495"></script>
+<script src="normalize.js?v=495"></script>
+<script src="terms.js?v=495"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2789,25 +2789,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=494"></script>
-<script src="edits.js?v=494"></script>
-<script src="due.js?v=494"></script>
-<script src="wear.js?v=494"></script>
-<script src="wear-figs.js?v=494"></script>
-<script src="wear-map.js?v=494"></script>
-<script src="machine-photos.js?v=494"></script>
-<script src="machine-fig.js?v=494"></script>
-<script src="get.js?v=494"></script>
-<script src="points.js?v=494"></script>
-<script src="uc-points.js?v=494"></script>
-<script src="inspect-guide.js?v=494"></script>
-<script src="get-figs.js?v=494"></script>
-<script src="body-points.js?v=494"></script>
-<script src="body-map.js?v=494"></script>
-<script src="lube.js?v=494"></script>
-<script src="lube-overrides.js?v=494"></script>
-<script src="lube2027.js?v=494"></script>
-<script src="report-core.js?v=494"></script>
+<script src="grade.js?v=495"></script>
+<script src="edits.js?v=495"></script>
+<script src="due.js?v=495"></script>
+<script src="wear.js?v=495"></script>
+<script src="wear-figs.js?v=495"></script>
+<script src="wear-map.js?v=495"></script>
+<script src="machine-photos.js?v=495"></script>
+<script src="machine-fig.js?v=495"></script>
+<script src="get.js?v=495"></script>
+<script src="points.js?v=495"></script>
+<script src="uc-points.js?v=495"></script>
+<script src="inspect-guide.js?v=495"></script>
+<script src="get-figs.js?v=495"></script>
+<script src="body-points.js?v=495"></script>
+<script src="body-map.js?v=495"></script>
+<script src="lube.js?v=495"></script>
+<script src="lube-overrides.js?v=495"></script>
+<script src="lube2027.js?v=495"></script>
+<script src="report-core.js?v=495"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -3562,6 +3562,9 @@ const I18N = {
     ready_all:"All {n} checks passed — tap to read them",
     rdy_off_t:"Works with no signal", rdy_off_ok:"The whole app is on the phone — {n} files.",
     rdy_off_part:"{n} of {of} files are here. Fix this before you go.",
+    rdy_off_installing:"Downloading for offline use: {n} of {of} files. Keep the app open with signal until it finishes.",
+    rdy_v_installing:"Getting ready for offline use — {n} of {of} files",
+    rdy_inst_sub:"Keep the app open with signal; it finishes by itself.",
     rdy_off_none:"Not installed for offline use yet. Connect once before leaving.",
     rdy_off_slow:"The offline copy did not answer. Try again in a moment.",
     rdy_bld_t:"Up to date", rdy_bld_ok:"Build {n}, the newest there is (checked {t}).",
@@ -4236,6 +4239,9 @@ const I18N = {
     ready_all:"Все проверки пройдены ({n}) — нажмите, чтобы посмотреть",
     rdy_off_t:"Работает без связи", rdy_off_ok:"Всё приложение на телефоне — {n} файлов.",
     rdy_off_part:"На телефоне {n} из {of} файлов. Исправьте до выезда.",
+    rdy_off_installing:"Загрузка для работы без связи: {n} из {of} файлов. Держите приложение открытым при наличии связи до завершения.",
+    rdy_v_installing:"Подготовка к работе без связи — {n} из {of} файлов",
+    rdy_inst_sub:"Держите приложение открытым при наличии связи — загрузка завершится сама.",
     rdy_off_none:"Ещё не установлено для работы без связи. Подключитесь один раз до выезда.",
     rdy_off_slow:"Офлайн-копия не ответила. Повторите через мгновение.",
     rdy_bld_t:"Актуальная версия", rdy_bld_ok:"Сборка {n}, новее нет (проверено {t}).",
@@ -14714,7 +14720,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="494";
+const BUILD="495";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -17618,11 +17624,21 @@ function renderReady(state){
   const el=$("readyBar"); if(!el) return;
   /* The offline copy's own verdict always outranks the yard's on this bar. */
   delete el.dataset.yard; el.onclick=null;
+  if(!state || state.kind!=="installing") delete el.dataset.inst;
   if(!state){ el.className="ready"; el.textContent=""; return; }
   if(state.kind==="ok"){
     el.className="ready good";
     el.innerHTML='<span class="dot"></span><span>'+esc(t("rdy_ok"))+'</span>';
     if(lastYard && lastYard.v.k!=="ok") renderYardBar();   // the copy is fine; the field check may not be
+    return;
+  }
+  /* A first install still downloading: how far it has got, and no repair
+     button — there is nothing to repair, and no worker in charge to ask. */
+  if(state.kind==="installing"){
+    el.dataset.inst="1";
+    el.className="ready warn";
+    el.innerHTML='<b>'+esc(t("rdy_v_installing",{n:state.have,of:state.need}))+'</b>'
+      +'<span class="sub">'+esc(t("rdy_inst_sub"))+'</span>';
     return;
   }
   if(state.kind==="busy"){
@@ -17651,13 +17667,25 @@ function checkReady(){
        say nothing rather than alarm somebody about a state that fixes itself a
        second later. Only speak up if it is still true once the page has
        settled. */
-    renderReady(null);
+    /* Not blanked between re-asks while an install count is showing, or the
+       bar flickers every 3 s. */
+    if(!($("readyBar")||{dataset:{}}).dataset.inst) renderReady(null);
+    /* A worker that is installing can say how far it has got; while it does,
+       the bar shows the count and asks again every 3 s, so it moves instead of
+       sitting on "0 of N" (the audit of 2026-10-01). */
+    swAskInstalling().then(h=>{
+      if(run!==readyRun || !h || !h.need || (navigator.serviceWorker||{}).controller) return;
+      renderReady({kind:"installing", have:h.have||0, need:h.need});
+      setTimeout(()=>{ if(run===readyRun) checkReady(); }, 3000);
+    });
     /* If a worker has landed by then, ASK it — a check that only ever spoke
        when the worker was still missing stayed silent for good on a phone
        whose first install took a few seconds longer than this timer. */
     setTimeout(()=>{ if(run!==readyRun) return;
       if((navigator.serviceWorker||{}).controller) checkReady();
-      else renderReady({kind:"bad", have:0, need:ESSENTIAL_N}); }, 12000);
+      else swAskInstalling().then(h=>{ if(run!==readyRun) return;
+        /* Still installing: the 3 s re-ask above owns the bar. */
+        if(!(h && h.need)) renderReady({kind:"bad", have:0, need:ESSENTIAL_N}); }); }, 12000);
     return;
   }
   const ch=new MessageChannel();
@@ -17691,6 +17719,28 @@ setTimeout(checkReady, 2200);
    by deleting work. So the list lives on the queue screen, runs itself when
    that screen opens, and each row that is not green offers the one tap that
    fixes it. */
+/* THE FIRST INSTALL, WHILE IT IS STILL DOWNLOADING.
+
+   With no worker in charge yet, swAsk() answered null and the card said
+   "Not installed for offline use yet" — correct, and flat: on a one-bar link
+   the first precache can take minutes and the card said the same thing from
+   the first second to the last (audit of 2026-10-01). The worker that is
+   installing can be asked the same question the active one answers
+   (sw-health counts this build's essential files already in its cache), so
+   the card can say how far it has got. null when there is no worker at all. */
+function swAskInstalling(){
+  return new Promise(res=>{
+    if(!("serviceWorker" in navigator) || !navigator.serviceWorker.getRegistration) return res(null);
+    navigator.serviceWorker.getRegistration().then(reg=>{
+      const w=reg && (reg.installing || reg.waiting);
+      if(!w) return res(null);
+      const ch=new MessageChannel();
+      const t0=setTimeout(()=>res(null), 3000);
+      ch.port1.onmessage=ev=>{ clearTimeout(t0); res(Object.assign({installing:true}, ev.data||{})); };
+      try{ w.postMessage({type:"sw-health"},[ch.port2]); }catch(e){ clearTimeout(t0); res(null); }
+    }).catch(()=>res(null));
+  });
+}
 function swAsk(){
   return new Promise(res=>{
     if(!("serviceWorker" in navigator) || !navigator.serviceWorker.controller) return res(null);
@@ -17702,6 +17752,21 @@ function swAsk(){
   });
 }
 let yardBusy=false;
+/* The card answers again the moment the install finishes and the worker takes
+   charge — the one event that changes its answer. Not a timer: a full
+   readiness check can call checkForNewBuild() and so reg.update(), and doing
+   that every few seconds while a worker is installing competed with the
+   install itself (tests/updatesafe.cjs went intermittent). The live count
+   is on the capture-screen bar, which asks the installing worker one light
+   question every 3 s and nothing else. */
+function yardInstallPoll(){
+  if(yardInstallPoll.on || !("serviceWorker" in navigator)) return;
+  yardInstallPoll.on=1;
+  navigator.serviceWorker.addEventListener("controllerchange",()=>{
+    yardInstallPoll.on=0;
+    setTimeout(()=>{ yardCheck().catch(e=>bad("yard-install", e)); }, 500);
+  },{once:true});
+}
 /* ── NOTHING HERE MAY HANG ───────────────────────────────────────────────────
 
    A technician reads this card, sees whether the phone is ready, and walks out
@@ -17753,6 +17818,10 @@ function yardVerdict(rows){
   const hasKey=key=>rows.some(r=>r.key===key && r.k!=="ok");
   if(hasKey("storage"))  return {k:"bad",  s:"rdy_v_storage"};
   if(hasKey("offline"))  return {k:"bad",  s:"rdy_v_setup"};
+  /* Not "setup needed": nothing is wrong, it is still downloading — say how
+     far it has got, and keep it loud, because it is not ready to leave yet. */
+  { const r=rows.find(x=>x.key==="offline_installing" && x.k!=="ok");
+    if(r) return {k:"bad", s:"rdy_v_installing", vars:r.vars||{}}; }
   if(hasKey("dest"))     return {k:"bad",  s:"rdy_v_setup"};
   if(hasKey("refs"))     return {k:"bad",  s:"rdy_v_setup"};
   if(hasKey("queue_recover")) return {k:"bad", s:"rdy_v_recover"};
@@ -17812,7 +17881,7 @@ function renderYardBar(){
   if(!yardLoud(v)){ if(el.dataset.yard){ delete el.dataset.yard; el.onclick=null; checkReady(); } return; }
   el.dataset.yard="1";
   el.className="ready "+(v.k==="bad"?"bad":"warn");
-  el.innerHTML='<b>'+esc(t("rdy_bar_not",{s:t(v.s)}))+'</b>';
+  el.innerHTML='<b>'+esc(t("rdy_bar_not",{s:t(v.s,v.vars)}))+'</b>';
   el.onclick=()=>showPane("paneSystem");
 }
 let yardNotified="";
@@ -17825,7 +17894,7 @@ async function yardNotify(v){
     yardNotified=key;
     if(key==="ok") return;                         // silence is the good news; the worker says "Ready" on its wakes
     const reg=await navigator.serviceWorker.ready;
-    await reg.showNotification(t("rdy_notif_not"),{ body:t(v.s), tag:"cm-ready", renotify:false, icon:"icon-192.png", badge:"icon-192.png" });
+    await reg.showNotification(t("rdy_notif_not"),{ body:t(v.s,v.vars), tag:"cm-ready", renotify:false, icon:"icon-192.png", badge:"icon-192.png" });
   }catch(e){}
 }
 setTimeout(()=>{ yardCheck().catch(e=>bad("yard-boot", e)); }, 5000);
@@ -17847,7 +17916,13 @@ async function yardCheck(){
   try{
     /* 1. is the whole app on the phone */
     const h=await within(5000, ()=>swAsk(), {slow:true});
-    if(!h) add("warn",t("rdy_off_t"),t("rdy_off_none"),null,"offline");
+    const hi = h ? null : await within(4000, ()=>swAskInstalling(), null);
+    if(!h && hi && hi.need){
+      add("warn",t("rdy_off_t"),t("rdy_off_installing",{n:hi.have||0,of:hi.need}),null,"offline_installing");
+      rows[rows.length-1].vars={n:hi.have||0,of:hi.need};
+      yardInstallPoll();
+    }
+    else if(!h) add("warn",t("rdy_off_t"),t("rdy_off_none"),null,"offline");
     /* Its own key, not "offline": yardVerdict() folds every non-ok row under
        one key into that key's own fixed verdict, so a one-off 4s timeout on
        the health probe was reaching the same "Setup needed before you go"
@@ -18021,7 +18096,7 @@ async function yardCheck(){
   renderYardBar(); yardNotify(v);
   const badge=$("yardBadge");
   if(badge){ badge.textContent = TERMS.t(lang, v.k==="ok"?"ready":v.k==="warn"?"ready_warn":"not_ready");
-             badge.title = t(v.s);
+             badge.title = t(v.s,v.vars);
              badge.className = "count-badge "+(v.k==="ok"?"ok":v.k==="warn"?"warn":"bad"); }
   /* Six green ticks is a wall of good news, and this card exists to surface the
      one row that is NOT. When they all pass it collapses to a line saying so,
@@ -18033,7 +18108,7 @@ async function yardCheck(){
     if(bad) card.classList.remove("folded");
     else if(!card.dataset.opened) card.classList.add("folded");
     const sum=$("yardSum");
-    if(sum) sum.textContent = bad ? t(v.s) : t("ready_all",{n:rows.length});
+    if(sum) sum.textContent = bad ? t(v.s,v.vars) : t("ready_all",{n:rows.length});
   }
   list.innerHTML="";
   rows.forEach(r=>{
