@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-01T10:47:37+00:00",
+  "generated": "2026-10-01T11:27:45+00:00",
   "byUnit": {
     "BL001": [
       {
@@ -25,7 +25,7 @@
     ],
     "CD007": [
       {
-        "wo": "GD-023097",
+        "wo": "GD-023088",
         "hours": 1000,
         "types": [
           "INSP"
@@ -56,7 +56,7 @@
     ],
     "CD009": [
       {
-        "wo": "GD-023141",
+        "wo": "GD-023133",
         "hours": 1000,
         "types": [
           "INSP"
@@ -7183,12 +7183,12 @@
       "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "hours": null,
       "plan": "2026-09-30",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "DD-00012683",
       "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "cause": "Поврежден шланга/линии",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-09-30"
     },
     {
       "wo": "WO-017180",
@@ -10197,7 +10197,25 @@
       "completed": "2026-09-20"
     },
     {
-      "wo": "GD-023090",
+      "wo": "GD-023083",
+      "equip": "CD007",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-08-01",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-08-01",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "GD-023085",
       "equip": "CD007",
       "cls": "GEN",
       "comp": "",
@@ -10206,6 +10224,24 @@
       "raised": "2026-08-01",
       "type": "500 Hours service Planned",
       "hours": 500,
+      "plan": "2026-08-01",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "GD-023088",
+      "equip": "CD007",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "General Inspection",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-08-01",
+      "type": "1000 Hours service Planned",
+      "hours": 1000,
       "plan": "2026-08-01",
       "status": "Elimination scheduled",
       "request": "",
@@ -10233,61 +10269,7 @@
       "completed": ""
     },
     {
-      "wo": "GD-023092",
-      "equip": "CD007",
-      "cls": "GEN",
-      "comp": "",
-      "desc": "250h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-08-01",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-08-01",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
-      "wo": "GD-023097",
-      "equip": "CD007",
-      "cls": "GEN",
-      "comp": "",
-      "desc": "General Inspection",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-08-01",
-      "type": "1000 Hours service Planned",
-      "hours": 1000,
-      "plan": "2026-08-01",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
-      "wo": "GD-023118",
-      "equip": "CD008",
-      "cls": "GEN",
-      "comp": "",
-      "desc": "250h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-08-01",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-08-01",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
-      "wo": "GD-023120",
+      "wo": "GD-023109",
       "equip": "CD008",
       "cls": "GEN",
       "comp": "",
@@ -10305,15 +10287,15 @@
       "completed": ""
     },
     {
-      "wo": "GD-023124",
+      "wo": "GD-023110",
       "equip": "CD008",
       "cls": "GEN",
       "comp": "",
-      "desc": "2000h service",
+      "desc": "250h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-08-01",
-      "type": "2000 Hours service Planned",
-      "hours": 2000,
+      "type": "250 Hours service Planned",
+      "hours": 250,
       "plan": "2026-08-01",
       "status": "Elimination scheduled",
       "request": "",
@@ -10341,7 +10323,25 @@
       "completed": ""
     },
     {
-      "wo": "GD-023134",
+      "wo": "GD-023117",
+      "equip": "CD008",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "2000h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-08-01",
+      "type": "2000 Hours service Planned",
+      "hours": 2000,
+      "plan": "2026-08-01",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "GD-023130",
       "equip": "CD009",
       "cls": "GEN",
       "comp": "",
@@ -10350,6 +10350,24 @@
       "raised": "2026-08-01",
       "type": "250 Hours service Planned",
       "hours": 250,
+      "plan": "2026-08-01",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "GD-023133",
+      "equip": "CD009",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "General Inspection",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-08-01",
+      "type": "1000 Hours service Planned",
+      "hours": 1000,
       "plan": "2026-08-01",
       "status": "Elimination scheduled",
       "request": "",
@@ -10368,24 +10386,6 @@
       "raised": "2026-08-01",
       "type": "500 Hours service Planned",
       "hours": 500,
-      "plan": "2026-08-01",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
-      "wo": "GD-023141",
-      "equip": "CD009",
-      "cls": "GEN",
-      "comp": "",
-      "desc": "General Inspection",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-08-01",
-      "type": "1000 Hours service Planned",
-      "hours": 1000,
       "plan": "2026-08-01",
       "status": "Elimination scheduled",
       "request": "",
