@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=495">
+<link rel="manifest" href="manifest.webmanifest?v=496">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=495">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=495">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=495">
+<link rel="apple-touch-icon" href="icon-192.png?v=496">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=496">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=496">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -162,6 +162,13 @@
      actually hit. */
   header .t{font-weight:700;font-size:clamp(12.5px,3.3vw,15.5px);letter-spacing:-.01em;
     margin-right:auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  /* TWO LINES BEFORE IT CLIPS. With the connection pill saying a sentence the
+     title got 32 px on a 390 px phone and read "Co…" (audit of 2026-10-01).
+     It now keeps room for its longest word ("Мониторинг") and wraps to "Condition /
+     Monitoring"; the pill wraps to two lines as well rather than taking the
+     title's room. 44 px controls are taller than two lines of either. */
+  header .t{white-space:normal;line-height:1.12;min-width:min-content;flex:0 1 auto;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
   /* 44 px, everywhere a thumb has to land. The header controls were 28 to 30 px
      tall — fine for a mouse, and not fine for the glove this app is used in.
      They are also the controls somebody reaches for when something is already
@@ -206,6 +213,7 @@
     overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .hdrsum i{display:block;font-style:normal;font-size:12px;color:var(--muted);margin-top:1px;
     font-variant-numeric:tabular-nums;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .hdrsum i{white-space:normal;overflow:visible;text-overflow:clip;}
   .hdrsum .hs-e{flex:0 0 auto;font-size:12.5px;font-weight:700;color:var(--accent);}
   .hdrsum:active{opacity:.7;}
   #cardInspection.folded{padding-bottom:8px;}
@@ -713,6 +721,8 @@
      cut with an ellipsis rather than pushing the header sideways. The full
      sentence is its title and the Saved screen. */
   header #netStatus{max-width:min(46vw,240px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  /* Two lines, not one clipped line: the sentence is the status. */
+  header #netStatus{white-space:normal;line-height:1.12;text-align:left;flex:0 1 auto;min-width:0;padding:0 9px;font-size:12px;}
   .pane{display:none;}
   .pane.on{display:block;}
   /* ONE STEP ON SCREEN. The three steps of an inspection were three regions of
@@ -732,6 +742,9 @@
     background:var(--surface);color:var(--ink);font:inherit;font-size:13px;text-align:left;cursor:pointer;}
   .stepctx b{font-weight:700;} .stepctx i{font-style:normal;color:var(--ink-2);min-width:0;
     overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  /* "TRUCK, D…" and "202…": the class and the date are what the line is FOR.
+     They wrap under the unit instead of being cut. */
+  .stepctx i{white-space:normal;overflow:visible;text-overflow:clip;}
   .stepctx .go{margin-left:auto;color:var(--ink-2);}
   /* What is missing, when a step will not open. */
   .stepmsg{margin:0 0 var(--s3);padding:10px 12px;border-radius:var(--r);font-size:13px;font-weight:600;
@@ -2761,16 +2774,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=495"></script>
-<script src="upload-defaults.js?v=495"></script>
-<script src="hme.js?v=495"></script>
-<script src="mp-fc.js?v=495"></script>
-<script src="rtw.js?v=495"></script>
-<script src="hme-cascade.js?v=495"></script>
-<script src="assets.js?v=495"></script>
-<script src="temp-limits.js?v=495"></script>
-<script src="normalize.js?v=495"></script>
-<script src="terms.js?v=495"></script>
+<script src="native.js?v=496"></script>
+<script src="upload-defaults.js?v=496"></script>
+<script src="hme.js?v=496"></script>
+<script src="mp-fc.js?v=496"></script>
+<script src="rtw.js?v=496"></script>
+<script src="hme-cascade.js?v=496"></script>
+<script src="assets.js?v=496"></script>
+<script src="temp-limits.js?v=496"></script>
+<script src="normalize.js?v=496"></script>
+<script src="terms.js?v=496"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2789,25 +2802,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=495"></script>
-<script src="edits.js?v=495"></script>
-<script src="due.js?v=495"></script>
-<script src="wear.js?v=495"></script>
-<script src="wear-figs.js?v=495"></script>
-<script src="wear-map.js?v=495"></script>
-<script src="machine-photos.js?v=495"></script>
-<script src="machine-fig.js?v=495"></script>
-<script src="get.js?v=495"></script>
-<script src="points.js?v=495"></script>
-<script src="uc-points.js?v=495"></script>
-<script src="inspect-guide.js?v=495"></script>
-<script src="get-figs.js?v=495"></script>
-<script src="body-points.js?v=495"></script>
-<script src="body-map.js?v=495"></script>
-<script src="lube.js?v=495"></script>
-<script src="lube-overrides.js?v=495"></script>
-<script src="lube2027.js?v=495"></script>
-<script src="report-core.js?v=495"></script>
+<script src="grade.js?v=496"></script>
+<script src="edits.js?v=496"></script>
+<script src="due.js?v=496"></script>
+<script src="wear.js?v=496"></script>
+<script src="wear-figs.js?v=496"></script>
+<script src="wear-map.js?v=496"></script>
+<script src="machine-photos.js?v=496"></script>
+<script src="machine-fig.js?v=496"></script>
+<script src="get.js?v=496"></script>
+<script src="points.js?v=496"></script>
+<script src="uc-points.js?v=496"></script>
+<script src="inspect-guide.js?v=496"></script>
+<script src="get-figs.js?v=496"></script>
+<script src="body-points.js?v=496"></script>
+<script src="body-map.js?v=496"></script>
+<script src="lube.js?v=496"></script>
+<script src="lube-overrides.js?v=496"></script>
+<script src="lube2027.js?v=496"></script>
+<script src="report-core.js?v=496"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -14720,7 +14733,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="495";
+const BUILD="496";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
