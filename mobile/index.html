@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=493">
+<link rel="manifest" href="manifest.webmanifest?v=494">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=493">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=493">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=493">
+<link rel="apple-touch-icon" href="icon-192.png?v=494">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=494">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=494">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -882,7 +882,8 @@
     width:6px;height:13px;border:solid #fff;border-width:0 3px 3px 0;transform:rotate(45deg);}
   .dest .dhead input[type="checkbox"]:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
   .provqr{width:100%;max-width:280px;margin:0 auto;display:block;background:#fff;border-radius:8px;padding:10px;}
-  .count-badge{background:var(--accent);color:#fff;border-radius:999px;padding:1px 8px;font-size:12px;margin-left:6px;}
+  .badgelbl{font-size:.72em;font-weight:500;letter-spacing:0;text-transform:none;}
+.count-badge{background:var(--accent);color:#fff;border-radius:999px;padding:1px 8px;font-size:12px;margin-left:6px;}
   .count-badge.warn{background:var(--warning);color:#111;} .count-badge.crit{background:var(--critical);}
   /* temperature reading */
   .tempbar{display:flex;align-items:center;gap:8px;font-size:12.5px;margin:-4px 0 12px;}
@@ -2202,7 +2203,11 @@
      one of them is asked at the start of every shift. -->
 <div class="pane" id="paneDue">
   <div class="card">
-    <h2><span data-i18n="sec_due">Inspection due</span> <span class="count-badge" id="dueCount">0</span></h2>
+    <!-- THE BADGE SAYS WHAT IT COUNTS. It is CM rounds past their interval
+         (dueRows, the same figure as the tab bar's), and a bare "0" over a 1C
+         list with LATE rows on it read as broken — audit of 2026-10-01. The
+         label says "CM rounds overdue"; the 1C list carries its own count. -->
+    <h2><span data-i18n="sec_due">Inspection due</span> <span class="count-badge" id="dueCount" data-i18n-title="due_badge_t">0</span> <span class="quiet badgelbl" id="dueCountLbl" data-i18n="due_badge_lbl">CM rounds overdue</span></h2>
     <div class="hint warn hidden" id="dueRunawayNote" data-i18n="due_healed"></div>
     <!-- ONE MACHINE, ASKED DIRECTLY.
 
@@ -2249,6 +2254,9 @@
            above (see renderDuePM's own comment). Hidden outright when 1C's
            data gives it nothing to split (one bucket only). -->
       <div class="tfilter dfilter" id="pmStatusF" aria-label="Status"></div>
+      <!-- The 1C list's OWN count, in words, so it is never read against the
+           heading badge above (which counts CM rounds overdue, not work orders). -->
+      <div class="quiet" id="pmSummary" style="margin:2px 0 8px"></div>
       <div id="duePmList"></div>
       <div class="hint" id="pmSchedAge" style="margin-top:8px"></div>
     </div>
@@ -2753,16 +2761,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=493"></script>
-<script src="upload-defaults.js?v=493"></script>
-<script src="hme.js?v=493"></script>
-<script src="mp-fc.js?v=493"></script>
-<script src="rtw.js?v=493"></script>
-<script src="hme-cascade.js?v=493"></script>
-<script src="assets.js?v=493"></script>
-<script src="temp-limits.js?v=493"></script>
-<script src="normalize.js?v=493"></script>
-<script src="terms.js?v=493"></script>
+<script src="native.js?v=494"></script>
+<script src="upload-defaults.js?v=494"></script>
+<script src="hme.js?v=494"></script>
+<script src="mp-fc.js?v=494"></script>
+<script src="rtw.js?v=494"></script>
+<script src="hme-cascade.js?v=494"></script>
+<script src="assets.js?v=494"></script>
+<script src="temp-limits.js?v=494"></script>
+<script src="normalize.js?v=494"></script>
+<script src="terms.js?v=494"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2781,25 +2789,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=493"></script>
-<script src="edits.js?v=493"></script>
-<script src="due.js?v=493"></script>
-<script src="wear.js?v=493"></script>
-<script src="wear-figs.js?v=493"></script>
-<script src="wear-map.js?v=493"></script>
-<script src="machine-photos.js?v=493"></script>
-<script src="machine-fig.js?v=493"></script>
-<script src="get.js?v=493"></script>
-<script src="points.js?v=493"></script>
-<script src="uc-points.js?v=493"></script>
-<script src="inspect-guide.js?v=493"></script>
-<script src="get-figs.js?v=493"></script>
-<script src="body-points.js?v=493"></script>
-<script src="body-map.js?v=493"></script>
-<script src="lube.js?v=493"></script>
-<script src="lube-overrides.js?v=493"></script>
-<script src="lube2027.js?v=493"></script>
-<script src="report-core.js?v=493"></script>
+<script src="grade.js?v=494"></script>
+<script src="edits.js?v=494"></script>
+<script src="due.js?v=494"></script>
+<script src="wear.js?v=494"></script>
+<script src="wear-figs.js?v=494"></script>
+<script src="wear-map.js?v=494"></script>
+<script src="machine-photos.js?v=494"></script>
+<script src="machine-fig.js?v=494"></script>
+<script src="get.js?v=494"></script>
+<script src="points.js?v=494"></script>
+<script src="uc-points.js?v=494"></script>
+<script src="inspect-guide.js?v=494"></script>
+<script src="get-figs.js?v=494"></script>
+<script src="body-points.js?v=494"></script>
+<script src="body-map.js?v=494"></script>
+<script src="lube.js?v=494"></script>
+<script src="lube-overrides.js?v=494"></script>
+<script src="lube2027.js?v=494"></script>
+<script src="report-core.js?v=494"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -3402,7 +3410,7 @@ const I18N = {
     saved_also:"{u} needs {n} more round(s) at this visit. Start one and the hours, the photographs of the machine, your name and the fix carry over — you do not walk it again.",
     saved_also_go:"Start {ty}",
     due_healed:"This screen was repainting itself without stopping, so its settings were put back to their defaults to free the app. Nothing else was changed — every round and photograph on this phone is still here.",
-    due_pm_seg:"1C PM",
+    due_badge_lbl:"CM rounds overdue", due_badge_t:"Condition-monitoring rounds past their interval — the CM programme. The 1C PM list counts 1C's own work orders separately.", pm_summary:"{n} 1C work orders on this list · {late} past their plan date", due_pm_seg:"1C PM",
     due_cm_seg:"CM",
     due_rtw_seg:"RTW",
     pm_info_sub:"Work order details",
@@ -4099,7 +4107,7 @@ const I18N = {
     saved_also:"{u}: на этот выезд осталось обходов — {n}. Начните следующий: моточасы, фотографии машины, ваше имя и координаты перенесутся — обходить заново не нужно.",
     saved_also_go:"Начать: {ty}",
     due_healed:"Этот экран перерисовывался без остановки, поэтому его настройки возвращены к значениям по умолчанию, чтобы освободить приложение. Больше ничего не менялось — все обходы и фотографии на этом телефоне на месте.",
-    due_pm_seg:"1С ПМ",
+    due_badge_lbl:"просрочено обходов CM", due_badge_t:"Обходы мониторинга состояния, просроченные по интервалу — программа CM. Список «1C PM» считает заказ-наряды 1С отдельно.", pm_summary:"Заказ-нарядов 1С в списке: {n} · просрочено по плану: {late}", due_pm_seg:"1С ПМ",
     due_cm_seg:"КМ",
     due_rtw_seg:"ВВР",
     pm_info_sub:"Сведения о наряде",
@@ -10142,6 +10150,16 @@ function renderDuePM(){
       renderDuePM();
     });
   }
+  /* The list's own total and how many of them are past 1C's plan date —
+     counted from the whole list (not the chips' selection), with the same
+     DUE.agendaPast the day headings use for "late", and a completed job is
+     never late. */
+  const sumEl=$("pmSummary");
+  if(sumEl){
+    const today0=todayISO();
+    const late=all.filter(r=>pmStatusOf(r)!=="complete" && (r.plan||r.raised) && DUE.agendaPast(today0, r.plan||r.raised)).length;
+    sumEl.textContent = all.length ? t("pm_summary",{n:all.length, late}) : "";
+  }
   let rows = pmPrio ? all.filter(r=>pmPrioOf(r)===pmPrio) : all.slice();
   if(pmStat) rows=rows.filter(r=>pmStatusOf(r)===pmStat);
   /* A SEARCH ANSWERS ABOUT THE MACHINE OR THE WORK ORDER, NOT THE PRIORITY —
@@ -14696,7 +14714,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="493";
+const BUILD="494";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
