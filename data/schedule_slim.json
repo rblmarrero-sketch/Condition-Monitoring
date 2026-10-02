@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-02T03:17:46+00:00",
+  "generated": "2026-10-02T04:08:17+00:00",
   "byUnit": {
     "BL001": [
       {
@@ -272,18 +272,6 @@
         "priority": "P3 Planned (PM)"
       }
     ],
-    "EX006": [
-      {
-        "wo": "WO-017419",
-        "hours": 2000,
-        "types": [
-          "FC",
-          "INSP"
-        ],
-        "plan": "2026-09-21",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
     "EX009": [
       {
         "wo": "WO-018528",
@@ -318,18 +306,6 @@
           "INSP"
         ],
         "plan": "2026-10-02",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "EX019": [
-      {
-        "wo": "WO-017382",
-        "hours": 1000,
-        "types": [
-          "FC",
-          "INSP"
-        ],
-        "plan": "2026-09-25",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -562,17 +538,6 @@
         "priority": "P3 Planned (PM)"
       }
     ],
-    "PU004": [
-      {
-        "wo": "WO-017372",
-        "hours": 1000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-09-26",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
     "TK003": [
       {
         "wo": "WO-016946",
@@ -659,20 +624,6 @@
           "MP"
         ],
         "plan": "2026-09-21",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "TK036": [
-      {
-        "wo": "WO-017367",
-        "hours": 4000,
-        "types": [
-          "FC",
-          "INSP",
-          "MP",
-          "TB"
-        ],
-        "plan": "2026-09-27",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -4696,24 +4647,6 @@
       "completed": "2026-09-27"
     },
     {
-      "wo": "WO-017367",
-      "equip": "TK036",
-      "cls": "HT",
-      "comp": "",
-      "desc": "Filter Cut / General Inspection / Magnetic Plug / Dump Body Liner",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-09-27",
-      "type": "4000 Hours service Planned",
-      "hours": 4000,
-      "plan": "2026-09-27",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
       "wo": "WO-017403",
       "equip": "TK091",
       "cls": "HT",
@@ -4958,12 +4891,12 @@
       "type": "1000 Hours service Planned",
       "hours": 1000,
       "plan": "2026-09-26",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-09-26"
     },
     {
       "wo": "WO-017389",
@@ -4975,6 +4908,24 @@
       "raised": "2026-09-26",
       "type": "500 Hours service Planned",
       "hours": 500,
+      "plan": "2026-09-26",
+      "status": "Completed",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "complete",
+      "completed": "2026-09-27"
+    },
+    {
+      "wo": "WO-017367",
+      "equip": "TK036",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Filter Cut / General Inspection / Magnetic Plug / Dump Body Liner",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-09-26",
+      "type": "4000 Hours service Planned",
+      "hours": 4000,
       "plan": "2026-09-26",
       "status": "Completed",
       "request": "",
@@ -5120,12 +5071,12 @@
       "type": "1000 Hours service Planned",
       "hours": 1000,
       "plan": "2026-09-25",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-09-26"
     },
     {
       "wo": "WO-017386",
@@ -5876,12 +5827,12 @@
       "type": "2000 Hours service Planned",
       "hours": 2000,
       "plan": "2026-09-21",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-09-22"
     },
     {
       "wo": "WO-016616",
