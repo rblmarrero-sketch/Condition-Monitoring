@@ -186,7 +186,7 @@ async function settled(p) {
   await p.waitForTimeout(450);
   ok('Enter stores the reading and moves on',
     await p.evaluate(() => draft.positions['IDLER.L-IN'].mm) === 24 &&
-    await p.evaluate(() => curItem) === 'IDLER.R-OUT',
+    await p.evaluate(() => curItem) === 'CARRIER.L-OUT',
     await p.evaluate(() => curItem));
 
   console.log('\nwhat the same point read last time');

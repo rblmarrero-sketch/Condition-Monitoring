@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=500">
+<link rel="manifest" href="manifest.webmanifest?v=501">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=500">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=500">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=500">
+<link rel="apple-touch-icon" href="icon-192.png?v=501">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=501">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=501">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2794,16 +2794,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=500"></script>
-<script src="upload-defaults.js?v=500"></script>
-<script src="hme.js?v=500"></script>
-<script src="mp-fc.js?v=500"></script>
-<script src="rtw.js?v=500"></script>
-<script src="hme-cascade.js?v=500"></script>
-<script src="assets.js?v=500"></script>
-<script src="temp-limits.js?v=500"></script>
-<script src="normalize.js?v=500"></script>
-<script src="terms.js?v=500"></script>
+<script src="native.js?v=501"></script>
+<script src="upload-defaults.js?v=501"></script>
+<script src="hme.js?v=501"></script>
+<script src="mp-fc.js?v=501"></script>
+<script src="rtw.js?v=501"></script>
+<script src="hme-cascade.js?v=501"></script>
+<script src="assets.js?v=501"></script>
+<script src="temp-limits.js?v=501"></script>
+<script src="normalize.js?v=501"></script>
+<script src="terms.js?v=501"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2822,25 +2822,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=500"></script>
-<script src="edits.js?v=500"></script>
-<script src="due.js?v=500"></script>
-<script src="wear.js?v=500"></script>
-<script src="wear-figs.js?v=500"></script>
-<script src="wear-map.js?v=500"></script>
-<script src="machine-photos.js?v=500"></script>
-<script src="machine-fig.js?v=500"></script>
-<script src="get.js?v=500"></script>
-<script src="points.js?v=500"></script>
-<script src="uc-points.js?v=500"></script>
-<script src="inspect-guide.js?v=500"></script>
-<script src="get-figs.js?v=500"></script>
-<script src="body-points.js?v=500"></script>
-<script src="body-map.js?v=500"></script>
-<script src="lube.js?v=500"></script>
-<script src="lube-overrides.js?v=500"></script>
-<script src="lube2027.js?v=500"></script>
-<script src="report-core.js?v=500"></script>
+<script src="grade.js?v=501"></script>
+<script src="edits.js?v=501"></script>
+<script src="due.js?v=501"></script>
+<script src="wear.js?v=501"></script>
+<script src="wear-figs.js?v=501"></script>
+<script src="wear-map.js?v=501"></script>
+<script src="machine-photos.js?v=501"></script>
+<script src="machine-fig.js?v=501"></script>
+<script src="get.js?v=501"></script>
+<script src="points.js?v=501"></script>
+<script src="uc-points.js?v=501"></script>
+<script src="inspect-guide.js?v=501"></script>
+<script src="get-figs.js?v=501"></script>
+<script src="body-points.js?v=501"></script>
+<script src="body-map.js?v=501"></script>
+<script src="lube.js?v=501"></script>
+<script src="lube-overrides.js?v=501"></script>
+<script src="lube2027.js?v=501"></script>
+<script src="report-core.js?v=501"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -7202,14 +7202,34 @@ function wireUCViews(){
 }
 /* An untouched round is all white pucks, which reads as "broken" rather than
    "nothing captured yet". Say the count, so the absence of colour is an answer. */
-/* The round in order, so Next means the next thing you walk to. */
+/* The round in order, so Next means the next thing you walk to — and a fitter
+   walks ONE SIDE of the machine at a time. WEAR.walk lists each component's
+   left and right positions together (idler left, idler right, carrier left,
+   carrier right...), which is the right order for a printed table and the
+   wrong one for a person: Next sent them across the machine and back on every
+   press. Asked for from the field on 2026-10-02: "if they choose left side, all
+   the components on the left, then they can go to the right." So the walk is
+   split by side, the side they chose first (ucStartSide, set by the LEFT /
+   RIGHT buttons over the map and remembered on this phone), keeping
+   WEAR.walk's own order within each side. Only the Next/Back sequence and its
+   count change; WEAR.walk itself, and every report built from it, do not. */
+let ucStartSide = localStorage.getItem("uc_start_side")==="R" ? "R" : "L";
+const ucSideOf = k => (ucSplit(k)[1]||"").charAt(0);
 function ucOrder(){ if(bodyType()) return bodyOrder();
-  const st=ucStatus(curEquip); return st.ok ? WEAR.walk(st.model).map(w=>w.k) : []; }
+  const st=ucStatus(curEquip); if(!st.ok) return [];
+  const keys=WEAR.walk(st.model).map(w=>w.k);
+  return keys.filter(k=>ucSideOf(k)===ucStartSide)
+    .concat(keys.filter(k=>ucSideOf(k)!==ucStartSide)); }
 function ucStep(d){
   const o=ucOrder(), i=o.indexOf(curItem);
   if(i<0) return;
   const j=i+d;
   if(j<0 || j>=o.length) return;
+  /* Crossing to the other side turns the map over with it, so the picture
+     above the reading is the side the reading belongs to. The starting side
+     does not move: Back from the first point of the second side returns to
+     the last point of the first. */
+  const sd=ucSideOf(o[j]); if(sd==="L"||sd==="R") ucSide=sd;
   pickComponent(o[j]);
   const f=$("ucFields"); if(f) f.scrollTop=0;
 }
@@ -7449,7 +7469,7 @@ function ucProfile(unit, ty){
 /* Which side is being walked. One at a time, not two: the two frames were the
    same photograph twice over, which said nothing and cost half the screen.
    The side is a choice at the top and everything below belongs to it. */
-let ucSide="L";
+let ucSide = localStorage.getItem("uc_start_side")==="R" ? "R" : "L";
 /* A number covers one or more measurements. Its colour is the worst of them,
    so a group with one point past condemn reads red even if the other five are
    fine — which is the only reading that is any use at arm's length. */
@@ -7559,7 +7579,8 @@ function renderUCMap(){
         esc(ucMemberLabel(k))+'</button>').join("")+'</div></div>';
   $("posnav").innerHTML=h;
   $("posnav").querySelectorAll("[data-ucside]").forEach(b=>b.onclick=()=>{
-    saveCur(); ucSide=b.dataset.ucside;
+    /* Choosing a side is also choosing where the walk starts (ucOrder). */
+    saveCur(); ucSide=b.dataset.ucside; ucStartSide=ucSide; lsSet("uc_start_side",ucSide);
     const k=(ucGroupKeys(ucGroupOf(curItem)||1)||[])[0];
     curItem=k||""; loadPos(); renderChips(); });
   wireUCViews();
@@ -14796,7 +14817,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="500";
+const BUILD="501";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
