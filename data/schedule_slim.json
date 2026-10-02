@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-02T02:07:45+00:00",
+  "generated": "2026-10-02T02:42:56+00:00",
   "byUnit": {
     "BL001": [
       {
@@ -4418,12 +4418,12 @@
       "type": "250 Hours service Planned",
       "hours": 250,
       "plan": "2026-09-28",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-09-28"
     },
     {
       "wo": "WO-010605",
@@ -4436,12 +4436,12 @@
       "type": "500 Hours service Planned",
       "hours": 500,
       "plan": "2026-09-28",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-09-28"
     },
     {
       "wo": "WO-017896",
