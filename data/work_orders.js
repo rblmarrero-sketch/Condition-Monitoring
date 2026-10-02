@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-02T21:37:52+00:00",
+  "generated": "2026-10-02T22:08:00+00:00",
   "source": "https://askpi.94-131-94-152.sslip.io/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 683,
@@ -316,7 +316,7 @@ window.CM_WO_DATA = {
     "WE009",
     "WE011"
   ],
-  "duplicateRowsCollapsed": 340,
+  "duplicateRowsCollapsed": 341,
   "roundsDedupedWithinVisit": 6,
   "columns": [
     "Asset description",
@@ -2840,7 +2840,7 @@ window.CM_WO_DATA = {
       "raised": "2026-08-20",
       "detected": "2026-08-20",
       "planStart": "2026-10-01",
-      "closed": null,
+      "closed": "2026-10-02",
       "asset": "TK126",
       "defect": "DD-00011242",
       "requestNo": "DD-00011242",
@@ -2851,7 +2851,7 @@ window.CM_WO_DATA = {
       "cause": "Абразивный износ",
       "causeFrom": "wo",
       "descr": "Предельный износ футеровочных пластин кузова",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "by": "Zhomart",
       "woNumber": "WO-016191",
       "maintType": "P4 Planned Repair",
@@ -19332,15 +19332,15 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-10-01",
-      "planStartDt": "2026-10-01T00:00:00",
-      "planEnd": "2026-10-02",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "planStartDt": "2026-10-01T14:50:00",
+      "planEnd": "2026-10-01",
+      "actualStart": "2026-10-01",
+      "actualStartDt": "2026-10-01T14:50:00",
+      "actualEnd": "2026-10-01"
     },
     {
       "equip": "EX021",

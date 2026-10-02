@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-02T21:37:52+00:00",
+  "generated": "2026-10-02T22:08:00+00:00",
   "byUnit": {
     "BL001": [
       {
@@ -3937,12 +3937,12 @@
       "type": "250 Hours service Planned",
       "hours": 250,
       "plan": "2026-10-01",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-01"
     },
     {
       "wo": "WO-017347",
@@ -10327,12 +10327,12 @@
       "type": "2.01 Wear / Износ",
       "hours": null,
       "plan": "2026-10-01",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "DD-00011242",
       "defType": "2.01 Wear / Износ",
       "cause": "Абразивный износ",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-02"
     },
     {
       "wo": "WO-015252",
