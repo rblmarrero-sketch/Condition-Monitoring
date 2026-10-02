@@ -7,8 +7,9 @@
    office pages (dashboard/ and dashboard-next/ are both permanent, CLAUDE.md)
    and reads what the panel prints:
 
-     - a failure is a P1 or a counted breakdown inside the period; a P2 repair
-       is not one, and neither is a P1 from before the period;
+     - a failure is a P1, a P2 or a counted breakdown inside the period (P2
+       added 2026-10-02, decided by the site); a P4 planned repair is not one,
+       and neither is a P1 from before the period;
      - a failure with no downtime figure is COUNTED and said out loud, never
        read as zero hours;
      - a population with no failures has no MTBF — it says so in words;
@@ -30,6 +31,7 @@ const FIX = {
   relEvents: [
     { equip: 'TK101', wo: 'WO-2', priority: 'P1 Breakdown', start: '2026-09-21', startDt: '2026-09-21T08:00:00Z', endDt: '2026-09-21T20:00:00Z', downH: 12, durH: 9, bd: 1 },
     { equip: 'TK101', wo: 'WO-9', priority: 'P2 Urgent (Repair)', start: '2026-09-22', startDt: '2026-09-22T08:00:00Z', downH: 5, bd: 0 },
+    { equip: 'EX005', wo: 'WO-11', priority: 'P4 Planned (Repair)', start: '2026-09-26', startDt: '2026-09-26T06:00:00Z', downH: 7, bd: 0 },
     { equip: 'EX005', wo: 'WO-3', priority: 'P3 Planned (Repair)', start: '2026-09-25', startDt: '2026-09-25T06:00:00Z', endDt: '2026-09-25T10:00:00Z', downH: null, durH: null, bd: 1 },
     { equip: 'TK102', wo: 'WO-5', priority: 'P1 Breakdown', start: '2026-09-28', startDt: '2026-09-28T08:00:00Z', endDt: null, downH: null, durH: null, bd: 0 },
     { equip: 'TK102', wo: 'WO-1', priority: 'P1 Breakdown', start: '2026-07-01', startDt: '2026-07-01T08:00:00Z', endDt: '2026-07-01T09:00:00Z', downH: 100, bd: 1 },
@@ -43,21 +45,22 @@ console.log('\n1. THE ARITHMETIC, AGAINST FIGURES WORKED BY HAND');
   require(path.join(ROOT, 'dashboard/reliability.js'));
   const R = globalThis.CMRel;
   const r = R.compute(FIX, { days: 30, classOf: u => CLS[u] });
-  // T = 3 machines × 30 d × 24 h = 2160. Failures: TK101's P1, EX005's counted
-  // breakdown, TK102's P1 (no downtime). TK101's P2 is not a failure; TK102's
-  // July P1 is outside the period. D = 12 (docs) + 4 (EX005's start–end).
+  // T = 3 machines × 30 d × 24 h = 2160. Failures: TK101's P1 and P2, EX005's
+  // counted breakdown, TK102's P1 (no downtime). EX005's P4 is not a failure;
+  // TK102's July P1 is outside the period. D = 12 + 5 (docs) + 4 (EX005's start–end).
   ok('three machines, 2160 h', r.units === 3 && r.T === 2160, JSON.stringify([r.units, r.T]));
-  ok('three failures: two P1 and one counted breakdown, not the P2, not the one from July', r.failures === 3, r.failures);
-  ok('16 h of downtime: 12 from 1C\'s figure, 4 from the start–end dates', near(r.downH, 16) && r.fromDocs === 1 && r.fromDates === 1, JSON.stringify(r));
-  ok('the failure with no downtime figure is counted and named', r.unknownN === 1 && r.knownN === 2);
-  ok('MTTR = 16 ÷ 2 known = 8 h', near(r.mttr, 8), r.mttr);
-  ok('MTBF = (2160 − 16) ÷ 3 = 714.67 h', near(r.mtbf, 2144 / 3), r.mtbf);
-  ok('availability = 2144 ÷ 2160', near(r.avail, 2144 / 2160), r.avail);
+  ok('four failures: two P1, one P2, one counted breakdown; not the P4, not the one from July', r.failures === 4, r.failures);
+  ok('the P2 counts and the P4 does not', R.isFailure({ priority: 'P2 Urgent' }) && !R.isFailure({ priority: 'P4 Planned (Repair)' }) && !R.isFailure({ priority: 'P3 Planned (PM)' }));
+  ok('21 h of downtime: 12 + 5 from 1C\'s figure, 4 from the start–end dates', near(r.downH, 21) && r.fromDocs === 2 && r.fromDates === 1, JSON.stringify(r));
+  ok('the failure with no downtime figure is counted and named', r.unknownN === 1 && r.knownN === 3);
+  ok('MTTR = 21 ÷ 3 known = 7 h', near(r.mttr, 7), r.mttr);
+  ok('MTBF = (2160 − 21) ÷ 4 = 534.75 h', near(r.mtbf, 2139 / 4), r.mtbf);
+  ok('availability = 2139 ÷ 2160', near(r.avail, 2139 / 2160), r.avail);
   ok('the machines are ranked by downtime', r.rows.map(x => x.unit).join() === 'TK101,EX005,TK102', r.rows.map(x => x.unit).join());
   const ht = R.compute(FIX, { days: 30, cls: 'HT', classOf: u => CLS[u] });
-  ok('class HT: two machines, two failures, MTBF (1440 − 12) ÷ 2 = 714', ht.units === 2 && ht.failures === 2 && near(ht.mtbf, 714), JSON.stringify([ht.units, ht.failures, ht.mtbf]));
+  ok('class HT: two machines, three failures, MTBF (1440 − 17) ÷ 3 = 474.33', ht.units === 2 && ht.failures === 3 && near(ht.mtbf, 1423 / 3), JSON.stringify([ht.units, ht.failures, ht.mtbf]));
   const ninety = R.compute(FIX, { days: 120, classOf: u => CLS[u] });
-  ok('a longer period takes in July\'s breakdown too', ninety.failures === 4 && near(ninety.downH, 116), JSON.stringify([ninety.failures, ninety.downH]));
+  ok('a longer period takes in July\'s breakdown too', ninety.failures === 5 && near(ninety.downH, 121), JSON.stringify([ninety.failures, ninety.downH]));
   const quiet = R.compute(Object.assign({}, FIX, { relEvents: FIX.relEvents.filter(e => e.equip !== 'TK101' && e.equip !== 'TK102' && e.equip !== 'EX005') }), { days: 30, classOf: u => CLS[u] });
   ok('no failures: no MTBF, no MTTR, availability 100%', quiet.mtbf === null && quiet.mttr === null && quiet.avail === 1, JSON.stringify([quiet.mtbf, quiet.mttr, quiet.avail]));
   /* A pull made before the ingester stopped writing it carries 1C's
@@ -115,11 +118,11 @@ async function panel(b, file, lang, serve) {
         top: [...document.querySelectorAll('#relTop tbody tr')].map(r => r.dataset.unit) };
     });
     ok('the panel is on the Reports tab', t.mtbf !== null, JSON.stringify(t).slice(0, 200));
-    // The panel opens on 90 days: T = 3 × 90 × 24 = 6480, MTBF = (6480 − 16) ÷ 3.
-    ok('MTBF reads 2 155 h — (6480 − 16) ÷ 3, rounded', /2\s?155\s*h/.test(t.mtbf || ''), t.mtbf);
-    ok('MTTR reads 8.0 h', /8\.0\s*h/.test(t.mttr || ''), t.mttr);
-    ok('availability reads 99.8% — 6464 ÷ 6480', /99\.8%/.test(t.av || ''), t.av);
-    ok('three failures over three machines', /^Failures\s*3/.test((t.f || '').replace(/\n/g, ' ')) || /\b3\b/.test(t.f || ''), t.f);
+    // The panel opens on 90 days: T = 3 × 90 × 24 = 6480, MTBF = (6480 − 21) ÷ 4.
+    ok('MTBF reads 1 615 h — (6480 − 21) ÷ 4, rounded', /1\s?615\s*h/.test(t.mtbf || ''), t.mtbf);
+    ok('MTTR reads 7.0 h', /7\.0\s*h/.test(t.mttr || ''), t.mttr);
+    ok('availability reads 99.7% — 6459 ÷ 6480', /99\.7%/.test(t.av || ''), t.av);
+    ok('four failures over three machines', /\b4\b/.test(t.f || ''), t.f);
     ok('the basis is printed: machines × days × 24', /3 machines × 90 days × 24 h/.test(t.basis), t.basis);
     ok('the failure with no downtime figure is said out loud', t.unknown);
     const want = await p.evaluate(() => [...new Set(['TK101', 'TK102', 'EX005'].map(u => (ASSET_BY[u] && ASSET_BY[u].cls) || ''))].sort());
@@ -128,7 +131,7 @@ async function panel(b, file, lang, serve) {
     // controls
     await p.selectOption('#relDays', '365');
     const f365 = await p.evaluate(() => document.getElementById('relFails').innerText);
-    ok('365 days takes in July\'s breakdown: four failures', /\b4\b/.test(f365), f365);
+    ok('365 days takes in July\'s breakdown: five failures', /\b5\b/.test(f365), f365);
     const tkCls = await p.evaluate(() => (ASSET_BY.TK101 && ASSET_BY.TK101.cls) || '');
     await p.selectOption('#relCls', tkCls);
     const ht = await p.evaluate(() => ({ f: document.getElementById('relFails').innerText, d: document.getElementById('relDays').value,
