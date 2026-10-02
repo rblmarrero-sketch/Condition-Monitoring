@@ -3777,7 +3777,10 @@ before trusting the panel's first numbers.
 `dashboard/reliability.js` (`CMRel`) is the one place the definitions live,
 loaded by both office pages. Calendar hours, machines × days × 24, because
 1C's operating-hour figure is a meter reading at registration and not a
-running total. A failure is P1 or a counted breakdown, starting in the period.
+running total. A failure is P1, P2 or a counted breakdown, starting in the
+period (P2 added 2026-10-02, decided by the site: an urgent unplanned repair
+takes the machine out of service as a breakdown does). The rule reads 1C's
+priority, not its maintenance type.
 Downtime comes from 1C's own figure, then the actual duration, then the
 start–end dates. A failure with none of the three is counted, left out of
 MTTR, and said out loud. MTBF = (T − D) ÷ failures. Availability =
@@ -3806,6 +3809,18 @@ column as `downH` (it is still counted in `relProfile`), and `CMRel.downtime`
 refuses a `downFrom: "register"` figure from a pull made before that, so the
 office stops seeing it the moment the page updates rather than at the next
 hourly run (`tests/relingest.py`, `tests/reliability.cjs`).
+
+**P2 COUNTS AS A FAILURE, AND THAT MOVES THE NUMBERS BY AN ORDER OF
+MAGNITUDE.** Asked on 2026-10-02, once the first real pull had shown the
+split: 1C carries about 10,000 "Mining Unplanned" jobs a year at P2 Urgent
+against about 1,900 at P1. Counting P1 alone, the last 30 days held 16
+failures (fleet MTBF about 30,700 h, MTTR 8 h, availability 99.97%);
+counting P1 and P2 they hold 1,028 (MTBF 472 h, MTTR 6.1 h, availability
+98.72%). The decision is the site's; `CMRel.isFailure` is the one line that
+states it, and the panel's subtitle names both priorities so nobody reads
+the new figures against the old definition. 70 of the year's P2 jobs are
+filed under the "P4 Planned Repair" maintenance type and count, because the
+rule reads priority.
 
 **EVERY PHONE BELONGS TO A NAMED PERSON, AND EVERY ROUND SAYS WHOSE PHONE
 FILED IT.** Audit item 9 (2026-10-01): "Inspected by" and "Verified by" are

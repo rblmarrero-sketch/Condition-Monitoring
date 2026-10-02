@@ -16,9 +16,13 @@
      time T       calendar hours: machines × days × 24. 1C's operating-hour
                   figure is a meter reading at registration, not a running
                   total, so it cannot be a denominator.
-     failure      a corrective work order 1C marks P1 (breakdown) or counts
-                  as a breakdown ("Count of break down from p1" > 0), starting
-                  inside the period
+     failure      a corrective work order 1C marks P1 (breakdown) or P2
+                  (urgent repair), or counts as a breakdown ("Count of break
+                  down from p1" > 0), starting inside the period. P2 was added
+                  on 2026-10-02, decided by the site: an urgent unplanned
+                  repair takes the machine out of service just as a breakdown
+                  does. The rule reads 1C's PRIORITY, not its maintenance
+                  type, so a P2 job filed under "P4 Planned Repair" counts.
      downtime D   per failure: 1C's "Down time by documents"; failing that
                   "Duration actual hours"; failing that the hours between the
                   actual start and end. A failure with none of the three is
@@ -46,7 +50,7 @@
   function isFailure(e) {
     if (!e) return false;
     if ((e.bd || 0) > 0) return true;
-    return /^\s*P1\b/i.test(String(e.priority || ""));
+    return /^\s*P[12]\b/i.test(String(e.priority || ""));
   }
 
   /* The downtime a failure cost, and where the figure came from. */
@@ -120,37 +124,37 @@
   const L = {
     en: {
       title: "Reliability — MTBF, MTTR, availability",
-      sub: "From 1C's corrective work orders. Calendar hours; failures are P1 breakdowns.",
+      sub: "From 1C's corrective work orders. Calendar hours; failures are P1 breakdowns and P2 urgent repairs.",
       period: "Period", days: "{n} days", cls: "Class", all: "All classes",
       mtbf: "MTBF", mttr: "MTTR", avail: "Availability", fails: "Failures",
-      mtbf_s: "hours between failures", mttr_s: "hours to repair", avail_s: "breakdown downtime only",
+      mtbf_s: "hours between failures", mttr_s: "hours to repair", avail_s: "failure downtime only (P1 + P2)",
       fails_s: "{n} machines", none: "no failures in {n} days", h: "{v} h",
       basis: "{u} machines × {d} days × 24 h = {t} h. {f} failures, {dh} h downtime: {docs} from 1C's downtime, {dur} from the actual duration, {dates} from start–end dates.",
       unknown: "{n} failure(s) carry no downtime figure in 1C — counted as failures, left out of MTTR, and their downtime is not in availability.",
       nodata: "Reliability figures arrive with the hourly 1C pull (data/reliability.json). It has not been generated yet — the next pull after this change creates it.",
       loadfail: "data/reliability.json could not be read ({e}). Nothing below is a measurement.",
       stale: "From the 1C pull of {at}.",
-      byclass: "By class", top: "Machines with the most breakdown downtime",
+      byclass: "By class", top: "Machines with the most failure downtime",
       c_cls: "Class", c_units: "Machines", c_unit: "Machine", c_f: "Failures", c_dh: "Downtime h",
       c_mtbf: "MTBF h", c_mttr: "MTTR h", c_av: "Availability",
-      csv: "Export CSV", unclassed: "(no class)", nofail: "No breakdowns recorded in this period.",
+      csv: "Export CSV", unclassed: "(no class)", nofail: "No P1 or P2 failures recorded in this period.",
     },
     ru: {
       title: "Надёжность — MTBF, MTTR, коэффициент готовности",
-      sub: "По корректирующим заказ-нарядам 1С. Календарные часы; отказ — аварийный ремонт P1.",
+      sub: "По корректирующим заказ-нарядам 1С. Календарные часы; отказ — аварийный ремонт P1 или срочный ремонт P2.",
       period: "Период", days: "{n} дн.", cls: "Класс", all: "Все классы",
       mtbf: "MTBF", mttr: "MTTR", avail: "Готовность", fails: "Отказы",
-      mtbf_s: "часов между отказами", mttr_s: "часов на ремонт", avail_s: "только аварийные простои",
+      mtbf_s: "часов между отказами", mttr_s: "часов на ремонт", avail_s: "только простои из-за отказов (P1 + P2)",
       fails_s: "машин: {n}", none: "нет отказов за {n} дн.", h: "{v} ч",
       basis: "{u} машин × {d} дн. × 24 ч = {t} ч. Отказов: {f}, простой {dh} ч: {docs} — по простою 1С, {dur} — по фактической длительности, {dates} — по датам начала и окончания.",
       unknown: "У {n} отказ(ов) в 1С нет данных о простое — они учтены как отказы, исключены из MTTR, а их простой не входит в готовность.",
       nodata: "Показатели надёжности приходят с ежечасной выгрузкой 1С (data/reliability.json). Файл ещё не сформирован — его создаст первая выгрузка после этого изменения.",
       loadfail: "Не удалось прочитать data/reliability.json ({e}). Ниже нет измерений.",
       stale: "По выгрузке 1С от {at}.",
-      byclass: "По классам", top: "Машины с наибольшим аварийным простоем",
+      byclass: "По классам", top: "Машины с наибольшим простоем из-за отказов",
       c_cls: "Класс", c_units: "Машин", c_unit: "Машина", c_f: "Отказы", c_dh: "Простой, ч",
       c_mtbf: "MTBF, ч", c_mttr: "MTTR, ч", c_av: "Готовность",
-      csv: "Экспорт CSV", unclassed: "(без класса)", nofail: "За период аварийных ремонтов не зарегистрировано.",
+      csv: "Экспорт CSV", unclassed: "(без класса)", nofail: "За период отказов P1 или P2 не зарегистрировано.",
     },
   };
   const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
