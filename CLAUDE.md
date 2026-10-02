@@ -3822,6 +3822,24 @@ the new figures against the old definition. 70 of the year's P2 jobs are
 filed under the "P4 Planned Repair" maintenance type and count, because the
 rule reads priority.
 
+**THE UNDERCARRIAGE IS WALKED ONE SIDE AT A TIME, AND NEXT NOW KNOWS IT.**
+Asked from the field on 2026-10-02: "they do all the ones in left or right
+side, then they go to the other side. In the app, when they press next it
+shows left then right, then left then right." `ucOrder()` handed Next
+`WEAR.walk` unchanged, and `WEAR.walk` lists each component's left and
+right positions together (idler L-OUT, L-IN, R-OUT, R-IN, then the
+carrier), which is a table's order, not a fitter's: every press sent them
+across the machine. `ucOrder()` now splits the walk by side, the chosen
+side first (`ucStartSide`, set by the LEFT / RIGHT buttons over the map and
+kept in `uc_start_side` on the phone, so an inspector who always starts on
+the right is not reset every round), keeping `WEAR.walk`'s order within
+each side. Crossing to the second side turns the map over with it
+(`ucStep` sets `ucSide`), the count runs on (point 19 of 36, not 1), and
+Back from the first point of the second side returns to the last of the
+first. `WEAR.walk` itself is untouched, so every report printed from it
+keeps its table order (`tests/ucside.cjs`; `tests/sheet.cjs`'s "Enter
+moves on" now lands on `CARRIER.L-OUT`, not `IDLER.R-OUT`).
+
 **EVERY PHONE BELONGS TO A NAMED PERSON, AND EVERY ROUND SAYS WHOSE PHONE
 FILED IT.** Audit item 9 (2026-10-01): "Inspected by" and "Verified by" are
 typed per round and checked against nothing, and the durable identity under
