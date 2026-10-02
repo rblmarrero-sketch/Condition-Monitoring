@@ -96,6 +96,14 @@ rows = [
     row(**{"Equip no": "DZ001", "Maintenence type": "Repair unplanned", "Work order number": "WO-7",
            "Priority": "P1 Breakdown", "Start date plan": d(500), "End date plan": d(500),
            "Start date actual": d(500), "End date actual": d(500, 12), "Down time by documents": 5}),
+    # the field shape read off the first live pull (2026-10-01): "Down time by
+    # documents" blank, the accumulation-register column carrying the machine's
+    # running total for the period. The register figure is NOT this job's
+    # downtime and must never become it.
+    row(**{"Equip no": "BL001", "Maintenence type": "Mining Unplanned", "Work order number": "WO-9",
+           "Priority": "P1 Breakdown", "Start date plan": d(15), "End date plan": d(15),
+           "Start date actual": d(15), "End date actual": d(15, 11), "Duration actual hours": 3,
+           "Down time by accamulation register per period": 926, "Count of break down from p1": 1}),
     # a unit with nothing but planned work -- still in the population
     row(**{"Equip no": "GR003", "Maintenence type": "500 Hours service Planned", "Work order number": "WO-8",
            "Priority": "P3 Planned (PM)", "Start date plan": d(3), "End date plan": d(3)}),
@@ -142,6 +150,14 @@ with tempfile.TemporaryDirectory() as tmp:
     ok("the population is every unit with a work order, broken down or not",
        all(u in rel["relUnits"] for u in ("TK101", "EX005", "DZ001", "GR003")), rel["relUnits"])
     ok("which columns were found is said", rel["relColumns"].get("down") == "Down time by documents", rel["relColumns"])
+    if "Down time by accamulation register per period" in COLS:
+        ok("the register's running total is never a job's downtime", ev.get("WO-9", {}).get("downH") is None, ev.get("WO-9"))
+        ok("and the job keeps its own actual duration", ev.get("WO-9", {}).get("durH") == 3, ev.get("WO-9"))
+        ok("nothing is filed as coming from the register", all(e.get("downFrom") != "register" for e in rel["relEvents"]))
+        ok("the register column is still counted in the profile",
+           rel["relProfile"]["shape"].get("downReg", {}).get("num", 0) >= 1, rel["relProfile"]["shape"].get("downReg"))
+    else:
+        ok("the live export still carries the register column this test reproduces", False)
     ok("no internal field leaks into the file", all("_shape" not in e for e in rel["relEvents"]))
 
 print("\nFAILED " + str(len(fails)) + ": " + " | ".join(fails) if fails else "\nall passed")

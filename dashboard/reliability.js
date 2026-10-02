@@ -51,7 +51,11 @@
 
   /* The downtime a failure cost, and where the figure came from. */
   function downtime(e) {
-    if (e.downH != null && e.downH > 0) return { h: e.downH, from: "docs" };
+    /* A figure the ingester took from 1C's accumulation register is a running
+       total for the machine and the period, repeated on every work order, not
+       what this one cost: never a downtime. Pulls made before the ingester
+       stopped writing it still carry it (downFrom "register"). */
+    if (e.downH != null && e.downH > 0 && e.downFrom !== "register") return { h: e.downH, from: "docs" };
     if (e.durH != null && e.durH > 0) return { h: e.durH, from: "duration" };
     const s = spanH(e.startDt || e.start, e.endDt || e.end);
     if (s != null && s > 0) return { h: s, from: "dates" };
