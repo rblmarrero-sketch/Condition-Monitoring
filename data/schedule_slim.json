@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-02T07:07:46+00:00",
+  "generated": "2026-10-02T07:37:47+00:00",
   "byUnit": {
     "BL001": [
       {
@@ -5809,12 +5809,12 @@
       "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "hours": null,
       "plan": "2026-10-01",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "DD-00013145",
       "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "cause": "Фитинг/штуцер ослаб",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-01"
     },
     {
       "wo": "WO-017419",
@@ -6475,12 +6475,12 @@
       "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "hours": null,
       "plan": "2026-10-01",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "DD-00012979",
       "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "cause": "Поврежден шланга/линии",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-01"
     },
     {
       "wo": "WO-017555",

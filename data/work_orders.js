@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-02T07:07:46+00:00",
+  "generated": "2026-10-02T07:37:47+00:00",
   "source": "https://askpi.94-131-94-152.sslip.io/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 683,
@@ -316,7 +316,7 @@ window.CM_WO_DATA = {
     "WE009",
     "WE011"
   ],
-  "duplicateRowsCollapsed": 335,
+  "duplicateRowsCollapsed": 338,
   "roundsDedupedWithinVisit": 6,
   "columns": [
     "Asset description",
@@ -1621,7 +1621,7 @@ window.CM_WO_DATA = {
       "raised": "2026-09-22",
       "detected": "2026-09-22",
       "planStart": "2026-10-01",
-      "closed": null,
+      "closed": "2026-10-01",
       "asset": "TK154",
       "defect": "DD-00013145",
       "requestNo": "DD-00013145",
@@ -1632,7 +1632,7 @@ window.CM_WO_DATA = {
       "cause": "Фитинг/штуцер ослаб",
       "causeFrom": "wo",
       "descr": "Множественные следы утечек масла.",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "by": "Slam",
       "woNumber": "WO-017820",
       "maintType": "P4 Planned Repair",
@@ -1759,7 +1759,7 @@ window.CM_WO_DATA = {
       "raised": "2026-09-19",
       "detected": "2026-09-19",
       "planStart": "2026-10-01",
-      "closed": null,
+      "closed": "2026-10-01",
       "asset": "TK126",
       "defect": "DD-00012979",
       "requestNo": "DD-00012979",
@@ -1770,7 +1770,7 @@ window.CM_WO_DATA = {
       "cause": "Поврежден шланга/линии",
       "causeFrom": "wo",
       "descr": "На поверхности РВД топливной системы выявлены следы запотевания.",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "by": "Slam",
       "woNumber": "WO-017800",
       "maintType": "P4 Planned Repair",
@@ -20548,7 +20548,7 @@ window.CM_WO_DATA = {
       "cmLabel": "500h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "CRTD",
+      "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
       "planStart": "2026-10-11",
@@ -27296,7 +27296,7 @@ window.CM_WO_DATA = {
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "CRTD",
+      "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
       "planStart": "2026-10-11",
