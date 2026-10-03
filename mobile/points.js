@@ -85,8 +85,17 @@
           mk("FDR","Final Drive Filter","Фильтр бортового редуктора"),mk("FUEL","Fuel Filter","Топливный фильтр")],
       INSP:["ENG","COOL","AIR","FUEL","ETRAC","WHEELM","FDR","HYD","HOIST","STEER","BRK","SUSP","FRAME","TYRE","ELEC","CAB","LUBE","FIRE"] },
     AT:{ en:"Articulated Truck", ru:"Сочленённый самосвал", asset:"TRUCK, ARTICULATED",
-      MP:[mk("FRD","Front Differential","Передний дифференциал"),mk("CTR","Centre / Inter-axle","Межосевой дифференциал"),
-          mk("RRD","Rear Differential","Задний дифференциал"),mk("TRANS","Transmission","Трансмиссия")],
+      /* The plugs are the lubrication sheet's own final-drive and centre
+         differential compartments (4AL/4AR front, 4CL/4CR centre, 4BL/4BR
+         rear), so a plug position and a sampling compartment carry the same
+         code. FRD, CTR and RRD are retired: records already captured on them
+         keep their names through `retired`, below. */
+      MP:[mk("4AL","Front-Left Final Drive","Левый передний бортовой редуктор"),mk("4AR","Front-Right Final Drive","Правый передний бортовой редуктор"),
+          mk("4CL","Centre Differential Left","Центральный дифференциал, левая сторона"),mk("4CR","Centre Differential Right","Центральный дифференциал, правая сторона"),
+          mk("4BL","Rear-Left Final Drive","Левый задний бортовой редуктор"),mk("4BR","Rear-Right Final Drive","Правый задний бортовой редуктор"),
+          mk("TRANS","Transmission","Трансмиссия")],
+      retired:{ MP:[mk("FRD","Front Differential","Передний дифференциал"),mk("CTR","Centre / Inter-axle","Межосевой дифференциал"),
+                    mk("RRD","Rear Differential","Задний дифференциал")] },
       FC:[mk("ENG","Engine Oil Filter","Фильтр моторного масла"),mk("TRANS","Transmission Filter","Фильтр трансмиссии"),
           mk("HYD","Hydraulic Filter","Гидравлический фильтр"),mk("FUEL","Fuel Filter","Топливный фильтр")],
       INSP:["ENG","COOL","AIR","FUEL","TRANS","ARTIC","AXLE","DRV","DIFF","HYD","HOIST","STEER","BRK","TYRE","FRAME","ELEC","CAB","LUBE","FIRE"] },
@@ -182,6 +191,9 @@
         if (e === key) return COMP[e] ? (COMP[e][lg] || COMP[e].en || "") : "";
       } else if (e.k === key) return e[lg] || e.en || "";
     }
+    /* A point the class has since retired: still named, never offered. */
+    var rl = (c && c.retired && c.retired[type]) || [];
+    for (var j = 0; j < rl.length; j++) if (rl[j].k === key) return rl[j][lg] || rl[j].en || "";
     /* A round type this class does not list, on a point every class shares —
        a thermal survey names its points from the inspection list, and a
        machine whose class was never filled in still has an engine. */
