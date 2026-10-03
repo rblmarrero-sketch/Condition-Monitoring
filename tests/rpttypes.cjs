@@ -165,7 +165,7 @@ const textOf = (p, key, lang) => p.evaluate(({ key, lang }) => {
   console.log("\n2. FILTER CUT — the filter findings table");
   const fc = await textOf(p, k("TK901", "2026-08-11", "FC"), "en");
   ok(/Filter findings/.test(fc), "the template subheading");
-  ok(/Service hours/.test(fc) && /Debris \/ defect/.test(fc), "  the template columns");
+  ok(/Service hours/.test(fc) && /Debris \/ defect/.test(fc), "  the template's own labels (service hours, debris / defect)");
   ok(/Light media debris/.test(fc) && /Next planned/.test(fc), "  debris and action printed");
 
   console.log("\n3. GENERAL INSPECTION — findings by component or system");

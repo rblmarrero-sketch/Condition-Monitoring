@@ -178,9 +178,12 @@ const LAY = ([equip]) => {
   const tall  = await p.evaluate(LAY, ['TK153']);
 
   console.log('1. a clean round is not a form somebody failed to fill in');
+  /* The findings are cards now, not a table with a Direct cause column: a
+     Normal point with nothing to say is a "No finding" line, and the only way
+     it could say "Not recorded" is by naming a point nobody recorded. */
   ok('no "Not recorded" against a cause on an all-Normal round',
      !/Direct cause<\/th>[\s\S]*?Not recorded/.test(clean.html)
-     && /class="muted">—</.test(clean.html),
+     && !/Not recorded/.test(clean.html),
      (clean.html.match(/Not recorded/g) || []).length + ' "Not recorded" left on the sheet');
   ok('  the maintenance section says so in a sentence, not five empty fields',
      /class="mact none"/.test(clean.html) && /No action required/.test(clean.html));
@@ -197,9 +200,9 @@ const LAY = ([equip]) => {
   console.log('\n3. the inspector\'s own words reach the sheet, in the grade\'s ink');
   ok('a comment on a table-bodied round is printed',
      /Metal throughout the pleats/.test(found.html) && /Clean/.test(clean.html));
-  ok('  under its own position, in the note row', /class="[^"]*rnote/.test(clean.html));
-  ok('  a Normal comment takes the Normal ink', /color:#0a7134">Clean/.test(clean.html));
-  ok('  a Severe one does not', /color:#b03a14">Metal throughout/.test(found.html));
+  ok('  under its own position, in the card\'s own sentence', /class="cm"/.test(clean.html));
+  ok('  a Normal comment takes the Normal ink', /color:#0a7134[^"]*">Clean/.test(clean.html));
+  ok('  a Severe one does not', /color:#b03a14[^"]*">Metal throughout/.test(found.html));
   ok('  and the ink is the ramp made for paper, never the chip fill',
      !/color:#fab219|color:#ec835a/.test(clean.html + found.html));
 
