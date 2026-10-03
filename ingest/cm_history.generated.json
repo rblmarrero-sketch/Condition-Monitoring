@@ -1,7 +1,7 @@
 {
-  "generated": "2026-10-03T02:58:29.797Z",
+  "generated": "2026-10-03T04:21:37.092Z",
   "source": "https://baimskaya-cm.duckdns.org?action=records",
-  "pairsSeen": 233,
+  "pairsSeen": 234,
   "hist": {
     "TB|TK101": {
       "d": "2026-08-18"
@@ -469,6 +469,9 @@
       "d": "2026-10-03"
     },
     "UC|EX024": {
+      "d": "2026-10-03"
+    },
+    "INSP|TK143": {
       "d": "2026-10-03"
     }
   }

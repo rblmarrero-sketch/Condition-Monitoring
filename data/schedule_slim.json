@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-03T02:58:50+00:00",
+  "generated": "2026-10-03T04:21:57+00:00",
   "byUnit": {
     "BL001": [
       {
@@ -179,19 +179,6 @@
           "UC"
         ],
         "plan": "2026-10-11",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "DZ006": [
-      {
-        "wo": "WO-016659",
-        "hours": 1000,
-        "types": [
-          "FC",
-          "INSP",
-          "UC"
-        ],
-        "plan": "2026-10-02",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -591,20 +578,6 @@
         "priority": "P3 Planned (PM)"
       }
     ],
-    "TK034": [
-      {
-        "wo": "WO-017992",
-        "hours": 2000,
-        "types": [
-          "FC",
-          "INSP",
-          "MP",
-          "TB"
-        ],
-        "plan": "2026-09-30",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
     "TK035": [
       {
         "wo": "WO-009622",
@@ -624,17 +597,6 @@
           "MP"
         ],
         "plan": "2026-10-22",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "TK041": [
-      {
-        "wo": "WO-017975",
-        "hours": 500,
-        "types": [
-          "MP"
-        ],
-        "plan": "2026-10-02",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -871,15 +833,6 @@
       }
     ],
     "TK114": [
-      {
-        "wo": "WO-016605",
-        "hours": 500,
-        "types": [
-          "MP"
-        ],
-        "plan": "2026-10-02",
-        "priority": "P3 Planned (PM)"
-      },
       {
         "wo": "WO-018498",
         "hours": 250,
@@ -3646,24 +3599,6 @@
       "completed": ""
     },
     {
-      "wo": "WO-016659",
-      "equip": "DZ006",
-      "cls": "DOZ",
-      "comp": "",
-      "desc": "Filter Cut / General Inspection / Undercarriage",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-10-02",
-      "type": "1000 Hours service Planned",
-      "hours": 1000,
-      "plan": "2026-10-02",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
       "wo": "WO-017983",
       "equip": "EX008",
       "cls": "EXC",
@@ -3674,12 +3609,12 @@
       "type": "500 Hours service Planned",
       "hours": 500,
       "plan": "2026-10-02",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-01"
     },
     {
       "wo": "WO-017337",
@@ -3746,12 +3681,12 @@
       "type": "500 Hours service Planned",
       "hours": 500,
       "plan": "2026-10-02",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-01"
     },
     {
       "wo": "WO-017318",
@@ -3782,12 +3717,12 @@
       "type": "500 Hours service Planned",
       "hours": 500,
       "plan": "2026-10-02",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-03"
     },
     {
       "wo": "WO-017311",
@@ -3998,12 +3933,12 @@
       "type": "250 Hours service Planned",
       "hours": 250,
       "plan": "2026-09-30",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-09-29"
     },
     {
       "wo": "WO-017982",
@@ -4106,12 +4041,12 @@
       "type": "2000 Hours service Planned",
       "hours": 2000,
       "plan": "2026-09-30",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-09-29"
     },
     {
       "wo": "WO-017890",
@@ -7777,13 +7712,13 @@
       "raised": "2026-09-14",
       "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "hours": null,
-      "plan": "2026-10-01",
-      "status": "Elimination scheduled",
+      "plan": "2026-10-02",
+      "status": "Completed",
       "request": "DD-00012627",
       "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "cause": "Поврежден шланга/линии",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-02"
     },
     {
       "wo": "WO-016315",
