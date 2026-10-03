@@ -1,0 +1,78 @@
+name: Refresh work orders (Plan vs Actual) - PECHANKA
+
+on:
+  workflow_dispatch:
+    inputs:
+      commit:
+        description: 'Commit and push results (leave unchecked for a dry run)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-work-orders-pechanka
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: [self-hosted, pechanka]
+    timeout-minutes: 30
+    env:
+      CM_BACKEND: ${{ vars.CM_BACKEND }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: claude/magnetic-plug-dashboard-llv4wc
+
+      - name: Tool versions
+        run: |
+          node --version; python3 --version
+          python3 -c "import openpyxl;print('openpyxl',openpyxl.__version__)"
+
+      - name: Install Playwright (Chromium only)
+        run: |
+          npm install --no-save playwright
+          npx playwright install chromium
+
+      - name: Serve the repo for gen_class_rounds.cjs
+        run: |
+          python3 -m http.server 8391 --directory "$GITHUB_WORKSPACE" &
+          echo $! > "$RUNNER_TEMP/http.pid"
+          for i in $(seq 1 30); do
+            curl -fsS -o /dev/null http://127.0.0.1:8391/mobile/index.html && break
+            sleep 1
+          done
+
+      - name: Pull real inspection history from the live backend
+        run: node ingest/fetch_cm_history.cjs "${CM_BACKEND:-https://baimskaya-cm.duckdns.org}"
+
+      - name: Resolve the class/round mapping live from due.js
+        run: node ingest/gen_class_rounds.cjs http://127.0.0.1:8391
+
+      - name: Stop the local server
+        if: always()
+        run: kill "$(cat "$RUNNER_TEMP/http.pid")" 2>/dev/null || true
+
+      - name: Read WO.xlsx from this server and regenerate data/work_orders.js
+        run: |
+          ls -l /opt/askpi-auto/pub/WO.xlsx
+          python3 ingest/ingest_work_orders.py /opt/askpi-auto/pub/WO.xlsx --out data/work_orders.js
+
+      - name: Show what changed
+        run: git status --porcelain -- data ingest | head -20
+
+      - name: Commit if anything changed
+        if: ${{ inputs.commit }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [ -z "$(git status --porcelain -- data/work_orders.js data/schedule_slim.json data/reliability.json ingest/class_rounds.generated.json ingest/cm_history.generated.json)" ]; then
+            echo "no change"; exit 0
+          fi
+          git add data/work_orders.js data/schedule_slim.json data/reliability.json ingest/class_rounds.generated.json ingest/cm_history.generated.json
+          git commit -m "Refresh work_orders.js from Pechanka WO.xlsx [skip ci]" \
+                     -m "Automated refresh (.github/workflows/refresh-work-orders-pechanka.yml)."
+          git push origin HEAD:claude/magnetic-plug-dashboard-llv4wc
