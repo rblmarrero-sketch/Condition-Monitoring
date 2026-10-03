@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-03T00:08:00+00:00",
+  "generated": "2026-10-03T01:07:52+00:00",
   "byUnit": {
     "BL001": [
       {
@@ -4079,12 +4079,12 @@
       "type": "250 Hours service Planned",
       "hours": 250,
       "plan": "2026-09-30",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-09-29"
     },
     {
       "wo": "WO-017297",
