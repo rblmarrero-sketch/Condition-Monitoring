@@ -93,6 +93,13 @@ async function boot(ctx, native) {
     await p.waitForTimeout(400);
 
     if (native) {
+      /* The browser half of this run left a round half-walked in the shared
+         context, and the app asks about it when the shell page opens (a round
+         is never resumed twice without asking). Say no, so the question is out
+         of the way of the click this half is about. */
+      await p.evaluate(() => { const d = document.getElementById('dlg');
+        if (d && d.open) document.getElementById('dlgCancel').click(); });
+      await p.waitForTimeout(300);
       await p.evaluate(() => { const k = items()[0].k; curItem = k; loadPos(); });
       /* Add photo asks where it comes from before it does anything — the shell
          has two real sources and neither is the escape hatch. Choose the live

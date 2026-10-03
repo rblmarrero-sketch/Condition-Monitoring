@@ -220,7 +220,7 @@
     const ctab = `<div class="secthd" style="margin-top:16px"><h3 style="margin:0">${esc(T("byclass"))}</h3></div><div style="overflow-x:auto"><table class="grid" id="relByClass"><thead><tr>
       <th>${esc(T("c_cls"))}</th><th>${esc(T("c_units"))}</th><th>${esc(T("c_f"))}</th><th>${esc(T("c_dh"))}</th><th>${esc(T("c_mtbf"))}</th><th>${esc(T("c_mttr"))}</th><th>${esc(T("c_av"))}</th></tr></thead><tbody>${
       cl.map(c => `<tr data-cls="${esc(c.cls)}"><td>${esc(c.cls || T("unclassed"))}</td><td>${c.units}</td><td>${c.failures}</td><td>${n1(c.downH)}</td><td>${c.failures ? n0(c.mtbf) : "—"}</td><td>${n1(c.mttr)}</td><td>${pct(c.avail)}</td></tr>`).join("")}</tbody></table></div>`;
-    const top = r.rows.slice(0, 15);
+    const top = r.rows.slice(0, 10);
     const utab = `<div class="secthd" style="margin-top:16px"><h3 style="margin:0">${esc(T("top"))}</h3></div>${top.length ? `<div style="overflow-x:auto"><table class="grid" id="relTop"><thead><tr>
       <th>${esc(T("c_unit"))}</th><th>${esc(T("c_cls"))}</th><th>${esc(T("c_f"))}</th><th>${esc(T("c_dh"))}</th><th>${esc(T("c_mtbf"))}</th><th>${esc(T("c_mttr"))}</th><th>${esc(T("c_av"))}</th></tr></thead><tbody>${
       top.map(u => `<tr data-unit="${esc(u.unit)}"><td><b>${esc(u.unit)}</b></td><td>${esc(u.cls || "")}</td><td>${u.failures}</td><td>${n1(u.downH)}${u.unknownN ? " +?" : ""}</td><td>${n0(u.mtbf)}</td><td>${n1(u.mttr)}</td><td>${pct(u.avail)}</td></tr>`).join("")}</tbody></table></div>`

@@ -104,6 +104,7 @@ async function phone(b, APP, opts) {
   const ctx = await b.newContext({ viewport: { width: 412, height: 915 }, isMobile: true, hasTouch: true });
   await ctx.grantPermissions(['notifications'], { origin: new URL(APP).origin });
   await ctx.addInitScript(a => {
+    localStorage.setItem('cm_holder', JSON.stringify({name:'Test Holder', badge:'T1', at:'2026-10-01T00:00:00Z'}));
     localStorage.setItem('up_dests', JSON.stringify([{ id: 'gas', on: true, url: a.exec, sec: '', folder: '{TYPE}/{UNIT}/{YYYY-MM-DD}' }]));
     /* One endpoint per phone, stable across reloads — a real push service
        hands the same subscription back on every getSubscription(). */

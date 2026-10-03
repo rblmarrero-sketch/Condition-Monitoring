@@ -34,7 +34,8 @@ const vis = (p, sel) => p.evaluate(s => { const e = document.querySelector(s);
   const p = await ctx.newPage();
   p.on('pageerror', e => fails.push('PAGEERROR ' + e.message));
   p.on('console', m => { if (m.type() === 'error' && !/ERR_|Failed to load resource/.test(m.text())) fails.push('CONSOLE ' + m.text()); });
-  await p.addInitScript(() => localStorage.setItem('up_dests', JSON.stringify(
+  await p.addInitScript(() => { localStorage.setItem('cm_holder', JSON.stringify({name:'Test Holder', badge:'T1', at:'2026-10-01T00:00:00Z'})); });
+await p.addInitScript(() => localStorage.setItem('up_dests', JSON.stringify(
     [{ id: 'gas', on: true, url: 'http://127.0.0.1:9/dead', sec: '', folder: '' }])));
   await p.goto(BASE + '/mobile/index.html', { waitUntil: 'load' });
   await p.waitForTimeout(1400);
