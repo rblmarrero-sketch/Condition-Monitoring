@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-03T07:20:46+00:00",
+  "generated": "2026-10-03T07:41:59+00:00",
   "byUnit": {
     "BL001": [
       {
@@ -378,17 +378,6 @@
         "priority": "P3 Planned (PM)"
       }
     ],
-    "GE025": [
-      {
-        "wo": "WO-017549",
-        "hours": 2000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-09-20",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
     "GE056": [
       {
         "wo": "WO-018337",
@@ -430,17 +419,6 @@
           "INSP"
         ],
         "plan": "2026-10-11",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "GE110": [
-      {
-        "wo": "WO-017369",
-        "hours": 2000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-09-27",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -4482,12 +4460,12 @@
       "type": "2000 Hours service Planned",
       "hours": 2000,
       "plan": "2026-09-27",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-09-27"
     },
     {
       "wo": "WO-017364",
@@ -4500,12 +4478,12 @@
       "type": "250 Hours service Planned",
       "hours": 250,
       "plan": "2026-09-27",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-09-27"
     },
     {
       "wo": "WO-016587",
@@ -6084,12 +6062,12 @@
       "type": "2000 Hours service Planned",
       "hours": 2000,
       "plan": "2026-09-20",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-09-29"
     },
     {
       "wo": "WO-016939",
