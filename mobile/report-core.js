@@ -639,6 +639,18 @@
 #rptRoot .cel .cm{font-size:10.5px;line-height:1.45;color:#16242c;margin-top:6px;
   border-top:1px solid #eaeef1;padding-top:5px;font-weight:600;}
 #rptRoot .cel .num{font-variant-numeric:tabular-nums;}
+/* The finding card: the inspector's sentence is the headline of the card, so it
+   reads as one (a stripe in the grade's ink, set inline, and a size up from the
+   facts), and the facts that follow from it sit in a quieter grid. */
+#rptRoot .cel .cm{border-top:0;padding:1px 0 1px 8px;margin-top:5px;border-left:3px solid #c8d0d6;
+  font-size:11px;line-height:1.5;}
+#rptRoot .cel .cm + dl{margin-top:7px;}
+#rptRoot .fbop{margin-top:7px;font-size:10.5px;}
+#rptRoot .fbrest{margin-top:8px;font-size:10px;line-height:1.55;color:#3d474f;}
+#rptRoot .fbrest .fk,#rptRoot .fbop .fk{font-size:8.5px;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:#5b6670;margin-right:6px;}
+#rptRoot .fbrest .fi{display:inline-block;margin-right:12px;white-space:nowrap;}
+#rptRoot .fbrest .fi b{font-weight:700;color:#16242c;}
 #rptRoot .b4{grid-template-columns:repeat(4,1fr);}
 #rptRoot .b3{grid-template-columns:repeat(3,1fr);}
 #rptRoot .b2{grid-template-columns:repeat(2,1fr);}
@@ -1115,7 +1127,7 @@
       c_reference:"Reference", c_retention:"Defect / retention", c_new:"New",
       c_minimum:"Minimum", c_change:"Change", c_status:"Status",
       c_station:"Station", c_side:"Side", c_point:"Point", c_filter:"Filter",
-      c_notmeas:"Not measured", c_notrec:"Not recorded", c_nofind:"No finding",
+      c_notmeas:"Not measured", c_notrec:"Not recorded", c_nofind:"No finding", fb_ok:"No finding", fb_pf:"Findings and photographs", fb_opstat:"Equipment status", fb_pc:"Particle count",
       ev_filterid:"Filter identification", ev_media:"Opened media", ev_debris:"Debris close-up",
       ev_overview:"Equipment overview", ev_component:"Component", ev_defect:"Defect close-up",
       ev_additional:"Additional", ev_thermal:"Thermal image with marker", ev_visible:"Visible-light comparison",
@@ -1310,7 +1322,7 @@
       c_reference:"Эталон", c_retention:"Дефект / фиксация", c_new:"Новый",
       c_minimum:"Минимум", c_change:"Изменение", c_status:"Статус",
       c_station:"Точка", c_side:"Сторона", c_point:"Точка", c_filter:"Фильтр",
-      c_notmeas:"Не измерено", c_notrec:"Не записано", c_nofind:"Без замечаний",
+      c_notmeas:"Не измерено", c_notrec:"Не записано", c_nofind:"Без замечаний", fb_ok:"Без замечаний", fb_pf:"Выявленное и фотографии", fb_opstat:"Состояние машины", fb_pc:"Количество частиц",
       ev_filterid:"Идентификация фильтра", ev_media:"Вскрытый материал", ev_debris:"Крупный план загрязнения",
       ev_overview:"Обзор техники", ev_component:"Компонент", ev_defect:"Крупный план дефекта",
       ev_additional:"Дополнительно", ev_thermal:"Термограмма с меткой", ev_visible:"Сравнение в видимом свете",
@@ -1763,12 +1775,12 @@
   /* The plan a graded finding carries from the machine: who, by when, and
      whether the machine is running — and the reason when the inspector graded
      below a proposed 5. Printed under the action wherever the action prints. */
-  function planTag(T, it) {
+  function planTag(T, it, noOp) {
     if (!it) return "";
     var bits = [];
     if (it.resp) bits.push(T.I("c_resp") + ": " + esc(it.resp));
     if (it.target) bits.push(T.I("c_target") + ": " + esc(it.target));
-    if (it.opstat) bits.push(T.I("c_opstat") + ": " + T.I("op_" + it.opstat));
+    if (it.opstat && !noOp) bits.push(T.I("c_opstat") + ": " + T.I("op_" + it.opstat));
     var h = bits.length ? '<div class="code">' + bits.join(" · ") + '</div>' : "";
     if (it.gradeWhy) h += '<div class="code">' + T.I("g_why") + ' ' + esc(it.gradeWhy) + '</div>';
     return h;
@@ -2813,35 +2825,65 @@
     });
     return x + '</table>';
   }
-  /* The template's evidence section for a table-bodied type: every component
-     photograph the round carries, under the template's own heading. The table
-     above states the finding; the pictures are shown here rather than crammed
-     into a cell, which is how the template lays out Filter Cut, General
-     Inspection, Thermography and GET. Nothing when no photograph arrived — a
-     grey placeholder is the same area as a photograph and carries none of it. */
-  function photoGallery(ctx, T, rec, headKey) {
-    var ph = (rec.items || []).filter(function (it) {
-      return !it.general && it.photos && it.photos.length; });
-    if (!ph.length) return "";
-    /* Always the full-width board, never the two-up column a wordy finding
-       card gets capped to. Two position-cards side by side put a five-photo
-       card next to a one-photo card and called the result aligned when their
-       heights had nothing in common; stacked full width, every card starts
-       and ends at the same edge and the photographs inside it are the only
-       thing that decides how tall it is. */
-    /* A COMMENT PRINTED TWICE IS NOT TWO FACTS. Every type that reaches this
-       gallery (FC, INSP, TEMP, GET) has already put the same it.comment on
-       its own row under the position in the findings table above (typeTable's
-       .rnote) — "Трещины, отломило левый адаптер ковша" read once under
-       CH.BUC's row and again under CH.BUC's own photo card, word for word, on
-       a real EX004 report. {comment:true} is cell()'s existing "already shown
-       elsewhere" signal (see sh.defect/sh.cause/sh.action, used the same way
-       for a shared-finding band) — it costs nothing new, it only tells the
-       card the sentence is already on the page. */
+  /* WHAT WAS FOUND, ONCE.
+     A findings table and a photographs board used to follow one another, and
+     said the same thing twice: the table gave the point, the grade, the action
+     and the inspector's sentence; the board under it gave the same point and
+     grade again, the same action again, the owner, the date, and then the
+     photographs. A reader had to hold a row in their head, scroll, and find the
+     pictures that belonged to it. Read off a real TK143 General Inspection and
+     asked for by name: merge the two, arrange it properly, so the finding and
+     its comment are read directly under its photographs.
+
+     One card per point that has something to say, worst first: the point and
+     its grade, the photographs, the inspector's own sentence, then the facts in
+     the order they follow from it (what the defect is, how it was found, what
+     is being done, by whom, by when). Nothing is printed twice: the action,
+     work order and owner appear in the card and nowhere else on the page, and
+     the machine's operating status — the same word on every row of a round —
+     is said once above the cards unless the points genuinely differ.
+
+     A point with nothing to say is not a card. Graded Normal with no
+     photograph, no defect and no comment is one line ("No finding"); a point
+     nobody recorded anything on is another ("Not recorded"), because an absent
+     point reads as a lost one and a blank card says nothing at all. */
+  function findingBoard(ctx, T, rec, headKey, opt) {
+    opt = opt || {};
+    var items = (rec.items || []).filter(function (it) { return !it.general; });
+    if (!items.length) return "";
+    var isCard = function (it) {
+      return !!((it.photos && it.photos.length) || it.comment || it.defect || it.cause
+        || it.particle || gnum(it.grade) >= 2 || (opt.worthy && opt.worthy(it)));
+    };
+    var cards = [], clean = [], blank = [];
+    items.forEach(function (it, i) {
+      if (isCard(it)) cards.push({ it: it, i: i });
+      else if (gnum(it.grade) === 1) clean.push(it);
+      else blank.push(it);
+    });
+    cards.sort(function (a, b) {
+      return (gnum(b.it.grade) || 0) - (gnum(a.it.grade) || 0) || a.i - b.i; });
+    var ops = [];
+    items.forEach(function (it) { if (it.opstat && ops.indexOf(it.opstat) < 0) ops.push(it.opstat); });
+    var opOnce = ops.length === 1;
+    var shared = { fb: true, detect: true, opOnce: opOnce, rows: opt.rows, noReadings: true };
+    var line = function (key, list) {
+      return list.length ? '<div class="fbrest"><span class="fk">' + T.I(key) + '</span> '
+        + list.map(function (it) {
+            return '<span class="fi"><b>' + esc(it.code || it.key) + '</b>'
+              + (it.name && it.name !== (it.code || it.key)
+                  ? ' ' + esc(dropCode(it.code, it.name)) : "")
+              + (opt.note && opt.note(it) ? ' <span class="num">' + esc(opt.note(it)) + '</span>' : "")
+              + '</span>'; }).join("") + '</div>' : "";
+    };
     return '<div class="subhd" style="margin-top:12px;">' + T.I(headKey) + '</div>'
-      + '<div class="board gal b1">'
-      + ph.map(function (it) { return cell(ctx, T, it, { comment: true }, true); }).join("") + '</div>';
+      + (opOnce ? '<div class="fbop"><span class="fk">' + T.I("fb_opstat") + '</span> '
+          + '<b>' + T.I("op_" + ops[0]) + '</b></div>' : "")
+      + (cards.length ? '<div class="board gal b1">' + cards.map(function (c) {
+          return cell(ctx, T, c.it, shared, true); }).join("") + '</div>' : "")
+      + line("fb_ok", clean) + line("c_notrec", blank);
   }
+
   /* MP — every plug as a card, photograph first, then code/component, grade,
      the particle finding and component/oil hours, the defect and action. A
      clean plug still earns its card: A GRADE IS A READING, even a Normal one
@@ -2922,36 +2964,20 @@
      cause, action. The filter-identification, opened-media and debris photos
      come after, through evidenceSections, as the template's Required evidence. */
   function fcFindings(ctx, T, rec) {
-    return '<div class="subhd" style="margin-top:12px;">' + T.I("tb_fc") + '</div>'
-      + typeTable([
-        { th: T.L("c_filter"), get: function (it) { return tbPoint(T, it); } },
-        { th: T.L("c_svchours"), cls: "r n", w: "72px", get: function (it) {
-            var h = [it.comp && (it.comp + " h"), it.oil && ("oil " + it.oil + " h")].filter(Boolean);
-            return h.length ? esc(h.join(" · ")) : tbMiss(T); } },
-        { th: T.L("c_grade"), w: "92px", get: function (it) { return tbGrade(T, it); } },
-        { th: T.L("c_debris"), get: function (it) {
-            var d = [it.particle && ("PC " + it.particle), it.defect].filter(Boolean);
-            return d.length ? esc(d.join("; ")) : tbMiss(T, "c_nofind"); } },
-        { th: T.L("c_cause"), get: function (it) { return it.cause ? esc(it.cause) : tbNA(T, it); } },
-        { th: T.L("c_action"), get: function (it) { return tbAct(T, it); } }
-      ], rec.items || [])
-      + photoGallery(ctx, T, rec, "tb_fc_ev");
+    var hours = function (it) {
+      return [it.comp && (it.comp + " h"), it.oil && ("oil " + it.oil + " h")].filter(Boolean); };
+    return findingBoard(ctx, T, rec, "tb_fc", {
+      note: function (it) { return hours(it).join(" · "); },
+      rows: function (it) {
+        var r = [], h = hours(it);
+        if (h.length) r.push([T.I("c_svchours"), '<span class="num">' + esc(h.join(" · ")) + '</span>']);
+        if (it.particle) r.push([T.I("fb_pc"), '<span class="num">PC ' + esc(it.particle) + '</span>']);
+        return r; } });
   }
   /* INSP — component/system, grade, defect, detection method, action and the
      equipment operating status the template asks for. */
   function inspFindings(ctx, T, rec) {
-    return '<div class="subhd" style="margin-top:12px;">' + T.I("tb_insp") + '</div>'
-      + typeTable([
-        { th: T.L("c_point"), get: function (it) { return tbPoint(T, it); } },
-        { th: T.L("c_grade"), w: "88px", get: function (it) { return tbGrade(T, it); } },
-        { th: T.L("c_defect"), get: function (it) {
-            return it.defect ? esc(it.defect) + (it.iso ? ' <span class="code">ISO ' + esc(it.iso) + '</span>' : "")
-                             : tbMiss(T, "c_nofind"); } },
-        { th: T.L("c_detection"), w: "96px", get: function (it) { return it.detect ? esc(it.detect) : tbNA(T, it); } },
-        { th: T.L("c_action"), get: function (it) { return tbAct(T, it); } },
-        { th: T.L("c_opstat"), w: "84px", get: function (it) { return it.opstatLabel ? esc(it.opstatLabel) : tbMiss(T); } }
-      ], rec.items || [])
-      + photoGallery(ctx, T, rec, "tb_insp_ph");
+    return findingBoard(ctx, T, rec, "tb_insp", {});
   }
   /* TEMP — measured and ambient temperature, method, operating state, the
      comparison and the grade. When ambient/state/method/comparison is missing
@@ -2965,19 +2991,18 @@
     };
     var incomplete = its.some(function (it) {
       return it.tempC && !(it.ambC && it.tempM && (it.opstatLabel || it.comment)); });
-    return '<div class="subhd" style="margin-top:12px;">' + T.I("tb_temp") + '</div>'
-      + typeTable([
-        { th: T.L("c_point"), get: function (it) { return tbPoint(T, it); } },
-        { th: T.L("c_measured"), cls: "r n", w: "70px", get: function (it) { return it.tempC ? esc(it.tempC) + " °C" : tbMiss(T, "c_notmeas"); } },
-        { th: T.L("c_ambient"), cls: "r n", w: "64px", get: function (it) { return it.ambC ? esc(it.ambC) + " °C" : tbMiss(T); } },
-        { th: T.L("c_method"), w: "82px", get: tm },
-        { th: T.L("c_opstate"), w: "82px", get: function (it) { return it.opstatLabel ? esc(it.opstatLabel) : tbMiss(T); } },
-        { th: T.L("c_comparison"), get: function (it) { return it.comment ? esc(it.comment) : tbMiss(T); } },
-        { th: T.L("c_grade"), w: "88px", get: function (it) { return tbGrade(T, it); } }
-      ], its)
+    return findingBoard(ctx, T, rec, "tb_temp", {
+      note: function (it) { return it.tempC ? it.tempC + " °C" + (it.ambC ? " · " + T("c_ambient") + " " + it.ambC + " °C" : "") : ""; },
+      rows: function (it, sh) {
+        var r = [];
+        if (it.tempC) r.push([T.I("c_measured"), '<span class="num">' + esc(it.tempC) + ' °C</span>'
+          + (it.ambC ? ' <span class="muted">· ' + T.I("c_ambient") + ' <span class="num">' + esc(it.ambC) + ' °C</span></span>' : "")]);
+        else r.push([T.I("c_measured"), tbMiss(T, "c_notmeas")]);
+        if (it.tempM) r.push([T.I("c_method"), tm(it)]);
+        if (it.opstatLabel && !(sh && sh.opOnce)) r.push([T.I("c_opstate"), esc(it.opstatLabel)]);
+        return r; } })
       + (incomplete ? '<div class="verdict v-watch" style="margin-top:9px;"><b>' + T.I("tb_temp_lim")
-          + '.</b> ' + T.I("tb_temp_note") + '</div>' : "")
-      + photoGallery(ctx, T, rec, "photos");
+          + '.</b> ' + T.I("tb_temp_note") + '</div>' : "");
   }
   /* RTW — Return to Work, the post-repair release checklist. Its own field:
      `mark` is "pass"/"attention"/"na", NEVER the 1–5 grade (grade.js's own
@@ -3282,12 +3307,35 @@
       { th: T.L("c_action"), get: function (it) { return tbAct(T, it); } }
     ];
   }
+  /* A GET position that carries photographs is a finding card (its readings
+     inside it, the same card INSP/FC/TEMP use); the register table keeps the
+     positions that have none. So a tool's number and its picture are one thing
+     on the page, and nothing is printed in both. */
+  function getRows(T) {
+    return function (it) {
+      var r = [];
+      if (it.w && it.w.mm != null) r.push([T.I("c_measured"), '<span class="num"><b>' + esc(it.w.mm) + '</b> mm'
+        + (it.w.pct != null ? ' · ' + esc(it.w.pct) + '% ' + T.I("c_worn") : "") + '</span>']);
+      if (it.w && it.w.newMM != null && it.w.newMM !== "")
+        r.push([T.I("c_reference"), '<span class="num">' + esc(it.w.newMM + " → " + it.w.condemnMM + " mm") + '</span>']);
+      return r;
+    };
+  }
+  function getSplit(T, rec) {
+    var all = (rec.items || []);
+    var pic = all.filter(function (it) { return !it.general && it.photos && it.photos.length; });
+    var rest = all.filter(function (it) { return !(it.photos && it.photos.length); });
+    return { pic: pic, rest: pic.length ? Object.assign({}, rec, { items: rest }) : rec,
+      board: function (ctx) {
+        return pic.length ? findingBoard(ctx, T, Object.assign({}, rec, { items: pic }), "fb_pf", { rows: getRows(T) }) : ""; } };
+  }
   /* The point register as a single block — used inline only where the caller
      knows the round is short (a synthetic three-point GET). Long registers go
      through getRegisterSections so no row is sliced at the fold. */
   function getRegister(ctx, T, rec) {
-    return '<div class="subhd" style="margin-top:12px;">' + T.I("tb_get") + '</div>'
-      + typeTable(getCols(T), rec.items || []);
+    var g = getSplit(T, rec);
+    return (g.rest.items.length ? '<div class="subhd" style="margin-top:12px;">' + T.I("tb_get") + '</div>'
+      + typeTable(getCols(T), g.rest.items) : "") + g.board(ctx);
   }
   /* The eleven-point register, chunked to the page. A machine with many GET
      positions makes a register taller than A4, and the PDF is a rasterised
@@ -3299,6 +3347,8 @@
   function getRegisterSections(ctx, T, rec, sign, lead, firstNb) {
     var rows = rec.items || [];
     var out = [];
+    /* Every position had photographs: they are all cards, in the tail. */
+    if (!rows.length) return [{ nb: !!firstNb, html: '<div class="sec">' + (lead || "") + (sign || "") + '</div>' }];
     var PER = 18;                 // 18 two-line rows + the sign block clear the fold
     var parts = Math.max(1, Math.ceil(rows.length / PER));
     PER = Math.ceil(rows.length / parts);
@@ -3661,17 +3711,19 @@
           /* Register → Evidence → maintenance action → status → approval, the
              template's page-2 order; the evidence gallery rides the last
              register chunk ahead of the sign-off. */
-          var getTail = photoGallery(ctx, T, rec, "photos") + sign;
+          var gsplit = getSplit(T, rec);
+          var getTail = gsplit.board(ctx) + sign;
+          var recReg = gsplit.rest;
           if (oneMap) {
             secs.push({ nb: n > 0, html: '<div class="sec">' + head + rbar + mstrip
               + generalBlock(T, rec) + oneMap + '</div>' });
             /* The register starts its own page — the map page is measured to the
                fold, and letting the first rows flow into whatever space is left
                under the drawing splits a row there (pagecut.cjs). */
-            getRegisterSections(ctx, T, rec, getTail, "", true).forEach(function (x) { secs.push(x); });
+            getRegisterSections(ctx, T, recReg, getTail, "", true).forEach(function (x) { secs.push(x); });
           } else {
             /* No model map: the masthead leads the first register chunk. */
-            getRegisterSections(ctx, T, rec, getTail,
+            getRegisterSections(ctx, T, recReg, getTail,
               head + rbar + mstrip + generalBlock(T, rec), n > 0).forEach(function (x) { secs.push(x); });
           }
           evidenceSections(T, rec).forEach(function (x) { secs.push(x); });
@@ -5042,15 +5094,28 @@
        under the label, which is how one card fact became two lines; T.I is
        the strip's own one-line form, used here for the same reason. */
     function row(k, v) { rows += '<dt>' + k + '</dt><dd>' + v + '</dd>'; }
+    /* The caller's own facts for this round type (a filter's service hours, a
+       thermograph's temperatures), ahead of the common ones. */
+    if (sh.rows) (sh.rows(it, sh) || []).forEach(function (r) { if (r && r[1] !== "") row(r[0], r[1]); });
     if (it.defect && !sh.defect) row(T.I("c_defect"), esc(it.defect)
       + (it.iso ? ' <span class="code">ISO ' + esc(it.iso) + '</span>' : ""));
     if (it.cause && !sh.cause) row(T.I("c_cause"), esc(it.cause));
+    /* what was seen, how it was found, THEN what is being done about it */
+    if (it.detect && sh.detect) row(T.I("c_detection"), esc(it.detect));
     /* The action in both languages: the host resolves it by code (actionAlt). */
     if (it.action && !sh.action) row(T.I("c_action"), '<b>' + T.both(it.action, it.actionAlt, "alti") + '</b>'
       + prioTag(it) + (it.wo ? ' <span class="code">' + esc(T("c_wo")) + ' ' + esc(it.wo) + '</span>' : ""));
     else if (it.wo || (it.prio && !sh.prio)) row(T.I("c_wo"),
       (it.prio && !sh.prio ? prioTag(it) + " " : "") + '<span class="num">' + esc(it.wo || "") + '</span>');
-    if (it.resp || it.target || it.opstat || it.gradeWhy) row(T.I("c_resp"), planTag(T, it));
+    if (sh.fb && !it.action && !it.wo && gnum(it.grade) >= 3) row(T.I("c_action"), tbMiss(T));
+    if (sh.fb) {
+      /* One fact a row. planTag packs owner, date and status into one sentence
+         that opens with the word the label above it has just said. */
+      if (it.resp) row(T.I("c_resp"), esc(it.resp));
+      if (it.target) row(T.I("c_target"), '<span class="num">' + esc(it.target) + '</span>');
+      if (it.opstat && !sh.opOnce) row(T.I("c_opstat"), T.I("op_" + it.opstat));
+      if (it.gradeWhy) row(T.I("g_why"), esc(it.gradeWhy));
+    } else if (it.resp || it.target || (it.opstat && !sh.opOnce) || it.gradeWhy) row(T.I("c_resp"), planTag(T, it, sh.opOnce));
     /* The lubrication round's whole answer. It is NOT a reading: a reading is
        a figure and gets tabular numerals, while this is a product name, how the
        fitter knows it, and whether a sample went with it. Folding it into the
@@ -5073,8 +5138,10 @@
         row(T.I("c_lube_want"), '<b>' + esc(Lb.want) + '</b> '
           + '<span class="code">' + esc(T("c_lube_off")) + '</span>');
     }
-    var read = (it.readings || []).slice();
-    if (it.w && it.w.mm != null) read.unshift(it.w.mm + " mm" + (it.w.pct != null ? " · " + it.w.pct + "%" : ""));
+    /* A finding card states its own readings as labelled rows (sh.rows), so the
+       host's pre-joined one-line copy of them is not printed beside them. */
+    var read = sh.noReadings ? [] : (it.readings || []).slice();
+    if (it.w && it.w.mm != null && !sh.noReadings) read.unshift(it.w.mm + " mm" + (it.w.pct != null ? " · " + it.w.pct + "%" : ""));
     if (read.length) row(T.I("c_reading"), '<span class="num">' + esc(read.join(" · ")) + '</span>');
     return '<div class="cel">' + top + '<div class="bd">'
       /* The code, its name and the grade all belong to the same fact — WHICH
@@ -5092,7 +5159,10 @@
           + '</div>'
       + ((it.grade || it.sev) ? '<div class="chips">' + gradeChip(it.grade) + sevIf(ctx, it) + '</div>' : "")
       + '</div>'
-      + (rows ? '<dl>' + rows + '</dl>' : "")
+      /* THE FINDING IN WORDS COMES BEFORE THE FIELDS. The inspector's sentence
+         is the finding; the defect code, detection method and action are what
+         follow from it. Read top to bottom a card says: which point, how bad,
+         what was seen, then what is being done about it. */
       /* THE INSPECTOR'S OWN WORDS, IN THE COLOUR OF WHAT THEY FOUND. The
          office asked for it and it earns its place: the comment is the one
          line on a card that is not a label or a code, and on a board of a
@@ -5114,8 +5184,9 @@
          sentence is never dropped. */
       + (it.comment && !sh.comment
           ? '<div class="cm"' + (gnum(it.grade)
-              ? ' style="color:' + GRADE_TEXT[gnum(it.grade)] + '"' : "")
+              ? ' style="color:' + GRADE_TEXT[gnum(it.grade)] + ';border-left-color:' + GRADE_HEX[gnum(it.grade)] + '"' : "")
             + '>' + esc(it.comment) + '</div>' : "")
+      + (rows ? '<dl>' + rows + '</dl>' : "")
       + '</div></div>';
   }
 

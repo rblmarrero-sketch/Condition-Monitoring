@@ -3939,6 +3939,49 @@ Run in full after the undercarriage side-walk (build 501) and read to the end:
   `DUE.today()` now. Nineteen other suites build a UTC "today" the same way and
   passed when run after noon UTC, which is when they would show it.
 
+**A FINDINGS TABLE FOLLOWED BY A PHOTOGRAPHS BOARD SAID EVERYTHING TWICE, AND
+THE READER HAD TO CARRY A ROW IN THEIR HEAD TO FIND ITS PICTURES.** Read off a
+real TK143 General Inspection, with the instruction "merge the two, it is
+redundant... directly read the findings and relevant comment and information
+below the photo, for all reports, dashboard and phone". The "Findings by
+component or system" table gave the point, grade, defect, detection, action,
+operating status ("RUN" on every row) and the inspector's sentence; the
+"Photographs with findings" board under it gave the point and grade again, the
+action again, the work order again, then "Responsible: Responsible: ...", the
+target date and the status again. FC, TEMP and GET had the same pair.
+
+`findingBoard()` (report-core.js, both surfaces — they load one file) is the one
+card now: the photographs, the point and its grade, the inspector's sentence
+(a stripe and ink in the grade's colour, a size up from the facts), then the
+facts in the order they follow from it — defect, cause, how it was found,
+action and work order, who, by when. Worst point first, round order within a
+grade. Nothing is printed twice: `cell()` takes `sh.rows` for a type's own
+facts (a filter's hours and particle count, a thermograph's temperatures, a
+tool's wear), `sh.noReadings` so the host's pre-joined `readings` line is not
+printed beside the rows that state them, and `sh.opOnce` so the machine's
+operating status — the same word on every row of a round — is said once above
+the cards ("Equipment status") unless the points genuinely differ. A point with
+nothing to say is a line, not a card: graded Normal with no photograph, defect
+or comment is "No finding" (with its hours or temperature, where the type has
+one), and a point nobody recorded is "Not recorded" — named, because an absent
+point reads as a lost one. A missing action on a Severe or Critical card is
+said ("Not recorded"), a missing one on a Normal point is not.
+
+GET keeps its register for the tools without photographs (a table of numbers is
+the right shape for eleven clean readings) and gives each tool WITH photographs
+a card with its readings in it, so a number and its picture are one thing.
+Wear rounds (UC, TB) keep their readings table and their photograph cards: the
+table is a measurement register of every station, which a card is not.
+`photoGallery()` is gone; `typeTable()` still builds the GET register and the
+other registers. The comment sits above the fields on EVERY card (MP, history,
+fleet appendix), not only these, so a card reads the same wherever it appears.
+
+`tests/findingcard.cjs` walks INSP, FC and TEMP through the real bodies in
+English, Russian and bilingual and asserts the promise: no second photographs
+heading, each sentence printed once, worst first, photographs above the
+sentence above the facts, clean and unrecorded points as lines, status once —
+and fails against the old engine on every one of those.
+
 ---
 
 ## Secrets

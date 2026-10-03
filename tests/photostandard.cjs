@@ -5,7 +5,7 @@
    galportrait.cjs each prove the shared gallery row (cell()'s justifiedRow
    branch, report-core.js) against one synthetic fixture apiece. What none of
    them ever did is walk every REPORT TYPE that calls into that same shared
-   function through its own real body — FC and INSP through photoGallery(),
+   function through its own real body — FC and INSP through findingBoard(),
    GET through its own register tail, TB and UC through the wear round's
    own trailing gallery, RTW through its own photo section — and TWO real
    field reports (TK154's Equipment Trend Report and TK117's Dump Body
