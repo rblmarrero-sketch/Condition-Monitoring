@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-02T23:32:48+00:00",
+  "generated": "2026-10-03T00:08:00+00:00",
   "byUnit": {
     "BL001": [
       {
@@ -1009,15 +1009,6 @@
       }
     ],
     "TK126": [
-      {
-        "wo": "WO-017886",
-        "hours": 250,
-        "types": [
-          "MP"
-        ],
-        "plan": "2026-10-01",
-        "priority": "P3 Planned (PM)"
-      },
       {
         "wo": "WO-018530",
         "hours": 500,
@@ -3962,12 +3953,12 @@
       "type": "250 Hours service Planned",
       "hours": 250,
       "plan": "2026-10-01",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-01"
     },
     {
       "wo": "WO-016557",
@@ -3998,12 +3989,12 @@
       "type": "4000 Hours service Planned",
       "hours": 4000,
       "plan": "2026-09-30",
-      "status": "In progress",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "inprogress",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-09-30"
     },
     {
       "wo": "WO-017997",
@@ -4232,12 +4223,12 @@
       "type": "500 Hours service Planned",
       "hours": 500,
       "plan": "2026-09-30",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-09-30"
     },
     {
       "wo": "WO-016633",
@@ -10090,42 +10081,6 @@
       "completed": "2026-09-03"
     },
     {
-      "wo": "WO-015413",
-      "equip": "DZ003",
-      "cls": "DOZ",
-      "comp": "",
-      "desc": "Filter Cut / General Inspection / Undercarriage",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-09-02",
-      "type": "1000 Hours service Planned",
-      "hours": 1000,
-      "plan": "2026-09-02",
-      "status": "Completed",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "complete",
-      "completed": "2026-09-02"
-    },
-    {
-      "wo": "WO-015435",
-      "equip": "DZ018",
-      "cls": "DOZ",
-      "comp": "",
-      "desc": "1500h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-09-02",
-      "type": "1500 Hours service Planned",
-      "hours": 1500,
-      "plan": "2026-09-02",
-      "status": "Completed",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "complete",
-      "completed": "2026-09-02"
-    },
-    {
       "wo": "WO-015441",
       "equip": "EX010",
       "cls": "EXC",
@@ -10178,114 +10133,6 @@
       "cause": "",
       "pmStatus": "complete",
       "completed": "2026-09-03"
-    },
-    {
-      "wo": "WO-015407",
-      "equip": "TK127",
-      "cls": "AT",
-      "comp": "",
-      "desc": "Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-09-02",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-09-02",
-      "status": "Completed",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "complete",
-      "completed": "2026-09-02"
-    },
-    {
-      "wo": "WO-015806",
-      "equip": "GE102",
-      "cls": "GEN",
-      "comp": "",
-      "desc": "250h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-09-01",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-09-01",
-      "status": "Completed",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "complete",
-      "completed": "2026-09-02"
-    },
-    {
-      "wo": "WO-015462",
-      "equip": "GR014",
-      "cls": "GRD",
-      "comp": "",
-      "desc": "Filter Cut / General Inspection",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-09-01",
-      "type": "1000 Hours service Planned",
-      "hours": 1000,
-      "plan": "2026-09-01",
-      "status": "Completed",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "complete",
-      "completed": "2026-09-02"
-    },
-    {
-      "wo": "WO-015814",
-      "equip": "LS007",
-      "cls": "GEN",
-      "comp": "",
-      "desc": "General Inspection",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-09-01",
-      "type": "2000 Hours service Planned",
-      "hours": 2000,
-      "plan": "2026-09-01",
-      "status": "Completed",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "complete",
-      "completed": "2026-09-02"
-    },
-    {
-      "wo": "WO-015875",
-      "equip": "TK033",
-      "cls": "HT",
-      "comp": "",
-      "desc": "Filter Cut / General Inspection / Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-09-01",
-      "type": "1000 Hours service Planned",
-      "hours": 1000,
-      "plan": "2026-09-01",
-      "status": "Completed",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "complete",
-      "completed": "2026-09-02"
-    },
-    {
-      "wo": "WO-015383",
-      "equip": "TK101",
-      "cls": "AT",
-      "comp": "",
-      "desc": "Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-09-01",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-09-01",
-      "status": "Completed",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "complete",
-      "completed": "2026-09-02"
     },
     {
       "wo": "WO-017446",
@@ -10376,24 +10223,6 @@
       "cause": "Некачественное выполнение",
       "pmStatus": "open",
       "completed": ""
-    },
-    {
-      "wo": "WO-015579",
-      "equip": "DZ002",
-      "cls": "",
-      "comp": "DZ002.CH.BL (Blade/Отвал)",
-      "desc": "Чрезмерный люфт в шарнирном соединении отвала и толкающего бруса с правой стороны",
-      "priority": "P4 Planned (Repair)",
-      "raised": "2026-08-06",
-      "type": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "hours": null,
-      "plan": "2026-09-01",
-      "status": "Completed",
-      "request": "DD-00010349",
-      "defType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "cause": "Износ зацепления",
-      "pmStatus": "complete",
-      "completed": "2026-09-02"
     },
     {
       "wo": "WO-016190",
