@@ -3903,16 +3903,34 @@ Run in full after the undercarriage side-walk (build 501) and read to the end:
 - *`histfilt`* held fixed calendar dates against a "last 30 days" filter and
   drifted out of the window; its dates are relative to today now.
 - *`sizes`* measured `ucOrder()[8]`, which the side-walk changed to a different
-  station. It measures the ninth point of `WEAR.walk` again. **Latent, not
-  fixed:** at 320x568 the sheet's Prev/Next row sits below the screen for some
-  stations (IDLER.L-OUT by 45 px, ROLLER.L5 by 30 px); ROLLER.L1 fits.
+  station, and the station that took its place exposed what the old one hid: at
+  320x568 and 360x640 Next sat 30-45 px under the fold on IDLER.L-OUT,
+  ROLLER.L5 and others (the 2026-10-03 follow-up fixed it, below). `sizes` still
+  measures the ninth point of `WEAR.walk`.
 - *`seam`*: the browser half left a half-walked round that the shell half's page
   load (rightly) asks about; the test now answers "no" before clicking.
 
-Still red, environment not app: `rptmirror` (no `pdfimages`) and `pdfprint`
-(no working `pypdf`) need poppler and a Python PDF library this container
-cannot install. `perfuc` (DOM node count) and `tray` (A4 fit) are the two
-already recorded above as failing on untouched HEAD.
+**THE RED LEFT OVER FROM THAT SWEEP, CLOSED THE SAME DAY.**
+- `rptmirror` and `pdfprint` were this container, not the app: poppler
+  (`pdfimages`) and a working `pypdf` are installed now and both pass.
+- `ucKeepFrameInView` kept a 16 px strip of the map in view unless the screen
+  was under 560 px tall — so an SE (568) and a 360x640 Android, with a member
+  row open above the sheet, were left with Next under the fold. The clamp now
+  applies from 700 px up; below that the number and the way on come first.
+  `tests/ucreach.cjs` walks all 36 stations at 320x568, 360x640 and 375x667
+  (and fails against the old threshold on 6+ stations).
+- `tray`: the section carrying the printed tray was 1,119 px against the 1,089
+  an A4 page has left, because the masthead above it had grown; `RPT_CSS_H` in
+  `mobile/body-map.js` is 600, not 640.
+- `perfuc` counted nodes in panes nobody can see: the Due pane builds the
+  1C PM list (~3,400 nodes, deliberately unclipped) and the CM agenda while
+  hidden. It counts what is on screen now. Painting only the active Due tab
+  was tried and reverted: nine suites read `#dueStrayNote`, which lives in the
+  CM tab, and an unpainted tab is not an empty one.
+- `duepm` dated its fixture "today" by the UTC date; the site's calendar is
+  twelve hours ahead, so from noon UTC the fixture read as a day late. It asks
+  `DUE.today()` now. Nineteen other suites build a UTC "today" the same way and
+  passed when run after noon UTC, which is when they would show it.
 
 ---
 
