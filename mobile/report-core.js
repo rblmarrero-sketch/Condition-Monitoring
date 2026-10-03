@@ -1127,7 +1127,7 @@
       c_reference:"Reference", c_retention:"Defect / retention", c_new:"New",
       c_minimum:"Minimum", c_change:"Change", c_status:"Status",
       c_station:"Station", c_side:"Side", c_point:"Point", c_filter:"Filter",
-      c_notmeas:"Not measured", c_notrec:"Not recorded", c_nofind:"No finding", fb_ok:"No finding", fb_pf:"Findings and photographs", fb_opstat:"Equipment status", fb_pc:"Particle count",
+      c_notmeas:"Not measured", c_notrec:"Not recorded", c_nofind:"No finding", fb_ok:"No finding", fb_pf:"Findings and photographs", fb_opstat:"Equipment status",
       ev_filterid:"Filter identification", ev_media:"Opened media", ev_debris:"Debris close-up",
       ev_overview:"Equipment overview", ev_component:"Component", ev_defect:"Defect close-up",
       ev_additional:"Additional", ev_thermal:"Thermal image with marker", ev_visible:"Visible-light comparison",
@@ -1322,7 +1322,7 @@
       c_reference:"Эталон", c_retention:"Дефект / фиксация", c_new:"Новый",
       c_minimum:"Минимум", c_change:"Изменение", c_status:"Статус",
       c_station:"Точка", c_side:"Сторона", c_point:"Точка", c_filter:"Фильтр",
-      c_notmeas:"Не измерено", c_notrec:"Не записано", c_nofind:"Без замечаний", fb_ok:"Без замечаний", fb_pf:"Выявленное и фотографии", fb_opstat:"Состояние машины", fb_pc:"Количество частиц",
+      c_notmeas:"Не измерено", c_notrec:"Не записано", c_nofind:"Без замечаний", fb_ok:"Без замечаний", fb_pf:"Выявленное и фотографии", fb_opstat:"Состояние машины",
       ev_filterid:"Идентификация фильтра", ev_media:"Вскрытый материал", ev_debris:"Крупный план загрязнения",
       ev_overview:"Обзор техники", ev_component:"Компонент", ev_defect:"Крупный план дефекта",
       ev_additional:"Дополнительно", ev_thermal:"Термограмма с меткой", ev_visible:"Сравнение в видимом свете",
@@ -2866,7 +2866,7 @@
     var ops = [];
     items.forEach(function (it) { if (it.opstat && ops.indexOf(it.opstat) < 0) ops.push(it.opstat); });
     var opOnce = ops.length === 1;
-    var shared = { fb: true, detect: true, opOnce: opOnce, rows: opt.rows, noReadings: true };
+    var shared = { fb: true, detect: true, opOnce: opOnce, rows: opt.rows, noReadings: true, defect: !!opt.ownDefect };
     var line = function (key, list) {
       return list.length ? '<div class="fbrest"><span class="fk">' + T.I(key) + '</span> '
         + list.map(function (it) {
@@ -2967,11 +2967,18 @@
     var hours = function (it) {
       return [it.comp && (it.comp + " h"), it.oil && ("oil " + it.oil + " h")].filter(Boolean); };
     return findingBoard(ctx, T, rec, "tb_fc", {
+      /* The template's own two labels, as rows: service hours, and debris /
+         defect (the particle count and what was found, one row, as the
+         template's column had them) — so the card's generic Defect row is
+         suppressed rather than saying the defect twice. */
+      ownDefect: true,
       note: function (it) { return hours(it).join(" · "); },
       rows: function (it) {
         var r = [], h = hours(it);
         if (h.length) r.push([T.I("c_svchours"), '<span class="num">' + esc(h.join(" · ")) + '</span>']);
-        if (it.particle) r.push([T.I("fb_pc"), '<span class="num">PC ' + esc(it.particle) + '</span>']);
+        var d = [it.particle && ("PC " + it.particle), it.defect].filter(Boolean);
+        if (d.length) r.push([T.I("c_debris"), esc(d.join(" · "))
+          + (it.iso ? ' <span class="code">ISO ' + esc(it.iso) + '</span>' : "")]);
         return r; } });
   }
   /* INSP — component/system, grade, defect, detection method, action and the
