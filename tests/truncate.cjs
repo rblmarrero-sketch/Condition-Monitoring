@@ -43,7 +43,20 @@ const CLIP = el => !el ? 'missing' : (el.scrollWidth > el.clientWidth + 1 || el.
     const p = await ctx.newPage();
     await p.goto(B + '/mobile/index.html', { waitUntil: 'load' });
     await p.waitForFunction(() => (document.getElementById('verNum') || {}).textContent !== '?', null, { timeout: 20000 });
-    await p.waitForTimeout(500);
+    /* Measure a header that has finished arriving, not one mid-paint. (This was
+       first blamed for the suite's intermittent failure; the cause was the page:
+       the pill's own status changes over a run, and the short one, "Всё
+       отправлено", was squeezed to 83 px with its ten-letter word clipped.
+       Fixed in the CSS; the settle stays so a read is never taken mid-paint.) */
+    await p.evaluate(() => document.fonts && document.fonts.ready);
+    await p.evaluate(() => new Promise(res => { const n = document.getElementById('netStatus');
+      let last = '', same = 0, tries = 0;
+      const tick = () => { const k = n.getBoundingClientRect().width + '|' + n.textContent;
+        same = (k === last) ? same + 1 : 0; last = k;
+        if (same >= 6 || ++tries > 120) return res();
+        requestAnimationFrame(tick); };
+      tick(); }));
+    await p.waitForTimeout(300);
     const r = await p.evaluate(CLIP => {
       const f = new Function('return ' + CLIP)();
       const t = document.querySelector('header .t'), n = document.getElementById('netStatus'), h = document.querySelector('header');

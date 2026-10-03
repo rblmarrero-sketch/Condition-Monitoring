@@ -3922,6 +3922,13 @@ Run in full after the undercarriage side-walk (build 501) and read to the end:
 - `tray`: the section carrying the printed tray was 1,119 px against the 1,089
   an A4 page has left, because the masthead above it had grown; `RPT_CSS_H` in
   `mobile/body-map.js` is 600, not 640.
+- `truncate` was called flaky and was not: the header's connection pill is
+  allowed to wrap but not to keep a word whole, so on a 360 px Russian phone the
+  short status ("Всё отправлено") was squeezed to 83 px with "отправлено"
+  clipped, and the long status ("Нет связи…") hid it. It passed or failed with
+  the state at the moment of looking. The pill's floor is its longest word from
+  341 px up (below that it would push the page sideways, and nothing in the fleet
+  is narrower).
 - `perfuc` counted nodes in panes nobody can see: the Due pane builds the
   1C PM list (~3,400 nodes, deliberately unclipped) and the CM agenda while
   hidden. It counts what is on screen now. Painting only the active Due tab
