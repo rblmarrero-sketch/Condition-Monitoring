@@ -5108,7 +5108,7 @@
       + (it.iso ? ' <span class="code">ISO ' + esc(it.iso) + '</span>' : ""));
     if (it.cause && !sh.cause) row(T.I("c_cause"), esc(it.cause));
     /* what was seen, how it was found, THEN what is being done about it */
-    if (it.detect && sh.detect) row(T.I("c_detection"), esc(it.detect));
+    if (it.detect && sh.detect) row(T.I("c_detection"), T.both(it.detect, it.detectAlt, "alti"));
     /* The action in both languages: the host resolves it by code (actionAlt). */
     if (it.action && !sh.action) row(T.I("c_action"), '<b>' + T.both(it.action, it.actionAlt, "alti") + '</b>'
       + prioTag(it) + (it.wo ? ' <span class="code">' + esc(T("c_wo")) + ' ' + esc(it.wo) + '</span>' : ""));

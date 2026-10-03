@@ -40,8 +40,8 @@ const count = (hay, needle) => hay.split(needle).length - 1;
       { equip: 'FCX01', date: '2026-10-03', type: 'INSP', cls: 'HT', by: 'Ivanov', smu: '1000',
         items: [
           { key: 'ENG.OIL', label: 'Engine oil', grade: 1 },
-          { key: 'HS.CYL', label: 'Cylinders', grade: 3, comment: 'SENTENCE-CYL leaking rod seal', action: 'Create 1C notification - plan repair', wo: 'WO-111', resp: 'Master', target: '2026-10-05', opstat: 'RUN', detect: 'Visual inspection', photos: A },
-          { key: 'DRS.AXL', label: 'Axles', grade: 5, comment: 'SENTENCE-AXL oil loss at the pinion seal', action: 'Stop and repair', wo: 'WO-222', resp: 'Superintendent', target: '2026-10-04', opstat: 'RUN', detect: 'Visual inspection', photos: B },
+          { key: 'HS.CYL', label: 'Cylinders', grade: 3, comment: 'SENTENCE-CYL leaking rod seal', action: 'Create 1C notification - plan repair', wo: 'WO-111', resp: 'Master', target: '2026-10-05', opstat: 'RUN', detection: 'DM-02', detectionLabel: 'Visual inspection', photos: A },
+          { key: 'DRS.AXL', label: 'Axles', grade: 5, comment: 'SENTENCE-AXL oil loss at the pinion seal', action: 'Stop and repair', wo: 'WO-222', resp: 'Superintendent', target: '2026-10-04', opstat: 'RUN', detection: 'DM-02', detectionLabel: 'Visual inspection', photos: B },
           { key: 'BS.CV', label: 'Control valve', grade: '' },
           { key: 'ELS.ALT', label: 'Alternator', grade: 2, comment: 'SENTENCE-ALT belt cracks', action: 'Monitor', opstat: 'RUN', photos: [] },
         ] },
@@ -93,6 +93,10 @@ const count = (hay, needle) => hay.split(needle).length - 1;
     ok(t + 'photographs, then the sentence, then the facts',
       /^phg.*>pkrow>cm>dl/.test(r.cels[0].order.replace(/phg>?/g, 'phg>').replace(/phg>phg/g, 'phg')) || /phg>pkrow>cm>dl/.test(r.cels[0].order), r.cels[0].order);
     ok(t + 'no findings TABLE for the points (only the sign-off tables remain)', r.tables <= 2, r.tables + ' tables');
+    ok(t + 'the detection method speaks the report\'s language, not the capture phone\'s',
+      lang === 'ru' && !bi ? /Визуальный осмотр/.test(r.text) && !/Visual inspection/.test(r.text)
+        : bi ? /Visual inspection/.test(r.text) && /Визуальный осмотр/.test(r.text)
+        : /Visual inspection/.test(r.text) && !/Визуальный осмотр/.test(r.text));
     ok(t + 'the clean point is one line, not a card', /ENG\.OIL/.test(r.text) && !r.cels.some(c => /ENG\.OIL/.test(c.pk)));
     ok(t + 'the unrecorded point is named, not dropped', /BS\.CV/.test(r.text) && !r.cels.some(c => /BS\.CV/.test(c.pk)));
     const lo = r.text.toLowerCase(), en = count(lo, 'equipment status'), ru = count(lo, 'состояние машины');

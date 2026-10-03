@@ -377,7 +377,13 @@
           particle: it.particle || "", comp: it.comp || "", oil: it.oil || "",
           tempC: it.tempC || "", ambC: it.ambC || "",
           tempM: it.tempMethod || it.tempM || "", tempMethodCode: it.tempMethod || "",
-          detect: it.detectionLabel || "", opstatLabel: it.opstatLabel || it.opstat || "",
+          /* By CODE, in the report's language with the other beside it, like the
+             action: the label frozen on the record is the phone's language at
+             capture, and a Russian sheet printed "Visual inspection". */
+          detect: typeof detName === "function" && it.detection ? detName(it.detection, it.detectionLabel)
+                  : (it.detectionLabel || ""),
+          detectAlt: typeof detName === "function" && it.detection ? inOther(() => detName(it.detection, it.detectionLabel)) : "",
+          opstatLabel: it.opstatLabel || it.opstat || "",
           zone: it.zone || "", zoneLabel: it.zoneLabel || "",
           lube: lubeBlock(rec, it),
           photos: wantPhotos ? photoSrcs(it, rec) : [],
