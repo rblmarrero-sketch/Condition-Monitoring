@@ -19,7 +19,12 @@ const SIZES=[[320,568,'iPhone SE 1'],[360,640,'small Android'],[375,667,'iPhone 
     await p.waitForTimeout(250);
     await p.evaluate(() => { selectEquip('DZ001'); goStep(2); });
     await p.waitForTimeout(800);
-    await p.evaluate(()=>pickComponent(ucOrder()[8]));
+    /* The ninth point of WEAR.walk (the table's own order), not of ucOrder():
+       the phone now walks one side at a time, so ucOrder()[8] is a different
+       station from the one this suite has always measured. Other stations
+       have taller sheets at 320 px (IDLER.L-OUT's nav ends 45 px below an
+       SE's screen) — noted in CLAUDE.md, not what this suite asks. */
+    await p.evaluate(()=>pickComponent(WEAR.walk(ucStatus(curEquip).model)[8].k));
     await p.waitForTimeout(400);
     await p.evaluate(()=>{const f=document.getElementById('ucMM');f.value='88';f.dispatchEvent(new Event('input',{bubbles:true}));});
     await p.waitForTimeout(400);

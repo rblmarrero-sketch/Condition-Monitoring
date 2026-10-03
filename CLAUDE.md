@@ -3890,6 +3890,30 @@ and `loadDriveCache()` in `dashboard/index.html` (the same code in
 `dashboard-next/index.html`). Take this entry off the list once a month of
 full-volume use has gone by with none of the above.
 
+**THE SWEEP OF 2026-10-03 FOUND FIVE THINGS THE LAST FEW PRs LEFT RED.**
+Run in full after the undercarriage side-walk (build 501) and read to the end:
+- *Holder row.* The "assign this phone to a person" readiness row (audit item 9)
+  made every "clean phone is all green" suite amber (`bgpush`, `quiet`, `field`)
+  — those fixtures now carry an assigned holder, and `field` counts seven
+  questions, not six. `holderSave` also called `localStorage.removeItem`
+  directly; it goes through `lsDel` like every other write (`histfull`).
+- *Reports page taller than three screens* (`urlstate`): the reliability
+  panel's "most failure downtime" list showed 15 machines; it shows 10 (the CSV
+  still carries every machine).
+- *`histfilt`* held fixed calendar dates against a "last 30 days" filter and
+  drifted out of the window; its dates are relative to today now.
+- *`sizes`* measured `ucOrder()[8]`, which the side-walk changed to a different
+  station. It measures the ninth point of `WEAR.walk` again. **Latent, not
+  fixed:** at 320x568 the sheet's Prev/Next row sits below the screen for some
+  stations (IDLER.L-OUT by 45 px, ROLLER.L5 by 30 px); ROLLER.L1 fits.
+- *`seam`*: the browser half left a half-walked round that the shell half's page
+  load (rightly) asks about; the test now answers "no" before clicking.
+
+Still red, environment not app: `rptmirror` (no `pdfimages`) and `pdfprint`
+(no working `pypdf`) need poppler and a Python PDF library this container
+cannot install. `perfuc` (DOM node count) and `tray` (A4 fit) are the two
+already recorded above as failing on untouched HEAD.
+
 ---
 
 ## Secrets

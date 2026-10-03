@@ -36,7 +36,8 @@ const ready = p => p.evaluate(() => [...document.querySelectorAll('.yardrow')].m
      worth knowing; it is not what this suite is measuring, so the other two
      are given a URL (which is what makes loadDests leave them alone) and
      switched off. */
-  await ctx.addInitScript(u => localStorage.setItem('up_dests', JSON.stringify([
+  await ctx.addInitScript(() => { localStorage.setItem('cm_holder', JSON.stringify({name:'Test Holder', badge:'T1', at:'2026-10-01T00:00:00Z'})); });
+await ctx.addInitScript(u => localStorage.setItem('up_dests', JSON.stringify([
     { id:'gas',  on:true,  url:u, sec:'', folder:'{TYPE}/{UNIT}/{YYYY-MM-DD}' },
     { id:'pa',   on:false, url:'https://off.invalid/', sec:'', folder:'' },
     { id:'post', on:false, url:'https://off.invalid/', sec:'', folder:'' }])), B + '/exec');
@@ -54,9 +55,10 @@ const ready = p => p.evaluate(() => [...document.querySelectorAll('.yardrow')].m
   await p.waitForTimeout(5500);
   const yard = await ready(p);
   yard.forEach(r => note(r.k.padEnd(4), r.t + ' — ' + r.s));
-  /* Six, not seven: the wake-up row appears only where a person can act on
-     it, and this backend is the Apps Script, which cannot wake a phone. */
-  ok('every readiness question is answered', yard.length === 6, yard.length + ' checks');
+  /* Seven: six questions about the phone and its link, and whose phone it is.
+     The wake-up row appears only where a person can act on it, and this
+     backend is the Apps Script, which cannot wake a phone. */
+  ok('every readiness question is answered', yard.length === 7, yard.length + ' checks');
   /* Should the row appear anyway (a backend that can, permission not yet
      given), amber is right for it. Every other row must be green. */
   const bgT = await p.evaluate(() => t('rdy_bg_t'));
