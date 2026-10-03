@@ -23,18 +23,21 @@ const URL = `http://127.0.0.1:${PORT}/dashboard/index.html`;
 const fails = [];
 const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !== undefined ? '   ' + d : '')); if (!c) fails.push(n); };
 
+/* Dates are relative to today: a fixed calendar date drifts out of the 30-day
+   period the suite asks about the moment the calendar moves on. */
+const dd = n => { const t = new Date(); t.setDate(t.getDate() - n); return t.toISOString().slice(0, 10); };
 const SEED = () => {
-  const recs = [
-    { equip: 'CR002', date: '2026-08-20', type: 'INSP', cls: 'CRJ', by: 'A', smu: '100',
+  const dd = n => { const t = new Date(); t.setDate(t.getDate() - n); return t.toISOString().slice(0, 10); };  const recs = [
+    { equip: 'CR002', date: dd(44), type: 'INSP', cls: 'CRJ', by: 'A', smu: '100',
       items: [{ key: 'GEN', label: 'General', grade: 3, defect: 'Cracking', defectCode: 'FM-MEC-04' }] },
-    { equip: 'TK151', date: '2026-09-01', type: 'MP', cls: 'HT', by: 'B', smu: '7100',
+    { equip: 'TK151', date: dd(20), type: 'MP', cls: 'HT', by: 'B', smu: '7100',
       items: [{ key: '4C', label: 'Left Rear Final Drive', grade: 5, defect: 'Ferrous debris — heavy', defectCode: 'DT14-03' },
               { key: '4D', label: 'Right Rear Final Drive', grade: 1 }] },
-    { equip: 'TK151', date: '2026-07-10', type: 'MP', cls: 'HT', by: 'B', smu: '6900',
+    { equip: 'TK151', date: dd(85), type: 'MP', cls: 'HT', by: 'B', smu: '6900',
       items: [{ key: '4C', label: 'Left Rear Final Drive', grade: 2 }] },
-    { equip: 'TK152', date: '2026-06-01', type: 'MP', cls: 'HT', by: 'C', smu: '5000',
+    { equip: 'TK152', date: dd(125), type: 'MP', cls: 'HT', by: 'C', smu: '5000',
       items: [{ key: '4C', label: 'Left Rear Final Drive', grade: 5, defect: 'Ferrous debris — heavy', defectCode: 'DT14-03' }] },
-    { equip: 'DZ003', date: '2026-09-02', type: 'MP', cls: 'DOZ', by: 'D', smu: '9000',
+    { equip: 'DZ003', date: dd(19), type: 'MP', cls: 'DOZ', by: 'D', smu: '9000',
       items: [{ key: '1A', label: 'Transmission', grade: 5, defect: 'Ferrous debris — heavy', defectCode: 'DT14-03', comment: 'weld line seep' }] },
   ];
   CMDash.importRecords(recs);
@@ -75,7 +78,7 @@ const setInput = (p, id, v) => p.evaluate(([id, v]) => { const el = document.get
   ok('  and the chosen machine is one of them', ['DZ003', 'TK151', 'TK152'].includes(S.unit), S.unit);
   await setSel(p, 'equipSel', 'TK151'); await p.waitForTimeout(300);
   S = await state(p);
-  ok('TK151 shows only its Critical round', S.rounds.join() === '2026-09-01', S.rounds.join());
+  ok('TK151 shows only its Critical round', S.rounds.join() === dd(20), S.rounds.join());
   ok('  and only its Critical position, not the 1 – Normal one beside it', S.grades.length === 1 && S.grades[0].indexOf(CRIT) >= 0, S.grades.join(' | '));
   ok('  the sub-line says these are matching inspections', /matching/i.test(S.sub), S.sub);
 
@@ -91,7 +94,7 @@ const setInput = (p, id, v) => p.evaluate(([id, v]) => { const el = document.get
   await p.evaluate(() => { const x = document.querySelector('#chips .chip [data-x]'); x.click(); }); await p.waitForTimeout(400);
   S = await state(p);
   ok('the chip is gone and the address no longer carries the grade', S.chips.length === 0 && !/sev=/.test(S.hash), S.hash);
-  ok('CR002 shows its whole history again', S.unit === 'CR002' && S.rounds.join() === '2026-08-20', S.unit + ' ' + S.rounds.join());
+  ok('CR002 shows its whole history again', S.unit === 'CR002' && S.rounds.join() === dd(44), S.unit + ' ' + S.rounds.join());
   ok('  and the machine list is complete again', S.units.includes('CR002') && S.units.includes('TK151'), S.units.length + ' machines');
 
   console.log('\n4. type, class, period and search narrow the list the same way');
@@ -102,7 +105,7 @@ const setInput = (p, id, v) => p.evaluate(([id, v]) => { const el = document.get
   await setSel(p, 'fClass', ''); await setSel(p, 'fRange', '30'); await p.waitForTimeout(300); S = await state(p);
   ok('last 30 days: the June round on TK152 drops out', !S.units.includes('TK152') && S.units.includes('DZ003'), S.units.join());
   await setSel(p, 'equipSel', 'TK151'); await p.waitForTimeout(300); S = await state(p);
-  ok('  and TK151 shows only its round inside the period', S.rounds.join() === '2026-09-01', S.rounds.join());
+  ok('  and TK151 shows only its round inside the period', S.rounds.join() === dd(20), S.rounds.join());
   await setSel(p, 'fRange', '0'); await setInput(p, 'fQ', 'weld'); await p.waitForTimeout(500); S = await state(p);
   ok('search "weld": only DZ003', S.units.join() === 'DZ003' && S.unit === 'DZ003', S.units.join() + ' · ' + S.unit);
   await setInput(p, 'fQ', ''); await p.waitForTimeout(300);
@@ -116,7 +119,7 @@ const setInput = (p, id, v) => p.evaluate(([id, v]) => { const el = document.get
   ok('TK152 under the Critical filter is in the address', /sev=5/.test(S.hash) && /eq=TK152/.test(S.hash), S.hash);
   await p.goBack(); await p.waitForTimeout(600); S = await state(p);
   ok('Back: TK151, the filter still on', S.unit === 'TK151' && /sev=5/.test(S.hash) && S.chips.some(c => c.indexOf(CRIT) >= 0), S.unit + ' ' + S.hash);
-  ok('  and its list is still the Critical one', S.rounds.join() === '2026-09-01' && S.grades.length === 1, S.rounds.join());
+  ok('  and its list is still the Critical one', S.rounds.join() === dd(20) && S.grades.length === 1, S.rounds.join());
   await p.goForward(); await p.waitForTimeout(600); S = await state(p);
   ok('Forward: TK152 again', S.unit === 'TK152' && /eq=TK152/.test(S.hash), S.unit + ' ' + S.hash);
   /* The record: open a position, Back closes it and leaves the page where it was. */
@@ -133,7 +136,7 @@ const setInput = (p, id, v) => p.evaluate(([id, v]) => { const el = document.get
   await p.evaluate(SEED); await p.waitForTimeout(300);
   await p.evaluate(() => urlRead('#equipment?sev=5&eq=TK151')); await p.waitForTimeout(500);
   S = await state(p);
-  ok('the filter, the machine and the Critical-only list are all in force', S.unit === 'TK151' && S.chips.some(c => c.indexOf(CRIT) >= 0) && S.rounds.join() === '2026-09-01' && S.grades.length === 1 && !S.units.includes('CR002'),
+  ok('the filter, the machine and the Critical-only list are all in force', S.unit === 'TK151' && S.chips.some(c => c.indexOf(CRIT) >= 0) && S.rounds.join() === dd(20) && S.grades.length === 1 && !S.units.includes('CR002'),
      JSON.stringify({ unit: S.unit, chips: S.chips, rounds: S.rounds, units: S.units }));
 
   await b.close();
