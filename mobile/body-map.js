@@ -378,7 +378,11 @@
      a near-square one (TR60) prints two different WIDTHS — correct, because
      each drawing then holds the same vertical, station-to-station scale
      instead of one stretched to fill a width its own shape does not want. */
-  var RPT_CSS_H = 640;
+  /* 640 until 2026-10-03, when the masthead above the drawing had grown enough
+     that the section (1,119 px) no longer fitted the 1,089 px an A4 page has
+     left and the fold would have gone through the zone table; 600 keeps the
+     whole section inside it with room to spare. */
+  var RPT_CSS_H = 600;
   W.bodyMapReport = function (o) {
     o = o || {};
     var vals = {}, mm = o.mm || {};

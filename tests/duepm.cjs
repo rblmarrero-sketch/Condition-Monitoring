@@ -36,8 +36,12 @@ const PORT = Number(process.argv[2] || 8478);
 const fails = [];
 const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !== undefined ? '   ' + d : '')); if (!c) fails.push(n); };
 
+/* The site's own calendar day, from the app's own clock. The site runs twelve
+   hours ahead of UTC, so from noon UTC the UTC date is a day BEHIND the app's
+   "today" and a fixture dated "today" by it reads as one day late. */
+global.self = global; require('../mobile/due.js');
 const today = new Date();
-const plus = n => { const d = new Date(today); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); };
+const plus = n => self.DUE.shift(self.DUE.today(), n);
 
 /* PM1 — a planned service, no defect fields at all: status only.
    DEF1 — a repair work order carrying every defect field, priority P1,
@@ -56,7 +60,7 @@ const FIXTURE = {
       hours: 4000, plan: plus(3), status: 'Released', request: '', defType: '', cause: '' },
     { wo: 'WO-2', equip: 'DEF1', cls: '', comp: 'Rear Differential',
       desc: 'Ferrous debris — heavy', priority: 'P1 Critical', raised: today.toISOString().slice(0, 10),
-      type: '4.1', hours: null, plan: today.toISOString().slice(0, 10), status: 'In Progress',
+      type: '4.1', hours: null, plan: plus(0), status: 'In Progress',
       request: 'DR-000100', defType: '4.1', cause: 'Contamination' },
     { wo: 'WO-3', equip: 'DEF2', cls: '', comp: 'Frame / guards',
       desc: 'Abnormal wear', priority: 'P2 Severe', raised: plus(3),
@@ -267,7 +271,7 @@ const server = http.createServer((req, res) => {
   FIXTURE.generated = new Date(Date.now() + 1000).toISOString();
   FIXTURE.rtwOpen = FIXTURE.rtwOpen.concat([{ wo: 'WO-9', equip: 'DEF9', cls: '', comp: 'Bucket',
     desc: 'New crack', priority: 'P1 Critical', raised: today.toISOString().slice(0, 10),
-    type: '1.2', hours: null, plan: today.toISOString().slice(0, 10), status: 'Registered',
+    type: '1.2', hours: null, plan: plus(0), status: 'Registered',
     request: 'DR-000199', defType: '1.2', cause: '' }]);
   const moved = await p.evaluate(() => schedEnsureLoaded(true));
   ok('the file is asked for and the page takes the newer pull', moved === true
