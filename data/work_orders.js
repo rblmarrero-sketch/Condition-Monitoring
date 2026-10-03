@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-03T21:01:52+00:00",
+  "generated": "2026-10-03T21:42:08+00:00",
   "source": "https://askpi.94-131-94-152.sslip.io/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 683,
@@ -400,13 +400,13 @@ window.CM_WO_DATA = {
     "wo": "Work order number"
   },
   "cmDateFrom": {
-    "raised": 126,
+    "raised": 128,
     "detected": 0,
     "planStart": 0
   },
   "cmCauseFrom": {
     "wo": 53,
-    "wr": 73,
+    "wr": 75,
     "cert": 0,
     "none": 0
   },
@@ -419,6 +419,52 @@ window.CM_WO_DATA = {
     "Bekzhan"
   ],
   "cmWorkOrders": [
+    {
+      "date": "2026-10-04",
+      "dateFrom": "raised",
+      "raised": "2026-10-04",
+      "detected": "2026-10-04",
+      "planStart": null,
+      "closed": null,
+      "asset": "EX021",
+      "defect": "DD-00013999",
+      "requestNo": "DD-00013999",
+      "eqType": "EXCAVATOR, BUCKET",
+      "system": "EX021.HS.DL (Hydraulic Lines / Гидролинии)",
+      "priority": "P4 Planned (Repair)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Поврежден шланга/линии",
+      "causeFrom": "wr",
+      "descr": "Течь гидравлического масла по телу РВД линии забора масла на гидропривод вентилятора",
+      "status": "Registered",
+      "by": "Zhomart",
+      "woNumber": null,
+      "maintType": null,
+      "planned": false
+    },
+    {
+      "date": "2026-10-04",
+      "dateFrom": "raised",
+      "raised": "2026-10-04",
+      "detected": "2026-10-04",
+      "planStart": null,
+      "closed": null,
+      "asset": "EX021",
+      "defect": "DD-00013998",
+      "requestNo": "DD-00013998",
+      "eqType": "EXCAVATOR, BUCKET",
+      "system": "EX021.DRS.CS (Cooling System / Система охлаждения)",
+      "priority": "P4 Planned (Repair)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Износ уплотнения",
+      "causeFrom": "wr",
+      "descr": "Течь охлаждающей жидкости помпы ДВС; потеря герметичности уплотнения помпы.",
+      "status": "Registered",
+      "by": "Zhomart",
+      "woNumber": null,
+      "maintType": null,
+      "planned": false
+    },
     {
       "date": "2026-10-03",
       "dateFrom": "raised",
