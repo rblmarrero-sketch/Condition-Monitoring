@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=510">
+<link rel="manifest" href="manifest.webmanifest?v=511">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=510">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=510">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=510">
+<link rel="apple-touch-icon" href="icon-192.png?v=511">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=511">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=511">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1656,6 +1656,7 @@
   .cam-ov{position:fixed;inset:0;z-index:210;background:#000;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);}
   .cam-top{width:100%;display:flex;align-items:center;gap:12px;padding:10px 14px;box-sizing:border-box;}
   .cam-hint{flex:1;font-size:13px;line-height:1.3;opacity:.9;}
+  .cam-hint b{font-weight:600;white-space:nowrap;}
   .cam-box{--s:min(100vw,calc(100vh - 200px));width:var(--s);height:var(--s);position:relative;overflow:hidden;background:#111;flex:none;}
   @supports (height:100dvh){ .cam-box{--s:min(100vw,calc(100dvh - 200px));} }
   .cam-box video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
@@ -2519,7 +2520,7 @@
 <div id="camOv" class="cam-ov hidden" role="dialog" aria-modal="true" aria-label="Camera">
   <div class="cam-top">
     <button class="btn ghost" id="camClose" type="button" data-i18n="btn_cancel">Cancel</button>
-    <span class="cam-hint" data-i18n="cam_hint">Saved as a square — keep the subject inside the frame</span>
+    <span class="cam-hint"><span data-i18n="cam_hint">Saved as a square — keep the subject inside the frame</span><b id="camRes"></b></span>
   </div>
   <div class="cam-box" id="camBox"><video id="camVideo" playsinline muted autoplay></video><i class="cam-c tl"></i><i class="cam-c tr"></i><i class="cam-c bl"></i><i class="cam-c br"></i></div>
   <div class="cam-bar">
@@ -2847,16 +2848,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=510"></script>
-<script src="upload-defaults.js?v=510"></script>
-<script src="hme.js?v=510"></script>
-<script src="mp-fc.js?v=510"></script>
-<script src="rtw.js?v=510"></script>
-<script src="hme-cascade.js?v=510"></script>
-<script src="assets.js?v=510"></script>
-<script src="temp-limits.js?v=510"></script>
-<script src="normalize.js?v=510"></script>
-<script src="terms.js?v=510"></script>
+<script src="native.js?v=511"></script>
+<script src="upload-defaults.js?v=511"></script>
+<script src="hme.js?v=511"></script>
+<script src="mp-fc.js?v=511"></script>
+<script src="rtw.js?v=511"></script>
+<script src="hme-cascade.js?v=511"></script>
+<script src="assets.js?v=511"></script>
+<script src="temp-limits.js?v=511"></script>
+<script src="normalize.js?v=511"></script>
+<script src="terms.js?v=511"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2875,25 +2876,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=510"></script>
-<script src="edits.js?v=510"></script>
-<script src="due.js?v=510"></script>
-<script src="wear.js?v=510"></script>
-<script src="wear-figs.js?v=510"></script>
-<script src="wear-map.js?v=510"></script>
-<script src="machine-photos.js?v=510"></script>
-<script src="machine-fig.js?v=510"></script>
-<script src="get.js?v=510"></script>
-<script src="points.js?v=510"></script>
-<script src="uc-points.js?v=510"></script>
-<script src="inspect-guide.js?v=510"></script>
-<script src="get-figs.js?v=510"></script>
-<script src="body-points.js?v=510"></script>
-<script src="body-map.js?v=510"></script>
-<script src="lube.js?v=510"></script>
-<script src="lube-overrides.js?v=510"></script>
-<script src="lube2027.js?v=510"></script>
-<script src="report-core.js?v=510"></script>
+<script src="grade.js?v=511"></script>
+<script src="edits.js?v=511"></script>
+<script src="due.js?v=511"></script>
+<script src="wear.js?v=511"></script>
+<script src="wear-figs.js?v=511"></script>
+<script src="wear-map.js?v=511"></script>
+<script src="machine-photos.js?v=511"></script>
+<script src="machine-fig.js?v=511"></script>
+<script src="get.js?v=511"></script>
+<script src="points.js?v=511"></script>
+<script src="uc-points.js?v=511"></script>
+<script src="inspect-guide.js?v=511"></script>
+<script src="get-figs.js?v=511"></script>
+<script src="body-points.js?v=511"></script>
+<script src="body-map.js?v=511"></script>
+<script src="lube.js?v=511"></script>
+<script src="lube-overrides.js?v=511"></script>
+<script src="lube2027.js?v=511"></script>
+<script src="report-core.js?v=511"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -5723,6 +5724,8 @@ const MAX_PHOTOS=10, MAX_VIDEO_SEC=60;
    flash and the zoom, which a pit at -40 sometimes needs more than a frame.
    Resolves a File, or null for cancelled. */
 let camBusy=false, camDenied=false;
+/* Higher than PHOTO_Q (0.78, the shrink of a camera original): this is the only lossy pass a framed photograph gets. */
+const CAM_Q=0.92;
 async function framedPhoto(fallbackId){
   const native=()=>oneFileFrom(fallbackId);
   const md=navigator.mediaDevices;
@@ -5762,16 +5765,33 @@ async function framedPhoto(fallbackId){
     try{ await v.play(); }catch(e){ started=false; }
     if(started && !v.videoWidth){ await new Promise(r=>{ v.addEventListener("loadedmetadata",r,{once:true}); setTimeout(r,2500); }); }
     if(!started || !v.videoWidth) finish("native");
-    else { live=true; $("camShutter").disabled=false; $("camShutter").focus(); }
+    else {
+      live=true; $("camShutter").disabled=false; $("camShutter").focus();
+      /* WHAT THE CAMERA ACTUALLY DELIVERED, said on the screen: the square is cut
+         from the live stream, so its size is the stream's, and that differs by
+         phone. Nobody should have to trust that it is sharp enough - it is printed. */
+      const sq=Math.min(v.videoWidth,v.videoHeight), lim=photoPx();
+      $("camRes").textContent=" · "+((lim>0&&sq>lim)?lim:sq)+" px";
+    }
     const answer = await answerP;
     let file=null;
     if(answer==="shot"){
-      const vw=v.videoWidth, vh=v.videoHeight, side=Math.min(vw,vh);
+      const vw=v.videoWidth, vh=v.videoHeight, srcSide=Math.min(vw,vh);
+      /* ONE LOSSY PASS, NOT TWO. The square is scaled to the phone's own photo
+         limit HERE, once, and encoded at CAM_Q. A frame already inside the limit
+         is handed back untouched by standardise() (reencode: "a JPEG inside the
+         size limit"), whereas a larger one drawn full-size and encoded here
+         would be decoded and encoded AGAIN there at the lower PHOTO_Q — a
+         generation lost for nothing. "Original" (limit 0) is never scaled. */
+      const lim=photoPx(), side=(lim>0 && srcSide>lim) ? lim : srcSide;
       const c=document.createElement("canvas"); c.width=c.height=side;
-      c.getContext("2d").drawImage(v,(vw-side)/2,(vh-side)/2,side,side,0,0,side,side);
-      let blob=await new Promise(r=>{ try{ c.toBlob(r,"image/jpeg",0.92); }catch(e){ r(null); } });
+      const g=c.getContext("2d"); g.imageSmoothingEnabled=true; g.imageSmoothingQuality="high";
+      g.drawImage(v,(vw-srcSide)/2,(vh-srcSide)/2,srcSide,srcSide,0,0,side,side);
+      window.__camShot={vw,vh,srcSide,side,q:CAM_Q};
+      slog("cam-shot",{vw,vh,side,lim});
+      let blob=await new Promise(r=>{ try{ c.toBlob(r,"image/jpeg",CAM_Q); }catch(e){ r(null); } });
       if(!blob || !blob.size){            // a second reader over the same pixels, as signBlob does
-        try{ const u=c.toDataURL("image/jpeg",0.92); const bin=atob(u.split(",")[1]); const a=new Uint8Array(bin.length);
+        try{ const u=c.toDataURL("image/jpeg",CAM_Q); const bin=atob(u.split(",")[1]); const a=new Uint8Array(bin.length);
              for(let i=0;i<bin.length;i++) a[i]=bin.charCodeAt(i); blob=new Blob([a],{type:"image/jpeg"}); }catch(e){ blob=null; }
       }
       if(blob && blob.size) file=new File([blob],"cam_"+Date.now()+".jpg",{type:"image/jpeg",lastModified:Date.now()});
@@ -15000,7 +15020,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="510";
+const BUILD="511";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
