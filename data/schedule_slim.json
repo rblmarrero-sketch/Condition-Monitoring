@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-04T02:59:38+00:00",
+  "generated": "2026-10-04T03:04:38+00:00",
   "byUnit": {
     "BL001": [
       {
@@ -467,17 +467,6 @@
           "INSP"
         ],
         "plan": "2026-10-07",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "LS021": [
-      {
-        "wo": "WO-017381",
-        "hours": 1000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-09-24",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -5131,12 +5120,12 @@
       "type": "1000 Hours service Planned",
       "hours": 1000,
       "plan": "2026-09-24",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-09-24"
     },
     {
       "wo": "WO-017393",
