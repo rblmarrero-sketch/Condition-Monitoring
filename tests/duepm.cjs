@@ -126,6 +126,26 @@ const server = http.createServer((req, res) => {
   const idxOf = u => order.findIndex(x => x === u);
   ok('DEF3 (earliest date, 3 days back) sorts before DEF1 (today)', idxOf('DEF3') < groups.findIndex(g => g.includes('DEF1')));
 
+  console.log('\n3b. a day heading names the month and the year, not only the weekday and the number');
+  /* Asked from the field on 2026-10-04: "what date are these" — the headings
+     said "TUE 30" over work orders planned for 30 December 2025. Expected
+     text is built here from the fixture's own dates, not read back off the page. */
+  const heads = await p.evaluate(() => [...document.querySelectorAll('#duePmList .daygroup')].map(g => ({
+    head: (g.querySelector('.dayhd b') || {}).textContent || '', text: g.innerText })));
+  const fmt = (iso, loc) => {
+    const d = new Date(iso + 'T00:00:00Z'), o = { timeZone: 'UTC' };
+    const wd = d.toLocaleDateString(loc, { ...o, weekday: 'short' }).replace(/\.$/, '');
+    const mo = d.toLocaleDateString(loc, { ...o, month: 'short' }).replace(/\.$/, '');
+    return wd + ' ' + d.getUTCDate() + ' ' + mo + ' ' + d.getUTCFullYear();
+  };
+  for (const [u, iso] of [['DEF3', plus(-3)], ['DEF1', plus(0)], ['DEF2', plus(3)]]) {
+    const h = heads.find(x => x.text.includes(u));
+    ok(u + "'s heading carries weekday, day, month and year: " + fmt(iso, 'en-US'), !!h && h.head.includes(fmt(iso, 'en-US')), h && h.head);
+  }
+  ok('the no-date group still has no date in its heading', heads.some(x => x.text.includes('DEF4') && !/\d{4}/.test(x.head)));
+  const ruHead = await p.evaluate(() => { const was = lang; lang = 'ru'; renderDuePM(); const h = [...document.querySelectorAll('#duePmList .daygroup')].find(g => g.innerText.includes('DEF3')); const r = h ? h.querySelector('.dayhd b').textContent : ''; lang = was; renderDuePM(); return r; });
+  ok("in Russian the heading names the month in Russian: " + fmt(plus(-3), 'ru-RU'), ruHead.includes(fmt(plus(-3), 'ru-RU')), ruHead);
+
   console.log('\n4. priority chips — only the codes actually present, with real counts');
   const chips = await p.evaluate(() => [...document.querySelectorAll('#pmPrioF [data-pp]')].map(b => ({ pp: b.dataset.pp, n: (b.querySelector('.n') || {}).textContent })));
   ok('P1, P2, P3, P4 all appear (one WO each) and no P5 (none in the fixture)',

@@ -4005,6 +4005,18 @@ nothing to deploy on the VM. `tests/staleedit.cjs` stands in for the dead handle
 with a 7-byte File every reader refuses and for the refusal with the field's own
 sentence; against the old page it reproduces the field message.
 
+**A DAY HEADING THAT SAYS "TUE 30" IS NOT A DATE.** Asked from the field on
+2026-10-04 with a screenshot of the 1C PM list: "what date are these." The
+heading was weekday and day-of-month only, and the list is deliberately never
+clipped (a job 1C still calls open is shown however overdue), so a work order
+planned for 30 December 2025 and one planned last Tuesday read the same, and the
+oldest rows sat under headings that looked recent. The groups are 1C's plan date
+(`r.plan`, falling back to `r.raised`). `renderDuePM`'s `dayLabel` now says
+"Tue 30 Dec 2025", the month in the phone's language. Phone only, nothing to
+deploy on the VM; `tests/duepm.cjs` §3b builds the expected text from the
+fixture's own dates in English and Russian. The CM tab's own headings are
+unchanged: its window is a fortnight, where a bare day number is unambiguous.
+
 ---
 
 ## Secrets
