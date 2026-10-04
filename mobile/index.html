@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=509">
+<link rel="manifest" href="manifest.webmanifest?v=510">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=509">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=509">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=509">
+<link rel="apple-touch-icon" href="icon-192.png?v=510">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=510">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=510">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1652,6 +1652,32 @@
   .scan-frame{position:relative;width:66vw;max-width:280px;aspect-ratio:1;border:3px solid #fff;border-radius:10px;box-shadow:0 0 0 100vmax rgba(0,0,0,.5);}
   .scan-hint{position:absolute;bottom:120px;color:#fff;font-size:15px;background:rgba(0,0,0,.5);padding:8px 14px;border-radius:10px;text-align:center;}
   .scan-ov .btn{position:absolute;bottom:40px;width:200px;}
+  /* framed camera — the box is a square that fits the screen in either orientation */
+  .cam-ov{position:fixed;inset:0;z-index:210;background:#000;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);}
+  .cam-top{width:100%;display:flex;align-items:center;gap:12px;padding:10px 14px;box-sizing:border-box;}
+  .cam-hint{flex:1;font-size:13px;line-height:1.3;opacity:.9;}
+  .cam-box{--s:min(100vw,calc(100vh - 200px));width:var(--s);height:var(--s);position:relative;overflow:hidden;background:#111;flex:none;}
+  @supports (height:100dvh){ .cam-box{--s:min(100vw,calc(100dvh - 200px));} }
+  .cam-box video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+  .cam-box::after{content:"";position:absolute;inset:0;border:2px solid rgba(255,255,255,.85);pointer-events:none;}
+  .cam-c{position:absolute;width:26px;height:26px;border:4px solid #fff;pointer-events:none;}
+  .cam-c.tl{top:8px;left:8px;border-right:0;border-bottom:0;} .cam-c.tr{top:8px;right:8px;border-left:0;border-bottom:0;}
+  .cam-c.bl{bottom:8px;left:8px;border-right:0;border-top:0;} .cam-c.br{bottom:8px;right:8px;border-left:0;border-top:0;}
+  .cam-bar{width:100%;display:grid;grid-template-columns:1fr;justify-items:center;align-items:center;row-gap:12px;padding:12px 18px 22px;box-sizing:border-box;}
+  .cam-bar .btn{order:2;}
+  .cam-bar .btn,.cam-top .btn{min-height:48px;width:auto;flex:none;padding-left:18px;padding-right:18px;}
+  .cam-bar .btn{min-width:0;padding-left:10px;padding-right:10px;white-space:nowrap;}
+  .cam-shutter{flex:none;width:80px;height:80px;border-radius:50%;background:#fff;border:6px solid #9aa4ab;box-shadow:0 0 0 3px #fff;cursor:pointer;padding:0;}
+  .cam-shutter:active{background:#cfd6da;}
+  .cam-shutter:disabled{opacity:.35;cursor:default;}
+  @media (orientation:landscape){
+    .cam-ov{flex-direction:row;padding:0;}
+    .cam-box{--s:min(calc(100vh - 8px),calc(100vw - 240px));}
+    @supports (height:100dvh){ .cam-box{--s:min(calc(100dvh - 8px),calc(100vw - 240px));} }
+    .cam-top{width:auto;flex:1;flex-direction:column;align-items:flex-start;align-self:stretch;justify-content:flex-start;}
+    .cam-bar{width:auto;flex:1;align-self:stretch;grid-template-rows:1fr auto 1fr;padding:12px 18px;}
+    .cam-bar .btn{order:0;align-self:start;margin-top:12px;}
+  }
   /* media strip (multi-photo + video) */
   .mediastrip{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:6px;}
   .mtile{position:relative;width:calc(25% - 6px);aspect-ratio:1;border-radius:10px;overflow:hidden;background:var(--surface-2);border:1px solid var(--border);}
@@ -2485,6 +2511,23 @@
 </div>
 <canvas id="qrCanvas" class="hidden"></canvas>
 
+<!-- THE FRAMED CAMERA. The square IS the viewfinder, not a mask laid over a
+     bigger picture: the box is square, the video fills it (object-fit:cover)
+     and the capture crops the centre square of the stream, which is by
+     construction the same area the box shows. What is on screen is what is
+     saved, and what is saved is what the report prints (its tiles are square). -->
+<div id="camOv" class="cam-ov hidden" role="dialog" aria-modal="true" aria-label="Camera">
+  <div class="cam-top">
+    <button class="btn ghost" id="camClose" type="button" data-i18n="btn_cancel">Cancel</button>
+    <span class="cam-hint" data-i18n="cam_hint">Saved as a square — keep the subject inside the frame</span>
+  </div>
+  <div class="cam-box" id="camBox"><video id="camVideo" playsinline muted autoplay></video><i class="cam-c tl"></i><i class="cam-c tr"></i><i class="cam-c bl"></i><i class="cam-c br"></i></div>
+  <div class="cam-bar">
+    <button class="btn ghost" id="camNative" type="button" data-i18n="cam_native">Phone camera</button>
+    <button class="cam-shutter" id="camShutter" type="button" data-i18n-title="cam_shutter" aria-label="Take photo"></button>
+      </div>
+</div>
+
 <!-- RETURN TO WORK. A separate overlay, not the guided round wizard: this is
      a repair-release checklist triggered by a work order, not a scheduled CM
      round, and it does not touch draft/curItem/renderMedia at all — it keeps
@@ -2804,16 +2847,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=509"></script>
-<script src="upload-defaults.js?v=509"></script>
-<script src="hme.js?v=509"></script>
-<script src="mp-fc.js?v=509"></script>
-<script src="rtw.js?v=509"></script>
-<script src="hme-cascade.js?v=509"></script>
-<script src="assets.js?v=509"></script>
-<script src="temp-limits.js?v=509"></script>
-<script src="normalize.js?v=509"></script>
-<script src="terms.js?v=509"></script>
+<script src="native.js?v=510"></script>
+<script src="upload-defaults.js?v=510"></script>
+<script src="hme.js?v=510"></script>
+<script src="mp-fc.js?v=510"></script>
+<script src="rtw.js?v=510"></script>
+<script src="hme-cascade.js?v=510"></script>
+<script src="assets.js?v=510"></script>
+<script src="temp-limits.js?v=510"></script>
+<script src="normalize.js?v=510"></script>
+<script src="terms.js?v=510"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2832,25 +2875,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=509"></script>
-<script src="edits.js?v=509"></script>
-<script src="due.js?v=509"></script>
-<script src="wear.js?v=509"></script>
-<script src="wear-figs.js?v=509"></script>
-<script src="wear-map.js?v=509"></script>
-<script src="machine-photos.js?v=509"></script>
-<script src="machine-fig.js?v=509"></script>
-<script src="get.js?v=509"></script>
-<script src="points.js?v=509"></script>
-<script src="uc-points.js?v=509"></script>
-<script src="inspect-guide.js?v=509"></script>
-<script src="get-figs.js?v=509"></script>
-<script src="body-points.js?v=509"></script>
-<script src="body-map.js?v=509"></script>
-<script src="lube.js?v=509"></script>
-<script src="lube-overrides.js?v=509"></script>
-<script src="lube2027.js?v=509"></script>
-<script src="report-core.js?v=509"></script>
+<script src="grade.js?v=510"></script>
+<script src="edits.js?v=510"></script>
+<script src="due.js?v=510"></script>
+<script src="wear.js?v=510"></script>
+<script src="wear-figs.js?v=510"></script>
+<script src="wear-map.js?v=510"></script>
+<script src="machine-photos.js?v=510"></script>
+<script src="machine-fig.js?v=510"></script>
+<script src="get.js?v=510"></script>
+<script src="points.js?v=510"></script>
+<script src="uc-points.js?v=510"></script>
+<script src="inspect-guide.js?v=510"></script>
+<script src="get-figs.js?v=510"></script>
+<script src="body-points.js?v=510"></script>
+<script src="body-map.js?v=510"></script>
+<script src="lube.js?v=510"></script>
+<script src="lube-overrides.js?v=510"></script>
+<script src="lube2027.js?v=510"></script>
+<script src="report-core.js?v=510"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -3151,7 +3194,7 @@ const I18N = {
     step_ctx_t:"Change the equipment, date or inspector",
     rv_empty:"Nothing recorded yet. Go back to Findings and record at least one inspection point.",
     /* Five rounds in the queue and a superintendent who wants one of them. */
-    rpt1_title:"PDF for this round only", scan_hint:"Point at the unit's QR code", btn_cancel:"Cancel", dlg_ok:"OK",
+    rpt1_title:"PDF for this round only", scan_hint:"Point at the unit's QR code", cam_hint:"Saved as a square — keep the subject inside the frame", cam_native:"Phone camera", cam_shutter:"Take photo", btn_cancel:"Cancel", dlg_ok:"OK",
     rep_title:"Condition Monitoring Inspection Report", rep_generated:"Generated", rep_building:["Building report…","Preparing the PDF — this can take a few seconds."],
     /* Rasterising is about a second a page on a warm handset and several times
        that on a cold one, and the old message said "a few seconds" and then sat
@@ -3874,7 +3917,7 @@ const I18N = {
     step_need_type:"Сначала выберите тип осмотра.",
     step_ctx_t:"Изменить технику, дату или инспектора",
     rv_empty:"Пока ничего не записано. Вернитесь к находкам и запишите хотя бы одну точку осмотра.",
-    rpt1_title:"PDF только по этому обходу", scan_hint:"Наведите на QR-код трака", btn_cancel:"Отмена", dlg_ok:"ОК",
+    rpt1_title:"PDF только по этому обходу", scan_hint:"Наведите на QR-код трака", cam_hint:"Снимок сохраняется квадратным — объект должен быть в рамке", cam_native:"Камера телефона", cam_shutter:"Сделать снимок", btn_cancel:"Отмена", dlg_ok:"ОК",
     rep_title:"Отчёт по мониторингу состояния", rep_generated:"Сформировано", rep_building:["Формирование отчёта…","Готовится PDF — это может занять несколько секунд."],
     rep_page:"Формирование… {i} из {n}",
     rep_photo:"Загрузка фотографии {i} из {n}…",
@@ -5662,6 +5705,85 @@ const MAX_PHOTOS=10, MAX_VIDEO_SEC=60;
    still the hidden file input below; inside the shell it is the platform
    camera, which keeps the resolution and the orientation the web path loses.
    Nothing here knows which, and the photograph is a Blob either way. */
+/* THE FRAMED CAMERA — A SQUARE VIEWFINDER, AND THE SQUARE IS WHAT IS SAVED.
+   The report prints every photograph in the same square tile, cropped to fill
+   it (tiledRow), so a landscape frame and a portrait frame from the phone's own
+   camera each lost a different part of the picture to the crop, and the
+   inspector never saw which. The phone's own camera cannot be given a frame;
+   this one can. The box on screen is square and the video fills it, and the
+   capture takes the centre square of the stream — the same area, by
+   construction — so the photograph the inspector composes is the photograph
+   the report prints, held either way up.
+
+   It hands back a File exactly like the platform camera does, and everything
+   downstream (intakeNoted -> ownBytes, the shrink, the manifest, the cap) is
+   unchanged. It never traps anybody: no camera API, a refused permission or a
+   capture that produces nothing all go to the phone's own camera input, and
+   "Phone camera" on the screen does the same on purpose — that camera has the
+   flash and the zoom, which a pit at -40 sometimes needs more than a frame.
+   Resolves a File, or null for cancelled. */
+let camBusy=false, camDenied=false;
+async function framedPhoto(fallbackId){
+  const native=()=>oneFileFrom(fallbackId);
+  const md=navigator.mediaDevices;
+  if(camBusy || camDenied || !(md && md.getUserMedia)) return native();
+  camBusy=true;
+  let stream=null;
+  const stop=()=>{ try{ if(stream) stream.getTracks().forEach(t=>t.stop()); }catch(e){} stream=null; };
+  try{
+    try{ stream=await md.getUserMedia({audio:false, video:{facingMode:{ideal:"environment"}, width:{ideal:4096}, height:{ideal:4096}}}); }
+    catch(e){
+      // A refusal is remembered for the session so the phone is not asked on every tap.
+      camDenied = !!(e && (e.name==="NotAllowedError" || e.name==="SecurityError"));
+      return await native();
+    }
+    const ov=$("camOv"), v=$("camVideo");
+    /* The buttons are wired BEFORE the screen is shown, not after the video
+       has started: a tap on Cancel while the stream is still starting was
+       otherwise lost, and the screen sat there ignoring it (found by
+       tests/framecam.cjs). The shutter only counts once there are pixels. */
+    let finish=null, live=false;
+    const answerP = new Promise(res=>{
+      const done=x=>{ cleanup(); res(x); };
+      const onShot=()=>{ if(live) done("shot"); }, onClose=()=>done("close"), onNative=()=>done("native");
+      const onKey=e=>{ if(e.key==="Escape") done("close"); };
+      const onVis=()=>{ if(document.visibilityState==="hidden") done("close"); };
+      const cleanup=()=>{ $("camShutter").removeEventListener("click",onShot); $("camClose").removeEventListener("click",onClose);
+        $("camNative").removeEventListener("click",onNative); document.removeEventListener("keydown",onKey); document.removeEventListener("visibilitychange",onVis); };
+      finish=done;
+      $("camShutter").addEventListener("click",onShot); $("camClose").addEventListener("click",onClose);
+      $("camNative").addEventListener("click",onNative); document.addEventListener("keydown",onKey); document.addEventListener("visibilitychange",onVis);
+    });
+    /* Shown BEFORE it plays: Safari will not start a video that is display:none. */
+    $("camShutter").disabled=true;      // greyed out until there are pixels, so a refused press looks refused
+    ov.classList.remove("hidden");
+    v.srcObject=stream;
+    let started=true;
+    try{ await v.play(); }catch(e){ started=false; }
+    if(started && !v.videoWidth){ await new Promise(r=>{ v.addEventListener("loadedmetadata",r,{once:true}); setTimeout(r,2500); }); }
+    if(!started || !v.videoWidth) finish("native");
+    else { live=true; $("camShutter").disabled=false; $("camShutter").focus(); }
+    const answer = await answerP;
+    let file=null;
+    if(answer==="shot"){
+      const vw=v.videoWidth, vh=v.videoHeight, side=Math.min(vw,vh);
+      const c=document.createElement("canvas"); c.width=c.height=side;
+      c.getContext("2d").drawImage(v,(vw-side)/2,(vh-side)/2,side,side,0,0,side,side);
+      let blob=await new Promise(r=>{ try{ c.toBlob(r,"image/jpeg",0.92); }catch(e){ r(null); } });
+      if(!blob || !blob.size){            // a second reader over the same pixels, as signBlob does
+        try{ const u=c.toDataURL("image/jpeg",0.92); const bin=atob(u.split(",")[1]); const a=new Uint8Array(bin.length);
+             for(let i=0;i<bin.length;i++) a[i]=bin.charCodeAt(i); blob=new Blob([a],{type:"image/jpeg"}); }catch(e){ blob=null; }
+      }
+      if(blob && blob.size) file=new File([blob],"cam_"+Date.now()+".jpg",{type:"image/jpeg",lastModified:Date.now()});
+    }
+    ov.classList.add("hidden"); stop(); v.srcObject=null;
+    if(answer==="shot") return file || await native();   // a capture that made nothing is not a lost photograph
+    if(answer==="native") return await native();
+    return null;
+  } finally {
+    stop(); const o=$("camOv"); if(o) o.classList.add("hidden"); camBusy=false;
+  }
+}
 async function takePhoto(){
   if((posRO().photos||[]).length>=MAX_PHOTOS) return;
   const btn=$("takeBtn"); btn.disabled=true;
@@ -14878,7 +15000,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="509";
+const BUILD="510";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
