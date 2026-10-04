@@ -1208,15 +1208,6 @@
        ink-saving default. */
     *{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
   }
-  /* One requirement per row: what needs it, how much it costs a year, and the
-     one choice. Volume is on the row because the argument for consolidating is
-     a number, not a feeling. */
-  .reqrow{display:grid;grid-template-columns:1fr 120px 260px;gap:14px;align-items:center;
-    padding:12px;border-radius:10px;}
-  .reqrow:nth-child(odd){background:var(--surface-2);}
-  .reqwhat b{display:block;font-size:14px;}
-  .reqwhat i{display:block;font-style:normal;font-size:11.5px;color:var(--muted);
-    font-weight:600;margin-top:1px;}
   /* The reconciliation lists. Each one is a disagreement between two of the
      site's own documents, so it is folded shut with its count showing: the
      number is the finding, the rows are the evidence. */
@@ -1237,19 +1228,6 @@
   .catrow i.prose{color:var(--ink-2);max-width:78ch;}
   .kpi .s{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.3;}
 
-  .reqwhat .spec{display:block;font-size:11.5px;color:var(--ink-2);margin-top:4px;}
-  .reqwhat .spec>summary{cursor:pointer;color:var(--muted);font-size:11.5px;
-    list-style:none;width:max-content;}
-  .reqwhat .spec>summary::-webkit-details-marker{display:none;}
-  .reqwhat .spec>summary::before{content:"▸ ";}
-  .reqwhat .spec[open]>summary::before{content:"▾ ";}
-  .reqwhat .spec>span{display:block;margin-top:4px;line-height:1.5;}
-  .reqvol{text-align:right;font-variant-numeric:tabular-nums;}
-  .reqvol b{font-size:17px;}
-  .reqvol i{display:block;font-style:normal;font-size:11px;color:var(--muted);font-weight:600;}
-  .reqpick select{width:100%;font:inherit;font-size:13px;padding:7px 8px;border-radius:8px;
-    border:1px solid color-mix(in srgb,var(--muted) 42%,transparent);
-    background:var(--surface);color:var(--ink);}
   /* A cell showing the STANDARD rather than an audit is drawn hollow: the
      colour is right, the fill is not, because nobody has been to the machine.
      A solid cell must always mean somebody looked. */
@@ -1258,25 +1236,6 @@
   table.grid.mtx tbody tr:hover td.cell.want{background:var(--surface);}
   table.mtx td.cell.want .sw{opacity:.45;}
   table.mtx td.cell i.want{display:none;}
-  @media (max-width:900px){ .reqrow{grid-template-columns:1fr 100px;} .reqpick{grid-column:1/-1;} }
-  /* The reference editor. Inputs sized to what goes in them: a capacity is
-     three digits, a specification is a sentence, and a box that fits neither
-     invites the wrong one. */
-  #lrTbl input.lrin,
-  #lrTbl tbody tr:nth-child(even) input.lrin,
-  #lrTbl tbody tr:hover input.lrin{width:100%;min-width:0;font:inherit;font-size:13px;
-    padding:6px 8px;border-radius:8px;color:var(--ink);
-    background:var(--surface);
-    border:1px solid color-mix(in srgb,var(--muted) 42%,transparent);}
-  input.lrin:focus{outline:2px solid var(--accent);outline-offset:1px;}
-  input.lrin.num{text-align:right;font-variant-numeric:tabular-nums;}
-  #lrTbl td{vertical-align:middle;}
-  #lrTbl td i.sub{display:block;font-style:normal;font-size:11px;color:var(--muted);}
-  #lrTbl th:nth-child(2),#lrTbl th:nth-child(4),#lrTbl th:nth-child(6){width:88px;}
-  #lrTbl th:nth-child(3){width:24%;}
-  /* An edited row is marked, because "did I already change this one" is the
-     question somebody asks on the fortieth model. */
-  #lrTbl tr.edited td:first-child{box-shadow:inset 3px 0 0 var(--accent);}
   table.mtx{--h:#8b969c;table-layout:auto;}
   table.mtx td{vertical-align:top;padding:0;}
   table.mtx tr.clsrow td{border:none;padding:14px 0 5px;font-size:11px;font-weight:800;
@@ -1386,7 +1345,6 @@
   .b-watch{background:color-mix(in srgb,var(--warning) 16%,var(--surface));color:var(--warning);}
   .b-act{background:color-mix(in srgb,var(--critical) 14%,var(--surface));color:var(--critical);}
   .b-none{background:color-mix(in srgb,var(--muted) 12%,var(--surface));color:var(--muted);}
-  .reqwhat .band{margin-top:6px;}
   .lang{display:flex;border:1px solid var(--border);border-radius:8px;overflow:hidden;}
   .lang button{background:var(--surface);color:var(--ink-2);border:0;padding:7px 11px;font:inherit;
     font-size:12px;font-weight:650;cursor:pointer;}
@@ -4307,9 +4265,11 @@
         <summary data-i18n="ov_defs">Definitions</summary>
         <div class="defsbody"><dl>
           <dt data-i18n="lp_title2">Programme coverage</dt><dd data-i18n="lp_sub">How much of the fleet is audited, verified and standardised — against the register, not against the machines somebody happened to visit.</dd>
-          <dt data-i18n="ls_title">Deciding the standard</dt><dd data-i18n="ls_sub">Not product by product — requirement by requirement.</dd>
+          <dt data-i18n="lt_master">Lube master</dt><dd data-i18n="lt_master_d">Every model and compartment — code, grade, approved and alternative oil, capacities, intervals, OEM specification — kept on the server and shared with every desk and phone.</dd>
+          <dt data-i18n="lt_decide">Needs decision</dt><dd data-i18n="lt_decide_d">Compartments where the workbook's own sheets name different oils. Decided once, here.</dd>
+          <dt data-i18n="lt_oils">Oils and consolidation</dt><dd data-i18n="lt_oils_d">One approved product and one alternative per grade — what procurement buys and the shops stock.</dd>
+          <dt data-i18n="lt_sample">Oil sampling</dt><dd data-i18n="lt_sample_d">Sample numbers in the site's form, the official component codes and a sampling form per machine.</dd>
           <dt data-i18n="lc_title">The 2027 shelf against the recommendations</dt><dd data-i18n="lc_sub">Specification 02 rev CO-05 is what the site may actually buy. The fleet matrices say what should go in each compartment.</dd>
-          <dt data-i18n="lr_title">Machine reference</dt><dd data-i18n="lr_sub">Capacities, specifications and intervals, per model.</dd>
           <dt data-i18n="lm_title">Fleet matrix</dt><dd data-i18n="lm_sub">Every asset class on one sheet. Colour is identity and nothing else: which product, never how good it is.</dd>
           <dt data-i18n="lg_title">Not on the sheet</dt><dd data-i18n="lg_sub">The matrix can only show a machine where the register's spelling of its model and the reference's spelling of its model meet. Both halves are listed: nothing is dropped quietly.</dd>
           <dt data-i18n="lpo_title">Shop posters</dt><dd data-i18n="lpo_sub">The sheet that goes on the workshop wall. The preview is shown reduced — it prints at full size.</dd>
@@ -4335,38 +4295,19 @@
     </div>
 
     </div>
-    <div class="lsub" data-lsub="std">
-    <div class="section">
-      <h2 data-i18n="ls_title">Deciding the standard</h2>
-      <div class="scrollbox" style="--sb:520px;border-top:0"><div id="lsList"></div></div>
-      <div class="sub" id="lsNote" style="margin-top:12px"></div>
-    </div>
-
-    </div>
+    <!-- THE LUBE MASTER. The site's lubrication programme kept on the server
+         (_meta/lube/master.json) and edited here, shared with every desk and
+         phone — drawn by dashboard/lube-master.js. It replaced "Standards"
+         and "Machine reference", which each saved to one browser only. -->
+    <div class="lsub" data-lsub="master"><div class="section" id="lmMaster"></div></div>
+    <div class="lsub" data-lsub="decide"><div class="section" id="lmDecide"></div></div>
+    <div class="lsub" data-lsub="oils"><div class="section" id="lmOils"></div></div>
+    <div class="lsub" data-lsub="sample"><div class="section" id="lmSample"></div></div>
     <div class="lsub" data-lsub="rec">
     <div class="section">
       <h2 data-i18n="lc_title">The 2027 shelf against the recommendations</h2>
       <div class="kpis" id="lcKpis"></div>
       <div class="scrollbox" style="--sb:480px;border-top:0"><div id="lcLists"></div></div>
-    </div>
-
-    </div>
-    <div class="lsub" data-lsub="ref">
-    <div class="section">
-      <h2 data-i18n="lr_title">Machine reference</h2>
-      <div class="row" style="margin:14px 0 12px;gap:12px;align-items:flex-end;flex-wrap:wrap">
-        <label class="fld"><span data-i18n="lr_model">Model</span>
-          <select id="lrModel"></select></label>
-        <span style="flex:1"></span>
-        <button class="btn" id="lrExport" data-i18n="lr_export">⬇ Export overrides</button>
-      </div>
-      <div class="tblwrap scrollbox" style="--sb:520px"><table class="grid" id="lrTbl"></table></div>
-      <div class="row" style="margin-top:12px;gap:12px;align-items:center;flex-wrap:wrap">
-        <button class="btn primary" id="lrSave" data-i18n="lr_save">Save the reference</button>
-        <button class="btn" id="lrReset" data-i18n="lr_reset">Undo my edits to this model</button>
-        <span class="sub" id="lrSaved" style="margin:0"></span>
-      </div>
-      <div class="sub" id="lrNote" style="margin-top:10px"></div>
     </div>
 
     </div>
@@ -4916,15 +4857,16 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=513"></script>
-<script src="../mobile/edits.js?v=513"></script>
-<script src="../mobile/due.js?v=513"></script>
-<script src="../mobile/wear.js?v=513"></script>
-<script src="../mobile/wear-map.js?v=513"></script>
-<script src="../mobile/lube.js?v=513"></script>
-<script src="../mobile/lube-overrides.js?v=513"></script>
-<script src="../mobile/lube2027.js?v=513"></script>
-<script src="../mobile/lube-tds.js?v=513"></script>
+<script src="../mobile/grade.js?v=512"></script>
+<script src="../mobile/edits.js?v=512"></script>
+<script src="../mobile/due.js?v=512"></script>
+<script src="../mobile/wear.js?v=512"></script>
+<script src="../mobile/wear-map.js?v=512"></script>
+<script src="../mobile/lube.js?v=512"></script>
+<script src="../mobile/lube-overrides.js?v=512"></script>
+<script src="../mobile/lube2027.js?v=512"></script>
+<script src="../mobile/lube-tds.js?v=512"></script>
+<script src="../dashboard/lube-master.js?v=512"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
 <script src="../mobile/upload-defaults.js?v=513"></script>
@@ -5159,9 +5101,15 @@ const I18N={
   cv_fleet:"of {n} machines",
   s_fleet2:"Equipment requiring attention",
   lt_cover:"Programme coverage",
-  lt_std:"Standards",
+  lt_master:"Lube master",
+  lt_decide:"Needs decision",
+  lt_oils:"Oils",
+  lt_sample:"Sampling",
+  lt_master_d:"Every model and compartment — code, grade, approved and alternative oil, capacities, intervals, OEM specification — kept on the server and shared with every desk and phone.",
+  lt_decide_d:"Compartments where the workbook's own sheets name different oils. Decided once, here.",
+  lt_oils_d:"One approved product and one alternative per grade — what procurement buys and the shops stock.",
+  lt_sample_d:"Sample numbers in the site's form, the official component codes and a sampling form per machine.",
   lt_rec:"Recommendations",
-  lt_ref:"Machine reference",
   lt_matrix:"Fleet matrix",
   lt_exc:"Exceptions",
   lt_shop:"Shop materials",
@@ -6170,9 +6118,15 @@ const I18N={
   cv_fleet:"из {n} машин",
   s_fleet2:"Техника, требующая внимания",
   lt_cover:"Охват программы",
-  lt_std:"Нормативы",
+  lt_master:"Справочник смазки",
+  lt_decide:"Требует решения",
+  lt_oils:"Масла",
+  lt_sample:"Пробы",
+  lt_master_d:"Каждая модель и узел — код, класс, основное и альтернативное масло, объёмы, интервалы, спецификация OEM — хранится на сервере и общий для всех рабочих мест и телефонов.",
+  lt_decide_d:"Узлы, для которых листы книги называют разные масла. Решается один раз, здесь.",
+  lt_oils_d:"Один основной продукт и одна альтернатива на класс — что закупают и держат на складе.",
+  lt_sample_d:"Номера проб в формате участка, официальные коды узлов и бланк отбора проб для каждой машины.",
   lt_rec:"Рекомендации",
-  lt_ref:"Справочник машин",
   lt_matrix:"Карта парка",
   lt_exc:"Исключения",
   lt_shop:"Материалы цеха",
@@ -14224,6 +14178,7 @@ async function autoRefresh(why){
   try{
     const r = await drv().load(null, {});
     autoLast = Date.now();
+    lubeMasterLoad();
     if(r && r.records){
       rebuild(); refreshControls(); renderAll();
       // Say it once, where the reader is already looking, and let it fade.
@@ -14310,7 +14265,7 @@ document.addEventListener("visibilitychange", ()=>{
 window.addEventListener("online", ()=>autoRefresh("online"));
 /* On open: catch up first, then keep up. Deferred a beat so the page paints
    what it already holds rather than waiting on the network to show anything. */
-setTimeout(()=>{ autoBooted = true; autoRefresh("open"); startAuto(); }, 1200);
+setTimeout(()=>{ autoBooted = true; autoRefresh("open"); startAuto(); lubeMasterLoad(); }, 1200);
 /* The 1C pull keeps itself current whether or not a folder is attached — it is
    a file on this site, not something the backend serves, so it has nothing to
    do with drvOn(). */
@@ -16734,7 +16689,7 @@ function cmbInit(){
   cmbAttach("rTarget", { input:"rTargetQ",
     items:()=>reportTargetOpts($("rScope").value).map(o=>({ v:o[0], l:o[1], s:o[2]||(o[0]+" "+o[1]).toUpperCase(), sub:o[3]||"" })),
     onType:()=>refreshReportTargets() });
-  cmbAttach("pfSel"); cmbAttach("lrModel"); cmbAttach("lpoModel");
+  cmbAttach("pfSel"); cmbAttach("lpoModel");
 }
 $("histRpt").onclick=()=>runReport("unit", $("equipSel").value, $("histRpt"));
 
@@ -17121,9 +17076,8 @@ function renderLubeTab(){
   });
   renderLubeKpis();
   renderLubeProg();
-  renderLubeStd();
   renderLubeCat();
-  renderLubeRef();
+  lubeMasterMount();
   renderLubeMtx();
   renderLubeGaps();
   renderLubePoster();
@@ -17209,67 +17163,10 @@ function renderLubeProg(){
      list of what those 1,218 are. */
   $("lubeProg").querySelectorAll("tr[data-lpk]").forEach(tr=>{
     const go=()=>{ lubeProgSel = lubeProgSel===tr.dataset.lpk ? "" : tr.dataset.lpk;
-                   renderLubeProg(); renderLubeRef(); };
+                   renderLubeProg(); };
     tr.onclick=go;
     tr.onkeydown=e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); } };
   });
-}
-
-function renderLubeStd(){
-  if(!window.LUBE){ $("lsList").innerHTML = ""; return; }
-  const reqs = lubeRequirements(), chosen = lubeStandard();
-  const decided = reqs.filter(R => chosen[R.key]).length;
-  $("lsList").innerHTML = reqs.map(R=>{
-    const names = Object.keys(R.names).slice(0,3).join(", ");
-    const specs = Object.keys(R.specs);
-    const pick = chosen[R.key] || "";
-    /* Two groups, because "which of these can I actually get" is the first
-       question anybody asks of this list. On the specification means a drum
-       exists; off it means choosing this raises a purchase order. */
-    const on  = R.shelf.filter(x=>x.on), off = R.shelf.filter(x=>!x.on);
-    const grp = (list, lbl) => list.length
-      ? `<optgroup label="${esc(lbl)}">` + list.map(x=>
-          /* A product whose pour point is at or above the design minimum stays
-             ON the list and cannot be picked. Hiding it would be worse: it is
-             on the signed specification, at 636,688 litres in one case, and
-             somebody has to see WHY it is not the answer. */
-          `<option value="${esc(x.p)}"${x.p===pick?" selected":""}${
-            x.cold && x.cold.k === "toowarm" && x.p !== pick ? " disabled" : ""
-          }>${esc(x.p)} · ${
-            esc(lubeColdWords(x.cold))}${
-            x.q ? ` · ${fmtN(x.q)} ${esc(x.u)}` : ""}</option>`).join("") + `</optgroup>`
-      : "";
-    const opts = grp(on, t("ls_onspec")) + grp(off, t("ls_offspec"));
-    return `<div class="reqrow">
-      <div class="reqwhat">
-        <b>${esc(names)}</b>
-        <i>${esc(t("ls_on",{m:Object.keys(R.models).length, u:R.units}))}</i>
-        ${specs.length ? `<details class="spec"><summary>${
-          esc(t("ls_specs",{n:specs.length}))}</summary><span>${
-          specs.map(x=>esc(x)).join(" · ")}</span></details>` : ""}
-        ${R.ask ? `<span class="band b-act">${esc(t("ls_ask",{n:R.ask}))}</span>` : ""}
-      </div>
-      <div class="reqvol"><b>${fmtN(R.litres)}</b><i>${esc(t("ls_lyr"))}</i></div>
-      <div class="reqpick">${
-        R.qualifiers.length
-          ? `<select data-req="${esc(R.key)}">
-               <option value="">${esc(t("ls_choose"))}</option>${opts}</select>`
-          : `<span class="band b-act">${esc(t("ls_nofit"))}</span>`
-      }</div>
-    </div>`;
-  }).join("");
-  $("lsList").querySelectorAll("select[data-req]").forEach(sel=>{
-    sel.onchange = ()=>{
-      const st = lubeStandard();
-      if(sel.value) st[sel.dataset.req] = sel.value; else delete st[sel.dataset.req];
-      localStorage.setItem(LUBE_STD_KEY, JSON.stringify(st));
-      renderLubeTab();
-    };
-  });
-  const prods = {};
-  Object.values(chosen).forEach(n=>{ if(n) prods[n] = 1; });
-  $("lsNote").textContent = t("ls_note",
-    { d:decided, n:reqs.length, p:Object.keys(prods).length });
 }
 
 /* ── the 2027 shelf against the recommendations ───────────────────────────
@@ -17352,58 +17249,6 @@ function renderLubeCat(){
     d.open=true;
     d.scrollIntoView({block:"nearest", behavior:"smooth"});
   });
-}
-
-function renderLubeRef(){
-  if(!window.LUBE) return;
-  const counts = lubeModelKeys();
-  const keys = Object.keys(counts).sort((a,b)=> counts[b]-counts[a] || (a<b?-1:1));
-  if(!keys.length){ $("lrTbl").innerHTML = ""; return; }
-  if(!lrModel || keys.indexOf(lrModel) < 0) lrModel = keys[0];
-
-  const ov = lubeOverrides();
-  $("lrModel").innerHTML = keys.map(k=>{
-    const i = k.indexOf("|");
-    const edited = ov[k] && Object.keys(ov[k]).length ? " ·" : "";
-    return `<option value="${esc(k)}"${k===lrModel?" selected":""}>${
-      esc(k.slice(i+1))} · ${counts[k]}${esc(edited)}</option>`;
-  }).join("");
-
-  const i = lrModel.indexOf("|");
-  const cls = lrModel.slice(0, i), m = lrModel.slice(i+1);
-  const r = lubeOf(m, cls);
-  const o = ov[lrModel] || {};
-  const cell = (k, f, v, ph, num) =>
-    `<input class="lrin${num?" num":""}" data-k="${esc(k)}" data-f="${esc(f)}" ` +
-    `value="${esc(v==null?"":v)}" placeholder="${esc(ph||"")}"` +
-    (num?' inputmode="decimal"':'') + `>`;
-  $("lrTbl").innerHTML =
-    `<thead><tr>
-       <th>${esc(t("lr_comp"))}</th><th>${esc(t("lr_cap"))}</th>
-       <th>${esc(t("lr_spec"))}</th><th>${esc(t("lr_iv"))}</th>
-       <th>${esc(t("lr_doc"))}</th><th>${esc(t("lr_page"))}</th>
-       <th>${esc(t("lr_who"))}</th><th>${esc(t("lr_state"))}</th>
-     </tr></thead><tbody>` +
-    r.comps.map(c=>{
-      const e = o[c.k] || {}, src = c.src || {};
-      const sourced = c.cap != null && !c.verify && c.oem && src.doc;
-      return `<tr${e && Object.keys(e).length ? ' class="edited"' : ''}>
-        <td><b>${esc(lang==="ru"?c.ru:c.en)}</b><i class="sub">${esc(c.k)}</i></td>
-        <td>${cell(c.k,"cap",c.cap,"",1)}</td>
-        <td>${cell(c.k,"oem",c.oem,t("lr_spec_ph"))}</td>
-        <td>${cell(c.k,"iv",c.iv,"",1)}</td>
-        <td>${cell(c.k,"doc",src.doc,t("lr_doc_ph"))}</td>
-        <td>${cell(c.k,"page",src.page,t("lr_page_ph"))}</td>
-        <td>${cell(c.k,"who",src.who,t("lr_who_ph"))}</td>
-        <td>${sourced
-          ? `<span class="band b-ok">${esc(t("lr_sourced"))}</span>`
-          : `<span class="band b-none">${esc(t("lr_unsourced"))}</span>`}</td>
-      </tr>`;
-    }).join("") + `</tbody>`;
-
-  $("lrNote").textContent = r.alias
-    ? t("lr_alias", {as:m, is:r.alias.is, who:r.alias.who})
-    : t("lr_note");
 }
 
 function renderLubeMtx(){
@@ -17896,193 +17741,42 @@ function renderLubeSub(){
 let lubeProgSel="";
 
 
-/* ── deciding the site standard ───────────────────────────────────────────
-   A requirement is not a specification string. Two compartments belong to the
-   same DECISION when the same products can serve them — an HM400 transmission,
-   a D375 powertrain and a TR60 transmission are three manufacturers and one
-   requirement, and buying three products for it is a decision nobody actually
-   made. Grouping on the spec text instead gives almost as many groups as
-   compartments, which is no help at all.
-
-   Grouping on what QUALIFIES also gets the hierarchy right for free: a CK-4
-   engine oil satisfies a CI-4 requirement and not the other way round, so the
-   two do not collapse and the standard lands on the higher one. */
-const LUBE_STD_KEY = "cm_lube_std";
-/* A requirement is a LUBRICANT TYPE. The site's own legend already works this
-   way — component 3 takes hydraulic oil, 4AL takes gear oil — and it is the
-   right grain: it collapses 389 compartments to eight decisions, and it does
-   not depend on how somebody typed a spec string in Excel. Grouping on the OEM
-   text would give 89 groups, which is the problem rather than the answer. */
-/* What may be offered for this job.
-
-   The panel used to offer the eight products the old masterlist knew, filtered
-   by type, and for two of the eight requirements that came to nothing at all —
-   an engineer looking at a decision with no options and no explanation. The
-   shelf is Specification 02 rev CO-05: twenty-four products procurement has
-   actually signed for. Anything the supplier recommended that is NOT on it is
-   offered too, and said to be off it, because choosing one is a purchase order
-   somebody has to raise. */
-function lubeShelf(type){
-  const out = [], seen = {};
-  const add = (o) => {
-    const k = String(o.p||"").toUpperCase().replace(/[^A-Z0-9]+/g,"");
-    if(!o.p || seen[k]) return;
-    seen[k] = 1; out.push(o);
-  };
-  /* Whether a product is fit for the cold is not something this screen may
-     assert. It reports what the data sheet says, and what follows necessarily
-     from it, and nothing else:
-
-       nosheet     no data sheet has been read for this product
-       nopour      there is a sheet and it does not state a pour point
-       toowarm     the pour point is at or above the design minimum — the oil
-                   stops pouring in a test jar before the coldest morning gets
-                   here, which disqualifies it without further argument
-       pourbelow   the pour point is below the design minimum. NOT approval.
-                   A pour point is not an operating limit: cold-crank and
-                   pumpability decide it for an engine oil, whether the oil
-                   throws for a splash gearbox, whether the pump can draw for a
-                   hydraulic system. It clears one hurdle, not the field.
-
-     The site designs to −40 and sees −45. */
-  const cold = p => window.LUBETDS ? LUBETDS.coldVerdict(p) : { k:"nosheet" };
-  if(window.LUBE2027)
-    LUBE2027.shelf.forEach(pr=>{ if(!type || pr.t === type)
-      add({ p:pr.p, t:pr.t, on:true, q:pr.q, u:pr.u, cold:cold(pr.p) }); });
-  if(window.LUBE)
-    LUBE.catalog.forEach(pr=>{ if(!type || pr.t === type)
-      add({ p:pr.p, t:pr.t, on:false, cold:cold(pr.p) }); });
-  return out;
-}
-function lubeQualifiers(type){
-  return lubeShelf(type).map(x => x.p);
-}
-/* One phrase per verdict, and none of them is "approved". */
-function lubeColdWords(v){
-  if(!v) return t("ls_c_nosheet");
-  if(v.k === "toowarm")   return t("ls_c_toowarm",  {d:v.pour});
-  if(v.k === "pourbelow") return t("ls_c_pourbelow",{d:v.pour});
-  if(v.k === "nopour")    return t("ls_c_nopour");
-  return t("ls_c_nosheet");
-}
-function lubeReqKey(c){
-  return c && c.t ? c.t : "none:" + ((c && c.k) || "?");
-}
-function lubeRequirements(){
-  const g = {};
-  const counts = lubeModelKeys();
-  Object.keys(counts).forEach(mk=>{
-    const i = mk.indexOf("|");
-    const r = lubeOf(mk.slice(i+1), mk.slice(0,i));
-    if(!r) return;
-    r.comps.forEach(c=>{
-      if(!c.t) return;                    /* no lubricant type on this one yet */
-      const k = lubeReqKey(c);
-      const G = g[k] || (g[k] = { key:k, specs:{}, names:{}, models:{}, units:0,
-                                  litres:0, shelf:lubeShelf(c.t),
-                                  qualifiers:lubeQualifiers(c.t),
-                                  type:c.t, ask:0 });
-      if(c.ask) G.ask++;
-      /* The OEM strings are shown here and ONLY here — this screen is where an
-         engineer decides, and seeing that one decision is covering eleven
-         different ways of writing the same requirement is the argument. */
-      if(c.oem) G.specs[c.oem] = 1;
-      G.names[lang==="ru"?c.ru:c.en] = 1;
-      G.models[mk] = 1;
-      G.units += counts[mk];
-      /* Volume, so the argument for consolidating is a number rather than a
-         feeling. One drum of the wrong thing is a nuisance; forty is a
-         stockholding problem. */
-      if(c.cap != null && c.iv)
-        G.litres += c.cap * counts[mk] * ((LUBE.site.hoursPerYear||5000) / c.iv);
-    });
-  });
-  return Object.values(g).sort((a,b)=> b.litres - a.litres || b.units - a.units);
-}
-function lubeStandard(){ return asMap(LUBE_STD_KEY); }
-/* The product this site has chosen for the requirement a compartment belongs
-   to — the thing the poster prints and the matrix compares against. */
+/* ── what goes in a compartment ──────────────────────────────────────────
+   The approved product of the compartment's GRADE — the workbook's own
+   "Actual oil", with the office's decisions and consolidation applied by the
+   lube master (dashboard/lube-master.js → LUBE.applyMaster). The matrix and
+   the poster print this. A compartment with no grade falls back to its
+   lubricant type, except where the OEM code contradicts the type: a question
+   is not a default, and GL-5 printed for a wet brake glazes the discs. */
 function lubeChosenFor(c){
-  if(!c || !c.t) return null;
-  /* An explicit choice wins; otherwise the site's own legend already answers
-     it, so the matrix and the poster are useful from the first minute rather
-     than after somebody has clicked eight dropdowns. */
-  const n = lubeStandard()[lubeReqKey(c)];
-  if(n) return LUBE.product(n) || { p:n };
-  /* Except where the masterlist contradicts itself. The Legend files the
-     HM400 transmission under gear oil and the OEM column says TO10, which is a
-     TO-4 wet-clutch oil; the front finals say HO-MVK, a hydraulic oil; the
-     brake says TOS5w30. Falling back to "first gear oil in the catalogue"
-     would print GL-5 on a shop sheet for a wet brake, and GL-5 glazes the
-     discs. A question is not a default. It prints as a question until a person
-     answers it in the panel above — where answering it IS an explicit choice
-     and the branch above then applies. */
-  if(c.ask) return null;
+  if(!c || !window.LUBE) return null;
+  if(c.g) return LUBE.gradeProduct(c.g);
+  if(c.ask || !c.t) return null;
   return LUBE.catalog.filter(p => p.t === c.t)[0] || null;
 }
-
-/* ── the machine reference, and editing it ────────────────────────────────
-   Overrides live in one place and are applied ON TOP of lube.js rather than
-   into it. Two reasons, and both have bitten this project before:
-
-   · Undo has to be possible. Editing the loaded table in place makes the
-     original unrecoverable, so "I typed 380 instead of 38" becomes permanent
-     the moment somebody reloads.
-   · Everything downstream — the matrix, the programme panel, the verdict —
-     reads LUBE. Applying the override into those objects means none of them
-     needs to know overrides exist, which is one seam instead of four. */
-const LUBE_OV_KEY = "cm_lube_ref";
-let LUBE_BASE = null;
-function lubeBase(){
-  if(LUBE_BASE || !window.LUBE) return LUBE_BASE || {};
-  LUBE_BASE = {};
-  LUBE.models.forEach(k=>{
-    const i = k.indexOf("|");
-    const r = lubeOf(k.slice(i+1), k.slice(0,i));
-    if(r) LUBE_BASE[k] = JSON.parse(JSON.stringify(r.comps));
-  });
-  return LUBE_BASE;
+/* The lube master's four panels, and keeping the rest of the tab in step with
+   it: every apply rebuilds the reference, so the memo of resolved models goes
+   and whatever is on screen is drawn again. */
+function lubeMasterMount(){
+  if(!window.CMLube) return;
+  if(!lubeMasterInit.done) lubeMasterInit();
+  CMLube.mount({ master:$("lmMaster"), decide:$("lmDecide"), oils:$("lmOils"), sample:$("lmSample") });
 }
-function lubeOverrides(){ return asMap(LUBE_OV_KEY); }
-/* Rebuilt from the pristine copy every time, so removing an override actually
-   removes it rather than leaving the last value stuck in memory. */
-function lubeApplyOverrides(){
-  if(!window.LUBE) return;
-  const base = lubeBase(), ov = lubeOverrides();
-  LUBE.models.forEach(k=>{
-    const i = k.indexOf("|");
-    const r = lubeOf(k.slice(i+1), k.slice(0,i));
-    if(!r || !base[k]) return;
-    r.comps = JSON.parse(JSON.stringify(base[k]));
-    const o = ov[k]; if(!o) return;
-    r.comps.forEach(c=>{
-      const e = o[c.k]; if(!e) return;
-      /* An empty string is a deliberate clearing — "this figure was wrong and I
-         do not have the right one" is a real answer, and it must not silently
-         leave the old number in place. undefined means untouched. */
-      if(e.cap !== undefined){
-        if(e.cap === "") delete c.cap;
-        else {
-          c.cap = Number(e.cap);
-          /* The masterlist flagged this as a typical figure to confirm. Somebody
-             has now been to the manual and typed a real one, so the flag goes —
-             otherwise the work list never goes down, and the person who did the
-             work watches the number stay where it was. */
-          delete c.verify;
-        }
-      }
-      if(e.iv  !== undefined){ if(e.iv  === "") delete c.iv;  else c.iv  = Number(e.iv);  }
-      /* The masterlist calls this the OEM code. It IS the specification, but
-         it is written the way the manual writes it — EOS0W30, TO10, HO-MVK —
-         so it keeps that name everywhere rather than being half-renamed. */
-      if(e.oem !== undefined){ if(e.oem === "") delete c.oem; else c.oem = e.oem; }
-      if(e.gr) c.gr = e.gr;
-      if(e.src){ c.src = e.src; } else if(e.src === null) delete c.src;
-    });
-  });
+function lubeMasterInit(){
+  if(!window.CMLube) return;
+  lubeMasterInit.done=true;
+  CMLube.init({ lang:()=>lang, seen:()=>lubeSeenByModel(),
+    onApplied:()=>{ LUBE_MEMO.clear(); if(CUR_TAB==="lube") renderLubeTab(); else markLubeDirty(); } });
 }
-
-let lrModel = null;
+let lubeMasterBusy=false;
+function lubeMasterLoad(){
+  if(!window.CMLube || lubeMasterBusy) return Promise.resolve(null);
+  lubeMasterBusy=true;
+  return CMLube.load().catch(e=>{ bad("lube-master-load", e); return null; })
+    .finally(()=>{ lubeMasterBusy=false; });
+}
+function markLubeDirty(){ try{ TAB_DIRTY.add("lube"); }catch(e){} }
+/* Machines on the register per reference model, "CLS|Model" -> count. */
 function lubeModelKeys(){
   const keys = {};
   (window.ASSETS||[]).forEach(a=>{
@@ -18092,56 +17786,6 @@ function lubeModelKeys(){
     keys[k] = (keys[k]||0) + 1;
   });
   return keys;
-}
-
-/* Read the boxes, not a shadow copy of them. A save that writes from state the
-   user cannot see is a save that loses the last thing they typed. */
-function lubeRefSave(){
-  const ov = lubeOverrides();
-  const o = {};
-  $("lrTbl").querySelectorAll("input.lrin").forEach(el=>{
-    const k = el.dataset.k, f = el.dataset.f, v = el.value.trim();
-    const i = lrModel.indexOf("|");
-    const c = LUBE.comp(lrModel.slice(i+1), k, lrModel.slice(0,i));
-    const base = (lubeBase()[lrModel]||[]).filter(x=>x.k===k)[0] || {};
-    const was = f==="doc"||f==="page"||f==="who"
-      ? String((base.src||{})[f]==null?"":(base.src||{})[f])
-      : String(base[f]==null?"":base[f]);
-    if(v === was) return;                       /* unchanged: not an override */
-    o[k] = o[k] || {};
-    if(f==="doc"||f==="page"||f==="who"){
-      o[k].src = Object.assign({}, base.src||{}, o[k].src||{});
-      o[k].src[f] = v;
-      o[k].src.when = todayISO();
-    } else {
-      o[k][f] = v;
-    }
-  });
-  if(Object.keys(o).length) ov[lrModel] = o; else delete ov[lrModel];
-  localStorage.setItem(LUBE_OV_KEY, JSON.stringify(ov));
-  lubeApplyOverrides();
-  renderAll();
-  const n = $("lrSaved"); n.textContent = t("lr_saved");
-  setTimeout(()=>{ if(n.textContent===t("lr_saved")) n.textContent=""; }, 2600);
-}
-function lubeRefReset(){
-  const ov = lubeOverrides();
-  delete ov[lrModel];
-  localStorage.setItem(LUBE_OV_KEY, JSON.stringify(ov));
-  lubeApplyOverrides();
-  renderAll();
-  $("lrSaved").textContent = t("lr_undone");
-}
-/* The browser is not where a reference lives. This is the file that goes back
-   into the generator so every phone gets it — the editor is for deciding, the
-   export is for shipping, and pretending the first does the second is how a
-   fleet ends up with two different reference tables. */
-function lubeRefExport(){
-  const blob = new Blob([JSON.stringify(lubeOverrides(), null, 1)],
-    {type:"application/json"});
-  const a = document.createElement("a"); a.href = URL.createObjectURL(blob);
-  a.download = `lube-overrides_${todayISO()}.json`; a.click();
-  setTimeout(()=>URL.revokeObjectURL(a.href), 4000);
 }
 
 /* ── the fleet matrix ─────────────────────────────────────────────────────
@@ -19783,7 +19427,8 @@ function paCsv(){
 /* Which of the seven is showing. Remembered, because somebody working through
    the fleet matrix on Tuesday is working through the fleet matrix on Wednesday. */
 const LSUBK="cm_dash_lubesub";
-const LSUBS=[["cover","lt_cover"],["std","lt_std"],["rec","lt_rec"],["ref","lt_ref"],
+const LSUBS=[["cover","lt_cover"],["master","lt_master"],["decide","lt_decide"],["oils","lt_oils"],
+             ["sample","lt_sample"],["rec","lt_rec"],
              ["matrix","lt_matrix"],["exc","lt_exc"],["shop","lt_shop"]];
 let lubeSub=(function(){ try{ const v=localStorage.getItem(LSUBK);
   return LSUBS.some(x=>x[0]===v)?v:"cover"; }catch(e){ return "cover"; } })();
@@ -21240,17 +20885,13 @@ addEventListener("resize",()=>{ clearTimeout(pfResizeT);
   pfResizeT=setTimeout(()=>{ if(CUR_TAB==="failure"){ try{ renderPF(); }catch(e){} } }, 150); });
 $("wearCsv").onclick=wearCsv;
 $("lubeCsv").onclick=lubeCsv;
-$("lrModel").onchange=()=>{ lrModel=$("lrModel").value; renderLubeRef(); };
-$("lrSave").onclick=lubeRefSave;
-$("lrReset").onclick=lubeRefReset;
-$("lrExport").onclick=lubeRefExport;
 $("lpoWhich").onchange=()=>{ lpoWhich=$("lpoWhich").value; renderLubePoster(); };
 $("lpoModel").onchange=()=>{ lpoModel=$("lpoModel").value; renderLubePoster(); };
 $("lpoClass").onchange=()=>{ lpoClass=$("lpoClass").value; renderLubePoster(); };
 $("lpoPrint").onclick=lubePrint;
-/* Before the first render, so nothing on the page is ever drawn from figures
-   the office has already corrected. */
-lubeApplyOverrides();
+/* Before the first render: the lube master's words and hooks. The document
+   itself arrives with the first read of the folder (lubeMasterLoad). */
+lubeMasterInit();
 /* The rail folds and stays folded. A reader who wants the width back for a
    wide engineering table should not have to ask for it again every morning. */
 const RAILK="cm_dash_rail";

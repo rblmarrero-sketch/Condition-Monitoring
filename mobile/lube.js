@@ -337,7 +337,9 @@
             if(e.g === "") delete c.g;
             else { c.g = e.g; if(GRADES[e.g]) c.t = GRADES[e.g].t; delete c.ask; }
           }
-          if(e.src) c.src = e.src;
+          /* A figure traced to a manual page is a figure somebody checked: the
+             placeholder flag goes, so the work list goes down as it is done. */
+          if(e.src){ c.src = e.src; if(e.src.doc) delete c.verify; }
           c.edited = 1; n++;
         });
       });
