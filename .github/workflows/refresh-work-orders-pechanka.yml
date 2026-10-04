@@ -1,6 +1,9 @@
 name: Refresh work orders (Plan vs Actual) - PECHANKA
 
 on:
+  schedule:
+    # Hourly at :05 UTC (off the hour on purpose: GitHub delays top-of-hour crons).
+    - cron: '5 * * * *'
   workflow_dispatch:
     inputs:
       commit:
@@ -46,6 +49,11 @@ jobs:
           done
 
       - name: Pull real inspection history from the live backend
+        # If the CM backend is slow or down, keep going with the history already
+        # committed in the repo (ingest/cm_history.generated.json) so the
+        # work-order refresh itself never stops.
+        continue-on-error: true
+        timeout-minutes: 15
         run: node ingest/fetch_cm_history.cjs "${CM_BACKEND:-https://baimskaya-cm.duckdns.org}"
 
       - name: Resolve the class/round mapping live from due.js
@@ -64,7 +72,7 @@ jobs:
         run: git status --porcelain -- data ingest | head -20
 
       - name: Commit if anything changed
-        if: ${{ inputs.commit }}
+        if: ${{ github.event_name == 'schedule' || inputs.commit }}
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
@@ -75,4 +83,9 @@ jobs:
           git add data/work_orders.js data/schedule_slim.json data/reliability.json ingest/class_rounds.generated.json ingest/cm_history.generated.json
           git commit -m "Refresh work_orders.js from Pechanka WO.xlsx [skip ci]" \
                      -m "Automated refresh (.github/workflows/refresh-work-orders-pechanka.yml)."
-          git push origin HEAD:claude/magnetic-plug-dashboard-llv4wc
+          # Other people merge into this branch too. If the push is rejected,
+          # rebase onto the new tip once and push again.
+          git push origin HEAD:claude/magnetic-plug-dashboard-llv4wc || {
+            git pull --rebase origin claude/magnetic-plug-dashboard-llv4wc
+            git push origin HEAD:claude/magnetic-plug-dashboard-llv4wc
+          }
