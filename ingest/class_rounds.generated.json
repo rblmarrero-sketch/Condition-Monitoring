@@ -1,14 +1,15 @@
 {
-  "generated": "2026-10-04T23:12:31.951Z",
+  "generated": "2026-10-04T23:52:46.825Z",
   "source": "mobile/due.js (D.EVERY, D.hours) and mobile/index.html (roundsOnClass), evaluated live -- not hand-copied",
-  "history": "162 pair(s) from https://baimskaya-cm.duckdns.org?action=records (pulled 2026-10-04T23:12:30.635Z)",
+  "history": "162 pair(s) from https://baimskaya-cm.duckdns.org?action=records (pulled 2026-10-04T23:52:45.450Z)",
   "map": {
     "MP": {
       "restricted": true,
       "classes": {
         "HT": 250,
         "AT": 250
-      }
+      },
+      "models": []
     },
     "FC": {
       "restricted": false,
@@ -17,7 +18,8 @@
         "EXC": 1000,
         "GRD": 1000,
         "HT": 1000
-      }
+      },
+      "models": []
     },
     "UC": {
       "restricted": true,
@@ -26,23 +28,26 @@
         "DRB": 4000,
         "DOZ": 1000,
         "EXC": 4000
-      }
+      },
+      "models": []
     },
     "GET": {
       "restricted": false,
-      "classes": {}
+      "classes": {},
+      "models": []
     },
     "TB": {
       "restricted": true,
       "classes": {
         "HT": 2000,
         "AT": 2000
-      }
+      },
+      "models": []
     },
     "INSP": {
-      "restricted": false,
+      "restricted": true,
       "classes": {
-        "GEN": 1000,
+        "CRN": 1000,
         "CRJ": 1000,
         "CRC": 1000,
         "DRB": 1000,
@@ -51,17 +56,25 @@
         "GRD": 1000,
         "HT": 1000,
         "AT": 1000
-      }
+      },
+      "models": []
     },
     "TEMP": {
       "restricted": false,
-      "classes": {}
+      "classes": {},
+      "models": []
     },
     "LUBE": {
       "restricted": false,
       "classes": {
         "HT": null
-      }
+      },
+      "models": [
+        {
+          "model": "TR60",
+          "h": 500
+        }
+      ]
     }
   }
 }

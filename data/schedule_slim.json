@@ -1,92 +1,6 @@
 {
-  "generated": "2026-10-04T23:12:49+00:00",
+  "generated": "2026-10-04T23:53:04+00:00",
   "byUnit": {
-    "BL001": [
-      {
-        "wo": "WO-016315",
-        "hours": 4000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-09-13",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "BL004": [
-      {
-        "wo": "WO-017742",
-        "hours": 4000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-09-24",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "CD006": [
-      {
-        "wo": "WO-018770",
-        "hours": 4000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-10-08",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "CD007": [
-      {
-        "wo": "GD-023088",
-        "hours": 1000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-08-01",
-        "priority": "P3 Planned (PM)"
-      },
-      {
-        "wo": "WO-013889",
-        "hours": 1000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-08-09",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "CD008": [
-      {
-        "wo": "GD-023112",
-        "hours": 1000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-08-01",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "CD009": [
-      {
-        "wo": "GD-023133",
-        "hours": 1000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-08-01",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "CD010": [
-      {
-        "wo": "GD-023195",
-        "hours": 1000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-08-01",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
     "CN005": [
       {
         "wo": "WO-017397",
@@ -312,61 +226,6 @@
         "priority": "P3 Planned (PM)"
       }
     ],
-    "FL015": [
-      {
-        "wo": "WO-016246",
-        "hours": 2000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-09-07",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "GE009": [
-      {
-        "wo": "WO-018765",
-        "hours": 1000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-10-07",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "GE056": [
-      {
-        "wo": "WO-018337",
-        "hours": 2000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-10-03",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "GE057": [
-      {
-        "wo": "WO-016852",
-        "hours": 2000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-09-12",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "GE109": [
-      {
-        "wo": "WO-018790",
-        "hours": 1000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-10-11",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
     "GR001": [
       {
         "wo": "WO-017332",
@@ -412,17 +271,6 @@
           "INSP"
         ],
         "plan": "2026-10-10",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "LS012": [
-      {
-        "wo": "WO-018767",
-        "hours": 1000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-10-07",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -841,6 +689,7 @@
         "types": [
           "FC",
           "INSP",
+          "LUBE",
           "MP"
         ],
         "plan": "2026-10-17",
@@ -874,6 +723,7 @@
         "types": [
           "FC",
           "INSP",
+          "LUBE",
           "MP"
         ],
         "plan": "2026-10-20",
@@ -898,6 +748,7 @@
         "types": [
           "FC",
           "INSP",
+          "LUBE",
           "MP",
           "TB"
         ],
@@ -952,6 +803,7 @@
         "wo": "WO-018518",
         "hours": 1500,
         "types": [
+          "LUBE",
           "MP"
         ],
         "plan": "2026-10-16",
@@ -963,6 +815,7 @@
         "wo": "WO-016557",
         "hours": 500,
         "types": [
+          "LUBE",
           "MP"
         ],
         "plan": "2026-10-01",
@@ -983,6 +836,7 @@
         "wo": "WO-017892",
         "hours": 500,
         "types": [
+          "LUBE",
           "MP"
         ],
         "plan": "2026-10-11",
@@ -994,6 +848,7 @@
         "wo": "WO-017867",
         "hours": 500,
         "types": [
+          "LUBE",
           "MP"
         ],
         "plan": "2026-10-08",
@@ -1025,6 +880,7 @@
         "wo": "WO-018521",
         "hours": 500,
         "types": [
+          "LUBE",
           "MP"
         ],
         "plan": "2026-10-15",
@@ -1036,29 +892,10 @@
         "wo": "WO-018523",
         "hours": 500,
         "types": [
+          "LUBE",
           "MP"
         ],
         "plan": "2026-10-12",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "TK164": [
-      {
-        "wo": "WO-008637",
-        "hours": 2000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-07-01",
-        "priority": "P3 Planned (PM)"
-      },
-      {
-        "wo": "WO-018785",
-        "hours": 4000,
-        "types": [
-          "INSP"
-        ],
-        "plan": "2026-10-10",
         "priority": "P3 Planned (PM)"
       }
     ]
@@ -1105,7 +942,7 @@
       "equip": "TK148",
       "cls": "HT",
       "comp": "",
-      "desc": "Filter Cut / General Inspection / Magnetic Plug",
+      "desc": "Filter Cut / General Inspection / Lubrication / Magnetic Plug",
       "priority": "P3 Planned (PM)",
       "raised": "2026-10-20",
       "type": "3000 Hours service Planned",
@@ -1303,7 +1140,7 @@
       "equip": "TK146",
       "cls": "HT",
       "comp": "",
-      "desc": "Filter Cut / General Inspection / Magnetic Plug",
+      "desc": "Filter Cut / General Inspection / Lubrication / Magnetic Plug",
       "priority": "P3 Planned (PM)",
       "raised": "2026-10-17",
       "type": "3000 Hours service Planned",
@@ -1519,7 +1356,7 @@
       "equip": "TK154",
       "cls": "HT",
       "comp": "",
-      "desc": "Magnetic Plug",
+      "desc": "Lubrication / Magnetic Plug",
       "priority": "P3 Planned (PM)",
       "raised": "2026-10-16",
       "type": "1500 Hours service Planned",
@@ -1645,7 +1482,7 @@
       "equip": "TK159",
       "cls": "HT",
       "comp": "",
-      "desc": "Magnetic Plug",
+      "desc": "Lubrication / Magnetic Plug",
       "priority": "P3 Planned (PM)",
       "raised": "2026-10-15",
       "type": "500 Hours service Planned",
@@ -1951,7 +1788,7 @@
       "equip": "TK161",
       "cls": "HT",
       "comp": "",
-      "desc": "Magnetic Plug",
+      "desc": "Lubrication / Magnetic Plug",
       "priority": "P3 Planned (PM)",
       "raised": "2026-10-12",
       "type": "500 Hours service Planned",
@@ -2077,7 +1914,7 @@
       "equip": "GE109",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "1000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-10-11",
       "type": "1000 Hours service Planned",
@@ -2167,7 +2004,7 @@
       "equip": "TK156",
       "cls": "HT",
       "comp": "",
-      "desc": "Magnetic Plug",
+      "desc": "Lubrication / Magnetic Plug",
       "priority": "P3 Planned (PM)",
       "raised": "2026-10-11",
       "type": "500 Hours service Planned",
@@ -2347,7 +2184,7 @@
       "equip": "TK164",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "4000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-10-10",
       "type": "4000 Hours service Planned",
@@ -2363,7 +2200,7 @@
     {
       "wo": "WO-018777",
       "equip": "CN013",
-      "cls": "GEN",
+      "cls": "CRN",
       "comp": "",
       "desc": "500h service",
       "priority": "P3 Planned (PM)",
@@ -2509,7 +2346,7 @@
       "equip": "CD006",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "4000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-10-08",
       "type": "4000 Hours service Planned",
@@ -2635,7 +2472,7 @@
       "equip": "TK157",
       "cls": "HT",
       "comp": "",
-      "desc": "Magnetic Plug",
+      "desc": "Lubrication / Magnetic Plug",
       "priority": "P3 Planned (PM)",
       "raised": "2026-10-08",
       "type": "500 Hours service Planned",
@@ -2669,7 +2506,7 @@
     {
       "wo": "WO-018763",
       "equip": "CN007",
-      "cls": "GEN",
+      "cls": "CRN",
       "comp": "",
       "desc": "General Inspection",
       "priority": "P3 Planned (PM)",
@@ -2707,7 +2544,7 @@
       "equip": "GE009",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "1000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-10-07",
       "type": "1000 Hours service Planned",
@@ -2743,7 +2580,7 @@
       "equip": "LS012",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "1000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-10-07",
       "type": "1000 Hours service Planned",
@@ -2869,7 +2706,7 @@
       "equip": "TK150",
       "cls": "HT",
       "comp": "",
-      "desc": "Filter Cut / General Inspection / Magnetic Plug / Dump Body Liner",
+      "desc": "Filter Cut / General Inspection / Lubrication / Magnetic Plug / Dump Body Liner",
       "priority": "P3 Planned (PM)",
       "raised": "2026-10-06",
       "type": "4000 Hours service Planned",
@@ -2941,7 +2778,7 @@
       "equip": "GE020",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "1000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-10-05",
       "type": "1000 Hours service Planned",
@@ -3247,7 +3084,7 @@
       "equip": "GE056",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "2000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-10-03",
       "type": "2000 Hours service Planned",
@@ -3463,7 +3300,7 @@
       "equip": "GE012",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "1000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-10-02",
       "type": "1000 Hours service Planned",
@@ -3571,7 +3408,7 @@
       "equip": "TK149",
       "cls": "HT",
       "comp": "",
-      "desc": "Filter Cut / General Inspection / Magnetic Plug / Dump Body Liner",
+      "desc": "Filter Cut / General Inspection / Lubrication / Magnetic Plug / Dump Body Liner",
       "priority": "P3 Planned (PM)",
       "raised": "2026-10-02",
       "type": "4000 Hours service Planned",
@@ -3733,7 +3570,7 @@
       "equip": "TK155",
       "cls": "HT",
       "comp": "",
-      "desc": "Magnetic Plug",
+      "desc": "Lubrication / Magnetic Plug",
       "priority": "P3 Planned (PM)",
       "raised": "2026-10-01",
       "type": "500 Hours service Planned",
@@ -3751,7 +3588,7 @@
       "equip": "BL015",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "4000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-30",
       "type": "4000 Hours service Planned",
@@ -3785,7 +3622,7 @@
     {
       "wo": "WO-017982",
       "equip": "CN019",
-      "cls": "GEN",
+      "cls": "CRN",
       "comp": "",
       "desc": "General Inspection",
       "priority": "P3 Planned (PM)",
@@ -3967,7 +3804,7 @@
       "equip": "TK153",
       "cls": "HT",
       "comp": "",
-      "desc": "Magnetic Plug",
+      "desc": "Lubrication / Magnetic Plug",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-30",
       "type": "500 Hours service Planned",
@@ -4091,7 +3928,7 @@
     {
       "wo": "WO-017996",
       "equip": "CN018",
-      "cls": "GEN",
+      "cls": "CRN",
       "comp": "",
       "desc": "General Inspection",
       "priority": "P3 Planned (PM)",
@@ -4183,7 +4020,7 @@
       "equip": "GE100",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "1000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-28",
       "type": "1000 Hours service Planned",
@@ -4255,7 +4092,7 @@
       "equip": "TK152",
       "cls": "HT",
       "comp": "",
-      "desc": "Magnetic Plug",
+      "desc": "Lubrication / Magnetic Plug",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-28",
       "type": "500 Hours service Planned",
@@ -4309,7 +4146,7 @@
       "equip": "GE110",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "2000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-27",
       "type": "2000 Hours service Planned",
@@ -4453,7 +4290,7 @@
       "equip": "TK151",
       "cls": "HT",
       "comp": "",
-      "desc": "Filter Cut / General Inspection / Magnetic Plug",
+      "desc": "Filter Cut / General Inspection / Lubrication / Magnetic Plug",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-27",
       "type": "1000 Hours service Planned",
@@ -4615,7 +4452,7 @@
       "equip": "PU004",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "1000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-26",
       "type": "1000 Hours service Planned",
@@ -4687,7 +4524,7 @@
       "equip": "TK147",
       "cls": "HT",
       "comp": "",
-      "desc": "Filter Cut / General Inspection / Magnetic Plug / Dump Body Liner",
+      "desc": "Filter Cut / General Inspection / Lubrication / Magnetic Plug / Dump Body Liner",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-26",
       "type": "4000 Hours service Planned",
@@ -4705,7 +4542,7 @@
       "equip": "TK158",
       "cls": "HT",
       "comp": "",
-      "desc": "Magnetic Plug",
+      "desc": "Lubrication / Magnetic Plug",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-26",
       "type": "500 Hours service Planned",
@@ -4813,7 +4650,7 @@
       "equip": "GE031",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "1000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-25",
       "type": "1000 Hours service Planned",
@@ -4903,7 +4740,7 @@
       "equip": "BL004",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "4000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-24",
       "type": "4000 Hours service Planned",
@@ -4919,7 +4756,7 @@
     {
       "wo": "WO-017741",
       "equip": "CN007",
-      "cls": "GEN",
+      "cls": "CRN",
       "comp": "",
       "desc": "General Inspection",
       "priority": "P3 Planned (PM)",
@@ -4993,7 +4830,7 @@
       "equip": "LS021",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "1000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-24",
       "type": "1000 Hours service Planned",
@@ -5047,7 +4884,7 @@
       "equip": "TK159",
       "cls": "HT",
       "comp": "",
-      "desc": "Filter Cut / General Inspection / Magnetic Plug / Dump Body Liner",
+      "desc": "Filter Cut / General Inspection / Lubrication / Magnetic Plug / Dump Body Liner",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-24",
       "type": "4000 Hours service Planned",
@@ -5191,7 +5028,7 @@
       "equip": "LS012",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "1000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-23",
       "type": "1000 Hours service Planned",
@@ -5281,7 +5118,7 @@
       "equip": "TK134",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "1000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-23",
       "type": "1000 Hours service Planned",
@@ -5317,7 +5154,7 @@
       "equip": "TK154",
       "cls": "HT",
       "comp": "",
-      "desc": "Filter Cut / General Inspection / Magnetic Plug",
+      "desc": "Filter Cut / General Inspection / Lubrication / Magnetic Plug",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-23",
       "type": "1000 Hours service Planned",
@@ -5369,7 +5206,7 @@
     {
       "wo": "WO-017397",
       "equip": "CN005",
-      "cls": "GEN",
+      "cls": "CRN",
       "comp": "",
       "desc": "General Inspection",
       "priority": "P3 Planned (PM)",
@@ -5497,7 +5334,7 @@
       "equip": "TK146",
       "cls": "HT",
       "comp": "",
-      "desc": "Magnetic Plug",
+      "desc": "Lubrication / Magnetic Plug",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-22",
       "type": "500 Hours service Planned",
@@ -5819,7 +5656,7 @@
     {
       "wo": "WO-016926",
       "equip": "CN020",
-      "cls": "GEN",
+      "cls": "CRN",
       "comp": "",
       "desc": "General Inspection",
       "priority": "P3 Planned (PM)",
@@ -5911,7 +5748,7 @@
       "equip": "GE025",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "2000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-20",
       "type": "2000 Hours service Planned",
@@ -6091,7 +5928,7 @@
       "equip": "GE032",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "1000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-19",
       "type": "1000 Hours service Planned",
@@ -6271,7 +6108,7 @@
       "equip": "CD010",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "1000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-18",
       "type": "1000 Hours service Planned",
@@ -6287,7 +6124,7 @@
     {
       "wo": "WO-016936",
       "equip": "CN023",
-      "cls": "GEN",
+      "cls": "CRN",
       "comp": "",
       "desc": "General Inspection",
       "priority": "P3 Planned (PM)",
@@ -6487,7 +6324,7 @@
       "equip": "TK148",
       "cls": "HT",
       "comp": "",
-      "desc": "Magnetic Plug",
+      "desc": "Lubrication / Magnetic Plug",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-18",
       "type": "500 Hours service Planned",
@@ -6523,7 +6360,7 @@
       "equip": "CD008",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "1000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-17",
       "type": "1000 Hours service Planned",
@@ -6539,7 +6376,7 @@
     {
       "wo": "WO-016917",
       "equip": "CN010",
-      "cls": "GEN",
+      "cls": "CRN",
       "comp": "",
       "desc": "250h service",
       "priority": "P3 Planned (PM)",
@@ -6577,7 +6414,7 @@
       "equip": "FL009",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "1000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-17",
       "type": "1000 Hours service Planned",
@@ -6631,7 +6468,7 @@
       "equip": "GE102",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "4000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-17",
       "type": "4000 Hours service Planned",
@@ -6703,7 +6540,7 @@
       "equip": "TK006",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "1000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-17",
       "type": "1000 Hours service Planned",
@@ -6811,7 +6648,7 @@
       "equip": "TK167",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "1000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-17",
       "type": "1000 Hours service Planned",
@@ -6919,7 +6756,7 @@
       "equip": "GE064",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "2000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-16",
       "type": "2000 Hours service Planned",
@@ -7027,7 +6864,7 @@
       "equip": "TK161",
       "cls": "HT",
       "comp": "",
-      "desc": "Filter Cut / General Inspection / Magnetic Plug / Dump Body Liner",
+      "desc": "Filter Cut / General Inspection / Lubrication / Magnetic Plug / Dump Body Liner",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-16",
       "type": "4000 Hours service Planned",
@@ -7079,7 +6916,7 @@
     {
       "wo": "WO-016888",
       "equip": "CN009",
-      "cls": "GEN",
+      "cls": "CRN",
       "comp": "",
       "desc": "General Inspection",
       "priority": "P3 Planned (PM)",
@@ -7099,7 +6936,7 @@
       "equip": "FL003",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "1000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-15",
       "type": "1000 Hours service Planned",
@@ -7135,7 +6972,7 @@
       "equip": "GE101",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "4000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-15",
       "type": "4000 Hours service Planned",
@@ -7207,7 +7044,7 @@
       "equip": "TK133",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "4000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-15",
       "type": "4000 Hours service Planned",
@@ -7331,7 +7168,7 @@
     {
       "wo": "WO-015854",
       "equip": "CN002",
-      "cls": "GEN",
+      "cls": "CRN",
       "comp": "",
       "desc": "General Inspection",
       "priority": "P3 Planned (PM)",
@@ -7423,7 +7260,7 @@
       "equip": "GE106",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "1000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-14",
       "type": "1000 Hours service Planned",
@@ -7441,7 +7278,7 @@
       "equip": "LS048",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "1000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-14",
       "type": "1000 Hours service Planned",
@@ -7513,7 +7350,7 @@
       "equip": "TK157",
       "cls": "HT",
       "comp": "",
-      "desc": "Filter Cut / General Inspection / Magnetic Plug / Dump Body Liner",
+      "desc": "Filter Cut / General Inspection / Lubrication / Magnetic Plug / Dump Body Liner",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-14",
       "type": "4000 Hours service Planned",
@@ -7549,7 +7386,7 @@
       "equip": "BL001",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "4000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-13",
       "type": "4000 Hours service Planned",
@@ -7565,7 +7402,7 @@
     {
       "wo": "WO-015954",
       "equip": "CN010",
-      "cls": "GEN",
+      "cls": "CRN",
       "comp": "",
       "desc": "General Inspection",
       "priority": "P3 Planned (PM)",
@@ -7603,7 +7440,7 @@
       "equip": "GE009",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "1000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-13",
       "type": "1000 Hours service Planned",
@@ -7747,7 +7584,7 @@
       "equip": "TK156",
       "cls": "HT",
       "comp": "",
-      "desc": "Filter Cut / General Inspection / Magnetic Plug / Dump Body Liner",
+      "desc": "Filter Cut / General Inspection / Lubrication / Magnetic Plug / Dump Body Liner",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-13",
       "type": "4000 Hours service Planned",
@@ -7855,7 +7692,7 @@
       "equip": "GE057",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "2000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-12",
       "type": "2000 Hours service Planned",
@@ -7997,7 +7834,7 @@
     {
       "wo": "WO-016282",
       "equip": "CN018",
-      "cls": "GEN",
+      "cls": "CRN",
       "comp": "",
       "desc": "General Inspection",
       "priority": "P3 Planned (PM)",
@@ -8539,7 +8376,7 @@
       "equip": "TK160",
       "cls": "HT",
       "comp": "",
-      "desc": "Filter Cut / General Inspection / Magnetic Plug / Dump Body Liner",
+      "desc": "Filter Cut / General Inspection / Lubrication / Magnetic Plug / Dump Body Liner",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-10",
       "type": "4000 Hours service Planned",
@@ -8627,7 +8464,7 @@
     {
       "wo": "WO-015359",
       "equip": "CN005",
-      "cls": "GEN",
+      "cls": "CRN",
       "comp": "",
       "desc": "General Inspection",
       "priority": "P3 Planned (PM)",
@@ -8645,7 +8482,7 @@
     {
       "wo": "WO-016268",
       "equip": "CN014",
-      "cls": "GEN",
+      "cls": "CRN",
       "comp": "",
       "desc": "General Inspection",
       "priority": "P3 Planned (PM)",
@@ -8719,7 +8556,7 @@
       "equip": "GE051",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "1000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-09",
       "type": "1000 Hours service Planned",
@@ -8827,7 +8664,7 @@
       "equip": "TK149",
       "cls": "HT",
       "comp": "",
-      "desc": "Magnetic Plug",
+      "desc": "Lubrication / Magnetic Plug",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-09",
       "type": "1500 Hours service Planned",
@@ -9043,7 +8880,7 @@
       "equip": "FL015",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "2000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-07",
       "type": "2000 Hours service Planned",
@@ -9223,7 +9060,7 @@
       "equip": "TK152",
       "cls": "HT",
       "comp": "",
-      "desc": "Filter Cut / General Inspection / Magnetic Plug / Dump Body Liner",
+      "desc": "Filter Cut / General Inspection / Lubrication / Magnetic Plug / Dump Body Liner",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-06",
       "type": "4000 Hours service Planned",
@@ -9259,7 +9096,7 @@
       "equip": "BL001",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "4000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-05",
       "type": "4000 Hours service Planned",
@@ -9275,7 +9112,7 @@
     {
       "wo": "WO-015953",
       "equip": "CN012",
-      "cls": "GEN",
+      "cls": "CRN",
       "comp": "",
       "desc": "General Inspection",
       "priority": "P3 Planned (PM)",
@@ -9293,7 +9130,7 @@
     {
       "wo": "WO-015371",
       "equip": "CN013",
-      "cls": "GEN",
+      "cls": "CRN",
       "comp": "",
       "desc": "General Inspection",
       "priority": "P3 Planned (PM)",
@@ -9439,7 +9276,7 @@
       "equip": "TK150",
       "cls": "HT",
       "comp": "",
-      "desc": "Magnetic Plug",
+      "desc": "Lubrication / Magnetic Plug",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-05",
       "type": "1500 Hours service Planned",
@@ -9457,7 +9294,7 @@
       "equip": "TK153",
       "cls": "HT",
       "comp": "",
-      "desc": "Filter Cut / General Inspection / Magnetic Plug / Dump Body Liner",
+      "desc": "Filter Cut / General Inspection / Lubrication / Magnetic Plug / Dump Body Liner",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-05",
       "type": "4000 Hours service Planned",
@@ -9511,7 +9348,7 @@
       "equip": "GE030",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "1000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-04",
       "type": "1000 Hours service Planned",
@@ -9547,7 +9384,7 @@
       "equip": "TC001",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "4000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-04",
       "type": "4000 Hours service Planned",
@@ -9601,7 +9438,7 @@
       "equip": "TK155",
       "cls": "HT",
       "comp": "",
-      "desc": "Filter Cut / General Inspection / Magnetic Plug / Dump Body Liner",
+      "desc": "Filter Cut / General Inspection / Lubrication / Magnetic Plug / Dump Body Liner",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-04",
       "type": "4000 Hours service Planned",
@@ -9635,7 +9472,7 @@
     {
       "wo": "WO-015856",
       "equip": "CN008",
-      "cls": "GEN",
+      "cls": "CRN",
       "comp": "",
       "desc": "General Inspection",
       "priority": "P3 Planned (PM)",
@@ -9727,7 +9564,7 @@
       "equip": "TK151",
       "cls": "HT",
       "comp": "",
-      "desc": "Magnetic Plug",
+      "desc": "Lubrication / Magnetic Plug",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-03",
       "type": "500 Hours service Planned",
@@ -9799,7 +9636,7 @@
       "equip": "CD007",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "1000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-08-09",
       "type": "1000 Hours service Planned",
@@ -9889,7 +9726,7 @@
       "equip": "CD007",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "1000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-08-01",
       "type": "1000 Hours service Planned",
@@ -9961,7 +9798,7 @@
       "equip": "CD008",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "1000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-08-01",
       "type": "1000 Hours service Planned",
@@ -10015,7 +9852,7 @@
       "equip": "CD009",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "1000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-08-01",
       "type": "1000 Hours service Planned",
@@ -10105,7 +9942,7 @@
       "equip": "CD010",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "1000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-08-01",
       "type": "1000 Hours service Planned",
@@ -10231,7 +10068,7 @@
       "equip": "TK164",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "2000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-07-01",
       "type": "2000 Hours service Planned",
@@ -10249,7 +10086,7 @@
       "equip": "BL002",
       "cls": "GEN",
       "comp": "",
-      "desc": "General Inspection",
+      "desc": "1000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-06-17",
       "type": "1000 Hours service Planned",
@@ -10265,7 +10102,7 @@
     {
       "wo": "WO-004720",
       "equip": "CN019",
-      "cls": "GEN",
+      "cls": "CRN",
       "comp": "",
       "desc": "General Inspection",
       "priority": "P3 Planned (PM)",
@@ -10283,7 +10120,7 @@
     {
       "wo": "WO-002197",
       "equip": "CN013",
-      "cls": "GEN",
+      "cls": "CRN",
       "comp": "",
       "desc": "General Inspection",
       "priority": "P3 Planned (PM)",
@@ -10301,7 +10138,7 @@
     {
       "wo": "GD-020555",
       "equip": "CN013",
-      "cls": "GEN",
+      "cls": "CRN",
       "comp": "",
       "desc": "General Inspection",
       "priority": "P3 Planned (PM)",
