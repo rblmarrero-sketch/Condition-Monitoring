@@ -4080,6 +4080,31 @@ home-screen app — Chromium's fake camera gave 3840×2160 here, which says noth
 a handset. If the readout on a real phone shows a side under ~1000 px, the answer is
 the "Phone camera" button for that phone, not a code change.
 
+**ONE DEVICE'S RIVAL COPY CAN BE DELETED ALONE, BECAUSE THE ONLY ROUND DELETE
+TOOK THE REAL ROUND WITH IT.** Read off the live folder on 2026-10-04: a test
+run had filed rounds under other device codes (`DGW79E`, `D8H0RT`) beside real
+inspections on 30 Sep — TK148 MP and EX003 INSP — and left fifteen-byte dummy
+JPEGs (the test suite's own `ff d8 ff db 01..09 ff d9`) under the normal
+overview names. `op:"delete"` matches `unit|date|type` and treats `~DEV` as part
+of the round on purpose, so deleting that key would have removed the real
+inspections too (8 files on TK148, 36 on EX003, counted by running the rule
+against the live listing before anything was sent). `deleteRecord` now takes an
+optional `dev`: only files carrying `~DEV` go — the rival's sidecar and its
+photographs — and the primary sidecar, other devices' copies, the edit and
+conflict markers and the signature never match. **It writes no `.deleted.json`**:
+that marker is a tombstone for the whole key, read by every phone and desk as
+"this round is gone", and it would have hidden the real round while its files
+sat in the folder. What was removed is recorded under
+`_meta/deletions/<at>_<stem>~<dev>.rival.json`, with who and why. `dry:true`
+lists what would go and changes nothing — run it first. A desk that already
+cached the rival keeps showing it until its cache is rebuilt: nothing tells a
+desk about a deleted sidecar except the whole-key marker, which is exactly what
+this must not write. Same gate as every delete (`ADMIN_SECRET`).
+`docs/google-upload.gs` carries the identical operation, unreached by live
+traffic. `tests/delrival.cjs` reproduces the live shape, fails 19 assertions
+against the old function and passes against the new. **VM change — not live on
+push.**
+
 ---
 
 ## Secrets

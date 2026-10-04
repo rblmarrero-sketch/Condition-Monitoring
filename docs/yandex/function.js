@@ -618,10 +618,39 @@ async function deleteRecord(b) {
   const esc = x => String(x).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   const p = String(b.key).split('|'), dmy = stem.split('_')[1];
   const re = new RegExp('^' + esc(p[0]) + '[._-].*?' + esc(dmy) + '_' + esc(p[2]) + '([._~]|$)', 'i');
-  const mine = all.filter(f => re.test(f.name));
-  if (!mine.length) return { ok: false, error: 'Nothing found for ' + b.key };
+  /* ONE DEVICE'S RIVAL COPY, AND NOTHING ELSE (`dev`).
+     The match above treats "~DEV" as part of the round, so deleting a key
+     removes the real round together with every rival copy beside it — right
+     for "delete this inspection", wrong for "this one phone's copy is junk".
+     A test run filed rounds under another device name next to a real round
+     (TK148 MP, EX003 INSP, 2026-09-30) and the only whole-round delete would
+     have taken the real inspection with it.
+     With `dev` the match is cut to files carrying "~DEV" — the rival's sidecar
+     and its photographs — and the primary sidecar, the other devices' copies,
+     the edit and conflict markers and the signature are never touched.
+     NO ".deleted.json" IS WRITTEN FOR THIS, on purpose: that marker is a
+     tombstone for the whole unit|date|type key, every phone and desk reads it
+     as "this round is gone", and it would remove the real round from every
+     screen even though its files are still in the folder. The record of what
+     was removed goes under _meta/deletions/ instead, with who and why.
+     `dry:true` answers with what WOULD go and changes nothing. */
+  const dev = b.dev === undefined || b.dev === null ? '' : String(b.dev);
+  if (dev && !/^[A-Za-z0-9_-]{1,24}$/.test(dev)) return { ok: false, error: 'Bad device code: ' + dev };
+  const tag = dev ? new RegExp('~' + esc(dev) + '([._]|$)') : null;
+  const mine = all.filter(f => re.test(f.name) && (!tag || tag.test(f.name)));
+  if (!mine.length) return { ok: false, error: dev ? 'Nothing found for ' + b.key + ' on device ' + dev : 'Nothing found for ' + b.key };
+  if (dev && b.dry) return { ok: true, dry: true, would: mine.map(f => f.name) };
   let gone = 0;
   for (const f of mine) { try { await delObj(f.key); gone++; } catch (e) {} }
+  if (dev) {
+    const at = new Date().toISOString();
+    await putObj(META_DIR + '/deletions/' + at.replace(/[:.]/g, '-') + '_' + stem + '~' + dev + '.rival.json',
+      Buffer.from(JSON.stringify({ type: 'cm-rival-deleted', key: b.key, dev: dev,
+        by: b.by || '', why: String(b.why || ''), at: at, files: mine.map(f => f.name) }, null, 2)),
+      'application/json');
+    await touchIndex();
+    return { ok: true, deleted: gone, dev: dev, files: mine.map(f => f.name) };
+  }
   await putObj(META_DIR + '/' + stem + '.deleted.json',
     Buffer.from(JSON.stringify({ type: 'cm-record-deleted', key: b.key,
       by: b.by || '', at: new Date().toISOString(), files: gone }, null, 2)), 'application/json');
