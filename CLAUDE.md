@@ -4053,6 +4053,33 @@ The first draft of the test also passed everything: `ok(c, n)` was called as
 `ok(n, c)`, so every assertion was a non-empty string. Phone only; nothing to deploy
 on the VM.
 
+**THE FRAME MUST NOT COST THE REPORT ITS SHARPNESS — AND THE FIRST VERSION DID,
+IN TWO PLACES.** Asked straight after the framed camera shipped: "will the new
+frame reduce the quality of the photo ... not pixelated when zoom." Two honest
+answers, one about each end. The REPORT is a bitmap: a gallery tile is
+`(746 − 3×4) ÷ 4 ≈ 184` CSS px, and at `RPT_SCALE` 2.4 that is about 440 px of the
+PDF, so any photograph above roughly 450 px a side already fills its tile and zooming
+the PDF past that pixelates it whatever the source (the page raster, not the photo,
+is the limit — see "THE REPORT CARRIES ITS OWN FONT AND ITS OWN RESOLUTION"). The
+PHONE-side numbers do depend on the camera: the square is cut from the live stream,
+and a web page is handed whatever size the browser's stream is, which is not the
+native camera's 12 MP. Two real losses were found reading the pipeline, both fixed:
+a frame larger than `photoPx()` (1600) was encoded at 0.92 in `framedPhoto` and then
+decoded and re-encoded AGAIN by `reencode` at `PHOTO_Q` 0.78 — a generation lost for
+nothing — so the square is now scaled to the limit once, with high-quality smoothing,
+and encoded once at `CAM_Q` (0.92, higher than the 0.78 every native-camera original
+got); a frame at or under the limit comes back from `reencode` untouched, and
+"Original" (limit 0) is never scaled. And nobody could see what the stream had
+delivered: the camera screen now prints the saved size (" · 1600 px") before the
+shutter is pressed, and every shot writes `cam-shot` {vw, vh, side, lim} to the trace,
+so the first real iPhone and Android numbers come back as data rather than as an
+argument. `tests/framecam.cjs` §8 asserts the saved side, the on-screen figure, that
+`reencode` handed the file back untouched, and the quality, at the default limit, at
+800 and at Original. What is NOT claimed: the real stream size of an iPhone in a
+home-screen app — Chromium's fake camera gave 3840×2160 here, which says nothing about
+a handset. If the readout on a real phone shows a side under ~1000 px, the answer is
+the "Phone camera" button for that phone, not a code change.
+
 ---
 
 ## Secrets

@@ -158,6 +158,25 @@ const live = (p) => p.evaluate(() => (window.__tracks || []).filter(t => t.ready
     await p.context().close();
   }
 
+  console.log('8. quality: scaled once to the photo limit, one lossy pass, and the pixels are printed on the screen');
+  for (const [label, px] of [['default limit', null], ['limit 800', '800'], ['Original (no limit)', '0']]) {
+    const p = await open(b, { width: 390, height: 844 }, ['camera']);
+    await p.evaluate(v => { if (v !== null) localStorage.setItem('up_px', v); else localStorage.removeItem('up_px');
+      window.__re = []; const orig = window.reencode; window.reencode = async (blob, m) => { const r = await orig(blob, m); window.__re.push(r === blob); return r; };
+      window.__st = undefined; window.__tp = takePhoto().then(() => { window.__st = 'done'; }, e => { window.__st = 'err:' + e.message; }); }, px);
+    await p.waitForSelector('#camShutter:not([disabled])', { timeout: 8000 });
+    const shown = await p.evaluate(() => document.getElementById('camRes').textContent);
+    await p.click('#camShutter'); await p.waitForFunction(() => window.__st !== undefined, null, { timeout: 15000 });
+    const r = await p.evaluate(async () => { const f = Object.values(draft.positions).flatMap(x => x.photos || []).slice(-1)[0]; const bm = await createImageBitmap(f);
+      return { shot: window.__camShot, w: bm.width, h: bm.height, re: window.__re, lim: photoPx() }; });
+    const want = (r.lim > 0 && r.shot.srcSide > r.lim) ? r.lim : r.shot.srcSide;
+    ok(label + ': the camera gave ' + r.shot.vw + 'x' + r.shot.vh + ', saved ' + r.w + 'x' + r.h, r.w === want && r.h === want, JSON.stringify(r));
+    ok(label + ': the screen said ' + want + ' px before the shot', shown.indexOf(String(want) + ' px') >= 0, JSON.stringify(shown));
+    ok(label + ': the shrink handed the photograph back untouched (no second lossy pass)', r.lim === 0 ? r.re.length === 0 : (r.re.length >= 1 && r.re.every(x => x === true)), JSON.stringify(r.re));
+    ok(label + ': encoded at the framed-photo quality, above the shrink quality', r.shot.q === 0.92 && r.shot.q > 0.78);
+    await p.context().close();
+  }
+
   await b.close(); srv.close();
   console.log(fails.length ? `\n${fails.length} FAILED: ` + fails.join(' | ') : '\nall passed');
   process.exit(fails.length ? 1 : 0);
