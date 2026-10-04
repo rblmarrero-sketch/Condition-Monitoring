@@ -4175,6 +4175,84 @@ sixteen trucks on it that list is correctly not empty — it uses the thermal su
 which is on no class and no model. **A test that reaches "nothing" through a
 particular round is asserting that round has no scope; say so in the test.**
 
+**THE DASHBOARD IS THE MASTER OF THE LUBRICATION PROGRAMME NOW, AND THE
+WORKBOOK IS AN EXPORT (2026-10-04).** Asked as a Lead Lubrication Engineer
+brief: the site's lube matrix workbook had grown to 319 columns, five sheets
+disagreed with one another, and maintenance, procurement and the shops could
+not tell which oil to use. Four decisions were put to the maintainer and taken
+as recommended: the dashboard is the master (Excel export / re-import);
+where the sheets disagree the import keeps every answer and flags it for the
+engineer; the matrix codes are official, with aliases; one approved product
+and one alternative per GRADE, approved in the dashboard.
+
+*The import.* `docs/build-lube-data.py` reads the October 2026 workbook BY ITS
+OWN HEADERS (role words in row 1, codes in row 2), never by column letter. A
+compartment now carries `g`, its grade — the sheet's own "Actual oil" — and
+`t` follows the grade where there is one. Each grade (`LUBE.grades`) carries
+its primary and alternative product and the colour the site paints it; two
+grades share a fill on the site's own sheet, so the code is printed on every
+swatch. `rf` is the refill / tank figure from the per-machine forms or Using
+table New, beside `cap`, the matrix's full system: both are real numbers for
+different questions. `DECIDE` lists the 58 compartments where the matrix, the
+form, Using table New and the sample log name different oils, with sources
+(TR60 hydraulic 5W30 vs HVLP 32 is one; 10W40 in engine samples on many
+models, specified nowhere, is another). The verdict is grade-aware: the
+grade's own products conform; an answer on an OPEN decision is "under
+decision" (`lube_v_pending`), never a finding; the same family in another
+grade is `lube_v_grade` (watch); another family is wrong. Wire rope and open
+gear keep no product: their sheet still says "VERIFY product".
+
+*The master.* One document, `_meta/lube/master.json`, written and read through
+the existing folder (`CMDrive.putDoc` / `getDoc`, `action=file`): no backend
+change. `dashboard/lube-master.js` (`CMLube`, loaded by both office pages,
+its own EN/RU words like reliability.js) draws four Lubrication sub-tabs —
+Lube master, Needs decision, Oils, Sampling — and `LUBE.applyMaster` applies
+the document to a pristine copy of the baseline every time, so taking an edit
+back really restores the workbook's value, and typing the workbook's value
+back leaves no edit behind. Every change carries a name (`cm_dash_who`), lands
+in `hist` and writes a detail record under `_meta/lube/log/`. It REPLACED the
+"Standards" and "Machine reference" panels, which each saved to one
+browser's localStorage and reached nobody else; a browser still holding old
+`cm_lube_ref` edits is offered a one-press move into the shared master. Two
+rules carried over unchanged: every product offered states its cold rating
+off its data sheet, and one DISQUALIFIED at the site's −40 cannot be chosen;
+a figure traced to a manual page (Source: manual · page, with who and when
+recorded, not typed) is a sourced figure, and the placeholder flag goes.
+
+*Two desks, one document, no compare-and-swap.* A save re-reads the document,
+applies its own change (a patch that reports only what it actually changed),
+writes, then READS BACK and re-applies; if that still changes something,
+another desk's write replaced ours in the same instant, and ours goes again
+on top. The first version re-read before writing and nothing more, and
+`tests/lubemaster.cjs` §4 lost one desk's edit the first time two saves
+genuinely overlapped. The same field edited on two desks still ends with the
+last one, which is the only answer there is.
+
+*The phone.* `lubeMasterPull()` reads the same document with the ordinary
+folder pull (at most every 15 minutes; every manual pull), applies it, and
+keeps the last copy (`cm_lube_master`) so an audit in the pit is judged
+against the office's last decision. Absent on the server means the baseline;
+a failed read changes nothing. Ticking "Oil sample taken" fills the bottle's
+number in the site's own form, DDMMYYYY-UNIT-CODE (`LUBE.sampleNo`, the
+formula on their sample log), editable, carried as `lubeSampleNo` through
+save, wire, reopen, team round, report and both office drawers.
+`LUBE.sampleCode` resolves an older form's code (4E, 6C, 1.1) onto the matrix
+code ONLY where that machine has it, and to nothing otherwise.
+
+*The retired Apps Script backend* addresses a file by Drive id, not by path,
+so the master cannot be read through it: the panels say "could not be read"
+and saving stays off. It is retired; this is noted, not fixed.
+
+Tests: `lubemaster.cjs` (both office pages against the real function: name
+required, server, reload, the other page, two desks at once, a decision, a
+grade approval, Excel out and back in with exactly the edited cells, sampling,
+Russian), `lubesample.cjs` (the phone follows a decision, keeps it across a
+restart, numbers a sample through every exit), `luberef.cjs` and
+`lubestd.cjs` rewritten for the master and the grade board. `lube.cjs` and
+`lubemtx.cjs` take the October figures (HM400 engine 500 h, was 250; 4AL 6 L,
+was 7.8; TR60 15 compartments, was 10) — checked against the workbook's own
+row before the tests were changed, not after.
+
 ---
 
 ## Secrets
