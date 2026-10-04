@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-04T01:12:14+00:00",
+  "generated": "2026-10-04T02:59:38+00:00",
   "byUnit": {
     "BL001": [
       {
@@ -3357,24 +3357,6 @@
       "completed": ""
     },
     {
-      "wo": "WO-017309",
-      "equip": "EX011",
-      "cls": "EXC",
-      "comp": "",
-      "desc": "250h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-10-03",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-10-03",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
       "wo": "WO-017333",
       "equip": "EX024",
       "cls": "EXC",
@@ -3571,6 +3553,24 @@
       "cause": "",
       "pmStatus": "complete",
       "completed": "2026-10-01"
+    },
+    {
+      "wo": "WO-017309",
+      "equip": "EX011",
+      "cls": "EXC",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-02",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-10-02",
+      "status": "Completed",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "complete",
+      "completed": "2026-10-02"
     },
     {
       "wo": "WO-017337",
@@ -8082,13 +8082,13 @@
       "raised": "2026-09-12",
       "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "hours": null,
-      "plan": "2026-10-02",
-      "status": "Elimination scheduled",
+      "plan": "2026-10-03",
+      "status": "Completed",
       "request": "DD-00012540",
       "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "cause": "Износ уплотнения",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-03"
     },
     {
       "wo": "WO-017018",
@@ -8100,13 +8100,13 @@
       "raised": "2026-09-12",
       "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "hours": null,
-      "plan": "2026-10-02",
-      "status": "Elimination scheduled",
+      "plan": "2026-10-03",
+      "status": "Completed",
       "request": "DD-00012527",
       "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "cause": "Износ уплотнения",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-03"
     },
     {
       "wo": "WO-016447",
