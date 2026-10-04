@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=507">
+<link rel="manifest" href="manifest.webmanifest?v=508">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=507">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=507">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=507">
+<link rel="apple-touch-icon" href="icon-192.png?v=508">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=508">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=508">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2804,16 +2804,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=507"></script>
-<script src="upload-defaults.js?v=507"></script>
-<script src="hme.js?v=507"></script>
-<script src="mp-fc.js?v=507"></script>
-<script src="rtw.js?v=507"></script>
-<script src="hme-cascade.js?v=507"></script>
-<script src="assets.js?v=507"></script>
-<script src="temp-limits.js?v=507"></script>
-<script src="normalize.js?v=507"></script>
-<script src="terms.js?v=507"></script>
+<script src="native.js?v=508"></script>
+<script src="upload-defaults.js?v=508"></script>
+<script src="hme.js?v=508"></script>
+<script src="mp-fc.js?v=508"></script>
+<script src="rtw.js?v=508"></script>
+<script src="hme-cascade.js?v=508"></script>
+<script src="assets.js?v=508"></script>
+<script src="temp-limits.js?v=508"></script>
+<script src="normalize.js?v=508"></script>
+<script src="terms.js?v=508"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2832,25 +2832,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=507"></script>
-<script src="edits.js?v=507"></script>
-<script src="due.js?v=507"></script>
-<script src="wear.js?v=507"></script>
-<script src="wear-figs.js?v=507"></script>
-<script src="wear-map.js?v=507"></script>
-<script src="machine-photos.js?v=507"></script>
-<script src="machine-fig.js?v=507"></script>
-<script src="get.js?v=507"></script>
-<script src="points.js?v=507"></script>
-<script src="uc-points.js?v=507"></script>
-<script src="inspect-guide.js?v=507"></script>
-<script src="get-figs.js?v=507"></script>
-<script src="body-points.js?v=507"></script>
-<script src="body-map.js?v=507"></script>
-<script src="lube.js?v=507"></script>
-<script src="lube-overrides.js?v=507"></script>
-<script src="lube2027.js?v=507"></script>
-<script src="report-core.js?v=507"></script>
+<script src="grade.js?v=508"></script>
+<script src="edits.js?v=508"></script>
+<script src="due.js?v=508"></script>
+<script src="wear.js?v=508"></script>
+<script src="wear-figs.js?v=508"></script>
+<script src="wear-map.js?v=508"></script>
+<script src="machine-photos.js?v=508"></script>
+<script src="machine-fig.js?v=508"></script>
+<script src="get.js?v=508"></script>
+<script src="points.js?v=508"></script>
+<script src="uc-points.js?v=508"></script>
+<script src="inspect-guide.js?v=508"></script>
+<script src="get-figs.js?v=508"></script>
+<script src="body-points.js?v=508"></script>
+<script src="body-map.js?v=508"></script>
+<script src="lube.js?v=508"></script>
+<script src="lube-overrides.js?v=508"></script>
+<script src="lube2027.js?v=508"></script>
+<script src="report-core.js?v=508"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -9072,7 +9072,7 @@ $("saveBtn").onclick=async ()=>{
      that is about to outlive the draft; nothing in it may still be the
      same object the draft put into storage under its own id, which is
      about to be deleted. */
-  await reArmForSave(rec);
+  const keptBlobs=await reArmForSave(rec);
   /* Requested now, not after the write: the risk window is the write
      itself plus whatever idle time follows it, and asking after the fact
      would already have missed the first half. Same window, said twice —
@@ -9096,8 +9096,28 @@ $("saveBtn").onclick=async ()=>{
      this point (dbDel(DRAFT_ID) has not run yet) — so the fix is not to
      retry silently, which could paper over a genuinely full disk, but to
      say so plainly and stop before anything below assumes the save worked. */
+  let putErr=null;
   try{ await dbPut(rec); }
   catch(e){
+    putErr=e;
+    /* A photograph this page could not re-read is the usual reason a put is
+       refused with "Error preparing Blob/File data" - the handle points at a
+       file the store has since replaced. The store's own current copy of the
+       same file is tried once before the inspector is told anything. */
+    if(keptBlobs.length){
+      let again=0; try{ again=await recoverKept(rec, keptBlobs); }catch(_){}
+      if(again){
+        slog("save-recovered",{u:rec.equip||"?", id:rec.id, n:again, why:String((e&&e.message)||e||"").slice(0,120)});
+        /* The manifest described the copy that could not be read: its size and
+           hash are refreshed from what is on the record now, or the read-back
+           would call the good bytes a different file. */
+        try{ await attSync(rec); }catch(_){}
+        try{ await dbPut(rec); putErr=null; }catch(e2){ putErr=e2; }
+      }
+    }
+  }
+  if(putErr){
+    const e=putErr;
     const why=String((e&&e.message)||e||"");
     const pair=t("m_save_failed"); dlg([pair[0], pair[1].split("{why}").join(why)]);
     slog("save-write-fail",{u:rec.equip||"?", id:rec.id, why:why.slice(0,200),
@@ -13569,7 +13589,28 @@ async function renderPending(){
     /* RTW's own shape (mark/comment, no grade) has no business going through
        the graded wizard's editRecord() — reported plainly: "if I select
        edit, its going to Inspection page, it should go to RTW." */
-    const openEdit=()=>rec.type==="RTW" ? rtwOpenForEdit(rec) : editRecord(rec);
+    /* THE RECORD THIS ROW WAS PAINTED FROM IS HOURS OLD BY THE TIME IT IS
+       TAPPED, AND ITS PHOTOGRAPHS ARE HANDLES, NOT BYTES. Read off TK157 on
+       2026-10-04: a round saved offline, Edit, photographs at a second
+       component, Save - "Error preparing Blob/File data to be stored in
+       object store", five presses, same words each time (save-write-fail in
+       the trace, hadReqErr:true: the put's own request refused the value).
+       A File that came out of IndexedDB points at a file the store owns, and
+       the store rewrites that file whenever the record is written - which a
+       phone with a failing link does on every retry (that round: eleven
+       attempts, each one a bookkeeping write). The list was painted before
+       those writes, so Edit handed the draft pointers to files already gone,
+       and Save could not put them back. Edit now reads the round again from
+       the store and copies every photograph into memory before the draft is
+       built, so nothing in the draft depends on a file the store may replace
+       (tests/staleedit.cjs). A read that fails keeps what it has - the
+       unreadable-photo handling downstream names it, as before. */
+    const openEdit=async()=>{
+      let use=rec;
+      try{ const cur=await dbGet(rec.id); if(cur) use=cur; }catch(e){ bad("edit-reread",e); }
+      try{ await reArmForSave(use); }catch(e){ bad("edit-detach",e); }
+      return use.type==="RTW" ? rtwOpenForEdit(use) : editRecord(use);
+    };
     row.querySelector(".rpt1").onclick=guard(async(ev)=>{ev.stopPropagation();await reportOne(rec);});
     row.querySelector(".edit").onclick=(ev)=>{ev.stopPropagation();openEdit();};
     row.querySelector(".meta").onclick=openEdit; row.querySelector(".thumb").onclick=openEdit;
@@ -14831,7 +14872,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="507";
+const BUILD="508";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -15569,7 +15610,10 @@ async function intake(blob){ return (await intakeNoted(blob)).att; }
    this exact photograph readable once, at intake, so failure here is not
    expected, only guarded against (tests/redraft.cjs). */
 async function reArmForSave(rec){
-  for(const p of Object.values(rec.positions||{})){
+  /* What could not be re-read is returned, not just kept: a caller whose
+     write is then refused can go back to the store for a current copy. */
+  const kept=[];
+  for(const [k,p] of Object.entries(rec.positions||{})){
     const ph=p.photos||[];
     for(let i=0;i<ph.length;i++){
       const b=ph[i]; if(!isBlob(b)) continue;
@@ -15577,7 +15621,7 @@ async function reArmForSave(rec){
         const u=await readBlobBytes(b);
         ph[i]=(typeof File!=="undefined") ? new File([u], b.name||"", {type:b.type||"image/jpeg"})
                                            : new Blob([u], {type:b.type||""});
-      }catch(e){}
+      }catch(e){ kept.push({k, i, name:b.name||"", video:false}); }
     }
     if(isBlob(p.video)){
       const b=p.video;
@@ -15585,9 +15629,36 @@ async function reArmForSave(rec){
         const u=await readBlobBytes(b);
         p.video=(typeof File!=="undefined") ? new File([u], b.name||"", {type:b.type||"video/mp4"})
                                              : new Blob([u], {type:b.type||""});
+      }catch(e){ kept.push({k, i:-1, name:b.name||"", video:true}); }
+    }
+  }
+  return kept;
+}
+/* A save refused over a photograph it could not read is retried once from the
+   store's own current copy of the same file (matched by name, same position).
+   Returns how many were replaced. */
+async function recoverKept(rec, kept){
+  const srcs=[];
+  for(const id of [editing&&editing.id, DRAFT_ID]){
+    if(!id) continue;
+    try{ const r=await dbGet(id); if(r) srcs.push(r); }catch(e){}
+  }
+  let n=0;
+  for(const w of kept){
+    const p=(rec.positions||{})[w.k]; if(!p) continue;
+    for(const r of srcs){
+      const sp=(r.positions||{})[w.k]; if(!sp) continue;
+      const cand = w.video ? [sp.video] : (sp.photos||[]);
+      const hit=cand.filter(isBlob).filter(b=>(b.name||"")===w.name)[0]; if(!hit) continue;
+      try{
+        const u=await readBlobBytes(hit);
+        const f=(typeof File!=="undefined") ? new File([u], w.name, {type:hit.type||(w.video?"video/mp4":"image/jpeg")}) : new Blob([u], {type:hit.type||""});
+        if(w.video) p.video=f; else p.photos[w.i]=f;
+        n++; break;
       }catch(e){}
     }
   }
+  return n;
 }
 /* One reason, one sentence — read by both doors that put a person in front
    of a dialog, so the two can never drift into saying different things

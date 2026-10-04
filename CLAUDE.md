@@ -3982,6 +3982,29 @@ heading, each sentence printed once, worst first, photographs above the
 sentence above the facts, clean and unrecorded points as lines, status once —
 and fails against the old engine on every one of those.
 
+**EDITING A SAVED ROUND OFFLINE FAILED TO SAVE, BECAUSE THE DRAFT HELD POINTERS
+TO FILES THE STORE HAD ALREADY REPLACED.** Read off TK157 on 2026-10-04
+(iPhone, signal dead for 45 minutes): a round saved, Edit, photographs at a
+second component, Save — "Error preparing Blob/File data to be stored in object
+store", five presses, the same words each time (`save-write-fail`,
+`hadReqErr:true`: the put's own request refused the value; the round's photographs
+had all landed on the server byte for byte, hashes checked against the manifest).
+A File read out of IndexedDB is a handle onto a file the store owns, and the store
+rewrites that file whenever the record is written — which a phone on a failing
+link does on every retry (that round: eleven attempts). The Saved list is painted
+before those writes and Edit used the painted record, so the draft was built on
+dead handles. `reArmForSave` meant to defeat exactly this by re-reading every
+photograph into a fresh File, but it swallowed a read that failed and kept the
+dead handle — and the put then failed. Two changes: Edit reads the round again
+from the store and copies every photograph into memory before the draft is built
+(`openEdit`, RTW included), and `reArmForSave` now returns what it could not
+re-read so a refused Save is retried once from the store's current copy of the
+same file (`recoverKept`, manifest refreshed by `attSync` first — without that the
+read-back called the good bytes a different file). Phone only; no backend change,
+nothing to deploy on the VM. `tests/staleedit.cjs` stands in for the dead handle
+with a 7-byte File every reader refuses and for the refusal with the field's own
+sentence; against the old page it reproduces the field message.
+
 ---
 
 ## Secrets
