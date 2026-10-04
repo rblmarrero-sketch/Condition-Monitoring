@@ -625,7 +625,7 @@
       const st = G0.state === "approved";
       return `<tr data-lmxgr="${esc(g)}"${gm[g] ? ' class="lmx-edited"' : ""}>
         <td>${swatch(g, true)}</td>
-        <td>${esc(lang() === "ru" ? G0.ru : G0.en)}<i class="sub lmx-t">${esc((lb.types[G0.t] || {})[lang()] || G0.t)}</i></td>
+        <td>${esc(lang() === "ru" ? G0.ru : G0.en)}</td>
         <td>${G0.verify ? `<i class="sub">${esc(tr("o_verify"))}</i>` : `<select class="lmx-in" data-f="primary" aria-label="${esc(tr("o_appr"))} ${esc(g)}"><option value=""></option>${opts(G0.primary)}</select>`}</td>
         <td>${G0.verify ? "" : `<select class="lmx-in" data-f="alt" aria-label="${esc(tr("o_alt"))} ${esc(g)}"><option value=""></option>${opts(G0.alt)}</select>`}</td>
         <td><span class="band ${st ? "b-ok" : "b-none"}">${esc(tr(st ? "o_approved" : "o_proposed"))}</span>
@@ -1095,7 +1095,7 @@
 .lmx-code b{font-variant-numeric:tabular-nums;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px}
 .lmx-sw{display:inline-flex;align-items:center;justify-content:center;min-width:44px;padding:2px 6px;border-radius:5px;font:700 11px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;border:1px solid rgba(22,36,44,.25);white-space:nowrap}
 .lmx-sw.big{min-width:80px;padding:5px 8px;font-size:12px}.lmx-sw-none{background:transparent;color:var(--muted);border-style:dashed}
-.lmx-gsel{display:flex;gap:6px;align-items:center}.lmx-gsel select{max-width:150px}
+.lmx-gsel{display:flex;gap:6px;align-items:center}.lmx-gsel select{width:22px;padding:5px 2px}
 .lmx-prod b{display:block;font-weight:600;font-size:12.5px}.lmx-prod i,.lmx-seen i,.lmx-src{display:block;font-style:normal;font-size:11.5px;color:var(--muted)}
 .lmx-seen .ok{color:var(--good-ink);font-weight:600}.lmx-seen .bad{color:var(--crit-ink);font-weight:600}.lmx-seen .warn{color:var(--warn-ink);font-weight:600}
 .lmx-flag{display:inline-block;font-size:10.5px;font-weight:700;padding:1px 6px;margin:1px 2px 1px 0;border-radius:4px;background:color-mix(in srgb,var(--warning) 30%,var(--surface));color:var(--warn-ink)}
@@ -1113,7 +1113,7 @@ tr.lmx-edited td:first-child{box-shadow:inset 3px 0 0 var(--accent)}
 .lmx-opt:hover:not([disabled]){border-color:var(--accent)}.lmx-opt.cur{box-shadow:0 0 0 2px var(--accent)}.lmx-opt[disabled]{cursor:default;opacity:.85}
 .lmx-osrc{font-size:12px;color:var(--ink-2)}.lmx-opick{font-size:11.5px;font-weight:700;color:var(--accent)}
 .lmx-dnote{margin-top:8px;width:min(420px,100%)}.lmx-dres{margin-top:8px;font-size:12.5px;color:var(--good-ink)}
-.lmx-kpis{margin:10px 0}.lmx-oils select{max-width:260px}.lmx-t{display:block;font-style:normal}.lmx-sm{padding:4px 8px;font-size:12px;margin-left:6px}
+.lmx-kpis{margin:10px 0}.lmx-oils select{width:100%;max-width:210px}.lmx-oils td:nth-child(2){max-width:150px}.lmx-sm{padding:4px 8px;font-size:12px;margin-left:6px}
 .lmx-warn{color:var(--warn-ink);font-weight:700}
 .lmx-h3{margin:22px 0 4px;font-size:15px}.lmx-sno{font-size:12.5px}
 .lmx-alias input{width:100%}
