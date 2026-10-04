@@ -25,12 +25,17 @@ const eq = (g, w, what) => ok(JSON.stringify(g) === JSON.stringify(w),
 console.log("── the masterlist loaded");
 ok(L, "window.LUBE exists");
 ok(L.models.length > 100, "models imported: " + L.models.length);
-eq(L.catalog.length, 8, "the eight products actually on site");
+/* Since the October 2026 workbook the catalogue is every product the
+   masterlist names — the primary AND the alternative of each grade — because
+   that is what the consolidation is decided between. A grade still marked
+   "VERIFY product" (wire rope, open gear) contributes nothing. */
+const gradeProducts = new Set();
+Object.values(L.grades).forEach(g => { if (!g.verify) [g.primary, g.alt].forEach(p => p && gradeProducts.add(p.toUpperCase().replace(/[^A-Z0-9]/g, ""))); });
+eq(L.catalog.length, gradeProducts.size, "the catalogue is every primary and alternative product");
 eq(L.site.design, -40, "site design minimum");
 
-console.log("── the site's own eight products, by type");
+console.log("── the site's grades, by type");
 const types = L.catalog.map(p => p.t).sort();
-eq(new Set(types).size, 8, "one product per lubricant type, no duplicates");
 ["engine","hydraulic","gear","grease","coolant","compressor","rockdrill","powertrain"]
   .forEach(t => ok(L.catalog.some(p => p.t === t), "  a " + t + " product exists"));
 ok(L.catalog.every(p => /^#[0-9a-f]{6}$/i.test(p.hue)),
@@ -38,8 +43,12 @@ ok(L.catalog.every(p => /^#[0-9a-f]{6}$/i.test(p.hue)),
 /* Colour must be by TYPE, not per product, or it has to be relearned the day a
    drum changes supplier. */
 const hueByType = {};
-L.catalog.forEach(p => { hueByType[p.t] = p.hue; });
-eq(new Set(Object.values(hueByType)).size, 8, "eight distinct type colours");
+let oneHue = true;
+L.catalog.forEach(p => { if (hueByType[p.t] && hueByType[p.t] !== p.hue) oneHue = false; hueByType[p.t] = p.hue; });
+ok(oneHue, "one colour per type, whatever the product");
+eq(new Set(Object.values(hueByType)).size, new Set(types).size, "and a distinct colour for each type");
+ok(Object.values(L.grades).every(g => /^#[0-9a-f]{6}$/i.test(g.hex) && g.primary !== undefined),
+   "every grade carries the colour the workbook paints it and its primary product");
 
 console.log("── HM400-3MO is one machine, however the register spells it");
 /* The register spells the same truck three ways. Keeping one entry per
@@ -62,10 +71,10 @@ const byK = {}; hm.comps.forEach(c => byK[c.k] = c);
 /* Straight off the masterlist row for Komatsu HM400-3MO. If the importer ever
    starts "improving" a figure, this is where it shows. */
 eq(byK["1"] && byK["1"].cap, 58,   "component 1 engine: 58 L");
-eq(byK["1"] && byK["1"].iv, 250,   "  every 250 h");
+eq(byK["1"] && byK["1"].iv, 500,   "  every 500 h (the October 2026 workbook; was 250)");
 eq(byK["2"] && byK["2"].cap, 257,  "component 2 transmission: 257 L");
 eq(byK["3"] && byK["3"].cap, 245,  "component 3 hydraulic: 245 L");
-eq(byK["4AL"] && byK["4AL"].cap, 7.8, "component 4AL front-left final drive: 7.8 L");
+eq(byK["4AL"] && byK["4AL"].cap, 6, "component 4AL front-left final drive: 6 L (was 7.8)");
 ok(byK["1"], "the codes are the site's own (1, 2, 3, 4AL …), not invented ones");
 ok(!hm.comps.some(c => /^(ENG|TRN|HYD|FDL)$/.test(c.k)),
    "and none of my invented codes survived the import");
@@ -95,7 +104,7 @@ L.models.forEach(k => {
 });
 ok(withOem > 200, "the OEM strings are kept for the engineer: " + withOem + " entries");
 ok(resolved > withOem * 0.8,
-   `and nearly all resolve to one of the eight products (${resolved})`);
+   `and nearly all resolve to one product (${resolved})`);
 /* Two types have no product on the shelf, and the Lube Legend says so itself:
    wire rope lube and open gear grease are both marked "(verify product)".
    That is an outstanding purchasing question, not an import fault — so it is
