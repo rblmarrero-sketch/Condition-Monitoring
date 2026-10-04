@@ -46,11 +46,20 @@ def main():
     data = json.loads(m.group(1))
     rows = data.get("workOrders", [])
     class_rounds = iwo.load_class_rounds()
+    # The class is read off the register again, not trusted from the file: a
+    # machine that has changed class since the file was built (the 24 cranes
+    # went from GEN to CRN on 2026-10-04) would otherwise be resolved against
+    # the class it used to be in and keep the wrong rounds until the next
+    # hourly rebuild.
+    cls_by_equip = iwo.load_asset_classes()
 
     changed = 0
     for w in rows:
         before = tuple(w.get("cmTypes") or ())
-        label, types = iwo.resolve_cm_types(w.get("hours"), w.get("cls") or "", class_rounds)
+        fresh = cls_by_equip.get(str(w.get("equip") or "").upper())
+        if fresh:
+            w["cls"] = fresh
+        label, types = iwo.resolve_cm_types(w.get("hours"), w.get("cls") or "", class_rounds, w.get("equip") or "")
         w["cmLabel"], w["cmTypes"] = label, types
         if tuple(types or ()) != before:
             changed += 1

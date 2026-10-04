@@ -43,7 +43,7 @@ const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
     document.getElementById('inspector').value = 'R. Marrero';
     document.getElementById('smu').value = '12000';
     draft = { positions: {} };
-    draft.positions[k] = { prod, evid: 'label', samp: true };
+    draft.positions[k] = { prod, evid: 'label', samp: true, filt: true };
     curItem = k;
     /* saveCur() rebuilds the position from the DOM of a screen this test never
        opened; the draft above IS the inspector's answer. */
@@ -62,7 +62,12 @@ const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
     /* And what comes back when the round is reopened to be corrected. */
     let back = {};
     if (rec) { editRecord(rec); back = draft.positions[k] || {}; }
-    return { unit: unit.n, key: k, prod, saved: !!rec, pos, wire, back };
+    /* And what the report is handed: the block the printed audit is built from. */
+    const blk = (typeof lubeReportBlock === 'function')
+      ? lubeReportBlock(unit.m || '', unit.cls || '', k, { product: prod, evid: 'label', samp: 1, filt: 1 }) : null;
+    const blkOff = (typeof lubeReportBlock === 'function')
+      ? lubeReportBlock(unit.m || '', unit.cls || '', k, { product: prod, evid: 'label', samp: 1 }) : null;
+    return { unit: unit.n, key: k, prod, saved: !!rec, pos, wire, back, blk, blkOff };
   });
 
   ok('a machine with lubrication compartments exists', !r.err, r.err || r.unit);
@@ -75,10 +80,17 @@ const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
     ok('the product reaches the wire', r.wire.lubeProduct === r.prod, JSON.stringify(r.wire.lubeProduct));
     ok('the evidence reaches the wire', r.wire.lubeEvidence === 'label', JSON.stringify(r.wire.lubeEvidence));
     ok('the sample flag reaches the wire', !!r.wire.lubeSampled, JSON.stringify(r.wire.lubeSampled));
+    /* THE OFFLINE-FILTRATION TICK, BESIDE THE OIL SAMPLE: same journey, same four exits. */
+    ok('the filtration tick survives the save', !!r.pos.filt, JSON.stringify(r.pos.filt));
+    ok('the filtration tick reaches the wire', !!r.wire.lubeFiltered, JSON.stringify(r.wire.lubeFiltered));
+    ok('the report block carries the filtration tick', !!(r.blk && r.blk.filt === true), JSON.stringify(r.blk && r.blk.filt));
+    ok('a round that never recorded it says nothing about it (null, not "not done")',
+       !!(r.blkOff && r.blkOff.filt === null), JSON.stringify(r.blkOff && r.blkOff.filt));
 
     ok('reopening the round shows the product back', r.back.prod === r.prod, JSON.stringify(r.back.prod));
     ok('reopening the round shows the evidence back', r.back.evid === 'label', JSON.stringify(r.back.evid));
     ok('reopening the round shows the sample flag back', !!r.back.samp, JSON.stringify(r.back.samp));
+    ok('reopening the round shows the filtration tick back', !!r.back.filt, JSON.stringify(r.back.filt));
   }
   ok('no page errors', !errs.length, errs.slice(0, 2).join(' | '));
 

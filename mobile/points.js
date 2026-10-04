@@ -151,6 +151,18 @@
       MP:[mk("HYD","Hydraulic Oil Sample","Проба гидравлического масла")],
       FC:[mk("HYD","Hydraulic Filter","Гидравлический фильтр")],
       INSP:["BODY","PISTON","BUSH","CHISEL","ACCUM","HOSE","BRACKET","HYD"] },
+    /* Mobile cranes, class of their own since 2026-10-04. They were GEN, the
+       catch-all, and the site asked for every crane to be on the general
+       inspection — which GEN cannot state, because a catch-all is not a fleet
+       (see CATCHALL_MIN in index.html). Everything a crane is walked on is
+       what GEN offered, point for point, so a crane's capture screen does not
+       change; only what the schedule says about it does. */
+    CRN:{ en:"Mobile Crane", ru:"Автокран", asset:"CRANE, MOBILE",
+      MP:[mk("TRANS","Transmission","Трансмиссия"),mk("DIFF","Differential","Дифференциал"),mk("FD1","Final Drive 1","Бортовой редуктор 1"),
+          mk("FD2","Final Drive 2","Бортовой редуктор 2"),mk("HYD","Hydraulic Tank","Гидробак")],
+      FC:[mk("ENG","Engine Oil Filter","Фильтр моторного масла"),mk("TRANS","Transmission Filter","Фильтр трансмиссии"),
+          mk("HYD","Hydraulic Filter","Гидравлический фильтр"),mk("FUEL","Fuel Filter","Топливный фильтр")],
+      INSP:["ENG","COOL","AIR","FUEL","TRANS","DRV","HYD","UC","TYRE","BRK","STEER","FRAME","ELEC","CAB","LUBE","FIRE"] },
     GEN:{ en:"General / Other", ru:"Общее / Другое", asset:"",
       MP:[mk("TRANS","Transmission","Трансмиссия"),mk("DIFF","Differential","Дифференциал"),mk("FD1","Final Drive 1","Бортовой редуктор 1"),
           mk("FD2","Final Drive 2","Бортовой редуктор 2"),mk("HYD","Hydraulic Tank","Гидробак")],

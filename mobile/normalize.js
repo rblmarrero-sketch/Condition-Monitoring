@@ -67,7 +67,7 @@
     /* the inspector's own words */
     'comment', 'note', 'notes',
     /* lubrication */
-    'lubeProduct', 'lubeUnlisted', 'lubeEvidence', 'lubeSampled', 'prod', 'evid',
+    'lubeProduct', 'lubeUnlisted', 'lubeEvidence', 'lubeSampled', 'lubeFiltered', 'prod', 'evid',
     /* temperature */
     'tempC', 'ambC', 'tempMethod', 'tempV', 'tempA', 'tempM',
     /* components and fluid */

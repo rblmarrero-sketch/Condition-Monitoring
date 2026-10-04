@@ -327,10 +327,15 @@ const rows = p => p.$$eval('#ddList tbody tr', a => a.map(tr => ({
 
   console.log('\nnothing to show');
   /* A round nobody has walked yet is the ordinary way to reach an empty list —
-     an office picks the lubrication round on day one and gets nothing. It must
-     say so, not show a table with a head and no body. */
+     an office picks a round on day one and gets nothing. It must say so, not
+     show a table with a head and no body.
+
+     This used to pick the lubrication round. The site put the 16 Terex TR60 on
+     it on 2026-10-04 (due.js byModel, 500 h), so a TR60 that has never been
+     walked is now a real row of work there and the list is no longer empty —
+     correctly. The thermal survey is on no class and no model, so it is. */
   await p.selectOption('#ddScope', 'all');
-  await p.selectOption('#ddType', 'LUBE'); await p.waitForTimeout(200);
+  await p.selectOption('#ddType', 'TEMP'); await p.waitForTimeout(200);
   const empty = (await p.textContent('#ddList')).trim();
   ok('an empty list says so in a sentence, with no empty table',
      empty.length > 5 && !/undefined|NaN|\[object/.test(empty)
