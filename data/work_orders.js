@@ -2,8 +2,8 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-04T09:01:46+00:00",
-  "source": "https://askpi.94-131-94-152.sslip.io/WO.xlsx",
+  "generated": "2026-10-04T09:28:29+00:00",
+  "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 683,
   "unitsKept": [
