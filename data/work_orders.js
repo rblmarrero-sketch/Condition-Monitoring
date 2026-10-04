@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-04T06:58:09+00:00",
+  "generated": "2026-10-04T07:29:12+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 683,
@@ -316,7 +316,7 @@ window.CM_WO_DATA = {
     "WE009",
     "WE011"
   ],
-  "duplicateRowsCollapsed": 354,
+  "duplicateRowsCollapsed": 357,
   "roundsDedupedWithinVisit": 6,
   "columns": [
     "Asset description",
@@ -400,13 +400,13 @@ window.CM_WO_DATA = {
     "wo": "Work order number"
   },
   "cmDateFrom": {
-    "raised": 128,
+    "raised": 131,
     "detected": 0,
     "planStart": 0
   },
   "cmCauseFrom": {
     "wo": 53,
-    "wr": 75,
+    "wr": 78,
     "cert": 0,
     "none": 0
   },
@@ -419,6 +419,75 @@ window.CM_WO_DATA = {
     "Bekzhan"
   ],
   "cmWorkOrders": [
+    {
+      "date": "2026-10-04",
+      "dateFrom": "raised",
+      "raised": "2026-10-04",
+      "detected": "2026-10-04",
+      "planStart": null,
+      "closed": null,
+      "asset": "TK120",
+      "defect": "DD-00014038",
+      "requestNo": "DD-00014038",
+      "eqType": "TRUCK, ARTICULATED",
+      "system": "TK120.BS (Braking System / Тормозная система)",
+      "priority": "P4 Planned (Repair)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Износ уплотнения",
+      "causeFrom": "wr",
+      "descr": "Замасливание корпуса регулятора зазора тормозов.",
+      "status": "Registered",
+      "by": "Slam",
+      "woNumber": null,
+      "maintType": null,
+      "planned": false
+    },
+    {
+      "date": "2026-10-04",
+      "dateFrom": "raised",
+      "raised": "2026-10-04",
+      "detected": "2026-10-04",
+      "planStart": null,
+      "closed": null,
+      "asset": "TK120",
+      "defect": "DD-00014031",
+      "requestNo": "DD-00014031",
+      "eqType": "TRUCK, ARTICULATED",
+      "system": "TK120.DRS.AXL (Axles / Мосты)",
+      "priority": "P4 Planned (Repair)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Поврежден прокладки",
+      "causeFrom": "wr",
+      "descr": "Течь передней левой и задней правой ступиц.",
+      "status": "Registered",
+      "by": "Slam",
+      "woNumber": null,
+      "maintType": null,
+      "planned": false
+    },
+    {
+      "date": "2026-10-04",
+      "dateFrom": "raised",
+      "raised": "2026-10-04",
+      "detected": "2026-10-04",
+      "planStart": null,
+      "closed": null,
+      "asset": "TK120",
+      "defect": "DD-00014029",
+      "requestNo": "DD-00014029",
+      "eqType": "TRUCK, ARTICULATED",
+      "system": "TK120.ELS.ALT (Alternator / Генератор)",
+      "priority": "P4 Planned (Repair)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "cause": "Усталостная трещина",
+      "causeFrom": "wr",
+      "descr": "Поперечные трещины ремня генератора.",
+      "status": "Registered",
+      "by": "Slam",
+      "woNumber": null,
+      "maintType": null,
+      "planned": false
+    },
     {
       "date": "2026-10-04",
       "dateFrom": "raised",
@@ -10073,15 +10142,15 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
-      "planStart": "2026-10-02",
-      "planStartDt": "2026-10-02T00:00:00",
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
+      "planStart": "2026-10-03",
+      "planStartDt": "2026-10-03T14:15:00",
       "planEnd": "2026-10-03",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-10-03",
+      "actualStartDt": "2026-10-03T14:15:00",
+      "actualEnd": "2026-10-03"
     },
     {
       "equip": "DZ004",
@@ -51496,15 +51565,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-10-03",
       "planStartDt": "2026-10-03T14:00:00",
       "planEnd": "2026-10-03",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-10-03",
+      "actualStartDt": "2026-10-03T14:00:00",
+      "actualEnd": "2026-10-03"
     },
     {
       "equip": "TK119",
