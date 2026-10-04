@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-04T04:08:38+00:00",
+  "generated": "2026-10-04T05:03:41+00:00",
   "byUnit": {
     "BL001": [
       {
@@ -244,18 +244,6 @@
           "UC"
         ],
         "plan": "2026-10-16",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "EX003": [
-      {
-        "wo": "WO-017970",
-        "hours": 1000,
-        "types": [
-          "FC",
-          "INSP"
-        ],
-        "plan": "2026-10-03",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -972,18 +960,6 @@
       }
     ],
     "TK149": [
-      {
-        "wo": "WO-017334",
-        "hours": 4000,
-        "types": [
-          "FC",
-          "INSP",
-          "MP",
-          "TB"
-        ],
-        "plan": "2026-10-02",
-        "priority": "P3 Planned (PM)"
-      },
       {
         "wo": "WO-018524",
         "hours": 250,
@@ -3202,24 +3178,6 @@
       "completed": ""
     },
     {
-      "wo": "WO-017338",
-      "equip": "LD006",
-      "cls": "LDR",
-      "comp": "",
-      "desc": "250h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-10-04",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-10-04",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
       "wo": "WO-017969",
       "equip": "TK004",
       "cls": "HT",
@@ -3320,12 +3278,12 @@
       "type": "1000 Hours service Planned",
       "hours": 1000,
       "plan": "2026-10-03",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-03"
     },
     {
       "wo": "WO-017333",
@@ -3356,12 +3314,12 @@
       "type": "250 Hours service Planned",
       "hours": 250,
       "plan": "2026-10-03",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-03"
     },
     {
       "wo": "WO-018337",
@@ -3391,6 +3349,24 @@
       "raised": "2026-10-03",
       "type": "500 Hours service Planned",
       "hours": 500,
+      "plan": "2026-10-03",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-017338",
+      "equip": "LD006",
+      "cls": "LDR",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-03",
+      "type": "250 Hours service Planned",
+      "hours": 250,
       "plan": "2026-10-03",
       "status": "Elimination scheduled",
       "request": "",
@@ -3680,12 +3656,12 @@
       "type": "4000 Hours service Planned",
       "hours": 4000,
       "plan": "2026-10-02",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-02"
     },
     {
       "wo": "WO-017336",
