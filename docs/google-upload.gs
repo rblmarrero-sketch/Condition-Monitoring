@@ -724,13 +724,34 @@ function deleteRecord_(b) {
 
   var all = [];
   collect_(rootFolder_(), '', all, 0, '');
-  var hit = all.filter(function (f) { return re.test(f.name); });
-  if (!hit.length) return { ok: false, error: 'Nothing found for ' + b.key };
+  // ONE DEVICE'S RIVAL COPY, AND NOTHING ELSE (`dev`) — field for field the same
+  // as docs/yandex/function.js deleteRecord(). This backend is retired; it is
+  // kept in step so a backend that is ever switched back on agrees about what
+  // the operation does. With `dev` only files carrying "~DEV" go; the primary
+  // sidecar, other devices' copies, markers and the signature are never
+  // touched, and NO deletion log named .deleted.json-for-the-key is written —
+  // that is a tombstone for the whole round. `dry` lists and changes nothing.
+  var dev = (b.dev === undefined || b.dev === null) ? '' : String(b.dev);
+  if (dev && !/^[A-Za-z0-9_-]{1,24}$/.test(dev)) return { ok: false, error: 'Bad device code: ' + dev };
+  var tag = dev ? new RegExp('~' + esc_(dev) + '([._]|$)') : null;
+  var hit = all.filter(function (f) { return re.test(f.name) && (!tag || tag.test(f.name)); });
+  if (!hit.length) return { ok: false, error: dev ? 'Nothing found for ' + b.key + ' on device ' + dev : 'Nothing found for ' + b.key };
+  if (dev && b.dry) return { ok: true, dry: true, would: hit.map(function (f) { return f.name; }) };
 
   var gone = [];
   for (var i = 0; i < hit.length; i++) {
     try { DriveApp.getFileById(hit[i].id).setTrashed(true); gone.push(hit[i].path); }
     catch (err) { /* already gone — not a failure */ }
+  }
+
+  if (dev) {
+    var rivalLog = { type: 'cm-rival-deleted', key: b.key, dev: dev, at: new Date().toISOString(),
+                     by: String(b.by || '').slice(0, 80), why: String(b.why || '').slice(0, 400), files: gone };
+    folderPath_(rootFolder_(), META_DIR + '/deletions').createFile(
+      Utilities.newBlob(JSON.stringify(rivalLog, null, 2), 'application/json',
+                        rivalLog.at.replace(/[:.]/g, '-') + '_' + stem + '~' + dev + '.rival.json'));
+    indexTouch_();
+    return { ok: true, deleted: gone.length, dev: dev, files: hit.map(function (f) { return f.name; }), trashed: true };
   }
 
   // Append-only: one file per deletion, so two people deleting at once cannot
