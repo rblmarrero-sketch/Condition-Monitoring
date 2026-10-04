@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-04T20:52:43+00:00",
+  "generated": "2026-10-04T21:22:46+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 683,
@@ -405,8 +405,8 @@ window.CM_WO_DATA = {
     "planStart": 0
   },
   "cmCauseFrom": {
-    "wo": 53,
-    "wr": 78,
+    "wo": 54,
+    "wr": 77,
     "cert": 0,
     "none": 0
   },
@@ -1974,8 +1974,8 @@ window.CM_WO_DATA = {
       "system": "DZ008.HS (Hydraulic System / Гидравлическая система)",
       "priority": "P4 Planned (Repair)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "cause": "Поврежден прокладки",
-      "causeFrom": "wr",
+      "cause": "Поврежден шланга/линии",
+      "causeFrom": "wo",
       "descr": "Течь ГЦ перекосо отвала.",
       "status": "Registered",
       "by": "Slam",
@@ -47648,15 +47648,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-10-03",
-      "planStartDt": "2026-10-03T00:00:00",
-      "planEnd": "2026-10-04",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "planStartDt": "2026-10-03T13:00:00",
+      "planEnd": "2026-10-03",
+      "actualStart": "2026-10-03",
+      "actualStartDt": "2026-10-03T13:00:00",
+      "actualEnd": "2026-10-03"
     },
     {
       "equip": "TK111",
