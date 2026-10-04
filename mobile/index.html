@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=511">
+<link rel="manifest" href="manifest.webmanifest?v=513">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=511">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=511">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=511">
+<link rel="apple-touch-icon" href="icon-192.png?v=513">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=513">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=513">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1988,6 +1988,8 @@
       </div>
       <label class="chk"><input type="checkbox" id="lubeSamp">
         <span data-i18n="lube_samp">Oil sample taken</span></label>
+      <label class="chk"><input type="checkbox" id="lubeFilt">
+        <span data-i18n="lube_filt">Offline filtration done</span></label>
       <div class="luberead" id="lubeRead"></div>
     </div>
     <div id="tempFields" class="hidden">
@@ -2848,16 +2850,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=511"></script>
-<script src="upload-defaults.js?v=511"></script>
-<script src="hme.js?v=511"></script>
-<script src="mp-fc.js?v=511"></script>
-<script src="rtw.js?v=511"></script>
-<script src="hme-cascade.js?v=511"></script>
-<script src="assets.js?v=511"></script>
-<script src="temp-limits.js?v=511"></script>
-<script src="normalize.js?v=511"></script>
-<script src="terms.js?v=511"></script>
+<script src="native.js?v=513"></script>
+<script src="upload-defaults.js?v=513"></script>
+<script src="hme.js?v=513"></script>
+<script src="mp-fc.js?v=513"></script>
+<script src="rtw.js?v=513"></script>
+<script src="hme-cascade.js?v=513"></script>
+<script src="assets.js?v=513"></script>
+<script src="temp-limits.js?v=513"></script>
+<script src="normalize.js?v=513"></script>
+<script src="terms.js?v=513"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2876,25 +2878,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=511"></script>
-<script src="edits.js?v=511"></script>
-<script src="due.js?v=511"></script>
-<script src="wear.js?v=511"></script>
-<script src="wear-figs.js?v=511"></script>
-<script src="wear-map.js?v=511"></script>
-<script src="machine-photos.js?v=511"></script>
-<script src="machine-fig.js?v=511"></script>
-<script src="get.js?v=511"></script>
-<script src="points.js?v=511"></script>
-<script src="uc-points.js?v=511"></script>
-<script src="inspect-guide.js?v=511"></script>
-<script src="get-figs.js?v=511"></script>
-<script src="body-points.js?v=511"></script>
-<script src="body-map.js?v=511"></script>
-<script src="lube.js?v=511"></script>
-<script src="lube-overrides.js?v=511"></script>
-<script src="lube2027.js?v=511"></script>
-<script src="report-core.js?v=511"></script>
+<script src="grade.js?v=513"></script>
+<script src="edits.js?v=513"></script>
+<script src="due.js?v=513"></script>
+<script src="wear.js?v=513"></script>
+<script src="wear-figs.js?v=513"></script>
+<script src="wear-map.js?v=513"></script>
+<script src="machine-photos.js?v=513"></script>
+<script src="machine-fig.js?v=513"></script>
+<script src="get.js?v=513"></script>
+<script src="points.js?v=513"></script>
+<script src="uc-points.js?v=513"></script>
+<script src="inspect-guide.js?v=513"></script>
+<script src="get-figs.js?v=513"></script>
+<script src="body-points.js?v=513"></script>
+<script src="body-map.js?v=513"></script>
+<script src="lube.js?v=513"></script>
+<script src="lube-overrides.js?v=513"></script>
+<script src="lube2027.js?v=513"></script>
+<script src="report-core.js?v=513"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -3021,7 +3023,7 @@ const mk = PTS_.mk;
 // Thermal survey points = the same components as the walk-around inspection. Registered
 // units use their real L7/L8/L9 tree instead (see currentTree), so this is the fallback list.
 Object.keys(CLASSES).forEach(k=>{ CLASSES[k].TEMP = CLASSES[k].INSP; });
-const CLASS_ORDER = ["ALL","HT","AT","EXC","DOZ","LDR","GRD","DRB","DRE","CRJ","CRC","SCR","HRB","GEN"];
+const CLASS_ORDER = ["ALL","HT","AT","EXC","DOZ","LDR","GRD","DRB","DRE","CRJ","CRC","SCR","HRB","CRN","GEN"];
 const $ = (id)=>document.getElementById(id);
 
 /* ===================== i18n ===================== */
@@ -3222,7 +3224,7 @@ const I18N = {
     lube_src_field:"in service now", lube_src_2027:"2027 specification",
     lube_src_both:"in service · 2027",
     lube_prod:"Product in service", lube_other:"Name it as printed on the label",
-    lube_evid:"How do you know?", lube_samp:"Oil sample taken",
+    lube_evid:"How do you know?", lube_samp:"Oil sample taken", lube_filt:"Offline filtration done",
     lube_pick:"— choose —", lube_fits:"Satisfies this compartment",
     lube_others:"Everything else on the shelf", lube_notlisted:"Not on this list…",
     lube_ref:"Refill {cap} L · every {iv} h",
@@ -3939,7 +3941,7 @@ const I18N = {
     lube_src_field:"сейчас в эксплуатации", lube_src_2027:"спецификация 2027",
     lube_src_both:"в эксплуатации · 2027",
     lube_prod:"Продукт в узле", lube_other:"Название как на этикетке",
-    lube_evid:"Откуда известно?", lube_samp:"Проба масла отобрана",
+    lube_evid:"Откуда известно?", lube_samp:"Проба масла отобрана", lube_filt:"Автономная фильтрация выполнена",
     lube_pick:"— выберите —", lube_fits:"Подходит для этого узла",
     lube_others:"Остальное на складе", lube_notlisted:"Нет в списке…",
     lube_ref:"Заправка {cap} л · каждые {iv} ч",
@@ -4584,7 +4586,7 @@ function assetClassOf(n){ const a=ASSET_BY[n]; return a?a.cls:null; }
 // each mapped to the inspection class that drives components + defect/cause filtering.
 const CAT2CLS={"TRUCK, DUMP":"HT","TRUCK, ARTICULATED":"AT","EXCAVATOR, BUCKET":"EXC","DOZER, TRACK TYPE":"DOZ",
   "GRADER, MOBILE":"GRD","LOADER, FRONT":"LDR","DRILL, BLASTING":"DRB","DRILL, EXPLORATION":"DRE",
-  "CRUSHER, MOBILE CONE":"CRC","CRUSHER, MOBILE JAW":"CRJ","SCREENER, MOBILE":"SCR","ROCK BREAKER, HYDRAULIC":"HRB"};
+  "CRUSHER, MOBILE CONE":"CRC","CRUSHER, MOBILE JAW":"CRJ","SCREENER, MOBILE":"SCR","ROCK BREAKER, HYDRAULIC":"HRB","CRANE, MOBILE":"CRN"};
 const CAT_COUNT={}; ASSETS.forEach(a=>{ const c=a.cat||"— UNCATEGORISED —"; CAT_COUNT[c]=(CAT_COUNT[c]||0)+1; });
 const CAT_LIST=Object.keys(CAT_COUNT).sort();
 let eqCat = localStorage.getItem("equip_cat") || "ALL";
@@ -7098,7 +7100,8 @@ function lubeReportBlock(model, cls, key, o){
   const product = String(o.product||"").trim();
   const evidKey = o.evid || "";
   const samp = o.samp == null ? null : !!o.samp;
-  if(!product && !evidKey && samp == null) return null;
+  const filt = o.filt == null ? null : !!o.filt;
+  if(!product && !evidKey && samp == null && filt == null) return null;
   const e = LUBE.EVID.filter(x=>x.k===evidKey)[0];
   /* Same judgement the capture screen showed the inspector and the same one
      the dashboard shows the office. This function used to carry a fourth
@@ -7108,6 +7111,7 @@ function lubeReportBlock(model, cls, key, o){
     product: product,
     evid: e ? { en:e.en, ru:e.ru } : null,
     samp: samp,
+    filt: filt,
     want: v.want || "",
     band: v.b || "",
     verdictKey: v.k || "",
@@ -7161,6 +7165,7 @@ function renderLube(){
   $("lubeOtherWrap").classList.toggle("hidden", p.prod!=="__other");
   $("lubeOther").value = p.other||"";
   $("lubeSamp").checked = !!p.samp;
+  $("lubeFilt").checked = !!p.filt;
 
   seg.innerHTML = (window.LUBE?LUBE.EVID:[]).map(e=>
     '<button type="button" data-e="'+esc(e.k)+'"'+(p.evid===e.k?' class="on"':'')+'>'+
@@ -8030,7 +8035,7 @@ function normDecAll(){ ["ucMM","tempV","tempA"].forEach(id=>{ const el=$(id); if
    classList.toggle(..., posCaptured(...)) call sites in refreshChips were
    not, and marked every untouched position on a round as captured the
    instant its card first painted. */
-function hasData(p){ return !!((p.mm!=null&&p.mm!=="")||p.reason||p.grade||p.sev||p.action||p.prio||p.detect||(p.photos&&p.photos.length)||p.video||p.particle||p.comp||p.oil||p.comment||p.defect||p.cause||p.tempV||p.prod||p.other||p.samp||p.resp||p.target||p.opstat); }
+function hasData(p){ return !!((p.mm!=null&&p.mm!=="")||p.reason||p.grade||p.sev||p.action||p.prio||p.detect||(p.photos&&p.photos.length)||p.video||p.particle||p.comp||p.oil||p.comment||p.defect||p.cause||p.tempV||p.prod||p.other||p.samp||p.filt||p.resp||p.target||p.opstat); }
 /* The ISO class that applies: derived from the grade, or the stored class on
    a record from before grades decided it. Everything that reasons about how
    bad a finding is in ISO terms — the priority hint, the 1C export code, the
@@ -8140,9 +8145,11 @@ function saveCur(){ if(!curItem) return; normDecAll(); const p=curP(); p.particl
     p.prod = $("lubeProd").value || "";
     p.other = p.prod==="__other" ? $("lubeOther").value.trim() : "";
     p.samp = !!$("lubeSamp").checked;
+    p.filt = !!$("lubeFilt").checked;
     if(!p.prod)  { delete p.prod; delete p.other; }
     if(!p.other) delete p.other;
     if(!p.samp)  delete p.samp;
+    if(!p.filt)  delete p.filt;
     /* Evidence with nothing recorded is not evidence of anything. */
     if(!p.prod && !p.other) delete p.evid;
   }
@@ -9012,7 +9019,7 @@ function editRecord(rec){ if(rec.cls && CLASSES[rec.cls]){ eqClass=rec.cls; lsSe
        typo used to empty it: the draft was rebuilt from this list, the list did
        not mention them, and the next Save wrote the blanks back over the
        record. */
-    prod:pp.prod||"",other:pp.other||"",evid:pp.evid||"",samp:pp.samp?1:0,
+    prod:pp.prod||"",other:pp.other||"",evid:pp.evid||"",samp:pp.samp?1:0,filt:pp.filt?1:0,
     /* THE MANIFEST, WHICH THIS LIST HAS TWICE ALREADY FAILED TO MENTION.
 
        The two comments above are the same bug, found twice: a field the draft
@@ -9191,7 +9198,7 @@ $("saveBtn").onclick=async ()=>{
          nothing in it. Downstream reads them off the RECORD (the report, the
          server payload, the ZIP, the dashboard), so all four routes carried an
          empty round and none of them could tell. */
-      prod:p.prod||"", other:p.other||"", evid:p.evid||"", samp:p.samp?1:0,
+      prod:p.prod||"", other:p.other||"", evid:p.evid||"", samp:p.samp?1:0, filt:p.filt?1:0,
       mm:(p.mm==null?null:Number(p.mm)), stood:p.stood?1:0, reason:p.reason||"",
       /* A baseline is not a separate kind of thing to sync. It is a marker on
          the reading that set it, so it travels every path a round already
@@ -9922,6 +9929,23 @@ function dueNoProgramme(){
    caught it: 106 + 992 = 1,098 of 1,128. Thirty machines had left the
    accounts entirely, which is the failure this whole screen exists to
    prevent, arriving through a change made to prevent a different one. */
+/* THE ROUNDS A MACHINE IS ON: its class's, plus any a MODEL rule puts it on.
+   A class answers "who is on the round" through roundsOnClass(); a model rule
+   (due.js byModel — the Terex TR60 on the lubrication audit) names machines the
+   class cannot separate from their neighbours, so it is read here, beside the
+   class, by every reader that turns a machine into a list of rounds. Returns
+   the class's own Set untouched when no rule applies. */
+function roundsOfUnit(a,k,on){
+  const base=on[k];
+  if(!window.DUE || !DUE.scoped || !DUE.EVERY) return base;
+  let out=base;
+  for(const ty of Object.keys(DUE.EVERY)){
+    if(!DUE.scoped(ty,a) || (base && base.has(ty))) continue;
+    if(out===base) out=new Set(base||[]);
+    out.add(ty);
+  }
+  return out;
+}
 function heldOffUnits(){
   const any=new Set(), all=new Set(), why={}, tys={};
   if(typeof ASSETS==="undefined" || !window.DUE || !DUE.OFF || !window.PTS)
@@ -9931,7 +9955,7 @@ function heldOffUnits(){
     if(!a || !a.n) continue;
     const k=PTS.classOf(a.cls||a.cat||"");
     if(!k || k==="GEN" || k==="ALL") continue;
-    const rounds=on[k]; if(!rounds || !rounds.size) continue;
+    const rounds=roundsOfUnit(a,k,on); if(!rounds || !rounds.size) continue;
     let off=0, n=0;
     for(const ty of rounds){
       n++;
@@ -10954,7 +10978,7 @@ function neverRows(only){
        said which rounds this machine is on, and this screen will not invent
        one. */
     if(!k || k==="GEN" || k==="ALL") continue;
-    const rounds=on[k]; if(!rounds) continue;
+    const rounds=roundsOfUnit(a,k,on); if(!rounds) continue;
     for(const ty of rounds){
       if(only && ty!==only) continue;
       if(!TYPE_META[ty]) continue;
@@ -11101,7 +11125,7 @@ function unclassedCount(){
     if(!a || !a.n) continue;
     const k=PTS.classOf(a.cls||a.cat||"");
     if(!k || k==="GEN" || k==="ALL"){ n++; continue; }
-    const rounds=on[k];
+    const rounds=roundsOfUnit(a,k,on);
     if(!rounds || !rounds.size) n++;
   }
   return n;
@@ -14005,6 +14029,7 @@ async function buildPackage(){
       }
       if(p.evid) n.lubeEvidence = p.evid;
       if(p.samp) n.lubeSampled = 1;
+      if(p.filt) n.lubeFiltered = 1;
       const wo_=wearOut(rec,k,p);
       if(wo_){ if(wo_.mm!=="")n.measuredMM=wo_.mm; if(wo_.newMM!=="")n.newMM=wo_.newMM;
         if(wo_.condemnMM!=="")n.condemnMM=wo_.condemnMM; if(wo_.wearPct!=="")n.wearPct=wo_.wearPct;
@@ -14061,7 +14086,7 @@ async function buildPackage(){
         causeCode:p.cause||"", cause:p.cause?causeLabel(p.cause,"en"):"",
         particle:p.particle||"", comp:p.comp||"", oil:p.oil||"", comment:p.comment||"",
         lubeProduct:(p.prod==="__other"?(p.other||""):(p.prod||"")),
-        lubeUnlisted:(p.prod==="__other"?1:0), lubeEvidence:p.evid||"", lubeSampled:p.samp?1:0,
+        lubeUnlisted:(p.prod==="__other"?1:0), lubeEvidence:p.evid||"", lubeSampled:p.samp?1:0, lubeFiltered:p.filt?1:0,
         tempC:p.tempV||"", ambC:p.tempA||"", tempMethod:p.tempM||"",
         /* How it was found. The server path has always sent this; the ZIP did
            not, so a coded ISO 14224 detection method the inspector chose on
@@ -14388,7 +14413,7 @@ async function rptRecords(onlyId){
       const lube = meta.lube
         ? lubeReportBlock(a1.m||"", a1.cls||"", k,
             { product:(p.prod==="__other"?(p.other||""):(p.prod||"")),
-              evid:p.evid||"", samp:(p.samp?1:0) })
+              evid:p.evid||"", samp:(p.samp?1:0), filt:(p.filt?1:0) })
         : null;
       items.push({ key:k, name:nm.name, nameAlt:nm.nameAlt, code:nm.code, lube,
         general:(k===GEN_KEY?1:0), cats:photosOf(p).map(b=>attCat(p,b)||"COMPONENT"),
@@ -14549,7 +14574,7 @@ function teamRecToReport(rec){
     const lube = meta.lube
       ? lubeReportBlock(a.m||"", a.cls||rec.cls||"", it.key,
           { product:it.lubeProduct||"", evid:it.lubeEvidence||"",
-            samp:it.lubeSampled?1:0 })
+            samp:it.lubeSampled?1:0, filt:it.lubeFiltered?1:0 })
       : null;
     return { key:it.key, name:nm.name, nameAlt:nm.nameAlt, code:nm.code, lube,
              general:it.general?1:0, cats:(it.att||[]).map(e=>e.category||"COMPONENT"),
@@ -15020,7 +15045,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="511";
+const BUILD="513";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -17805,7 +17830,7 @@ function recToExport0(rec){
         defectIso:p.defect?upDefect(p.defect):"",
         defect:p.defect?defectLabel(p.defect,"en"):"", iso:d?d.iso14224:"", isoMode:d?d.iso14224:"",
         lubeProduct:(p.prod==="__other"?(p.other||""):(p.prod||"")),
-        lubeUnlisted:(p.prod==="__other"?1:0), lubeEvidence:p.evid||"", lubeSampled:p.samp?1:0,
+        lubeUnlisted:(p.prod==="__other"?1:0), lubeEvidence:p.evid||"", lubeSampled:p.samp?1:0, lubeFiltered:p.filt?1:0,
         causeCode:p.cause||"", causeIso:p.cause?upCause(p.cause):"",
         cause:p.cause?causeLabel(p.cause,"en"):"", particle:p.particle||"",
         detection:det, detectionLabel:detectLabel(det,"en"),

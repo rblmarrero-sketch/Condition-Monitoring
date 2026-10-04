@@ -4105,6 +4105,76 @@ traffic. `tests/delrival.cjs` reproduces the live shape, fails 19 assertions
 against the old function and passes against the new. **VM change — not live on
 push.**
 
+**THE SITE'S SCOPE OF 2026-10-04: THE TR60 LUBRICATION AUDIT AT 500 H, EVERY
+CRANE ON THE GENERAL INSPECTION, AND AN OFFLINE-FILTRATION TICK (build 512).**
+Asked as one sentence: "put in the scope Condition Monitoring schedule in TR60,
+Filtration - every 500 hours, will use the Lubrication Audit ... include in the
+Offline filtration, maybe beside Oil Sample, a tick as well. Also include in the
+scope Inspection of all cranes." Three design questions were put to the
+maintainer first and answered: TR60 only (not all HT), a new Crane class, and
+the tick on every compartment.
+
+*TR60 is a MODEL, so it is a model rule.* The 16 Terex TR60 share class HT with
+30 KAMAZ (held off every round) and 5 IVECO nobody has given a figure for; a
+class rule would have moved all of them. `EVERY.LUBE.byModel` (due.js) states
+`TR60 -> 500 h`, matched on the model text the way `OFF` is (never `mk`: see
+`offRound`). It sits between a machine's own figure and its class's in `spec()`
+and only answers when the caller names the unit — every call that schedules a
+machine already does. Membership follows the model too (`DUE.scoped`): a TR60 is
+on the audit whether or not any HT truck was ever walked on it, which the
+class-history rule could not say. Read in three places that turn a machine into
+a list of rounds — the phone's `roundsOfUnit` (neverRows, heldOffUnits,
+unclassedCount) and the office's `unitRoundsOf` (dueNeverRows), the same rule
+twice, on both dashboards — and in the coverage panel (`ivDaysFor` now passes the
+unit; `cutOf` is keyed on the interval, not the class, because two machines of
+one class now run one round at two figures; `cvEvery` says "500 h TR60 · every
+30 days (other machines)"). The 1C side: `gen_class_rounds.cjs` writes
+`DUE.byModel` into `class_rounds.generated.json` as `models`, and
+`ingest_work_orders.py` (`model_of`, `round_interval`) applies it, so a TR60's
+500 h service resolves to the audit and an IVECO's does not; both
+`resolve_cm_types` and `dedupe_within_visit` read it. **The hourly job
+regenerates that file from due.js live, so nothing here needs committing by
+hand and nothing waits on the VM** — the mapping reaches the phones with the
+first hourly run after this build is on Pages. `reresolve_rounds.py` now re-reads
+each machine's CLASS from the register as well: it claimed "every input is in the
+file", and a class that changed since the file was built (the cranes) would have
+been resolved against the one it used to be in.
+
+*Cranes were GEN, and a catch-all cannot state a programme.* All 24 `CRANE,
+MOBILE` machines (CN001-CN024) are class `CRN` now (`assets.js`, `points.js`,
+`CAT2CLS`, both dashboards' `cls_CRN`), with exactly the capture lists GEN had
+(a crane's screen is unchanged), and `INSP.onClass` names the class. 1,000 h is
+still the only inspection figure. As GEN a round walked on one crane never put
+the other twenty-three on a list (CATCHALL_MIN, above); as CRN it does, and a
+crane's 1,000 h order resolves to the inspection in 1C (it resolved to nothing as
+GEN). `docs/build-hme-data.py` keeps an existing machine's class on a rebuild
+("merge, never replace"), so it does not undo this.
+
+*The tick.* "Offline filtration done" (`#lubeFilt`) sits directly after "Oil
+sample taken" on the audit screen, in the same group, on every compartment, and
+takes the same journey the sample flag takes — position `filt`, record, wire
+(`lubeFiltered`), reopen-to-edit, team round, the report block (`filt`, null when
+the round never recorded it, which prints nothing rather than "not done"), the
+printed audit's own column (`c_lube_filt`, a second ●/○ beside the oil sample) and
+its detail row, `normalize.js`'s allow-list, `dashboard/report.js`, and both
+dashboards' import and position drawer. Russian: "Автономная фильтрация
+выполнена". NOT done, deliberately: the Lubrication tab's coverage tiles count
+"sampled" (180 days) and have no filtration tile — nobody asked for one, and a
+tile for a field no round has recorded yet would read 0 of everything.
+
+`tests/lubescope.cjs` asks the app on all three surfaces (the TR60 and the
+cranes by the register's own rows, never a copy of 500 or 1000; IVECO, KAMAZ and
+every other HT truck proven untouched; the real screen ticked; Russian);
+`tests/modelround.py` (wrapped by `modelround.cjs`) asks the ingester's own
+functions, including a round map from before `models` existed;
+`tests/lubekeep.cjs` carries the tick through save, wire, reopen and report.
+Against the old code `lubescope` stops at its first assertion and `lubekeep` fails
+five. One existing suite had encoded the old world: `tests/dashdue.cjs` picked the
+lubrication round as "a round nobody has walked" to reach an empty list, and with
+sixteen trucks on it that list is correctly not empty — it uses the thermal survey,
+which is on no class and no model. **A test that reaches "nothing" through a
+particular round is asserting that round has no scope; say so in the test.**
+
 ---
 
 ## Secrets

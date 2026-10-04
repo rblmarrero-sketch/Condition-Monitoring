@@ -130,7 +130,37 @@ def load_class_rounds(path=CLASS_ROUNDS_PATH):
     return json.loads(path.read_text(encoding="utf-8"))["map"]
 
 
-def resolve_cm_types(hours, cls, class_rounds):
+_MODELS = None
+
+
+def model_of(equip, path=ASSETS_PATH):
+    """equip -> the model text due.js matches a model rule against (the
+    register's model and model-key, upper-cased), parsed from the same
+    mobile/assets.js the class comes from. "" for a machine it does not know."""
+    global _MODELS
+    if _MODELS is None:
+        _MODELS = {}
+        if path.exists():
+            m = re.search(r"window\.ASSETS\s*=\s*(\[.*\])\s*;", path.read_text(encoding="utf-8"), re.S)
+            if m:
+                for a in json.loads(m.group(1)):
+                    if a.get("n"):
+                        _MODELS[a["n"].upper()] = f"{a.get('m') or ''} {a.get('mk') or ''}".upper()
+    return _MODELS.get(str(equip or "").upper(), "")
+
+
+def round_interval(spec, cls, model):
+    """The hour figure this round runs on for this machine: a MODEL's own
+    (due.js byModel, generated into class_rounds.generated.json as `models`)
+    beats the class's, exactly as DUE.spec resolves it, so the 1C mapping and
+    the phone's due list cannot read two different intervals for one truck."""
+    for r in spec.get("models") or []:
+        if r.get("model") and str(r["model"]).upper() in (model or ""):
+            return r.get("h")
+    return spec["classes"].get((cls or "").upper())
+
+
+def resolve_cm_types(hours, cls, class_rounds, equip=""):
     """Return (label, types_or_None) for an (hours, class) pair, by asking
     class_rounds (due.js's own numbers, evaluated live) which round type(s)
     fall due on this class at this hour figure. Ambiguous by design where
@@ -160,10 +190,11 @@ def resolve_cm_types(hours, cls, class_rounds):
     cls = (cls or "").upper()
     if hours is None:
         return "—", None
+    model = model_of(equip)
     types = sorted(
         ty for ty, spec in class_rounds.items()
-        if spec["classes"].get(cls) is not None
-        and hours > 0 and hours % spec["classes"][cls] == 0
+        if round_interval(spec, cls, model) is not None
+        and hours > 0 and hours % round_interval(spec, cls, model) == 0
     )
     if not types:
         return f"{hours}h service", None
@@ -204,7 +235,8 @@ def dedupe_within_visit(work_orders, class_rounds):
         if len(group) < 2:
             continue
         cls = (group[0].get("cls") or "").upper()
-        interval = {ty: spec["classes"].get(cls) for ty, spec in class_rounds.items()}
+        model = model_of(group[0].get("equip"))
+        interval = {ty: round_interval(spec, cls, model) for ty, spec in class_rounds.items()}
         wanted = {id(w): [] for w in group}
         taken = set()
         # Pass one: the order whose own tier is this round's interval.
@@ -828,7 +860,7 @@ def main():
         hm = hours_re.search(str(maint_type))
         hours = int(hm.group(1)) if hm else None
         cls = cls_by_equip.get(equip.upper(), "")
-        cm_label, cm_types = resolve_cm_types(hours, cls, class_rounds)
+        cm_label, cm_types = resolve_cm_types(hours, cls, class_rounds, equip)
         wo_number = row[col["Work order number"]]
 
         # DEDUPE. 1C's export is one ROW per line item on a work order, not

@@ -101,7 +101,12 @@ const HIST_PATH = path.join(__dirname, 'cm_history.generated.json');
         if (!onIt) continue;                       // neither stated nor ever walked -- no figure recorded
         clsHours[cls] = DUE.hours(ty, null, cls);
       }
-      out[ty] = { restricted, classes: clsHours };
+      /* A MODEL with its own figure on this round (due.js byModel — the Terex
+         TR60 on the lubrication audit at 500 h) is not a class, so it cannot
+         ride in `classes`. It is written beside them, read from due.js live
+         like everything else here, and ingest_work_orders.py applies it to
+         the machines whose model text matches. */
+      out[ty] = { restricted, classes: clsHours, models: (DUE.byModel && DUE.byModel(ty)) || [] };
     }
     return out;
   });

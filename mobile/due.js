@@ -144,14 +144,40 @@
          general inspection — roughly 50 days a machine at the fleet rate
          rather than 25 — and that is a real reduction in work, decided by
          the site with the figure in front of them. The KAMAZ trucks are
-         still held off it entirely (OFF.INSP below). */
-      INSP: { h: 1000 },
+         still held off it entirely (OFF.INSP below).
+
+         onClass CRN: every mobile crane is on the general inspection, asked
+         for on 2026-10-04 ("include in the scope Inspection of all cranes").
+         The 24 cranes were class GEN, the catch-all nobody has assigned a
+         programme to, and a round walked on one crane could never put the
+         other twenty-three on a list: GEN is held to a bar of three machines
+         before a walked round counts for the class (CATCHALL_MIN). A class of
+         their own states it once. onClass carries no number, so this does not
+         add a second interval — 1,000 h above is still the only figure. */
+      INSP: { h: 1000, onClass: ["CRN"] },
 
       /* Still no hour figure for these two, so they keep the calendar the
          fleet already ran them on. Carried forward rather than converted: 30
          days is what somebody chose, and 600 h is a number nobody has said. */
       TEMP: { d: 30, carried: 1 },
-      LUBE: { d: 30, carried: 1 },
+      /* Lubrication audit. Still a 30-day calendar round for every machine
+         the fleet has walked it on — nobody has stated an hour figure for
+         those — EXCEPT the Terex TR60 haul trucks, which the site put on a
+         500 h cycle on 2026-10-04 ("filtration, every 500 hours, will use the
+         Lubrication Audit"; the audit now records the offline-filtration tick
+         beside the oil sample).
+
+         byModel, not byClass: TR60 is a model, not a class. The 16 TR60 share
+         class HT with 30 KAMAZ (held off every round) and 5 IVECO that nobody
+         has given a figure for, and a class rule would have moved all of them.
+         A rule is matched on the model text, the way OFF is, never on the
+         make — see offRound for why. Membership follows the model too: a TR60
+         is on this round whether or not any HT truck has ever been walked on
+         it (scoped()), and its interval is the number below wherever a
+         surface asks with the unit (spec). Every other machine is exactly
+         where it was. */
+      LUBE: { d: 30, carried: 1,
+              byModel: [{ model: 'TR60', h: 500, since: '2026-10-04' }] },
     },
     FALLBACK: { d: 30, carried: 1 },
 
@@ -289,6 +315,14 @@
       var hu = s.byUnit[String(unit).toUpperCase()];
       if (hu != null) return Object.assign({}, s, { h: hu, byUnitFor: String(unit).toUpperCase() });
     }
+    /* A MODEL's figure sits between the machine's own and its class's: a
+       machine stated by number wins, a model beats the class it belongs to.
+       It needs the machine, so it only answers when the caller passed the
+       unit — every call that schedules a machine already does. */
+    if (unit && s.byModel) {
+      var mr = modelRule(type, assetOf(unit));
+      if (mr) return Object.assign({}, s, { h: mr.h, byModelFor: mr.model });
+    }
     if (!cls || !s.byClass) return s;
     var h = s.byClass[cls];
     if (h == null) {
@@ -300,6 +334,44 @@
     return Object.assign({}, s, { h: h });
   }
   D.spec = spec;
+
+  /* The register, read lazily and by name. due.js is also loaded where there
+     is no register (a service worker has no window), and schedules nothing
+     there; an absent register answers "no machine", which is no model rule. */
+  var _assetIdx = null, _assetLen = -1;
+  function assetOf(unit) {
+    var A = G.ASSETS;
+    if (!A || !A.length) return null;
+    if (!_assetIdx || _assetLen !== A.length) {
+      _assetIdx = {}; _assetLen = A.length;
+      for (var i = 0; i < A.length; i++) if (A[i] && A[i].n) _assetIdx[String(A[i].n).toUpperCase()] = A[i];
+    }
+    return _assetIdx[String(unit).toUpperCase()] || null;
+  }
+  /* The model rule for this round on this machine, or null. Matched on the
+     model text, as offRound is. `asset` is a register row ({n, cls, m, mk}). */
+  function modelRule(type, asset) {
+    var s = D.EVERY[type];
+    if (!asset || !s || !s.byModel) return null;
+    var model = (String(asset.m || '') + ' ' + String(asset.mk || '')).toUpperCase();
+    for (var i = 0; i < s.byModel.length; i++) {
+      var r = s.byModel[i];
+      if (r.model && model.indexOf(String(r.model).toUpperCase()) >= 0) return r;
+    }
+    return null;
+  }
+  D.modelRule = modelRule;
+  /* Is this machine ON this round by its model, whatever its class says? The
+     membership half of byModel — class membership is roundsOnClass's job on
+     the phone and gen_class_rounds's for 1C, and neither can see a model. */
+  D.scoped = function (type, asset) { return !!modelRule(type, asset); };
+  /* Every model with its own figure on this round, as [{model, h}] — what a
+     coverage row needs to say "500 h TR60" beside the class figures. */
+  D.byModel = function (type) {
+    var s = D.EVERY[type] || D.FALLBACK;
+    if (!s.byModel) return null;
+    return s.byModel.map(function (r) { return { model: r.model, h: r.h }; });
+  };
   /* Every class this round is walked on at its own stated figure, as
      [{cls, h}] — what a coverage row needs to say "1,000 h dozers ·
      4,000 h excavators" instead of one number that is wrong for one of them. */

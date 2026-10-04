@@ -4881,23 +4881,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=511"></script>
+<script src="../data/magnetic_plug.js?v=513"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=511"></script>
-<script src="../mobile/hme.js?v=511"></script>
-<script src="../mobile/mp-fc.js?v=511"></script>
-<script src="../mobile/rtw.js?v=511"></script>
-<script src="../mobile/hme-cascade.js?v=511"></script>
-<script src="../mobile/temp-limits.js?v=511"></script>
+<script src="../data/work_orders.js?v=513"></script>
+<script src="../mobile/hme.js?v=513"></script>
+<script src="../mobile/mp-fc.js?v=513"></script>
+<script src="../mobile/rtw.js?v=513"></script>
+<script src="../mobile/hme-cascade.js?v=513"></script>
+<script src="../mobile/temp-limits.js?v=513"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=511"></script>
-<script src="../mobile/normalize.js?v=511"></script>
-<script src="../mobile/terms.js?v=511"></script>
+<script src="../mobile/assets.js?v=513"></script>
+<script src="../mobile/normalize.js?v=513"></script>
+<script src="../mobile/terms.js?v=513"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -4916,19 +4916,19 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=511"></script>
-<script src="../mobile/edits.js?v=511"></script>
-<script src="../mobile/due.js?v=511"></script>
-<script src="../mobile/wear.js?v=511"></script>
-<script src="../mobile/wear-map.js?v=511"></script>
-<script src="../mobile/lube.js?v=511"></script>
-<script src="../mobile/lube-overrides.js?v=511"></script>
-<script src="../mobile/lube2027.js?v=511"></script>
-<script src="../mobile/lube-tds.js?v=511"></script>
+<script src="../mobile/grade.js?v=513"></script>
+<script src="../mobile/edits.js?v=513"></script>
+<script src="../mobile/due.js?v=513"></script>
+<script src="../mobile/wear.js?v=513"></script>
+<script src="../mobile/wear-map.js?v=513"></script>
+<script src="../mobile/lube.js?v=513"></script>
+<script src="../mobile/lube-overrides.js?v=513"></script>
+<script src="../mobile/lube2027.js?v=513"></script>
+<script src="../mobile/lube-tds.js?v=513"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=511"></script>
-<script src="../mobile/machine-photos.js?v=511"></script>
+<script src="../mobile/upload-defaults.js?v=513"></script>
+<script src="../mobile/machine-photos.js?v=513"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -4937,17 +4937,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=511"></script>
-<script src="../mobile/get.js?v=511"></script>
-<script src="../mobile/points.js?v=511"></script>
-<script src="../mobile/uc-points.js?v=511"></script>
-<script src="../mobile/inspect-guide.js?v=511"></script>
-<script src="../mobile/get-figs.js?v=511"></script>
-<script src="../mobile/body-points.js?v=511"></script>
-<script src="../mobile/body-map.js?v=511"></script>
-<script src="../mobile/jspdf.umd.min.js?v=511"></script>
-<script src="../mobile/html2canvas.min.js?v=511"></script>
-<script src="../mobile/report-core.js?v=511"></script>
+<script src="../mobile/machine-fig.js?v=513"></script>
+<script src="../mobile/get.js?v=513"></script>
+<script src="../mobile/points.js?v=513"></script>
+<script src="../mobile/uc-points.js?v=513"></script>
+<script src="../mobile/inspect-guide.js?v=513"></script>
+<script src="../mobile/get-figs.js?v=513"></script>
+<script src="../mobile/body-points.js?v=513"></script>
+<script src="../mobile/body-map.js?v=513"></script>
+<script src="../mobile/jspdf.umd.min.js?v=513"></script>
+<script src="../mobile/html2canvas.min.js?v=513"></script>
+<script src="../mobile/report-core.js?v=513"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -5117,7 +5117,7 @@ const I18N={
   tab_equipment:"Equipment History", tab_reports:"Reports", tab_lube:"Lubrication",
   cls_HT:"Rigid dump truck", cls_AT:"Articulated truck", cls_EXC:"Excavator",
   cls_DOZ:"Track dozer", cls_LDR:"Loader", cls_GRD:"Grader", cls_DRB:"Blast drill",
-  cls_DRE:"Exploration drill", cls_HRB:"Rock breaker", cls_CRJ:"Jaw crusher",
+  cls_DRE:"Exploration drill", cls_HRB:"Rock breaker", cls_CRJ:"Jaw crusher", cls_CRN:"Mobile crane",
   cls_CRC:"Cone crusher", cls_SCR:"Screener", cls_GEN:"Support equipment",
   lp_title:"The programme, honestly counted",
   lp_sub:"How much of the fleet is audited, verified and standardised — against the register, not against the machines somebody happened to visit.",
@@ -5576,7 +5576,7 @@ const I18N={
   type_MP:"Magnetic Plug", type_FC:"Filter Cut", type_INSP:"Inspection", type_TEMP:"Temperature",
   type_UC:"Undercarriage", type_GET:"Ground engaging tools", type_TB:"Dump body liner",
   type_LUBE:"Lubrication audit", type_RTW:"Return to Work",
-  lube_product:"Product in service", lube_evidence:"Evidence", lube_sampled:"Sampled",
+  lube_product:"Product in service", lube_evidence:"Evidence", lube_sampled:"Sampled", lube_filtered:"Offline filtration done",
   lube_unlisted:"Not on the catalogue",
   lube_ev_label:"Label photographed", lube_ev_batch:"Tank / pump batch",
   lube_ev_told:"Reported, not shown",
@@ -5653,7 +5653,7 @@ const I18N={
   cv_sub:"Compliance is rounds completed before they were overdue, of every round that came due. Coverage is machines each round applies to, against machines it reached, in the period selected above. A finding you never went to look for is not an absence of findings.",
   cv_th_round:"Round", cv_th_seen:"Reached", cv_th_insp:"Insp.",
   cv_th_never:"Never", cv_th_over:"Overdue", cv_th_who:"By",
-  cv_every:"every {d} days", cv_every_h:"every {h} h", cv_every_h_cls:"{h} h {c}", cv_carried:"(carried forward)", cv_scoped:"machines this round fits", cv_p_days:"the last {d} days", cv_p_all:"all time",
+  cv_every:"every {d} days", cv_every_h:"every {h} h", cv_every_h_cls:"{h} h {c}", cv_carried:"(carried forward)", cv_others:"(other machines)", cv_scoped:"machines this round fits", cv_p_days:"the last {d} days", cv_p_all:"all time",
   cv_note:"Against a register of {n} unit(s), over {p}. \u201cNever inspected\u201d and \u201coverdue\u201d look at the whole history, not just the period, because a machine is overdue whatever window you are reading.",
   cv_empty:"Nothing to measure coverage against in this selection.",
   tr_title:"Direction — is the fleet getting better or worse",
@@ -6128,7 +6128,7 @@ const I18N={
   tab_equipment:"История по технике", tab_reports:"Отчёты", tab_lube:"Смазочные материалы",
   cls_HT:"Карьерный самосвал", cls_AT:"Сочленённый самосвал", cls_EXC:"Экскаватор",
   cls_DOZ:"Бульдозер", cls_LDR:"Погрузчик", cls_GRD:"Автогрейдер", cls_DRB:"Буровой станок",
-  cls_DRE:"Разведочное бурение", cls_HRB:"Гидромолот", cls_CRJ:"Щековая дробилка",
+  cls_DRE:"Разведочное бурение", cls_HRB:"Гидромолот", cls_CRJ:"Щековая дробилка", cls_CRN:"Автокран",
   cls_CRC:"Конусная дробилка", cls_SCR:"Грохот", cls_GEN:"Вспомогательная техника",
   lube_kt_cov:"Охват метрик", lube_kt_cov_tag:"программа", lube_kt_cov_note:"из {n} в реестре",
   lube_kt_src:"Источник указан", lube_kt_src_tag:"справочник", lube_kt_src_note:"из {n} узлов есть заводская спецификация",
@@ -6565,7 +6565,7 @@ const I18N={
   type_MP:"Магнитная пробка", type_FC:"Разрез фильтра", type_INSP:"Осмотр", type_TEMP:"Температура",
   type_UC:"Ходовая часть", type_GET:"Рабочий инструмент", type_TB:"Футеровка кузова",
   type_LUBE:"Аудит смазочных материалов", type_RTW:"Возврат в работу",
-  lube_product:"Продукт в узле", lube_evidence:"Подтверждение", lube_sampled:"Проба отобрана",
+  lube_product:"Продукт в узле", lube_evidence:"Подтверждение", lube_sampled:"Проба отобрана", lube_filtered:"Автономная фильтрация выполнена",
   lube_unlisted:"Нет в каталоге",
   lube_ev_label:"Фото этикетки", lube_ev_batch:"Партия из ёмкости",
   lube_ev_told:"Со слов",
@@ -6642,7 +6642,7 @@ const I18N={
   cv_sub:"Соблюдение сроков — обходы, пройденные до просрочки, из всех наступивших. Охват — машины, к которым применим обход, против машин, до которых он дошёл, за выбранный период. Отсутствие дефектов там, где никто не смотрел, — это не отсутствие дефектов.",
   cv_th_round:"Обход", cv_th_seen:"Охват", cv_th_insp:"Осм.",
   cv_th_never:"Ни разу", cv_th_over:"Просроч.", cv_th_who:"Кто",
-  cv_every:"каждые {d} сут", cv_every_h:"каждые {h} ч", cv_every_h_cls:"{h} ч — {c}", cv_carried:"(перенесено)", cv_scoped:"машины, к которым применим обход", cv_p_days:"последние {d} сут", cv_p_all:"всё время",
+  cv_every:"каждые {d} сут", cv_every_h:"каждые {h} ч", cv_every_h_cls:"{h} ч — {c}", cv_carried:"(перенесено)", cv_others:"(остальные машины)", cv_scoped:"машины, к которым применим обход", cv_p_days:"последние {d} сут", cv_p_all:"всё время",
   cv_note:"По реестру из {n} ед., за {p}. «Не проводился» и «просрочено» считаются по всей истории, а не только по периоду.",
   cv_empty:"В этой выборке нечего сопоставить с охватом.",
   tr_title:"Динамика — парк улучшается или ухудшается?",
@@ -7341,7 +7341,7 @@ function fromBundled(){
       action:"",actionLabel:"",wo:"",defectCode:"",defect:"",iso:"",isoMode:"",causeCode:"",cause:"",
       particle:p.particleCount||"",comp:p.componentHours||"",oil:p.oilHours||"",comment:p.comment||"",
       lubeProduct:p.lubeProduct||"",lubeUnlisted:p.lubeUnlisted||0,
-      lubeEvidence:p.lubeEvidence||"",lubeSampled:p.lubeSampled||0,
+      lubeEvidence:p.lubeEvidence||"",lubeSampled:p.lubeSampled||0,lubeFiltered:p.lubeFiltered||0,
       photo:p.photo||"",photos:p.photo?1:0,video:0})),src:"bundled"}));
 }
 /* A store that parses but is not the shape we expect is worse than one that does
@@ -7570,6 +7570,7 @@ function lubeDL(rec, i){
       i.lubeUnlisted?` <span class="warnv">${esc(t("lube_unlisted"))}</span>`:""}</dd>`+
     (ev?`<dt>${esc(t("lube_evidence"))}</dt><dd>${esc(ev)}</dd>`:"")+
     (i.lubeSampled?`<dt>${esc(t("lube_sampled"))}</dt><dd>${esc(t("lube_sampled"))}</dd>`:"")+
+    (i.lubeFiltered?`<dt>${esc(t("lube_filtered"))}</dt><dd>${esc(t("lube_filtered"))}</dd>`:"")+
     (v?`<dt>&nbsp;</dt><dd><span class="band b-${esc(v.b||"none")}">${esc(t(v.k))}</span></dd>`:"")+
     `</dl>`;
 }
@@ -11512,9 +11513,12 @@ const HPD=()=>(window.DUE&&DUE.HOURS_PER_DAY)||20;
 /* This round's interval for THIS machine, in days. */
 function ivDaysFor(ty,a){
   if(!window.DUE) return 30;
-  const h=DUE.hours(ty,null,a&&a.cls);
+  /* The unit as well as the class: a machine's own or its MODEL's figure
+     (DZ011's filter cut, the TR60's lubrication audit) is only ever read when
+     the machine is named. */
+  const h=DUE.hours(ty,null,a&&a.cls,a&&a.n);
   if(h!=null) return h/HPD();
-  const sp=DUE.spec(ty,a&&a.cls);
+  const sp=DUE.spec(ty,a&&a.cls,a&&a.n);
   return (sp&&sp.d)||30;
 }
 /* Which machines a round can be done on at all. Returns null where the answer
@@ -11590,9 +11594,12 @@ function coverageRows(){
     const cutOf={};
     pool.forEach(a=>{ const d=last.get(a.n);
       if(!d){ never++; return; }
-      const k=a.cls||"";
-      if(!cutOf[k]) cutOf[k]=DUE.daysAgo(ivDaysFor(ty,a));
-      if(d<cutOf[k]) overdue++; });
+      /* Keyed on the interval itself, not the class: two machines of one class
+         can run one round at different figures (a TR60's lubrication audit at
+         500 h beside the rest of its class). */
+      const dd=ivDaysFor(ty,a);
+      if(!cutOf[dd]) cutOf[dd]=DUE.daysAgo(dd);
+      if(d<cutOf[dd]) overdue++; });
     /* Which of the classes this round actually fits carry a stated figure, so
        the row can name them instead of printing one number for both. */
     /* Every class this round fits, with the figure each is actually walked on
@@ -11606,6 +11613,7 @@ function coverageRows(){
     out.push({ ty, seen:seen.size, total, inspections:mine.length,
                pc: total?Math.round(seen.size/total*100):0,
                never, overdue, iv, ivh, perCls, scoped:!!can,
+               byModel:(window.DUE&&DUE.byModel)?DUE.byModel(ty):null,
                people:new Set(mine.map(r=>r.by).filter(Boolean)).size });
   });
   return { rows:out, days, fleet:fleet.length };
@@ -11627,6 +11635,14 @@ function covBar(pc){
    ride on the title, because hours are what the machine wears in and the
    calendar is a rendering of them. */
 function cvEvery(r){
+  const base=cvEveryBase(r), bm=r.byModel||[];
+  if(!bm.length) return base;
+  /* A model with its own figure, then what everybody else on the round runs
+     on — "500 h NHL TR60 · every 30 days (other machines)". */
+  return bm.map(m=>t("cv_every_h_cls",{h:num(m.h), c:m.model})).join(" · ")
+    +" · "+base+" "+t("cv_others");
+}
+function cvEveryBase(r){
   const per=r.perCls||[];
   const hrs=[...new Set(per.map(x=>x.h).filter(h=>h!=null))];
   /* One figure for every machine it fits: say it once. */
@@ -18434,6 +18450,21 @@ function dueTabRows(){
    more than the phone can. Kept apart from dueTabRows because these rows have
    no last date and no clock — every reader of that list does arithmetic on
    both. */
+/* THE ROUNDS A MACHINE IS ON: its class's, plus any a MODEL rule puts it on
+   (due.js byModel — the Terex TR60 on the lubrication audit). The phone's
+   roundsOfUnit, by the same rule; a class cannot see a model, so a reader that
+   turns a machine into a list of rounds reads both. */
+function unitRoundsOf(a,k,on){
+  const base=on[k];
+  if(!window.DUE || !DUE.scoped || !DUE.EVERY) return base;
+  let out=base;
+  Object.keys(DUE.EVERY).forEach(ty=>{
+    if(!DUE.scoped(ty,a) || (base && base.has(ty))) return;
+    if(out===base) out=new Set(base||[]);
+    out.add(ty);
+  });
+  return out;
+}
 function dueNeverRows(only){
   const out=[];
   if(!window.ASSETS || !window.DUE) return out;
@@ -18484,7 +18515,7 @@ function dueNeverRows(only){
   (window.ASSETS||[]).forEach(a=>{
     if(!a || !a.n) return;
     const k=String(a.cls||"").toUpperCase(); if(!k || k==="GEN" || k==="ALL") return;
-    const rounds=on[k]; if(!rounds) return;
+    const rounds=unitRoundsOf(a,k,on); if(!rounds) return;
     const unit=String(a.n).toUpperCase();
     rounds.forEach(ty=>{
       if(only && ty!==only) return;
@@ -21487,10 +21518,10 @@ document.querySelector(".lang").addEventListener("click",e=>{
   setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 })();
 </script>
-<script src="../dashboard/drive.js?v=511"></script>
-<script src="../dashboard/sync-adapter.js?v=511"></script>
-<script src="../dashboard/report.js?v=511"></script>
-<script src="../dashboard/reliability.js?v=511"></script>
+<script src="../dashboard/drive.js?v=513"></script>
+<script src="../dashboard/sync-adapter.js?v=513"></script>
+<script src="../dashboard/report.js?v=513"></script>
+<script src="../dashboard/reliability.js?v=513"></script>
 <script>
 /* THE CLOSED FILTER SAYS WHAT IS CHOSEN. A dropdown narrower than its option
    text ellipsises ("All t…", audit of 2026-10-01). Between 1331 and 1500 px
