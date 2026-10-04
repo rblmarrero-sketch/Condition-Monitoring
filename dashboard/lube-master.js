@@ -204,7 +204,10 @@
     if (!configured() || !root.CMDrive.getDoc) {
       S.state = "off"; S.doc = null; apply(null); return null;
     }
-    S.state = S.doc ? S.state : "loading";
+    /* "Reading…" only until the folder has answered once. A refresh of a
+       folder that has already said "nothing decided yet" keeps saying that
+       while it asks again, instead of flickering every three minutes. */
+    if (S.state !== "ready" && S.state !== "none") S.state = "loading";
     try {
       const d = await root.CMDrive.getDoc(DOC);
       S.doc = d || null; S.state = d ? "ready" : "none"; S.err = ""; S.loadedAt = Date.now();
