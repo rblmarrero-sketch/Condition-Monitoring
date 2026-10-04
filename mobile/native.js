@@ -294,7 +294,14 @@
   global.CMNative = {
     get native() { return NATIVE; },
     where: where,
-    photo: function (opts) { return NATIVE ? nativePhoto(opts) : webPhoto(opts); },
+    /* In a browser the photograph comes from the page's own framed camera (a
+       square viewfinder — see framedPhoto in index.html), which itself falls
+       back to the file input webPhoto drives. The shell keeps its platform camera. */
+    photo: function (opts) {
+      if (NATIVE) return nativePhoto(opts);
+      if (typeof global.framedPhoto === "function") return global.framedPhoto((opts && opts.input) || "camera");
+      return webPhoto(opts);
+    },
     pick: nativePick,
     files: Files,
     net: Net,

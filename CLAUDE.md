@@ -4017,6 +4017,42 @@ deploy on the VM; `tests/duepm.cjs` §3b builds the expected text from the
 fixture's own dates in English and Russian. The CM tab's own headings are
 unchanged: its window is a fortnight, where a bare day number is unambiguous.
 
+**THE CAMERA NOW HAS A SQUARE FRAME, BECAUSE THE REPORT'S TILE IS A SQUARE.**
+Asked from the field on 2026-10-04: "put a square or frame when they take photo
+so sizes will be good, not expanded or distorted ... it looks the same from photo
+to report ... even in landscape or portrait." The report prints every photograph
+in one square tile cropped to fill it (`tiledRow`), so a landscape and a portrait
+frame from the phone's own camera each lost a different part of the picture to
+that crop, and the inspector never saw which. A web page cannot put a frame on the
+phone's own camera, so `framedPhoto()` (mobile/index.html) is the page's own camera
+screen: the viewfinder IS a square (`.cam-box`, video `object-fit:cover`) and the
+capture takes the centre square of the stream — the same area by construction, not a
+mask over a bigger picture. It is wired in through `CMNative.photo()` in
+`mobile/native.js` (browser path only; the App Store shell keeps its platform
+camera), so the component photograph and the machine photographs both get it, and it
+returns a File like the platform camera does: `intakeNoted` -> `ownBytes`, the shrink,
+the manifest and the cap are all unchanged. It never traps anybody: no camera API, a
+refused permission (remembered for the session, so the phone is not asked on every
+tap) or a capture that produces nothing all go to the phone's own camera input, and
+"Phone camera" on the screen does the same on purpose — that camera has the flash and
+the zoom. NOT changed: photographs picked from the gallery keep their own shape (the
+report still crops them to the tile), and RTW's photo buttons open the OS chooser, not
+a camera.
+
+`tests/framecam.cjs` runs the real screen against Chromium's fake camera, portrait
+and landscape, and found three things a screenshot or a DOM read would not have: a tap
+on Cancel while the stream was still starting was lost (the buttons were wired after
+the video played), a shutter press in that same moment was ignored with nothing on
+screen saying so (it is greyed out until there are pixels now — "a button that refuses
+a press must look like one"), and the shutter was squeezed to 48 px by flexbox. A
+screenshot found the rest: Cancel stretched to the width of the screen and squeezed
+its hint into a one-word-wide column, and the shutter sat off-centre. The first draft of
+the hook sat in `takePhoto()` and never ran, because `window.CMNative` always exists in
+a browser (it wraps the file input); the browser path is `CMNative.photo()` itself.
+The first draft of the test also passed everything: `ok(c, n)` was called as
+`ok(n, c)`, so every assertion was a non-empty string. Phone only; nothing to deploy
+on the VM.
+
 ---
 
 ## Secrets
