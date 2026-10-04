@@ -4392,7 +4392,7 @@ const I18N={
   type_MP:"Magnetic Plug", type_FC:"Filter Cut", type_INSP:"Inspection", type_TEMP:"Temperature",
   type_UC:"Undercarriage", type_GET:"Ground engaging tools", type_TB:"Dump body liner",
   type_LUBE:"Lubrication audit", type_RTW:"Return to Work",
-  lube_product:"Product in service", lube_evidence:"Evidence", lube_sampled:"Sampled", lube_filtered:"Offline filtration done",
+  lube_product:"Product in service", lube_evidence:"Evidence", lube_sampled:"Sampled", lube_sno:"Sample number", lube_filtered:"Offline filtration done",
   lube_unlisted:"Not on the catalogue",
   lube_ev_label:"Label photographed", lube_ev_batch:"Tank / pump batch",
   lube_ev_told:"Reported, not shown",
@@ -5293,7 +5293,7 @@ const I18N={
   type_MP:"Магнитная пробка", type_FC:"Разрез фильтра", type_INSP:"Осмотр", type_TEMP:"Температура",
   type_UC:"Ходовая часть", type_GET:"Рабочий инструмент", type_TB:"Футеровка кузова",
   type_LUBE:"Аудит смазочных материалов", type_RTW:"Возврат в работу",
-  lube_product:"Продукт в узле", lube_evidence:"Подтверждение", lube_sampled:"Проба отобрана", lube_filtered:"Автономная фильтрация выполнена",
+  lube_product:"Продукт в узле", lube_evidence:"Подтверждение", lube_sampled:"Проба отобрана", lube_sno:"Номер пробы", lube_filtered:"Автономная фильтрация выполнена",
   lube_unlisted:"Нет в каталоге",
   lube_ev_label:"Фото этикетки", lube_ev_batch:"Партия из ёмкости",
   lube_ev_told:"Со слов",
@@ -6015,7 +6015,7 @@ function fromBundled(){
       action:"",actionLabel:"",wo:"",defectCode:"",defect:"",iso:"",isoMode:"",causeCode:"",cause:"",
       particle:p.particleCount||"",comp:p.componentHours||"",oil:p.oilHours||"",comment:p.comment||"",
       lubeProduct:p.lubeProduct||"",lubeUnlisted:p.lubeUnlisted||0,
-      lubeEvidence:p.lubeEvidence||"",lubeSampled:p.lubeSampled||0,lubeFiltered:p.lubeFiltered||0,
+      lubeEvidence:p.lubeEvidence||"",lubeSampled:p.lubeSampled||0,lubeSampleNo:p.lubeSampleNo||"",lubeFiltered:p.lubeFiltered||0,
       photo:p.photo||"",photos:p.photo?1:0,video:0})),src:"bundled"}));
 }
 /* A store that parses but is not the shape we expect is worse than one that does
@@ -6251,6 +6251,7 @@ function lubeDL(rec, i){
       i.lubeUnlisted?` <span class="warnv">${esc(t("lube_unlisted"))}</span>`:""}</dd>`+
     (ev?`<dt>${esc(t("lube_evidence"))}</dt><dd>${esc(ev)}</dd>`:"")+
     (i.lubeSampled?`<dt>${esc(t("lube_sampled"))}</dt><dd>${esc(t("lube_sampled"))}</dd>`:"")+
+    (i.lubeSampleNo?`<dt>${esc(t("lube_sno"))}</dt><dd>${esc(i.lubeSampleNo)}</dd>`:"")+
     (i.lubeFiltered?`<dt>${esc(t("lube_filtered"))}</dt><dd>${esc(t("lube_filtered"))}</dd>`:"")+
     (v?`<dt>&nbsp;</dt><dd><span class="band b-${esc(v.b||"none")}">${esc(t(v.k))}</span></dd>`:"")+
     `</dl>`;

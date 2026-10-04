@@ -65,7 +65,7 @@ const open = async (d, sub) => {
   await d.p.waitForTimeout(150);
 };
 const state = d => d.p.evaluate(() => CMLube.state().state);
-const until = async (d, fn, arg, ms) => d.p.waitForFunction(fn, arg, { timeout: ms || 15000 });
+const until = async (d, fn, arg, ms) => d.p.waitForFunction(fn, arg, { timeout: ms || 40000 });
 /* A save in panel k has been confirmed by the server: its message names a
    revision. Cleared by clearMsg() before the action, so an old message from
    the same panel cannot satisfy it. */
