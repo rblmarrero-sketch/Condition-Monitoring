@@ -4311,6 +4311,14 @@ model name no longer makes one row three times the next. Both office pages,
 identically; dashboard-next keeps its column filters. Nothing to deploy on
 the VM.
 
+**AND PROGRAMME COVERAGE (build 519).** The scorecard's metric names (row
+headers) sat lower than the bar and count beside them and did not carry the
+row stripe, so a metric could not be followed across. `table.grid.scorecard`
+is fixed-layout now (metric 26%, coverage the rest, result 170 px, source
+150 px, gap 90 px) with every cell centred on the row's middle and the row
+header striped and highlighted with its row. CSS only, both office pages;
+nothing to deploy on the VM.
+
 ---
 
 ## Secrets
