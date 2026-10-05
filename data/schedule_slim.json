@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-05T18:48:03+00:00",
+  "generated": "2026-10-05T19:44:48+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -257,6 +257,20 @@
           "MP"
         ],
         "plan": "2026-09-28",
+        "priority": "P3 Planned (PM)"
+      }
+    ],
+    "TK004": [
+      {
+        "wo": "GD-004716",
+        "hours": 2000,
+        "types": [
+          "FC",
+          "INSP",
+          "MP",
+          "TB"
+        ],
+        "plan": "2025-06-02",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -9909,6 +9923,114 @@
       "type": "1000 Hours service Planned",
       "hours": 1000,
       "plan": "2025-12-30",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "GD-005001",
+      "equip": "GE058",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "500h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2025-09-22",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2025-09-22",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "GD-010925",
+      "equip": "BSL003",
+      "cls": "",
+      "comp": "",
+      "desc": "500h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2025-09-02",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2025-09-02",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "GD-007363",
+      "equip": "TK038",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Filter Cut / General Inspection / Magnetic Plug / Dump Body Liner",
+      "priority": "P3 Planned (PM)",
+      "raised": "2025-06-04",
+      "type": "2000 Hours service Planned",
+      "hours": 2000,
+      "plan": "2025-06-04",
+      "status": "In progress",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "inprogress",
+      "completed": ""
+    },
+    {
+      "wo": "GD-004716",
+      "equip": "TK004",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Filter Cut / General Inspection / Magnetic Plug / Dump Body Liner",
+      "priority": "P3 Planned (PM)",
+      "raised": "2025-06-02",
+      "type": "2000 Hours service Planned",
+      "hours": 2000,
+      "plan": "2025-06-02",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "GD-001272",
+      "equip": "LD005",
+      "cls": "LDR",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2025-04-15",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2025-04-15",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "AC-006378",
+      "equip": "TK134",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "500h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2025-02-25",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2025-02-25",
       "status": "Elimination scheduled",
       "request": "",
       "defType": "",
