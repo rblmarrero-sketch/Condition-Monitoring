@@ -2197,6 +2197,14 @@
   #syGapTbl.sytbl tbody td,#syDevTbl.sytbl tbody td{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:middle;}
   #syGapTbl.sytbl thead th,#syDevTbl.sytbl thead th{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   #syGapTbl.sytbl th.cwfh input.cwcf,#syDevTbl.sytbl th.cwfh input.cwcf{width:100%;box-sizing:border-box;}
+  /* ── Equipment History, one set of columns for every visit (build 528) ───
+     Each visit's table sized its own columns, so Component, Defect and the
+     rest moved left and right from one visit to the next down the page. One
+     colgroup (renderHistList's HCOLG), fixed layout, one line a row. */
+  .insp table.histtbl{table-layout:fixed;width:100%;}
+  .insp table.histtbl thead th{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .insp table.histtbl th.cwfh input.cwcf{width:100%;box-sizing:border-box;}
+  .insp table.histtbl tbody td{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:middle;}
   td.ed{cursor:text;}
   td.ed:hover{background:color-mix(in srgb,var(--accent) 7%,transparent);}
   td.ed.editing{padding:2px 6px;}
@@ -3894,23 +3902,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=527"></script>
+<script src="../data/magnetic_plug.js?v=528"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=527"></script>
-<script src="../mobile/hme.js?v=527"></script>
-<script src="../mobile/mp-fc.js?v=527"></script>
-<script src="../mobile/rtw.js?v=527"></script>
-<script src="../mobile/hme-cascade.js?v=527"></script>
-<script src="../mobile/temp-limits.js?v=527"></script>
+<script src="../data/work_orders.js?v=528"></script>
+<script src="../mobile/hme.js?v=528"></script>
+<script src="../mobile/mp-fc.js?v=528"></script>
+<script src="../mobile/rtw.js?v=528"></script>
+<script src="../mobile/hme-cascade.js?v=528"></script>
+<script src="../mobile/temp-limits.js?v=528"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=527"></script>
-<script src="../mobile/normalize.js?v=527"></script>
-<script src="../mobile/terms.js?v=527"></script>
+<script src="../mobile/assets.js?v=528"></script>
+<script src="../mobile/normalize.js?v=528"></script>
+<script src="../mobile/terms.js?v=528"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -3929,20 +3937,20 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=527"></script>
-<script src="../mobile/edits.js?v=527"></script>
-<script src="../mobile/due.js?v=527"></script>
-<script src="../mobile/wear.js?v=527"></script>
-<script src="../mobile/wear-map.js?v=527"></script>
-<script src="../mobile/lube.js?v=527"></script>
-<script src="../mobile/lube-overrides.js?v=527"></script>
-<script src="../mobile/lube2027.js?v=527"></script>
-<script src="../mobile/lube-tds.js?v=527"></script>
-<script src="lube-master.js?v=527"></script>
+<script src="../mobile/grade.js?v=528"></script>
+<script src="../mobile/edits.js?v=528"></script>
+<script src="../mobile/due.js?v=528"></script>
+<script src="../mobile/wear.js?v=528"></script>
+<script src="../mobile/wear-map.js?v=528"></script>
+<script src="../mobile/lube.js?v=528"></script>
+<script src="../mobile/lube-overrides.js?v=528"></script>
+<script src="../mobile/lube2027.js?v=528"></script>
+<script src="../mobile/lube-tds.js?v=528"></script>
+<script src="lube-master.js?v=528"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=527"></script>
-<script src="../mobile/machine-photos.js?v=527"></script>
+<script src="../mobile/upload-defaults.js?v=528"></script>
+<script src="../mobile/machine-photos.js?v=528"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3951,17 +3959,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=527"></script>
-<script src="../mobile/get.js?v=527"></script>
-<script src="../mobile/points.js?v=527"></script>
-<script src="../mobile/uc-points.js?v=527"></script>
-<script src="../mobile/inspect-guide.js?v=527"></script>
-<script src="../mobile/get-figs.js?v=527"></script>
-<script src="../mobile/body-points.js?v=527"></script>
-<script src="../mobile/body-map.js?v=527"></script>
-<script src="../mobile/jspdf.umd.min.js?v=527"></script>
-<script src="../mobile/html2canvas.min.js?v=527"></script>
-<script src="../mobile/report-core.js?v=527"></script>
+<script src="../mobile/machine-fig.js?v=528"></script>
+<script src="../mobile/get.js?v=528"></script>
+<script src="../mobile/points.js?v=528"></script>
+<script src="../mobile/uc-points.js?v=528"></script>
+<script src="../mobile/inspect-guide.js?v=528"></script>
+<script src="../mobile/get-figs.js?v=528"></script>
+<script src="../mobile/body-points.js?v=528"></script>
+<script src="../mobile/body-map.js?v=528"></script>
+<script src="../mobile/jspdf.umd.min.js?v=528"></script>
+<script src="../mobile/html2canvas.min.js?v=528"></script>
+<script src="../mobile/report-core.js?v=528"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -9502,6 +9510,10 @@ function histMedia(src,rec,withHidden){
 function renderHistList(recs){
   if(!recs.length) return `<div class="empty">${esc(t("hv_none"))}</div>`;
   const th=k=>`<th>${esc(t(k))}</th>`;
+  /* Point · Component · Grade · Defect · Direct cause · Action · Photos ·
+     Finding — the same widths in every visit, so a column is in one place
+     all the way down the page; the three columns of words share the rest. */
+  const HCOLG=`<colgroup>${[86,190,128,0,150,0,88,0].map(w=>w?`<col style="width:${w}px">`:"<col>").join("")}</colgroup>`;
   let n=0;
   /* Grouped by round, not flattened. A round is a visit — who went, on what
      hour meter, whether it was corrected, whether two phones sent it — and
@@ -9545,7 +9557,7 @@ function renderHistList(recs){
       <button class="btn" data-edit="${esc(ekOf(rec))}" style="padding:2px 9px;font-size:11.5px">${esc(t("ed_edit"))}</button></div>
       ${rec._note?`<div class="sub" style="margin:6px 12px 0">📝 ${esc(rec._note)}</div>`:""}
       ${isWearType(rec.type)?ucBlock(rec):""}
-      ${rows?`<div class="tblwrap"><table class="grid"><thead><tr>${
+      ${rows?`<div class="tblwrap"><table class="grid histtbl">${HCOLG}<thead><tr>${
         th("hh_point")}${th("th_point")}${th("th_sev")}${th("th_defect")}${th("th_cause")}${
         th("hh_action")}${th("hh_photos")}${th("hh_finding")}</tr></thead><tbody>${rows}</tbody></table></div>`:""}
     </div>`;
@@ -18611,10 +18623,10 @@ document.querySelector(".lang").addEventListener("click",e=>{
   setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 })();
 </script>
-<script src="drive.js?v=527"></script>
-<script src="sync-adapter.js?v=527"></script>
-<script src="report.js?v=527"></script>
-<script src="reliability.js?v=527"></script>
+<script src="drive.js?v=528"></script>
+<script src="sync-adapter.js?v=528"></script>
+<script src="report.js?v=528"></script>
+<script src="reliability.js?v=528"></script>
 <script>
 /* THE CLOSED FILTER SAYS WHAT IS CHOSEN. A dropdown narrower than its option
    text ellipsises ("All t…", audit of 2026-10-01). Between 1331 and 1500 px

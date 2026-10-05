@@ -4472,6 +4472,17 @@ than vanish under the ellipsis. The correction table keeps its multi-line
 cells: a correction is read, not scanned. Dashboard only; nothing to deploy
 on the VM.
 
+**AND EQUIPMENT HISTORY (build 528).** The list view is one table per visit
+(see "Equipment History has no column filter, on purpose"), and each one
+sized its columns to its own content, so Grade, Defect and Action sat at a
+different x in every visit down the page and a column could not be followed
+from one round to the next. Every visit's table now carries the same
+`colgroup` (`HCOLG` in `renderHistList`: Point 86, Component 190, Grade 128,
+Direct cause 150, Photos 88 px; Defect, Action and Finding share the rest)
+under `table.histtbl`, fixed layout, one line a row, the full text on hover.
+The undercarriage wear table and the gallery view are unchanged. Both office
+pages; dashboard only, nothing to deploy on the VM.
+
 ---
 
 ## Secrets
