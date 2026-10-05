@@ -4355,6 +4355,24 @@ inspected" is warning-ink text here, as on the Actions register. The h/day
 header may wrap to two lines; nothing else in the table does. Selectors the
 suites read are unchanged. Dashboard only; nothing to deploy on the VM.
 
+**AND PLAN VS ACTUAL (build 522).** "fix the Plan vs Actual tables too". The
+main table on the main page wrapped every row onto two to six lines (the
+service, and two status pills stacked), and on dashboard-next the service was
+sliced off at its column's edge with no ellipsis, because the label sat in an
+inline-flex span the ellipsis cannot reach. Both pages: `table.patbl` is
+fixed with a colgroup from `renderPlanActualTab` (`PA_W`, per language), one
+line a row, a cut cell's text on its title, headers on theirs; "Pre-PM check
+due" is warning-ink text after the status pill rather than a second pill.
+The fortnight grid on the MAIN page was 2,525 px in a 1,168 px panel —
+every day as wide as its longest caption, which never wrapped. It is
+`table.pawk`, fixed, fifteen equal day columns under a 64 px unit column:
+pills may wrap to a second line, the order and the hours are one line each
+with an ellipsis, and the pre-check sentence wraps inside its cell to at most
+three lines with the whole of it on its title. dashboard-next's grid already
+fitted by its own deliberate single-caption design and is untouched. Fits
+without a sideways scroll at 1366 on both pages in English. Dashboard only;
+nothing to deploy on the VM.
+
 ---
 
 ## Secrets

@@ -2711,6 +2711,17 @@
     color:var(--warn-ink);font-weight:600;font-size:var(--t-micro,11px);}
   #ddList .shown>span:first-child{white-space:nowrap;}
   #ddList table.ddtbl th.cwfh input.cwcf{width:100%;box-sizing:border-box;}
+  /* ── Plan vs Actual, one line a row (build 522) ──────────────────────────
+     The main table: fixed columns from the colgroup renderPlanActualTab
+     writes (PA_W, per language), every cell one line with an ellipsis and its
+     whole text on its title where it was cut. The header may wrap, as it
+     already could on dashboard-next: two of its nine names are longer than
+     anything under them. */
+  #paList table.patbl{table-layout:fixed;width:100%;}
+  #paList table.patbl thead th{white-space:normal;line-height:1.25;overflow:hidden;text-overflow:ellipsis;}
+  #paList table.patbl th.cwfh input.cwcf{width:100%;box-sizing:border-box;}
+  #paList table.patbl tbody td{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:middle;}
+  #paList table.patbl .pa-need{margin-left:6px;color:var(--warn-ink);font-weight:600;font-size:var(--t-micro,11px);}
   td.ed{cursor:text;}
   td.ed:hover{background:color-mix(in srgb,var(--accent) 7%,transparent);}
   td.ed.editing{padding:2px 6px;}
@@ -4939,23 +4950,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=521"></script>
+<script src="../data/magnetic_plug.js?v=522"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=521"></script>
-<script src="../mobile/hme.js?v=521"></script>
-<script src="../mobile/mp-fc.js?v=521"></script>
-<script src="../mobile/rtw.js?v=521"></script>
-<script src="../mobile/hme-cascade.js?v=521"></script>
-<script src="../mobile/temp-limits.js?v=521"></script>
+<script src="../data/work_orders.js?v=522"></script>
+<script src="../mobile/hme.js?v=522"></script>
+<script src="../mobile/mp-fc.js?v=522"></script>
+<script src="../mobile/rtw.js?v=522"></script>
+<script src="../mobile/hme-cascade.js?v=522"></script>
+<script src="../mobile/temp-limits.js?v=522"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=521"></script>
-<script src="../mobile/normalize.js?v=521"></script>
-<script src="../mobile/terms.js?v=521"></script>
+<script src="../mobile/assets.js?v=522"></script>
+<script src="../mobile/normalize.js?v=522"></script>
+<script src="../mobile/terms.js?v=522"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -4974,20 +4985,20 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=521"></script>
-<script src="../mobile/edits.js?v=521"></script>
-<script src="../mobile/due.js?v=521"></script>
-<script src="../mobile/wear.js?v=521"></script>
-<script src="../mobile/wear-map.js?v=521"></script>
-<script src="../mobile/lube.js?v=521"></script>
-<script src="../mobile/lube-overrides.js?v=521"></script>
-<script src="../mobile/lube2027.js?v=521"></script>
-<script src="../mobile/lube-tds.js?v=521"></script>
-<script src="../dashboard/lube-master.js?v=521"></script>
+<script src="../mobile/grade.js?v=522"></script>
+<script src="../mobile/edits.js?v=522"></script>
+<script src="../mobile/due.js?v=522"></script>
+<script src="../mobile/wear.js?v=522"></script>
+<script src="../mobile/wear-map.js?v=522"></script>
+<script src="../mobile/lube.js?v=522"></script>
+<script src="../mobile/lube-overrides.js?v=522"></script>
+<script src="../mobile/lube2027.js?v=522"></script>
+<script src="../mobile/lube-tds.js?v=522"></script>
+<script src="../dashboard/lube-master.js?v=522"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=521"></script>
-<script src="../mobile/machine-photos.js?v=521"></script>
+<script src="../mobile/upload-defaults.js?v=522"></script>
+<script src="../mobile/machine-photos.js?v=522"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -4996,17 +5007,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=521"></script>
-<script src="../mobile/get.js?v=521"></script>
-<script src="../mobile/points.js?v=521"></script>
-<script src="../mobile/uc-points.js?v=521"></script>
-<script src="../mobile/inspect-guide.js?v=521"></script>
-<script src="../mobile/get-figs.js?v=521"></script>
-<script src="../mobile/body-points.js?v=521"></script>
-<script src="../mobile/body-map.js?v=521"></script>
-<script src="../mobile/jspdf.umd.min.js?v=521"></script>
-<script src="../mobile/html2canvas.min.js?v=521"></script>
-<script src="../mobile/report-core.js?v=521"></script>
+<script src="../mobile/machine-fig.js?v=522"></script>
+<script src="../mobile/get.js?v=522"></script>
+<script src="../mobile/points.js?v=522"></script>
+<script src="../mobile/uc-points.js?v=522"></script>
+<script src="../mobile/inspect-guide.js?v=522"></script>
+<script src="../mobile/get-figs.js?v=522"></script>
+<script src="../mobile/body-points.js?v=522"></script>
+<script src="../mobile/body-map.js?v=522"></script>
+<script src="../mobile/jspdf.umd.min.js?v=522"></script>
+<script src="../mobile/html2canvas.min.js?v=522"></script>
+<script src="../mobile/report-core.js?v=522"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -19481,7 +19492,9 @@ function renderPlanActualTab(){
        walked before THIS PM, so it is shown alongside the status chip, not
        instead of it. */
     return `<span class="pill ${cls}">${esc(lab)}</span>`
-      + (r.preInspNeeded ? ` <span class="pill w" title="${esc(t("pa_k_preinsp_s",{n:PA_PREINSP_DAYS}))}">${esc(t("pa_st_preinsp"))}</span>` : "");
+      /* Warning-ink text, not a second pill: two pills side by side in a
+         one-line cell lost the second one whole to the ellipsis. */
+      + (r.preInspNeeded ? `<span class="pa-need" title="${esc(t("pa_k_preinsp_s",{n:PA_PREINSP_DAYS}))}">${esc(t("pa_st_preinsp"))}</span>` : "");
   };
   /* THE DOT STANDS EVEN WHEN THE TOGGLE ABOVE IS HIDING EVERYTHING IT MARKS
      GREY -- with cmOnly on, every row here already is covered and the dot is
@@ -19492,9 +19505,12 @@ function renderPlanActualTab(){
   const svcCell=r=>{
     const covered=paCovered(r);
     const dot=`<span style="display:inline-block;width:6px;height:6px;border-radius:50%;`
-      +`background:${covered?"var(--good-ink)":"var(--muted)"};margin-right:6px;flex:none"></span>`;
+      +`background:${covered?"var(--good-ink)":"var(--muted)"};margin-right:6px;vertical-align:middle"></span>`;
     return `<td title="${esc(r.w.maintType||"")}" style="${covered?"":"color:var(--muted)"}">`
-      + `<span style="display:inline-flex;align-items:center">${dot}${esc(r.info.label)}</span></td>`;
+      /* Inline, not inline-flex: a flex box is one unbreakable piece, so the
+         ellipsis could not reach the label and a long service was simply
+         sliced off at the column's edge. */
+      + `<span>${dot}${esc(r.info.label)}</span></td>`;
   };
   const deltaTxt=r=>{
     if(r.status==="unsched") return "—";
@@ -19511,7 +19527,12 @@ function renderPlanActualTab(){
     status:t("pa_c_status")};
   const cwfhRow=`<tr>`+PA_COLS.map(k=>
     `<th class="cwfh"><input type="text" class="cwcf" data-k="${esc(k)}" value="${esc(paColQ[k]||"")}" placeholder="${esc(t("cw_colfilter_ph"))}" aria-label="${esc(t("cw_colfilter_aria",{c:PA_COL_LABEL[k]}))}"></th>`).join("")+`</tr>`;
-  box.innerHTML=`<div class="tblwrap scrollbox" style="--sb:560px"><table class="grid"><thead><tr>
+  /* Unit · WO · Service · Hours · Plan · Actual · Nearest CM round · CM vs
+     plan · Status. Widths for the columns whose content has a known size;
+     the service takes the rest. */
+  const PA_W = lang==="ru" ? [88,104,0,76,96,104,140,112,300] : [76,104,0,60,96,104,140,100,246];
+  const PA_COLG=`<colgroup>${PA_W.map(w=>w?`<col style="width:${w}px">`:"<col>").join("")}</colgroup>`;
+  box.innerHTML=`<div class="tblwrap scrollbox" style="--sb:560px"><table class="grid patbl" style="min-width:${PA_W.reduce((a,b)=>a+b,0)+120}px">${PA_COLG}<thead><tr>
     ${th("equip",t("pa_c_unit"))}${th("wo",t("pa_c_wo"))}${th("svc",t("pa_c_type"))}${th("hours",t("pa_c_hours"),"r")}
     ${th("plan",t("pa_c_plan"))}${th("actual",t("pa_c_woactual"))}
     ${th("cmround",t("pa_c_cmround"))}${th("delta",t("pa_c_delta"),"r")}
@@ -19530,6 +19551,11 @@ function renderPlanActualTab(){
       </tr>`).join("")
     + `</tbody></table></div>`
     + (pg.strip||"");
+  /* A cell the ellipsis cut carries its whole text on hover. */
+  box.querySelectorAll("table.patbl tbody td").forEach(td=>{
+    if(td.scrollWidth>td.clientWidth+1 && !td.title) td.title=td.textContent.replace(/\s+/g," ").trim(); });
+  box.querySelectorAll("table.patbl thead th[data-sort]").forEach(th=>{
+    const w=th.textContent.replace(/[▲▼↕]/g,"").replace(/\s+/g," ").trim(); if(w && !th.title) th.title=w; });
   box.querySelectorAll("th[data-sort]").forEach(el=>el.onclick=()=>paSortGo(el.dataset.sort));
   box.querySelectorAll("input.cwcf").forEach(inp=>inp.oninput=()=>{
     paColQ[inp.dataset.k]=inp.value;
@@ -21324,10 +21350,10 @@ document.querySelector(".lang").addEventListener("click",e=>{
   setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 })();
 </script>
-<script src="../dashboard/drive.js?v=521"></script>
-<script src="../dashboard/sync-adapter.js?v=521"></script>
-<script src="../dashboard/report.js?v=521"></script>
-<script src="../dashboard/reliability.js?v=521"></script>
+<script src="../dashboard/drive.js?v=522"></script>
+<script src="../dashboard/sync-adapter.js?v=522"></script>
+<script src="../dashboard/report.js?v=522"></script>
+<script src="../dashboard/reliability.js?v=522"></script>
 <script>
 /* THE CLOSED FILTER SAYS WHAT IS CHOSEN. A dropdown narrower than its option
    text ellipsises ("All t…", audit of 2026-10-01). Between 1331 and 1500 px
