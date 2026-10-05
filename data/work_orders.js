@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-05T02:02:06+00:00",
+  "generated": "2026-10-05T02:17:51+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 684,
@@ -1974,7 +1974,7 @@ window.CM_WO_DATA = {
       "system": "DZ008.HS (Hydraulic System / Гидравлическая система)",
       "priority": "P4 Planned (Repair)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "cause": "Поврежден шланга/линии",
+      "cause": "Поврежден прокладки",
       "causeFrom": "wo",
       "descr": "Течь ГЦ перекосо отвала.",
       "status": "Registered",
