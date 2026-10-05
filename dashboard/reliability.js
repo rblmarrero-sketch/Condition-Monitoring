@@ -137,6 +137,7 @@
       byclass: "By class", top: "Machines with the most failure downtime",
       c_cls: "Class", c_units: "Machines", c_unit: "Machine", c_f: "Failures", c_dh: "Downtime h",
       c_mtbf: "MTBF h", c_mttr: "MTTR h", c_av: "Availability",
+      unk_t: "{n} failure(s) here have no downtime figure in 1C and are not in this total.",
       csv: "Export CSV", unclassed: "(no class)", nofail: "No P1 or P2 failures recorded in this period.",
     },
     ru: {
@@ -154,6 +155,7 @@
       byclass: "По классам", top: "Машины с наибольшим простоем из-за отказов",
       c_cls: "Класс", c_units: "Машин", c_unit: "Машина", c_f: "Отказы", c_dh: "Простой, ч",
       c_mtbf: "MTBF, ч", c_mttr: "MTTR, ч", c_av: "Готовность",
+      unk_t: "У {n} отказ(ов) здесь нет данных о простое в 1С — они не входят в эту сумму.",
       csv: "Экспорт CSV", unclassed: "(без класса)", nofail: "За период отказов P1 или P2 не зарегистрировано.",
     },
   };
@@ -166,6 +168,28 @@
   const n0 = x => (x == null || !isFinite(x)) ? "—" : Math.round(x).toLocaleString("en-US").replace(/,/g, "\u2009");
   const n1 = x => (x == null || !isFinite(x)) ? "—" : (Math.round(x * 10) / 10).toFixed(1);
   const pct = x => (x == null || !isFinite(x)) ? "—" : (Math.round(x * 1000) / 10).toFixed(1) + "%";
+  /* For the screen only: the same tenths, grouped the way n0 groups, so a
+     downtime column and an MTBF column read alike ("5 917.8" beside "1 240").
+     The CSV keeps n1 — a spreadsheet wants a plain number. */
+  const n1g = x => { if (x == null || !isFinite(x)) return "—"; const s = n1(x), i = s.indexOf(".");
+    return Number(s.slice(0, i)).toLocaleString("en-US").replace(/,/g, "\u2009") + s.slice(i); };
+  /* ONE SET OF COLUMNS FOR BOTH TABLES. "By class" and "the most downtime"
+     carry the same five measures, and with each table sizing itself the
+     MTBF of one sat under the downtime of the other. Fixed, shared widths,
+     numbers right-aligned in tabular figures so the digits line up. Injected
+     once from here so both office pages carry the identical rule. */
+  const COLG = '<colgroup><col style="width:17%"><col style="width:11%"><col style="width:13%">'
+    + '<col style="width:16%"><col style="width:14%"><col style="width:14%"><col style="width:15%"></colgroup>';
+  function css() {
+    if (typeof document === "undefined" || document.getElementById("relCss")) return;
+    const st = document.createElement("style"); st.id = "relCss";
+    st.textContent = "#relPanel table.reltbl{table-layout:fixed;width:100%;}"
+      + "#relPanel table.reltbl th,#relPanel table.reltbl td{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:middle;}"
+      + "#relPanel table.reltbl .num{text-align:right;font-variant-numeric:tabular-nums;}"
+      + "#relPanel table.reltbl th.num{text-align:right;}"
+      + "#relPanel table.reltbl .relq{margin-left:4px;color:var(--warn-ink,#8a5a00);font-weight:600;cursor:help;}";
+    document.head.appendChild(st);
+  }
 
   let DATA = null, LOADING = null, LOAD_ERR = "";
   /* Fetched when the panel is first drawn, not at page load: nobody else on
@@ -185,6 +209,7 @@
   /* el: the container. opts: {lang, classOf, days, cls, onChange} */
   function render(el, opts) {
     opts = opts || {};
+    css();
     const lang = opts.lang === "ru" ? "ru" : "en";
     const T = (k, v) => tr(lang, k, v);
     const days = [30, 90, 365].includes(Number(opts.days)) ? Number(opts.days) : 90;
@@ -213,17 +238,17 @@
       + tile("relAvail", T("avail"), esc(pct(r.avail)), T("avail_s"), r.avail != null && r.avail < 0.85 ? "warn" : "good")
       + tile("relFails", T("fails"), String(r.failures), T("fails_s", { n: r.units }), r.failures ? "warn" : "good")}</div>`;
     const basis = `<div class="hint" data-rel="basis" style="margin-top:8px">${esc(T("basis", { u: r.units, d: days, t: n0(r.T),
-      f: r.failures, dh: n1(r.downH), docs: r.fromDocs, dur: r.fromDuration, dates: r.fromDates }))}${
+      f: r.failures, dh: n1g(r.downH), docs: r.fromDocs, dur: r.fromDuration, dates: r.fromDates }))}${
       r.unknownN ? `<br><span class="warn" data-rel="unknown">${esc(T("unknown", { n: r.unknownN }))}</span>` : ""}${
       DATA.generated ? `<br>${esc(T("stale", { at: String(DATA.generated).replace("T", " ").slice(0, 16) + " UTC" }))}` : ""}</div>`;
     const cl = byClass(DATA, { days, classOf }) || [];
-    const ctab = `<div class="secthd" style="margin-top:16px"><h3 style="margin:0">${esc(T("byclass"))}</h3></div><div style="overflow-x:auto"><table class="grid" id="relByClass"><thead><tr>
-      <th>${esc(T("c_cls"))}</th><th>${esc(T("c_units"))}</th><th>${esc(T("c_f"))}</th><th>${esc(T("c_dh"))}</th><th>${esc(T("c_mtbf"))}</th><th>${esc(T("c_mttr"))}</th><th>${esc(T("c_av"))}</th></tr></thead><tbody>${
-      cl.map(c => `<tr data-cls="${esc(c.cls)}"><td>${esc(c.cls || T("unclassed"))}</td><td>${c.units}</td><td>${c.failures}</td><td>${n1(c.downH)}</td><td>${c.failures ? n0(c.mtbf) : "—"}</td><td>${n1(c.mttr)}</td><td>${pct(c.avail)}</td></tr>`).join("")}</tbody></table></div>`;
+    const ctab = `<div class="secthd" style="margin-top:16px"><h3 style="margin:0">${esc(T("byclass"))}</h3></div><div style="overflow-x:auto"><table class="grid reltbl" id="relByClass">${COLG}<thead><tr>
+      <th>${esc(T("c_cls"))}</th><th class="num">${esc(T("c_units"))}</th><th class="num">${esc(T("c_f"))}</th><th class="num">${esc(T("c_dh"))}</th><th class="num">${esc(T("c_mtbf"))}</th><th class="num">${esc(T("c_mttr"))}</th><th class="num">${esc(T("c_av"))}</th></tr></thead><tbody>${
+      cl.map(c => `<tr data-cls="${esc(c.cls)}"><td>${esc(c.cls || T("unclassed"))}</td><td class="num">${c.units}</td><td class="num">${c.failures}</td><td class="num">${n1g(c.downH)}${c.unknownN ? `<span class="relq" title="${esc(T("unk_t", { n: c.unknownN }))}">+?</span>` : ""}</td><td class="num">${c.failures ? n0(c.mtbf) : "—"}</td><td class="num">${n1(c.mttr)}</td><td class="num">${pct(c.avail)}</td></tr>`).join("")}</tbody></table></div>`;
     const top = r.rows.slice(0, 10);
-    const utab = `<div class="secthd" style="margin-top:16px"><h3 style="margin:0">${esc(T("top"))}</h3></div>${top.length ? `<div style="overflow-x:auto"><table class="grid" id="relTop"><thead><tr>
-      <th>${esc(T("c_unit"))}</th><th>${esc(T("c_cls"))}</th><th>${esc(T("c_f"))}</th><th>${esc(T("c_dh"))}</th><th>${esc(T("c_mtbf"))}</th><th>${esc(T("c_mttr"))}</th><th>${esc(T("c_av"))}</th></tr></thead><tbody>${
-      top.map(u => `<tr data-unit="${esc(u.unit)}"><td><b>${esc(u.unit)}</b></td><td>${esc(u.cls || "")}</td><td>${u.failures}</td><td>${n1(u.downH)}${u.unknownN ? " +?" : ""}</td><td>${n0(u.mtbf)}</td><td>${n1(u.mttr)}</td><td>${pct(u.avail)}</td></tr>`).join("")}</tbody></table></div>`
+    const utab = `<div class="secthd" style="margin-top:16px"><h3 style="margin:0">${esc(T("top"))}</h3></div>${top.length ? `<div style="overflow-x:auto"><table class="grid reltbl" id="relTop">${COLG}<thead><tr>
+      <th>${esc(T("c_unit"))}</th><th>${esc(T("c_cls"))}</th><th class="num">${esc(T("c_f"))}</th><th class="num">${esc(T("c_dh"))}</th><th class="num">${esc(T("c_mtbf"))}</th><th class="num">${esc(T("c_mttr"))}</th><th class="num">${esc(T("c_av"))}</th></tr></thead><tbody>${
+      top.map(u => `<tr data-unit="${esc(u.unit)}"><td><b>${esc(u.unit)}</b></td><td>${esc(u.cls || "")}</td><td class="num">${u.failures}</td><td class="num">${n1g(u.downH)}${u.unknownN ? `<span class="relq" title="${esc(T("unk_t", { n: u.unknownN }))}">+?</span>` : ""}</td><td class="num">${n0(u.mtbf)}</td><td class="num">${n1(u.mttr)}</td><td class="num">${pct(u.avail)}</td></tr>`).join("")}</tbody></table></div>`
       : `<div class="hint">${esc(T("nofail"))}</div>`}`;
     el.innerHTML = head + ctl + kp + basis + ctab + utab;
     const fire = o => { if (opts.onChange) opts.onChange(Object.assign({ days, cls }, o)); };
