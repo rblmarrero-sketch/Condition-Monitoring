@@ -140,7 +140,9 @@ async function boot(b, port, lang) {
     const { p, errs } = await boot(b, port);
     await p.click('button[data-tab="actions"]');
     await p.waitForTimeout(600);
-    const row = await p.$('#actionTbl tr.hrow');
+    /* The unit cell, not the row's middle: owner, due, status and work order
+       edit in place on a click. */
+    const row = await p.$('#actionTbl tr.hrow td:not(.selcol):not(.ed) b');
     ok('Actions register: an open finding exists in the fixture', !!row);
     if (row) {
       await row.click();

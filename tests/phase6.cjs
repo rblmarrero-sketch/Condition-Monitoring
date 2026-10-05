@@ -116,13 +116,15 @@ const AUDIT = (phone) => {
 
   console.log('\nBACK CLOSES A DRAWER AND KEEPS THE PAGE');
   await p.evaluate(() => { showTab('actions', true); actView = 'table'; renderActions(); }); await p.waitForTimeout(300);
-  await p.click('#actionTbl tbody tr.hrow'); await p.waitForTimeout(300);
+  /* On the unit: the owner, due, status and work-order cells edit in place
+     on a click, so the row's middle is not a stable place to press. */
+  await p.click('#actionTbl tbody tr.hrow td:not(.selcol):not(.ed) b'); await p.waitForTimeout(300);
   const opened = await p.evaluate(() => ({ open: !document.getElementById('follOv').classList.contains('hidden'), st: history.state && history.state.cmOverlay }));
   ok('a row opens the follow-up sheet and marks it in history', opened.open && opened.st === 'follOv', JSON.stringify(opened));
   await p.goBack(); await p.waitForTimeout(500);
   const afterBack = await p.evaluate(() => ({ open: !document.getElementById('follOv').classList.contains('hidden'), tab: CUR_TAB, hash: location.hash }));
   ok('Back closes it and the page underneath stays', !afterBack.open && afterBack.tab === 'actions', JSON.stringify(afterBack));
-  await p.click('#actionTbl tbody tr.hrow'); await p.waitForTimeout(300);
+  await p.click('#actionTbl tbody tr.hrow td:not(.selcol):not(.ed) b'); await p.waitForTimeout(300);
   await p.click('#follX'); await p.waitForTimeout(400);
   const closed = await p.evaluate(() => ({ open: !document.getElementById('follOv').classList.contains('hidden'), st: history.state, tab: CUR_TAB }));
   ok('closing it by its button leaves no stray history entry', !closed.open && !(closed.st && closed.st.cmOverlay) && closed.tab === 'actions', JSON.stringify(closed));

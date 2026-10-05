@@ -83,8 +83,11 @@ const shown = (p, sel) => p.evaluate(s => { const e = document.querySelector(s);
   ok('CSV export is offered', A.csv);
   ok('the address names the page', /^#actions/.test(A.hash), A.hash);
 
-  /* the row opens the plan */
-  await p.click('#actionTbl tbody tr.hrow');
+  /* the row opens the plan. Pressed on the unit, not the row's middle: the
+     owner, due, status and work-order cells edit in place on a click
+     (cellEdit), so where the middle of the row lands decides which of two
+     things happens, and that moves whenever the column widths do. */
+  await p.click('#actionTbl tbody tr.hrow td:not(.selcol):not(.ed) b');
   await p.waitForTimeout(300);
   ok('a row opens the follow-up drawer', await shown(p, '#follOv'));
   const follTitle = await p.textContent('#follTitle');
