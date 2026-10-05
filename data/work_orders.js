@@ -2,8 +2,8 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-05T01:26:46+00:00",
-  "source": "https://askpi.94-131-94-152.sslip.io/WO.xlsx",
+  "generated": "2026-10-05T01:33:10+00:00",
+  "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 684,
   "unitsKept": [
@@ -316,7 +316,7 @@ window.CM_WO_DATA = {
     "WE009",
     "WE011"
   ],
-  "duplicateRowsCollapsed": 363,
+  "duplicateRowsCollapsed": 365,
   "roundsDedupedWithinVisit": 2,
   "columns": [
     "Asset description",
@@ -19328,25 +19328,6 @@ window.CM_WO_DATA = {
     {
       "equip": "EX021",
       "cls": "EXC",
-      "woNumber": "GD-023289",
-      "maintType": "500 Hours service Planned",
-      "hours": 500,
-      "cmLabel": "500h service",
-      "cmTypes": null,
-      "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
-      "planStart": "2026-08-01",
-      "planStartDt": "2026-08-01T00:00:00",
-      "planEnd": "2026-08-01",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
-    },
-    {
-      "equip": "EX021",
-      "cls": "EXC",
       "woNumber": "GD-023299",
       "maintType": "250 Hours service Planned",
       "hours": 250,
@@ -19397,6 +19378,25 @@ window.CM_WO_DATA = {
       "planStart": "2026-08-01",
       "planStartDt": "2026-08-01T00:00:00",
       "planEnd": "2026-08-02",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
+      "equip": "EX021",
+      "cls": "EXC",
+      "woNumber": "GD-023285",
+      "maintType": "500 Hours service Planned",
+      "hours": 500,
+      "cmLabel": "500h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-08-01",
+      "planStartDt": "2026-08-01T00:00:00",
+      "planEnd": "2026-08-01",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
