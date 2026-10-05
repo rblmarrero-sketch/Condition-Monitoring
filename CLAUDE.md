@@ -4483,6 +4483,42 @@ under `table.histtbl`, fixed layout, one line a row, the full text on hover.
 The undercarriage wear table and the gallery view are unchanged. Both office
 pages; dashboard only, nothing to deploy on the VM.
 
+**AND WHAT WAS LEFT IN LUBRICATION, WHICH SHOWED IN RUSSIAN (build 529).**
+The Lube master, Needs decision and Oils headings wrapped at any letter
+(`overflow-wrap:anywhere`), so in Russian "Система" printed as "СИСТЕМ / А",
+"Заправка" as "ЗАПРАВ / КА" and "Моделей" as "МОДЕЛ / ЕЙ"; on the shop poster
+the workbook's own "Гидравлич.система" broke as "Гидравлич.си / стема" and
+"Differential" as "DIFFERENTIA / L". A heading now wraps between words, after
+an abbreviation's full stop (`lpoWbr`), or at a soft hyphen from ONE list in
+`dashboard/lube-master.js` (`HY`, `CMLube.shy`, used by the three tables'
+headings through `hd()` and by the poster on both pages) — "Compart-ments",
+"Заправ-ка", "Dif-fer-en-tial". Only headings: tooltips, the CSV and the wall
+chart keep the words whole. Column widths are set per language (`:lang(ru)`)
+so every piece fits. In Lube master the "decide" / "OEM vs grade" flag sits
+on the compartment's line, so every row is one height; in Needs decision a
+compartment's answers stay on one line, the sources ending in an ellipsis with
+the full list in the tooltip. `tests/lubehead.cjs` measures every heading
+piece against its cell on both pages in both languages, the row heights, the
+one-line answers and the poster's breaks, and fails 50-odd assertions on build
+528.
+
+**AND A REDRAW NO LONGER THROWS AWAY WHAT A DESK HAS TYPED.** Found running
+the sweep for the above: `tests/lubemaster.cjs` failed about one run in three
+on build 528 as well, at "a change lands on the server" — the save answered
+"Nothing changed." with the typed 72 back at 70. Every lube-master panel is
+drawn whole from the document, and the page redraws it by itself: the folder
+refresh at boot, every three minutes (`AUTO_MS`) and on coming back to the
+window re-reads the master, and `onApplied` redraws the tab. A capacity, a
+grade, an approved product or a decision note typed and not yet saved went
+back to the document's value in silence. `keepEdits` (lube-master.js) notes
+every box whose value differs from what it was drawn with, draws, and puts
+those values back on the same boxes, the one with the keyboard keeping it and
+its caret; a product typed through "Other…" is re-added to its list. Discard,
+"Back to the workbook" (`UI.drop`) and choosing another model still start
+clean. `tests/lubehead.cjs` §5 types, redraws and reads back on both pages in
+both languages (and fails with the keeping switched off); `lubemaster.cjs` then
+passed eight runs out of eight. Dashboard only; nothing to deploy on the VM.
+
 ---
 
 ## Secrets

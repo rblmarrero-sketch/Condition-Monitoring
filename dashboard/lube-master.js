@@ -118,7 +118,7 @@
       c_code: "Код", c_comp: "Узел", c_grade: "Класс", c_prod: "Основное · альтернатива",
       c_seen: "Фактически", c_cap: "Система, л", c_rf: "Заправка, л", c_iv: "Интервал участка, ч",
       c_ivo: "Интервал OEM, ч", c_oem: "Спецификация OEM", c_flags: "Отметки",
-      c_src: "Источник: руководство · стр.", c_doc: "руководство", c_page: "стр.", src_by: "{who} · {when}",
+      c_src: "Источник: руководство · стр.", c_doc: "рук-во", c_page: "стр.", src_by: "{who} · {when}",
       h_cap: "Объём, л", h_iv: "Интервал, ч", h_sys: "Система", h_rf: "Заправка", h_site: "Участок", h_oem: "OEM",
       h_spec: "Спец. OEM", h_src: "Руководство · стр.", h_oil: "Основное / альтернатива", h_seen: "Фактически",
       d_model: "Модель", d_unitsh: "Ед.", d_opts: "Что указано в листах — выберите", d_why: "Причина / решение",
@@ -175,6 +175,21 @@
   }
   const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c =>
     ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  /* A heading wraps between words and never inside one; the few words wider
+     than their column carry a soft hyphen at a proper break, so they divide
+     as "Compart-ments" or "Заправ-ка" when they must and not at all when
+     they fit. Headings only: the same words in a tooltip, the CSV or the
+     wall chart stay whole. */
+  const SHY = "\u00AD";
+  const HY = ["Compart|ments", "Alter|native", "Dif|fer|en|tial", "Trans|mis|sion", "Sus|pen|sion", "Hydrau|lic",
+              "Auto|matic", "Lubri|cant", "Reduc|tion", "Compres|sor",
+              "Систе|ма", "Заправ|ка", "Уча|сток", "Факти|чески", "Руковод|ство", "Моде|лей", "Назва|ний",
+              "Альтер|натива", "Основ|ное", "Дви|га|тель", "Транс|мис|сия", "Подвес|ной", "Автома|тической",
+              "Поворот|ного", "Компрес|сор", "Механиз|ма", "Пред|очиститель", "Диф|фе|рен|ци|ал", "Гидрав|лич"]
+    .map(w => { const p = w.split("|");
+      return [new RegExp(p.map(x => "(" + x + ")").join(""), "gi"), p.map((x, i) => "$" + (i + 1)).join(SHY)]; });
+  function shy(x) { x = String(x == null ? "" : x); HY.forEach(([re, to]) => { x = x.replace(re, to); }); return x; }
+  function hd(k) { return shy(tr(k)); }
   const fmtN = n => (n == null || !isFinite(n)) ? "—" : Math.round(n).toLocaleString(lang() === "ru" ? "ru-RU" : "en-GB");
   const fmtAt = iso => { if (!iso) return "—"; const d = new Date(iso); if (!isFinite(d)) return iso;
     const p = n => String(n).padStart(2, "0");
@@ -364,6 +379,68 @@
      it is shown (show()), so it is never stale when somebody looks. With no
      active panel named, all four are drawn — a host that does not say. */
   const EL = {};
+  /* WHAT SOMEBODY HAS TYPED SURVIVES A REDRAW. Every panel is drawn whole from
+     the document, and the page redraws it on its own — the folder refresh at
+     boot, every three minutes, and on coming back to the window, each of which
+     re-reads the master. Until build 529 that put the document's values back
+     over whatever a desk had typed and not yet saved: a capacity typed, then
+     Save pressed a moment after a refresh landed, answered "Nothing changed",
+     and the figure was simply gone (tests/lubemaster.cjs failed one run in
+     three on exactly this). So before a panel is drawn, every box whose value
+     differs from the value it was drawn with is noted, and put back on the
+     same box afterwards; the box that had the keyboard keeps it, caret and
+     all. Not kept: Discard and "Back to the workbook" (UI.drop), a different
+     model chosen, and the boxes the panel already mirrors into its own state
+     (the search, the sampling machine and date). */
+  const KEEP_SKIP = { lmxQ: 1, lmxSU: 1, lmxSD: 1 };
+  function boxKey(x) {
+    if (x.id) return "#" + x.id;
+    const row = x.closest("tr"), tb = x.closest("table");
+    const rk = row ? (row.dataset.lmxk || row.dataset.lmxid || row.dataset.lmxgr || "r" + [...row.parentNode.children].indexOf(row)) : "";
+    return [tb ? tb.className : "", rk, x.dataset.k || "", x.dataset.f || "", x.dataset.s || "", x.className].join("|");
+  }
+  function drawnValue(x) {
+    if (x.tagName === "SELECT") { const o = [...x.options].find(o => o.defaultSelected) || x.options[0]; return o ? o.value : ""; }
+    if (x.type === "checkbox" || x.type === "radio") return x.defaultChecked;
+    return x.defaultValue;
+  }
+  function boxValue(x) { return x.type === "checkbox" || x.type === "radio" ? x.checked : x.value; }
+  function keepEdits(el, ctx, fresh, draw) {
+    const was = el.dataset.lmxCtx, typed = {}, act = document.activeElement;
+    let focus = null;
+    if (!fresh && !UI.drop && was === ctx()) {
+      el.querySelectorAll("input,select,textarea").forEach(x => {
+        if (x.type === "file" || x.type === "search" || KEEP_SKIP[x.id]) return;
+        const v = boxValue(x);
+        if (v !== drawnValue(x)) typed[boxKey(x)] = v;
+      });
+      if (act && el.contains(act) && /^(INPUT|SELECT|TEXTAREA)$/.test(act.tagName) && !KEEP_SKIP[act.id]) {
+        let a = null, b = null; try { a = act.selectionStart; b = act.selectionEnd; } catch (e) {}
+        focus = { k: boxKey(act), a, b };
+      }
+    }
+    UI.drop = false;
+    draw();
+    const now = ctx(); el.dataset.lmxCtx = now;
+    if (now !== was) return;
+    el.querySelectorAll("input,select,textarea").forEach(x => {
+      const k = boxKey(x);
+      if (Object.prototype.hasOwnProperty.call(typed, k)) {
+        const v = typed[k];
+        /* a product typed through "Other…" is an option the fresh list does not have */
+        if (x.tagName === "SELECT" && v && ![...x.options].some(o => o.value === v)) {
+          const o = document.createElement("option"); o.value = v; o.textContent = v; x.insertBefore(o, x.lastChild); }
+        if (x.type === "checkbox" || x.type === "radio") x.checked = v; else x.value = v;
+        /* the grade picker shows its value as a swatch */
+        if (x.matches('select[data-f="g"]') && typeof x.onchange === "function") x.onchange();
+      }
+      if (focus && k === focus.k) { x.focus(); try { if (focus.a != null) x.setSelectionRange(focus.a, focus.b); } catch (e) {} }
+    });
+  }
+  function drawMaster(el, fresh) { keepEdits(el, () => "m:" + (UI.model || ""), fresh, () => drawMaster0(el)); }
+  function drawDecide(el, fresh) { keepEdits(el, () => "d:" + UI.dFilter, fresh, () => drawDecide0(el)); }
+  function drawOils(el, fresh) { keepEdits(el, () => "o", fresh, () => drawOils0(el)); }
+  function drawSample(el, fresh) { keepEdits(el, () => "s:" + (UI.sUnit || ""), fresh, () => drawSample0(el)); }
   function redraw() {
     const on = k => EL[k] && (!UI.active || UI.active === k);
     if (on("master")) drawMaster(EL.master);
@@ -395,7 +472,7 @@
       let n = 0; Object.values(o).forEach(m => { n += Object.keys(m || {}).length; }); return n; }
     catch (e) { return 0; }
   }
-  function drawMaster(el) {
+  function drawMaster0(el) {
     const lb = L(); if (!lb) { el.innerHTML = ""; return; }
     const rows = modelRows();
     const q = UI.q.trim().toUpperCase();
@@ -474,7 +551,7 @@
       const srcT = src.who ? tr("src_by", { who: src.who, when: src.when || "" }) : "";
       return `<tr data-lmxk="${esc(c.k)}"${c.edited ? ' class="lmx-edited"' : ""}>
         <td class="lmx-code"><b>${esc(c.k)}</b></td>
-        <td class="lmx-cn"><span class="lmx-1" title="${esc(name)}">${esc(name)}</span>${flags.length ? `<span class="lmx-flags">${flags.map(f => `<span class="lmx-flag">${esc(f)}</span>`).join("")}</span>` : ""}</td>
+        <td class="lmx-cn"><div class="lmx-cnw"><span class="lmx-1" title="${esc(name)}">${esc(name)}</span>${flags.length ? `<span class="lmx-flags">${flags.map(f => `<span class="lmx-flag">${esc(f)}</span>`).join("")}</span>` : ""}</div></td>
         <td><label class="lmx-gsel" title="${esc(tr("c_grade"))}">${swatch(c.g)}<select class="lmx-in" data-k="${esc(c.k)}" data-f="g" aria-label="${esc(tr("c_grade"))} ${esc(c.k)}">${gradeOptions(c.g)}</select></label></td>
         <td class="lmx-oil">${oil}</td>
         <td class="lmx-seen">${s ? `<span class="lmx-1 ${v.b === "ok" ? "ok" : v.b === "act" ? "bad" : "warn"}" title="${esc(s.product + " · " + s.unit + " · " + s.date)}">${esc(s.product)}</span>` : `<span class="lmx-1 sub" title="${esc(tr("seen_none"))}">—</span>`}</td>
@@ -490,12 +567,12 @@
     return head + `<div class="tblwrap scrollbox lmx-tw" style="--sb:620px"><table class="grid lmx-tbl lmx-mtbl">
       <colgroup><col class="w-code"><col class="w-comp"><col class="w-grade"><col class="w-oil"><col class="w-seen">
       <col class="w-n"><col class="w-n"><col class="w-n"><col class="w-n"><col class="w-spec"><col class="w-src"></colgroup>
-      <thead><tr class="lmx-hg"><th rowspan="2">${esc(tr("c_code"))}</th><th rowspan="2">${esc(tr("c_comp"))}</th><th rowspan="2">${esc(tr("c_grade"))}</th>
-      <th rowspan="2">${esc(tr("h_oil"))}</th><th rowspan="2">${esc(tr("h_seen"))}</th>
-      <th colspan="2" class="lmx-g1 c">${esc(tr("h_cap"))}</th><th colspan="2" class="lmx-g1 c">${esc(tr("h_iv"))}</th>
-      <th rowspan="2" class="lmx-g1">${esc(tr("h_spec"))}</th><th rowspan="2">${esc(tr("h_src"))}</th></tr>
-      <tr class="lmx-hs"><th class="num lmx-g1" title="${esc(tr("c_cap"))}">${esc(tr("h_sys"))}</th><th class="num" title="${esc(tr("c_rf"))}">${esc(tr("h_rf"))}</th>
-      <th class="num lmx-g1" title="${esc(tr("c_iv"))}">${esc(tr("h_site"))}</th><th class="num" title="${esc(tr("c_ivo"))}">${esc(tr("h_oem"))}</th></tr></thead>
+      <thead><tr class="lmx-hg"><th rowspan="2">${esc(hd("c_code"))}</th><th rowspan="2">${esc(hd("c_comp"))}</th><th rowspan="2">${esc(hd("c_grade"))}</th>
+      <th rowspan="2">${esc(hd("h_oil"))}</th><th rowspan="2">${esc(hd("h_seen"))}</th>
+      <th colspan="2" class="lmx-g1 c">${esc(hd("h_cap"))}</th><th colspan="2" class="lmx-g1 c">${esc(hd("h_iv"))}</th>
+      <th rowspan="2" class="lmx-g1">${esc(hd("h_spec"))}</th><th rowspan="2">${esc(hd("h_src"))}</th></tr>
+      <tr class="lmx-hs"><th class="num lmx-g1" title="${esc(tr("c_cap"))}">${esc(hd("h_sys"))}</th><th class="num" title="${esc(tr("c_rf"))}">${esc(hd("h_rf"))}</th>
+      <th class="num lmx-g1" title="${esc(tr("c_iv"))}">${esc(hd("h_site"))}</th><th class="num" title="${esc(tr("c_ivo"))}">${esc(hd("h_oem"))}</th></tr></thead>
       <tbody>${rows}</tbody></table></div>
       <div class="lmx-bar"><button class="btn primary" type="button" id="lmxSaveM">${esc(tr("save_model"))}</button>
       <button class="btn" type="button" id="lmxUndoM">${esc(tr("undo_model"))}</button>
@@ -506,13 +583,13 @@
     el.querySelectorAll('select[data-f="g"]').forEach(s => s.onchange = () => {
       const sw = s.parentNode.querySelector(".lmx-sw"); if (sw) sw.outerHTML = swatch(s.value);
     });
-    el.querySelector("#lmxUndoM").onclick = () => drawMaster(el);
-    el.querySelector("#lmxRevM").onclick = () => run("model", d => {
+    el.querySelector("#lmxUndoM").onclick = () => drawMaster(el, true);
+    el.querySelector("#lmxRevM").onclick = () => { UI.drop = true; return run("model", d => {
       const ch = [];
       const o = d.comps && d.comps[r.key];
       if (o) { Object.keys(o).forEach(k => Object.keys(o[k] || {}).forEach(f => setAt(d, ["comps", r.key, k], f, undefined, ch))); }
       return ch;
-    }, r.M.m + ": back to the workbook");
+    }, r.M.m + ": back to the workbook"); };
     el.querySelector("#lmxSaveM").onclick = () => {
       /* Read the boxes, not a shadow copy: what is on screen is what is saved. */
       const want = {};
@@ -572,7 +649,7 @@
   }
 
   /* ---- NEEDS DECISION -------------------------------------------------- */
-  function drawDecide(el) {
+  function drawDecide0(el) {
     const lb = L(); if (!lb) { el.innerHTML = ""; return; }
     const dm = (S.doc && S.doc.decide) || {};
     const all = lb.decide.map(d => ({ d, done: dm[d.id] && dm[d.id].g ? dm[d.id] : null }));
@@ -588,8 +665,8 @@
       `</div>${msg("decide")}</div>` +
       (list.length ? `<div class="tblwrap scrollbox" style="--sb:680px"><table class="grid lmx-tbl lmx-dtbl">
         <colgroup><col class="w-code"><col class="w-dcomp"><col class="w-units"><col><col class="w-why"></colgroup>
-        <thead><tr><th>${esc(tr("c_code"))}</th><th>${esc(tr("c_comp"))}</th><th class="num">${esc(tr("d_unitsh"))}</th>
-        <th>${esc(tr("d_opts"))}</th><th>${esc(tr("d_why"))}</th></tr></thead><tbody>` +
+        <thead><tr><th>${esc(hd("c_code"))}</th><th>${esc(hd("c_comp"))}</th><th class="num">${esc(hd("d_unitsh"))}</th>
+        <th>${esc(hd("d_opts"))}</th><th>${esc(hd("d_why"))}</th></tr></thead><tbody>` +
         list.map(({ d, done }, i) => {
           const cur = done ? done.g : d.cur;
           /* Rows of one model sit under one heading row, so the model is read
@@ -645,7 +722,7 @@
   }
   function coldWarn(p) { return cold(p).k === "toowarm"; }
   function coldWords(p) { const v = cold(p); return tr("c_" + v.k, { d: v.pour }); }
-  function drawOils(el) {
+  function drawOils0(el) {
     const lb = L(); if (!lb) { el.innerHTML = ""; return; }
     const use = gradeUse(), seenG = seenNamesByGrade(), gm = (S.doc && S.doc.grades) || {};
     const gs = Object.keys(lb.grades);
@@ -676,7 +753,7 @@
         <td class="lmx-r">${names.length ? `<span class="${names.length > 2 ? "lmx-warn" : ""}" title="${esc(names.join("\n"))}">${names.length}</span>` : esc(tr("o_seen_none"))}</td>
       </tr>`;
     };
-    const oilCols = `<colgroup><col class="w-ogr"><col class="w-otype"><col><col><col class="w-ost"><col class="w-on"><col class="w-on"><col class="w-ovol"><col class="w-on"><col class="w-on"></colgroup>`;
+    const oilCols = `<colgroup><col class="w-ogr"><col class="w-otype"><col><col><col class="w-ost"><col class="w-oc"><col class="w-om"><col class="w-ovol"><col class="w-od"><col class="w-onm"></colgroup>`;
     el.innerHTML =
       `<div class="secthd"><h2>${esc(tr("o_title"))}</h2><span class="spacer"></span>` +
       `<button class="btn" type="button" id="lmxCsv">${esc(tr("o_csv"))}</button>` +
@@ -690,9 +767,9 @@
       </div>
       <div class="lmx-bar">${whoBox("lmxWhoO")}${msg("oils")}</div>
       <div class="tblwrap scrollbox" style="--sb:680px"><table class="grid lmx-tbl lmx-oils">${oilCols}<thead><tr>
-        <th>${esc(tr("o_grade"))}</th><th>${esc(tr("o_type"))}</th><th>${esc(tr("o_appr"))}</th><th>${esc(tr("o_alt"))}</th>
-        <th>${esc(tr("o_state"))}</th><th class="num">${esc(tr("o_comps"))}</th><th class="num">${esc(tr("o_models"))}</th>
-        <th class="num">${esc(tr("o_vol"))}</th><th class="num">${esc(tr("o_drums"))}</th><th class="num" title="${esc(tr("o_seen_t"))}">${esc(tr("o_seen"))}</th>
+        <th>${esc(hd("o_grade"))}</th><th>${esc(hd("o_type"))}</th><th>${esc(hd("o_appr"))}</th><th>${esc(hd("o_alt"))}</th>
+        <th>${esc(hd("o_state"))}</th><th class="num">${esc(hd("o_comps"))}</th><th class="num">${esc(hd("o_models"))}</th>
+        <th class="num">${esc(hd("o_vol"))}</th><th class="num">${esc(hd("o_drums"))}</th><th class="num" title="${esc(tr("o_seen_t"))}">${esc(hd("o_seen"))}</th>
       </tr></thead><tbody>${used.map(row).join("")}</tbody></table></div>
       <div class="lmx-bar"><button class="btn primary" type="button" id="lmxSaveO">${esc(tr("o_save"))}</button></div>
       ${unused.length ? `<details class="lmx-hist"><summary>${esc(tr("o_unused"))} (${unused.length})</summary>
@@ -782,7 +859,7 @@
     const M = L().of(a.m || "", a.cls || "");
     return M ? { a, M } : null;
   }
-  function drawSample(el) {
+  function drawSample0(el) {
     const lb = L(); if (!lb) { el.innerHTML = ""; return; }
     if (!UI.sDate) UI.sDate = todayISO();
     const hit = UI.sUnit ? unitModel(UI.sUnit) : null;
@@ -1140,7 +1217,7 @@
    tabular figures, anything that does not fit ends in an ellipsis and is in
    the tooltip. A row is one compartment and reads straight across. */
 table.grid.lmx-tbl{table-layout:fixed;width:100%}
-table.grid.lmx-tbl th{font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);font-weight:700;padding:6px 8px;white-space:normal;line-height:1.25;vertical-align:bottom;overflow-wrap:anywhere}
+table.grid.lmx-tbl th{font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);font-weight:700;padding:6px 8px;white-space:normal;line-height:1.25;vertical-align:bottom;overflow-wrap:normal;word-break:normal;hyphens:manual;overflow:hidden}
 table.grid.lmx-tbl th.c{text-align:center}
 table.grid.lmx-tbl td{vertical-align:middle;padding:5px 8px;height:34px;overflow:hidden}
 table.grid.lmx-tbl tbody tr:nth-child(even) td{background:color-mix(in srgb,var(--surface-2) 55%,transparent)}
@@ -1163,13 +1240,19 @@ table.grid.lmx-tbl tbody tr:hover td{background:var(--surface-2)}
 .lmx-tbl .lmx-in.num{width:100%;text-align:right;font-variant-numeric:tabular-nums}
 .lmx-oil .lmx-p{font-weight:600;font-size:12.5px;line-height:1.25}.lmx-oil .lmx-a{font-size:11.5px;color:var(--muted);line-height:1.25}
 .lmx-seen .ok{color:var(--good-ink);font-weight:600}.lmx-seen .bad{color:var(--crit-ink);font-weight:600}.lmx-seen .warn{color:var(--warn-ink);font-weight:600}
-.lmx-cn .lmx-flags{display:flex;gap:3px;margin-top:2px;overflow:hidden}
+.lmx-cnw{display:flex;gap:5px;align-items:center;min-width:0}.lmx-cnw>.lmx-1{flex:0 1 auto}
+.lmx-cn .lmx-flags{display:flex;gap:3px;flex:none}
 .lmx-flag{display:inline-block;font-size:10px;font-weight:700;padding:0 5px;border-radius:4px;white-space:nowrap;background:color-mix(in srgb,var(--warning) 30%,var(--surface));color:var(--warn-ink)}
 .lmx-srccell{display:table-cell}.lmx-srccell .lmx-in{display:inline-block;vertical-align:middle}
-.lmx-srccell .lmx-doc{width:calc(100% - 54px)}.lmx-srccell .lmx-page{width:50px;margin-left:4px}
-.lmx-mtbl col.w-code{width:58px}.lmx-mtbl col.w-comp{width:15%}.lmx-mtbl col.w-grade{width:96px}.lmx-mtbl col.w-oil{width:22%}
-.lmx-mtbl col.w-seen{width:11%}.lmx-mtbl col.w-n{width:70px}.lmx-mtbl col.w-spec{width:9%}.lmx-mtbl col.w-src{width:12%}
+.lmx-srccell .lmx-doc{width:calc(100% - 50px)}.lmx-srccell .lmx-page{width:46px;margin-left:4px}
+/* A heading wraps between words and never inside one, so every column is at
+   least as wide as the longest word of its heading — in Russian too, where
+   "Заправка" and "Фактически" are wider than anything in English. */
+.lmx-mtbl col.w-code{width:50px}.lmx-mtbl col.w-comp{width:17%}.lmx-mtbl col.w-grade{width:86px}.lmx-mtbl col.w-oil{width:20%}
+.lmx-mtbl col.w-seen{width:9%}.lmx-mtbl col.w-n{width:76px}.lmx-mtbl col.w-spec{width:8%}.lmx-mtbl col.w-src{width:13%}
+:lang(ru) .lmx-mtbl col.w-n{width:82px}
 .lmx-mtbl{min-width:1000px}
+table.grid.lmx-mtbl tbody td{height:41px;box-sizing:border-box}
 tr.lmx-edited td:first-child{box-shadow:inset 3px 0 0 var(--accent)}
 .lmx-hist{margin-top:14px}.lmx-hist summary{cursor:pointer;font-weight:600;color:var(--ink-2)}
 .lmx-histl{font-size:12.5px;color:var(--ink-2);margin:8px 0;padding-left:20px;max-height:280px;overflow:auto}
@@ -1177,17 +1260,22 @@ tr.lmx-edited td:first-child{box-shadow:inset 3px 0 0 var(--accent)}
 .lmx-imp{border:1px solid var(--accent);border-radius:8px;padding:10px 12px;margin:10px 0;background:var(--surface)}.lmx-imp.bad{border-color:var(--critical)}
 .lmx-dtbl col.w-code{width:56px}.lmx-dtbl col.w-dcomp{width:17%}.lmx-dtbl col.w-units{width:64px}.lmx-dtbl col.w-why{width:24%}
 .lmx-dtbl tr.lmx-grp th{background:var(--surface-2);color:var(--ink);font-size:12.5px;text-transform:none;letter-spacing:0;padding:7px 8px;border-top:1px solid var(--border)}
-.lmx-dtbl td{height:auto;padding-top:6px;padding-bottom:6px}
+.lmx-dtbl td{height:34px}
 .lmx-dtbl tr.lmx-dec.done td{color:var(--muted)}
-.lmx-dopts{display:flex;flex-wrap:wrap;gap:6px}
-.lmx-opt{all:unset;box-sizing:border-box;cursor:pointer;display:inline-flex;gap:6px;align-items:center;max-width:100%;border:1px solid var(--axis);border-radius:6px;padding:3px 7px 3px 3px;background:var(--surface)}
+/* The answers to one compartment sit on one line; a long list of sources
+   ends in an ellipsis and is in the button's tooltip. */
+.lmx-dopts{display:flex;flex-wrap:nowrap;gap:6px;min-width:0;overflow:hidden;padding:2px;margin:-2px}
+.lmx-opt{all:unset;box-sizing:border-box;cursor:pointer;display:inline-flex;gap:6px;align-items:center;max-width:100%;min-width:0;flex:0 1 auto;border:1px solid var(--axis);border-radius:6px;padding:3px 7px 3px 3px;background:var(--surface)}
+.lmx-opt .lmx-sw{flex:none}
 .lmx-opt:hover:not([disabled]){border-color:var(--accent);background:color-mix(in srgb,var(--accent) 7%,var(--surface))}
 .lmx-opt.cur{box-shadow:0 0 0 2px var(--accent)}.lmx-opt[disabled]{cursor:default}.lmx-opt[disabled]:not(.cur){opacity:.6}
 .lmx-opt:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
-.lmx-osrc{font-size:11.5px;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:240px}
+.lmx-osrc{font-size:11.5px;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:240px;min-width:0}
 .lmx-dnote{width:100%}.lmx-dres{display:flex;gap:6px;align-items:center;font-size:12px;color:var(--good-ink)}.lmx-dres .lmx-1{flex:1}
 .lmx-kpis{margin:10px 0}.lmx-sm{padding:3px 8px;font-size:11.5px;white-space:nowrap}
-.lmx-oils col.w-ogr{width:112px}.lmx-oils col.w-otype{width:14%}.lmx-oils col.w-ost{width:172px}.lmx-oils col.w-on{width:70px}.lmx-oils col.w-ovol{width:86px}
+.lmx-oils col.w-ogr{width:112px}.lmx-oils col.w-otype{width:14%}.lmx-oils col.w-ost{width:172px}.lmx-oils col.w-ovol{width:86px}
+.lmx-oils col.w-oc{width:92px}.lmx-oils col.w-om{width:78px}.lmx-oils col.w-od{width:72px}.lmx-oils col.w-onm{width:72px}
+:lang(ru) .lmx-oils col.w-oc{width:70px}:lang(ru) .lmx-oils col.w-om{width:78px}:lang(ru) .lmx-oils col.w-onm{width:80px}
 .lmx-oils{min-width:980px}
 .lmx-st{display:flex;gap:6px;align-items:center}.lmx-st .band{white-space:nowrap}
 .lmx-warn{color:var(--warn-ink);font-weight:700}
@@ -1209,6 +1297,8 @@ tr.lmx-edited td:first-child{box-shadow:inset 3px 0 0 var(--accent)}
 
   root.CMLube = {
     init(opts) { HOST = Object.assign(HOST, opts || {}); css(); },
+    /* The soft-hyphen list, for the page's own narrow headings (the poster). */
+    shy,
     load, save, state: () => S, doc: () => S.doc,
     /* Draw into the four panels the host page provides. */
     mount(els, active) { Object.assign(EL, els || {}); if (active !== undefined) UI.active = active; css(); redraw(); },
