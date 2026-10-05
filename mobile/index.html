@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=513">
+<link rel="manifest" href="manifest.webmanifest?v=515">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=513">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=513">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=513">
+<link rel="apple-touch-icon" href="icon-192.png?v=515">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=515">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=515">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1990,6 +1990,12 @@
         <span data-i18n="lube_samp">Oil sample taken</span></label>
       <label class="chk"><input type="checkbox" id="lubeFilt">
         <span data-i18n="lube_filt">Offline filtration done</span></label>
+      <!-- The bottle's number, in the site's own form (DDMMYYYY-UNIT-CODE, the
+           formula on their sample log). Filled in when the box is ticked, from
+           the round's date, the machine and the compartment's OFFICIAL code;
+           the label on the bottle wins if it says otherwise. -->
+      <label class="fld hidden" id="lubeSnoWrap"><span data-i18n="lube_sno">Sample number</span>
+        <input id="lubeSno" type="text" autocomplete="off" spellcheck="false" autocapitalize="characters"></label>
       <div class="luberead" id="lubeRead"></div>
     </div>
     <div id="tempFields" class="hidden">
@@ -2850,16 +2856,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=513"></script>
-<script src="upload-defaults.js?v=513"></script>
-<script src="hme.js?v=513"></script>
-<script src="mp-fc.js?v=513"></script>
-<script src="rtw.js?v=513"></script>
-<script src="hme-cascade.js?v=513"></script>
-<script src="assets.js?v=513"></script>
-<script src="temp-limits.js?v=513"></script>
-<script src="normalize.js?v=513"></script>
-<script src="terms.js?v=513"></script>
+<script src="native.js?v=515"></script>
+<script src="upload-defaults.js?v=515"></script>
+<script src="hme.js?v=515"></script>
+<script src="mp-fc.js?v=515"></script>
+<script src="rtw.js?v=515"></script>
+<script src="hme-cascade.js?v=515"></script>
+<script src="assets.js?v=515"></script>
+<script src="temp-limits.js?v=515"></script>
+<script src="normalize.js?v=515"></script>
+<script src="terms.js?v=515"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2878,25 +2884,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=513"></script>
-<script src="edits.js?v=513"></script>
-<script src="due.js?v=513"></script>
-<script src="wear.js?v=513"></script>
-<script src="wear-figs.js?v=513"></script>
-<script src="wear-map.js?v=513"></script>
-<script src="machine-photos.js?v=513"></script>
-<script src="machine-fig.js?v=513"></script>
-<script src="get.js?v=513"></script>
-<script src="points.js?v=513"></script>
-<script src="uc-points.js?v=513"></script>
-<script src="inspect-guide.js?v=513"></script>
-<script src="get-figs.js?v=513"></script>
-<script src="body-points.js?v=513"></script>
-<script src="body-map.js?v=513"></script>
-<script src="lube.js?v=513"></script>
-<script src="lube-overrides.js?v=513"></script>
-<script src="lube2027.js?v=513"></script>
-<script src="report-core.js?v=513"></script>
+<script src="grade.js?v=515"></script>
+<script src="edits.js?v=515"></script>
+<script src="due.js?v=515"></script>
+<script src="wear.js?v=515"></script>
+<script src="wear-figs.js?v=515"></script>
+<script src="wear-map.js?v=515"></script>
+<script src="machine-photos.js?v=515"></script>
+<script src="machine-fig.js?v=515"></script>
+<script src="get.js?v=515"></script>
+<script src="points.js?v=515"></script>
+<script src="uc-points.js?v=515"></script>
+<script src="inspect-guide.js?v=515"></script>
+<script src="get-figs.js?v=515"></script>
+<script src="body-points.js?v=515"></script>
+<script src="body-map.js?v=515"></script>
+<script src="lube.js?v=515"></script>
+<script src="lube-overrides.js?v=515"></script>
+<script src="lube2027.js?v=515"></script>
+<script src="report-core.js?v=515"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -3224,7 +3230,7 @@ const I18N = {
     lube_src_field:"in service now", lube_src_2027:"2027 specification",
     lube_src_both:"in service · 2027",
     lube_prod:"Product in service", lube_other:"Name it as printed on the label",
-    lube_evid:"How do you know?", lube_samp:"Oil sample taken", lube_filt:"Offline filtration done",
+    lube_evid:"How do you know?", lube_samp:"Oil sample taken", lube_sno:"Sample number", lube_filt:"Offline filtration done",
     lube_pick:"— choose —", lube_fits:"Satisfies this compartment",
     lube_others:"Everything else on the shelf", lube_notlisted:"Not on this list…",
     lube_ref:"Refill {cap} L · every {iv} h",
@@ -3233,7 +3239,7 @@ const I18N = {
     lube_v_nostd:"Recorded — no site product chosen for this yet",
     lube_v_wrong:"Not the product for this compartment",
     lube_verify:"Capacity to be confirmed against the manual",
-    lube_v_unknown:"Not a catalogued product — needs checking",
+    lube_v_pending:"Standard under decision — on the needs-decision list", lube_v_grade:"Same family, not the standard grade", lube_v_unknown:"Not a catalogued product — needs checking",
     lube_v_bad:"Does not meet the specification",
     lube_v_cold:"Right specification, too thick for −40",
     lube_v_unlisted:"Meets the specification, grade not listed here",
@@ -3941,7 +3947,7 @@ const I18N = {
     lube_src_field:"сейчас в эксплуатации", lube_src_2027:"спецификация 2027",
     lube_src_both:"в эксплуатации · 2027",
     lube_prod:"Продукт в узле", lube_other:"Название как на этикетке",
-    lube_evid:"Откуда известно?", lube_samp:"Проба масла отобрана", lube_filt:"Автономная фильтрация выполнена",
+    lube_evid:"Откуда известно?", lube_samp:"Проба масла отобрана", lube_sno:"Номер пробы", lube_filt:"Автономная фильтрация выполнена",
     lube_pick:"— выберите —", lube_fits:"Подходит для этого узла",
     lube_others:"Остальное на складе", lube_notlisted:"Нет в списке…",
     lube_ref:"Заправка {cap} л · каждые {iv} ч",
@@ -3950,7 +3956,7 @@ const I18N = {
     lube_v_nostd:"Записано — продукт для этого узла ещё не выбран",
     lube_v_wrong:"Не тот продукт для этого узла",
     lube_verify:"Объём требует подтверждения по руководству",
-    lube_v_unknown:"Нет в каталоге — требует проверки",
+    lube_v_pending:"Стандарт на согласовании — в списке решений", lube_v_grade:"Тот же тип, но не стандартный класс", lube_v_unknown:"Нет в каталоге — требует проверки",
     lube_v_bad:"Не соответствует спецификации",
     lube_v_cold:"Спецификация верна, слишком густое для −40",
     lube_v_unlisted:"Спецификация выполнена, вязкость не указана для узла",
@@ -4621,6 +4627,56 @@ const gradeIso = g => GRADE.iso(g) || "";
    two the throw IS the answer. */
 function lsSet(k,v){ try{ localStorage.setItem(k,String(v)); return true; }catch(e){ return false; } }
 function lsDel(k){ try{ localStorage.removeItem(k); }catch(e){} }
+
+/* THE LUBE MASTER, ON THE PHONE.
+
+   The office keeps the lubrication programme in one document on the server
+   (_meta/lube/master.json, written by dashboard/lube-master.js): decisions
+   on the compartments the workbook's own sheets disagreed about, the approved
+   and alternative product of every grade, corrected figures, sample-code
+   aliases. A phone that audited against the workbook baseline would call the
+   office's decided oil "under decision" and offer a product the office has
+   replaced. So the phone applies the same document, the same way
+   (LUBE.applyMaster), and keeps the last copy it read — an audit in the pit
+   is judged against the last decision this phone heard, never against
+   nothing. Absent on the server means "nobody has decided anything yet":
+   the baseline is then the right answer. A failed read changes nothing. */
+const LUBE_MASTER_LS="cm_lube_master", LUBE_MASTER_DOC="_meta/lube/master.json";
+const LUBE_MASTER_GAP=15*60*1000;
+let lubeMasterAt=0;
+function lubeMasterApply(doc){
+  try{ if(window.LUBE && LUBE.applyMaster) LUBE.applyMaster(doc||null); }
+  catch(e){ bad("lube-master-apply", e); }
+}
+(function(){ let d=null; try{ d=JSON.parse(localStorage.getItem(LUBE_MASTER_LS)||"null"); }catch(e){}
+  if(d) lubeMasterApply(d); })();
+async function lubeMasterPull(force){
+  if(!force && Date.now()-lubeMasterAt < LUBE_MASTER_GAP) return null;
+  const g=loadDests().find(d=>d.id==="gas" && d.url); if(!g) return null;
+  lubeMasterAt=Date.now();
+  const q=new URLSearchParams({action:"file", id:LUBE_MASTER_DOC}); if(g.sec) q.set("secret",g.sec);
+  let j=null;
+  try{
+    const r=await fetchT(g.url+(g.url.indexOf("?")<0?"?":"&")+q.toString(), {method:"GET"}, 25000);
+    j=JSON.parse(await r.text());
+  }catch(e){ return null; }                       /* silence is not a verdict */
+  if(!j) return null;
+  if(j.ok===false){
+    if(/\b404\b|NoSuchKey|not\s*found/i.test(String(j.error||""))){
+      if(localStorage.getItem(LUBE_MASTER_LS)!==null){ lsDel(LUBE_MASTER_LS); lubeMasterApply(null); }
+    }
+    return null;
+  }
+  let doc=null;
+  try{ doc=JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(j.data||""), c=>c.charCodeAt(0)))); }
+  catch(e){ console.warn("lube master unreadable", e); return null; }
+  let prev=null; try{ prev=JSON.parse(localStorage.getItem(LUBE_MASTER_LS)||"null"); }catch(e){}
+  if(prev && prev.rev===doc.rev && prev.at===doc.at) return doc;
+  lsSet(LUBE_MASTER_LS, JSON.stringify(doc));
+  lubeMasterApply(doc);
+  try{ if(TYPE_META[type] && TYPE_META[type].lube && curItem) renderLube(); }catch(e){}
+  return doc;
+}
 
 /* ===================== state ===================== */
 let eqClass = localStorage.getItem("equip_class") || "ALL";
@@ -6599,7 +6655,14 @@ $("lubeEvid").addEventListener("click",(e)=>{ const b=e.target.closest("button[d
   renderLube(); renderChips(); draftKeep(); });
 $("lubeProd").addEventListener("change",()=>{ saveCur(); renderLube(); renderChips(); });
 $("lubeOther").addEventListener("input",()=>{ saveCur(); renderLube(); renderChips(); });
-$("lubeSamp").addEventListener("change",()=>{ saveCur(); renderChips(); });
+$("lubeSamp").addEventListener("change",()=>{ saveCur(); renderLube(); renderChips(); });
+$("lubeSno").addEventListener("change",()=>{ saveCur(); renderChips(); });
+/* DDMMYYYY-UNIT-CODE off the round's own date and machine, with the code the
+   lube master says is official for this compartment on this model. */
+function lubeSnoDefault(k){
+  if(!window.LUBE || !LUBE.sampleNo || !curEquip || !k) return "";
+  return LUBE.sampleNo($("date").value||todayISO(), curEquip, k);
+}
 
 /* No handler. Severity is derived; there is nothing here to press. */
 
@@ -7101,7 +7164,8 @@ function lubeReportBlock(model, cls, key, o){
   const evidKey = o.evid || "";
   const samp = o.samp == null ? null : !!o.samp;
   const filt = o.filt == null ? null : !!o.filt;
-  if(!product && !evidKey && samp == null && filt == null) return null;
+  const sno = String(o.sno||"").trim();
+  if(!product && !evidKey && samp == null && filt == null && !sno) return null;
   const e = LUBE.EVID.filter(x=>x.k===evidKey)[0];
   /* Same judgement the capture screen showed the inspector and the same one
      the dashboard shows the office. This function used to carry a fourth
@@ -7111,6 +7175,7 @@ function lubeReportBlock(model, cls, key, o){
     product: product,
     evid: e ? { en:e.en, ru:e.ru } : null,
     samp: samp,
+    sno: sno,
     filt: filt,
     want: v.want || "",
     band: v.b || "",
@@ -7165,6 +7230,8 @@ function renderLube(){
   $("lubeOtherWrap").classList.toggle("hidden", p.prod!=="__other");
   $("lubeOther").value = p.other||"";
   $("lubeSamp").checked = !!p.samp;
+  $("lubeSnoWrap").classList.toggle("hidden", !p.samp);
+  $("lubeSno").value = p.sno||"";
   $("lubeFilt").checked = !!p.filt;
 
   seg.innerHTML = (window.LUBE?LUBE.EVID:[]).map(e=>
@@ -8145,10 +8212,14 @@ function saveCur(){ if(!curItem) return; normDecAll(); const p=curP(); p.particl
     p.prod = $("lubeProd").value || "";
     p.other = p.prod==="__other" ? $("lubeOther").value.trim() : "";
     p.samp = !!$("lubeSamp").checked;
+    /* A sample has a number; no sample, no number. The default is the site's
+       own formula, so the bottle, the log and the lab report agree. */
+    p.sno = p.samp ? ($("lubeSno").value.trim().toUpperCase() || lubeSnoDefault(curItem)) : "";
     p.filt = !!$("lubeFilt").checked;
     if(!p.prod)  { delete p.prod; delete p.other; }
     if(!p.other) delete p.other;
     if(!p.samp)  delete p.samp;
+    if(!p.sno)   delete p.sno;
     if(!p.filt)  delete p.filt;
     /* Evidence with nothing recorded is not evidence of anything. */
     if(!p.prod && !p.other) delete p.evid;
@@ -9019,7 +9090,7 @@ function editRecord(rec){ if(rec.cls && CLASSES[rec.cls]){ eqClass=rec.cls; lsSe
        typo used to empty it: the draft was rebuilt from this list, the list did
        not mention them, and the next Save wrote the blanks back over the
        record. */
-    prod:pp.prod||"",other:pp.other||"",evid:pp.evid||"",samp:pp.samp?1:0,filt:pp.filt?1:0,
+    prod:pp.prod||"",other:pp.other||"",evid:pp.evid||"",samp:pp.samp?1:0,sno:pp.sno||"",filt:pp.filt?1:0,
     /* THE MANIFEST, WHICH THIS LIST HAS TWICE ALREADY FAILED TO MENTION.
 
        The two comments above are the same bug, found twice: a field the draft
@@ -9198,7 +9269,7 @@ $("saveBtn").onclick=async ()=>{
          nothing in it. Downstream reads them off the RECORD (the report, the
          server payload, the ZIP, the dashboard), so all four routes carried an
          empty round and none of them could tell. */
-      prod:p.prod||"", other:p.other||"", evid:p.evid||"", samp:p.samp?1:0, filt:p.filt?1:0,
+      prod:p.prod||"", other:p.other||"", evid:p.evid||"", samp:p.samp?1:0, sno:p.sno||"", filt:p.filt?1:0,
       mm:(p.mm==null?null:Number(p.mm)), stood:p.stood?1:0, reason:p.reason||"",
       /* A baseline is not a separate kind of thing to sync. It is a marker on
          the reading that set it, so it travels every path a round already
@@ -12718,6 +12789,9 @@ async function teamPull(manual,full,from,pre){
        IndexedDB is slower than the paint — returning before the write lands
        makes a round that did arrive look like one the folder no longer has. */
     try{ await stash; }catch(_){ }
+    /* The office's lube decisions travel with the folder's other news. Not
+       awaited: a pull is "done" when the rounds are, and this never holds it. */
+    lubeMasterPull(false).catch(e=>bad("lube-master-pull", e));
     return true;                               // the folder actually answered
   }catch(e){
     if(!mine()) return false;                      // superseded by a newer press
@@ -14029,6 +14103,7 @@ async function buildPackage(){
       }
       if(p.evid) n.lubeEvidence = p.evid;
       if(p.samp) n.lubeSampled = 1;
+      if(p.sno) n.lubeSampleNo = p.sno;
       if(p.filt) n.lubeFiltered = 1;
       const wo_=wearOut(rec,k,p);
       if(wo_){ if(wo_.mm!=="")n.measuredMM=wo_.mm; if(wo_.newMM!=="")n.newMM=wo_.newMM;
@@ -14086,7 +14161,7 @@ async function buildPackage(){
         causeCode:p.cause||"", cause:p.cause?causeLabel(p.cause,"en"):"",
         particle:p.particle||"", comp:p.comp||"", oil:p.oil||"", comment:p.comment||"",
         lubeProduct:(p.prod==="__other"?(p.other||""):(p.prod||"")),
-        lubeUnlisted:(p.prod==="__other"?1:0), lubeEvidence:p.evid||"", lubeSampled:p.samp?1:0, lubeFiltered:p.filt?1:0,
+        lubeUnlisted:(p.prod==="__other"?1:0), lubeEvidence:p.evid||"", lubeSampled:p.samp?1:0, lubeSampleNo:p.sno||"", lubeFiltered:p.filt?1:0,
         tempC:p.tempV||"", ambC:p.tempA||"", tempMethod:p.tempM||"",
         /* How it was found. The server path has always sent this; the ZIP did
            not, so a coded ISO 14224 detection method the inspector chose on
@@ -14413,7 +14488,7 @@ async function rptRecords(onlyId){
       const lube = meta.lube
         ? lubeReportBlock(a1.m||"", a1.cls||"", k,
             { product:(p.prod==="__other"?(p.other||""):(p.prod||"")),
-              evid:p.evid||"", samp:(p.samp?1:0), filt:(p.filt?1:0) })
+              evid:p.evid||"", samp:(p.samp?1:0), sno:p.sno||"", filt:(p.filt?1:0) })
         : null;
       items.push({ key:k, name:nm.name, nameAlt:nm.nameAlt, code:nm.code, lube,
         general:(k===GEN_KEY?1:0), cats:photosOf(p).map(b=>attCat(p,b)||"COMPONENT"),
@@ -14574,7 +14649,7 @@ function teamRecToReport(rec){
     const lube = meta.lube
       ? lubeReportBlock(a.m||"", a.cls||rec.cls||"", it.key,
           { product:it.lubeProduct||"", evid:it.lubeEvidence||"",
-            samp:it.lubeSampled?1:0, filt:it.lubeFiltered?1:0 })
+            samp:it.lubeSampled?1:0, sno:it.lubeSampleNo||"", filt:it.lubeFiltered?1:0 })
       : null;
     return { key:it.key, name:nm.name, nameAlt:nm.nameAlt, code:nm.code, lube,
              general:it.general?1:0, cats:(it.att||[]).map(e=>e.category||"COMPONENT"),
@@ -15045,7 +15120,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="513";
+const BUILD="515";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -17830,7 +17905,7 @@ function recToExport0(rec){
         defectIso:p.defect?upDefect(p.defect):"",
         defect:p.defect?defectLabel(p.defect,"en"):"", iso:d?d.iso14224:"", isoMode:d?d.iso14224:"",
         lubeProduct:(p.prod==="__other"?(p.other||""):(p.prod||"")),
-        lubeUnlisted:(p.prod==="__other"?1:0), lubeEvidence:p.evid||"", lubeSampled:p.samp?1:0, lubeFiltered:p.filt?1:0,
+        lubeUnlisted:(p.prod==="__other"?1:0), lubeEvidence:p.evid||"", lubeSampled:p.samp?1:0, lubeSampleNo:p.sno||"", lubeFiltered:p.filt?1:0,
         causeCode:p.cause||"", causeIso:p.cause?upCause(p.cause):"",
         cause:p.cause?causeLabel(p.cause,"en"):"", particle:p.particle||"",
         detection:det, detectionLabel:detectLabel(det,"en"),

@@ -238,11 +238,12 @@
     const evidKey = it.lubeEvidence || "";
     const samp = it.lubeSampled ? true : false;
     const filt = it.lubeFiltered ? true : false;
-    if (!product && !evidKey && !samp && !filt) return null;
+    const sno = String(it.lubeSampleNo || "").trim();
+    if (!product && !evidKey && !samp && !filt && !sno) return null;
     const e = LUBE.EVID.filter(x => x.k === evidKey)[0];
     const a = (typeof ASSET_BY !== "undefined" && ASSET_BY[rec.equip]) || {};
     const v = LUBE.verdict(a.m || "", a.cls || "", it.key, product);
-    return { product, evid: e ? { en: e.en, ru: e.ru } : null, samp, filt,
+    return { product, evid: e ? { en: e.en, ru: e.ru } : null, samp, sno, filt,
              want: v.want || "", band: v.b || "", verdictKey: v.k || "",
              off: !!(product && v.off) };
   }

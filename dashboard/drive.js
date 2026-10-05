@@ -1133,6 +1133,22 @@
       index[name] = { id: (j && j.saved && j.saved[0] && j.saved[0].id) || "", size: data.length };
       return j;
     },
+    /* A small JSON document read back by its path (the lube master,
+       _meta/lube/master.json). `null` means the folder answered and the
+       document is not there — never yet written — which is a different answer
+       from a failure: a failure throws, so a desk that cannot reach the folder
+       never mistakes "unreachable" for "nobody has decided anything yet". */
+    async getDoc(name) {
+      let r;
+      try { r = await api({ action: "file", id: name }); }
+      catch (e) {
+        if (/\b404\b|NoSuchKey|not\s*found/i.test(String((e && e.message) || e))) return null;
+        throw e;
+      }
+      if (!r || !r.data) return null;
+      const txt = new TextDecoder().decode(await b64ToBlob(r.data, "application/json").arrayBuffer());
+      return JSON.parse(txt);
+    },
     cursorAt() { return cursor(); },
   };
 })();

@@ -101,7 +101,8 @@ const reset = q => fetch(BASE + '/__reset?' + q).then(r => r.text());
     defs: document.querySelectorAll('#tab-lube details.defs').length,
     open: document.querySelectorAll('#tab-lube details[open]').length,
     tall: +(document.documentElement.scrollHeight / innerHeight).toFixed(2) }));
-  ok('seven views as tabs, one showing', L.tabs === 7 && L.showing === 1, L.tabs + ' tabs, ' + L.showing + ' showing');
+  /* nine since 2026-10-04: the lube master's four panels (master, decide, oils, sample) replaced Standards and Machine reference */
+  ok('nine views as tabs, one showing', L.tabs === 9 && L.showing === 1, L.tabs + ' tabs, ' + L.showing + ' showing');
   ok('one Definitions control for the page, no per-view "How this is counted", none open by default', L.defs === 1 && L.method === 0 && L.open === 0, L.defs + ' defs / ' + L.method + ' method / ' + L.open + ' open');
   await p.evaluate(() => lubeGo('exc')); await p.waitForTimeout(400);
   const G = await p.evaluate(() => {

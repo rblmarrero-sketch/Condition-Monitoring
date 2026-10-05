@@ -1040,7 +1040,7 @@
       rest_n:"Also checked, nothing to report —",
       c_action:"Action", c_reading:"Reading",
       c_life:"Life left", c_permm:"mm/1000h", c_h:"h",
-      c_lube_prod:"In service", c_lube_evid:"Evidence", c_lube_samp:"Oil sample", c_lube_filt:"Offline filtration",
+      c_lube_prod:"In service", c_lube_evid:"Evidence", c_lube_samp:"Oil sample", c_lube_sno:"Sample number", c_lube_filt:"Offline filtration",
       c_lube_want:"Site standard", c_lube_off:"OFF STANDARD",
       lube_off_n:"{n} compartment(s) hold something other than the site standard.",
       c_sampled:"taken", c_notsampled:"not taken", c_filtered:"done", c_notfiltered:"not done",
@@ -1240,7 +1240,7 @@
       rest_n:"\u0422\u0430\u043a\u0436\u0435 \u043f\u0440\u043e\u0432\u0435\u0440\u0435\u043d\u043e, \u0431\u0435\u0437 \u0437\u0430\u043c\u0435\u0447\u0430\u043d\u0438\u0439 \u2014",
       c_action:"\u0414\u0435\u0439\u0441\u0442\u0432\u0438\u0435", c_reading:"\u041f\u043e\u043a\u0430\u0437\u0430\u043d\u0438\u044f",
       c_life:"\u041e\u0441\u0442\u0430\u0442\u043e\u043a", c_permm:"\u043c\u043c/1000\u0447", c_h:"\u0447",
-      c_lube_prod:"\u0417\u0430\u043b\u0438\u0442\u043e", c_lube_evid:"\u041f\u043e\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043d\u0438\u0435", c_lube_samp:"\u041f\u0440\u043e\u0431\u0430 \u043c\u0430\u0441\u043b\u0430", c_lube_filt:"\u0410\u0432\u0442\u043e\u043d\u043e\u043c\u043d\u0430\u044f \u0444\u0438\u043b\u044c\u0442\u0440\u0430\u0446\u0438\u044f",
+      c_lube_prod:"\u0417\u0430\u043b\u0438\u0442\u043e", c_lube_evid:"\u041f\u043e\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043d\u0438\u0435", c_lube_samp:"\u041f\u0440\u043e\u0431\u0430 \u043c\u0430\u0441\u043b\u0430", c_lube_sno:"\u041d\u043e\u043c\u0435\u0440 \u043f\u0440\u043e\u0431\u044b", c_lube_filt:"\u0410\u0432\u0442\u043e\u043d\u043e\u043c\u043d\u0430\u044f \u0444\u0438\u043b\u044c\u0442\u0440\u0430\u0446\u0438\u044f",
       c_lube_want:"\u0421\u0442\u0430\u043d\u0434\u0430\u0440\u0442 \u043f\u0440\u0435\u0434\u043f\u0440\u0438\u044f\u0442\u0438\u044f", c_lube_off:"\u041d\u0415 \u041f\u041e \u0421\u0422\u0410\u041d\u0414\u0410\u0420\u0422\u0423",
       lube_off_n:"\u0412 {n} \u0443\u0437\u043b. \u0437\u0430\u043b\u0438\u0442\u043e \u043d\u0435 \u0442\u043e, \u0447\u0442\u043e \u043f\u0440\u0435\u0434\u0443\u0441\u043c\u043e\u0442\u0440\u0435\u043d\u043e \u0441\u0442\u0430\u043d\u0434\u0430\u0440\u0442\u043e\u043c.",
       c_sampled:"\u043e\u0442\u043e\u0431\u0440\u0430\u043d\u0430", c_notsampled:"\u043d\u0435 \u043e\u0442\u043e\u0431\u0440\u0430\u043d\u0430", c_filtered:"\u0432\u044b\u043f\u043e\u043b\u043d\u0435\u043d\u0430", c_notfiltered:"\u043d\u0435 \u0432\u044b\u043f\u043e\u043b\u043d\u0435\u043d\u0430",
@@ -5140,6 +5140,7 @@
       if (Lb.evid) row(T.I("c_lube_evid"), T.both(Lb.evid.en, Lb.evid.ru, ""));
       if (Lb.samp != null) row(T.I("c_lube_samp"),
         T.I(Lb.samp ? "c_sampled" : "c_notsampled"));
+      if (Lb.sno) row(T.I("c_lube_sno"), '<span class="code">' + esc(Lb.sno) + '</span>');
       if (Lb.filt != null) row(T.I("c_lube_filt"),
         T.I(Lb.filt ? "c_filtered" : "c_notfiltered"));
       /* The finding. Right specification, wrong drum is the thing this round

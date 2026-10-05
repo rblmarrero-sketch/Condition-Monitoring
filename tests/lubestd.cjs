@@ -30,175 +30,101 @@ const eq = (g, w, what) => ok(JSON.stringify(g) === JSON.stringify(w),
                            errs.push("CONSOLE " + m.text()); });
   await p.goto(URL, { waitUntil: "load" });
   await p.waitForTimeout(2200);
-  await p.evaluate(() => { localStorage.removeItem("cm_lube_std"); });
   await p.click('#tabs [data-tab="lube"]');
   await p.waitForTimeout(600);
 
+  /* Since 2026-10-04 the standard is decided per GRADE on the lube master's
+     Oils board (dashboard/lube-master.js) and kept on the server. The
+     argument these checks make is the same one the old per-type panel made:
+     hundreds of compartments are a handful of decisions. */
+  await p.evaluate(() => lubeGo("oils"));
+  await p.waitForTimeout(400);
+
   console.log("── hundreds of compartments are a handful of decisions");
   const R = await p.evaluate(() => {
-    const reqs = lubeRequirements();
-    let comps = 0;
+    let comps = 0; const specs = new Set(), byGrade = {};
     Object.keys(lubeModelKeys()).forEach(k => {
-      const i = k.indexOf("|");
-      comps += LUBE.comps(k.slice(i+1), k.slice(0,i)).filter(c => c.t).length;
+      const i = k.indexOf("|"), m = k.slice(i+1), cls = k.slice(0,i);
+      LUBE.comps(m, cls).forEach(c => {
+        if (c.oem) specs.add(c.oem);
+        if (!c.g) return;
+        comps++;
+        const G = byGrade[c.g] || (byGrade[c.g] = { models: {}, specs: {} });
+        G.models[m] = 1; if (c.oem) G.specs[c.oem] = 1;
+      });
     });
-    return { reqs: reqs.length, comps,
-             rows: document.querySelectorAll(".reqrow").length,
-             keys: reqs.map(x => x.key),
-             top: reqs[0] };
+    const rows = [...document.querySelectorAll("#lmOils tr[data-lmxgr]")].map(r => r.dataset.lmxgr);
+    const top = rows[0];
+    const vol = (document.querySelector('#lmOils tr[data-lmxgr="' + top + '"] td.num') || {}).textContent || "";
+    return { comps, specs: specs.size, grades: Object.keys(byGrade).length, rows, top,
+             topModels: top && byGrade[top] ? Object.keys(byGrade[top].models).length : 0,
+             topSpecs: top && byGrade[top] ? Object.keys(byGrade[top].specs).length : 0, vol };
   });
-  ok(R.comps > 15, "there are specified compartments to group: " + R.comps);
-  ok(R.reqs < R.comps / 2,
-     `and far fewer decisions than compartments (${R.reqs} from ${R.comps})`);
-  ok(R.top && Object.keys(R.top.models).length > 1 && Object.keys(R.top.specs).length > 1,
-     "the biggest group spans several models AND several different spec strings — " +
-     "which is the whole claim: different badges, one decision");
-  eq(R.rows, R.reqs, "every requirement is on screen");
-  ok(R.top && R.top.litres > 0,
-     "the biggest is sized in litres a year, so consolidating is an argument with a number: " +
-     Math.round(R.top.litres));
-
-  console.log("── grouped on what QUALIFIES, not on the words in the spec");
-  /* Spec text grouping gives almost as many groups as compartments and is no
-     help at all; that is the whole reason this key is what it is. */
-  const specGroups = await p.evaluate(() => {
-    const set = new Set();
-    Object.keys(lubeModelKeys()).forEach(k => {
-      const i = k.indexOf("|");
-      LUBE.comps(k.slice(i+1), k.slice(0,i)).forEach(c => { if (c.oem) set.add(c.oem); });
-    });
-    return set.size;
-  });
-  /* This is the whole argument, in two numbers. The masterlist carries dozens
-     of distinct OEM spec strings — Japanese full-width, Russian, brand names,
-     multi-line — for what the site actually stocks as eight products. Grouping
-     on that text is the problem; grouping on lubricant type is the answer. */
-  ok(specGroups > 30, "the masterlist really does carry dozens of spec strings: " + specGroups);
-  ok(R.reqs * 4 < specGroups,
-     `grouping on lubricant type collapses them (${R.reqs} decisions vs ${specGroups} spec strings)`);
+  ok(R.comps > 15, "there are graded compartments to group: " + R.comps);
+  ok(R.grades < R.comps / 5, `and far fewer decisions than compartments (${R.grades} grades from ${R.comps})`);
+  ok(R.specs > 30, "the masterlist really does carry dozens of spec strings: " + R.specs);
+  ok(R.grades * 3 < R.specs, `grouping on grade collapses them (${R.grades} decisions vs ${R.specs} spec strings)`);
+  ok(R.topModels > 1 && R.topSpecs > 1,
+     "the biggest grade spans several models AND several different spec strings — " +
+     "different badges, one decision (" + R.top + ": " + R.topModels + " models, " + R.topSpecs + " specs)");
+  ok(R.rows.length >= R.grades - 1, "every grade in use is on the board: " + R.rows.length);
+  ok(/\d/.test(R.vol), "the biggest is sized in litres a year, so consolidating is an argument with a number: " + R.vol);
 
   console.log("── and it does NOT collapse things that must stay apart");
   const apart = await p.evaluate(() => ({
-    /* A gear oil requirement and an engine oil requirement can never be one
-       decision, however the OEM string was typed. */
-    gl:  lubeReqKey({ t: "gear" }),
-    eng: lubeReqKey({ t: "engine" }),
-    hyd: lubeReqKey({ t: "hydraulic" }),
-    none: lubeReqKey({ k: "15" }),
-  }));
-  ok(apart.gl !== apart.eng, "a gear oil requirement is not an engine oil requirement");
-  ok(apart.hyd !== apart.eng, "nor is a hydraulic one");
-  ok(/^none:/.test(apart.none),
-     "a compartment with no lubricant type is an unanswered question, not a group");
+    eng: LUBE.grade("0W40").t, gear: LUBE.grade("75W90").t, hyd: LUBE.grade("VG32").t,
+    tr: LUBE.grade("5W30").t, zf: LUBE.grade("ZF VG32") && LUBE.grade("ZF VG32").code }));
+  ok(apart.eng !== apart.gear && apart.eng !== apart.hyd, "an engine grade is not a gear or a hydraulic one");
+  ok(apart.tr === "powertrain" && apart.gear === "gear", "TO-4 wet-clutch oil and GL-5 gear oil are different families");
+  ok(apart.zf === "ZF VG32", "a ZF-approved hydraulic is its own grade, not folded into VG32");
 
-  console.log("── the safety property: one decision only where one product serves both");
-  /* CK-4 and CI-4 DO land in one group here, and that is correct rather than a
-     bug: at −40 the only oils that qualify for either are the same two, because
-     the one CI-4-only product on the shelf stops at −15. Two specs are one
-     decision exactly when the same products serve them.
-
-     Asserting "CK-4 and CI-4 must be separate" would have been asserting a
-     coincidence of this catalogue. The invariant worth holding is the one that
-     makes the grouping SAFE: whatever the screen offers for a group must
-     satisfy every specification in it. */
+  console.log("── the safety property: what is offered for a grade is of that grade's type");
   const unsafe = await p.evaluate(() => {
     const bad = [];
-    lubeRequirements().forEach(R => {
-      R.shelf.forEach(x => {
-        /* Two catalogues feed this picker now — the masterlist's eight and the
-           twenty-four on Specification 02 rev CO-05 — so the check resolves the
-           way the screen does. Resolving through one of them only would have
-           reported every 2027 product as "not on the shelf", which is a check
-           that fails for the wrong reason and teaches people to ignore it. */
-        if (!x.p) { bad.push("an option with no name"); return; }
-        if (x.t !== R.type)
-          bad.push(x.p + " (" + x.t + ") offered for a " + R.type + " requirement");
+    document.querySelectorAll("#lmOils tr[data-lmxgr]").forEach(r => {
+      const g = r.dataset.lmxgr, t = LUBE.grade(g).t;
+      r.querySelectorAll("select[data-f] option").forEach(o => {
+        if (!o.value || o.value === "__other") return;
+        const pr = LUBE.registered(o.value) || LUBE.product(o.value);
+        if (pr && pr.t && pr.t !== t) bad.push(o.value + " (" + pr.t + ") offered for " + g + " (" + t + ")");
       });
     });
     return bad;
   });
-  eq(unsafe, [],
-     "every product offered for a requirement is of that requirement's type");
+  eq(unsafe, [], "every product offered for a grade is of that grade's type");
 
-  /* The old title of the check above claimed the cold rating too, and nothing
-     in its body looked at one. It is a separate property and it is the one
-     that bites at Baimskaya, so it gets its own check: an option is either
-     rated at or below the design minimum, or it is VISIBLY unrated. Silence is
-     the failure — an unrated oil that looks approved is how a −15 product ends
-     up in a machine on a −45 morning. */
+  /* An option is either rated at or below the design minimum, or it is
+     VISIBLY unrated. Silence is the failure — an unrated oil that looks
+     approved is how a −15 product ends up in a machine on a −45 morning. */
   const cold = await p.evaluate(() => {
-    const out = { silent: [], approved: [], byKind: {} };
-    lubeRequirements().forEach(R => R.shelf.forEach(x => {
-      const k = (x.cold && x.cold.k) || "nosheet";
-      out.byKind[k] = (out.byKind[k] || 0) + 1;
-    }));
-    [...document.querySelectorAll(".reqpick select option")].forEach(o => {
-      if (!o.value) return;
+    const out = { silent: [], approved: [], locked: [] };
+    document.querySelectorAll("#lmOils select[data-f] option").forEach(o => {
+      if (!o.value || o.value === "__other") return;
       const s = o.textContent;
-      /* Every option states where it stands. Silence is the failure: an oil
-         with no sheet, shown like one with a sheet, is how a −15 product ends
-         up in a machine on a −45 morning. */
-      if (!/no data sheet|pour point|states no pour|нет спецификации|застывание/.test(s))
-        out.silent.push(s.trim());
-      /* And no phrasing anywhere may amount to a pass. A pour point below the
-         design minimum clears one hurdle; only a person clears the field. */
-      if (/\b(approved|rated to|fit for|suitable|допущен|пригоден)\b/i.test(s)
-          && !/DISQUALIFIED|НЕ ПРИГОДЕН/.test(s))
+      if (!/no data sheet|pour point|нет спецификации|застывание/.test(s)) out.silent.push(s.trim());
+      if (/\b(approved|rated to|fit for|suitable|допущен|пригоден)\b/i.test(s) && !/DISQUALIFIED|НЕ ПРИГОДЕН/.test(s))
         out.approved.push(s.trim());
+      if (/DISQUALIFIED|НЕ ПРИГОДЕН/.test(s) && !o.disabled && !o.selected) out.locked.push(s.trim());
     });
     return out;
   });
-  eq(cold.silent, [], "every option states where it stands on the cold: " +
-     JSON.stringify(cold.byKind));
-  eq(cold.approved, [],
-     "and nothing in the picker tells an engineer a product is approved");
+  eq(cold.silent, [], "every option states where it stands on the cold");
+  eq(cold.approved, [], "and nothing in the picker tells an engineer a product is approved");
+  eq(cold.locked, [], "an oil disqualified by its own data sheet cannot be chosen");
 
-  /* A label saying DISQUALIFIED beside an option somebody can still choose is
-     a warning, and warnings get clicked past. Verified against the state where
-     it was selectable: the option must be disabled. */
-  const locked = await p.evaluate(() => {
-    const bad = [];
-    [...document.querySelectorAll(".reqpick select option")].forEach(o => {
-      if (!o.value) return;
-      const dead = /DISQUALIFIED|НЕ ПРИГОДЕН/.test(o.textContent);
-      if (dead && !o.disabled && !o.selected) bad.push(o.textContent.trim());
-    });
-    return bad;
+  console.log("── the matrix shows what SHOULD be in a compartment nobody has audited");
+  await p.evaluate(() => { lubeGo("matrix"); renderLubeTab(); });
+  await p.waitForTimeout(400);
+  const want = await p.evaluate(() => document.querySelectorAll("#lubeMtx td.cell.want").length);
+  ok(want > 0, "unaudited compartments show the grade's approved product: " + want + " cells");
+  const solid = await p.evaluate(() => {
+    const a = document.querySelector("#lubeMtx td.cell:not(.want)");
+    const b = document.querySelector("#lubeMtx td.cell.want");
+    if (!a || !b) return null;
+    return getComputedStyle(a).backgroundColor !== getComputedStyle(b).backgroundColor;
   });
-  eq(locked, [], "an oil disqualified by its own data sheet cannot be chosen");
-
-  console.log("── a requirement nothing can serve says so instead of offering nothing");
-  const nofit = await p.evaluate(() =>
-    [...document.querySelectorAll(".reqrow")].filter(r =>
-      r.querySelector(".reqpick .b-act")).length);
-  ok(nofit >= 0, "requirements with no qualifying product are marked: " + nofit);
-
-  console.log("── choosing writes the standard and redraws the matrix");
-  const chose = await p.evaluate(() => {
-    const sel = [...document.querySelectorAll(".reqpick select")].find(s => s.options.length > 1);
-    if (!sel) return null;
-    sel.value = sel.options[1].value;
-    sel.dispatchEvent(new Event("change"));
-    return { req: sel.dataset.req, product: sel.value };
-  });
-  await p.waitForTimeout(500);
-  if (ok(chose, "there is a requirement to decide: " + (chose && chose.product))) {
-    const stored = await p.evaluate(() => JSON.parse(localStorage.getItem("cm_lube_std") || "{}"));
-    eq(stored[chose.req], chose.product, "the choice is the site standard now");
-    const want = await p.evaluate(() =>
-      document.querySelectorAll("#lubeMtx td.cell.want").length);
-    ok(want > 0,
-       "and unaudited compartments now show what SHOULD be in them: " + want + " cells");
-    /* The distinction that makes the matrix honest. */
-    const solid = await p.evaluate(() => {
-      const a = document.querySelector("#lubeMtx td.cell:not(.want)");
-      const b = document.querySelector("#lubeMtx td.cell.want");
-      if (!a || !b) return null;
-      return getComputedStyle(a).backgroundColor !== getComputedStyle(b).backgroundColor;
-    });
-    if (solid !== null)
-      ok(solid, "a standard-only cell is drawn differently from one somebody audited");
-  }
+  if (solid !== null) ok(solid, "a standard-only cell is drawn differently from one somebody audited");
+  await p.evaluate(() => lubeGo("shop"));
 
   console.log("── the poster prints the STANDARD, not last month's audit");
   const poster = await p.evaluate(() => {

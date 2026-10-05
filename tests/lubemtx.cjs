@@ -84,7 +84,10 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
     const r = LUBE.of("NHL TR60", "HT");
     return r ? { n: r.n, comps: r.comps.length } : null;
   });
-  ok(tr && tr.n === 16 && tr.comps === 10,
+  /* Sixteen machines; ten compartments on the 2025 workbook, fifteen on the
+     October 2026 one (the suspension cylinders 3BL/3BR/3CL/3CR and the grease
+     point 13 were added). At least the ten either way. */
+  ok(tr && tr.n === 16 && tr.comps >= 10,
      "and it was never missing from the data", JSON.stringify(tr));
 
   /* Discriminating: this must FAIL against the old default. GEN is the biggest

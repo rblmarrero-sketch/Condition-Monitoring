@@ -233,11 +233,18 @@ const eq = (g, w, what) => ok(JSON.stringify(g) === JSON.stringify(w),
     const c = lubeComp(k), ty = c && c.t;
     const of = (t, src) => (r.filter(x => x.t === t && x.src === src)[0] || {}).p;
     const other = (r.filter(x => x.t && x.t !== ty)[0] || {}).p;
+    /* The 2027 product for THIS compartment's grade (since the October 2026
+       workbook every compartment carries one): a 75W-140 drum on the new
+       shelf is not the replacement for a 75W-90 final drive, and the verdict
+       now says so ("same family, not the standard grade"). */
+    const g = c && c.g;
+    const rep = (r.filter(x => x.src !== "field" &&
+                   (g ? LUBE.oilCode(x.p) === g : x.t === ty))[0] || {}).p || of(ty, "2027");
     const out = {
       ty: ty, unit: curEquip, comp: k,
-      names: { inc: of(ty, "field"), rep: of(ty, "2027"), other: other },
+      names: { inc: of(ty, "field"), rep: rep, other: other },
       incumbent: set(of(ty, "field")),
-      replacement: set(of(ty, "2027")),
+      replacement: set(rep),
       wrongJob: set(other),
       unlisted: set("SOME DRUM FROM THE BACK OF THE SHED"),
       nothing: set(""),

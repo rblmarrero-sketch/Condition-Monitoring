@@ -173,9 +173,13 @@ const key = e => new KeyboardEvent('keydown', { key: e, bubbles: true, cancelabl
   await p.fill('#rTargetQ', target); await p.keyboard.press('ArrowDown'); await p.keyboard.press('Enter'); await p.waitForTimeout(300);
   const Rp2 = await p.evaluate(() => ({ v: $('rTarget').value, prev: $('rPreview').innerText }));
   ok('  choosing by keyboard sets the target and the preview follows', Rp2.v === target && new RegExp(target).test(Rp2.prev), Rp2.v);
-  await p.evaluate(() => { showTab('lube', true); lubeGo('ref'); }); await p.waitForTimeout(300);
-  const Lr = await p.evaluate(() => ({ inp: !!$('lrModelQ'), inLabel: !!($('lrModelQ') && $('lrModelQ').closest('label')), text: ($('lrModelQ') || {}).value, sel: $('lrModel').selectedOptions[0] && $('lrModel').selectedOptions[0].textContent }));
-  ok('Lubrication reference: the model picker is a combobox inside its label, showing the chosen model', Lr.inp && Lr.inLabel && Lr.text === Lr.sel && !!Lr.text, Lr.text);
+  /* The machine reference is the lube master now (2026-10-04): a searchable
+     list of models beside the editor, the chosen one marked selected. */
+  await p.evaluate(() => { showTab('lube', true); lubeGo('master'); }); await p.waitForTimeout(300);
+  const Lr = await p.evaluate(() => { const q = $('lmxQ'), on = document.querySelector('#lmMaster .lmx-mrow[aria-selected="true"]');
+    return { inp: !!q, search: q && q.type === 'search', ph: q && q.placeholder, role: (document.querySelector('#lmMaster .lmx-models') || {}).getAttribute && document.querySelector('#lmMaster .lmx-models').getAttribute('role'),
+             sel: on && on.querySelector('b').textContent, head: (document.querySelector('#lmMaster .lmx-edhd h3') || {}).textContent }; });
+  ok('Lubrication master: a model search and a listbox, the chosen model marked and edited beside it', Lr.inp && Lr.search && !!Lr.ph && Lr.role === 'listbox' && !!Lr.sel && Lr.sel === Lr.head, JSON.stringify(Lr));
 
   console.log('\n6. SUPPORT PAGES PUT THE RECORD FILTERS AWAY; THREE SEARCHES, THREE NAMES');
   const Sp = await p.evaluate(() => { const out = {}; ['overview', 'actions', 'equipment', 'due', 'lube', 'sync', 'reports'].forEach(k => { showTab(k, true);
