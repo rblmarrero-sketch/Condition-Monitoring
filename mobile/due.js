@@ -370,7 +370,12 @@
   D.byModel = function (type) {
     var s = D.EVERY[type] || D.FALLBACK;
     if (!s.byModel) return null;
-    return s.byModel.map(function (r) { return { model: r.model, h: r.h }; });
+    /* `since` travels with the figure: the day the site put the model on
+       it. A schedule written before that day (1C's work orders, planned
+       weeks ahead and kept for months) did not owe this round, and the
+       ingester reads the date to say so. Live scheduling asks about today,
+       which is never before it. */
+    return s.byModel.map(function (r) { return { model: r.model, h: r.h, since: r.since || null }; });
   };
   /* Every class this round is walked on at its own stated figure, as
      [{cls, h}] — what a coverage row needs to say "1,000 h dozers ·

@@ -4390,6 +4390,29 @@ The "{n} matching" line printed above the pager as well as in it; it stands
 alone now only when there is no pager. Fits without a sideways scroll at
 1366 on both pages. Dashboard only; nothing to deploy on the VM.
 
+**A MODEL RULE STARTS ON ITS OWN DATE (build 524).** The TR60 audit rule in
+`due.js` carries `since: '2026-10-04'`, and nothing read it: the ingester
+applied the rule to every work order in the file, so TK156's 4,000 h service
+of 13 September was made to owe a lubrication audit nobody had been asked to
+do, and Plan vs Actual could score it missed (`tests/progchg.cjs` caught it
+and had been red since build 512). `DUE.byModel` now returns `since`,
+`gen_class_rounds.cjs` writes it into the round map, and
+`round_interval(spec, cls, model, on)` takes the class's figure for an order
+PLANNED before it; `resolve_cm_types` and `dedupe_within_visit` pass the plan
+date. An order with no plan date is a future one and takes the rule; a rule
+with no `since` applies to everything, as before. Run against the live file it
+removed the audit from exactly 56 TR60 orders planned before 4 October and
+changed nothing else. Live scheduling (the phone's due list, never-inspected,
+coverage) asks about today and is unaffected.
+
+The data fixes itself: the hourly job regenerates the round map from due.js
+and re-ingests, so the first run after this is on the default branch writes
+the corrected `work_orders.js` and `schedule_slim.json`. Nothing was
+committed to `data/` by hand. `reresolve_rounds.py` also stopped dropping the
+rest of `schedule_slim.json` when it rewrites it: it wrote `byUnit` alone,
+which would have emptied every phone's 1C PM list (`rtwOpen`) until the next
+hourly run. It now replaces `byUnit` and keeps the rest. No VM deploy.
+
 ---
 
 ## Secrets

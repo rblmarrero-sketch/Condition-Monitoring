@@ -81,5 +81,35 @@ ok("the 500 h order keeps the audit it names (its tier IS the model's interval)"
 ok("and the 1,000 h order does not claim it a second time", "LUBE" not in (visit[1]["cmTypes"] or []),
    str(visit[1]["cmTypes"]))
 
+# A MODEL RULE STARTS ON ITS OWN DATE. due.js states when the site put the
+# TR60 on the audit (`since`); a work order planned before that did not owe it.
+# The day is read off due.js through the generated map, never typed here.
+since = None
+for r in (iwo.load_class_rounds().get("LUBE", {}).get("models") or []):
+    if r.get("model") == "TR60":
+        since = r.get("since")
+RS = dict(RR, LUBE={"restricted": False, "classes": {"HT": None},
+                    "models": [{"model": "TR60", "h": 500, "since": "2026-10-04"}]})
+label, types = iwo.resolve_cm_types(4000, "HT", RS, tr60[0], "2026-09-13")
+ok("a TR60's 4,000 h order planned before the rule's date does not owe the audit (TK156, 13 Sep)",
+   "LUBE" not in (types or []) and "MP" in (types or []), str(types))
+label, types = iwo.resolve_cm_types(4000, "HT", RS, tr60[0], "2026-10-04")
+ok("  one planned ON the date does", "LUBE" in (types or []), str(types))
+label, types = iwo.resolve_cm_types(500, "HT", RS, tr60[0], "2026-11-20")
+ok("  and so does one planned after it", "LUBE" in (types or []), str(types))
+label, types = iwo.resolve_cm_types(500, "HT", RS, tr60[0])
+ok("  an order with no plan date is a future order and takes the rule", "LUBE" in (types or []), str(types))
+label, types = iwo.resolve_cm_types(500, "HT", RR, tr60[0], "2026-01-01")
+ok("  a rule with no date of its own applies whatever the order's date", "LUBE" in (types or []), str(types))
+visit_old = [
+    {"equip": tr60[0], "planStart": "2026-09-13", "cls": "HT", "hours": 500, "cmTypes": ["MP"], "cmLabel": "x"},
+    {"equip": tr60[0], "planStart": "2026-09-13", "cls": "HT", "hours": 1000, "cmTypes": ["INSP", "MP"], "cmLabel": "x"},
+]
+iwo.dedupe_within_visit(visit_old, RS)
+ok("  the within-visit dedupe reads the same date (no audit appears on a September visit)",
+   all("LUBE" not in (w["cmTypes"] or []) for w in visit_old), str([w["cmTypes"] for w in visit_old]))
+ok("the generated round map carries the date due.js states, or predates this change",
+   since in (None, "2026-10-04"), str(since))
+
 print("\nFAILED: " + ", ".join(fails) if fails else "\nall good")
 sys.exit(1 if fails else 0)
