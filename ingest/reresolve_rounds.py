@@ -59,7 +59,8 @@ def main():
         fresh = cls_by_equip.get(str(w.get("equip") or "").upper())
         if fresh:
             w["cls"] = fresh
-        label, types = iwo.resolve_cm_types(w.get("hours"), w.get("cls") or "", class_rounds, w.get("equip") or "")
+        label, types = iwo.resolve_cm_types(w.get("hours"), w.get("cls") or "", class_rounds,
+                                            w.get("equip") or "", w.get("planStart"))
         w["cmLabel"], w["cmTypes"] = label, types
         if tuple(types or ()) != before:
             changed += 1
@@ -84,7 +85,17 @@ def main():
             "wo": w.get("woNumber"), "hours": w.get("hours"), "types": w["cmTypes"],
             "plan": w["planStart"], "priority": w.get("priority"),
         })
-    slim = {"generated": data.get("generated"), "source": data.get("source"), "byUnit": by_unit}
+    # Only byUnit is this script's to rewrite. The ingester's slice carries
+    # more than that — rtwOpen is the phone's whole 1C PM list — and writing
+    # a fresh dict here dropped it, emptying that list on every phone until
+    # the next hourly run. Everything else in the file is kept as it was.
+    try:
+        slim = json.loads(SLIM.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        slim = {}
+    slim.update({"generated": data.get("generated"), "byUnit": by_unit})
+    if data.get("source") is not None:
+        slim["source"] = data.get("source")
     SLIM.write_text(json.dumps(slim, ensure_ascii=False, separators=(",", ":")) + "\n",
                     encoding="utf-8")
 
