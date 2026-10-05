@@ -4296,6 +4296,21 @@ product names it ONCE, on a row of its own under the compartment names
 hours in large type; a column with two products names each in its cell.
 Nothing to deploy on the VM.
 
+**AND RECOMMENDATIONS AND EXCEPTIONS (build 518).** "fix the Exceptions and
+Recommendations tables too". Each of the five recommendation lists (told to
+use it and nobody bought it; bought and recommended for nothing; summer vs
+winter; the two matrices disagree; the supplier's caveats) was a stack of
+bold-over-grey pairs (`.catrow`, now retired); each is a fixed-column table
+(`table.grid.lctbl`) inside the same `details.cat` fold, one fact a column —
+product, times named, where; model, compartment, summer, winter; model,
+compartment, V3.1, audit — one line a row with the full text on hover, and
+only the supplier's notes wrap, because they are prose. The two exception
+lists keep their markup and paging; `#lgNoRef`/`#lgNoMach` are fixed-width,
+one line a row, the full text on hover, so "Support equipment" or a long
+model name no longer makes one row three times the next. Both office pages,
+identically; dashboard-next keeps its column filters. Nothing to deploy on
+the VM.
+
 ---
 
 ## Secrets

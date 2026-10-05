@@ -1222,10 +1222,25 @@
   details.cat>summary i{font-style:normal;margin-left:auto;color:var(--muted);
     font-size:12px;font-variant-numeric:tabular-nums;}
   .catbody{padding:2px 0 12px 20px;display:grid;gap:9px;}
-  .catrow b{display:block;font-size:13px;font-weight:600;line-height:1.3;}
-  .catrow i{display:block;font-style:normal;font-size:11.5px;color:var(--muted);
-    margin-top:2px;line-height:1.45;}
-  .catrow i.prose{color:var(--ink-2);max-width:78ch;}
+  /* A recommendation list is a table (lctbl): fixed columns, one line a row,
+     the supplier's notes the only column that wraps. */
+  table.grid.lctbl{table-layout:fixed;}
+  table.grid.lctbl th{font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);}
+  table.grid.lctbl td{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:middle;}
+  table.grid.lctbl td.prose{white-space:normal;color:var(--ink-2);line-height:1.45;vertical-align:top;}
+  table.grid.lctbl td:first-child{font-weight:600;color:var(--ink);}
+  /* The two exception lists: fixed columns and one line a row, the full text
+     on hover, so a long model name or a class name does not make one row
+     three times the height of the next. */
+  #lgNoRef,#lgNoMach{table-layout:fixed;}
+  #lgNoRef td,#lgNoMach td{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:middle;}
+  #lgNoRef th,#lgNoMach th{white-space:normal;vertical-align:bottom;}
+  #lgNoRef thead tr:first-child th:nth-child(1){width:27%;}
+  #lgNoRef thead tr:first-child th:nth-child(3){width:25%;}
+  #lgNoRef thead tr:first-child th:nth-child(4){width:92px;}
+  #lgNoMach thead tr:first-child th:nth-child(1){width:24%;}
+  #lgNoMach thead tr:first-child th:nth-child(3){width:136px;}
+  #lgNoRef input.cwcf,#lgNoMach input.cwcf{width:100%;box-sizing:border-box;}
   .kpi .s{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.3;}
 
   /* A cell showing the STANDARD rather than an audit is drawn hollow: the
@@ -4856,23 +4871,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=517"></script>
+<script src="../data/magnetic_plug.js?v=518"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=517"></script>
-<script src="../mobile/hme.js?v=517"></script>
-<script src="../mobile/mp-fc.js?v=517"></script>
-<script src="../mobile/rtw.js?v=517"></script>
-<script src="../mobile/hme-cascade.js?v=517"></script>
-<script src="../mobile/temp-limits.js?v=517"></script>
+<script src="../data/work_orders.js?v=518"></script>
+<script src="../mobile/hme.js?v=518"></script>
+<script src="../mobile/mp-fc.js?v=518"></script>
+<script src="../mobile/rtw.js?v=518"></script>
+<script src="../mobile/hme-cascade.js?v=518"></script>
+<script src="../mobile/temp-limits.js?v=518"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=517"></script>
-<script src="../mobile/normalize.js?v=517"></script>
-<script src="../mobile/terms.js?v=517"></script>
+<script src="../mobile/assets.js?v=518"></script>
+<script src="../mobile/normalize.js?v=518"></script>
+<script src="../mobile/terms.js?v=518"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -4891,20 +4906,20 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=517"></script>
-<script src="../mobile/edits.js?v=517"></script>
-<script src="../mobile/due.js?v=517"></script>
-<script src="../mobile/wear.js?v=517"></script>
-<script src="../mobile/wear-map.js?v=517"></script>
-<script src="../mobile/lube.js?v=517"></script>
-<script src="../mobile/lube-overrides.js?v=517"></script>
-<script src="../mobile/lube2027.js?v=517"></script>
-<script src="../mobile/lube-tds.js?v=517"></script>
-<script src="../dashboard/lube-master.js?v=517"></script>
+<script src="../mobile/grade.js?v=518"></script>
+<script src="../mobile/edits.js?v=518"></script>
+<script src="../mobile/due.js?v=518"></script>
+<script src="../mobile/wear.js?v=518"></script>
+<script src="../mobile/wear-map.js?v=518"></script>
+<script src="../mobile/lube.js?v=518"></script>
+<script src="../mobile/lube-overrides.js?v=518"></script>
+<script src="../mobile/lube2027.js?v=518"></script>
+<script src="../mobile/lube-tds.js?v=518"></script>
+<script src="../dashboard/lube-master.js?v=518"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=517"></script>
-<script src="../mobile/machine-photos.js?v=517"></script>
+<script src="../mobile/upload-defaults.js?v=518"></script>
+<script src="../mobile/machine-photos.js?v=518"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -4913,17 +4928,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=517"></script>
-<script src="../mobile/get.js?v=517"></script>
-<script src="../mobile/points.js?v=517"></script>
-<script src="../mobile/uc-points.js?v=517"></script>
-<script src="../mobile/inspect-guide.js?v=517"></script>
-<script src="../mobile/get-figs.js?v=517"></script>
-<script src="../mobile/body-points.js?v=517"></script>
-<script src="../mobile/body-map.js?v=517"></script>
-<script src="../mobile/jspdf.umd.min.js?v=517"></script>
-<script src="../mobile/html2canvas.min.js?v=517"></script>
-<script src="../mobile/report-core.js?v=517"></script>
+<script src="../mobile/machine-fig.js?v=518"></script>
+<script src="../mobile/get.js?v=518"></script>
+<script src="../mobile/points.js?v=518"></script>
+<script src="../mobile/uc-points.js?v=518"></script>
+<script src="../mobile/inspect-guide.js?v=518"></script>
+<script src="../mobile/get-figs.js?v=518"></script>
+<script src="../mobile/body-points.js?v=518"></script>
+<script src="../mobile/body-map.js?v=518"></script>
+<script src="../mobile/jspdf.umd.min.js?v=518"></script>
+<script src="../mobile/html2canvas.min.js?v=518"></script>
+<script src="../mobile/report-core.js?v=518"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -5238,6 +5253,7 @@ const I18N={
   lc_hdr_disp:"The two matrices answer the same compartment differently",
   lc_hdr_notes:"The supplier's own caveats",
   lc_summer:"summer", lc_winter:"winter", lc_named:"named {n}×",
+  lc_c_prod:"Product", lc_c_named:"Times named", lc_c_where:"Named in", lc_c_qty:"Bought for 2027", lc_c_model:"Model", lc_c_comp:"Compartment", lc_c_audit:"Audit", lc_c_note:"Supplier's note",
   ls_ask:"{n} compartment(s) here where the OEM code contradicts the type",
   lm_offstd:"off standard — should be {p}",
   lr_title:"Machine reference",
@@ -6250,6 +6266,7 @@ const I18N={
   lc_hdr_disp:"Две матрицы отвечают по-разному",
   lc_hdr_notes:"Замечания поставщика",
   lc_summer:"лето", lc_winter:"зима", lc_named:"названо {n}×",
+  lc_c_prod:"Продукт", lc_c_named:"Упоминаний", lc_c_where:"Где указан", lc_c_qty:"Закуплено на 2027", lc_c_model:"Модель", lc_c_comp:"Узел", lc_c_audit:"Аудит", lc_c_note:"Замечание поставщика",
   ls_ask:"{n} узл. — код OEM противоречит типу",
   lm_offstd:"вне стандарта — должно быть {p}",
   lr_title:"Справочник по технике",
@@ -17252,28 +17269,31 @@ function renderLubeCat(){
        <span class="v">${fmtN(C.shelf.length)}</span>
        <span class="s">${esc(t("lc_shelf_s", {n: rows}))}</span></div>`;
 
-  const list = (key, items, render) => items.length
+  /* Each list is a table: one row a finding, one fact a column, so the eye
+     reads down a column of products or compartments instead of down a stack
+     of bold-over-grey pairs. Long text ends in an ellipsis with the whole of
+     it in the tooltip; the supplier's own notes are prose and wrap. */
+  const list = (key, items, cols, row) => items.length
     ? `<details class="cat" data-lclist="${esc(key)}"><summary><b>${esc(t(key))}</b>` +
-      `<i>${items.length}</i></summary><div class="catbody">` +
-      items.map(render).join("") + `</div></details>`
+      `<i>${items.length}</i></summary><div class="catbody"><table class="grid lctbl">` +
+      `<colgroup>${cols.map(c => `<col${c[2] ? ` style="width:${c[2]}"` : ""}>`).join("")}</colgroup>` +
+      `<thead><tr>${cols.map(c => `<th${c[1] ? ` class="${c[1]}"` : ""}>${esc(c[0])}</th>`).join("")}</tr></thead>` +
+      `<tbody>${items.map(x => `<tr>${row(x).map((v, i) =>
+        `<td${cols[i][1] ? ` class="${cols[i][1]}"` : ""}${cols[i][1] === "prose" ? "" : ` title="${esc(v)}"`}>${esc(v)}</td>`).join("")}</tr>`).join("")}</tbody>` +
+      `</table></div></details>`
     : "";
-  const vol = x => x.q ? `<i>${fmtN(x.q)} ${esc(x.u)}</i>` : "";
+  const dash = v => (v == null || v === "") ? "\u2014" : String(v);
   box.innerHTML =
-    list("lc_hdr_off", C.offShelf, x =>
-      `<div class="catrow"><b>${esc(x.as)}</b><i>${
-        esc(t("lc_named",{n:x.n}))} · ${esc(x.where.join(", "))}</i></div>`) +
-    list("lc_hdr_un", C.unassigned, x =>
-      `<div class="catrow"><b>${esc(x.p)}</b>${vol(x)}</div>`) +
-    list("lc_hdr_season", C.seasons, x =>
-      `<div class="catrow"><b>${esc(x.model)} — ${esc(x.comp)}</b>` +
-      `<i>${esc(t("lc_summer"))}: ${esc(x.by.summer||"—")} · ` +
-      `${esc(t("lc_winter"))}: ${esc(x.by.winter||"—")}</i></div>`) +
-    list("lc_hdr_disp", C.disputed, x =>
-      `<div class="catrow"><b>${esc(x.model)} — ${esc(x.comp)}</b>` +
-      `<i>V3.1: ${esc(x.matrix||"—")}</i><i>audit: ${esc(x.audit||"—")}</i></div>`) +
-    list("lc_hdr_notes", C.notes, x =>
-      `<div class="catrow"><b>${esc(x.m)} — ${esc(x.comp)}</b>` +
-      `<i class="prose">${esc(x.text)}</i></div>`);
+    list("lc_hdr_off", C.offShelf, [[t("lc_c_prod"), "", "38%"], [t("lc_c_named"), "num", "110px"], [t("lc_c_where"), ""]],
+      x => [x.as, String(x.n), x.where.join(", ")]) +
+    list("lc_hdr_un", C.unassigned, [[t("lc_c_prod"), "", "60%"], [t("lc_c_qty"), "num"]],
+      x => [x.p, x.q ? fmtN(x.q) + " " + (x.u || "") : "\u2014"]) +
+    list("lc_hdr_season", C.seasons, [[t("lc_c_model"), "", "18%"], [t("lc_c_comp"), "", "22%"], [t("lc_summer"), ""], [t("lc_winter"), ""]],
+      x => [x.model, x.comp, dash(x.by.summer), dash(x.by.winter)]) +
+    list("lc_hdr_disp", C.disputed, [[t("lc_c_model"), "", "18%"], [t("lc_c_comp"), "", "22%"], ["V3.1", ""], [t("lc_c_audit"), ""]],
+      x => [x.model, x.comp, dash(x.matrix), dash(x.audit)]) +
+    list("lc_hdr_notes", C.notes, [[t("lc_c_model"), "", "18%"], [t("lc_c_comp"), "", "20%"], [t("lc_c_note"), "prose"]],
+      x => [x.m, x.comp, dash(x.text)]);
 
   /* Pressing the count opens the list it counts and puts it on screen. */
   kp.querySelectorAll("[data-lcgo]").forEach(b=>b.onclick=(e)=>{
@@ -17609,6 +17629,8 @@ function renderLubeGaps(){
     const old=w.querySelector(":scope > .pager"); if(old) old.remove();
     if(pg.strip) w.insertAdjacentHTML("beforeend", pg.strip);
   });
+  [noRef,noMach].forEach(tb=>tb.querySelectorAll("tbody td").forEach(td=>{
+    if(!td.title && !td.querySelector("[title]")) td.title=td.textContent.trim(); }));
   $("lgNote").textContent = t("lg_note",{a:fmtN(missUnits), b:fmtN(mrows.length), c:fmtN(drows.length)})
     + (suggested ? " " + t("lg_note2",{n:fmtN(suggested)}) : "")
     + (settled ? " " + t("lg_note3",{n:fmtN(settled)}) : "");
@@ -21212,10 +21234,10 @@ document.querySelector(".lang").addEventListener("click",e=>{
   setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 })();
 </script>
-<script src="../dashboard/drive.js?v=517"></script>
-<script src="../dashboard/sync-adapter.js?v=517"></script>
-<script src="../dashboard/report.js?v=517"></script>
-<script src="../dashboard/reliability.js?v=517"></script>
+<script src="../dashboard/drive.js?v=518"></script>
+<script src="../dashboard/sync-adapter.js?v=518"></script>
+<script src="../dashboard/report.js?v=518"></script>
+<script src="../dashboard/reliability.js?v=518"></script>
 <script>
 /* THE CLOSED FILTER SAYS WHAT IS CHOSEN. A dropdown narrower than its option
    text ellipsises ("All t…", audit of 2026-10-01). Between 1331 and 1500 px
