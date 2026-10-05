@@ -4413,6 +4413,20 @@ rest of `schedule_slim.json` when it rewrites it: it wrote `byUnit` alone,
 which would have emptied every phone's 1C PM list (`rtwOpen`) until the next
 hourly run. It now replaces `byUnit` and keeps the rest. No VM deploy.
 
+**AND THE REPORTS TAB'S TABLES (build 525).** "fix the Reports tables too".
+The reliability panel's two tables (by class; the machines with the most
+failure downtime) were already one line a row, but every number sat
+left-aligned in a column sized by its own table, so the MTBF of one table sat
+under the downtime of the other and the digits never lined up; downtime was
+"5917.8" beside an MTBF of "1 240". Both tables now share one colgroup
+(`COLG` in `dashboard/reliability.js`, which injects its own `#relCss` so
+both office pages carry the identical rule), numbers are right-aligned in
+tabular figures, and downtime is grouped like MTBF on screen (`n1g`) — the
+CSV keeps the plain number. The "+?" that marks downtime 1C does not have is
+on a class row as well as a machine row now, in warning ink, with its meaning
+on the title in the page's language. Dashboard only; nothing to deploy on the
+VM.
+
 ---
 
 ## Secrets
