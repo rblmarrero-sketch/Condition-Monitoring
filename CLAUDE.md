@@ -4519,6 +4519,31 @@ clean. `tests/lubehead.cjs` §5 types, redraws and reads back on both pages in
 both languages (and fails with the keeping switched off); `lubemaster.cjs` then
 passed eight runs out of eight. Dashboard only; nothing to deploy on the VM.
 
+**AND THE OVERVIEW (build 530).** "Equipment requiring attention" stacked
+three and four lines a row — the round, date and inspector under the defect,
+the status under the action, the overdue/unassigned tag under the grade, long
+inspector names wrapping. It is fixed columns now (`fleetColgroup`, `FLEET_W`,
+`FLEET_W_RU` for the longer Russian headings), one line a row, the extra facts
+riding on the same line in muted type and the whole text in each cell's
+tooltip; the owner's initials are kept to a line's height so every row is one.
+Two real defects went with it: the columns the 1500px rule hides (`.hide-m`,
+Inspected and Findings) hid their headings but not their filter boxes, which
+sat squeezed to "Fi" at the right edge — the filter cell carries `.hide-m` too,
+the hidden column gets no `<col>`, and crossing 1500px redraws the table (a
+`<col>` for a hidden column would push every width after it one column left);
+and the count was said twice ("Showing the 10 highest-priority of 81
+machines" and "Showing 10 of 81") — it is one line, `#fleetShown`, carrying
+"View all", and on the full list the pager alone. On dashboard-next the Sync
+cell said "Синхронизировано" cut with no tooltip; it has one and a Russian
+width. Compliance on dashboard/ is one line a round (the interval beside the
+name, the fraction beside the bar). On dashboard-next, where the panel is
+405px, the six columns were an equal 67px each and the coverage bar ran into
+its own fraction; they are sized now and each line ends in an ellipsis inside
+its cell, keeping that page's tested "at most one line" worksheet contract.
+`tests/ovtables.cjs` reads both tables on both pages in both languages, at 1366
+and 1600, and fails 29 assertions on build 529. Dashboard only; nothing to
+deploy on the VM.
+
 ---
 
 ## Secrets

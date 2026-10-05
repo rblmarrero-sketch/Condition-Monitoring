@@ -1993,12 +1993,38 @@
   #fleetTbl td .tag{white-space:nowrap;}
   /* And in Russian the dates and badges give way before the table does. */
   #fleetTbl .duec,#fleetTbl .triage{white-space:normal;}
+  /* ── The attention table, one line a row (build 530) ──────────────────
+     Fixed columns from fleetColgroup(); a cell that does not fit ends in an
+     ellipsis and its whole text is the cell's tooltip. The round, date and
+     inspector ride on the defect's line, the status on the action's, the
+     overdue/unassigned tag beside the grade. */
+  #fleetTbl{table-layout:fixed;width:100%;}
+  #fleetTbl thead th{overflow:hidden;text-overflow:ellipsis;}
+  #fleetTbl th.cwfh input.cwcf{width:100%;box-sizing:border-box;}
+  #fleetTbl tbody td{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:middle;}
+  #fleetTbl td:nth-child(4){min-width:0;}
+  #fleetTbl .ovmeta{font-size:11px;}
+  #fleetTbl .attn.tag{display:inline-block;margin:0 0 0 6px;vertical-align:middle;}
+  #fleetTbl .duec,#fleetTbl .triage{white-space:nowrap;}
+  #fleetTbl .xf.who{max-width:100%;}
+  #fleetTbl .xf.who span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  /* the owner's initials are the one thing in a row taller than a line of
+     text; at a line's height every row is the same height */
+  #fleetTbl .xf.who{padding-top:0;padding-bottom:0;margin-top:-3px;margin-bottom:-3px;}
+  #fleetTbl .xf.who i{width:20px;height:20px;}
     .covcell{min-width:180px;}
   .covrow{display:flex;align-items:center;gap:9px;}
   .covpc{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:700;
     font-variant-numeric:tabular-nums;min-width:38px;text-align:right;color:var(--ink);}
   .covpc.bad{color:var(--crit-ink);}
   .covrow .cbar{flex:1;}
+  /* Compliance, one line a round (build 530) */
+  #covTbl{table-layout:fixed;width:100%;}
+  #covTbl thead th{white-space:normal;overflow-wrap:normal;word-break:normal;overflow:hidden;}
+  #covTbl tbody td{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:middle;}
+  #covTbl .covcell{min-width:0;}
+  #covTbl .ovmeta,#covTbl .covfr{font-size:11px;}
+  #covTbl .covfr{flex:none;}
     .cbar{display:block;width:100%;height:8px;border-radius:999px;background:var(--surface-3);
     overflow:hidden;box-shadow:inset 0 1px 2px rgba(0,0,0,.12);}
   .cbar i{display:block;height:100%;border-radius:999px;transition:width .3s var(--ease);}
@@ -3902,23 +3928,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=529"></script>
+<script src="../data/magnetic_plug.js?v=530"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=529"></script>
-<script src="../mobile/hme.js?v=529"></script>
-<script src="../mobile/mp-fc.js?v=529"></script>
-<script src="../mobile/rtw.js?v=529"></script>
-<script src="../mobile/hme-cascade.js?v=529"></script>
-<script src="../mobile/temp-limits.js?v=529"></script>
+<script src="../data/work_orders.js?v=530"></script>
+<script src="../mobile/hme.js?v=530"></script>
+<script src="../mobile/mp-fc.js?v=530"></script>
+<script src="../mobile/rtw.js?v=530"></script>
+<script src="../mobile/hme-cascade.js?v=530"></script>
+<script src="../mobile/temp-limits.js?v=530"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=529"></script>
-<script src="../mobile/normalize.js?v=529"></script>
-<script src="../mobile/terms.js?v=529"></script>
+<script src="../mobile/assets.js?v=530"></script>
+<script src="../mobile/normalize.js?v=530"></script>
+<script src="../mobile/terms.js?v=530"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -3937,20 +3963,20 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=529"></script>
-<script src="../mobile/edits.js?v=529"></script>
-<script src="../mobile/due.js?v=529"></script>
-<script src="../mobile/wear.js?v=529"></script>
-<script src="../mobile/wear-map.js?v=529"></script>
-<script src="../mobile/lube.js?v=529"></script>
-<script src="../mobile/lube-overrides.js?v=529"></script>
-<script src="../mobile/lube2027.js?v=529"></script>
-<script src="../mobile/lube-tds.js?v=529"></script>
-<script src="lube-master.js?v=529"></script>
+<script src="../mobile/grade.js?v=530"></script>
+<script src="../mobile/edits.js?v=530"></script>
+<script src="../mobile/due.js?v=530"></script>
+<script src="../mobile/wear.js?v=530"></script>
+<script src="../mobile/wear-map.js?v=530"></script>
+<script src="../mobile/lube.js?v=530"></script>
+<script src="../mobile/lube-overrides.js?v=530"></script>
+<script src="../mobile/lube2027.js?v=530"></script>
+<script src="../mobile/lube-tds.js?v=530"></script>
+<script src="lube-master.js?v=530"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=529"></script>
-<script src="../mobile/machine-photos.js?v=529"></script>
+<script src="../mobile/upload-defaults.js?v=530"></script>
+<script src="../mobile/machine-photos.js?v=530"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3959,17 +3985,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=529"></script>
-<script src="../mobile/get.js?v=529"></script>
-<script src="../mobile/points.js?v=529"></script>
-<script src="../mobile/uc-points.js?v=529"></script>
-<script src="../mobile/inspect-guide.js?v=529"></script>
-<script src="../mobile/get-figs.js?v=529"></script>
-<script src="../mobile/body-points.js?v=529"></script>
-<script src="../mobile/body-map.js?v=529"></script>
-<script src="../mobile/jspdf.umd.min.js?v=529"></script>
-<script src="../mobile/html2canvas.min.js?v=529"></script>
-<script src="../mobile/report-core.js?v=529"></script>
+<script src="../mobile/machine-fig.js?v=530"></script>
+<script src="../mobile/get.js?v=530"></script>
+<script src="../mobile/points.js?v=530"></script>
+<script src="../mobile/uc-points.js?v=530"></script>
+<script src="../mobile/inspect-guide.js?v=530"></script>
+<script src="../mobile/get-figs.js?v=530"></script>
+<script src="../mobile/body-points.js?v=530"></script>
+<script src="../mobile/body-map.js?v=530"></script>
+<script src="../mobile/jspdf.umd.min.js?v=530"></script>
+<script src="../mobile/html2canvas.min.js?v=530"></script>
+<script src="../mobile/report-core.js?v=530"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -7052,6 +7078,21 @@ function nextDueBy(){
   if(Object.keys(m).length) nextDueBy._c={at:Date.now(), v:m};
   return m;
 }
+/* THE ATTENTION TABLE'S COLUMNS, ONE WIDTH EACH (build 530). Fixed layout,
+   one line a row: the words that do not fit end in an ellipsis and are in the
+   cell's tooltip. The defect and the action share what is left. A column the
+   1500px rule hides (.hide-m) gets no <col>, or every width after it would
+   land one column to the left; crossing that width redraws the table. */
+const FLEET_W={equip:76,prio:128,cls:64,defect:0,date:150,find:64,act:0,open:64,owner:170,adue:108,due:108,sync:104};
+const FLEET_W_RU={prio:152,cls:88,find:84,open:90,sync:150};
+const FLEET_MQ = window.matchMedia ? window.matchMedia("(max-width:1500px)") : null;
+function fleetColgroup(cs){
+  const narrow = FLEET_MQ && FLEET_MQ.matches;
+  return `<colgroup>${cs.filter(([,,cl])=>!(narrow && /\bhide-m\b/.test(cl||""))).map(([k])=>{
+    const w=(lang==="ru" && FLEET_W_RU[k]) || FLEET_W[k];
+    return w ? `<col style="width:${w}px">` : "<col>"; }).join("")}</colgroup>`;
+}
+if(FLEET_MQ && FLEET_MQ.addEventListener) FLEET_MQ.addEventListener("change", ()=>{ try{ if(CUR_TAB==="overview") renderFleet(); }catch(e){} });
 function renderFleet(){
   const recs=filtered(); const byU={}, itemsU={};
   recs.forEach(r=>{ const k=r.equip; if(!byU[k]||(r.date||"")>(byU[k].date||"")) byU[k]=r; });
@@ -7144,10 +7185,10 @@ function renderFleet(){
     const fq=(fleetColQ[k]||"").trim().toUpperCase();
     return !fq || cwWordMatch((KEY[r.equip].disp||{})[k]||"", fq);
   }));
-  let h=`<thead><tr>`+cols.map(([k,l,cl])=>
+  let h=fleetColgroup(cols)+`<thead><tr>`+cols.map(([k,l,cl])=>
     `<th class="sortable ${cl}${fleetSort.k===k?" on":""}" data-sort="${k}">${l}<span class="arrow">${fleetSort.k===k?(fleetSort.dir>0?"\u25b2":"\u25bc"):"\u2195"}</span></th>`).join("")
-    + `</tr><tr>` + cols.map(([k,l]) =>
-      `<th class="cwfh"><input type="text" class="cwcf" data-k="${esc(k)}" value="${esc(fleetColQ[k]||"")}" placeholder="${esc(t("cw_colfilter_ph"))}" aria-label="${esc(t("cw_colfilter_aria",{c:l}))}"></th>`).join("")
+    + `</tr><tr>` + cols.map(([k,l,cl]) =>
+      `<th class="cwfh${/\bhide-m\b/.test(cl||"")?" hide-m":""}"><input type="text" class="cwcf" data-k="${esc(k)}" value="${esc(fleetColQ[k]||"")}" placeholder="${esc(t("cw_colfilter_ph"))}" aria-label="${esc(t("cw_colfilter_aria",{c:l}))}"></th>`).join("")
     + `</tr></thead><tbody>`;
   if(!shown.length) h += `<tr><td class="empty" colspan="${cols.length}">${esc(t("e_nofilter"))}</td></tr>`;
   /* TEN, ON OVERVIEW — AND THE WHOLE REGISTER ONE CLICK AWAY.
@@ -7193,14 +7234,14 @@ function renderFleet(){
         attn.sev?`<span class="sevtxt${attn.sev>=5?" crit":""}" title="${esc(t("th_worst"))}">${esc(SEV[attn.sev].l)}</span>`:'<span class="muted">\u2014</span>'
         }<span class="attn a${attn.rank}${attn.rank===2||attn.rank===3?" tag":" sr"}">${esc(t(attn.key))}</span></td>
       <td>${clsOf(r)?`<button class="xf" data-xcls="${esc(clsOf(r))}" title="${esc(t("xf_cls"))}">${esc(clsOf(r))}</button>`:'<span class="muted">\u2014</span>'}</td>
-      <td>${top?esc(top):'<span class="muted">\u2014</span>'}<div class="muted" style="font-size:11px;margin-top:2px"><span class="tag">${esc(TYPE_LABEL[r.type]||r.type)}</span><span class="mono">${esc(r.date||"")}</span>${r.by?` · ${esc(r.by)}`:""}</div></td>
-      <td class="hide-m"><span class="mono">${esc(r.date||"")}</span><div class="muted" style="font-size:11px;margin-top:2px">${esc(r.by||"")}</div></td>
+      <td title="${esc([top||"\u2014", (TYPE_LABEL[r.type]||r.type)+" "+(r.date||""), r.by||""].filter(Boolean).join(" \u00b7 "))}">${top?esc(top):'<span class="muted">\u2014</span>'}<span class="muted ovmeta"> \u00b7 <span class="tag">${esc(TYPE_LABEL[r.type]||r.type)}</span><span class="mono">${esc(r.date||"")}</span>${r.by?` \u00b7 ${esc(r.by)}`:""}</span></td>
+      <td class="hide-m" title="${esc([r.date||"", r.by||""].filter(Boolean).join(" \u00b7 "))}"><span class="mono">${esc(r.date||"")}</span>${r.by?`<span class="muted ovmeta"> \u00b7 ${esc(r.by)}</span>`:""}</td>
       <td class="mono r hide-m">${fs.length}</td>
-      <td>${lead
+      <td title="${esc(lead ? [lead.i.action ? actionName(lead.i.action) : "\u2014", as && as.k==="triage" ? (as.miss||[]).map(m=>NEED_KEY[m]).filter(Boolean).map(x=>TERMS.t(lang,x)).join(", ") : stName(lead.i.status)].filter(Boolean).join(" \u00b7 ") : t("ov_noact"))}">${lead
           ? (lead.i.action ? esc(actionName(lead.i.action)) : `<span class="muted">—</span>`)
-            + `<div class="fstat" style="margin-top:3px">${as && as.k==="triage"
+            + `<span class="fstat"> \u00b7 ${as && as.k==="triage"
                 ? needChips(as.miss, 1, true)
-                : `<span class="muted">${esc(stName(lead.i.status))}</span>`}</div>`
+                : `<span class="muted">${esc(stName(lead.i.status))}</span>`}</span>`
           : `<span class="muted">${esc(t("ov_noact"))}</span>`}</td>
       <td class="mono r">${open.length
           ? `<button class="xf num${nOver?" bad":""}" data-xact="${esc(r.equip)}" title="${esc(nOver?t("xf_open_over",{n:nOver}):t("xf_open"))}">${open.length}${nOver?`<i>\u25cf</i>`:""}</button>`
@@ -7215,12 +7256,20 @@ function renderFleet(){
   });
   $("fleetTbl").innerHTML=h+"</tbody>";
   const fw=$("fleetTbl").parentNode;
+  /* ONE COUNT UNDER THE TABLE. The top-ten strip ("Showing the 10
+     highest-priority of 81 machines") and the line under it ("Showing 10 of
+     81") said the same thing twice; and on the full list the pager already
+     says "81 matching · showing 1-25". So: the pager when the whole list is
+     open, otherwise one line, carrying the button when there is more. */
+  const topOnly = !fleetAll && shown.length>OVERVIEW_TOP;
   if(fw){ const old2=fw.querySelector(":scope > .pager"); if(old2) old2.remove();
-          if(pgF.strip) fw.insertAdjacentHTML("beforeend", pgF.strip); }
+          if(pgF.strip && fleetAll) fw.insertAdjacentHTML("beforeend", pgF.strip); }
+  if($("fleetShown")) $("fleetShown").innerHTML = fleetAll ? "" : topOnly
+    ? `<span>${esc(t("ov_top",{n:OVERVIEW_TOP, of:num(shown.length)}))}</span><span class="spacer"></span>
+       <button type="button" class="btn sm" id="fleetAllBtn">${esc(t("ov_all"))}</button>`
+    : `<span>${esc(t("shown_n",{n:pgF.rows.length, of:shown.length}))}</span>`;
   const fab=$("fleetAllBtn");
   if(fab) fab.onclick=()=>{ fleetAll=true; renderFleet(); };
-  if($("fleetShown")) $("fleetShown").innerHTML=
-    `<span>${esc(t("shown_n",{n:pgF.rows.length, of:shown.length}))}</span>`;
   $("fleetTbl").querySelectorAll("th[data-sort]").forEach(th=>th.onclick=()=>{
     const k=th.dataset.sort;
     // a new column starts on the reading people expect: worst/newest first
@@ -9956,8 +10005,12 @@ function renderCoverage(){
      panel shares a screen with four others; the two that matter are always the
      worst-covered, and they are sorted to the top already. */
   const CAP=5, all=covOpen||rows.length<=CAP, show=all?rows:rows.slice(0,CAP);
-  $("covTbl").innerHTML=`<thead><tr>${th("cv_th_round")}
-      <th style="min-width:126px">${esc(t("cv_th_seen"))}</th>
+  /* One line a round (build 530): the interval rides beside the round's
+     name and the fraction beside its bar; whatever does not fit ends in an
+     ellipsis and is in the tooltip. Fixed widths, so the numbers line up. */
+  const cw=(k,w,wr)=>`<col${(lang==="ru"&&wr)||w?` style="width:${(lang==="ru"&&wr)||w}px"`:""}>`;
+  $("covTbl").innerHTML=`<colgroup>${cw("round",0)}${cw("seen",166)}${cw("insp",58,62)}${cw("never",64,70)}${cw("over",84,100)}${cw("who",48,52)}</colgroup><thead><tr>${th("cv_th_round")}
+      <th>${esc(t("cv_th_seen"))}</th>
       ${thn("cv_th_insp")}${thn("cv_th_never")}${thn("cv_th_over")}
       ${thn("cv_th_who")}</tr></thead><tbody>`
     + show.map(r=>{
@@ -9973,12 +10026,10 @@ function renderCoverage(){
            out of it. */
         const on = $("fType").value===r.ty;
         return `<tr class="covr${on?" on":""}" data-cvty="${esc(r.ty)}" tabindex="0"
-            title="${esc(on?t("cv_off"):t("cv_on"))}"><td><b>${esc(TYPE_LABEL[r.ty]||r.ty)}</b>
-            <div class="muted" style="font-size:11px">${esc(cvEvery(r))}${
-              r.scoped?" · "+esc(t("cv_scoped")):""}</div></td>
+            title="${esc(on?t("cv_off"):t("cv_on"))}"><td title="${esc((TYPE_LABEL[r.ty]||r.ty)+" · "+cvEvery(r)+(r.scoped?" · "+t("cv_scoped"):""))}"><b>${esc(TYPE_LABEL[r.ty]||r.ty)}</b><span class="muted ovmeta"> · ${esc(cvEvery(r))}${
+              r.scoped?" · "+esc(t("cv_scoped")):""}</span></td>
           <td class="covcell">
-            <div class="covrow"><span class="covpc${bad?" bad":""}">${r.pc}%</span>${covBar(r.pc)}</div>
-            <div class="muted mono" style="font-size:11px">${r.seen} / ${r.total}</div></td>
+            <div class="covrow"><span class="covpc${bad?" bad":""}">${r.pc}%</span>${covBar(r.pc)}<span class="muted mono covfr">${r.seen} / ${r.total}</span></div></td>
           ${n(r.inspections,0)}
           <td class="num mono${r.never?" bad":" muted"}">${r.never
             ? `<button class="xf num bad" data-cvnever="${esc(r.ty)}"
@@ -18629,10 +18680,10 @@ document.querySelector(".lang").addEventListener("click",e=>{
   setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 })();
 </script>
-<script src="drive.js?v=529"></script>
-<script src="sync-adapter.js?v=529"></script>
-<script src="report.js?v=529"></script>
-<script src="reliability.js?v=529"></script>
+<script src="drive.js?v=530"></script>
+<script src="sync-adapter.js?v=530"></script>
+<script src="report.js?v=530"></script>
+<script src="reliability.js?v=530"></script>
 <script>
 /* THE CLOSED FILTER SAYS WHAT IS CHOSEN. A dropdown narrower than its option
    text ellipsises ("All t…", audit of 2026-10-01). Between 1331 and 1500 px
