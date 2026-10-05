@@ -4278,6 +4278,24 @@ unchanged (`.lmx-mrow`, `.lmx-dec[data-lmxid]`, `.lmx-dnote`, `[data-lmxg]`,
 file (`dashboard/lube-master.js`) for both office pages; nothing to deploy on
 the VM.
 
+**AND THE FLEET MATRIX AND THE SHOP POSTER, THE SAME WAY (build 517).** Asked
+straight after: "fix the Fleet matrix and Shop materials tables too". Both are
+drawn in each office page itself (`renderLubeMtx`, `renderLubePoster`), so the
+change is made twice, identically; dashboard-next keeps its Detailed/Compact
+switch (a recorded design difference). The matrix is `table-layout:fixed` with
+a floor per column set from the column count (210 px + 138 px a compartment),
+so a wide class scrolls inside its own box; the machine column is pinned while
+the compartments scroll; every line in a cell is one line with an ellipsis and
+the cell's tooltip carries the product, litres, hours and any finding (it
+already did on dashboard-next); an absent compartment is blank rather than a
+dot, its words kept for a screen reader; the class chips wrap instead of
+running off the panel, and Export CSV sits beside the title. The poster takes
+the matrix's own rule: a column where every machine on the sheet takes one
+product names it ONCE, on a row of its own under the compartment names
+(`tr.pprow`, so the swatches line up), and the cells carry the litres over the
+hours in large type; a column with two products names each in its cell.
+Nothing to deploy on the VM.
+
 ---
 
 ## Secrets

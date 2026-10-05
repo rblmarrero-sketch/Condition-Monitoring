@@ -1296,6 +1296,43 @@
     background:color-mix(in srgb, var(--h) 13%, var(--surface,#fff));}
   table.mtx td.unset b{display:block;font-size:11.5px;font-weight:600;color:var(--muted);}
   table.mtx td.na{text-align:center;color:var(--border);font-size:16px;padding:9px 0;}
+  /* The screen matrix as a table: fixed columns (a floor per column is set
+     from the column count, so a wide class scrolls inside its own box), one
+     line per fact, the machine column pinned while the compartments scroll.
+     Whatever does not fit ends in an ellipsis and is in the cell's tooltip. */
+  table.grid.mtx{table-layout:fixed;}
+  table.grid.mtx thead tr:first-child th:first-child{width:210px;}
+  table.grid.mtx th{white-space:normal;vertical-align:bottom;line-height:1.25;}
+  table.grid.mtx th .ck{margin-bottom:3px;}
+  table.grid.mtx td.mdl{position:sticky;left:0;z-index:1;background:var(--surface);padding-left:2px;}
+  table.grid.mtx thead tr:first-child th:first-child,table.grid.mtx thead th.cwfh:first-child{position:sticky;left:0;z-index:3;}
+  table.grid.mtx tr.clsrow td{position:sticky;left:0;}
+  table.grid.mtx td.mdl b,table.grid.mtx td.mdl i,
+  table.grid.mtx td.cell b,table.grid.mtx td.cell i.num,table.grid.mtx td.cell i.warnv{
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  table.grid.mtx td.cell,table.grid.mtx td.unset,table.grid.mtx td.na{height:44px;}
+  table.grid.mtx td.unset b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  table.grid.mtx th.cwfh input.cwcf{width:100%;box-sizing:border-box;}
+  .lmsegrow{margin:10px 0 12px;}
+  .lmsegrow .seg{display:flex;flex-wrap:wrap;max-width:100%;}
+  /* The poster: equal compartment columns, the machine column wider; a column
+     that carries one product names it in its heading (pcolp). */
+  .poster table.mtx{table-layout:fixed;}
+  .poster table.mtx thead th:first-child{width:18%;}
+  .poster table.mtx td.na{background:#fafbfb;}
+  .poster table.mtx td.cell i.num{font-size:15px;font-weight:700;color:#11171a;}
+  .poster table.mtx td.cell b + i.num{font-size:12px;font-weight:600;color:#41505a;}
+  .poster table.mtx th{vertical-align:top;overflow-wrap:break-word;}
+  .posterbox .poster table.mtx thead tr:first-child th{font-size:10.5px;letter-spacing:0;}
+  .poster table.mtx thead tr:first-child th{border-bottom:1px solid #d6dde1;}
+  .poster table.mtx tr.pprow th{padding-top:6px;}
+  .poster table.mtx tr.pprow .pcolp{margin-top:0;align-items:flex-start;}
+  .poster table.mtx th .ck{display:table;margin:0 0 4px;}
+  .poster table.mtx td.cell i.pnum span{display:block;white-space:nowrap;}
+  .poster .pcolp{display:flex;align-items:center;gap:5px;margin-top:5px;font-size:11px;font-weight:700;
+    text-transform:none;letter-spacing:0;color:#11171a;line-height:1.2;}
+  .poster .pcolp .sw{width:11px;height:11px;border-radius:2px;flex:none;background:var(--h);
+    box-shadow:inset 0 0 0 1px rgba(0,0,0,.3);}
   .lgnd{display:flex;flex-wrap:wrap;gap:9px 20px;margin-top:14px;padding-top:12px;
     border-top:1px solid var(--border);}
   .lg{display:flex;align-items:center;gap:7px;font-size:12.5px;}
@@ -4313,13 +4350,10 @@
     </div>
     <div class="lsub" data-lsub="matrix">
     <div class="section">
-      <h2 data-i18n="lm_title">Fleet matrix</h2>
-      <div class="row" style="margin:14px 0 12px;gap:12px;align-items:center;flex-wrap:wrap">
-        <div class="seg" id="lmSeg"></div>
-        <span style="flex:1"></span>
+      <div class="secthd"><h2 data-i18n="lm_title">Fleet matrix</h2><span class="spacer"></span>
         <div class="seg" id="lmDensity"></div>
-        <button class="btn" id="lubeCsv" data-i18n="lm_csv">⬇ Export CSV</button>
-      </div>
+        <button class="btn" id="lubeCsv" data-i18n="lm_csv">⬇ Export CSV</button></div>
+      <div class="lmsegrow"><div class="seg" id="lmSeg"></div></div>
       <div class="shown" id="lmShown"></div>
       <div class="tblwrap mtxwrap scrollbox" style="--sb:600px"><table class="grid mtx" id="lubeMtx"></table></div>
       <div id="lubeMtxPg"></div>
@@ -4822,23 +4856,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=516"></script>
+<script src="../data/magnetic_plug.js?v=517"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=516"></script>
-<script src="../mobile/hme.js?v=516"></script>
-<script src="../mobile/mp-fc.js?v=516"></script>
-<script src="../mobile/rtw.js?v=516"></script>
-<script src="../mobile/hme-cascade.js?v=516"></script>
-<script src="../mobile/temp-limits.js?v=516"></script>
+<script src="../data/work_orders.js?v=517"></script>
+<script src="../mobile/hme.js?v=517"></script>
+<script src="../mobile/mp-fc.js?v=517"></script>
+<script src="../mobile/rtw.js?v=517"></script>
+<script src="../mobile/hme-cascade.js?v=517"></script>
+<script src="../mobile/temp-limits.js?v=517"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=516"></script>
-<script src="../mobile/normalize.js?v=516"></script>
-<script src="../mobile/terms.js?v=516"></script>
+<script src="../mobile/assets.js?v=517"></script>
+<script src="../mobile/normalize.js?v=517"></script>
+<script src="../mobile/terms.js?v=517"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -4857,20 +4891,20 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=516"></script>
-<script src="../mobile/edits.js?v=516"></script>
-<script src="../mobile/due.js?v=516"></script>
-<script src="../mobile/wear.js?v=516"></script>
-<script src="../mobile/wear-map.js?v=516"></script>
-<script src="../mobile/lube.js?v=516"></script>
-<script src="../mobile/lube-overrides.js?v=516"></script>
-<script src="../mobile/lube2027.js?v=516"></script>
-<script src="../mobile/lube-tds.js?v=516"></script>
-<script src="../dashboard/lube-master.js?v=516"></script>
+<script src="../mobile/grade.js?v=517"></script>
+<script src="../mobile/edits.js?v=517"></script>
+<script src="../mobile/due.js?v=517"></script>
+<script src="../mobile/wear.js?v=517"></script>
+<script src="../mobile/wear-map.js?v=517"></script>
+<script src="../mobile/lube.js?v=517"></script>
+<script src="../mobile/lube-overrides.js?v=517"></script>
+<script src="../mobile/lube2027.js?v=517"></script>
+<script src="../mobile/lube-tds.js?v=517"></script>
+<script src="../dashboard/lube-master.js?v=517"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=516"></script>
-<script src="../mobile/machine-photos.js?v=516"></script>
+<script src="../mobile/upload-defaults.js?v=517"></script>
+<script src="../mobile/machine-photos.js?v=517"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -4879,17 +4913,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=516"></script>
-<script src="../mobile/get.js?v=516"></script>
-<script src="../mobile/points.js?v=516"></script>
-<script src="../mobile/uc-points.js?v=516"></script>
-<script src="../mobile/inspect-guide.js?v=516"></script>
-<script src="../mobile/get-figs.js?v=516"></script>
-<script src="../mobile/body-points.js?v=516"></script>
-<script src="../mobile/body-map.js?v=516"></script>
-<script src="../mobile/jspdf.umd.min.js?v=516"></script>
-<script src="../mobile/html2canvas.min.js?v=516"></script>
-<script src="../mobile/report-core.js?v=516"></script>
+<script src="../mobile/machine-fig.js?v=517"></script>
+<script src="../mobile/get.js?v=517"></script>
+<script src="../mobile/points.js?v=517"></script>
+<script src="../mobile/uc-points.js?v=517"></script>
+<script src="../mobile/inspect-guide.js?v=517"></script>
+<script src="../mobile/get-figs.js?v=517"></script>
+<script src="../mobile/body-points.js?v=517"></script>
+<script src="../mobile/body-map.js?v=517"></script>
+<script src="../mobile/jspdf.umd.min.js?v=517"></script>
+<script src="../mobile/html2canvas.min.js?v=517"></script>
+<script src="../mobile/report-core.js?v=517"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -17367,7 +17401,7 @@ function renderLubeMtx(){
       const c = r.comps.filter(x=>x.k===col.k)[0];
       /* No such compartment is not a gap. It must not look like an unanswered
          question sitting beside the ones that are. */
-      if(!c) return `<td class="na"><span aria-hidden="true">·</span><span class="vh">${
+      if(!c) return `<td class="na"><span class="vh">${
         esc(t("lm_nocomp"))}</span></td>`;
       const hit = seen[r.cls+"|"+r.m+"|"+c.k];
       const std = lubeChosenFor(c);
@@ -17416,7 +17450,7 @@ function renderLubeMtx(){
         (warnBits.length ? `<i class="warndot" aria-hidden="true"></i>` : "")+
         `</td>`;
     }).join("");
-    if(on) body += `<tr><td class="mdl"><b>${esc(r.m)}</b><i>×${r.n}${
+    if(on) body += `<tr><td class="mdl"><b title="${esc(r.m)}">${esc(r.m)}</b><i>×${r.n}${
       r.alias?` · ${esc(t("lm_alias",{m:r.alias.is}))}`:""}</i></td>${cells}</tr>`;
   });
 
@@ -17425,6 +17459,7 @@ function renderLubeMtx(){
   const cwfhRow = `<tr>${lubeCols.map(k=>
     `<th class="cwfh"><input type="text" class="cwcf" data-k="${esc(k)}" value="${esc(lubeColQ[k]||"")}" placeholder="${esc(t("cw_colfilter_ph"))}" aria-label="${esc(t("cw_colfilter_aria",{c:lubeColLabel[k]}))}"></th>`
   ).join("")}</tr>`;
+  tbl.style.minWidth = (210 + colSet.length * 138) + "px";
   tbl.innerHTML =
     `<thead><tr><th>${esc(t("lm_machine"))}</th>${
       colSet.map(c=>{
@@ -17647,6 +17682,16 @@ function renderLubePoster(){
   /* Whole fleet: one row per model, one column per compartment that occurs. */
   const cols = [];
   all.forEach(r=>r.comps.forEach(c=>{ if(!cols.some(x=>x.k===c.k)) cols.push(c); }));
+  /* The same rule as the screen matrix: where every machine on the sheet takes
+     one product in a column, the heading names it once with its colour, and
+     the cells carry the litres and the hours in large type. A name repeated
+     down a column wrapped every cell to four lines and made the sheet a wall
+     of the same words. Where a column holds two products, each cell names its
+     own. */
+  const pColProd = {};
+  all.forEach(r=>r.comps.forEach(c=>{ const x = lpoCellText(c);
+    if(x.product) (pColProd[c.k] || (pColProd[c.k] = {}))[x.product] = 1; }));
+  const pOne = k => { const o = Object.keys(pColProd[k] || {}); return o.length === 1 ? o[0] : ""; };
   let lastCls = null, body = "";
   all.forEach(r=>{
     if(r.cls !== lastCls){
@@ -17664,15 +17709,15 @@ function renderLubePoster(){
     body += `<tr><td class="mdl"><b>${esc(r.m)}</b><i>×${r.n}</i></td>` +
       cols.map(col=>{
         const c = r.comps.filter(x=>x.k===col.k)[0];
-        if(!c) return `<td class="na"><span aria-hidden="true">·</span></td>`;
+        if(!c) return `<td class="na"><span class="vh">${esc(t("lm_nocomp"))}</span></td>`;
         const x = lpoCellText(c);
         if(!x.product) return `<td class="unset"><b>${esc(t("lpo_undecided"))}</b>` +
                               `<i>${esc(t("lpo_undecided_ru"))}</i></td>`;
         const hue = lubeHue(x.product) || LUBE_NOHUE;
-        return `<td class="cell" style="--h:${esc(hue)}"><span class="sw"></span>` +
-          `<b>${esc(lubeShort(x.product))}</b>` +
-          `<i class="num">${x.cap!=null?esc(x.cap)+" L":"—"} · ${
-            x.iv!=null?esc(x.iv)+" h":"—"}</i></td>`;
+        return `<td class="cell" style="--h:${esc(hue)}" data-p="${esc(x.product)}"><span class="sw"></span>` +
+          (pOne(c.k) ? "" : `<b>${esc(lubeShort(x.product))}</b>`) +
+          `<i class="num pnum"><span>${x.cap!=null?esc(x.cap)+" L":"— L"}</span><span>${
+            x.iv!=null?esc(x.iv)+" h":"— h"}</span></i></td>`;
       }).join("") + `</tr>`;
   });
   const used = [];
@@ -17685,8 +17730,12 @@ function renderLubePoster(){
       lpoWhich === "class" ? t("lpo_class_sub",{n:all.reduce((x,r)=>x+r.n,0)})
                            : t("lpo_fleet_sub")) +
     `<table class="mtx ptbl"><thead><tr><th>${esc(t("lm_machine"))}</th>` +
-      cols.map(c=>`<th><b class="ck">${esc(c.k)}</b>${esc(c.en)}<i>${
-        esc(c.ru)}</i></th>`).join("") +
+      cols.map(c=>`<th><b class="ck">${esc(c.k)}</b>${esc(c.en)}<i>${esc(c.ru)}</i></th>`).join("") +
+    /* The products sit on a row of their own under the names, so every
+       swatch lines up across the sheet however long a compartment's name. */
+    `</tr><tr class="pprow"><th>${esc(t("lpo_use"))}<i>${esc(t("lpo_use_ru"))}</i></th>` +
+      cols.map(c=>{ const one = pOne(c.k);
+        return `<th>${one ? `<span class="pcolp" title="${esc(one)}"><span class="sw" style="--h:${esc(lubeHue(one)||LUBE_NOHUE)}"></span>${esc(lubeShort(one))}</span>` : ""}</th>`; }).join("") +
     `</tr></thead><tbody>${body}</tbody></table>` +
     `<div class="lgnd">` + used.sort().map(n=>{
       const pr = LUBE.product(n) || {};
@@ -21163,10 +21212,10 @@ document.querySelector(".lang").addEventListener("click",e=>{
   setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 })();
 </script>
-<script src="../dashboard/drive.js?v=516"></script>
-<script src="../dashboard/sync-adapter.js?v=516"></script>
-<script src="../dashboard/report.js?v=516"></script>
-<script src="../dashboard/reliability.js?v=516"></script>
+<script src="../dashboard/drive.js?v=517"></script>
+<script src="../dashboard/sync-adapter.js?v=517"></script>
+<script src="../dashboard/report.js?v=517"></script>
+<script src="../dashboard/reliability.js?v=517"></script>
 <script>
 /* THE CLOSED FILTER SAYS WHAT IS CHOSEN. A dropdown narrower than its option
    text ellipsises ("All t…", audit of 2026-10-01). Between 1331 and 1500 px
