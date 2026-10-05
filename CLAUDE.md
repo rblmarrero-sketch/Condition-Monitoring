@@ -4427,6 +4427,36 @@ on a class row as well as a machine row now, in warning ink, with its meaning
 on the title in the page's language. Dashboard only; nothing to deploy on the
 VM.
 
+**A ROUND PUT BACK AFTER IT WAS DELETED IS SHOWN AGAIN (build 526).** On
+2026-10-04 a "dry run" sent to the old delete removed EX003's real General
+Inspection of 30 Sep and TK148's real Magnetic Plug round of 30 Sep, and wrote
+`.deleted.json` markers for both. The phone that took them (DRLDEJ) has since
+deleted its own copies, there is no server backup, and bucket versioning is
+unconfirmed. EX003 was restored on 2026-10-05 from a copy saved during the
+investigation: the full record (8 findings) and the real overview photograph,
+uploaded through the ordinary batch upload as DRLDEJ to
+`INSP/EX003/2026-09-30/`. Its 32 finding photographs were not in the copy and
+will read as missing. TK148 has no copy anywhere found so far.
+
+Both office pages remember a deletion for good (`cm_dash_deleted`), on
+purpose — a phone that missed the marker must not resurrect a round by
+re-sending it — so restoring the files was not enough. A restored record now
+carries `restoredAt` / `restoredBy` / `restoredWhy`, and `isDeleted()` lets a
+record through only when `restoredAt` is LATER than the deletion's `at`. A
+phone's own re-send has no stamp and stays hidden; a stamp older than the
+deletion stays hidden too (`tests/restorewins.cjs`, both pages, fails against
+the old code). The phones keep no tombstone list — `teamGone()` drops a round
+once — but a full re-read re-delivers the marker, so the marker itself is
+rewritten (admin `op:"rewrite"`, which backs the old one up under
+`_meta/backup/`) to a document with no `key`, which `readRecords` ignores.
+To restore another round the same way: upload the record with a `restoredAt`
+later than the deletion, then neutralise its marker. No VM deploy.
+
+A read-only console snippet that pulls a deleted round's record and any
+cached photographs out of an office browser was given to the maintainer on
+2026-10-05 (IndexedDB `cm_dash_idb` / `kv` / `cm_dash_drive`, Cache Storage
+`cm-media-v1`); a desk hides a deleted round but keeps its own copy.
+
 ---
 
 ## Secrets
