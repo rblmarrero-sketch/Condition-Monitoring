@@ -2610,7 +2610,7 @@
   .wlh .sp{flex:1;}
   .wlh .cnt{font:700 11px/1 'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--muted);
     background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:4px 9px;}
-  .wlr{display:grid;grid-template-columns:4px minmax(150px,1.4fr) minmax(120px,1.1fr) 128px 104px 112px auto;
+  .wlr{display:grid;grid-template-columns:4px minmax(150px,1.4fr) minmax(120px,1.1fr) 168px 104px 124px auto;
     gap:12px;align-items:center;padding:0 14px 0 0;border-top:1px solid var(--border);
     background:none;border-left:0;border-right:0;border-bottom:0;width:100%;
     font-family:inherit;color:inherit;text-align:left;cursor:pointer;
@@ -2638,9 +2638,6 @@
      any "still missing" chips wrapped onto a line of their own underneath —
      never squeezed onto the status word's own nowrap line, where they were
      silently clipped instead of shown (see the render comment). */
-  .stneed{display:block;margin-top:3px;white-space:normal;}
-  .stneed .need{margin-top:2px;}
-  .stneed .need:first-child{margin-left:0;}
   .colpick{position:relative;}
   .colpick>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:7px;
     min-height:34px;padding:6px 12px;border:1px solid var(--border);border-radius:var(--r-sm,8px);
@@ -2659,6 +2656,42 @@
   .syxq dt{color:var(--muted);font-weight:600;white-space:nowrap;} .syxq dd{margin:0;}
   #syQuarTbl td.syx{white-space:normal;} #syQuarTbl tbody tr{height:auto;}
   .syfix{min-height:32px;padding:4px 10px;}
+  /* ── the action register, one line a row (build 520) ─────────────────────
+     Fixed columns, widths stated in renderActions (AC_W); every cell is one
+     line and ends in an ellipsis, the full text on the cell's title. */
+  #actionTbl table.acttbl{table-layout:fixed;width:100%;}
+  #actionTbl table.acttbl th.selcol{width:34px;}
+  #actionTbl table.acttbl th.go{width:22px;}
+  #actionTbl table.acttbl tbody td.go{text-overflow:clip;padding-left:0;}
+  #actionTbl table.acttbl th.ac-queue,#actionTbl table.acttbl th.ac-sev{width:128px;}
+  #actionTbl table.acttbl th.ac-age{width:62px;}
+  #actionTbl table.acttbl th.ac-unit{width:70px;}
+  #actionTbl table.acttbl th.ac-owner{width:136px;}
+  #actionTbl table.acttbl th.ac-due{width:156px;}
+  #actionTbl table.acttbl th.ac-st{width:180px;}
+  #actionTbl table.acttbl th.ac-wo{width:100px;}
+  #actionTbl table.acttbl thead th.sortable{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  #actionTbl table.acttbl tbody td{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:middle;}
+  #actionTbl table.acttbl tbody tr.hrow{height:40px;}
+  #actionTbl table.acttbl .who{max-width:100%;vertical-align:middle;}
+  #actionTbl table.acttbl .who span{min-width:0;}
+  /* What is still missing is said in warning ink, not drawn as a pill: a pill
+     is one unbreakable box, so in a cell one line wide the ellipsis took the
+     whole of it away. As text it is cut at its end, and its title names it. */
+  #actionTbl table.acttbl td .need{display:inline;margin-left:6px;padding:0;border:0;background:none;
+    color:var(--warn-ink);font-weight:600;font-size:var(--t-micro,11px);}
+  #actionTbl table.acttbl td>.need:first-child,#actionTbl table.acttbl td .trunc>.need:first-child{margin-left:0;}
+  #actionTbl table.acttbl td .need.more{margin-left:4px;font-weight:500;}
+  #actionTbl table.acttbl td .st{vertical-align:middle;}
+  #actionTbl table.acttbl td .due{display:inline;}
+  #actionTbl table.acttbl td .due i{margin-left:6px;}
+  #actionTbl table.acttbl td .sevcell{display:inline;}
+  #actionTbl table.acttbl td .sevcell i{display:inline-block;margin-right:6px;vertical-align:0;}
+  /* By machine: a long owner name ends in an ellipsis inside its own column
+     instead of running under the due date beside it. */
+  .wlr .cell{overflow:hidden;}
+  .wlr .who{max-width:100%;}
+  .wlr .who span{min-width:0;}
   td.ed{cursor:text;}
   td.ed:hover{background:color-mix(in srgb,var(--accent) 7%,transparent);}
   td.ed.editing{padding:2px 6px;}
@@ -4887,23 +4920,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=519"></script>
+<script src="../data/magnetic_plug.js?v=520"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=519"></script>
-<script src="../mobile/hme.js?v=519"></script>
-<script src="../mobile/mp-fc.js?v=519"></script>
-<script src="../mobile/rtw.js?v=519"></script>
-<script src="../mobile/hme-cascade.js?v=519"></script>
-<script src="../mobile/temp-limits.js?v=519"></script>
+<script src="../data/work_orders.js?v=520"></script>
+<script src="../mobile/hme.js?v=520"></script>
+<script src="../mobile/mp-fc.js?v=520"></script>
+<script src="../mobile/rtw.js?v=520"></script>
+<script src="../mobile/hme-cascade.js?v=520"></script>
+<script src="../mobile/temp-limits.js?v=520"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=519"></script>
-<script src="../mobile/normalize.js?v=519"></script>
-<script src="../mobile/terms.js?v=519"></script>
+<script src="../mobile/assets.js?v=520"></script>
+<script src="../mobile/normalize.js?v=520"></script>
+<script src="../mobile/terms.js?v=520"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -4922,20 +4955,20 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=519"></script>
-<script src="../mobile/edits.js?v=519"></script>
-<script src="../mobile/due.js?v=519"></script>
-<script src="../mobile/wear.js?v=519"></script>
-<script src="../mobile/wear-map.js?v=519"></script>
-<script src="../mobile/lube.js?v=519"></script>
-<script src="../mobile/lube-overrides.js?v=519"></script>
-<script src="../mobile/lube2027.js?v=519"></script>
-<script src="../mobile/lube-tds.js?v=519"></script>
-<script src="../dashboard/lube-master.js?v=519"></script>
+<script src="../mobile/grade.js?v=520"></script>
+<script src="../mobile/edits.js?v=520"></script>
+<script src="../mobile/due.js?v=520"></script>
+<script src="../mobile/wear.js?v=520"></script>
+<script src="../mobile/wear-map.js?v=520"></script>
+<script src="../mobile/lube.js?v=520"></script>
+<script src="../mobile/lube-overrides.js?v=520"></script>
+<script src="../mobile/lube2027.js?v=520"></script>
+<script src="../mobile/lube-tds.js?v=520"></script>
+<script src="../dashboard/lube-master.js?v=520"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=519"></script>
-<script src="../mobile/machine-photos.js?v=519"></script>
+<script src="../mobile/upload-defaults.js?v=520"></script>
+<script src="../mobile/machine-photos.js?v=520"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -4944,17 +4977,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=519"></script>
-<script src="../mobile/get.js?v=519"></script>
-<script src="../mobile/points.js?v=519"></script>
-<script src="../mobile/uc-points.js?v=519"></script>
-<script src="../mobile/inspect-guide.js?v=519"></script>
-<script src="../mobile/get-figs.js?v=519"></script>
-<script src="../mobile/body-points.js?v=519"></script>
-<script src="../mobile/body-map.js?v=519"></script>
-<script src="../mobile/jspdf.umd.min.js?v=519"></script>
-<script src="../mobile/html2canvas.min.js?v=519"></script>
-<script src="../mobile/report-core.js?v=519"></script>
+<script src="../mobile/machine-fig.js?v=520"></script>
+<script src="../mobile/get.js?v=520"></script>
+<script src="../mobile/points.js?v=520"></script>
+<script src="../mobile/uc-points.js?v=520"></script>
+<script src="../mobile/inspect-guide.js?v=520"></script>
+<script src="../mobile/get-figs.js?v=520"></script>
+<script src="../mobile/body-points.js?v=520"></script>
+<script src="../mobile/body-map.js?v=520"></script>
+<script src="../mobile/jspdf.umd.min.js?v=520"></script>
+<script src="../mobile/html2canvas.min.js?v=520"></script>
+<script src="../mobile/report-core.js?v=520"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -9743,11 +9776,19 @@ function renderActions(){
     if($("actShown")) $("actShown").innerHTML=
       `<span>${esc(t("pg_of",{n:num(list.length), a:num(pgT.from||0), b:num(pgT.to||0)}))}${
         list.length!==rows.length ? " · "+esc(t("a_k_open_s",{n:num(rows.length)})) : ""}</span>`;
-    $("actionTbl").innerHTML=`<div class="tblwrap scrollbox" style="--sb:520px"><table class="grid seltbl">
+    /* One line a row, columns that hold still. A fixed layout with a width
+       for every column whose content has a known size (the grade, the unit,
+       the owner, the date, the status, the work order) and the rest shared
+       between the columns of words; the table may not shrink below the room
+       those need, so on a narrow screen it scrolls inside its own box rather
+       than squeezing a finding to three letters. */
+    const AC_W={queue:128, sev:128, age:62, unit:70, owner:136, due:156, st:180, wo:100};
+    const acMin=34+22+cols.reduce((s,[k])=>s+(!k?0:(AC_W[k]||96)),0);
+    $("actionTbl").innerHTML=`<div class="tblwrap scrollbox" style="--sb:520px"><table class="grid seltbl acttbl" style="min-width:${acMin}px">
       <thead><tr><th class="selcol"><input type="checkbox" id="aAll"${allOn?" checked":""}
           title="${esc(t("a_sel_all"))}" aria-label="${esc(t("a_sel_all"))}"></th>${cols.map(([k,l])=> !k ? `<th class="go"></th>` :
-        `<th class="sortable${actSort.k===k?" on":""}" data-asort="${k}"${
-          k==="queue"?` title="${esc(t("a_queue_tip"))}"`:""}>${esc(l)}<span class="arrow">${
+        `<th class="sortable ac-${k}${actSort.k===k?" on":""}" data-asort="${k}" title="${
+          esc(k==="queue"?t("a_queue_tip"):l)}">${esc(l)}<span class="arrow">${
           actSort.k===k?(actSort.dir>0?"▲":"▼"):"↕"}</span></th>`).join("")}</tr>
       <tr><th class="cwfh"></th>${cols.map(([k,l])=> !k ? `<th class="cwfh"></th>` :
         `<th class="cwfh"><input type="text" class="cwcf" data-k="${esc(k)}" value="${esc(actColQ[k]||"")}" placeholder="${esc(t("cw_colfilter_ph"))}" aria-label="${esc(t("cw_colfilter_aria",{c:l}))}"></th>`).join("")}</tr>
@@ -9778,7 +9819,7 @@ function renderActions(){
             ${!acolOn("act")?"":`<td title="${esc(i.defect||"")}"><span class="trunc">${i.defect?esc(i.defect):'<span class="muted">—</span>'}</span></td>`}
             <!-- Grade: the finding's own 1–5 severity grade, and the
                  stoppage priority beside it once somebody has set one. -->
-            ${!acolOn("sev")?"":`<td class="nw">${sv?`<span class="sevcell" style="--sc:${sc}"><i></i>${esc(SEV[sv].l)}</span>`
+            ${!acolOn("sev")?"":`<td class="nw" title="${esc((sv?SEV[sv].l:"")+(i.prio?" · "+prioName(i.prio):""))}">${sv?`<span class="sevcell" style="--sc:${sc}"><i></i>${esc(SEV[sv].l)}</span>`
                     :'<span class="muted">—</span>'}${
               i.prio?` <span class="prio ${prioClass(i.prio)}" title="${esc(prioName(i.prio))}">${esc(i.prio)}</span>`:""}</td>`}
             <!-- READ-OUTS THAT EDIT ON A CLICK. The row carries no live form
@@ -9800,12 +9841,13 @@ function renderActions(){
                  at 1366px) against real content (222px, "Open" plus two
                  chips), so the chips were silently clipped mid-pill rather
                  than shown, read as "Open Action required Priority required"
-                 crammed and cut off with nothing to tell them apart. The
-                 status word stays on its own line; any chips wrap onto a
-                 second line of their own under it, rather than fighting the
-                 status word for the same nowrap line. -->
+                 crammed and cut off with nothing to tell them apart. Then
+                 they wrapped onto a second line, which made every row a
+                 different height. Now the column is wide enough for the
+                 status word, the FIRST missing item and a "+n" — the chip's
+                 own title names every missing item. -->
             ${!acolOn("st")?"":`<td class="ed" data-ed="status" title="${esc(t("a_ed_tip"))}"><span class="st s-${esc(String(i.status||"open"))}">${esc(stName(i.status))}</span>${
-              ast.k==="triage" ? `<div class="stneed">${needChips(ast.miss.filter(m=>m!=="owner"&&m!=="due"), 2)}</div>` : ""}</td>`}
+              ast.k==="triage" ? needChips(ast.miss.filter(m=>m!=="owner"&&m!=="due"), 1) : ""}</td>`}
             <!-- Off by default (see ACOL_DEFAULT above), still real columns
                  reachable through Columns. -->
             ${!acolOn("req")?"":`<td title="${esc(i.actionLabel||(i.action?actionName(i.action):""))}"><span class="trunc">${
@@ -21250,10 +21292,10 @@ document.querySelector(".lang").addEventListener("click",e=>{
   setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 })();
 </script>
-<script src="../dashboard/drive.js?v=519"></script>
-<script src="../dashboard/sync-adapter.js?v=519"></script>
-<script src="../dashboard/report.js?v=519"></script>
-<script src="../dashboard/reliability.js?v=519"></script>
+<script src="../dashboard/drive.js?v=520"></script>
+<script src="../dashboard/sync-adapter.js?v=520"></script>
+<script src="../dashboard/report.js?v=520"></script>
+<script src="../dashboard/reliability.js?v=520"></script>
 <script>
 /* THE CLOSED FILTER SAYS WHAT IS CHOSEN. A dropdown narrower than its option
    text ellipsises ("All t…", audit of 2026-10-01). Between 1331 and 1500 px

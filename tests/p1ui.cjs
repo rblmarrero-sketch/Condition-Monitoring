@@ -111,7 +111,8 @@ const key = e => new KeyboardEvent('keydown', { key: e, bubbles: true, cancelabl
     unassigned: (document.querySelector('#actionTbl tbody .who.none span') || {}).textContent }));
   ok('no form control in any row; owner and status are read-outs', R.fields === 0 && R.who === 25 && R.st === 25, R.fields + ' field(s)');
   ok('  an unassigned action says so in words', !!R.unassigned && R.unassigned.length > 2, R.unassigned);
-  await p.click('#actionTbl tbody tr.hrow'); await p.waitForTimeout(250);
+  /* The unit cell: owner, due, status and work order edit in place on a click. */
+  await p.click('#actionTbl tbody tr.hrow td:not(.selcol):not(.ed) b'); await p.waitForTimeout(250);
   const Dr = await p.evaluate(() => ({ open: !$('follOv').classList.contains('hidden'),
     fields: ['follOwner', 'follDue', 'follStatus', 'follWo', 'follPlan'].every(id => !!$(id)), names: $('ownerNames').options.length }));
   ok('the row opens the drawer with owner, due, WO, status and plan', Dr.open && Dr.fields, JSON.stringify(Dr));

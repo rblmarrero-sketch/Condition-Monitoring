@@ -4319,6 +4319,27 @@ is fixed-layout now (metric 26%, coverage the rest, result 170 px, source
 header striped and highlighted with its row. CSS only, both office pages;
 nothing to deploy on the VM.
 
+**AND THE MAINTENANCE ACTIONS REGISTER (build 520).** "fix the Maintenance
+Actions tables too". The table ran 300 px past its panel at 1440 (the Status
+cell carried the status word and two pills, the work order was off screen),
+the component and finding were cut to a dozen letters while the owner and due
+columns had room to spare, and on dashboard-next the status pills wrapped to a
+second and third line so no two rows were the same height. Both pages:
+`table.acttbl` is `table-layout:fixed` with a width per column whose content
+has a known size (`AC_W` in `renderActions`, mirrored by `th.ac-<key>` in the
+CSS — keep the two in step), the words columns share the rest, and the table
+may not shrink below what those need (it scrolls inside its own box on a
+narrow screen). Every cell is one line with an ellipsis; a row is 40 px. What
+is still missing is warning-ink TEXT in this table, not a pill: a pill is one
+unbreakable box, so in a one-line cell the ellipsis removed the whole pill
+rather than cutting it. The Status cell names the FIRST missing item and "+n";
+the chip's own title names them all (`needChips(…, 1)`, and dashboard-next's
+`.stneed` second line is gone). The grade cell has the grade and stoppage
+priority on its title, for the Russian names that do not fit. By machine:
+`.wlr` cells clip, and the owner column is 168 px, so a long name ends in an
+ellipsis instead of running under the due date. Selectors the suites read are
+unchanged. Dashboard only; nothing to deploy on the VM.
+
 ---
 
 ## Secrets
