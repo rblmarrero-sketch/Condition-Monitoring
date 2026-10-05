@@ -4373,6 +4373,23 @@ fitted by its own deliberate single-caption design and is untouched. Fits
 without a sideways scroll at 1366 on both pages in English. Dashboard only;
 nothing to deploy on the VM.
 
+**AND DEFECTS RAISED (build 523).** "fix the Defects raised tables too". The
+main page's register was 1,371 px in a 1,168 px panel with rows from 53 to
+144 px, whatever height the longest sentence wanted; dashboard-next fitted
+only by giving all eleven columns 102 px each and capping three of them at
+three lines. Both pages: `table.cwtbl` is fixed with a colgroup from
+`renderCmWoTab` (`CW_W`), 6 px side padding, 48 px rows. The short columns
+(date, asset, number, type, priority, status, who) are one line with an
+ellipsis and their text on the title where cut; 1C's four free-text columns
+(system, defect type, description, cause) are at most two lines (`.cw2`),
+always titled. 1C's values are still printed whole into the cell — the
+ellipsis only hides their end on screen — so `tests/cmwo.cjs`'s rule that
+this panel never reformats a field 1C owns still holds (priority is NOT cut
+to its code). `.clamp3` and `.wrapcell` are retired with their last users.
+The "{n} matching" line printed above the pager as well as in it; it stands
+alone now only when there is no pager. Fits without a sideways scroll at
+1366 on both pages. Dashboard only; nothing to deploy on the VM.
+
 ---
 
 ## Secrets

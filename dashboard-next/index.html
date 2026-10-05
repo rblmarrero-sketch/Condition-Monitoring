@@ -822,19 +822,6 @@
   /* The ring is drawn OUTSIDE the pill, so the line of pills needs room
      under it or the dash strikes through the work-order number beneath. */
   #paWeek .pline{white-space:nowrap;padding-bottom:4px;}
-  /* A defect description is a sentence, not a code. Left to itself it makes
-     one column as wide as the rest of the table put together. */
-  table.grid td.wrapcell{white-space:normal;min-width:14em;max-width:26em;}
-  /* Defects raised: Description/Cause/Component are 1C's own free text, no
-     shorter in Russian, and .wrapcell alone only ever bounded the WIDTH —
-     the height still grew with however many sentences an inspector wrote,
-     which is what made row heights range from 55px to 137px on the same
-     screen (measured at 1920px, ten consecutive real rows, no two alike).
-     Capped to three lines with the full text kept on the element's own
-     `title` (set where this class is used), so every row in the table is a
-     consistent, scannable height and nothing is lost, only a hover away. */
-  .clamp3{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;
-    line-clamp:3;overflow:hidden;text-overflow:ellipsis;white-space:normal;}
   table.grid tr:hover td{background:var(--surface-2);}
   .tblwrap{overflow-x:auto;max-width:100%;min-width:0;}
   /* A table in a half-width column has to fit that column. Headers are
@@ -2722,6 +2709,19 @@
   #paList table.patbl th.cwfh input.cwcf{width:100%;box-sizing:border-box;}
   #paList table.patbl tbody td{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:middle;}
   #paList table.patbl .pa-need{margin-left:6px;color:var(--warn-ink);font-weight:600;font-size:var(--t-micro,11px);}
+  /* ── Defects raised, one line a row (build 523) ──────────────────────────
+     Fixed columns from the colgroup renderCmWoTab writes (CW_W). Short cells
+     one line with an ellipsis and their text on the title where cut; 1C's
+     four free-text columns at most two lines (.cw2), titled. */
+  #cwList table.cwtbl{table-layout:fixed;width:100%;}
+  #cwList table.cwtbl thead th{white-space:normal;line-height:1.25;overflow:hidden;text-overflow:ellipsis;}
+  #cwList table.cwtbl th.cwfh input.cwcf{width:100%;box-sizing:border-box;}
+  #cwList table.cwtbl tbody tr{height:48px;}
+  #cwList table.cwtbl td,#cwList table.cwtbl th{padding-left:6px;padding-right:6px;}
+  #cwList table.cwtbl tbody td{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:middle;}
+  #cwList table.cwtbl tbody td.cwc2{white-space:normal;}
+  #cwList table.cwtbl .cw2{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;
+    overflow:hidden;white-space:normal;overflow-wrap:anywhere;line-height:1.3;}
   td.ed{cursor:text;}
   td.ed:hover{background:color-mix(in srgb,var(--accent) 7%,transparent);}
   td.ed.editing{padding:2px 6px;}
@@ -3117,7 +3117,6 @@
     table.grid td,table.grid th{padding-left:5px;padding-right:5px;}
     table.grid th{letter-spacing:.02em;}
     table.grid td{max-width:20ch;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-    table.grid td.wrapcell{max-width:22ch;min-width:0;white-space:nowrap;}
     table.grid td:has(input),table.grid td:has(select),table.grid td:has(button),table.grid td:has(.minibtn){max-width:none;overflow:visible;}
     #paWeek table.grid td{white-space:normal;max-width:none;overflow:visible;}
     /* The sidebar widened from 198px to 240px in the stage 3b visual pass
@@ -4950,23 +4949,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=522"></script>
+<script src="../data/magnetic_plug.js?v=523"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=522"></script>
-<script src="../mobile/hme.js?v=522"></script>
-<script src="../mobile/mp-fc.js?v=522"></script>
-<script src="../mobile/rtw.js?v=522"></script>
-<script src="../mobile/hme-cascade.js?v=522"></script>
-<script src="../mobile/temp-limits.js?v=522"></script>
+<script src="../data/work_orders.js?v=523"></script>
+<script src="../mobile/hme.js?v=523"></script>
+<script src="../mobile/mp-fc.js?v=523"></script>
+<script src="../mobile/rtw.js?v=523"></script>
+<script src="../mobile/hme-cascade.js?v=523"></script>
+<script src="../mobile/temp-limits.js?v=523"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=522"></script>
-<script src="../mobile/normalize.js?v=522"></script>
-<script src="../mobile/terms.js?v=522"></script>
+<script src="../mobile/assets.js?v=523"></script>
+<script src="../mobile/normalize.js?v=523"></script>
+<script src="../mobile/terms.js?v=523"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -4985,20 +4984,20 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=522"></script>
-<script src="../mobile/edits.js?v=522"></script>
-<script src="../mobile/due.js?v=522"></script>
-<script src="../mobile/wear.js?v=522"></script>
-<script src="../mobile/wear-map.js?v=522"></script>
-<script src="../mobile/lube.js?v=522"></script>
-<script src="../mobile/lube-overrides.js?v=522"></script>
-<script src="../mobile/lube2027.js?v=522"></script>
-<script src="../mobile/lube-tds.js?v=522"></script>
-<script src="../dashboard/lube-master.js?v=522"></script>
+<script src="../mobile/grade.js?v=523"></script>
+<script src="../mobile/edits.js?v=523"></script>
+<script src="../mobile/due.js?v=523"></script>
+<script src="../mobile/wear.js?v=523"></script>
+<script src="../mobile/wear-map.js?v=523"></script>
+<script src="../mobile/lube.js?v=523"></script>
+<script src="../mobile/lube-overrides.js?v=523"></script>
+<script src="../mobile/lube2027.js?v=523"></script>
+<script src="../mobile/lube-tds.js?v=523"></script>
+<script src="../dashboard/lube-master.js?v=523"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=522"></script>
-<script src="../mobile/machine-photos.js?v=522"></script>
+<script src="../mobile/upload-defaults.js?v=523"></script>
+<script src="../mobile/machine-photos.js?v=523"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -5007,17 +5006,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=522"></script>
-<script src="../mobile/get.js?v=522"></script>
-<script src="../mobile/points.js?v=522"></script>
-<script src="../mobile/uc-points.js?v=522"></script>
-<script src="../mobile/inspect-guide.js?v=522"></script>
-<script src="../mobile/get-figs.js?v=522"></script>
-<script src="../mobile/body-points.js?v=522"></script>
-<script src="../mobile/body-map.js?v=522"></script>
-<script src="../mobile/jspdf.umd.min.js?v=522"></script>
-<script src="../mobile/html2canvas.min.js?v=522"></script>
-<script src="../mobile/report-core.js?v=522"></script>
+<script src="../mobile/machine-fig.js?v=523"></script>
+<script src="../mobile/get.js?v=523"></script>
+<script src="../mobile/points.js?v=523"></script>
+<script src="../mobile/uc-points.js?v=523"></script>
+<script src="../mobile/inspect-guide.js?v=523"></script>
+<script src="../mobile/get-figs.js?v=523"></script>
+<script src="../mobile/body-points.js?v=523"></script>
+<script src="../mobile/body-map.js?v=523"></script>
+<script src="../mobile/jspdf.umd.min.js?v=523"></script>
+<script src="../mobile/html2canvas.min.js?v=523"></script>
+<script src="../mobile/report-core.js?v=523"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -20845,17 +20844,11 @@ function renderCmWoTab(){
   const pg = paged("cmwo", shown, renderCmWoTab);
   const cell = v => v ? esc(v) : `<span class="muted">—</span>`;
   /* DESCRIPTION/CAUSE/COMPONENT ARE 1C's OWN FREE TEXT, ESPECIALLY IN
-     RUSSIAN, AND UNBOUNDED. Left to wrap (.wrapcell alone), a row prints at
-     whatever height its longest of these three cells needs — measured at
-     1920px on real fixture data: 55px to 137px across ten consecutive rows,
-     no two the same, because "how many sentences did this inspector write"
-     is not a property a scannable register should show as row height. Each
-     is capped to three lines (line-clamp), with the full, untruncated text
-     kept on a `title` so nothing is lost, only deferred to a hover — the
-     same "keep truncation, add a real title" fix this build already gives
-     the Maintenance Actions register's own long text columns. */
-  const clampCell = v => v ? `<span class="clamp3" title="${esc(v)}">${esc(v)}</span>` : `<span class="muted">—</span>`;
-  /* SORT and a FILTER PER COLUMN, in the header itself — reusing the exact
+     RUSSIAN, AND UNBOUNDED. Left to wrap, a row printed at whatever height
+     its longest cell needed (55px to 137px across ten consecutive rows,
+     measured at 1920px). They were capped at three lines; since build 523
+     they are capped at two (.cw2, below) and every other column is one
+     line, with the whole text on the title either way. */  /* SORT and a FILTER PER COLUMN, in the header itself — reusing the exact
      sortable-column pattern the Fleet and Plan-vs-Actual tables already use
      (class="sortable", data-sort, the same arrow glyphs), plus a second
      header row of plain text inputs, one per column, each reading only ITS
@@ -20867,27 +20860,46 @@ function renderCmWoTab(){
     + `</tr><tr>` + CW_COLS.map(([k,labelKey]) =>
       `<th class="cwfh"><input type="text" class="cwcf" data-k="${esc(k)}" value="${esc(cwColQ[k]||"")}" placeholder="${esc(t("cw_colfilter_ph"))}" aria-label="${esc(t("cw_colfilter_aria",{c:t(labelKey)}))}"></th>`).join("")
     + `</tr>`;
+  /* ONE LINE A ROW, AND TWO FOR A SENTENCE. The short columns (date, asset,
+     number, type, priority, status, who) are one line with an ellipsis; the
+     four that are 1C's free text (system, defect type, description, cause)
+     are at most two lines, every one of them with its whole text on its
+     title. 1C's own values are printed whole into the cell — the ellipsis
+     only hides the end of them on screen — so nothing here is reformatted. */
+  const c2 = v => v ? `<span class="cw2" title="${esc(v)}">${esc(v)}</span>` : `<span class="muted">—</span>`;
   const tbody = shown.length ? pg.rows.map(r=>`<tr${r.planned?' class="muted"':''}>
         <td class="mono" title="${esc(r.planStart ? t("cw_plan_on",{d:r.planStart}) : t("cw_plan_none"))}">${cell(r.date)}</td>
         <td><b>${cell(r.asset)}</b></td>
         <td class="mono">${r.defect ? esc(r.defect)
             : (r.requestNo ? `<span class="muted" title="${esc(r.requestNo)}">${esc(r.requestNo.slice(0,28))}</span>`
                            : `<span class="muted">—</span>`)}</td>
-        <td>${cell(r.eqType)}</td><td class="mono wrapcell">${r.planned ? cell(r.system) : clampCell(r.system)}</td><td>${cell(r.priority)}</td>
-        <td>${r.planned ? `<span class="muted">${esc(t("cw_is_planned"))}</span>` : cell(r.defectType)}</td>
-        <td class="wrapcell">${r.planned ? `<span class="muted">—</span>` : clampCell(r.descr)}</td>
-        <td class="wrapcell">${r.planned ? `<span class="muted">—</span>` : clampCell(r.cause)}</td>
+        <td>${cell(r.eqType)}</td><td class="mono cwc2">${c2(r.system)}</td><td>${cell(r.priority)}</td>
+        <td class="cwc2">${r.planned ? `<span class="muted">${esc(t("cw_is_planned"))}</span>` : c2(r.defectType)}</td>
+        <td class="cwc2">${r.planned ? `<span class="muted">—</span>` : c2(r.descr)}</td>
+        <td class="cwc2">${r.planned ? `<span class="muted">—</span>` : c2(r.cause)}</td>
         <td>${cell(r.status)}</td><td>${cell(r.by)}</td></tr>`).join("")
     : `<tr><td colspan="${CW_COLS.length}" class="empty">${esc(t("cw_none"))}</td></tr>`;
-  box.innerHTML = `<div class="tblwrap"><table class="grid"><thead>${thead}</thead><tbody>${tbody}</tbody></table></div>`
+  /* Date · Asset · Defect no. · Equipment type · System · Priority · Defect
+     type · Description · Cause · Status · Raised by — the description takes
+     what the others leave. */
+  const CW_W=[90,64,100,92,116,84,108,0,104,88,64];
+  const CW_COLG=`<colgroup>${CW_W.map(w=>w?`<col style="width:${w}px">`:"<col>").join("")}</colgroup>`;
+  box.innerHTML = `<div class="tblwrap"><table class="grid cwtbl" style="min-width:${CW_W.reduce((a,b)=>a+b,0)+140}px">${CW_COLG}<thead>${thead}</thead><tbody>${tbody}</tbody></table></div>`
     /* The pager's own strip, and the count in the words every other table on
        this page uses — "{n} matching · showing a–b". Written once in t(),
        never restated here. */
     /* pgbar is already a progress bar on this page — a class reused for a
        second thing is a style collision waiting for the next edit. */
-    + `<div class="sub">${esc(t("pg_of",{n:String(shown.length),
-         a:String(pg.from||0), b:String(pg.to||0)}))}</div>${pg.strip||""}`;
+    /* Once: the pager's strip already says "{n} matching · showing a–b", and
+       the same words printed above it read as two counts. The line stands
+       alone only when there is no pager to carry it. */
+    + (pg.strip ? pg.strip : `<div class="sub">${esc(t("pg_of",{n:String(shown.length),
+         a:String(pg.from||0), b:String(pg.to||0)}))}</div>`);
 
+  box.querySelectorAll("table.cwtbl tbody td:not(.cwc2)").forEach(td=>{
+    if(td.scrollWidth>td.clientWidth+1 && !td.title) td.title=td.textContent.replace(/\s+/g," ").trim(); });
+  box.querySelectorAll("table.cwtbl thead th.sortable").forEach(th=>{
+    const w=th.textContent.replace(/[▲▼↕]/g,"").replace(/\s+/g," ").trim(); if(w && !th.title) th.title=w; });
   box.querySelectorAll("th.sortable[data-sort]").forEach(th=>th.onclick=()=>{
     const k = th.dataset.sort;
     if(cwSort.k===k) cwSort.dir*=-1;
@@ -21350,10 +21362,10 @@ document.querySelector(".lang").addEventListener("click",e=>{
   setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 })();
 </script>
-<script src="../dashboard/drive.js?v=522"></script>
-<script src="../dashboard/sync-adapter.js?v=522"></script>
-<script src="../dashboard/report.js?v=522"></script>
-<script src="../dashboard/reliability.js?v=522"></script>
+<script src="../dashboard/drive.js?v=523"></script>
+<script src="../dashboard/sync-adapter.js?v=523"></script>
+<script src="../dashboard/report.js?v=523"></script>
+<script src="../dashboard/reliability.js?v=523"></script>
 <script>
 /* THE CLOSED FILTER SAYS WHAT IS CHOSEN. A dropdown narrower than its option
    text ellipsises ("All t…", audit of 2026-10-01). Between 1331 and 1500 px
