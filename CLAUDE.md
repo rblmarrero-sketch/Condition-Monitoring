@@ -4457,6 +4457,21 @@ cached photographs out of an office browser was given to the maintainer on
 2026-10-05 (IndexedDB `cm_dash_idb` / `kv` / `cm_dash_drive`, Cache Storage
 `cm-media-v1`); a desk hides a deleted round but keeps its own copy.
 
+**AND DATA & SYNC (build 527).** "fix the Data & Sync tables too". Read off the
+live folder: the attachment-status table printed one point name per missing
+photograph — "CH.BUC, CH.BUC, CH.BUC, CH.BUC, HS.MP, …" for EX003's 32 — so the
+cell never reached its second point; on the main page its Type column took
+349 px and Points what was left, and on dashboard-next every column of both
+tables was the same width, cutting the device table's "last round". Both
+pages: `#syGapTbl` and `#syDevTbl` take `.sytbl` (fixed, a colgroup written
+by `renderSync`, one line a row, a cut cell's text on its title) only while
+they have rows, so an empty state is still one full-width cell. Points are
+each named once with their count ("CH.BUC ×4 · HS.MP ×8"), the file names
+still on the title. dashboard-next's per-row action buttons may wrap rather
+than vanish under the ellipsis. The correction table keeps its multi-line
+cells: a correction is read, not scanned. Dashboard only; nothing to deploy
+on the VM.
+
 ---
 
 ## Secrets
