@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-05T11:48:33+00:00",
+  "generated": "2026-10-05T12:03:45+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -9737,15 +9737,15 @@
       "completed": ""
     },
     {
-      "wo": "GD-023287",
+      "wo": "GD-023285",
       "equip": "EX021",
       "cls": "EXC",
       "comp": "",
-      "desc": "Filter Cut / General Inspection",
+      "desc": "500h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-08-01",
-      "type": "1000 Hours service Planned",
-      "hours": 1000,
+      "type": "500 Hours service Planned",
+      "hours": 500,
       "plan": "2026-08-01",
       "status": "Elimination scheduled",
       "request": "",
@@ -9755,15 +9755,15 @@
       "completed": ""
     },
     {
-      "wo": "GD-023289",
+      "wo": "GD-023287",
       "equip": "EX021",
       "cls": "EXC",
       "comp": "",
-      "desc": "500h service",
+      "desc": "Filter Cut / General Inspection",
       "priority": "P3 Planned (PM)",
       "raised": "2026-08-01",
-      "type": "500 Hours service Planned",
-      "hours": 500,
+      "type": "1000 Hours service Planned",
+      "hours": 1000,
       "plan": "2026-08-01",
       "status": "Elimination scheduled",
       "request": "",
