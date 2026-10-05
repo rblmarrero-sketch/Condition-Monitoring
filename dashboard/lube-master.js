@@ -54,7 +54,11 @@
       c_code: "Code", c_comp: "Component", c_grade: "Grade", c_prod: "Approved oil · alternative",
       c_seen: "In use on site", c_cap: "System, L", c_rf: "Refill, L", c_iv: "Site interval, h",
       c_ivo: "OEM interval, h", c_oem: "OEM specification", c_flags: "Flags",
-      c_src: "Source: manual · page", c_doc: "manual / document", c_page: "page", src_by: "{who} · {when}",
+      c_src: "Source: manual · page", c_doc: "manual", c_page: "page", src_by: "{who} · {when}",
+      h_cap: "Capacity, L", h_iv: "Interval, h", h_sys: "System", h_rf: "Refill", h_site: "Site", h_oem: "OEM",
+      h_spec: "OEM spec", h_src: "Manual · page", h_oil: "Approved oil / alternative", h_seen: "On site",
+      d_model: "Model", d_unitsh: "Units", d_opts: "What the sheets say — pick one", d_why: "Why / decision",
+      o_by: "approved by {by} · {at}",
       g_none: "— no grade —", save_model: "Save changes to this model", undo_model: "Discard",
       revert: "Back to workbook", revert_t: "Take every office edit off this model",
       f_verify: "figure to confirm", f_noiv: "no interval", f_ask: "OEM vs grade", f_dec: "decide",
@@ -73,9 +77,9 @@
       o_title: "Oils and consolidation", o_sub: "One approved product and one alternative per grade. This is the list procurement buys from and the shops stock.",
       o_k_grades: "grades in use", o_k_prod: "products named", o_k_vol: "litres a year", o_k_appr: "approved",
       o_grade: "Grade", o_type: "Type", o_appr: "Approved product", o_alt: "Alternative",
-      o_state: "State", o_use: "Used in", o_vol: "L / year", o_drums: "Drums / year", o_seen: "Seen on site",
+      o_state: "State", o_use: "Used in", o_vol: "L / year", o_drums: "Drums / year", o_seen: "Names seen",
       o_proposed: "Proposed", o_approved: "Approved", o_approve: "Approve", o_unapprove: "Back to proposed",
-      o_use_n: "{c} compartments · {m} models", o_other: "Other…", o_other_p: "Product name",
+      o_use_n: "{c} compartments · {m} models", o_comps: "Compartments", o_models: "Models", o_seen_t: "Different product names audited on site for this grade", o_other: "Other…", o_other_p: "Product name",
       o_seen_n: "{n} names", o_seen_none: "—", o_save: "Save", o_csv: "⬇ Procurement list (CSV)",
       o_print: "🖨 Wall chart", o_unused: "Grades on the sheet that no compartment uses",
       o_verify: "product not chosen yet (VERIFY on the sheet)", o_shelf: "on the 2027 shelf",
@@ -114,7 +118,11 @@
       c_code: "Код", c_comp: "Узел", c_grade: "Класс", c_prod: "Основное · альтернатива",
       c_seen: "Фактически", c_cap: "Система, л", c_rf: "Заправка, л", c_iv: "Интервал участка, ч",
       c_ivo: "Интервал OEM, ч", c_oem: "Спецификация OEM", c_flags: "Отметки",
-      c_src: "Источник: руководство · стр.", c_doc: "руководство / документ", c_page: "стр.", src_by: "{who} · {when}",
+      c_src: "Источник: руководство · стр.", c_doc: "руководство", c_page: "стр.", src_by: "{who} · {when}",
+      h_cap: "Объём, л", h_iv: "Интервал, ч", h_sys: "Система", h_rf: "Заправка", h_site: "Участок", h_oem: "OEM",
+      h_spec: "Спец. OEM", h_src: "Руководство · стр.", h_oil: "Основное / альтернатива", h_seen: "Фактически",
+      d_model: "Модель", d_unitsh: "Ед.", d_opts: "Что указано в листах — выберите", d_why: "Причина / решение",
+      o_by: "утвердил {by} · {at}",
       g_none: "— без класса —", save_model: "Сохранить изменения модели", undo_model: "Отменить",
       revert: "Вернуть из книги", revert_t: "Снять все правки офиса с этой модели",
       f_verify: "уточнить", f_noiv: "нет интервала", f_ask: "OEM vs класс", f_dec: "решить",
@@ -133,9 +141,9 @@
       o_title: "Масла и унификация", o_sub: "Один основной продукт и одна альтернатива на каждый класс. По этому списку закупают и комплектуют склад.",
       o_k_grades: "классов в работе", o_k_prod: "продуктов названо", o_k_vol: "литров в год", o_k_appr: "утверждено",
       o_grade: "Класс", o_type: "Тип", o_appr: "Основной продукт", o_alt: "Альтернатива",
-      o_state: "Статус", o_use: "Применение", o_vol: "л / год", o_drums: "Бочек / год", o_seen: "Встречается",
+      o_state: "Статус", o_use: "Применение", o_vol: "л / год", o_drums: "Бочек / год", o_seen: "Названий",
       o_proposed: "Предложено", o_approved: "Утверждено", o_approve: "Утвердить", o_unapprove: "Вернуть в предложенные",
-      o_use_n: "{c} узлов · {m} моделей", o_other: "Другое…", o_other_p: "Название продукта",
+      o_use_n: "{c} узлов · {m} моделей", o_comps: "Узлов", o_models: "Моделей", o_seen_t: "Сколько разных названий продукта встречено на аудитах для этого класса", o_other: "Другое…", o_other_p: "Название продукта",
       o_seen_n: "{n} назв.", o_seen_none: "—", o_save: "Сохранить", o_csv: "⬇ Список закупки (CSV)",
       o_print: "🖨 Плакат", o_unused: "Классы листа, не применённые ни в одном узле",
       o_verify: "продукт ещё не выбран (VERIFY в книге)", o_shelf: "на полке 2027",
@@ -405,13 +413,14 @@
       (legacy ? `<span class="lmx-mig">${esc(tr("migrate", { n: legacy }))} <button class="btn" type="button" id="lmxMig">${esc(tr("migrate_go"))}</button></span>` : "") +
       msg("master") + `</div>` + importPanel() +
       `<div class="lmx-two">
-        <div class="lmx-list">
+        <div class="lmx-list"><div class="lmx-lbar">
           <input class="lmx-in" id="lmxQ" type="search" placeholder="${esc(tr("m_search"))}" value="${esc(UI.q)}">
           <div class="seg lmx-seg"><button type="button" data-lmxf="1" class="${UI.fleetOnly ? "on" : ""}">${esc(tr("m_fleet"))}</button>` +
           `<button type="button" data-lmxf="0" class="${UI.fleetOnly ? "" : "on"}">${esc(tr("m_all"))}</button></div>
+          <span class="sub lmx-lcount">${list.length}</span></div>
           <div class="lmx-models" role="listbox" aria-label="${esc(tr("m_title"))}">` +
-          list.map(r => `<button type="button" role="option" class="lmx-mrow${r.key === UI.model ? " on" : ""}" data-lmxm="${esc(r.key)}" aria-selected="${r.key === UI.model}">` +
-            `<b>${esc(r.M.m)}</b><i>${esc(r.M.cls)} · ${r.n}${r.open ? ` · <span class="lmx-dot">${r.open}</span>` : ""}</i></button>`).join("") +
+          list.map(r => `<button type="button" role="option" class="lmx-mrow${r.key === UI.model ? " on" : ""}" data-lmxm="${esc(r.key)}" aria-selected="${r.key === UI.model}" title="${esc(r.M.m)}">` +
+            `<b>${esc(r.M.m)}</b><i>${esc(r.M.cls)}</i><i class="num">${r.n}</i><i>${r.open ? `<span class="lmx-dot" title="${esc(tr("f_dec"))}">${r.open}</span>` : ""}</i></button>`).join("") +
           `</div></div>
         <div class="lmx-ed">${sel ? modelEditor(sel) : `<p class="sub">${esc(tr("none_sel"))}</p>`}</div>
       </div>
@@ -444,9 +453,12 @@
     const lb = L(), M = r.M, seen = HOST.seen() || {};
     const base = (lb.base().MODELS[r.key] || { comps: [] }).comps;
     const baseOf = k => base.filter(c => c.k === k)[0] || {};
-    const num = (k, f, v) => `<input class="lmx-in num" data-k="${esc(k)}" data-f="${f}" value="${esc(v == null ? "" : v)}" inputmode="decimal" aria-label="${esc(tr("c_" + f))} ${esc(k)}">`;
+    const num = (k, f, v, t) => `<input class="lmx-in num" data-k="${esc(k)}" data-f="${f}" value="${esc(v == null ? "" : v)}" inputmode="decimal" aria-label="${esc(tr("c_" + f))} ${esc(k)}"${t ? ` title="${esc(t)}"` : ""}>`;
     const head = `<div class="lmx-edhd"><h3>${esc(M.m)}</h3><span class="lmx-chip">${esc(M.cls)}</span>` +
       `<span class="sub">${esc(tr("m_units", { n: r.n }))} · ${esc(tr("m_plan", { a: r.u[0], b: r.u[1], c: r.u[2] }))}</span></div>`;
+    /* One line a compartment. Everything secondary — where a refill figure came
+       from, who traced a manual page, the audited unit and date — rides in the
+       cell's tooltip, so every row is the same height and reads across. */
     const rows = M.comps.map(c => {
       const b = baseOf(c.k), s = seen[r.key + "|" + c.k];
       const prod = c.g ? lb.grade(c.g) : null;
@@ -454,28 +466,36 @@
       const flags = [c.verify ? tr("f_verify") : "", c.noiv ? tr("f_noiv") : "", c.ask ? tr("f_ask") : "",
                      open ? tr("f_dec") : "", c.edited ? tr("f_edit") : ""].filter(Boolean);
       const v = lb.verdict(M.m, M.cls, c.k, s && s.product);
+      const name = lang() === "ru" ? c.ru : c.en;
+      const oil = prod ? (prod.verify ? `<span class="lmx-1 sub">${esc(tr("o_verify"))}</span>` :
+        `<span class="lmx-1 lmx-p" title="${esc(prod.primary || "")}">${esc(prod.primary || "—")}</span>` +
+        `<span class="lmx-1 lmx-a" title="${esc(prod.alt || "")}">${esc(prod.alt || "")}</span>`) : `<span class="lmx-1 sub">—</span>`;
+      const src = c.src || {};
+      const srcT = src.who ? tr("src_by", { who: src.who, when: src.when || "" }) : "";
       return `<tr data-lmxk="${esc(c.k)}"${c.edited ? ' class="lmx-edited"' : ""}>
         <td class="lmx-code"><b>${esc(c.k)}</b></td>
-        <td>${esc(lang() === "ru" ? c.ru : c.en)}</td>
-        <td><div class="lmx-gsel">${swatch(c.g)}<select class="lmx-in" data-k="${esc(c.k)}" data-f="g" aria-label="${esc(tr("c_grade"))} ${esc(c.k)}">${gradeOptions(c.g)}</select></div></td>
-        <td class="lmx-prod">${prod ? (prod.verify ? `<i class="sub">${esc(tr("o_verify"))}</i>` :
-          `<b>${esc(prod.primary || "—")}</b>${prod.alt ? `<i>${esc(prod.alt)}</i>` : ""}`) : "—"}</td>
-        <td class="lmx-seen">${s ? `<span class="${v.b === "ok" ? "ok" : v.b === "act" ? "bad" : "warn"}">${esc(s.product)}</span><i>${esc(s.unit)} · ${esc(s.date)}</i>` : `<i class="sub">${esc(tr("seen_none"))}</i>`}</td>
-        <td>${num(c.k, "cap", c.cap)}</td>
-        <td>${num(c.k, "rf", c.rf)}${c.rfs ? `<i class="sub lmx-src">${esc(tr("rf_src", { s: c.rfs }))}</i>` : ""}</td>
-        <td>${num(c.k, "iv", c.iv)}</td>
-        <td>${num(c.k, "ivo", c.ivo)}</td>
-        <td><input class="lmx-in" data-k="${esc(c.k)}" data-f="oem" value="${esc(c.oem || "")}" aria-label="${esc(tr("c_oem"))} ${esc(c.k)}" title="${esc(b.oem || "")}"></td>
-        <td class="lmx-srccell"><input class="lmx-in" data-k="${esc(c.k)}" data-s="doc" value="${esc((c.src || {}).doc || "")}" placeholder="${esc(tr("c_doc"))}" aria-label="${esc(tr("c_doc"))} ${esc(c.k)}">` +
-        `<input class="lmx-in lmx-page" data-k="${esc(c.k)}" data-s="page" value="${esc((c.src || {}).page || "")}" placeholder="${esc(tr("c_page"))}" aria-label="${esc(tr("c_page"))} ${esc(c.k)}">` +
-        `${c.src && c.src.who ? `<i class="sub lmx-src">${esc(tr("src_by", { who: c.src.who, when: c.src.when || "" }))}</i>` : ""}</td>
-        <td class="lmx-flags">${flags.map(f => `<span class="lmx-flag">${esc(f)}</span>`).join("")}</td>
+        <td class="lmx-cn"><span class="lmx-1" title="${esc(name)}">${esc(name)}</span>${flags.length ? `<span class="lmx-flags">${flags.map(f => `<span class="lmx-flag">${esc(f)}</span>`).join("")}</span>` : ""}</td>
+        <td><label class="lmx-gsel" title="${esc(tr("c_grade"))}">${swatch(c.g)}<select class="lmx-in" data-k="${esc(c.k)}" data-f="g" aria-label="${esc(tr("c_grade"))} ${esc(c.k)}">${gradeOptions(c.g)}</select></label></td>
+        <td class="lmx-oil">${oil}</td>
+        <td class="lmx-seen">${s ? `<span class="lmx-1 ${v.b === "ok" ? "ok" : v.b === "act" ? "bad" : "warn"}" title="${esc(s.product + " · " + s.unit + " · " + s.date)}">${esc(s.product)}</span>` : `<span class="lmx-1 sub" title="${esc(tr("seen_none"))}">—</span>`}</td>
+        <td class="lmx-n lmx-g1">${num(c.k, "cap", c.cap)}</td>
+        <td class="lmx-n">${num(c.k, "rf", c.rf, c.rfs ? tr("rf_src", { s: c.rfs }) : "")}</td>
+        <td class="lmx-n lmx-g1">${num(c.k, "iv", c.iv)}</td>
+        <td class="lmx-n">${num(c.k, "ivo", c.ivo)}</td>
+        <td class="lmx-g1"><input class="lmx-in lmx-w" data-k="${esc(c.k)}" data-f="oem" value="${esc(c.oem || "")}" aria-label="${esc(tr("c_oem"))} ${esc(c.k)}" title="${esc(c.oem || b.oem || "")}"></td>
+        <td class="lmx-srccell" title="${esc(srcT)}"><input class="lmx-in lmx-doc" data-k="${esc(c.k)}" data-s="doc" value="${esc(src.doc || "")}" placeholder="${esc(tr("c_doc"))}" aria-label="${esc(tr("c_doc"))} ${esc(c.k)}">` +
+        `<input class="lmx-in lmx-page" data-k="${esc(c.k)}" data-s="page" value="${esc(src.page || "")}" placeholder="${esc(tr("c_page"))}" aria-label="${esc(tr("c_page"))} ${esc(c.k)}"></td>
       </tr>`;
     }).join("");
-    return head + `<div class="tblwrap scrollbox lmx-tw" style="--sb:560px"><table class="grid lmx-tbl">
-      <thead><tr><th>${esc(tr("c_code"))}</th><th>${esc(tr("c_comp"))}</th><th>${esc(tr("c_grade"))}</th>
-      <th>${esc(tr("c_prod"))}</th><th>${esc(tr("c_seen"))}</th><th>${esc(tr("c_cap"))}</th><th>${esc(tr("c_rf"))}</th>
-      <th>${esc(tr("c_iv"))}</th><th>${esc(tr("c_ivo"))}</th><th>${esc(tr("c_oem"))}</th><th>${esc(tr("c_src"))}</th><th>${esc(tr("c_flags"))}</th></tr></thead>
+    return head + `<div class="tblwrap scrollbox lmx-tw" style="--sb:620px"><table class="grid lmx-tbl lmx-mtbl">
+      <colgroup><col class="w-code"><col class="w-comp"><col class="w-grade"><col class="w-oil"><col class="w-seen">
+      <col class="w-n"><col class="w-n"><col class="w-n"><col class="w-n"><col class="w-spec"><col class="w-src"></colgroup>
+      <thead><tr class="lmx-hg"><th rowspan="2">${esc(tr("c_code"))}</th><th rowspan="2">${esc(tr("c_comp"))}</th><th rowspan="2">${esc(tr("c_grade"))}</th>
+      <th rowspan="2">${esc(tr("h_oil"))}</th><th rowspan="2">${esc(tr("h_seen"))}</th>
+      <th colspan="2" class="lmx-g1 c">${esc(tr("h_cap"))}</th><th colspan="2" class="lmx-g1 c">${esc(tr("h_iv"))}</th>
+      <th rowspan="2" class="lmx-g1">${esc(tr("h_spec"))}</th><th rowspan="2">${esc(tr("h_src"))}</th></tr>
+      <tr class="lmx-hs"><th class="num lmx-g1" title="${esc(tr("c_cap"))}">${esc(tr("h_sys"))}</th><th class="num" title="${esc(tr("c_rf"))}">${esc(tr("h_rf"))}</th>
+      <th class="num lmx-g1" title="${esc(tr("c_iv"))}">${esc(tr("h_site"))}</th><th class="num" title="${esc(tr("c_ivo"))}">${esc(tr("h_oem"))}</th></tr></thead>
       <tbody>${rows}</tbody></table></div>
       <div class="lmx-bar"><button class="btn primary" type="button" id="lmxSaveM">${esc(tr("save_model"))}</button>
       <button class="btn" type="button" id="lmxUndoM">${esc(tr("undo_model"))}</button>
@@ -566,20 +586,30 @@
       [["open", "d_open", nOpen], ["done", "d_done", nDone], ["all", "d_all", all.length]].map(([k, l, n]) =>
         `<button type="button" data-lmxd="${k}" class="${UI.dFilter === k ? "on" : ""}">${esc(tr(l))}<span class="n">${n}</span></button>`).join("") +
       `</div>${msg("decide")}</div>` +
-      (list.length ? `<div class="lmx-dlist">` + list.map(({ d, done }) => {
-        const cur = done ? done.g : d.cur;
-        return `<div class="lmx-dec${done ? " done" : ""}" data-lmxid="${esc(d.id)}">
-          <div class="lmx-dwhat"><b>${esc(d.m)}</b><span class="lmx-code">${esc(d.k)}</span> ${esc(d.en)}
-            <i>${esc(tr("d_units", { n: d.units }))}</i></div>
-          <div class="lmx-dopts">` + d.opts.map(o => `<button type="button" class="lmx-opt${o.g === cur ? " cur" : ""}" data-lmxg="${esc(o.g)}" ${done ? "disabled" : ""}>` +
-            `${swatch(o.g)}<span class="lmx-osrc">${esc(o.src.map(s => s === "matrix" ? tr("d_matrix") : s).join(" · "))}</span>` +
-            (done ? "" : `<span class="lmx-opick">${esc(tr("d_pick"))}</span>`) + `</button>`).join("") +
-          `</div>` +
-          (done ? `<div class="lmx-dres">${esc(tr("d_decided", { g: done.g, by: done.by || "—", at: fmtAt(done.at) }))}${done.note ? " — " + esc(done.note) : ""}` +
-                  ` <button class="btn" type="button" data-lmxre="${esc(d.id)}">${esc(tr("d_reopen"))}</button></div>`
-                : `<input class="lmx-in lmx-dnote" placeholder="${esc(tr("d_note"))}" aria-label="${esc(tr("d_note"))}">`) +
-        `</div>`;
-      }).join("") + `</div>` : `<p class="sub">${esc(tr("d_empty"))}</p>`);
+      (list.length ? `<div class="tblwrap scrollbox" style="--sb:680px"><table class="grid lmx-tbl lmx-dtbl">
+        <colgroup><col class="w-code"><col class="w-dcomp"><col class="w-units"><col><col class="w-why"></colgroup>
+        <thead><tr><th>${esc(tr("c_code"))}</th><th>${esc(tr("c_comp"))}</th><th class="num">${esc(tr("d_unitsh"))}</th>
+        <th>${esc(tr("d_opts"))}</th><th>${esc(tr("d_why"))}</th></tr></thead><tbody>` +
+        list.map(({ d, done }, i) => {
+          const cur = done ? done.g : d.cur;
+          /* Rows of one model sit under one heading row, so the model is read
+             once instead of on every compartment. */
+          const grp = (i === 0 || list[i - 1].d.m !== d.m)
+            ? `<tr class="lmx-grp"><th colspan="5" scope="colgroup">${esc(d.m)}</th></tr>` : "";
+          return grp + `<tr class="lmx-dec${done ? " done" : ""}" data-lmxid="${esc(d.id)}">
+          <td class="lmx-code"><b>${esc(d.k)}</b></td>
+          <td><span class="lmx-1" title="${esc(d.en)}">${esc(d.en)}</span></td>
+          <td class="num">${esc(String(d.units))}</td>
+          <td><div class="lmx-dopts">` + d.opts.map(o => { const srcs = o.src.map(x => x === "matrix" ? tr("d_matrix") : x).join(" · ");
+            return `<button type="button" class="lmx-opt${o.g === cur ? " cur" : ""}" data-lmxg="${esc(o.g)}" ${done ? "disabled" : ""}` +
+            ` title="${esc((done ? "" : tr("d_pick") + ": ") + o.g + " — " + srcs)}" aria-label="${esc((done ? "" : tr("d_pick") + ": ") + o.g + " — " + srcs)}">` +
+            `${swatch(o.g)}<span class="lmx-osrc">${esc(srcs)}</span></button>`; }).join("") +
+          `</div></td><td>` +
+          (done ? `<div class="lmx-dres"><span class="lmx-1" title="${esc(done.note || "")}">${esc(tr("d_decided", { g: done.g, by: done.by || "—", at: fmtAt(done.at) }))}${done.note ? " — " + esc(done.note) : ""}</span>` +
+                  `<button class="btn lmx-sm" type="button" data-lmxre="${esc(d.id)}">${esc(tr("d_reopen"))}</button></div>`
+                : `<input class="lmx-in lmx-dnote" placeholder="${esc(tr("d_note"))}" aria-label="${esc(tr("d_note"))} ${esc(d.m)} ${esc(d.k)}">`) +
+          `</td></tr>`;
+        }).join("") + `</tbody></table></div>` : `<p class="sub">${esc(tr("d_empty"))}</p>`);
     bindWho(el, "lmxWhoD");
     el.querySelectorAll("[data-lmxd]").forEach(b => b.onclick = () => { UI.dFilter = b.dataset.lmxd; drawDecide(el); });
     el.querySelectorAll(".lmx-dec:not(.done) [data-lmxg]").forEach(b => b.onclick = () => {
@@ -632,19 +662,21 @@
         `<option value="__other">${esc(tr("o_other"))}</option>`;
       const names = Object.keys(seenG[g] || {});
       const st = G0.state === "approved";
+      const typ = lang() === "ru" ? G0.ru : G0.en;
+      const sel = (f, cur, lab) => `<select class="lmx-in lmx-w" data-f="${f}" aria-label="${esc(lab)} ${esc(g)}" title="${esc(cur ? cur + " · " + coldWords(cur) : "")}"><option value=""></option>${opts(cur)}</select>`;
       return `<tr data-lmxgr="${esc(g)}"${gm[g] ? ' class="lmx-edited"' : ""}>
         <td>${swatch(g, true)}</td>
-        <td>${esc(lang() === "ru" ? G0.ru : G0.en)}</td>
-        <td>${G0.verify ? `<i class="sub">${esc(tr("o_verify"))}</i>` : `<select class="lmx-in" data-f="primary" aria-label="${esc(tr("o_appr"))} ${esc(g)}"><option value=""></option>${opts(G0.primary)}</select>`}</td>
-        <td>${G0.verify ? "" : `<select class="lmx-in" data-f="alt" aria-label="${esc(tr("o_alt"))} ${esc(g)}"><option value=""></option>${opts(G0.alt)}</select>`}</td>
-        <td><span class="band ${st ? "b-ok" : "b-none"}">${esc(tr(st ? "o_approved" : "o_proposed"))}</span>
-            ${G0.verify ? "" : `<button class="btn lmx-sm" type="button" data-lmxap="${st ? "0" : "1"}">${esc(tr(st ? "o_unapprove" : "o_approve"))}</button>`}
-            ${st && G0.by ? `<i class="sub">${esc(G0.by)} · ${esc(fmtAt(G0.at))}</i>` : ""}</td>
-        <td>${esc(tr("o_use_n", { c: u.comps, m: Object.keys(u.models).length }))}</td>
+        <td><span class="lmx-1" title="${esc(typ)}">${esc(typ)}</span></td>
+        ${G0.verify ? `<td colspan="2"><span class="lmx-1 sub">${esc(tr("o_verify"))}</span></td>` :
+          `<td>${sel("primary", G0.primary, tr("o_appr"))}</td><td>${sel("alt", G0.alt, tr("o_alt"))}</td>`}
+        <td><div class="lmx-st"><span class="band ${st ? "b-ok" : "b-none"}"${st && G0.by ? ` title="${esc(tr("o_by", { by: G0.by, at: fmtAt(G0.at) }))}"` : ""}>${esc(tr(st ? "o_approved" : "o_proposed"))}</span>` +
+            `${G0.verify ? "" : `<button class="btn lmx-sm" type="button" data-lmxap="${st ? "0" : "1"}">${esc(tr(st ? "o_unapprove" : "o_approve"))}</button>`}</div></td>
+        <td class="lmx-r">${u.comps}</td><td class="lmx-r">${Object.keys(u.models).length}</td>
         <td class="num">${fmtN(u.lyr)}</td><td class="num">${fmtN(u.lyr / DRUM)}</td>
-        <td>${names.length ? `<span class="${names.length > 2 ? "lmx-warn" : ""}" title="${esc(names.join("\n"))}">${esc(tr("o_seen_n", { n: names.length }))}</span>` : esc(tr("o_seen_none"))}</td>
+        <td class="lmx-r">${names.length ? `<span class="${names.length > 2 ? "lmx-warn" : ""}" title="${esc(names.join("\n"))}">${names.length}</span>` : esc(tr("o_seen_none"))}</td>
       </tr>`;
     };
+    const oilCols = `<colgroup><col class="w-ogr"><col class="w-otype"><col><col><col class="w-ost"><col class="w-on"><col class="w-on"><col class="w-ovol"><col class="w-on"><col class="w-on"></colgroup>`;
     el.innerHTML =
       `<div class="secthd"><h2>${esc(tr("o_title"))}</h2><span class="spacer"></span>` +
       `<button class="btn" type="button" id="lmxCsv">${esc(tr("o_csv"))}</button>` +
@@ -657,13 +689,14 @@
         <div class="kpi ${nAppr === used.length ? "good" : "warn"}"><span class="k">${esc(tr("o_k_appr"))}</span><span class="v">${nAppr}<span class="of"> / ${used.length}</span></span></div>
       </div>
       <div class="lmx-bar">${whoBox("lmxWhoO")}${msg("oils")}</div>
-      <div class="tblwrap scrollbox" style="--sb:640px"><table class="grid lmx-tbl lmx-oils"><thead><tr>
+      <div class="tblwrap scrollbox" style="--sb:680px"><table class="grid lmx-tbl lmx-oils">${oilCols}<thead><tr>
         <th>${esc(tr("o_grade"))}</th><th>${esc(tr("o_type"))}</th><th>${esc(tr("o_appr"))}</th><th>${esc(tr("o_alt"))}</th>
-        <th>${esc(tr("o_state"))}</th><th>${esc(tr("o_use"))}</th><th class="num">${esc(tr("o_vol"))}</th><th class="num">${esc(tr("o_drums"))}</th><th>${esc(tr("o_seen"))}</th>
+        <th>${esc(tr("o_state"))}</th><th class="num">${esc(tr("o_comps"))}</th><th class="num">${esc(tr("o_models"))}</th>
+        <th class="num">${esc(tr("o_vol"))}</th><th class="num">${esc(tr("o_drums"))}</th><th class="num" title="${esc(tr("o_seen_t"))}">${esc(tr("o_seen"))}</th>
       </tr></thead><tbody>${used.map(row).join("")}</tbody></table></div>
       <div class="lmx-bar"><button class="btn primary" type="button" id="lmxSaveO">${esc(tr("o_save"))}</button></div>
       ${unused.length ? `<details class="lmx-hist"><summary>${esc(tr("o_unused"))} (${unused.length})</summary>
-        <table class="grid lmx-tbl lmx-oils"><tbody>${unused.map(row).join("")}</tbody></table></details>` : ""}`;
+        <div class="tblwrap"><table class="grid lmx-tbl lmx-oils">${oilCols}<tbody>${unused.map(row).join("")}</tbody></table></div></details>` : ""}`;
     bindWho(el, "lmxWhoO");
     el.querySelectorAll('select[data-f]').forEach(s => s.onchange = () => {
       if (s.value !== "__other") return;
@@ -764,14 +797,15 @@
       `<label class="fld"><span>${esc(tr("s_date"))}</span><input class="lmx-in" id="lmxSD" type="date" value="${esc(UI.sDate)}"></label></div>` +
       (UI.sUnit && !hit ? `<p class="sub">${esc(tr("s_nomodel"))}</p>` : "") +
       (hit ? `<div class="lmx-edhd"><h3>${esc(hit.a.n)}</h3><span class="lmx-chip">${esc(hit.M.m)}</span></div>
-        <div class="tblwrap"><table class="grid lmx-tbl lmx-samp"><thead><tr><th>${esc(tr("c_code"))}</th><th>${esc(tr("s_point"))}</th>
-        <th>${esc(tr("s_oil"))}</th><th>${esc(tr("s_no"))}</th><th>${esc(tr("c_rf"))}</th><th>${esc(tr("c_iv"))}</th></tr></thead><tbody>` +
-        sampleRows(hit).map(r => `<tr><td class="lmx-code"><b>${esc(r.k)}</b></td><td>${esc(r.name)}</td><td>${swatch(r.g)} ${esc(r.prod)}</td>` +
+        <div class="tblwrap"><table class="grid lmx-tbl lmx-samp"><colgroup><col class="w-code"><col class="w-spt"><col><col class="w-sno"><col class="w-on"><col class="w-on"></colgroup><thead><tr><th>${esc(tr("c_code"))}</th><th>${esc(tr("s_point"))}</th>
+        <th>${esc(tr("s_oil"))}</th><th>${esc(tr("s_no"))}</th><th class="num">${esc(tr("c_rf"))}</th><th class="num">${esc(tr("c_iv"))}</th></tr></thead><tbody>` +
+        sampleRows(hit).map(r => `<tr><td class="lmx-code"><b>${esc(r.k)}</b></td><td><span class="lmx-1" title="${esc(r.name)}">${esc(r.name)}</span></td>` +
+          `<td><span class="lmx-sp">${swatch(r.g)}<span class="lmx-1" title="${esc(r.prod)}">${esc(r.prod || "—")}</span></span></td>` +
           `<td><code class="lmx-sno">${esc(r.no)}</code></td><td class="num">${r.rf == null ? "—" : esc(r.rf)}</td><td class="num">${r.iv == null ? "—" : esc(r.iv)}</td></tr>`).join("") +
         `</tbody></table></div>` : "") +
       `<h3 class="lmx-h3">${esc(tr("s_alias"))}</h3><p class="sub">${esc(tr("s_alias_sub"))}</p>
        <div class="lmx-bar">${whoBox("lmxWhoS")}${msg("alias")}</div>
-       <table class="grid lmx-tbl lmx-alias"><thead><tr><th>${esc(tr("s_from"))}</th><th>${esc(tr("s_to"))}</th></tr></thead><tbody>` +
+       <table class="grid lmx-tbl lmx-alias"><colgroup><col class="w-afrom"><col></colgroup><thead><tr><th>${esc(tr("s_from"))}</th><th>${esc(tr("s_to"))}</th></tr></thead><tbody>` +
       Object.keys(al).map(k => `<tr><td><input class="lmx-in" data-a="from" value="${esc(k)}" aria-label="${esc(tr("s_from"))}"></td>` +
         `<td><input class="lmx-in" data-a="to" value="${esc((al[k] || []).join(", "))}" aria-label="${esc(tr("s_to"))}"></td></tr>`).join("") +
       `<tr><td><input class="lmx-in" data-a="from" value="" aria-label="${esc(tr("s_from"))}"></td><td><input class="lmx-in" data-a="to" value="" aria-label="${esc(tr("s_to"))}"></td></tr>` +
@@ -1084,49 +1118,83 @@
 .lmx-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0}
 .lmx-who{display:inline-flex;gap:6px;align-items:center;font-size:12.5px;color:var(--muted)}
 .lmx-in{font:inherit;font-size:13px;color:var(--ink);background:var(--surface);border:1px solid var(--axis);border-radius:6px;padding:5px 7px;min-width:0}
-.lmx-in.num{width:74px;text-align:right;font-variant-numeric:tabular-nums}
 .lmx-in:focus-visible,.lmx-mrow:focus-visible,.lmx-opt:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 .lmx-msg{font-size:12.5px;color:var(--ink-2)}
 .lmx-file{position:relative;overflow:hidden;display:inline-flex;align-items:center}
 .lmx-file input{position:absolute;inset:0;opacity:0;cursor:pointer}
-.lmx-two{display:grid;grid-template-columns:minmax(200px,260px) 1fr;gap:14px;align-items:start}
-@media (max-width:900px){.lmx-two{grid-template-columns:1fr}}
-.lmx-list{display:flex;flex-direction:column;gap:8px}
-.lmx-seg{align-self:flex-start}
-.lmx-models{display:flex;flex-direction:column;max-height:560px;overflow:auto;border:1px solid var(--border);border-radius:8px;background:var(--surface)}
-.lmx-mrow{all:unset;cursor:pointer;display:flex;flex-direction:column;gap:2px;padding:7px 10px;border-bottom:1px solid var(--grid)}
-.lmx-mrow b{font-size:13px;color:var(--ink);font-weight:600}.lmx-mrow i{font-style:normal;font-size:11.5px;color:var(--muted)}
+/* The model picker sits ABOVE the editor, as a compact grid, so the
+   compartment table gets the page's whole width and needs no sideways scroll. */
+.lmx-two{display:flex;flex-direction:column;gap:12px}
+.lmx-list{display:flex;flex-direction:column;gap:8px;min-width:0}
+.lmx-lbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.lmx-lbar #lmxQ{width:260px;max-width:100%}
+.lmx-lcount{font-variant-numeric:tabular-nums}
+.lmx-models{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));max-height:172px;overflow:auto;border:1px solid var(--border);border-radius:8px;background:var(--surface)}
+.lmx-mrow{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:minmax(0,1fr) auto 2.2em 1.6em;gap:6px;align-items:center;padding:5px 10px;border-bottom:1px solid var(--grid);border-right:1px solid var(--grid);font-size:12.5px;height:34px}
+.lmx-mrow b{color:var(--ink);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lmx-mrow i{font-style:normal;font-size:11.5px;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums}
 .lmx-mrow:hover{background:var(--surface-2)}.lmx-mrow.on{background:color-mix(in srgb,var(--accent) 12%,var(--surface));box-shadow:inset 3px 0 0 var(--accent)}
-.lmx-dot{display:inline-block;min-width:16px;padding:0 4px;border-radius:8px;background:var(--warning);color:#16242c;font-weight:700;text-align:center}
+.lmx-dot{display:inline-block;min-width:16px;padding:0 4px;border-radius:8px;background:var(--warning);color:#16242c;font-weight:700;text-align:center;font-size:11px}
 .lmx-edhd{display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;margin:2px 0 8px}.lmx-edhd h3{margin:0;font-size:17px}
 .lmx-chip{font-size:11.5px;font-weight:700;padding:2px 7px;border-radius:5px;background:var(--surface-3);color:var(--ink-2)}
-.lmx-tbl td{vertical-align:middle}.lmx-tbl td.num,.lmx-tbl th.num{text-align:right;font-variant-numeric:tabular-nums}
+/* The four tables: fixed columns, one line a row, numbers right-aligned in
+   tabular figures, anything that does not fit ends in an ellipsis and is in
+   the tooltip. A row is one compartment and reads straight across. */
+table.grid.lmx-tbl{table-layout:fixed;width:100%}
+table.grid.lmx-tbl th{font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);font-weight:700;padding:6px 8px;white-space:normal;line-height:1.25;vertical-align:bottom;overflow-wrap:anywhere}
+table.grid.lmx-tbl th.c{text-align:center}
+table.grid.lmx-tbl td{vertical-align:middle;padding:5px 8px;height:34px;overflow:hidden}
+table.grid.lmx-tbl tbody tr:nth-child(even) td{background:color-mix(in srgb,var(--surface-2) 55%,transparent)}
+table.grid.lmx-tbl tbody tr:hover td{background:var(--surface-2)}
+.lmx-tbl td.num,.lmx-tbl th.num,.lmx-tbl td.lmx-r{text-align:right;font-variant-numeric:tabular-nums}
+.lmx-tbl th.lmx-g1,.lmx-tbl td.lmx-g1{border-left:1px solid var(--border)}
+.lmx-tbl tr.lmx-hs th{padding-top:0;font-size:10.5px}
+.lmx-tbl tr.lmx-hg th.c{border-bottom:1px solid var(--border);padding-bottom:3px}
+.lmx-1{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
 .lmx-code b{font-variant-numeric:tabular-nums;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px}
-.lmx-sw{display:inline-flex;align-items:center;justify-content:center;min-width:44px;padding:2px 6px;border-radius:5px;font:700 11px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;border:1px solid rgba(22,36,44,.25);white-space:nowrap}
-.lmx-sw.big{min-width:80px;padding:5px 8px;font-size:12px}.lmx-sw-none{background:transparent;color:var(--muted);border-style:dashed}
-.lmx-gsel{display:flex;gap:6px;align-items:center}.lmx-gsel select{width:22px;padding:5px 2px}
-.lmx-prod b{display:block;font-weight:600;font-size:12.5px}.lmx-prod i,.lmx-seen i,.lmx-src{display:block;font-style:normal;font-size:11.5px;color:var(--muted)}
+.lmx-sw{display:inline-flex;align-items:center;justify-content:center;min-width:46px;max-width:100%;box-sizing:border-box;padding:2px 6px;border-radius:5px;font:700 11px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;border:1px solid rgba(22,36,44,.25);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lmx-sw.big{min-width:84px;padding:4px 8px;font-size:11.5px}.lmx-sw-none{background:transparent;color:var(--muted);border-style:dashed}
+/* The grade picker IS its swatch: the native select lies over it, so a click
+   on the colour opens the list and keyboard focus rings the swatch. */
+.lmx-gsel{position:relative;display:inline-flex;align-items:center;gap:3px;cursor:pointer;max-width:100%}
+.lmx-gsel::after{content:"▾";font-size:10px;color:var(--muted)}
+.lmx-gsel select.lmx-in{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;padding:0}
+.lmx-gsel:focus-within .lmx-sw{outline:2px solid var(--accent);outline-offset:1px}
+.lmx-tbl .lmx-in{width:100%;box-sizing:border-box;padding:3px 6px;font-size:12.5px;height:26px}
+.lmx-tbl .lmx-in.num{width:100%;text-align:right;font-variant-numeric:tabular-nums}
+.lmx-oil .lmx-p{font-weight:600;font-size:12.5px;line-height:1.25}.lmx-oil .lmx-a{font-size:11.5px;color:var(--muted);line-height:1.25}
 .lmx-seen .ok{color:var(--good-ink);font-weight:600}.lmx-seen .bad{color:var(--crit-ink);font-weight:600}.lmx-seen .warn{color:var(--warn-ink);font-weight:600}
-.lmx-flag{display:inline-block;font-size:10.5px;font-weight:700;padding:1px 6px;margin:1px 2px 1px 0;border-radius:4px;background:color-mix(in srgb,var(--warning) 30%,var(--surface));color:var(--warn-ink)}
+.lmx-cn .lmx-flags{display:flex;gap:3px;margin-top:2px;overflow:hidden}
+.lmx-flag{display:inline-block;font-size:10px;font-weight:700;padding:0 5px;border-radius:4px;white-space:nowrap;background:color-mix(in srgb,var(--warning) 30%,var(--surface));color:var(--warn-ink)}
+.lmx-srccell{display:table-cell}.lmx-srccell .lmx-in{display:inline-block;vertical-align:middle}
+.lmx-srccell .lmx-doc{width:calc(100% - 54px)}.lmx-srccell .lmx-page{width:50px;margin-left:4px}
+.lmx-mtbl col.w-code{width:58px}.lmx-mtbl col.w-comp{width:15%}.lmx-mtbl col.w-grade{width:96px}.lmx-mtbl col.w-oil{width:22%}
+.lmx-mtbl col.w-seen{width:11%}.lmx-mtbl col.w-n{width:70px}.lmx-mtbl col.w-spec{width:9%}.lmx-mtbl col.w-src{width:12%}
+.lmx-mtbl{min-width:1000px}
 tr.lmx-edited td:first-child{box-shadow:inset 3px 0 0 var(--accent)}
 .lmx-hist{margin-top:14px}.lmx-hist summary{cursor:pointer;font-weight:600;color:var(--ink-2)}
 .lmx-histl{font-size:12.5px;color:var(--ink-2);margin:8px 0;padding-left:20px;max-height:280px;overflow:auto}
 .lmx-mig{font-size:12.5px;background:color-mix(in srgb,var(--warning) 22%,var(--surface));padding:6px 10px;border-radius:8px}
 .lmx-imp{border:1px solid var(--accent);border-radius:8px;padding:10px 12px;margin:10px 0;background:var(--surface)}.lmx-imp.bad{border-color:var(--critical)}
-.lmx-dlist{display:flex;flex-direction:column;gap:10px}
-.lmx-dec{border:1px solid var(--border);border-radius:10px;padding:10px 12px;background:var(--surface)}
-.lmx-dec.done{background:var(--surface-2)}
-.lmx-dwhat{display:flex;flex-wrap:wrap;gap:8px;align-items:baseline;margin-bottom:8px}.lmx-dwhat i{font-style:normal;font-size:12px;color:var(--muted)}
-.lmx-dopts{display:flex;flex-wrap:wrap;gap:8px}
-.lmx-opt{all:unset;cursor:pointer;display:inline-flex;gap:8px;align-items:center;border:1px solid var(--axis);border-radius:8px;padding:6px 9px;background:var(--surface)}
-.lmx-opt:hover:not([disabled]){border-color:var(--accent)}.lmx-opt.cur{box-shadow:0 0 0 2px var(--accent)}.lmx-opt[disabled]{cursor:default;opacity:.85}
-.lmx-osrc{font-size:12px;color:var(--ink-2)}.lmx-opick{font-size:11.5px;font-weight:700;color:var(--accent)}
-.lmx-dnote{margin-top:8px;width:min(420px,100%)}.lmx-dres{margin-top:8px;font-size:12.5px;color:var(--good-ink)}
-.lmx-kpis{margin:10px 0}.lmx-oils select{width:100%;max-width:210px}.lmx-oils td:nth-child(2){max-width:150px}.lmx-sm{padding:4px 8px;font-size:12px;margin-left:6px}
+.lmx-dtbl col.w-code{width:56px}.lmx-dtbl col.w-dcomp{width:17%}.lmx-dtbl col.w-units{width:64px}.lmx-dtbl col.w-why{width:24%}
+.lmx-dtbl tr.lmx-grp th{background:var(--surface-2);color:var(--ink);font-size:12.5px;text-transform:none;letter-spacing:0;padding:7px 8px;border-top:1px solid var(--border)}
+.lmx-dtbl td{height:auto;padding-top:6px;padding-bottom:6px}
+.lmx-dtbl tr.lmx-dec.done td{color:var(--muted)}
+.lmx-dopts{display:flex;flex-wrap:wrap;gap:6px}
+.lmx-opt{all:unset;box-sizing:border-box;cursor:pointer;display:inline-flex;gap:6px;align-items:center;max-width:100%;border:1px solid var(--axis);border-radius:6px;padding:3px 7px 3px 3px;background:var(--surface)}
+.lmx-opt:hover:not([disabled]){border-color:var(--accent);background:color-mix(in srgb,var(--accent) 7%,var(--surface))}
+.lmx-opt.cur{box-shadow:0 0 0 2px var(--accent)}.lmx-opt[disabled]{cursor:default}.lmx-opt[disabled]:not(.cur){opacity:.6}
+.lmx-opt:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.lmx-osrc{font-size:11.5px;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:240px}
+.lmx-dnote{width:100%}.lmx-dres{display:flex;gap:6px;align-items:center;font-size:12px;color:var(--good-ink)}.lmx-dres .lmx-1{flex:1}
+.lmx-kpis{margin:10px 0}.lmx-sm{padding:3px 8px;font-size:11.5px;white-space:nowrap}
+.lmx-oils col.w-ogr{width:112px}.lmx-oils col.w-otype{width:14%}.lmx-oils col.w-ost{width:172px}.lmx-oils col.w-on{width:70px}.lmx-oils col.w-ovol{width:86px}
+.lmx-oils{min-width:980px}
+.lmx-st{display:flex;gap:6px;align-items:center}.lmx-st .band{white-space:nowrap}
 .lmx-warn{color:var(--warn-ink);font-weight:700}
-.lmx-h3{margin:22px 0 4px;font-size:15px}.lmx-sno{font-size:12.5px}
-.lmx-alias input{width:100%}
-.lmx-srccell{min-width:170px}.lmx-srccell input{width:120px}.lmx-srccell .lmx-page{width:46px;margin-left:4px}
+.lmx-h3{margin:22px 0 4px;font-size:15px}.lmx-sno{font-size:12.5px;white-space:nowrap}
+.lmx-samp col.w-code{width:60px}.lmx-samp col.w-spt{width:22%}.lmx-samp col.w-sno{width:190px}.lmx-samp col.w-on{width:110px}
+.lmx-sp{display:flex;gap:6px;align-items:center;min-width:0}
+.lmx-alias{max-width:560px}.lmx-alias col.w-afrom{width:40%}
 #lmxPrint{display:none}
 @media print{body.lmx-printing>*:not(#lmxPrint){display:none!important}body.lmx-printing #lmxPrint{display:block!important}
  #lmxPrint{color:#000;font-family:Arial,Helvetica,sans-serif}

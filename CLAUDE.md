@@ -4254,6 +4254,30 @@ restart, numbers a sample through every exit), `luberef.cjs` and
 was 7.8; TR60 15 compartments, was 10) — checked against the workbook's own
 row before the tests were changed, not after.
 
+**THE FOUR LUBE MASTER PANELS ARE TABLES, ONE LINE A ROW (build 516).** Asked
+plainly: "fix the tables in lube master … make it table like, clean, it's all
+too messy". The first version stacked two or three lines in a cell (approved
+over alternative, "from form HM400-3MO" under the refill box, who traced a
+manual page under its input), ran 12 columns past the panel so it scrolled
+sideways, drew Needs decision as 58 cards, and gave the oils table text that
+wrapped to three lines. Now every panel is a `table-layout:fixed` table with a
+`colgroup`, one line a row, numbers right-aligned in tabular figures, and
+anything that does not fit ends in an ellipsis with the full text in the
+tooltip (the refill's source, the audited unit and date, who traced the page,
+the approver). Lube master puts the model picker ABOVE the editor as a compact
+grid, so the compartment table has the page's width; its header is grouped
+(Capacity, L: System · Refill; Interval, h: Site · OEM); the grade picker is
+its swatch (the native select lies over it, focus rings the swatch); flags sit
+under the component name. Needs decision is a table grouped by model, the
+options are swatch + source chips, the whole chip is the button. Oils splits
+"used in" into Compartments and Models columns and keeps the volume as the row's
+FIRST `td.num` (two suites read it there); every option still states its cold
+rating in its own text (`lubestd.cjs`). Selectors and ids the suites use are
+unchanged (`.lmx-mrow`, `.lmx-dec[data-lmxid]`, `.lmx-dnote`, `[data-lmxg]`,
+`tr[data-lmxk]`, `tr[data-lmxgr]`, `#lmxSaveM` …). Dashboard only, one shared
+file (`dashboard/lube-master.js`) for both office pages; nothing to deploy on
+the VM.
+
 ---
 
 ## Secrets
