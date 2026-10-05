@@ -1,7 +1,7 @@
 {
-  "generated": "2026-10-05T08:11:27.609Z",
+  "generated": "2026-10-05T08:39:35.855Z",
   "source": "mobile/due.js (D.EVERY, D.hours) and mobile/index.html (roundsOnClass), evaluated live -- not hand-copied",
-  "history": "163 pair(s) from https://baimskaya-cm.duckdns.org?action=records (pulled 2026-10-05T08:11:26.295Z)",
+  "history": "163 pair(s) from https://baimskaya-cm.duckdns.org?action=records (pulled 2026-10-05T08:39:34.547Z)",
   "map": {
     "MP": {
       "restricted": true,
@@ -72,7 +72,8 @@
       "models": [
         {
           "model": "TR60",
-          "h": 500
+          "h": 500,
+          "since": "2026-10-04"
         }
       ]
     }

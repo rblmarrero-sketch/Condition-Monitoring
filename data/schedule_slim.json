@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-05T08:11:45+00:00",
+  "generated": "2026-10-05T08:39:50+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -213,6 +213,31 @@
         "priority": "P3 Planned (PM)"
       }
     ],
+    "EX024": [
+      {
+        "wo": "WO-017333",
+        "hours": 4000,
+        "types": [
+          "FC",
+          "INSP",
+          "UC"
+        ],
+        "plan": "2026-10-03",
+        "priority": "P3 Planned (PM)"
+      }
+    ],
+    "GR001": [
+      {
+        "wo": "WO-017332",
+        "hours": 4000,
+        "types": [
+          "FC",
+          "INSP"
+        ],
+        "plan": "2026-10-04",
+        "priority": "P3 Planned (PM)"
+      }
+    ],
     "GR004": [
       {
         "wo": "WO-017871",
@@ -257,6 +282,17 @@
           "MP"
         ],
         "plan": "2026-09-28",
+        "priority": "P3 Planned (PM)"
+      }
+    ],
+    "TK004": [
+      {
+        "wo": "WO-017969",
+        "hours": 500,
+        "types": [
+          "MP"
+        ],
+        "plan": "2026-10-04",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -338,6 +374,16 @@
       }
     ],
     "TK104": [
+      {
+        "wo": "WO-017879",
+        "hours": 1000,
+        "types": [
+          "INSP",
+          "MP"
+        ],
+        "plan": "2026-10-04",
+        "priority": "P3 Planned (PM)"
+      },
       {
         "wo": "WO-018492",
         "hours": 250,
@@ -537,6 +583,16 @@
       }
     ],
     "TK120": [
+      {
+        "wo": "WO-017320",
+        "hours": 1000,
+        "types": [
+          "INSP",
+          "MP"
+        ],
+        "plan": "2026-10-04",
+        "priority": "P3 Planned (PM)"
+      },
       {
         "wo": "WO-018496",
         "hours": 250,
@@ -759,7 +815,6 @@
         "wo": "WO-016557",
         "hours": 500,
         "types": [
-          "LUBE",
           "MP"
         ],
         "plan": "2026-10-01",
@@ -2800,12 +2855,12 @@
       "type": "250 Hours service Planned",
       "hours": 250,
       "plan": "2026-10-04",
-      "status": "Completed",
+      "status": "Elimination scheduled",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "complete",
-      "completed": "2026-10-04"
+      "pmStatus": "open",
+      "completed": ""
     },
     {
       "wo": "WO-017328",
@@ -2836,12 +2891,12 @@
       "type": "250 Hours service Planned",
       "hours": 250,
       "plan": "2026-10-04",
-      "status": "Completed",
+      "status": "Elimination scheduled",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "complete",
-      "completed": "2026-10-04"
+      "pmStatus": "open",
+      "completed": ""
     },
     {
       "wo": "WO-017967",
@@ -2854,12 +2909,12 @@
       "type": "500 Hours service Planned",
       "hours": 500,
       "plan": "2026-10-04",
-      "status": "Completed",
+      "status": "Elimination scheduled",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "complete",
-      "completed": "2026-10-04"
+      "pmStatus": "open",
+      "completed": ""
     },
     {
       "wo": "WO-017332",
@@ -2872,12 +2927,12 @@
       "type": "4000 Hours service Planned",
       "hours": 4000,
       "plan": "2026-10-04",
-      "status": "Completed",
+      "status": "Elimination scheduled",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "complete",
-      "completed": "2026-10-05"
+      "pmStatus": "open",
+      "completed": ""
     },
     {
       "wo": "WO-017969",
@@ -2890,12 +2945,12 @@
       "type": "500 Hours service Planned",
       "hours": 500,
       "plan": "2026-10-04",
-      "status": "Completed",
+      "status": "Elimination scheduled",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "complete",
-      "completed": "2026-10-05"
+      "pmStatus": "open",
+      "completed": ""
     },
     {
       "wo": "WO-017879",
@@ -2908,12 +2963,12 @@
       "type": "1000 Hours service Planned",
       "hours": 1000,
       "plan": "2026-10-04",
-      "status": "Completed",
+      "status": "Elimination scheduled",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "complete",
-      "completed": "2026-10-04"
+      "pmStatus": "open",
+      "completed": ""
     },
     {
       "wo": "WO-017320",
@@ -2926,12 +2981,12 @@
       "type": "1000 Hours service Planned",
       "hours": 1000,
       "plan": "2026-10-04",
-      "status": "Completed",
+      "status": "Elimination scheduled",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "complete",
-      "completed": "2026-10-04"
+      "pmStatus": "open",
+      "completed": ""
     },
     {
       "wo": "WO-017881",
@@ -2998,12 +3053,12 @@
       "type": "4000 Hours service Planned",
       "hours": 4000,
       "plan": "2026-10-03",
-      "status": "Completed",
+      "status": "Elimination scheduled",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "complete",
-      "completed": "2026-10-04"
+      "pmStatus": "open",
+      "completed": ""
     },
     {
       "wo": "WO-017999",
@@ -3052,12 +3107,12 @@
       "type": "500 Hours service Planned",
       "hours": 500,
       "plan": "2026-10-03",
-      "status": "Completed",
+      "status": "Elimination scheduled",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "complete",
-      "completed": "2026-10-04"
+      "pmStatus": "open",
+      "completed": ""
     },
     {
       "wo": "WO-017338",
@@ -3352,7 +3407,7 @@
       "equip": "TK149",
       "cls": "HT",
       "comp": "",
-      "desc": "Filter Cut / General Inspection / Lubrication / Magnetic Plug / Dump Body Liner",
+      "desc": "Filter Cut / General Inspection / Magnetic Plug / Dump Body Liner",
       "priority": "P3 Planned (PM)",
       "raised": "2026-10-02",
       "type": "4000 Hours service Planned",
@@ -3514,7 +3569,7 @@
       "equip": "TK155",
       "cls": "HT",
       "comp": "",
-      "desc": "Lubrication / Magnetic Plug",
+      "desc": "Magnetic Plug",
       "priority": "P3 Planned (PM)",
       "raised": "2026-10-01",
       "type": "500 Hours service Planned",
@@ -3748,7 +3803,7 @@
       "equip": "TK153",
       "cls": "HT",
       "comp": "",
-      "desc": "Lubrication / Magnetic Plug",
+      "desc": "Magnetic Plug",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-30",
       "type": "500 Hours service Planned",
@@ -4036,7 +4091,7 @@
       "equip": "TK152",
       "cls": "HT",
       "comp": "",
-      "desc": "Lubrication / Magnetic Plug",
+      "desc": "Magnetic Plug",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-28",
       "type": "500 Hours service Planned",
@@ -4234,7 +4289,7 @@
       "equip": "TK151",
       "cls": "HT",
       "comp": "",
-      "desc": "Filter Cut / General Inspection / Lubrication / Magnetic Plug",
+      "desc": "Filter Cut / General Inspection / Magnetic Plug",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-27",
       "type": "1000 Hours service Planned",
@@ -4468,7 +4523,7 @@
       "equip": "TK147",
       "cls": "HT",
       "comp": "",
-      "desc": "Filter Cut / General Inspection / Lubrication / Magnetic Plug / Dump Body Liner",
+      "desc": "Filter Cut / General Inspection / Magnetic Plug / Dump Body Liner",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-26",
       "type": "4000 Hours service Planned",
@@ -4486,7 +4541,7 @@
       "equip": "TK158",
       "cls": "HT",
       "comp": "",
-      "desc": "Lubrication / Magnetic Plug",
+      "desc": "Magnetic Plug",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-26",
       "type": "500 Hours service Planned",
@@ -4828,7 +4883,7 @@
       "equip": "TK159",
       "cls": "HT",
       "comp": "",
-      "desc": "Filter Cut / General Inspection / Lubrication / Magnetic Plug / Dump Body Liner",
+      "desc": "Filter Cut / General Inspection / Magnetic Plug / Dump Body Liner",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-24",
       "type": "4000 Hours service Planned",
@@ -5098,7 +5153,7 @@
       "equip": "TK154",
       "cls": "HT",
       "comp": "",
-      "desc": "Filter Cut / General Inspection / Lubrication / Magnetic Plug",
+      "desc": "Filter Cut / General Inspection / Magnetic Plug",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-23",
       "type": "1000 Hours service Planned",
@@ -5278,7 +5333,7 @@
       "equip": "TK146",
       "cls": "HT",
       "comp": "",
-      "desc": "Lubrication / Magnetic Plug",
+      "desc": "Magnetic Plug",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-22",
       "type": "500 Hours service Planned",
@@ -6268,7 +6323,7 @@
       "equip": "TK148",
       "cls": "HT",
       "comp": "",
-      "desc": "Lubrication / Magnetic Plug",
+      "desc": "Magnetic Plug",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-18",
       "type": "500 Hours service Planned",
@@ -6808,7 +6863,7 @@
       "equip": "TK161",
       "cls": "HT",
       "comp": "",
-      "desc": "Filter Cut / General Inspection / Lubrication / Magnetic Plug / Dump Body Liner",
+      "desc": "Filter Cut / General Inspection / Magnetic Plug / Dump Body Liner",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-16",
       "type": "4000 Hours service Planned",
@@ -7294,7 +7349,7 @@
       "equip": "TK157",
       "cls": "HT",
       "comp": "",
-      "desc": "Filter Cut / General Inspection / Lubrication / Magnetic Plug / Dump Body Liner",
+      "desc": "Filter Cut / General Inspection / Magnetic Plug / Dump Body Liner",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-14",
       "type": "4000 Hours service Planned",
@@ -7528,7 +7583,7 @@
       "equip": "TK156",
       "cls": "HT",
       "comp": "",
-      "desc": "Filter Cut / General Inspection / Lubrication / Magnetic Plug / Dump Body Liner",
+      "desc": "Filter Cut / General Inspection / Magnetic Plug / Dump Body Liner",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-13",
       "type": "4000 Hours service Planned",
@@ -8320,7 +8375,7 @@
       "equip": "TK160",
       "cls": "HT",
       "comp": "",
-      "desc": "Filter Cut / General Inspection / Lubrication / Magnetic Plug / Dump Body Liner",
+      "desc": "Filter Cut / General Inspection / Magnetic Plug / Dump Body Liner",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-10",
       "type": "4000 Hours service Planned",
@@ -8608,7 +8663,7 @@
       "equip": "TK149",
       "cls": "HT",
       "comp": "",
-      "desc": "Lubrication / Magnetic Plug",
+      "desc": "Magnetic Plug",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-09",
       "type": "1500 Hours service Planned",
@@ -9004,7 +9059,7 @@
       "equip": "TK152",
       "cls": "HT",
       "comp": "",
-      "desc": "Filter Cut / General Inspection / Lubrication / Magnetic Plug / Dump Body Liner",
+      "desc": "Filter Cut / General Inspection / Magnetic Plug / Dump Body Liner",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-06",
       "type": "4000 Hours service Planned",
@@ -9220,7 +9275,7 @@
       "equip": "TK150",
       "cls": "HT",
       "comp": "",
-      "desc": "Lubrication / Magnetic Plug",
+      "desc": "Magnetic Plug",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-05",
       "type": "1500 Hours service Planned",
@@ -9238,7 +9293,7 @@
       "equip": "TK153",
       "cls": "HT",
       "comp": "",
-      "desc": "Filter Cut / General Inspection / Lubrication / Magnetic Plug / Dump Body Liner",
+      "desc": "Filter Cut / General Inspection / Magnetic Plug / Dump Body Liner",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-05",
       "type": "4000 Hours service Planned",
@@ -9310,7 +9365,7 @@
       "equip": "TK155",
       "cls": "HT",
       "comp": "",
-      "desc": "Filter Cut / General Inspection / Lubrication / Magnetic Plug / Dump Body Liner",
+      "desc": "Filter Cut / General Inspection / Magnetic Plug / Dump Body Liner",
       "priority": "P3 Planned (PM)",
       "raised": "2026-09-04",
       "type": "4000 Hours service Planned",
@@ -9738,25 +9793,7 @@
       "completed": ""
     },
     {
-      "wo": "GD-023284",
-      "equip": "EX021",
-      "cls": "EXC",
-      "comp": "",
-      "desc": "250h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-08-01",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-08-01",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
-      "wo": "GD-023285",
+      "wo": "GD-023289",
       "equip": "EX021",
       "cls": "EXC",
       "comp": "",
@@ -9774,15 +9811,15 @@
       "completed": ""
     },
     {
-      "wo": "GD-023287",
+      "wo": "GD-023299",
       "equip": "EX021",
       "cls": "EXC",
       "comp": "",
-      "desc": "Filter Cut / General Inspection",
+      "desc": "250h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-08-01",
-      "type": "1000 Hours service Planned",
-      "hours": 1000,
+      "type": "250 Hours service Planned",
+      "hours": 250,
       "plan": "2026-08-01",
       "status": "Elimination scheduled",
       "request": "",
@@ -9819,6 +9856,24 @@
       "raised": "2026-08-01",
       "type": "250 Hours service Planned",
       "hours": 250,
+      "plan": "2026-08-01",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "GD-023287",
+      "equip": "EX021",
+      "cls": "EXC",
+      "comp": "",
+      "desc": "Filter Cut / General Inspection",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-08-01",
+      "type": "1000 Hours service Planned",
+      "hours": 1000,
       "plan": "2026-08-01",
       "status": "Elimination scheduled",
       "request": "",
