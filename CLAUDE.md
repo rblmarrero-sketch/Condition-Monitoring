@@ -4340,6 +4340,21 @@ priority on its title, for the Russian names that do not fit. By machine:
 ellipsis instead of running under the due date. Selectors the suites read are
 unchanged. Dashboard only; nothing to deploy on the VM.
 
+**AND THE INSPECTION SCHEDULE (build 521).** "fix the Inspection Schedule
+tables too". On the main page the action cell was `display:flex` — a table
+cell taken out of its row — so "Defer inspection" ran past the panel on every
+row and the buttons sat centred against text set at the top of a 49 px row; a
+1C plan row's reason pushed the table to 1,616 px; the hours-a-day column
+spent 184 px on "20*". Both pages: `table.ddtbl` is `table-layout:fixed` with
+a `colgroup` written by `renderDueTab` (`DD_W`, per language — Russian dates
+and day counts are longer — and with a 144 px action column on the 1C plan
+tab, whose rows have Start and no Defer). One line a row, 40 px, compact
+buttons in an ordinary cell; a cell the ellipsis cut gets its whole text as
+its title, a cell that fits gets none; the long headers carry theirs. "Never
+inspected" is warning-ink text here, as on the Actions register. The h/day
+header may wrap to two lines; nothing else in the table does. Selectors the
+suites read are unchanged. Dashboard only; nothing to deploy on the VM.
+
 ---
 
 ## Secrets

@@ -2134,6 +2134,25 @@
   .wlr .cell{overflow:hidden;}
   .wlr .who{max-width:100%;}
   .wlr .who span{min-width:0;}
+  /* ── the inspection schedule, one line a row (build 521) ─────────────────
+     Fixed columns from the colgroup renderDueTab writes (DD_COLG); every cell
+     one line, cut with an ellipsis and given the full text as its title only
+     where it was cut. The action buttons sit in an ordinary table cell: the
+     cell was display:flex, which took it out of the row's own layout, pushed
+     Defer past the panel and centred the buttons against top-set text. */
+  #ddList table.ddtbl{table-layout:fixed;width:100%;}
+  #ddList table.ddtbl thead th{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  #ddList table.ddtbl thead tr:first-child th:nth-child(5){white-space:normal;line-height:1.25;}
+  #ddList table.ddtbl tbody td{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:middle;}
+  #ddList table.ddtbl tbody tr{height:40px;}
+  #ddList table.ddtbl td.ddact{display:table-cell;text-align:right;overflow:visible;padding-top:3px;padding-bottom:3px;}
+  #ddList table.ddtbl td.ddact .minibtn:first-child{margin-left:0;}
+  #ddList table.ddtbl td.ddact .minibtn{display:inline-flex;align-items:center;vertical-align:middle;margin-left:5px;
+    min-height:32px;padding:3px 9px;font-size:12px;}
+  #ddList table.ddtbl td .need{display:inline;margin-left:0;padding:0;border:0;background:none;
+    color:var(--warn-ink);font-weight:600;font-size:var(--t-micro,11px);}
+  #ddList .shown>span:first-child{white-space:nowrap;}
+  #ddList table.ddtbl th.cwfh input.cwcf{width:100%;box-sizing:border-box;}
   td.ed{cursor:text;}
   td.ed:hover{background:color-mix(in srgb,var(--accent) 7%,transparent);}
   td.ed.editing{padding:2px 6px;}
@@ -3831,23 +3850,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=520"></script>
+<script src="../data/magnetic_plug.js?v=521"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=520"></script>
-<script src="../mobile/hme.js?v=520"></script>
-<script src="../mobile/mp-fc.js?v=520"></script>
-<script src="../mobile/rtw.js?v=520"></script>
-<script src="../mobile/hme-cascade.js?v=520"></script>
-<script src="../mobile/temp-limits.js?v=520"></script>
+<script src="../data/work_orders.js?v=521"></script>
+<script src="../mobile/hme.js?v=521"></script>
+<script src="../mobile/mp-fc.js?v=521"></script>
+<script src="../mobile/rtw.js?v=521"></script>
+<script src="../mobile/hme-cascade.js?v=521"></script>
+<script src="../mobile/temp-limits.js?v=521"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=520"></script>
-<script src="../mobile/normalize.js?v=520"></script>
-<script src="../mobile/terms.js?v=520"></script>
+<script src="../mobile/assets.js?v=521"></script>
+<script src="../mobile/normalize.js?v=521"></script>
+<script src="../mobile/terms.js?v=521"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -3866,20 +3885,20 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=520"></script>
-<script src="../mobile/edits.js?v=520"></script>
-<script src="../mobile/due.js?v=520"></script>
-<script src="../mobile/wear.js?v=520"></script>
-<script src="../mobile/wear-map.js?v=520"></script>
-<script src="../mobile/lube.js?v=520"></script>
-<script src="../mobile/lube-overrides.js?v=520"></script>
-<script src="../mobile/lube2027.js?v=520"></script>
-<script src="../mobile/lube-tds.js?v=520"></script>
-<script src="lube-master.js?v=520"></script>
+<script src="../mobile/grade.js?v=521"></script>
+<script src="../mobile/edits.js?v=521"></script>
+<script src="../mobile/due.js?v=521"></script>
+<script src="../mobile/wear.js?v=521"></script>
+<script src="../mobile/wear-map.js?v=521"></script>
+<script src="../mobile/lube.js?v=521"></script>
+<script src="../mobile/lube-overrides.js?v=521"></script>
+<script src="../mobile/lube2027.js?v=521"></script>
+<script src="../mobile/lube-tds.js?v=521"></script>
+<script src="lube-master.js?v=521"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=520"></script>
-<script src="../mobile/machine-photos.js?v=520"></script>
+<script src="../mobile/upload-defaults.js?v=521"></script>
+<script src="../mobile/machine-photos.js?v=521"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3888,17 +3907,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=520"></script>
-<script src="../mobile/get.js?v=520"></script>
-<script src="../mobile/points.js?v=520"></script>
-<script src="../mobile/uc-points.js?v=520"></script>
-<script src="../mobile/inspect-guide.js?v=520"></script>
-<script src="../mobile/get-figs.js?v=520"></script>
-<script src="../mobile/body-points.js?v=520"></script>
-<script src="../mobile/body-map.js?v=520"></script>
-<script src="../mobile/jspdf.umd.min.js?v=520"></script>
-<script src="../mobile/html2canvas.min.js?v=520"></script>
-<script src="../mobile/report-core.js?v=520"></script>
+<script src="../mobile/machine-fig.js?v=521"></script>
+<script src="../mobile/get.js?v=521"></script>
+<script src="../mobile/points.js?v=521"></script>
+<script src="../mobile/uc-points.js?v=521"></script>
+<script src="../mobile/inspect-guide.js?v=521"></script>
+<script src="../mobile/get-figs.js?v=521"></script>
+<script src="../mobile/body-points.js?v=521"></script>
+<script src="../mobile/body-map.js?v=521"></script>
+<script src="../mobile/jspdf.umd.min.js?v=521"></script>
+<script src="../mobile/html2canvas.min.js?v=521"></script>
+<script src="../mobile/report-core.js?v=521"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -15871,7 +15890,14 @@ function renderDueTab(){
   const cwfhRow=`<tr>${DD_COLS.map(k=>
     `<th class="cwfh"><input type="text" class="cwcf" data-k="${esc(k)}" value="${esc(ddColQ[k]||"")}" placeholder="${esc(t("cw_colfilter_ph"))}" aria-label="${esc(t("cw_colfilter_aria",{c:ddColLabel[k]}))}"></th>`
   ).join("")}<th class="cwfh"></th></tr>`;
-  box.innerHTML=`<div class="tblwrap scrollbox" style="--sb:560px"><table class="grid"><thead><tr>
+  /* Unit · Round · Last done · Due · h/day · Reason · actions. Widths for the
+     columns whose content has a known size; the reason takes the rest. */
+  /* Russian dates and day counts are longer; a 1C plan row has only Start,
+     so its action column gives the reason the room Defer would have used. */
+  const DD_W = lang==="ru" ? [84,160,184,204,118,0,scope==="plan"?144:278]
+                           : [78,150,156,160,104,0,scope==="plan"?144:264];
+  const DD_COLG=`<colgroup>${DD_W.map(w=>w?`<col style="width:${w}px">`:"<col>").join("")}</colgroup>`;
+  box.innerHTML=`<div class="tblwrap scrollbox" style="--sb:560px"><table class="grid ddtbl" style="min-width:${DD_W.reduce((a,b)=>a+b,0)+120}px">${DD_COLG}<thead><tr>
     <th>${esc(t("dd_c_unit"))}</th><th>${esc(t("dd_c_round"))}</th><th>${esc(t("dd_c_last"))}</th>
     <th class="r">${esc(t("dd_c_due"))}</th><th class="r">${esc(t("dd_c_rate"))}</th>
     <th>${esc(t("dd_c_why"))}</th><th></th></tr>${cwfhRow}</thead><tbody>`
@@ -15945,6 +15971,12 @@ function renderDueTab(){
     + `<div class="shown"><span>${esc(t("shown_n",{n:kept.length, of:shown.length}))}</span>
         <span class="spacer"></span>
         <span>${esc(t("dd_foot",{r:DUE.HOURS_PER_DAY}))}</span></div>`;
+  /* A cell cut by the ellipsis carries its whole text on hover; one that fits
+     carries nothing extra. */
+  box.querySelectorAll("table.ddtbl tbody td:not(.ddact)").forEach(td=>{
+    if(td.scrollWidth>td.clientWidth+1 && !td.title) td.title=td.textContent.replace(/\s+/g," ").trim(); });
+  box.querySelectorAll("table.ddtbl thead tr:first-child th").forEach(th=>{
+    const w=th.textContent.replace(/[▲▼↕]/g,"").replace(/\s+/g," ").trim(); if(w && !th.title) th.title=w; });
   box.querySelectorAll("[data-defer]").forEach(b=>b.onclick=()=>askDefer(b.dataset.defer));
   box.querySelectorAll("input.cwcf").forEach(inp=>inp.oninput=()=>{
     ddColQ[inp.dataset.k]=inp.value;
@@ -18475,10 +18507,10 @@ document.querySelector(".lang").addEventListener("click",e=>{
   setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 })();
 </script>
-<script src="drive.js?v=520"></script>
-<script src="sync-adapter.js?v=520"></script>
-<script src="report.js?v=520"></script>
-<script src="reliability.js?v=520"></script>
+<script src="drive.js?v=521"></script>
+<script src="sync-adapter.js?v=521"></script>
+<script src="report.js?v=521"></script>
+<script src="reliability.js?v=521"></script>
 <script>
 /* THE CLOSED FILTER SAYS WHAT IS CHOSEN. A dropdown narrower than its option
    text ellipsises ("All t…", audit of 2026-10-01). Between 1331 and 1500 px
