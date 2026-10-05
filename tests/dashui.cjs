@@ -230,7 +230,9 @@ const TABS = ['overview', 'failure', 'wear', 'actions', 'due', 'equipment', 'lub
   await p.evaluate(() => showTab('lube'));
   await p.waitForTimeout(600);
   const lube = await p.evaluate(() => ({
-    strips: document.querySelectorAll('#tab-lube .kpis').length,
+    /* The Oils board's own figures (grades, products, litres, approved) are
+       a different subject from the coverage funnel, so they are not counted. */
+    strips: document.querySelectorAll('#tab-lube .kpis:not(.lmx-kpis)').length,
     lcTiles: document.querySelectorAll('#lcKpis > *').length,
     parts: document.querySelectorAll('.lcpart').length,
     pressable: document.querySelectorAll('.lcpart[data-lcgo]').length,

@@ -153,7 +153,8 @@ function proseUnderTitles() {
     tabs: document.querySelectorAll("#lubeSub button").length,
     h: Math.round(document.getElementById("tab-lube").getBoundingClientRect().height),
   }));
-  ok(lube.panels === 7 && lube.tabs === 7, "seven panels, seven tabs",
+  /* nine since 2026-10-04: the lube master's four panels (master, decide, oils, sample) replaced Standards and Machine reference */
+  ok(lube.panels === 9 && lube.tabs === 9, "nine panels, nine tabs",
      `${lube.panels} / ${lube.tabs}`);
   ok(lube.showing === 1, "one of them on screen at a time", String(lube.showing));
   ok(lube.h < 2000, "so the tab is not a report", lube.h + "px");

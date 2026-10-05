@@ -14680,7 +14680,7 @@ function lubeChosenFor(c){
 function lubeMasterMount(){
   if(!window.CMLube) return;
   if(!lubeMasterInit.done) lubeMasterInit();
-  CMLube.mount({ master:$("lmMaster"), decide:$("lmDecide"), oils:$("lmOils"), sample:$("lmSample") });
+  CMLube.mount({ master:$("lmMaster"), decide:$("lmDecide"), oils:$("lmOils"), sample:$("lmSample") }, lubeSub);
 }
 function lubeMasterInit(){
   if(!window.CMLube) return;
@@ -16737,6 +16737,9 @@ function renderLubeSub(){
     d.setAttribute("aria-labelledby","lsubTab-"+d.dataset.lsub);
     d.classList.toggle("hidden", d.dataset.lsub!==lubeSub);
   });
+  /* The lube master draws only the panel on screen; switching to one of its
+     four draws it now. */
+  if(window.CMLube && CMLube.show) CMLube.show(lubeSub);
 }
 
 /* One way in, for a deep link, a test, or anything that needs to put a reader

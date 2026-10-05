@@ -1988,14 +1988,14 @@
       </div>
       <label class="chk"><input type="checkbox" id="lubeSamp">
         <span data-i18n="lube_samp">Oil sample taken</span></label>
+      <label class="chk"><input type="checkbox" id="lubeFilt">
+        <span data-i18n="lube_filt">Offline filtration done</span></label>
       <!-- The bottle's number, in the site's own form (DDMMYYYY-UNIT-CODE, the
            formula on their sample log). Filled in when the box is ticked, from
            the round's date, the machine and the compartment's OFFICIAL code;
            the label on the bottle wins if it says otherwise. -->
       <label class="fld hidden" id="lubeSnoWrap"><span data-i18n="lube_sno">Sample number</span>
         <input id="lubeSno" type="text" autocomplete="off" spellcheck="false" autocapitalize="characters"></label>
-      <label class="chk"><input type="checkbox" id="lubeFilt">
-        <span data-i18n="lube_filt">Offline filtration done</span></label>
       <div class="luberead" id="lubeRead"></div>
     </div>
     <div id="tempFields" class="hidden">
@@ -4669,7 +4669,7 @@ async function lubeMasterPull(force){
   }
   let doc=null;
   try{ doc=JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(j.data||""), c=>c.charCodeAt(0)))); }
-  catch(e){ bad("lube-master-parse", e); return null; }
+  catch(e){ console.warn("lube master unreadable", e); return null; }
   let prev=null; try{ prev=JSON.parse(localStorage.getItem(LUBE_MASTER_LS)||"null"); }catch(e){}
   if(prev && prev.rev===doc.rev && prev.at===doc.at) return doc;
   lsSet(LUBE_MASTER_LS, JSON.stringify(doc));
@@ -12791,7 +12791,7 @@ async function teamPull(manual,full,from,pre){
     try{ await stash; }catch(_){ }
     /* The office's lube decisions travel with the folder's other news. Not
        awaited: a pull is "done" when the rounds are, and this never holds it. */
-    lubeMasterPull(!!manual).catch(e=>bad("lube-master-pull", e));
+    lubeMasterPull(false).catch(e=>bad("lube-master-pull", e));
     return true;                               // the folder actually answered
   }catch(e){
     if(!mine()) return false;                      // superseded by a newer press

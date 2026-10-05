@@ -4229,7 +4229,8 @@ genuinely overlapped. The same field edited on two desks still ends with the
 last one, which is the only answer there is.
 
 *The phone.* `lubeMasterPull()` reads the same document with the ordinary
-folder pull (at most every 15 minutes; every manual pull), applies it, and
+folder pull (at most every 15 minutes, never forced: the sync suites count
+requests at the mock, and a manual pull is a question about rounds), applies it, and
 keeps the last copy (`cm_lube_master`) so an audit in the pit is judged
 against the office's last decision. Absent on the server means the baseline;
 a failed read changes nothing. Ticking "Oil sample taken" fills the bottle's

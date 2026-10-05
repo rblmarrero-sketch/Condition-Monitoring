@@ -350,12 +350,18 @@
   }
 
   /* ── drawing ────────────────────────────────────────────────────────── */
+  /* Only the panel on screen is drawn. The Lubrication tab repaints on every
+     refresh, and drawing four panels nobody is looking at cost it 80 ms over
+     the 150 ms a tab is allowed (tests/perf.cjs). A panel is drawn the moment
+     it is shown (show()), so it is never stale when somebody looks. With no
+     active panel named, all four are drawn — a host that does not say. */
   const EL = {};
   function redraw() {
-    if (EL.master) drawMaster(EL.master);
-    if (EL.decide) drawDecide(EL.decide);
-    if (EL.oils) drawOils(EL.oils);
-    if (EL.sample) drawSample(EL.sample);
+    const on = k => EL[k] && (!UI.active || UI.active === k);
+    if (on("master")) drawMaster(EL.master);
+    if (on("decide")) drawDecide(EL.decide);
+    if (on("oils")) drawOils(EL.oils);
+    if (on("sample")) drawSample(EL.sample);
   }
   function statusLine() {
     const d = S.doc;
@@ -1137,7 +1143,8 @@ tr.lmx-edited td:first-child{box-shadow:inset 3px 0 0 var(--accent)}
     init(opts) { HOST = Object.assign(HOST, opts || {}); css(); },
     load, save, state: () => S, doc: () => S.doc,
     /* Draw into the four panels the host page provides. */
-    mount(els) { Object.assign(EL, els || {}); css(); redraw(); },
+    mount(els, active) { Object.assign(EL, els || {}); if (active !== undefined) UI.active = active; css(); redraw(); },
+    show(active) { if (UI.active === active) return; UI.active = active; redraw(); },
     redraw,
     DOC, XLSX,
     _ui: UI,

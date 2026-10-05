@@ -103,10 +103,11 @@ const FLEET = JSON.parse(fs.readFileSync(path.join(__dirname, 'fleet-fixture.jso
      the mockup's separate pages -- scrolling past six other views to reach
      the fleet matrix was the thing this shape was built to fix) ──────────── */
   const subtabs = await n.$$eval('#lubeSub button[data-lsub]', els => els.map(e => e.dataset.lsub));
-  ok('all seven Lubrication subtabs render',
-     JSON.stringify(subtabs) === JSON.stringify(['cover', 'std', 'rec', 'ref', 'matrix', 'exc', 'shop']), JSON.stringify(subtabs));
+  /* nine since 2026-10-04: the lube master's four panels (master, decide, oils, sample) replaced Standards and Machine reference */
+  ok('all nine Lubrication subtabs render',
+     JSON.stringify(subtabs) === JSON.stringify(['cover', 'master', 'decide', 'oils', 'sample', 'rec', 'matrix', 'exc', 'shop']), JSON.stringify(subtabs));
 
-  for (const key of ['matrix', 'ref', 'cover']) {
+  for (const key of ['matrix', 'master', 'cover']) {
     await n.click(`#lubeSub button[data-lsub="${key}"]`);
     await n.waitForTimeout(300);
     const state = await n.evaluate(k => {
@@ -127,13 +128,15 @@ const FLEET = JSON.parse(fs.readFileSync(path.join(__dirname, 'fleet-fixture.jso
   ok('fleet matrix table renders rows', mtx.rows > 0, JSON.stringify(mtx));
   ok('fleet matrix has a pager (never "show all")', mtx.pager, JSON.stringify(mtx));
 
-  /* ── machine reference editor keeps Save/Undo/Export (CLAUDE.md) ────────── */
-  await n.click('#lubeSub button[data-lsub="ref"]');
+  /* ── the machine reference is the lube master now (2026-10-04): it keeps
+     save, undo and export — Save, Discard, Back to workbook, Excel out and in. */
+  await n.click('#lubeSub button[data-lsub="master"]');
   await n.waitForTimeout(300);
   const refBtns = await n.evaluate(() => ({
-    save: !!document.getElementById('lrSave'), undo: !!document.getElementById('lrReset'), exp: !!document.getElementById('lrExport'),
+    save: !!document.getElementById('lmxSaveM'), undo: !!document.getElementById('lmxUndoM'), back: !!document.getElementById('lmxRevM'),
+    exp: !!document.getElementById('lmxXlOut'), imp: !!document.getElementById('lmxXlIn'),
   }));
-  ok('machine reference editor keeps its Save/Undo/Export controls', refBtns.save && refBtns.undo && refBtns.exp, JSON.stringify(refBtns));
+  ok('the lube master keeps Save, Discard, Back-to-workbook and Excel export/import', refBtns.save && refBtns.undo && refBtns.back && refBtns.exp && refBtns.imp, JSON.stringify(refBtns));
 
   /* ── no sideways scroller at 1366px on the coverage view ─────────────────── */
   await n.click('#lubeSub button[data-lsub="cover"]');
