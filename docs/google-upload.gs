@@ -1069,14 +1069,28 @@ function readIndex_(p) {
     the summary row aged out of the phone's cache, and the last-done date it had
     already written stayed exactly where it was. */
 function metaSince_(since) {
+  /* META_DIGEST_V1 (06.10): a whole read (since = 0, a new phone or a new browser) opened all ~350 _meta files one
+     by one, ~250 of its ~270 s, and passed Google's 360 s limit in a browser (CORS error, 0 rounds shown). The
+     parsed files are now kept in ONE cache file, _meta/index/meta_digest.cache, keyed by file id + last-updated
+     time: a file is opened only when it is new or changed since the cache saw it. Not .json, so it is never read
+     as a shard or a round, and _meta/index is never copied to Pechanka. Same answers as before, file for file. */
   var edits = [], conflicts = [], deleted = [], deferrals = [];
+  var dg = metaDigestRead_(), map = dg.map, seen = {}, changed = false;
   var take = function (it) {
     while (it.hasNext()) {
       var f = it.next(), n = f.getName();
       if (!/\.(edit|conflict|deleted|defer)\.json$/i.test(n)) continue;
-      if (since && f.getLastUpdated().getTime() <= since) continue;
+      var id = f.getId(), upd = f.getLastUpdated().getTime();
+      seen[id] = true;
+      if (since && upd <= since) continue;
       try {
-        var j = JSON.parse(f.getBlob().getDataAsString());
+        var j, c = map[id];
+        if (c && c.u === upd) { j = c.j; }
+        else {
+          j = null;
+          try { j = JSON.parse(f.getBlob().getDataAsString()); } catch (errP) { j = null; }
+          map[id] = { u: upd, j: j }; changed = true;
+        }
         /* A deferral is keyed by unit and round, not by a round key — it is
            about a round that has not happened and so has none. */
         if (!j || (!j.key && !(j.u && j.t))) continue;
@@ -1088,15 +1102,46 @@ function metaSince_(since) {
       } catch (err) { /* skip */ }
     }
   };
-  try { take(folderPath_(rootFolder_(), META_DIR).getFiles()); } catch (err) { /* no _meta yet */ }
+  var listed = 0;
+  try { take(folderPath_(rootFolder_(), META_DIR).getFiles()); listed++; } catch (err) { /* no _meta yet */ }
   /* Deletion markers are filed in _meta/deletions, one per round and stamped,
      because a round can be deleted more than once over its life and one file
      per key would lose the earlier one. A reader that lists only _meta itself
      finds none of them — which is exactly how this shipped not working. */
-  try { take(folderPath_(rootFolder_(), META_DIR + '/deletions').getFiles()); } catch (err) { /* none yet */ }
+  try { take(folderPath_(rootFolder_(), META_DIR + '/deletions').getFiles()); listed++; } catch (err) { /* none yet */ }
   /* The phones file theirs here — see syncDefer() in the app. */
-  try { take(folderPath_(rootFolder_(), META_DIR + '/deferrals').getFiles()); } catch (err) { /* none yet */ }
+  try { take(folderPath_(rootFolder_(), META_DIR + '/deferrals').getFiles()); listed++; } catch (err) { /* none yet */ }
+  if (listed === 3) {                       // drop files that are gone, only when every folder was listed
+    for (var k in map) if (!seen[k]) { delete map[k]; changed = true; }
+  }
+  if (changed) metaDigestWrite_(dg, map);
   return { edits: edits, conflicts: conflicts, deleted: deleted, deferrals: deferrals };
+}
+var META_DIGEST_NAME = 'meta_digest.cache';
+function metaDigestRead_() {
+  var d = { dir: null, file: null, map: {} };
+  try {
+    d.dir = folderPath_(rootFolder_(), INDEX_DIR);
+    var it = d.dir.getFilesByName(META_DIGEST_NAME);
+    if (it.hasNext()) {
+      d.file = it.next();
+      var j = JSON.parse(d.file.getBlob().getDataAsString());
+      if (j && j.type === 'cm-meta-digest' && j.files && typeof j.files === 'object') d.map = j.files;
+    }
+  } catch (err) { d.map = {}; }          // a bad cache only costs time: every file is read again
+  return d;
+}
+function metaDigestWrite_(d, map) {
+  if (!d.dir) return;
+  var lock = null;
+  try { lock = LockService.getScriptLock(); if (!lock.tryLock(5000)) return; } catch (err) { return; }
+  try {
+    var body = JSON.stringify({ type: 'cm-meta-digest', v: 1, at: new Date().getTime(), files: map });
+    var it = d.dir.getFilesByName(META_DIGEST_NAME);
+    if (it.hasNext()) it.next().setContent(body);
+    else d.dir.createFile(META_DIGEST_NAME, body, 'application/json');
+  } catch (err) { /* the answer is already built; a cache that will not save is read again next time */ }
+  finally { try { lock.releaseLock(); } catch (err2) {} }
 }
 
 /* Build the index for a folder that predates it.
@@ -1108,10 +1153,15 @@ var INDEX_FULL_BYTES = 6 * 1024 * 1024;   // ContentService will not carry much 
 var INDEX_SLIM_BYTES = 24 * 1024 * 1024;  // ~90 bytes a round: a decade of them
 var REBUILD_MAX = 250;
 function rebuildIndex_(p) {
-  var started = new Date().getTime();
+  /* REBUILD_FIT_V1 (06.10): walking ~800 folders took most of the 200 s, so a batch indexed 0 rounds and the
+     rebuild never moved. Collect only .json (round) files - photos are not needed here and their per-file calls
+     were the slow part - and give the indexing its own clock, inside Google's 360 s limit. */
+  var t0 = new Date().getTime();
   var after = Number(p.after || 0) || 0;
   var all = [];
-  collect_(rootFolder_(), '', all, 0, '');
+  collect_(rootFolder_(), '', all, 0, '.json');
+  var started = new Date().getTime();
+  var budget = Math.max(30000, 300000 - (started - t0));
   var sidecars = all.filter(function (f) {
     return isSidecar_(f.name) && f.path.indexOf(META_DIR + '/') !== 0 && f.updated > after;
   }).sort(function (a, b) { return a.updated - b.updated; });
@@ -1119,7 +1169,7 @@ function rebuildIndex_(p) {
   var dir = folderPath_(rootFolder_(), INDEX_DIR);
   var open = {}, order = [], done = 0, cursor = after, more = false;
   for (var i = 0; i < sidecars.length; i++) {
-    if (done >= REBUILD_MAX || new Date().getTime() - started > 200000) { more = true; break; }
+    if (done >= REBUILD_MAX || new Date().getTime() - started > budget) { more = true; break; }
     var f = sidecars[i];
     try {
       var j = JSON.parse(DriveApp.getFileById(f.id).getBlob().getDataAsString());
