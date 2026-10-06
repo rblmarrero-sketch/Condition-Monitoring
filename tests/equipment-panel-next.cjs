@@ -55,14 +55,44 @@ const srv = http.createServer((q, r) => {
      mainline bumps mobile/sw.js's BUILD constantly; this branch's own tag is
      a snapshot from whenever it was cut). Every other -next suite leaves
      this request to 404, which is exactly why none of them saw this. */
-  if (p === '/mobile/sw.js') { r.writeHead(200, { 'content-type': 'application/javascript' }); r.end('const BUILD = "999999999";'); return; }
+  if (p === '/mobile/sw.js') { r.writeHead(200, { 'content-type': 'application/javascript' }); r.end(ARMED ? 'const BUILD = "999999999";' : 'const BUILD = "1";'); return; }
   const f = path.join(ROOT, p);
   fs.readFile(f, (e, d) => { if (e) { r.writeHead(404); r.end(); } else { r.writeHead(200, { 'content-type': MIME[path.extname(f)] || 'application/octet-stream' }); r.end(d); } });
 });
 const FLEET = JSON.parse(fs.readFileSync(path.join(__dirname, 'fleet-fixture.json'), 'utf8'));
+/* WHY THE NEWER BUILD IS SERVED ONLY ON CUE.
+   Served from the first request, it made this suite flaky (failed 3 runs in 6
+   on 2026-10-06, never alone): look() calls applyIfIdle() the moment it finds
+   a newer build, and a page with nothing open is RIGHT to update, so the idle
+   page replaced itself at ~4.5 s and again at ~8.9 s after load. The boot
+   below clicks at ~7 s, and under load one of those self-replaces landed
+   inside the 1.8 s watch window: a navigation the page made on its own,
+   counted against the click. The condition this suite needs is "an update is
+   waiting AND the reader opens something", so arm() builds exactly that:
+   with a text box focused (busy() holds the reload) the mock starts
+   answering newer and look() is asked; dashWaiting is armed with no reload;
+   the box goes, and the very next click is the one that opens the panel.
+   busy() must then hold the reload through the 300 ms post-click check and
+   the whole wait. */
+let ARMED = false;
+async function arm(p) {
+  let navs = 0; const onNav = f => { if (f === p.mainFrame()) navs++; };
+  p.on('framenavigated', onNav);
+  ARMED = true;
+  await p.evaluate(() => {
+    const i = document.createElement('input'); i.id = '__armHold'; document.body.appendChild(i); i.focus();
+    window.dispatchEvent(new Event('online'));
+  });
+  const armed = await p.waitForFunction(() => document.getElementById('dashVer').classList.contains('stale'), null, { timeout: 15000 })
+    .then(() => true, () => false);
+  await p.evaluate(() => { const i = document.getElementById('__armHold'); if (i) i.remove(); });
+  p.off('framenavigated', onNav);
+  ok('(precondition) an update is waiting, armed without a reload', armed && navs === 0, `armed ${armed}, navigations ${navs}`);
+}
 const WAIT_MS = 1800; // a REAL wait — long enough to see the bug survive, not a same-tick check
 
 async function boot(b, port, lang) {
+  ARMED = false;                      // a page with nothing open must not be made to update during boot
   const ctx = await b.newContext({ viewport: { width: 1366, height: 1000 } });
   const p = await ctx.newPage();
   const errs = []; p.on('pageerror', e => errs.push(e.message));
@@ -90,6 +120,7 @@ async function boot(b, port, lang) {
     const { p, errs } = await boot(b, port);
     let navs = 0; p.on('framenavigated', () => navs++);
     const before = await p.$$eval('#fleetTbl tbody tr[data-u]', rs => rs.length);
+    await arm(p);
     navs = 0; // ignore the boot-time navigation(s); count only from here
     await p.click('#fleetAllBtn');
     await p.waitForTimeout(50);
@@ -105,6 +136,7 @@ async function boot(b, port, lang) {
   /* ── 2. A unit ID in the attention table opens the machine drawer ──────── */
   {
     const { p, errs } = await boot(b, port);
+    await arm(p);
     await p.click('#fleetTbl tbody tr[data-u]');
     await p.waitForTimeout(50);
     const openedRight = await p.$eval('#drw', el => !el.classList.contains('hidden'));
@@ -124,6 +156,7 @@ async function boot(b, port, lang) {
     const editBtn = await p.$('[data-edit]');
     ok('Equipment History: a record to edit exists in the fixture', !!editBtn);
     if (editBtn) {
+      await arm(p);
       await editBtn.click();
       await p.waitForTimeout(50);
       const openedRight = await p.$eval('#editOv', el => !el.classList.contains('hidden'));
@@ -145,6 +178,7 @@ async function boot(b, port, lang) {
     const row = await p.$('#actionTbl tr.hrow td:not(.selcol):not(.ed) b');
     ok('Actions register: an open finding exists in the fixture', !!row);
     if (row) {
+      await arm(p);
       await row.click();
       await p.waitForTimeout(50);
       const openedRight = await p.$eval('#follOv', el => !el.classList.contains('hidden'));
@@ -163,6 +197,7 @@ async function boot(b, port, lang) {
     await p.waitForTimeout(600);
     const row = await p.$('#wearTbl tr[data-rk]');
     if (row) {
+      await arm(p);
       await row.click();
       await p.waitForTimeout(50);
       const openedRight = await p.$eval('#drw', el => !el.classList.contains('hidden'));
@@ -196,6 +231,7 @@ async function boot(b, port, lang) {
   fs.mkdirSync(SHOTDIR, { recursive: true });
   for (const lang of ['en', 'ru']) {
     const { p } = await boot(b, port, lang);
+    await arm(p);
     await p.click('#fleetAllBtn');
     await p.click('#fleetTbl tbody tr[data-u]');
     await p.waitForTimeout(WAIT_MS);
