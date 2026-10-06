@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-06T04:33:16+00:00",
+  "generated": "2026-10-06T04:48:10+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 755,
@@ -20449,15 +20449,15 @@ window.CM_WO_DATA = {
         "UC"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CLSD",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-10-04",
-      "planStartDt": "2026-10-04T00:00:00",
-      "planEnd": "2026-10-04",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "planStartDt": "2026-10-04T13:20:00",
+      "planEnd": "2026-10-06",
+      "actualStart": "2026-10-04",
+      "actualStartDt": "2026-10-04T13:20:00",
+      "actualEnd": "2026-10-06"
     },
     {
       "equip": "DZ008",
@@ -60135,15 +60135,15 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CLSD",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-10-05",
-      "planStartDt": "2026-10-05T00:00:00",
-      "planEnd": "2026-10-06",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "planStartDt": "2026-10-05T08:10:00",
+      "planEnd": "2026-10-05",
+      "actualStart": "2026-10-05",
+      "actualStartDt": "2026-10-05T08:10:00",
+      "actualEnd": "2026-10-05"
     },
     {
       "equip": "LD008",

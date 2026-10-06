@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-06T04:33:16+00:00",
+  "generated": "2026-10-06T04:48:10+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -84,19 +84,6 @@
           "UC"
         ],
         "plan": "2026-10-11",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "DZ008": [
-      {
-        "wo": "WO-017328",
-        "hours": 4000,
-        "types": [
-          "FC",
-          "INSP",
-          "UC"
-        ],
-        "plan": "2026-10-04",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -2748,12 +2735,12 @@
       "type": "250 Hours service Planned",
       "hours": 250,
       "plan": "2026-10-05",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-05"
     },
     {
       "wo": "WO-017880",
@@ -2820,12 +2807,12 @@
       "type": "4000 Hours service Planned",
       "hours": 4000,
       "plan": "2026-10-04",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-06"
     },
     {
       "wo": "WO-017877",
