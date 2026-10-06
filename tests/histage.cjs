@@ -262,7 +262,7 @@ function dictKeys() {
   {
     /* The path that used to be silent: the backend answers, and refuses. */
     const { ctx, p } = await mk({ hist: HIST, at: { at: Date.now() - 60000, n: 3 }, url: BASE + '/old' });
-    await p.evaluate(() => { localStorage.setItem('up_index', JSON.stringify({ [document.location.origin + '/old']: false })); });
+    await p.evaluate(() => { localStorage.setItem('up_index2', JSON.stringify({ [document.location.origin + '/old']: false })); });
     await p.evaluate(() => teamPull(true, false));
     await p.waitForTimeout(1200);
     ok('a backend that refuses the request is recorded as a failed pull',
