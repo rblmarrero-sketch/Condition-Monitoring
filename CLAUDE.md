@@ -11,7 +11,65 @@ anywhere in the shared engine, not only the report path.
 
 ---
 
-## THE BACKEND IS YANDEX. GOOGLE IS RETIRED.
+## TWO BACKENDS ARE LIVE: GOOGLE (FIREBASE PHONES) AND YANDEX (OLD PHONES)
+
+**Corrected 2026-10-06 — Google is NOT retired.** Everything below this
+section that says "Google is retired" or "never deploy `google-upload.gs`"
+predates this and is superseded by it.
+
+**Where the app reaches people:**
+
+- **Phones: `https://relconditionmonitoring.web.app` (Firebase).** GitHub Pages
+  is blocked at site. Pechanka (the company server) republishes the live branch
+  to Firebase within 15 min of each push, and applies an overlay to the
+  Firebase copy ONLY:
+  - sets the main slot's swap to `google-back-2026-10` (Google Apps Script);
+  - leaves the `x.upload` listeners off in `postT()` for `script.google.com`
+    URLs only (so those uploads stay simple POSTs — Apps Script has no
+    `doOptions` and cannot answer a preflight) and starts the overall max
+    clock instead; every other endpoint is unchanged;
+  - adds 1 to BUILD.
+  GitHub's own files keep the Yandex swap. **The overlay finds its targets by
+  text**: keep the `swap: {…}` block in `mobile/upload-defaults.js` and the
+  `x.upload.onprogress=onUp` line in `postT()` recognisable, or Firebase stays
+  on the last good version and nothing new reaches a phone.
+- **Office: `maintenance.vegadevelopment.com/cm/dashboard/` and
+  `/cm/dashboard-next/`** — this branch, copied every 15 min, with
+  `upload-defaults.js` replaced to use Pechanka's `/cm-api`
+  (backend=`pechanka`; writes forwarded to Google; deletes paused during the
+  changeover).
+
+**The backends:**
+
+- **Google Apps Script — main backend for Firebase phones, live again since
+  2026-10-06.** Deployment `AKfycbwWJ1vb…/exec`, writing to Drive folder
+  `CM_backup_Pechanka` (`ROOT_FOLDER_ID` `1cw-t83KlEZ8Nc103-iVbXKKBHNvxrS37`).
+  `docs/google-upload.gs` is meant to be exactly what is deployed, with
+  `ROOT_FOLDER_ID` / `ADMIN_SECRET` as placeholders in the repo — the real
+  values are set only in the script editor. **`ADMIN_SECRET` is empty by
+  decision**, so delete / rewrite / resolve are OFF on Google
+  (`canDelete:false`); uploads and edits work.
+- **Yandex — `https://baimskaya-cm.duckdns.org`** (`docs/yandex/function.js`
+  under `server.js` on the VM) stays up for phones still on the old
+  GitHub-Pages app until everyone has moved, then it will be switched off.
+- **Pechanka collects both**: Yandex → Pechanka every 5 min, Google →
+  Pechanka every 2 min. It never overwrites a newer file and never deletes.
+
+**Rules (asked for 2026-10-06):**
+
+- **Do not change** the swap/retire settings, the `postT` upload lines, or
+  `ROOT_FOLDER_ID` / `ADMIN_SECRET` without asking the maintainer.
+- **A backend change → ask which backend (Google Apps Script or Yandex) before
+  deploying.** Keep `function.js` and `google-upload.gs` in field-for-field
+  agreement either way; both are live code now, not one live and one archive.
+- The destination id stays `gas` whichever URL it points at. Branch on the id,
+  never on the URL.
+
+## YANDEX DETAILS (still live for old-app phones)
+
+The rest of this section was written while Yandex was the only backend. It is
+still correct for the Yandex VM; read "Google is retired" in it as superseded.
+
 
 **The live endpoint is `https://baimskaya-cm.duckdns.org`** — `docs/yandex/function.js`
 running under `server.js` on a small VM. That is the only backend the fleet talks to.
@@ -4559,9 +4617,11 @@ configure phones. Do not add anything to it that is not already public.
 
 ## Branch and deployment
 
-`claude/magnetic-plug-dashboard-llv4wc` **is the default branch**, and GitHub
-Pages publishes from it. There is no merge step: **every push is immediately
-live to the field.** Develop, commit and push only on that branch.
+`claude/magnetic-plug-dashboard-llv4wc` **is the default branch and the only
+published one.** Pechanka copies it to Firebase (phones) and to
+maintenance.vegadevelopment.com (office) within 15 min of a push; GitHub Pages
+also publishes it but is blocked at site. **Work on a side branch reaches
+nobody until it is merged into this one.**
 
 ---
 
