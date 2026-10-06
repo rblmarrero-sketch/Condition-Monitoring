@@ -4602,6 +4602,17 @@ its cell, keeping that page's tested "at most one line" worksheet contract.
 and 1600, and fails 29 assertions on build 529. Dashboard only; nothing to
 deploy on the VM.
 
+**THE DATA SOURCES SHEET HAS NO TABLES; IT HAD ONE RAW BOX (build 532).**
+Asked to clean its tables: it is three cards, not tables, on both office
+pages. What was wrong in it was the Apps Script / server address field, a
+`type="url"` input, which the sheet's shared input rule (`.sheet input[type=
+text], …password, …date`) never named — so it was the one browser-default box
+in the sheet, square and black-bordered beside its styled twin. `type=url` is
+in the rule now on both pages. The two Reliability tables on Reports were
+checked the same day and needed nothing: fixed shared columns since build 525,
+one line a row, nothing cut at 1100–1920 in either language. Dashboard only;
+nothing to deploy on the VM.
+
 ---
 
 ## Secrets
