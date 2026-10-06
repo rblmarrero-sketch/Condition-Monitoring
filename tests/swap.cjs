@@ -23,6 +23,14 @@ const path = require('path');
 const PORT = 8110, B = `http://127.0.0.1:${PORT}`;
 const OLD = 'https://script.google.com/macros/s/OLDONE/exec';
 const NEW = 'https://baimskaya-cm.example.org';
+/* Both are made-up hosts, and a phone in this suite does pull from them. Until
+   this stub they went out through the network and were refused by whatever sat
+   between this machine and the internet, so no request ever reached a real
+   backend, but it left the machine. Now the browser answers them itself, the
+   same way the network did: connection refused. Every assertion sees exactly
+   what it saw before, and the count proves nothing got past. */
+const STUB = /script\.google\.com|baimskaya-cm\.example\.org/;
+let stubbed = 0;
 
 let fail = 0;
 const ok = (n, c, d) => { if (!c) { fail++; console.log('  FAIL  ' + n + (d !== undefined ? '   ' + d : '')); }
@@ -37,6 +45,7 @@ process.on('exit', bye); process.on('SIGINT', () => { bye(); process.exit(1); })
    same object, from the same global, which is all loadDests() ever reads. */
 async function phone(b, { dests, swap, retire, flags }) {
   const ctx = await b.newContext({ viewport: { width: 412, height: 915 }, isMobile: true, hasTouch: true });
+  await ctx.route(STUB, r => { stubbed++; r.abort('connectionrefused'); });
   await ctx.addInitScript(([d, sw, fl, ret]) => {
     if (d) localStorage.setItem('up_dests', JSON.stringify(d));
     (fl || []).forEach(k => localStorage.setItem(k, '1'));
@@ -259,6 +268,7 @@ const GAS_ONLY = ['up_gas_only_v1'];
     await ctx.close();
   }
 
+  ok('the made-up backends were answered here, never by the network', stubbed > 0, stubbed + ' requests stubbed');
   await b.close(); bye();
   console.log(fail ? `\n${fail} FAILED` : '\nthe fleet moves once, and keeps what it is told');
   process.exit(fail ? 1 : 0);
