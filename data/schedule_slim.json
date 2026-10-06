@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-06T02:17:47+00:00",
+  "generated": "2026-10-06T02:33:09+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -457,7 +457,7 @@
           "MP",
           "TB"
         ],
-        "plan": "2026-10-15",
+        "plan": "2026-10-21",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -478,7 +478,7 @@
         "types": [
           "MP"
         ],
-        "plan": "2026-10-16",
+        "plan": "2026-10-17",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -489,7 +489,7 @@
         "types": [
           "MP"
         ],
-        "plan": "2026-10-17",
+        "plan": "2026-10-16",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -500,7 +500,7 @@
         "types": [
           "MP"
         ],
-        "plan": "2026-10-18",
+        "plan": "2026-10-22",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -513,7 +513,7 @@
           "MP",
           "TB"
         ],
-        "plan": "2026-10-12",
+        "plan": "2026-10-15",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -884,6 +884,42 @@
       "completed": ""
     },
     {
+      "wo": "WO-018489",
+      "equip": "TK115",
+      "cls": "AT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-22",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-10-22",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-018509",
+      "equip": "TK112",
+      "cls": "AT",
+      "comp": "",
+      "desc": "General Inspection / Magnetic Plug / Dump Body Liner",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-21",
+      "type": "2000 Hours service Planned",
+      "hours": 2000,
+      "plan": "2026-10-21",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-018507",
       "equip": "TK111",
       "cls": "AT",
@@ -1010,24 +1046,6 @@
       "completed": ""
     },
     {
-      "wo": "WO-018489",
-      "equip": "TK115",
-      "cls": "AT",
-      "comp": "",
-      "desc": "Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-10-18",
-      "type": "500 Hours service Planned",
-      "hours": 500,
-      "plan": "2026-10-18",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
       "wo": "WO-018486",
       "equip": "TK147",
       "cls": "HT",
@@ -1082,8 +1100,8 @@
       "completed": ""
     },
     {
-      "wo": "WO-018498",
-      "equip": "TK114",
+      "wo": "WO-018493",
+      "equip": "TK113",
       "cls": "AT",
       "comp": "",
       "desc": "Magnetic Plug",
@@ -1244,8 +1262,8 @@
       "completed": ""
     },
     {
-      "wo": "WO-018493",
-      "equip": "TK113",
+      "wo": "WO-018498",
+      "equip": "TK114",
       "cls": "AT",
       "comp": "",
       "desc": "Magnetic Plug",
@@ -1388,8 +1406,8 @@
       "completed": ""
     },
     {
-      "wo": "WO-018509",
-      "equip": "TK112",
+      "wo": "WO-018522",
+      "equip": "TK117",
       "cls": "AT",
       "comp": "",
       "desc": "General Inspection / Magnetic Plug / Dump Body Liner",
@@ -1649,24 +1667,6 @@
       "raised": "2026-10-12",
       "type": "500 Hours service Planned",
       "hours": 500,
-      "plan": "2026-10-12",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
-      "wo": "WO-018522",
-      "equip": "TK117",
-      "cls": "AT",
-      "comp": "",
-      "desc": "General Inspection / Magnetic Plug / Dump Body Liner",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-10-12",
-      "type": "2000 Hours service Planned",
-      "hours": 2000,
       "plan": "2026-10-12",
       "status": "Elimination scheduled",
       "request": "",

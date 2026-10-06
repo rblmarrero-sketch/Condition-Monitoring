@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-06T02:17:47+00:00",
+  "generated": "2026-10-06T02:33:09+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 755,
@@ -86405,9 +86405,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-10-15",
-      "planStartDt": "2026-10-15T00:00:00",
-      "planEnd": "2026-10-16",
+      "planStart": "2026-10-21",
+      "planStartDt": "2026-10-21T00:00:00",
+      "planEnd": "2026-10-22",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -87495,9 +87495,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-10-16",
-      "planStartDt": "2026-10-16T00:00:00",
-      "planEnd": "2026-10-17",
+      "planStart": "2026-10-17",
+      "planStartDt": "2026-10-17T00:00:00",
+      "planEnd": "2026-10-18",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -88629,9 +88629,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-10-17",
-      "planStartDt": "2026-10-17T00:00:00",
-      "planEnd": "2026-10-18",
+      "planStart": "2026-10-16",
+      "planStartDt": "2026-10-16T00:00:00",
+      "planEnd": "2026-10-17",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -89700,9 +89700,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-10-18",
-      "planStartDt": "2026-10-18T00:00:00",
-      "planEnd": "2026-10-19",
+      "planStart": "2026-10-22",
+      "planStartDt": "2026-10-22T00:00:00",
+      "planEnd": "2026-10-23",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -91606,9 +91606,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-10-12",
-      "planStartDt": "2026-10-12T00:00:00",
-      "planEnd": "2026-10-13",
+      "planStart": "2026-10-15",
+      "planStartDt": "2026-10-15T00:00:00",
+      "planEnd": "2026-10-16",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
