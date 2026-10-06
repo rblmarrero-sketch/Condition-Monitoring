@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-06T05:18:20+00:00",
+  "generated": "2026-10-06T05:33:44+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -450,16 +450,6 @@
     ],
     "TK113": [
       {
-        "wo": "WO-017880",
-        "hours": 1000,
-        "types": [
-          "INSP",
-          "MP"
-        ],
-        "plan": "2026-10-05",
-        "priority": "P3 Planned (PM)"
-      },
-      {
         "wo": "WO-018493",
         "hours": 250,
         "types": [
@@ -591,19 +581,6 @@
           "TB"
         ],
         "plan": "2026-10-13",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "TK143": [
-      {
-        "wo": "WO-017872",
-        "hours": 4000,
-        "types": [
-          "INSP",
-          "MP",
-          "TB"
-        ],
-        "plan": "2026-10-05",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -800,15 +777,6 @@
       }
     ],
     "TK159": [
-      {
-        "wo": "WO-017881",
-        "hours": 250,
-        "types": [
-          "MP"
-        ],
-        "plan": "2026-10-04",
-        "priority": "P3 Planned (PM)"
-      },
       {
         "wo": "WO-018521",
         "hours": 500,
@@ -2681,12 +2649,12 @@
       "type": "500 Hours service Planned",
       "hours": 500,
       "plan": "2026-10-05",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-05"
     },
     {
       "wo": "WO-017344",
@@ -2753,12 +2721,12 @@
       "type": "1000 Hours service Planned",
       "hours": 1000,
       "plan": "2026-10-05",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-05"
     },
     {
       "wo": "WO-017872",
@@ -2771,12 +2739,30 @@
       "type": "4000 Hours service Planned",
       "hours": 4000,
       "plan": "2026-10-05",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-06"
+    },
+    {
+      "wo": "WO-017881",
+      "equip": "TK159",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-05",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-10-05",
+      "status": "Completed",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "complete",
+      "completed": "2026-10-06"
     },
     {
       "wo": "WO-017988",
@@ -2921,24 +2907,6 @@
       "cause": "",
       "pmStatus": "complete",
       "completed": "2026-10-04"
-    },
-    {
-      "wo": "WO-017881",
-      "equip": "TK159",
-      "cls": "HT",
-      "comp": "",
-      "desc": "Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-10-04",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-10-04",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
     },
     {
       "wo": "WO-017261",
@@ -5290,13 +5258,13 @@
       "raised": "2026-09-22",
       "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "hours": null,
-      "plan": "2026-10-04",
-      "status": "Elimination scheduled",
+      "plan": "2026-10-05",
+      "status": "Completed",
       "request": "DD-00013149",
       "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "cause": "Поврежден прокладки",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-05"
     },
     {
       "wo": "WO-017820",
