@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-06T21:52:55+00:00",
+  "generated": "2026-10-06T22:08:01+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 756,
@@ -14580,9 +14580,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-10-12",
-      "planStartDt": "2026-10-12T00:00:00",
-      "planEnd": "2026-10-13",
+      "planStart": "2026-10-17",
+      "planStartDt": "2026-10-17T00:00:00",
+      "planEnd": "2026-10-18",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -16584,9 +16584,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-10-15",
-      "planStartDt": "2026-10-15T00:00:00",
-      "planEnd": "2026-10-15",
+      "planStart": "2026-10-19",
+      "planStartDt": "2026-10-19T00:00:00",
+      "planEnd": "2026-10-20",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -17575,9 +17575,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-10-11",
-      "planStartDt": "2026-10-11T00:00:00",
-      "planEnd": "2026-10-12",
+      "planStart": "2026-10-19",
+      "planStartDt": "2026-10-19T00:00:00",
+      "planEnd": "2026-10-20",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -20471,9 +20471,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-10-16",
-      "planStartDt": "2026-10-16T00:00:00",
-      "planEnd": "2026-10-17",
+      "planStart": "2026-10-22",
+      "planStartDt": "2026-10-22T00:00:00",
+      "planEnd": "2026-10-23",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
