@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=530">
+<link rel="manifest" href="manifest.webmanifest?v=531">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=530">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=530">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=530">
+<link rel="apple-touch-icon" href="icon-192.png?v=531">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=531">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=531">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2856,16 +2856,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=530"></script>
-<script src="upload-defaults.js?v=530"></script>
-<script src="hme.js?v=530"></script>
-<script src="mp-fc.js?v=530"></script>
-<script src="rtw.js?v=530"></script>
-<script src="hme-cascade.js?v=530"></script>
-<script src="assets.js?v=530"></script>
-<script src="temp-limits.js?v=530"></script>
-<script src="normalize.js?v=530"></script>
-<script src="terms.js?v=530"></script>
+<script src="native.js?v=531"></script>
+<script src="upload-defaults.js?v=531"></script>
+<script src="hme.js?v=531"></script>
+<script src="mp-fc.js?v=531"></script>
+<script src="rtw.js?v=531"></script>
+<script src="hme-cascade.js?v=531"></script>
+<script src="assets.js?v=531"></script>
+<script src="temp-limits.js?v=531"></script>
+<script src="normalize.js?v=531"></script>
+<script src="terms.js?v=531"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2884,25 +2884,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=530"></script>
-<script src="edits.js?v=530"></script>
-<script src="due.js?v=530"></script>
-<script src="wear.js?v=530"></script>
-<script src="wear-figs.js?v=530"></script>
-<script src="wear-map.js?v=530"></script>
-<script src="machine-photos.js?v=530"></script>
-<script src="machine-fig.js?v=530"></script>
-<script src="get.js?v=530"></script>
-<script src="points.js?v=530"></script>
-<script src="uc-points.js?v=530"></script>
-<script src="inspect-guide.js?v=530"></script>
-<script src="get-figs.js?v=530"></script>
-<script src="body-points.js?v=530"></script>
-<script src="body-map.js?v=530"></script>
-<script src="lube.js?v=530"></script>
-<script src="lube-overrides.js?v=530"></script>
-<script src="lube2027.js?v=530"></script>
-<script src="report-core.js?v=530"></script>
+<script src="grade.js?v=531"></script>
+<script src="edits.js?v=531"></script>
+<script src="due.js?v=531"></script>
+<script src="wear.js?v=531"></script>
+<script src="wear-figs.js?v=531"></script>
+<script src="wear-map.js?v=531"></script>
+<script src="machine-photos.js?v=531"></script>
+<script src="machine-fig.js?v=531"></script>
+<script src="get.js?v=531"></script>
+<script src="points.js?v=531"></script>
+<script src="uc-points.js?v=531"></script>
+<script src="inspect-guide.js?v=531"></script>
+<script src="get-figs.js?v=531"></script>
+<script src="body-points.js?v=531"></script>
+<script src="body-map.js?v=531"></script>
+<script src="lube.js?v=531"></script>
+<script src="lube-overrides.js?v=531"></script>
+<script src="lube2027.js?v=531"></script>
+<script src="report-core.js?v=531"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -12476,14 +12476,24 @@ function teamMerge(recs,replace){
    announce, and a fleet that does not have to move together. null means "ask
    again next time" — used when the deployment HAS the index but the folder has
    not been built into one yet. */
+/* false is stored ONLY on the backend's own {ok:false, error:"Unknown action…"}.
+   A timeout, an abort, a network error, an HTML page (Apps Script's six-minute
+   limit, "unable to open the file") or any other refusal reads the records for
+   THIS pull and remembers nothing — remembered, it moved a phone to the
+   whole-folder path for good, which outruns TEAM_TIMEOUT every time, and the
+   phone silently stopped receiving team rounds. New key ("up_index2"), so a
+   phone already stuck on false asks again; the old key is removed. */
 let idxCache=null;
 function idxCaps(){ if(idxCache) return idxCache;
-  try{ idxCache=JSON.parse(localStorage.getItem("up_index")||"{}"); }catch(e){ idxCache={}; }
+  lsDel("up_index");
+  try{ idxCache=JSON.parse(localStorage.getItem("up_index2")||"{}"); }catch(e){ idxCache={}; }
+  if(!idxCache || typeof idxCache!=="object") idxCache={};
   return idxCache; }
+function noIndexReply(j){ return !!(j && j.ok===false && /unknown action/i.test(String(j.error||""))); }
 function idxCap(url){ const v=idxCaps()[url]; return v===undefined?undefined:v; }
 function setIdxCap(url,v){ const c=idxCaps();
   if(v===null) delete c[url]; else c[url]=v;
-  try{ lsSet("up_index",JSON.stringify(c)); }catch(e){} }
+  try{ lsSet("up_index2",JSON.stringify(c)); }catch(e){} }
 let teamBusy=false, teamAt=0, teamAbort=null, teamRun=0;
 /* Did the last reply that landed cover the WHOLE folder, or stop short of it?
    The backend caps a records call at six hundred sidecars, so on a season's
@@ -12633,14 +12643,16 @@ async function teamPull(manual,full,from,pre){
       teamPrefetchDrop();                        // used; a second open must not merge it twice
     } else if(pre && Number(pre.since)<after) teamPrefetchDrop();   // older than what this phone already holds
     if(!j && idxCap(g.url)!==false){
-      const r2=await ask({action:"index", slim:"1", since:String(after)});
+      let r2=null;
+      try{ r2=await ask({action:"index", slim:"1", since:String(after)}); }
+      catch(e){ if(!mine()) return false; r2=null; }   // this pull only: the records path below may still answer
       if(!mine()) return false;
-      if(r2.j && r2.j.ok!==false && r2.j.v){
+      if(r2 && r2.j && r2.j.ok!==false && r2.j.v){
         // Indexed deployment, but the folder predates the index. Read it the
         // long way this time; the dashboard is what builds it.
         if(r2.j.needsRebuild){ setIdxCap(g.url,null); }
         else { j=r2.j; viaIndex=true; setIdxCap(g.url,true); }
-      } else setIdxCap(g.url,false);
+      } else if(r2 && noIndexReply(r2.j)) setIdxCap(g.url,false);
     }
     if(!j){
       const r3=await ask({action:"records", after:String(after), index:"0"});
@@ -15120,7 +15132,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="530";
+const BUILD="531";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

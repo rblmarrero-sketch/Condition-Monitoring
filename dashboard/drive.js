@@ -281,7 +281,7 @@
         if (!j) throw (r.ok
           ? new Error("Unexpected reply — check the deployment's “Who has access” is Anyone.")
           : notJSON(r.status, text));
-        if (j.ok === false) throw new Error(j.error || "Drive refused the request");
+        if (j.ok === false) { const e = new Error(j.error || "Drive refused the request"); e.srvRefused = true; throw e; }
         return j;
       });
   }
@@ -316,7 +316,16 @@
 
      The slow one is exactly what shipped before, kept because a deployment
      that has not been redeployed must keep working. */
-  const LS_IDX = "cm_drive_index";     // "1" / "0": does this /exec have an index?
+  /* "1" / "0": does this /exec have an index? "0" is stored ONLY when the
+     backend itself answers {ok:false, error:"Unknown action…"} (noIndexReply).
+     A timeout, a network error, an HTML page (Apps Script's six-minute limit,
+     "unable to open the file") or any other refusal falls back to the records
+     path for THIS load only: remembered, one bad minute sent a browser down the
+     whole-folder path for good. The key is new (was "cm_drive_index") so a
+     browser already stuck on "0" asks again; the old key is removed. */
+  const LS_IDX = "cm_drive_index2";
+  try { localStorage.removeItem("cm_drive_index"); } catch (e) {}
+  const noIndexReply = e => !!(e && e.srvRefused && /unknown action/i.test(String(e.message || "")));
   const idxCap = () => { const v = localStorage.getItem(LS_IDX); return v === null ? null : v === "1"; };
   const setIdxCap = v => { try { v === null ? localStorage.removeItem(LS_IDX)
                                             : localStorage.setItem(LS_IDX, v ? "1" : "0"); } catch (e) {} };
@@ -413,12 +422,11 @@
           const photos = await refreshMediaIndex();
           return Object.assign({ files: 0, photos }, r);
         }
-        setIdxCap(false);
+        // A JSON reply that is not an index reply: fall back this time, remember nothing.
       } catch (e) {
-        // An /exec without the index says "Unknown action". Anything else is a
-        // real failure and must not be hidden behind a slower path that will
-        // hit it too — but the slow path is strictly more compatible, so try it.
-        setIdxCap(false);
+        // An /exec without the index says "Unknown action" — the only answer
+        // remembered. Anything else falls back to the slow path for this load.
+        if (noIndexReply(e)) setIdxCap(false);
       }
     }
 
