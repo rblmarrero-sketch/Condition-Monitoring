@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-07T00:25:09+00:00",
+  "generated": "2026-10-07T00:42:54+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -3159,6 +3159,24 @@
       "cause": "",
       "pmStatus": "complete",
       "completed": "2026-10-03"
+    },
+    {
+      "wo": "WO-019034",
+      "equip": "DZ020",
+      "cls": "",
+      "comp": "DZ020.HS.DL (Hydraulic Lines / Гидролинии)",
+      "desc": "Трещины наружного слоя резины сливного патрубка гидрораспределителя.",
+      "priority": "P4 Planned (Repair)",
+      "raised": "2026-10-03",
+      "type": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "hours": null,
+      "plan": "2026-10-16",
+      "status": "Elimination scheduled",
+      "request": "DD-00013973",
+      "defType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "cause": "Усталостная трещина",
+      "pmStatus": "open",
+      "completed": ""
     },
     {
       "wo": "WO-016659",

@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-07T00:25:09+00:00",
+  "generated": "2026-10-07T00:42:54+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 756,
@@ -351,7 +351,7 @@ window.CM_WO_DATA = {
     "WE010",
     "WE011"
   ],
-  "duplicateRowsCollapsed": 743,
+  "duplicateRowsCollapsed": 744,
   "roundsDedupedWithinVisit": 2,
   "columns": [
     "Asset description",
@@ -440,8 +440,8 @@ window.CM_WO_DATA = {
     "planStart": 0
   },
   "cmCauseFrom": {
-    "wo": 54,
-    "wr": 77,
+    "wo": 55,
+    "wr": 76,
     "cert": 0,
     "none": 0
   },
@@ -666,7 +666,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-10-03",
       "detected": "2026-10-03",
-      "planStart": null,
+      "planStart": "2026-10-16",
       "closed": null,
       "asset": "DZ020",
       "defect": "DD-00013973",
@@ -676,12 +676,12 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "cause": "Усталостная трещина",
-      "causeFrom": "wr",
+      "causeFrom": "wo",
       "descr": "Трещины наружного слоя резины сливного патрубка гидрораспределителя.",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "by": "Zhomart",
-      "woNumber": null,
-      "maintType": null,
+      "woNumber": "WO-019034",
+      "maintType": "P4 Planned Repair",
       "planned": false
     },
     {
