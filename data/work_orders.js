@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-07T01:00:40+00:00",
+  "generated": "2026-10-07T01:18:37+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 756,
@@ -440,8 +440,8 @@ window.CM_WO_DATA = {
     "planStart": 0
   },
   "cmCauseFrom": {
-    "wo": 55,
-    "wr": 76,
+    "wo": 56,
+    "wr": 75,
     "cert": 0,
     "none": 0
   },
@@ -528,7 +528,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-10-04",
       "detected": "2026-10-04",
-      "planStart": null,
+      "planStart": "2026-10-20",
       "closed": null,
       "asset": "EX021",
       "defect": "DD-00013999",
@@ -538,12 +538,12 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "cause": "Поврежден шланга/линии",
-      "causeFrom": "wr",
+      "causeFrom": "wo",
       "descr": "Течь гидравлического масла по телу РВД линии забора масла на гидропривод вентилятора",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "by": "Zhomart",
-      "woNumber": null,
-      "maintType": null,
+      "woNumber": "WO-019040",
+      "maintType": "P4 Planned Repair",
       "planned": false
     },
     {
@@ -35487,9 +35487,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-10-17",
-      "planStartDt": "2026-10-17T00:00:00",
-      "planEnd": "2026-10-18",
+      "planStart": "2026-10-20",
+      "planStartDt": "2026-10-20T00:00:00",
+      "planEnd": "2026-10-21",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null

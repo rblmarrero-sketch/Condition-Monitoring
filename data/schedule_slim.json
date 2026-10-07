@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-07T01:00:40+00:00",
+  "generated": "2026-10-07T01:18:37+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -929,6 +929,24 @@
       "completed": ""
     },
     {
+      "wo": "WO-018490",
+      "equip": "EX021",
+      "cls": "EXC",
+      "comp": "",
+      "desc": "500h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-20",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-10-20",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-018507",
       "equip": "TK111",
       "cls": "AT",
@@ -1130,24 +1148,6 @@
       "wo": "WO-018541",
       "equip": "DZ002",
       "cls": "DOZ",
-      "comp": "",
-      "desc": "500h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-10-17",
-      "type": "500 Hours service Planned",
-      "hours": 500,
-      "plan": "2026-10-17",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
-      "wo": "WO-018490",
-      "equip": "EX021",
-      "cls": "EXC",
       "comp": "",
       "desc": "500h service",
       "priority": "P3 Planned (PM)",
@@ -2943,6 +2943,24 @@
       "cause": "",
       "pmStatus": "complete",
       "completed": "2026-10-04"
+    },
+    {
+      "wo": "WO-019040",
+      "equip": "EX021",
+      "cls": "",
+      "comp": "EX021.HS.DL (Hydraulic Lines / Гидролинии)",
+      "desc": "Течь гидравлического масла по телу РВД линии забора масла на гидропривод вентилятора",
+      "priority": "P4 Planned (Repair)",
+      "raised": "2026-10-04",
+      "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "hours": null,
+      "plan": "2026-10-20",
+      "status": "Elimination scheduled",
+      "request": "DD-00013999",
+      "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Поврежден шланга/линии",
+      "pmStatus": "open",
+      "completed": ""
     },
     {
       "wo": "WO-017261",
