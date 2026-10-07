@@ -579,7 +579,7 @@
   padding:9px 12px;margin-top:12px;background:#fafbfc;}
 #rptRoot .common .k{font-size:8.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;
   color:#5b6670;}
-#rptRoot .common dl{display:grid;grid-template-columns:auto 1fr;gap:3px 10px;margin-top:5px;}
+#rptRoot .common dl{display:grid;grid-template-columns:fit-content(42%) minmax(0,1fr);gap:3px 10px;margin-top:5px;}
 #rptRoot .common dt{font-size:8.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
   color:#5b6670;padding-top:2px;}
 #rptRoot .common dd{font-size:11px;line-height:1.35;}
@@ -621,9 +621,23 @@
 #rptRoot .cel .pk{font-size:11px;font-weight:750;letter-spacing:-.01em;line-height:1.3;min-width:0;}
 #rptRoot .cel .pn{font-size:.9em;font-weight:500;color:#5b6670;}
 #rptRoot .cel .chips{display:flex;gap:4px;align-items:center;flex:0 0 auto;flex-wrap:wrap;}
-#rptRoot .cel dl{margin-top:5px;display:grid;grid-template-columns:auto 1fr;gap:2px 7px;min-width:0;}
+/* A FACT IS NEVER SQUEEZED TO ONE LETTER (build 535). This grid was
+   auto 1fr, and a value may break anywhere, so a value's narrowest is one
+   character: in a quarter-width card the label column grew to its longest
+   label's one-line width - RESPONSIBLE / OTVETSTVENNYY in a bilingual
+   report - and left the value one letter wide. Read off a real TK105 sheet:
+   4CR's action, work order, owner, date and status ran down two and a half
+   pages one letter to a line. The label column is now capped at 42% of the
+   card, so a value always has the rest; a label breaks between words; and
+   on a board of three or four cards across, where even 58% is narrow, the
+   label sits on its own line above its value (rule below). */
+#rptRoot .cel dl{margin-top:5px;display:grid;grid-template-columns:fit-content(42%) minmax(0,1fr);gap:2px 7px;min-width:0;}
 #rptRoot .cel dt{font-size:8.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
-  color:#5b6670;padding-top:1px;min-width:0;overflow-wrap:anywhere;}
+  color:#5b6670;padding-top:1px;min-width:0;overflow-wrap:break-word;}
+#rptRoot .board.b3:not(.wide) .cel dl,#rptRoot .board.b4:not(.wide) .cel dl{display:block;}
+#rptRoot .board.b3:not(.wide) .cel dt,#rptRoot .board.b4:not(.wide) .cel dt{margin-top:4px;}
+#rptRoot .board.b3:not(.wide) .cel dt:first-child,#rptRoot .board.b4:not(.wide) .cel dt:first-child{margin-top:0;}
+#rptRoot .board.b3:not(.wide) .cel dd,#rptRoot .board.b4:not(.wide) .cel dd{margin:0;}
 #rptRoot .cel dd{font-size:10.5px;line-height:1.4;min-width:0;overflow-wrap:anywhere;}
 /* The owner/target/status line is a full sentence, not an inline code, so it
    wraps inside a narrow gallery card instead of running off the edge — a
@@ -632,6 +646,12 @@
    cards on a narrow two-up sheet). Inline codes (ISO, WO, priority) are spans
    and keep their nowrap. */
 #rptRoot .cel div.code{white-space:normal;}
+/* AND IN A TABLE TOO (build 535). The same block sentence sits under the
+   action in the fleet and round reports' findings table, where it kept its
+   nowrap and pushed the table 160 to 490 px past the right edge of the page
+   - a cut-off column in the PDF. A div.code is a sentence everywhere; the
+   inline span.code (ISO, WO, priority) keeps its nowrap. */
+#rptRoot td div.code{white-space:normal;overflow-wrap:anywhere;}
 #rptRoot .cel dd b{font-weight:700;}
 /* The comment carries the grade's own ink, set inline per card (see cell()).
    600 rather than 400: a coloured word at book weight reads washed out beside
@@ -2959,7 +2979,9 @@
       + '<div class="board b' + bc.cols + (bc.wide ? ' wide' : '') + '">'
       + its.map(function (it) { return cell(ctx, T, it, sh); }).join("") + '</div>'
       + (skipped.length ? '<div class="muted" style="font-size:9.5px;margin-top:4px;">'
-          + esc(T.I("tb_mp_skip", { n: skipped.map(function (it) { return it.code || it.key; }).join(", ") }))
+          /* T.I is already escaped HTML; escaping it again printed its own
+             span tag on the sheet (TK105, 2026-10-07) */
+          + T.I("tb_mp_skip", { n: skipped.map(function (it) { return it.code || it.key; }).join(", ") })
           + '</div>' : "");
   }
   /* FC — one row per filter: identity, service hours, grade, debris/defect,

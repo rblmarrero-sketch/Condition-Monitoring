@@ -4615,6 +4615,38 @@ checked the same day and needed nothing: fixed shared columns since build 525,
 one line a row, nothing cut at 1100–1920 in either language. Dashboard only;
 nothing to deploy on the VM.
 
+**A FACT ON A REPORT CARD IS NEVER ONE LETTER WIDE, AND NO TABLE RUNS OFF
+THE PAGE (build 535).** Read off a real TK105 Magnetic Plug PDF: on a board
+of four plug cards, 4CR's action, work order, owner, target date and status
+ran down two and a half pages one letter to a line, and under the board the
+line naming the plug nobody walked printed its own markup (`<span
+class="alti">/ Также …</span>`). Both in `mobile/report-core.js`, so all
+three surfaces had them:
+- a card's facts (`.cel dl`) were a grid of `auto 1fr` with values allowed to
+  break anywhere, so a value's narrowest is one character; in a quarter-width
+  card in a bilingual report the label column grew to "RESPONSIBLE /
+  ОТВЕТСТВЕННЫЙ" on one line and left the value 0 px. The label column is
+  capped at `fit-content(42%)`, a label breaks between words, and on a board
+  of three or four cards across (`.board.b3/.b4`, not `.wide`) the label sits
+  above its value. The shared-facts band (`.common dl`) takes the same cap.
+- `mpEvidence`'s "not inspected" line wrapped `T.I()` — already escaped HTML —
+  in `esc()` again. It was the only such call in the engine.
+- found by the scan written for the above: the findings table of the round
+  and month (fleet) reports kept `planTag`'s owner/target/status sentence, a
+  `div.code`, on one line, and pushed the table 160–490 px past the page edge
+  — a cut-off column in the PDF. A `div.code` in a table cell wraps now, as it
+  already did inside a card; inline `span.code` (ISO, WO, priority) keeps its
+  nowrap.
+`tests/rptoverflow.cjs` renders every round type (MP four/three/two across,
+INSP, FC, TEMP, LUBE, RTW) and the unit, summary, round and month reports in
+English, Russian and bilingual through the real engine, and fails on markup
+printed as text, a fact under 48 px, text taller than eight times its width,
+or anything past its card, its cell or the page — naming the element. On build
+534 it fails the TK105 board and all six fleet renders. Not changed, though
+seen: a narrow card's "Responsible" row repeats its own label inside the
+sentence (`planTag`); that is wording, not overflow, and was not asked for.
+Shared engine; nothing to deploy on the VM.
+
 ---
 
 ## Secrets
