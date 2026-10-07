@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-07T04:58:16+00:00",
+  "generated": "2026-10-07T05:13:50+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 756,
@@ -435,13 +435,13 @@ window.CM_WO_DATA = {
     "wo": "Work order number"
   },
   "cmDateFrom": {
-    "raised": 131,
+    "raised": 132,
     "detected": 0,
     "planStart": 0
   },
   "cmCauseFrom": {
     "wo": 56,
-    "wr": 75,
+    "wr": 76,
     "cert": 0,
     "none": 0
   },
@@ -454,6 +454,29 @@ window.CM_WO_DATA = {
     "Bekzhan"
   ],
   "cmWorkOrders": [
+    {
+      "date": "2026-10-07",
+      "dateFrom": "raised",
+      "raised": "2026-10-07",
+      "detected": "2026-10-07",
+      "planStart": null,
+      "closed": null,
+      "asset": "CN018",
+      "defect": "DD-00014256",
+      "requestNo": "DD-00014256",
+      "eqType": "CRANE, MOBILE",
+      "system": "CN018.CH.GAN (Crane / Кран)",
+      "priority": "P4 Planned (Repair)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "cause": "Разрушение стыка",
+      "causeFrom": "wr",
+      "descr": "Трещина в зоне втулки шарнирного крепления стрелы крана. С левой стороны.",
+      "status": "Registered",
+      "by": "Zhomart",
+      "woNumber": null,
+      "maintType": null,
+      "planned": false
+    },
     {
       "date": "2026-10-04",
       "dateFrom": "raised",
