@@ -22,10 +22,12 @@
 # something to silence by weakening the guard itself.
 name: Refresh work orders (Plan vs Actual)
 
+# RETIRED 2026-10-07: its WO.xlsx source (askpi.94-131-94-152.sslip.io) is the retired Yandex
+# site, which no longer receives 1C deliveries, so each hourly run could put older work orders
+# back over the Pechanka refresh. refresh-work-orders-pechanka.yml (self-hosted runner on
+# Pechanka, reads /opt/askpi-auto/pub/WO.xlsx) is the only scheduled refresh now. Kept for a
+# manual run only.
 on:
-  schedule:
-    # Hourly, on the hour, UTC.
-    - cron: '0 * * * *'
   workflow_dispatch:
 
 permissions:

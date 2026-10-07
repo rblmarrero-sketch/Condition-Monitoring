@@ -55,7 +55,8 @@ const ALLOW = new Set([
   'tests/noprodhit.cjs',              // this file, in its own comment
 ]);
 
-const HOSTS = [/duckdns\.org/i, /baimskaya-cm(?!\.example)/i];
+// `baimskaya-cm\\.example` (the made-up host written as a regex, tests/swap.cjs) is not the real one either.
+const HOSTS = [/duckdns\.org/i, /baimskaya-cm(?!\\?\.example)/i];
 
 function walk(dir, out) {
   for (const name of fs.readdirSync(dir)) {
