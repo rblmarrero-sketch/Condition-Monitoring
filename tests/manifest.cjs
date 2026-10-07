@@ -35,6 +35,13 @@ const ok = (c, n, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
 
   console.log('\n1. THE PHONE PUTS IT IN THE SIDECAR');
   const ctx = await b.newContext({ viewport: { width: 412, height: 915 }, isMobile: true, hasTouch: true });
+  /* No production backend at either end: the phone and the dashboard both
+     fell back to the shipped defaults and read the LIVE folder — and since
+     build 534 the shipped swap points them at the real Apps Script. An empty
+     up_dests means "the defaults" to a phone, so every destination points at
+     a port nobody listens on; "" on the dashboard means "no backend". The
+     dashboard's media index is stubbed below; nothing here needs a server. */
+  await ctx.addInitScript(() => { localStorage.setItem('up_dests', JSON.stringify(["gas","mirror","pa","post"].map(id=>({id,on:false,url:"http://127.0.0.1:9/exec",sec:"",folder:""})))); localStorage.setItem('cm_drive_url', ''); });
   const ph = await ctx.newPage();
   const perr = []; ph.on('pageerror', e => perr.push(e.message));
   await ph.goto(PHONE, { waitUntil: 'load' });
@@ -79,6 +86,7 @@ const ok = (c, n, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
 
   console.log('\n2. THE OFFICE MATCHES BY IT, AND BY THE SERVER\'S KEY FIRST');
   const p = await b.newPage({ viewport: { width: 1440, height: 900 } });
+  await p.addInitScript(() => { localStorage.setItem('up_dests', JSON.stringify(["gas","mirror","pa","post"].map(id=>({id,on:false,url:"http://127.0.0.1:9/exec",sec:"",folder:""})))); localStorage.setItem('cm_drive_url', ''); });
   const derr = []; p.on('pageerror', e => derr.push(e.message));
   await p.goto(DASH, { waitUntil: 'load' });
   await p.waitForFunction(() => !!window.CMDash, null, { timeout: 25000 });

@@ -11,7 +11,19 @@ const SEED=fs.readFileSync('e2e.cjs','utf8').match(/const SEED = `([\s\S]*?)`;/)
   const ctx=await b.newContext({viewport:{width:1440,height:960},acceptDownloads:true});
   const app=await ctx.newPage();
   app.on('pageerror',e=>fails.push('APP '+e.message));
-  await app.addInitScript(()=>localStorage.setItem('up_dests','[]'));
+  /* NO PRODUCTION BACKEND, EITHER END. The phone already had no upload
+     destination; the dashboard had none set either, so it fell back to the
+     shipped defaults and read the LIVE folder into allRecs() beside the rounds
+     this suite builds — the result depended on what the field had uploaded
+     that day, and once the shipped swap moved to Google it reached for the
+     real Apps Script instead (build 534). Both ends are local now. */
+  /* An empty up_dests means "the shipped defaults" to a phone, so each
+     destination is pointed at a port nobody listens on (CLAUDE.md: a phone
+     in the pit); "" on the dashboard means "no backend", which is kept. */
+  await ctx.addInitScript(()=>{
+    localStorage.setItem('up_dests', JSON.stringify(["gas","mirror","pa","post"].map(id=>({id,on:false,url:"http://127.0.0.1:9/exec",sec:"",folder:""}))));
+    localStorage.setItem('cm_drive_url','');
+  });
   await app.goto(B+'/mobile/index.html',{waitUntil:'load'});
   await app.waitForFunction(()=>(document.getElementById('verNum')||{}).textContent!=='?',null,{timeout:20000});
   await app.waitForTimeout(500);
@@ -22,6 +34,8 @@ const SEED=fs.readFileSync('e2e.cjs','utf8').match(/const SEED = `([\s\S]*?)`;/)
   dash.on('pageerror',e=>fails.push('DASH '+e.message));
   await dash.goto(B+'/dashboard/index.html',{waitUntil:'load'});
   await dash.waitForTimeout(1800);
+  /* with no backend the page offers Data sources by itself; this suite imports instead */
+  await dash.evaluate(()=>{ const o=document.getElementById('dataOv'); if(o) o.classList.add('hidden'); });
   await dash.evaluate(p=>window.CMDash.importRecords(p), payload);
   await dash.waitForTimeout(900);
 

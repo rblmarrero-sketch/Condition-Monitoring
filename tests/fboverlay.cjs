@@ -83,7 +83,13 @@ const OTHER = 'https://example-other-backend.test/exec';
     const p = path.join(bad, 'mobile/index.html');
     fs.writeFileSync(p, fs.readFileSync(p, 'utf8').replace('x.upload.onprogress=onUp;', 'x.upload.onprogress = onUp;'));
     const r = py(bad);
-    ok('a postT whose anchor line has moved makes the overlay refuse (exit 2), so Firebase keeps the last good build', r.status === 2, r.stdout.trim());
+    // Since build 534 the source itself carries the Google simple POST (one source, 2026-10-07),
+    // so the overlay must leave postT alone whatever its listener line looks like. Before that,
+    // a moved anchor had to make it refuse. Both answers are checked against what the source holds.
+    if (/simpleOnly/.test(fs.readFileSync(path.join(ROOT, 'mobile/index.html'), 'utf8')))
+      ok('the source already carries the Google simple POST, so the overlay leaves postT alone (exit 0, "already in the source")', r.status === 0 && /Google simple POST already in the source/.test(r.stdout), r.stdout.trim().replace(/\n/g, ' | '));
+    else
+      ok('a postT whose anchor line has moved makes the overlay refuse (exit 2), so Firebase keeps the last good build', r.status === 2, r.stdout.trim());
     const bad2 = copyTree();
     const q = path.join(bad2, 'mobile/upload-defaults.js');
     fs.writeFileSync(q, fs.readFileSync(q, 'utf8').replace(/swap:\s*\{/, 'swapX: {'));

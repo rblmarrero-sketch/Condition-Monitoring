@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=532">
+<link rel="manifest" href="manifest.webmanifest?v=534">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=532">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=532">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=532">
+<link rel="apple-touch-icon" href="icon-192.png?v=534">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=534">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=534">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2856,16 +2856,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=532"></script>
-<script src="upload-defaults.js?v=532"></script>
-<script src="hme.js?v=532"></script>
-<script src="mp-fc.js?v=532"></script>
-<script src="rtw.js?v=532"></script>
-<script src="hme-cascade.js?v=532"></script>
-<script src="assets.js?v=532"></script>
-<script src="temp-limits.js?v=532"></script>
-<script src="normalize.js?v=532"></script>
-<script src="terms.js?v=532"></script>
+<script src="native.js?v=534"></script>
+<script src="upload-defaults.js?v=534"></script>
+<script src="hme.js?v=534"></script>
+<script src="mp-fc.js?v=534"></script>
+<script src="rtw.js?v=534"></script>
+<script src="hme-cascade.js?v=534"></script>
+<script src="assets.js?v=534"></script>
+<script src="temp-limits.js?v=534"></script>
+<script src="normalize.js?v=534"></script>
+<script src="terms.js?v=534"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2884,25 +2884,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=532"></script>
-<script src="edits.js?v=532"></script>
-<script src="due.js?v=532"></script>
-<script src="wear.js?v=532"></script>
-<script src="wear-figs.js?v=532"></script>
-<script src="wear-map.js?v=532"></script>
-<script src="machine-photos.js?v=532"></script>
-<script src="machine-fig.js?v=532"></script>
-<script src="get.js?v=532"></script>
-<script src="points.js?v=532"></script>
-<script src="uc-points.js?v=532"></script>
-<script src="inspect-guide.js?v=532"></script>
-<script src="get-figs.js?v=532"></script>
-<script src="body-points.js?v=532"></script>
-<script src="body-map.js?v=532"></script>
-<script src="lube.js?v=532"></script>
-<script src="lube-overrides.js?v=532"></script>
-<script src="lube2027.js?v=532"></script>
-<script src="report-core.js?v=532"></script>
+<script src="grade.js?v=534"></script>
+<script src="edits.js?v=534"></script>
+<script src="due.js?v=534"></script>
+<script src="wear.js?v=534"></script>
+<script src="wear-figs.js?v=534"></script>
+<script src="wear-map.js?v=534"></script>
+<script src="machine-photos.js?v=534"></script>
+<script src="machine-fig.js?v=534"></script>
+<script src="get.js?v=534"></script>
+<script src="points.js?v=534"></script>
+<script src="uc-points.js?v=534"></script>
+<script src="inspect-guide.js?v=534"></script>
+<script src="get-figs.js?v=534"></script>
+<script src="body-points.js?v=534"></script>
+<script src="body-map.js?v=534"></script>
+<script src="lube.js?v=534"></script>
+<script src="lube-overrides.js?v=534"></script>
+<script src="lube2027.js?v=534"></script>
+<script src="report-core.js?v=534"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -15132,7 +15132,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="532";
+const BUILD="534";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -16787,13 +16787,16 @@ function postT(url, body, idle, max, reply){
     const fail=e=>{ stop(); try{ e.sentAll=sentAll; }catch(_){} rej(e); };
     try{ x.open("POST",url,true); x.setRequestHeader("Content-Type","text/plain;charset=utf-8"); }
     catch(e){ return rej(e); }
-    if(x.upload){ try{ x.upload.onprogress=onUp; x.upload.onload=()=>{ sentAll=true; arm(reply||UP_CLOCKS.reply); }; }catch(_){ } }
+    /* CM_FBOVERLAY_V1: an Apps Script web app cannot answer a CORS preflight, and a listener on x.upload makes
+       this POST non-simple - so for script.google.com the upload listeners stay off (overall max still bounds it). */
+    const simpleOnly=/^https:\/\/script\.google(usercontent)?\.com\//i.test(String(url||""));
+    if(x.upload && !simpleOnly){ try{ x.upload.onprogress=onUp; x.upload.onload=()=>{ sentAll=true; arm(reply||UP_CLOCKS.reply); }; }catch(_){ } }
     x.onprogress=onUp;
     x.onload=()=>{ stop(); res({ ok:x.status>=200&&x.status<300, status:x.status, text:()=>Promise.resolve(x.responseText||"") }); };
     x.onerror=()=>fail(new TypeError("Failed to fetch"));
     x.onabort=()=>fail(new Error(why ? t_up_timeout() : "aborted"));
     cap=setTimeout(()=>{ why="max"; try{ x.abort(); }catch(_){ } }, max||UP_CLOCKS.max);
-    onUp();
+    if(simpleOnly) arm(max||UP_CLOCKS.max); else onUp();
     try{ x.send(body); }catch(e){ stop(); rej(e); }
   });
 }

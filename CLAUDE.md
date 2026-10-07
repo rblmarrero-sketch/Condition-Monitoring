@@ -21,18 +21,20 @@ predates this and is superseded by it.
 
 - **Phones: `https://relconditionmonitoring.web.app` (Firebase).** GitHub Pages
   is blocked at site. Pechanka (the company server) republishes the live branch
-  to Firebase within 15 min of each push, and applies an overlay to the
-  Firebase copy ONLY:
-  - sets the main slot's swap to `google-back-2026-10` (Google Apps Script);
-  - leaves the `x.upload` listeners off in `postT()` for `script.google.com`
-    URLs only (so those uploads stay simple POSTs — Apps Script has no
-    `doOptions` and cannot answer a preflight) and starts the overall max
-    clock instead; every other endpoint is unchanged;
-  - adds 1 to BUILD.
-  GitHub's own files keep the Yandex swap. **The overlay finds its targets by
-  text**: keep the `swap: {…}` block in `mobile/upload-defaults.js` and the
-  `x.upload.onprogress=onUp` line in `postT()` recognisable, or Firebase stays
-  on the last good version and nothing new reaches a phone.
+  to Firebase within 15 min of each push.
+  **Since build 534 (2026-10-07) the source IS what Firebase serves** — the
+  Google changes that used to be a Pechanka-only overlay are in the files:
+  - the main slot's swap is `google-back-2026-10` (Yandex → Google Apps Script);
+  - `postT()` leaves the `x.upload` listeners off for `script.google.com` URLs
+    only (simple POSTs — Apps Script has no `doOptions` and cannot answer a
+    preflight) and starts the overall max clock instead;
+  - the landing page (`index.html`) opens `dashboard-next/`, classic linked in
+    the footer.
+  Pechanka's overlay (`docs/firebase/fb_overlay.py`) recognises all of this as
+  "already in the source"; it is switched off (`cm_firebase.sh app-plain`), so
+  Firebase BUILD = GitHub BUILD. A fix reaches the phones by the normal path
+  only: branch → PR → merge into the live branch → Pechanka publishes (≤15 min)
+  → BUILD bump makes every phone take it. There is no second copy to patch.
 - **Office: `maintenance.vegadevelopment.com/cm/dashboard/` and
   `/cm/dashboard-next/`** — this branch, copied every 15 min, with
   `upload-defaults.js` replaced to use Pechanka's `/cm-api`
