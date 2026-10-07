@@ -5139,14 +5139,18 @@
     else if (it.wo || (it.prio && !sh.prio)) row(T.I("c_wo"),
       (it.prio && !sh.prio ? prioTag(it) + " " : "") + '<span class="num">' + esc(it.wo || "") + '</span>');
     if (sh.fb && !it.action && !it.wo && gnum(it.grade) >= 3) row(T.I("c_action"), tbMiss(T));
-    if (sh.fb) {
-      /* One fact a row. planTag packs owner, date and status into one sentence
-         that opens with the word the label above it has just said. */
-      if (it.resp) row(T.I("c_resp"), esc(it.resp));
-      if (it.target) row(T.I("c_target"), '<span class="num">' + esc(it.target) + '</span>');
-      if (it.opstat && !sh.opOnce) row(T.I("c_opstat"), T.I("op_" + it.opstat));
-      if (it.gradeWhy) row(T.I("g_why"), esc(it.gradeWhy));
-    } else if (it.resp || it.target || (it.opstat && !sh.opOnce) || it.gradeWhy) row(T.I("c_resp"), planTag(T, it, sh.opOnce));
+    /* One fact a row, on EVERY card (build 536). planTag packs owner, date and
+       status into one sentence that opens with the word the label above it
+       has just said - which is what the finding cards stopped printing, and
+       what every other card (the magnetic plug board, the history cards) went
+       on printing: "RESPONSIBLE / Responsible: Nachalnik ... Target date: ...
+       Status: ...", the label said twice, read off the TK105 sheet. planTag
+       stays the one-sentence form for the tables, where no label sits above
+       it. */
+    if (it.resp) row(T.I("c_resp"), esc(it.resp));
+    if (it.target) row(T.I("c_target"), '<span class="num">' + esc(it.target) + '</span>');
+    if (it.opstat && !sh.opOnce) row(T.I("c_opstat"), T.I("op_" + it.opstat));
+    if (it.gradeWhy) row(T.I("g_why"), esc(it.gradeWhy));
     /* The lubrication round's whole answer. It is NOT a reading: a reading is
        a figure and gets tabular numerals, while this is a product name, how the
        fitter knows it, and whether a sample went with it. Folding it into the

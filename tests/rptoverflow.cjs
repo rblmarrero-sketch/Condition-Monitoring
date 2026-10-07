@@ -25,6 +25,8 @@
      2. no fact squeezed: every value at least 48px wide
      3. nothing printed vertically: no text box many times taller than it is wide
      4. nothing visibly past its card, its table cell, or the page
+     5. no card says a field's label again inside its own value - the
+        "RESPONSIBLE / Responsible: ..." of the same sheet (build 536)
 
    Run: node tests/rptoverflow.cjs [port]   (needs tests/mock.cjs on the port) */
 const { chromium } = require(require('./pw.cjs'));
@@ -100,10 +102,13 @@ const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
     await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
     const R = e => e.getBoundingClientRect();
     const txt = e => (e.innerText || '').replace(/\s+/g, ' ').trim();
-    const out = { markup: [], squeezed: [], vertical: [], past: [], cells: d.querySelectorAll('.cel').length, dds: 0 };
+    const out = { markup: [], squeezed: [], vertical: [], past: [], twice: [], cells: d.querySelectorAll('.cel').length, dds: 0 };
     /* 1 */ (txt(d).match(/<\/?(span|div|b|i)\b[^>]*>?|&lt;|&quot;|&amp;[a-z]+;/g) || []).forEach(m => out.markup.push(m));
     /* 2 */ d.querySelectorAll('.cel dd').forEach(dd => { if (!txt(dd)) return; out.dds++;
       if (R(dd).width < 48) out.squeezed.push(Math.round(R(dd).width) + 'px: ' + txt(dd).slice(0, 30)); });
+    /* 5 */ d.querySelectorAll('.cel dt').forEach(dt => { const dd = dt.nextElementSibling; if (!dd) return;
+      const lab = txt(dt).split(' / ')[0].trim();
+      if (lab && new RegExp('(^|[\\s·])' + lab.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\s*:', 'i').test(txt(dd))) out.twice.push(lab + ' → ' + txt(dd).slice(0, 40)); });
     /* 3 */ d.querySelectorAll('dd, dt, td, th, .cm, .sv, .sk, .pk, .muted, .rnote').forEach(e => {
       const r = R(e), t = txt(e);
       if (t.length > 12 && r.width > 0 && r.height > 8 * r.width && r.height > 60) out.vertical.push(e.tagName + ' ' + Math.round(r.width) + 'x' + Math.round(r.height) + ': ' + t.slice(0, 24)); });
@@ -134,6 +139,7 @@ const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
       ok(`${name}: no fact squeezed under 48px`, s.squeezed.length === 0, s.squeezed.slice(0, 3).join(' | '));
       ok(`${name}: nothing printed one letter to a line`, s.vertical.length === 0, s.vertical.slice(0, 3).join(' | '));
       ok(`${name}: nothing past its card, cell or the page`, s.past.length === 0, s.past.slice(0, 3).join(' | '));
+      ok(`${name}: no card says a field's label again inside its value`, s.twice.length === 0, s.twice.slice(0, 2).join(' | '));
     }
   }
   /* the scan must be able to see: the reported card has facts to read */
