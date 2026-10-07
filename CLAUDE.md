@@ -4647,6 +4647,17 @@ seen: a narrow card's "Responsible" row repeats its own label inside the
 sentence (`planTag`); that is wording, not overflow, and was not asked for.
 Shared engine; nothing to deploy on the VM.
 
+**AND THE LABEL IS SAID ONCE (build 536).** Asked for straight after: the
+same TK105 cards printed "RESPONSIBLE / ОТВЕТСТВЕННЫЙ" and then a sentence
+opening "Responsible: …· Target date: … · Status: …". Finding cards had already
+moved to one fact a row; `cell()` kept `planTag`'s one-sentence form for every
+other card (the magnetic plug board, Equipment History's older rounds). Every
+card now prints owner, target date, operating status and the grade's reason
+as rows of their own. `planTag` stays the sentence for the tables, where no
+label sits above it. `tests/rptoverflow.cjs` §5 fails when a card's value
+repeats its own label (it does on build 535). Shared engine; nothing to deploy
+on the VM.
+
 ---
 
 ## Secrets
