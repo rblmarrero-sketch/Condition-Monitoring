@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-07T09:33:10+00:00",
+  "generated": "2026-10-07T09:49:17+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -9365,6 +9365,24 @@
       "completed": ""
     },
     {
+      "wo": "GD-023284",
+      "equip": "EX021",
+      "cls": "EXC",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-08-01",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-08-01",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "GD-023285",
       "equip": "EX021",
       "cls": "EXC",
@@ -9392,24 +9410,6 @@
       "raised": "2026-08-01",
       "type": "1000 Hours service Planned",
       "hours": 1000,
-      "plan": "2026-08-01",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
-      "wo": "GD-023299",
-      "equip": "EX021",
-      "cls": "EXC",
-      "comp": "",
-      "desc": "250h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-08-01",
-      "type": "250 Hours service Planned",
-      "hours": 250,
       "plan": "2026-08-01",
       "status": "Elimination scheduled",
       "request": "",
