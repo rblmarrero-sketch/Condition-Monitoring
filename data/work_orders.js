@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-07T21:52:58+00:00",
+  "generated": "2026-10-07T22:12:51+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 756,
@@ -351,7 +351,7 @@ window.CM_WO_DATA = {
     "WE010",
     "WE011"
   ],
-  "duplicateRowsCollapsed": 750,
+  "duplicateRowsCollapsed": 751,
   "roundsDedupedWithinVisit": 2,
   "columns": [
     "Asset description",
@@ -440,8 +440,8 @@ window.CM_WO_DATA = {
     "planStart": 0
   },
   "cmCauseFrom": {
-    "wo": 56,
-    "wr": 76,
+    "wo": 57,
+    "wr": 75,
     "cert": 0,
     "none": 0
   },
@@ -2046,7 +2046,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-09-20",
       "detected": "2026-09-20",
-      "planStart": null,
+      "planStart": "2026-10-12",
       "closed": null,
       "asset": "DZ007",
       "defect": "DD-00013033",
@@ -2056,12 +2056,12 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "cause": "Усталостная трещина",
-      "causeFrom": "wr",
+      "causeFrom": "wo",
       "descr": "Требуется сварка и футеровка отвала.",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "by": "Slam",
-      "woNumber": null,
-      "maintType": null,
+      "woNumber": "WO-019086",
+      "maintType": "P4 Planned Repair",
       "planned": false
     },
     {
@@ -23180,6 +23180,29 @@ window.CM_WO_DATA = {
       "priority": "P3 Planned (PM)",
       "woStatus": null,
       "cmmsStatus": "Registered",
+      "open": true,
+      "planStart": null,
+      "planStartDt": null,
+      "planEnd": null,
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
+      "equip": "DZ014",
+      "cls": "DOZ",
+      "woNumber": null,
+      "maintType": "2000 Hours service Planned",
+      "hours": 2000,
+      "cmLabel": "Filter Cut / General Inspection / Undercarriage",
+      "cmTypes": [
+        "FC",
+        "INSP",
+        "UC"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": null,
+      "cmmsStatus": null,
       "open": true,
       "planStart": null,
       "planStartDt": null,
@@ -55075,6 +55098,25 @@ window.CM_WO_DATA = {
       "actualStart": "2026-08-25",
       "actualStartDt": "2026-08-25T20:20:00",
       "actualEnd": "2026-08-26"
+    },
+    {
+      "equip": "LD002",
+      "cls": "LDR",
+      "woNumber": "WO-019084",
+      "maintType": "2000 Hours service Planned",
+      "hours": 2000,
+      "cmLabel": "2000h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-10-12",
+      "planStartDt": "2026-10-12T00:00:00",
+      "planEnd": "2026-10-13",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
     },
     {
       "equip": "LD003",

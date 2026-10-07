@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-07T21:52:58+00:00",
+  "generated": "2026-10-07T22:12:51+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -1671,6 +1671,24 @@
       "type": "250 Hours service Planned",
       "hours": 250,
       "plan": "2026-10-13",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-019084",
+      "equip": "LD002",
+      "cls": "LDR",
+      "comp": "",
+      "desc": "2000h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-12",
+      "type": "2000 Hours service Planned",
+      "hours": 2000,
+      "plan": "2026-10-12",
       "status": "Elimination scheduled",
       "request": "",
       "defType": "",
@@ -5799,6 +5817,24 @@
       "cause": "",
       "pmStatus": "complete",
       "completed": "2026-09-21"
+    },
+    {
+      "wo": "WO-019086",
+      "equip": "DZ007",
+      "cls": "",
+      "comp": "DZ007.CH.BL (Blade / Отвал)",
+      "desc": "Требуется сварка и футеровка отвала.",
+      "priority": "P4 Planned (Repair)",
+      "raised": "2026-09-20",
+      "type": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "hours": null,
+      "plan": "2026-10-12",
+      "status": "Elimination scheduled",
+      "request": "DD-00013033",
+      "defType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "cause": "Усталостная трещина",
+      "pmStatus": "open",
+      "completed": ""
     },
     {
       "wo": "WO-016944",
