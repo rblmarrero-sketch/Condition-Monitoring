@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-08T08:03:40+00:00",
+  "generated": "2026-10-08T08:18:27+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 757,
@@ -440,8 +440,8 @@ window.CM_WO_DATA = {
     "planStart": 0
   },
   "cmCauseFrom": {
-    "wo": 57,
-    "wr": 77,
+    "wo": 58,
+    "wr": 76,
     "cert": 0,
     "none": 0
   },
@@ -2414,7 +2414,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-09-15",
       "detected": "2026-09-15",
-      "planStart": null,
+      "planStart": "2026-09-15",
       "closed": null,
       "asset": "EX005",
       "defect": "DD-00012684",
@@ -2424,12 +2424,12 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "cause": "Поврежден прокладки",
-      "causeFrom": "wr",
+      "causeFrom": "wo",
       "descr": "Выявлены следы утечки охлаждающей жидкости под водяным насосом.",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "by": "Slam",
-      "woNumber": null,
-      "maintType": null,
+      "woNumber": "WO-019184",
+      "maintType": "P4 Planned Repair",
       "planned": false
     },
     {

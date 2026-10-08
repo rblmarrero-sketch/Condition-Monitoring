@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-08T08:03:40+00:00",
+  "generated": "2026-10-08T08:18:27+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -7428,6 +7428,24 @@
       "request": "DD-00012679",
       "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "cause": "Поврежден шланга/линии",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-019184",
+      "equip": "EX005",
+      "cls": "",
+      "comp": "EX005.DRS.COO (Cooling System / Система охлаждения)",
+      "desc": "Выявлены следы утечки охлаждающей жидкости под водяным насосом.",
+      "priority": "P4 Planned (Repair)",
+      "raised": "2026-09-15",
+      "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "hours": null,
+      "plan": "2026-09-15",
+      "status": "Elimination scheduled",
+      "request": "DD-00012684",
+      "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Поврежден прокладки",
       "pmStatus": "open",
       "completed": ""
     },
