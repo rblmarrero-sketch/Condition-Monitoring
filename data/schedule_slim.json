@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-08T05:48:12+00:00",
+  "generated": "2026-10-08T06:03:29+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -400,7 +400,7 @@
           "MP",
           "TB"
         ],
-        "plan": "2026-10-16",
+        "plan": "2026-10-13",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -569,7 +569,7 @@
           "MP",
           "TB"
         ],
-        "plan": "2026-10-13",
+        "plan": "2026-10-16",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -1427,24 +1427,6 @@
       "completed": ""
     },
     {
-      "wo": "WO-018514",
-      "equip": "TK109",
-      "cls": "AT",
-      "comp": "",
-      "desc": "General Inspection / Magnetic Plug / Dump Body Liner",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-10-16",
-      "type": "2000 Hours service Planned",
-      "hours": 2000,
-      "plan": "2026-10-16",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
       "wo": "WO-018498",
       "equip": "TK114",
       "cls": "AT",
@@ -1454,6 +1436,24 @@
       "raised": "2026-10-16",
       "type": "250 Hours service Planned",
       "hours": 250,
+      "plan": "2026-10-16",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-017853",
+      "equip": "TK127",
+      "cls": "AT",
+      "comp": "",
+      "desc": "General Inspection / Magnetic Plug / Dump Body Liner",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-16",
+      "type": "8000 Hours service Planned",
+      "hours": 8000,
       "plan": "2026-10-16",
       "status": "Elimination scheduled",
       "request": "",
@@ -1643,15 +1643,15 @@
       "completed": ""
     },
     {
-      "wo": "WO-017853",
-      "equip": "TK127",
+      "wo": "WO-018514",
+      "equip": "TK109",
       "cls": "AT",
       "comp": "",
       "desc": "General Inspection / Magnetic Plug / Dump Body Liner",
       "priority": "P3 Planned (PM)",
       "raised": "2026-10-13",
-      "type": "8000 Hours service Planned",
-      "hours": 8000,
+      "type": "2000 Hours service Planned",
+      "hours": 2000,
       "plan": "2026-10-13",
       "status": "Elimination scheduled",
       "request": "",
@@ -1688,6 +1688,24 @@
       "raised": "2026-10-12",
       "type": "2000 Hours service Planned",
       "hours": 2000,
+      "plan": "2026-10-12",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-019103",
+      "equip": "LD004",
+      "cls": "LDR",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-12",
+      "type": "250 Hours service Planned",
+      "hours": 250,
       "plan": "2026-10-12",
       "status": "Elimination scheduled",
       "request": "",
