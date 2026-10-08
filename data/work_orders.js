@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-08T09:40:26+00:00",
+  "generated": "2026-10-08T20:32:29+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 757,
@@ -21634,15 +21634,15 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-10-07",
-      "planStartDt": "2026-10-07T00:00:00",
-      "planEnd": "2026-10-08",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "planStartDt": "2026-10-07T15:00:00",
+      "planEnd": "2026-10-07",
+      "actualStart": "2026-10-07",
+      "actualStartDt": "2026-10-07T15:00:00",
+      "actualEnd": "2026-10-07"
     },
     {
       "equip": "DZ009",
@@ -23524,17 +23524,21 @@ window.CM_WO_DATA = {
       "equip": "DZ014",
       "cls": "DOZ",
       "woNumber": "WO-016593",
-      "maintType": "250 Hours service Planned",
-      "hours": 250,
-      "cmLabel": "250h service",
-      "cmTypes": null,
+      "maintType": "2000 Hours service Planned",
+      "hours": 2000,
+      "cmLabel": "Filter Cut / General Inspection / Undercarriage",
+      "cmTypes": [
+        "FC",
+        "INSP",
+        "UC"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
       "planStart": "2026-10-23",
       "planStartDt": "2026-10-23T00:00:00",
-      "planEnd": "2026-10-25",
+      "planEnd": "2026-10-24",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -80509,15 +80513,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CLSD",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-10-07",
-      "planStartDt": "2026-10-07T00:00:00",
-      "planEnd": "2026-10-08",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "planStartDt": "2026-10-07T08:30:00",
+      "planEnd": "2026-10-07",
+      "actualStart": "2026-10-07",
+      "actualStartDt": "2026-10-07T08:30:00",
+      "actualEnd": "2026-10-07"
     },
     {
       "equip": "TK105",
@@ -105747,15 +105751,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-10-07",
-      "planStartDt": "2026-10-07T00:00:00",
-      "planEnd": "2026-10-08",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "planStartDt": "2026-10-07T08:00:00",
+      "planEnd": "2026-10-07",
+      "actualStart": "2026-10-07",
+      "actualStartDt": "2026-10-07T08:00:00",
+      "actualEnd": "2026-10-07"
     },
     {
       "equip": "TK146",
@@ -107634,20 +107638,21 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016557",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Magnetic Plug",
+      "cmLabel": "Lubrication / Magnetic Plug",
       "cmTypes": [
+        "LUBE",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
-      "planStart": "2026-10-01",
-      "planStartDt": "2026-10-01T00:00:00",
-      "planEnd": "2026-10-02",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "woStatus": "CLSD",
+      "cmmsStatus": "Completed",
+      "open": false,
+      "planStart": "2026-10-07",
+      "planStartDt": "2026-10-07T08:00:00",
+      "planEnd": "2026-10-07",
+      "actualStart": "2026-10-07",
+      "actualStartDt": "2026-10-07T08:00:00",
+      "actualEnd": "2026-10-07"
     },
     {
       "equip": "TK155",
