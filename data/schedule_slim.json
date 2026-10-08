@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-08T23:03:05+00:00",
+  "generated": "2026-10-08T23:17:56+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -3706,6 +3706,42 @@
       "cause": "",
       "pmStatus": "complete",
       "completed": "2026-10-03"
+    },
+    {
+      "wo": "WO-019276",
+      "equip": "CN008",
+      "cls": "",
+      "comp": "CN008.HS.DL (Hydraulic Lines / Гидролинии)",
+      "desc": "Сетчатое поверхностное растрескивание наружного слоя РВД питания гидромотора лебедки.",
+      "priority": "P4 Planned (Repair)",
+      "raised": "2026-10-02",
+      "type": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "hours": null,
+      "plan": "2026-10-18",
+      "status": "Elimination scheduled",
+      "request": "DD-00013861",
+      "defType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "cause": "Усталостная трещина",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-019275",
+      "equip": "CN008",
+      "cls": "",
+      "comp": "CN008.HS.CYL (Cylinders / Гидроцилиндры)",
+      "desc": "Утечка гидравлической жидкости из-под резьбового соединения переходного штуцера/адаптера РВД в верхней крышке гидроцилиндра.",
+      "priority": "P4 Planned (Repair)",
+      "raised": "2026-10-02",
+      "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "hours": null,
+      "plan": "2026-10-18",
+      "status": "Elimination scheduled",
+      "request": "DD-00013852",
+      "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Износ уплотнения",
+      "pmStatus": "open",
+      "completed": ""
     },
     {
       "wo": "WO-017976",

@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-08T23:03:05+00:00",
+  "generated": "2026-10-08T23:17:56+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 757,
@@ -440,8 +440,8 @@ window.CM_WO_DATA = {
     "planStart": 0
   },
   "cmCauseFrom": {
-    "wo": 59,
-    "wr": 75,
+    "wo": 61,
+    "wr": 73,
     "cert": 0,
     "none": 0
   },
@@ -1149,7 +1149,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-10-02",
       "detected": "2026-10-02",
-      "planStart": null,
+      "planStart": "2026-10-18",
       "closed": null,
       "asset": "CN008",
       "defect": "DD-00013861",
@@ -1159,12 +1159,12 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "cause": "Усталостная трещина",
-      "causeFrom": "wr",
+      "causeFrom": "wo",
       "descr": "Сетчатое поверхностное растрескивание наружного слоя РВД питания гидромотора лебедки.",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "by": "Irek",
-      "woNumber": null,
-      "maintType": null,
+      "woNumber": "WO-019276",
+      "maintType": "P4 Planned Repair",
       "planned": false
     },
     {
@@ -1241,7 +1241,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-10-02",
       "detected": "2026-10-02",
-      "planStart": null,
+      "planStart": "2026-10-18",
       "closed": null,
       "asset": "CN008",
       "defect": "DD-00013852",
@@ -1251,12 +1251,12 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "cause": "Износ уплотнения",
-      "causeFrom": "wr",
+      "causeFrom": "wo",
       "descr": "Утечка гидравлической жидкости из-под резьбового соединения переходного штуцера/адаптера РВД в верхней крышке гидроцилиндра.",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "by": "Irek",
-      "woNumber": null,
-      "maintType": null,
+      "woNumber": "WO-019275",
+      "maintType": "P4 Planned Repair",
       "planned": false
     },
     {
