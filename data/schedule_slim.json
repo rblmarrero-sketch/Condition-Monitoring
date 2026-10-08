@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-08T22:18:01+00:00",
+  "generated": "2026-10-08T22:33:04+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -4084,6 +4084,24 @@
       "cause": "",
       "pmStatus": "complete",
       "completed": "2026-09-30"
+    },
+    {
+      "wo": "WO-019254",
+      "equip": "EX003",
+      "cls": "",
+      "comp": "EX003.HS.DL (Hydraulic Lines / Гидролинии)",
+      "desc": "В насосном отсеке перетирание  РВД в месте взаимного контакта и контакта с разрушенным хомутом крепления.",
+      "priority": "P4 Planned (Repair)",
+      "raised": "2026-09-30",
+      "type": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "hours": null,
+      "plan": "2026-10-17",
+      "status": "Elimination scheduled",
+      "request": "DD-00013743",
+      "defType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "cause": "Отсутствует крепеж",
+      "pmStatus": "open",
+      "completed": ""
     },
     {
       "wo": "WO-016633",
