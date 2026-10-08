@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-08T01:13:04+00:00",
+  "generated": "2026-10-08T01:28:10+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 756,
@@ -351,7 +351,7 @@ window.CM_WO_DATA = {
     "WE010",
     "WE011"
   ],
-  "duplicateRowsCollapsed": 753,
+  "duplicateRowsCollapsed": 754,
   "roundsDedupedWithinVisit": 2,
   "columns": [
     "Asset description",
@@ -435,13 +435,13 @@ window.CM_WO_DATA = {
     "wo": "Work order number"
   },
   "cmDateFrom": {
-    "raised": 133,
+    "raised": 134,
     "detected": 0,
     "planStart": 0
   },
   "cmCauseFrom": {
     "wo": 57,
-    "wr": 76,
+    "wr": 77,
     "cert": 0,
     "none": 0
   },
@@ -454,6 +454,29 @@ window.CM_WO_DATA = {
     "Bekzhan"
   ],
   "cmWorkOrders": [
+    {
+      "date": "2026-10-08",
+      "dateFrom": "raised",
+      "raised": "2026-10-08",
+      "detected": "2026-10-08",
+      "planStart": null,
+      "closed": null,
+      "asset": "EX009",
+      "defect": "DD-00014335",
+      "requestNo": "DD-00014335",
+      "eqType": "EXCAVATOR, BUCKET",
+      "system": "EX009.DRS.COO (Cooling System / Система охлаждения)",
+      "priority": "P4 Planned (Repair)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Трещина корпуса",
+      "causeFrom": "wr",
+      "descr": "Течь охлаждающей жидкости из расширительного бочка.",
+      "status": "Registered",
+      "by": "Zhomart",
+      "woNumber": null,
+      "maintType": null,
+      "planned": false
+    },
     {
       "date": "2026-10-08",
       "dateFrom": "raised",
