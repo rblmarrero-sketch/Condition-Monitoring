@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-08T23:47:31+00:00",
+  "generated": "2026-10-09T00:05:15+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -9000,24 +9000,6 @@
       "completed": "2026-09-09"
     },
     {
-      "wo": "WO-016252",
-      "equip": "CD006",
-      "cls": "GEN",
-      "comp": "",
-      "desc": "500h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-09-08",
-      "type": "500 Hours service Planned",
-      "hours": 500,
-      "plan": "2026-09-08",
-      "status": "Completed",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "complete",
-      "completed": "2026-09-08"
-    },
-    {
       "wo": "WO-016253",
       "equip": "CD010",
       "cls": "GEN",
@@ -9034,24 +9016,6 @@
       "cause": "",
       "pmStatus": "complete",
       "completed": "2026-09-09"
-    },
-    {
-      "wo": "WO-015655",
-      "equip": "DZ019",
-      "cls": "DOZ",
-      "comp": "",
-      "desc": "Filter Cut / General Inspection / Undercarriage",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-09-08",
-      "type": "4000 Hours service Planned",
-      "hours": 4000,
-      "plan": "2026-09-08",
-      "status": "Completed",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "complete",
-      "completed": "2026-09-08"
     },
     {
       "wo": "WO-016254",
@@ -9072,24 +9036,6 @@
       "completed": "2026-09-09"
     },
     {
-      "wo": "WO-016278",
-      "equip": "GE110",
-      "cls": "GEN",
-      "comp": "",
-      "desc": "500h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-09-08",
-      "type": "500 Hours service Planned",
-      "hours": 500,
-      "plan": "2026-09-08",
-      "status": "Completed",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "complete",
-      "completed": "2026-09-08"
-    },
-    {
       "wo": "WO-016245",
       "equip": "TK030",
       "cls": "HT",
@@ -9106,24 +9052,6 @@
       "cause": "",
       "pmStatus": "complete",
       "completed": "2026-09-09"
-    },
-    {
-      "wo": "WO-015620",
-      "equip": "TK112",
-      "cls": "AT",
-      "comp": "",
-      "desc": "Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-09-08",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-09-08",
-      "status": "Completed",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "complete",
-      "completed": "2026-09-08"
     },
     {
       "wo": "WO-015621",
@@ -9178,42 +9106,6 @@
       "cause": "",
       "pmStatus": "open",
       "completed": ""
-    },
-    {
-      "wo": "WO-015615",
-      "equip": "TK104",
-      "cls": "AT",
-      "comp": "",
-      "desc": "Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-09-07",
-      "type": "500 Hours service Planned",
-      "hours": 500,
-      "plan": "2026-09-07",
-      "status": "Completed",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "complete",
-      "completed": "2026-09-08"
-    },
-    {
-      "wo": "WO-015625",
-      "equip": "TK119",
-      "cls": "AT",
-      "comp": "",
-      "desc": "General Inspection / Magnetic Plug / Dump Body Liner",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-09-07",
-      "type": "4000 Hours service Planned",
-      "hours": 4000,
-      "plan": "2026-09-07",
-      "status": "Completed",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "complete",
-      "completed": "2026-09-08"
     },
     {
       "wo": "WO-017446",
