@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-09T05:52:52+00:00",
+  "generated": "2026-10-09T06:07:46+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -710,18 +710,6 @@
           "MP"
         ],
         "plan": "2026-10-11",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "TK157": [
-      {
-        "wo": "WO-017867",
-        "hours": 500,
-        "types": [
-          "LUBE",
-          "MP"
-        ],
-        "plan": "2026-10-08",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -2681,12 +2669,12 @@
       "type": "500 Hours service Planned",
       "hours": 500,
       "plan": "2026-10-08",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-08"
     },
     {
       "wo": "WO-017305",
