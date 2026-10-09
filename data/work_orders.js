@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-09T22:53:02+00:00",
+  "generated": "2026-10-09T23:08:09+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 766,
@@ -23850,6 +23850,29 @@ window.CM_WO_DATA = {
       "actualEnd": null
     },
     {
+      "equip": "DZ014",
+      "cls": "DOZ",
+      "woNumber": "WO-019358",
+      "maintType": "2000 Hours service Planned",
+      "hours": 2000,
+      "cmLabel": "Filter Cut / General Inspection / Undercarriage",
+      "cmTypes": [
+        "FC",
+        "INSP",
+        "UC"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-10-31",
+      "planStartDt": "2026-10-31T00:00:00",
+      "planEnd": "2026-11-01",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
       "equip": "DZ016",
       "cls": "DOZ",
       "woNumber": null,
@@ -24039,6 +24062,29 @@ window.CM_WO_DATA = {
       "actualStart": "2026-09-28",
       "actualStartDt": "2026-09-28T13:35:00",
       "actualEnd": "2026-09-28"
+    },
+    {
+      "equip": "DZ016",
+      "cls": "DOZ",
+      "woNumber": "WO-019359",
+      "maintType": "4000 Hours service Planned",
+      "hours": 4000,
+      "cmLabel": "Filter Cut / General Inspection / Undercarriage",
+      "cmTypes": [
+        "FC",
+        "INSP",
+        "UC"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-01",
+      "planStartDt": "2026-11-01T00:00:00",
+      "planEnd": "2026-11-02",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
     },
     {
       "equip": "DZ017",
@@ -24300,6 +24346,25 @@ window.CM_WO_DATA = {
       "actualEnd": null
     },
     {
+      "equip": "DZ018",
+      "cls": "DOZ",
+      "woNumber": "WO-019362",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "250h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-10-21",
+      "planStartDt": "2026-10-21T00:00:00",
+      "planEnd": "2026-10-22",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
       "equip": "DZ019",
       "cls": "DOZ",
       "woNumber": null,
@@ -24455,6 +24520,25 @@ window.CM_WO_DATA = {
       "planStart": "2026-10-10",
       "planStartDt": "2026-10-10T00:00:00",
       "planEnd": "2026-10-11",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
+      "equip": "DZ019",
+      "cls": "DOZ",
+      "woNumber": "WO-019364",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "250h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-10-27",
+      "planStartDt": "2026-10-27T00:00:00",
+      "planEnd": "2026-10-28",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -30022,6 +30106,25 @@ window.CM_WO_DATA = {
       "planStart": "2026-10-11",
       "planStartDt": "2026-10-11T00:00:00",
       "planEnd": "2026-10-12",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
+      "equip": "EX009",
+      "cls": "EXC",
+      "woNumber": "WO-019372",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "250h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-10-30",
+      "planStartDt": "2026-10-30T00:00:00",
+      "planEnd": "2026-10-31",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
