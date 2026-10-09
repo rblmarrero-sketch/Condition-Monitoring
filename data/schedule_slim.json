@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-09T22:18:28+00:00",
+  "generated": "2026-10-09T22:32:52+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -74,6 +74,19 @@
         "priority": "P3 Planned (PM)"
       }
     ],
+    "DZ003": [
+      {
+        "wo": "WO-019346",
+        "hours": 4000,
+        "types": [
+          "FC",
+          "INSP",
+          "UC"
+        ],
+        "plan": "2026-10-24",
+        "priority": "P3 Planned (PM)"
+      }
+    ],
     "DZ005": [
       {
         "wo": "WO-017850",
@@ -84,6 +97,19 @@
           "UC"
         ],
         "plan": "2026-10-19",
+        "priority": "P3 Planned (PM)"
+      }
+    ],
+    "DZ007": [
+      {
+        "wo": "WO-019352",
+        "hours": 1000,
+        "types": [
+          "FC",
+          "INSP",
+          "UC"
+        ],
+        "plan": "2026-10-28",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -761,6 +787,114 @@
       "type": "500 Hours service Planned",
       "hours": 500,
       "plan": "2026-11-01",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-019348",
+      "equip": "DZ004",
+      "cls": "DOZ",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-01",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-11-01",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-019349",
+      "equip": "DZ005",
+      "cls": "DOZ",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-31",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-10-31",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-019344",
+      "equip": "DZ002",
+      "cls": "DOZ",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-30",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-10-30",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-019352",
+      "equip": "DZ007",
+      "cls": "DOZ",
+      "comp": "",
+      "desc": "Filter Cut / General Inspection / Undercarriage",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-28",
+      "type": "1000 Hours service Planned",
+      "hours": 1000,
+      "plan": "2026-10-28",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-019342",
+      "equip": "DZ001",
+      "cls": "DOZ",
+      "comp": "",
+      "desc": "500h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-26",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-10-26",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-019346",
+      "equip": "DZ003",
+      "cls": "DOZ",
+      "comp": "",
+      "desc": "Filter Cut / General Inspection / Undercarriage",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-24",
+      "type": "4000 Hours service Planned",
+      "hours": 4000,
+      "plan": "2026-10-24",
       "status": "Elimination scheduled",
       "request": "",
       "defType": "",
@@ -2867,12 +3001,12 @@
       "type": "500 Hours service Planned",
       "hours": 500,
       "plan": "2026-10-06",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-07"
     },
     {
       "wo": "WO-011198",
