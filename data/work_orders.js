@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-09T23:22:58+00:00",
+  "generated": "2026-10-09T23:52:28+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 766,
@@ -351,7 +351,7 @@ window.CM_WO_DATA = {
     "WE010",
     "WE011"
   ],
-  "duplicateRowsCollapsed": 865,
+  "duplicateRowsCollapsed": 866,
   "roundsDedupedWithinVisit": 2,
   "columns": [
     "Asset description",
@@ -28630,15 +28630,15 @@ window.CM_WO_DATA = {
       "cmLabel": "500h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-10-08",
       "planStartDt": "2026-10-08T00:00:00",
       "planEnd": "2026-10-08",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-10-07",
+      "actualStartDt": "2026-10-07T19:00:00",
+      "actualEnd": "2026-10-07"
     },
     {
       "equip": "EX008",
@@ -31141,6 +31141,28 @@ window.CM_WO_DATA = {
       "actualEnd": "2026-10-08"
     },
     {
+      "equip": "EX010",
+      "cls": "EXC",
+      "woNumber": "WO-019375",
+      "maintType": "2000 Hours service Planned",
+      "hours": 2000,
+      "cmLabel": "Filter Cut / General Inspection",
+      "cmTypes": [
+        "FC",
+        "INSP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-10-23",
+      "planStartDt": "2026-10-23T00:00:00",
+      "planEnd": "2026-10-24",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
       "equip": "EX011",
       "cls": "EXC",
       "woNumber": null,
@@ -32155,6 +32177,25 @@ window.CM_WO_DATA = {
       "actualEnd": null
     },
     {
+      "equip": "EX011",
+      "cls": "EXC",
+      "woNumber": "WO-019382",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "250h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-01",
+      "planStartDt": "2026-11-01T00:00:00",
+      "planEnd": "2026-11-02",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
       "equip": "EX012",
       "cls": "EXC",
       "woNumber": null,
@@ -32939,6 +32980,25 @@ window.CM_WO_DATA = {
       "planStart": "2026-10-10",
       "planStartDt": "2026-10-10T00:00:00",
       "planEnd": "2026-10-10",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
+      "equip": "EX012",
+      "cls": "EXC",
+      "woNumber": "WO-019383",
+      "maintType": "500 Hours service Planned",
+      "hours": 500,
+      "cmLabel": "500h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-10-25",
+      "planStartDt": "2026-10-25T00:00:00",
+      "planEnd": "2026-10-26",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -34223,6 +34283,25 @@ window.CM_WO_DATA = {
       "planStart": "2026-10-11",
       "planStartDt": "2026-10-11T00:00:00",
       "planEnd": "2026-10-11",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
+      "equip": "EX015",
+      "cls": "EXC",
+      "woNumber": "WO-019384",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "250h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-10-26",
+      "planStartDt": "2026-10-26T00:00:00",
+      "planEnd": "2026-10-27",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -36237,7 +36316,7 @@ window.CM_WO_DATA = {
     {
       "equip": "EX021",
       "cls": "EXC",
-      "woNumber": "WO-018490",
+      "woNumber": "WO-019386",
       "maintType": "500 Hours service Planned",
       "hours": 500,
       "cmLabel": "500h service",
@@ -36995,6 +37074,25 @@ window.CM_WO_DATA = {
       "actualEnd": null
     },
     {
+      "equip": "EX023",
+      "cls": "EXC",
+      "woNumber": "WO-019388",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "250h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-10-31",
+      "planStartDt": "2026-10-31T00:00:00",
+      "planEnd": "2026-11-01",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
       "equip": "EX024",
       "cls": "EXC",
       "woNumber": null,
@@ -37293,6 +37391,25 @@ window.CM_WO_DATA = {
       "actualEnd": null
     },
     {
+      "equip": "EX024",
+      "cls": "EXC",
+      "woNumber": "WO-019390",
+      "maintType": "500 Hours service Planned",
+      "hours": 500,
+      "cmLabel": "500h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-10-30",
+      "planStartDt": "2026-10-30T00:00:00",
+      "planEnd": "2026-10-31",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
       "equip": "EX025",
       "cls": "EXC",
       "woNumber": null,
@@ -37551,6 +37668,28 @@ window.CM_WO_DATA = {
       "actualStart": "2026-10-06",
       "actualStartDt": "2026-10-06T08:45:00",
       "actualEnd": "2026-10-06"
+    },
+    {
+      "equip": "EX025",
+      "cls": "EXC",
+      "woNumber": "WO-019392",
+      "maintType": "1000 Hours service Planned",
+      "hours": 1000,
+      "cmLabel": "Filter Cut / General Inspection",
+      "cmTypes": [
+        "FC",
+        "INSP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-10-23",
+      "planStartDt": "2026-10-23T00:00:00",
+      "planEnd": "2026-10-24",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
     },
     {
       "equip": "FL001",
@@ -42900,15 +43039,15 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-10-07",
       "planStartDt": "2026-10-07T00:00:00",
       "planEnd": "2026-10-07",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-10-07",
+      "actualStartDt": "2026-10-07T11:00:00",
+      "actualEnd": "2026-10-07"
     },
     {
       "equip": "GE033",
