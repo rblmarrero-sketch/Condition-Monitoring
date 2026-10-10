@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-10T03:13:18+00:00",
+  "generated": "2026-10-10T03:28:39+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -173,19 +173,6 @@
           "UC"
         ],
         "plan": "2026-11-01",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "DZ018": [
-      {
-        "wo": "WO-017325",
-        "hours": 1000,
-        "types": [
-          "FC",
-          "INSP",
-          "UC"
-        ],
-        "plan": "2026-10-09",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -925,15 +912,6 @@
       }
     ],
     "TK148": [
-      {
-        "wo": "WO-017327",
-        "hours": 250,
-        "types": [
-          "MP"
-        ],
-        "plan": "2026-10-09",
-        "priority": "P3 Planned (PM)"
-      },
       {
         "wo": "WO-017888",
         "hours": 3000,
@@ -3969,12 +3947,12 @@
       "type": "1000 Hours service Planned",
       "hours": 1000,
       "plan": "2026-10-09",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-09"
     },
     {
       "wo": "WO-018780",
@@ -4077,12 +4055,12 @@
       "type": "250 Hours service Planned",
       "hours": 250,
       "plan": "2026-10-09",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-10"
     },
     {
       "wo": "WO-018770",
@@ -4095,12 +4073,12 @@
       "type": "4000 Hours service Planned",
       "hours": 4000,
       "plan": "2026-10-08",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-08"
     },
     {
       "wo": "WO-018772",
