@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-10T04:14:20+00:00",
+  "generated": "2026-10-10T04:28:15+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 766,
@@ -351,7 +351,7 @@ window.CM_WO_DATA = {
     "WE010",
     "WE011"
   ],
-  "duplicateRowsCollapsed": 856,
+  "duplicateRowsCollapsed": 858,
   "roundsDedupedWithinVisit": 2,
   "columns": [
     "Asset description",
@@ -79350,15 +79350,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CLSD",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-10-09",
-      "planStartDt": "2026-10-09T00:00:00",
-      "planEnd": "2026-10-10",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "planStartDt": "2026-10-09T07:00:00",
+      "planEnd": "2026-10-09",
+      "actualStart": "2026-10-09",
+      "actualStartDt": "2026-10-09T07:00:00",
+      "actualEnd": "2026-10-09"
     },
     {
       "equip": "TK103",
