@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-10T03:43:07+00:00",
+  "generated": "2026-10-10T03:58:24+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 766,
@@ -49613,15 +49613,15 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-10-08",
       "planStartDt": "2026-10-08T00:00:00",
       "planEnd": "2026-10-08",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-10-08",
+      "actualStartDt": "2026-10-08T14:00:00",
+      "actualEnd": "2026-10-08"
     },
     {
       "equip": "GE111",
@@ -66425,15 +66425,15 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-10-08",
       "planStartDt": "2026-10-08T00:00:00",
       "planEnd": "2026-10-08",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-10-08",
+      "actualStartDt": "2026-10-08T10:00:00",
+      "actualEnd": "2026-10-08"
     },
     {
       "equip": "SN001",
@@ -70717,15 +70717,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-10-09",
       "planStartDt": "2026-10-09T00:00:00",
       "planEnd": "2026-10-09",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-10-08",
+      "actualStartDt": "2026-10-08T19:00:00",
+      "actualEnd": "2026-10-09"
     },
     {
       "equip": "TK032",
