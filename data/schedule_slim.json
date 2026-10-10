@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-10T06:17:24+00:00",
+  "generated": "2026-10-10T06:31:50+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -4467,12 +4467,12 @@
       "type": "500 Hours service Planned",
       "hours": 500,
       "plan": "2026-10-05",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-05"
     },
     {
       "wo": "WO-017263",
@@ -6969,12 +6969,12 @@
       "type": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "hours": null,
       "plan": "2026-10-08",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "DD-00013199",
       "defType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "cause": "Усталостная трещина",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-08"
     },
     {
       "wo": "WO-018628",
