@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-10T07:43:45+00:00",
+  "generated": "2026-10-10T20:28:19+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 766,
@@ -351,7 +351,7 @@ window.CM_WO_DATA = {
     "WE010",
     "WE011"
   ],
-  "duplicateRowsCollapsed": 860,
+  "duplicateRowsCollapsed": 865,
   "roundsDedupedWithinVisit": 2,
   "columns": [
     "Asset description",
@@ -440,8 +440,8 @@ window.CM_WO_DATA = {
     "planStart": 0
   },
   "cmCauseFrom": {
-    "wo": 61,
-    "wr": 84,
+    "wo": 62,
+    "wr": 83,
     "cert": 0,
     "none": 0
   },
@@ -676,7 +676,7 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "cause": "Поврежден шланга/линии",
-      "causeFrom": "wr",
+      "causeFrom": "wo",
       "descr": "Течь РВД линии с распределителя в гидробак, требуется диагностика и локализация течи.",
       "status": "Registered",
       "by": "Zhomart",
