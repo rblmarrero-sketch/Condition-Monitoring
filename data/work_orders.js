@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-09T23:52:28+00:00",
+  "generated": "2026-10-10T00:10:13+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 766,
@@ -351,7 +351,7 @@ window.CM_WO_DATA = {
     "WE010",
     "WE011"
   ],
-  "duplicateRowsCollapsed": 866,
+  "duplicateRowsCollapsed": 868,
   "roundsDedupedWithinVisit": 2,
   "columns": [
     "Asset description",
@@ -39410,15 +39410,15 @@ window.CM_WO_DATA = {
       "cmLabel": "1000h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-10-07",
       "planStartDt": "2026-10-07T00:00:00",
       "planEnd": "2026-10-07",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-10-07",
+      "actualStartDt": "2026-10-07T15:00:00",
+      "actualEnd": "2026-10-07"
     },
     {
       "equip": "GE012",
@@ -76196,15 +76196,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-10-07",
       "planStartDt": "2026-10-07T00:00:00",
       "planEnd": "2026-10-07",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-10-07",
+      "actualStartDt": "2026-10-07T13:00:00",
+      "actualEnd": "2026-10-07"
     },
     {
       "equip": "TK090",
