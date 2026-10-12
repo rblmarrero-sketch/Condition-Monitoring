@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-12T06:19:03+00:00",
+  "generated": "2026-10-12T06:33:44+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -177,19 +177,6 @@
           "UC"
         ],
         "plan": "2026-10-16",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "EX009": [
-      {
-        "wo": "WO-018528",
-        "hours": 4000,
-        "types": [
-          "FC",
-          "INSP",
-          "UC"
-        ],
-        "plan": "2026-10-11",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -3482,24 +3469,6 @@
       "completed": ""
     },
     {
-      "wo": "WO-018528",
-      "equip": "EX009",
-      "cls": "EXC",
-      "comp": "",
-      "desc": "Filter Cut / General Inspection / Undercarriage",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-10-11",
-      "type": "4000 Hours service Planned",
-      "hours": 4000,
-      "plan": "2026-10-11",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
       "wo": "WO-018529",
       "equip": "EX015",
       "cls": "EXC",
@@ -3636,12 +3605,30 @@
       "type": "500 Hours service Planned",
       "hours": 500,
       "plan": "2026-10-10",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-11"
+    },
+    {
+      "wo": "WO-018528",
+      "equip": "EX009",
+      "cls": "EXC",
+      "comp": "",
+      "desc": "Filter Cut / General Inspection / Undercarriage",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-10",
+      "type": "4000 Hours service Planned",
+      "hours": 4000,
+      "plan": "2026-10-10",
+      "status": "Completed",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "complete",
+      "completed": "2026-10-11"
     },
     {
       "wo": "WO-018537",

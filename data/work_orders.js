@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-12T06:19:03+00:00",
+  "generated": "2026-10-12T06:33:44+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 766,
@@ -351,7 +351,7 @@ window.CM_WO_DATA = {
     "WE010",
     "WE011"
   ],
-  "duplicateRowsCollapsed": 1279,
+  "duplicateRowsCollapsed": 1280,
   "roundsDedupedWithinVisit": 2,
   "columns": [
     "Asset description",
@@ -24606,15 +24606,15 @@ window.CM_WO_DATA = {
       "cmLabel": "500h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-10-10",
-      "planStartDt": "2026-10-10T00:00:00",
+      "planStartDt": "2026-10-10T19:00:00",
       "planEnd": "2026-10-11",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-10-10",
+      "actualStartDt": "2026-10-10T19:00:00",
+      "actualEnd": "2026-10-11"
     },
     {
       "equip": "DZ019",
@@ -30192,15 +30192,15 @@ window.CM_WO_DATA = {
         "UC"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
-      "planStart": "2026-10-11",
-      "planStartDt": "2026-10-11T00:00:00",
-      "planEnd": "2026-10-12",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
+      "planStart": "2026-10-10",
+      "planStartDt": "2026-10-10T19:00:00",
+      "planEnd": "2026-10-11",
+      "actualStart": "2026-10-10",
+      "actualStartDt": "2026-10-10T19:00:00",
+      "actualEnd": "2026-10-11"
     },
     {
       "equip": "EX009",
