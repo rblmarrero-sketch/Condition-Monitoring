@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-12T00:43:12+00:00",
+  "generated": "2026-10-12T00:58:12+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -163,7 +163,7 @@
           "INSP",
           "UC"
         ],
-        "plan": "2026-11-01",
+        "plan": "2026-11-06",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -1079,6 +1079,24 @@
   },
   "rtwOpen": [
     {
+      "wo": "WO-019359",
+      "equip": "DZ016",
+      "cls": "DOZ",
+      "comp": "",
+      "desc": "Filter Cut / General Inspection / Undercarriage",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-06",
+      "type": "4000 Hours service Planned",
+      "hours": 4000,
+      "plan": "2026-11-06",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-007947",
       "equip": "CO009",
       "cls": "GEN",
@@ -1106,24 +1124,6 @@
       "raised": "2026-11-01",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-11-01",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
-      "wo": "WO-019359",
-      "equip": "DZ016",
-      "cls": "DOZ",
-      "comp": "",
-      "desc": "Filter Cut / General Inspection / Undercarriage",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-01",
-      "type": "4000 Hours service Planned",
-      "hours": 4000,
       "plan": "2026-11-01",
       "status": "Elimination scheduled",
       "request": "",
