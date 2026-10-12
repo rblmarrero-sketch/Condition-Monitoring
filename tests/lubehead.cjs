@@ -63,7 +63,7 @@ const headFit = sel => {
   for (const file of ["dashboard/index.html", "dashboard-next/index.html"]) {
     for (const lang of ["en", "ru"]) {
       const tag = file.split("/")[0] + " " + lang;
-      const ctx = await b.newContext({ viewport: { width: 1366, height: 950 } });
+      const ctx = await b.newContext({ viewport: { width: 1366, height: 950 } }); await ctx.addInitScript(() => { window.CM_LUBE_EDIT_HERE = true; });  // LUBELINK_HANDOVER_V1: this suite tests the editor itself
       await ctx.addInitScript(([url, l]) => { localStorage.setItem("cm_drive_url", url); localStorage.setItem("cm_dash_lang", l); }, [EXEC, lang]);
       const p = await ctx.newPage();
       const errs = [];

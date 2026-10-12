@@ -4658,6 +4658,29 @@ label sits above it. `tests/rptoverflow.cjs` §5 fails when a card's value
 repeats its own label (it does on build 535). Shared engine; nothing to deploy
 on the VM.
 
+**LUBELINK IS THE ONE EDITOR OF THE LUBE MASTER; THE LUBRICATION TAB IS ITS
+READ-ONLY VIEW (builds 537–538, PR #60).** LubeLink, the site's lubrication app
+on Pechanka (`https://maintenance.vegadevelopment.com/lube/`, company network
+only), keeps the same `_meta/lube/master.json` in step every minute
+(`lube_cm_sync.py` on Pechanka, installed 2026-10-11). Two editors of one
+document with no compare-and-swap is two desks racing on one field, so the
+site chose a hand-over (2026-10-12): the Lubrication tab header carries a
+primary "Open LubeLink ↗" button and one line saying the master is managed
+there; in the four lube-master panels (Lube master, Needs decision, Oils,
+Sampling) `lockEdits()` puts a bar on top ("Read-only here … Edit in LubeLink
+↗"), disables every edit box, hides save / undo / revert / Excel import /
+migrate / approve / reopen, and disables the decision options; `save()` itself
+refuses with the same sentence. What only reads stays usable: model search and
+fleet/all, choosing a model, the decision filter, the sampling unit and date,
+printing, CSV and Excel export. Everything else on the tab (coverage, matrix,
+recommendations, exceptions, posters) was read-only already. The phone is
+untouched: it still reads the master and judges its audits against it.
+`window.CM_LUBE_EDIT_HERE = true` turns editing back on (`handover()` in
+`dashboard/lube-master.js`); the editor's own suites (`lubemaster`,
+`lubehead`, `luberef`, `lubestd`, `lube-next`) set it, and
+`tests/lubehandover.cjs` proves both sides on both pages in English and
+Russian. Dashboard only; nothing to deploy on the VM.
+
 ---
 
 ## Secrets

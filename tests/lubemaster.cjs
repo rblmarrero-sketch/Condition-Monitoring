@@ -42,7 +42,7 @@ const readDoc = async k => {
 const keys = async () => (await (await fetch(B + "/__keys")).json()).keys;
 
 async function boot(b, file, opts) {
-  const ctx = await b.newContext({ viewport: { width: 1440, height: 950 }, acceptDownloads: true });
+  const ctx = await b.newContext({ viewport: { width: 1440, height: 950 }, acceptDownloads: true }); await ctx.addInitScript(() => { window.CM_LUBE_EDIT_HERE = true; });  // LUBELINK_HANDOVER_V1: this suite tests the editor itself
   await ctx.addInitScript(([url, o]) => {
     if (!sessionStorage.getItem("booted")) {
       sessionStorage.setItem("booted", "1");

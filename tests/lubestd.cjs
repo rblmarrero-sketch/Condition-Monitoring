@@ -23,7 +23,7 @@ const eq = (g, w, what) => ok(JSON.stringify(g) === JSON.stringify(w),
 
 (async () => {
   const b = await chromium.launch();
-  const p = await b.newPage({ viewport: { width: 1500, height: 1000 } });
+  const p = await b.newPage({ viewport: { width: 1500, height: 1000 } }); await p.addInitScript(() => { window.CM_LUBE_EDIT_HERE = true; });  // LUBELINK_HANDOVER_V1: this suite tests the editor itself
   const errs = [];
   p.on("pageerror", e => errs.push("PAGEERROR " + e.message));
   p.on("console", m => { if (m.type() === "error" && !/ERR_|Failed to load/.test(m.text()))

@@ -60,7 +60,7 @@ const FLEET = JSON.parse(fs.readFileSync(path.join(__dirname, 'fleet-fixture.jso
   const port = srv.address().port;
   const b = await chromium.launch();
 
-  const ctxA = await b.newContext({ viewport: { width: 1366, height: 1000 } });
+  const ctxA = await b.newContext({ viewport: { width: 1366, height: 1000 } }); await ctxA.addInitScript(() => { window.CM_LUBE_EDIT_HERE = true; });  // LUBELINK_HANDOVER_V1: this suite tests the editor itself
   const a = await ctxA.newPage();
   const errsA = []; a.on('pageerror', e => errsA.push(e.message));
   await a.goto(`http://127.0.0.1:${port}/dashboard/index.html`, { waitUntil: 'load' });
@@ -69,7 +69,7 @@ const FLEET = JSON.parse(fs.readFileSync(path.join(__dirname, 'fleet-fixture.jso
   await a.waitForTimeout(1200);
   const baseP = await a.evaluate(() => window.lubeProgramme ? window.lubeProgramme() : null);
 
-  const ctxB = await b.newContext({ viewport: { width: 1366, height: 1000 } });
+  const ctxB = await b.newContext({ viewport: { width: 1366, height: 1000 } }); await ctxB.addInitScript(() => { window.CM_LUBE_EDIT_HERE = true; });  // LUBELINK_HANDOVER_V1: this suite tests the editor itself
   const n = await ctxB.newPage();
   const errsB = []; n.on('pageerror', e => errsB.push(e.message));
   await n.goto(`http://127.0.0.1:${port}/dashboard-next/index.html`, { waitUntil: 'load' });
