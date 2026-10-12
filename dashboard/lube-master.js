@@ -30,6 +30,13 @@
   const WHO = "cm_dash_who";
   const HIST_MAX = 300;
   const DRUM = 208;
+  /* LUBELINK_HANDOVER_V1 (build 538): the lube master is EDITED in LubeLink, the site's lubrication app on
+     Pechanka, which keeps this same document in step every minute (lube_cm_sync.py). These four panels stay as a
+     read-only view, so a desk or a phone off the company network still sees the reference; every edit control is
+     disabled and a bar says where the edits are made. One editor, so two desks cannot race on one field.
+     window.CM_LUBE_EDIT_HERE = true turns editing back on here (the suites that test the editor set it). */
+  const LL_URL = "https://maintenance.vegadevelopment.com/lube/";
+  const handover = () => root.CM_LUBE_EDIT_HERE !== true;
 
   const S = { doc: null, state: "idle", err: "", loadedAt: 0, busy: false };
   const UI = { model: null, q: "", fleetOnly: true, dFilter: "open",
@@ -46,6 +53,8 @@
       st_err: "The shared lube master could not be read ({e}). Showing the workbook baseline; saving is off until it reads.",
       who: "Your name", who_ph: "recorded with every change",
       who_need: "Type your name first — every change to the lube master is recorded with it.",
+      ho_line: "Read-only here. The lube master is edited in LubeLink — the same document, kept in step every minute.",
+      ho_btn: "Edit in LubeLink ↗", ho_t: "Opens LubeLink (company network only)",
       saving: "Saving…", saved: "Saved — revision {rev}.", saved_merged: "Saved — revision {rev}. Another desk had saved in the meantime; both changes are kept.",
       save_fail: "Not saved: {e}", nothing: "Nothing changed.",
       m_title: "Lube master", m_sub: "Every model and compartment: code, grade, approved and alternative oil, capacities, intervals and the OEM specification. Edits are shared with every desk and phone.",
@@ -110,6 +119,8 @@
       st_err: "Не удалось прочитать общий справочник ({e}). Показан базовый вариант; сохранение недоступно.",
       who: "Ваше имя", who_ph: "сохраняется с каждым изменением",
       who_need: "Сначала введите имя — каждое изменение справочника записывается с ним.",
+      ho_line: "Здесь только просмотр. Мастер смазки редактируется в LubeLink — это тот же документ, синхронизация каждую минуту.",
+      ho_btn: "Редактировать в LubeLink ↗", ho_t: "Открывает LubeLink (только из сети компании)",
       saving: "Сохранение…", saved: "Сохранено — редакция {rev}.", saved_merged: "Сохранено — редакция {rev}. Другое рабочее место сохраняло одновременно; сохранены оба изменения.",
       save_fail: "Не сохранено: {e}", nothing: "Изменений нет.",
       m_title: "Справочник смазки", m_sub: "Каждая модель и узел: код, класс масла, основной и альтернативный продукт, объёмы, интервалы и спецификация OEM. Правки видны всем рабочим местам и телефонам.",
@@ -246,6 +257,7 @@
      ([{path, from, to}]). Applied to the CURRENT server copy, read just before
      the write, so an edit from another desk in between is not lost. */
   async function save(patch, summary) {
+    if (handover()) throw new Error(tr("ho_line"));
     if (!who()) throw new Error(tr("who_need"));
     if (!configured()) throw new Error(tr("st_off"));
     if (S.state === "error") throw new Error(tr("st_err", { e: S.err }));
@@ -437,10 +449,23 @@
       if (focus && k === focus.k) { x.focus(); try { if (focus.a != null) x.setSelectionRange(focus.a, focus.b); } catch (e) {} }
     });
   }
-  function drawMaster(el, fresh) { keepEdits(el, () => "m:" + (UI.model || ""), fresh, () => drawMaster0(el)); }
-  function drawDecide(el, fresh) { keepEdits(el, () => "d:" + UI.dFilter, fresh, () => drawDecide0(el)); }
-  function drawOils(el, fresh) { keepEdits(el, () => "o", fresh, () => drawOils0(el)); }
-  function drawSample(el, fresh) { keepEdits(el, () => "s:" + (UI.sUnit || ""), fresh, () => drawSample0(el)); }
+  /* LUBELINK_HANDOVER_V1: after a panel is drawn, a bar on top and every edit control off. What stays usable is
+     what only READS: the model search and fleet/all switch, the decision filter, choosing a model, the sampling
+     unit and date, printing, CSV and Excel export. */
+  const HO_KEEP = { lmxQ: 1, lmxSU: 1, lmxSD: 1 };
+  function lockEdits(el) {
+    if (!handover() || !el) return;
+    el.insertAdjacentHTML("afterbegin", `<div class="lmx-ho" data-lmx-ho="1"><span>${esc(tr("ho_line"))}</span>` +
+      `<a class="btn primary" href="${LL_URL}" target="_blank" rel="noopener" title="${esc(tr("ho_t"))}">${esc(tr("ho_btn"))}</a></div>`);
+    el.querySelectorAll("input,select,textarea").forEach(x => { if (x.type === "search" || HO_KEEP[x.id]) return; x.disabled = true; });
+    el.querySelectorAll("#lmxSaveM,#lmxUndoM,#lmxRevM,#lmxSaveO,#lmxSaveA,#lmxMig,.lmx-mig,.lmx-file,.lmx-who,[data-lmxap],[data-lmxre]")
+      .forEach(x => { x.hidden = true; x.style.display = "none"; });
+    el.querySelectorAll("[data-lmxg]").forEach(x => { x.disabled = true; });
+  }
+  function drawMaster(el, fresh) { keepEdits(el, () => "m:" + (UI.model || ""), fresh, () => { drawMaster0(el); lockEdits(el); }); }
+  function drawDecide(el, fresh) { keepEdits(el, () => "d:" + UI.dFilter, fresh, () => { drawDecide0(el); lockEdits(el); }); }
+  function drawOils(el, fresh) { keepEdits(el, () => "o", fresh, () => { drawOils0(el); lockEdits(el); }); }
+  function drawSample(el, fresh) { keepEdits(el, () => "s:" + (UI.sUnit || ""), fresh, () => { drawSample0(el); lockEdits(el); }); }
   function redraw() {
     const on = k => EL[k] && (!UI.active || UI.active === k);
     if (on("master")) drawMaster(EL.master);
@@ -1193,6 +1218,8 @@
 .lmx-status{font-size:12.5px;color:var(--ink-2);background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;margin:10px 0}
 .lmx-status.ok{border-left:3px solid var(--good)}.lmx-status.bad{border-left:3px solid var(--critical);color:var(--crit-ink)}
 .lmx-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0}
+.lmx-ho{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;font-size:12.5px;color:var(--ink-2);background:var(--surface-2);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:8px;padding:8px 12px;margin:0 0 10px}
+.lmx-ho .btn{text-decoration:none}
 .lmx-who{display:inline-flex;gap:6px;align-items:center;font-size:12.5px;color:var(--muted)}
 .lmx-in{font:inherit;font-size:13px;color:var(--ink);background:var(--surface);border:1px solid var(--axis);border-radius:6px;padding:5px 7px;min-width:0}
 .lmx-in:focus-visible,.lmx-mrow:focus-visible,.lmx-opt:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
@@ -1304,7 +1331,7 @@ tr.lmx-edited td:first-child{box-shadow:inset 3px 0 0 var(--accent)}
     mount(els, active) { Object.assign(EL, els || {}); if (active !== undefined) UI.active = active; css(); redraw(); },
     show(active) { if (UI.active === active) return; UI.active = active; redraw(); },
     redraw,
-    DOC, XLSX,
+    DOC, XLSX, handover, LL_URL,
     _ui: UI,
   };
 })(window);

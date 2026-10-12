@@ -4439,6 +4439,13 @@
     <div class="pagehd">
       <div class="pgt"><h1 data-i18n="tab_lube">Lubrication</h1></div>
       <span class="spacer"></span>
+      <!-- LUBELINK_BTN_V1 (2026-10-12): LubeLink, the site's lubrication app on
+           Pechanka (routes, top-ups, oil samples, results, follow-ups), keeps its
+           lube master in step with _meta/lube/master.json every minute
+           (lube_cm_sync.py). This is the way across; LubeLink links back here.
+           Company network only, like everything on maintenance.vegadevelopment.com. -->
+      <a class="btn primary" id="lubeLinkBtn" style="text-decoration:none" href="https://maintenance.vegadevelopment.com/lube/" target="_blank" rel="noopener"
+         data-i18n="lube_ll" data-i18n-title="lube_ll_t" title="LubeLink: routes, top-ups, oil samples and results. Same lube master as this tab, kept in step every minute. Company network only.">Open LubeLink ↗</a>
       <details class="defs" id="lubeDefs">
         <summary data-i18n="ov_defs">Definitions</summary>
         <div class="defsbody"><dl>
@@ -4457,6 +4464,8 @@
     <!-- Tile.dc.html's own four tiles, read off lubeProgramme() and the "not
          on the sheet" count the table below already computes -- no number
          kept twice. -->
+<!-- LUBELINK_HANDOVER_V1 (build 538): LubeLink is the one editor of the lube master; this tab is its read-only view. -->
+    <p class="sub" id="lubeHoNote" data-i18n="lube_ho_note" style="margin:2px 0 10px">The lube master, decisions, routes, samples and results are managed in LubeLink. This tab is a read-only view of the same master, kept in step every minute.</p>
     <div class="kpirow" id="lubeKpis"></div>
     <div class="subtabs" id="lubeSub" role="tablist" aria-label="Lubrication"></div>
 
@@ -4997,23 +5006,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=536"></script>
+<script src="../data/magnetic_plug.js?v=538"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=536"></script>
-<script src="../mobile/hme.js?v=536"></script>
-<script src="../mobile/mp-fc.js?v=536"></script>
-<script src="../mobile/rtw.js?v=536"></script>
-<script src="../mobile/hme-cascade.js?v=536"></script>
-<script src="../mobile/temp-limits.js?v=536"></script>
+<script src="../data/work_orders.js?v=538"></script>
+<script src="../mobile/hme.js?v=538"></script>
+<script src="../mobile/mp-fc.js?v=538"></script>
+<script src="../mobile/rtw.js?v=538"></script>
+<script src="../mobile/hme-cascade.js?v=538"></script>
+<script src="../mobile/temp-limits.js?v=538"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=536"></script>
-<script src="../mobile/normalize.js?v=536"></script>
-<script src="../mobile/terms.js?v=536"></script>
+<script src="../mobile/assets.js?v=538"></script>
+<script src="../mobile/normalize.js?v=538"></script>
+<script src="../mobile/terms.js?v=538"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -5032,20 +5041,20 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=536"></script>
-<script src="../mobile/edits.js?v=536"></script>
-<script src="../mobile/due.js?v=536"></script>
-<script src="../mobile/wear.js?v=536"></script>
-<script src="../mobile/wear-map.js?v=536"></script>
-<script src="../mobile/lube.js?v=536"></script>
-<script src="../mobile/lube-overrides.js?v=536"></script>
-<script src="../mobile/lube2027.js?v=536"></script>
-<script src="../mobile/lube-tds.js?v=536"></script>
-<script src="../dashboard/lube-master.js?v=536"></script>
+<script src="../mobile/grade.js?v=538"></script>
+<script src="../mobile/edits.js?v=538"></script>
+<script src="../mobile/due.js?v=538"></script>
+<script src="../mobile/wear.js?v=538"></script>
+<script src="../mobile/wear-map.js?v=538"></script>
+<script src="../mobile/lube.js?v=538"></script>
+<script src="../mobile/lube-overrides.js?v=538"></script>
+<script src="../mobile/lube2027.js?v=538"></script>
+<script src="../mobile/lube-tds.js?v=538"></script>
+<script src="../dashboard/lube-master.js?v=538"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=536"></script>
-<script src="../mobile/machine-photos.js?v=536"></script>
+<script src="../mobile/upload-defaults.js?v=538"></script>
+<script src="../mobile/machine-photos.js?v=538"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -5054,17 +5063,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=536"></script>
-<script src="../mobile/get.js?v=536"></script>
-<script src="../mobile/points.js?v=536"></script>
-<script src="../mobile/uc-points.js?v=536"></script>
-<script src="../mobile/inspect-guide.js?v=536"></script>
-<script src="../mobile/get-figs.js?v=536"></script>
-<script src="../mobile/body-points.js?v=536"></script>
-<script src="../mobile/body-map.js?v=536"></script>
-<script src="../mobile/jspdf.umd.min.js?v=536"></script>
-<script src="../mobile/html2canvas.min.js?v=536"></script>
-<script src="../mobile/report-core.js?v=536"></script>
+<script src="../mobile/machine-fig.js?v=538"></script>
+<script src="../mobile/get.js?v=538"></script>
+<script src="../mobile/points.js?v=538"></script>
+<script src="../mobile/uc-points.js?v=538"></script>
+<script src="../mobile/inspect-guide.js?v=538"></script>
+<script src="../mobile/get-figs.js?v=538"></script>
+<script src="../mobile/body-points.js?v=538"></script>
+<script src="../mobile/body-map.js?v=538"></script>
+<script src="../mobile/jspdf.umd.min.js?v=538"></script>
+<script src="../mobile/html2canvas.min.js?v=538"></script>
+<script src="../mobile/report-core.js?v=538"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -5232,6 +5241,7 @@ const I18N={
   w_empty:"No measured positions in this selection. Undercarriage, GET and tray rounds produce these \u2014 check the inspection-type filter.",
 
   tab_equipment:"Equipment History", tab_reports:"Reports", tab_lube:"Lubrication",
+  lube_ll:"Open LubeLink ↗", lube_ho_note:"The lube master, decisions, routes, samples and results are managed in LubeLink. This tab is a read-only view of the same master, kept in step every minute.", lube_ll_t:"LubeLink: routes, top-ups, oil samples and results. Same lube master as this tab, kept in step every minute. Company network only.",
   cls_HT:"Rigid dump truck", cls_AT:"Articulated truck", cls_EXC:"Excavator",
   cls_DOZ:"Track dozer", cls_LDR:"Loader", cls_GRD:"Grader", cls_DRB:"Blast drill",
   cls_DRE:"Exploration drill", cls_HRB:"Rock breaker", cls_CRJ:"Jaw crusher", cls_CRN:"Mobile crane",
@@ -6250,6 +6260,7 @@ const I18N={
   w_empty:"\u0412 \u044d\u0442\u043e\u0439 \u0432\u044b\u0431\u043e\u0440\u043a\u0435 \u043d\u0435\u0442 \u0437\u0430\u043c\u0435\u0440\u0435\u043d\u043d\u044b\u0445 \u0442\u043e\u0447\u0435\u043a.",
 
   tab_equipment:"История по технике", tab_reports:"Отчёты", tab_lube:"Смазочные материалы",
+  lube_ll:"Открыть LubeLink ↗", lube_ho_note:"Мастер смазки, решения, маршруты, пробы и результаты ведутся в LubeLink. Эта вкладка — просмотр того же мастера, синхронизация каждую минуту.", lube_ll_t:"LubeLink: маршруты, доливы, пробы масла и результаты. Тот же мастер смазки, что и на этой вкладке, синхронизируется каждую минуту. Только из сети компании.",
   cls_HT:"Карьерный самосвал", cls_AT:"Сочленённый самосвал", cls_EXC:"Экскаватор",
   cls_DOZ:"Бульдозер", cls_LDR:"Погрузчик", cls_GRD:"Автогрейдер", cls_DRB:"Буровой станок",
   cls_DRE:"Разведочное бурение", cls_HRB:"Гидромолот", cls_CRJ:"Щековая дробилка", cls_CRN:"Автокран",
@@ -21470,10 +21481,10 @@ document.querySelector(".lang").addEventListener("click",e=>{
   setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 })();
 </script>
-<script src="../dashboard/drive.js?v=536"></script>
-<script src="../dashboard/sync-adapter.js?v=536"></script>
-<script src="../dashboard/report.js?v=536"></script>
-<script src="../dashboard/reliability.js?v=536"></script>
+<script src="../dashboard/drive.js?v=538"></script>
+<script src="../dashboard/sync-adapter.js?v=538"></script>
+<script src="../dashboard/report.js?v=538"></script>
+<script src="../dashboard/reliability.js?v=538"></script>
 <script>
 /* THE CLOSED FILTER SAYS WHAT IS CHOSEN. A dropdown narrower than its option
    text ellipsises ("All t…", audit of 2026-10-01). Between 1331 and 1500 px

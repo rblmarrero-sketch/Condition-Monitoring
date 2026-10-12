@@ -31,7 +31,7 @@ process.on("exit", bye);
 (async () => {
   for (let i = 0; i < 60; i++) { try { await fetch(EXEC); break; } catch (e) { await wait(250); } }
   const b = await chromium.launch();
-  const ctx = await b.newContext({ viewport: { width: 1440, height: 1000 } });
+  const ctx = await b.newContext({ viewport: { width: 1440, height: 1000 } }); await ctx.addInitScript(() => { window.CM_LUBE_EDIT_HERE = true; });  // LUBELINK_HANDOVER_V1: this suite tests the editor itself
   await ctx.addInitScript(url => { if (!sessionStorage.getItem("b")) { sessionStorage.setItem("b", 1);
     localStorage.setItem("cm_drive_url", url); localStorage.setItem("cm_dash_who", "A. Tester"); } }, EXEC);
   const p = await ctx.newPage();
