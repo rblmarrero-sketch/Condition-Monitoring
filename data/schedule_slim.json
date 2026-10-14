@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-14T02:48:12+00:00",
+  "generated": "2026-10-14T03:03:56+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -466,17 +466,6 @@
       }
     ],
     "TK109": [
-      {
-        "wo": "WO-018514",
-        "hours": 2000,
-        "types": [
-          "INSP",
-          "MP",
-          "TB"
-        ],
-        "plan": "2026-10-13",
-        "priority": "P3 Planned (PM)"
-      },
       {
         "wo": "WO-019512",
         "hours": 250,
@@ -3315,12 +3304,12 @@
       "type": "2000 Hours service Planned",
       "hours": 2000,
       "plan": "2026-10-13",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-14"
     },
     {
       "wo": "WO-013160",
@@ -6105,12 +6094,12 @@
       "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "hours": null,
       "plan": "2026-10-13",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "DD-00013535",
       "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "cause": "Поврежден прокладки",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-13"
     },
     {
       "wo": "WO-018450",
@@ -6123,12 +6112,12 @@
       "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "hours": null,
       "plan": "2026-10-13",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "DD-00013534",
       "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "cause": "Поврежден прокладки",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-13"
     },
     {
       "wo": "WO-018449",
