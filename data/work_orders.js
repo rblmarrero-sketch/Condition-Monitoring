@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-14T02:18:15+00:00",
+  "generated": "2026-10-14T02:33:35+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 766,
@@ -351,7 +351,7 @@ window.CM_WO_DATA = {
     "WE010",
     "WE011"
   ],
-  "duplicateRowsCollapsed": 1351,
+  "duplicateRowsCollapsed": 1337,
   "roundsDedupedWithinVisit": 2,
   "columns": [
     "Asset description",
@@ -101940,7 +101940,7 @@ window.CM_WO_DATA = {
     {
       "equip": "TK124",
       "cls": "AT",
-      "woNumber": "WO-011195",
+      "woNumber": "WO-013160",
       "maintType": "250 Hours service Planned",
       "hours": 250,
       "cmLabel": "Magnetic Plug",
@@ -101948,15 +101948,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "CLSD",
+      "woStatus": "CNF",
       "cmmsStatus": "Completed",
       "open": false,
       "planStart": "2026-10-13",
-      "planStartDt": "2026-10-13T00:00:00",
-      "planEnd": "2026-10-14",
-      "actualStart": "2026-08-12",
-      "actualStartDt": "2026-08-12T08:00:00",
-      "actualEnd": "2026-08-12"
+      "planStartDt": "2026-10-13T08:00:00",
+      "planEnd": "2026-10-13",
+      "actualStart": "2026-10-13",
+      "actualStartDt": "2026-10-13T08:00:00",
+      "actualEnd": "2026-10-13"
     },
     {
       "equip": "TK124",

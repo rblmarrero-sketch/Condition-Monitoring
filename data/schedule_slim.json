@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-14T02:18:15+00:00",
+  "generated": "2026-10-14T02:33:35+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -3321,6 +3321,24 @@
       "cause": "",
       "pmStatus": "open",
       "completed": ""
+    },
+    {
+      "wo": "WO-013160",
+      "equip": "TK124",
+      "cls": "AT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-13",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-10-13",
+      "status": "Completed",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "complete",
+      "completed": "2026-10-13"
     },
     {
       "wo": "WO-018524",
