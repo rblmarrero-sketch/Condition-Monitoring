@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-14T04:49:31+00:00",
+  "generated": "2026-10-14T05:05:56+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -1062,6 +1062,24 @@
       "raised": "2026-11-01",
       "type": "250 Hours service Planned",
       "hours": 250,
+      "plan": "2026-11-01",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-019757",
+      "equip": "GR001",
+      "cls": "GRD",
+      "comp": "",
+      "desc": "500h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-01",
+      "type": "500 Hours service Planned",
+      "hours": 500,
       "plan": "2026-11-01",
       "status": "Elimination scheduled",
       "request": "",
