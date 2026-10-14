@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-14T03:49:16+00:00",
+  "generated": "2026-10-14T04:03:33+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -816,15 +816,6 @@
       }
     ],
     "TK149": [
-      {
-        "wo": "WO-018524",
-        "hours": 250,
-        "types": [
-          "MP"
-        ],
-        "plan": "2026-10-13",
-        "priority": "P3 Planned (PM)"
-      },
       {
         "wo": "WO-019530",
         "hours": 500,
@@ -3268,12 +3259,12 @@
       "type": "1000 Hours service Planned",
       "hours": 1000,
       "plan": "2026-10-13",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-13"
     },
     {
       "wo": "WO-019112",
@@ -3340,12 +3331,12 @@
       "type": "250 Hours service Planned",
       "hours": 250,
       "plan": "2026-10-13",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-13"
     },
     {
       "wo": "WO-019106",
@@ -6130,12 +6121,12 @@
       "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "hours": null,
       "plan": "2026-10-13",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "DD-00013533",
       "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "cause": "Поврежден шланга/линии",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-13"
     },
     {
       "wo": "WO-017409",
