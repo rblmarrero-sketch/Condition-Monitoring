@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-17T21:38:05+00:00",
+  "generated": "2026-10-17T21:52:55+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -765,17 +765,6 @@
       }
     ],
     "TK127": [
-      {
-        "wo": "WO-017853",
-        "hours": 8000,
-        "types": [
-          "INSP",
-          "MP",
-          "TB"
-        ],
-        "plan": "2026-10-16",
-        "priority": "P3 Planned (PM)"
-      },
       {
         "wo": "WO-019527",
         "hours": 250,
@@ -3298,12 +3287,12 @@
       "type": "250 Hours service Planned",
       "hours": 250,
       "plan": "2026-10-16",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-16"
     },
     {
       "wo": "WO-018495",
@@ -3424,12 +3413,12 @@
       "type": "8000 Hours service Planned",
       "hours": 8000,
       "plan": "2026-10-16",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-17"
     },
     {
       "wo": "WO-017295",
