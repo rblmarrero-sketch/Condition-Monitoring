@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-17T21:18:42+00:00",
+  "generated": "2026-10-17T21:38:05+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 768,
@@ -436,13 +436,13 @@ window.CM_WO_DATA = {
     "wo": "Work order number"
   },
   "cmDateFrom": {
-    "raised": 157,
+    "raised": 158,
     "detected": 0,
     "planStart": 0
   },
   "cmCauseFrom": {
     "wo": 73,
-    "wr": 84,
+    "wr": 85,
     "cert": 0,
     "none": 0
   },
@@ -455,6 +455,29 @@ window.CM_WO_DATA = {
     "Bekzhan"
   ],
   "cmWorkOrders": [
+    {
+      "date": "2026-10-17",
+      "dateFrom": "raised",
+      "raised": "2026-10-17",
+      "detected": "2026-10-17",
+      "planStart": null,
+      "closed": null,
+      "asset": "DZ005",
+      "defect": "DD-00014955",
+      "requestNo": "DD-00014955",
+      "eqType": "DOZER, TRACK TYPE",
+      "system": "DZ005.ELS.PH (Preheater / Предпусковой подогреватель)",
+      "priority": "P4 Planned (Repair)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "cause": "Отказ предпуск. подогр.",
+      "causeFrom": "wr",
+      "descr": "Предпусковой подогреватель двигателя не функционирует.",
+      "status": "Registered",
+      "by": "Bekzhan",
+      "woNumber": null,
+      "maintType": null,
+      "planned": false
+    },
     {
       "date": "2026-10-15",
       "dateFrom": "raised",
@@ -19451,8 +19474,8 @@ window.CM_WO_DATA = {
       "cmmsStatus": "Elimination scheduled",
       "open": true,
       "planStart": "2026-10-16",
-      "planStartDt": "2026-10-16T00:00:00",
-      "planEnd": "2026-10-17",
+      "planStartDt": "2026-10-16T20:35:00",
+      "planEnd": "2026-10-16",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -110316,15 +110339,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-10-16",
-      "planStartDt": "2026-10-16T00:00:00",
+      "planStartDt": "2026-10-16T16:00:00",
       "planEnd": "2026-10-17",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-10-16",
+      "actualStartDt": "2026-10-16T16:00:00",
+      "actualEnd": "2026-10-17"
     },
     {
       "equip": "TK152",
