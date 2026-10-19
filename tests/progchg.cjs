@@ -593,8 +593,13 @@ const srv = http.createServer((req, res) => {
      plan it currently sits. */
   const pills = await d.evaluate(() => {
     const rows = paRows();
-    const open = rows.filter(r => r.w.open && Array.isArray(r.info.types) &&
-      r.info.types.length >= 3 && r.info.types.includes('INSP'));
+    /* A work order with a number and a plan date. 1C's pull also carries open
+       planned-service lines with neither (273 on 2026-10-19), which the grid
+       cannot place on any day — the first of those to resolve five rounds made
+       this read "null's visit" and draw nothing, for a reason that is not the
+       rule under test. */
+    const open = rows.filter(r => r.w.open && r.w.woNumber && r.w.planStart &&
+      Array.isArray(r.info.types) && r.info.types.length >= 3 && r.info.types.includes('INSP'));
     open.sort((a, b) => b.info.types.length - a.info.types.length);
     const r = open[0];
     if (!r) return { skip: true };

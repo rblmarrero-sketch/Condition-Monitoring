@@ -4826,12 +4826,21 @@ Full sweep: `bash tests/runall.sh` — ~150 suites, ~4,000 assertions, and it
 brings up its own helper servers on 8085/8092/8093/8094/8096/8097/8098/8099/8101/8102.
 Register every new suite in the list at the top of that file.
 
-Two traps that have each cost an hour:
+Three traps that have each cost an hour:
 
 - `tests/pw.cjs` exports a **module name string** — use `require(require("./pw.cjs"))`.
 - **`pkill -f runall` matches its own wrapper shell** and kills the sweep you
   just started. Never put the pattern and the launch in one command line; use a
   pattern that cannot match itself, e.g. `pkill -f 'run[a]ll.sh'`.
+- **`page.waitForFunction` does not await a Promise.** A predicate like
+  `() => dbAll().then(a => a.every(r => r.up))`, or any `async () => …`,
+  returns a Promise, which is truthy, so the wait ends on the first poll
+  whatever the answer is (measured: a predicate resolving to `false`
+  "succeeded" in 51 ms). Seven suites waited for "every round is up" this way
+  and passed only while the upload happened to finish inside the next fixed
+  sleep; `field.cjs` went red on 2026-10-19 when it did not. Use
+  `require('./until.cjs')(page, fn, arg, {timeout})`, which awaits the
+  predicate and polls, and rejects on timeout the way `waitForFunction` does.
 
 Three dashboard conventions a suite has to respect since build 271:
 

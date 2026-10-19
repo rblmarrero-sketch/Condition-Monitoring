@@ -22,6 +22,7 @@
    row with no record on a phone that healed months ago.
 */
 const { chromium } = require(require('./pw.cjs'));
+const until = require('./until.cjs');  // waitForFunction does not await a Promise
 const PORT = process.env.EDPORT || 8092;
 const fails = [];
 const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !== undefined ? '   ' + d : '')); if (!c) fails.push(n); };
@@ -143,7 +144,7 @@ const DEAD = 'http://127.0.0.1:1/exec';          // configured, and nothing answ
     await p.goto('http://127.0.0.1:' + PORT + '/mobile/index.html', { waitUntil: 'load' });
     await settled(p);
     /* No tap at all — just the boot pull and the one-time heal behind it. */
-    await p.waitForFunction(async () => (await dbTeam()).length > 0, null, { timeout: 20000 })
+    await until(p, async () => (await dbTeam()).length > 0, null, { timeout: 20000 })
       .catch(() => {});
     const healed = await p.evaluate(async () => {
       const kept = await dbTeam();

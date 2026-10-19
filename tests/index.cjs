@@ -86,8 +86,12 @@ const PHONE = o => {
     p.on('pageerror', e => fails.push('PAGEERROR ' + e.message));
     const asked = [];
     p.on('request', r => { const u = r.url();
-      if (u.indexOf('/exec') > 0) asked.push((u.match(/action=(\w+)/) || [, '?'])[1] +
-        (/slim=1/.test(u) ? ':slim' : '')); });
+      /* action=vapid is the readiness check asking for the push key, on its own
+         timer 3 s after boot (pushSetup). It is not a team pull, and whether it
+         lands inside the second check's window depends only on how long boot
+         took — which made this fail one run in three on both builds 534 and 538. */
+      if (u.indexOf('/exec') > 0 && !/action=vapid/.test(u))
+        asked.push((u.match(/action=(\w+)/) || [, '?'])[1] + (/slim=1/.test(u) ? ':slim' : '')); });
     await p.goto('http://127.0.0.1:' + PORT + '/mobile/index.html', { waitUntil: 'load' });
     await settled(p);
     await p.evaluate(() => teamPull(true));

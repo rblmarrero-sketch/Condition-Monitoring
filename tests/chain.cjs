@@ -15,6 +15,7 @@
    Run: node tests/chain.cjs
 */
 const { chromium } = require(require('./pw.cjs'));
+const until = require('./until.cjs');  // waitForFunction does not await a Promise
 const { spawn } = require('child_process');
 const path = require('path');
 
@@ -71,7 +72,7 @@ process.on('exit', bye); process.on('SIGINT', () => { bye(); process.exit(1); })
     retryAt = RETRY_MIN;
     return syncThenArm(true);
   });
-  await ph.waitForFunction(() => dbAll().then(a => a.length && a.every(r => r.up)),
+  await until(ph, () => dbAll().then(a => a.length && a.every(r => r.up)),
                            null, { timeout: 90000 }).catch(() => {});
   const away = await ph.evaluate(() => dbAll().then(a => a.map(r => r.up)));
   ok('the round is marked away', away.length === 1 && away[0] === 1, JSON.stringify(away));
