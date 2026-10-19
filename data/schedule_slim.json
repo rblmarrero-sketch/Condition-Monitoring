@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-19T06:49:55+00:00",
+  "generated": "2026-10-19T07:23:46+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -3026,7 +3026,7 @@
       "equip": "TK105",
       "cls": "AT",
       "comp": "",
-      "desc": "1000h service",
+      "desc": "General Inspection / Magnetic Plug",
       "priority": "P3 Planned (PM)",
       "raised": "2026-10-18",
       "type": "1000 Hours service Planned",
