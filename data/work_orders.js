@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-19T21:34:30+00:00",
+  "generated": "2026-10-19T21:54:49+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -87077,15 +87077,17 @@ window.CM_WO_DATA = {
       "equip": "TK111",
       "cls": "AT",
       "woNumber": null,
-      "maintType": "250 Hours service Planned",
-      "hours": 250,
-      "cmLabel": "Magnetic Plug",
+      "maintType": "8000 Hours service Planned",
+      "hours": 8000,
+      "cmLabel": "General Inspection / Magnetic Plug / Dump Body Liner",
       "cmTypes": [
-        "MP"
+        "INSP",
+        "MP",
+        "TB"
       ],
       "priority": "P3 Planned (PM)",
       "woStatus": null,
-      "cmmsStatus": "Registered",
+      "cmmsStatus": null,
       "open": true,
       "planStart": null,
       "planStartDt": null,
@@ -87098,17 +87100,15 @@ window.CM_WO_DATA = {
       "equip": "TK111",
       "cls": "AT",
       "woNumber": null,
-      "maintType": "8000 Hours service Planned",
-      "hours": 8000,
-      "cmLabel": "General Inspection / Magnetic Plug / Dump Body Liner",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
-        "MP",
-        "TB"
+        "MP"
       ],
       "priority": "P3 Planned (PM)",
       "woStatus": null,
-      "cmmsStatus": null,
+      "cmmsStatus": "Registered",
       "open": true,
       "planStart": null,
       "planStartDt": null,
@@ -87240,6 +87240,29 @@ window.CM_WO_DATA = {
       "planStart": "2026-10-20",
       "planStartDt": "2026-10-20T00:00:00",
       "planEnd": "2026-10-21",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
+      "equip": "TK111",
+      "cls": "AT",
+      "woNumber": "WO-020283",
+      "maintType": "8000 Hours service Planned",
+      "hours": 8000,
+      "cmLabel": "General Inspection / Magnetic Plug / Dump Body Liner",
+      "cmTypes": [
+        "INSP",
+        "MP",
+        "TB"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-01",
+      "planStartDt": "2026-11-01T00:00:00",
+      "planEnd": "2026-11-02",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null

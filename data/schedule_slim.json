@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-19T21:34:30+00:00",
+  "generated": "2026-10-19T21:54:49+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -478,6 +478,17 @@
           "MP"
         ],
         "plan": "2026-10-20",
+        "priority": "P3 Planned (PM)"
+      },
+      {
+        "wo": "WO-020283",
+        "hours": 8000,
+        "types": [
+          "INSP",
+          "MP",
+          "TB"
+        ],
+        "plan": "2026-11-01",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -995,6 +1006,24 @@
       "raised": "2026-11-01",
       "type": "250 Hours service Planned",
       "hours": 250,
+      "plan": "2026-11-01",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-020283",
+      "equip": "TK111",
+      "cls": "AT",
+      "comp": "",
+      "desc": "General Inspection / Magnetic Plug / Dump Body Liner",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-01",
+      "type": "8000 Hours service Planned",
+      "hours": 8000,
       "plan": "2026-11-01",
       "status": "Elimination scheduled",
       "request": "",
