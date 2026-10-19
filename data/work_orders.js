@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-19T11:24:30+00:00",
+  "generated": "2026-10-19T11:39:40+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -352,7 +352,7 @@ window.CM_WO_DATA = {
     "WE010",
     "WE011"
   ],
-  "duplicateRowsCollapsed": 484,
+  "duplicateRowsCollapsed": 451,
   "roundsDedupedWithinVisit": 2,
   "columns": [
     "Asset description",
@@ -22563,9 +22563,9 @@ window.CM_WO_DATA = {
       "equip": "DZ010",
       "cls": "DOZ",
       "woNumber": null,
-      "maintType": "250 Hours service Planned",
-      "hours": 250,
-      "cmLabel": "250h service",
+      "maintType": "500 Hours service Planned",
+      "hours": 500,
+      "cmLabel": "500h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": null,
@@ -22582,9 +22582,9 @@ window.CM_WO_DATA = {
       "equip": "DZ010",
       "cls": "DOZ",
       "woNumber": null,
-      "maintType": "500 Hours service Planned",
-      "hours": 500,
-      "cmLabel": "500h service",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": null,
