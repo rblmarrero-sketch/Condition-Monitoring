@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-20T21:13:56+00:00",
+  "generated": "2026-10-20T23:12:31+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -20724,9 +20724,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-01",
-      "planStartDt": "2026-11-01T00:00:00",
-      "planEnd": "2026-11-02",
+      "planStart": "2026-11-13",
+      "planStartDt": "2026-11-13T00:00:00",
+      "planEnd": "2026-11-14",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -108110,9 +108110,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-10-29",
-      "planStartDt": "2026-10-29T00:00:00",
-      "planEnd": "2026-10-30",
+      "planStart": "2026-10-28",
+      "planStartDt": "2026-10-28T00:00:00",
+      "planEnd": "2026-10-29",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -108333,6 +108333,28 @@ window.CM_WO_DATA = {
       "actualStart": "2026-10-19",
       "actualStartDt": "2026-10-19T08:00:00",
       "actualEnd": "2026-10-19"
+    },
+    {
+      "equip": "TK150",
+      "cls": "HT",
+      "woNumber": "WO-020353",
+      "maintType": "500 Hours service Planned",
+      "hours": 500,
+      "cmLabel": "Lubrication / Magnetic Plug",
+      "cmTypes": [
+        "LUBE",
+        "MP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-01",
+      "planStartDt": "2026-11-01T00:00:00",
+      "planEnd": "2026-11-02",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
     },
     {
       "equip": "TK151",
@@ -108740,9 +108762,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-10-30",
-      "planStartDt": "2026-10-30T00:00:00",
-      "planEnd": "2026-10-31",
+      "planStart": "2026-10-27",
+      "planStartDt": "2026-10-27T00:00:00",
+      "planEnd": "2026-10-28",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -108958,9 +108980,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-10-31",
-      "planStartDt": "2026-10-31T00:00:00",
-      "planEnd": "2026-11-01",
+      "planStart": "2026-10-30",
+      "planStartDt": "2026-10-30T00:00:00",
+      "planEnd": "2026-10-31",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -109572,9 +109594,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-10-27",
-      "planStartDt": "2026-10-27T00:00:00",
-      "planEnd": "2026-10-28",
+      "planStart": "2026-10-29",
+      "planStartDt": "2026-10-29T00:00:00",
+      "planEnd": "2026-10-30",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -110487,9 +110509,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-10-27",
-      "planStartDt": "2026-10-27T00:00:00",
-      "planEnd": "2026-10-28",
+      "planStart": "2026-10-31",
+      "planStartDt": "2026-10-31T00:00:00",
+      "planEnd": "2026-11-01",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
