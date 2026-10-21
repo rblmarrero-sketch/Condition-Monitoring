@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-21T03:34:55+00:00",
+  "generated": "2026-10-21T04:04:58+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -3473,8 +3473,8 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-09-15",
       "detected": "2026-09-15",
-      "planStart": "2026-10-11",
-      "closed": null,
+      "planStart": "2026-10-13",
+      "closed": "2026-10-13",
       "asset": "EX006",
       "defect": "DD-00012679",
       "requestNo": "DD-00012679",
@@ -3485,7 +3485,7 @@ window.CM_WO_DATA = {
       "cause": "Поврежден шланга/линии",
       "causeFrom": "wo",
       "descr": "На поверхности шланга РВД выявлены следы запотевания/",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "by": "Slam",
       "woNumber": "WO-018739",
       "maintType": "P4 Planned Repair",

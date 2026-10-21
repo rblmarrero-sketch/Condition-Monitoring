@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-21T03:34:55+00:00",
+  "generated": "2026-10-21T04:04:58+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -8296,13 +8296,13 @@
       "raised": "2026-09-15",
       "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "hours": null,
-      "plan": "2026-10-11",
-      "status": "Elimination scheduled",
+      "plan": "2026-10-13",
+      "status": "Completed",
       "request": "DD-00012679",
       "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "cause": "Поврежден шланга/линии",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-13"
     },
     {
       "wo": "WO-019184",
