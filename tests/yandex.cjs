@@ -15,6 +15,7 @@
    Run: node tests/yandex.cjs         (starts both servers itself)
 */
 const { chromium } = require(require('./pw.cjs'));
+const until = require('./until.cjs');  // waitForFunction does not await a Promise
 const { spawn } = require('child_process');
 const path = require('path');
 
@@ -204,7 +205,7 @@ function shape(v, depth) {
     retryAt = RETRY_MIN;
     return syncThenArm(true);
   });
-  await p.waitForFunction(() => dbAll().then(a => a.length && a.every(r => r.up)),
+  await until(p, () => dbAll().then(a => a.length && a.every(r => r.up)),
                           null, { timeout: 90000 }).catch(() => {});
   const up = await p.evaluate(() => dbAll().then(a => a.map(r => ({ up: r.up, to: Object.keys(r.upTo || {}) }))));
   ok('the round uploads and is marked away', up.length === 1 && up[0].up === 1, JSON.stringify(up));

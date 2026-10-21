@@ -9,6 +9,7 @@
 
    Run: node tests/field.cjs [port]   (needs tests/ed-srv.cjs on 8093) */
 const { chromium } = require(require('./pw.cjs'));
+const until = require('./until.cjs');  // waitForFunction does not await a Promise
 const PORT = Number(process.argv[2] || 8093);
 const B = `http://127.0.0.1:${PORT}`;
 
@@ -140,7 +141,7 @@ await ctx.addInitScript(u => localStorage.setItem('up_dests', JSON.stringify([
   console.log('\nback in range');
   await ctx.setOffline(false);
   await p.evaluate(() => { retryAt = RETRY_MIN; return syncThenArm(true); });
-  await p.waitForFunction(() => dbAll().then(a => a.every(r => r.up)), null, { timeout:120000 })
+  await until(p, () => dbAll().then(a => a.every(r => r.up) && !syncing), null, { timeout:120000 })
     .catch(() => {});
   await p.evaluate(() => renderPending());
   await p.waitForTimeout(500);

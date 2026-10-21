@@ -17,6 +17,7 @@
    Run: node tests/mirror.cjs
 */
 const { chromium } = require(require('./pw.cjs'));
+const until = require('./until.cjs');  // waitForFunction does not await a Promise
 const { spawn } = require('child_process');
 const path = require('path');
 
@@ -82,7 +83,7 @@ const keys = base => fetch(base + '/__keys').then(r => r.json()).then(j => j.key
     retryAt = RETRY_MIN;
     return syncThenArm(true);
   });
-  await p.waitForFunction(() => dbAll().then(a => a.length && a.every(r => r.up)),
+  await until(p, () => dbAll().then(a => a.length && a.every(r => r.up)),
                           null, { timeout: 90000 }).catch(() => {});
 
   const km = (await keys(M)).filter(k => k.indexOf('TK149') >= 0);

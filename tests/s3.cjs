@@ -1,6 +1,7 @@
 /* Stage 3 — one job per screen, tablet and landscape layouts, and the trend at
    the point of capture. */
 const { chromium } = require(require('./pw.cjs'));
+const until = require('./until.cjs');  // waitForFunction does not await a Promise
 const { PLANT } = require('./overview.cjs');   // the machine photographs every round now carries
 const B = 'http://127.0.0.1:8094';
 const fails = [];
@@ -136,7 +137,7 @@ const pane = p => p.evaluate(() => [...document.querySelectorAll('main > .pane')
      is a badge nobody looks at. */
   await ctx.setOffline(false);
   await p.evaluate(() => { retryAt = RETRY_MIN; return syncThenArm(true); });
-  await p.waitForFunction(() => dbAll().then(a => a.every(r => r.up)), null, { timeout: 30000 }).catch(() => {});
+  await until(p, () => dbAll().then(a => a.every(r => r.up)), null, { timeout: 30000 }).catch(() => {});
   await p.waitForTimeout(300);
   ok('  and clears once the signal comes back and it goes', (await badge(p, 'tabQ')) === '',
      await badge(p, 'tabQ') || '(no badge)');

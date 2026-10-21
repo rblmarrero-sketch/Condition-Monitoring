@@ -13,6 +13,7 @@
 
    Run: node tests/gasonly.cjs [port]   (needs tests/ed-srv.cjs on 8093) */
 const { chromium } = require(require('./pw.cjs'));
+const until = require('./until.cjs');  // waitForFunction does not await a Promise
 const PORT = Number(process.argv[2] || 8093);
 const B = `http://127.0.0.1:${PORT}`;
 
@@ -90,7 +91,7 @@ const ticked = p => p.evaluate(() => loadDests().filter(d => d.on && d.url).map(
     retryAt = RETRY_MIN;
     return syncThenArm(true);
   });
-  await run.p.waitForFunction(() => dbAll().then(a => a.length && a.every(r => r.up)),
+  await until(run.p, () => dbAll().then(a => a.length && a.every(r => r.up)),
                               null, { timeout:60000 }).catch(() => {});
   const done = await run.p.evaluate(() => dbAll().then(a => a.map(r => ({ up:r.up, to:Object.keys(r.upTo||{}) }))));
   ok('it reaches the cloud and says so', done.length === 1 && done[0].up === 1, JSON.stringify(done));
