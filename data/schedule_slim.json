@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-22T03:12:45+00:00",
+  "generated": "2026-10-22T03:39:06+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -2520,24 +2520,6 @@
       "completed": ""
     },
     {
-      "wo": "WO-019383",
-      "equip": "EX012",
-      "cls": "EXC",
-      "comp": "",
-      "desc": "500h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-10-23",
-      "type": "500 Hours service Planned",
-      "hours": 500,
-      "plan": "2026-10-23",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
       "wo": "WO-019842",
       "equip": "EX019",
       "cls": "EXC",
@@ -2880,6 +2862,24 @@
       "completed": "2026-10-22"
     },
     {
+      "wo": "WO-019383",
+      "equip": "EX012",
+      "cls": "EXC",
+      "comp": "",
+      "desc": "500h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-21",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-10-21",
+      "status": "Completed",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "complete",
+      "completed": "2026-10-22"
+    },
+    {
       "wo": "WO-019830",
       "equip": "GE009",
       "cls": "GEN",
@@ -2926,12 +2926,12 @@
       "type": "500 Hours service Planned",
       "hours": 500,
       "plan": "2026-10-21",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-22"
     },
     {
       "wo": "WO-019833",
