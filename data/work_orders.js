@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-23T23:18:24+00:00",
+  "generated": "2026-10-23T23:22:19+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -1887,7 +1887,7 @@ window.CM_WO_DATA = {
       "raised": "2026-10-04",
       "detected": "2026-10-04",
       "planStart": "2026-10-23",
-      "closed": null,
+      "closed": "2026-10-24",
       "asset": "EX021",
       "defect": "DD-00013999",
       "requestNo": "DD-00013999",
@@ -1898,7 +1898,7 @@ window.CM_WO_DATA = {
       "cause": "Поврежден шланга/линии",
       "causeFrom": "wo",
       "descr": "Течь гидравлического масла по телу РВД линии забора масла на гидропривод вентилятора",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "by": "Zhomart",
       "woNumber": "WO-019040",
       "maintType": "P4 Planned Repair",
@@ -45356,15 +45356,15 @@ window.CM_WO_DATA = {
       "cmLabel": "4000h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CLSD",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-10-15",
       "planStartDt": "2026-10-15T00:00:00",
       "planEnd": "2026-10-15",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-10-15",
+      "actualStartDt": "2026-10-15T00:00:00",
+      "actualEnd": "2026-10-15"
     },
     {
       "equip": "GE055",
@@ -86031,8 +86031,8 @@ window.CM_WO_DATA = {
       "cmmsStatus": "Elimination scheduled",
       "open": true,
       "planStart": "2026-10-23",
-      "planStartDt": "2026-10-23T00:00:00",
-      "planEnd": "2026-10-24",
+      "planStartDt": "2026-10-23T08:30:00",
+      "planEnd": "2026-10-23",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
