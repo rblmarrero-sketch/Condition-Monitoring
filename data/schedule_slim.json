@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-23T23:38:06+00:00",
+  "generated": "2026-10-23T23:58:07+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -463,18 +463,6 @@
           "TB"
         ],
         "plan": "2026-10-26",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "TK108": [
-      {
-        "wo": "WO-019511",
-        "hours": 1000,
-        "types": [
-          "INSP",
-          "MP"
-        ],
-        "plan": "2026-10-23",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -2444,6 +2432,24 @@
       "completed": ""
     },
     {
+      "wo": "WO-019362",
+      "equip": "DZ018",
+      "cls": "DOZ",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-23",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-10-23",
+      "status": "Completed",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "complete",
+      "completed": "2026-10-23"
+    },
+    {
       "wo": "WO-019842",
       "equip": "EX019",
       "cls": "EXC",
@@ -2526,12 +2532,12 @@
       "type": "1000 Hours service Planned",
       "hours": 1000,
       "plan": "2026-10-23",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-23"
     },
     {
       "wo": "WO-018521",
@@ -2766,24 +2772,6 @@
       "cause": "",
       "pmStatus": "complete",
       "completed": "2026-10-21"
-    },
-    {
-      "wo": "WO-019362",
-      "equip": "DZ018",
-      "cls": "DOZ",
-      "comp": "",
-      "desc": "250h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-10-21",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-10-21",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
     },
     {
       "wo": "WO-019375",
