@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-23T01:38:04+00:00",
+  "generated": "2026-10-23T01:52:52+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -784,17 +784,6 @@
           "MP"
         ],
         "plan": "2026-11-02",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "TK155": [
-      {
-        "wo": "WO-018506",
-        "hours": 250,
-        "types": [
-          "MP"
-        ],
-        "plan": "2026-10-21",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -2688,12 +2677,30 @@
       "type": "250 Hours service Planned",
       "hours": 250,
       "plan": "2026-10-22",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-22"
+    },
+    {
+      "wo": "WO-018488",
+      "equip": "LD008",
+      "cls": "LDR",
+      "comp": "",
+      "desc": "1000h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-22",
+      "type": "1000 Hours service Planned",
+      "hours": 1000,
+      "plan": "2026-10-22",
+      "status": "Completed",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "complete",
+      "completed": "2026-10-23"
     },
     {
       "wo": "WO-019840",
@@ -2984,24 +2991,6 @@
       "completed": ""
     },
     {
-      "wo": "WO-018506",
-      "equip": "TK155",
-      "cls": "HT",
-      "comp": "",
-      "desc": "Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-10-21",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-10-21",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
       "wo": "WO-019829",
       "equip": "TK167",
       "cls": "GEN",
@@ -3108,24 +3097,6 @@
       "cause": "",
       "pmStatus": "complete",
       "completed": "2026-10-20"
-    },
-    {
-      "wo": "WO-018488",
-      "equip": "LD008",
-      "cls": "LDR",
-      "comp": "",
-      "desc": "1000h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-10-20",
-      "type": "1000 Hours service Planned",
-      "hours": 1000,
-      "plan": "2026-10-20",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
     },
     {
       "wo": "WO-019826",
