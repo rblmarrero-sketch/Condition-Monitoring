@@ -1103,14 +1103,14 @@ function metaSince_(since) {
     }
   };
   var listed = 0;
-  try { take(folderPath_(rootFolder_(), META_DIR).getFiles()); listed++; } catch (err) { /* no _meta yet */ }
+  try { folderPaths_(rootFolder_(), META_DIR).forEach(function (d) { take(d.getFiles()); }); listed++; } catch (err) { /* no _meta yet */ }
   /* Deletion markers are filed in _meta/deletions, one per round and stamped,
      because a round can be deleted more than once over its life and one file
      per key would lose the earlier one. A reader that lists only _meta itself
      finds none of them — which is exactly how this shipped not working. */
-  try { take(folderPath_(rootFolder_(), META_DIR + '/deletions').getFiles()); listed++; } catch (err) { /* none yet */ }
+  try { folderPaths_(rootFolder_(), META_DIR + '/deletions').forEach(function (d) { take(d.getFiles()); }); listed++; } catch (err) { /* none yet */ }
   /* The phones file theirs here — see syncDefer() in the app. */
-  try { take(folderPath_(rootFolder_(), META_DIR + '/deferrals').getFiles()); listed++; } catch (err) { /* none yet */ }
+  try { folderPaths_(rootFolder_(), META_DIR + '/deferrals').forEach(function (d) { take(d.getFiles()); }); listed++; } catch (err) { /* none yet */ }
   if (listed === 3) {                       // drop files that are gone, only when every folder was listed
     for (var k in map) if (!seen[k]) { delete map[k]; changed = true; }
   }
@@ -1344,9 +1344,11 @@ var MEDIA_RE = /\.(jpe?g|png|webp|mp4|mov)$/i;
 /** Every file under the root, sub-folders included. `ext` filters by suffix. */
 function listFiles_(sub, ext) {
   var root = rootFolder_();
-  var dir = sub ? folderPath_(root, sub) : root;
+  // Every folder of the name, not the first: see foldersNamed_. A folder that
+  // was never written to lists as empty rather than being created by a read.
+  var dirs = sub ? folderPaths_(root, sub) : [root];
   var out = [];
-  collect_(dir, '', out, 0, String(ext || '').toLowerCase());
+  dirs.forEach(function (dir) { collect_(dir, '', out, 0, String(ext || '').toLowerCase()); });
   return { ok: true, count: out.length, truncated: out.length >= LIST_CAP, files: out };
 }
 var LIST_CAP = 4000;
@@ -1458,12 +1460,53 @@ function rootFolder_() {
 }
 function rootId_() { rootFolder_(); return ROOT_CACHE.id; }
 
+/* ONE NAME, SEVERAL FOLDERS. Drive allows two folders of one name side by
+   side, and this tree has a second writer: Pechanka fills the same root
+   (CM_backup_Pechanka) and creates a folder when it cannot find one. On
+   2026-10-20 it made a second INSP/TK112, getFoldersByName then handed the
+   two back in no fixed order, and one phone's round of 26 files went half
+   into each; action=list read the first folder only and answered 13. Two
+   uploads arriving together can make the same pair here too. So a write
+   always picks the OLDEST folder of a name (every writer of this script
+   converges on one), a folder this request just made gives way to an older
+   one that appeared beside it, and a reader reads every folder of a name. */
+function foldersNamed_(dir, part) {
+  var out = [], it = dir.getFoldersByName(part);
+  while (it.hasNext()) out.push(it.next());
+  var born = function (f) { try { return f.getDateCreated().getTime(); } catch (err) { return 0; } };
+  out.sort(function (a, b) {
+    return (born(a) - born(b)) || (String(a.getId()) < String(b.getId()) ? -1 : 1);
+  });
+  return out;
+}
+function emptyFolder_(f) {
+  try { return !f.getFiles().hasNext() && !f.getFolders().hasNext(); } catch (err) { return false; }
+}
+
 /** "2026-07" or "2026/07/TK146" → the matching folder, creating what's missing. */
 function folderPath_(root, path) {
   return String(path).split('/').filter(String).reduce(function (dir, part) {
-    var it = dir.getFoldersByName(part);
-    return it.hasNext() ? it.next() : dir.createFolder(part);
+    var have = foldersNamed_(dir, part);
+    if (have.length) return have[0];
+    var made = dir.createFolder(part);
+    var now = foldersNamed_(dir, part);
+    if (now.length > 1 && now[0].getId() !== made.getId()) {
+      // Someone made one first. Ours is empty; leave it to them.
+      if (emptyFolder_(made)) { try { made.setTrashed(true); } catch (err) { /* harmless */ } }
+      return now[0];
+    }
+    return made;
   }, root);
+}
+
+/** Every folder that answers to `path` — duplicates at any level included.
+    Never creates anything: a path nobody wrote to yet is an empty list. */
+function folderPaths_(root, path) {
+  return String(path).split('/').filter(String).reduce(function (dirs, part) {
+    var next = [];
+    dirs.forEach(function (d) { next = next.concat(foldersNamed_(d, part)); });
+    return next;
+  }, [root]);
 }
 
 function json(o) {
