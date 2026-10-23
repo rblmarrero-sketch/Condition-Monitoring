@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-23T05:11:34+00:00",
+  "generated": "2026-10-23T05:40:31+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -436,13 +436,13 @@ window.CM_WO_DATA = {
     "wo": "Work order number"
   },
   "cmDateFrom": {
-    "raised": 179,
+    "raised": 180,
     "detected": 0,
     "planStart": 0
   },
   "cmCauseFrom": {
     "wo": 77,
-    "wr": 102,
+    "wr": 103,
     "cert": 0,
     "none": 0
   },
@@ -455,6 +455,29 @@ window.CM_WO_DATA = {
     "Bekzhan"
   ],
   "cmWorkOrders": [
+    {
+      "date": "2026-10-23",
+      "dateFrom": "raised",
+      "raised": "2026-10-23",
+      "detected": "2026-10-23",
+      "planStart": null,
+      "closed": null,
+      "asset": "TK107",
+      "defect": "DD-00015488",
+      "requestNo": "DD-00015488",
+      "eqType": "TRUCK, ARTICULATED",
+      "system": "TK107.DRS.COO.FAN Cooling Fan & Drive / Вентилятор и привод вентилятора",
+      "priority": "P4 Planned (Repair)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "cause": "Усталостная трещина",
+      "causeFrom": "wr",
+      "descr": "Tрещины зубчатого профиля ремней генератора.",
+      "status": "Registered",
+      "by": "Bekzhan",
+      "woNumber": null,
+      "maintType": null,
+      "planned": false
+    },
     {
       "date": "2026-10-20",
       "dateFrom": "raised",
@@ -6939,7 +6962,7 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "CRTD",
+      "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
       "planStart": "2026-11-01",
@@ -70734,7 +70757,7 @@ window.CM_WO_DATA = {
         "TB"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "CRTD",
+      "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
       "planStart": "2026-11-01",
@@ -71967,7 +71990,7 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "CRTD",
+      "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
       "planStart": "2026-10-31",
