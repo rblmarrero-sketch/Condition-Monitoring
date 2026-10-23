@@ -96,6 +96,13 @@ const covRead = () => {
         localStorage.setItem('cm_drive_url', u); localStorage.setItem('cm_drive_sec', '');
         localStorage.setItem('cm_drive_cursor', '0'); localStorage.setItem('cm_swap_off', '1');
         localStorage.setItem('cm_dash_lang', l);
+        /* All time on dashboard-next. The mock's rounds are dated July 2026, and
+           dashboard-next shows the last 90 days by default (cm_dash_window), so
+           the table this reads shrank one day at a time: 8 machines on
+           2026-10-22, under the 10 that put "View all" on the count line, and
+           none at all from 2026-10-27. dashboard/ has no window and ignores
+           the key. */
+        localStorage.setItem('cm_dash_window', '0');
       }, [BASE + '/exec', lang]);
       const p = await ctx.newPage();
       const errs = []; p.on('pageerror', e => errs.push(e.message));
