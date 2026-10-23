@@ -4681,6 +4681,31 @@ untouched: it still reads the master and judges its audits against it.
 `tests/lubehandover.cjs` proves both sides on both pages in English and
 Russian. Dashboard only; nothing to deploy on the VM.
 
+**TWO FOLDERS OF ONE NAME ON GOOGLE, AND A LISTING THAT READ ONE OF THEM
+(2026-10-23).** Read off the diagnostic traces: TK112's General Inspection of
+19 Oct (phone DRGZCS, 26 files) stood at "13 of 26" on Google for four days
+while the phone had logged it complete. Every file was on Drive. The Apps
+Script's root is Pechanka's own folder (`CM_backup_Pechanka`) and Pechanka
+writes into it: on 2026-10-20 01:32 it created a second `INSP/TK112` (and a
+`2026-10-19` under it) beside the one the script made the day before — its
+folders carry a Drive description equal to their name, the script's never do.
+`getFoldersByName` returns same-named folders in no fixed order, so the
+uploads that followed went half into each (record file and 13 photographs in
+one, 13 photographs in the other), and `action=list` read the first folder
+only. In `docs/google-upload.gs`: a write picks the OLDEST folder of a name
+(`foldersNamed_`), so every later upload converges on one; a folder a request
+just created gives way to an older one that appeared beside it, and is
+trashed only if still empty (two of the script's own uploads arriving
+together could make the same pair); `listFiles_` and the `_meta` readers read
+every folder of a name (`folderPaths_`), and a read no longer creates a
+folder. `tests/gsdupdir.cjs` builds the TK112 shape in a fake Drive that
+returns the two in either order, and fails 11 assertions against the old
+script. **This is the Apps Script and is not live until the maintainer
+deploys a new version**; Pechanka creating folders the script already has is
+Pechanka's to stop and is not in this repository. Folders already split stay
+split on Drive (the reads now see both). Yandex has no folders (object keys)
+and needs nothing.
+
 ---
 
 ## Secrets
