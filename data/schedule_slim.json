@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-24T22:54:52+00:00",
+  "generated": "2026-10-24T23:25:23+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -295,17 +295,6 @@
           "MP"
         ],
         "plan": "2026-10-31",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "TK035": [
-      {
-        "wo": "WO-019838",
-        "hours": 500,
-        "types": [
-          "MP"
-        ],
-        "plan": "2026-10-22",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -2555,11 +2544,11 @@
       "type": "500 Hours service Planned",
       "hours": 500,
       "plan": "2026-10-22",
-      "status": "Elimination scheduled",
+      "status": "In progress",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
+      "pmStatus": "inprogress",
       "completed": ""
     },
     {
@@ -2663,12 +2652,12 @@
       "type": "500 Hours service Planned",
       "hours": 500,
       "plan": "2026-10-22",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-23"
     },
     {
       "wo": "WO-016283",
@@ -2933,12 +2922,12 @@
       "type": "500 Hours service Planned",
       "hours": 500,
       "plan": "2026-10-21",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-22"
     },
     {
       "wo": "WO-019825",
@@ -2951,12 +2940,12 @@
       "type": "4000 Hours service Planned",
       "hours": 4000,
       "plan": "2026-10-20",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-22"
     },
     {
       "wo": "WO-018545",

@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-24T22:54:52+00:00",
+  "generated": "2026-10-24T23:25:23+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -352,7 +352,7 @@ window.CM_WO_DATA = {
     "WE010",
     "WE011"
   ],
-  "duplicateRowsCollapsed": 470,
+  "duplicateRowsCollapsed": 471,
   "roundsDedupedWithinVisit": 2,
   "columns": [
     "Asset description",
@@ -5614,15 +5614,15 @@ window.CM_WO_DATA = {
       "cmLabel": "4000h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "PCNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-10-20",
       "planStartDt": "2026-10-20T00:00:00",
       "planEnd": "2026-10-20",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-10-20",
+      "actualStartDt": "2026-10-20T10:00:00",
+      "actualEnd": "2026-10-22"
     },
     {
       "equip": "CD002",
@@ -27888,15 +27888,15 @@ window.CM_WO_DATA = {
       "cmLabel": "500h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "PCNF",
+      "cmmsStatus": "In progress",
+      "open": false,
       "planStart": "2026-10-22",
       "planStartDt": "2026-10-22T00:00:00",
       "planEnd": "2026-10-22",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-10-22",
+      "actualStartDt": "2026-10-22T15:00:00",
+      "actualEnd": "2026-10-22"
     },
     {
       "equip": "EX005",
@@ -73073,15 +73073,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-10-22",
       "planStartDt": "2026-10-22T00:00:00",
       "planEnd": "2026-10-22",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-10-22",
+      "actualStartDt": "2026-10-22T19:00:00",
+      "actualEnd": "2026-10-23"
     },
     {
       "equip": "TK036",
@@ -112597,15 +112597,15 @@ window.CM_WO_DATA = {
       "cmLabel": "500h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-10-21",
       "planStartDt": "2026-10-21T00:00:00",
       "planEnd": "2026-10-21",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-10-21",
+      "actualStartDt": "2026-10-21T19:00:00",
+      "actualEnd": "2026-10-22"
     },
     {
       "equip": "TK168",
