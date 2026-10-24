@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-24T05:50:01+00:00",
+  "generated": "2026-10-24T06:01:29+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -3172,12 +3172,12 @@
       "type": "500 Hours service Planned",
       "hours": 500,
       "plan": "2026-10-19",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-19"
     },
     {
       "wo": "WO-019822",
@@ -3190,12 +3190,12 @@
       "type": "500 Hours service Planned",
       "hours": 500,
       "plan": "2026-10-19",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-21"
     },
     {
       "wo": "WO-018534",
