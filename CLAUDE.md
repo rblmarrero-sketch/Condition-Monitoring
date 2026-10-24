@@ -1,5 +1,12 @@
 # Condition Monitoring — what anyone working on this has to know first
 
+> **READ `docs/PROJECT_FACTS.md` FIRST (CM_FACTS_V1, 25.10.2026).** It holds the current state of the system, kept
+> together with the reliability project (askpi-site KB), and **it wins over anything in this file**. Out of date below:
+> Yandex is deleted (20.10), every phone uses Google; `ADMIN_SECRET` IS set in the script editor and office deletes are ON
+> (20.10); PECHANKA follows Drive including deletions (CM_FINAL_V1); the github-actions[bot] work-order commits are
+> expected. When you redeploy `google-upload.gs`, keep BOTH the `ROOT_FOLDER_ID` and the `ADMIN_SECRET` lines from the
+> editor. If your work changes one of those facts, update `docs/PROJECT_FACTS.md` in the same PR and tell the maintainer.
+
 Baimskaya, Chukotka. 1,128 machines. Three surfaces, one engine:
 `mobile/index.html` (the phone, offline-first PWA), `dashboard/index.html`
 (the office) and `dashboard-next/index.html` (a second, PERMANENT office
