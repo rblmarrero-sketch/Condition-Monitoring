@@ -53,6 +53,7 @@ const ALLOW = new Set([
   'ingest/class_rounds.generated.json',
   'ingest/cm_history.generated.json',
   'tests/noprodhit.cjs',              // this file, in its own comment
+  'tests/pw-guard.cjs',               // names the hosts only to block them from every suite
 ]);
 
 // `baimskaya-cm\\.example` (the made-up host written as a regex, tests/swap.cjs) is not the real one either.

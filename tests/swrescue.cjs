@@ -262,8 +262,18 @@ const verOf = (pg) => within(pg.evaluate(() => (document.getElementById('verNum'
   ok('the worker reaches the silent window and tries, every time asked',
      !!second && second.asked >= 1, JSON.stringify(second));
   const rescued = await verOf(p0);
+  /* STILL STUCK IS WHAT THE WORKER SAYS, NOT ONE SHAPE OF SILENCE.
+     The page used to answer "FROZEN" (the read timed out). On the Chromium
+     of 2026-10-25 the worker's navigate() starts the unload, so the read is
+     refused with "Execution context was destroyed" instead — and the new
+     document never arrives: asked again, the worker still finds a silent
+     window (moved >= 1). Both are the same fact, a page that is not running
+     the app. What would be news is the opposite, the build number read off
+     the page and no silent window left: then the rescue works and this
+     limit, and section 3's advice, need rewriting. */
+  const stillStuck = !/^\d+$/.test(String(rescued)) && !!second && second.moved >= 1;
   ok('  but a SPUN page cannot be navigated — it is still stuck, as expected',
-     rescued === 'FROZEN', 'verNum ' + rescued);
+     stillStuck, 'verNum ' + rescued + ' · worker moved ' + (second && second.moved));
   console.log('   (a spun page comes back only by closing the app and reopening —');
   console.log('    measured separately: it recovers on the second launch.)');
   await within(helper.close(), 6000, 'late');

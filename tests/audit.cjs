@@ -66,7 +66,13 @@ const srv = http.createServer((req, res) => {
   let b = ''; req.on('data', c => b += c);
   req.on('end', async () => {
     let j = null; try { j = JSON.parse(b); } catch (e) {}
-    if (j && j.name) got.push(j.name);
+    /* The phone's own diagnostic trace (sendTrace, `_meta/diag`) is not an
+       upload of a round. It is sent after a run that went wrong and is
+       deliberately not awaited, so the one from the first run can land in
+       the retry's window below: on 2026-10-25 it did, on every run, and
+       read as "the retry re-sent the round" when the round's name was not
+       in it. Rounds only are counted. */
+    if (j && j.name && j.folder !== '_meta/diag') got.push(j.name);
     if (hold) await hold;
     if (j && /TK900/.test(j.name || '')) { res.writeHead(500, cors); res.end('{"error":"rejected"}'); return; }
     if (j && j.name && j.file && !j.op) {
@@ -283,7 +289,7 @@ const shot = async (p) => p.evaluate(async () => {
     await p.evaluate(async () => { await syncNow(); });
     await p.waitForTimeout(300);
     ok('retry does not re-upload to the healthy destination', got.length === before,
-       `requests during retry = ${got.length - before}`);
+       `requests during retry = ${got.length - before} ` + JSON.stringify(got.slice(before)));
     await ctx.close();
   }
 
