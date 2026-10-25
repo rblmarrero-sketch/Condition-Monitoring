@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-25T22:26:38+00:00",
+  "generated": "2026-10-25T22:57:00+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -352,7 +352,7 @@ window.CM_WO_DATA = {
     "WE010",
     "WE011"
   ],
-  "duplicateRowsCollapsed": 554,
+  "duplicateRowsCollapsed": 556,
   "roundsDedupedWithinVisit": 2,
   "columns": [
     "Asset description",
@@ -441,8 +441,8 @@ window.CM_WO_DATA = {
     "planStart": 0
   },
   "cmCauseFrom": {
-    "wo": 83,
-    "wr": 106,
+    "wo": 84,
+    "wr": 105,
     "cert": 0,
     "none": 0
   },
@@ -1886,7 +1886,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-10-07",
       "detected": "2026-10-07",
-      "planStart": null,
+      "planStart": "2026-12-05",
       "closed": null,
       "asset": "CN018",
       "defect": "DD-00014256",
@@ -1896,12 +1896,12 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "cause": "Разрушение стыка",
-      "causeFrom": "wr",
+      "causeFrom": "wo",
       "descr": "Трещина в зоне втулки шарнирного крепления стрелы крана. С левой стороны.",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "by": "Zhomart",
-      "woNumber": null,
-      "maintType": null,
+      "woNumber": "WO-020797",
+      "maintType": "P4 Planned Repair",
       "planned": false
     },
     {
@@ -31118,15 +31118,15 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-10-26",
-      "planStartDt": "2026-10-26T00:00:00",
-      "planEnd": "2026-10-27",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "planStartDt": "2026-10-26T01:10:00",
+      "planEnd": "2026-10-26",
+      "actualStart": "2026-10-26",
+      "actualStartDt": "2026-10-26T01:10:00",
+      "actualEnd": "2026-10-26"
     },
     {
       "equip": "EX010",
@@ -55825,7 +55825,7 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
+      "woStatus": "CNF",
       "cmmsStatus": "Completed",
       "open": false,
       "planStart": "2026-10-25",
@@ -59511,15 +59511,15 @@ window.CM_WO_DATA = {
       "cmLabel": "500h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-10-25",
-      "planStartDt": "2026-10-25T00:00:00",
-      "planEnd": "2026-10-26",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "planStartDt": "2026-10-25T13:00:00",
+      "planEnd": "2026-10-25",
+      "actualStart": "2026-10-25",
+      "actualStartDt": "2026-10-25T13:00:00",
+      "actualEnd": "2026-10-25"
     },
     {
       "equip": "LD006",
@@ -111051,8 +111051,8 @@ window.CM_WO_DATA = {
       "cmmsStatus": "Elimination scheduled",
       "open": true,
       "planStart": "2026-10-25",
-      "planStartDt": "2026-10-25T00:00:00",
-      "planEnd": "2026-10-26",
+      "planStartDt": "2026-10-25T08:40:00",
+      "planEnd": "2026-10-25",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null

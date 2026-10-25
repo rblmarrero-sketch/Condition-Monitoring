@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-25T22:26:38+00:00",
+  "generated": "2026-10-25T22:57:00+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -1918,24 +1918,6 @@
       "completed": ""
     },
     {
-      "wo": "WO-019372",
-      "equip": "EX009",
-      "cls": "EXC",
-      "comp": "",
-      "desc": "250h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-10-26",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-10-26",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
       "wo": "WO-020410",
       "equip": "GE111",
       "cls": "GEN",
@@ -2054,12 +2036,12 @@
       "type": "500 Hours service Planned",
       "hours": 500,
       "plan": "2026-10-25",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-25"
     },
     {
       "wo": "WO-019854",
@@ -5138,6 +5120,24 @@
       "cause": "",
       "pmStatus": "complete",
       "completed": "2026-10-07"
+    },
+    {
+      "wo": "WO-020797",
+      "equip": "CN018",
+      "cls": "",
+      "comp": "CN018.CH.GAN (Crane / Кран)",
+      "desc": "Трещина в зоне втулки шарнирного крепления стрелы крана. С левой стороны.",
+      "priority": "P4 Planned (Repair)",
+      "raised": "2026-10-07",
+      "type": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "hours": null,
+      "plan": "2026-12-05",
+      "status": "Elimination scheduled",
+      "request": "DD-00014256",
+      "defType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "cause": "Разрушение стыка",
+      "pmStatus": "open",
+      "completed": ""
     },
     {
       "wo": "WO-018750",
