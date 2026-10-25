@@ -57,7 +57,13 @@ const ok = (n, c, d) => { console.log((c ? "  PASS  " : "  FAIL  ") + n + (d !==
     Object.defineProperty(navigator, "onLine", { get: () => false, configurable: true });
     window.dispatchEvent(new Event("offline"));
   });
-  await p.waitForTimeout(600);
+  /* AND WAIT FOR THE PAINT, NOT FOR 600 ms. renderNet() awaits IndexedDB
+     before it writes, and under the full sweep's load that took longer than
+     the fixed wait: on 2026-10-25 the badge still read "All sent" here, while
+     the same suite passed alone four times out of four. Awaiting a render of
+     our own returns only once a paint has completed (netRun supersedes any
+     older one), so what is read is what the offline flag produces. */
+  await p.evaluate(() => renderNet());
   const off = await badge();
   ok("it says offline when the phone is offline", /offline|saved|Офлайн|сохран/i.test(off), JSON.stringify(off));
 
@@ -95,7 +101,11 @@ const ok = (n, c, d) => { console.log((c ? "  PASS  " : "  FAIL  ") + n + (d !==
 
   /* Coming back to the front is one of the two signals. */
   await p.evaluate(() => document.dispatchEvent(new Event("visibilitychange")));
-  await p.waitForTimeout(600);
+  /* The repaint this starts awaits IndexedDB too, so wait until it lands (up
+     to 10 s) rather than a fixed 600 ms; a badge that never changes still
+     fails, exactly as before. */
+  await require("./until.cjs")(p, o => ((document.getElementById("netStatus") || {}).textContent || "") !== o,
+                               off, { timeout: 10000 }).catch(() => {});
   const afterVis = await badge();
   ok("returning to the app refreshes it", afterVis !== off, JSON.stringify(afterVis));
 
