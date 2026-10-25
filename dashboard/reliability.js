@@ -1,162 +1,79 @@
-/* MTBF, MTTR AND AVAILABILITY, FROM 1C's OWN WORK ORDERS.
+/* RELIABILITY ON REPORTS: THE SITE'S OWN FIGURES, NOT A SECOND CALCULATION.
 
-   The audit of 2026-10-01: "Reports currently computes inspection compliance
-   and programme coverage, not MTBF, MTTR, or availability." Nothing in this
-   project had the data for them either — ingest/ingest_work_orders.py kept the
-   planned services and the CM team's own defects and dropped every other row
-   of WO.xlsx. It now also keeps the corrective work orders (`relEvents`), and
-   this file is the ONE place the three numbers are worked out from them, loaded
-   by both office pages so the two desks cannot compute them two ways.
+   Decided by the site on 2026-10-26 ("show the site figures"). Until then this
+   file worked MTBF, MTTR and availability out for itself from 1C's corrective
+   work orders (data/reliability.json): calendar hours, P1 + P2 work orders as
+   failures. The reliability site computes the official figures from 1C's
+   Asset State (ISO 14224: one continuous breakdown = one failure, counted
+   where it started; standby is up time; MTBF = operating hours ÷ failures;
+   MTTR = P1 + P2 hours ÷ failures), and the two disagreed — two numbers for
+   one question, the defect this project keeps naming. The office now reads
+   the site's.
 
-   THE DEFINITIONS, stated once, and printed beside the numbers on screen:
+   WHERE THE NUMBERS COME FROM. PECHANKA's build writes /site_kpi.json
+   (SITE_KPI_V1, askpi-site kit site_kpi_kit) right after the homepage, from
+   the same engine call that draws the homepage cards, and only when it equals
+   them. The office dashboards are served by the same server
+   (maintenance.vegadevelopment.com/cm/dashboard/), so the file is same-origin.
+   Nothing is computed here: every figure is printed as the file states it,
+   rounded the way the homepage rounds it ("shown").
 
-     population   every machine 1C carries a work order for (`relUnits`), or
-                  the class / unit chosen
-     period       the last N days, ending at the time of the 1C pull
-     time T       calendar hours: machines × days × 24. 1C's operating-hour
-                  figure is a meter reading at registration, not a running
-                  total, so it cannot be a denominator.
-     failure      a corrective work order 1C marks P1 (breakdown) or P2
-                  (urgent repair), or counts as a breakdown ("Count of break
-                  down from p1" > 0), starting inside the period. P2 was added
-                  on 2026-10-02, decided by the site: an urgent unplanned
-                  repair takes the machine out of service just as a breakdown
-                  does. The rule reads 1C's PRIORITY, not its maintenance
-                  type, so a P2 job filed under "P4 Planned Repair" counts.
-     downtime D   per failure: 1C's "Down time by documents"; failing that
-                  "Duration actual hours"; failing that the hours between the
-                  actual start and end. A failure with none of the three is
-                  COUNTED (it happened) and its downtime is UNKNOWN — said out
-                  loud as a number, never silently read as zero.
-     MTTR         D ÷ failures with a known downtime
-     MTBF         (T − D) ÷ failures
-     availability (T − D) ÷ T — breakdown downtime only (planned services
-                  are not counted against it)
+   ON ANY OTHER HOST (Firebase, GitHub Pages) there is no /site_kpi.json, or
+   the host answers with a page that is not it. Then the panel says, in one
+   sentence, where the site figures are — and prints no numbers, because a
+   number from somewhere else is exactly what this replaced.
 
-   A population with no failures has no MTBF — it is "no failures in N days",
-   never a number. */
+   data/reliability.json is no longer read by any office page. The ingester
+   still writes it (ingest/ingest_work_orders.py, tests/relingest.py). */
 (function (root) {
   "use strict";
-  const H = 3600 * 1000;
+  const SITE = "https://maintenance.vegadevelopment.com";
+  const URL_DEF = "/site_kpi.json";
+  const WAIT_MS = 8000;
+  const STALE_H = 26;            // the site builds every ~10 min; a day without a build is worth saying
 
-  // Hours between two ISO datetimes, or null.
-  function spanH(a, b) {
-    if (!a || !b) return null;
-    const t0 = Date.parse(a), t1 = Date.parse(b);
-    if (!isFinite(t0) || !isFinite(t1) || t1 < t0) return null;
-    return (t1 - t0) / H;
-  }
-
-  function isFailure(e) {
-    if (!e) return false;
-    if ((e.bd || 0) > 0) return true;
-    return /^\s*P[12]\b/i.test(String(e.priority || ""));
-  }
-
-  /* The downtime a failure cost, and where the figure came from. */
-  function downtime(e) {
-    /* A figure the ingester took from 1C's accumulation register is a running
-       total for the machine and the period, repeated on every work order, not
-       what this one cost: never a downtime. Pulls made before the ingester
-       stopped writing it still carry it (downFrom "register"). */
-    if (e.downH != null && e.downH > 0 && e.downFrom !== "register") return { h: e.downH, from: "docs" };
-    if (e.durH != null && e.durH > 0) return { h: e.durH, from: "duration" };
-    const s = spanH(e.startDt || e.start, e.endDt || e.end);
-    if (s != null && s > 0) return { h: s, from: "dates" };
-    return { h: null, from: null };
-  }
-
-  /* data: window.CM_WO_DATA. opts: {days, cls, unit, classOf(unit)->cls}.
-     Returns null when the pull carries no reliability data at all — the
-     caller says so rather than printing zeros. */
-  function compute(data, opts) {
-    opts = opts || {};
-    if (!data || !Array.isArray(data.relEvents) || !Array.isArray(data.relUnits)) return null;
-    const days = Math.max(1, Number(opts.days) || 90);
-    const end = Date.parse(data.generated) || Date.now();
-    const start = end - days * 24 * H;
-    const classOf = opts.classOf || (() => "");
-    const want = u => (!opts.unit || u === opts.unit) && (opts.cls == null || classOf(u) === opts.cls);
-    const units = data.relUnits.filter(want);
-    const T = units.length * days * 24;
-    const by = {};
-    const out = { days, from: new Date(start).toISOString(), to: new Date(end).toISOString(),
-      units: units.length, T, failures: 0, downH: 0, knownN: 0, unknownN: 0,
-      fromDocs: 0, fromDuration: 0, fromDates: 0, mtbf: null, mttr: null, avail: null, rows: [] };
-    const inUnits = new Set(units);
-    data.relEvents.forEach(e => {
-      if (!e || !inUnits.has(e.equip) || !isFailure(e)) return;
-      const t = Date.parse(e.startDt || e.start);
-      if (!isFinite(t) || t < start || t > end) return;
-      out.failures++;
-      const d = downtime(e);
-      const r = by[e.equip] || (by[e.equip] = { unit: e.equip, cls: classOf(e.equip), failures: 0, downH: 0, unknownN: 0 });
-      r.failures++;
-      if (d.h == null) { out.unknownN++; r.unknownN++; return; }
-      out.knownN++; out.downH += d.h; r.downH += d.h;
-      if (d.from === "docs") out.fromDocs++; else if (d.from === "duration") out.fromDuration++; else out.fromDates++;
-    });
-    const D = Math.min(out.downH, T);
-    if (T > 0) out.avail = (T - D) / T;
-    if (out.failures > 0) out.mtbf = (T - D) / out.failures;
-    if (out.knownN > 0) out.mttr = out.downH / out.knownN;
-    const unitT = days * 24;
-    out.rows = Object.values(by).map(r => Object.assign(r, {
-      mtbf: (unitT - Math.min(r.downH, unitT)) / r.failures,
-      mttr: (r.failures - r.unknownN) > 0 ? r.downH / (r.failures - r.unknownN) : null,
-      avail: (unitT - Math.min(r.downH, unitT)) / unitT,
-    })).sort((a, b) => b.downH - a.downH || b.failures - a.failures || (a.unit < b.unit ? -1 : 1));
-    return out;
-  }
-
-  /* One row per class, the fleet first. */
-  function byClass(data, opts) {
-    opts = opts || {};
-    if (!data || !Array.isArray(data.relUnits)) return null;
-    const classOf = opts.classOf || (() => "");
-    const classes = [...new Set(data.relUnits.map(u => classOf(u) || ""))].sort();
-    return classes.map(c => Object.assign({ cls: c }, compute(data, Object.assign({}, opts, { cls: c, unit: "" }))));
-  }
-
-  /* ---- the panel -------------------------------------------------------
-     Its own words, in both languages, so the two office pages cannot word
-     the definitions two ways. */
   const L = {
     en: {
       title: "Reliability — MTBF, MTTR, availability",
-      sub: "From 1C's corrective work orders. Calendar hours; failures are P1 breakdowns and P2 urgent repairs.",
-      period: "Period", days: "{n} days", cls: "Class", all: "All classes",
-      mtbf: "MTBF", mttr: "MTTR", avail: "Availability", fails: "Failures",
-      mtbf_s: "hours between failures", mttr_s: "hours to repair", avail_s: "failure downtime only (P1 + P2)",
-      fails_s: "{n} machines", none: "no failures in {n} days", h: "{v} h",
-      basis: "{u} machines × {d} days × 24 h = {t} h. {f} failures, {dh} h downtime: {docs} from 1C's downtime, {dur} from the actual duration, {dates} from start–end dates.",
-      unknown: "{n} failure(s) carry no downtime figure in 1C — counted as failures, left out of MTTR, and their downtime is not in availability.",
-      nodata: "Reliability figures arrive with the hourly 1C pull (data/reliability.json). It has not been generated yet — the next pull after this change creates it.",
-      loadfail: "data/reliability.json could not be read ({e}). Nothing below is a measurement.",
-      stale: "From the 1C pull of {at}.",
-      byclass: "By class", top: "Machines with the most failure downtime",
-      c_cls: "Class", c_units: "Machines", c_unit: "Machine", c_f: "Failures", c_dh: "Downtime h",
-      c_mtbf: "MTBF h", c_mttr: "MTTR h", c_av: "Availability",
-      unk_t: "{n} failure(s) here have no downtime figure in 1C and are not in this total.",
-      csv: "Export CSV", unclassed: "(no class)", nofail: "No P1 or P2 failures recorded in this period.",
+      sub: "The reliability site's official figures, Primary fleet, ISO 14224 counting.",
+      same: "Same figures as the reliability site homepage:",
+      home: "reliability site", weekly: "Weekly report",
+      away: "Site reliability figures are on maintenance.vegadevelopment.com",
+      wk: "Week {n}", wk_s: "{a} – {b}",
+      avail: "Availability", fails: "Failures", mtbf: "MTBF", mttr: "MTTR",
+      avail_s: "plan {p}%", avail_np: "scheduled hours less P1–P4 downtime",
+      fails_s: "{u} Primary units", mtbf_s: "operating hours ÷ failures", mttr_s: "P1 + P2 hours ÷ failures",
+      none: "no failures this week", h: "{v} h",
+      periods: "Week, month to date, year to date",
+      fleets: "By fleet — week {n}", fleets_s: "The fleets of the site's Weekly report, Primary units.",
+      c_per: "Period", c_fleet: "Fleet", c_units: "Units", c_av: "Availability", c_f: "Failures", c_mtbf: "MTBF h", c_mttr: "MTTR h",
+      p_week: "Week {n}", p_mtd: "Month to date", p_ytd: "Year to date",
+      s_primary: "Primary ({u} units)", s_all: "All equipment ({u} units)",
+      basis: "Data as of {at} site · week {from} – {to} · ISO 14224: one continuous breakdown = one failure, counted in the period where it started; 0 failures = no MTBF or MTTR.",
+      stale: "These figures are from {at} site — the site has not published newer ones for more than a day.",
+      nofleet: "Fleet rows are not in today's file: {why}",
+      csv: "Export CSV", loading: "Reading the reliability site's figures…",
     },
     ru: {
       title: "Надёжность — MTBF, MTTR, коэффициент готовности",
-      sub: "По корректирующим заказ-нарядам 1С. Календарные часы; отказ — аварийный ремонт P1 или срочный ремонт P2.",
-      period: "Период", days: "{n} дн.", cls: "Класс", all: "Все классы",
-      mtbf: "MTBF", mttr: "MTTR", avail: "Готовность", fails: "Отказы",
-      mtbf_s: "часов между отказами", mttr_s: "часов на ремонт", avail_s: "только простои из-за отказов (P1 + P2)",
-      fails_s: "машин: {n}", none: "нет отказов за {n} дн.", h: "{v} ч",
-      basis: "{u} машин × {d} дн. × 24 ч = {t} ч. Отказов: {f}, простой {dh} ч: {docs} — по простою 1С, {dur} — по фактической длительности, {dates} — по датам начала и окончания.",
-      unknown: "У {n} отказ(ов) в 1С нет данных о простое — они учтены как отказы, исключены из MTTR, а их простой не входит в готовность.",
-      nodata: "Показатели надёжности приходят с ежечасной выгрузкой 1С (data/reliability.json). Файл ещё не сформирован — его создаст первая выгрузка после этого изменения.",
-      loadfail: "Не удалось прочитать data/reliability.json ({e}). Ниже нет измерений.",
-      stale: "По выгрузке 1С от {at}.",
-      byclass: "По классам", top: "Машины с наибольшим простоем из-за отказов",
-      c_cls: "Класс", c_units: "Машин", c_unit: "Машина", c_f: "Отказы", c_dh: "Простой, ч",
-      c_mtbf: "MTBF, ч", c_mttr: "MTTR, ч", c_av: "Готовность",
-      unk_t: "У {n} отказ(ов) здесь нет данных о простое в 1С — они не входят в эту сумму.",
-      csv: "Экспорт CSV", unclassed: "(без класса)", nofail: "За период отказов P1 или P2 не зарегистрировано.",
+      sub: "Официальные показатели сайта надёжности, основной парк, учёт по ISO 14224.",
+      same: "Те же показатели, что на главной странице сайта надёжности:",
+      home: "сайт надёжности", weekly: "Недельный отчёт",
+      away: "Показатели надёжности сайта — на maintenance.vegadevelopment.com",
+      wk: "Неделя {n}", wk_s: "{a} – {b}",
+      avail: "Готовность", fails: "Отказы", mtbf: "MTBF", mttr: "MTTR",
+      avail_s: "план {p}%", avail_np: "плановые часы минус простои P1–P4",
+      fails_s: "основных единиц: {u}", mtbf_s: "часы работы ÷ отказы", mttr_s: "часы P1 + P2 ÷ отказы",
+      none: "отказов за неделю нет", h: "{v} ч",
+      periods: "Неделя, с начала месяца, с начала года",
+      fleets: "По паркам — неделя {n}", fleets_s: "Парки недельного отчёта сайта, основная техника.",
+      c_per: "Период", c_fleet: "Парк", c_units: "Ед.", c_av: "Готовность", c_f: "Отказы", c_mtbf: "MTBF, ч", c_mttr: "MTTR, ч",
+      p_week: "Неделя {n}", p_mtd: "С начала месяца", p_ytd: "С начала года",
+      s_primary: "Основная ({u} ед.)", s_all: "Вся техника ({u} ед.)",
+      basis: "Данные на {at} (время участка) · неделя {from} – {to} · ISO 14224: один непрерывный простой = один отказ, учитывается в периоде, где он начался; 0 отказов = MTBF и MTTR не рассчитываются.",
+      stale: "Показатели от {at} (время участка) — сайт не публиковал новых больше суток.",
+      nofleet: "Строк по паркам в сегодняшнем файле нет: {why}",
+      csv: "Экспорт CSV", loading: "Читаем показатели сайта надёжности…",
     },
   };
   const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -165,21 +82,15 @@
     Object.keys(v || {}).forEach(n => { s = s.split("{" + n + "}").join(String(v[n])); });
     return s;
   }
-  const n0 = x => (x == null || !isFinite(x)) ? "—" : Math.round(x).toLocaleString("en-US").replace(/,/g, "\u2009");
-  const n1 = x => (x == null || !isFinite(x)) ? "—" : (Math.round(x * 10) / 10).toFixed(1);
-  const pct = x => (x == null || !isFinite(x)) ? "—" : (Math.round(x * 1000) / 10).toFixed(1) + "%";
-  /* For the screen only: the same tenths, grouped the way n0 groups, so a
-     downtime column and an MTBF column read alike ("5 917.8" beside "1 240").
-     The CSV keeps n1 — a spreadsheet wants a plain number. */
-  const n1g = x => { if (x == null || !isFinite(x)) return "—"; const s = n1(x), i = s.indexOf(".");
-    return Number(s.slice(0, i)).toLocaleString("en-US").replace(/,/g, "\u2009") + s.slice(i); };
-  /* ONE SET OF COLUMNS FOR BOTH TABLES. "By class" and "the most downtime"
-     carry the same five measures, and with each table sizing itself the
-     MTBF of one sat under the downtime of the other. Fixed, shared widths,
-     numbers right-aligned in tabular figures so the digits line up. Injected
-     once from here so both office pages carry the identical rule. */
-  const COLG = '<colgroup><col style="width:17%"><col style="width:11%"><col style="width:13%">'
-    + '<col style="width:16%"><col style="width:14%"><col style="width:14%"><col style="width:15%"></colgroup>';
+  /* "2026-10-19" -> "19.10.2026" (the site's own date style, DATE_DMY_V1) */
+  const dmy = t => { const m = /^(\d{4})-(\d\d)-(\d\d)(.*)$/.exec(String(t || "")); return m ? m[3] + "." + m[2] + "." + m[1] + m[4] : String(t || "—"); };
+  const dash = v => (v == null || v === "") ? "—" : String(v);
+  const pctS = v => (v == null || v === "") ? "—" : (/%$/.test(String(v)) ? String(v) : v + "%");
+
+  const COLG = '<colgroup><col style="width:28%"><col style="width:12%"><col style="width:15%">'
+    + '<col style="width:15%"><col style="width:15%"><col style="width:15%"></colgroup>';
+  const COLP = '<colgroup><col style="width:32%"><col style="width:17%"><col style="width:17%">'
+    + '<col style="width:17%"><col style="width:17%"></colgroup>';
   function css() {
     if (typeof document === "undefined" || document.getElementById("relCss")) return;
     const st = document.createElement("style"); st.id = "relCss";
@@ -187,86 +98,105 @@
       + "#relPanel table.reltbl th,#relPanel table.reltbl td{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:middle;}"
       + "#relPanel table.reltbl .num{text-align:right;font-variant-numeric:tabular-nums;}"
       + "#relPanel table.reltbl th.num{text-align:right;}"
-      + "#relPanel table.reltbl .relq{margin-left:4px;color:var(--warn-ink,#8a5a00);font-weight:600;cursor:help;}";
+      + "#relPanel table.reltbl tr.relgrp td{font-weight:600;background:var(--surface-2,rgba(0,0,0,.03));}"
+      + "#relPanel .relsrc a,#relPanel [data-rel=away] a{white-space:nowrap;display:inline-flex;align-items:center;min-height:32px;}";   // a pressable target, not a line of text (tests/phase6.cjs)
     document.head.appendChild(st);
   }
 
-  let DATA = null, LOADING = null, LOAD_ERR = "";
-  /* Fetched when the panel is first drawn, not at page load: nobody else on
-     the page reads it, and it is the largest file in data/. A timestamp, not
-     the build tag, steps past the cache, for the same reason woRefresh()
-     does: the hourly job deliberately does not bump BUILD. */
+  /* A file is the site's only when it says so; a host that answers every
+     address with its own page (a single-page fallback) is not the site. */
+  function valid(j) {
+    return !!(j && j.marker === "SITE_KPI_V1" && j.scopes && j.scopes.Primary && j.scopes.Primary.week && j.week);
+  }
+
+  let DATA = null, LOADING = null, WHY = "", TRIED = false;
+  /* Read when the panel is first drawn and on every later draw (a timestamp,
+     not the build tag, steps past the cache: the site rewrites the file on
+     its own clock, ~every 10 minutes). */
   function load(url) {
     if (LOADING) return LOADING;
-    LOADING = fetch((url || "../data/reliability.json") + "?t=" + Date.now(), { cache: "no-store" })
-      .then(r => { if (r.status === 404) return null; if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
-      .then(j => { DATA = j; LOAD_ERR = ""; return j; })
-      .catch(e => { LOAD_ERR = String((e && e.message) || e); DATA = null; return null; })
-      .finally(() => { setTimeout(() => { LOADING = null; }, 0); });
+    const ac = typeof AbortController !== "undefined" ? new AbortController() : null;
+    const timer = ac ? setTimeout(() => ac.abort(), WAIT_MS) : null;
+    LOADING = fetch((url || URL_DEF) + "?t=" + Date.now(), { cache: "no-store", signal: ac ? ac.signal : undefined })
+      .then(r => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+      .then(j => { if (!valid(j)) throw new Error("not the site file"); DATA = j; WHY = ""; return j; })
+      .catch(e => { WHY = String((e && e.message) || e); DATA = null; return null; })
+      .finally(() => { TRIED = true; if (timer) clearTimeout(timer); setTimeout(() => { LOADING = null; }, 0); });
     return LOADING;
   }
 
-  /* el: the container. opts: {lang, classOf, days, cls, onChange} */
+  function siteLinks(T) {
+    return `<a href="${SITE}/" target="_blank" rel="noopener">${esc(T("home"))} ↗</a> · `
+      + `<a href="${SITE}/weekly_report.html" target="_blank" rel="noopener">${esc(T("weekly"))} ↗</a>`;
+  }
+
+  /* el: the container. opts: {lang}. Older callers also pass days / cls /
+     classOf / onChange (the work-order panel's controls); they are ignored —
+     the site's periods are its own. Returns the file, or null. */
   function render(el, opts) {
     opts = opts || {};
     css();
     const lang = opts.lang === "ru" ? "ru" : "en";
     const T = (k, v) => tr(lang, k, v);
-    const days = [30, 90, 365].includes(Number(opts.days)) ? Number(opts.days) : 90;
-    const cls = opts.cls == null ? null : String(opts.cls);
-    const head = `<div class="secthd"><h2>${esc(T("title"))}</h2></div>
-      <div class="sub" style="margin:0 0 10px">${esc(T("sub"))}</div>`;
-    if (!DATA) {
-      el.innerHTML = head + `<div class="hint" data-rel="nodata">${esc(LOAD_ERR ? T("loadfail", { e: LOAD_ERR }) : T("nodata"))}</div>`;
+    const head = `<div class="secthd"><h2>${esc(T("title"))}</h2></div>`;
+    if (!DATA && !TRIED) {   // the first read has not answered yet: say so, never "away" for a moment on the site itself
+      el.innerHTML = head + `<div class="hint" data-rel="loading">${esc(T("loading"))}</div>`;
       return null;
     }
-    const classOf = opts.classOf || (() => "");
-    const r = compute(DATA, { days, cls, classOf });
-    if (!r) { el.innerHTML = head + `<div class="hint" data-rel="nodata">${esc(T("nodata"))}</div>`; return null; }
-    const classes = [...new Set(DATA.relUnits.map(u => classOf(u) || ""))].sort();
-    const ctl = `<div class="row" style="gap:12px;flex-wrap:wrap;margin-bottom:10px">
-      <div class="field"><label for="relDays">${esc(T("period"))}</label><select id="relDays">${
-        [30, 90, 365].map(d => `<option value="${d}"${d === days ? " selected" : ""}>${esc(T("days", { n: d }))}</option>`).join("")}</select></div>
-      <div class="field"><label for="relCls">${esc(T("cls"))}</label><select id="relCls"><option value="__all"${cls == null ? " selected" : ""}>${esc(T("all"))}</option>${
-        classes.map(c => `<option value="${esc(c)}"${c === cls ? " selected" : ""}>${esc(c || T("unclassed"))}</option>`).join("")}</select></div>
-      <div class="field" style="align-self:flex-end"><button class="btn" type="button" id="relCsv">${esc(T("csv"))}</button></div>
-    </div>`;
+    if (!DATA) {
+      el.innerHTML = head + `<div class="hint" data-rel="away"${WHY ? ` data-why="${esc(WHY)}"` : ""}>`
+        + `<a href="${SITE}/" target="_blank" rel="noopener">${esc(T("away"))} ↗</a></div>`;
+      return null;
+    }
+    const d = DATA, P = d.scopes.Primary, A = d.scopes.All, W = P.week, wn = d.week.no;
+    const sh = x => (x && x.shown) || {};
+    const fail0 = !W.failures;
     const tile = (id, k, v, s, tone) => `<div class="kpi ${tone || ""}" id="${id}"><span class="k">${esc(k)}</span><span class="v">${v}</span><span class="s">${esc(s)}</span></div>`;
     const kp = `<div class="kpis" id="relKpis">${
-      tile("relMtbf", T("mtbf"), r.failures ? esc(T("h", { v: n0(r.mtbf) })) : "—", r.failures ? T("mtbf_s") : T("none", { n: days }), r.failures ? "" : "good")
-      + tile("relMttr", T("mttr"), r.mttr != null ? esc(T("h", { v: n1(r.mttr) })) : "—", T("mttr_s"))
-      + tile("relAvail", T("avail"), esc(pct(r.avail)), T("avail_s"), r.avail != null && r.avail < 0.85 ? "warn" : "good")
-      + tile("relFails", T("fails"), String(r.failures), T("fails_s", { n: r.units }), r.failures ? "warn" : "good")}</div>`;
-    const basis = `<div class="hint" data-rel="basis" style="margin-top:8px">${esc(T("basis", { u: r.units, d: days, t: n0(r.T),
-      f: r.failures, dh: n1g(r.downH), docs: r.fromDocs, dur: r.fromDuration, dates: r.fromDates }))}${
-      r.unknownN ? `<br><span class="warn" data-rel="unknown">${esc(T("unknown", { n: r.unknownN }))}</span>` : ""}${
-      DATA.generated ? `<br>${esc(T("stale", { at: String(DATA.generated).replace("T", " ").slice(0, 16) + " UTC" }))}` : ""}</div>`;
-    const cl = byClass(DATA, { days, classOf }) || [];
-    const ctab = `<div class="secthd" style="margin-top:16px"><h3 style="margin:0">${esc(T("byclass"))}</h3></div><div style="overflow-x:auto"><table class="grid reltbl" id="relByClass">${COLG}<thead><tr>
-      <th>${esc(T("c_cls"))}</th><th class="num">${esc(T("c_units"))}</th><th class="num">${esc(T("c_f"))}</th><th class="num">${esc(T("c_dh"))}</th><th class="num">${esc(T("c_mtbf"))}</th><th class="num">${esc(T("c_mttr"))}</th><th class="num">${esc(T("c_av"))}</th></tr></thead><tbody>${
-      cl.map(c => `<tr data-cls="${esc(c.cls)}"><td>${esc(c.cls || T("unclassed"))}</td><td class="num">${c.units}</td><td class="num">${c.failures}</td><td class="num">${n1g(c.downH)}${c.unknownN ? `<span class="relq" title="${esc(T("unk_t", { n: c.unknownN }))}">+?</span>` : ""}</td><td class="num">${c.failures ? n0(c.mtbf) : "—"}</td><td class="num">${n1(c.mttr)}</td><td class="num">${pct(c.avail)}</td></tr>`).join("")}</tbody></table></div>`;
-    const top = r.rows.slice(0, 10);
-    const utab = `<div class="secthd" style="margin-top:16px"><h3 style="margin:0">${esc(T("top"))}</h3></div>${top.length ? `<div style="overflow-x:auto"><table class="grid reltbl" id="relTop">${COLG}<thead><tr>
-      <th>${esc(T("c_unit"))}</th><th>${esc(T("c_cls"))}</th><th class="num">${esc(T("c_f"))}</th><th class="num">${esc(T("c_dh"))}</th><th class="num">${esc(T("c_mtbf"))}</th><th class="num">${esc(T("c_mttr"))}</th><th class="num">${esc(T("c_av"))}</th></tr></thead><tbody>${
-      top.map(u => `<tr data-unit="${esc(u.unit)}"><td><b>${esc(u.unit)}</b></td><td>${esc(u.cls || "")}</td><td class="num">${u.failures}</td><td class="num">${n1g(u.downH)}${u.unknownN ? `<span class="relq" title="${esc(T("unk_t", { n: u.unknownN }))}">+?</span>` : ""}</td><td class="num">${n0(u.mtbf)}</td><td class="num">${n1(u.mttr)}</td><td class="num">${pct(u.avail)}</td></tr>`).join("")}</tbody></table></div>`
-      : `<div class="hint">${esc(T("nofail"))}</div>`}`;
-    el.innerHTML = head + ctl + kp + basis + ctab + utab;
-    const fire = o => { if (opts.onChange) opts.onChange(Object.assign({ days, cls }, o)); };
-    el.querySelector("#relDays").onchange = e => fire({ days: Number(e.target.value) });
-    el.querySelector("#relCls").onchange = e => fire({ cls: e.target.value === "__all" ? null : e.target.value });
+      tile("relAvail", T("avail") + " · " + T("wk", { n: wn }), esc(pctS(sh(W).pa)), W.plan_pct != null ? T("avail_s", { p: W.plan_pct }) : T("avail_np"))
+      + tile("relFails", T("fails") + " · " + T("wk", { n: wn }), esc(dash(W.failures)), T("fails_s", { u: P.units }), fail0 ? "good" : "")
+      + tile("relMtbf", T("mtbf") + " · " + T("wk", { n: wn }), fail0 || sh(W).mtbf == null ? "—" : esc(T("h", { v: sh(W).mtbf })), fail0 ? T("none") : T("mtbf_s"), fail0 ? "good" : "")
+      + tile("relMttr", T("mttr") + " · " + T("wk", { n: wn }), fail0 || sh(W).mttr == null ? "—" : esc(T("h", { v: sh(W).mttr })), fail0 ? T("none") : T("mttr_s"))}</div>`;
+    const src = `<div class="hint relsrc" data-rel="site" style="margin:8px 0 0">${esc(T("same"))} ${siteLinks(T)}</div>`;
+    const row = (lab, x) => `<tr><td>${esc(lab)}</td><td class="num">${esc(pctS(sh(x).pa))}</td><td class="num">${esc(dash(x.failures))}</td>`
+      + `<td class="num">${esc(x.failures ? dash(sh(x).mtbf) : "—")}</td><td class="num">${esc(x.failures ? dash(sh(x).mttr) : "—")}</td></tr>`;
+    const block = (S, lab) => S ? `<tr class="relgrp"><td colspan="5">${esc(lab)}</td></tr>`
+      + row(T("p_week", { n: wn }), S.week) + row(T("p_mtd"), S.mtd) + row(T("p_ytd"), S.ytd) : "";
+    const ptab = `<div class="secthd" style="margin-top:16px"><h3 style="margin:0">${esc(T("periods"))}</h3></div><div style="overflow-x:auto"><table class="grid reltbl" id="relPeriods">${COLP}<thead><tr>
+      <th>${esc(T("c_per"))}</th><th class="num">${esc(T("c_av"))}</th><th class="num">${esc(T("c_f"))}</th><th class="num">${esc(T("c_mtbf"))}</th><th class="num">${esc(T("c_mttr"))}</th></tr></thead><tbody>${
+      block(P, T("s_primary", { u: P.units })) + block(A, A ? T("s_all", { u: A.units }) : "")}</tbody></table></div>`;
+    const fl = Array.isArray(d.fleets) ? d.fleets : [];
+    const num = v => v == null ? "—" : String(v);
+    const ftab = `<div class="secthd" style="margin-top:16px"><h3 style="margin:0">${esc(T("fleets", { n: wn }))}</h3></div>${fl.length
+      ? `<div class="sub" style="margin:0 0 6px">${esc(T("fleets_s"))}</div><div style="overflow-x:auto"><table class="grid reltbl" id="relFleets">${COLG}<thead><tr>
+      <th>${esc(T("c_fleet"))}</th><th class="num">${esc(T("c_units"))}</th><th class="num">${esc(T("c_av"))}</th><th class="num">${esc(T("c_f"))}</th><th class="num">${esc(T("c_mtbf"))}</th><th class="num">${esc(T("c_mttr"))}</th></tr></thead><tbody>${
+      fl.map(f => `<tr data-fleet="${esc(f.k)}"><td>${esc(lang === "ru" ? (f.ru || f.en) : f.en)}</td><td class="num">${f.units}</td><td class="num">${esc(pctS(num(sh(f).pa)))}</td><td class="num">${f.failures}</td>`
+        + `<td class="num">${f.failures ? num(sh(f).mtbf) : "—"}</td><td class="num">${f.failures ? num(sh(f).mttr) : "—"}</td></tr>`).join("")}</tbody></table></div>`
+      : `<div class="hint" data-rel="nofleet">${esc(T("nofleet", { why: d.fleets_note || "—" }))}</div>`}`;
+    const at = d.data_as_of_site || d.generated_site;
+    const old = (() => { const t = Date.parse(String(at || "").replace(" ", "T") + ":00+12:00"); return isFinite(t) && Date.now() - t > STALE_H * 3600 * 1000; })();
+    const basis = `<div class="hint" data-rel="basis" style="margin-top:10px">${esc(T("basis", { at: dmy(at), from: dmy(d.week.from), to: dmy(d.week.to) }))}${
+      old ? `<br><span class="warn" data-rel="stale">${esc(T("stale", { at: dmy(at) }))}</span>` : ""}</div>`;
+    const ctl = `<div class="row" style="justify-content:flex-end;margin:-4px 0 6px"><button class="btn" type="button" id="relCsv">${esc(T("csv"))}</button></div>`;
+    el.innerHTML = head + `<div class="sub" style="margin:0 0 10px">${esc(T("sub"))} ${esc(T("wk_s", { a: dmy(d.week.from), b: dmy(d.week.to) }))}</div>`
+      + ctl + kp + src + ptab + ftab + basis;
     el.querySelector("#relCsv").onclick = () => {
       const q = v => { const s = String(v == null ? "" : v); return /[",\n;]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
-      const lines = [["scope", "class", "unit", "machines", "days", "failures", "downtime_h", "unknown_downtime", "mtbf_h", "mttr_h", "availability"].join(",")];
-      cl.forEach(c => lines.push(["class", c.cls, "", c.units, days, c.failures, n1(c.downH), c.unknownN, c.failures ? Math.round(c.mtbf) : "", c.mttr != null ? n1(c.mttr) : "", c.avail != null ? (c.avail * 100).toFixed(1) : ""].map(q).join(",")));
-      r.rows.forEach(u => lines.push(["unit", u.cls, u.unit, 1, days, u.failures, n1(u.downH), u.unknownN, Math.round(u.mtbf), u.mttr != null ? n1(u.mttr) : "", (u.avail * 100).toFixed(1)].map(q).join(",")));
+      const lines = [["scope", "period", "from", "to", "units", "availability_pct", "failures", "mtbf_h", "mttr_h"].join(",")];
+      [["Primary", P], ["All", A]].forEach(([nm, S]) => S && ["week", "mtd", "ytd"].forEach(k => {
+        const x = S[k], per = k === "week" ? d.week : d[k] || {};
+        lines.push([nm, k, per.from, per.to, x.units, x.pa_pct, x.failures, x.mtbf_h, x.mttr_h].map(q).join(","));
+      }));
+      fl.forEach(f => lines.push(["fleet:" + f.en, "week", d.week.from, d.week.to, f.units, f.pa_pct, f.failures, f.mtbf_h, f.mttr_h].map(q).join(",")));
+      lines.push(["source", q(d.source + ", data as of " + at + " site")].join(","));
       const a = document.createElement("a");
-      a.href = URL.createObjectURL(new Blob(["\ufeff" + lines.join("\n")], { type: "text/csv;charset=utf-8" }));
-      a.download = "reliability_" + days + "d_" + String(DATA.generated || "").slice(0, 10) + ".csv";
+      a.href = URL.createObjectURL(new Blob(["﻿" + lines.join("\n")], { type: "text/csv;charset=utf-8" }));
+      a.download = "site_reliability_" + d.week.label + ".csv";
       a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
     };
-    return r;
+    return d;
   }
 
-  root.CMRel = { compute, byClass, isFailure, downtime, spanH, load, render,
-    _set(d) { DATA = d; LOAD_ERR = ""; }, data() { return DATA; } };
+  root.CMRel = { load, render, valid, SITE, URL: URL_DEF,
+    _set(d) { DATA = valid(d) ? d : null; WHY = ""; TRIED = true; }, data() { return DATA; }, why() { return WHY; } };
 })(typeof window !== "undefined" ? window : globalThis);

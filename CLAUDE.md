@@ -4713,6 +4713,33 @@ Pechanka's to stop and is not in this repository. Folders already split stay
 split on Drive (the reads now see both). Yandex has no folders (object keys)
 and needs nothing.
 
+**THE RELIABILITY PANEL SHOWS THE SITE'S FIGURES, NOT ITS OWN (2026-10-26,
+build 539).** Decided by the site: "show the site figures". Reports →
+"Reliability — MTBF, MTTR, availability" worked the three numbers out itself
+from 1C's corrective work orders (`data/reliability.json`: calendar hours, P1
+and P2 work orders as failures), and they disagreed with the reliability
+site's official figures (1C Asset State, ISO 14224 episodes, standby = up,
+MTBF = operating h ÷ failures, MTTR = P1 + P2 h ÷ failures). Two answers to
+one question. `dashboard/reliability.js` now computes nothing: it reads
+`/site_kpi.json` (same origin — PECHANKA serves both the site and
+`/cm/dashboard/`), written by the site build right after its homepage
+(`SITE_KPI_V1`, askpi-site kit `site_kpi_kit`, only when it equals the
+homepage cards), and prints it as it stands: week availability / failures /
+MTBF / MTTR as the homepage rounds them, week · month to date · year to date
+for Primary and All, the Weekly report's fleets, data-as-of, and links to the
+site and its Weekly report. A file that is missing, not JSON, or not marked
+`SITE_KPI_V1` (Firebase and GitHub Pages have none; a host may answer with
+its own page) gives ONE sentence saying where the figures are, and no
+numbers — a number from somewhere else is what this replaced. The period /
+class pickers are gone (the site's periods are its own); `relShow()` still
+passes them and they are ignored. Nothing in either office page reads
+`data/reliability.json` any more; the ingester still writes it
+(`tests/relingest.py`). `tests/reliability.cjs` serves a made-up
+`/site_kpi.json` to both pages and checks the figures, the 0-failure week,
+the no-file / wrong-file / other-host cases, Russian and the CSV; against the
+old panel it fails 52 assertions. Until the PECHANKA kit is installed the
+office panel shows the sentence, not numbers.
+
 ---
 
 ## Secrets
