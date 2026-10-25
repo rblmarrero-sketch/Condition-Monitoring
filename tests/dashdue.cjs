@@ -95,7 +95,15 @@ const rows = p => p.$$eval('#ddList tbody tr', a => a.map(tr => ({
   const ctx = await b.newContext({ viewport: { width: 1440, height: 1000 } });
   const p = await ctx.newPage();
   p.on('pageerror', e => fails.push('PAGEERROR ' + e.message));
-  p.on('console', m => { if (m.type() === 'error' && !/ERR_/.test(m.text())) fails.push('CONSOLE ' + m.text()); });
+  /* /site_kpi.json is the reliability panel's file (Reports, build 539): only
+     PECHANKA serves it, and where it is absent the panel says so in a
+     sentence, by design. The browser logs that 404 whatever the page does, so
+     this one expected absence is not a console error; any other is. */
+  p.on('console', m => {
+    if (m.type() !== 'error' || /ERR_/.test(m.text())) return;
+    if (/\/site_kpi\.json/.test((m.location() || {}).url || '')) return;
+    fails.push('CONSOLE ' + m.text() + ' ' + ((m.location() || {}).url || ''));
+  });
 
   await p.goto(URL, { waitUntil: 'load' });
   /* The page ships a bundled magnetic-plug history so it is never blank on a
