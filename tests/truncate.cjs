@@ -90,6 +90,30 @@ const CLIP = el => !el ? 'missing' : (el.scrollWidth > el.clientWidth + 1 || el.
     await ctx.close();
   }
 
+  console.log('\n2b. A REASON WITH NO BREAK IN IT DOES NOT WIDEN THE PHONE');
+  /* "Upload failed: ..." prints the reason as it was given, and a reason can be
+     one long token. With nothing to break at it pushed the page past the screen
+     and the tab bar and Release button with it (tests/rtw.cjs, 2026-10-25). */
+  {
+    const ctx = await b.newContext({ viewport: { width: 360, height: 800 }, isMobile: true, hasTouch: true });
+    await ctx.addInitScript(() => localStorage.setItem('up_dests', '[]'));
+    const p = await ctx.newPage();
+    await p.goto(B + '/mobile/index.html', { waitUntil: 'load' });
+    await p.waitForFunction(() => (document.getElementById('verNum') || {}).textContent !== '?', null, { timeout: 20000 });
+    const r = await p.evaluate(() => {
+      showPane('paneQueue');                       // the bar lives on the Saved screen
+      const bar = document.getElementById('syncBar');
+      bar.className = 'syncbar err';
+      bar.innerHTML = '<span class="dot"></span><span class="sp">Upload failed: Main backend (backend.example): '
+        + 'https://backend.example/macros/s/' + 'A'.repeat(90) + '/exec</span><button>Retry</button>';
+      return { sw: document.documentElement.scrollWidth, iw: innerWidth, cw: document.documentElement.clientWidth,
+               shown: bar.offsetWidth > 0 };
+    });
+    ok('  (the bar is on screen, so the check can see it)', r.shown, JSON.stringify(r));
+    ok('a 120-character token in the sync bar keeps the page the width of the phone', r.sw <= r.cw, JSON.stringify(r));
+    await ctx.close();
+  }
+
   console.log('\n3. THE OFFICE FILTER BAR — wider dropdowns, still one row, full text on hover');
   for (const file of ['dashboard', 'dashboard-next']) for (const lang of ['en', 'ru']) for (const W of [1280, 1366, 1440]) {
     const ctx = await b.newContext({ viewport: { width: W, height: 800 } });
