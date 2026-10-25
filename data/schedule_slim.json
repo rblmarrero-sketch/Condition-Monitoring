@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-25T23:40:09+00:00",
+  "generated": "2026-10-25T23:57:35+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -452,17 +452,6 @@
           "MP"
         ],
         "plan": "2026-10-29",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "TK118": [
-      {
-        "wo": "WO-019518",
-        "hours": 250,
-        "types": [
-          "MP"
-        ],
-        "plan": "2026-10-25",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -2051,24 +2040,6 @@
       "cause": "",
       "pmStatus": "complete",
       "completed": "2026-10-25"
-    },
-    {
-      "wo": "WO-019518",
-      "equip": "TK118",
-      "cls": "AT",
-      "comp": "",
-      "desc": "Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-10-25",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-10-25",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
     },
     {
       "wo": "WO-019537",
