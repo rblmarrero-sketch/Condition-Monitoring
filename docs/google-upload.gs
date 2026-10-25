@@ -389,8 +389,6 @@ function staleWrite_(b, prior, what) {
 function saveEdit_(b) {
   var name = keyFile_(b.key, '.edit.json');
   if (!name) return { ok: false, error: 'Bad record key: ' + b.key };
-  // GAS_SAFETY_V1: every correction, void and unvoid says who made it.
-  if (!String(b.by || '').trim()) return { ok: false, error: 'A name is required (who is making this change)' };
   return withScriptLock_(function () { return saveEditLocked_(b, name); });
 }
 /* GAS_SAFETY_V1: one field of the stored correction. A key the request leaves
@@ -400,6 +398,26 @@ function saveEdit_(b) {
    they left out into {} or null: a re-filed round went back, an hour-meter fix
    vanished with the next PDF. A client that sends the whole document sees no
    difference. */
+/* GAS_SAFETY_V1: true when the request changes nothing but the report log. The dashboards' logReport() echoes
+   the page's copy of the correction (void, reason, note, items, media) with the new log; a desk that never typed
+   a name sends by "" - a refusal there would lose the record that a PDF was issued. Any other change needs a name. */
+var EDIT_DFLT_ = { void: false, reason: '', note: '', items: {}, media: {}, fields: {}, assign: {}, move: null };
+function blank_(v) {   // null, '', {} and [] all mean "nothing here" (the store writes {} as null for some keys)
+  if (v === undefined || v === null || v === '') return null;
+  if (typeof v === 'object' && Object.keys(v).length === 0) return null;
+  return v;
+}
+function onlyReportLog_(b, prior) {
+  var env = { op: 1, key: 1, ifAt: 1, by: 1, desk: 1, secret: 1, at: 1, reports: 1 };
+  if (!Object.prototype.hasOwnProperty.call(b, 'reports')) return false;
+  for (var k in b) {
+    if (!Object.prototype.hasOwnProperty.call(b, k) || env[k]) continue;
+    var was = (prior && Object.prototype.hasOwnProperty.call(prior, k)) ? prior[k]
+            : (Object.prototype.hasOwnProperty.call(EDIT_DFLT_, k) ? EDIT_DFLT_[k] : undefined);
+    if (JSON.stringify(blank_(b[k])) !== JSON.stringify(blank_(was))) return false;
+  }
+  return true;
+}
 function editField_(b, prior, k, norm, dflt) {
   if (Object.prototype.hasOwnProperty.call(b, k)) return norm(b[k]);
   if (prior && Object.prototype.hasOwnProperty.call(prior, k)) return norm(prior[k]);
@@ -426,6 +444,8 @@ function saveEditLocked_(b, name) {
   }
   var refused = staleWrite_(b, prior, 'correction');
   if (refused) return refused;
+  // GAS_SAFETY_V1: every correction, void and unvoid says who made it (a report log alone may come without a name).
+  if (!String(b.by || '').trim() && !onlyReportLog_(b, prior)) return { ok: false, error: 'A name is required (who is making this change)' };
   /* GAS_SAFETY_V1: voiding a round needs a reason, as the Edit panel asks.
      Only when this request is what voids it: a writer that echoes an
      existing void back is not voiding anything. */

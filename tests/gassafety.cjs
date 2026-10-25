@@ -359,6 +359,21 @@ section('7a. a name on every correction, void and decision', () => {
   ok('nothing was written for the refused ones', !W.alive().some(p => /\.edit\.json$/.test(p)));
 });
 
+section('7a2. a report log alone may come without a name', () => {
+  const { W, S } = world();
+  const k = 'TK146|2026-10-20|INSP';
+  const a = S.post({ op: 'edit', key: k, by: 'Desk A', note: 'n1', items: {} });
+  ok('a named correction is stored', a.ok === true, a.error);
+  const log = [{ rev: 1, at: '2026-10-26T00:00:00Z', by: '', status: 'issued', pages: 2 }];
+  const r = S.post({ op: 'edit', key: k, by: '', void: false, reason: '', note: 'n1', items: {}, media: {}, reports: log });
+  ok('logReport with no name, changing nothing else, is accepted', r.ok === true, r.error);
+  const f = Object.values(W.byId).find(x => x._buf && !x._trash && /^_meta\/TK146_20\.10\.2026_INSP\.edit\.json$/.test(x.path()));
+  const d = f ? JSON.parse(f._buf.toString('utf8')) : {};
+  ok('the log is stored and the note kept', Array.isArray(d.reports) && d.reports.length === 1 && d.note === 'n1', JSON.stringify(d).slice(0, 160));
+  const x = S.post({ op: 'edit', key: k, by: '', note: 'changed', reports: log });
+  ok('no name + any other change is refused', x.ok === false && /name/i.test(x.error || ''), x.error);
+});
+
 section('7b. what an upload may put in _meta', () => {
   const { W, S } = world();
   const up = (folder, name, body, extra) => S.post(Object.assign({ op: 'batch', folder, dev: 'DPHONE1',
