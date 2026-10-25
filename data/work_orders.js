@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-25T05:14:43+00:00",
+  "generated": "2026-10-25T05:29:27+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -352,7 +352,7 @@ window.CM_WO_DATA = {
     "WE010",
     "WE011"
   ],
-  "duplicateRowsCollapsed": 476,
+  "duplicateRowsCollapsed": 477,
   "roundsDedupedWithinVisit": 2,
   "columns": [
     "Asset description",
@@ -436,13 +436,13 @@ window.CM_WO_DATA = {
     "wo": "Work order number"
   },
   "cmDateFrom": {
-    "raised": 187,
+    "raised": 189,
     "detected": 0,
     "planStart": 0
   },
   "cmCauseFrom": {
     "wo": 76,
-    "wr": 111,
+    "wr": 113,
     "cert": 0,
     "none": 0
   },
@@ -497,6 +497,52 @@ window.CM_WO_DATA = {
       "descr": "Утечка с щупа РПН, масло не характерного цвета и консистенции. Требуется диагностика.",
       "status": "Registered",
       "by": "Bekzhan",
+      "woNumber": null,
+      "maintType": null,
+      "planned": false
+    },
+    {
+      "date": "2026-10-25",
+      "dateFrom": "raised",
+      "raised": "2026-10-25",
+      "detected": "2026-10-25",
+      "planStart": null,
+      "closed": null,
+      "asset": "DZ017",
+      "defect": "DD-00015642",
+      "requestNo": "DD-00015642",
+      "eqType": "DOZER, TRACK TYPE",
+      "system": "DZ017.CH.UC (Undercarriage / Ходовая часть)",
+      "priority": "P4 Planned (Repair)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "cause": "Разрушение от удара",
+      "causeFrom": "wr",
+      "descr": "Абразивный износ зубьев звёздочки, сколами и разрушением рабочей поверхности.",
+      "status": "Registered",
+      "by": "Zhomart",
+      "woNumber": null,
+      "maintType": null,
+      "planned": false
+    },
+    {
+      "date": "2026-10-25",
+      "dateFrom": "raised",
+      "raised": "2026-10-25",
+      "detected": "2026-10-25",
+      "planStart": null,
+      "closed": null,
+      "asset": "DZ017",
+      "defect": "DD-00015641",
+      "requestNo": "DD-00015641",
+      "eqType": "DOZER, TRACK TYPE",
+      "system": "DZ017.DRS.FUE.TNK (Fuel Tank / Топливный бак)",
+      "priority": "P4 Planned (Repair)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Износ уплотнения",
+      "causeFrom": "wr",
+      "descr": "Негерметичность крышки заливной горловины топливного бака.",
+      "status": "Registered",
+      "by": "Zhomart",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -61460,15 +61506,15 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-10-24",
-      "planStartDt": "2026-10-24T00:00:00",
-      "planEnd": "2026-10-25",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "planStartDt": "2026-10-24T19:30:00",
+      "planEnd": "2026-10-24",
+      "actualStart": "2026-10-24",
+      "actualStartDt": "2026-10-24T19:30:00",
+      "actualEnd": "2026-10-24"
     },
     {
       "equip": "LD008",
