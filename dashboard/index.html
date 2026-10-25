@@ -3787,10 +3787,10 @@
         <ul class="synone" id="rRecent"></ul>
       </div>
     </div>
-      <!-- MTBF / MTTR / AVAILABILITY. Drawn by dashboard/reliability.js, the
-         one place the three numbers are worked out, from data/reliability.json
-         (the hourly 1C pull's corrective work orders). Read when this tab is
-         opened, not at page load. -->
+      <!-- MTBF / MTTR / AVAILABILITY. Drawn by dashboard/reliability.js from
+         the reliability site's own figures (/site_kpi.json, SITE_KPI_V1, the
+         same numbers as the site homepage; decided 2026-10-26). Read when this
+         tab is opened; on a host without the file it says where they are. -->
     <div class="section" id="relPanel" style="margin-top:var(--s4,16px)"></div>
   </section>
 </main>
@@ -13498,9 +13498,9 @@ $("themeBtn").onclick=()=>{ const c=document.documentElement.getAttribute("data-
    pressing the button a person presses. A test that drives the function cannot
    see that nothing can reach the function. */
 let CUR_TAB="overview";
-/* The reliability panel on Reports (dashboard/reliability.js). Its period and
-   class are this page's own, so a redraw (a language change, the file
-   arriving) keeps what the reader chose. */
+/* The reliability panel on Reports (dashboard/reliability.js): the site's own
+   figures from /site_kpi.json. reliability.js ignores the period / class it is
+   still handed (the work-order panel's controls, retired 2026-10-26). */
 function relShow(){
   const el=$("relPanel"); if(!el||!window.CMRel) return;
   // Held on the function, not a module-level const: showTab() can run during

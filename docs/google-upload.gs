@@ -104,6 +104,11 @@ function doPost(e) {
     if (b.op === 'ping')    return json({ ok: true, write: true, batch: true, canDelete: !!ADMIN_SECRET,
                                           index: true, media: MEDIA_BATCH, at: indexAt_() });
 
+    /* GAS_SAFETY_V1: the office's changes carry the desk key PECHANKA's /cm-api
+       adds, once DESK_KEY is set in Script properties (see deskOk_). Phone ops
+       below — uploads, deferrals, push, reads — are never asked for it. */
+    if (DESK_OPS_[b.op] && !deskOk_(b)) return json({ ok: false, error: DESK_REFUSED_ });
+
     if (b.op === 'edit')    return json(saveEdit_(b));
     if (b.op === 'delete')  return json(deleteRecord_(b));
     if (b.op === 'delfile') return json(deleteFile_(b));
@@ -142,6 +147,7 @@ function doPost(e) {
         var one = list[bi];
         if (one.folder === undefined) one.folder = b.folder;
         if (one.dev === undefined) one.dev = b.dev;
+        if (one.desk === undefined) one.desk = b.desk;      // GAS_SAFETY_V1: the lube master's gate reads it
         try {
           var r = saveOne_(one, dirs);
           if (r.ok) saved.push(r); else failed.push({ name: one.name, error: r.error });
@@ -173,6 +179,11 @@ function saveOne_(b, dirs) {
   var parts = String(b.name).split('/').filter(String);
   var fileName = parts.pop();
   var path = [String(b.folder || '')].concat(parts).filter(String).join('/');
+
+  /* GAS_SAFETY_V1: what an upload may write. Checked before any folder is
+     made, so a refused upload leaves nothing behind. */
+  var refusedU = uploadRefused_(path, fileName, b);
+  if (refusedU) return { ok: false, error: refusedU };
 
   /* Keyed on the path, so every file of one component resolves the folder
      chain once and the rest read it back out. On a single upload the cache is
@@ -279,6 +290,11 @@ function saveOne_(b, dirs) {
     out.kept = true;                       // "we did not overwrite the other phone"
     if (isSidecar_(wanted)) {
       var c = markConflict_(wanted, plan.rival, dev);
+      /* GAS_SAFETY_V1: the lock was busy, so the marker was not written. Say the
+         file failed: the phone sends it again, placeUpload_ finds the rival
+         again, and the marker is written then. Our own ~DEV copy is simply
+         overwritten by that retry. */
+      if (c && c.busy) return { ok: false, busy: true, req: b.name, error: c.error };
       if (c) { out.conflict = c.key; out.devices = c.devices; }
     }
   }
@@ -306,7 +322,7 @@ function doGet(e) {
        older than this deployment keeps working; this is what a current one
        asks for first. */
     if (p.action === 'index') return json(p.rebuild ? rebuildIndex_(p) : readIndex_(p));
-    if (p.action === 'list') return json(listFiles_(p.folder || '', p.ext || ''));
+    if (p.action === 'list') return json(listFiles_(p.folder || '', p.ext || '', p.cursor || '', p.max));
     if (p.action === 'file') return json(readFile_(p.id));
     if (p.action === 'files') return json(readFiles_(p.ids));
     if (p.action === 'vapid') return json({ ok: false, error: 'No VAPID keys on this endpoint' });
@@ -346,9 +362,17 @@ function keyFile_(key, ext) {
    one indexUpsert_() already takes -- and the compare is identical, so a
    client written against one backend gets the same answer from the other.
    An absent ifAt is a legacy client: allowed, serialised, backed up. */
+/* GAS_SAFETY_V1: a lock that could not be taken in 20 s used to let the write
+   run WITHOUT it, so the race guard was off exactly when the script was busy.
+   Now nothing is written and the client is told to try again. */
 function withScriptLock_(fn) {
   var lock = null;
-  try { lock = LockService.getScriptLock(); lock.waitLock(20000); } catch (err) { lock = null; }
+  // No lock service at all is a local harness, never Apps Script; it runs as before.
+  try { lock = LockService.getScriptLock(); } catch (err0) { lock = null; }
+  if (lock) {
+    try { lock.waitLock(20000); }
+    catch (err) { return { ok: false, busy: true, error: 'busy, try again' }; }
+  }
   try { return fn(); }
   finally { if (lock) { try { lock.releaseLock(); } catch (err2) {} } }
 }
@@ -367,6 +391,40 @@ function saveEdit_(b) {
   if (!name) return { ok: false, error: 'Bad record key: ' + b.key };
   return withScriptLock_(function () { return saveEditLocked_(b, name); });
 }
+/* GAS_SAFETY_V1: one field of the stored correction. A key the request leaves
+   out keeps what is stored; a key it sends — an empty value or null included —
+   replaces it. Most writers send only what they changed (the action drawer, the
+   bulk plan, a report log), and the old whole-document write turned every key
+   they left out into {} or null: a re-filed round went back, an hour-meter fix
+   vanished with the next PDF. A client that sends the whole document sees no
+   difference. */
+/* GAS_SAFETY_V1: true when the request changes nothing but the report log. The dashboards' logReport() echoes
+   the page's copy of the correction (void, reason, note, items, media) with the new log; a desk that never typed
+   a name sends by "" - a refusal there would lose the record that a PDF was issued. Any other change needs a name. */
+var EDIT_DFLT_ = { void: false, reason: '', note: '', items: {}, media: {}, fields: {}, assign: {}, move: null };
+function blank_(v) {   // null, '', {} and [] all mean "nothing here" (the store writes {} as null for some keys)
+  if (v === undefined || v === null || v === '') return null;
+  if (typeof v === 'object' && Object.keys(v).length === 0) return null;
+  return v;
+}
+function onlyReportLog_(b, prior) {
+  var env = { op: 1, key: 1, ifAt: 1, by: 1, desk: 1, secret: 1, at: 1, reports: 1 };
+  if (!Object.prototype.hasOwnProperty.call(b, 'reports')) return false;
+  for (var k in b) {
+    if (!Object.prototype.hasOwnProperty.call(b, k) || env[k]) continue;
+    var was = (prior && Object.prototype.hasOwnProperty.call(prior, k)) ? prior[k]
+            : (Object.prototype.hasOwnProperty.call(EDIT_DFLT_, k) ? EDIT_DFLT_[k] : undefined);
+    if (JSON.stringify(blank_(b[k])) !== JSON.stringify(blank_(was))) return false;
+  }
+  return true;
+}
+function editField_(b, prior, k, norm, dflt) {
+  if (Object.prototype.hasOwnProperty.call(b, k)) return norm(b[k]);
+  if (prior && Object.prototype.hasOwnProperty.call(prior, k)) return norm(prior[k]);
+  return dflt;
+}
+var EDIT_OBJ_ = function (v) { return (v && typeof v === 'object') ? v : {}; };
+var EDIT_OBJN_ = function (v) { return (v && typeof v === 'object') ? v : null; };
 function saveEditLocked_(b, name) {
   var dir = folderPath_(rootFolder_(), META_DIR);
   /* Field for field the same gap docs/yandex/function.js's own saveEdit() had
@@ -386,37 +444,46 @@ function saveEditLocked_(b, name) {
   }
   var refused = staleWrite_(b, prior, 'correction');
   if (refused) return refused;
+  // GAS_SAFETY_V1: every correction, void and unvoid says who made it (a report log alone may come without a name).
+  if (!String(b.by || '').trim() && !onlyReportLog_(b, prior)) return { ok: false, error: 'A name is required (who is making this change)' };
+  /* GAS_SAFETY_V1: voiding a round needs a reason, as the Edit panel asks.
+     Only when this request is what voids it: a writer that echoes an
+     existing void back is not voiding anything. */
+  var voidNow = editField_(b, prior, 'void', function (v) { return !!v; }, false);
+  var reasonNow = editField_(b, prior, 'reason', function (v) { return String(v || '').slice(0, 400); }, '');
+  if (voidNow && !(prior && prior.void) && !reasonNow.trim())
+    return { ok: false, error: 'A reason is required to void a round' };
   indexTouch_();               // a correction is a change; clients must come and look
   var doc = {
     type: 'cm-record-edit', version: 1,
     key: b.key,
     at: new Date().toISOString(),
     by: String(b.by || '').slice(0, 80),
-    void: !!b.void,
-    reason: String(b.reason || '').slice(0, 400),
-    note: String(b.note || '').slice(0, 2000),
+    void: voidNow,
+    reason: reasonNow,
+    note: editField_(b, prior, 'note', function (v) { return String(v || '').slice(0, 2000); }, ''),
     /* Round-level corrections — the hour meter, who walked it, who verified
        it. The other backend has had this slot since it was written and this
        one did not, so a correction to an hour meter saved here vanished with
        no error. NOT the unit, the date or the round type: those three ARE the
        record's identity, and changing one would leave this marker filed
        against a round that no longer exists. */
-    fields: (b.fields && typeof b.fields === 'object') ? b.fields : {},
+    fields: editField_(b, prior, 'fields', EDIT_OBJ_, {}),
     /* THE ROUND WAS FILED AGAINST THE WRONG MACHINE, DAY OR ROUND. Not a field
        edit — the three of them ARE the record's filing address, so this marker
        stays filed under the address the round arrived with and names where it
        should read instead. A re-read of the folder then re-applies the move
        instead of undoing it. null puts the round back. */
-    move: (b.move && typeof b.move === 'object') ? b.move : null,
+    move: editField_(b, prior, 'move', EDIT_OBJN_, null),
     /* Both of these were written by the dashboard and thrown away here. The
        save succeeded, the panel said so, and the crop or the issued report was
        gone the next time the folder was read. */
-    media: (b.media && typeof b.media === 'object') ? b.media : null,
+    media: editField_(b, prior, 'media', EDIT_OBJN_, null),
     /* Orphan-photograph assignments, keyed by file name — see the note in the
        Yandex function. */
-    assign: (b.assign && typeof b.assign === 'object') ? b.assign : null,
-    reports: (b.reports && b.reports.length) ? b.reports.slice(-20) : null,
-    items: (b.items && typeof b.items === 'object') ? b.items : {},
+    assign: editField_(b, prior, 'assign', EDIT_OBJN_, null),
+    reports: editField_(b, prior, 'reports', function (v) { return (v && v.length) ? v.slice(-20) : null; }, null),
+    items: editField_(b, prior, 'items', EDIT_OBJ_, {}),
   };
   if (prior) {
     var stamp = doc.at.replace(/[:.]/g, '-');
@@ -597,6 +664,8 @@ function markConflictLocked_(key, name, sidecarName, rivalDev, dev) {
 /* The office's decision. Both versions stay in Drive — this only records which
    one the reports should use, so it is as reversible as a void. */
 function resolveConflict_(b) {
+  // GAS_SAFETY_V1: a decision says who made it.
+  if (!String(b.by || '').trim()) return { ok: false, error: 'A name is required (who is making this decision)' };
   indexTouch_();     // the office has decided; every phone must stop warning
   var stem = keyFile_(b.key, '');
   if (!stem) return { ok: false, error: 'Bad record key: ' + b.key };
@@ -668,13 +737,12 @@ function rewriteObject_(b) {
   var text = Utilities.newBlob(bytes).getDataAsString();
   try { JSON.parse(text); } catch (errJ) { return { ok: false, error: 'New content is not JSON' }; }
   var want = sha256Hex_(bytes);
-  /* Located by a Drive id or a path, whichever the tool was handed by ?action=list. */
-  var all = [];
-  collect_(rootFolder_(), '', all, 0, '');
-  var hit = null;
-  for (var i = 0; i < all.length; i++) {
-    if (all[i].id === key || all[i].path === key || all[i].name === key) { hit = all[i]; break; }
-  }
+  /* Located by a Drive id or a path, whichever the tool was handed by ?action=list.
+     GAS_SAFETY_V1: addressed directly (a path, an id, or a round file by its
+     own folders), not by a walk of the whole tree that stops at LIST_CAP. */
+  var found = findObject_(key);
+  if (found.error) return { ok: false, truncated: !!found.truncated, error: found.error };
+  var hit = found.hit;
   if (!hit) return { ok: false, error: 'No object called ' + key };
   if (!/\.json$/i.test(hit.name)) return { ok: false, error: 'Only JSON documents can be rewritten' };
   var f = DriveApp.getFileById(hit.id);
@@ -722,8 +790,18 @@ function deleteRecord_(b) {
   var unit = p[0], dmy = stem.split('_')[1], type = p[2];
   var re = new RegExp('^' + esc_(unit) + '[._-].*?' + esc_(dmy) + '_' + esc_(type) + '([._~]|$)', 'i');
 
-  var all = [];
-  collect_(rootFolder_(), '', all, 0, '');
+  /* GAS_SAFETY_V1: the round's own folders (roundDirs_), not a walk of the
+     whole tree. That walk stopped at LIST_CAP files, and a round past it
+     answered "Nothing found" while its files stayed on Drive. Only when the
+     round's folders hold nothing is the tree walked, and a walk that could not
+     finish is an error, never "nothing found". */
+  var all = roundFiles_(b.key);
+  if (!all.filter(function (f) { return re.test(f.name); }).length) {
+    var wk = walkAll_('', { cap: 1e9, ms: TIME_BUDGET_MS });
+    if (wk.w.cut) return { ok: false, truncated: true, error:
+      'The folder could not be listed in full in one request, so nothing was deleted. Try again.' };
+    all = wk.files;
+  }
   // ONE DEVICE'S RIVAL COPY, AND NOTHING ELSE (`dev`) — field for field the same
   // as docs/yandex/function.js deleteRecord(). This backend is retired; it is
   // kept in step so a backend that is ever switched back on agrees about what
@@ -736,7 +814,9 @@ function deleteRecord_(b) {
   var tag = dev ? new RegExp('~' + esc_(dev) + '([._]|$)') : null;
   var hit = all.filter(function (f) { return re.test(f.name) && (!tag || tag.test(f.name)); });
   if (!hit.length) return { ok: false, error: dev ? 'Nothing found for ' + b.key + ' on device ' + dev : 'Nothing found for ' + b.key };
-  if (dev && b.dry) return { ok: true, dry: true, would: hit.map(function (f) { return f.name; }) };
+  /* GAS_SAFETY_V1: dry changes nothing, with or without dev. It used to be read
+     only beside dev, so a "dry run" of a whole round deleted it (EX003/TK148). */
+  if (b.dry) return { ok: true, dry: true, would: hit.map(function (f) { return f.name; }) };
 
   var gone = [];
   for (var i = 0; i < hit.length; i++) {
@@ -794,9 +874,25 @@ function deleteFile_(b) {
   var by = String(b.by || '').trim();
   if (!by) return { ok: false, error: 'A name is required' };
 
+  /* GAS_SAFETY_V1: every phone photograph lives in its round's folder
+     (TYPE/UNIT/DATE), and this looked only in the root, where only a photo
+     added from the office lands. The dashboard sends the round's key; the
+     file is looked up by name in that round's folders and the root, and only
+     if it is in none of them is the tree walked. */
   var hit = [];
-  (function take(it) { while (it.hasNext()) { var f = it.next();
-    if (f.getName() === name) hit.push(f); } })(rootFolder_().getFiles());
+  var dirs = roundDirs_(b.key);
+  dirs.forEach(function (d) {
+    var it = d.dir.getFilesByName(name);
+    while (it.hasNext()) hit.push(it.next());
+  });
+  if (!hit.length) {
+    var wk = walkAll_('', { cap: 1e9, ms: TIME_BUDGET_MS });
+    if (wk.w.cut) return { ok: false, truncated: true, error:
+      'The folder could not be listed in full in one request, so nothing was deleted. Try again.' };
+    wk.files.forEach(function (f) {
+      if (f.name === name && f.path.indexOf(META_DIR + '/') !== 0) hit.push(DriveApp.getFileById(f.id));
+    });
+  }
   if (!hit.length) return { ok: false, error: 'No file called ' + name };
 
   var at = new Date().toISOString(), stampSafe = at.replace(/[:.]/g, '-');
@@ -1158,8 +1254,14 @@ function rebuildIndex_(p) {
      were the slow part - and give the indexing its own clock, inside Google's 360 s limit. */
   var t0 = new Date().getTime();
   var after = Number(p.after || 0) || 0;
-  var all = [];
-  collect_(rootFolder_(), '', all, 0, '.json');
+  /* GAS_SAFETY_V1: the walk is no longer cut at LIST_CAP files in silence. It
+     runs to the end or to its clock, and a walk that did not finish indexes
+     nothing and says so: a rebuild that saw part of the folder must never mark
+     the index built. */
+  var wk = walkAll_('', { cap: 1e9, ms: WALK_BUDGET_MS, ext: '.json' });
+  if (wk.w.cut) return { ok: false, truncated: true, files: wk.files.length, error:
+    'The folder could not be walked in one request (' + wk.files.length + ' files listed before the clock ran out). Nothing was indexed.' };
+  var all = wk.files;
   var started = new Date().getTime();
   var budget = Math.max(30000, 300000 - (started - t0));
   var sidecars = all.filter(function (f) {
@@ -1258,6 +1360,7 @@ function readFiles_(ids) {
    ──────────────────────────────────────────────────────────────────────────*/
 var RECORDS_MAX = 600;         // sidecars read per call; response stays ~1-2 MB
 var TIME_BUDGET_MS = 240000;   // stop at 4 min — Apps Script kills us at 6
+var WALK_BUDGET_MS = 200000;   // GAS_SAFETY_V1: a whole-tree walk inside a read stops here
 
 function readRecords_(p) {
   var started = new Date().getTime();
@@ -1265,8 +1368,16 @@ function readRecords_(p) {
   var max = Math.min(Number(p.max || 0) || RECORDS_MAX, 2000);
   var wantIndex = String(p.index == null ? '1' : p.index) !== '0';
 
-  var all = [];
-  collect_(rootFolder_(), '', all, 0, '');
+  /* GAS_SAFETY_V1: the walk that feeds this read used to stop at LIST_CAP
+     (4,000) files without a word, so the rounds and photographs past it simply
+     were not there. It now runs to its clock (WALK_BUDGET_MS), and a walk that
+     did not finish is an error — never a reply that looks complete. The fast
+     read is ?action=index; a full file listing is ?action=list with its cursor. */
+  var wk = walkAll_('', { cap: 1e9, ms: WALK_BUDGET_MS });
+  if (wk.w.cut) return { ok: false, truncated: true, listTruncated: true, files: wk.files.length, error:
+    'The folder is too large to list in one request (' + wk.files.length + ' files listed before the clock ran out). '
+    + 'Use action=index, or action=list with its cursor.' };
+  var all = wk.files;
 
   // Oldest first, so a truncated run resumes cleanly from its cursor. Records
   // and correction markers share one cursor: they interleave by write time, and
@@ -1341,37 +1452,265 @@ function readRecords_(p) {
 }
 var MEDIA_RE = /\.(jpe?g|png|webp|mp4|mov)$/i;
 
-/** Every file under the root, sub-folders included. `ext` filters by suffix. */
-function listFiles_(sub, ext) {
+/** Every file under the root, sub-folders included. `ext` filters by suffix.
+
+    GAS_SAFETY_V1: PAGED. One reply holds at most `max` files (LIST_CAP by
+    default) and stops early, at a folder boundary, before Apps Script's
+    6-minute limit. When it stops it says truncated:true and gives `cursor`,
+    the path of the next folder; ?action=list&cursor=<that> carries on from
+    there, so a full listing is a few calls however big the folder gets. The
+    order is the folder paths sorted, so a cursor means the same place on every
+    call. A client that ignores the cursor gets exactly the first page, with
+    truncated:true, as it always did. */
+function listFiles_(sub, ext, cursor, max) {
+  var cap = Math.min(Math.max(Number(max || 0) || LIST_CAP, 1), LIST_MAX);
+  var wk = walkAll_(sub || '', { cap: cap, ms: TIME_BUDGET_MS, from: cursor || '', ext: ext });
+  var out = { ok: true, count: wk.files.length, truncated: !!wk.w.cut, files: wk.files };
+  if (wk.w.cut) out.cursor = wk.w.next;
+  return out;
+}
+var LIST_CAP = 4000;         // files per page of ?action=list
+var LIST_MAX = 20000;        // the most a caller may ask for in one page
+/* The walk under every listing. `dirs` are the folders that answer to one
+   path (duplicates of a name included, see foldersNamed_), `segs` that path.
+   w = { cap, until, from: [segs] | null, ext, cut, next }. A folder's files are
+   taken whole; the walk stops only BEFORE a folder, when the page is full or
+   the clock has run out, and records that folder's path in w.next. Folders are
+   visited in sorted path order (a folder before its sub-folders), so "every
+   folder from this path on" is a well-defined rest-of-the-walk. */
+function walk_(dirs, segs, out, w) {
+  if (w.cut || segs.length > 5) return;
+  var mine = !w.from || cmpSegs_(segs, w.from) >= 0;
+  if (mine) {
+    if (out.length >= w.cap || new Date().getTime() > w.until) { w.cut = true; w.next = segs.join('/'); return; }
+    var prefix = segs.length ? segs.join('/') + '/' : '';
+    dirs.forEach(function (dir) {
+      var fs = dir.getFiles();
+      while (fs.hasNext()) {
+        var f = fs.next(), n = f.getName();
+        if (!w.ext || n.toLowerCase().slice(-w.ext.length) === w.ext) {
+          // updated drives the incremental read — see readRecords_
+          out.push({ name: n, path: prefix + n, id: f.getId(), size: f.getSize(),
+                     updated: f.getLastUpdated().getTime() });
+        }
+      }
+    });
+  }
+  var kids = {}, names = [];
+  dirs.forEach(function (dir) {
+    var ds = dir.getFolders();
+    while (ds.hasNext()) {
+      var d = ds.next(), n = d.getName();
+      if (!kids[n]) { kids[n] = []; names.push(n); }
+      kids[n].push(d);
+    }
+  });
+  names.sort();
+  for (var i = 0; i < names.length; i++) {
+    var cs = segs.concat([names[i]]);
+    // a folder wholly before the cursor, and not on the way to it, is done
+    if (w.from && cmpSegs_(cs, w.from) < 0 && !isPrefix_(cs, w.from)) continue;
+    walk_(kids[names[i]], cs, out, w);
+    if (w.cut) return;
+  }
+}
+function cmpSegs_(a, b) {
+  for (var i = 0; i < a.length && i < b.length; i++) {
+    if (a[i] < b[i]) return -1;
+    if (a[i] > b[i]) return 1;
+  }
+  return a.length - b.length;
+}
+function isPrefix_(a, b) {
+  if (a.length > b.length) return false;
+  for (var i = 0; i < a.length; i++) if (a[i] !== b[i]) return false;
+  return true;
+}
+/* Walk `sub` (every folder of that name, never creating one). opt = { cap, ms,
+   from, ext }. Returns { files, w }; w.cut says the walk did not finish. */
+function walkAll_(sub, opt) {
   var root = rootFolder_();
   // Every folder of the name, not the first: see foldersNamed_. A folder that
   // was never written to lists as empty rather than being created by a read.
   var dirs = sub ? folderPaths_(root, sub) : [root];
-  var out = [];
-  dirs.forEach(function (dir) { collect_(dir, '', out, 0, String(ext || '').toLowerCase()); });
-  return { ok: true, count: out.length, truncated: out.length >= LIST_CAP, files: out };
+  var from = String(opt.from || '').split('/').filter(String);
+  var w = { cap: opt.cap || LIST_CAP, until: new Date().getTime() + (opt.ms || TIME_BUDGET_MS),
+            from: from.length ? from : null, ext: String(opt.ext || '').toLowerCase(), cut: false, next: '' };
+  var files = [];
+  if (dirs.length) walk_(dirs, [], files, w);
+  return { files: files, w: w };
 }
-var LIST_CAP = 4000;
-function collect_(dir, prefix, out, depth, ext) {
-  if (depth > 5 || out.length >= LIST_CAP) return;
-  var fs = dir.getFiles();
-  while (fs.hasNext() && out.length < LIST_CAP) {
-    var f = fs.next(), n = f.getName();
-    if (!ext || n.toLowerCase().slice(-ext.length) === ext) {
-      // updated drives the incremental read — see readRecords_
-      out.push({ name: n, path: prefix + n, id: f.getId(), size: f.getSize(),
+
+/* ── a round's own folders (GAS_SAFETY_V1) ───────────────────────────────────
+   Every file of a round is filed by the phone under the folder pattern its
+   destination carries, filled from the round itself (expandFolder in the app):
+     {TYPE}/{UNIT}/{YYYY-MM-DD}   the default since 2026-09
+     {TYPE}/{YYYY-MM}             the default before it
+     {YYYY-MM}                    older still
+   plus the root (a photograph added from the office) and _meta (the round's
+   correction and conflict markers). Duplicate folders of one name are all
+   read (folderPaths_), and nothing is created by asking. */
+function roundDirs_(key) {
+  var p = String(key || '').split('|');
+  var out = [], root = rootFolder_();
+  var add = function (path) {
+    (path ? folderPaths_(root, path) : [root]).forEach(function (d) { out.push({ dir: d, path: path }); });
+  };
+  if (p.length === 3 && p[0] && /^\d{4}-\d{2}-\d{2}$/.test(p[1]) && p[2]) {
+    var u = String(p[0]).toUpperCase(), ty = String(p[2]).toUpperCase(), ym = p[1].slice(0, 7);
+    add(ty + '/' + u + '/' + p[1]);
+    add(ty + '/' + ym);
+    add(ym);
+    add(META_DIR);
+  }
+  add('');
+  return out;
+}
+/** The files directly in a round's folders, shaped as a listing entry. */
+function roundFiles_(key) {
+  var out = [];
+  roundDirs_(key).forEach(function (d) {
+    var prefix = d.path ? d.path + '/' : '';
+    var fs = d.dir.getFiles();
+    while (fs.hasNext()) {
+      var f = fs.next();
+      out.push({ name: f.getName(), path: prefix + f.getName(), id: f.getId(), size: f.getSize(),
                  updated: f.getLastUpdated().getTime() });
     }
+  });
+  return out;
+}
+/* One document for op:rewrite, by Drive id, by path, or by a round file's name.
+   { hit } or { error, truncated }. Never a whole-tree walk unless the name is
+   nothing this script can place, and a walk that did not finish is an error. */
+function findObject_(key) {
+  var root = rootFolder_(), entry = function (f, path) {
+    return { name: f.getName(), path: path, id: f.getId(), size: f.getSize(), updated: f.getLastUpdated().getTime() };
+  };
+  if (key.indexOf('/') >= 0) {
+    var segs = key.split('/').filter(String), base = segs.pop(), dir = segs.join('/');
+    var dirs = folderPaths_(root, dir);
+    for (var i = 0; i < dirs.length; i++) {
+      var it = dirs[i].getFilesByName(base);
+      if (it.hasNext()) return { hit: entry(it.next(), dir + '/' + base) };
+    }
+    return { hit: null };
   }
-  var ds = dir.getFolders();
-  while (ds.hasNext()) {
-    var d = ds.next();
-    collect_(d, prefix + d.getName() + '/', out, depth + 1, ext);
+  var byId = null;
+  try { byId = DriveApp.getFileById(key); } catch (err) { byId = null; }
+  if (byId && underRoot_(byId)) return { hit: entry(byId, byId.getName()) };
+  var rk = keyFromSidecar_(key.replace(/~[A-Za-z0-9_-]{1,12}(?=\.json$)/i, '')
+                              .replace(/\.(edit|conflict)\.json$/i, '.json'));
+  if (rk) {
+    var fs = roundFiles_(rk);
+    for (var j = 0; j < fs.length; j++) if (fs[j].name === key) return { hit: fs[j] };
   }
+  var wk = walkAll_('', { cap: 1e9, ms: TIME_BUDGET_MS });
+  for (var k = 0; k < wk.files.length; k++) if (wk.files[k].name === key) return { hit: wk.files[k] };
+  if (wk.w.cut) return { truncated: true, error: 'The folder could not be listed in full in one request, so ' + key + ' was not found and nothing was changed. Try again.' };
+  return { hit: null };
+}
+
+/* ── what an upload may write (GAS_SAFETY_V1) ────────────────────────────────
+   The upload op is the phones' door and is public by design. It used to file
+   anything anywhere, so one ordinary upload of _meta/deletions/x.deleted.json
+   took a round off every screen with no admin password. _meta is the office's
+   and the script's own shelf; an upload may put exactly these there:
+     _meta/deferrals/<UNIT>_<TYPE>.defer.json  a round put off — the phone
+                    (syncDefer, folder "_meta/deferrals") and the office (dfSave,
+                    putDoc). Must be a cm-round-deferred document.
+     _meta/diag/<DEV>_<stamp>.json             a phone's sync trace (sendTrace).
+                    Must be a cm-sync-trace document.
+     _meta/lube/master.json, _meta/lube/log/<stamp>_r<rev>.json
+                    the lube master and its change log — LubeLink's sync on
+                    PECHANKA (op batch through /cm-api) and the dashboard's own
+                    editor (lube-master.js). Must be cm-lube-master /
+                    cm-lube-change, and once DESK_KEY is set must carry it.
+   Everything else under _meta is written by this script itself (corrections,
+   conflicts, deletions and their logs, backups, the index, push subscriptions)
+   and an upload there is refused. Anywhere else, a file shaped like one of
+   those markers — by its name or by its type — is refused too, because the
+   readers below recognise markers wherever they sit. */
+var MARKER_NAME_RE_ = /\.(edit|deleted|conflict|defer|rival|file)\.json$/i;
+var MARKER_TYPES_ = { 'cm-record-edit': 1, 'cm-record-conflict': 1, 'cm-record-deleted': 1, 'cm-deletion': 1,
+                      'cm-rival-deleted': 1, 'cm-file-deleted': 1, 'cm-round-deferred': 1, 'cm-index-shard': 1,
+                      'cm-meta-digest': 1, 'cm-lube-master': 1, 'cm-lube-change': 1 };
+function uploadJson_(b) {
+  try { return JSON.parse(Utilities.newBlob(Utilities.base64Decode(b.file)).getDataAsString()); }
+  catch (err) { return undefined; }
+}
+function uploadRefused_(path, fileName, b) {
+  var segs = String(path || '').split('/').filter(String);
+  var top = (segs[0] || '').toLowerCase();
+  var isJson = /\.json$/i.test(fileName);
+  var j = isJson ? uploadJson_(b) : undefined;
+  var type = (j && typeof j === 'object' && !Array.isArray(j)) ? String(j.type || '') : '';
+  if (top === META_DIR.toLowerCase()) {
+    var sub = segs.slice(1).map(function (s) { return s.toLowerCase(); }).join('/');
+    if (sub === 'deferrals' && /\.defer\.json$/i.test(fileName) && type === 'cm-round-deferred' && j.u && j.t) return '';
+    if (sub === 'diag' && isJson && !MARKER_NAME_RE_.test(fileName) && type === 'cm-sync-trace') return '';
+    if ((sub === 'lube' && fileName === 'master.json' && type === 'cm-lube-master') ||
+        (sub === 'lube/log' && isJson && !MARKER_NAME_RE_.test(fileName) && type === 'cm-lube-change')) {
+      return deskOk_(b) ? '' : DESK_REFUSED_;
+    }
+    return 'Uploads into ' + META_DIR + '/ are refused except deferrals, phone diagnostics and the lube master ('
+      + [META_DIR].concat(segs.slice(1)).concat([fileName]).join('/') + ')';
+  }
+  if (MARKER_NAME_RE_.test(fileName)) return 'A file named like an office marker cannot be uploaded (' + fileName + ')';
+  if (type && MARKER_TYPES_[type]) return 'A ' + type + ' document cannot be uploaded outside ' + META_DIR + '/';
+  return '';
+}
+
+/* ── the desk key (GAS_SAFETY_V1) ─────────────────────────────────────────────
+   The /exec URL is public (every phone carries it), so anybody could correct,
+   void or resolve a round with one request. Office changes reach this script
+   only through PECHANKA's /cm-api, which adds `desk` to every body it forwards.
+   Set the Script property DESK_KEY (Project Settings > Script properties) to
+   the same value and these ops then need it. Not set: they behave as before,
+   so deploying this version first changes nothing. The value is never logged,
+   echoed or stored in the repository. Phone ops are never gated by it. */
+var DESK_OPS_ = { edit: 1, resolve: 1, rewrite: 1, 'delete': 1, delfile: 1 };
+var DESK_REFUSED_ = 'office changes go through maintenance.vegadevelopment.com';
+function deskKey_() {
+  try { return String(PropertiesService.getScriptProperties().getProperty('DESK_KEY') || ''); }
+  catch (err) { return ''; }
+}
+function deskOk_(b) {
+  var want = deskKey_();
+  if (!want) return true;
+  var got = String((b && b.desk) || '');
+  if (got.length !== want.length) return false;
+  var diff = 0;
+  for (var i = 0; i < want.length; i++) diff |= want.charCodeAt(i) ^ got.charCodeAt(i);
+  return diff === 0;
 }
 
 function readFile_(id) {
   if (!id) return { ok: false, error: 'Missing file id' };
+  /* GAS_SAFETY_V1: a path under the root ("_meta/lube/master.json") as well as
+     a Drive id, so phones and desks read the LubeLink master here too. Read
+     only; ".." and absolute paths are refused. "not found" is answered only
+     when the folders were read and the file is not in them — the phone takes
+     that answer as "no master" and drops its copy. */
+  if (String(id).indexOf('/') >= 0) {
+    var p = String(id);
+    var segs = p.split('/');
+    if (p.charAt(0) === '/' || /^[A-Za-z]:/.test(p) || p.indexOf('\\') >= 0 ||
+        segs.some(function (s) { return s === '..' || s === '.'; }) || segs.some(function (s) { return s === ''; }))
+      return { ok: false, error: 'Bad path: ' + p };
+    var base = segs.pop(), best = null;
+    folderPaths_(rootFolder_(), segs.join('/')).forEach(function (d) {
+      var it = d.getFilesByName(base);
+      while (it.hasNext()) {
+        var c = it.next();
+        if (!best || c.getLastUpdated().getTime() > best.getLastUpdated().getTime()) best = c;
+      }
+    });
+    if (!best) return { ok: false, error: 'Not found: ' + p };
+    var pb = best.getBlob();
+    return { ok: true, name: best.getName(), mime: pb.getContentType(),
+             data: Utilities.base64Encode(pb.getBytes()) };
+  }
   var f = DriveApp.getFileById(id);
   // Never hand back something outside the configured folder, even with a valid id.
   if (!underRoot_(f)) return { ok: false, error: 'That file is not inside the configured folder' };

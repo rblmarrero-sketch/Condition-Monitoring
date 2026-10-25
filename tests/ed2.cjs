@@ -241,7 +241,10 @@ const openHist = async (p,unit) => {
   f=await files();
   ok('the sidecar is gone',!f.files.some(x=>/TK146_09\.03\.2026_MP\.json$/.test(x)));
   ok('its photo is gone',!f.files.some(x=>/TK146_4C_09\.03\.2026_MP\.jpg$/.test(x)));
-  ok('its correction marker is gone',!f.files.some(x=>/TK146_09\.03\.2026_MP\.edit\.json$/.test(x)));
+  /* The live marker. Its earlier versions under _meta/backup/ stay (GAS_SAFETY_V1:
+     the delete addresses the round's own folders and _meta, not the backups),
+     and nothing reads a backup as a correction. */
+  ok('its correction marker is gone',!f.files.some(x=>/^_meta\/TK146_09\.03\.2026_MP\.edit\.json$/.test(x)));
   ok('nothing was purged — it is all in the trash',f.trashed.length>=3,`${f.trashed.length} trashed`);
   ok('the deletion is logged',f.files.some(x=>/^_meta\/deletions\/.*\.deleted\.json$/.test(x)),
      f.files.filter(x=>/_meta/.test(x)).join(' | '));
