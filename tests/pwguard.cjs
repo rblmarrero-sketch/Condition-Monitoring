@@ -50,6 +50,15 @@ const PROD_URL = 'https://script.google.com/macros/s/X/exec?action=ping';
   const p5 = await ctx.newPage(); await p5.goto(LOCAL);
   const r5 = await probe(p5);
   ok('  and only on that page: the next page is still guarded', r5.prod === 'refused', JSON.stringify(r5));
+  /* And setOffline still takes the phone off the air (tests/team.cjs). */
+  await ctx.setOffline(true);
+  const off = await p2.evaluate(() => navigator.onLine);
+  await ctx.setOffline(false);
+  const on = await p2.evaluate(() => navigator.onLine);
+  const r6 = await probe(p2);
+  ok('setOffline(true) still reads as offline on a guarded page', off === false, 'onLine=' + off);
+  ok('  and back on, the page is online and still guarded', on === true && r6.prod === 'refused' && r6.local === 'local',
+     'onLine=' + on + ' ' + JSON.stringify(r6));
   await b.close();
 
   /* The blind spot, planted: the bare module, with the production URL served

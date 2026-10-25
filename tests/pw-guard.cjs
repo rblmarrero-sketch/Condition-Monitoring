@@ -83,6 +83,21 @@ const BLOCK = urlsFor(new Set());
 const LIFTED = new WeakMap();                       // page or context -> Set of hosts
 const lifted = page => new Set([...(LIFTED.get(page) || []), ...(LIFTED.get(page.context()) || [])]);
 const CDP = new WeakMap();
+/* AND IT MUST NOT TAKE AWAY context.setOffline(). A second DevTools session
+   on a page is enough to stop Playwright's offline emulation reaching it —
+   navigator.onLine stayed true and tests/team.cjs, which pulls the plug to
+   prove the phone says "Offline", read the app as failing. So whatever a
+   suite sets with setOffline (or newContext({offline})) is said again on this
+   session as well. */
+const OFFLINE = new WeakMap();
+const NET = off => ({ offline: !!off, latency: 0, downloadThroughput: -1, uploadThroughput: -1 });
+async function offline(ctx, off) {
+  OFFLINE.set(ctx, !!off);
+  await Promise.all(ctx.pages().map(async p => {
+    if (!CDP.has(p)) return;
+    try { await (await CDP.get(p)).send('Network.emulateNetworkConditions', NET(off)); } catch (e) {}
+  }));
+}
 async function block(page) {
   try {
     /* One session a page, kept as a promise from the first call: the page
@@ -91,6 +106,7 @@ async function block(page) {
     if (!CDP.has(page)) CDP.set(page, page.context().newCDPSession(page).then(async s => { await s.send('Network.enable'); return s; }));
     const s = await CDP.get(page);
     await s.send('Network.setBlockedURLs', { urls: urlsFor(lifted(page)) });
+    if (OFFLINE.get(page.context())) await s.send('Network.emulateNetworkConditions', NET(true));
   } catch (e) { /* a page closed before it could be guarded has nothing to send */ }
   return page;
 }
@@ -106,21 +122,24 @@ function guardPage(p) {
   return p;
 }
 const guarded = new WeakSet();
-function guard(ctx) {
+function guard(ctx, opts) {
   if (!ctx || guarded.has(ctx)) return ctx;
   guarded.add(ctx);
+  if (opts && opts.offline) OFFLINE.set(ctx, true);
   const newPage = ctx.newPage.bind(ctx);
   ctx.newPage = async (...a) => block(guardPage(await newPage(...a)));
   ctx.on('page', p => { block(guardPage(p)); });
   const route = ctx.route.bind(ctx);
   ctx.route = async (m, ...a) => { const r = await route(m, ...a); await lift(ctx, m, ctx.pages()); return r; };
+  const setOffline = ctx.setOffline.bind(ctx);
+  ctx.setOffline = async off => { const r = await setOffline(off); await offline(ctx, off); return r; };
   return ctx;
 }
 function wrapBrowser(b) {
   const newContext = b.newContext.bind(b);
-  b.newContext = async (...a) => guard(await newContext(...a));
+  b.newContext = async (...a) => guard(await newContext(...a), a[0]);
   const newPage = b.newPage.bind(b);
-  b.newPage = async (...a) => { const p = await newPage(...a); guard(p.context()); return block(guardPage(p)); };
+  b.newPage = async (...a) => { const p = await newPage(...a); guard(p.context(), a[0]); return block(guardPage(p)); };
   return b;
 }
 function wrapType(t) {
@@ -131,7 +150,7 @@ function wrapType(t) {
     __cmGuarded: true,
     launch: async (...a) => wrapBrowser(await launch(...a)),
     launchPersistentContext: persistent && (async (...a) => {
-      const c = guard(await persistent(...a)); await Promise.all(c.pages().map(p => block(guardPage(p)))); return c; }),
+      const c = guard(await persistent(...a), a[1]); await Promise.all(c.pages().map(p => block(guardPage(p)))); return c; }),
   });
 }
 
