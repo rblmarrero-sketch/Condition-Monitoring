@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-25T22:13:02+00:00",
+  "generated": "2026-10-25T22:26:38+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -352,7 +352,7 @@ window.CM_WO_DATA = {
     "WE010",
     "WE011"
   ],
-  "duplicateRowsCollapsed": 553,
+  "duplicateRowsCollapsed": 554,
   "roundsDedupedWithinVisit": 2,
   "columns": [
     "Asset description",
@@ -441,8 +441,8 @@ window.CM_WO_DATA = {
     "planStart": 0
   },
   "cmCauseFrom": {
-    "wo": 81,
-    "wr": 108,
+    "wo": 83,
+    "wr": 106,
     "cert": 0,
     "none": 0
   },
@@ -2369,7 +2369,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-10-02",
       "detected": "2026-10-02",
-      "planStart": null,
+      "planStart": "2026-12-20",
       "closed": null,
       "asset": "CN018",
       "defect": "DD-00013873",
@@ -2379,12 +2379,12 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "cause": "Разрушение от удара",
-      "causeFrom": "wr",
+      "causeFrom": "wo",
       "descr": "Разрушение кабельного ввода датчика контроля остатка каната лебедки.",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "by": "Irek",
-      "woNumber": null,
-      "maintType": null,
+      "woNumber": "WO-020796",
+      "maintType": "P4 Planned Repair",
       "planned": false
     },
     {
@@ -2415,7 +2415,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-10-02",
       "detected": "2026-10-02",
-      "planStart": null,
+      "planStart": "2026-12-20",
       "closed": null,
       "asset": "CN018",
       "defect": "DD-00013869",
@@ -2425,12 +2425,12 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
       "cause": "Крепеж ослаблен",
-      "causeFrom": "wr",
+      "causeFrom": "wo",
       "descr": "Неисправность предохранительного замка (язычка) крюка.",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "by": "Irek",
-      "woNumber": null,
-      "maintType": null,
+      "woNumber": "WO-020795",
+      "maintType": "P4 Planned Repair",
       "planned": false
     },
     {
@@ -55826,14 +55826,14 @@ window.CM_WO_DATA = {
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
-      "planStart": "2026-10-26",
-      "planStartDt": "2026-10-26T00:00:00",
-      "planEnd": "2026-10-27",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "cmmsStatus": "Completed",
+      "open": false,
+      "planStart": "2026-10-25",
+      "planStartDt": "2026-10-25T19:00:00",
+      "planEnd": "2026-10-26",
+      "actualStart": "2026-10-25",
+      "actualStartDt": "2026-10-25T19:00:00",
+      "actualEnd": "2026-10-26"
     },
     {
       "equip": "HX039",
