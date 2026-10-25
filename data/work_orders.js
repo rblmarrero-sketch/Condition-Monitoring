@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-25T06:13:05+00:00",
+  "generated": "2026-10-25T06:32:03+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -2738,7 +2738,7 @@ window.CM_WO_DATA = {
       "raised": "2026-09-30",
       "detected": "2026-09-30",
       "planStart": "2026-10-17",
-      "closed": null,
+      "closed": "2026-10-17",
       "asset": "EX003",
       "defect": "DD-00013743",
       "requestNo": "DD-00013743",
@@ -2749,7 +2749,7 @@ window.CM_WO_DATA = {
       "cause": "Отсутствует крепеж",
       "causeFrom": "wo",
       "descr": "В насосном отсеке перетирание  РВД в месте взаимного контакта и контакта с разрушенным хомутом крепления.",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "by": "Irek",
       "woNumber": "WO-019254",
       "maintType": "P4 Planned Repair",

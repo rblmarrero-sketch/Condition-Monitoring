@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-25T06:13:05+00:00",
+  "generated": "2026-10-25T06:32:03+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -6464,12 +6464,12 @@
       "type": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
       "hours": null,
       "plan": "2026-10-17",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "DD-00013743",
       "defType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
       "cause": "Отсутствует крепеж",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-17"
     },
     {
       "wo": "WO-016633",
