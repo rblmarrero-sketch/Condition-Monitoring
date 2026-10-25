@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-25T21:08:57+00:00",
+  "generated": "2026-10-25T21:51:50+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -4798,6 +4798,24 @@
       "completed": "2026-10-09"
     },
     {
+      "wo": "WO-020775",
+      "equip": "CN013",
+      "cls": "",
+      "comp": "CN013.DRS.ENG (Engine / Двигатель)",
+      "desc": "Патрубок воздуховода системы впуска ДВС имеет трещины.",
+      "priority": "P4 Planned (Repair)",
+      "raised": "2026-10-09",
+      "type": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "hours": null,
+      "plan": "2026-11-10",
+      "status": "Elimination scheduled",
+      "request": "DD-00014452",
+      "defType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "cause": "Усталостная трещина",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-018770",
       "equip": "CD006",
       "cls": "GEN",
@@ -6022,6 +6040,42 @@
       "completed": ""
     },
     {
+      "wo": "WO-020771",
+      "equip": "CN008",
+      "cls": "",
+      "comp": "CN008.OC.DO (Doors / Двери)",
+      "desc": "Механический излом внутренней ручки двери кабины оператора.",
+      "priority": "P4 Planned (Repair)",
+      "raised": "2026-10-02",
+      "type": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "hours": null,
+      "plan": "2026-11-09",
+      "status": "Elimination scheduled",
+      "request": "DD-00013865",
+      "defType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "cause": "Разрушение от удара",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-020774",
+      "equip": "CN008",
+      "cls": "",
+      "comp": "CN008.CH.UC (Undercarriage / Ходовая часть)",
+      "desc": "Глубокий механический порез плечевой зоны/боковины шины.",
+      "priority": "P4 Planned (Repair)",
+      "raised": "2026-10-02",
+      "type": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "hours": null,
+      "plan": "2026-11-10",
+      "status": "Elimination scheduled",
+      "request": "DD-00013864",
+      "defType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "cause": "Отслоение протектора",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-019276",
       "equip": "CN008",
       "cls": "",
@@ -6036,6 +6090,42 @@
       "request": "DD-00013861",
       "defType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "cause": "Усталостная трещина",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-020772",
+      "equip": "CN008",
+      "cls": "",
+      "comp": "CN008.DRS.ENG (Engine / Двигатель)",
+      "desc": "Патрубок воздуховода системы впуска ДВС имеет трещины, следы старения и перегиба.",
+      "priority": "P4 Planned (Repair)",
+      "raised": "2026-10-02",
+      "type": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "hours": null,
+      "plan": "2026-11-09",
+      "status": "Elimination scheduled",
+      "request": "DD-00013857",
+      "defType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "cause": "Усталостная трещина",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-020773",
+      "equip": "CN008",
+      "cls": "",
+      "comp": "CN008.DRS.ENG (Engine / Двигатель)",
+      "desc": "Пластиковый корпус фильтра предварительной очистки имеет механическое повреждение расколот/разбит.",
+      "priority": "P4 Planned (Repair)",
+      "raised": "2026-10-02",
+      "type": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "hours": null,
+      "plan": "2026-11-09",
+      "status": "Elimination scheduled",
+      "request": "DD-00013855",
+      "defType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "cause": "Разрушение от удара",
       "pmStatus": "open",
       "completed": ""
     },
