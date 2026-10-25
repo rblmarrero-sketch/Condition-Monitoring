@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-25T05:45:59+00:00",
+  "generated": "2026-10-25T06:00:41+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -2062,24 +2062,6 @@
       "completed": ""
     },
     {
-      "wo": "WO-019384",
-      "equip": "EX015",
-      "cls": "EXC",
-      "comp": "",
-      "desc": "250h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-10-25",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-10-25",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
       "wo": "WO-019503",
       "equip": "LD005",
       "cls": "LDR",
@@ -2222,6 +2204,24 @@
       "cause": "",
       "pmStatus": "open",
       "completed": ""
+    },
+    {
+      "wo": "WO-019384",
+      "equip": "EX015",
+      "cls": "EXC",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-24",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-10-24",
+      "status": "Completed",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "complete",
+      "completed": "2026-10-24"
     },
     {
       "wo": "WO-019392",
