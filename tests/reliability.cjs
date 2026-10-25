@@ -1,21 +1,23 @@
-/* MTBF, MTTR AND AVAILABILITY — the arithmetic, and the panel on both desks.
+/* RELIABILITY ON REPORTS — THE SITE'S OWN FIGURES, ON BOTH DESKS.
 
-   dashboard/reliability.js is the one place the three numbers are worked out
-   (from data/reliability.json, the hourly 1C pull's corrective work orders —
-   tests/relingest.py proves the ingest half). This holds the arithmetic to
-   figures worked by hand from a small fixture, then opens Reports on BOTH
-   office pages (dashboard/ and dashboard-next/ are both permanent, CLAUDE.md)
+   Decided 2026-10-26 ("show the site figures"): the Reports panel prints the
+   reliability site's official MTBF / MTTR / availability from /site_kpi.json
+   (SITE_KPI_V1, written by PECHANKA's build next to the homepage, the same
+   numbers as the homepage cards) and computes nothing itself. This opens
+   Reports on BOTH office pages (dashboard/ and dashboard-next/ are both
+   permanent, CLAUDE.md), with a made-up site file served at /site_kpi.json,
    and reads what the panel prints:
 
-     - a failure is a P1, a P2 or a counted breakdown inside the period (P2
-       added 2026-10-02, decided by the site); a P4 planned repair is not one,
-       and neither is a P1 from before the period;
-     - a failure with no downtime figure is COUNTED and said out loud, never
-       read as zero hours;
-     - a population with no failures has no MTBF — it says so in words;
-     - no file yet (before the first hourly pull after this change) is a
-       sentence, not a row of zeros;
-     - the period and class controls redraw; Russian is Russian.
+     - the week's availability, failures, MTBF and MTTR, exactly the strings
+       the file says the homepage shows; week / MTD / YTD for Primary and All;
+       the Weekly report's fleets; the data-as-of line; the links to the site;
+     - data/reliability.json (the retired work-order calculation) is never
+       requested;
+     - a week with 0 failures has no MTBF or MTTR, in words;
+     - no file (Firebase / GitHub Pages), or a host that answers with its own
+       page instead of the file: one sentence saying where the figures are,
+       with the link, and no numbers at all;
+     - Russian is Russian; the CSV downloads; a day-old file says so.
 
    Run: node tests/reliability.cjs */
 const { chromium } = require(require('./pw.cjs'));
@@ -23,65 +25,41 @@ const http = require('http'), fs = require('fs'), path = require('path');
 const ROOT = path.join(__dirname, '..');
 const fails = [];
 const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !== undefined ? '   ' + d : '')); if (!c) fails.push(n); };
-const near = (a, b, eps) => a != null && Math.abs(a - b) <= (eps || 1e-6);
 
-const FIX = {
-  generated: '2026-10-01T00:00:00+00:00', relSince: '2025-08-27', relWindowDays: 400,
-  relUnits: ['TK101', 'TK102', 'EX005'],
-  relEvents: [
-    { equip: 'TK101', wo: 'WO-2', priority: 'P1 Breakdown', start: '2026-09-21', startDt: '2026-09-21T08:00:00Z', endDt: '2026-09-21T20:00:00Z', downH: 12, durH: 9, bd: 1 },
-    { equip: 'TK101', wo: 'WO-9', priority: 'P2 Urgent (Repair)', start: '2026-09-22', startDt: '2026-09-22T08:00:00Z', downH: 5, bd: 0 },
-    { equip: 'EX005', wo: 'WO-11', priority: 'P4 Planned (Repair)', start: '2026-09-26', startDt: '2026-09-26T06:00:00Z', downH: 7, bd: 0 },
-    { equip: 'EX005', wo: 'WO-3', priority: 'P3 Planned (Repair)', start: '2026-09-25', startDt: '2026-09-25T06:00:00Z', endDt: '2026-09-25T10:00:00Z', downH: null, durH: null, bd: 1 },
-    { equip: 'TK102', wo: 'WO-5', priority: 'P1 Breakdown', start: '2026-09-28', startDt: '2026-09-28T08:00:00Z', endDt: null, downH: null, durH: null, bd: 0 },
-    { equip: 'TK102', wo: 'WO-1', priority: 'P1 Breakdown', start: '2026-07-01', startDt: '2026-07-01T08:00:00Z', endDt: '2026-07-01T09:00:00Z', downH: 100, bd: 1 },
-  ],
-};
-const CLS = { TK101: 'HT', TK102: 'HT', EX005: 'EXC' };
-
-console.log('\n1. THE ARITHMETIC, AGAINST FIGURES WORKED BY HAND');
-{
-  global.window = undefined;
-  require(path.join(ROOT, 'dashboard/reliability.js'));
-  const R = globalThis.CMRel;
-  const r = R.compute(FIX, { days: 30, classOf: u => CLS[u] });
-  // T = 3 machines × 30 d × 24 h = 2160. Failures: TK101's P1 and P2, EX005's
-  // counted breakdown, TK102's P1 (no downtime). EX005's P4 is not a failure;
-  // TK102's July P1 is outside the period. D = 12 + 5 (docs) + 4 (EX005's start–end).
-  ok('three machines, 2160 h', r.units === 3 && r.T === 2160, JSON.stringify([r.units, r.T]));
-  ok('four failures: two P1, one P2, one counted breakdown; not the P4, not the one from July', r.failures === 4, r.failures);
-  ok('the P2 counts and the P4 does not', R.isFailure({ priority: 'P2 Urgent' }) && !R.isFailure({ priority: 'P4 Planned (Repair)' }) && !R.isFailure({ priority: 'P3 Planned (PM)' }));
-  ok('21 h of downtime: 12 + 5 from 1C\'s figure, 4 from the start–end dates', near(r.downH, 21) && r.fromDocs === 2 && r.fromDates === 1, JSON.stringify(r));
-  ok('the failure with no downtime figure is counted and named', r.unknownN === 1 && r.knownN === 3);
-  ok('MTTR = 21 ÷ 3 known = 7 h', near(r.mttr, 7), r.mttr);
-  ok('MTBF = (2160 − 21) ÷ 4 = 534.75 h', near(r.mtbf, 2139 / 4), r.mtbf);
-  ok('availability = 2139 ÷ 2160', near(r.avail, 2139 / 2160), r.avail);
-  ok('the machines are ranked by downtime', r.rows.map(x => x.unit).join() === 'TK101,EX005,TK102', r.rows.map(x => x.unit).join());
-  const ht = R.compute(FIX, { days: 30, cls: 'HT', classOf: u => CLS[u] });
-  ok('class HT: two machines, three failures, MTBF (1440 − 17) ÷ 3 = 474.33', ht.units === 2 && ht.failures === 3 && near(ht.mtbf, 1423 / 3), JSON.stringify([ht.units, ht.failures, ht.mtbf]));
-  const ninety = R.compute(FIX, { days: 120, classOf: u => CLS[u] });
-  ok('a longer period takes in July\'s breakdown too', ninety.failures === 5 && near(ninety.downH, 121), JSON.stringify([ninety.failures, ninety.downH]));
-  const quiet = R.compute(Object.assign({}, FIX, { relEvents: FIX.relEvents.filter(e => e.equip !== 'TK101' && e.equip !== 'TK102' && e.equip !== 'EX005') }), { days: 30, classOf: u => CLS[u] });
-  ok('no failures: no MTBF, no MTTR, availability 100%', quiet.mtbf === null && quiet.mttr === null && quiet.avail === 1, JSON.stringify([quiet.mtbf, quiet.mttr, quiet.avail]));
-  /* A pull made before the ingester stopped writing it carries 1C's
-     accumulation-register total as downH (downFrom "register"): the machine's
-     running total for the period, repeated on every work order. It is never
-     a job's downtime; the job's own duration answers instead. */
-  const reg = R.downtime({ downH: 926, downFrom: 'register', durH: 3 });
-  ok('a register total is not a downtime: the job\'s own duration answers', reg.h === 3 && reg.from === 'duration', JSON.stringify(reg));
-  const regOnly = R.downtime({ downH: 926, downFrom: 'register' });
-  ok('and with nothing else it is unknown, not 926 h', regOnly.h === null, JSON.stringify(regOnly));
-  ok('1C\'s own document figure still counts', R.downtime({ downH: 12, downFrom: 'docs', durH: 3 }).h === 12);
-  ok('no file at all is null, not zeros', R.compute(null, {}) === null && R.compute({ generated: 'x' }, {}) === null);
+const siteNow = () => { const d = new Date(Date.now() + 12 * 3600e3); return d.toISOString().slice(0, 16).replace('T', ' '); };
+const per = (pa, f, mtbf, mttr, units, plan) => ({ pa_pct: pa, failures: f, mtbf_h: mtbf, mttr_h: mttr, operating_h: 1, scheduled_h: 1, downtime_h: 1, units, plan_pct: plan == null ? null : plan,
+  shown: { pa: Math.round(pa) + '%', mtbf: mtbf == null ? null : String(Math.round(mtbf)), mttr: mttr == null ? null : String(Math.round(mttr)) } });
+function fixture(o) {
+  o = o || {};
+  const wk = o.zero ? per(100, 0, null, null, 145, 89) : per(81.2, 259, 75.2, 14.0, 145, 89);
+  return {
+    marker: 'SITE_KPI_V1', v: 1, source: 'site engine acd.json', source_detail: 'test',
+    generated_site: siteNow(), data_as_of_site: o.asof || siteNow(),
+    week: { label: '2026-W43', no: 43, from: '2026-10-19', to: '2026-10-25' },
+    mtd: { from: '2026-10-01', to: '2026-10-25' }, ytd: { from: '2026-01-01', to: '2026-10-25' },
+    scopes: {
+      Primary: { units: 145, avail24_pct: 82.0, week: wk, mtd: per(79.6, 812, 78.4, 15.1, 145, 89), ytd: per(79.2, 10421, 75.6, 15.3, 145, 89) },
+      All: { units: 637, avail24_pct: 85.0, week: per(84.3, 402, 160.1, 12.2, 637), mtd: per(84.0, 1300, 150.2, 12.9, 637), ytd: per(83.1, 16000, 140.4, 13.3, 637) },
+    },
+    home: { week_label: '2026-W43 · 10/19/2026–10/25/2026', units: '145', week: { actual: '81%', mtbf: '75', mttr: '14', plan: '89' } },
+    fleets: [
+      { k: 'exc', en: 'Excavator', ru: 'Экскаваторы', units: 22, pa_pct: 78.4, failures: 58, mtbf_h: 56.0, mttr_h: 5.0, shown: { pa: 78, mtbf: 56, mttr: 5 } },
+      { k: 'drl', en: 'Drill', ru: 'Буровые', units: 9, pa_pct: 95.0, failures: 0, mtbf_h: null, mttr_h: null, shown: { pa: 95, mtbf: null, mttr: null } },
+    ],
+    fleets_note: 'Weekly report fleets', links: { home: '/', weekly_report: '/weekly_report.html' },
+  };
 }
 
 const PORT = 8147;
 const MIME = { '.html': 'text/html', '.js': 'text/javascript', '.json': 'application/json', '.css': 'text/css', '.png': 'image/png', '.svg': 'image/svg+xml', '.woff2': 'font/woff2' };
-let SERVE_REL = true;
+let MODE = 'ok', FIX = fixture(), HITS = [];
 const srv = http.createServer((req, res) => {
   const u = new URL(req.url, 'http://x');
-  if (u.pathname === '/data/reliability.json') {
-    if (!SERVE_REL) { res.writeHead(404); return res.end('nope'); }
+  if (/reliability\.json$/.test(u.pathname)) HITS.push(u.pathname);
+  if (u.pathname === '/site_kpi.json') {
+    if (MODE === '404') { res.writeHead(404); return res.end('nope'); }
+    if (MODE === 'spa') { res.writeHead(200, { 'Content-Type': 'text/html' }); return res.end('<!doctype html><html><body>app</body></html>'); }
+    if (MODE === 'other') { res.writeHead(200, { 'Content-Type': 'application/json' }); return res.end('{"hello":1}'); }
     res.writeHead(200, { 'Content-Type': 'application/json' }); return res.end(JSON.stringify(FIX));
   }
   const p = path.join(ROOT, decodeURIComponent(u.pathname));
@@ -90,73 +68,87 @@ const srv = http.createServer((req, res) => {
   fs.createReadStream(p).pipe(res);
 }).listen(PORT);
 
-async function panel(b, file, lang, serve) {
-  SERVE_REL = serve;
-  const ctx = await b.newContext({ viewport: { width: 1366, height: 900 } });
+async function panel(b, file, lang, mode, fix) {
+  MODE = mode; FIX = fix || fixture(); HITS = [];
+  const ctx = await b.newContext({ viewport: { width: 1366, height: 900 }, acceptDownloads: true });
   await ctx.addInitScript(l => { localStorage.setItem('cm_dash_lang', l); }, lang);
   const p = await ctx.newPage();
   const errs = []; p.on('pageerror', e => errs.push(e.message));
   await p.goto(`http://127.0.0.1:${PORT}/${file}#reports`, { waitUntil: 'load' });
   await p.waitForFunction(() => window.CMRel && window.showTab, null, { timeout: 15000 });
   await p.evaluate(() => showTab('reports'));
-  await p.waitForFunction(s => { const el = document.getElementById('relPanel'); return el && (s ? el.querySelector('#relKpis') : el.querySelector('[data-rel="nodata"]')); },
-    serve, { timeout: 10000 }).catch(() => {});
+  await p.waitForFunction(() => { const el = document.getElementById('relPanel'); return el && (el.querySelector('#relKpis') || el.querySelector('[data-rel="away"]')); },
+    null, { timeout: 15000 }).catch(() => {});
   return { ctx, p, errs };
 }
+const read = p => p.evaluate(() => {
+  const g = id => { const el = document.getElementById(id); return el ? el.innerText.replace(/\s+/g, ' ').trim() : null; };
+  const el = document.getElementById('relPanel');
+  return { av: g('relAvail'), f: g('relFails'), mtbf: g('relMtbf'), mttr: g('relMttr'),
+    periods: [...document.querySelectorAll('#relPeriods tbody tr')].map(r => r.innerText.replace(/\s+/g, ' ').trim()),
+    fleets: [...document.querySelectorAll('#relFleets tbody tr')].map(r => r.innerText.replace(/\s+/g, ' ').trim()),
+    basis: (document.querySelector('[data-rel="basis"]') || {}).innerText || '',
+    stale: !!document.querySelector('[data-rel="stale"]'),
+    links: [...el.querySelectorAll('a')].map(a => a.href),
+    away: (document.querySelector('[data-rel="away"]') || {}).innerText || '',
+    h: (el.querySelector('h2') || {}).innerText || '', text: el.innerText };
+});
 
 (async () => {
   const b = await chromium.launch();
   for (const file of ['dashboard/index.html', 'dashboard-next/index.html']) {
-    console.log(`\n2. ${file}: THE PANEL ON REPORTS`);
-    const { ctx, p, errs } = await panel(b, file, 'en', true);
-    const t = await p.evaluate(() => {
-      const g = id => { const el = document.getElementById(id); return el ? el.innerText : null; };
-      return { mtbf: g('relMtbf'), mttr: g('relMttr'), av: g('relAvail'), f: g('relFails'),
-        basis: (document.querySelector('[data-rel="basis"]') || {}).innerText || '',
-        unknown: !!document.querySelector('[data-rel="unknown"]'),
-        classes: [...document.querySelectorAll('#relByClass tbody tr')].map(r => r.dataset.cls),
-        top: [...document.querySelectorAll('#relTop tbody tr')].map(r => r.dataset.unit) };
-    });
-    ok('the panel is on the Reports tab', t.mtbf !== null, JSON.stringify(t).slice(0, 200));
-    // The panel opens on 90 days: T = 3 × 90 × 24 = 6480, MTBF = (6480 − 21) ÷ 4.
-    ok('MTBF reads 1 615 h — (6480 − 21) ÷ 4, rounded', /1\s?615\s*h/.test(t.mtbf || ''), t.mtbf);
-    ok('MTTR reads 7.0 h', /7\.0\s*h/.test(t.mttr || ''), t.mttr);
-    ok('availability reads 99.7% — 6459 ÷ 6480', /99\.7%/.test(t.av || ''), t.av);
-    ok('four failures over three machines', /\b4\b/.test(t.f || ''), t.f);
-    ok('the basis is printed: machines × days × 24', /3 machines × 90 days × 24 h/.test(t.basis), t.basis);
-    ok('the failure with no downtime figure is said out loud', t.unknown);
-    const want = await p.evaluate(() => [...new Set(['TK101', 'TK102', 'EX005'].map(u => (ASSET_BY[u] && ASSET_BY[u].cls) || ''))].sort());
-    ok('one row per class, read off the page\'s own register', t.classes.join() === want.join(), t.classes.join() + ' vs ' + want.join());
-    ok('machines ranked by downtime', t.top.join() === 'TK101,EX005,TK102', t.top.join());
-    // controls
-    await p.selectOption('#relDays', '365');
-    const f365 = await p.evaluate(() => document.getElementById('relFails').innerText);
-    ok('365 days takes in July\'s breakdown: five failures', /\b5\b/.test(f365), f365);
-    const tkCls = await p.evaluate(() => (ASSET_BY.TK101 && ASSET_BY.TK101.cls) || '');
-    await p.selectOption('#relCls', tkCls);
-    const ht = await p.evaluate(() => ({ f: document.getElementById('relFails').innerText, d: document.getElementById('relDays').value,
-      rows: [...document.querySelectorAll('#relTop tbody tr')].map(r => r.dataset.unit) }));
-    ok('a class keeps the period and narrows to its own machines', ht.d === '365' && !ht.rows.includes('EX005') && ht.rows.includes('TK101'), JSON.stringify(ht));
+    console.log(`\n1. ${file}: THE SITE'S FIGURES ON REPORTS`);
+    const { ctx, p, errs } = await panel(b, file, 'en', 'ok');
+    const t = await read(p);
+    ok('the panel is on the Reports tab, with four tiles', t.av !== null && t.mttr !== null, JSON.stringify(t).slice(0, 160));
+    ok('availability = the homepage string, 81% (week 43)', /Week 43/i.test(t.av) && /\b81%/.test(t.av) && /plan 89%/.test(t.av), t.av);
+    ok('failures 259, ISO count from the file', /\b259\b/.test(t.f) && /145 Primary units/.test(t.f), t.f);
+    ok('MTBF 75 h', /\b75 h\b/.test(t.mtbf), t.mtbf);
+    ok('MTTR 14 h', /\b14 h\b/.test(t.mttr), t.mttr);
+    ok('week, MTD, YTD for Primary and All (2 headings + 6 rows)', t.periods.length === 8 && /Year to date 79% 10421 76 15/.test(t.periods.join('|')) && /All equipment \(637 units\)/.test(t.periods.join('|')), t.periods.join(' | '));
+    ok('the Weekly report fleets, a 0-failure fleet without MTBF / MTTR', t.fleets.length === 2 && /^Excavator 22 78% 58 56 5$/.test(t.fleets[0]) && /^Drill 9 95% 0 — —$/.test(t.fleets[1]), t.fleets.join(' | '));
+    ok('data-as-of and the week dates in the site\'s date style', /Data as of \d\d\.\d\d\.\d{4} \d\d:\d\d site/.test(t.basis) && /19\.10\.2026 – 25\.10\.2026/.test(t.basis), t.basis);
+    ok('"same figures as the homepage", linked to the site and the Weekly report',
+      /Same figures as the reliability site homepage/.test(t.text) && t.links.includes('https://maintenance.vegadevelopment.com/') && t.links.includes('https://maintenance.vegadevelopment.com/weekly_report.html'), t.links.join(' '));
+    ok('a fresh file carries no stale warning', !t.stale);
+    ok('data/reliability.json (the retired work-order calculation) is never requested', HITS.length === 0, HITS.join(','));
+    ok('no work-order wording left (no "corrective work orders", no period / class pickers)', !/corrective work orders/i.test(t.text) && !(await p.$('#relDays')) && !(await p.$('#relCls')));
     const [dl] = await Promise.all([p.waitForEvent('download', { timeout: 5000 }).catch(() => null), p.click('#relCsv')]);
-    let csv = '';
-    if (dl) { const fp = await dl.path(); csv = fs.readFileSync(fp, 'utf8'); }
-    ok('the CSV downloads with a row per class and per machine', /^﻿?scope,class,unit/.test(csv) && /,TK101,/.test(csv), csv.slice(0, 160));
+    let csv = ''; if (dl) { const fp = await dl.path(); csv = fs.readFileSync(fp, 'utf8'); }
+    ok('the CSV downloads: Primary / All periods, fleets, the source', /^\ufeff?scope,period,from,to/.test(csv) && /Primary,week,2026-10-19,2026-10-25,145,81\.2,259,75\.2,14/.test(csv) && /fleet:Excavator/.test(csv) && /site engine acd\.json/.test(csv), csv.slice(0, 200));
     ok('no page errors', errs.length === 0, errs.slice(0, 2).join(' | ') || 'none');
     await ctx.close();
 
-    console.log(`\n3. ${file}: NO FILE YET`);
-    const n = await panel(b, file, 'en', false);
-    const nd = await n.p.evaluate(() => ({ msg: (document.querySelector('[data-rel="nodata"]') || {}).innerText || '', kpis: !!document.getElementById('relKpis') }));
-    ok('says the figures arrive with the hourly 1C pull', /hourly 1C pull/.test(nd.msg), nd.msg);
-    ok('and prints no tiles — no zeros standing in for a measurement', !nd.kpis);
-    await n.ctx.close();
+    console.log(`\n2. ${file}: A WEEK WITH NO FAILURES, A FILE A DAY OLD`);
+    const z = await panel(b, file, 'en', 'ok', fixture({ zero: true, asof: '2026-01-02 08:00' }));
+    const tz = await read(z.p);
+    ok('0 failures: MTBF and MTTR are "—" and say why', /—/.test(tz.mtbf) && /no failures this week/.test(tz.mtbf) && /—/.test(tz.mttr), tz.mtbf + ' / ' + tz.mttr);
+    ok('availability 100%', /100%/.test(tz.av), tz.av);
+    ok('an old file says it is old', tz.stale, tz.basis);
+    await z.ctx.close();
+
+    for (const mode of ['404', 'spa', 'other']) {
+      console.log(`\n3. ${file}: NO SITE FILE (${mode === '404' ? 'Firebase / GitHub Pages: 404' : mode === 'spa' ? 'a host answering with its own page' : 'some other JSON'})`);
+      const n = await panel(b, file, 'en', mode);
+      const tn = await read(n.p);
+      ok('one sentence saying where the figures are, linked', /Site reliability figures are on maintenance\.vegadevelopment\.com/.test(tn.away) && tn.links.includes('https://maintenance.vegadevelopment.com/'), tn.away);
+      ok('and no numbers at all: no tiles, no tables, no digits but the address', tn.av === null && !tn.periods.length && !tn.fleets.length && !/\d/.test(tn.text.replace(/maintenance\.vegadevelopment\.com/g, '')), tn.text.slice(0, 120));
+      ok('data/reliability.json is not read as a fallback', HITS.length === 0, HITS.join(','));
+      ok('no page errors', n.errs.length === 0, n.errs.slice(0, 2).join(' | ') || 'none');
+      await n.ctx.close();
+    }
 
     console.log(`\n4. ${file}: IN RUSSIAN`);
-    const r = await panel(b, file, 'ru', true);
-    const ru = await r.p.evaluate(() => ({ h: (document.querySelector('#relPanel h2') || {}).innerText || '', av: (document.getElementById('relAvail') || {}).innerText || '' }));
+    const r = await panel(b, file, 'ru', 'ok');
+    const ru = await read(r.p);
     ok('the heading is Russian', /Надёжность/.test(ru.h), ru.h);
-    ok('and so are the tiles', /Готовность/i.test(ru.av), ru.av);
+    ok('and so are the tiles, the fleets and the source line', /Готовность · Неделя 43/i.test(ru.av) && /Экскаваторы/.test(ru.fleets.join()) && /Те же показатели, что на главной странице/.test(ru.text), ru.av + ' | ' + ru.fleets[0]);
+    ok('the numbers are the same strings', /\b81%/.test(ru.av) && /\b75 ч/.test(ru.mtbf), ru.mtbf);
     await r.ctx.close();
+    const ra = await panel(b, file, 'ru', '404');
+    const ta = await read(ra.p);
+    ok('Russian, no file: the sentence is Russian', /Показатели надёжности сайта — на maintenance\.vegadevelopment\.com/.test(ta.away), ta.away);
+    await ra.ctx.close();
   }
   await b.close(); srv.close();
   console.log(fails.length ? '\nFAILED ' + fails.length + ': ' + fails.join(' | ') : '\nall passed');
