@@ -146,6 +146,33 @@ const CLIP = el => !el ? 'missing' : (el.scrollWidth > el.clientWidth + 1 || el.
     }
     await ctx.close();
   }
+  console.log('\n3b. ONE ROW WITH THE PAGE\'S OWN FONT, AT EVERY OFFICE WIDTH');
+  /* The check above compares two states of the same bar, so it passed while
+     the bar was on two rows in both: from 1401 to 1679 px, with IBM Plex Sans
+     loaded, the labels put "Clear all" on a line of its own (2026-10-25).
+     Earlier sweeps never saw it because the web font could not load and the
+     fallback's narrower letters fitted. This asks the plain question — is every
+     control on the first line — and says which font it measured with. */
+  for (const lang of ['en', 'ru']) for (const W of [1401, 1440, 1536, 1600, 1680, 1719, 1720, 1920]) {
+    const ctx = await b.newContext({ viewport: { width: W, height: 800 } });
+    await ctx.addInitScript(l => localStorage.setItem('cm_dash_lang', l), lang);
+    const p = await ctx.newPage();
+    await p.goto(`${B}/dashboard/index.html`, { waitUntil: 'load' });
+    await p.waitForFunction(() => window.CMDash, null, { timeout: 15000 });
+    const r = await p.evaluate(async () => {
+      try { await Promise.race([document.fonts.ready, new Promise(z => setTimeout(z, 4000))]); } catch (e) {}
+      const bar = document.querySelector('main > .controls:not(.more)');
+      const kids = [...bar.children].filter(k => k.offsetWidth > 2);
+      const tops = kids.map(k => k.getBoundingClientRect().top);
+      const q = bar.querySelector('input[type=search]');
+      return { rows: new Set(tops.map(t => Math.round(t / 20))).size, spread: Math.round(Math.max(...tops) - Math.min(...tops)),
+               q: q ? q.offsetWidth : 0, plex: document.fonts.check('14px "IBM Plex Sans"') };
+    });
+    ok(`dashboard ${lang} ${W}: every control on one line (${r.plex ? 'IBM Plex Sans' : 'fallback font'})`,
+       r.spread <= 12, JSON.stringify(r));
+    await ctx.close();
+  }
+
   await b.close(); srv.close();
   console.log(fails.length ? '\nFAILED ' + fails.length + ': ' + fails.join(' | ') : '\nall passed');
   process.exit(fails.length ? 1 : 0);
