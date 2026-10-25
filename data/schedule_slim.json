@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-25T23:13:42+00:00",
+  "generated": "2026-10-25T23:24:47+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -511,19 +511,6 @@
         "priority": "P3 Planned (PM)"
       }
     ],
-    "TK123": [
-      {
-        "wo": "WO-019523",
-        "hours": 8000,
-        "types": [
-          "INSP",
-          "MP",
-          "TB"
-        ],
-        "plan": "2026-10-25",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
     "TK124": [
       {
         "wo": "WO-019524",
@@ -663,20 +650,6 @@
           "MP"
         ],
         "plan": "2026-10-29",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "TK158": [
-      {
-        "wo": "WO-019537",
-        "hours": 3000,
-        "types": [
-          "FC",
-          "INSP",
-          "LUBE",
-          "MP"
-        ],
-        "plan": "2026-10-25",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -2098,24 +2071,6 @@
       "completed": ""
     },
     {
-      "wo": "WO-019523",
-      "equip": "TK123",
-      "cls": "AT",
-      "comp": "",
-      "desc": "General Inspection / Magnetic Plug / Dump Body Liner",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-10-25",
-      "type": "8000 Hours service Planned",
-      "hours": 8000,
-      "plan": "2026-10-25",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
       "wo": "WO-019537",
       "equip": "TK158",
       "cls": "HT",
@@ -2126,12 +2081,12 @@
       "type": "3000 Hours service Planned",
       "hours": 3000,
       "plan": "2026-10-25",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-25"
     },
     {
       "wo": "WO-019346",
