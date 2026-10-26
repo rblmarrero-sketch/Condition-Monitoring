@@ -4841,6 +4841,18 @@ applies from today and has no re-grade choice. Its preview counts how many
 readings on record would have been proposed a different grade, and says
 grades already given stay. No backend change (`tests/limitsall.cjs`).
 
+**A CUT INDEX REPLY IS MORE TO COME (build 548, audit 26.10 C3).** Google's
+`readIndex_` stops once the month files it has read pass `INDEX_SLIM_BYTES`
+and says `truncated` with a `cursor`; it never says `pending`, which only the
+records path sends. `histDrain` asked `pending` alone, so the first cut page of
+a new phone's full read counted as the whole folder and `histTrueUp` stripped
+the "from the system" stamp from every machine not on it, which are the most
+recently inspected. `teamPull` now sets `teamPending = 1` when a reply is
+`truncated` and carries no `pending`, so the drain asks again from the cursor;
+a cut reply whose cursor never moves makes the drain return false, never true
+up. Phone only, no backend change (`tests/draincut.cjs`, its own backend; fails
+four assertions against build 547).
+
 ---
 
 ## Secrets
