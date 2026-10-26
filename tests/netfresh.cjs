@@ -34,6 +34,11 @@ const ok = (n, c, d) => { console.log((c ? "  PASS  " : "  FAIL  ") + n + (d !==
     localStorage.setItem("cm_swap_off", "1"); localStorage.setItem("lang", "en");
   }, BASE + "/exec");
   const p = await ctx.newPage(); const errs = []; p.on("pageerror", e => errs.push(e.message));
+  /* Requests the page has started and not finished. See "quiet" below. */
+  let inflight = 0;
+  p.on("request", () => inflight++);
+  p.on("requestfinished", () => inflight--);
+  p.on("requestfailed", () => inflight--);
   await p.goto(BASE + "/mobile/index.html", { waitUntil: "load" });
   await p.waitForTimeout(2500);
 
@@ -53,6 +58,17 @@ const ok = (n, c, d) => { console.log((c ? "  PASS  " : "  FAIL  ") + n + (d !==
   /* navigator.onLine is what netState() reads; dispatching the event alone
      changes nothing, and a first pass at this "passed" while the badge still
      said "All sent". Override the flag, THEN tell the page. */
+  /* LET THE BOOT'S OWN REQUESTS FINISH FIRST. netState() says "Offline" only
+     while no reply has come back since the phone went offline (netOkAt >
+     offSince is real evidence of a network, and wins over the flag), and this
+     test flips the flag on a page whose network is real. The boot pulls from
+     the mock; under the full sweep's load one was still in flight after the
+     2.5 s wait, landed just after the flip, and the badge rightly said "All
+     sent" (2026-10-26, twice in two sweeps, never alone). Wait until nothing
+     has been in flight for half a second, up to 20 s. */
+  for (let quiet = 0, t0 = Date.now(); quiet < 500 && Date.now() - t0 < 20000; ) {
+    await p.waitForTimeout(100); quiet = inflight > 0 ? 0 : quiet + 100;
+  }
   await p.evaluate(() => {
     Object.defineProperty(navigator, "onLine", { get: () => false, configurable: true });
     window.dispatchEvent(new Event("offline"));
