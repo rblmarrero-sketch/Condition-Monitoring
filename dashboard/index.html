@@ -3709,6 +3709,8 @@
           <div class="sub" data-i18n="sy_unknown_sub">These need a backend that issues a durable receipt per record and a hash per attachment. This one stores files in folders, so the dashboard cannot prove delivery latency, detect a corrupted upload or count a suppressed duplicate. They are listed rather than reported as zero.</div></details>
       </div>
     </details>
+    <!-- Measurement limits, set by the office (dashboard/wear-limits.js). -->
+    <div class="wl-panel" id="wlPanel"></div>
   </section>
 
   <section id="tab-reports" class="hidden">
@@ -3948,23 +3950,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=544"></script>
+<script src="../data/magnetic_plug.js?v=546"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=544"></script>
-<script src="../mobile/hme.js?v=544"></script>
-<script src="../mobile/mp-fc.js?v=544"></script>
-<script src="../mobile/rtw.js?v=544"></script>
-<script src="../mobile/hme-cascade.js?v=544"></script>
-<script src="../mobile/temp-limits.js?v=544"></script>
+<script src="../data/work_orders.js?v=546"></script>
+<script src="../mobile/hme.js?v=546"></script>
+<script src="../mobile/mp-fc.js?v=546"></script>
+<script src="../mobile/rtw.js?v=546"></script>
+<script src="../mobile/hme-cascade.js?v=546"></script>
+<script src="../mobile/temp-limits.js?v=546"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=544"></script>
-<script src="../mobile/normalize.js?v=544"></script>
-<script src="../mobile/terms.js?v=544"></script>
+<script src="../mobile/assets.js?v=546"></script>
+<script src="../mobile/normalize.js?v=546"></script>
+<script src="../mobile/terms.js?v=546"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -3983,20 +3985,21 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=544"></script>
-<script src="../mobile/edits.js?v=544"></script>
-<script src="../mobile/due.js?v=544"></script>
-<script src="../mobile/wear.js?v=544"></script>
-<script src="../mobile/wear-map.js?v=544"></script>
-<script src="../mobile/lube.js?v=544"></script>
-<script src="../mobile/lube-overrides.js?v=544"></script>
-<script src="../mobile/lube2027.js?v=544"></script>
-<script src="../mobile/lube-tds.js?v=544"></script>
-<script src="lube-master.js?v=544"></script>
+<script src="../mobile/grade.js?v=546"></script>
+<script src="../mobile/edits.js?v=546"></script>
+<script src="../mobile/due.js?v=546"></script>
+<script src="../mobile/wear.js?v=546"></script>
+<script src="../mobile/wear-map.js?v=546"></script>
+<script src="../mobile/lube.js?v=546"></script>
+<script src="../mobile/lube-overrides.js?v=546"></script>
+<script src="../mobile/lube2027.js?v=546"></script>
+<script src="../mobile/lube-tds.js?v=546"></script>
+<script src="lube-master.js?v=546"></script>
+<script src="wear-limits.js?v=546"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=544"></script>
-<script src="../mobile/machine-photos.js?v=544"></script>
+<script src="../mobile/upload-defaults.js?v=546"></script>
+<script src="../mobile/machine-photos.js?v=546"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -4005,17 +4008,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=544"></script>
-<script src="../mobile/get.js?v=544"></script>
-<script src="../mobile/points.js?v=544"></script>
-<script src="../mobile/uc-points.js?v=544"></script>
-<script src="../mobile/inspect-guide.js?v=544"></script>
-<script src="../mobile/get-figs.js?v=544"></script>
-<script src="../mobile/body-points.js?v=544"></script>
-<script src="../mobile/body-map.js?v=544"></script>
-<script src="../mobile/jspdf.umd.min.js?v=544"></script>
-<script src="../mobile/html2canvas.min.js?v=544"></script>
-<script src="../mobile/report-core.js?v=544"></script>
+<script src="../mobile/machine-fig.js?v=546"></script>
+<script src="../mobile/get.js?v=546"></script>
+<script src="../mobile/points.js?v=546"></script>
+<script src="../mobile/uc-points.js?v=546"></script>
+<script src="../mobile/inspect-guide.js?v=546"></script>
+<script src="../mobile/get-figs.js?v=546"></script>
+<script src="../mobile/body-points.js?v=546"></script>
+<script src="../mobile/body-map.js?v=546"></script>
+<script src="../mobile/jspdf.umd.min.js?v=546"></script>
+<script src="../mobile/html2canvas.min.js?v=546"></script>
+<script src="../mobile/report-core.js?v=546"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -5954,6 +5957,7 @@ function applyLang(){
   railApply(document.body.classList.contains("railshut"));
   // Everything built in code has to be repainted, not just the static markup.
   refreshControls(); renderAll(true); refreshSources(); refreshReportTargets();
+  if(window.CMWearLimits && wearLimitsInit.done) CMWearLimits.redraw();
   if(typeof relShow==="function" && $("tab-reports") && !$("tab-reports").classList.contains("hidden")) relShow();
   // The edit panel is built when it opens, so a switch made with it open leaves
   // it in the old language. Repaint the part that is generated rather than
@@ -6028,11 +6032,12 @@ function bodyModelOf(unit){
    re-resolves against the same reference the phone used, so a reference
    corrected since the export shows corrected here too. Both ends run the
    identical WEAR.wear() — there is no second opinion to reconcile. */
-const UC_BAND = pct => pct>=100 ? "act" : pct>=80 ? "watch" : "ok";
+/* With an office warning (wear-limits.js) "watch" starts at the warning, not at 80 %. */
+const UC_BAND = (pct, warn) => pct>=100 ? "act" : pct>=(warn!=null&&warn!==""?Number(warn):80) ? "watch" : "ok";
 /* A measured point's grade comes from its remaining life — GRADE.fromWorn —
    on the same bands the phone's cards state for undercarriage and GET:
    1 at 80–100% remaining … 5 below 20% or past the limit. */
-const UC_GRADE = pct => GRADE.fromWorn(pct) || "";
+const UC_GRADE = (pct, warn) => GRADE.fromWorn(pct, warn) || "";
 function wearOf(rec,it){
   if(!isWearType(rec.type)) return null;
   /* A GET round with no reading and no reason given: there is nothing to
@@ -6053,7 +6058,7 @@ function wearOf(rec,it){
   if(rec.type==="GET" && (it.mm===""||it.mm==null) && !it.reason) return null;
   const mm = (it.mm===""||it.mm==null) ? null : Number(it.mm);
   let n=it.newMM, c=it.condemnMM, pct=(it.wearPct===""||it.wearPct==null)?null:Number(it.wearPct),
-      src=it.refSrc||"";
+      src=it.refSrc||"", warn=null;
   const a=ASSET_BY[rec.equip];
   const i=String(it.key||"").indexOf("."), pt=i<0?it.key:String(it.key).slice(0,i),
         pos=i<0?"":String(it.key).slice(i+1);
@@ -6087,6 +6092,7 @@ function wearOf(rec,it){
        perfectly good reference is a lie about the data. */
     const ref=WEAR.refFor(rec.equip, a.m, pt, pos, rec.date);
     if(ref && !ref.x){ n=ref.n; c=ref.c; src=ref.src;
+      warn = WEAR.warnPct ? WEAR.warnPct(ref) : null;
       const w = mm==null ? null : WEAR.wear(ref,mm);
       pct = (w==null?null:Math.round(w)); }
     else if(ref && ref.x){ n=ref.n; c=ref.c; src="x:"+ref.x; pct=null; }
@@ -6102,8 +6108,8 @@ function wearOf(rec,it){
   const odd = (window.WEAR && WEAR.outOfRange && !String(src).startsWith("x:"))
     ? WEAR.outOfRange({n, c}, mm) : null;
   if(odd) pct=null;
-  return { mm, newMM:n, condemnMM:c, wearPct:pct, band:(pct==null?"":UC_BAND(pct)),
-           odd:odd||"", refSrc:src, stood:!!it.stood, reason:"", reasonLabel:"", reasonAlt:"" };
+  return { mm, newMM:n, condemnMM:c, wearPct:pct, band:(pct==null?"":UC_BAND(pct, warn)),
+           warnPct:(warn==null?null:Math.round(warn)), odd:odd||"", refSrc:src, stood:!!it.stood, reason:"", reasonLabel:"", reasonAlt:"" };
 }
 /* Why a point has no millimetre, resolved HERE rather than trusted from the
    record. The phone froze the label in English at capture, so a Russian sheet
@@ -6154,7 +6160,7 @@ function reasonPair(ty, code){
    sevConflicts() names those. */
 function sevOf(rec,it){
   const w=wearOf(rec,it);
-  if(w && w.wearPct!=null && w.wearPct!=="" && w.mm!=null) return UC_GRADE(w.wearPct);
+  if(w && w.wearPct!=null && w.wearPct!=="" && w.mm!=null) return UC_GRADE(w.wearPct, w.warnPct);
   if(it && it.general) return "";
   const g=gradeNum(it && it.grade);
   if(g) return g;
@@ -12230,7 +12236,7 @@ async function autoRefresh(why){
   try{
     const r = await drv().load(null, {});
     autoLast = Date.now();
-    lubeMasterLoad();
+    lubeMasterLoad(); wearLimitsLoad();
     if(r && r.records){
       rebuild(); refreshControls(); renderAll();
       // Say it once, where the reader is already looking, and let it fade.
@@ -12317,7 +12323,7 @@ document.addEventListener("visibilitychange", ()=>{
 window.addEventListener("online", ()=>autoRefresh("online"));
 /* On open: catch up first, then keep up. Deferred a beat so the page paints
    what it already holds rather than waiting on the network to show anything. */
-setTimeout(()=>{ autoBooted = true; autoRefresh("open"); startAuto(); lubeMasterLoad(); }, 1200);
+setTimeout(()=>{ autoBooted = true; autoRefresh("open"); startAuto(); lubeMasterLoad(); wearLimitsLoad(); }, 1200);
 /* The 1C pull keeps itself current whether or not a folder is attached — it is
    a file on this site, not something the backend serves, so it has nothing to
    do with drvOn(). */
@@ -14985,6 +14991,23 @@ function lubeMasterLoad(){
   lubeMasterBusy=true;
   return CMLube.load().catch(e=>{ bad("lube-master-load", e); return null; })
     .finally(()=>{ lubeMasterBusy=false; });
+}
+/* The office's measurement limits (dashboard/wear-limits.js): read with the
+   folder, applied to WEAR, and the page re-scored when they move. */
+function wearLimitsInit(){
+  if(!window.CMWearLimits || wearLimitsInit.done) return;
+  wearLimitsInit.done=true;
+  CMWearLimits.init({ lang:()=>lang, recs:()=>RECS,
+    onApplied:()=>{ try{ rebuild(); refreshControls(); renderAll(); }catch(e){ bad("wear-limits-apply", e); } } });
+  const el=$("wlPanel"); if(el) CMWearLimits.mount(el);
+}
+let wearLimitsBusy=false;
+function wearLimitsLoad(){
+  if(!window.CMWearLimits || wearLimitsBusy) return Promise.resolve(null);
+  wearLimitsInit();
+  wearLimitsBusy=true;
+  return CMWearLimits.load().catch(e=>{ bad("wear-limits-load", e); return null; })
+    .finally(()=>{ wearLimitsBusy=false; });
 }
 function markLubeDirty(){ try{ TAB_DIRTY.add("lube"); }catch(e){} }
 /* Machines on the register per reference model, "CLS|Model" -> count. */
@@ -18718,10 +18741,10 @@ document.querySelector(".lang").addEventListener("click",e=>{
   setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 })();
 </script>
-<script src="drive.js?v=544"></script>
-<script src="sync-adapter.js?v=544"></script>
-<script src="report.js?v=544"></script>
-<script src="reliability.js?v=544"></script>
+<script src="drive.js?v=546"></script>
+<script src="sync-adapter.js?v=546"></script>
+<script src="report.js?v=546"></script>
+<script src="reliability.js?v=546"></script>
 <script>
 /* THE CLOSED FILTER SAYS WHAT IS CHOSEN. A dropdown narrower than its option
    text ellipsises ("All t…", audit of 2026-10-01). Between 1331 and 1500 px

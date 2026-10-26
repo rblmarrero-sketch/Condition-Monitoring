@@ -390,7 +390,7 @@
           lube: lubeBlock(rec, it),
           photos: wantPhotos ? photoSrcs(it, rec) : [],
           w: w ? { mm: w.mm, newMM: w.newMM, condemnMM: w.condemnMM, pct: w.wearPct,
-                   band: w.band || "", refSrc: w.refSrc || "", odd: w.odd || "",
+                   band: w.band || "", refSrc: w.refSrc || "", odd: w.odd || "", warnPct: w.warnPct,
                    reason: w.reason || "", reasonLabel: w.reasonLabel || "",
                    reasonAlt: w.reasonAlt || "",
                    stood: !!w.stood } : null,

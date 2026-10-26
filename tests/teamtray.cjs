@@ -80,8 +80,11 @@ const st = (key, mm, extra) => Object.assign({ key, detection: 'DM-02', mm, refS
     const rows = [...document.querySelectorAll('#roundBody .rdrow')].map(e => ({ t: e.innerText.replace(/\s+/g, ' ').trim(), p: (e.querySelector('.rp') || {}).textContent || '' }));
     document.getElementById('roundClose').click(); return rows; });
   /* Every liner station is 20 mm on and 3 mm off (body-points.js LINER), so a
-     24 mm reading on F62 is thicker than new: −24%, and honestly so. */
-  ok('the round view shows the same percentage per station', V.length === 5 && V.some(r => /F31/.test(r.t) && /103%/.test(r.p)) && V.some(r => /F32/.test(r.t) && /101%/.test(r.p)) && V.some(r => /F62/.test(r.t) && /-24%/.test(r.p)), V.map(r => r.t.slice(0, 12) + ' ' + r.p).join(' | '));
+     24 mm reading on F62 is thicker than new. Since build 542 that is not
+     printed as "−24%": a reading on the wrong side of new has no percentage
+     and is named as outside the reference, as on the office and the report. */
+  ok('the round view shows the same percentage per station', V.length === 5 && V.some(r => /F31/.test(r.t) && /103%/.test(r.p)) && V.some(r => /F32/.test(r.t) && /101%/.test(r.p)) && V.some(r => /F62/.test(r.t) && /out of ref\./.test(r.p)), V.map(r => r.t.slice(0, 12) + ' ' + r.p).join(' | '));
+  ok('and never a negative percentage', !V.some(r => /-\d+%/.test(r.p)));
 
   console.log('\n  TK117: measured before the limit was revised');
   const T = await p.evaluate(() => { const row = teamAll().find(x => x.u === 'TK117' && x.t === 'TB'); const st = bodyStatus('TK117');

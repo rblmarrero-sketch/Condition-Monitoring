@@ -207,6 +207,46 @@ window.WEAR = '''
   };
   W.eligible = function (regModel) { return !W.exclude[regModel]; };
 
+  /* ---- the office's limits -------------------------------------------------
+     A limit set on the dashboard (dashboard/wear-limits.js) for one model and
+     one point, held in the folder as _meta/wear/limits.json. Each change has a
+     date it applies FROM: today means the readings before it keep the limit
+     they were scored against; "re-grade all history" is a change dated
+     0000-01-01, so every reading takes it. A voided change is kept in the
+     document for the audit trail and takes no part. The latest change in force
+     on the reading's date wins. It replaces the catalogue figure for that model
+     and point, borrowed or not, and a unit's own baseline still sits on top. */
+  W.limits = [];
+  W.limitsDoc = null;
+  W.setLimits = function (doc) {
+    W.limitsDoc = doc || null;
+    W.limits = ((doc && doc.changes) || []).filter(function (x) {
+      return x && !x.void && x.model && x.point && isFinite(Number(x.n)) && isFinite(Number(x.c))
+        && Number(x.n) !== Number(x.c);
+    });
+  };
+  /* The warning as percent worn, for GRADE.fromWorn — null when the office has
+     set none, or set one that is not between new and the limit. */
+  W.warnPct = function (ref) {
+    if (!ref || ref.w == null || ref.w === '' || ref.n == null || ref.c == null) return null;
+    var span = Number(ref.c) - Number(ref.n);
+    if (!span) return null;
+    var k = ((Number(ref.w) - Number(ref.n)) / span) * 100;
+    return (k > 0 && k < 100) ? k : null;
+  };
+  W.limitFor = function (model, point, atISO) {
+    var at = atISO || '9999-12-31', best = null;
+    for (var i = 0; i < W.limits.length; i++) {
+      var l = W.limits[i];
+      if (l.model !== model || l.point !== point) continue;
+      var from = l.from || '0000-01-01';
+      if (from > at) continue;
+      if (!best || from > (best.from || '0000-01-01') ||
+          (from === (best.from || '0000-01-01') && String(l.at || '') > String(best.at || ''))) best = l;
+    }
+    return best;
+  };
+
   /* The reference in force for one unit, one point, one position, on one date. */
   W.refFor = function (unit, regModel, point, pos, atISO) {
     var at = atISO || '9999-12-31', best = null;
@@ -219,6 +259,13 @@ window.WEAR = '''
     }
     var cat = null, m = W.modelFor(regModel);
     if (m && m.pts[point]) cat = m.pts[point];
+    var mk = W.map[regModel] && W.map[regModel].m;
+    var lim = mk ? W.limitFor(mk, point, atISO) : null;
+    if (lim) {
+      var ln = Number(lim.n), lc = Number(lim.c);
+      var lw = (lim.w == null || lim.w === '' || !isFinite(Number(lim.w))) ? null : Number(lim.w);
+      cat = { n: ln, c: lc, w: lw, d: lc < ln ? 'shrink' : 'grow', x: null, lim: lim };
+    }
     if (best) {
       /* A baseline replaces "new" only, and it inherits the catalogue's condemn
          where there is one worth inheriting. A FLAGGED one is not: the SD90
@@ -230,12 +277,16 @@ window.WEAR = '''
       var inherit = (cat && !cat.x) ? cat.c : null;
       var c = (best.c != null ? best.c : inherit);
       return { n: best.n, c: c,
+               w: (best.c == null && cat && cat.w != null) ? cat.w : null,
                d: cat ? cat.d : (best.c > best.n ? 'grow' : 'shrink'),
                src: best.why === 'override' ? 'override' : 'baseline',
                from: best.from, by: best.by,
                x: (c == null) ? 'nolimit' : null };
     }
     if (!cat) return null;
+    if (cat.lim) return { n: cat.n, c: cat.c, w: cat.w, d: cat.d, src: 'limit', x: null,
+                          from: cat.lim.from || '', by: cat.lim.by || '', why: cat.lim.why || '',
+                          lim: cat.lim };
     return { n: cat.n, c: cat.c, d: cat.d, src: 'catalogue', x: cat.x || null,
              rivals: cat.rivals || null };
   };
