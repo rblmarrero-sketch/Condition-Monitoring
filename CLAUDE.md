@@ -1030,7 +1030,9 @@ Critical included, was filled `--good` green. P1 and P2 now take `.p-hi`
 P4/P5 and the CM agenda's tags are unchanged. The RTW Pass / Attention / N/A
 buttons were 28 px; they are `min-height:44px`. `tests/duepm.cjs` §2b reads the
 computed fill and its contrast in both themes, and `tests/rtw.cjs` measures
-all 69 buttons.
+all 69 buttons. Build 550: the green tag (P4/P5 and the CM agenda's round
+code) had white text at 2.9:1 in dark mode; it takes `--g1-ink` now (6.6:1),
+and §2b holds all three fills to 4.5:1.
 
 **A BUTTON THAT REFUSES A PRESS MUST LOOK LIKE ONE.** Read off a handset on
 build 375: "when you choose Not being done it's not responding — it never
