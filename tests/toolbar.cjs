@@ -29,7 +29,7 @@ const SEED = () => {
 
   console.log('1. THE BAR');
   const bar = await p.evaluate(() => {
-    const row = document.querySelector('main > .controls:not(.more)');
+    const row = document.querySelector('#filterBar');
     const order = [...row.querySelectorAll('select, input[type=search], button')].map(e => e.id).filter(Boolean);
     return { order, more: document.getElementById('fMoreRow').classList.contains('hidden'), reset: document.getElementById('fReset').textContent.trim(),
              status: [...document.querySelectorAll('#fStatus option')].map(o => o.value), h: Math.round(row.getBoundingClientRect().height) };
@@ -74,11 +74,11 @@ const SEED = () => {
 
   console.log('\n4. THE SUPPORT PAGES, AND RUSSIAN');
   const H = await p.evaluate(() => { $('fDq').value = 'owner'; renderAll(); const out = {};
-    ['overview', 'lube', 'sync', 'reports', 'due', 'actions'].forEach(k => { showTab(k, true); out[k] = [document.querySelector('main > .controls:not(.more)').classList.contains('hidden'), $('fMoreRow').classList.contains('hidden')].join('/'); });
+    ['overview', 'lube', 'sync', 'reports', 'due', 'actions'].forEach(k => { showTab(k, true); out[k] = [document.querySelector('#filterBar').classList.contains('hidden'), $('fMoreRow').classList.contains('hidden')].join('/'); });
     showTab('overview', true); $('fDq').value = ''; renderAll(); return out; });
   ok('both rows go away on Lubrication, Data & Sync, Reports and Due, and come back on the analysis pages', H.lube === 'true/true' && H.sync === 'true/true' && H.reports === 'true/true' && H.due === 'true/true' && H.overview === 'false/false' && H.actions === 'false/false', JSON.stringify(H));
   await p.click('.lang button[data-lang="ru"]'); await p.waitForTimeout(400);
-  const R = await p.evaluate(() => ({ labels: [...document.querySelectorAll('main > .controls:not(.more) label')].map(l => l.textContent.trim()), more: $('fMore').textContent.trim(), reset: $('fReset').textContent.trim(),
+  const R = await p.evaluate(() => ({ labels: [...document.querySelectorAll('#filterBar label')].map(l => l.textContent.trim()), more: $('fMore').textContent.trim(), reset: $('fReset').textContent.trim(),
     status: [...document.querySelectorAll('#fStatus option')].map(o => o.textContent) }));
   const cyr = x => /[А-Яа-яЁё]/.test(x);
   ok('in Russian: every label, the status list, More and Clear all', R.labels.every(cyr) && cyr(R.more) && cyr(R.reset) && R.status.every(cyr), [R.labels.join(','), R.more, R.reset, R.status.join(',')].join(' | '));

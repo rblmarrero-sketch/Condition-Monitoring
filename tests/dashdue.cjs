@@ -281,10 +281,10 @@ const rows = p => p.$$eval('#ddList tbody tr', a => a.map(tr => ({
      that is up to date look like one nobody has ever visited. So it is put away
      here, and the tab carries its own controls instead. */
   ok('the global record filters are put away on this tab',
-     await p.evaluate(() => document.querySelector("main > .controls").classList.contains("hidden")));
+     await p.evaluate(() => document.querySelector("#filterBar").classList.contains("hidden")));
   ok('and come back on a tab they do work on', await (async () => {
     await p.click('[data-tab="overview"]'); await p.waitForTimeout(150);
-    const back = await p.evaluate(() => !document.querySelector("main > .controls").classList.contains("hidden"));
+    const back = await p.evaluate(() => !document.querySelector("#filterBar").classList.contains("hidden"));
     await p.click('[data-tab="due"]'); await p.waitForTimeout(150);
     return back;
   })());

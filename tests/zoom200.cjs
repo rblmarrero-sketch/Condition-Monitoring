@@ -24,7 +24,7 @@ const AUDIT = () => {
   const vw = document.documentElement.clientWidth;
   const vis = el => { const r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0 && el.checkVisibility(); };
   const sec = document.querySelector('section:not(.hidden)');
-  const roots = [sec, document.querySelector('main > .controls:not(.more)'), document.querySelector('header.app'), document.querySelector('nav.tabs')].filter(Boolean);
+  const roots = [sec, document.querySelector('#filterBar'), document.querySelector('header.app'), document.querySelector('nav.tabs')].filter(Boolean);
   const q = s => roots.flatMap(root => [...root.querySelectorAll(s)]);
   /* A control the reader has to reach: any part of it past the right edge is
      a part they cannot press. Content inside a box that scrolls sideways on
