@@ -585,9 +585,9 @@
   .medit .mwhy .mgo{color:var(--crit-ink);
     border-color:color-mix(in srgb,var(--critical) 45%,var(--border));}
   /* the follow-up panel and the tracker */
-  .kpi.bad .v{color:var(--critical);}
+  .kpi.bad .v{color:var(--crit-ink);}
   table.grid tr.over td{background:color-mix(in srgb,var(--critical) 7%,transparent);}
-  table.grid td.bad{color:var(--critical);font-weight:640;}
+  table.grid td.bad{color:var(--crit-ink);font-weight:640;}
   .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0 14px;}
   .readback{padding:8px 10px;background:var(--surface-2);border:1px solid var(--border);
     border-radius:8px;font-size:13px;color:var(--ink-2);}
@@ -711,7 +711,7 @@
   .src.syncing .dot{animation:pulse 1.1s ease-in-out infinite;}
   @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.25;}}
   @media (prefers-reduced-motion:reduce){ .src.syncing .dot{animation:none;opacity:.5;} }
-  .syncflash{margin-left:8px;font-size:12px;color:var(--good);opacity:0;
+  .syncflash{margin-left:8px;font-size:12px;color:var(--good-ink);opacity:0;
     transition:opacity .4s;pointer-events:none;white-space:nowrap;}
   .syncflash.on{opacity:1;}
   .pill{display:inline-block;padding:1px 8px;border-radius:999px;font-size:11px;font-weight:650;color:#fff;}
@@ -1122,9 +1122,9 @@
      thing that has to look computed rather than written. */
   .pos .band{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.05em;
     text-transform:uppercase;padding:3px 8px;border-radius:999px;}
-  .pos .b-ok{background:color-mix(in srgb,var(--good) 14%,var(--surface));color:var(--good);}
+  .pos .b-ok{background:color-mix(in srgb,var(--good) 14%,var(--surface));color:var(--good-ink);}
   .pos .b-watch{background:color-mix(in srgb,var(--warning) 16%,var(--surface));color:var(--warning);}
-  .pos .b-act{background:color-mix(in srgb,var(--critical) 14%,var(--surface));color:var(--critical);}
+  .pos .b-act{background:color-mix(in srgb,var(--critical) 14%,var(--surface));color:var(--crit-ink);}
   .pos .b-none{background:color-mix(in srgb,var(--muted) 12%,var(--surface));color:var(--muted);}
   .pos .cm{margin-top:6px;font-size:12px;color:var(--ink-2);font-style:italic;}
   /* A band is a pill wherever it is put. These rules were scoped to .pos, so
@@ -1136,9 +1136,9 @@
   .band{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.05em;
     text-transform:uppercase;padding:3px 8px;border-radius:999px;line-height:1.35;
     white-space:normal;}
-  .b-ok{background:color-mix(in srgb,var(--good) 14%,var(--surface));color:var(--good);}
+  .b-ok{background:color-mix(in srgb,var(--good) 14%,var(--surface));color:var(--good-ink);}
   .b-watch{background:color-mix(in srgb,var(--warning) 16%,var(--surface));color:var(--warning);}
-  .b-act{background:color-mix(in srgb,var(--critical) 14%,var(--surface));color:var(--critical);}
+  .b-act{background:color-mix(in srgb,var(--critical) 14%,var(--surface));color:var(--crit-ink);}
   .b-none{background:color-mix(in srgb,var(--muted) 12%,var(--surface));color:var(--muted);}
   .lang{display:flex;border:1px solid var(--border);border-radius:8px;overflow:hidden;}
   .lang button{background:var(--surface);color:var(--ink-2);border:0;padding:7px 11px;font:inherit;
@@ -1471,7 +1471,7 @@
     border:1px solid color-mix(in srgb,var(--accent) 40%,var(--border));color:var(--ink);
     border-radius:999px;padding:4px 6px 4px 11px;font-size:12.5px;}
   .chip b{font-weight:650;} .chip button{border:none;background:none;color:var(--ink-2);cursor:pointer;
-    font-size:14px;line-height:1;padding:0 4px;border-radius:50%;} .chip button:hover{color:var(--critical);}
+    font-size:14px;line-height:1;padding:0 4px;border-radius:50%;} .chip button:hover{color:var(--crit-ink);}
   .chip.clearall{background:var(--surface-2);border-style:dashed;cursor:pointer;padding:4px 12px;}
   /* interactive affordances */
   /* Only the rows that can be pressed look pressable. The pointer and the
@@ -1513,7 +1513,7 @@
   /* A card nobody can judge does not look like one they can. */
   .opc.off{opacity:.62;}
   .opc.off .th,.opc.off .nofile{filter:grayscale(1);}
-  .opc .st.gone{background:var(--crit-bg,#f6e6e3);color:var(--critical);}
+  .opc .st.gone{background:var(--crit-bg,#f6e6e3);color:var(--crit-ink);}
   .opc .th{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;
            background:var(--surface-3);cursor:pointer;}
   .opc .nofile{width:100%;aspect-ratio:4/3;display:flex;align-items:center;
@@ -1524,7 +1524,7 @@
            word-break:break-all;}
   .opc .st{display:inline-block;margin-top:4px;padding:1px 6px;border-radius:3px;
            font-weight:600;font-size:10px;line-height:1.6;letter-spacing:.06em;text-transform:uppercase;}
-  .opc .st.done{background:var(--good-bg,#e2efe8);color:var(--good);}
+  .opc .st.done{background:var(--good-bg,#e2efe8);color:var(--good-ink);}
   .opc .st.todo{background:var(--warn-bg,#f2e9de);color:var(--warn-ink);}
   .opc input[type=checkbox]{position:absolute;top:8px;left:8px;width:20px;height:20px;
            accent-color:var(--accent);cursor:pointer;z-index:2;}
@@ -1570,7 +1570,7 @@
   .srchead .ico{font-size:20px;line-height:1;} .srchead b{font-size:14px;}
   .srchead .muted{font-size:12px;margin-top:3px;}
   .srchead .state{margin-left:auto;font-size:11px;color:var(--muted);white-space:nowrap;padding-top:2px;}
-  .srccard.on .srchead .state{color:var(--good);font-weight:650;}
+  .srccard.on .srchead .state{color:var(--good-ink);font-weight:650;}
   .srcbody{padding:14px 16px;display:flex;flex-direction:column;gap:10px;}
   /* THE TOOLBAR RULE THAT NEVER EXISTED. Twelve blocks on this page carry
      class="row" with inline gap and align-items — and .row was only ever
@@ -1583,7 +1583,7 @@
   .row>.field{flex:1 1 160px;min-width:0;}
   .srcbody input{width:100%;min-width:0;}
   .srcbody .msg{font-size:12px;color:var(--muted);min-height:16px;white-space:pre-wrap;}
-  .btn.danger{color:var(--critical);}
+  .btn.danger{color:var(--crit-ink);}
   /* header status chip */
   /* A disclosure that is a tool, not a footnote: closed by default because
      hunting a stray file is the exception, open with one press when it is not. */
@@ -1727,9 +1727,9 @@
   table.grid.wear td{font-size:12px;padding:6px 8px;}
   .ucsum{margin:12px 16px 0;padding:8px 12px;border-radius:6px;font-size:12.5px;font-weight:650;}
   .ucsum .muted{font-weight:400;}
-  .ucsum.ok{background:color-mix(in srgb,var(--good) 12%,var(--surface));color:var(--good);}
+  .ucsum.ok{background:color-mix(in srgb,var(--good) 12%,var(--surface));color:var(--good-ink);}
   .ucsum.watch{background:color-mix(in srgb,var(--serious) 13%,var(--surface));color:var(--serious);}
-  .ucsum.act{background:color-mix(in srgb,var(--critical) 12%,var(--surface));color:var(--critical);}
+  .ucsum.act{background:color-mix(in srgb,var(--critical) 12%,var(--surface));color:var(--crit-ink);}
   .ucodd{color:var(--serious);font-weight:650;font-size:11px;white-space:nowrap;}
   .ucsum.warnrow{background:var(--surface-2);color:var(--ink-2);font-weight:550;}
   /* A second tile pass lived here \u2014 the one that drew them as a single strip
@@ -2055,8 +2055,8 @@
   .prio{display:inline-block;margin-left:7px;font:700 10px/1 ui-monospace,SFMono-Regular,Menlo,monospace;
     letter-spacing:.04em;padding:3px 5px;border-radius:4px;vertical-align:1px;
     border:1px solid currentColor;}
-  .prio.c{color:var(--critical);} .prio.s{color:var(--serious);}
-  .prio.w{color:var(--warn-ink,var(--serious));} .prio.g{color:var(--good);}
+  .prio.c{color:var(--crit-ink);} .prio.s{color:var(--serious);}
+  .prio.w{color:var(--warn-ink,var(--serious));} .prio.g{color:var(--good-ink);}
   .prio.n{color:var(--muted);}
 
   /* ── segmented filter ──────────────────────────────────────────────────
@@ -2270,7 +2270,7 @@
   .due{display:inline-flex;align-items:baseline;gap:6px;font-variant-numeric:tabular-nums;}
   .due b{font:600 12px/1 ui-monospace,SFMono-Regular,Menlo,monospace;}
   .due i{font-style:normal;font-size:var(--t-micro);color:var(--muted);}
-  .due.late b{color:var(--critical);} .due.late i{color:var(--critical);font-weight:700;}
+  .due.late b{color:var(--crit-ink);} .due.late i{color:var(--crit-ink);font-weight:700;}
   .due.soon b{color:var(--serious);}
   .st{display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:11.5px;line-height:1;font-family:inherit;color:var(--ink-2);}
   .st::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--stc,var(--none));flex:none;}
@@ -3950,23 +3950,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=550"></script>
+<script src="../data/magnetic_plug.js?v=551"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=550"></script>
-<script src="../mobile/hme.js?v=550"></script>
-<script src="../mobile/mp-fc.js?v=550"></script>
-<script src="../mobile/rtw.js?v=550"></script>
-<script src="../mobile/hme-cascade.js?v=550"></script>
-<script src="../mobile/temp-limits.js?v=550"></script>
+<script src="../data/work_orders.js?v=551"></script>
+<script src="../mobile/hme.js?v=551"></script>
+<script src="../mobile/mp-fc.js?v=551"></script>
+<script src="../mobile/rtw.js?v=551"></script>
+<script src="../mobile/hme-cascade.js?v=551"></script>
+<script src="../mobile/temp-limits.js?v=551"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=550"></script>
-<script src="../mobile/normalize.js?v=550"></script>
-<script src="../mobile/terms.js?v=550"></script>
+<script src="../mobile/assets.js?v=551"></script>
+<script src="../mobile/normalize.js?v=551"></script>
+<script src="../mobile/terms.js?v=551"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -3985,21 +3985,21 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=550"></script>
-<script src="../mobile/edits.js?v=550"></script>
-<script src="../mobile/due.js?v=550"></script>
-<script src="../mobile/wear.js?v=550"></script>
-<script src="../mobile/wear-map.js?v=550"></script>
-<script src="../mobile/lube.js?v=550"></script>
-<script src="../mobile/lube-overrides.js?v=550"></script>
-<script src="../mobile/lube2027.js?v=550"></script>
-<script src="../mobile/lube-tds.js?v=550"></script>
-<script src="lube-master.js?v=550"></script>
-<script src="wear-limits.js?v=550"></script>
+<script src="../mobile/grade.js?v=551"></script>
+<script src="../mobile/edits.js?v=551"></script>
+<script src="../mobile/due.js?v=551"></script>
+<script src="../mobile/wear.js?v=551"></script>
+<script src="../mobile/wear-map.js?v=551"></script>
+<script src="../mobile/lube.js?v=551"></script>
+<script src="../mobile/lube-overrides.js?v=551"></script>
+<script src="../mobile/lube2027.js?v=551"></script>
+<script src="../mobile/lube-tds.js?v=551"></script>
+<script src="lube-master.js?v=551"></script>
+<script src="wear-limits.js?v=551"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=550"></script>
-<script src="../mobile/machine-photos.js?v=550"></script>
+<script src="../mobile/upload-defaults.js?v=551"></script>
+<script src="../mobile/machine-photos.js?v=551"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -4008,17 +4008,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=550"></script>
-<script src="../mobile/get.js?v=550"></script>
-<script src="../mobile/points.js?v=550"></script>
-<script src="../mobile/uc-points.js?v=550"></script>
-<script src="../mobile/inspect-guide.js?v=550"></script>
-<script src="../mobile/get-figs.js?v=550"></script>
-<script src="../mobile/body-points.js?v=550"></script>
-<script src="../mobile/body-map.js?v=550"></script>
-<script src="../mobile/jspdf.umd.min.js?v=550"></script>
-<script src="../mobile/html2canvas.min.js?v=550"></script>
-<script src="../mobile/report-core.js?v=550"></script>
+<script src="../mobile/machine-fig.js?v=551"></script>
+<script src="../mobile/get.js?v=551"></script>
+<script src="../mobile/points.js?v=551"></script>
+<script src="../mobile/uc-points.js?v=551"></script>
+<script src="../mobile/inspect-guide.js?v=551"></script>
+<script src="../mobile/get-figs.js?v=551"></script>
+<script src="../mobile/body-points.js?v=551"></script>
+<script src="../mobile/body-map.js?v=551"></script>
+<script src="../mobile/jspdf.umd.min.js?v=551"></script>
+<script src="../mobile/html2canvas.min.js?v=551"></script>
+<script src="../mobile/report-core.js?v=551"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -16102,7 +16102,7 @@ function renderDueTab(){
         <td><b>${esc(r.unit)}</b></td>
         <td>${esc(r.ty)} · <span class="muted">${esc(t("type_"+r.ty)||r.ty)}</span></td>
         <td>${r.last ? esc(r.last.date) : `<span class="need">${esc(TERMS.t(lang,"never_inspected"))}</span>`}</td>
-        <td class="r">${r.late?`<b style="color:var(--critical)">${esc(r.plan)}</b>`:esc(r.plan)}</td>
+        <td class="r">${r.late?`<b style="color:var(--crit-ink)">${esc(r.plan)}</b>`:esc(r.plan)}</td>
         <td class="r"><span class="muted">—</span></td>
         <td>${esc(t("dd_plan_row",{p:r.label||"—"}))}${r.wo?` <span class="muted">· ${esc(r.wo)}</span>`:""}${
              r.late?` <span class="muted">· ${esc(t("dd_plan_late",{d:r.plan}))}</span>`:""}</td>
@@ -16123,7 +16123,7 @@ function renderDueTab(){
           <button type="button" class="minibtn" data-defer="${esc(r.ty+"|"+r.unit)}"
              title="${esc(t("dd_defer_t"))}">${esc(r.d?t("dd_defer_edit"):t("dd_defer"))}</button>
         </td></tr>`;
-      const when = n.over ? `<b style="color:var(--critical)">${esc(t("due_over",{n:numAbs(n.dueInDays)}))}</b>`
+      const when = n.over ? `<b style="color:var(--crit-ink)">${esc(t("due_over",{n:numAbs(n.dueInDays)}))}</b>`
                           : esc(t("due_in",{n:numAbs(n.dueInDays)}));
       /* A compare row (scope "cmp") carries 1C's own nearest date instead of
          a deferral — the two never coexist on one row, since
@@ -18743,10 +18743,10 @@ document.querySelector(".lang").addEventListener("click",e=>{
   setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 })();
 </script>
-<script src="drive.js?v=550"></script>
-<script src="sync-adapter.js?v=550"></script>
-<script src="report.js?v=550"></script>
-<script src="reliability.js?v=550"></script>
+<script src="drive.js?v=551"></script>
+<script src="sync-adapter.js?v=551"></script>
+<script src="report.js?v=551"></script>
+<script src="reliability.js?v=551"></script>
 <script>
 /* THE CLOSED FILTER SAYS WHAT IS CHOSEN. A dropdown narrower than its option
    text ellipsises ("All t…", audit of 2026-10-01). Between 1331 and 1500 px

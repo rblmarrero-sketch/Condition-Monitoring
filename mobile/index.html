@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=550">
+<link rel="manifest" href="manifest.webmanifest?v=551">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=550">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=550">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=550">
+<link rel="apple-touch-icon" href="icon-192.png?v=551">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=551">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=551">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -499,7 +499,7 @@
     border-radius:8px;background:var(--surface-3);cursor:pointer;}
   .pitem .thumb-bad{width:52px;height:52px;flex:none;}
   .pitem .meta{min-width:0;} .pitem .meta .a{font-weight:700;} .pitem .meta .b{font-size:12.5px;color:var(--muted);}
-  .tag{display:inline-block;font-size:10.5px;font-weight:700;padding:1px 6px;border-radius:6px;background:var(--accent);color:#fff;margin-right:6px;vertical-align:middle;}
+  .tag{display:inline-block;font-size:10.5px;font-weight:700;padding:1px 6px;border-radius:6px;background:var(--accent);color:var(--accent-ink);margin-right:6px;vertical-align:middle;}
   /* A queue of nine rounds across four types is where the colour earns its
      keep — it is the one screen that shows several categories at once. */
   .tag{background:var(--surface);border:1.5px solid var(--muted);color:var(--ink-2);padding:0 6px;}
@@ -674,8 +674,10 @@
   .yardrow .w b{display:block;font-size:13px;font-weight:700;}
   .yardrow .w span{display:block;font-size:11.5px;color:var(--muted);line-height:1.35;}
   .yardrow button{margin-top:5px;min-height:38px;padding:0 12px;font-size:12px;}
-  #yardBadge.ok{background:var(--good);color:#fff;}
-  #yardBadge.warn{background:var(--warn-ink);color:#fff;}
+  /* Ink from the grade ramp, never a fixed white: in dark, white on these
+     fills read 2.2-2.9:1 (audit 26.10 M5/M6). */
+  #yardBadge.ok{background:var(--good);color:var(--g1-ink);}
+  #yardBadge.warn{background:var(--warning);color:var(--g2-ink);}
   .pitem .up{font-size:11.5px;font-weight:700;margin-top:3px;display:flex;align-items:center;gap:5px;}
   .pitem .up::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor;flex:none;}
   .pitem .up.ok{color:var(--good);}
@@ -799,7 +801,7 @@
     border-radius:0 0 3px 3px;background:var(--accent);}
   /* A count that means "there is something here for you", not decoration. */
   .tabbar .tb{position:absolute;top:5px;left:50%;margin-left:6px;min-width:17px;height:17px;padding:0 4px;
-    border-radius:999px;background:var(--accent);color:#fff;font-size:10px;line-height:17px;
+    border-radius:999px;background:var(--accent);color:var(--accent-ink);font-size:10px;line-height:17px;
     text-align:center;letter-spacing:0;}
   .tabbar .tb.warn{background:var(--warning);color:#111;}
   /* Missed is not a warning, it is a miss. The queue's badge is the accent
@@ -925,8 +927,8 @@
   .dest .dhead input[type="checkbox"]:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
   .provqr{width:100%;max-width:280px;margin:0 auto;display:block;background:#fff;border-radius:8px;padding:10px;}
   .badgelbl{font-size:.72em;font-weight:500;letter-spacing:0;text-transform:none;}
-.count-badge{background:var(--accent);color:#fff;border-radius:999px;padding:1px 8px;font-size:12px;margin-left:6px;}
-  .count-badge.warn{background:var(--warning);color:#111;} .count-badge.crit{background:var(--critical);}
+.count-badge{background:var(--accent);color:var(--accent-ink);border-radius:999px;padding:1px 8px;font-size:12px;margin-left:6px;}
+  .count-badge.warn{background:var(--warning);color:#111;} .count-badge.crit{background:var(--critical);color:var(--g5-ink);}
   /* temperature reading */
   .tempbar{display:flex;align-items:center;gap:8px;font-size:12.5px;margin:-4px 0 12px;}
   /* Undercarriage: the drawing, the number, and what the number means — in that
@@ -1258,7 +1260,7 @@
   .ucsides button{flex:1 1 0;min-height:44px;border:1px solid var(--line);
     background:var(--surface);color:var(--ink-2);border-radius:10px;font-weight:700;font-size:13.5px;line-height:1;font-family:inherit;
     letter-spacing:.04em;text-transform:uppercase;cursor:pointer;}
-  .ucsides button.on{background:var(--accent);border-color:var(--accent);color:#fff;}
+  .ucsides button.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);}
   .ucgroups{flex:0 0 100%;display:flex;flex-wrap:wrap;gap:7px;margin:10px 0 0;}
   .ucgroups button{display:inline-flex;align-items:center;gap:7px;min-height:44px;
     padding:6px 12px 6px 6px;border:1px solid var(--line);background:var(--surface);
@@ -1266,7 +1268,11 @@
   .ucgroups button i{flex:0 0 auto;width:22px;height:22px;border-radius:999px;
     display:inline-flex;align-items:center;justify-content:center;font-style:normal;
     font-weight:800;font-size:11.5px;background:var(--surface-2);border:1px solid var(--line);}
-  .ucgroups button.on{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);}
+  /* The ring is the whole selected state: .posnav button.on (the plain position
+     chips) also matches these and filled the chip with ink, which left the
+     number badge light-on-light (1.06:1, audit 26.10 M4). */
+  .ucgroups button.on{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);
+    background:var(--surface);color:var(--ink);}
   .ucgroups button.done i{background:var(--good);border-color:var(--good);color:#fff;}
   .ucgroups button.watch i{background:var(--warning);border-color:var(--warn-ink);color:#3a2a00;}
   .ucgroups button.act i{background:var(--critical);border-color:var(--critical);color:#fff;}
@@ -1423,7 +1429,8 @@
   .ucmembers{flex:0 0 100%;display:flex;flex-wrap:wrap;gap:7px;margin:9px 0 0;}
   .ucmembers button{min-width:56px;min-height:44px;padding:6px 14px;border:1px solid var(--line);
     background:var(--surface);color:var(--ink);border-radius:10px;font-weight:700;font-size:13px;line-height:1;font-family:inherit;cursor:pointer;}
-  .ucmembers button.on{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);}
+  .ucmembers button.on{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);
+    background:var(--surface);color:var(--ink);}
   .ucmembers button.done{border-color:var(--good);}
   .ucmembers button.watch{border-color:var(--warn-ink);}
   .ucmembers button.act{border-color:var(--critical);}
@@ -2871,16 +2878,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=550"></script>
-<script src="upload-defaults.js?v=550"></script>
-<script src="hme.js?v=550"></script>
-<script src="mp-fc.js?v=550"></script>
-<script src="rtw.js?v=550"></script>
-<script src="hme-cascade.js?v=550"></script>
-<script src="assets.js?v=550"></script>
-<script src="temp-limits.js?v=550"></script>
-<script src="normalize.js?v=550"></script>
-<script src="terms.js?v=550"></script>
+<script src="native.js?v=551"></script>
+<script src="upload-defaults.js?v=551"></script>
+<script src="hme.js?v=551"></script>
+<script src="mp-fc.js?v=551"></script>
+<script src="rtw.js?v=551"></script>
+<script src="hme-cascade.js?v=551"></script>
+<script src="assets.js?v=551"></script>
+<script src="temp-limits.js?v=551"></script>
+<script src="normalize.js?v=551"></script>
+<script src="terms.js?v=551"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2899,25 +2906,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=550"></script>
-<script src="edits.js?v=550"></script>
-<script src="due.js?v=550"></script>
-<script src="wear.js?v=550"></script>
-<script src="wear-figs.js?v=550"></script>
-<script src="wear-map.js?v=550"></script>
-<script src="machine-photos.js?v=550"></script>
-<script src="machine-fig.js?v=550"></script>
-<script src="get.js?v=550"></script>
-<script src="points.js?v=550"></script>
-<script src="uc-points.js?v=550"></script>
-<script src="inspect-guide.js?v=550"></script>
-<script src="get-figs.js?v=550"></script>
-<script src="body-points.js?v=550"></script>
-<script src="body-map.js?v=550"></script>
-<script src="lube.js?v=550"></script>
-<script src="lube-overrides.js?v=550"></script>
-<script src="lube2027.js?v=550"></script>
-<script src="report-core.js?v=550"></script>
+<script src="grade.js?v=551"></script>
+<script src="edits.js?v=551"></script>
+<script src="due.js?v=551"></script>
+<script src="wear.js?v=551"></script>
+<script src="wear-figs.js?v=551"></script>
+<script src="wear-map.js?v=551"></script>
+<script src="machine-photos.js?v=551"></script>
+<script src="machine-fig.js?v=551"></script>
+<script src="get.js?v=551"></script>
+<script src="points.js?v=551"></script>
+<script src="uc-points.js?v=551"></script>
+<script src="inspect-guide.js?v=551"></script>
+<script src="get-figs.js?v=551"></script>
+<script src="body-points.js?v=551"></script>
+<script src="body-map.js?v=551"></script>
+<script src="lube.js?v=551"></script>
+<script src="lube-overrides.js?v=551"></script>
+<script src="lube2027.js?v=551"></script>
+<script src="report-core.js?v=551"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -15223,7 +15230,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="550";
+const BUILD="551";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

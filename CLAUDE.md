@@ -4911,6 +4911,20 @@ in the index until the next upload or a rebuild (N3, Pechanka's reconcile,
 covers it). `tests/gsindex.cjs` runs the real script over an in-memory Drive and
 fails 13 assertions against the previous version.
 
+**TEXT THAT READS IN BOTH THEMES (build 551, audit 26.10 M4, M5, M6, D7).**
+Measured on screen, not read off a class. Phone: `.posnav button.on` (the
+plain position chips) also matches the undercarriage and tray chips and
+filled the selected one with ink, so its number badge was light on light
+(1.06:1); `.ucgroups`/`.ucmembers button.on` now set their own surface and
+ink. White on the copper accent (the Saved count, the tab badge, LEFT/RIGHT,
+`.tag`) takes `--accent-ink` (3.0:1 in dark before). The readiness badge
+takes the grade ramp's ink, never a fixed white ("Ready with warning" was
+2.2:1 in dark). Both office pages: their dark theme never redefines `--good`
+and `--critical`, so text coloured with them was 3.4-3.7:1; every text rule
+uses `--good-ink` / `--crit-ink` now, and fills keep the fill tokens.
+`tests/uicontrast.cjs` measures each in both themes and fails seven
+assertions against build 550.
+
 ---
 
 ## Secrets
