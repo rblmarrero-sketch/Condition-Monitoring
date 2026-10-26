@@ -4878,6 +4878,37 @@ a cut reply whose cursor never moves makes the drain return false, never true
 up. Phone only, no backend change (`tests/draincut.cjs`, its own backend; fails
 four assertions against build 547).
 
+**THE GOOGLE INDEX IS NEVER WRITTEN WITHOUT ITS LOCK, AND A FILE IS WRITTEN
+BEFORE THE OLD ONE IS TRASHED (`GAS_INDEX_SAFETY_V1`, audit 26.10 C1, C2, C6,
+C10, N2).** In `docs/google-upload.gs`:
+- `indexPut_` / `indexDrop_` run under `withIndexLock_`: a lock not free within
+  20 s returns `busy`, where they used to carry on with `lock = null`, so two
+  uploads at shift end each dropped the other's round from the index. An upload
+  whose index write was refused reports `ok:false` (the file is on Drive), so
+  the phone sends it again and the retry indexes it. A delete still stands; its
+  reply says `indexed:false`.
+- `shardRead_` throws on a month it cannot read, so nothing is written over it.
+  It used to return an empty month, and the next upload wrote the month back
+  with one round. The rebuild treats an unreadable month as empty only on a
+  pass from the start, and otherwise names it (`unreadable`) and does not mark
+  itself built.
+- `shardWrite_` and `saveOne_` create the new file first and trash the old after,
+  so a failed create leaves the old file. Readers take the newest live file of a
+  name (`newestByName_`, and `readIndex_` reads each month once).
+- `saveOne_` checks again after writing, Yandex's `toctou` rule: another
+  device's file of the same name created before ours means ours moves to its
+  `~DEV` name with a conflict marker; exactly one of the two yields (creation
+  time, then id). Only our own old copies are trashed.
+- `SCRIPT_VERSION` is in `op:ping` and `GET /exec`; `function.js` has its own in
+  the ping. Change it with every change to the file.
+
+**Not live until the maintainer redeploys the Apps Script (F6).** One edge is
+left: if the network loses the reply after a refused index write, the phone's
+`landedAnyway` can take the file for landed. The round is then on Drive but not
+in the index until the next upload or a rebuild (N3, Pechanka's reconcile,
+covers it). `tests/gsindex.cjs` runs the real script over an in-memory Drive and
+fails 13 assertions against the previous version.
+
 ---
 
 ## Secrets
