@@ -4938,7 +4938,7 @@ the fields shrink with their row (`min-width:0`). `tests/phonetap.cjs` walks
 the screens at 360 and 390 in English and Russian, names any control under
 44 px and any running off the screen, and fails on build 551.
 
-**THE OFFICE PAGES HOLD THEIR SHAPE FROM TAB TO TAB (build 553, audit 26.10
+**THE OFFICE PAGES HOLD THEIR SHAPE FROM TAB TO TAB (builds 553–554, audit 26.10
 D1, D2, D3).** Measured on both pages, English and Russian, 1366 and 1920.
 The title moved between y 52 and 139 on dashboard/, because the shared filter
 bar sat above it and is put away on some tabs. `showTab` now moves the bar,
@@ -4954,8 +4954,8 @@ label now spans the tile and the tag sits at the end of the number's line
 (CSS grid, `.hd` as `display:contents`; no markup change). `.grid12` rows
 stretch, so cards in one row end together; on dashboard-next's Overview the
 right-hand column (`.stackcol`) gives the last card what is left. Reports'
-"Recent reports" card now matches the form's height, so it is a tall card
-when empty. `tests/dashlayout.cjs` measures all of it and fails 33
+"Recent reports" card is a full row under the form (`.g12`), asked for
+rather than a tall empty card beside it (build 554). `tests/dashlayout.cjs` measures all of it and fails 33
 assertions on build 552.
 
 ---

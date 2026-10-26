@@ -94,6 +94,11 @@ const MEASURE = () => {
         const tt = await p.evaluate(() => { const k = [...document.querySelectorAll('section:not(.hidden) .kpi .k, section:not(.hidden) .tile .k')].find(x => x.title); return k ? k.title : ''; });
         ok('D2 a label cut to two lines is said in full on hover', tt === h.text, `"${tt}"`); }
     }
+    const rr = await p.evaluate(() => { showTab('reports');
+      const rec = document.getElementById('rRecentHint').closest('.section'), form = document.querySelector('#tab-reports .grid12 > .section');
+      const a = rec.getBoundingClientRect(), f = form.getBoundingClientRect(), g = rec.parentElement.getBoundingClientRect();
+      return { below: a.top >= f.bottom - 1, full: Math.abs(a.width - g.width) <= 1 }; });
+    ok('Recent reports is a full row under the Reports form', rr.below && rr.full, JSON.stringify(rr));
     const fb = await p.evaluate(() => { const bar = document.getElementById('filterBar'); return !!bar && !!bar.querySelector('#fType'); });
     ok('the filter bar is #filterBar', fb);
     await ctx.close();
