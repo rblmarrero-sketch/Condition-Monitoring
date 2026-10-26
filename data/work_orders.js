@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-26T20:20:07+00:00",
+  "generated": "2026-10-26T20:28:39+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -442,8 +442,8 @@ window.CM_WO_DATA = {
     "planStart": 0
   },
   "cmCauseFrom": {
-    "wo": 87,
-    "wr": 106,
+    "wo": 88,
+    "wr": 105,
     "cert": 0,
     "none": 0
   },
@@ -3658,7 +3658,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-09-18",
       "detected": "2026-09-18",
-      "planStart": null,
+      "planStart": "2026-11-05",
       "closed": null,
       "asset": "TK118",
       "defect": "DD-00012866",
@@ -3668,12 +3668,12 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "defectType": "2.01 Wear / Износ",
       "cause": "Абразивный износ",
-      "causeFrom": "wr",
+      "causeFrom": "wo",
       "descr": "Критический износ кузова, трещины. Требуются футеровка и сварка кузова.",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "by": "Slam",
-      "woNumber": null,
-      "maintType": null,
+      "woNumber": "WO-020865",
+      "maintType": "P4 Planned Repair",
       "planned": false
     },
     {
