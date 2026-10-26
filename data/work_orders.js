@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-26T21:47:36+00:00",
+  "generated": "2026-10-26T22:02:40+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -442,8 +442,8 @@ window.CM_WO_DATA = {
     "planStart": 0
   },
   "cmCauseFrom": {
-    "wo": 88,
-    "wr": 105,
+    "wo": 90,
+    "wr": 103,
     "cert": 0,
     "none": 0
   },
@@ -1519,7 +1519,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-10-13",
       "detected": "2026-10-13",
-      "planStart": null,
+      "planStart": "2026-11-05",
       "closed": null,
       "asset": "TK127",
       "defect": "DD-00014674",
@@ -1529,12 +1529,12 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "cause": "Усталостная трещина",
-      "causeFrom": "wr",
+      "causeFrom": "wo",
       "descr": "Ремень генератора в трещинах, требуется замена.",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "by": "Zhomart",
-      "woNumber": null,
-      "maintType": null,
+      "woNumber": "WO-020882",
+      "maintType": "P4 Planned Repair",
       "planned": false
     },
     {
@@ -2163,7 +2163,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-10-03",
       "detected": "2026-10-03",
-      "planStart": null,
+      "planStart": "2026-11-06",
       "closed": null,
       "asset": "TK143",
       "defect": "DD-00013969",
@@ -2173,12 +2173,12 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "cause": "Усталостная трещина",
-      "causeFrom": "wr",
+      "causeFrom": "wo",
       "descr": "Глубокие поперечные трещины наружного резинового слоя РВД охлаждения тормозов.",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "by": "Zhomart",
-      "woNumber": null,
-      "maintType": null,
+      "woNumber": "WO-020884",
+      "maintType": "P4 Planned Repair",
       "planned": false
     },
     {
@@ -106521,6 +106521,27 @@ window.CM_WO_DATA = {
       "actualEnd": null
     },
     {
+      "equip": "TK127",
+      "cls": "AT",
+      "woNumber": "WO-020880",
+      "maintType": "500 Hours service Planned",
+      "hours": 500,
+      "cmLabel": "Magnetic Plug",
+      "cmTypes": [
+        "MP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-05",
+      "planStartDt": "2026-11-05T00:00:00",
+      "planEnd": "2026-11-06",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
       "equip": "TK128",
       "cls": "GEN",
       "woNumber": "GD-011993",
@@ -108780,6 +108801,27 @@ window.CM_WO_DATA = {
       "actualStart": "2026-10-20",
       "actualStartDt": "2026-10-20T08:00:00",
       "actualEnd": "2026-10-21"
+    },
+    {
+      "equip": "TK143",
+      "cls": "AT",
+      "woNumber": "WO-020883",
+      "maintType": "500 Hours service Planned",
+      "hours": 500,
+      "cmLabel": "Magnetic Plug",
+      "cmTypes": [
+        "MP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-06",
+      "planStartDt": "2026-11-06T00:00:00",
+      "planEnd": "2026-11-07",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
     },
     {
       "equip": "TK146",
