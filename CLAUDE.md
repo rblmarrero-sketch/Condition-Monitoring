@@ -849,6 +849,21 @@ arriving together cannot make three requests or redraw under a thumb. The Due
 screen states the age (`schedAge`, beside `histAge`) and says so only where 1C
 is actually on screen (`tests/duetoday.cjs`).
 
+**AND THE CLASS HISTORY BEHIND IT COMES FROM GOOGLE, AND SAYS WHEN IT IS
+STALE (audit 26.10 C7, check 27.10 N6).** `ingest/fetch_cm_history.cjs` read
+the deleted Yandex VM, and the Pechanka workflow ran it with
+`continue-on-error` and a duckdns default, so `cm_history.generated.json`
+stopped at 18.10 without a word. A class walked for the first time after that
+never reached the class/round map. It now reads the Google Apps Script the
+phones upload to: the address comes from `mobile/upload-defaults.js` (`swap.to`),
+it uses `action=index&slim=1` paged by `truncated`/`cursor`, and it falls back
+to `action=records` only when the index has never been built. A duckdns address
+(an old `CM_BACKEND` repository variable) is ignored with a warning. A pull with
+under half the pairs already on file is refused rather than written. The
+workflow's last step, `--check-age 48`, runs after the commit and turns the run
+red with a `::error` when the committed history is older than 48 h
+(`tests/histpull.cjs`).
+
 **A MACHINE HELD OFF A ROUND IS HELD OFF IT ON EVERY SCREEN.** `DUE.OFF` is
 the one place a machine comes off a round, and `DUE.offRound` the one way to
 ask. Two things went wrong with it in two days.
