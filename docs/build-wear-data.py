@@ -11,7 +11,8 @@ workbook (the ZX 1200 link height, 181/171, was the ZX 280's 116/109).
 Two things this file deliberately does NOT do.
 
   It does not guess roller counts. The workbook gives every machine eight
-  positions whether or not the machine has eight. Rather than substitute one
+  positions whether or not the machine has eight; a count the site has
+  confirmed goes in ROLLERS (the LiuGong 990F's nine). Rather than substitute one
   guess for another, the count stays at the workbook's eight and the app offers
   "not fitted" as a reason. After a round, the real count is in the data.
 
@@ -96,6 +97,11 @@ REASONS = [
 ]
 
 ROLLERS_DEFAULT = 8
+# Roller counts the site has confirmed, model by model. Anything not listed
+# keeps the workbook's eight (and "not fitted" for a roller that is not there).
+ROLLERS = {
+    'LiuGong 990F': 9,   # site undercarriage reference sheet, confirmed 26.10.2026
+}
 DISPUTE_NOTE = {
     'Shantui SD90': 'Bushing, carrier roller and idler still carry the SD32 figures. Bushings '
                     'on both SD90s measure 114-116 mm against a 79 mm "new" — impossible. Set '
@@ -137,7 +143,7 @@ def build():
                 disputed[code] = why
             pts[code] = row
         models[key] = {'pts': pts, 'units': m['units'],
-                       'rollers': ROLLERS_DEFAULT,
+                       'rollers': ROLLERS.get(key, ROLLERS_DEFAULT),
                        'frame': 'highdrive' if key in HIGH_DRIVE else 'oval'}
         if disputed:
             models[key]['disputed'] = disputed

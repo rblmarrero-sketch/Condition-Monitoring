@@ -132,6 +132,8 @@ ok('SD90 carrier and idler stay borrowed', ref('DZ017', 'SHANTUI SD90-C5', 'CARR
    && ref('DZ017', 'SHANTUI SD90-C5', 'IDLER').x === 'borrowed');
 ok('LiuGong 970E bushing 87 / 82.9', nc(ref('EX025', 'LiuGong CLG970E', 'BUSH'), 87, 82.9));
 ok('LiuGong 990F bushing 87 / 82.9', nc(ref('EX022', 'LiuGong CLG990FHD', 'BUSH'), 87, 82.9));
+ok('the LiuGong 990F walks nine rollers a side', W.walk('LiuGong CLG990FHD').filter(x => x.point === 'ROLLER').length === 18);
+ok('every other model keeps eight', W.walk('LiuGong CLG970E').filter(x => x.point === 'ROLLER').length === 16);
 ok('the confirmed rows name their source', /confirmed/.test(W.models['Shantui SD90'].pts.LINKH.doc || ''));
 
 console.log(fails.length ? `\n${fails.length} FAILED: ` + fails.join(' | ') : '\nall passed');
