@@ -4758,6 +4758,22 @@ paths that turned a null percentage into "0 %" with `Math.round(null)` now leave
 it empty (`tests/ucodd.cjs`, which fails 38 assertions on build 541). No backend
 change.
 
+**THE SITE'S UNDERCARRIAGE SHEET, CONFIRMED (build 543).** The site sent its
+reference sheet on 2026-10-26 and confirmed the figures. Now in
+`docs/wear-limits.json`, each with a `source`:
+- SD60 bushing: 98.5 / 92.5. It was 98 / 97.65, a 0.35 mm allowance that put
+  almost every reading at the limit.
+- SD90 link pitch (4 links 1271 / 1283, 1 link 317.8 / 320.8), link height
+  (199 / 181), grouser (105 / 35) and track roller (300 / 246). The SD90 had no
+  link or roller figures before, and its grouser was the SD32's 80 / 25.
+- LiuGong 970E and 990F bushing: 87 / 82.9. There was no figure before.
+- Still to settle: the SD90 bushing, carrier roller and idler are still the
+  SD32's figures. The sheet repeats them, the SD90's bushings measure 114–116
+  against that 79 mm "new", and they stay `borrowed` (no percentage). A row
+  carrying `source` is never marked borrowed (`build-wear-data.py`).
+- Not changed: the 990F's nine rollers a side (the app assumes eight).
+  `tests/wear.cjs` holds every figure.
+
 ---
 
 ## Secrets

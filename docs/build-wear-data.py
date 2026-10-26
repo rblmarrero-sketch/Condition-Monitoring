@@ -97,8 +97,10 @@ REASONS = [
 
 ROLLERS_DEFAULT = 8
 DISPUTE_NOTE = {
-    'Shantui SD90': 'Carries the SD32 figures. Bushings on both SD90s measure 114-116 mm '
-                    'against a 79 mm "new" — impossible. Set a baseline instead.',
+    'Shantui SD90': 'Bushing, carrier roller and idler still carry the SD32 figures. Bushings '
+                    'on both SD90s measure 114-116 mm against a 79 mm "new" — impossible. Set '
+                    'a baseline instead. Link pitch, link height, grouser and track roller are '
+                    'the site\'s own figures (sheet confirmed 26.10.2026).',
     'Hitachi ZX 330': 'Two different link pitches under one model name: 250 mm on EX007/EX019 '
                       'and 216 mm on EX008/EX020. Two undercarriage builds, one label.',
 }
@@ -127,7 +129,7 @@ def build():
             if 'rival' in r:
                 why = 'rival'
                 row['rivals'] = [{'n': x['new'], 'c': x['condemn']} for x in r['rival']]
-            if key == 'Shantui SD90' and code in sd32 \
+            if key == 'Shantui SD90' and code in sd32 and 'source' not in r \
                and sd32[code]['new'] == new and sd32[code]['condemn'] == con:
                 why = 'borrowed'
             if why:
