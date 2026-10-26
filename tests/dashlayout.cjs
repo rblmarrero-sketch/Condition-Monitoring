@@ -1,4 +1,4 @@
-/* THE OFFICE PAGES HOLD THEIR SHAPE FROM TAB TO TAB (audit 26.10 D1, D2, D3).
+/* THE OFFICE PAGES HOLD THEIR SHAPE FROM TAB TO TAB (audit 26.10 D1-D6).
 
    Measured on the real pages, both dashboards, English and Russian, at 1366
    and 1920:
@@ -99,6 +99,41 @@ const MEASURE = () => {
       const a = rec.getBoundingClientRect(), f = form.getBoundingClientRect(), g = rec.parentElement.getBoundingClientRect();
       return { below: a.top >= f.bottom - 1, full: Math.abs(a.width - g.width) <= 1 }; });
     ok('Recent reports is a full row under the Reports form', rr.below && rr.full, JSON.stringify(rr));
+    if (lang === 'en' && W === 1366) {
+      /* D4: one 16 px gap between the cards of the Overview, none overlapping */
+      await p.evaluate(() => showTab('overview', true)); await p.waitForTimeout(350);
+      const g = await p.evaluate(() => { const r = e => e.getBoundingClientRect();
+        const cs = [...document.querySelectorAll('#tab-overview .section')].filter(x => x.getClientRects().length && !x.parentElement.closest('.section'));
+        const gaps = [];
+        for (const a of cs) for (const c of cs) { if (a === c) continue; const A = r(a), C = r(c);
+          const sideBySide = Math.min(A.bottom, C.bottom) - Math.max(A.top, C.top) > 4, above = Math.min(A.right, C.right) - Math.max(A.left, C.left) > 4;
+          if (above && C.top >= A.top + 4 && !cs.some(m => m !== a && m !== c && r(m).top > A.top + 4 && r(m).top < C.top - 4 && Math.min(r(m).right, A.right) - Math.max(r(m).left, A.left) > 4)) gaps.push(Math.round(C.top - A.bottom));
+          if (sideBySide && C.left > A.left + 4 && !above) gaps.push(Math.round(C.left - A.right)); }
+        return [...new Set(gaps)]; });
+      ok('D4 every gap between Overview cards is 16 px, none overlapping', g.length && g.every(x => Math.abs(x - 16) <= 1), JSON.stringify(g));
+      /* D6: one grade drawing — a round dot and "n – Name", coloured text only for 5 */
+      const d6 = await p.evaluate(async () => {
+        const out = { pills: [], squares: 0, n: 0, crit: [], plain: [] };
+        const names = [1,2,3,4,5].map(n => SEV[n].l);
+        for (const t of ['overview', 'failure', 'actions', 'equipment']) { showTab(t, true); await new Promise(r => setTimeout(r, 300));
+          const sec = document.getElementById('tab-' + t);
+          sec.querySelectorAll('.pill').forEach(x => { if (names.includes(x.textContent.trim())) out.pills.push(t + ': ' + x.textContent.trim()); });
+          sec.querySelectorAll('.sevcell').forEach(x => { if (!x.getClientRects().length) return; out.n++;
+            const i = x.querySelector('i'); if (!i || parseFloat(getComputedStyle(i).borderTopLeftRadius) < 3.5) out.squares++;
+            const five = x.textContent.trim() === names[4], col = getComputedStyle(x).color, ink = getComputedStyle(x.parentElement).color;
+            if (five && col === ink && !x.classList.contains('crit')) out.crit.push(t);
+            if (!five && x.classList.contains('crit')) out.plain.push(t); }); }
+        return out; });
+      ok('D6 no grade is drawn as a filled pill', !d6.pills.length, d6.pills.slice(0, 4).join(' | '));
+      ok('D6 every grade is a round dot and its name', d6.n > 0 && !d6.squares, `${d6.n} drawn, ${d6.squares} square`);
+      ok('D6 only a 5 is coloured text', !d6.crit.length && !d6.plain.length, JSON.stringify([d6.crit, d6.plain]));
+      /* D5: a read-only lube master box reads as text, not as a box to type in */
+      await p.evaluate(() => { showTab('lube', true); lubeGo('master'); }); await p.waitForTimeout(400);
+      await p.evaluate(() => { const m = document.querySelector('#lmMaster .lmx-mrow'); if (m) m.click(); }); await p.waitForTimeout(400);
+      const d5 = await p.evaluate(() => { const x = [...document.querySelectorAll('#lmMaster .lmx-in:disabled')].find(e => e.getClientRects().length && e.tagName === 'INPUT');
+        if (!x) return null; const c = getComputedStyle(x); return { bg: c.backgroundColor, border: c.borderTopColor, op: c.opacity }; });
+      ok('D5 a read-only lube master box has no box around it', d5 && /rgba\(0, 0, 0, 0\)|transparent/.test(d5.bg) && /rgba\(0, 0, 0, 0\)|transparent/.test(d5.border) && d5.op === '1', JSON.stringify(d5));
+    }
     const fb = await p.evaluate(() => { const bar = document.getElementById('filterBar'); return !!bar && !!bar.querySelector('#fType'); });
     ok('the filter bar is #filterBar', fb);
     await ctx.close();

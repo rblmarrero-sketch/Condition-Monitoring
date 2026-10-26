@@ -4958,6 +4958,25 @@ right-hand column (`.stackcol`) gives the last card what is left. Reports'
 rather than a tall empty card beside it (build 554). `tests/dashlayout.cjs` measures all of it and fails 33
 assertions on build 552.
 
+
+**ONE GAP, ONE READ-ONLY LOOK, ONE GRADE (build 555, audit 26.10 D4, D5,
+D6).**
+- D4: the cards of dashboard-next's Overview are 16 px apart everywhere. The
+  `.stackcol` column was 12 px inside, and had overlapped by 1 px before
+  build 554.
+- D5: a Lube master box disabled by the LubeLink hand-over
+  (`lockEdits`) reads as text: no fill, no border, no dropdown arrow beside
+  the grade swatch, and the full value on hover. Before, it was a white box
+  that looked editable.
+- D6: a grade is drawn ONE way on both office pages: `gradeTag(n)` — a round
+  dot in the grade's colour and "n – Name", with coloured text only for a 5.
+  It replaced filled `.pill`s (Failure Analysis, the action drawer, history
+  heads, Data & Sync), the square-dot `.sevcell` (Actions register, history
+  list) and the plain bold `.sevtxt` (Overview table, which keeps `.sevtxt`
+  as a second class). The Grade mix legend, the Overview table's legend and
+  dashboard-next's Severity mix buttons use the same round dot.
+  Never write `<span class="pill ${SEV[n].c}">` again; call `gradeTag(n)`.
+  `tests/dashlayout.cjs` fails 9 assertions on build 554.
 ---
 
 ## Secrets
