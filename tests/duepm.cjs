@@ -112,6 +112,37 @@ const server = http.createServer((req, res) => {
   const rows0 = await p.evaluate(() => [...document.querySelectorAll('#duePmList [data-wo]')].map(b => b.dataset.wo));
   ok('all five rtwOpen entries are on the list', rows0.length === 5, JSON.stringify(rows0));
 
+  console.log('\n2b. the priority tag says how urgent, in a colour that can be read (audit 26.10 U1)');
+  /* Every priority used to be --good green, P1 Critical included. Read off the
+     screen: the tag's computed fill against the theme's own tokens, and the
+     text against that fill, in both themes. */
+  for (const theme of ['light', 'dark']) {
+    const tags = await p.evaluate(th => {
+      document.documentElement.setAttribute('data-theme', th);
+      const css = getComputedStyle(document.documentElement);
+      const tok = n => { const d = document.createElement('i'); d.style.color = css.getPropertyValue(n); document.body.appendChild(d);
+                         const c = getComputedStyle(d).color; d.remove(); return c; };
+      const rgb = s => (s.match(/[\d.]+/g) || []).slice(0, 3).map(Number);
+      const lum = c => { const v = rgb(c).map(x => { x /= 255; return x <= .03928 ? x / 12.92 : Math.pow((x + .055) / 1.055, 2.4); });
+                         return .2126 * v[0] + .7152 * v[1] + .0722 * v[2]; };
+      const ratio = (a, b) => { const A = lum(a), B = lum(b); return (Math.max(A, B) + .05) / (Math.min(A, B) + .05); };
+      const out = {};
+      for (const wo of ['WO-1', 'WO-2', 'WO-3', 'WO-4']) {
+        const t = document.querySelector(`#duePmList [data-wo="${wo}"] .tag`);
+        const cs = getComputedStyle(t);
+        out[wo] = { txt: t.textContent, bg: cs.backgroundColor, ratio: ratio(cs.color, cs.backgroundColor) };
+      }
+      out.crit = tok('--critical'); out.warn = tok('--warning'); out.good = tok('--good');
+      return out;
+    }, theme);
+    ok(`${theme}: P1 and P2 are red`, tags['WO-2'].bg === tags.crit && tags['WO-3'].bg === tags.crit, JSON.stringify([tags['WO-2'], tags['WO-3'], tags.crit]));
+    ok(`${theme}: P3 is amber`, tags['WO-4'].bg === tags.warn, JSON.stringify([tags['WO-4'], tags.warn]));
+    ok(`${theme}: P4 is left as it was`, tags['WO-1'].bg === tags.good, JSON.stringify([tags['WO-1'], tags.good]));
+    ok(`${theme}: the red and amber tags read at 4.5:1 or better`,
+       tags['WO-2'].ratio >= 4.5 && tags['WO-4'].ratio >= 4.5, JSON.stringify([tags['WO-2'].ratio.toFixed(2), tags['WO-4'].ratio.toFixed(2)]));
+  }
+  await p.evaluate(() => document.documentElement.removeAttribute('data-theme'));
+
   console.log('\n3. grouped by day, chronological, and a day already gone is marked late');
   const groups = await p.evaluate(() => [...document.querySelectorAll('#duePmList .daygroup')].map(g => g.innerText));
   ok('DEF3 (3 days back) is drawn, not dropped for being open and overdue',
