@@ -49,12 +49,16 @@ jobs:
           done
 
       - name: Pull real inspection history from the live backend
-        # If the CM backend is slow or down, keep going with the history already
-        # committed in the repo (ingest/cm_history.generated.json) so the
-        # work-order refresh itself never stops.
+        # The Google Apps Script the phones upload to (address read from
+        # mobile/upload-defaults.js; CM_BACKEND overrides it, a duckdns value
+        # is ignored). If it is slow or down, keep going with the history
+        # already committed (ingest/cm_history.generated.json) so the
+        # work-order refresh itself never stops -- the age check at the end of
+        # this job is what turns the run red if that goes on for 48 h.
+        id: history
         continue-on-error: true
         timeout-minutes: 15
-        run: node ingest/fetch_cm_history.cjs "${CM_BACKEND:-https://baimskaya-cm.duckdns.org}"
+        run: node ingest/fetch_cm_history.cjs "${CM_BACKEND:-}"
 
       - name: Resolve the class/round mapping live from due.js
         run: node ingest/gen_class_rounds.cjs http://127.0.0.1:8391
@@ -89,3 +93,11 @@ jobs:
             git pull --rebase origin claude/magnetic-plug-dashboard-llv4wc
             git push origin HEAD:claude/magnetic-plug-dashboard-llv4wc
           }
+
+      - name: CM history must be under 48 hours old
+        # Loud on purpose: the pull above may fail and the run carry on, but a
+        # history that has not refreshed in 48 h means the class/round mapping
+        # no longer sees the rounds walked since (audit 26.10 C7, check N6).
+        # Runs after the commit, so the work orders still land; the run is red.
+        if: always()
+        run: node ingest/fetch_cm_history.cjs --check-age 48
