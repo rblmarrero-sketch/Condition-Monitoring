@@ -221,7 +221,7 @@ window.WEAR = '''
   W.setLimits = function (doc) {
     W.limitsDoc = doc || null;
     W.limits = ((doc && doc.changes) || []).filter(function (x) {
-      return x && !x.void && x.model && x.point && isFinite(Number(x.n)) && isFinite(Number(x.c))
+      return x && !x.void && (!x.kind || x.kind === 'uc') && x.model && x.point && isFinite(Number(x.n)) && isFinite(Number(x.c))
         && Number(x.n) !== Number(x.c);
     });
   };

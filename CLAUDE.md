@@ -4815,6 +4815,32 @@ scale stands unchanged, so nothing moves until the office sets one. The band
 pages' `wearOf`, in `report.js`, and in report-core's two `fromWorn` calls.
 `teamLife` returns `{pct, warn}`, which `GRADE.roundGrade` reads.
 
+**AND GET, THE TRAY AND TEMPERATURE IN THE SAME PANEL (build 547).** Asked
+for once the undercarriage panel was live. A "Round" choice above the model
+picker: Undercarriage, Ground engaging tools, Dump body tray, Temperature.
+Still ONE document (`_meta/wear/limits.json`). Each change carries a `kind`:
+none or `uc` is the undercarriage, `get` is keyed on the TOOL (bucket / blade)
+and point, `tb` on the tray model and ZONE, and `temp` on a temperature row
+key with `warn` / `alarm` instead of `n` / `c`. Each engine reads only its own
+kind: `WEAR.setLimits`, `GET.setLimits` (mobile/get.js), `BODY.setLimits`
+(mobile/body-points.js) and `tempSetLimits` (mobile/temp-limits.js). The
+phone's `wearLimApply` and the panel's `engines()` call all four. A build-546
+phone ignores the new kinds: `temp` has no `n`/`c`, and a `get`/`tb` model
+never matches an undercarriage model. GET and the tray work like the
+undercarriage: from a date or re-grade all history, an optional warning, a
+limit that must be thinner than new. A tray zone the table leaves ungraded
+(the side skins, the front wall) is graded once the office states a figure,
+and only from its date. `GET.refFor(…, at)`, `BODY.limitFor/wear/band(…, at)`
+and `tempLimit(ctx, at)` take the reading's date. Every call site that has a
+record passes `rec.date`; live capture passes none, which means the latest
+change. The tray's warning goes out on the reading (`warnPct`) like the
+undercarriage's. A temperature row's rows carry stable keys (4th element of
+`TEMP_LIMITS`, names in `TEMP_LIMIT_NAMES`); never rename one. A temperature
+grade is the inspector's, proposed at the reading, so a temperature change
+applies from today and has no re-grade choice. Its preview counts how many
+readings on record would have been proposed a different grade, and says
+grades already given stay. No backend change (`tests/limitsall.cjs`).
+
 ---
 
 ## Secrets
