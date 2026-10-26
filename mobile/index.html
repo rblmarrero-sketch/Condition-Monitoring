@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=551">
+<link rel="manifest" href="manifest.webmanifest?v=552">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=551">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=551">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=551">
+<link rel="apple-touch-icon" href="icon-192.png?v=552">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=552">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=552">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -181,7 +181,8 @@
     cursor:pointer;letter-spacing:.02em;}
   .lang button.on{background:var(--accent);color:var(--accent-ink);}
   .replang{display:flex;align-items:center;gap:10px;margin-bottom:12px;font-size:14px;color:var(--ink-2);}
-  .replang select{flex:0 1 220px;min-height:40px;}
+  .replang select{flex:0 1 220px;min-height:var(--tap);}
+  #syncDiag summary{min-height:var(--tap);display:flex;align-items:center;cursor:pointer;}
   /* The sync pill. It reports whether the work is safe, which is the only thing
      worth a permanent place in the header, and tapping it goes to the queue. */
   header .st{font-size:12.5px;font-weight:650;padding:0 13px;border-radius:999px;
@@ -323,7 +324,11 @@
   .rtw-screen{display:flex;flex-direction:column;height:100%;min-height:0;}
   .rtw-ov-head{flex:none;background:var(--surface);border-bottom:1px solid var(--border);
     padding:calc(env(safe-area-inset-top) + 10px) 14px 10px;display:flex;align-items:center;gap:10px;}
-  .rtw-ov-back{flex:none;background:none;border:none;color:var(--muted);font-size:22px;line-height:1;padding:2px 4px;cursor:pointer;}
+  /* Touch targets (audit 26.10 M3): every control on these screens is at
+     least --tap (44 px). The chevron was 15x26; it keeps its look and gains
+     the box, pulled left so the glyph stays where it was. */
+  .rtw-ov-back{flex:none;background:none;border:none;color:var(--muted);font-size:22px;line-height:1;cursor:pointer;
+    min-width:var(--tap);min-height:var(--tap);padding:0;margin-left:-12px;display:inline-flex;align-items:center;justify-content:center;}
   .rtw-ov-head b{display:block;font-size:15px;color:var(--ink);}
   .rtw-ov-head .hint{margin:0;}
   .rtw-ov-body{flex:1 1 auto;overflow-y:auto;padding:12px 14px 24px;display:flex;flex-direction:column;gap:8px;}
@@ -351,20 +356,23 @@
   .rtw-marks button.on-attn{background:color-mix(in srgb, var(--critical) 12%, var(--surface));border-color:var(--critical);color:var(--critical);}
   .rtw-marks button.on-na{background:var(--surface-3);border-color:var(--ink-2);color:var(--ink);}
   .rtw-evidence-toggle{display:flex;align-items:center;justify-content:space-between;background:none;border:none;
-    border-top:1px solid var(--border);padding:5px 0 0;font:inherit;text-align:left;cursor:pointer;width:100%;color:var(--ink-2);}
+    border-top:1px solid var(--border);padding:5px 0 0;font:inherit;text-align:left;cursor:pointer;width:100%;color:var(--ink-2);
+    min-height:var(--tap);}
   .rtw-evidence-body{display:flex;flex-direction:column;gap:6px;}
   .rtw-evidence-body textarea{flex:1 1 auto;box-sizing:border-box;border:1px solid var(--border);border-radius:8px;
-    padding:7px 9px;font:inherit;font-size:12.5px;color:var(--ink);background:var(--surface-2);min-height:34px;resize:none;}
+    padding:7px 9px;font:inherit;font-size:12.5px;color:var(--ink);background:var(--surface-2);min-height:var(--tap);resize:none;}
   .rtw-evidence-row{display:flex;gap:6px;align-items:flex-start;}
-  .rtw-icon-btn{flex:none;width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:var(--surface);
+  .rtw-icon-btn{flex:none;width:var(--tap);height:var(--tap);border-radius:8px;border:1px solid var(--border);background:var(--surface);
     color:var(--ink);font-size:14px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;}
   .rtw-icon-btn.mic{color:var(--accent);}
   .rtw-icon-btn.mic.rec{color:#fff;background:var(--critical);border-color:var(--critical);animation:pulse 1s infinite;}
   .rtw-photo-badge{position:absolute;top:-5px;right:-5px;min-width:14px;height:14px;border-radius:7px;background:var(--good);
     color:#fff;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 3px;}
-  .rtw-release-field{display:flex;flex-direction:column;gap:4px;}
+  /* min-width:0 so a field shrinks with its row: a date or time input's own
+     minimum otherwise ran the Time box off the card at 390 px. */
+  .rtw-release-field{display:flex;flex-direction:column;gap:4px;min-width:0;}
   .rtw-release-field label{font-size:11.5px;color:var(--muted);}
-  .rtw-release-field input, .rtw-release-field select{height:38px;box-sizing:border-box;border:1px solid var(--border);
+  .rtw-release-field input, .rtw-release-field select{height:48px;box-sizing:border-box;min-width:0;width:100%;border:1px solid var(--border);
     border-radius:8px;padding:0 10px;font:inherit;font-size:13px;color:var(--ink);background:var(--surface-2);}
   .rtw-sign-pad-slot{border:1.5px dashed var(--border);border-radius:9px;background:var(--surface-2);min-height:96px;
     display:flex;align-items:center;justify-content:center;padding:4px;}
@@ -562,7 +570,7 @@
      control elsewhere (steps, filters), not a new shape. */
   .viewseg{display:flex;gap:6px;margin:0 0 10px;background:var(--surface-2);
     border:1px solid var(--border);border-radius:10px;padding:4px;}
-  .viewseg button{flex:1;min-height:38px;border:none;border-radius:7px;background:transparent;
+  .viewseg button{flex:1;min-height:var(--tap);border:none;border-radius:7px;background:transparent;
     color:var(--ink-2);font:inherit;font-size:13.5px;font-weight:650;cursor:pointer;}
   .viewseg button.on{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.12);}
   /* This week's agenda: grouped by day, not by unit — see dueweekRows(). */
@@ -914,7 +922,7 @@
   .dest.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,var(--surface-2));}
   .dest.needurl{border-color:var(--warn-ink);}
   .dest .need{color:var(--warn-ink);font-size:12.5px;margin:-6px 0 12px;}
-  .dest .dhead{display:flex;align-items:center;gap:11px;font-weight:700;font-size:14px;margin-bottom:10px;
+  .dest .dhead{display:flex;align-items:center;gap:11px;font-weight:700;font-size:14px;margin-bottom:10px;min-height:var(--tap);
     cursor:pointer;user-select:none;-webkit-user-select:none;}
   /* Drawn by hand: the app strips native control styling, and a bare accent-color
      leaves no visible tick. Sized for a gloved finger. */
@@ -2878,16 +2886,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=551"></script>
-<script src="upload-defaults.js?v=551"></script>
-<script src="hme.js?v=551"></script>
-<script src="mp-fc.js?v=551"></script>
-<script src="rtw.js?v=551"></script>
-<script src="hme-cascade.js?v=551"></script>
-<script src="assets.js?v=551"></script>
-<script src="temp-limits.js?v=551"></script>
-<script src="normalize.js?v=551"></script>
-<script src="terms.js?v=551"></script>
+<script src="native.js?v=552"></script>
+<script src="upload-defaults.js?v=552"></script>
+<script src="hme.js?v=552"></script>
+<script src="mp-fc.js?v=552"></script>
+<script src="rtw.js?v=552"></script>
+<script src="hme-cascade.js?v=552"></script>
+<script src="assets.js?v=552"></script>
+<script src="temp-limits.js?v=552"></script>
+<script src="normalize.js?v=552"></script>
+<script src="terms.js?v=552"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2906,25 +2914,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=551"></script>
-<script src="edits.js?v=551"></script>
-<script src="due.js?v=551"></script>
-<script src="wear.js?v=551"></script>
-<script src="wear-figs.js?v=551"></script>
-<script src="wear-map.js?v=551"></script>
-<script src="machine-photos.js?v=551"></script>
-<script src="machine-fig.js?v=551"></script>
-<script src="get.js?v=551"></script>
-<script src="points.js?v=551"></script>
-<script src="uc-points.js?v=551"></script>
-<script src="inspect-guide.js?v=551"></script>
-<script src="get-figs.js?v=551"></script>
-<script src="body-points.js?v=551"></script>
-<script src="body-map.js?v=551"></script>
-<script src="lube.js?v=551"></script>
-<script src="lube-overrides.js?v=551"></script>
-<script src="lube2027.js?v=551"></script>
-<script src="report-core.js?v=551"></script>
+<script src="grade.js?v=552"></script>
+<script src="edits.js?v=552"></script>
+<script src="due.js?v=552"></script>
+<script src="wear.js?v=552"></script>
+<script src="wear-figs.js?v=552"></script>
+<script src="wear-map.js?v=552"></script>
+<script src="machine-photos.js?v=552"></script>
+<script src="machine-fig.js?v=552"></script>
+<script src="get.js?v=552"></script>
+<script src="points.js?v=552"></script>
+<script src="uc-points.js?v=552"></script>
+<script src="inspect-guide.js?v=552"></script>
+<script src="get-figs.js?v=552"></script>
+<script src="body-points.js?v=552"></script>
+<script src="body-map.js?v=552"></script>
+<script src="lube.js?v=552"></script>
+<script src="lube-overrides.js?v=552"></script>
+<script src="lube2027.js?v=552"></script>
+<script src="report-core.js?v=552"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -11640,14 +11648,14 @@ function rtwRenderChecklist(keepSignDataUrl){
       <div style="font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);">${esc(t('rtw_release_t'))}</div>
       <div class="rtw-release-field"><label>${esc(t('rtw_senior_mech'))}</label>
         <input id="rtwSup" type="text" placeholder="${esc(t('rtw_senior_mech_ph'))}" value="${esc(d.sup||"")}"></div>
-      <div style="display:flex;gap:8px;">
-        <div class="rtw-release-field" style="flex:1.3;"><label>${esc(t('rtw_result'))}</label>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;">
+        <div class="rtw-release-field" style="flex:1 1 100%;"><label>${esc(t('rtw_result'))}</label>
           <select id="rtwResult">
             ${Object.keys(RTW_RESULTS).map(code=>`<option value="${code}" ${d.result===code?'selected':''}>${esc(code+" — "+(RTW_RESULTS[code][lang]||RTW_RESULTS[code].en))}</option>`).join("")}
           </select></div>
-        <div class="rtw-release-field" style="flex:1;"><label>${esc(t('rtw_date'))}</label>
+        <div class="rtw-release-field" style="flex:1 1 0;"><label>${esc(t('rtw_date'))}</label>
           <input id="rtwDate" type="date" value="${esc(d.date||todayISO())}"></div>
-        <div class="rtw-release-field" style="flex:.8;"><label>${esc(t('rtw_time'))}</label>
+        <div class="rtw-release-field" style="flex:1 1 0;"><label>${esc(t('rtw_time'))}</label>
           <input id="rtwTime" type="time" value="${esc(d.time||nowHHMM())}"></div>
       </div>
       <div class="rtw-release-field"><label>${esc(t('rtw_overall_t'))}</label>
@@ -11662,7 +11670,7 @@ function rtwRenderChecklist(keepSignDataUrl){
       </div>
       <div class="rtw-release-field">
         <div style="display:flex;align-items:center;justify-content:space-between;"><label>${esc(t('rtw_signature'))}</label>
-          <button type="button" id="rtwSignClear" style="border:none;background:none;color:var(--accent);font-size:11.5px;font-weight:650;">${esc(t('rtw_sign_clear'))}</button></div>
+          <button type="button" id="rtwSignClear" style="border:none;background:none;color:var(--accent);font-size:11.5px;font-weight:650;min-height:var(--tap);min-width:var(--tap);padding:0 4px;margin-right:-4px;">${esc(t('rtw_sign_clear'))}</button></div>
         <div class="rtw-sign-pad-slot"><canvas id="rtwSignCanvas"></canvas></div>
       </div>
     </div>`;
@@ -15230,7 +15238,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="551";
+const BUILD="552";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
