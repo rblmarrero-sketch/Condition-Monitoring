@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-26T05:55:00+00:00",
+  "generated": "2026-10-26T06:59:35+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -486,6 +486,17 @@
         "priority": "P3 Planned (PM)"
       }
     ],
+    "TK112": [
+      {
+        "wo": "WO-020835",
+        "hours": 250,
+        "types": [
+          "MP"
+        ],
+        "plan": "2026-11-04",
+        "priority": "P3 Planned (PM)"
+      }
+    ],
     "TK113": [
       {
         "wo": "WO-019514",
@@ -508,6 +519,15 @@
         ],
         "plan": "2026-10-29",
         "priority": "P3 Planned (PM)"
+      },
+      {
+        "wo": "WO-020836",
+        "hours": 250,
+        "types": [
+          "MP"
+        ],
+        "plan": "2026-11-08",
+        "priority": "P3 Planned (PM)"
       }
     ],
     "TK115": [
@@ -529,6 +549,27 @@
           "MP"
         ],
         "plan": "2026-10-29",
+        "priority": "P3 Planned (PM)"
+      },
+      {
+        "wo": "WO-020837",
+        "hours": 500,
+        "types": [
+          "MP"
+        ],
+        "plan": "2026-11-07",
+        "priority": "P3 Planned (PM)"
+      }
+    ],
+    "TK118": [
+      {
+        "wo": "WO-020838",
+        "hours": 1000,
+        "types": [
+          "INSP",
+          "MP"
+        ],
+        "plan": "2026-11-04",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -787,6 +828,42 @@
       "completed": ""
     },
     {
+      "wo": "WO-020836",
+      "equip": "TK114",
+      "cls": "AT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-08",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-11-08",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-020837",
+      "equip": "TK117",
+      "cls": "AT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-07",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-11-07",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-019358",
       "equip": "DZ014",
       "cls": "DOZ",
@@ -868,6 +945,42 @@
       "raised": "2026-11-04",
       "type": "250 Hours service Planned",
       "hours": 250,
+      "plan": "2026-11-04",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-020835",
+      "equip": "TK112",
+      "cls": "AT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-04",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-11-04",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-020838",
+      "equip": "TK118",
+      "cls": "AT",
+      "comp": "",
+      "desc": "General Inspection / Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-04",
+      "type": "1000 Hours service Planned",
+      "hours": 1000,
       "plan": "2026-11-04",
       "status": "Elimination scheduled",
       "request": "",
@@ -6376,13 +6489,13 @@
       "raised": "2026-10-02",
       "type": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "hours": null,
-      "plan": "2026-10-18",
-      "status": "Elimination scheduled",
+      "plan": "2026-10-19",
+      "status": "Completed",
       "request": "DD-00013861",
       "defType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "cause": "Усталостная трещина",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-19"
     },
     {
       "wo": "WO-020772",
