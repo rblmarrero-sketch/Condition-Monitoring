@@ -443,9 +443,19 @@
   .tdelta.better{background:color-mix(in srgb,var(--good) 16%,transparent);color:var(--good-ink);}
   .tdelta.flat{background:var(--surface-2);color:var(--muted);}
   table.grid td.num,table.grid th.num{text-align:right;font-variant-numeric:tabular-nums;}
-  .grid12{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--s4);align-items:start;}
+  /* Cards in one row are one height (audit 26.10 D3): with align-items:start
+     a short card beside a tall one left a hole under it — 458 px beside the
+     Reports form. Stretched, the row reads as one object. */
+  .grid12{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--s4);align-items:stretch;}
+  /* A column of cards in a stretched row: the last one takes what is left, so
+     the column ends where the card beside it ends. */
+  .stackcol{margin-bottom:16px;}
+  .stackcol>.section:last-child{flex:1 1 auto;}
   .g4{grid-column:span 4;} .g5{grid-column:span 5;} .g6{grid-column:span 6;}
   .g7{grid-column:span 7;} .g8{grid-column:span 8;}
+  /* A full row of its own: Reports' "Recent reports" sits under the form
+     rather than beside it, where it was a short card or a tall empty one. */
+  .g12{grid-column:span 12;}
   @media (max-width:1180px){ .grid12>*{grid-column:span 12;} }
 
   /* ── A BOUNDED SURFACE ───────────────────────────────────────────────────
@@ -2243,6 +2253,20 @@
      small-caps micro label the original strip used. */
   .kpi .hd,.tile .hd{display:flex;align-items:center;justify-content:space-between;gap:8px;}
   .kpi .k,.tile .k{font-weight:600;font-size:13.5px;line-height:1.25;font-family:inherit;color:var(--ink);}
+  /* The numbers in one strip line up (audit 26.10 D2): a label that wrapped to
+     a second line pushed its number 17-34 px below its neighbours'. Every
+     label takes two lines' room and never more, the tag sits on its first
+     line, and the whole label is on the tile's title (kpiTitles). */
+  /* The label has the tile's whole width and the tag sits at the end of the
+     number's line, where there was empty room: on one line with the label the
+     tag squeezed it to a word a line ("Работы без ответственного" at 42 px). */
+  .kpi:has(>.hd>.k),.tile:has(>.hd>.k){display:grid;grid-template-columns:max-content minmax(0,1fr);align-content:start;column-gap:8px;}
+  .kpi:has(>.hd>.k)>*,.tile:has(>.hd>.k)>*{grid-column:1/-1;}
+  .kpi .hd,.tile .hd{display:contents;}
+  .kpi .hd>.k,.tile .hd>.k{grid-column:1/-1;}
+  .kpi:has(>.hd>.k)>.v,.tile:has(>.hd>.k)>.v{grid-column:1;}
+  .kpi .hd>.tag,.tile .hd>.tag{grid-row:2;grid-column:2;align-self:center;justify-self:end;max-width:100%;}
+  .kpi .k,.tile .k{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.5em;}
   /* flex-shrink stays 0 -- unchanged from before this fix, and deliberately
      so: with the tag left at its own natural width, the flex row already
      puts all of the squeeze onto ".k" (which wraps onto a second line
@@ -2370,7 +2394,9 @@
   /* ── THE OVERVIEW HEADER, AND ITS ONE "DEFINITIONS" ─────────────────────
      A page title, the count the page is over, and the explanations behind
      one control instead of under every card. */
-  .pagehd{position:relative;display:flex;align-items:flex-end;gap:var(--s3);
+  /* Top-aligned (audit 26.10 D1): bottom-aligned, a taller control on the
+     right (LubeLink, Definitions) pushed the title down a few px on its tab. */
+  .pagehd{position:relative;display:flex;align-items:flex-start;gap:var(--s3);
     margin:0 0 var(--s3);min-width:0;flex-wrap:wrap;}
   /* Head.dc.html: the title is alone on its own line, the purpose sentence
      (and Definitions, where a tab has one) on the line under it -- both left
@@ -3926,7 +3952,7 @@
         <div id="trendChart"></div>
         <div class="insight" id="trendNote"></div>
       </div>
-      <div class="g5" style="display:flex;flex-direction:column;gap:var(--s3)">
+      <div class="g5 stackcol" style="display:flex;flex-direction:column;gap:var(--s3)">
         <div class="section" style="margin-bottom:0">
           <div class="secthd"><h2 data-i18n="cv_title2">Inspection compliance</h2>
             <span class="spacer"></span><span class="hint" id="covFleet"></span></div>
@@ -4795,7 +4821,7 @@
         </div>
         <div class="sub" style="margin-top:14px" data-i18n="r_hint">Photos and supervisor signatures come from whichever data source is loaded.</div>
       </div>
-      <div class="section g5">
+      <div class="section g12">
         <div class="secthd"><h2 data-i18n="r_recent">Recent reports</h2>
           <span class="spacer"></span><span class="hint" id="rRecentHint"></span></div>
         <label class="vh" for="rRecentQ" data-i18n="r_recent_search">Search recent reports</label>
@@ -5009,23 +5035,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=552"></script>
+<script src="../data/magnetic_plug.js?v=554"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=552"></script>
-<script src="../mobile/hme.js?v=552"></script>
-<script src="../mobile/mp-fc.js?v=552"></script>
-<script src="../mobile/rtw.js?v=552"></script>
-<script src="../mobile/hme-cascade.js?v=552"></script>
-<script src="../mobile/temp-limits.js?v=552"></script>
+<script src="../data/work_orders.js?v=554"></script>
+<script src="../mobile/hme.js?v=554"></script>
+<script src="../mobile/mp-fc.js?v=554"></script>
+<script src="../mobile/rtw.js?v=554"></script>
+<script src="../mobile/hme-cascade.js?v=554"></script>
+<script src="../mobile/temp-limits.js?v=554"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=552"></script>
-<script src="../mobile/normalize.js?v=552"></script>
-<script src="../mobile/terms.js?v=552"></script>
+<script src="../mobile/assets.js?v=554"></script>
+<script src="../mobile/normalize.js?v=554"></script>
+<script src="../mobile/terms.js?v=554"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -5044,21 +5070,21 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=552"></script>
-<script src="../mobile/edits.js?v=552"></script>
-<script src="../mobile/due.js?v=552"></script>
-<script src="../mobile/wear.js?v=552"></script>
-<script src="../mobile/wear-map.js?v=552"></script>
-<script src="../mobile/lube.js?v=552"></script>
-<script src="../mobile/lube-overrides.js?v=552"></script>
-<script src="../mobile/lube2027.js?v=552"></script>
-<script src="../mobile/lube-tds.js?v=552"></script>
-<script src="../dashboard/lube-master.js?v=552"></script>
-<script src="../dashboard/wear-limits.js?v=552"></script>
+<script src="../mobile/grade.js?v=554"></script>
+<script src="../mobile/edits.js?v=554"></script>
+<script src="../mobile/due.js?v=554"></script>
+<script src="../mobile/wear.js?v=554"></script>
+<script src="../mobile/wear-map.js?v=554"></script>
+<script src="../mobile/lube.js?v=554"></script>
+<script src="../mobile/lube-overrides.js?v=554"></script>
+<script src="../mobile/lube2027.js?v=554"></script>
+<script src="../mobile/lube-tds.js?v=554"></script>
+<script src="../dashboard/lube-master.js?v=554"></script>
+<script src="../dashboard/wear-limits.js?v=554"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=552"></script>
-<script src="../mobile/machine-photos.js?v=552"></script>
+<script src="../mobile/upload-defaults.js?v=554"></script>
+<script src="../mobile/machine-photos.js?v=554"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -5067,17 +5093,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=552"></script>
-<script src="../mobile/get.js?v=552"></script>
-<script src="../mobile/points.js?v=552"></script>
-<script src="../mobile/uc-points.js?v=552"></script>
-<script src="../mobile/inspect-guide.js?v=552"></script>
-<script src="../mobile/get-figs.js?v=552"></script>
-<script src="../mobile/body-points.js?v=552"></script>
-<script src="../mobile/body-map.js?v=552"></script>
-<script src="../mobile/jspdf.umd.min.js?v=552"></script>
-<script src="../mobile/html2canvas.min.js?v=552"></script>
-<script src="../mobile/report-core.js?v=552"></script>
+<script src="../mobile/machine-fig.js?v=554"></script>
+<script src="../mobile/get.js?v=554"></script>
+<script src="../mobile/points.js?v=554"></script>
+<script src="../mobile/uc-points.js?v=554"></script>
+<script src="../mobile/inspect-guide.js?v=554"></script>
+<script src="../mobile/get-figs.js?v=554"></script>
+<script src="../mobile/body-points.js?v=554"></script>
+<script src="../mobile/body-map.js?v=554"></script>
+<script src="../mobile/jspdf.umd.min.js?v=554"></script>
+<script src="../mobile/html2canvas.min.js?v=554"></script>
+<script src="../mobile/report-core.js?v=554"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -15934,6 +15960,13 @@ function showTab(t,push){
   if(typeof urlWrite==="function") urlWrite(!!push);
 }
 $("tabs").onclick=e=>{ const b=e.target.closest("button[data-tab]"); if(b) showTab(b.dataset.tab,true); };
+/* A tile label the two-line clamp cut short (audit 26.10 D2) is said in full
+   on hover. Asked at the moment of hovering, so a label that fits gets no
+   tooltip and one cut by a language or a narrow window always does. */
+document.addEventListener("mouseover",e=>{
+  const k=e.target&&e.target.closest&&e.target.closest(".kpi .k,.tile .k");
+  if(k && !k.title && k.scrollHeight>k.clientHeight+1) k.title=k.textContent.trim();
+});
 
 /* ── THE URL IS THE STATE, SO BACK AND RELOAD BOTH WORK ────────────────────
 
@@ -21523,10 +21556,10 @@ document.querySelector(".lang").addEventListener("click",e=>{
   setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 })();
 </script>
-<script src="../dashboard/drive.js?v=552"></script>
-<script src="../dashboard/sync-adapter.js?v=552"></script>
-<script src="../dashboard/report.js?v=552"></script>
-<script src="../dashboard/reliability.js?v=552"></script>
+<script src="../dashboard/drive.js?v=554"></script>
+<script src="../dashboard/sync-adapter.js?v=554"></script>
+<script src="../dashboard/report.js?v=554"></script>
+<script src="../dashboard/reliability.js?v=554"></script>
 <script>
 /* THE CLOSED FILTER SAYS WHAT IS CHOSEN. A dropdown narrower than its option
    text ellipsises ("All t…", audit of 2026-10-01). Between 1331 and 1500 px

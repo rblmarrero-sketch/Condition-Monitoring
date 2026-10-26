@@ -184,7 +184,7 @@ const key = e => new KeyboardEvent('keydown', { key: e, bubbles: true, cancelabl
 
   console.log('\n6. SUPPORT PAGES PUT THE RECORD FILTERS AWAY; THREE SEARCHES, THREE NAMES');
   const Sp = await p.evaluate(() => { const out = {}; ['overview', 'actions', 'equipment', 'due', 'lube', 'sync', 'reports'].forEach(k => { showTab(k, true);
-    out[k] = !document.querySelector('main > .controls').classList.contains('hidden'); });
+    out[k] = !document.querySelector('#filterBar').classList.contains('hidden'); });
     showTab('overview', true);
     return { bar: out, g: $('gq').getAttribute('aria-label'), f: $('fQ').placeholder, dd: (document.querySelector('label[for="ddQ"], #ddQ') && ($('ddQ').closest('label').querySelector('span') || {}).textContent) || '', eq: $('equipQ').placeholder }; });
   ok('the bar shows on the analysis pages and not on Due, Lubrication, Data & Sync or Reports',

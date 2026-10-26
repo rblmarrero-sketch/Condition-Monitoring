@@ -252,7 +252,7 @@ const cells = p => p.$$eval('#cwList tbody tr', rs => rs.map(r =>
      already puts that bar away for Due/Lube/Sync/Reports/Plan vs Actual;
      cmwo was left off it. */
   let barState = await p.evaluate(() => ({
-    bar: document.querySelector('main > .controls:not(.more)').classList.contains('hidden'),
+    bar: document.querySelector('#filterBar').classList.contains('hidden'),
     chips: document.getElementById('chips').classList.contains('hidden') }));
   ok('the global bar is put away on Defects raised, the same as Due/Lube/Sync',
      barState.bar === true, JSON.stringify(barState));
@@ -260,7 +260,7 @@ const cells = p => p.$$eval('#cwList tbody tr', rs => rs.map(r =>
   await p.click('[data-tab="overview"]');
   await p.waitForTimeout(150);
   barState = await p.evaluate(() => ({
-    bar: document.querySelector('main > .controls:not(.more)').classList.contains('hidden') }));
+    bar: document.querySelector('#filterBar').classList.contains('hidden') }));
   ok('  and it comes back on a tab the bar actually narrows',
      barState.bar === false, JSON.stringify(barState));
   await p.click('[data-tab="cmwo"]');

@@ -126,7 +126,7 @@ const CLIP = el => !el ? 'missing' : (el.scrollWidth > el.clientWidth + 1 || el.
     // the cap stays 92 (the search field's 260 px floor, tests/layout.cjs); dashboard-next/ was already wider.
     const oldCap = (file === 'dashboard' && W > 1330 && W <= 1500) ? 88 : 0;
     const r = await p.evaluate(oldCap => {
-      const bar = document.querySelector('main > .controls:not(.more)');
+      const bar = document.querySelector('#filterBar');
       const sels = [...bar.querySelectorAll('select')].filter(s => s.offsetWidth);
       const h = bar.offsetHeight;
       // The same bar with the old 88 px cap — the wider dropdowns must not add a row.
@@ -138,7 +138,7 @@ const CLIP = el => !el ? 'missing' : (el.scrollWidth > el.clientWidth + 1 || el.
     ok(`${file} ${lang} ${W}: the bar is no taller than it was with the old cap`, r.h <= r.h0, JSON.stringify(r));
     if (file === 'dashboard' && W > 1330 && W <= 1440) ok(`${file} ${lang} ${W}: dropdowns are 100 px, not 88`, r.minW >= 99 || r.n === 0, JSON.stringify(r));
     // hover → tooltip with the chosen option's whole text
-    const sel = await p.$('main > .controls:not(.more) select');
+    const sel = await p.$('#filterBar select');
     if (sel) {
       await sel.hover();
       const tip = await p.evaluate(s => ({ title: s.title, text: s.options[s.selectedIndex] && s.options[s.selectedIndex].text }), sel);
@@ -161,7 +161,7 @@ const CLIP = el => !el ? 'missing' : (el.scrollWidth > el.clientWidth + 1 || el.
     await p.waitForFunction(() => window.CMDash, null, { timeout: 15000 });
     const r = await p.evaluate(async () => {
       try { await Promise.race([document.fonts.ready, new Promise(z => setTimeout(z, 4000))]); } catch (e) {}
-      const bar = document.querySelector('main > .controls:not(.more)');
+      const bar = document.querySelector('#filterBar');
       const kids = [...bar.children].filter(k => k.offsetWidth > 2);
       const tops = kids.map(k => k.getBoundingClientRect().top);
       const q = bar.querySelector('input[type=search]');
