@@ -205,9 +205,39 @@
      nothing to measure against. Shaped exactly like WEAR.refFor's result so the
      millimetre field, the bands and the arithmetic are shared rather than
      reimplemented. GET always wears down. */
-  function refFor(unit, cls, model, code) {
+  /* The office's limits (dashboard/wear-limits.js, kind "get"): per TOOL
+     (bucket / blade) and point, from a date. The latest change in force on
+     the reading's date replaces the figure above, so a generic starting point
+     stops being generic the day the office states the supplier's chart. A
+     change carries an optional warning `w` between new and the limit. No date
+     = the latest change. */
+  var OFFICE = [];
+  function setLimits(doc) {
+    OFFICE = ((doc && doc.changes) || []).filter(function (x) {
+      return x && !x.void && x.kind === 'get' && TOOLS[x.model] && x.point &&
+        isFinite(Number(x.n)) && isFinite(Number(x.c)) && Number(x.n) > Number(x.c);
+    });
+  }
+  function limitFor(tool, code, at) {
+    var d = at || '9999-12-31', best = null;
+    for (var i = 0; i < OFFICE.length; i++) {
+      var l = OFFICE[i], from = l.from || '0000-01-01';
+      if (l.model !== tool || l.point !== code || from > d) continue;
+      if (!best || from > (best.from || '0000-01-01') ||
+          (from === (best.from || '0000-01-01') && String(l.at || '') > String(best.at || ''))) best = l;
+    }
+    return best;
+  }
+  function refFor(unit, cls, model, code, at) {
     var p = profileFor(unit, cls, model);
-    var L = p && p.lim && p.lim[code];
+    if (!p) return null;
+    var off = limitFor(p.tool, code, at);
+    if (off) {
+      var w = (off.w == null || off.w === '' || !isFinite(Number(off.w))) ? null : Number(off.w);
+      return { n: Number(off.n), c: Number(off.c), w: w, d: 'shrink', src: 'limit',
+               from: off.from, by: off.by, why: off.why, lim: off };
+    }
+    var L = p.lim && p.lim[code];
     if (!L) return null;
     return { n: L.n, c: L.c, d: 'shrink', src: L.src || 'generic' };
   }
@@ -241,7 +271,7 @@
 
   G.GET = {
     tools: TOOLS, familyFor: familyFor, profileFor: profileFor, has: has,
-    walk: walk, refFor: refFor, label: label, rowFor: rowFor, all: all, slug: slug,
+    walk: walk, refFor: refFor, setLimits: setLimits, limitFor: limitFor, label: label, rowFor: rowFor, all: all, slug: slug,
     photos: PHOTO_BY_MODEL, toolByModel: TOOL_BY_MODEL,
   };
 /* `self`, not `window`. The service worker importScripts() this file to learn

@@ -20,7 +20,17 @@
    Two desks, one document, no compare-and-swap: a save re-reads, adds its
    change, writes, reads back, and writes again if another desk's save replaced
    it (the lube master's rule). Every change also writes a detail record under
-   _meta/wear/log/. */
+   _meta/wear/log/.
+
+   FOUR KINDS OF ROUND, ONE DOCUMENT (build 547). A change carries `kind`:
+   none (or "uc") is the undercarriage, per model and point; "get" is a ground
+   engaging tool, per TOOL (bucket / blade, mobile/get.js) and point; "tb" is
+   the dump body tray, per tray model and ZONE (mobile/body-points.js); "temp"
+   is a temperature row (mobile/temp-limits.js), warn and alarm in °C. Each
+   engine takes only its own kind, so a phone on an older build ignores the
+   new kinds rather than misreading them. A temperature grade is the
+   inspector's, proposed at the reading, so a temperature change applies from
+   today and has no "re-grade all history". */
 (function (root) {
   "use strict";
   const DOC = "_meta/wear/limits.json";
@@ -30,8 +40,16 @@
 
   const WORDS = {
     en: {
-      title: "Measurement limits — undercarriage",
-      sub: "New and wear limit for each model and point. A limit set here replaces the reference figure on the phone, on both dashboards and in every report.",
+      title: "Measurement limits",
+      sub: "New and wear limit for each model and point, or warning and alarm for a temperature. A limit set here replaces the reference figure on the phone, on both dashboards and in every report.",
+      kind: "Round", k_uc: "Undercarriage", k_get: "Ground engaging tools", k_tb: "Dump body tray", k_temp: "Temperature",
+      tool: "Tool", tray: "Tray model", t_bucket: "Bucket", t_blade: "Blade & ripper",
+      th_zone: "Zone", th_row: "Component", th_tref: "Reference (warning → alarm, °C)", th_tnow: "In force today (warning → alarm, °C)",
+      generic: "generic", site: "site", notgraded: "not graded",
+      f_twarn: "Warning, °C", f_talarm: "Alarm, °C",
+      f_temp_hint: "Applies from today. A temperature grade is proposed on the phone when the reading is taken, so grades already given are not changed.",
+      e_tnum: "The warning and the alarm must both be numbers.", e_tdir: "The alarm must be higher than the warning.",
+      pv_t: "{n} reading(s) of this kind on record. With these limits {chg} would be proposed a different grade ({worse} higher, {better} lower); grades already given stay as they are.",
       st_off: "No folder attached — limits can be read and set once a backend is attached.",
       st_load: "Reading the office's limits…",
       st_none: "No office limits set yet. The reference figures are in force.",
@@ -59,14 +77,22 @@
       pv_keep: "{k} earlier reading(s) keep the limit they were scored against.",
       saved: "Saved — revision {rev}.", saved_merged: "Saved on top of another desk's change — revision {rev}.",
       log_fail: " The detail record could not be written; the change itself is saved.",
-      hist: "Changes for this model", h_void: "Take back", h_voided: "taken back {at} by {by}",
+      hist: "Changes for this model", hist_t: "Temperature changes", none_hist_t: "No temperature changes.", h_void: "Take back", h_voided: "taken back {at} by {by}",
       void_ask: "Take this change back? Readings return to the limit in force before it.",
       void_who: "Type your name in the form first — taking a change back is signed too.",
       none_hist: "No changes for this model."
     },
     ru: {
-      title: "Пределы замеров — ходовая часть",
-      sub: "Новый размер и предел износа для каждой модели и точки. Предел, заданный здесь, заменяет эталонное значение в телефоне, на обеих панелях и во всех отчётах.",
+      title: "Пределы замеров",
+      sub: "Новый размер и предел износа для каждой модели и точки или предупреждение и тревога для температуры. Предел, заданный здесь, заменяет эталонное значение в телефоне, на обеих панелях и во всех отчётах.",
+      kind: "Осмотр", k_uc: "Ходовая часть", k_get: "Навесное (GET)", k_tb: "Кузов самосвала", k_temp: "Температура",
+      tool: "Орудие", tray: "Модель кузова", t_bucket: "Ковш", t_blade: "Отвал и рыхлитель",
+      th_zone: "Зона", th_row: "Узел", th_tref: "Эталон (предупр. → тревога, °C)", th_tnow: "Действует сегодня (предупр. → тревога, °C)",
+      generic: "типовое", site: "участок", notgraded: "без оценки",
+      f_twarn: "Предупреждение, °C", f_talarm: "Тревога, °C",
+      f_temp_hint: "Действует с сегодняшнего дня. Оценка температуры предлагается в телефоне при замере, поэтому уже выставленные оценки не меняются.",
+      e_tnum: "Предупреждение и тревога должны быть числами.", e_tdir: "Тревога должна быть выше предупреждения.",
+      pv_t: "{n} замер(ов) этого вида. С этими пределами {chg} получили бы другую предложенную оценку ({worse} выше, {better} ниже); выставленные оценки остаются.",
       st_off: "Папка не подключена — пределы можно читать и задавать после подключения.",
       st_load: "Чтение пределов офиса…",
       st_none: "Офис пока не задал пределов. Действуют эталонные значения.",
@@ -94,14 +120,14 @@
       pv_keep: "{k} более ранних замер(ов) сохраняют предел, по которому они оценены.",
       saved: "Сохранено — версия {rev}.", saved_merged: "Сохранено поверх изменения с другого рабочего места — версия {rev}.",
       log_fail: " Подробную запись сохранить не удалось; само изменение сохранено.",
-      hist: "Изменения по этой модели", h_void: "Отменить", h_voided: "отменено {at}, {by}",
+      hist: "Изменения по этой модели", hist_t: "Изменения температурных пределов", none_hist_t: "Изменений температурных пределов нет.", h_void: "Отменить", h_voided: "отменено {at}, {by}",
       void_ask: "Отменить это изменение? Замеры вернутся к пределу, действовавшему до него.",
       void_who: "Сначала введите имя в форме — отмена тоже подписывается.",
       none_hist: "Изменений по этой модели нет."
     }
   };
   let HOST = { lang: () => "en", recs: () => [], onApplied: () => {} };
-  const S = { state: "idle", doc: null, err: "", model: "", edit: "", msg: "", msgBad: false, el: null };
+  const S = { state: "idle", doc: null, err: "", kind: "uc", model: "", edit: "", msg: "", msgBad: false, el: null };
 
   const W = () => root.WEAR;
   const lang = () => (HOST.lang && HOST.lang() === "ru") ? "ru" : "en";
@@ -119,54 +145,180 @@
   const fmt = n => (n == null || n === "") ? "—" : String(n);
 
   function empty() { return { type: "cm-wear-limits", version: 1, rev: 0, at: "", by: "", changes: [] }; }
-  function apply(doc) {
+  /* Every engine takes the whole document and keeps the changes of its own kind. */
+  function engines(doc) {
     if (W() && W().setLimits) W().setLimits(doc || null);
+    if (root.GET && root.GET.setLimits) root.GET.setLimits(doc || null);
+    if (root.BODY && root.BODY.setLimits) root.BODY.setLimits(doc || null);
+    if (root.tempSetLimits) root.tempSetLimits(doc || null);
+  }
+  function apply(doc) {
+    engines(doc);
     try { HOST.onApplied(); } catch (e) { if (root.bad) root.bad("wear-limits-apply", e); }
   }
+  const kindOf = x => (x && x.kind) || "uc";
 
-  /* ── which machines a model covers, and their readings ─────────────── */
+  /* ── the four kinds: their models, points, references and readings ── */
   function modelOfUnit(a) { const m = a && a.m && W() && W().map[a.m]; return (m && m.m) || ""; }
-  function unitsOf(model) {
-    return (root.ASSETS || []).filter(a => modelOfUnit(a) === model);
+  const G = () => root.GET, B = () => root.BODY;
+  const toolOfUnit = a => { try { const p = G() && G().profileFor(a.n, a.cat || a.cls || "", a.m || ""); return (p && p.tool) || ""; } catch (e) { return ""; } };
+  const trayOfUnit = a => { try { return (HOST.bodyModel && HOST.bodyModel(a.n)) || ""; } catch (e) { return ""; } };
+  const assetOf = u => (HOST.asset && HOST.asset(u)) || (root.ASSETS || []).find(x => x.n === u) || null;
+  const splitKey = k => { k = String(k || ""); const i = k.indexOf("."); return [i < 0 ? k : k.slice(0, i), i < 0 ? "" : k.slice(i + 1)]; };
+  const numOf = v => (v === "" || v == null) ? null : (isFinite(Number(v)) ? Number(v) : null);
+  const TEMP_KEYS = () => ((root.TEMP_LIMITS || []).map(r => r[3]).filter(Boolean)).concat(["*"]);
+  function tempRow(key) {
+    if (key === "*") return root.TEMP_LIMIT_DEFAULT || { warn: 80, alarm: 95 };
+    const r = (root.TEMP_LIMITS || []).find(x => x[3] === key);
+    return r ? { warn: r[1], alarm: r[2] } : null;
   }
-  function readings(model, point) {
-    const units = {}; unitsOf(model).forEach(a => { units[a.n] = a; });
-    const out = [];
-    (HOST.recs() || []).forEach(r => {
-      if (!r || r.type !== "UC" || !units[r.equip]) return;
-      (r.items || []).forEach(it => {
-        const k = String(it.key || ""), i = k.indexOf(".");
-        if ((i < 0 ? k : k.slice(0, i)) !== point) return;
-        const mm = (it.mm === "" || it.mm == null) ? null : Number(it.mm);
-        if (mm == null || !isFinite(mm)) return;
-        out.push({ unit: r.equip, m: units[r.equip].m, pos: i < 0 ? "" : k.slice(i + 1), date: r.date || "", mm });
-      });
-    });
-    return out;
+  const KINDS = {
+    uc: {
+      models: () => Object.keys((W() && W().models) || {}).sort(),
+      unitOk: (a, model) => modelOfUnit(a) === model,
+      points: model => ((W() && W().points) || []).map(p => ({ code: p.code, en: p.en, ru: p.ru })),
+      ref: (model, code) => { const m = W().models[model], c = m && m.pts[code];
+        return c ? { n: c.n, c: c.c, tag: c.x === "borrowed" ? "borrowed" : c.x === "rival" ? "rival" : "" } : null; },
+      now: (model, code) => W().limitFor(model, code, today()),
+      dir: (model, code) => { const m = W().models[model], c = m && m.pts[code]; return (c && c.d) || ""; },
+      reads(model, point) {
+        const out = [];
+        (HOST.recs() || []).forEach(r => {
+          if (!r || r.type !== "UC") return;
+          const a = assetOf(r.equip);
+          if (!a || modelOfUnit(a) !== model) return;
+          (r.items || []).forEach(it => { const [pt, pos] = splitKey(it.key); const mm = numOf(it.mm);
+            if (pt === point && mm != null) out.push({ unit: r.equip, m: a.m, pos, date: r.date || "", mm }); });
+        });
+        return out;
+      },
+      grade(r, point) {
+        const ref = W().refFor(r.unit, r.m, point, r.pos, r.date);
+        if (!ref || ref.x) return { g: null, odd: false };
+        if (W().outOfRange(ref, r.mm)) return { g: null, odd: true };
+        const p = W().wear(ref, r.mm);
+        return { g: p == null ? null : (root.GRADE ? root.GRADE.fromWorn(p, W().warnPct ? W().warnPct(ref) : null) : null), odd: false };
+      }
+    },
+    get: {
+      models: () => G() ? Object.keys(G().tools) : [],
+      unitOk: (a, model) => toolOfUnit(a) === model,
+      label: model => tr("t_" + model),
+      points: model => { const T = G() && G().tools[model];
+        return T ? T.pts.filter(r => r[4] === "mm").map(r => ({ code: r[1], en: r[2], ru: r[3] })) : []; },
+      ref: (model, code) => { const T = G() && G().tools[model], L = T && T.lim && T.lim[code];
+        return L ? { n: L.n, c: L.c, tag: L.src === "site" ? "site" : "generic" } : null; },
+      now: (model, code) => G().limitFor(model, code, today()),
+      dir: () => "shrink",
+      reads(model, point) {
+        const out = [];
+        (HOST.recs() || []).forEach(r => {
+          if (!r || r.type !== "GET") return;
+          const a = assetOf(r.equip);
+          if (!a || toolOfUnit(a) !== model) return;
+          (r.items || []).forEach(it => { const [pt] = splitKey(it.key); const mm = numOf(it.mm);
+            if (pt === point && mm != null) out.push({ unit: r.equip, a, date: r.date || "", mm }); });
+        });
+        return out;
+      },
+      grade(r, point) {
+        const ref = G().refFor(r.unit, r.a.cat || r.a.cls || "", r.a.m || "", point, r.date);
+        if (!ref) return { g: null, odd: false };
+        if (W().outOfRange(ref, r.mm)) return { g: null, odd: true };
+        const p = W().wear(ref, r.mm);
+        return { g: p == null ? null : (root.GRADE ? root.GRADE.fromWorn(p, W().warnPct(ref)) : null), odd: false };
+      }
+    },
+    tb: {
+      models: () => (B() && B().models) ? B().models.slice().sort() : [],
+      unitOk: (a, model) => trayOfUnit(a) === model,
+      points: model => (B() ? B().zones(model) : []).map(z => ({ code: z.k, en: z.en, ru: z.ru })),
+      ref: (model, code) => { const L = B() && B().limits[model] && B().limits[model][code];
+        return L ? { n: L.n, c: L.c, tag: L.src === "site" ? "site" : "" } : null; },
+      now: (model, code) => { const L = B().limitFor(model, (B().inZone(model, code)[0] || {}).k, today());
+        return (L && L.src === "limit") ? L.lim : null; },
+      dir: () => "shrink",
+      reads(model, zone) {
+        const out = [];
+        (HOST.recs() || []).forEach(r => {
+          if (!r || r.type !== "TB") return;
+          const a = assetOf(r.equip);
+          if (!a || trayOfUnit(a) !== model) return;
+          (r.items || []).forEach(it => { const p = B().get(model, it.key); const mm = numOf(it.mm);
+            if (p && p.z === zone && mm != null) out.push({ unit: r.equip, k: it.key, date: r.date || "", mm }); });
+        });
+        return out;
+      },
+      grade(r) {
+        const L = B().limitFor(S.model, r.k, r.date);
+        if (!L) return { g: null, odd: false };
+        if (W().outOfRange({ n: L.n, c: L.c, d: "shrink" }, r.mm)) return { g: null, odd: true };
+        const p = B().wear(S.model, r.k, r.mm, r.date);
+        return { g: p == null ? null : (root.GRADE ? root.GRADE.fromWorn(p, B().warnPct(L)) : null), odd: false };
+      }
+    },
+    temp: {
+      models: () => ["*"],
+      unitOk: () => true,
+      points: () => TEMP_KEYS().map(k => { const nm = (root.TEMP_LIMIT_NAMES || {})[k] || [k, k]; return { code: k, en: nm[0], ru: nm[1] }; }),
+      ref: (model, code) => { const r = tempRow(code); return r ? { n: r.warn, c: r.alarm, tag: "" } : null; },
+      now: (model, code) => {
+        const changes = ((S.doc && S.doc.changes) || []).filter(x => kindOf(x) === "temp" && !x.void && x.point === code && (x.from || "") <= today());
+        if (!changes.length) return null;
+        changes.sort((x, y) => (x.from || "").localeCompare(y.from || "") || String(x.at || "").localeCompare(String(y.at || "")));
+        const x = changes[changes.length - 1];
+        return { n: x.warn, c: x.alarm, from: x.from }; },
+      dir: () => "",
+      reads(model, key) {
+        const out = [];
+        (HOST.recs() || []).forEach(r => {
+          if (!r || r.type !== "TEMP") return;
+          (r.items || []).forEach(it => {
+            const v = numOf(it.tempV != null && it.tempV !== "" ? it.tempV : it.tempC);
+            if (v == null) return;
+            const ctx = [it.key, it.comp, it.name, it.label, it.labelRu, it.compRu].filter(Boolean).join(" ");
+            if (root.tempBase && root.tempBase(ctx).key === key) out.push({ ctx, date: r.date || "", v });
+          });
+        });
+        return out;
+      },
+      grade(r) {
+        const sv = root.tempSeverity(r.v, root.tempLimit(r.ctx, r.date));
+        return { g: sv && root.GRADE ? root.GRADE.fromIso(sv) : null, odd: false };
+      }
+    }
+  };
+  const K = () => KINDS[S.kind] || KINDS.uc;
+  function unitsOf(model, kind) {
+    const k = KINDS[kind || S.kind] || KINDS.uc;
+    if ((kind || S.kind) === "temp") return [];
+    return (root.ASSETS || []).filter(a => k.unitOk(a, model));
   }
-  /* What a change would do: the grade of every reading of this point on this
-     model, scored now and scored with the change added, by the engine itself. */
+  function readings(model, point) { return K().reads(model, point); }
+  /* A change shaped for its kind. */
+  function changeOf(point, n, c, from, w) {
+    if (S.kind === "temp") return { kind: "temp", model: "*", point, warn: n, alarm: c, from };
+    const ch = { model: S.model, point, n, w: (w == null ? null : w), c, from };
+    if (S.kind !== "uc") ch.kind = S.kind;
+    return ch;
+  }
+  /* What a change would do: the grade of every reading of this point, scored
+     now and scored with the change added, by the engine itself. */
   function preview(model, point, n, c, from, w) {
     const rs = readings(model, point);
     if (!rs.length || !W()) return { n: 0 };
-    const grade = (r) => {
-      const ref = W().refFor(r.unit, r.m, point, r.pos, r.date);
-      if (!ref || ref.x) return { g: null, odd: false };
-      if (W().outOfRange(ref, r.mm)) return { g: null, odd: true };
-      const p = W().wear(ref, r.mm);
-      return { g: p == null ? null : (root.GRADE ? root.GRADE.fromWorn(p, W().warnPct ? W().warnPct(ref) : null) : null), odd: false };
-    };
+    const grade = r => K().grade(r, point);
     const base = S.doc || empty();
     const before = rs.map(grade);
     const trial = JSON.parse(JSON.stringify(base));
-    trial.changes.push({ id: "preview", model, point, n, c, w: (w == null ? null : w), from, at: "9999", by: "" });
-    W().setLimits(trial);
+    trial.changes.push(Object.assign(changeOf(point, n, c, from, w), { id: "preview", at: "9999", by: "" }));
+    engines(trial);
     let after;
-    try { after = rs.map(grade); } finally { W().setLimits(S.doc || null); }
+    try { after = rs.map(grade); } finally { engines(S.doc || null); }
     let chg = 0, worse = 0, better = 0, odd = 0, keep = 0;
     const units = {};
     rs.forEach((r, i) => {
-      units[r.unit] = 1;
+      if (r.unit) units[r.unit] = 1;
       if (from > r.date) keep++;
       if (after[i].odd) odd++;
       const a = before[i].g || 0, b = after[i].g || 0;
@@ -227,14 +379,20 @@
     return { rev: cur.rev, merged, logged };
   }
   function check(point, n, c, from, why, w) {
+    if (S.kind === "temp") {
+      if (!(isFinite(n) && isFinite(c))) return tr("e_tnum");
+      if (!(c > n)) return tr("e_tdir");
+      if (!from || !/^\d{4}-\d{2}-\d{2}$/.test(from)) return tr("e_date");
+      if (!why) return tr("e_why");
+      if (!who()) return tr("e_who");
+      return "";
+    }
     if (!(isFinite(n) && isFinite(c) && n > 0 && c > 0)) return tr("e_num");
     if (n === c) return tr("e_same");
     if (w != null && !(isFinite(w) && ((c < n && w < n && w > c) || (c > n && w > n && w < c)))) return tr("e_warn");
-    const m = W() && W().models[S.model], ref = m && m.pts[point];
-    if (ref && ref.d) {
-      if (ref.d === "shrink" && !(c < n)) return tr("e_dir", { dir: tr("down"), rel: tr("smaller") });
-      if (ref.d === "grow" && !(c > n)) return tr("e_dir", { dir: tr("up"), rel: tr("larger") });
-    }
+    const d = K().dir(S.model, point);
+    if (d === "shrink" && !(c < n)) return tr("e_dir", { dir: tr("down"), rel: tr("smaller") });
+    if (d === "grow" && !(c > n)) return tr("e_dir", { dir: tr("up"), rel: tr("larger") });
     if (!from || !/^\d{4}-\d{2}-\d{2}$/.test(from)) return tr("e_date");
     if (!why) return tr("e_why");
     if (!who()) return tr("e_who");
@@ -242,14 +400,15 @@
   }
   async function setLimit(point, n, c, from, why, w) {
     if (w === "" || (typeof w === "number" && !isFinite(w))) w = null;
+    if (S.kind === "temp") { w = null; from = today(); }
     const err = check(point, n, c, from, why, w);
     if (err) throw new Error(err);
     const id = "w" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
-    const ch = { id, model: S.model, point, n, w: (w == null ? null : w), c, from, at: new Date().toISOString(), by: who(), why };
+    const ch = Object.assign({ id }, changeOf(point, n, c, from, w), { at: new Date().toISOString(), by: who(), why });
     return save(d => {
       if (d.changes.some(x => x.id === id)) return false;
       d.changes.push(ch); return true;
-    }, S.model + " " + point + " " + n + (w != null ? "/" + w : "") + "/" + c + " from " + from);
+    }, (S.kind === "uc" ? "" : S.kind + " ") + (S.kind === "temp" ? "" : S.model + " ") + point + " " + n + (w != null ? "/" + w : "") + "/" + c + " from " + from);
   }
   async function voidChange(id) {
     if (!who()) throw new Error(tr("void_who"));
@@ -297,9 +456,10 @@
     document.head.appendChild(s);
   }
   function ptName(code) {
-    const p = W() && (W().points || []).find(x => x.code === code);
+    const p = K().points(S.model).find(x => x.code === code);
     return p ? (lang() === "ru" ? p.ru : p.en) : code;
   }
+  function modelLabel(k) { return K().label ? K().label(k) : k; }
   function statusLine() {
     if (S.state === "off") return [tr("st_off"), false];
     if (S.state === "loading" || S.state === "idle") return [tr("st_load"), false];
@@ -308,70 +468,83 @@
     const d = S.doc || {};
     return [tr("st_ready", { rev: d.rev || 0, by: d.by || "—", at: String(d.at || "").slice(0, 16).replace("T", " ") }), false];
   }
+  const span = (a, w, c) => esc(fmt(a)) + " → " + (w != null && w !== "" ? esc(fmt(w)) + " → " : "") + esc(fmt(c));
+  function tagOf(t) { return t ? `<span class="wl-tag warn">${esc(tr(t))}</span>` : ""; }
   function nowCell(model, code) {
-    const lim = W().limitFor(model, code, today());
-    const m = W().models[model], cat = m && m.pts[code];
-    if (lim) return `<td class="num">${esc(fmt(lim.n))} → ${lim.w != null ? esc(fmt(lim.w)) + " → " : ""}${esc(fmt(lim.c))}<span class="wl-tag off">${esc(tr("office"))} · ${
+    const lim = K().now(model, code), ref = K().ref(model, code);
+    if (lim) return `<td class="num">${span(lim.n, lim.w, lim.c)}<span class="wl-tag off">${esc(tr("office"))} · ${
       esc(lim.from && lim.from > "0001" ? tr("from", { d: lim.from }) : tr("all_hist"))}</span></td>`;
-    if (!cat) return `<td class="num">${tr("none")}</td>`;
-    const tag = cat.x === "borrowed" ? tr("borrowed") : cat.x === "rival" ? tr("rival") : "";
-    return `<td class="num">${esc(fmt(cat.n))} → ${esc(fmt(cat.c))}${tag ? `<span class="wl-tag warn">${esc(tag)}</span>` : ""}</td>`;
+    if (!ref) return `<td class="num">${tr("none")}${S.kind === "tb" ? tagOf("notgraded") : ""}</td>`;
+    return `<td class="num">${span(ref.n, null, ref.c)}${tagOf(ref.tag)}</td>`;
+  }
+  function histText(x) {
+    const amt = kindOf(x) === "temp" ? span(x.warn, null, x.alarm) + " °C" : span(x.n, x.w, x.c);
+    return `${esc(ptName(x.point))}: ${amt} · ${esc(x.from && x.from > "0001" ? tr("from", { d: x.from }) : tr("all_hist"))} · ${
+      esc(x.by || "")} · ${esc(String(x.at || "").slice(0, 10))} · ${esc(x.why || "")}${
+      x.void ? " · " + esc(tr("h_voided", { at: String(x.void.at || "").slice(0, 10), by: x.void.by || "" })) : ""}`;
   }
   function draw() {
     const el = S.el; if (!el || !W()) return;
     css();
     const [st, bad] = statusLine();
-    const models = Object.keys(W().models || {}).sort();
-    if (!S.model || !W().models[S.model]) S.model = "";
+    if (!KINDS[S.kind]) S.kind = "uc";
+    if (S.kind === "temp") S.model = "*";
+    const models = K().models();
+    if (!S.model || models.indexOf(S.model) < 0) S.model = "";
+    const kinds = ["uc", "get", "tb", "temp"].filter(k => k === "uc" || k === "temp" ? (k !== "temp" || root.TEMP_LIMITS) : KINDS[k].models().length);
+    const kopts = kinds.map(k => `<option value="${k}"${k === S.kind ? " selected" : ""}>${esc(tr("k_" + k))}</option>`).join("");
+    const mlabel = S.kind === "get" ? tr("tool") : S.kind === "tb" ? tr("tray") : tr("model");
     const opts = `<option value="">${esc(tr("pick"))}</option>` + models.map(k =>
-      `<option value="${esc(k)}"${k === S.model ? " selected" : ""}>${esc(k)} (${unitsOf(k).length})</option>`).join("");
+      `<option value="${esc(k)}"${k === S.model ? " selected" : ""}>${esc(modelLabel(k))} (${unitsOf(k).length})</option>`).join("");
+    const tmp = S.kind === "temp";
     let body = "";
     if (S.model) {
-      const m = W().models[S.model];
-      const codes = (W().points || []).map(p => p.code);
+      const pts = K().points(S.model);
+      const thP = tmp ? tr("th_row") : S.kind === "tb" ? tr("th_zone") : tr("th_point");
+      const thR = tmp ? tr("th_tref") : tr("th_ref"), thN = tmp ? tr("th_tnow") : tr("th_now");
       body += `<div class="tblwrap"><table class="grid wltbl"><colgroup><col style="width:28%"><col style="width:24%"><col><col style="width:120px"></colgroup>
-        <thead><tr><th>${esc(tr("th_point"))}</th><th class="r">${esc(tr("th_ref"))}</th><th class="r">${esc(tr("th_now"))}</th><th></th></tr></thead><tbody>` +
-        codes.map(code => {
-          const cat = m.pts[code];
-          return `<tr data-wlpt="${esc(code)}"><td title="${esc(code)}">${esc(ptName(code))}</td>
-            <td class="num">${cat ? esc(fmt(cat.n)) + " → " + esc(fmt(cat.c)) : tr("none")}</td>
-            ${nowCell(S.model, code)}
-            <td><button class="btn ghost sm" type="button" data-wledit="${esc(code)}"${S.state === "error" || S.state === "off" ? " disabled" : ""}>${esc(tr("edit"))}</button></td></tr>`;
+        <thead><tr><th>${esc(thP)}</th><th class="r">${esc(thR)}</th><th class="r">${esc(thN)}</th><th></th></tr></thead><tbody>` +
+        pts.map(p => {
+          const ref = K().ref(S.model, p.code);
+          return `<tr data-wlpt="${esc(p.code)}"><td title="${esc(p.code)}">${esc(lang() === "ru" ? p.ru : p.en)}</td>
+            <td class="num">${ref ? span(ref.n, null, ref.c) : tr("none")}</td>
+            ${nowCell(S.model, p.code)}
+            <td><button class="btn ghost sm" type="button" data-wledit="${esc(p.code)}"${S.state === "error" || S.state === "off" ? " disabled" : ""}>${esc(tr("edit"))}</button></td></tr>`;
         }).join("") + `</tbody></table></div>`;
       if (S.edit) body += formHtml();
-      const hist = ((S.doc && S.doc.changes) || []).filter(x => x.model === S.model).slice().reverse();
-      body += `<div class="secthd" style="margin-top:12px"><h3 style="font-size:14px;margin:0">${esc(tr("hist"))}</h3></div>`;
+      const hist = ((S.doc && S.doc.changes) || []).filter(x => kindOf(x) === S.kind && (tmp || x.model === S.model)).slice().reverse();
+      body += `<div class="secthd" style="margin-top:12px"><h3 style="font-size:14px;margin:0">${esc(tr(tmp ? "hist_t" : "hist"))}</h3></div>`;
       body += hist.length ? `<ul class="wl-hist">` + hist.map(x => `<li class="${x.void ? "void" : ""}" data-wlid="${esc(x.id)}">
-          <span class="sp" title="${esc(x.why || "")}">${esc(ptName(x.point))}: ${esc(fmt(x.n))} → ${x.w != null ? esc(fmt(x.w)) + " → " : ""}${esc(fmt(x.c))} · ${
-            esc(x.from && x.from > "0001" ? tr("from", { d: x.from }) : tr("all_hist"))} · ${esc(x.by || "")} · ${esc(String(x.at || "").slice(0, 10))} · ${esc(x.why || "")}${
-            x.void ? " · " + esc(tr("h_voided", { at: String(x.void.at || "").slice(0, 10), by: x.void.by || "" })) : ""}</span>
+          <span class="sp" title="${esc(x.why || "")}">${histText(x)}</span>
           ${x.void ? "" : `<button class="btn ghost sm" type="button" data-wlvoid="${esc(x.id)}">${esc(tr("h_void"))}</button>`}</li>`).join("") + `</ul>`
-        : `<div class="sub">${esc(tr("none_hist"))}</div>`;
+        : `<div class="sub">${esc(tr(tmp ? "none_hist_t" : "none_hist"))}</div>`;
     }
     el.innerHTML = `<div class="secthd"><h2>${esc(tr("title"))}</h2></div>
       <div class="sub">${esc(tr("sub"))}</div>
-      <div class="wl-top"><label class="wl-f">${esc(tr("model"))}<select id="wlModel">${opts}</select></label>
+      <div class="wl-top"><label class="wl-f">${esc(tr("kind"))}<select id="wlKind">${kopts}</select></label>
+        ${tmp ? "" : `<label class="wl-f">${esc(mlabel)}<select id="wlModel">${opts}</select></label>`}
         <span class="wl-st${bad ? " bad" : ""}" id="wlStatus">${esc(st)}</span></div>
       ${S.msg && !S.edit ? `<div class="wl-msg ${S.msgBad ? "bad" : "ok"}" id="wlMsg">${esc(S.msg)}</div>` : ""}
       ${body}`;
     wire();
   }
   function formHtml() {
-    const code = S.edit, m = W().models[S.model], cat = m && m.pts[code];
-    const lim = W().limitFor(S.model, code, today());
-    const n0 = lim ? lim.n : (cat ? cat.n : ""), c0 = lim ? lim.c : (cat ? cat.c : ""), w0 = lim && lim.w != null ? lim.w : "";
+    const code = S.edit, ref = K().ref(S.model, code), lim = K().now(S.model, code);
+    const n0 = lim ? lim.n : (ref ? ref.n : ""), c0 = lim ? lim.c : (ref ? ref.c : ""), w0 = lim && lim.w != null ? lim.w : "";
+    const tmp = S.kind === "temp";
+    const title = tmp ? ptName(code) : tr("f_title", { pt: ptName(code), model: modelLabel(S.model) });
     return `<div class="wl-form" id="wlForm">
-      <b>${esc(tr("f_title", { pt: ptName(code), model: S.model }))}</b>
+      <b>${esc(title)}</b>
       <div class="wl-row">
-        <label class="wl-f">${esc(tr("f_new"))}<input type="number" step="any" id="wlN" value="${esc(n0)}"></label>
-        <label class="wl-f">${esc(tr("f_warn"))}<input type="number" step="any" id="wlW" value="${esc(w0)}"></label>
-        <label class="wl-f">${esc(tr("f_lim"))}<input type="number" step="any" id="wlC" value="${esc(c0)}"></label>
+        <label class="wl-f">${esc(tr(tmp ? "f_twarn" : "f_new"))}<input type="number" step="any" id="wlN" value="${esc(n0)}"></label>
+        ${tmp ? "" : `<label class="wl-f">${esc(tr("f_warn"))}<input type="number" step="any" id="wlW" value="${esc(w0)}"></label>`}
+        <label class="wl-f">${esc(tr(tmp ? "f_talarm" : "f_lim"))}<input type="number" step="any" id="wlC" value="${esc(c0)}"></label>
       </div>
-      <div class="sub" style="margin:0">${esc(tr("f_warn_hint"))}</div>
-      <div class="wl-radio" role="radiogroup" aria-label="${esc(tr("f_apply"))}"><span>${esc(tr("f_apply"))}:</span>
+      <div class="sub" style="margin:0">${esc(tr(tmp ? "f_temp_hint" : "f_warn_hint"))}</div>
+      ${tmp ? "" : `<div class="wl-radio" role="radiogroup" aria-label="${esc(tr("f_apply"))}"><span>${esc(tr("f_apply"))}:</span>
         <label><input type="radio" name="wlApply" id="wlFromOn" value="from" checked> ${esc(tr("f_from"))}</label>
         <input type="date" id="wlFrom" value="${esc(today())}" aria-label="${esc(tr("f_from"))}">
-        <label><input type="radio" name="wlApply" id="wlAllOn" value="all"> ${esc(tr("f_all"))}</label></div>
+        <label><input type="radio" name="wlApply" id="wlAllOn" value="all"> ${esc(tr("f_all"))}</label></div>`}
       <div class="wl-row">
         <label class="wl-f" style="flex:1;min-width:260px">${esc(tr("f_why"))}<input type="text" id="wlWhy" placeholder="${esc(tr("f_why_ph"))}"></label>
         <label class="wl-f">${esc(tr("f_who"))}<input type="text" id="wlWho" value="${esc(who())}"></label>
@@ -384,6 +557,8 @@
   }
   function formVals() {
     const $ = id => S.el.querySelector("#" + id);
+    if (S.kind === "temp")
+      return { n: Number($("wlN").value), c: Number($("wlC").value), w: null, from: today(), why: ($("wlWhy").value || "").trim() };
     const all = $("wlAllOn") && $("wlAllOn").checked;
     const wv = ($("wlW").value || "").trim();
     return { n: Number($("wlN").value), c: Number($("wlC").value), w: wv === "" ? null : Number(wv),
@@ -392,6 +567,12 @@
   function drawPreview() {
     const pv = S.el && S.el.querySelector("#wlPv"); if (!pv) return;
     const v = formVals();
+    if (S.kind === "temp") {
+      if (!(isFinite(v.n) && isFinite(v.c) && v.c > v.n)) { pv.textContent = ""; return; }
+      const r = preview(S.model, S.edit, v.n, v.c, v.from, null);
+      pv.textContent = r.n ? tr("pv_t", { n: r.n, chg: r.chg, worse: r.worse, better: r.better }) : tr("pv_none");
+      return;
+    }
     if (!(isFinite(v.n) && isFinite(v.c) && v.n > 0 && v.c > 0 && v.n !== v.c) || !v.from) { pv.textContent = ""; return; }
     if (check(S.edit, v.n, v.c, v.from, "x", v.w) === tr("e_warn")) { pv.textContent = tr("e_warn"); return; }
     const r = preview(S.model, S.edit, v.n, v.c, v.from, v.w);
@@ -401,6 +582,8 @@
   }
   function wire() {
     const el = S.el, q = s => el.querySelector(s);
+    const ks = q("#wlKind");
+    if (ks) ks.onchange = () => { S.kind = ks.value; S.model = ""; S.edit = ""; S.msg = ""; draw(); };
     const sel = q("#wlModel");
     if (sel) sel.onchange = () => { S.model = sel.value; S.edit = ""; S.msg = ""; draw(); };
     el.querySelectorAll("[data-wledit]").forEach(b => b.onclick = () => {
@@ -450,8 +633,8 @@
     init(h) { HOST = Object.assign(HOST, h || {}); },
     mount(el) { S.el = el; draw(); },
     load, preview, setLimit, voidChange, redraw: draw,
-    state: () => ({ state: S.state, rev: S.doc ? S.doc.rev : 0, model: S.model, edit: S.edit }),
-    select(model) { S.model = model; S.edit = ""; S.msg = ""; draw(); },
+    state: () => ({ state: S.state, rev: S.doc ? S.doc.rev : 0, kind: S.kind, model: S.model, edit: S.edit }),
+    select(model, kind) { if (kind) S.kind = kind; S.model = kind === "temp" ? "*" : model; S.edit = ""; S.msg = ""; draw(); },
     words: WORDS
   };
 })(window);

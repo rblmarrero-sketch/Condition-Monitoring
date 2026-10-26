@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=546">
+<link rel="manifest" href="manifest.webmanifest?v=547">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=546">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=546">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=546">
+<link rel="apple-touch-icon" href="icon-192.png?v=547">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=547">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=547">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2863,16 +2863,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=546"></script>
-<script src="upload-defaults.js?v=546"></script>
-<script src="hme.js?v=546"></script>
-<script src="mp-fc.js?v=546"></script>
-<script src="rtw.js?v=546"></script>
-<script src="hme-cascade.js?v=546"></script>
-<script src="assets.js?v=546"></script>
-<script src="temp-limits.js?v=546"></script>
-<script src="normalize.js?v=546"></script>
-<script src="terms.js?v=546"></script>
+<script src="native.js?v=547"></script>
+<script src="upload-defaults.js?v=547"></script>
+<script src="hme.js?v=547"></script>
+<script src="mp-fc.js?v=547"></script>
+<script src="rtw.js?v=547"></script>
+<script src="hme-cascade.js?v=547"></script>
+<script src="assets.js?v=547"></script>
+<script src="temp-limits.js?v=547"></script>
+<script src="normalize.js?v=547"></script>
+<script src="terms.js?v=547"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2891,25 +2891,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=546"></script>
-<script src="edits.js?v=546"></script>
-<script src="due.js?v=546"></script>
-<script src="wear.js?v=546"></script>
-<script src="wear-figs.js?v=546"></script>
-<script src="wear-map.js?v=546"></script>
-<script src="machine-photos.js?v=546"></script>
-<script src="machine-fig.js?v=546"></script>
-<script src="get.js?v=546"></script>
-<script src="points.js?v=546"></script>
-<script src="uc-points.js?v=546"></script>
-<script src="inspect-guide.js?v=546"></script>
-<script src="get-figs.js?v=546"></script>
-<script src="body-points.js?v=546"></script>
-<script src="body-map.js?v=546"></script>
-<script src="lube.js?v=546"></script>
-<script src="lube-overrides.js?v=546"></script>
-<script src="lube2027.js?v=546"></script>
-<script src="report-core.js?v=546"></script>
+<script src="grade.js?v=547"></script>
+<script src="edits.js?v=547"></script>
+<script src="due.js?v=547"></script>
+<script src="wear.js?v=547"></script>
+<script src="wear-figs.js?v=547"></script>
+<script src="wear-map.js?v=547"></script>
+<script src="machine-photos.js?v=547"></script>
+<script src="machine-fig.js?v=547"></script>
+<script src="get.js?v=547"></script>
+<script src="points.js?v=547"></script>
+<script src="uc-points.js?v=547"></script>
+<script src="inspect-guide.js?v=547"></script>
+<script src="get-figs.js?v=547"></script>
+<script src="body-points.js?v=547"></script>
+<script src="body-map.js?v=547"></script>
+<script src="lube.js?v=547"></script>
+<script src="lube-overrides.js?v=547"></script>
+<script src="lube2027.js?v=547"></script>
+<script src="report-core.js?v=547"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -4697,7 +4697,13 @@ async function lubeMasterPull(force){
 const WEAR_LIM_LS="cm_wear_limits", WEAR_LIM_DOC="_meta/wear/limits.json";
 let wearLimAt=0;
 function wearLimApply(doc){
+  /* One document, four readers: the undercarriage, the GET tools, the tray
+     zones and the temperature rows each take the changes of their own kind. */
   try{ if(window.WEAR && WEAR.setLimits) WEAR.setLimits(doc||null); }
+  catch(e){ bad("wear-limits-apply", e); }
+  try{ if(window.GET && GET.setLimits) GET.setLimits(doc||null);
+       if(window.BODY && BODY.setLimits) BODY.setLimits(doc||null);
+       if(window.tempSetLimits) tempSetLimits(doc||null); }
   catch(e){ bad("wear-limits-apply", e); }
 }
 (function(){ let d=null; try{ d=JSON.parse(localStorage.getItem(WEAR_LIM_LS)||"null"); }catch(e){}
@@ -6803,9 +6809,9 @@ async function loadBaselines(){
 function wearRefOf(rec,k){
   const ty=rec.type||"";
   if(ty==="TB"){ const st=bodyStatus(rec.equip);
-    return st.ok ? BODY.limitFor(st.model,k) : null; }
+    return st.ok ? BODY.limitFor(st.model,k,rec.date) : null; }
   const a=ASSET_BY[rec.equip]||{}, [pt,pos]=ucSplit(k);
-  if(ty==="GET") return window.GET ? GET.refFor(rec.equip, a.cat||a.cls||"", a.m||"", pt) : null;
+  if(ty==="GET") return window.GET ? GET.refFor(rec.equip, a.cat||a.cls||"", a.m||"", pt, rec.date) : null;
   return (window.WEAR && a.m) ? WEAR.refFor(rec.equip, a.m, pt, pos, rec.date) : null;
 }
 function wearOut(rec,k,p){
@@ -6814,15 +6820,17 @@ function wearOut(rec,k,p){
   if(p.mm==null && !p.reason) return null;
   if(ty==="TB"){
     const st=bodyStatus(rec.equip);
-    const L=st.ok?BODY.limitFor(st.model,k):null;
-    const pct=(st.ok && p.mm!=null)?BODY.wear(st.model,k,Number(p.mm)):null;
+    const L=st.ok?BODY.limitFor(st.model,k,rec.date):null;
+    const pct=(st.ok && p.mm!=null)?BODY.wear(st.model,k,Number(p.mm),rec.date):null;
     const pt=st.ok?BODY.get(st.model,k):null;
+    const wp=(L && BODY.warnPct)?BODY.warnPct(L):null;
     return { mm:(p.mm==null?"":Number(p.mm)), stood:p.stood?1:0, reason:p.reason||"",
              reasonLabel:p.reason?ucReasonLabel(p.reason,"en",ty):"",
              reasonRu:p.reason?ucReasonLabel(p.reason,"ru",ty):"",
              newMM:L?L.n:"", condemnMM:L?L.c:"",
              wearPct:(pct==null?"":Math.round(pct)),
-             band:(pct==null?"":BODY.band(st.model,k,Number(p.mm))),
+             warnPct:(wp==null?"":Math.round(wp)),
+             band:(pct==null?"":BODY.band(st.model,k,Number(p.mm),rec.date)),
              /* Which tray sheet the number was taken against, and its zone.
                 A millimetre with no zone is not a survey — it is a number. */
              refSrc:st.ok?("tray:"+st.model+(st.sure?"":"?")):"",
@@ -14536,7 +14544,7 @@ async function rptRecords(onlyId){
          count it rather than quietly leave it out. */
       let w=wearOut(rec,k,p);
       if(!w && meta.wear && meta.body){
-        const st2=bodyStatus(rec.equip), L=st2.ok?BODY.limitFor(st2.model,k):null;
+        const st2=bodyStatus(rec.equip), L=st2.ok?BODY.limitFor(st2.model,k,rec.date):null;
         const pt2=st2.ok?BODY.get(st2.model,k):null;
         w={ mm:"", stood:0, reason:"", reasonLabel:"",
             newMM:L?L.n:"", condemnMM:L?L.c:"", wearPct:"", band:"",
@@ -14820,10 +14828,11 @@ function teamRefFor(rec,key){
   const a=ASSET_BY[rec.equip]||{};
   if(rec.type==="TB" && window.BODY){
     const st=bodyStatus(rec.equip); if(!st.ok) return null;
-    const L=BODY.limitFor(st.model,key); return L?{n:L.n,c:L.c,d:"shrink",src:"tray:"+st.model}:null;
+    const L=BODY.limitFor(st.model,key,rec.date);
+    return L?{n:L.n,c:L.c,w:(L.w==null?null:L.w),d:"shrink",src:L.src==="limit"?"limit":"tray:"+st.model}:null;
   }
   if(rec.type==="GET" && window.GET)
-    return GET.refFor(rec.equip, a.cat||a.cls||"", a.m||"", key);
+    return GET.refFor(rec.equip, a.cat||a.cls||"", a.m||"", key, rec.date);
   if(window.WEAR && a.m){
     const [pt,pos]=ucSplit(key);
     const r=WEAR.refFor(rec.equip, a.m, pt, pos, rec.date);
@@ -15201,7 +15210,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="546";
+const BUILD="547";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

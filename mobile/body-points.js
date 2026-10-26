@@ -92,9 +92,34 @@
     TR60:  { FLR1:LINER, FLR2:LINER, FLR3:LINER, TAIL:LINER }
   };
 
-  function limFor(id, k){
-    var tab = LIM[id]; if (!tab) return null;
+  /* The office's limits (dashboard/wear-limits.js, kind "tb"): per model and
+     ZONE, from a date. The latest change in force on the reading's date beats
+     the table above, so a side skin the table leaves ungraded is graded once
+     the office states a figure for it. No date = the latest change. */
+  var OFFICE = [];
+  function setLimits(doc) {
+    OFFICE = ((doc && doc.changes) || []).filter(function (x) {
+      return x && !x.void && x.kind === "tb" && x.model && x.point &&
+        isFinite(Number(x.n)) && isFinite(Number(x.c)) && Number(x.n) > Number(x.c);
+    });
+  }
+  function officeFor(id, z, at) {
+    var d = at || "9999-12-31", best = null;
+    for (var i = 0; i < OFFICE.length; i++) {
+      var l = OFFICE[i], from = l.from || "0000-01-01";
+      if (l.model !== id || l.point !== z || from > d) continue;
+      if (!best || from > (best.from || "0000-01-01") ||
+          (from === (best.from || "0000-01-01") && String(l.at || "") > String(best.at || ""))) best = l;
+    }
+    if (!best) return null;
+    var w = (best.w == null || best.w === "" || !isFinite(Number(best.w))) ? null : Number(best.w);
+    return { n: Number(best.n), c: Number(best.c), w: w, src: "limit", from: best.from, by: best.by, why: best.why, lim: best };
+  }
+  function limFor(id, k, at){
     var p = (m(id) || {points:[]}).points.filter(function (q) { return q.k === k; })[0];
+    var off = p ? officeFor(id, p.z, at) : null;
+    if (off) return off;
+    var tab = LIM[id]; if (!tab) return null;
     var hit = tab[k] || (p && tab[p.z]) || tab["*"] || null;
     return (hit && hit.n != null && hit.c != null) ? hit : null;
   }
@@ -128,29 +153,39 @@
        What differs is the direction: a body liner gets THINNER, so `new` is the
        larger number here and the subtraction runs the other way.
        null means no limit is loaded, which is not the same as 0%. */
-    wear: function (id, k, mm) {
-      var L = limFor(id, k); if (!L || mm == null || isNaN(mm)) return null;
+    wear: function (id, k, mm, at) {
+      var L = limFor(id, k, at); if (!L || mm == null || isNaN(mm)) return null;
       var span = L.n - L.c; if (!span) return null;
       return ((L.n - Number(mm)) / span) * 100;
     },
-    band: function (id, k, mm) {
-      var pct = this.wear(id, k, mm);
-      return pct == null ? null : pct >= 100 ? "act" : pct >= 80 ? "watch" : "done";
+    band: function (id, k, mm, at) {
+      var pct = this.wear(id, k, mm, at);
+      if (pct == null) return null;
+      var w = this.warnPct(limFor(id, k, at));
+      return pct >= 100 ? "act" : pct >= (w == null ? 80 : w) ? "watch" : "done";
     },
+    /* The office warning as percent worn (GRADE.fromWorn), null when none. */
+    warnPct: function (L) {
+      if (!L || L.w == null || L.n == null || L.c == null) return null;
+      var span = L.n - L.c; if (!span) return null;
+      var k = ((L.n - L.w) / span) * 100;
+      return (k > 0 && k < 100) ? k : null;
+    },
+    setLimits: setLimits,
     /* True when this model has limits at all, which is what the round asks
        before it offers a verdict rather than a reading. */
     hasLimits: function (id) {
       var tab = LIM[id];
-      return !!tab && Object.keys(tab).length > 0;
+      return (!!tab && Object.keys(tab).length > 0) || OFFICE.some(function (l) { return l.model === id; });
     },
     /* Whether a whole zone can be graded. The floor can and the side skins
        cannot, so "does this model have limits" is no longer the question the
        screen needs answered — it needs to know WHICH parts are graded, or an
        inspector standing at a side skin gets a reading with no verdict and
        nothing on screen saying why. */
-    zoneHasLimit: function (id, z) {
+    zoneHasLimit: function (id, z, at) {
       var pts = this.inZone(id, z);
-      return pts.length > 0 && pts.every(function (p) { return !!limFor(id, p.k); });
+      return pts.length > 0 && pts.every(function (p) { return !!limFor(id, p.k, at); });
     },
     ungradedZones: function (id) {
       var self = this;
