@@ -4,7 +4,9 @@
 Source of truth is docs/wear-limits.json, extracted from the two inspection
 workbooks (EX and DZ). That file records, per model and per point, the new and
 condemn figures the workbook itself uses, how many tabs agree, and any rival
-values found. Nothing here is invented: every number traces to a cell.
+values found. Nothing here is invented: every number traces to a cell, or —
+where a row carries `source` — to the manufacturer's page that corrected the
+workbook (the ZX 1200 link height, 181/171, was the ZX 280's 116/109).
 
 Two things this file deliberately does NOT do.
 
@@ -119,6 +121,8 @@ def build():
         for code, r in m['pts'].items():
             new, con = r['new'], r['condemn']
             row = {'n': new, 'c': con, 'd': direction(new, con)}
+            if 'source' in r:                        # a figure taken from a manual, not the workbook
+                row['doc'] = r['source']
             why = None
             if 'rival' in r:
                 why = 'rival'
@@ -228,12 +232,32 @@ window.WEAR = '''
              rivals: cat.rivals || null };
   };
 
-  /* Percent of the way from new to condemn. Null whenever it would be a lie. */
+  /* A reading on the wrong side of "new" — a part that wears down measured
+     thicker than new, or one that wears up measured smaller. It cannot be
+     wear: it is the wrong point, a typo, or a reference that is wrong for this
+     machine (EX002's link height, 180 mm against a "new" of 116, printed
+     -914 % and counted as inside limits). The direction comes from the figures
+     themselves when the reference does not say, so a tray plate is judged by
+     the same rule. */
+  W.outOfRange = function (ref, mm) {
+    if (!ref || mm == null || ref.n == null || ref.c == null || !isFinite(Number(mm))) return null;
+    var n = Number(ref.n), c = Number(ref.c), m = Number(mm);
+    if (!isFinite(n) || !isFinite(c) || n === c) return null;
+    var d = ref.d || (c < n ? 'shrink' : 'grow');
+    var tol = Math.max(1, Math.abs(n) * 0.02);
+    if (d === 'shrink' && m > n + tol) return 'over-new';
+    if (d === 'grow' && m < n - tol) return 'under-new';
+    return null;
+  };
+
+  /* Percent of the way from new to condemn. Null whenever it would be a lie —
+     including a reading outside the reference, which has no honest percentage. */
   W.wear = function (ref, mm) {
     if (!ref || mm == null || ref.x) return null;
     if (ref.n == null || ref.c == null) return null;
     var span = ref.c - ref.n;
     if (!span) return null;
+    if (W.outOfRange(ref, mm)) return null;
     return ((mm - ref.n) / span) * 100;
   };
 
@@ -241,9 +265,8 @@ window.WEAR = '''
      Never a block: the SD90s prove the reference can be the thing that is wrong. */
   W.implausible = function (ref, mm) {
     if (!ref || mm == null || ref.n == null || ref.c == null) return null;
-    var tol = Math.max(1, Math.abs(ref.n) * 0.02);
-    if (ref.d === 'shrink' && mm > ref.n + tol) return 'over-new';
-    if (ref.d === 'grow' && mm < ref.n - tol) return 'under-new';
+    var out = W.outOfRange(ref, mm);
+    if (out) return out;
     var p = W.wear(ref, mm);
     if (p != null && p > 130) return 'past-condemn';
     return null;

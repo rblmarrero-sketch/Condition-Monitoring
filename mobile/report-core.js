@@ -87,6 +87,7 @@
 #rptRoot .h1 .alti{font-size:.5em;font-weight:600;opacity:.82;margin-left:3px;}
 #rptRoot .lede{font-size:15px;line-height:1.45;font-weight:500;color:#12161a;}
 #rptRoot .muted{color:#5b6670;}
+#rptRoot .oddref{color:#8a4b00;font-weight:700;font-size:9px;line-height:1.1;}
 #rptRoot .alti{font-weight:500;color:#5b6670;}
 #rptRoot .rule{height:2.5px;background:#16242c;}
 #rptRoot .hair{height:1px;background:#dfe4e9;}
@@ -1086,6 +1087,8 @@
       verdict_act:"{n} of {of} points need action. Do not run this machine on the next shift without addressing them.",
       verdict_part:"{m} of {of} points measured and all inside limits. {n} could not be reached — see below.",
       unread_n:"{n} of {of} points could not be measured — see the table below.",
+      odd_n:"{n} readings are outside the reference for this model — check the reading and the standard.",
+      odd_short:"out of ref.",
       unread_s:"{n} not measured", flagged:"{n} points flagged",
       more_n:"+{n} more — see the technical appendix for the full unit report.",
       uc_over:"{n} points at or past condemn", uc_watch:"{n} more above 80%",
@@ -1286,6 +1289,8 @@
       verdict_act:"{n} из {of} точек требуют действий. Не выпускайте машину в смену без их устранения.",
       verdict_part:"Измерено {m} из {of} точек, все в пределах. К {n} не удалось подобраться — см. ниже.",
       unread_n:"{n} из {of} точек измерить не удалось — см. таблицу ниже.",
+      odd_n:"{n} замеров вне эталона для этой модели — проверьте замер и норматив.",
+      odd_short:"вне эталона",
       unread_s:"{n} не измерено", flagged:"{n} точек отмечено",
       more_n:"Ещё {n} — полный отчёт по машине см. в техническом приложении.",
       uc_over:"{n} точек на пределе или за ним", uc_watch:"ещё {n} выше 80%",
@@ -1892,7 +1897,8 @@
      eleven, and plan the work. */
   function isAct(it){ var n=gnum(it.grade); return n===5||(!n&&it.sev==="CRI")||(it.w&&it.w.band==="act"); }
   function isWatch(it){ var n=gnum(it.grade); return (n>=2&&n<=4)||(!n&&(it.sev==="DEG"||it.sev==="INC"))
-                            ||(it.w&&it.w.band==="watch"); }
+                            ||(it.w&&(it.w.band==="watch"||it.w.odd)); }
+  function oddN(rec){ return (rec.items||[]).filter(function(it){ return it.w&&it.w.odd; }).length; }
   function flagged(rec){ return (rec.items||[]).filter(function(it){
     return isAct(it)||isWatch(it); }); }
   function verdict(rec){
@@ -2223,7 +2229,7 @@
         + '</td>'
         + '<td class="r n">' + (w.mm != null ? '<b>' + esc(w.mm) + '</b>'
             : '<span class="muted" style="font-size:9px">' + reasonText(T, w) + '</span>') + '</td>'
-        + (anyRef ? '<td class="r n">' + (w.pct != null ? esc(w.pct) + "%" : "") + '</td>'
+        + (anyRef ? '<td class="r n">' + (w.pct != null ? esc(w.pct) + "%" : w.odd ? '<span class="oddref">' + esc(T("odd_short")) + '</span>' : "") + '</td>'
             + '<td>' + (w.pct != null ? wearBar(w.pct) : "") + '</td>' : ""); };
     var col = function (list) {
       var hd = '<th>' + T.L("c_item") + '</th>'
@@ -2245,7 +2251,7 @@
       var w = it.w;
       return '<td class="r n">' + (w.mm != null ? '<b>' + esc(w.mm) + '</b>'
           : '<span class="muted" style="font-size:9px">' + reasonText(T, w) + '</span>') + '</td>'
-        + (anyRef ? '<td class="r n">' + (w.pct != null ? esc(w.pct) + "%" : "") + '</td>'
+        + (anyRef ? '<td class="r n">' + (w.pct != null ? esc(w.pct) + "%" : w.odd ? '<span class="oddref">' + esc(T("odd_short")) + '</span>' : "") + '</td>'
             + '<td>' + (w.pct != null ? wearBar(w.pct) : "") + '</td>' : ""); };
     /* Wider than the running grid's columns, because there is width to spend:
        the part is named once instead of twice, and the reading a reliability
@@ -3783,6 +3789,7 @@
         ? T.S("verdict_part", { m: rec.items.length - unread, of: rec.items.length, n: unread })
         : T.S("verdict_" + vc, { n: flagged(rec).length, of: rec.items.length })
           + (unread ? T.S("unread_n", { n: unread, of: rec.items.length }) : "");
+      if (oddN(rec)) verd += " " + T.S("odd_n", { n: oddN(rec) });
       var maps = CMR.mapBlock(T, rec.mapHTML, 8, rec.zones, rec.mapKey);
       /* Where the metadata strip and the rating bar go on a wear round depends
          on whether it has a measurement-register page. A real undercarriage or
@@ -5329,10 +5336,25 @@
      `pct != null`, so one change here makes the column, the bar, the banner and
      the history table all do the right thing. The MILLIMETRE still prints, with
      the reference beside it, so nothing is hidden from whoever reads the row. */
+  /* A reading on the wrong side of "new" (wear.js's outOfRange, the one rule)
+     is not wear and not "inside limits" either: EX002's link height, 180 mm
+     against a "new" of 116, arrived with no percentage and the sheet called
+     the round normal. It is marked `odd`, so the verdict counts it as a point
+     to look at and the register names it. A host's own percentage below zero
+     is the same fact, reached without wear.js. */
+  function oddOf(w) {
+    if (!w || w.mm == null) return false;
+    if (w.odd) return true;
+    if (w.pct != null && Number(w.pct) < 0) return true;
+    var WR = (typeof window !== "undefined") && window.WEAR;
+    if (!WR || !WR.outOfRange || w.newMM == null || w.condemnMM == null
+        || w.newMM === "" || w.condemnMM === "" || /^x:/.test(String(w.refSrc || ""))) return false;
+    return !!WR.outOfRange({ n: Number(w.newMM), c: Number(w.condemnMM) }, Number(w.mm));
+  }
   function sane(recs) {
     return recs.map(function (rec) {
       var hasNeg = (rec.items || []).some(function (it) {
-            return it.w && it.w.pct != null && Number(it.w.pct) < 0; });
+            return it.w && ((it.w.pct != null && Number(it.w.pct) < 0) || (oddOf(it.w) && !it.w.odd)); });
       /* THE MACHINE'S PHOTOGRAPHS ARE NOT A POINT. The phone carries them on a
          pseudo-position so they travel every path a point's do; here they
          come off the point list — which is counted, measured and verdicted —
@@ -5345,10 +5367,12 @@
       var copy = {}, k;
       for (k in rec) copy[k] = rec[k];
       copy.items = rec.items.filter(function (it) { return !(it && it.general); }).map(function (it) {
-        if (!it.w || it.w.pct == null || Number(it.w.pct) >= 0) return it;
+        var odd = it.w && oddOf(it.w);
+        if (!it.w || ((it.w.pct == null || Number(it.w.pct) >= 0) && (!odd || it.w.odd))) return it;
         var w = {}, c = {}, x;
         for (x in it.w) w[x] = it.w[x];
         w.pct = null;
+        if (odd) w.odd = 1;
         for (x in it) c[x] = it[x];
         c.w = w;
         return c;
@@ -5804,6 +5828,7 @@
               ? T.S("verdict_part",{m:rec.items.length-unread,of:rec.items.length,n:unread})
               : T.S("verdict_"+vc,{n:vn,of:rec.items.length})
                 + (unread?T.S("unread_n",{n:unread,of:rec.items.length}):""))
+          + (oddN(rec)?" "+T.S("odd_n",{n:oddN(rec)}):"")
           + '</div>';
 
       if(notable.length) m += notableTable(ctx,T,notable);
