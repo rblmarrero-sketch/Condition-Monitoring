@@ -293,7 +293,7 @@
      since 194. Same category, for the same reason. */
   var DEFAULTED = ['detect', 'detection', 'detectionLabel',
                    'refSrc', 'zone', 'zoneLabel',
-                   'newMM', 'condemnMM', 'wearPct', 'band',
+                   'newMM', 'condemnMM', 'wearPct', 'warnPct', 'band',
                    'mapSev'];
 
   var METADATA = [

@@ -1984,7 +1984,7 @@
            exact round type the page's other two tables were flagging red. */
         var g=gnum(it.grade);
         if(!g && it.w && it.w.pct!=null && isFinite(Number(it.w.pct)) && GR)
-          g=GR.fromWorn(Number(it.w.pct));
+          g=GR.fromWorn(Number(it.w.pct), it.w.warnPct);
         if(g>t.worst) t.worst=g;
         /* A wear point's own "defect" is what it IS, not a free-text note —
            the detail table two pages later prints an empty DEFECT column for
@@ -2504,7 +2504,7 @@
          DECISION cell read "No condition rating recorded" beside a table that
          had, in fact, found one. */
       if (!n && it.w && it.w.pct != null && isFinite(Number(it.w.pct)) && GR)
-        n = GR.fromWorn(Number(it.w.pct));
+        n = GR.fromWorn(Number(it.w.pct), it.w.warnPct);
       if (n > worst) worst = n; });
     return worst || null;
   }

@@ -4801,6 +4801,20 @@ redeploy (F6) before a desk can save. Until then a save is refused by Google wit
 "Uploads into _meta/ are refused …", and nothing is lost. GET, TB tray and TEMP
 limits are not in the panel yet (`tests/wearlimits.cjs`, `tests/gassafety.cjs`).
 
+**AND A WARNING BETWEEN NEW AND THE LIMIT: FIXED SQC LIMITS (same PR).** Asked
+straight after, as "SQC, like new limit then warning or critical"; fixed
+limits chosen over statistical ones. A change may carry `w`, a warning in mm
+strictly between new and the wear limit, and the wear limit is the critical
+line. `WEAR.warnPct(ref)` states the warning as percent worn, and
+`GRADE.fromWorn(pct, warnPct)` grades by it: at or past the limit Critical
+(5), at or past the warning Severe (4), and the way to the warning split in
+thirds — Normal, Incipient, Degraded. With no warning the fixed remaining-life
+scale stands unchanged, so nothing moves until the office sets one. The band
+("watch") starts at the warning instead of 80 %. `warnPct` travels beside
+`wearPct`: on the phone's export, in `normalize.js`'s list, in both office
+pages' `wearOf`, in `report.js`, and in report-core's two `fromWorn` calls.
+`teamLife` returns `{pct, warn}`, which `GRADE.roundGrade` reads.
+
 ---
 
 ## Secrets

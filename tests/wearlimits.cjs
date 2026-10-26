@@ -43,6 +43,7 @@ const RECS = [
   { equip: "DZ017", date: "2026-09-01", type: "UC", cls: "DOZ", by: "T", items: [{ key: "BUSH.L", mm: 115 }, { key: "BUSH.R", mm: 114 }] },
   { equip: "DZ019", date: "2026-09-02", type: "UC", cls: "DOZ", by: "T", items: [{ key: "BUSH.L", mm: 96 }] },
   { equip: "DZ021", date: TODAY, type: "UC", cls: "DOZ", by: "T", items: [{ key: "BUSH.L", mm: 96 }] },
+  { equip: "DZ022", date: TODAY, type: "UC", cls: "DOZ", by: "T", items: [{ key: "BUSH.L", mm: 91 }] },
 ];
 
 async function boot(b, file, o) {
@@ -126,11 +127,29 @@ const pct = (d, i, j) => d.p.evaluate(([i, j]) => {
   await A.p.evaluate(() => CMWearLimits.select("Shantui SD60"));
   await A.p.click('[data-wledit="BUSH"]');
   await A.p.fill("#wlN", "98.5"); await A.p.fill("#wlC", "90");
+  await A.p.fill("#wlW", "89");
   await A.p.fill("#wlWhy", "manual check");
+  await A.p.click("#wlSave");
+  ok("a warning outside new..limit is refused", /between new and the wear limit/.test(await A.p.textContent("#wlFormMsg")));
+  await A.p.fill("#wlW", "93");
   await A.p.click("#wlSave");
   await A.p.waitForFunction(() => /revision 2/i.test((document.getElementById("wlMsg") || {}).textContent || ""), null, { timeout: 20000 });
   ok("from today: the reading before keeps 98.5 / 92.5 (42 %)", (await pct(A, ["DZ019", "2026-09-02"], "BUSH.L")) === 42);
   ok("from today: today's reading takes 98.5 / 90 (29 %)", (await pct(A, ["DZ021", TODAY], "BUSH.L")) === 29);
+
+  console.log("\n4b. NEW → WARNING → CRITICAL");
+  const g = await A.p.evaluate(() => [GRADE.fromWorn(10, 60), GRADE.fromWorn(25, 60), GRADE.fromWorn(50, 60),
+    GRADE.fromWorn(65, 60), GRADE.fromWorn(100, 60), GRADE.fromWorn(85), GRADE.fromWorn(50)].join(","));
+  ok("with a warning: thirds to the warning, Severe past it, Critical at the limit; without: the fixed scale", g === "1,2,3,4,5,5,3", g);
+  const w22 = await A.p.evaluate(t => { const r = RECS.find(x => x.equip === "DZ022" && x.date === t);
+    const w = wearOf(r, r.items[0]); return { pct: w.wearPct, warn: w.warnPct, band: w.band, g: UC_GRADE(w.wearPct, w.warnPct) }; }, TODAY);
+  ok("91 mm against 98.5 → 93 → 90 is 88 % worn, past the warning (65 %): Severe, not Critical",
+     w22.pct === 88 && w22.warn === 65 && w22.g === 4 && w22.band === "watch", JSON.stringify(w22));
+  ok("the table shows new → warning → critical",
+     /98\.5 → 93 → 90/.test(await A.p.textContent('tr[data-wlpt="BUSH"]')));
+  const rp = await A.p.evaluate(t => { const s = CMReport.sectionsFor("one", "DZ022|" + t + "|UC", { lang: "en", bi: false, photos: false });
+    const d = document.createElement("div"); d.innerHTML = s.map(x => x.html).join(""); return d.innerText; }, TODAY);
+  ok("the report rates the round Severe", /4\s*[–-]\s*Severe/.test(rp) && !/5\s*[–-]\s*Critical/.test(rp), rp.slice(0, 160));
 
   console.log("\n5. THE OTHER OFFICE PAGE");
   const N = await boot(b, "dashboard-next/index.html", { who: "Desk 2" });
@@ -164,8 +183,10 @@ const pct = (d, i, j) => d.p.evaluate(([i, j]) => {
   await P.waitForFunction(() => window.WEAR && typeof wearLimitsPull === "function", null, { timeout: 20000 });
   const ph = await P.evaluate(async () => { const d = await wearLimitsPull(true);
     const r = WEAR.refFor("DZ021", "SHANTUI SD60-C5", "BUSH", "L", DUE.today());
-    return { rev: d && d.rev, n: r.n, c: r.c, src: r.src, kept: !!localStorage.getItem("cm_wear_limits") }; });
+    return { rev: d && d.rev, n: r.n, w: r.w, c: r.c, src: r.src, g: GRADE.fromWorn(WEAR.wear(r, 91), WEAR.warnPct(r)),
+             kept: !!localStorage.getItem("cm_wear_limits") }; });
   ok("the phone pulls the limits and scores against them", ph.rev === 3 && ph.n === 98.5 && ph.c === 90 && ph.src === "limit", JSON.stringify(ph));
+  ok("and grades 91 mm Severe by the office's warning", ph.w === 93 && ph.g === 4, JSON.stringify(ph));
   ok("and keeps them for the pit", ph.kept);
   await P.reload({ waitUntil: "load" });
   await P.waitForFunction(() => window.WEAR && WEAR.limits, null, { timeout: 20000 });

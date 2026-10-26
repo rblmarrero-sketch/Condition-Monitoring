@@ -53,6 +53,15 @@ window.WEAR = {"built":"2026-10-26","points":[{"code":"IDLER","en":"Idler tread"
         && Number(x.n) !== Number(x.c);
     });
   };
+  /* The warning as percent worn, for GRADE.fromWorn — null when the office has
+     set none, or set one that is not between new and the limit. */
+  W.warnPct = function (ref) {
+    if (!ref || ref.w == null || ref.w === '' || ref.n == null || ref.c == null) return null;
+    var span = Number(ref.c) - Number(ref.n);
+    if (!span) return null;
+    var k = ((Number(ref.w) - Number(ref.n)) / span) * 100;
+    return (k > 0 && k < 100) ? k : null;
+  };
   W.limitFor = function (model, point, atISO) {
     var at = atISO || '9999-12-31', best = null;
     for (var i = 0; i < W.limits.length; i++) {
@@ -82,7 +91,8 @@ window.WEAR = {"built":"2026-10-26","points":[{"code":"IDLER","en":"Idler tread"
     var lim = mk ? W.limitFor(mk, point, atISO) : null;
     if (lim) {
       var ln = Number(lim.n), lc = Number(lim.c);
-      cat = { n: ln, c: lc, d: lc < ln ? 'shrink' : 'grow', x: null, lim: lim };
+      var lw = (lim.w == null || lim.w === '' || !isFinite(Number(lim.w))) ? null : Number(lim.w);
+      cat = { n: ln, c: lc, w: lw, d: lc < ln ? 'shrink' : 'grow', x: null, lim: lim };
     }
     if (best) {
       /* A baseline replaces "new" only, and it inherits the catalogue's condemn
@@ -95,13 +105,14 @@ window.WEAR = {"built":"2026-10-26","points":[{"code":"IDLER","en":"Idler tread"
       var inherit = (cat && !cat.x) ? cat.c : null;
       var c = (best.c != null ? best.c : inherit);
       return { n: best.n, c: c,
+               w: (best.c == null && cat && cat.w != null) ? cat.w : null,
                d: cat ? cat.d : (best.c > best.n ? 'grow' : 'shrink'),
                src: best.why === 'override' ? 'override' : 'baseline',
                from: best.from, by: best.by,
                x: (c == null) ? 'nolimit' : null };
     }
     if (!cat) return null;
-    if (cat.lim) return { n: cat.n, c: cat.c, d: cat.d, src: 'limit', x: null,
+    if (cat.lim) return { n: cat.n, c: cat.c, w: cat.w, d: cat.d, src: 'limit', x: null,
                           from: cat.lim.from || '', by: cat.lim.by || '', why: cat.lim.why || '',
                           lim: cat.lim };
     return { n: cat.n, c: cat.c, d: cat.d, src: 'catalogue', x: cat.x || null,

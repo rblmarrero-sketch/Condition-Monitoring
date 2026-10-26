@@ -176,10 +176,12 @@
       if (!i || i.general || i.key === '__general') return;
       var n = num(i.grade);
       if (!n) {
-        var p = null;
+        var p = null, k = null;
         if (typeof life === 'function') { try { p = life(i); } catch (e) { p = null; } }
-        if (p == null && i.wearPct !== '' && i.wearPct != null && isFinite(Number(i.wearPct))) p = Number(i.wearPct);
-        if (p != null && isFinite(Number(p))) n = fromWorn(Number(p));
+        if (p && typeof p === 'object') { k = p.warn; p = p.pct; }      // a life that knows the warning
+        if (p == null && i.wearPct !== '' && i.wearPct != null && isFinite(Number(i.wearPct))) {
+          p = Number(i.wearPct); k = i.warnPct; }
+        if (p != null && isFinite(Number(p))) n = fromWorn(Number(p), k);
       }
       if (n && n > w) w = n;
     });
@@ -208,9 +210,22 @@
     if (r >= 20) return 4;
     return 5;
   }
-  function fromWorn(pctWorn) {
+  /* With a WARNING the office set (dashboard/wear-limits.js), the scale is
+     the office's, not the fixed one: at or past the wear limit (100 % worn) is
+     Critical, at or past the warning is Severe, and the way from new to the
+     warning is split in thirds — Normal, Incipient, Degraded. warnPct is the
+     warning expressed as percent worn; without one the fixed scale stands. */
+  function fromWorn(pctWorn, warnPct) {
     var w = Number(pctWorn);
     if (!isFinite(w)) return null;
+    var k = Number(warnPct);
+    if (warnPct != null && warnPct !== '' && isFinite(k) && k > 0 && k < 100) {
+      if (w >= 100) return 5;
+      if (w >= k) return 4;
+      if (w >= k * 2 / 3) return 3;
+      if (w >= k / 3) return 2;
+      return 1;
+    }
     return fromRemaining(100 - w);
   }
 

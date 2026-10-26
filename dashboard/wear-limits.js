@@ -38,10 +38,12 @@
       st_ready: "Revision {rev} · {by} · {at}",
       st_err: "The office's limits could not be read ({e}). Nothing can be saved until they can.",
       model: "Model", units: "Machines", pick: "Choose a model",
-      th_point: "Point", th_ref: "Reference (new → limit)", th_now: "In force today", th_act: "",
+      th_point: "Point", th_ref: "Reference (new → limit)", th_now: "In force today (new → warning → critical)", th_act: "",
       none: "—", borrowed: "borrowed", rival: "two figures", office: "office",
       from: "from {d}", all_hist: "all history", edit: "Set limit",
-      f_title: "{pt} — {model}", f_new: "New, mm", f_lim: "Wear limit, mm",
+      f_title: "{pt} — {model}", f_new: "New, mm", f_warn: "Warning, mm", f_lim: "Critical (wear limit), mm",
+      f_warn_hint: "Optional. Past the warning a reading is Severe; past the wear limit it is Critical. Left empty, the fixed percentage scale grades it.",
+      e_warn: "The warning must lie between new and the wear limit.",
       f_apply: "Applies", f_from: "From", f_all: "Re-grade all history",
       f_why: "Source / reason", f_why_ph: "e.g. site sheet 26.10.2026, Hitachi manual p. W155-03-07-001",
       f_who: "Your name", f_save: "Save limit", f_cancel: "Cancel",
@@ -71,10 +73,12 @@
       st_ready: "Версия {rev} · {by} · {at}",
       st_err: "Пределы офиса не удалось прочитать ({e}). Сохранение невозможно, пока они не прочитаны.",
       model: "Модель", units: "Машин", pick: "Выберите модель",
-      th_point: "Точка", th_ref: "Эталон (новый → предел)", th_now: "Действует сегодня", th_act: "",
+      th_point: "Точка", th_ref: "Эталон (новый → предел)", th_now: "Действует сегодня (новый → предупр. → критич.)", th_act: "",
       none: "—", borrowed: "заимствовано", rival: "два значения", office: "офис",
       from: "с {d}", all_hist: "вся история", edit: "Задать предел",
-      f_title: "{pt} — {model}", f_new: "Новый, мм", f_lim: "Предел износа, мм",
+      f_title: "{pt} — {model}", f_new: "Новый, мм", f_warn: "Предупреждение, мм", f_lim: "Критический (предел износа), мм",
+      f_warn_hint: "Необязательно. После предупреждения замер — «Серьёзное», после предела износа — «Критическое». Без него оценка идёт по фиксированной шкале процентов.",
+      e_warn: "Предупреждение должно быть между новым размером и пределом износа.",
       f_apply: "Применяется", f_from: "С даты", f_all: "Пересчитать всю историю",
       f_why: "Источник / причина", f_why_ph: "напр. лист участка 26.10.2026, руководство Hitachi стр. W155-03-07-001",
       f_who: "Ваше имя", f_save: "Сохранить предел", f_cancel: "Отмена",
@@ -142,7 +146,7 @@
   }
   /* What a change would do: the grade of every reading of this point on this
      model, scored now and scored with the change added, by the engine itself. */
-  function preview(model, point, n, c, from) {
+  function preview(model, point, n, c, from, w) {
     const rs = readings(model, point);
     if (!rs.length || !W()) return { n: 0 };
     const grade = (r) => {
@@ -150,12 +154,12 @@
       if (!ref || ref.x) return { g: null, odd: false };
       if (W().outOfRange(ref, r.mm)) return { g: null, odd: true };
       const p = W().wear(ref, r.mm);
-      return { g: p == null ? null : (root.GRADE ? root.GRADE.fromWorn(p) : null), odd: false };
+      return { g: p == null ? null : (root.GRADE ? root.GRADE.fromWorn(p, W().warnPct ? W().warnPct(ref) : null) : null), odd: false };
     };
     const base = S.doc || empty();
     const before = rs.map(grade);
     const trial = JSON.parse(JSON.stringify(base));
-    trial.changes.push({ id: "preview", model, point, n, c, from, at: "9999", by: "" });
+    trial.changes.push({ id: "preview", model, point, n, c, w: (w == null ? null : w), from, at: "9999", by: "" });
     W().setLimits(trial);
     let after;
     try { after = rs.map(grade); } finally { W().setLimits(S.doc || null); }
@@ -222,9 +226,10 @@
     S.doc = cur; S.state = "ready"; apply(cur);
     return { rev: cur.rev, merged, logged };
   }
-  function check(point, n, c, from, why) {
+  function check(point, n, c, from, why, w) {
     if (!(isFinite(n) && isFinite(c) && n > 0 && c > 0)) return tr("e_num");
     if (n === c) return tr("e_same");
+    if (w != null && !(isFinite(w) && ((c < n && w < n && w > c) || (c > n && w > n && w < c)))) return tr("e_warn");
     const m = W() && W().models[S.model], ref = m && m.pts[point];
     if (ref && ref.d) {
       if (ref.d === "shrink" && !(c < n)) return tr("e_dir", { dir: tr("down"), rel: tr("smaller") });
@@ -235,15 +240,16 @@
     if (!who()) return tr("e_who");
     return "";
   }
-  async function setLimit(point, n, c, from, why) {
-    const err = check(point, n, c, from, why);
+  async function setLimit(point, n, c, from, why, w) {
+    if (w === "" || (typeof w === "number" && !isFinite(w))) w = null;
+    const err = check(point, n, c, from, why, w);
     if (err) throw new Error(err);
     const id = "w" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
-    const ch = { id, model: S.model, point, n, c, from, at: new Date().toISOString(), by: who(), why };
+    const ch = { id, model: S.model, point, n, w: (w == null ? null : w), c, from, at: new Date().toISOString(), by: who(), why };
     return save(d => {
       if (d.changes.some(x => x.id === id)) return false;
       d.changes.push(ch); return true;
-    }, S.model + " " + point + " " + n + "/" + c + " from " + from);
+    }, S.model + " " + point + " " + n + (w != null ? "/" + w : "") + "/" + c + " from " + from);
   }
   async function voidChange(id) {
     if (!who()) throw new Error(tr("void_who"));
@@ -305,7 +311,7 @@
   function nowCell(model, code) {
     const lim = W().limitFor(model, code, today());
     const m = W().models[model], cat = m && m.pts[code];
-    if (lim) return `<td class="num">${esc(fmt(lim.n))} → ${esc(fmt(lim.c))}<span class="wl-tag off">${esc(tr("office"))} · ${
+    if (lim) return `<td class="num">${esc(fmt(lim.n))} → ${lim.w != null ? esc(fmt(lim.w)) + " → " : ""}${esc(fmt(lim.c))}<span class="wl-tag off">${esc(tr("office"))} · ${
       esc(lim.from && lim.from > "0001" ? tr("from", { d: lim.from }) : tr("all_hist"))}</span></td>`;
     if (!cat) return `<td class="num">${tr("none")}</td>`;
     const tag = cat.x === "borrowed" ? tr("borrowed") : cat.x === "rival" ? tr("rival") : "";
@@ -336,7 +342,7 @@
       const hist = ((S.doc && S.doc.changes) || []).filter(x => x.model === S.model).slice().reverse();
       body += `<div class="secthd" style="margin-top:12px"><h3 style="font-size:14px;margin:0">${esc(tr("hist"))}</h3></div>`;
       body += hist.length ? `<ul class="wl-hist">` + hist.map(x => `<li class="${x.void ? "void" : ""}" data-wlid="${esc(x.id)}">
-          <span class="sp" title="${esc(x.why || "")}">${esc(ptName(x.point))}: ${esc(fmt(x.n))} → ${esc(fmt(x.c))} · ${
+          <span class="sp" title="${esc(x.why || "")}">${esc(ptName(x.point))}: ${esc(fmt(x.n))} → ${x.w != null ? esc(fmt(x.w)) + " → " : ""}${esc(fmt(x.c))} · ${
             esc(x.from && x.from > "0001" ? tr("from", { d: x.from }) : tr("all_hist"))} · ${esc(x.by || "")} · ${esc(String(x.at || "").slice(0, 10))} · ${esc(x.why || "")}${
             x.void ? " · " + esc(tr("h_voided", { at: String(x.void.at || "").slice(0, 10), by: x.void.by || "" })) : ""}</span>
           ${x.void ? "" : `<button class="btn ghost sm" type="button" data-wlvoid="${esc(x.id)}">${esc(tr("h_void"))}</button>`}</li>`).join("") + `</ul>`
@@ -353,13 +359,15 @@
   function formHtml() {
     const code = S.edit, m = W().models[S.model], cat = m && m.pts[code];
     const lim = W().limitFor(S.model, code, today());
-    const n0 = lim ? lim.n : (cat ? cat.n : ""), c0 = lim ? lim.c : (cat ? cat.c : "");
+    const n0 = lim ? lim.n : (cat ? cat.n : ""), c0 = lim ? lim.c : (cat ? cat.c : ""), w0 = lim && lim.w != null ? lim.w : "";
     return `<div class="wl-form" id="wlForm">
       <b>${esc(tr("f_title", { pt: ptName(code), model: S.model }))}</b>
       <div class="wl-row">
         <label class="wl-f">${esc(tr("f_new"))}<input type="number" step="any" id="wlN" value="${esc(n0)}"></label>
+        <label class="wl-f">${esc(tr("f_warn"))}<input type="number" step="any" id="wlW" value="${esc(w0)}"></label>
         <label class="wl-f">${esc(tr("f_lim"))}<input type="number" step="any" id="wlC" value="${esc(c0)}"></label>
       </div>
+      <div class="sub" style="margin:0">${esc(tr("f_warn_hint"))}</div>
       <div class="wl-radio" role="radiogroup" aria-label="${esc(tr("f_apply"))}"><span>${esc(tr("f_apply"))}:</span>
         <label><input type="radio" name="wlApply" id="wlFromOn" value="from" checked> ${esc(tr("f_from"))}</label>
         <input type="date" id="wlFrom" value="${esc(today())}" aria-label="${esc(tr("f_from"))}">
@@ -377,14 +385,16 @@
   function formVals() {
     const $ = id => S.el.querySelector("#" + id);
     const all = $("wlAllOn") && $("wlAllOn").checked;
-    return { n: Number($("wlN").value), c: Number($("wlC").value),
+    const wv = ($("wlW").value || "").trim();
+    return { n: Number($("wlN").value), c: Number($("wlC").value), w: wv === "" ? null : Number(wv),
              from: all ? REGRADE : ($("wlFrom").value || ""), why: ($("wlWhy").value || "").trim() };
   }
   function drawPreview() {
     const pv = S.el && S.el.querySelector("#wlPv"); if (!pv) return;
     const v = formVals();
     if (!(isFinite(v.n) && isFinite(v.c) && v.n > 0 && v.c > 0 && v.n !== v.c) || !v.from) { pv.textContent = ""; return; }
-    const r = preview(S.model, S.edit, v.n, v.c, v.from);
+    if (check(S.edit, v.n, v.c, v.from, "x", v.w) === tr("e_warn")) { pv.textContent = tr("e_warn"); return; }
+    const r = preview(S.model, S.edit, v.n, v.c, v.from, v.w);
     if (!r.n) { pv.textContent = tr("pv_none"); return; }
     pv.textContent = tr("pv", { n: r.n, m: r.m, chg: r.chg, worse: r.worse, better: r.better, odd: r.odd })
       + (r.keep ? " " + tr("pv_keep", { k: r.keep }) : "");
@@ -407,19 +417,19 @@
     });
     const f = q("#wlForm");
     if (!f) return;
-    ["#wlN", "#wlC", "#wlFrom", "#wlFromOn", "#wlAllOn"].forEach(s => {
+    ["#wlN", "#wlW", "#wlC", "#wlFrom", "#wlFromOn", "#wlAllOn"].forEach(s => {
       const x = q(s); if (x) { x.oninput = drawPreview; x.onchange = drawPreview; } });
     q("#wlWho").onchange = () => setWho(q("#wlWho").value.trim());
     q("#wlCancel").onclick = () => { S.edit = ""; S.msg = ""; draw(); };
     q("#wlSave").onclick = async () => {
       setWho(q("#wlWho").value.trim());
       const v = formVals(), btn = q("#wlSave");
-      const err = check(S.edit, v.n, v.c, v.from, v.why);
+      const err = check(S.edit, v.n, v.c, v.from, v.why, v.w);
       const m = q("#wlFormMsg");
       if (err) { m.textContent = err; m.className = "wl-msg bad"; return; }
       btn.disabled = true;
       try {
-        const r = await setLimit(S.edit, v.n, v.c, v.from, v.why);
+        const r = await setLimit(S.edit, v.n, v.c, v.from, v.why, v.w);
         S.edit = ""; S.msgBad = false;
         S.msg = r.none ? "" : (r.merged ? tr("saved_merged", { rev: r.rev }) : tr("saved", { rev: r.rev })) + (r.logged === false ? tr("log_fail") : "");
         draw();
