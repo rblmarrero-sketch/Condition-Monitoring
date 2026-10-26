@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-26T23:07:49+00:00",
+  "generated": "2026-10-26T23:22:43+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -24465,6 +24465,29 @@ window.CM_WO_DATA = {
       "actualStart": "2026-10-22",
       "actualStartDt": "2026-10-22T08:30:00",
       "actualEnd": "2026-10-22"
+    },
+    {
+      "equip": "DZ011",
+      "cls": "DOZ",
+      "woNumber": "WO-020895",
+      "maintType": "4000 Hours service Planned",
+      "hours": 4000,
+      "cmLabel": "Filter Cut / General Inspection / Undercarriage",
+      "cmTypes": [
+        "FC",
+        "INSP",
+        "UC"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-02",
+      "planStartDt": "2026-11-02T00:00:00",
+      "planEnd": "2026-11-03",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
     },
     {
       "equip": "DZ012",
