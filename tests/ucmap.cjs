@@ -92,6 +92,20 @@ const enter = async (p, v) => { await p.evaluate(() => goStep(2)); await p.fill(
   const roll = await p.evaluate(() =>
     [5, 6, 7].reduce((n, g) => n + ucGroupKeys(g).filter(k => /^ROLLER\./.test(k)).length, 0));
   ok('eight rollers a side, split front / centre / rear', roll === 8, String(roll));
+
+  /* The LiuGong 990F has nine a side (site sheet, confirmed 26.10.2026), and
+     the count comes from the model, not from the default. */
+  await p.evaluate(() => { selectEquip('EX022'); goStep(2); });          // LiuGong CLG990FHD
+  await p.waitForTimeout(500);
+  const r9 = await p.evaluate(() => {
+    const keys = [5, 6, 7].flatMap(g => ucGroupKeys(g)).filter(k => /^ROLLER\./.test(k));
+    const walk = items().map(i => i.k).filter(k => /^ROLLER\./.test(k));
+    return { left: keys.length, last: keys[keys.length - 1], walk: walk.length };
+  });
+  ok('the LiuGong 990F has nine rollers a side', r9.left === 9 && r9.last === 'ROLLER.L9', JSON.stringify(r9));
+  ok('and its walk carries all eighteen', r9.walk === 18, String(r9.walk));
+  await p.evaluate(() => { selectEquip('DZ001'); goStep(2); });
+  await p.waitForTimeout(500);
   const bands = await p.evaluate(() => ({ idler: ucGroupKeys(1), carrier: ucGroupKeys(3) }));
   ok('the idler and carrier each carry their outer and inner band',
      bands.idler.length === 2 && bands.carrier.length === 2,

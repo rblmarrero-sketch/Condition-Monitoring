@@ -4771,8 +4771,11 @@ reference sheet on 2026-10-26 and confirmed the figures. Now in
   SD32's figures. The sheet repeats them, the SD90's bushings measure 114–116
   against that 79 mm "new", and they stay `borrowed` (no percentage). A row
   carrying `source` is never marked borrowed (`build-wear-data.py`).
-- Not changed: the 990F's nine rollers a side (the app assumes eight).
-  `tests/wear.cjs` holds every figure.
+- The LiuGong 990F has nine rollers a side (build 544): `ROLLERS` in
+  `docs/build-wear-data.py` gives it its own count. Every model not listed
+  keeps the default of eight. The walk, the map's groups and the reports all
+  read `model.rollers`. `tests/wear.cjs` holds every figure, and
+  `tests/ucmap.cjs` checks the nine on the phone.
 
 ---
 
