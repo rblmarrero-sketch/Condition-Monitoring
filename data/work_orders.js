@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-26T22:17:57+00:00",
+  "generated": "2026-10-26T22:32:35+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -442,8 +442,8 @@ window.CM_WO_DATA = {
     "planStart": 0
   },
   "cmCauseFrom": {
-    "wo": 90,
-    "wr": 103,
+    "wo": 91,
+    "wr": 102,
     "cert": 0,
     "none": 0
   },
@@ -2117,7 +2117,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-10-03",
       "detected": "2026-10-03",
-      "planStart": null,
+      "planStart": "2026-11-06",
       "closed": null,
       "asset": "TK143",
       "defect": "DD-00013971",
@@ -2127,12 +2127,12 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "cause": "Усталостная трещина",
-      "causeFrom": "wr",
+      "causeFrom": "wo",
       "descr": "Множественные поперечные трещины приводного ремня генератора.",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "by": "Zhomart",
-      "woNumber": null,
-      "maintType": null,
+      "woNumber": "WO-020886",
+      "maintType": "P4 Planned Repair",
       "planned": false
     },
     {
@@ -17187,6 +17187,25 @@ window.CM_WO_DATA = {
       "actualStart": "2026-10-24",
       "actualStartDt": "2026-10-24T07:00:00",
       "actualEnd": "2026-10-24"
+    },
+    {
+      "equip": "DZ003",
+      "cls": "DOZ",
+      "woNumber": "WO-020888",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "250h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-03",
+      "planStartDt": "2026-11-03T00:00:00",
+      "planEnd": "2026-11-04",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
     },
     {
       "equip": "DZ004",
