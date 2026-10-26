@@ -137,9 +137,10 @@ const server = http.createServer((req, res) => {
     }, theme);
     ok(`${theme}: P1 and P2 are red`, tags['WO-2'].bg === tags.crit && tags['WO-3'].bg === tags.crit, JSON.stringify([tags['WO-2'], tags['WO-3'], tags.crit]));
     ok(`${theme}: P3 is amber`, tags['WO-4'].bg === tags.warn, JSON.stringify([tags['WO-4'], tags.warn]));
-    ok(`${theme}: P4 is left as it was`, tags['WO-1'].bg === tags.good, JSON.stringify([tags['WO-1'], tags.good]));
-    ok(`${theme}: the red and amber tags read at 4.5:1 or better`,
-       tags['WO-2'].ratio >= 4.5 && tags['WO-4'].ratio >= 4.5, JSON.stringify([tags['WO-2'].ratio.toFixed(2), tags['WO-4'].ratio.toFixed(2)]));
+    ok(`${theme}: P4 stays green`, tags['WO-1'].bg === tags.good, JSON.stringify([tags['WO-1'], tags.good]));
+    ok(`${theme}: the red, amber and green tags read at 4.5:1 or better`,
+       tags['WO-2'].ratio >= 4.5 && tags['WO-4'].ratio >= 4.5 && tags['WO-1'].ratio >= 4.5,
+       JSON.stringify([tags['WO-2'].ratio.toFixed(2), tags['WO-4'].ratio.toFixed(2), tags['WO-1'].ratio.toFixed(2)]));
   }
   await p.evaluate(() => document.documentElement.removeAttribute('data-theme'));
 
