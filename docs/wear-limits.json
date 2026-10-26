@@ -121,9 +121,10 @@
     "tabs": 8
    },
    "LINKH": {
-    "condemn": 109,
-    "new": 116,
-    "tabs": 4
+    "condemn": 171,
+    "new": 181,
+    "tabs": 4,
+    "source": "Hitachi manual W155-03-07-001, link height row A (181 standard, 171 allowable); the workbook carried 116/109, the ZX 280 figures"
    },
    "PITCH1": {
     "condemn": 286,

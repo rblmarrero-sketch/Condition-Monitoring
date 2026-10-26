@@ -4740,6 +4740,24 @@ the no-file / wrong-file / other-host cases, Russian and the CSV; against the
 old panel it fails 52 assertions. Until the PECHANKA kit is installed the
 office panel shows the sentence, not numbers.
 
+**A READING ON THE WRONG SIDE OF "NEW" IS A QUESTION, NOT A PASS (build 542).**
+EX002, 24 Oct 2026: both link heights read 180 mm, the office printed "-914 %"
+and, under the table, "All N measured points inside limits". The ZX 1200's link
+height in `docs/wear-limits.json` was 116 / 109 — the ZX 280's row. Hitachi's
+page W155-03-07-001 (row A) gives 181 / 171; the row now carries `source`, which
+`docs/build-wear-data.py` writes into `mobile/wear.js` as `doc`. 180 mm is 10 %
+worn. The ZX 280 and ZX 330 still carry 116 / 109 and have not been checked
+against a manual. Separately, `WEAR.outOfRange` (wear.js, the one rule, also used
+by `implausible`) names a reading beyond "new" in the wrong direction, and
+`WEAR.wear` answers null for it. Both office pages' `wearOf` mark it `odd` and
+drop any percentage the record carried, and `ucBlock` names it ("outside the
+reference — check the standard") and leaves it out of the "inside limits" count.
+`report-core` marks it in `sane()`, counts it as a point to watch, and the verdict
+and the register say so. On the phone the station chip is amber, and two team
+paths that turned a null percentage into "0 %" with `Math.round(null)` now leave
+it empty (`tests/ucodd.cjs`, which fails 38 assertions on build 541). No backend
+change.
+
 ---
 
 ## Secrets
