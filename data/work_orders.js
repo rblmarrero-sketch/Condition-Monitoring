@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-26T21:17:59+00:00",
+  "generated": "2026-10-26T21:33:01+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -97239,6 +97239,27 @@ window.CM_WO_DATA = {
       "actualEnd": null
     },
     {
+      "equip": "TK119",
+      "cls": "AT",
+      "woNumber": "WO-020872",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "Magnetic Plug",
+      "cmTypes": [
+        "MP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-08",
+      "planStartDt": "2026-11-08T00:00:00",
+      "planEnd": "2026-11-09",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
       "equip": "TK120",
       "cls": "AT",
       "woNumber": null,
@@ -99569,6 +99590,27 @@ window.CM_WO_DATA = {
       "actualEnd": null
     },
     {
+      "equip": "TK121",
+      "cls": "AT",
+      "woNumber": "WO-020873",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "Magnetic Plug",
+      "cmTypes": [
+        "MP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-06",
+      "planStartDt": "2026-11-06T00:00:00",
+      "planEnd": "2026-11-07",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
       "equip": "TK122",
       "cls": "AT",
       "woNumber": null,
@@ -101772,6 +101814,27 @@ window.CM_WO_DATA = {
       "actualEnd": "2026-10-26"
     },
     {
+      "equip": "TK123",
+      "cls": "AT",
+      "woNumber": "WO-020874",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "Magnetic Plug",
+      "cmTypes": [
+        "MP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-05",
+      "planStartDt": "2026-11-05T00:00:00",
+      "planEnd": "2026-11-06",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
       "equip": "TK124",
       "cls": "AT",
       "woNumber": null,
@@ -102942,6 +103005,27 @@ window.CM_WO_DATA = {
       "planStart": "2026-10-28",
       "planStartDt": "2026-10-28T00:00:00",
       "planEnd": "2026-10-29",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
+      "equip": "TK124",
+      "cls": "AT",
+      "woNumber": "WO-020875",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "Magnetic Plug",
+      "cmTypes": [
+        "MP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-07",
+      "planStartDt": "2026-11-07T00:00:00",
+      "planEnd": "2026-11-08",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -105232,6 +105316,29 @@ window.CM_WO_DATA = {
       "planStart": "2026-10-27",
       "planStartDt": "2026-10-27T00:00:00",
       "planEnd": "2026-10-28",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
+      "equip": "TK126",
+      "cls": "AT",
+      "woNumber": "WO-020876",
+      "maintType": "8000 Hours service Planned",
+      "hours": 8000,
+      "cmLabel": "General Inspection / Magnetic Plug / Dump Body Liner",
+      "cmTypes": [
+        "INSP",
+        "MP",
+        "TB"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-07",
+      "planStartDt": "2026-11-07T00:00:00",
+      "planEnd": "2026-11-08",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
