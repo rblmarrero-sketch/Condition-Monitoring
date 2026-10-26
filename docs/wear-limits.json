@@ -590,9 +590,10 @@
  "Shantui SD60": {
   "pts": {
    "BUSH": {
-    "condemn": 97.65,
-    "new": 98,
-    "tabs": 6
+    "condemn": 92.5,
+    "new": 98.5,
+    "tabs": 6,
+    "source": "Site undercarriage reference sheet, confirmed by the site 26.10.2026"
    },
    "CARRIER": {
     "condemn": 185,
@@ -649,14 +650,39 @@
     "tabs": 8
    },
    "GROUSER": {
-    "condemn": 25,
-    "new": 80,
-    "tabs": 4
+    "condemn": 35,
+    "new": 105,
+    "tabs": 4,
+    "source": "Site undercarriage reference sheet, confirmed by the site 26.10.2026"
    },
    "IDLER": {
     "condemn": 30,
     "new": 25,
     "tabs": 8
+   },
+   "PITCH4": {
+    "tabs": 0,
+    "new": 1271,
+    "condemn": 1283,
+    "source": "Site undercarriage reference sheet, confirmed by the site 26.10.2026"
+   },
+   "PITCH1": {
+    "tabs": 0,
+    "new": 317.8,
+    "condemn": 320.8,
+    "source": "Site undercarriage reference sheet, confirmed by the site 26.10.2026"
+   },
+   "LINKH": {
+    "tabs": 0,
+    "new": 199,
+    "condemn": 181,
+    "source": "Site undercarriage reference sheet, confirmed by the site 26.10.2026"
+   },
+   "ROLLER": {
+    "tabs": 0,
+    "new": 300,
+    "condemn": 246,
+    "source": "Site undercarriage reference sheet, confirmed by the site 26.10.2026"
    }
   },
   "units": [
@@ -700,6 +726,12 @@
     "condemn": 168,
     "new": 180,
     "tabs": 32
+   },
+   "BUSH": {
+    "tabs": 0,
+    "new": 87,
+    "condemn": 82.9,
+    "source": "Site undercarriage reference sheet, confirmed by the site 26.10.2026"
    }
   },
   "units": [
@@ -743,6 +775,12 @@
     "condemn": 258,
     "new": 270,
     "tabs": 36
+   },
+   "BUSH": {
+    "tabs": 0,
+    "new": 87,
+    "condemn": 82.9,
+    "source": "Site undercarriage reference sheet, confirmed by the site 26.10.2026"
    }
   },
   "units": [

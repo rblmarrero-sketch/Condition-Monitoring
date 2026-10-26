@@ -119,5 +119,20 @@ ok('"not fitted" is there, so the roller count corrects itself',
   W.reasons.some(x => x.code === 'NOFIT'));
 ok('every reason is bilingual', W.reasons.every(x => x.en && x.ru && x.code));
 
+console.log('\nthe site sheet confirmed on 26.10.2026');
+const ref = (u, m, pt) => W.refFor(u, m, pt, 'L', '2026-10-26');
+const nc = (x, n, c) => x && x.n === n && x.c === c && !x.x;
+ok('SD60 bushing is 98.5 / 92.5 (was 98 / 97.65)', nc(ref('DZ019', 'SHANTUI SD60-C5', 'BUSH'), 98.5, 92.5));
+ok('SD90 link pitch, 4 links, 1271 / 1283', nc(ref('DZ017', 'SHANTUI SD90-C5', 'PITCH4'), 1271, 1283));
+ok('SD90 link pitch, 1 link, 317.8 / 320.8', nc(ref('DZ017', 'SHANTUI SD90-C5', 'PITCH1'), 317.8, 320.8));
+ok('SD90 link height 199 / 181', nc(ref('DZ017', 'SHANTUI SD90-C5', 'LINKH'), 199, 181));
+ok('SD90 grouser 105 / 35', nc(ref('DZ017', 'SHANTUI SD90-C5', 'GROUSER'), 105, 35));
+ok('SD90 track roller 300 / 246', nc(ref('DZ017', 'SHANTUI SD90-C5', 'ROLLER'), 300, 246));
+ok('SD90 carrier and idler stay borrowed', ref('DZ017', 'SHANTUI SD90-C5', 'CARRIER').x === 'borrowed'
+   && ref('DZ017', 'SHANTUI SD90-C5', 'IDLER').x === 'borrowed');
+ok('LiuGong 970E bushing 87 / 82.9', nc(ref('EX025', 'LiuGong CLG970E', 'BUSH'), 87, 82.9));
+ok('LiuGong 990F bushing 87 / 82.9', nc(ref('EX022', 'LiuGong CLG990FHD', 'BUSH'), 87, 82.9));
+ok('the confirmed rows name their source', /confirmed/.test(W.models['Shantui SD90'].pts.LINKH.doc || ''));
+
 console.log(fails.length ? `\n${fails.length} FAILED: ` + fails.join(' | ') : '\nall passed');
 process.exit(fails.length ? 1 : 0);
