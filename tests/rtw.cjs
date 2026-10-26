@@ -145,6 +145,11 @@ const jpg = p => p.evaluate(() => {
   console.log('\n5. Pass/Attention/N/A — evidence required only on Attention');
   const items = await p.evaluate(() => Object.keys(rtwDraft.items));
   ok('the draft holds all 23 checklist items', items.length === 23);
+  /* Gloved, at −40, 69 of them a checklist: at least 44 px (audit 26.10 U2; was 28). */
+  const markH = await p.evaluate(() => [...document.querySelectorAll('.rtw-mark')].filter(b => b.offsetParent)
+    .map(b => b.getBoundingClientRect().height));
+  ok('every Pass / Attention / N/A button is at least 44 px tall', markH.length >= 69 && Math.min(...markH) >= 44,
+     'n=' + markH.length + ' min=' + Math.min(...markH));
   // Mark the first 22 items Pass, leave one for the Attention case below.
   for (const no of items.slice(0, 22)) {
     await p.click(`.rtw-mark[data-mark="pass"][data-no="${no}"]`);

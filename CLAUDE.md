@@ -1007,6 +1007,16 @@ already downloaded and in charge, and only needs a reload.
 Losing a half-captured inspection to a reload is worse than a phone being an
 hour behind. `applyUpdateIfIdle` checks `__swBusy()` for exactly that reason.
 
+**1C PM PRIORITY IS RED, AMBER OR AS IT WAS, AND THE RTW MARKS ARE 44 PX
+(build 549, audit 26.10 U1/U2).** `.agitem .tag` was written for the CM
+agenda's round code and reused for 1C PM's priority, so every priority, P1
+Critical included, was filled `--good` green. P1 and P2 now take `.p-hi`
+(`--critical`, ink `--g5-ink`) and P3 `.p-mid` (`--warning`, ink `--g2-ink`);
+P4/P5 and the CM agenda's tags are unchanged. The RTW Pass / Attention / N/A
+buttons were 28 px; they are `min-height:44px`. `tests/duepm.cjs` §2b reads the
+computed fill and its contrast in both themes, and `tests/rtw.cjs` measures
+all 69 buttons.
+
 **A BUTTON THAT REFUSES A PRESS MUST LOOK LIKE ONE.** Read off a handset on
 build 375: "when you choose Not being done it's not responding — it never
 worked." It was never a dead handler. The chip highlighted exactly as
