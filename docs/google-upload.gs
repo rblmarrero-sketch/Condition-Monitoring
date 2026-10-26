@@ -83,6 +83,12 @@ const INDEX_AT = 'cm_at';               // script property: last change, ms
    there. Nothing quieter than that, and nothing worse. */
 const INDEX_BUILT = 'cm_built';
 const INDEX_V = 1;
+/* Which version of this file is running. The repo copy and the deployed one
+   can differ (every deploy is a paste in the editor), and nothing showed
+   which had happened; the ping and the health check (GET /exec) both carry
+   this, so a plain GET says whether a redeploy landed. Change it with every
+   change to this file. */
+const SCRIPT_VERSION = 'GAS_INDEX_SAFETY_V1';
 // ────────────────────────────────────────────────────────────────────────────
 
 function doPost(e) {
@@ -102,7 +108,8 @@ function doPost(e) {
        answers every GET — so the dashboard sends this to find out whether the
        half it needs is actually live. It writes nothing. */
     if (b.op === 'ping')    return json({ ok: true, write: true, batch: true, canDelete: !!ADMIN_SECRET,
-                                          index: true, media: MEDIA_BATCH, at: indexAt_() });
+                                          index: true, media: MEDIA_BATCH, at: indexAt_(),
+                                          version: SCRIPT_VERSION });
 
     /* GAS_SAFETY_V1: the office's changes carry the desk key PECHANKA's /cm-api
        adds, once DESK_KEY is set in Script properties (see deskOk_). Phone ops
@@ -207,17 +214,50 @@ function saveOne_(b, dirs) {
     fileName
   );
 
-  // Re-sending a record (after an edit, or a retry) must overwrite, not pile up
-  // "TK146_… (1).jpg" copies next to the original. placeUpload_ has already
-  // made sure this name belongs to us, so what we overwrite is our own.
-  var existing = dir.getFilesByName(fileName);
-  while (existing.hasNext()) existing.next().setTrashed(true);
-
+  /* WRITE THE NEW FILE FIRST, THEN TRASH THE OLD (GAS_INDEX_SAFETY_V1).
+     Re-sending a record (after an edit, or a retry) must replace, not pile up
+     "TK146_… (1).jpg" copies. It used to trash the old file and then create
+     the new one, so a createFile that failed (a quota, a Drive error, the
+     6-minute limit) left the folder with neither. Two files of one name for a
+     moment is harmless: every reader takes the newest (newestByName_). */
   var f = dir.createFile(blob);
   // Who uploaded it, so the next phone to send this name can tell whether it is
   // overwriting its own work or someone else's. Kept out of the bytes so the
   // file itself is untouched, and out of the name so nothing has to parse it.
   if (dev) { try { f.setDescription('cm-dev:' + dev); } catch (err) { /* not fatal */ } }
+
+  /* THE RIVAL WHO LANDED WHILE WE WROTE — docs/yandex/function.js's rule
+     (tests/toctou.cjs), which this backend never had. placeUpload_ looked
+     before the write; two phones handing over a round both see no owner and
+     both write the same name. So look again now: another device's file of
+     this name, created before ours, means ours is the later one and moves to
+     its own ~DEV name with a conflict marker; the earlier stays. Exactly one
+     of the two yields (creation time, then id), so neither is thrown away. */
+  var olderRival = '';
+  if (dev && !plan.rival) {
+    var again = dir.getFilesByName(fileName);
+    while (again.hasNext()) {
+      var g = again.next();
+      if (g.getId() === f.getId() || isTrashed_(g)) continue;
+      var go = ownerDev_(g);
+      if (go && go !== dev && createdBefore_(g, f)) { olderRival = go; break; }
+    }
+    if (olderRival) {
+      fileName = variantName_(wanted, dev);
+      try { f.setName(fileName); } catch (errN) { /* rename failed: both files stand, nothing lost */ }
+      plan.rival = olderRival;
+    }
+  }
+  /* Now the old copies go — only our own (or an unowned one, as before). A
+     different device's file is never trashed here; an older client that sends
+     no device id behaves as it always did. */
+  var olds = dir.getFilesByName(fileName);
+  while (olds.hasNext()) {
+    var o = olds.next();
+    if (o.getId() === f.getId()) continue;
+    if (dev) { var oo = ownerDev_(o); if (oo && oo !== dev) continue; }
+    try { o.setTrashed(true); } catch (errT) { /* already gone */ }
+  }
 
   /* `req` is the name the phone ASKED for, which is not always the name on
      Drive — placeUpload_ renames when another phone already owns that name. The
@@ -268,22 +308,35 @@ function saveOne_(b, dirs) {
      already decoded in `blob` — so the index is maintained for the cost of the
      shard write alone, and no read anywhere else ever has to walk the folder
      to discover this round exists. */
+  var idxFail = null;
   if (isSidecar_(fileName)) {
+    var side = null;
     try {
       /* Read it back off the file that was just written, not off the blob that
          was handed to createFile. Indexing what actually landed is the only
          version worth indexing — and a blob built in memory is not guaranteed
          to be readable as text on every runtime. One Drive operation, once per
          round, against the hundreds it saves every reader. */
-      var side = JSON.parse(f.getBlob().getDataAsString());
-      var rs = (side && side.records) || [];
-      for (var si = 0; si < rs.length; si++) {
-        if (!rs[si]) continue;
-        rs[si]._file = (path ? path + '/' : '') + fileName;
-        rs[si]._id = f.getId();
-        indexPut_(rs[si], f.getId(), dev);
-      }
-    } catch (err) { /* not our shape — the file still stands, ?rebuild reconciles */ }
+      side = JSON.parse(f.getBlob().getDataAsString());
+    } catch (err) { side = null; /* not our shape — the file still stands */ }
+    var rs = (side && side.records) || [];
+    for (var si = 0; si < rs.length; si++) {
+      if (!rs[si]) continue;
+      rs[si]._file = (path ? path + '/' : '') + fileName;
+      rs[si]._id = f.getId();
+      var ix = indexPut_(rs[si], f.getId(), dev);
+      if (ix && !ix.ok && !idxFail) idxFail = ix;
+    }
+  }
+  /* GAS_INDEX_SAFETY_V1: the index could not take this round (the lock was
+     busy, or the month could not be read). The file is on Drive; the phone is
+     told the upload failed so it sends the record again, and the retry indexes
+     it. Saying "saved" here would leave the round on Drive and missing from
+     every phone's list, with nobody told. */
+  if (idxFail) {
+    return { ok: false, busy: !!idxFail.busy, req: b.name, id: f.getId(),
+             error: idxFail.busy ? 'The index is busy; the file is on Drive. Send it again.'
+                                 : 'The index was not updated (' + idxFail.error + '); the file is on Drive. Send it again.' };
   }
 
   if (plan.rival) {
@@ -844,9 +897,15 @@ function deleteRecord_(b) {
     Utilities.newBlob(JSON.stringify(log, null, 2), 'application/json',
                       stampSafe + '_' + stem + '.deleted.json'));
 
-  indexDrop_(b.key);          // or the list keeps offering a round that is gone
+  /* The files are trashed and the marker is written, so the deletion stands
+     and every phone drops the round when it reads the marker. If the index
+     could not take it (busy, or the month unreadable) the reply says so
+     instead of claiming it did; a rebuild, or the next delete, puts it right. */
+  var dropped = indexDrop_(b.key);          // or the list keeps offering a round that is gone
   indexTouch_();              // even if it was never indexed, this IS a change
-  return { ok: true, deleted: gone.length, files: gone, trashed: true };
+  var outD = { ok: true, deleted: gone.length, files: gone, trashed: true };
+  if (dropped && !dropped.ok) { outD.indexed = false; outD.indexNote = dropped.busy ? 'index busy' : dropped.error; }
+  return outD;
 }
 /* ONE PHOTOGRAPH, DELETED ON PURPOSE, WITH A REASON ON IT.
 
@@ -941,23 +1000,62 @@ var ROUNDKEY_ = function (r) {
   return String(r.equip || '').toUpperCase() + '|' + (r.date || '') + '|' + (r.type || 'MP');
 };
 
-/** One shard, read whole. 2 Drive operations, or 1 if it does not exist yet. */
-function shardRead_(dir, name) {
-  var it = dir.getFilesByName(name + '.json');
-  if (!it.hasNext()) return { records: [], file: null };
-  var f = it.next();
-  try {
-    var j = JSON.parse(f.getBlob().getDataAsString());
-    return { records: (j && j.records) || [], file: f };
-  } catch (err) { return { records: [], file: f }; }   // corrupt shard rebuilds itself below
+function isTrashed_(f) { try { return f.isTrashed(); } catch (err) { return false; } }
+/** Was `a` created before `b`? Creation time, then id, so two files never tie. */
+function createdBefore_(a, b) {
+  var ta = 0, tb = 0;
+  try { ta = a.getDateCreated().getTime(); tb = b.getDateCreated().getTime(); } catch (err) {}
+  return ta !== tb ? ta < tb : String(a.getId()) < String(b.getId());
 }
+/** The newest live file of one name in one folder, or null. A write creates
+    the new file before trashing the old, so for a moment there can be two. */
+function newestByName_(dir, name) {
+  var it = dir.getFilesByName(name), best = null, bt = 0;
+  while (it.hasNext()) {
+    var f = it.next();
+    if (isTrashed_(f)) continue;
+    var t = 0; try { t = f.getLastUpdated().getTime(); } catch (err) {}
+    if (!best || t > bt) { best = f; bt = t; }
+  }
+  return best;
+}
+/** One shard, read whole. A shard that cannot be read THROWS: it is not an
+    empty month (GAS_INDEX_SAFETY_V1). Returning [] here used to let the next
+    upload write the month back holding one round. */
+function shardRead_(dir, name) {
+  var f = newestByName_(dir, name + '.json');
+  if (!f) return { records: [], file: null };
+  var j = JSON.parse(f.getBlob().getDataAsString());
+  if (!j || !Array.isArray(j.records)) throw new Error('index shard ' + name + ' is not readable');
+  return { records: j.records, file: f };
+}
+/** Write the new shard FIRST, then trash the old copies: a failed create
+    leaves the old month standing instead of no month at all. */
 function shardWrite_(dir, name, records) {
   var body = JSON.stringify({ type: 'cm-index-shard', version: INDEX_V,
                               at: new Date().getTime(), n: records.length, records: records });
   var blob = Utilities.newBlob(body, 'application/json', name + '.json');
-  var it = dir.getFilesByName(name + '.json');
-  while (it.hasNext()) it.next().setTrashed(true);
-  return dir.createFile(blob);
+  var olds = [], it = dir.getFilesByName(name + '.json');
+  while (it.hasNext()) olds.push(it.next());
+  var nf = dir.createFile(blob);
+  for (var i = 0; i < olds.length; i++) { try { olds[i].setTrashed(true); } catch (err) {} }
+  return nf;
+}
+/** The index's own lock. Never written WITHOUT it: a lock that cannot be had
+    in 20 s is { busy: true }, and the caller says so (GAS_INDEX_SAFETY_V1).
+    It used to carry on with lock = null, and two uploads at shift end each
+    kept their own round and dropped the other's from the index. */
+function withIndexLock_(fn) {
+  var lock = null;
+  // No lock service at all is a local harness, never Apps Script (as withScriptLock_).
+  try { lock = LockService.getScriptLock(); } catch (err0) { lock = null; }
+  if (lock) {
+    try { lock.waitLock(20000); }
+    catch (err) { return { ok: false, busy: true, error: 'index busy' }; }
+  }
+  try { return fn(); }
+  catch (err) { return { ok: false, error: String((err && err.message) || err) }; }
+  finally { if (lock) { try { lock.releaseLock(); } catch (err2) {} } }
 }
 
 /* A round has landed. Put it in its shard.
@@ -969,18 +1067,16 @@ function shardWrite_(dir, name, records) {
    A lock that cannot be taken is not a reason to fail the upload; the file is
    on Drive either way and a rebuild puts the index right. */
 function indexPut_(rec, fileId, dev) {
-  if (!rec || !rec.equip || !rec.date) return;
+  if (!rec || !rec.equip || !rec.date) return { ok: true, skipped: true };
   /* Which phone sent it. Usually inside the record, but a client that leaves it
      out still sends it alongside the upload — and without it two phones' copies
      of one round key the same, so the second silently replaces the first in the
      index while both files sit in the folder. */
   if (!rec.dev && dev) rec = Object.assign({}, rec, { dev: dev });
-  var lock = null;
-  try { lock = LockService.getScriptLock(); lock.waitLock(20000); } catch (err) { lock = null; }
-  try {
+  return withIndexLock_(function () {
     var dir = folderPath_(rootFolder_(), INDEX_DIR);
     var name = shardOf_(rec.date);
-    var cur = shardRead_(dir, name);
+    var cur = shardRead_(dir, name);          // throws when unreadable: nothing is written
     var key = RECKEY_(rec), out = [], put = false;
     for (var i = 0; i < cur.records.length; i++) {
       if (RECKEY_(cur.records[i]) === key) { if (put) continue; out.push(rec); put = true; }
@@ -989,29 +1085,25 @@ function indexPut_(rec, fileId, dev) {
     if (!put) out.push(rec);
     shardWrite_(dir, name, out);
     indexTouch_();
-  } catch (err) {
-    // Never fail an upload because the index could not be updated. The bytes
-    // are safe on Drive; ?action=index&rebuild=1 reconciles.
-  } finally { if (lock) { try { lock.releaseLock(); } catch (err2) {} } }
+    return { ok: true };
+  });
 }
 /** A round has been deleted. Take it out, so the list stops offering it. */
 function indexDrop_(key) {
   var p = String(key || '').split('|');
-  if (p.length !== 3) return;
-  var lock = null;
-  try { lock = LockService.getScriptLock(); lock.waitLock(20000); } catch (err) { lock = null; }
-  try {
+  if (p.length !== 3) return { ok: true, skipped: true };
+  return withIndexLock_(function () {
     var dir = folderPath_(rootFolder_(), INDEX_DIR);
     var name = shardOf_(p[1]);
-    var cur = shardRead_(dir, name);
+    var cur = shardRead_(dir, name);          // throws when unreadable: nothing is written
     // Deleting a round deletes every version of it — both phones' — the same
     // way the file sweep below does. Keyed without the device for that reason.
     var want = p[0].toUpperCase() + '|' + p[1] + '|' + p[2], out = [];
     for (var i = 0; i < cur.records.length; i++)
       if (ROUNDKEY_(cur.records[i]) !== want) out.push(cur.records[i]);
     if (out.length !== cur.records.length) { shardWrite_(dir, name, out); indexTouch_(); }
-  } catch (err) { /* as above */ }
-  finally { if (lock) { try { lock.releaseLock(); } catch (err2) {} } }
+    return { ok: true };
+  });
 }
 
 /* The summary a phone needs, and nothing else.
@@ -1101,11 +1193,17 @@ function readIndex_(p) {
 
   var root = rootFolder_();
   var it = folderPath_(root, INDEX_DIR).getFiles();
-  var shards = [];
+  var shards = [], byName = {};
   while (it.hasNext()) {
     var f = it.next();
-    if (!/\.json$/i.test(f.getName())) continue;
-    shards.push({ f: f, name: f.getName(), updated: f.getLastUpdated().getTime() });
+    if (!/\.json$/i.test(f.getName()) || isTrashed_(f)) continue;
+    /* A shard write creates the new file before trashing the old, so for a
+       moment one month can have two files: read the newest, once. */
+    var sh0 = { f: f, name: f.getName(), updated: f.getLastUpdated().getTime() };
+    var prev = byName[sh0.name];
+    if (prev && prev.updated >= sh0.updated) continue;
+    if (prev) shards.splice(shards.indexOf(prev), 1);
+    byName[sh0.name] = sh0; shards.push(sh0);
   }
   if (!shards.length) {
     /* No shards is not the same as nothing to say. A correction, a void or a
@@ -1289,23 +1387,36 @@ function rebuildIndex_(p) {
     cursor = f.updated;
   }
 
-  // Merge each touched shard once, at the end — not once per record.
-  for (var s = 0; s < order.length; s++) {
-    var name = order[s], cur = shardRead_(dir, name), map = {}, keep = [];
-    for (var c = 0; c < cur.records.length; c++) map[RECKEY_(cur.records[c])] = cur.records[c];
-    for (var kk in open[name]) map[kk] = open[name][kk];
-    for (var mk in map) keep.push(map[mk]);
-    shardWrite_(dir, name, keep);
-  }
+  /* Merge each touched shard once, at the end — not once per record — under
+     the index lock, like every other shard write (GAS_INDEX_SAFETY_V1). A
+     shard that cannot be read is rebuilt from the walk only on a pass from
+     the start, which saw every round of it; an incremental pass leaves it and
+     says so. */
+  var unreadable = [];
+  var merged = withIndexLock_(function () {
+    for (var s = 0; s < order.length; s++) {
+      var name = order[s], cur, map = {}, keep = [];
+      try { cur = shardRead_(dir, name); }
+      catch (errR) { if (after) { unreadable.push(name); continue; } cur = { records: [] }; }
+      for (var c = 0; c < cur.records.length; c++) map[RECKEY_(cur.records[c])] = cur.records[c];
+      for (var kk in open[name]) map[kk] = open[name][kk];
+      for (var mk in map) keep.push(map[mk]);
+      shardWrite_(dir, name, keep);
+    }
+    return { ok: true };
+  });
+  if (!merged.ok) return { ok: false, busy: !!merged.busy, error: 'Rebuild could not write the index: ' + merged.error };
   indexTouch_();
   /* Only when the walk actually finished. A rebuild that stopped for time is a
      rebuild that has not covered the folder, and marking it done would leave
      every reader looking at half of it. */
-  if (!more) {
+  if (!more && !unreadable.length) {
     try { PropertiesService.getScriptProperties().setProperty(INDEX_BUILT, '1'); } catch (err) {}
   }
-  return { ok: true, building: more, done: done, cursor: cursor,
-           pending: Math.max(0, sidecars.length - done), shards: order.length, at: indexAt_() };
+  var outR = { ok: true, building: more, done: done, cursor: cursor,
+               pending: Math.max(0, sidecars.length - done), shards: order.length, at: indexAt_() };
+  if (unreadable.length) outR.unreadable = unreadable;   // run again from the start (no cursor) to rebuild them
+  return outR;
 }
 
 /* Several files in one reply.
@@ -1779,7 +1890,7 @@ function diagnose_() {
     // `wearLimits` says this version accepts _meta/wear/ (WEAR_LIMITS_V1), so a
     // plain GET of /exec shows whether the redeploy happened.
     return { ok: true, service: 'Condition Monitoring upload', folder: f.getName(), id: id,
-             canDelete: !!ADMIN_SECRET, wearLimits: 1 };
+             canDelete: !!ADMIN_SECRET, wearLimits: 1, version: SCRIPT_VERSION };
   } catch (err) {
     return { ok: false, id: id, error: 'Could not open that folder. Either (a) the script has ' +
       'not been authorised for Drive — open the editor, Run > setup, click Allow, then deploy a ' +

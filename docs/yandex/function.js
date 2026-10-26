@@ -88,6 +88,10 @@ const RECORDS_MAX = 600;
    phone already called its copy MEDIA_BATCH; the backends match it now.
    tests/audit-scan.cjs fails on any constant carrying two numbers in two files. */
 const MEDIA_BATCH = 8;
+/* Which version of this file is running — the same field docs/google-upload.gs
+   carries (SCRIPT_VERSION), so a ping says on either backend whether the copy
+   running is the one in the repository. */
+const SCRIPT_VERSION = 'YA_INDEX_SAFETY_V1';
 
 /* ---- signing ------------------------------------------------------------
    SigV4, by hand. Long, but it is the only part of this file that is not
@@ -1239,7 +1243,8 @@ exports.handler = async function (event) {
     }
     if (SECRET && b.secret !== SECRET) return json({ ok: false, error: 'Bad or missing secret' });
     if (b.op === 'ping') return json({ ok: true, write: true, batch: true,
-      canDelete: !!ADMIN, index: false, media: MEDIA_BATCH, at: await indexAt() });
+      canDelete: !!ADMIN, index: false, media: MEDIA_BATCH, at: await indexAt(),
+      version: SCRIPT_VERSION });
     if (b.op === 'edit')    { const r = await saveEdit(b); if (r && r.ok) folderChanged('edit'); return json(r); }
     if (b.op === 'subscribe')   return json(await pushSubscribe(b));
     if (b.op === 'unsubscribe') return json(await pushUnsubscribe(b));
