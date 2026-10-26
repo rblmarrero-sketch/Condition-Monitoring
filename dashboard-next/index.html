@@ -449,6 +449,8 @@
   .grid12{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--s4);align-items:stretch;}
   /* A column of cards in a stretched row: the last one takes what is left, so
      the column ends where the card beside it ends. */
+  /* One gap for the tab (audit 26.10 D4): the cards in this column were 12 px
+     apart and had overlapped by 1 px; every gap on the page is now 16 px. */
   .stackcol{margin-bottom:16px;}
   .stackcol>.section:last-child{flex:1 1 auto;}
   .g4{grid-column:span 4;} .g5{grid-column:span 5;} .g6{grid-column:span 6;}
@@ -619,7 +621,7 @@
   .tile .legend button:hover:not(:disabled){background:var(--surface-2);color:var(--ink);}
   .tile .legend button.on{background:var(--surface-2);color:var(--ink);font-weight:650;}
   .tile .legend button:disabled{opacity:.4;cursor:default;}
-  .tile .legend i{width:9px;height:9px;border-radius:2px;flex:none;}
+  .tile .legend i{width:9px;height:9px;border-radius:50%;flex:none;}   /* the grade dot (D6) */
   .tile .legend b{margin-left:auto;font-variant-numeric:tabular-nums;color:var(--ink);}
   .section{background:var(--surface);border:1px solid var(--border);border-radius:10px;
     padding:var(--s3) var(--s4);margin-bottom:var(--s3);box-shadow:var(--shadow);
@@ -949,7 +951,9 @@
   td.phc svg{width:12px;height:12px;vertical-align:-2px;margin-right:3px;}
   /* Severity is never colour alone: a dot, then the word. */
   .sevcell{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;}
-  .sevcell i{width:8px;height:8px;border-radius:2px;flex:none;background:var(--sc,var(--none));}
+  .sevcell i{width:8px;height:8px;border-radius:50%;flex:none;background:var(--sc,var(--none));}
+  /* gradeTag: only a 5 is coloured text as well as a coloured dot (D6). */
+  .sevcell.crit{color:var(--crit-ink);font-weight:700;}
   .trunc{display:block;max-width:0;min-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 
   /* ── the detail drawer ─────────────────────────────────────────────────
@@ -2093,6 +2097,7 @@
   .legend{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;font-size:var(--t-tiny);color:var(--ink-2);margin-top:12px;}
   .secthd .legend{margin-top:0;justify-content:flex-end;}
   .legend .sw{width:13px;height:13px;border-radius:4px;display:inline-block;margin-right:5px;vertical-align:-2px;}
+  #sevLegend .sw{width:9px;height:9px;border-radius:50%;vertical-align:0;}   /* the grade dot (D6) */
 
   /* ---- one visual language with the printed report ----------------------
      The report an inspector carries and this screen describe the same fleet, so
@@ -2357,7 +2362,7 @@
   .sevmixrow:hover:not(:disabled){background:var(--surface-2);}
   .sevmixrow.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,transparent);}
   .sevmixrow:disabled{cursor:default;opacity:.55;}
-  .sevmixrow i{width:14px;height:14px;border-radius:4px;}
+  .sevmixrow i{width:10px;height:10px;border-radius:50%;justify-self:center;}   /* the grade dot (D6) */
   .sevmixrow b{font:700 13px/1 'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
     color:var(--ink);text-align:right;}
   .kpi.good{--kc:var(--good);} .kpi.warn{--kc:var(--warning);}
@@ -2528,8 +2533,7 @@
      (denser) register on the page also uses. */
   #fleetTbl td{padding:13px 7px;}
   #fleetTbl td:first-child{font-family:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:700;}
-  #fleetTbl .sevtxt{font-weight:700;white-space:nowrap;}
-  #fleetTbl .sevtxt.crit{color:var(--crit-ink);}
+  #fleetTbl .sevtxt{white-space:nowrap;}
   /* Item 7: the Sync column's own dot + text, amber for a conflict, green
      for the honest default -- still text, never a pill background. */
   #fleetTbl .sevtxt.syncst{display:inline-flex;align-items:center;gap:6px;font-weight:600;}
@@ -3952,7 +3956,7 @@
         <div id="trendChart"></div>
         <div class="insight" id="trendNote"></div>
       </div>
-      <div class="g5 stackcol" style="display:flex;flex-direction:column;gap:var(--s3)">
+      <div class="g5 stackcol" style="display:flex;flex-direction:column;gap:var(--s4)">
         <div class="section" style="margin-bottom:0">
           <div class="secthd"><h2 data-i18n="cv_title2">Inspection compliance</h2>
             <span class="spacer"></span><span class="hint" id="covFleet"></span></div>
@@ -5035,23 +5039,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=554"></script>
+<script src="../data/magnetic_plug.js?v=555"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=554"></script>
-<script src="../mobile/hme.js?v=554"></script>
-<script src="../mobile/mp-fc.js?v=554"></script>
-<script src="../mobile/rtw.js?v=554"></script>
-<script src="../mobile/hme-cascade.js?v=554"></script>
-<script src="../mobile/temp-limits.js?v=554"></script>
+<script src="../data/work_orders.js?v=555"></script>
+<script src="../mobile/hme.js?v=555"></script>
+<script src="../mobile/mp-fc.js?v=555"></script>
+<script src="../mobile/rtw.js?v=555"></script>
+<script src="../mobile/hme-cascade.js?v=555"></script>
+<script src="../mobile/temp-limits.js?v=555"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=554"></script>
-<script src="../mobile/normalize.js?v=554"></script>
-<script src="../mobile/terms.js?v=554"></script>
+<script src="../mobile/assets.js?v=555"></script>
+<script src="../mobile/normalize.js?v=555"></script>
+<script src="../mobile/terms.js?v=555"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -5070,21 +5074,21 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=554"></script>
-<script src="../mobile/edits.js?v=554"></script>
-<script src="../mobile/due.js?v=554"></script>
-<script src="../mobile/wear.js?v=554"></script>
-<script src="../mobile/wear-map.js?v=554"></script>
-<script src="../mobile/lube.js?v=554"></script>
-<script src="../mobile/lube-overrides.js?v=554"></script>
-<script src="../mobile/lube2027.js?v=554"></script>
-<script src="../mobile/lube-tds.js?v=554"></script>
-<script src="../dashboard/lube-master.js?v=554"></script>
-<script src="../dashboard/wear-limits.js?v=554"></script>
+<script src="../mobile/grade.js?v=555"></script>
+<script src="../mobile/edits.js?v=555"></script>
+<script src="../mobile/due.js?v=555"></script>
+<script src="../mobile/wear.js?v=555"></script>
+<script src="../mobile/wear-map.js?v=555"></script>
+<script src="../mobile/lube.js?v=555"></script>
+<script src="../mobile/lube-overrides.js?v=555"></script>
+<script src="../mobile/lube2027.js?v=555"></script>
+<script src="../mobile/lube-tds.js?v=555"></script>
+<script src="../dashboard/lube-master.js?v=555"></script>
+<script src="../dashboard/wear-limits.js?v=555"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=554"></script>
-<script src="../mobile/machine-photos.js?v=554"></script>
+<script src="../mobile/upload-defaults.js?v=555"></script>
+<script src="../mobile/machine-photos.js?v=555"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -5093,17 +5097,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=554"></script>
-<script src="../mobile/get.js?v=554"></script>
-<script src="../mobile/points.js?v=554"></script>
-<script src="../mobile/uc-points.js?v=554"></script>
-<script src="../mobile/inspect-guide.js?v=554"></script>
-<script src="../mobile/get-figs.js?v=554"></script>
-<script src="../mobile/body-points.js?v=554"></script>
-<script src="../mobile/body-map.js?v=554"></script>
-<script src="../mobile/jspdf.umd.min.js?v=554"></script>
-<script src="../mobile/html2canvas.min.js?v=554"></script>
-<script src="../mobile/report-core.js?v=554"></script>
+<script src="../mobile/machine-fig.js?v=555"></script>
+<script src="../mobile/get.js?v=555"></script>
+<script src="../mobile/points.js?v=555"></script>
+<script src="../mobile/uc-points.js?v=555"></script>
+<script src="../mobile/inspect-guide.js?v=555"></script>
+<script src="../mobile/get-figs.js?v=555"></script>
+<script src="../mobile/body-points.js?v=555"></script>
+<script src="../mobile/body-map.js?v=555"></script>
+<script src="../mobile/jspdf.umd.min.js?v=555"></script>
+<script src="../mobile/html2canvas.min.js?v=555"></script>
+<script src="../mobile/report-core.js?v=555"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -7261,6 +7265,11 @@ const SEV_C={1:"g",2:"w",3:"s",4:"e",5:"c"};
 const SEV={};
 GRADE.LEVELS.forEach(n=>{ SEV[n]={ get l(){ return GRADE.label(n,lang); }, get name(){ return GRADE.name(n,lang); }, c:SEV_C[n], r:n }; });
 const SEVC={1:"var(--good)",2:"var(--warning)",3:"var(--serious)",4:"var(--severe)",5:"var(--critical)"};
+/* ONE WAY TO DRAW A GRADE (audit 26.10 D6). It was drawn four ways — plain
+   text, a dot, a filled pill, a boxed row — so the same 4 looked like a
+   different thing on each page. A dot in the grade's colour and "n – Name";
+   only a 5 is coloured text as well. */
+const gradeTag = (n, extra) => n && SEV[n] ? `<span class="sevcell${n>=5?" crit":""}${extra?" "+extra:""}" style="--sc:${SEVC[n]}"><i></i>${esc(SEV[n].l)}</span>` : "";
 /* A grade, whatever shape it arrived in — 3, "3", "C", "c" — as the number.
    Every read of a record's grade goes through this. */
 const gradeNum = g => GRADE.num(g);
@@ -8760,7 +8769,7 @@ function renderFleet(){
     const CELLS={
       equip:`<td><b>${esc(r.equip)}</b></td>`,
       prio:`<td class="nw" title="${esc(t(attn.key))}">${
-        attn.sev?`<span class="sevtxt${attn.sev>=5?" crit":""}" title="${esc(t("th_worst"))}">${esc(SEV[attn.sev].l)}</span>`:'<span class="muted">\u2014</span>'
+        attn.sev?`<span class="sevcell sevtxt${attn.sev>=5?" crit":""}" style="--sc:${SEVC[attn.sev]}" title="${esc(t("th_worst"))}"><i></i>${esc(SEV[attn.sev].l)}</span>`:'<span class="muted">\u2014</span>'
         }<span class="attn a${attn.rank}${attn.rank===2||attn.rank===3?" tag":" sr"}">${esc(t(attn.key))}</span></td>`,
       cls:`<td>${clsOf(r)?`<button class="xf" data-xcls="${esc(clsOf(r))}" title="${esc(t("xf_cls"))}">${esc(clsOf(r))}</button>`:'<span class="muted">\u2014</span>'}</td>`,
       defect:`<td title="${esc([top||"\u2014", (TYPE_LABEL[r.type]||r.type)+" "+(r.date||""), r.by||""].filter(Boolean).join(" \u00b7 "))}">${top?esc(top):'<span class="muted">\u2014</span>'}<span class="muted ovmeta"> \u00b7 <span class="tag">${esc(TYPE_LABEL[r.type]||r.type)}</span><span class="mono">${esc(r.date||"")}</span>${r.by?` \u00b7 ${esc(r.by)}`:""}</span></td>`,
@@ -9010,7 +9019,7 @@ function renderFailAffected(f){
         <td>${cls?esc(cls):'<span class="muted">—</span>'}</td>
         <td title="${esc(it.label||it.key)}"><span class="trunc">${esc(it.label||it.key)}</span></td>
         <td title="${esc(defOf(x))}"><span class="trunc">${defOf(x)?esc(defOf(x)):'<span class="muted">—</span>'}</span></td>
-        <td>${s?`<span class="pill ${SEV[s].c}">${esc(SEV[s].l)}</span>`:'<span class="muted">—</span>'}</td>
+        <td>${s?`${gradeTag(s)}`:'<span class="muted">—</span>'}</td>
         <td title="${esc(causeOf(x))}"><span class="trunc">${causeOf(x)?esc(causeOf(x)):'<span class="muted">—</span>'}</span></td></tr>`;
     }).join("")+`</tbody>`;
   tkWire(tb,"failaff",redrawFA);
@@ -9988,7 +9997,7 @@ function renderActions(){
             ${!acolOn("act")?"":`<td title="${esc(i.defect||"")}"><span class="trunc">${i.defect?esc(i.defect):'<span class="muted">—</span>'}</span></td>`}
             <!-- Grade: the finding's own 1–5 severity grade, and the
                  stoppage priority beside it once somebody has set one. -->
-            ${!acolOn("sev")?"":`<td class="nw" title="${esc((sv?SEV[sv].l:"")+(i.prio?" · "+prioName(i.prio):""))}">${sv?`<span class="sevcell" style="--sc:${sc}"><i></i>${esc(SEV[sv].l)}</span>`
+            ${!acolOn("sev")?"":`<td class="nw" title="${esc((sv?SEV[sv].l:"")+(i.prio?" · "+prioName(i.prio):""))}">${sv?`${gradeTag(sv)}`
                     :'<span class="muted">—</span>'}${
               i.prio?` <span class="prio ${prioClass(i.prio)}" title="${esc(prioName(i.prio))}">${esc(i.prio)}</span>`:""}</td>`}
             <!-- READ-OUTS THAT EDIT ON A CLICK. The row carries no live form
@@ -10124,7 +10133,7 @@ function renderActions(){
       <button type="button" class="wlh" data-unit="${esc(unit)}"
         aria-expanded="${shut?"false":"true"}">
         <span class="tw">${shut?"\u203a":"\u02c5"}</span>
-        ${worst?`<span class="pill ${SEV[worst].c}">${esc(SEV[worst].l)}</span>`:""}
+        ${worst?`${gradeTag(worst)}`:""}
         <span class="u">${esc(unit)}</span>
         <span class="m">${esc(a.cat||a.cls||TYPE_LABEL[list[0].r.type]||"")}</span>
         <span class="sp"></span>
@@ -11424,7 +11433,7 @@ function renderHistList(recs){
       const sc=sev?SEVC[sev]:"";
       /* Colour AND the word. A dot alone tells a colour-blind reader nothing,
          and this is the column the page is about. */
-      const sevCell=sev?`<span class="sevcell" style="--sc:${sc}"><i></i>${esc(SEV[sev].l)}</span>`
+      const sevCell=sev?`${gradeTag(sev)}`
                        :`<span class="muted">—</span>`;
       return `<tr class="hrow" tabindex="0" data-rk="${esc(ekOf(rec))}" data-ik="${esc(i._openKey||i.key)}">
         <td><b>${esc(i.key)}</b></td>
@@ -11684,7 +11693,7 @@ function renderHistory(){
           ${gal}
           ${edit}
           <div class="body"><div class="pk">${esc(i.key)}
-            ${s?`<span class="pill ${SEV[s].c}">${SEV[s].l}</span>`:""}</div>
+            ${s?`${gradeTag(s)}`:""}</div>
             <div class="pl">${esc(i.label||"")}</div>
             ${i.defect?`<div style="font-size:12px"><b>${esc(i.defect)}</b> <span class="muted">${esc(i.defectCode)}</span></div>`:""}
             ${i.cause?`<div style="font-size:12px" class="muted">Cause: ${esc(i.cause)}</div>`:""}
@@ -14709,7 +14718,7 @@ function openPos(rk, ik){
     + (rec._note?`<div class="sub" style="margin-top:8px">📝 ${esc(rec._note)}</div>`:"")
     + `<details class="disc"><summary>${esc(t("d_more"))}</summary>
        <div class="pk" style="margin-top:8px">${esc(i.key)}${
-         sev?` <span class="pill ${SEV[sev].c}">${esc(SEV[sev].l)}</span>`:""}${
+         sev?` ${gradeTag(sev)}`:""}${
          rec._void?` <span class="voidflag">${esc(t("ed_voided"))}</span>`:""}</div>
        <div class="pl">${esc(i.label||"")}</div>
        <dl>${
@@ -14822,7 +14831,7 @@ function openUnit(unit){
   const worst=recs.length?worstOf(recs[0]):"";
   const row=(k,v)=>v==null||v===""?"":`<dt>${esc(k)}</dt><dd>${v}</dd>`;
   $("drwBody").innerHTML=
-    `<div class="uhead">${worst?`<span class="pill ${SEV[worst].c}">${esc(SEV[worst].l)}</span>`:""}
+    `<div class="uhead">${worst?`${gradeTag(worst)}`:""}
        <span class="umod">${esc([a.m,a.cat||a.cls].filter(Boolean).join(" \u00b7 "))}</span></div>`
   + `<dl class="kv">`
     + row(t("th_class"), a.cls?`<button class="xf" data-ucls="${esc(a.cls)}">${esc(a.cls)}</button>`:"")
@@ -20611,7 +20620,7 @@ function renderSync(){
             tal.missing ? `<button class="btn ghost sm" type="button" data-opgo="${rk}">${esc(t("sy_act_missing"))}</button>` : "",
           ].filter(Boolean).join(" ");
           return `<tr class="hrow" tabindex="0" data-sygo="${rk}">
-            <td><b>${esc(r.equip)}</b>${crit?` <span class="pill c">${esc(SEV[5].l)}</span>`:""}</td>
+            <td><b>${esc(r.equip)}</b>${crit?` ${gradeTag(5)}`:""}</td>
             <td class="mono">${esc(r.date||"")}</td>
             <td><span class="tag">${esc(TYPE_LABEL[r.type]||r.type)}</span></td>
             <td class="num mono bad">${miss.length}</td>
@@ -21556,10 +21565,10 @@ document.querySelector(".lang").addEventListener("click",e=>{
   setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 })();
 </script>
-<script src="../dashboard/drive.js?v=554"></script>
-<script src="../dashboard/sync-adapter.js?v=554"></script>
-<script src="../dashboard/report.js?v=554"></script>
-<script src="../dashboard/reliability.js?v=554"></script>
+<script src="../dashboard/drive.js?v=555"></script>
+<script src="../dashboard/sync-adapter.js?v=555"></script>
+<script src="../dashboard/report.js?v=555"></script>
+<script src="../dashboard/reliability.js?v=555"></script>
 <script>
 /* THE CLOSED FILTER SAYS WHAT IS CHOSEN. A dropdown narrower than its option
    text ellipsises ("All t…", audit of 2026-10-01). Between 1331 and 1500 px

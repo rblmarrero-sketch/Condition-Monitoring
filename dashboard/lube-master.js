@@ -457,7 +457,9 @@
     if (!handover() || !el) return;
     el.insertAdjacentHTML("afterbegin", `<div class="lmx-ho" data-lmx-ho="1"><span>${esc(tr("ho_line"))}</span>` +
       `<a class="btn primary" href="${LL_URL}" target="_blank" rel="noopener" title="${esc(tr("ho_t"))}">${esc(tr("ho_btn"))}</a></div>`);
-    el.querySelectorAll("input,select,textarea").forEach(x => { if (x.type === "search" || HO_KEEP[x.id]) return; x.disabled = true; });
+    el.querySelectorAll("input,select,textarea").forEach(x => { if (x.type === "search" || HO_KEEP[x.id]) return; x.disabled = true;
+      /* read as plain text now (audit 26.10 D5), so a value longer than its cell is said in full on hover */
+      if (x.tagName !== "SELECT" && x.value && !x.title) x.title = x.value; });
     el.querySelectorAll("#lmxSaveM,#lmxUndoM,#lmxRevM,#lmxSaveO,#lmxSaveA,#lmxMig,.lmx-mig,.lmx-file,.lmx-who,[data-lmxap],[data-lmxre]")
       .forEach(x => { x.hidden = true; x.style.display = "none"; });
     el.querySelectorAll("[data-lmxg]").forEach(x => { x.disabled = true; });
@@ -1264,6 +1266,9 @@ table.grid.lmx-tbl tbody tr:hover td{background:var(--surface-2)}
 .lmx-gsel select.lmx-in{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;padding:0}
 .lmx-gsel:focus-within .lmx-sw{outline:2px solid var(--accent);outline-offset:1px}
 .lmx-tbl .lmx-in{width:100%;box-sizing:border-box;padding:3px 6px;font-size:12.5px;height:26px}
+.lmx-in:disabled{background:transparent;border-color:transparent;color:var(--ink);opacity:1;cursor:default;-webkit-appearance:none;appearance:none;box-shadow:none}
+.lmx-in:disabled::placeholder{color:transparent}
+.lmx-gsel:has(select:disabled){cursor:default}.lmx-gsel:has(select:disabled)::after{content:none}.lmx-gsel select.lmx-in:disabled{cursor:default}
 .lmx-tbl .lmx-in.num{width:100%;text-align:right;font-variant-numeric:tabular-nums}
 .lmx-oil .lmx-p{font-weight:600;font-size:12.5px;line-height:1.25}.lmx-oil .lmx-a{font-size:11.5px;color:var(--muted);line-height:1.25}
 .lmx-seen .ok{color:var(--good-ink);font-weight:600}.lmx-seen .bad{color:var(--crit-ink);font-weight:600}.lmx-seen .warn{color:var(--warn-ink);font-weight:600}
