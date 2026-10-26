@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-26T04:21:05+00:00",
+  "generated": "2026-10-26T05:55:00+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -353,7 +353,7 @@ window.CM_WO_DATA = {
     "WE010",
     "WE011"
   ],
-  "duplicateRowsCollapsed": 570,
+  "duplicateRowsCollapsed": 614,
   "roundsDedupedWithinVisit": 2,
   "columns": [
     "Asset description",
@@ -437,13 +437,13 @@ window.CM_WO_DATA = {
     "wo": "Work order number"
   },
   "cmDateFrom": {
-    "raised": 189,
+    "raised": 193,
     "detected": 0,
     "planStart": 0
   },
   "cmCauseFrom": {
-    "wo": 84,
-    "wr": 105,
+    "wo": 87,
+    "wr": 106,
     "cert": 0,
     "none": 0
   },
@@ -456,6 +456,98 @@ window.CM_WO_DATA = {
     "Bekzhan"
   ],
   "cmWorkOrders": [
+    {
+      "date": "2026-10-26",
+      "dateFrom": "raised",
+      "raised": "2026-10-26",
+      "detected": "2026-10-26",
+      "planStart": null,
+      "closed": null,
+      "asset": "TK114",
+      "defect": "DD-00015725",
+      "requestNo": "DD-00015725",
+      "eqType": "TRUCK, ARTICULATED",
+      "system": "TK114.BS (Braking System / Тормозная система)",
+      "priority": "P4 Planned (Repair)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Фитинг/штуцер ослаб",
+      "causeFrom": "wr",
+      "descr": "Течь масло с фильтра маслоохладителя тормозной жидкости.",
+      "status": "Registered",
+      "by": "Bekzhan",
+      "woNumber": null,
+      "maintType": null,
+      "planned": false
+    },
+    {
+      "date": "2026-10-26",
+      "dateFrom": "raised",
+      "raised": "2026-10-26",
+      "detected": "2026-10-26",
+      "planStart": null,
+      "closed": null,
+      "asset": "TK114",
+      "defect": "DD-00015724",
+      "requestNo": "DD-00015724",
+      "eqType": "TRUCK, ARTICULATED",
+      "system": "TK114.HS.DL (Hydraulic Lines / Гидролинии)",
+      "priority": "P4 Planned (Repair)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Фитинг/штуцер ослаб",
+      "causeFrom": "wr",
+      "descr": "Течь масла с фитинга гидролинии.",
+      "status": "Registered",
+      "by": "Bekzhan",
+      "woNumber": null,
+      "maintType": null,
+      "planned": false
+    },
+    {
+      "date": "2026-10-26",
+      "dateFrom": "raised",
+      "raised": "2026-10-26",
+      "detected": "2026-10-26",
+      "planStart": null,
+      "closed": null,
+      "asset": "TK114",
+      "defect": "DD-00015721",
+      "requestNo": "DD-00015721",
+      "eqType": "TRUCK, ARTICULATED",
+      "system": "TK114.ELS.ALT (Alternator / Генератор)",
+      "priority": "P4 Planned (Repair)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "cause": "Усталостная трещина",
+      "causeFrom": "wr",
+      "descr": "Трещины зубчатого профиля ремней.",
+      "status": "Registered",
+      "by": "Bekzhan",
+      "woNumber": null,
+      "maintType": null,
+      "planned": false
+    },
+    {
+      "date": "2026-10-26",
+      "dateFrom": "raised",
+      "raised": "2026-10-26",
+      "detected": "2026-10-26",
+      "planStart": null,
+      "closed": null,
+      "asset": "TK107",
+      "defect": "DD-00015727",
+      "requestNo": "DD-00015727",
+      "eqType": "TRUCK, ARTICULATED",
+      "system": "TK107.CH.BY (Dump Body / Самосвальный кузов)",
+      "priority": "P4 Planned (Repair)",
+      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
+      "cause": "Износ брони",
+      "causeFrom": "wr",
+      "descr": "Критический износ футеровочных пластин кузова.",
+      "status": "Registered",
+      "by": "Bekzhan",
+      "woNumber": null,
+      "maintType": null,
+      "planned": false
+    },
     {
       "date": "2026-10-25",
       "dateFrom": "raised",
@@ -714,7 +806,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-10-23",
       "detected": "2026-10-23",
-      "planStart": null,
+      "planStart": "2026-11-06",
       "closed": null,
       "asset": "TK107",
       "defect": "DD-00015488",
@@ -724,12 +816,12 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "cause": "Усталостная трещина",
-      "causeFrom": "wr",
+      "causeFrom": "wo",
       "descr": "Tрещины зубчатого профиля ремней генератора.",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "by": "Bekzhan",
-      "woNumber": null,
-      "maintType": null,
+      "woNumber": "WO-020826",
+      "maintType": "P4 Planned Repair",
       "planned": false
     },
     {
@@ -1611,7 +1703,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-10-10",
       "detected": "2026-10-10",
-      "planStart": null,
+      "planStart": "2026-11-08",
       "closed": null,
       "asset": "TK109",
       "defect": "DD-00014508",
@@ -1621,12 +1713,12 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "cause": "Фитинг/штуцер ослаб",
-      "causeFrom": "wr",
+      "causeFrom": "wo",
       "descr": "Течь рабочей жидкости из линии РВД подведенной к фильтру гидросистемы тормозов. Подтеки наблюдаются на фитинге.",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "by": "Zhomart",
-      "woNumber": null,
-      "maintType": null,
+      "woNumber": "WO-020831",
+      "maintType": "P4 Planned Repair",
       "planned": false
     },
     {
@@ -1657,7 +1749,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-10-10",
       "detected": "2026-10-10",
-      "planStart": null,
+      "planStart": "2026-11-08",
       "closed": null,
       "asset": "TK109",
       "defect": "DD-00014502",
@@ -1667,12 +1759,12 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "cause": "Усталостная трещина",
-      "causeFrom": "wr",
+      "causeFrom": "wo",
       "descr": "В ремнях генератора обнаружены множественные поперечные трещины.",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "by": "Zhomart",
-      "woNumber": null,
-      "maintType": null,
+      "woNumber": "WO-020829",
+      "maintType": "P4 Planned Repair",
       "planned": false
     },
     {
@@ -8298,27 +8390,6 @@ window.CM_WO_DATA = {
     {
       "equip": "CN007",
       "cls": "CRN",
-      "woNumber": "WO-017741",
-      "maintType": "2000 Hours service Planned",
-      "hours": 2000,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
-      "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
-      "planStart": "2026-09-24",
-      "planStartDt": "2026-09-24T00:00:00",
-      "planEnd": "2026-09-24",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
-    },
-    {
-      "equip": "CN007",
-      "cls": "CRN",
       "woNumber": "WO-018763",
       "maintType": "2000 Hours service Planned",
       "hours": 2000,
@@ -8336,6 +8407,27 @@ window.CM_WO_DATA = {
       "actualStart": "2026-10-07",
       "actualStartDt": "2026-10-07T07:00:00",
       "actualEnd": "2026-10-08"
+    },
+    {
+      "equip": "CN007",
+      "cls": "CRN",
+      "woNumber": "WO-017741",
+      "maintType": "2000 Hours service Planned",
+      "hours": 2000,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-16",
+      "planStartDt": "2026-11-16T00:00:00",
+      "planEnd": "2026-11-22",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
     },
     {
       "equip": "CN008",
@@ -79477,6 +79569,29 @@ window.CM_WO_DATA = {
       "actualEnd": "2026-10-25"
     },
     {
+      "equip": "TK101",
+      "cls": "AT",
+      "woNumber": "WO-020819",
+      "maintType": "4000 Hours service Planned",
+      "hours": 4000,
+      "cmLabel": "General Inspection / Magnetic Plug / Dump Body Liner",
+      "cmTypes": [
+        "INSP",
+        "MP",
+        "TB"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-03",
+      "planStartDt": "2026-11-03T00:00:00",
+      "planEnd": "2026-11-04",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
       "equip": "TK103",
       "cls": "AT",
       "woNumber": null,
@@ -80589,6 +80704,27 @@ window.CM_WO_DATA = {
       "actualStart": "2026-10-21",
       "actualStartDt": "2026-10-21T09:00:00",
       "actualEnd": "2026-10-21"
+    },
+    {
+      "equip": "TK103",
+      "cls": "AT",
+      "woNumber": "WO-020823",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "Magnetic Plug",
+      "cmTypes": [
+        "MP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-04",
+      "planStartDt": "2026-11-04T00:00:00",
+      "planEnd": "2026-11-05",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
     },
     {
       "equip": "TK104",
@@ -84779,6 +84915,27 @@ window.CM_WO_DATA = {
       "actualEnd": null
     },
     {
+      "equip": "TK107",
+      "cls": "AT",
+      "woNumber": "WO-020824",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "Magnetic Plug",
+      "cmTypes": [
+        "MP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-06",
+      "planStartDt": "2026-11-06T00:00:00",
+      "planEnd": "2026-11-07",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
       "equip": "TK108",
       "cls": "AT",
       "woNumber": null,
@@ -85956,6 +86113,27 @@ window.CM_WO_DATA = {
       "actualEnd": "2026-10-23"
     },
     {
+      "equip": "TK108",
+      "cls": "AT",
+      "woNumber": "WO-020827",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "Magnetic Plug",
+      "cmTypes": [
+        "MP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-03",
+      "planStartDt": "2026-11-03T00:00:00",
+      "planEnd": "2026-11-04",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
       "equip": "TK109",
       "cls": "AT",
       "woNumber": null,
@@ -87061,6 +87239,27 @@ window.CM_WO_DATA = {
       "planStart": "2026-10-29",
       "planStartDt": "2026-10-29T00:00:00",
       "planEnd": "2026-10-30",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
+      "equip": "TK109",
+      "cls": "AT",
+      "woNumber": "WO-020828",
+      "maintType": "500 Hours service Planned",
+      "hours": 500,
+      "cmLabel": "Magnetic Plug",
+      "cmTypes": [
+        "MP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-08",
+      "planStartDt": "2026-11-08T00:00:00",
+      "planEnd": "2026-11-09",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -88264,6 +88463,29 @@ window.CM_WO_DATA = {
       "actualStart": "2026-10-21",
       "actualStartDt": "2026-10-21T07:00:00",
       "actualEnd": "2026-10-21"
+    },
+    {
+      "equip": "TK110",
+      "cls": "AT",
+      "woNumber": "WO-020832",
+      "maintType": "2000 Hours service Planned",
+      "hours": 2000,
+      "cmLabel": "General Inspection / Magnetic Plug / Dump Body Liner",
+      "cmTypes": [
+        "INSP",
+        "MP",
+        "TB"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-02",
+      "planStartDt": "2026-11-02T00:00:00",
+      "planEnd": "2026-11-03",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
     },
     {
       "equip": "TK111",
