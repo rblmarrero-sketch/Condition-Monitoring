@@ -849,6 +849,21 @@ arriving together cannot make three requests or redraw under a thumb. The Due
 screen states the age (`schedAge`, beside `histAge`) and says so only where 1C
 is actually on screen (`tests/duetoday.cjs`).
 
+**AND THE CLASS HISTORY BEHIND IT COMES FROM GOOGLE, AND SAYS WHEN IT IS
+STALE (audit 26.10 C7, check 27.10 N6).** `ingest/fetch_cm_history.cjs` read
+the deleted Yandex VM, and the Pechanka workflow ran it with
+`continue-on-error` and a duckdns default, so `cm_history.generated.json`
+stopped at 18.10 without a word. A class walked for the first time after that
+never reached the class/round map. It now reads the Google Apps Script the
+phones upload to: the address comes from `mobile/upload-defaults.js` (`swap.to`),
+it uses `action=index&slim=1` paged by `truncated`/`cursor`, and it falls back
+to `action=records` only when the index has never been built. A duckdns address
+(an old `CM_BACKEND` repository variable) is ignored with a warning. A pull with
+under half the pairs already on file is refused rather than written. The
+workflow's last step, `--check-age 48`, runs after the commit and turns the run
+red with a `::error` when the committed history is older than 48 h
+(`tests/histpull.cjs`).
+
 **A MACHINE HELD OFF A ROUND IS HELD OFF IT ON EVERY SCREEN.** `DUE.OFF` is
 the one place a machine comes off a round, and `DUE.offRound` the one way to
 ask. Two things went wrong with it in two days.
@@ -1006,6 +1021,16 @@ already downloaded and in charge, and only needs a reload.
 **Never make an update wait on a technician, and never apply one mid-round.**
 Losing a half-captured inspection to a reload is worse than a phone being an
 hour behind. `applyUpdateIfIdle` checks `__swBusy()` for exactly that reason.
+
+**1C PM PRIORITY IS RED, AMBER OR AS IT WAS, AND THE RTW MARKS ARE 44 PX
+(build 549, audit 26.10 U1/U2).** `.agitem .tag` was written for the CM
+agenda's round code and reused for 1C PM's priority, so every priority, P1
+Critical included, was filled `--good` green. P1 and P2 now take `.p-hi`
+(`--critical`, ink `--g5-ink`) and P3 `.p-mid` (`--warning`, ink `--g2-ink`);
+P4/P5 and the CM agenda's tags are unchanged. The RTW Pass / Attention / N/A
+buttons were 28 px; they are `min-height:44px`. `tests/duepm.cjs` §2b reads the
+computed fill and its contrast in both themes, and `tests/rtw.cjs` measures
+all 69 buttons.
 
 **A BUTTON THAT REFUSES A PRESS MUST LOOK LIKE ONE.** Read off a handset on
 build 375: "when you choose Not being done it's not responding — it never
@@ -4840,6 +4865,18 @@ grade is the inspector's, proposed at the reading, so a temperature change
 applies from today and has no re-grade choice. Its preview counts how many
 readings on record would have been proposed a different grade, and says
 grades already given stay. No backend change (`tests/limitsall.cjs`).
+
+**A CUT INDEX REPLY IS MORE TO COME (build 548, audit 26.10 C3).** Google's
+`readIndex_` stops once the month files it has read pass `INDEX_SLIM_BYTES`
+and says `truncated` with a `cursor`; it never says `pending`, which only the
+records path sends. `histDrain` asked `pending` alone, so the first cut page of
+a new phone's full read counted as the whole folder and `histTrueUp` stripped
+the "from the system" stamp from every machine not on it, which are the most
+recently inspected. `teamPull` now sets `teamPending = 1` when a reply is
+`truncated` and carries no `pending`, so the drain asks again from the cursor;
+a cut reply whose cursor never moves makes the drain return false, never true
+up. Phone only, no backend change (`tests/draincut.cjs`, its own backend; fails
+four assertions against build 547).
 
 **THE GOOGLE INDEX IS NEVER WRITTEN WITHOUT ITS LOCK, AND A FILE IS WRITTEN
 BEFORE THE OLD ONE IS TRASHED (`GAS_INDEX_SAFETY_V1`, audit 26.10 C1, C2, C6,
