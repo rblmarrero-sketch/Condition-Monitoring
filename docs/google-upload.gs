@@ -1626,6 +1626,11 @@ function findObject_(key) {
                     PECHANKA (op batch through /cm-api) and the dashboard's own
                     editor (lube-master.js). Must be cm-lube-master /
                     cm-lube-change, and once DESK_KEY is set must carry it.
+     _meta/wear/limits.json, _meta/wear/log/<stamp>_r<rev>.json   (WEAR_LIMITS_V1)
+                    the office's measurement limits and their change log —
+                    dashboard/wear-limits.js, through /cm-api. Must be
+                    cm-wear-limits / cm-wear-change, and once DESK_KEY is set
+                    must carry it.
    Everything else under _meta is written by this script itself (corrections,
    conflicts, deletions and their logs, backups, the index, push subscriptions)
    and an upload there is refused. Anywhere else, a file shaped like one of
@@ -1634,7 +1639,8 @@ function findObject_(key) {
 var MARKER_NAME_RE_ = /\.(edit|deleted|conflict|defer|rival|file)\.json$/i;
 var MARKER_TYPES_ = { 'cm-record-edit': 1, 'cm-record-conflict': 1, 'cm-record-deleted': 1, 'cm-deletion': 1,
                       'cm-rival-deleted': 1, 'cm-file-deleted': 1, 'cm-round-deferred': 1, 'cm-index-shard': 1,
-                      'cm-meta-digest': 1, 'cm-lube-master': 1, 'cm-lube-change': 1 };
+                      'cm-meta-digest': 1, 'cm-lube-master': 1, 'cm-lube-change': 1,
+                      'cm-wear-limits': 1, 'cm-wear-change': 1 };
 function uploadJson_(b) {
   try { return JSON.parse(Utilities.newBlob(Utilities.base64Decode(b.file)).getDataAsString()); }
   catch (err) { return undefined; }
@@ -1653,7 +1659,11 @@ function uploadRefused_(path, fileName, b) {
         (sub === 'lube/log' && isJson && !MARKER_NAME_RE_.test(fileName) && type === 'cm-lube-change')) {
       return deskOk_(b) ? '' : DESK_REFUSED_;
     }
-    return 'Uploads into ' + META_DIR + '/ are refused except deferrals, phone diagnostics and the lube master ('
+    if ((sub === 'wear' && fileName === 'limits.json' && type === 'cm-wear-limits') ||
+        (sub === 'wear/log' && isJson && !MARKER_NAME_RE_.test(fileName) && type === 'cm-wear-change')) {
+      return deskOk_(b) ? '' : DESK_REFUSED_;
+    }
+    return 'Uploads into ' + META_DIR + '/ are refused except deferrals, phone diagnostics, the lube master and the wear limits ('
       + [META_DIR].concat(segs.slice(1)).concat([fileName]).join('/') + ')';
   }
   if (MARKER_NAME_RE_.test(fileName)) return 'A file named like an office marker cannot be uploaded (' + fileName + ')';
@@ -1766,8 +1776,10 @@ function diagnose_() {
     // Whether deletion is switched on, so the dashboard can say which it is
     // instead of offering a password box that can never be satisfied. The
     // secret itself never leaves the script — only whether one is set.
+    // `wearLimits` says this version accepts _meta/wear/ (WEAR_LIMITS_V1), so a
+    // plain GET of /exec shows whether the redeploy happened.
     return { ok: true, service: 'Condition Monitoring upload', folder: f.getName(), id: id,
-             canDelete: !!ADMIN_SECRET };
+             canDelete: !!ADMIN_SECRET, wearLimits: 1 };
   } catch (err) {
     return { ok: false, id: id, error: 'Could not open that folder. Either (a) the script has ' +
       'not been authorised for Drive — open the editor, Run > setup, click Allow, then deploy a ' +

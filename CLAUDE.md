@@ -4777,6 +4777,30 @@ reference sheet on 2026-10-26 and confirmed the figures. Now in
   read `model.rollers`. `tests/wear.cjs` holds every figure, and
   `tests/ucmap.cjs` checks the nine on the phone.
 
+**THE OFFICE SETS THE MEASUREMENT LIMITS (build 545, WEAR_LIMITS_V1).** Asked
+for on 2026-10-26: undercarriage new / wear limit editable on the CM dashboard
+(not LubeLink, which is for lubrication only), with the choice of applying a
+change from a date or re-grading all history. `dashboard/wear-limits.js`
+(`CMWearLimits`, loaded by both office pages) draws "Measurement limits —
+undercarriage" at the foot of Data & Sync. Each change is held in ONE document,
+`_meta/wear/limits.json` (`cm-wear-limits`), with a detail record under
+`_meta/wear/log/` (`cm-wear-change`). A change records model, point, new, limit,
+the date it applies FROM, who and why. "Re-grade all history" is the same change
+dated `0000-01-01`. A change taken back is voided, not deleted. `WEAR.setLimits` /
+`WEAR.limitFor` (`mobile/wear.js`, written by `build-wear-data.py`) apply it in
+`refFor`. The latest change in force on the reading's date replaces the catalogue
+figure, borrowed or not (`src: 'limit'`), and a unit's own baseline still sits on
+top. The form shows how many readings each choice re-grades before saving. It
+refuses a limit on the wrong side of new, equal figures, no source or no name.
+Saving follows the lube master's write-then-read-back rule. The page is re-scored
+only when the document's revision moves. The phone pulls it with the folder
+(`wearLimitsPull`, every 15 min at most, kept as `cm_wear_limits`).
+**`docs/google-upload.gs` changed** (`_meta/wear/` allowed, desk-gated like the
+lube master, and `wearLimits:1` in the `GET /exec` health answer). It needs a
+redeploy (F6) before a desk can save. Until then a save is refused by Google with
+"Uploads into _meta/ are refused …", and nothing is lost. GET, TB tray and TEMP
+limits are not in the panel yet (`tests/wearlimits.cjs`, `tests/gassafety.cjs`).
+
 ---
 
 ## Secrets

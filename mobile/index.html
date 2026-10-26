@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=544">
+<link rel="manifest" href="manifest.webmanifest?v=545">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=544">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=544">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=544">
+<link rel="apple-touch-icon" href="icon-192.png?v=545">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=545">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=545">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2862,16 +2862,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=544"></script>
-<script src="upload-defaults.js?v=544"></script>
-<script src="hme.js?v=544"></script>
-<script src="mp-fc.js?v=544"></script>
-<script src="rtw.js?v=544"></script>
-<script src="hme-cascade.js?v=544"></script>
-<script src="assets.js?v=544"></script>
-<script src="temp-limits.js?v=544"></script>
-<script src="normalize.js?v=544"></script>
-<script src="terms.js?v=544"></script>
+<script src="native.js?v=545"></script>
+<script src="upload-defaults.js?v=545"></script>
+<script src="hme.js?v=545"></script>
+<script src="mp-fc.js?v=545"></script>
+<script src="rtw.js?v=545"></script>
+<script src="hme-cascade.js?v=545"></script>
+<script src="assets.js?v=545"></script>
+<script src="temp-limits.js?v=545"></script>
+<script src="normalize.js?v=545"></script>
+<script src="terms.js?v=545"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2890,25 +2890,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=544"></script>
-<script src="edits.js?v=544"></script>
-<script src="due.js?v=544"></script>
-<script src="wear.js?v=544"></script>
-<script src="wear-figs.js?v=544"></script>
-<script src="wear-map.js?v=544"></script>
-<script src="machine-photos.js?v=544"></script>
-<script src="machine-fig.js?v=544"></script>
-<script src="get.js?v=544"></script>
-<script src="points.js?v=544"></script>
-<script src="uc-points.js?v=544"></script>
-<script src="inspect-guide.js?v=544"></script>
-<script src="get-figs.js?v=544"></script>
-<script src="body-points.js?v=544"></script>
-<script src="body-map.js?v=544"></script>
-<script src="lube.js?v=544"></script>
-<script src="lube-overrides.js?v=544"></script>
-<script src="lube2027.js?v=544"></script>
-<script src="report-core.js?v=544"></script>
+<script src="grade.js?v=545"></script>
+<script src="edits.js?v=545"></script>
+<script src="due.js?v=545"></script>
+<script src="wear.js?v=545"></script>
+<script src="wear-figs.js?v=545"></script>
+<script src="wear-map.js?v=545"></script>
+<script src="machine-photos.js?v=545"></script>
+<script src="machine-fig.js?v=545"></script>
+<script src="get.js?v=545"></script>
+<script src="points.js?v=545"></script>
+<script src="uc-points.js?v=545"></script>
+<script src="inspect-guide.js?v=545"></script>
+<script src="get-figs.js?v=545"></script>
+<script src="body-points.js?v=545"></script>
+<script src="body-map.js?v=545"></script>
+<script src="lube.js?v=545"></script>
+<script src="lube-overrides.js?v=545"></script>
+<script src="lube2027.js?v=545"></script>
+<script src="report-core.js?v=545"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -3282,6 +3282,7 @@ const I18N = {
     uc_f_flat:"no measurable wear since the last reading",
     uc_f_away:"reading has moved away from the limit — check it before trusting a trend",
     uc_src_override:"vs the corrected reference set",
+    uc_src_limit:"vs the office limit set",
     uc_x_borrowed:"this model's figures belong to another model",
     uc_x_rival:"two different references exist for this model",
     uc_x_nolimit:"a baseline, but no condemn limit anywhere",
@@ -3999,6 +4000,7 @@ const I18N = {
     uc_f_flat:"с прошлого замера износ не измеряется",
     uc_f_away:"замер удалился от предела — проверьте, прежде чем строить тренд",
     uc_src_override:"по исправленному эталону от",
+    uc_src_limit:"по пределу, заданному офисом",
     uc_x_borrowed:"эталон этой модели принадлежит другой модели",
     uc_x_rival:"для этой модели существуют два разных эталона",
     uc_x_nolimit:"базовый замер есть, предела износа нет",
@@ -4681,6 +4683,47 @@ async function lubeMasterPull(force){
   lsSet(LUBE_MASTER_LS, JSON.stringify(doc));
   lubeMasterApply(doc);
   try{ if(TYPE_META[type] && TYPE_META[type].lube && curItem) renderLube(); }catch(e){}
+  return doc;
+}
+
+/* THE OFFICE'S MEASUREMENT LIMITS (dashboard/wear-limits.js), read the way the
+   lube master is: _meta/wear/limits.json through the ordinary folder, at most
+   every 15 minutes, never forced, and kept (cm_wear_limits) so a round in the
+   pit is scored against the office's last decision. Absent on the server means
+   nobody has set one: the catalogue stands. A failed read changes nothing. */
+const WEAR_LIM_LS="cm_wear_limits", WEAR_LIM_DOC="_meta/wear/limits.json";
+let wearLimAt=0;
+function wearLimApply(doc){
+  try{ if(window.WEAR && WEAR.setLimits) WEAR.setLimits(doc||null); }
+  catch(e){ bad("wear-limits-apply", e); }
+}
+(function(){ let d=null; try{ d=JSON.parse(localStorage.getItem(WEAR_LIM_LS)||"null"); }catch(e){}
+  if(d) wearLimApply(d); })();
+async function wearLimitsPull(force){
+  if(!force && Date.now()-wearLimAt < LUBE_MASTER_GAP) return null;
+  const g=loadDests().find(d=>d.id==="gas" && d.url); if(!g) return null;
+  wearLimAt=Date.now();
+  const q=new URLSearchParams({action:"file", id:WEAR_LIM_DOC}); if(g.sec) q.set("secret",g.sec);
+  let j=null;
+  try{
+    const r=await fetchT(g.url+(g.url.indexOf("?")<0?"?":"&")+q.toString(), {method:"GET"}, 25000);
+    j=JSON.parse(await r.text());
+  }catch(e){ return null; }                       /* silence is not a verdict */
+  if(!j) return null;
+  if(j.ok===false){
+    if(/\b404\b|NoSuchKey|not\s*found/i.test(String(j.error||""))){
+      if(localStorage.getItem(WEAR_LIM_LS)!==null){ lsDel(WEAR_LIM_LS); wearLimApply(null); }
+    }
+    return null;
+  }
+  let doc=null;
+  try{ doc=JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(j.data||""), c=>c.charCodeAt(0)))); }
+  catch(e){ console.warn("wear limits unreadable", e); return null; }
+  if(!doc || doc.type!=="cm-wear-limits") return null;
+  let prev=null; try{ prev=JSON.parse(localStorage.getItem(WEAR_LIM_LS)||"null"); }catch(e){}
+  if(prev && prev.rev===doc.rev && prev.at===doc.at) return doc;
+  lsSet(WEAR_LIM_LS, JSON.stringify(doc));
+  wearLimApply(doc);
   return doc;
 }
 
@@ -7990,7 +8033,7 @@ function renderUCRef(){
      inspector had just looked at. What is left is what the gauge cannot say:
      which way the number moves, and where the limit came from. */
   el.textContent=(ucGaugeOn() ? "" : t("uc_ref_span",{n:fmtMM(ref.n),c:fmtMM(ref.c)})+" · ")
-    +dir+" · "+t("uc_src_"+ref.src)+(ref.from?" "+ref.from:"");
+    +dir+" · "+t("uc_src_"+ref.src)+(ref.from && ref.from>"0001"?" "+ref.from:"");
   el.className="ucref";
 }
 const fmtMM = v => v==null ? "—" : String(Math.round(v*100)/100);
@@ -12811,6 +12854,7 @@ async function teamPull(manual,full,from,pre){
     /* The office's lube decisions travel with the folder's other news. Not
        awaited: a pull is "done" when the rounds are, and this never holds it. */
     lubeMasterPull(false).catch(e=>bad("lube-master-pull", e));
+    wearLimitsPull(false).catch(e=>bad("wear-limits-pull", e));
     return true;                               // the folder actually answered
   }catch(e){
     if(!mine()) return false;                      // superseded by a newer press
@@ -15143,7 +15187,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="544";
+const BUILD="545";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

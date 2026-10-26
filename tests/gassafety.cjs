@@ -393,6 +393,9 @@ section('7b. what an upload may put in _meta', () => {
     ['', '_meta/deletions/z.deleted.json', { type: 'cm-deletion', key: 'TK146|2026-03-09|MP' }],
     ['_meta/deferrals', 'TK146_MP.defer.json', { type: 'cm-record-edit', key: 'TK146|2026-03-09|MP' }],
     ['_meta/diag', 'x.deleted.json', { type: 'cm-sync-trace' }],
+    ['_meta/wear', 'limits.json', { type: 'cm-lube-master' }],
+    ['_meta/wear', 'other.json', { type: 'cm-wear-limits' }],
+    ['MP/TK146/2026-03-09', 'limits.json', { type: 'cm-wear-limits', changes: [] }],
     ['_meta/diag', 'DX_1.json', { type: 'cm-record-edit', key: 'k' }],
     ['MP/TK146/2026-03-09', 'TK146_09.03.2026_MP.deleted.json', { type: 'cm-deletion', key: 'TK146|2026-03-09|MP' }],
     ['MP/TK146/2026-03-09', 'note.json', { type: 'cm-record-edit', key: 'TK146|2026-03-09|MP', void: true }],
@@ -408,6 +411,8 @@ section('7b. what an upload may put in _meta', () => {
     ['phone diagnostic trace', up('_meta/diag', 'DPHONE1_2026-10-25T01-02-03.json', { type: 'cm-sync-trace', v: 1, dev: 'DPHONE1', lines: [] })],
     ['lube master (no DESK_KEY set)', up('', '_meta/lube/master.json', { type: 'cm-lube-master', version: 1, rev: 3 })],
     ['lube change log (no DESK_KEY set)', up('', '_meta/lube/log/2026-10-25T00-00-00-000Z_r3.json', { type: 'cm-lube-change', rev: 3, changes: [] })],
+    ['wear limits (no DESK_KEY set)', up('', '_meta/wear/limits.json', { type: 'cm-wear-limits', version: 1, rev: 1, changes: [] })],
+    ['wear limits change log (no DESK_KEY set)', up('', '_meta/wear/log/2026-10-26T00-00-00-000Z_r1.json', { type: 'cm-wear-change', rev: 1 })],
     ['a round sidecar', up('MP/TK146/2026-03-09', 'TK146_09.03.2026_MP.json', sidecar('TK146', '2026-03-09', 'MP'))],
   ];
   legit.forEach(([n, r]) => ok('accepted: ' + n, landed(r), r.error || (r.failed && r.failed[0]) || r));
@@ -456,6 +461,10 @@ section('7c. the desk key', () => {
   ok('the lube master without the desk key is refused', (lm.failed || []).length === 1 && lm.failed[0].error === MSG, lm);
   const lm2 = S.post({ op: 'batch', desk: KEY, files: [{ name: '_meta/lube/master.json', file: b64({ type: 'cm-lube-master', rev: 9 }) }] });
   ok('the lube master with the desk key lands (LubeLink through /cm-api)', (lm2.saved || []).length === 1, lm2);
+  const wl = S.post({ op: 'batch', files: [{ name: '_meta/wear/limits.json', file: b64({ type: 'cm-wear-limits', rev: 2, changes: [] }) }] });
+  ok('the wear limits without the desk key are refused', (wl.failed || []).length === 1 && wl.failed[0].error === MSG, wl);
+  const wl2 = S.post({ op: 'batch', desk: KEY, files: [{ name: '_meta/wear/limits.json', file: b64({ type: 'cm-wear-limits', rev: 2, changes: [] }) }] });
+  ok('the wear limits with the desk key land (the dashboard through /cm-api)', (wl2.saved || []).length === 1, wl2);
 
   office.forEach(([n, b]) => {
     const r = S.post(Object.assign({}, b, { desk: KEY }));
