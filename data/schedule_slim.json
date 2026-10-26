@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-26T02:39:41+00:00",
+  "generated": "2026-10-26T02:55:26+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -40,6 +40,17 @@
           "INSP"
         ],
         "plan": "2026-03-26",
+        "priority": "P3 Planned (PM)"
+      }
+    ],
+    "CN015": [
+      {
+        "wo": "WO-020810",
+        "hours": 4000,
+        "types": [
+          "INSP"
+        ],
+        "plan": "2026-10-27",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -1655,6 +1666,24 @@
       "raised": "2026-10-27",
       "type": "2000 Hours service Planned",
       "hours": 2000,
+      "plan": "2026-10-27",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-020810",
+      "equip": "CN015",
+      "cls": "CRN",
+      "comp": "",
+      "desc": "General Inspection",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-27",
+      "type": "4000 Hours service Planned",
+      "hours": 4000,
       "plan": "2026-10-27",
       "status": "Elimination scheduled",
       "request": "",
