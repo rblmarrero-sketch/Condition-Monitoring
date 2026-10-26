@@ -4925,6 +4925,19 @@ uses `--good-ink` / `--crit-ink` now, and fills keep the fill tokens.
 `tests/uicontrast.cjs` measures each in both themes and fails seven
 assertions against build 550.
 
+**EVERY CONTROL ON THE PHONE'S SHORT SCREENS IS 44 PX (build 552, audit 26.10
+M3).** Measured, not read off the CSS: the Due tab switch was 38 px, the
+1C PM sheet's and RTW checklist's back chevron 15x26, RTW's evidence toggle
+21, its photo and voice buttons 32, its release fields 38, its comment box 34
+and the signature's Clear 14; Settings' backend rows 26; the Saved tab's
+upload-details summary 18 and report-language select 42. All take `--tap`
+(44 px; the release fields 48). The chevron keeps its glyph where it was and
+gains the box. The Result / Date / Time row squeezed Result to "R" and ran
+the Time box 23-45 px off the card at 360-390 px: Result has its own line and
+the fields shrink with their row (`min-width:0`). `tests/phonetap.cjs` walks
+the screens at 360 and 390 in English and Russian, names any control under
+44 px and any running off the screen, and fails on build 551.
+
 ---
 
 ## Secrets
