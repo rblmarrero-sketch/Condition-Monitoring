@@ -4992,6 +4992,17 @@ in full. A wider tile was tried and dropped: it squeezed the seven headline
 tiles until "БЕЗ ОТВЕТСТВЕННОГО" was cut. Also tried and dropped: sizing the
 global filter selects to their own text (`field-sizing:content`). That put the
 Russian bar on two rows at 1280–1366, so "All clas…" stays for now.
+
+**ONE RULE PER COMPONENT FOR THE TABLE HEADER AND THE PILL (build 557, audit
+26.10 D8).** `table.grid th` was stated three times on dashboard/ and four
+on dashboard-next, and `.pill` three times on dashboard/ with radii of 999,
+3 and 5 px, each layer overriding the one before. Each is now ONE rule
+holding the values that won, placed where the last layer sat. Nothing on
+screen changed, and that was measured, not assumed: the computed style of
+every visible element on every tab, on both pages, in light and dark, English
+and Russian, came out identical to build 556. The same comparison, with a
+1 px radius change planted, reported 440 differences, so it can see a change.
+Add to the one rule; never restate the selector further down.
 ---
 
 ## Secrets
