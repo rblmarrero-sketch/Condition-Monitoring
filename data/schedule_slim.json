@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-27T21:19:18+00:00",
+  "generated": "2026-10-27T21:24:31+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -643,15 +643,6 @@
       }
     ],
     "TK121": [
-      {
-        "wo": "WO-019521",
-        "hours": 500,
-        "types": [
-          "MP"
-        ],
-        "plan": "2026-10-27",
-        "priority": "P3 Planned (PM)"
-      },
       {
         "wo": "WO-020873",
         "hours": 250,
@@ -2979,12 +2970,12 @@
       "type": "500 Hours service Planned",
       "hours": 500,
       "plan": "2026-10-27",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-27"
     },
     {
       "wo": "WO-019526",
