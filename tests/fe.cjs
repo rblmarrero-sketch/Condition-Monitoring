@@ -192,7 +192,9 @@ http.createServer((q,r)=>{const u=new URL(q.url,'http://x');const p=path.join(RO
  await p.goto(B+'/mobile/index.html',{waitUntil:'load'});
  await p.waitForTimeout(900);
  const focus=await p.evaluate(()=>{
-   const el=[...document.querySelectorAll('button,input,select,textarea,[tabindex]')]
+   // tabindex="-1" is focused by the app (a step when it opens), never by a key:
+  // a frame round it is the audit's F23, not a missing focus ring (build 564).
+  const el=[...document.querySelectorAll('button,input,select,textarea,[tabindex]:not([tabindex="-1"])')]
      .filter(e=>e.getClientRects().length).slice(0,25);
    const bad=[];
    el.forEach(e=>{ e.focus();

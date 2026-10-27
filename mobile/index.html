@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=563">
+<link rel="manifest" href="manifest.webmanifest?v=564">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=563">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=563">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=563">
+<link rel="apple-touch-icon" href="icon-192.png?v=564">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=564">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=564">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -147,6 +147,16 @@
   :root[data-theme="dark"] body[data-round="FC"]{--cat:#b48bce;--cat-bg:#26202b;}
   :root[data-theme="dark"] body[data-round="INSP"]{--cat:#37b2b4;--cat-bg:#162626;}
   :root[data-theme="dark"] body[data-round="TEMP"]{--cat:#cb9154;--cat-bg:#2a2118;}
+  /* LOW AUDIT ITEMS (audit 26.10 F22 F23). F22: the machine photograph under
+     the undercarriage map is a white plate, a full-width white slab on a
+     night-shift screen; dimmed a little in dark. Only on the capture screen:
+     the report draws its own copy. */
+  :root[data-theme="dark"] #posnav .um-photo{filter:brightness(.82);}
+  @media (prefers-color-scheme: dark){ :root:where(:not([data-theme="light"])) #posnav .um-photo{filter:brightness(.82);} }
+  /* F23: a step is focused when it opens, so a screen reader starts at it;
+     that is no reason to draw a black frame round the whole step. Controls
+     keep their own focus rings. */
+  section.view:focus{outline:none;}
   :root[data-theme="dark"] body[data-round="UC"]{--cat:#83ad69;--cat-bg:#1e251a;}
   :root[data-theme="dark"] body[data-round="GET"]{--cat:#cd83ae;--cat-bg:#2b1f25;}
   :root[data-theme="dark"] body[data-round="TB"]{--cat:#4cabd2;--cat-bg:#17252b;}
@@ -279,7 +289,7 @@
   .withbtn > input, .withbtn > textarea{flex:1;min-width:0;}
   .iconbtn{flex:none;min-height:44px;white-space:nowrap;background:var(--surface-3);color:var(--ink);border:1px solid var(--border);border-radius:10px;padding:0 13px;font-size:14.5px;font-weight:650;cursor:pointer;}
   .withbtn > textarea + .iconbtn{align-self:flex-start;width:44px;padding:0;font-size:18px;}
-  .iconbtn.rec{background:var(--critical);color:#fff;border-color:transparent;animation:pulse 1s infinite;}
+  .iconbtn.rec{background:var(--critical);color:var(--g5-ink);border-color:transparent;animation:pulse 1s infinite;}
   @keyframes pulse{50%{opacity:.55;}}
   .seg{display:flex;gap:6px;flex-wrap:wrap;}
   .seg button{min-height:44px;flex:1;min-width:56px;padding:10px 8px;border-radius:10px;border:1px solid var(--border);background:var(--surface-2);color:var(--ink-2);font-size:15px;font-weight:650;cursor:pointer;transition:background .1s,color .1s;}
@@ -381,7 +391,7 @@
   .rtw-icon-btn{flex:none;width:var(--tap);height:var(--tap);border-radius:8px;border:1px solid var(--border);background:var(--surface);
     color:var(--ink);font-size:14px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;}
   .rtw-icon-btn.mic{color:var(--accent);}
-  .rtw-icon-btn.mic.rec{color:#fff;background:var(--critical);border-color:var(--critical);animation:pulse 1s infinite;}
+  .rtw-icon-btn.mic.rec{color:var(--g5-ink);background:var(--critical);border-color:var(--critical);animation:pulse 1s infinite;}
   .rtw-photo-badge{position:absolute;top:-5px;right:-5px;min-width:14px;height:14px;border-radius:7px;background:var(--good);
     color:#fff;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 3px;}
   /* min-width:0 so a field shrinks with its row: a date or time input's own
@@ -501,7 +511,7 @@
      lower than usual: a real state change with nothing on screen to show it.
      Filled solid, the same way .primary is, so a dangerous choice reads as
      clearly made as a safe one does. */
-  .btn.danger{background:var(--critical);color:#fff;}
+  .btn.danger{background:var(--critical);color:var(--g5-ink);}
   .btn.ghost{background:var(--surface-2);color:var(--ink);border:1px solid var(--border);}
   .btn.ghost:active{background:var(--surface-3);opacity:1;}
   .pending{display:flex;flex-direction:column;gap:10px;}
@@ -570,7 +580,7 @@
     scrollbar-width:none;padding-bottom:2px;margin-bottom:8px;}
   .dfilter::-webkit-scrollbar{display:none;}
   .dfilter button{padding:6px 11px;}
-  .dfilter button.on.over{border-color:var(--critical);background:var(--critical);color:#fff;}
+  .dfilter button.on.over{border-color:var(--critical);background:var(--critical);color:var(--g5-ink);}
   .dfilter button.on.soon{border-color:var(--warning);background:var(--warning);color:#111;}
   .dfilter button.on.put{border-color:var(--accent);background:var(--accent);color:var(--accent-ink);}
   .dfilter button.on.over .n,.dfilter button.on.soon .n,.dfilter button.on.put .n{
@@ -851,7 +861,7 @@
   /* Missed is not a warning, it is a miss. The queue's badge is the accent
      because work waiting to upload is normal; this one is red because a
      machine nobody has been to is not. */
-  .tabbar .tb.miss{background:var(--critical);color:#fff;}
+  .tabbar .tb.miss{background:var(--critical);color:var(--g5-ink);}
 
   /* The unit's recent history, at the moment of standing in front of it. */
   .trend{display:flex;align-items:center;gap:8px;margin:-2px 0 12px;}
@@ -1326,16 +1336,16 @@
      number badge light-on-light (1.06:1, audit 26.10 M4). */
   .ucgroups button.on{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);
     background:var(--surface);color:var(--ink);}
-  .ucgroups button.done i{background:var(--good);border-color:var(--good);color:#fff;}
+  .ucgroups button.done i{background:var(--good);border-color:var(--good);color:var(--g1-ink);}
   .ucgroups button.watch i{background:var(--warning);border-color:var(--warn-ink);color:#3a2a00;}
-  .ucgroups button.act i{background:var(--critical);border-color:var(--critical);color:#fff;}
+  .ucgroups button.act i{background:var(--critical);border-color:var(--critical);color:var(--g5-ink);}
   .ucgroups button.na i{background:var(--surface-3);border-style:dashed;}
   /* A tray zone counts its stations rather than carrying a catalog number, so
      the badge is a tally and has to be able to hold "13/13" — not a puck. */
   .ucgroups button i.cnt{width:auto;min-width:34px;padding:0 7px;border-radius:999px;
     font-variant-numeric:tabular-nums;color:var(--muted);order:2;margin-left:2px;}
   .ucgroups button{padding-right:6px;}
-  .ucgroups button.done i.cnt,.ucgroups button.act i.cnt{color:#fff;}
+  .ucgroups button.done i.cnt{color:var(--g1-ink);} .ucgroups button.act i.cnt{color:var(--g5-ink);}
   .ucgroups button.watch i.cnt{color:#3a2a00;}
   /* ---- the tray, drawn as an opened box -------------------------------
      Colour carries HEIGHT OFF THE FLOOR, not category. Green, amber and red
@@ -2932,16 +2942,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=563"></script>
-<script src="upload-defaults.js?v=563"></script>
-<script src="hme.js?v=563"></script>
-<script src="mp-fc.js?v=563"></script>
-<script src="rtw.js?v=563"></script>
-<script src="hme-cascade.js?v=563"></script>
-<script src="assets.js?v=563"></script>
-<script src="temp-limits.js?v=563"></script>
-<script src="normalize.js?v=563"></script>
-<script src="terms.js?v=563"></script>
+<script src="native.js?v=564"></script>
+<script src="upload-defaults.js?v=564"></script>
+<script src="hme.js?v=564"></script>
+<script src="mp-fc.js?v=564"></script>
+<script src="rtw.js?v=564"></script>
+<script src="hme-cascade.js?v=564"></script>
+<script src="assets.js?v=564"></script>
+<script src="temp-limits.js?v=564"></script>
+<script src="normalize.js?v=564"></script>
+<script src="terms.js?v=564"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2960,25 +2970,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=563"></script>
-<script src="edits.js?v=563"></script>
-<script src="due.js?v=563"></script>
-<script src="wear.js?v=563"></script>
-<script src="wear-figs.js?v=563"></script>
-<script src="wear-map.js?v=563"></script>
-<script src="machine-photos.js?v=563"></script>
-<script src="machine-fig.js?v=563"></script>
-<script src="get.js?v=563"></script>
-<script src="points.js?v=563"></script>
-<script src="uc-points.js?v=563"></script>
-<script src="inspect-guide.js?v=563"></script>
-<script src="get-figs.js?v=563"></script>
-<script src="body-points.js?v=563"></script>
-<script src="body-map.js?v=563"></script>
-<script src="lube.js?v=563"></script>
-<script src="lube-overrides.js?v=563"></script>
-<script src="lube2027.js?v=563"></script>
-<script src="report-core.js?v=563"></script>
+<script src="grade.js?v=564"></script>
+<script src="edits.js?v=564"></script>
+<script src="due.js?v=564"></script>
+<script src="wear.js?v=564"></script>
+<script src="wear-figs.js?v=564"></script>
+<script src="wear-map.js?v=564"></script>
+<script src="machine-photos.js?v=564"></script>
+<script src="machine-fig.js?v=564"></script>
+<script src="get.js?v=564"></script>
+<script src="points.js?v=564"></script>
+<script src="uc-points.js?v=564"></script>
+<script src="inspect-guide.js?v=564"></script>
+<script src="get-figs.js?v=564"></script>
+<script src="body-points.js?v=564"></script>
+<script src="body-map.js?v=564"></script>
+<script src="lube.js?v=564"></script>
+<script src="lube-overrides.js?v=564"></script>
+<script src="lube2027.js?v=564"></script>
+<script src="report-core.js?v=564"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -10581,6 +10591,15 @@ function pmStatusOf(row){
   if(s.indexOf("progress")>=0) return "inprogress";
   return "open";
 }
+/* One way to say a 1C date on the 1C PM screens (audit F24): the list said
+   "Sun 18 Oct 2026" and the sheet it opens said "18.10". */
+function pmLongDate(d){
+  const dt=new Date(d+"T00:00:00Z"); if(isNaN(dt)) return d;
+  const loc=lang==="ru"?"ru-RU":"en-US";
+  const wd=dt.toLocaleDateString(loc,{weekday:"short",timeZone:"UTC"}).replace(/\.$/,"");
+  const mo=dt.toLocaleDateString(loc,{month:"short",timeZone:"UTC"}).replace(/\.$/,"");
+  return wd+" "+dt.getUTCDate()+" "+mo+" "+dt.getUTCFullYear();
+}
 function pmInfoRows(row){
   const rows=[[t("pm_equip"), row.equip]];
   if(row.comp) rows.push([t("pm_component"), row.comp]);
@@ -10597,7 +10616,7 @@ function pmInfoRows(row){
   if(row.status) rows.push([t("pm_status"), row.status]);
   if(row.priority) rows.push([t("pm_priority"), row.priority]);
   const dt=row.plan||row.raised;
-  if(dt) rows.push([t("pm_date"), schedShortDate(dt)||dt]);
+  if(dt) rows.push([t("pm_date"), pmLongDate(dt)]);
   return rows;
 }
 let pmInfoRow=null;
@@ -10682,15 +10701,12 @@ function renderDuePM(){
   const byDay={};
   rows.forEach(r=>(byDay[r.plan||r.raised||""]=byDay[r.plan||r.raised||""]||[]).push(r));
   const dayLabel=d=>{
-    const dt=new Date(d+"T00:00:00Z");
-    const wd=dt.toLocaleDateString(lang==="ru"?"ru-RU":"en-US",{weekday:"short",timeZone:"UTC"}).replace(/\.$/,"");
     /* THE MONTH AND THE YEAR ARE PART OF THE DATE. This said "Tue 30" and
        nothing more, and the list is never clipped, so a work order 1C planned
        for 30 December 2025 and one planned for last Tuesday read the same.
        Asked from the field on 2026-10-04: "what date are these". The locale
        supplies the month word, so Russian says it in Russian. */
-    const mo=dt.toLocaleDateString(lang==="ru"?"ru-RU":"en-US",{month:"short",timeZone:"UTC"}).replace(/\.$/,"");
-    const base=wd+" "+dt.getUTCDate()+" "+mo+" "+dt.getUTCFullYear();
+    const base=pmLongDate(d);
     if(d===today) return t("due_week_today")+" · "+base;
     return DUE.agendaPast(today,d) ? base+" · "+t("due_week_late") : base;
   };
@@ -15288,7 +15304,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="563";
+const BUILD="564";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
