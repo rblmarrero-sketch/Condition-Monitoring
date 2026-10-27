@@ -144,6 +144,54 @@ const MEASURE = () => {
         return out; });
       ok('the Grade mix legend entries do not run into each other', !lg.length, lg.slice(0, 4).join(' | '));
     }
+    /* MEDIUM, batch A (audit 26.10 M3 M5 M7 M9 M12 M14 M16 M17) */
+    const shownDup = await p.evaluate(async () => {
+      const out = [];
+      for (const [tab, box] of [['actions', '#actShown'], ['failure', '#failAffShown'], ['due', '#ddList'], ['wear', '#wearShown']]) {
+        showTab(tab, true); await new Promise(r => setTimeout(r, 300));
+        const el = document.querySelector(box); if (!el) continue;
+        /* a count printed by the pager and again beside it */
+        const txt = (el.closest('.section') || el.parentElement).innerText;
+        const m = txt.match(/(\d[\d,\s]*)\s*(matching|совпад)/gi) || [];
+        const sh = txt.match(/Showing \d+ of \d+|Показано \d+ из \d+/g) || [];
+        if (m.length > 1 || (m.length && sh.length)) out.push(`${tab}: ${m.length} pager counts, ${sh.length} "showing"`);
+        el.querySelectorAll('.pager').forEach(pg => { const w = el.getBoundingClientRect().width, pw = pg.getBoundingClientRect().width;
+          if (el.classList.contains('shown') && pw < w - 40) out.push(`${tab}: pager ${Math.round(pw)} of ${Math.round(w)} px`); });
+      }
+      return out; });
+    ok('M5 the pager owns the count: no second count beside it, and it spans its line', !shownDup.length, shownDup.join(' | '));
+    const inset = await p.evaluate(async () => {
+      const out = {};
+      const pad = (el) => { const s = el.closest('.section'); const h = s.querySelector('.secthd h2, h2'); return [Math.round(el.getBoundingClientRect().left - s.getBoundingClientRect().left), h ? Math.round(h.getBoundingClientRect().left - s.getBoundingClientRect().left) : null]; };
+      showTab('actions', true); await new Promise(r => setTimeout(r, 300));
+      const bar = document.getElementById('actBar'); if (bar && bar.offsetHeight) out.actBar = pad(bar);
+      showTab('overview', true); await new Promise(r => setTimeout(r, 300));
+      const tc = document.getElementById('trendChart'); if (tc && tc.offsetHeight) out.trend = pad(tc);
+      showTab('sync', true); await new Promise(r => setTimeout(r, 400));
+      const wl = document.getElementById('wlPanel'); out.wlCard = !!wl && wl.classList.contains('section') && getComputedStyle(wl).borderTopStyle !== 'none';
+      showTab('cmwo', true); await new Promise(r => setTimeout(r, 300));
+      const cb = document.getElementById('cwPlanned'), lab = cb && cb.closest('label').querySelector('span');
+      if (cb && lab) { const a = cb.getBoundingClientRect(), l = lab.getBoundingClientRect();
+        out.chk = { beside: l.left >= a.right - 1 && Math.abs((l.top + l.bottom) / 2 - (a.top + a.bottom) / 2) < 6, upper: getComputedStyle(lab).textTransform }; }
+      showTab('equipment', true); await new Promise(r => setTimeout(r, 300));
+      const pick = document.querySelector('#tab-equipment > .controls:not(#filterBar):not(#fMoreRow)'), col = [...document.querySelectorAll('#tab-equipment .section')].find(e => e.getClientRects().length);
+      if (pick && col) out.pick = [Math.round(pick.getBoundingClientRect().left - col.getBoundingClientRect().left), Math.round(pick.getBoundingClientRect().right - col.getBoundingClientRect().right)];
+      showTab('lube', true); await new Promise(r => setTimeout(r, 300)); if (window.lubeGo) lubeGo('master'); await new Promise(r => setTimeout(r, 600));
+      out.primaries = [...document.querySelectorAll('#tab-lube .btn.primary')].filter(e => e.getClientRects().length).map(e => e.textContent.trim());
+      const hd = document.querySelector('header.app');
+      if (hd) out.hdr = [...hd.querySelectorAll('#srcChip,#dataBtn')].filter(e => e.getClientRects().length).map(e => [e.id, Math.round(e.getBoundingClientRect().height), e.scrollHeight > e.clientHeight + 2 || (e.id === 'srcChip' ? false : e.getClientRects().length > 1)]);
+      return out; });
+    if (inset.actBar) ok('M7 the progress strip starts where the card title does', Math.abs(inset.actBar[0] - inset.actBar[1]) <= 1, JSON.stringify(inset.actBar));
+    if (inset.trend) ok('M12 the trend chart sits inside the card padding', Math.abs(inset.trend[0] - inset.trend[1]) <= 1, JSON.stringify(inset.trend));
+    ok('M14 Measurement limits is a card', inset.wlCard);
+    if (inset.chk) ok('M16 a tick box has its label beside it, in sentence case', inset.chk.beside && inset.chk.upper === 'none', JSON.stringify(inset.chk));
+    if (inset.pick) ok('M3 the Equipment History picker keeps the page column', Math.abs(inset.pick[0]) <= 1 && Math.abs(inset.pick[1]) <= 1, JSON.stringify(inset.pick));
+    ok('M17 Lubrication has one primary button', inset.primaries.length <= 1, inset.primaries.join(' | '));
+    if (file === 'dashboard-next' && inset.hdr) {
+      const lh = await p.evaluate(() => [...document.querySelectorAll('header.app #srcText, header.app #dataBtn')].map(e => { const cs = getComputedStyle(e); return [e.id, Math.round(e.getBoundingClientRect().height / parseFloat(cs.lineHeight === 'normal' ? parseFloat(cs.fontSize) * 1.25 : cs.lineHeight))]; }));
+      const wraps = await p.evaluate(() => [...document.querySelectorAll('header.app #srcText, header.app #dataBtn')].filter(e => { const r = document.createRange(); r.selectNodeContents(e); return r.getClientRects().length > 1 && new Set([...r.getClientRects()].map(x => Math.round(x.top))).size > 1; }).map(e => e.id));
+      ok('M9 the source chip and Data sources stay on one line', !wraps.length, wraps.join(', '));
+    }
     const fb = await p.evaluate(() => { const bar = document.getElementById('filterBar'); return !!bar && !!bar.querySelector('#fType'); });
     ok('the filter bar is #filterBar', fb);
     /* nothing chosen: each filter shows its own short name ("Class"), not "All clas…" cut short */

@@ -423,6 +423,8 @@
   /* ── drawing ────────────────────────────────────────────────────────── */
   const CSS = `
   .wl-panel{margin-top:var(--s4,24px)}
+  /* A card like its sibling sections on Data & Sync (audit M14). */
+  .wl-panel.section{padding:16px 0 2px}
   .wl-panel .wl-top{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:end;margin:8px 0}
   .wl-panel label.wl-f{display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--ink-2,#3d474f)}
   .wl-panel select,.wl-panel input[type=number],.wl-panel input[type=text],.wl-panel input[type=date]{
@@ -435,7 +437,7 @@
   .wl-panel table.wltbl td,.wl-panel table.wltbl th{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .wl-panel td.num{font-variant-numeric:tabular-nums;text-align:right}
   .wl-panel .wl-tag{font-size:11px;color:var(--ink-2,#3d474f);margin-left:6px}
-  .wl-panel .wl-tag.off{color:var(--accent,#1f5fa8);font-weight:600}
+  .wl-panel .wl-tag.off{color:var(--accent);font-weight:600}
   .wl-panel .wl-tag.warn{color:var(--warn-ink,#8a4b00)}
   .wl-panel .wl-form{border:1px solid var(--line,#ccd3d9);border-radius:8px;padding:12px;margin:10px 0;
     display:flex;flex-direction:column;gap:10px;background:var(--surface-2,#f5f7f9)}
@@ -444,7 +446,7 @@
   .wl-panel .wl-pv{font-size:12.5px;color:var(--ink,#12161a)}
   .wl-panel .wl-msg{font-size:12.5px}
   .wl-panel .wl-msg.bad{color:var(--crit-ink,#a1271b)}
-  .wl-panel .wl-msg.ok{color:var(--good,#2c7a3f)}
+  .wl-panel .wl-msg.ok{color:var(--good-ink,#2c7a3f)}
   .wl-panel ul.wl-hist{list-style:none;margin:6px 0 0;padding:0;font-size:12.5px}
   .wl-panel ul.wl-hist li{display:flex;gap:10px;align-items:center;padding:4px 0;border-bottom:1px solid var(--line,#e3e7eb)}
   .wl-panel ul.wl-hist li.void{color:var(--muted,#5b6670);text-decoration:line-through}

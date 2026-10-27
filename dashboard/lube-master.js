@@ -456,7 +456,7 @@
   function lockEdits(el) {
     if (!handover() || !el) return;
     el.insertAdjacentHTML("afterbegin", `<div class="lmx-ho" data-lmx-ho="1"><span>${esc(tr("ho_line"))}</span>` +
-      `<a class="btn primary" href="${LL_URL}" target="_blank" rel="noopener" title="${esc(tr("ho_t"))}">${esc(tr("ho_btn"))}</a></div>`);
+      `<a class="btn" href="${LL_URL}" target="_blank" rel="noopener" title="${esc(tr("ho_t"))}">${esc(tr("ho_btn"))}</a></div>`);
     el.querySelectorAll("input,select,textarea").forEach(x => { if (x.type === "search" || HO_KEEP[x.id]) return; x.disabled = true;
       /* read as plain text now (audit 26.10 D5), so a value longer than its cell is said in full on hover */
       if (x.tagName !== "SELECT" && x.value && !x.title) x.title = x.value; });
