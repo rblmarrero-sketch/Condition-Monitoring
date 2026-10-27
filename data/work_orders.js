@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-27T04:42:47+00:00",
+  "generated": "2026-10-27T05:01:17+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -353,7 +353,7 @@ window.CM_WO_DATA = {
     "WE010",
     "WE011"
   ],
-  "duplicateRowsCollapsed": 652,
+  "duplicateRowsCollapsed": 653,
   "roundsDedupedWithinVisit": 2,
   "columns": [
     "Asset description",
@@ -53757,6 +53757,25 @@ window.CM_WO_DATA = {
       "actualEnd": "2026-10-20"
     },
     {
+      "equip": "GR008",
+      "cls": "GRD",
+      "woNumber": "WO-020976",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "250h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-05",
+      "planStartDt": "2026-11-05T00:00:00",
+      "planEnd": "2026-11-06",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
       "equip": "GR009",
       "cls": "GRD",
       "woNumber": null,
@@ -54727,6 +54746,25 @@ window.CM_WO_DATA = {
       "actualEnd": "2026-07-07"
     },
     {
+      "equip": "GR009",
+      "cls": "GRD",
+      "woNumber": "WO-020977",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "250h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-04",
+      "planStartDt": "2026-11-04T00:00:00",
+      "planEnd": "2026-11-05",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
       "equip": "GR010",
       "cls": "GRD",
       "woNumber": "GD-003754",
@@ -55684,6 +55722,28 @@ window.CM_WO_DATA = {
       "actualStart": "2026-10-22",
       "actualStartDt": "2026-10-22T07:00:00",
       "actualEnd": "2026-10-22"
+    },
+    {
+      "equip": "GR013",
+      "cls": "GRD",
+      "woNumber": "WO-020980",
+      "maintType": "2000 Hours service Planned",
+      "hours": 2000,
+      "cmLabel": "Filter Cut / General Inspection",
+      "cmTypes": [
+        "FC",
+        "INSP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-02",
+      "planStartDt": "2026-11-02T00:00:00",
+      "planEnd": "2026-11-03",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
     },
     {
       "equip": "GR014",
@@ -62963,6 +63023,25 @@ window.CM_WO_DATA = {
       "planStart": "2026-10-27",
       "planStartDt": "2026-10-27T00:00:00",
       "planEnd": "2026-10-28",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
+      "equip": "LD008",
+      "cls": "LDR",
+      "woNumber": "WO-020975",
+      "maintType": "500 Hours service Planned",
+      "hours": 500,
+      "cmLabel": "500h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-08",
+      "planStartDt": "2026-11-08T00:00:00",
+      "planEnd": "2026-11-09",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null

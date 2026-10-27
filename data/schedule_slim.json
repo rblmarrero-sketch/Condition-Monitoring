@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-27T04:42:47+00:00",
+  "generated": "2026-10-27T05:01:17+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -199,6 +199,18 @@
           "INSP"
         ],
         "plan": "2026-08-01",
+        "priority": "P3 Planned (PM)"
+      }
+    ],
+    "GR013": [
+      {
+        "wo": "WO-020980",
+        "hours": 2000,
+        "types": [
+          "FC",
+          "INSP"
+        ],
+        "plan": "2026-11-02",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -940,6 +952,24 @@
       "completed": ""
     },
     {
+      "wo": "WO-020975",
+      "equip": "LD008",
+      "cls": "LDR",
+      "comp": "",
+      "desc": "500h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-08",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-11-08",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-020828",
       "equip": "TK109",
       "cls": "AT",
@@ -1210,6 +1240,24 @@
       "completed": ""
     },
     {
+      "wo": "WO-020976",
+      "equip": "GR008",
+      "cls": "GRD",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-05",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-11-05",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-020971",
       "equip": "LD005",
       "cls": "LDR",
@@ -1285,6 +1333,24 @@
       "wo": "WO-020923",
       "equip": "EX010",
       "cls": "EXC",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-04",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-11-04",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-020977",
+      "equip": "GR009",
+      "cls": "GRD",
       "comp": "",
       "desc": "250h service",
       "priority": "P3 Planned (PM)",
@@ -1507,6 +1573,24 @@
       "raised": "2026-11-02",
       "type": "250 Hours service Planned",
       "hours": 250,
+      "plan": "2026-11-02",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-020980",
+      "equip": "GR013",
+      "cls": "GRD",
+      "comp": "",
+      "desc": "Filter Cut / General Inspection",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-02",
+      "type": "2000 Hours service Planned",
+      "hours": 2000,
       "plan": "2026-11-02",
       "status": "Elimination scheduled",
       "request": "",
