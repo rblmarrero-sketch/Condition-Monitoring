@@ -192,6 +192,46 @@ const MEASURE = () => {
       const wraps = await p.evaluate(() => [...document.querySelectorAll('header.app #srcText, header.app #dataBtn')].filter(e => { const r = document.createRange(); r.selectNodeContents(e); return r.getClientRects().length > 1 && new Set([...r.getClientRects()].map(x => Math.round(x.top))).size > 1; }).map(e => e.id));
       ok('M9 the source chip and Data sources stay on one line', !wraps.length, wraps.join(', '));
     }
+    /* MEDIUM, batch B (audit 26.10 M1 M2 M4 M6 M13 M15) */
+    const mb = await p.evaluate(async (tabs) => {
+      const out = { split: [], gap: [], title: [], empty: [] };
+      const vis = e => e.getClientRects().length && e.getBoundingClientRect().height > 0;
+      const R = e => e.getBoundingClientRect();
+      for (const t of tabs) {
+        showTab(t, true); if (t === 'equipment') cmbSet('equipSel', RECS[0].equip);
+        await new Promise(r => setTimeout(r, 350));
+        const sec = [...document.querySelectorAll('section[id^="tab-"]')].find(x => !x.classList.contains('hidden'));
+        const cards = [...sec.querySelectorAll('.section')].filter(vis).filter(c => !c.parentElement.closest('.section'));
+        /* M1: half-width cards in one tab share one split */
+        const half = new Set(cards.filter(c => R(c).width < R(sec).width * 0.8).map(c => Math.round(R(c).left) === Math.round(R(sec).left + parseFloat(getComputedStyle(sec).paddingLeft || 0)) ? 'L' + Math.round(R(c).right) : null).filter(Boolean));
+        if (half.size > 1) out.split.push(`${t}: ${[...half].join(',')}`);
+        /* M2: cards stacked with nothing between them are 16 px apart */
+        cards.forEach(a => { let best = null, bc = null; cards.forEach(c => { if (c === a) return; const A = R(a), C = R(c);
+          if (C.top >= A.bottom - 2 && Math.min(A.right, C.right) - Math.max(A.left, C.left) > 40 && (best === null || C.top - A.bottom < best)) { best = C.top - A.bottom; bc = c; } });
+          if (best === null) return;
+          /* something visible in between (a disclosure row, a note) is not a gap */
+          const between = [...sec.querySelectorAll('details, .note, .notecard, .hint, p')].filter(vis).some(e => !e.closest('.section') && R(e).top >= R(a).bottom - 1 && R(e).bottom <= R(bc).top + 1);
+          if (!between && Math.abs(best - 16) > 1) out.gap.push(`${t}: ${Math.round(best)}`); });
+        /* M4: every card title is 15 px */
+        cards.forEach(c => { const h = c.querySelector('.secthd h2, :scope > h2, .hhd h2'); if (h && vis(h) && Math.round(parseFloat(getComputedStyle(h).fontSize)) !== 15) out.title.push(`${t}: ${h.textContent.trim().slice(0, 20)} ${getComputedStyle(h).fontSize}`); });
+        /* M13: an empty state is inset like the card title */
+        sec.querySelectorAll('.section .empty').forEach(e => { if (!vis(e)) return; const c = e.closest('.section'), h = [...c.querySelectorAll('.secthd h2, :scope > h2, .hhd h2')].find(vis);
+          const hx = h ? R(h).left + parseFloat(getComputedStyle(h).paddingLeft) - R(c).left : 0;
+          if (h && Math.abs((R(e).left - R(c).left) - hx) > 2) out.empty.push(`${t}: ${Math.round(R(e).left - R(c).left)} vs ${Math.round(hx)}`); });
+      }
+      showTab('due', true); await new Promise(r => setTimeout(r, 300));
+      const q = R(document.getElementById('ddQ')), ty = R(document.getElementById('ddType')), csv = R(document.getElementById('ddCsv')), seg = R(document.getElementById('ddSeg'));
+      out.due = { row: Math.abs(q.bottom - ty.bottom) <= 2 && Math.abs((csv.top + csv.bottom) / 2 - (q.top + q.bottom) / 2) <= 24, below: q.top >= seg.bottom - 1, csvRight: csv.left > ty.right, qFirst: q.left < ty.left };
+      showTab('actions', true); await new Promise(r => setTimeout(r, 300));
+      const panel = document.getElementById('actProgressPanel'), bar = document.getElementById('actBar');
+      out.prog = panel && vis(panel) ? /closed out|закрыт/i.test(bar.textContent) : false;
+      return out; }, tabs);
+    ok('M1 half-width cards in a tab share one column split', !mb.split.length, mb.split.join(' | '));
+    ok('M2 cards stacked in a column are 16 px apart', !mb.gap.length, mb.gap.join(' | '));
+    ok('M4 every card title is 15 px', !mb.title.length, mb.title.join(' | '));
+    ok('M13 an empty state sits inside the card padding', !mb.empty.length, mb.empty.join(' | '));
+    ok('M15 the schedule has one toolbar under its views: search, Round, then Export', mb.due.row && mb.due.below && mb.due.csvRight && mb.due.qFirst, JSON.stringify(mb.due));
+    ok('M6 the closed-out figure is said once on Actions', !mb.prog);
     const fb = await p.evaluate(() => { const bar = document.getElementById('filterBar'); return !!bar && !!bar.querySelector('#fType'); });
     ok('the filter bar is #filterBar', fb);
     /* nothing chosen: each filter shows its own short name ("Class"), not "All clas…" cut short */

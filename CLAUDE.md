@@ -5033,6 +5033,24 @@ plain button; "Open LubeLink" in the header stays the one primary. M9
 (dashboard-next): the source chip ends in an ellipsis and Data sources stays on
 one line. `tests/dashlayout.cjs` checks each, and fails 58 assertions on build
 558.
+
+**MEDIUM AUDIT ITEMS, BATCH B (build 560, audit 26.10 M1 M2 M4 M6 M13 M15).**
+Both office pages. M1: Failure Analysis's second row of cards is 7/5 like its
+first (it was 6/6, so the column edge jumped 96 px). M2: a card inside a
+`.grid12` kept its own 16 px bottom margin on top of the grid's 16 px gap, so
+rows were 32 px apart; the grid now takes the margin (`.grid12>.section,
+.grid12>.stackcol{margin-bottom:0}`, `.grid12{margin-bottom:16px}`). The 60 px on
+Data & Sync is the collapsed Admin diagnostics row, not a gap. M4: Equipment
+History's title sat outside `.secthd` and took the browser's 21 px heading;
+`.hhd h2` is the 15 px card title. M13: the P–F empty state sits inside the card
+padding. M15: the Inspection Schedule's views have their own row, and under them
+one toolbar: Unit search, Round, then Export at the far end (`.ddbreak`). M6
+(dashboard-next): `#actProgressPanel` is the mock-up's one number, so the state
+bar under it no longer repeats "N of M closed out". NOT changed, on purpose: M8
+(dashboard-next's 44 px column-filter boxes). They were set to 44 px as a
+deliberate touch-target decision (see the comment above `table.grid th.cwfh`),
+and the audit's 28 px would undo it; that is the maintainer's call.
+`tests/dashlayout.cjs` checks the rest and fails 44 assertions on build 559.
 ---
 
 ## Secrets
