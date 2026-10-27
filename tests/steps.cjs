@@ -101,9 +101,10 @@ const SRC = fs.readFileSync(path.join(__dirname, '..', 'mobile', 'index.html'), 
   ok('  and appears once one is, and goes again when it is cleared', gated.a && !gated.b);
 
   console.log('\n5. THE WORDS ON THE PILL, THE LIST AND THE READINESS CARD');
-  const W = await p.evaluate(async () => { await renderNet(); return { net: document.getElementById('netStatus').textContent.trim(),
+  const W = await p.evaluate(async () => { await renderNet(); return { net: document.getElementById('netStatus').textContent.trim(), netTitle: document.getElementById('netStatus').title,
     never: I18N.en.up_never, wait: I18N.en.up_wait, sent: I18N.en.up_yes, conf: I18N.en.up_conf, verif: I18N.en.up_verif, err: I18N.en.up_err, synced: I18N.en.net_synced, sending: I18N.en.net_sending }; });
-  ok('with no signal the pill says "' + T.en.offline_saved + '"', W.net === T.en.offline_saved, W.net);
+  /* The pill says the state; the sentence is its title (audit F18). */
+  ok('with no signal the pill says "' + T.en.offline + '" and its title "' + T.en.offline_saved + '"', W.net === T.en.offline && W.netTitle === T.en.offline_saved, W.net + ' | ' + W.netTitle);
   ok('the saved list speaks the dictionary: saved here · waiting · sent · confirmed · verified · attention',
      W.never === T.en.saved_here && W.wait === T.en.waiting && W.sent === T.en.sent && W.conf.indexOf(T.en.confirmed) === 0 && W.verif.indexOf(T.en.verified) === 0 && W.err === T.en.attention && W.synced === T.en.all_sent && W.sending === T.en.sending,
      [W.never, W.wait, W.sent, W.conf, W.verif, W.err].join(' | '));
@@ -120,7 +121,7 @@ const SRC = fs.readFileSync(path.join(__dirname, '..', 'mobile', 'index.html'), 
     steps: [...document.querySelectorAll('#stepBar button span')].map(e => e.textContent.trim()), more: document.querySelector('#moreDetails > summary').textContent.trim(),
     finish: document.getElementById('saveBtn').textContent, net: document.getElementById('netStatus').textContent.trim() }));
   const cyr = s2 => /[А-Яа-яЁё]/.test(s2);
-  ok('tabs, steps, the fold, Finish and the pill are Russian', R.tabs.every(cyr) && R.steps.every(cyr) && cyr(R.more) && cyr(R.finish) && R.net === T.ru.offline_saved, [R.tabs.join('·'), R.steps.join('·'), R.more, R.finish, R.net].join(' | '));
+  ok('tabs, steps, the fold, Finish and the pill are Russian', R.tabs.every(cyr) && R.steps.every(cyr) && cyr(R.more) && cyr(R.finish) && R.net === T.ru.offline, [R.tabs.join('·'), R.steps.join('·'), R.more, R.finish, R.net].join(' | '));
   ok('  and the tabs are the four in the same order', R.tabs.join('·') === [T.ru.overdue && 'Осмотр', 'Сохранено', 'Срок', 'Связь'].join('·'), R.tabs.join('·'));
   await p.click('.lang button[data-lang="en"]');
 

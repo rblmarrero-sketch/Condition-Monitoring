@@ -5048,9 +5048,30 @@ one toolbar: Unit search, Round, then Export at the far end (`.ddbreak`). M6
 (dashboard-next): `#actProgressPanel` is the mock-up's one number, so the state
 bar under it no longer repeats "N of M closed out". NOT changed, on purpose: M8
 (dashboard-next's 44 px column-filter boxes). They were set to 44 px as a
-deliberate touch-target decision (see the comment above `table.grid th.cwfh`),
-and the audit's 28 px would undo it; that is the maintainer's call.
+deliberate touch-target decision (see the comment above `table.grid th.cwfh`);
+the maintainer confirmed on 2026-10-27 that they stay at 44 px. Do not shrink
+them.
 `tests/dashlayout.cjs` checks the rest and fails 44 assertions on build 559.
+
+**THE PHONE'S MEDIUM AUDIT ITEMS, BATCH A (build 561, audit 26.10 F11 F15 F16
+F18 F19 F20).** F11: nothing a person reads is under 11 px (the Due badge's
+label was 8.6 px, the tab badge, tab labels at 360 px, the RTW badge, the 1C PM
+info labels, `.tag`, the round badge and the RTW evidence line 10–10.5 px). The
+tray's station codes on the SVG drawing are exempt. F15: on the Saved list,
+Delete is the same plain 44 px button as Report and Edit, in `--crit-ink`, with
+no box of its own. F16: the stale-data line on Due (`#dueStrayNote.warn`) is a
+warning-tinted notice in `--warn-ink`, regular weight, two lines with the rest a
+tap away, and its whole text is its title. The class stays `warn` for every test
+that reads it. Grade-5 red is not for it. F18: the header pill says the state
+(`net_off_short`, `TERMS.offline`: "Offline" / "Нет связи") for both no-network
+states, and its title says the sentence. F19: at 430 px and under, in Russian,
+the RTW item's status badge sits under the title. F20: the RTW item number and
+the badges use `--ink-2` / the grade inks, Settings' active destination uses
+`--ink-2`, and a selected grade card's number is a ring, not a 28 % white fill.
+`tests/phonepolish.cjs` checks each at 360 and 390 px, in English and Russian,
+light and dark, and fails 48 assertions on build 560. Its colour reader handles
+`color(srgb …)`, which is what a `color-mix()` background resolves to. Without
+that, text on a tinted box was measured against the page behind it and passed.
 ---
 
 ## Secrets
