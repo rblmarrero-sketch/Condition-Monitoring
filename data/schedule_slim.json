@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-27T01:37:59+00:00",
+  "generated": "2026-10-27T01:54:26+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -85,7 +85,7 @@
           "INSP",
           "UC"
         ],
-        "plan": "2026-11-13",
+        "plan": "2026-11-15",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -880,10 +880,10 @@
       "comp": "",
       "desc": "Filter Cut / General Inspection / Undercarriage",
       "priority": "P3 Planned (PM)",
-      "raised": "2026-11-13",
+      "raised": "2026-11-15",
       "type": "1000 Hours service Planned",
       "hours": 1000,
-      "plan": "2026-11-13",
+      "plan": "2026-11-15",
       "status": "Elimination scheduled",
       "request": "",
       "defType": "",
@@ -1198,6 +1198,24 @@
       "completed": ""
     },
     {
+      "wo": "WO-020923",
+      "equip": "EX010",
+      "cls": "EXC",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-04",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-11-04",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-020823",
       "equip": "TK103",
       "cls": "AT",
@@ -1279,6 +1297,24 @@
       "raised": "2026-11-03",
       "type": "250 Hours service Planned",
       "hours": 250,
+      "plan": "2026-11-03",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-020919",
+      "equip": "EX009",
+      "cls": "EXC",
+      "comp": "",
+      "desc": "500h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-03",
+      "type": "500 Hours service Planned",
+      "hours": 500,
       "plan": "2026-11-03",
       "status": "Elimination scheduled",
       "request": "",

@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-27T01:37:59+00:00",
+  "generated": "2026-10-27T01:54:26+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -21182,9 +21182,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-13",
-      "planStartDt": "2026-11-13T00:00:00",
-      "planEnd": "2026-11-14",
+      "planStart": "2026-11-15",
+      "planStartDt": "2026-11-15T00:00:00",
+      "planEnd": "2026-11-16",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -31361,6 +31361,25 @@ window.CM_WO_DATA = {
       "actualEnd": "2026-10-26"
     },
     {
+      "equip": "EX009",
+      "cls": "EXC",
+      "woNumber": "WO-020919",
+      "maintType": "500 Hours service Planned",
+      "hours": 500,
+      "cmLabel": "500h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-03",
+      "planStartDt": "2026-11-03T00:00:00",
+      "planEnd": "2026-11-04",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
       "equip": "EX010",
       "cls": "EXC",
       "woNumber": null,
@@ -32370,6 +32389,25 @@ window.CM_WO_DATA = {
       "actualStart": "2026-10-21",
       "actualStartDt": "2026-10-21T08:30:00",
       "actualEnd": "2026-10-22"
+    },
+    {
+      "equip": "EX010",
+      "cls": "EXC",
+      "woNumber": "WO-020923",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "250h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-04",
+      "planStartDt": "2026-11-04T00:00:00",
+      "planEnd": "2026-11-05",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
     },
     {
       "equip": "EX011",
