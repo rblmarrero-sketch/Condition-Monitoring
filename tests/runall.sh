@@ -43,6 +43,10 @@ BAD=0
 # (regen needs python3 + openpyxl) is a real answer, but it can never again be
 # something the eye slides over.
 SILENT=""
+# A listed suite that is not there ran nothing, which is not a pass either:
+# opt.cjs sat on this list from the day the suites were committed and never
+# existed, skipped in silence on every sweep until 2026-10-27.
+MISSING=""
 run(){ ensure; printf "%-15s" "$1"; if out=$(node "$1" 2>&1); then
     n=$(echo "$out" | grep -c PASS)
     if [ "$n" = 0 ]; then echo "ok   0 pass  <- SILENT, asserted nothing"; SILENT="$SILENT $1"
@@ -52,8 +56,8 @@ for t in bump.cjs noprodhit.cjs prodguard.cjs pwguard.cjs idxcap.cjs fboverlay.c
          cards.cjs v4.cjs wear.cjs uc.cjs ucmap.cjs sheet.cjs ucside.cjs ucreach.cjs map2.cjs stale.cjs ver.cjs \
          cf.cjs cfd.cjs cfp.cjs f4.cjs s3.cjs s1.cjs edit.cjs ed2.cjs gs.cjs gsdupdir.cjs gsindex.cjs uicontrast.cjs phonetap.cjs phonepolish.cjs puckhit.cjs dashlayout.cjs histpull.cjs gassafety.cjs drv.cjs \
          dash.cjs fold2.cjs stab.cjs team.cjs wedge.cjs audit.cjs offline.cjs \
-         pick.cjs lang.cjs opt.cjs rtw.cjs rtwopen.cjs relingest.cjs reliability.cjs srcpill.cjs installprog.cjs truncate.cjs favicon.cjs holder.cjs resumewords.cjs; do
-  [ -f "$t" ] && run "$t"
+         pick.cjs lang.cjs rtw.cjs rtwopen.cjs relingest.cjs reliability.cjs srcpill.cjs installprog.cjs truncate.cjs favicon.cjs holder.cjs resumewords.cjs; do
+  if [ -f "$t" ]; then run "$t"; else MISSING="$MISSING $t"; fi
 done
 pkill -f 'ed-srv.cjs|mock.cjs|stab-srv.cjs|hang.cjs|up-srv.cjs' 2>/dev/null
 
@@ -72,7 +76,8 @@ pkill -f 'ed-srv.cjs|mock.cjs|stab-srv.cjs|hang.cjs|up-srv.cjs' 2>/dev/null
 # suite, here or above, so neither needs special-casing; they simply take as
 # long as they take, same as e.g. bigday.cjs already does above.
 for t in actions-next.cjs assignphotos-next.cjs conflict-next.cjs data-window-next.cjs datasources-next.cjs defects-next.cjs defer-next.cjs detail-next.cjs disposition-next.cjs due-next.cjs editround-next.cjs equipment-panel-next.cjs failure-next.cjs followup-next.cjs history-next.cjs lube-next.cjs missingphotos-next.cjs nav-shell-next.cjs overview-next.cjs period-filter-next.cjs photoeditor-next.cjs plan-next.cjs reports-next.cjs sync-next.cjs tablekit-next.cjs tablekit-scale-next.cjs wear-next.cjs; do
-  [ -f "$t" ] && run "$t"
+  if [ -f "$t" ]; then run "$t"; else MISSING="$MISSING $t"; fi
 done
 [ -n "$SILENT" ] && echo "SILENT (asserted nothing):$SILENT"
+[ -n "$MISSING" ] && { echo "MISSING (listed, no such file):$MISSING"; BAD=1; }
 exit $BAD
