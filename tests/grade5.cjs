@@ -301,8 +301,8 @@ const J = o => JSON.stringify(o).slice(0, 420);
     clearFilters(); await new Promise(r => setTimeout(r, 250));
     return { opts, four, boxAfterTile, cleared: sel.value, drillCleared: drill.sev };
   });
-  ok('the grade filter offers All grades and 1 – Normal … 5 – Critical, and is the same drill the headlines set',
-     df.opts.length === 6 && /All grades/.test(df.opts[0]) && df.opts[4] === '4 – Severe' && df.four.drill === 4 && df.four.chip.some(c => /4 – Severe/.test(c))
+  ok('the grade filter offers Grade (nothing chosen) and 1 – Normal … 5 – Critical, and is the same drill the headlines set',
+     df.opts.length === 6 && /^Grade$/.test(df.opts[0]) && df.opts[4] === '4 – Severe' && df.four.drill === 4 && df.four.chip.some(c => /4 – Severe/.test(c))
      && df.boxAfterTile === '5' && df.cleared === '' && !df.drillCleared, J(df));
   const d3 = await q.evaluate(async () => {
     const blobs = []; const oc = URL.createObjectURL; URL.createObjectURL = bl => { blobs.push(bl); return oc(bl); };

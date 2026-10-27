@@ -133,10 +133,15 @@ const CLIP = el => !el ? 'missing' : (el.scrollWidth > el.clientWidth + 1 || el.
       sels.forEach(s => { s.dataset.mw = s.style.maxWidth; if (oldCap) s.style.maxWidth = oldCap + 'px'; });
       const h0 = bar.offsetHeight;
       sels.forEach(s => { s.style.maxWidth = s.dataset.mw; });
-      return { n: sels.length, minW: Math.min(...sels.map(s => s.offsetWidth)), h, h0 };
+      // nothing chosen: does each dropdown's text fit? A select holding only its chosen option, uncapped, is the width that text needs.
+      const cut = sels.filter(s => { const c = s.cloneNode(true); c.style.maxWidth = 'none'; c.style.width = 'auto'; c.style.flex = 'none';
+        const o = s.selectedOptions[0]; c.replaceChildren(o ? o.cloneNode(true) : ''); s.parentNode.appendChild(c); const need = c.offsetWidth; c.remove(); return s.offsetWidth < need - 1; })
+        .map(s => s.id + ':' + (s.selectedOptions[0] || {}).textContent);
+      return { n: sels.length, minW: Math.min(...sels.map(s => s.offsetWidth)), h, h0, cut };
     }, oldCap);
     ok(`${file} ${lang} ${W}: the bar is no taller than it was with the old cap`, r.h <= r.h0, JSON.stringify(r));
-    if (file === 'dashboard' && W > 1330 && W <= 1440) ok(`${file} ${lang} ${W}: dropdowns are 100 px, not 88`, r.minW >= 99 || r.n === 0, JSON.stringify(r));
+    // Nothing chosen, each dropdown shows its short name (Class, Grade …), and none is cut ("All clas…" was).
+    ok(`${file} ${lang} ${W}: no empty dropdown is cut short`, !r.cut.length, JSON.stringify(r));
     // hover → tooltip with the chosen option's whole text
     const sel = await p.$('#filterBar select');
     if (sel) {
