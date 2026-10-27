@@ -14,6 +14,9 @@
           of squeezing it
      F20  small text on the RTW checklist and on Settings' active destination
           reads at 4.5:1 or better in dark
+   Low: F22 the map photograph dimmed in dark; F23 no frame round a focused
+   step; F24 one date on the 1C PM list and its sheet; F25 the grade ink, not
+   white, on red fills.
    Batch B, in light: F9 back and forward one height (52 px); F10 the measured
    millimetres the big field; F12 choosing one of several is the accent fill;
    F14 the overlays' 12 px gutter and the map stopping at the card's rail; F17
@@ -195,6 +198,52 @@ const TEXT = (root) => {
         document.querySelectorAll('.rtw-ov').forEach(e => e.classList.add('hidden')); document.body.classList.remove('ovopen'); return o; }, FIXTURE);
       ok('F14 an overlay keeps the app\'s 12 px gutter', ov[0] === '12px' && ov[1] === '12px', JSON.stringify(ov));
     }
+    /* LOW (audit F22 F23 F24 F25) */
+    /* F23: the browser draws a focus ring only after keyboard use, so press a key
+       first, as a keyboard or screen-reader user would have. */
+    await p.evaluate(() => { document.querySelectorAll('.rtw-ov').forEach(e => e.classList.add('hidden')); document.body.classList.remove('ovopen'); showPane('paneCapture'); });
+    await p.keyboard.press('Shift');
+    const f23 = await p.evaluate(async () => { const sel = document.getElementById('typeSel'); sel.value = 'MP'; sel.dispatchEvent(new Event('change'));
+      await new Promise(r => setTimeout(r, 150)); selectEquip('TK146'); goStep(2); await new Promise(r => setTimeout(r, 300));
+      const v = document.activeElement; return v && v.matches('section.view') ? { on: v.id, outline: getComputedStyle(v).outlineStyle, w: getComputedStyle(v).outlineWidth } : { on: v && (v.id || v.tagName) }; });
+    const lw = await p.evaluate(async fx => {
+      const out = {};
+      document.querySelectorAll('.rtw-ov').forEach(e => e.classList.add('hidden')); document.body.classList.remove('ovopen');
+      showPane('paneCapture');
+      const sel = document.getElementById('typeSel'); sel.value = 'MP'; sel.dispatchEvent(new Event('change')); await new Promise(r => setTimeout(r, 150));
+      selectEquip('TK146'); goStep(2); await new Promise(r => setTimeout(r, 300));
+      const v = document.activeElement; out.focus = v && v.matches('section.view') ? getComputedStyle(v).outlineStyle : 'not-focused';
+      sel.value = 'UC'; sel.dispatchEvent(new Event('change')); await new Promise(r => setTimeout(r, 150));
+      selectEquip('DZ001'); goStep(2); await new Promise(r => setTimeout(r, 500));
+      const ph = document.querySelector('#posnav .um-photo'); out.photo = ph ? getComputedStyle(ph).filter : null;
+      SCHED = fx; dueView = 'pm'; showPane('paneDue'); renderDue(); await new Promise(r => setTimeout(r, 300));
+      const head = [...document.querySelectorAll('#duePmList .daygroup h3, #duePmList h3, #duePmList .dayhd')].map(e => e.textContent)[0] || '';
+      document.querySelector('#duePmList [data-wo="WO-1"]').click(); await new Promise(r => setTimeout(r, 300));
+      const vals = [...document.querySelectorAll('#pmInfoBody > div')].map(d => d.textContent.trim());
+      out.date = { sheet: vals.find(x => /\d{4}/.test(x)) || vals.join(' | '), long: (d => { const dt = new Date(d + 'T00:00:00Z'), loc = lang === 'ru' ? 'ru-RU' : 'en-US';
+        return dt.toLocaleDateString(loc, { weekday: 'short', timeZone: 'UTC' }).replace(/\.$/, '') + ' ' + dt.getUTCDate() + ' ' +
+          dt.toLocaleDateString(loc, { month: 'short', timeZone: 'UTC' }).replace(/\.$/, '') + ' ' + dt.getUTCFullYear(); })(fx.rtwOpen[0].plan), head };
+      document.querySelectorAll('.rtw-ov').forEach(e => e.classList.add('hidden')); document.body.classList.remove('ovopen');
+      return out; }, FIXTURE);
+    ok('F23 a step that takes focus draws no frame round itself', f23.outline === 'none' || f23.w === '0px', JSON.stringify(f23));
+    ok('F24 the 1C PM sheet says its date the way the list does', lw.date.sheet.includes(lw.date.long) && lw.date.head.includes(lw.date.long), JSON.stringify(lw.date));
+    if (theme === 'dark') ok('F22 the machine photograph under the map is dimmed in dark', lw.photo && /brightness/.test(lw.photo), JSON.stringify(lw.photo));
+    if (theme === 'light') ok('F22 and left as it is in light', !lw.photo || lw.photo === 'none', JSON.stringify(lw.photo));
+    if (theme === 'dark') {
+      const cr = await p.evaluate(() => {
+        const parse = s => { const m = s.match(/rgba?\(([^)]+)\)/); return m && m[1].split(/[ ,/]+/).filter(Boolean).map(Number); };
+        const lum = c => { const f = v => { v /= 255; return v <= .03928 ? v / 12.92 : Math.pow((v + .055) / 1.055, 2.4); }; return .2126 * f(c[0]) + .7152 * f(c[1]) + .0722 * f(c[2]); };
+        const ratio = (a, b) => { const x = lum(a), y = lum(b); return (Math.max(x, y) + .05) / (Math.min(x, y) + .05); };
+        const out = {};
+        for (const [k, cls] of [['danger', 'btn danger'], ['miss', 'tb miss']]) {
+          const e = document.createElement(k === 'miss' ? 'span' : 'button'); e.className = cls; e.textContent = '3';
+          (k === 'miss' ? document.querySelector('.tabbar button') : document.body).appendChild(e);
+          const cs = getComputedStyle(e); out[k] = +ratio(parse(cs.color), parse(cs.backgroundColor)).toFixed(2); e.remove();
+        }
+        return out; });
+      ok('F25 white-on-red has become the grade ink: Delete and the missed badge read at 4.5:1 in dark', cr.danger >= 4.5 && cr.miss >= 4.5, JSON.stringify(cr));
+    }
+
     await ctx.close();
   }
   ok('no page errors', !fails.some(f => /^PAGEERROR/.test(f)), fails.filter(f => /^PAGEERROR/.test(f)).join(' | '));

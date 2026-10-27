@@ -5105,6 +5105,23 @@ stops at two. L5: the Inspection Schedule's Due column is left-aligned like
 Last done, in tabular figures. L6: `.minibtn` has 7 px corners, not a 99 px
 pill. Changed in its one rule, per D8. `tests/dashlayout.cjs` checks each and
 fails 38 assertions on build 562.
+
+**THE PHONE'S LOW AUDIT ITEMS (build 564, audit 26.10 F22-F25).** F22: in dark,
+the white-plated machine photograph under the undercarriage map
+(`#posnav .um-photo`) is dimmed to 82 %. Only on the capture screen; the report
+draws its own copy. F23: a step is focused when it opens (`goStep`), and that
+drew the browser's focus frame round the whole step after keyboard use.
+`section.view:focus{outline:none}`; controls keep their rings. F24: the 1C PM
+list and the sheet it opens say a date one way, `pmLongDate()` ("Sun 18 Oct
+2026"). The sheet said "18.10". F25, scoped: white text on the red and green
+fills (Delete in a dialog, the missed-round tab badge, the recording mic, the
+overdue filter, the undercarriage group counts) takes `--g5-ink` / `--g1-ink`,
+which read in both themes. The broader token clean-up the audit lists (52 hex
+literals, the round tint table written three times) is not done; it changes
+nothing on screen. `tests/phonepolish.cjs` checks F22-F25 and fails 24 more
+assertions on build 563. Its F23 check presses a key first, because Chromium
+draws a focus ring only after keyboard use; without that it passed on the old
+code.
 ---
 
 ## Secrets
