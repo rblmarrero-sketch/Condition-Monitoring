@@ -5072,6 +5072,27 @@ the badges use `--ink-2` / the grade inks, Settings' active destination uses
 light and dark, and fails 48 assertions on build 560. Its colour reader handles
 `color(srgb …)`, which is what a `color-mix()` background resolves to. Without
 that, text on a tinted box was measured against the page behind it and passed.
+
+**THE PHONE'S MEDIUM AUDIT ITEMS, BATCH B (build 562, audit 26.10 F9 F10 F12
+F14 F17).** F9: back and forward in `.stepnav` are one pair. They stretch to the
+same height when a label wraps, and are 52 px. F10: the measured millimetres on
+the undercarriage sheet (`.mrow` input) are 48 px tall, 22 px tabular figures.
+The tray keeps the ordinary field (`body:not(.tbreading)`). In reading mode the
+tray drawing and its sheet share a 412x915 screen with nothing to spare: 4 px
+more put the drawing off the top (`tests/tray.cjs`), and taking the room from
+the drawing put its side zones under 44 px. F12: there are two selected states. Choosing one of several is the
+accent fill with `--accent-ink`: the position chips (were black), "Tap the
+machine / Work down a list" (was a tint) and the 1C PM / CM / RTW switch (was a
+raised white button). Switching a filter on is the accent tint with an accent
+border: `.chips` (was amber). Colour that means something stays as it is:
+grades, RTW marks, overdue filters. F14: overlays use the app's 12 px gutter
+(was 14). The undercarriage maps still break out of the card for their tap
+size, but only to the card's padding (`--cpad`), not over its coloured rail.
+F17: a `div.fld` label ("Condition grade") wears the field-label style, as
+`label.fld` does. It was plain 16 px text. Settings' labels carry examples, so
+they are sentence case, and two fields in a Settings row line up at the
+bottom. `tests/phonepolish.cjs` checks these too and fails 28 more assertions
+on build 561.
 ---
 
 ## Secrets
