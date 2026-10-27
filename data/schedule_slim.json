@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-27T06:13:58+00:00",
+  "generated": "2026-10-27T06:32:11+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -935,6 +935,28 @@
         "priority": "P3 Planned (PM)"
       }
     ],
+    "TK158": [
+      {
+        "wo": "WO-020999",
+        "hours": 250,
+        "types": [
+          "MP"
+        ],
+        "plan": "2026-11-06",
+        "priority": "P3 Planned (PM)"
+      }
+    ],
+    "TK159": [
+      {
+        "wo": "WO-021005",
+        "hours": 250,
+        "types": [
+          "MP"
+        ],
+        "plan": "2026-11-04",
+        "priority": "P3 Planned (PM)"
+      }
+    ],
     "TK161": [
       {
         "wo": "WO-019538",
@@ -1121,6 +1143,24 @@
       "type": "250 Hours service Planned",
       "hours": 250,
       "plan": "2026-11-08",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-021007",
+      "equip": "DZ001",
+      "cls": "DOZ",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-07",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-11-07",
       "status": "Elimination scheduled",
       "request": "",
       "defType": "",
@@ -1336,6 +1376,24 @@
       "raised": "2026-11-06",
       "type": "500 Hours service Planned",
       "hours": 500,
+      "plan": "2026-11-06",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-020999",
+      "equip": "TK158",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-06",
+      "type": "250 Hours service Planned",
+      "hours": 250,
       "plan": "2026-11-06",
       "status": "Elimination scheduled",
       "request": "",
@@ -1588,6 +1646,24 @@
       "raised": "2026-11-04",
       "type": "1000 Hours service Planned",
       "hours": 1000,
+      "plan": "2026-11-04",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-021005",
+      "equip": "TK159",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-04",
+      "type": "250 Hours service Planned",
+      "hours": 250,
       "plan": "2026-11-04",
       "status": "Elimination scheduled",
       "request": "",
@@ -3521,6 +3597,42 @@
       "cause": "",
       "pmStatus": "complete",
       "completed": "2026-10-23"
+    },
+    {
+      "wo": "WO-021004",
+      "equip": "TK158",
+      "cls": "",
+      "comp": "TK158.HS.CV (Control Valves / Гидрораспределители)",
+      "desc": "Течь масла с фитингов гидрораспределителя.",
+      "priority": "P4 Planned (Repair)",
+      "raised": "2026-10-23",
+      "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "hours": null,
+      "plan": "2026-11-06",
+      "status": "Elimination scheduled",
+      "request": "DD-00015505",
+      "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Фитинг/штуцер ослаб",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-021003",
+      "equip": "TK158",
+      "cls": "",
+      "comp": "TK158.SS.SP (Steering Pump / Насос рулевого управления)",
+      "desc": "Утечка масла с фитингов рулевого насоса.",
+      "priority": "P4 Planned (Repair)",
+      "raised": "2026-10-23",
+      "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "hours": null,
+      "plan": "2026-11-06",
+      "status": "Elimination scheduled",
+      "request": "DD-00015502",
+      "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Фитинг/штуцер ослаб",
+      "pmStatus": "open",
+      "completed": ""
     },
     {
       "wo": "WO-020826",
