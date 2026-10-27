@@ -5192,6 +5192,19 @@ agent trying to refute it. Three are fixed in the pages; the rest are in
   deleted, so the "the app is CLOSED" row of the update table above describes
   a mechanism that no longer runs. Android's periodic wake is what is left.
 Each new test fails on build 565 (11 assertions between them).
+**ONLY A MONTH SHARD IS A SHARD (`GAS_SCAN_FIXES_V2`, 2026-10-27).** Read
+off the live `/exec` minutes after V1 was deployed: `action=index` answered 0
+rows, `truncated`, `unreadable:"at.json"`. Pechanka mirrors the Yandex bucket
+into the Drive folder, and Yandex keeps its index clock as `_meta/index/at.json`
+(no `records`). `readIndex_` took every `.json` in `_meta/index` as a month;
+before V1 an unreadable one was skipped, and V1's "never read past an
+unreadable month" stopped every reply on it. Phones on build 566 refused the
+cut reply (`draincut`), so no history was lost, but none arrived either.
+`readIndex_` now reads only names `shardOf_` can produce (`SHARD_NAME_`,
+`YYYY-MM.json` / `undated.json`). `tests/gsscan.cjs` §4b plants `at.json` and
+fails on V1. **Not live until the Apps Script is redeployed.** Trashing
+`_meta/index/at.json` on Drive cures the live folder at once.
+
 ---
 
 ## Secrets

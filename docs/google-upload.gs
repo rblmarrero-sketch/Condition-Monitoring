@@ -88,7 +88,7 @@ const INDEX_V = 1;
    which had happened; the ping and the health check (GET /exec) both carry
    this, so a plain GET says whether a redeploy landed. Change it with every
    change to this file. */
-const SCRIPT_VERSION = 'GAS_SCAN_FIXES_V1';
+const SCRIPT_VERSION = 'GAS_SCAN_FIXES_V2';
 // ────────────────────────────────────────────────────────────────────────────
 
 function doPost(e) {
@@ -999,6 +999,8 @@ function indexTouch_(ms) {
   try { PropertiesService.getScriptProperties().setProperty(INDEX_AT, String(ms || new Date().getTime())); }
   catch (err) { /* a property that will not save is not worth failing an upload over */ }
 }
+/** The file name of every shard shardOf_ can produce, and of nothing else. */
+var SHARD_NAME_ = /^(\d{4}-\d{2}|undated)\.json$/;
 /** '2026-08' from an inspection date. The shard a record belongs to. */
 function shardOf_(iso) {
   var m = /^(\d{4})-(\d{2})/.exec(String(iso || ''));
@@ -1242,7 +1244,13 @@ function readIndex_(p) {
   var shards = [], byName = {};
   while (it.hasNext()) {
     var f = it.next();
-    if (!/\.json$/i.test(f.getName()) || isTrashed_(f)) continue;
+    /* Only a month shard is a shard (GAS_SCAN_FIXES_V2). The folder is not the
+       script's alone: Pechanka mirrors the Yandex bucket into it, and Yandex
+       keeps its index clock as _meta/index/at.json. Any .json used to count,
+       an unreadable one was skipped; since V1 an unreadable shard stops the
+       read, so at.json made every index reply 0 rows. shardOf_ names every
+       shard the script writes; read those and nothing else. */
+    if (!SHARD_NAME_.test(f.getName()) || isTrashed_(f)) continue;
     /* A shard write creates the new file before trashing the old, so for a
        moment one month can have two files: read the newest, once. */
     var sh0 = { f: f, name: f.getName(), updated: f.getLastUpdated().getTime() };

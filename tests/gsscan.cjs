@@ -81,6 +81,22 @@ section('4. A MONTH INDEX THAT CANNOT BE READ IS NOT READ PAST', () => {
   ok('asked again once Drive answers, both months arrive', (r2.rows || []).length === 2 && !r2.truncated, (r2.rows || []).map(x => x.u));
 });
 
+section('4b. A FILE IN THE INDEX FOLDER THAT IS NOT A MONTH IS NOT A MONTH', () => {
+  const { W, S } = world();
+  up(S, 'DA', sidecar('TK001', '2026-09-20', 'MP', 'DA'), 'TK001_20.09.2026_MP.json', 'MP/TK001/2026-09-20');
+  W.now += 1000;
+  up(S, 'DA', sidecar('TK002', '2026-10-20', 'MP', 'DA'), 'TK002_20.10.2026_MP.json', 'MP/TK002/2026-10-20');
+  built(W);
+  // What Pechanka's Yandex mirror left in the live folder on 2026-10-27: Yandex's index clock.
+  W.put('_meta/index/at.json', { at: 1760000000000 });
+  W.put('_meta/index/notes.json', 'not json at all');
+  const r = S.get({ action: 'index', since: '0', slim: '1' });
+  ok('both months arrive, at.json beside them', (r.rows || []).length === 2, { n: (r.rows || []).length, unreadable: r.unreadable });
+  ok('and the reply is complete', !r.truncated && !r.unreadable, { truncated: r.truncated, unreadable: r.unreadable });
+  const v = S.get({});
+  ok('the version says V2', v.version === 'GAS_SCAN_FIXES_V2', v.version);
+});
+
 section('5. A CORRECTION OR A DECISION WHOSE WRITE FAILS LEAVES THE OLD ONE STANDING', () => {
   const { W, S } = world();
   const key = 'TK146|2026-10-26|MP';
