@@ -5015,6 +5015,24 @@ Grade, Period, Status), on both office pages. A choice still shows itself. The
 each empty dropdown against the width its chosen option needs alone (a select
 is as wide as its WIDEST option, so an uncapped clone measures the wrong
 thing). `tests/dashlayout.cjs` checks that the first option equals the label.
+
+**MEDIUM AUDIT ITEMS, BATCH A (build 559, audit 26.10 M3 M5 M7 M9 M12 M14 M16
+M17).** Both office pages. M5: a pager already says "N matching · showing
+a–b", so the line under it no longer repeats the count (Actions, Failure →
+Affected equipment, Wear, Inspection Schedule's "Showing 25 of 54"); it keeps
+the count only where there is no pager, and a pager inside a `.shown` line
+spans the line (`.shown>.pager`). M7: the Actions progress strip had an
+inline `margin:2px 0 16px` that cancelled the card's 20 px side margin. M12:
+`#trendChart` was exempted from the card's side margin, so the bars ran to the
+border. M14: `#wlPanel` is a `.section` card; `wear-limits.js` uses
+`--good-ink` and the page's `--accent`, not a blue fallback. M16: `.fld.chk`
+puts a tick box beside its label in sentence case. M3: only the sticky filter
+bar (`#filterBar`, `#fMoreRow`) runs edge to edge; the Equipment History
+picker keeps the page column. M17: "Edit in LubeLink" in the lock bar is a
+plain button; "Open LubeLink" in the header stays the one primary. M9
+(dashboard-next): the source chip ends in an ellipsis and Data sources stays on
+one line. `tests/dashlayout.cjs` checks each, and fails 58 assertions on build
+558.
 ---
 
 ## Secrets

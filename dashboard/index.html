@@ -407,6 +407,7 @@
     border-top:1px solid var(--border);font-size:var(--t-tiny);color:var(--muted);
     font-variant-numeric:tabular-nums;}
   .shown .spacer{flex:1;}
+  .shown>.pager{flex:1;margin:0;}
   /* A question, not an answer: dotted underline, the colour of a note. */
   .maybe{border-bottom:1px dotted var(--warn-ink);cursor:help;}
   /* An answer, not a question — so it must not wear the question's colour. */
@@ -702,6 +703,10 @@
      token rather than back to being a rule that does nothing. */
   .fld>span{font-weight:700;font-size:var(--t-micro);line-height:1.2;font-family:inherit;letter-spacing:.11em;text-transform:uppercase;
     color:var(--muted);}
+  /* A tick box reads as a sentence beside its box, not as a field caption
+     above it (audit M16): inline, sentence case, on the row's baseline. */
+  .fld.chk{flex-direction:row;align-items:center;align-self:flex-end;gap:7px;min-height:34px;}
+  .fld.chk>span{text-transform:none;letter-spacing:0;font-weight:500;font-size:13px;color:var(--ink-2);}
   .fld select,.fld input[type=search]{min-width:0;padding:7px 10px;font-size:13px;}
   .fld select{min-width:150px;} .fld input[type=search]{width:150px;}
   /* Due & missed — the state a row is in, carried by a left edge rather than a
@@ -2407,7 +2412,7 @@
     max-width:82ch;}
   .section > h2 + .sub{padding-top:4px;}
   .section > *:not(h2):not(.sub){margin-left:20px;margin-right:20px;}
-  .section > .tblwrap,.section > #trendChart,.section > #pfChart{margin-left:0;margin-right:0;}
+  .section > .tblwrap,.section > #pfChart{margin-left:0;margin-right:0;}
   .section > *:last-child{margin-bottom:18px;}
   .section > h2:only-child,.section > .sub:last-child{padding-bottom:18px;}
   .section .tblwrap{margin-top:14px;}
@@ -2417,6 +2422,9 @@
      had not been laid out. One surface, one row, aligned. */
   .controls{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
     box-shadow:var(--e1);padding:12px 16px;gap:16px;align-items:end;margin-bottom:16px;}
+  /* Only the sticky filter bar runs edge to edge; any other control card
+     (the Equipment History picker) keeps the page column (audit M3). */
+  .controls:not(#filterBar):not(#fMoreRow){margin-left:0;margin-right:0;}
   .controls .field{gap:5px;}
   .controls .field label{font-weight:700;font-size:var(--t-micro);line-height:1.2;font-family:inherit;letter-spacing:.08em;color:var(--muted);}
   .controls select,.controls input[type=search],.controls input[type=text]{
@@ -3247,7 +3255,7 @@
             <dt data-i18n="a_k_done">Closed out</dt><dd data-i18n="a_d_done">Done, verified, or disposed as not needed with a reason and a name.</dd>
           </dl></div>
         </details></div>
-      <div id="actBar" style="margin:2px 0 16px"></div>
+      <div id="actBar" style="margin-top:2px;margin-bottom:16px"></div>
       <div class="row" style="margin-bottom:14px;gap:12px;align-items:center;flex-wrap:wrap">
         <!-- All four answers on screen. A four-option dropdown hides three of
              them and costs two clicks to change one filter. -->
@@ -3731,7 +3739,7 @@
       </div>
     </details>
     <!-- Measurement limits, set by the office (dashboard/wear-limits.js). -->
-    <div class="wl-panel" id="wlPanel"></div>
+    <div class="section wl-panel" id="wlPanel"></div>
   </section>
 
   <section id="tab-reports" class="hidden">
@@ -3971,23 +3979,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=558"></script>
+<script src="../data/magnetic_plug.js?v=559"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=558"></script>
-<script src="../mobile/hme.js?v=558"></script>
-<script src="../mobile/mp-fc.js?v=558"></script>
-<script src="../mobile/rtw.js?v=558"></script>
-<script src="../mobile/hme-cascade.js?v=558"></script>
-<script src="../mobile/temp-limits.js?v=558"></script>
+<script src="../data/work_orders.js?v=559"></script>
+<script src="../mobile/hme.js?v=559"></script>
+<script src="../mobile/mp-fc.js?v=559"></script>
+<script src="../mobile/rtw.js?v=559"></script>
+<script src="../mobile/hme-cascade.js?v=559"></script>
+<script src="../mobile/temp-limits.js?v=559"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=558"></script>
-<script src="../mobile/normalize.js?v=558"></script>
-<script src="../mobile/terms.js?v=558"></script>
+<script src="../mobile/assets.js?v=559"></script>
+<script src="../mobile/normalize.js?v=559"></script>
+<script src="../mobile/terms.js?v=559"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -4006,21 +4014,21 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=558"></script>
-<script src="../mobile/edits.js?v=558"></script>
-<script src="../mobile/due.js?v=558"></script>
-<script src="../mobile/wear.js?v=558"></script>
-<script src="../mobile/wear-map.js?v=558"></script>
-<script src="../mobile/lube.js?v=558"></script>
-<script src="../mobile/lube-overrides.js?v=558"></script>
-<script src="../mobile/lube2027.js?v=558"></script>
-<script src="../mobile/lube-tds.js?v=558"></script>
-<script src="lube-master.js?v=558"></script>
-<script src="wear-limits.js?v=558"></script>
+<script src="../mobile/grade.js?v=559"></script>
+<script src="../mobile/edits.js?v=559"></script>
+<script src="../mobile/due.js?v=559"></script>
+<script src="../mobile/wear.js?v=559"></script>
+<script src="../mobile/wear-map.js?v=559"></script>
+<script src="../mobile/lube.js?v=559"></script>
+<script src="../mobile/lube-overrides.js?v=559"></script>
+<script src="../mobile/lube2027.js?v=559"></script>
+<script src="../mobile/lube-tds.js?v=559"></script>
+<script src="lube-master.js?v=559"></script>
+<script src="wear-limits.js?v=559"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=558"></script>
-<script src="../mobile/machine-photos.js?v=558"></script>
+<script src="../mobile/upload-defaults.js?v=559"></script>
+<script src="../mobile/machine-photos.js?v=559"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -4029,17 +4037,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=558"></script>
-<script src="../mobile/get.js?v=558"></script>
-<script src="../mobile/points.js?v=558"></script>
-<script src="../mobile/uc-points.js?v=558"></script>
-<script src="../mobile/inspect-guide.js?v=558"></script>
-<script src="../mobile/get-figs.js?v=558"></script>
-<script src="../mobile/body-points.js?v=558"></script>
-<script src="../mobile/body-map.js?v=558"></script>
-<script src="../mobile/jspdf.umd.min.js?v=558"></script>
-<script src="../mobile/html2canvas.min.js?v=558"></script>
-<script src="../mobile/report-core.js?v=558"></script>
+<script src="../mobile/machine-fig.js?v=559"></script>
+<script src="../mobile/get.js?v=559"></script>
+<script src="../mobile/points.js?v=559"></script>
+<script src="../mobile/uc-points.js?v=559"></script>
+<script src="../mobile/inspect-guide.js?v=559"></script>
+<script src="../mobile/get-figs.js?v=559"></script>
+<script src="../mobile/body-points.js?v=559"></script>
+<script src="../mobile/body-map.js?v=559"></script>
+<script src="../mobile/jspdf.umd.min.js?v=559"></script>
+<script src="../mobile/html2canvas.min.js?v=559"></script>
+<script src="../mobile/report-core.js?v=559"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -7501,7 +7509,7 @@ function renderFailAffected(f){
     tr.onclick=go;
     tr.onkeydown=e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); } };
   });
-  if($("failAffShown")) $("failAffShown").innerHTML=`<span>${esc(t("pg_of",{n:num(rows.length), a:num(pg.from||0), b:num(pg.to||0)}))}</span>`+pg.strip;
+  if($("failAffShown")) $("failAffShown").innerHTML=(pg.strip ? "" : `<span>${esc(t("pg_of",{n:num(rows.length), a:num(pg.from||0), b:num(pg.to||0)}))}</span>`)+pg.strip;
 }
 
 /* ---------- the P-F interval ----------
@@ -8189,9 +8197,13 @@ function renderActions(){
     const allOn = !!page.length && page.every(({r,i})=>aSel.has(selId(ekOf(r),i.key)));
     /* "555 matching · showing 1–25", and how big the whole register is when
        the filter has narrowed it. "Showing 555 of 555" said neither. */
+    /* The pager under the table already says "N matching · showing a–b";
+       saying it again on the next line was the same count twice (audit M5).
+       This line keeps the count only when there is no pager, and the size of
+       the whole register whenever a filter has narrowed it. */
     if($("actShown")) $("actShown").innerHTML=
-      `<span>${esc(t("pg_of",{n:num(list.length), a:num(pgT.from||0), b:num(pgT.to||0)}))}${
-        list.length!==rows.length ? " · "+esc(t("a_k_open_s",{n:num(rows.length)})) : ""}</span>`;
+      `<span>${pgT.strip ? "" : esc(t("pg_of",{n:num(list.length), a:num(pgT.from||0), b:num(pgT.to||0)}))}${
+        list.length!==rows.length ? (pgT.strip ? "" : " · ")+esc(t("a_k_open_s",{n:num(rows.length)})) : ""}</span>`;
     /* One line a row, columns that hold still. A fixed layout with a width
        for every column whose content has a known size (the grade, the unit,
        the owner, the date, the status, the work order) and the rest shared
@@ -14746,7 +14758,7 @@ function renderWearTab(){
   });
   $("wearNote").textContent = t("w_note",{s:rows.length, n:all.length, h:WEAR.MIN_HOURS, d:WEAR.MIN_DAYS});
   if($("wearShown")) $("wearShown").innerHTML=
-    `<span>${esc(t("pg_of",{n:num(rows.length), a:num(pg.from||0), b:num(pg.to||0)}))}</span>` + pg.strip;
+    (pg.strip ? "" : `<span>${esc(t("pg_of",{n:num(rows.length), a:num(pg.from||0), b:num(pg.to||0)}))}</span>`) + pg.strip;
 }
 function wearCsv(){
   const rows=wearRows(filtered());
@@ -16204,7 +16216,7 @@ function renderDueTab(){
     /* What is on screen out of what exists. The list was capped at 500 rows in
        silence, which on a fleet this size reads as "that is all of them". */
     + pg.strip
-    + `<div class="shown"><span>${esc(t("shown_n",{n:kept.length, of:shown.length}))}</span>
+    + `<div class="shown"><span>${pg.strip ? "" : esc(t("shown_n",{n:kept.length, of:shown.length}))}</span>
         <span class="spacer"></span>
         <span>${esc(t("dd_foot",{r:DUE.HOURS_PER_DAY}))}</span></div>`;
   /* A cell cut by the ellipsis carries its whole text on hover; one that fits
@@ -18790,10 +18802,10 @@ document.querySelector(".lang").addEventListener("click",e=>{
   setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 })();
 </script>
-<script src="drive.js?v=558"></script>
-<script src="sync-adapter.js?v=558"></script>
-<script src="report.js?v=558"></script>
-<script src="reliability.js?v=558"></script>
+<script src="drive.js?v=559"></script>
+<script src="sync-adapter.js?v=559"></script>
+<script src="report.js?v=559"></script>
+<script src="reliability.js?v=559"></script>
 <script>
 /* THE CLOSED FILTER SAYS WHAT IS CHOSEN. A dropdown narrower than its option
    text ellipsises ("All t…", audit of 2026-10-01). Between 1331 and 1500 px
