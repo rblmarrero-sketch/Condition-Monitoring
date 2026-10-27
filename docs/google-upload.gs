@@ -88,7 +88,7 @@ const INDEX_V = 1;
    which had happened; the ping and the health check (GET /exec) both carry
    this, so a plain GET says whether a redeploy landed. Change it with every
    change to this file. */
-const SCRIPT_VERSION = 'GAS_INDEX_SAFETY_V1';
+const SCRIPT_VERSION = 'GAS_SCAN_FIXES_V1';
 // ────────────────────────────────────────────────────────────────────────────
 
 function doPost(e) {
@@ -203,7 +203,13 @@ function saveOne_(b, dirs) {
   // <UNIT>_<DD.MM.YYYY>_<TYPE>.json, so the overwrite below used to throw the
   // first inspector's round away without either of them ever being told.
   // A rival now gets its own file and a marker; the office decides which stands.
-  var dev = cleanDev_(b.dev);
+  /* An upload into _meta is one shared document per name (a deferral is one
+     file per unit and round, and the newest statement stands), never a
+     device's copy: with an owner, a second phone re-deferring a round another
+     phone deferred was renamed "X.defer~DEV.json", a name no reader looks for,
+     and its decision reached nobody (GAS_SCAN_FIXES_V1). */
+  var isMetaUp = /^_meta(\/|$)/.test(path);
+  var dev = isMetaUp ? '' : cleanDev_(b.dev);
   var plan = placeUpload_(dir, fileName, dev);
   var wanted = fileName;
   fileName = plan.name;
@@ -265,6 +271,11 @@ function saveOne_(b, dirs) {
      renamed file would look like one that never arrived and be sent again for
      ever. */
   var out = { ok: true, req: b.name, id: f.getId(), name: f.getName(), url: f.getUrl(), folder: dir.getName() };
+  /* A deferral is news for every phone, and it carries no record, so nothing
+     below moved the index clock: every incremental pull answered upToDate and
+     the deferral waited for an unrelated upload, overnight an inspector could
+     drive to a machine the office had put off (GAS_SCAN_FIXES_V1). */
+  if (/^_meta\/deferrals(\/|$)/.test(path) && /\.defer\.json$/i.test(fileName)) indexTouch_();
 
   /* THE RECEIPT — mirrored field for field from docs/yandex/function.js.
 
@@ -490,9 +501,9 @@ function saveEditLocked_(b, name) {
      up before it is trashed, the same _meta/backup/ pattern rewriteObject_()
      already uses. */
   var prior = null, overwrote = null;
-  var existing = dir.getFilesByName(name);
-  if (existing.hasNext()) {
-    try { prior = JSON.parse(existing.next().getBlob().getDataAsString()); }
+  var existing = newestByName_(dir, name);
+  if (existing) {
+    try { prior = JSON.parse(existing.getBlob().getDataAsString()); }
     catch (errP) { prior = null; }
   }
   var refused = staleWrite_(b, prior, 'correction');
@@ -506,7 +517,6 @@ function saveEditLocked_(b, name) {
   var reasonNow = editField_(b, prior, 'reason', function (v) { return String(v || '').slice(0, 400); }, '');
   if (voidNow && !(prior && prior.void) && !reasonNow.trim())
     return { ok: false, error: 'A reason is required to void a round' };
-  indexTouch_();               // a correction is a change; clients must come and look
   var doc = {
     type: 'cm-record-edit', version: 1,
     key: b.key,
@@ -546,9 +556,11 @@ function saveEditLocked_(b, name) {
     } catch (errB) {}
     if ((prior.by || '') !== (b.by || '')) overwrote = { by: prior.by || '', at: prior.at || '' };
   }
-  var old = dir.getFilesByName(name);
-  while (old.hasNext()) old.next().setTrashed(true);      // one marker per record
-  dir.createFile(Utilities.newBlob(JSON.stringify(doc, null, 2), 'application/json', name));
+  replaceFile_(dir, name, JSON.stringify(doc, null, 2));     // one marker per record
+  /* The clock moves AFTER the marker is on Drive (GAS_SCAN_FIXES_V1): moved
+     first, a pull in between got the new `at` and no marker, and its next pull
+     was told upToDate and never asked again. */
+  indexTouch_();               // a correction is a change; clients must come and look
   var out = { ok: true, saved: name, at: doc.at };
   if (overwrote) out.overwrote = overwrote;
   return out;
@@ -646,7 +658,9 @@ function strBytes_(s) {
   return out;
 }
 function isSidecar_(name) {
-  return /\.json$/i.test(name) && !/\.(edit|deleted|conflict)\.json$/i.test(name);
+  /* No marker is a round: a deferral was parsed as one, and owned like one
+     (GAS_SCAN_FIXES_V1). */
+  return /\.json$/i.test(name) && !/\.(edit|deleted|conflict|defer|rival|file)\.json$/i.test(name);
 }
 function variantName_(name, dev) {
   var i = name.lastIndexOf('.');
@@ -686,7 +700,6 @@ function keyFromSidecar_(fileName) {
    office has already made. A genuinely new device does re-open it, because that
    is a version nobody has looked at. */
 function markConflict_(sidecarName, rivalDev, dev) {
-  indexTouch_();      // two versions of one round is the most urgent kind of news
   var key = keyFromSidecar_(sidecarName);
   if (!key) return null;
   var name = sidecarName.replace(/\.json$/i, '') + '.conflict.json';
@@ -695,8 +708,8 @@ function markConflict_(sidecarName, rivalDev, dev) {
 function markConflictLocked_(key, name, sidecarName, rivalDev, dev) {
   var meta = folderPath_(rootFolder_(), META_DIR);
 
-  var doc = null, it = meta.getFilesByName(name);
-  if (it.hasNext()) { try { doc = JSON.parse(it.next().getBlob().getDataAsString()); } catch (err) { doc = null; } }
+  var doc = null, cur0 = newestByName_(meta, name);
+  if (cur0) { try { doc = JSON.parse(cur0.getBlob().getDataAsString()); } catch (err) { doc = null; } }
 
   var devices = (doc && doc.devices) || [];
   var known = {}, i;
@@ -709,9 +722,8 @@ function markConflictLocked_(key, name, sidecarName, rivalDev, dev) {
   var out = { type: 'cm-record-conflict', version: 1, key: key,
               at: new Date().toISOString(), devices: devices,
               resolved: false, keep: '', by: '' };
-  var old = meta.getFilesByName(name);
-  while (old.hasNext()) old.next().setTrashed(true);
-  meta.createFile(Utilities.newBlob(JSON.stringify(out, null, 2), 'application/json', name));
+  replaceFile_(meta, name, JSON.stringify(out, null, 2));
+  indexTouch_();      // two versions of one round is the most urgent kind of news (after the marker exists)
   return { key: key, devices: devices };
 }
 /* The office's decision. Both versions stay in Drive — this only records which
@@ -719,7 +731,6 @@ function markConflictLocked_(key, name, sidecarName, rivalDev, dev) {
 function resolveConflict_(b) {
   // GAS_SAFETY_V1: a decision says who made it.
   if (!String(b.by || '').trim()) return { ok: false, error: 'A name is required (who is making this decision)' };
-  indexTouch_();     // the office has decided; every phone must stop warning
   var stem = keyFile_(b.key, '');
   if (!stem) return { ok: false, error: 'Bad record key: ' + b.key };
   var name = stem + '.conflict.json';
@@ -727,14 +738,14 @@ function resolveConflict_(b) {
 }
 function resolveConflictLocked_(b, name) {
   var meta = folderPath_(rootFolder_(), META_DIR);
-  var it = meta.getFilesByName(name);
-  if (!it.hasNext()) {
+  var curC = newestByName_(meta, name);
+  if (!curC) {
     var gone = staleWrite_(b, null, 'conflict');
     return gone || { ok: false, error: 'No conflict recorded for ' + b.key };
   }
 
   var doc;
-  try { doc = JSON.parse(it.next().getBlob().getDataAsString()); }
+  try { doc = JSON.parse(curC.getBlob().getDataAsString()); }
   catch (err) { return { ok: false, error: 'The conflict marker for ' + b.key + ' is unreadable' }; }
   var refusedR = staleWrite_(b, doc, 'conflict');
   if (refusedR) return refusedR;
@@ -760,9 +771,8 @@ function resolveConflictLocked_(b, name) {
   doc.keep = keep;
   doc.by = String(b.by || '').slice(0, 80);
   doc.at = new Date().toISOString();
-  var old = meta.getFilesByName(name);
-  while (old.hasNext()) old.next().setTrashed(true);
-  meta.createFile(Utilities.newBlob(JSON.stringify(doc, null, 2), 'application/json', name));
+  replaceFile_(meta, name, JSON.stringify(doc, null, 2));
+  indexTouch_();     // the office has decided; every phone must stop warning (after the decision exists)
   var out = { ok: true, key: doc.key, keep: keep, at: doc.at };
   if (overwrote) out.overwrote = overwrote;
   return out;
@@ -812,7 +822,7 @@ function rewriteObject_(b) {
   var back = DriveApp.getFileById(hit.id).getBlob().getBytes();
   var storedSha = sha256Hex_(back);
   if (storedSha !== want) return { ok: false, error: 'stored bytes do not match what was sent', key: key, backup: bf.getId() };
-  if (/\.json$/i.test(hit.name) && !/\.(edit|conflict|file|defer)\.json$/i.test(hit.name)) indexTouch_();
+  if (/\.json$/i.test(hit.name) && !/\.(edit|conflict|file)\.json$/i.test(hit.name)) indexTouch_();
   return { ok: true, key: key, backup: bf.getId(), was: wasSha, sha256: storedSha, at: at, by: String(b.by || '').slice(0, 80) };
 }
 
@@ -883,8 +893,15 @@ function deleteRecord_(b) {
     folderPath_(rootFolder_(), META_DIR + '/deletions').createFile(
       Utilities.newBlob(JSON.stringify(rivalLog, null, 2), 'application/json',
                         rivalLog.at.replace(/[:.]/g, '-') + '_' + stem + '~' + dev + '.rival.json'));
+    /* And that device's row out of the index (GAS_SCAN_FIXES_V1). It stayed,
+       keyed unit|date|type|dev, so every phone (which keys a round without the
+       device, last row wins) went on showing the deleted copy's grade,
+       inspector and hour meter in place of the real round. */
+    var droppedR = indexDropDev_(b.key, dev);
     indexTouch_();
-    return { ok: true, deleted: gone.length, dev: dev, files: hit.map(function (f) { return f.name; }), trashed: true };
+    var outR = { ok: true, deleted: gone.length, dev: dev, files: hit.map(function (f) { return f.name; }), trashed: true };
+    if (droppedR && !droppedR.ok) { outR.indexed = false; outR.indexNote = droppedR.busy ? 'index busy' : droppedR.error; }
+    return outR;
   }
 
   // Append-only: one file per deletion, so two people deleting at once cannot
@@ -1019,6 +1036,20 @@ function newestByName_(dir, name) {
   }
   return best;
 }
+/** A marker or a shard-like document, replaced the safe way round: the new
+    file FIRST, then the old copies trashed (GAS_SCAN_FIXES_V1). saveEdit,
+    markConflict and resolveConflict trashed first and created after, so a
+    createFile that failed (a Drive error, a quota) left NO marker: a void and
+    its note gone from every reader, a conflict decision gone and the clash with
+    it. The order shardWrite_ and saveOne_ already keep. Readers take the
+    newest live file of the name (newestByName_). */
+function replaceFile_(dir, name, body) {
+  var olds = [], it = dir.getFilesByName(name);
+  while (it.hasNext()) olds.push(it.next());
+  var nf = dir.createFile(Utilities.newBlob(body, 'application/json', name));
+  for (var i = 0; i < olds.length; i++) { try { olds[i].setTrashed(true); } catch (err) {} }
+  return nf;
+}
 /** One shard, read whole. A shard that cannot be read THROWS: it is not an
     empty month (GAS_INDEX_SAFETY_V1). Returning [] here used to let the next
     upload write the month back holding one round. */
@@ -1085,6 +1116,21 @@ function indexPut_(rec, fileId, dev) {
     if (!put) out.push(rec);
     shardWrite_(dir, name, out);
     indexTouch_();
+    return { ok: true };
+  });
+}
+/** One device's copy of a round has been deleted: its row only. */
+function indexDropDev_(key, dev) {
+  var p = String(key || '').split('|');
+  if (p.length !== 3 || !dev) return { ok: true, skipped: true };
+  return withIndexLock_(function () {
+    var dir = folderPath_(rootFolder_(), INDEX_DIR);
+    var name = shardOf_(p[1]);
+    var cur = shardRead_(dir, name);          // throws when unreadable: nothing is written
+    var want = p[0].toUpperCase() + '|' + p[1] + '|' + p[2] + '|' + cleanDev_(dev), out = [];
+    for (var i = 0; i < cur.records.length; i++)
+      if (RECKEY_(cur.records[i]) !== want) out.push(cur.records[i]);
+    if (out.length !== cur.records.length) { shardWrite_(dir, name, out); indexTouch_(); }
     return { ok: true };
   });
 }
@@ -1222,25 +1268,33 @@ function readIndex_(p) {
      otherwise build a reply too big to send. */
   shards.sort(function (a2, b2) { return a2.updated - b2.updated; });
 
-  var recs = [], read = 0, bytes = 0, truncated = false, cursor = since;
+  var recs = [], read = 0, bytes = 0, truncated = false, cursor = since, out0Unread = '';
   var budget = slim ? INDEX_SLIM_BYTES : INDEX_FULL_BYTES;
   for (var i = 0; i < shards.length; i++) {
     if (since && shards[i].updated <= since) continue;      // untouched month
     if (bytes > budget) { truncated = true; break; }
+    /* A month that cannot be read is NOT read past (GAS_SCAN_FIXES_V1). It was
+       caught, skipped and the cursor moved over it, in a reply that said it
+       was complete: a phone's full read rebuilt its history without that
+       month and stripped "from the system" off every machine walked in it.
+       One retry for a passing Drive error; then stop here, truncated, with the
+       cursor on the last month that WAS read, so the client asks again from
+       it, and a cursor that does not move never counts as a complete read. */
+    var j = null, raw = null;
+    for (var tr = 0; tr < 2 && j === null; tr++) {
+      try { raw = shards[i].f.getBlob().getDataAsString(); j = JSON.parse(raw); }
+      catch (err) { j = null; if (tr === 0) { try { Utilities.sleep(400); } catch (e2) {} } }
+    }
+    if (!j || !Array.isArray(j.records)) { truncated = true; out0Unread = shards[i].name; break; }
     read++;
-    try {
-      var raw = shards[i].f.getBlob().getDataAsString();
-      bytes += raw.length;
-      var j = JSON.parse(raw);
-      var rs = (j && j.records) || [];
-      for (var k = 0; k < rs.length; k++) recs.push(rs[k]);
-    } catch (err) { /* one bad shard must not lose the others */ }
+    bytes += raw.length;
+    for (var k = 0; k < j.records.length; k++) recs.push(j.records[k]);
     cursor = shards[i].updated;
   }
 
   var out = { ok: true, v: INDEX_V, at: at || new Date().getTime(),
               shards: shards.length, readShards: read, n: recs.length };
-  if (truncated) { out.truncated = true; out.cursor = cursor; }
+  if (truncated) { out.truncated = true; out.cursor = cursor; if (out0Unread) out.unreadable = out0Unread; }
   if (slim) {
     out.rows = recs.map(slimRow_);
   } else {
@@ -1291,7 +1345,10 @@ function metaSince_(since) {
         if (/\.conflict\.json$/i.test(n)) conflicts.push(j);
         else if (/\.deleted\.json$/i.test(n)) deleted.push({ key: j.key, by: j.by || '', at: j.at || '' });
         else if (/\.defer\.json$/i.test(n)) deferrals.push({ u: j.u, t: j.t, until: j.until || null,
-          why: j.why || '', whyKey: j.whyKey || '', by: j.by || '', at: j.at || '' });
+          why: j.why || '', whyKey: j.whyKey || '', by: j.by || '', at: j.at || '',
+          /* The office's "Cancel the deferral" (GAS_SCAN_FIXES_V1): without it
+             every reader stored the cancel as "put off, no end date". */
+          cleared: j.cleared ? 1 : 0 });
         else edits.push(j);
       } catch (err) { /* skip */ }
     }
@@ -1524,7 +1581,8 @@ function readRecords_(p) {
            half of the due list: without it the office sees a machine that is
            overdue and cannot tell "nobody went" from "it was on a low-loader". */
         if (j && j.u && j.t) deferrals.push({ u: j.u, t: j.t, until: j.until || null,
-          why: j.why || '', whyKey: j.whyKey || '', by: j.by || '', at: j.at || '' });
+          why: j.why || '', whyKey: j.whyKey || '', by: j.by || '', at: j.at || '',
+          cleared: j.cleared ? 1 : 0 });      // the office's cancel (GAS_SCAN_FIXES_V1)
       } else if (/\.deleted\.json$/i.test(f.name) || (j && j.type === 'cm-record-deleted')) {
         /* The round was deleted from the office. Its files are already gone, so
            this marker is the only thing left that says so — and a phone that

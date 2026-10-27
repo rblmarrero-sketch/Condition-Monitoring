@@ -317,7 +317,8 @@ async function readRecords(p) {
              dropped here is a field the office can never count no matter what
              the phone sends. */
           if (j && j.u && j.t) deferrals.push({ u: j.u, t: j.t, until: j.until || null,
-            why: j.why || '', whyKey: j.whyKey || '', by: j.by || '', at: j.at || '' });
+            why: j.why || '', whyKey: j.whyKey || '', by: j.by || '', at: j.at || '',
+            cleared: j.cleared ? 1 : 0 });   // the office's cancel, as google-upload.gs (GAS_SCAN_FIXES_V1)
         } else if (/\.deleted\.json$/i.test(f.name) || (j && j.type === 'cm-record-deleted')) {
           /* The round was deleted from the office. The files are already gone —
              this marker is the only thing left that says so, and a phone that
