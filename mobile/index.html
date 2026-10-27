@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=561">
+<link rel="manifest" href="manifest.webmanifest?v=562">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=561">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=561">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=561">
+<link rel="apple-touch-icon" href="icon-192.png?v=562">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=562">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=562">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -253,8 +253,14 @@
     font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--ink-2);
     display:flex;align-items:center;gap:8px;}
   label.fld{display:block;margin-bottom:10px;}
-  label.fld > span{display:block;font-size:11px;font-weight:600;text-transform:uppercase;
+  label.fld > span, div.fld > span:first-child{display:block;font-size:11px;font-weight:600;text-transform:uppercase;
     letter-spacing:.07em;color:var(--muted);margin-bottom:4px;}
+  /* Three levels of label (audit F17): card title, section, field. Capitals
+     are for a label of a word or two; Settings' labels carry examples and
+     wrapped to three shouted lines, so they are sentence case. */
+  #setOv label.fld > span{text-transform:none;letter-spacing:0;font-size:12.5px;}
+  /* Two fields side by side: when one label wraps, the boxes still line up. */
+  #setOv .row{align-items:flex-end;}
   /* 44 px: the floor a gloved thumb needs and, from here down, the only
      control height in the app. Before this the same screen carried 27, 38, 44,
      45, 47, 49, 50, 51, 56, 60 and 64 px controls — no two rows the same, and
@@ -298,7 +304,11 @@
   .seg button.on:active{opacity:.85;background:var(--accent);}
   .posnav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;}
   .posnav button{flex:1 1 auto;min-width:56px;min-height:44px;padding:11px 10px;border-radius:10px;border:1px solid var(--border);background:var(--surface-2);color:var(--ink-2);font-weight:700;font-size:14px;cursor:pointer;position:relative;}
-  .posnav button.on{background:var(--ink);color:var(--page);border-color:transparent;}
+  /* TWO SELECTED STATES, NO MORE (audit F12). Choosing one of several (a
+     position, a mode, a view) is the accent fill with its ink; switching a
+     filter or a tag on is the accent tint with an accent border. Colour that
+     MEANS something (a grade, Pass / Attention, overdue) keeps its own. */
+  .posnav button.on{background:var(--accent);color:var(--accent-ink);border-color:transparent;}
   /* component cascade (L7 cards -> L8 -> L9) */
   .casc{margin-bottom:10px;}
   .crumb{display:flex;flex-wrap:wrap;gap:4px;align-items:center;font-size:12.5px;color:var(--muted);margin-bottom:10px;}
@@ -323,7 +333,7 @@
   .rtw-ov.hidden{display:none;}
   .rtw-screen{display:flex;flex-direction:column;height:100%;min-height:0;}
   .rtw-ov-head{flex:none;background:var(--surface);border-bottom:1px solid var(--border);
-    padding:calc(env(safe-area-inset-top) + 10px) 14px 10px;display:flex;align-items:center;gap:10px;}
+    padding:calc(env(safe-area-inset-top) + 10px) 12px 10px;display:flex;align-items:center;gap:10px;}
   /* Touch targets (audit 26.10 M3): every control on these screens is at
      least --tap (44 px). The chevron was 15x26; it keeps its look and gains
      the box, pulled left so the glyph stays where it was. */
@@ -331,7 +341,7 @@
     min-width:var(--tap);min-height:var(--tap);padding:0;margin-left:-12px;display:inline-flex;align-items:center;justify-content:center;}
   .rtw-ov-head b{display:block;font-size:15px;color:var(--ink);}
   .rtw-ov-head .hint{margin:0;}
-  .rtw-ov-body{flex:1 1 auto;overflow-y:auto;padding:12px 14px 24px;display:flex;flex-direction:column;gap:8px;}
+  .rtw-ov-body{flex:1 1 auto;overflow-y:auto;padding:12px 12px 24px;display:flex;flex-direction:column;gap:8px;}
   .rtw-search-row{display:flex;gap:8px;}
   .rtw-search-row input{flex:1 1 auto;height:44px;border:1px solid var(--border);border-radius:10px;
     background:var(--surface);color:var(--ink);padding:0 12px;font:inherit;font-size:14px;}
@@ -391,7 +401,7 @@
      signature window is not working" on a real phone. */
   .rtw-sign-pad-slot canvas{width:100%;height:90px;touch-action:none;}
   .rtw-footer{flex:none;background:var(--surface);border-top:1px solid var(--border);
-    padding:10px 14px calc(env(safe-area-inset-bottom) + 14px);display:flex;flex-direction:column;gap:8px;}
+    padding:10px 12px calc(env(safe-area-inset-bottom) + 14px);display:flex;flex-direction:column;gap:8px;}
   .searchall{width:100%;padding:9px;border:1px dashed var(--border);background:none;color:var(--accent);border-radius:10px;font-size:13px;font-weight:650;cursor:pointer;margin-bottom:10px;}
   .needunit{width:100%;text-align:center;padding:12px 6px 4px;}
   .needunit .nu-t{color:var(--ink-2);font-size:14px;margin-bottom:12px;}
@@ -584,7 +594,7 @@
     border:1px solid var(--border);border-radius:10px;padding:4px;}
   .viewseg button{flex:1;min-height:var(--tap);border:none;border-radius:7px;background:transparent;
     color:var(--ink-2);font:inherit;font-size:13.5px;font-weight:650;cursor:pointer;}
-  .viewseg button.on{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.12);}
+  .viewseg button.on{background:var(--accent);color:var(--accent-ink);box-shadow:none;}
   /* This week's agenda: grouped by day, not by unit — see dueweekRows(). */
   .daygroup{margin-bottom:14px;}
   .daygroup:last-child{margin-bottom:0;}
@@ -790,9 +800,11 @@
      too — a panel that is only visually gone is still a panel to tab through. */
   .view[hidden]{display:none!important;}
   /* Back and Continue, at the foot of each step. */
-  .stepnav{display:flex;align-items:center;gap:var(--s3);margin:var(--s4) 0 var(--s2);}
+  /* Back and forward are one pair: when a label wraps, both grow together
+     (audit F9), and the pair is a size up from an ordinary button. */
+  .stepnav{display:flex;align-items:stretch;gap:var(--s3);margin:var(--s4) 0 var(--s2);}
   .stepnav .spacer{flex:1;}
-  .stepnav .btn{min-height:var(--tap);padding:10px 18px;}
+  .stepnav .btn{min-height:52px;padding:10px 18px;}
   /* The machine being walked, on every step after the first. */
   .stepctx{display:flex;align-items:center;gap:8px;width:100%;margin:0 0 var(--s3);
     padding:9px 12px;min-height:40px;border:1px solid var(--border);border-radius:var(--r);
@@ -1088,6 +1100,13 @@
      goes to the verdict, which is the part that varies. */
   .mrow{display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap;margin-bottom:2px;}
   .mrow > label.fld{flex:0 0 132px;margin-bottom:0;}
+  /* The reading is the one number the sheet exists for (audit F10): larger,
+     in tabular figures, taller than an ordinary field. Not on the tray in
+     reading mode: there the drawing and the sheet share a 412x915 screen with
+     no height to spare, and 4 px more put the drawing off the top
+     (tests/tray.cjs), while taking it from the drawing put its side zones
+     under 44 px. */
+  body:not(.tbreading) .mrow > label.fld > input{min-height:48px;font-size:22px;font-weight:650;font-variant-numeric:tabular-nums;letter-spacing:.01em;}
   .mrow > .ucread{flex:1 1 150px;min-width:0;margin:0 0 3px;}
   /* Stated rather than left to source order: both selectors weigh the same, so
      whichever came last would silently decide how wide the gauge is. */
@@ -1224,7 +1243,7 @@
   .chips{display:flex;flex-wrap:wrap;gap:7px;}
   .chips button{font-weight:600;font-size:12.5px;line-height:1;font-family:inherit;color:var(--ink);background:var(--surface-2);
     border:1px solid var(--line);border-radius:999px;padding:9px 13px;cursor:pointer;}
-  .chips button.on{background:color-mix(in srgb,var(--warning) 16%,var(--surface));border-color:var(--warn-ink);color:var(--warn-ink);}
+  .chips button.on{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);}
   .stale{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between;
     background:var(--accent-soft);border:1px solid var(--accent);border-radius:10px;
     padding:12px 14px;margin:0 0 12px;font-size:13.5px;color:var(--ink);line-height:1.45;}
@@ -1580,7 +1599,8 @@
   @media (prefers-reduced-motion:reduce){ .mfig .mf-part{transition:none;} }
   /* The pair of frames is what claims the pane width now; posnav is a flex row,
      so the claim has to sit on the element that is actually its child. */
-  .ucmaps{flex:0 0 calc(100% + 32px);width:calc(100% + 32px);margin:0 -16px 9px;}
+  /* Out to the card's padding edge, not over its coloured rail (audit F14). */
+  .ucmaps{flex:0 0 calc(100% + 2 * var(--cpad,13px));width:calc(100% + 2 * var(--cpad,13px));margin:0 calc(-1 * var(--cpad,13px)) 9px;}
   .ucmaps .ucmapwrap{width:100%;margin:0 0 9px;}
   .ucmaps .ucmapwrap:last-child{margin-bottom:0;}
   /* Not side by side, even on a tablet. The app's two-column layout caps the
@@ -1604,7 +1624,7 @@
   .ucviews{display:flex;gap:7px;margin:0 0 9px;}
   .ucviews button{flex:1;min-width:0;font-weight:600;font-size:13px;line-height:1;font-family:inherit;color:var(--muted);background:var(--surface-2);
     border:1px solid var(--line);border-radius:10px;padding:10px;cursor:pointer;}
-  .ucviews button.on{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);}
+  .ucviews button.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);}
   .uctally{display:flex;flex-wrap:wrap;gap:6px 14px;margin:0 0 10px;
     font-size:12.5px;font-weight:600;font-variant-numeric:tabular-nums;}
   .uctally .t{display:inline-flex;align-items:center;gap:6px;color:var(--muted);}
@@ -2912,16 +2932,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=561"></script>
-<script src="upload-defaults.js?v=561"></script>
-<script src="hme.js?v=561"></script>
-<script src="mp-fc.js?v=561"></script>
-<script src="rtw.js?v=561"></script>
-<script src="hme-cascade.js?v=561"></script>
-<script src="assets.js?v=561"></script>
-<script src="temp-limits.js?v=561"></script>
-<script src="normalize.js?v=561"></script>
-<script src="terms.js?v=561"></script>
+<script src="native.js?v=562"></script>
+<script src="upload-defaults.js?v=562"></script>
+<script src="hme.js?v=562"></script>
+<script src="mp-fc.js?v=562"></script>
+<script src="rtw.js?v=562"></script>
+<script src="hme-cascade.js?v=562"></script>
+<script src="assets.js?v=562"></script>
+<script src="temp-limits.js?v=562"></script>
+<script src="normalize.js?v=562"></script>
+<script src="terms.js?v=562"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2940,25 +2960,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=561"></script>
-<script src="edits.js?v=561"></script>
-<script src="due.js?v=561"></script>
-<script src="wear.js?v=561"></script>
-<script src="wear-figs.js?v=561"></script>
-<script src="wear-map.js?v=561"></script>
-<script src="machine-photos.js?v=561"></script>
-<script src="machine-fig.js?v=561"></script>
-<script src="get.js?v=561"></script>
-<script src="points.js?v=561"></script>
-<script src="uc-points.js?v=561"></script>
-<script src="inspect-guide.js?v=561"></script>
-<script src="get-figs.js?v=561"></script>
-<script src="body-points.js?v=561"></script>
-<script src="body-map.js?v=561"></script>
-<script src="lube.js?v=561"></script>
-<script src="lube-overrides.js?v=561"></script>
-<script src="lube2027.js?v=561"></script>
-<script src="report-core.js?v=561"></script>
+<script src="grade.js?v=562"></script>
+<script src="edits.js?v=562"></script>
+<script src="due.js?v=562"></script>
+<script src="wear.js?v=562"></script>
+<script src="wear-figs.js?v=562"></script>
+<script src="wear-map.js?v=562"></script>
+<script src="machine-photos.js?v=562"></script>
+<script src="machine-fig.js?v=562"></script>
+<script src="get.js?v=562"></script>
+<script src="points.js?v=562"></script>
+<script src="uc-points.js?v=562"></script>
+<script src="inspect-guide.js?v=562"></script>
+<script src="get-figs.js?v=562"></script>
+<script src="body-points.js?v=562"></script>
+<script src="body-map.js?v=562"></script>
+<script src="lube.js?v=562"></script>
+<script src="lube-overrides.js?v=562"></script>
+<script src="lube2027.js?v=562"></script>
+<script src="report-core.js?v=562"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -15268,7 +15288,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="561";
+const BUILD="562";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

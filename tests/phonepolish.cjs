@@ -1,4 +1,4 @@
-/* THE PHONE'S MEDIUM AUDIT ITEMS, BATCH A (audit 26.10 F11 F15 F16 F18 F19 F20).
+/* THE PHONE'S MEDIUM AUDIT ITEMS (audit 26.10 F9-F12, F14-F20).
 
    Measured on the real page at 360 and 390 px, English and Russian, light and
    dark:
@@ -14,6 +14,10 @@
           of squeezing it
      F20  small text on the RTW checklist and on Settings' active destination
           reads at 4.5:1 or better in dark
+   Batch B, in light: F9 back and forward one height (52 px); F10 the measured
+   millimetres the big field; F12 choosing one of several is the accent fill;
+   F14 the overlays' 12 px gutter and the map stopping at the card's rail; F17
+   "Condition grade" a field label, Settings' labels in sentence case.
 
    Run: node tests/phonepolish.cjs   (serves the repo itself on 8483) */
 const http = require('http');
@@ -150,6 +154,47 @@ const TEXT = (root) => {
     }
     await take('settings', '#setOv');
     ok('F11 no text on these screens is under 11 px', !small.length, small.slice(0, 6).join(' | '));
+
+    /* BATCH B (audit F9 F10 F12 F14 F17), light only: these are shapes, not colours */
+    if (theme === 'light') {
+      const st = await p.evaluate(() => { const fs = [...document.querySelectorAll('#setOv label.fld > span')].filter(e => e.getClientRects().length);
+        const rows = [...document.querySelectorAll('#setOv .row')].filter(e => e.getClientRects().length).map(r => [...r.querySelectorAll('input')].filter(e => e.getClientRects().length).map(i => Math.round(i.getBoundingClientRect().bottom)));
+        return { upper: fs.filter(e => getComputedStyle(e).textTransform === 'uppercase').map(e => e.textContent.trim().slice(0, 20)), rows: rows.filter(r => r.length > 1 && Math.max(...r) - Math.min(...r) > 1) }; });
+      ok('F17 Settings\' labels are sentence case, and two fields in a row line up', !st.upper.length && !st.rows.length, JSON.stringify(st));
+      await p.evaluate(() => { const c = document.getElementById('setClose'); c && c.click(); });
+      const cap = await p.evaluate(async () => {
+        const out = {};
+        const acc = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+        const probe = document.createElement('i'); document.body.appendChild(probe);
+        const rgb = v => { probe.style.color = v; return getComputedStyle(probe).color; };
+        out.accent = rgb('var(--accent)'); out.soft = rgb('var(--accent-soft)');
+        const sel = document.getElementById('typeSel'); sel.value = 'MP'; sel.dispatchEvent(new Event('change')); await new Promise(r => setTimeout(r, 150));
+        selectEquip('TK146'); goStep(2); await new Promise(r => setTimeout(r, 400));
+        const pos = document.querySelector('#posnav > button.on, .posnav > button.on'); out.pos = pos && getComputedStyle(pos).backgroundColor;
+        const gl = document.querySelector('#gradeFld > span'); out.grade = gl && { fs: getComputedStyle(gl).fontSize, tt: getComputedStyle(gl).textTransform };
+        const nav = [...document.querySelectorAll('.stepnav')].find(e => e.getClientRects().length);
+        out.nav = nav && [...nav.querySelectorAll('.btn')].filter(e => e.getClientRects().length).map(b => Math.round(b.getBoundingClientRect().height));
+        sel.value = 'UC'; sel.dispatchEvent(new Event('change')); await new Promise(r => setTimeout(r, 150));
+        selectEquip('DZ001'); goStep(2); await new Promise(r => setTimeout(r, 500));
+        const v = document.querySelector('.ucviews button.on'); out.ucview = v && getComputedStyle(v).backgroundColor;
+        const card = document.getElementById('cardComponent'), maps = document.querySelector('.ucmaps');
+        if (card && maps) { const cs = getComputedStyle(card); out.rail = Math.round(maps.getBoundingClientRect().left - (card.getBoundingClientRect().left + parseFloat(cs.borderLeftWidth))); }
+        pickComponent(ucOrder()[4]); await new Promise(r => setTimeout(r, 400));
+        const mm = document.getElementById('ucMM'); out.mm = mm && { h: Math.round(mm.getBoundingClientRect().height), fs: parseFloat(getComputedStyle(mm).fontSize) };
+        showPane('paneDue'); renderDue(); await new Promise(r => setTimeout(r, 300));
+        const vs = document.querySelector('.viewseg button.on'); out.viewseg = vs && getComputedStyle(vs).backgroundColor;
+        probe.remove(); return out; });
+      ok('F12 choosing one of several is the accent fill: position, mode and view', cap.pos === cap.accent && cap.ucview === cap.accent && cap.viewseg === cap.accent, JSON.stringify(cap));
+      ok('F9 back and forward are one height, 52 px', cap.nav && cap.nav.length && cap.nav.every(h => h === cap.nav[0] && h >= 52), JSON.stringify(cap.nav));
+      ok('F10 the measured millimetres are the big field', cap.mm && cap.mm.h >= 48 && cap.mm.fs >= 20, JSON.stringify(cap.mm));
+      ok('F14 the undercarriage map stops at the card\'s rail, not over it', cap.rail != null && cap.rail >= 0, JSON.stringify(cap.rail));
+      ok('F17 "Condition grade" is a field label like the others', cap.grade && cap.grade.fs === '11px' && cap.grade.tt === 'uppercase', JSON.stringify(cap.grade));
+      const ov = await p.evaluate(async fx => { SCHED = fx; dueView = 'pm'; showPane('paneDue'); renderDue(); await new Promise(r => setTimeout(r, 300));
+        document.querySelector('#duePmList [data-wo="WO-1"]').click(); await new Promise(r => setTimeout(r, 300));
+        const b = document.querySelector('#pmOv .rtw-ov-body'), cs = getComputedStyle(b); const o = [cs.paddingLeft, cs.paddingRight];
+        document.querySelectorAll('.rtw-ov').forEach(e => e.classList.add('hidden')); document.body.classList.remove('ovopen'); return o; }, FIXTURE);
+      ok('F14 an overlay keeps the app\'s 12 px gutter', ov[0] === '12px' && ov[1] === '12px', JSON.stringify(ov));
+    }
     await ctx.close();
   }
   ok('no page errors', !fails.some(f => /^PAGEERROR/.test(f)), fails.filter(f => /^PAGEERROR/.test(f)).join(' | '));
