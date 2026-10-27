@@ -232,6 +232,30 @@ const MEASURE = () => {
     ok('M13 an empty state sits inside the card padding', !mb.empty.length, mb.empty.join(' | '));
     ok('M15 the schedule has one toolbar under its views: search, Round, then Export', mb.due.row && mb.due.below && mb.due.csvRight && mb.due.qFirst, JSON.stringify(mb.due));
     ok('M6 the closed-out figure is said once on Actions', !mb.prog);
+    /* LOW (audit 26.10 L1-L6) */
+    const lo = await p.evaluate(async (file) => {
+      const vis = e => e.getClientRects().length && e.getBoundingClientRect().height > 0 && !e.closest('.hidden');
+      const out = { font: [], blue: [], mono: [], nav: [], t2: null, due: null, mini: [] };
+      const bodyF = getComputedStyle(document.body).fontFamily;
+      for (const t of ['overview', 'actions', 'due', 'reports']) {
+        showTab(t, true); await new Promise(r => setTimeout(r, 300));
+        document.querySelectorAll('button,select,input:not([type=checkbox]):not([type=radio]),textarea').forEach(e => { if (!vis(e)) return; const f = getComputedStyle(e).fontFamily;
+          if (!/Plex/.test(f)) out.font.push(`${t}: ${e.id || e.className || e.tagName} ${f.slice(0, 24)}`); });
+        document.querySelectorAll('a').forEach(e => { if (vis(e) && getComputedStyle(e).color === 'rgb(0, 0, 238)') out.blue.push(`${t}: ${e.textContent.trim().slice(0, 24)}`); });
+        document.querySelectorAll('main *').forEach(e => { if (!vis(e)) return; const f = getComputedStyle(e).fontFamily; if (/monospace/.test(f) && !/Plex Mono/.test(f)) out.mono.push(`${t}: ${String(e.className || e.tagName).split(' ')[0]}`); });
+        document.querySelectorAll('.minibtn').forEach(e => { if (vis(e)) out.mini.push(parseFloat(getComputedStyle(e).borderTopLeftRadius)); });
+        if (t === 'due') { const tb = document.querySelector('#ddList table.ddtbl'); if (tb) { const th = tb.querySelector('thead tr:first-child > :nth-child(4)'), td = tb.querySelector('tbody tr > :nth-child(4)');
+          out.due = { th: getComputedStyle(th).textAlign, td: td && getComputedStyle(td).textAlign, nums: getComputedStyle(tb).fontVariantNumeric }; } }
+      }
+      document.querySelectorAll('nav.tabs button span[data-i18n]').forEach(e => { if (vis(e) && (e.scrollHeight > e.clientHeight + 1 || e.scrollWidth > e.clientWidth + 1)) out.nav.push(e.textContent.trim()); });
+      const t2 = document.querySelector('nav.tabs .brand .t2'); if (t2 && vis(t2)) { const lh = parseFloat(getComputedStyle(t2).lineHeight) || parseFloat(getComputedStyle(t2).fontSize) * 1.25; out.t2 = Math.round(t2.getBoundingClientRect().height / lh); }
+      return out; }, file);
+    ok('L1 every control is in the page\'s typeface', !lo.font.length, lo.font.slice(0, 4).join(' | '));
+    ok('L2 no link is the browser\'s default blue', !lo.blue.length, lo.blue.join(' | '));
+    ok('L3 numbers set in monospace use IBM Plex Mono, not the system\'s', !lo.mono.length, [...new Set(lo.mono)].slice(0, 6).join(' | '));
+    if (W <= 1500) ok('L4 no menu label is cut off, and the status under the title is at most two lines', !lo.nav.length && (lo.t2 == null || lo.t2 <= 2), JSON.stringify({ cut: lo.nav, t2: lo.t2 }));
+    ok('L5 the schedule\'s Due column reads left, in even-width digits', lo.due && lo.due.th === 'left' && (!lo.due.td || lo.due.td === 'left') && /tabular/.test(lo.due.nums), JSON.stringify(lo.due));
+    ok('L6 a row\'s buttons have ordinary corners, not pills', lo.mini.length && lo.mini.every(r => r <= 8), JSON.stringify([...new Set(lo.mini)]));
     const fb = await p.evaluate(() => { const bar = document.getElementById('filterBar'); return !!bar && !!bar.querySelector('#fType'); });
     ok('the filter bar is #filterBar', fb);
     /* nothing chosen: each filter shows its own short name ("Class"), not "All clas…" cut short */
