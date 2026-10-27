@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=555">
+<link rel="manifest" href="manifest.webmanifest?v=556">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=555">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=555">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=555">
+<link rel="apple-touch-icon" href="icon-192.png?v=556">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=556">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=556">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -422,6 +422,12 @@
   .govr-t{font-size:13.5px;color:var(--ink);margin-bottom:8px;line-height:1.3;}
   .greq{margin:10px 0 4px;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--surface-2);}
   .greq-t{font-size:13px;color:var(--ink-2);line-height:1.35;margin-bottom:8px;}
+  /* Responsible and Target date (audit 26.10 M7). Side by side, the longer
+     label wrapped and dropped its box 15 px below the date's, and the default
+     role was cut off in half a phone's width. On a phone they stack; wider,
+     the two boxes line up at the bottom. */
+  #gradeReq .row{align-items:flex-end;}
+  @media (max-width:520px){ #gradeReq .row{flex-direction:column;align-items:stretch;} #gradeReq .row>*{flex:none;} }
   /* A PROMPT, NOT AN ALARM. This said "WO required" in bold amber, and nothing
      in the app requires a work order to save — GRADE.requires has no `wo` at
      any grade, and the Save gate never asks for one. An inspector at the
@@ -2886,16 +2892,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=555"></script>
-<script src="upload-defaults.js?v=555"></script>
-<script src="hme.js?v=555"></script>
-<script src="mp-fc.js?v=555"></script>
-<script src="rtw.js?v=555"></script>
-<script src="hme-cascade.js?v=555"></script>
-<script src="assets.js?v=555"></script>
-<script src="temp-limits.js?v=555"></script>
-<script src="normalize.js?v=555"></script>
-<script src="terms.js?v=555"></script>
+<script src="native.js?v=556"></script>
+<script src="upload-defaults.js?v=556"></script>
+<script src="hme.js?v=556"></script>
+<script src="mp-fc.js?v=556"></script>
+<script src="rtw.js?v=556"></script>
+<script src="hme-cascade.js?v=556"></script>
+<script src="assets.js?v=556"></script>
+<script src="temp-limits.js?v=556"></script>
+<script src="normalize.js?v=556"></script>
+<script src="terms.js?v=556"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2914,25 +2920,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=555"></script>
-<script src="edits.js?v=555"></script>
-<script src="due.js?v=555"></script>
-<script src="wear.js?v=555"></script>
-<script src="wear-figs.js?v=555"></script>
-<script src="wear-map.js?v=555"></script>
-<script src="machine-photos.js?v=555"></script>
-<script src="machine-fig.js?v=555"></script>
-<script src="get.js?v=555"></script>
-<script src="points.js?v=555"></script>
-<script src="uc-points.js?v=555"></script>
-<script src="inspect-guide.js?v=555"></script>
-<script src="get-figs.js?v=555"></script>
-<script src="body-points.js?v=555"></script>
-<script src="body-map.js?v=555"></script>
-<script src="lube.js?v=555"></script>
-<script src="lube-overrides.js?v=555"></script>
-<script src="lube2027.js?v=555"></script>
-<script src="report-core.js?v=555"></script>
+<script src="grade.js?v=556"></script>
+<script src="edits.js?v=556"></script>
+<script src="due.js?v=556"></script>
+<script src="wear.js?v=556"></script>
+<script src="wear-figs.js?v=556"></script>
+<script src="wear-map.js?v=556"></script>
+<script src="machine-photos.js?v=556"></script>
+<script src="machine-fig.js?v=556"></script>
+<script src="get.js?v=556"></script>
+<script src="points.js?v=556"></script>
+<script src="uc-points.js?v=556"></script>
+<script src="inspect-guide.js?v=556"></script>
+<script src="get-figs.js?v=556"></script>
+<script src="body-points.js?v=556"></script>
+<script src="body-map.js?v=556"></script>
+<script src="lube.js?v=556"></script>
+<script src="lube-overrides.js?v=556"></script>
+<script src="lube2027.js?v=556"></script>
+<script src="report-core.js?v=556"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -15238,7 +15244,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="555";
+const BUILD="556";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

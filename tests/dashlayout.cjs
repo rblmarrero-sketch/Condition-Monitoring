@@ -134,6 +134,16 @@ const MEASURE = () => {
         if (!x) return null; const c = getComputedStyle(x); return { bg: c.backgroundColor, border: c.borderTopColor, op: c.opacity }; });
       ok('D5 a read-only lube master box has no box around it', d5 && /rgba\(0, 0, 0, 0\)|transparent/.test(d5.bg) && /rgba\(0, 0, 0, 0\)|transparent/.test(d5.border) && d5.op === '1', JSON.stringify(d5));
     }
+    if (file === 'dashboard') {
+      /* the Grade mix legend: no entry runs under its neighbour (Russian ran "Ухудшенное 14" into the next) */
+      await p.evaluate(() => showTab('overview', true)); await p.waitForTimeout(300);
+      const lg = await p.evaluate(() => { const bs = [...document.querySelectorAll('#kpiMix .legend button')]; const out = [];
+        for (const a of bs) for (const c of bs) { if (a === c) continue; const A = a.getBoundingClientRect(), C = c.getBoundingClientRect();
+          if (Math.min(A.right, C.right) - Math.max(A.left, C.left) > 1 && Math.min(A.bottom, C.bottom) - Math.max(A.top, C.top) > 1) out.push(a.textContent.trim()); }
+        bs.forEach(x => { if (x.scrollWidth > x.clientWidth + 1) out.push('spills: ' + x.textContent.trim()); });
+        return out; });
+      ok('the Grade mix legend entries do not run into each other', !lg.length, lg.slice(0, 4).join(' | '));
+    }
     const fb = await p.evaluate(() => { const bar = document.getElementById('filterBar'); return !!bar && !!bar.querySelector('#fType'); });
     ok('the filter bar is #filterBar', fb);
     await ctx.close();

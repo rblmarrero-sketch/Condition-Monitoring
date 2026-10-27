@@ -7,6 +7,8 @@
      buttons (32), release fields (38), comment box (34) — Settings' backend
      rows (26), the Saved tab's upload-details summary (18) and report-language
      select (42).
+   And M7: on grade 5, "Responsible" shows its default whole and its box is
+   not 15 px below the target date's.
    A control smaller than 44 px is named with its size.
 
    Run: node tests/phonetap.cjs   (serves the repo itself on 8480) */
@@ -97,6 +99,23 @@ const name = list => list.slice(0, 6).map(c => `${c.id} "${c.txt}" ${c.w}x${c.h}
     const rtwAll = await p.evaluate(MEASURE, '#rtwChecklistScr');
     const off = rtwAll.filter(c => c.right > c.vw);
     ok('and none of them runs off the screen (the Time field did, at 390 px)', !off.length, off.map(c => `${c.id} right ${c.right} > ${c.vw}`).join(' | '));
+
+    // Grade 5 on a magnetic plug: Responsible and Target date (audit 26.10 M7)
+    const g = await p.evaluate(async () => {
+      document.querySelectorAll('.rtw-ov').forEach(e => e.classList.add('hidden')); document.body.classList.remove('ovopen');
+      showPane('paneCapture');
+      const sel = document.getElementById('typeSel'); sel.value = 'MP'; sel.dispatchEvent(new Event('change')); await new Promise(r => setTimeout(r, 150));
+      curEquip = 'TK147'; updateEquipBtn && updateEquipBtn(); applyForm && applyForm(); await new Promise(r => setTimeout(r, 250));
+      document.querySelector('#posnav button[data-pos]').click(); await new Promise(r => setTimeout(r, 250));
+      goStep(2); await new Promise(r => setTimeout(r, 300));
+      document.querySelector('#gradeSeg .gcard[data-g="5"]').click(); await new Promise(r => setTimeout(r, 300));
+      const a = document.getElementById('gResp'), t = document.getElementById('gTarget');
+      const A = a.getBoundingClientRect(), T = t.getBoundingClientRect();
+      return { side: Math.abs(A.top - T.top) < 4, below: T.top >= A.bottom, cut: a.scrollWidth > a.clientWidth + 1, val: a.value, w: Math.round(A.width) };
+    });
+    ok('grade 5: the Responsible default is shown whole, its box not dropped below the date (M7)',
+       g.val && !g.cut && (g.below || g.side), JSON.stringify(g));
+    await p.evaluate(() => { if (typeof resetForm === 'function') resetForm(); });
 
     // Settings: the backend rows
     await p.evaluate(() => { document.querySelectorAll('.rtw-ov').forEach(e => e.classList.add('hidden')); document.body.classList.remove('ovopen');

@@ -4977,6 +4977,21 @@ D6).**
   dashboard-next's Severity mix buttons use the same round dot.
   Never write `<span class="pill ${SEV[n].c}">` again; call `gradeTag(n)`.
   `tests/dashlayout.cjs` fails 9 assertions on build 554.
+
+**RESPONSIBLE AND TARGET DATE STACK ON A PHONE; THE GRADE MIX LEGEND STAYS IN
+ITS COLUMNS (build 556, audit 26.10 M7).** On a grade of 3–5 the plan box put
+"Responsible person / team" beside "Target date". The longer label wrapped, so
+its box sat 15 px lower, and the default role ("Maintenance Superintendent") was
+cut off in half a phone's width. Under 520 px the two fields stack at full width.
+Wider, they line up at the bottom (`#gradeReq .row`). `tests/phonetap.cjs`
+checks it at 360 and 390 px, in English and Russian. On dashboard/, each entry
+of the Overview's Grade mix legend was a no-wrap button sized to its words, so
+in Russian "3 – Ухудшенное 14" ran under its neighbour. Each entry now fills its
+own column; the name (`.ln`) ends in an ellipsis and the button's title says it
+in full. A wider tile was tried and dropped: it squeezed the seven headline
+tiles until "БЕЗ ОТВЕТСТВЕННОГО" was cut. Also tried and dropped: sizing the
+global filter selects to their own text (`field-sizing:content`). That put the
+Russian bar on two rows at 1280–1366, so "All clas…" stays for now.
 ---
 
 ## Secrets
