@@ -5122,6 +5122,21 @@ nothing on screen. `tests/phonepolish.cjs` checks F22-F25 and fails 24 more
 assertions on build 563. Its F23 check presses a key first, because Chromium
 draws a focus ring only after keyboard use; without that it passed on the old
 code.
+
+**THE NUMBERS ON THE UNDERCARRIAGE AND GET MAPS ARE 44 PX, AND THE NEAREST ONE
+TAKES THE TAP (build 565, audit 26.10 F21, F13).** The numbered map
+(`WEAR.mapPhoto`) gave each number a hit circle of radius 28 in a 460-wide
+viewBox, sized on a 412 px phone: 40 px on a 360 one, 35 on a 320. It is 36
+now, 44 px at 320. Neighbours can sit 28 units apart (`spread`), so hit
+circles overlap, and in an overlap the number drawn LAST got the tap: at 320 px
+a tap 17 px from number 9 picked 10. `wireNums` now gives a click to the number
+whose centre is nearest the finger; Enter on a focused number, and a click with
+no position, keep their own. `tests/puckhit.cjs` measures every hit area at
+320, 360 and 390 on a UC and a GET round and taps between the closest pair; it
+fails all 12 on build 564. F21's other rows (the upload summary, Settings rows,
+the report-language select) were done in build 552. F13: the Due switch has
+been 44 px since 552; its 7 px button corners sit in a 10 px frame with 4 px
+padding, which is the right nested radius, so it is left as it is.
 ---
 
 ## Secrets
