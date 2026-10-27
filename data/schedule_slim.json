@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-27T00:37:51+00:00",
+  "generated": "2026-10-27T00:52:34+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -7602,6 +7602,42 @@
       "request": "DD-00013586",
       "defType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "cause": "Трещина шва",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-020911",
+      "equip": "DZ018",
+      "cls": "",
+      "comp": "DZ018.DRS.COO.RAD (Radiator / Радиатор)",
+      "desc": "Зафиксирована утечка охлаждающей жидкости в месте штуцерного соединения гибкого шланга контура охлаждения (просачивание антифриза из-под червячного хомута с образованием потёков на несущих конструкциях).",
+      "priority": "P4 Planned (Repair)",
+      "raised": "2026-09-28",
+      "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "hours": null,
+      "plan": "2026-11-04",
+      "status": "Elimination scheduled",
+      "request": "DD-00013585",
+      "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Поврежден шланга/линии",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-020913",
+      "equip": "DZ018",
+      "cls": "",
+      "comp": "DZ018.CH.BL (Blade / Отвал)",
+      "desc": "Зафиксирован механический излом (разрыв и частичный отрыв по металлу и околошовной зоне) защитного кожуха кронштейна крепления гидроцилиндра/раскоса на тыльной стороне отвала.",
+      "priority": "P4 Planned (Repair)",
+      "raised": "2026-09-28",
+      "type": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "hours": null,
+      "plan": "2026-11-04",
+      "status": "Elimination scheduled",
+      "request": "DD-00013582",
+      "defType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "cause": "Разрушение от удара",
       "pmStatus": "open",
       "completed": ""
     },
