@@ -50,6 +50,7 @@ const ALLOW = new Set([
   'CLAUDE.md',
   'mobile/upload-defaults.js',        // the ONE place the live swap is real and intended
   'ingest/fetch_cm_history.cjs',
+  'tests/histpull.cjs',               // names the old host to prove the pull IGNORES it; talks only to 127.0.0.1
   'ingest/class_rounds.generated.json',
   'ingest/cm_history.generated.json',
   'tests/noprodhit.cjs',              // this file, in its own comment
