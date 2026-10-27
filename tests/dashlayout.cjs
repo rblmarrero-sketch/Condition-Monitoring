@@ -146,6 +146,11 @@ const MEASURE = () => {
     }
     const fb = await p.evaluate(() => { const bar = document.getElementById('filterBar'); return !!bar && !!bar.querySelector('#fType'); });
     ok('the filter bar is #filterBar', fb);
+    /* nothing chosen: each filter shows its own short name ("Class"), not "All clas…" cut short */
+    const fn = await p.evaluate(() => ['fType','fClass','fGrade','fRange','fStatus'].map(id => { const s = document.getElementById(id); if (!s) return null;
+      const lab = document.querySelector('label[for="' + id + '"]'); const o = s.options[0];
+      return o && lab && o.textContent.trim() === lab.textContent.trim() ? null : id + ': ' + (o && o.textContent) + ' vs ' + (lab && lab.textContent); }).filter(Boolean));
+    ok('an empty filter shows its short name', !fn.length, fn.join(' | '));
     await ctx.close();
   }
   ok('no page errors', !fails.some(f => /^PAGEERROR/.test(f)), fails.filter(f => /^PAGEERROR/.test(f)).join(' | '));

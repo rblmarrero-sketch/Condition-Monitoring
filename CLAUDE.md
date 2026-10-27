@@ -5003,6 +5003,18 @@ every visible element on every tab, on both pages, in light and dark, English
 and Russian, came out identical to build 556. The same comparison, with a
 1 px radius change planted, reported 440 differences, so it can see a change.
 Add to the one rule; never restate the selector further down.
+
+**AN EMPTY FILTER SHOWS ITS OWN NAME (build 558).** Under 1500 px the global
+filter dropdowns are capped at 100 px (92 px under 1330) so the search box
+keeps its room, and "All classes", "All grades", "All statuses" and Russian
+"За всё время" were cut to "All clas…". Asked for with a screenshot: with
+nothing chosen, each dropdown's first option is now its own short label
+(`f_type_s`, `f_class_s`, `f_grade_s`, `f_period`, `f_status_s`: Type, Class,
+Grade, Period, Status), on both office pages. A choice still shows itself. The
+`f_all*` words are no longer used by either page. `tests/truncate.cjs` measures
+each empty dropdown against the width its chosen option needs alone (a select
+is as wide as its WIDEST option, so an uncapped clone measures the wrong
+thing). `tests/dashlayout.cjs` checks that the first option equals the label.
 ---
 
 ## Secrets
