@@ -21,7 +21,7 @@ function mkDrive(){
     getDescription:()=>f._desc,setDescription:d=>{f._desc=d;return f;},
     getSize:()=>4,getLastUpdated:()=>new Date(1000+seq),
     getBlob:()=>({getDataAsString:()=>'{}',getBytes:()=>Buffer.from('x'),getContentType:()=>'image/jpeg'}),
-    getParents:()=>it([dir]), setTrashed:()=>{ delete dir._files[name]; }};
+    getParents:()=>it([dir]), setTrashed:()=>{ if(dir._files[name]===f) delete dir._files[name]; }};
     byId[f._id]=f; return f; }
   function mkFolder(name,parent){ const subs={},files={};
     const d={_id:'d'+(++seq),_name:name,_files:files,_subs:subs,

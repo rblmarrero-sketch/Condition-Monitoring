@@ -42,7 +42,10 @@ function mkDrive(){
       getParents:()=>it(dir?[dir]:[]),
       /* DriveApp's File.setContent: the same file, new bytes, new stamp. */
       setContent:s=>{ f._buf=Buffer.from(String(s)); f._updated=stamp(); return f; },
-      setTrashed:v=>{ if(v){ trashed.push(full); delete dir._files[name]; } }};
+      /* Drive keeps two files of one name; this map keeps one. Trashing the
+         older after a newer was written must not take the newer with it
+         (the script writes first and trashes after since GAS_INDEX_SAFETY_V1). */
+      setTrashed:v=>{ if(v){ trashed.push(full); if(dir._files[name]===f) delete dir._files[name]; } }};
     byId[f._id]=f; return f;
   }
   function mkFolder(name,full,parent){
@@ -93,9 +96,15 @@ function mkDrive(){
      the thing it is meant to be older than. */
   let raw=fs.readFileSync(ROOT+'/docs/google-upload.gs','utf8');
   if(process.env.CM_OLD){
-    raw=raw.replace(/^.*p\.action === 'index'.*$/m,'')
-           .replace(/^.*p\.action === 'files'.*$/m,'')
-           .replace(/index: true, media: MEDIA_BATCH, at: indexAt_\(\)/,'');
+    /* Each cut must find its text: one that stops matching leaves the "old"
+       script identical to the new one, or (as on 2026-10-27, when the ping
+       grew a version field after this line and the cut left a lone comma)
+       not a script at all, and the 8102 helper died at start-up. */
+    for(const re of [/^.*p\.action === 'index'.*$/m, /^.*p\.action === 'files'.*$/m,
+                     /index: true, media: MEDIA_BATCH, at: indexAt_\(\),?/]){
+      if(!re.test(raw)) throw new Error('CM_OLD: google-upload.gs no longer has '+re);
+      raw=raw.replace(re,'');
+    }
   }
   const src=raw
     .replace(/const SECRET = '[^']*';/, "const SECRET = '';")

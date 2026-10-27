@@ -28,7 +28,7 @@ function mkDrive() {
       getBlob: () => { tick('getBlob'); return { getDataAsString: () => f._body, getBytes: () => Buffer.from(f._body),
                     getContentType: () => /\.jpg$/.test(name) ? 'image/jpeg' : 'application/json' }; },
       getParents: () => { tick('getParents'); return it(dir ? [dir] : []); },
-      setTrashed: v => { if (v) { trashed.push(full); delete dir._files[name]; } } };
+      setTrashed: v => { if (v) { trashed.push(full); if (dir._files[name] === f) delete dir._files[name]; } } };
     byId[f._id] = f; return f;
   }
   function mkFolder(name, full, parent) {
