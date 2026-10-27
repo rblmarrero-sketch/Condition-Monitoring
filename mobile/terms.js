@@ -46,7 +46,7 @@
     /* the phone's sync states, in the technician's words */
     saved_here: "Saved on this phone", waiting: "Waiting to send", sending: "Sending", sent: "Sent successfully",
     confirmed: "Confirmed on server", verified: "Verified byte for byte", attention: "Needs attention",
-    all_sent: "All sent", offline_saved: "Offline — work saved here", send_now: "Send now",
+    all_sent: "All sent", offline_saved: "Offline — work saved here", offline: "Offline", send_now: "Send now",
     /* readiness */
     ready: "Ready", ready_warn: "Ready with warning", not_ready: "Not ready",
   };
@@ -71,7 +71,7 @@
     server_unconfirmed: "Нет подтверждения сервера",
     saved_here: "Сохранено на этом телефоне", waiting: "Ожидает отправки", sending: "Отправка", sent: "Отправлено",
     confirmed: "Подтверждено сервером", verified: "Проверено побайтно", attention: "Требует внимания",
-    all_sent: "Всё отправлено", offline_saved: "Нет связи — работа сохранена здесь", send_now: "Отправить сейчас",
+    all_sent: "Всё отправлено", offline_saved: "Нет связи — работа сохранена здесь", offline: "Нет связи", send_now: "Отправить сейчас",
     ready: "Готово", ready_warn: "Готово, есть замечание", not_ready: "Не готово",
   };
   /* Words that must not appear on a screen or in a report, in either

@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=560">
+<link rel="manifest" href="manifest.webmanifest?v=561">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=560">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=560">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=560">
+<link rel="apple-touch-icon" href="icon-192.png?v=561">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=561">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=561">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -248,7 +248,7 @@
   .rbadge{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;
     min-width:36px;height:21px;padding:0 7px;border-radius:6px;
     background:var(--surface);border:1.5px solid var(--cat);color:var(--ink-2);
-    font:700 10.5px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.06em;}
+    font:700 11px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.06em;}
   .card h2{margin:0 calc(-1 * var(--cpad)) 10px;padding:11px var(--cpad) 9px;border-bottom:1px solid var(--line);
     font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--ink-2);
     display:flex;align-items:center;gap:8px;}
@@ -308,7 +308,7 @@
   .cards button{display:flex;flex-direction:column;gap:3px;align-items:flex-start;text-align:left;background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:13px 12px;cursor:pointer;position:relative;}
   .cards button:active{background:var(--surface-3);}
   .cards button.on{background:var(--accent-soft);}
-  .cards button .cc{font-size:10.5px;color:var(--muted);font-weight:700;letter-spacing:.05em;}
+  .cards button .cc{font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.05em;}
   /* Russian compounds one word where English uses two — "Электросистема",
      "Пневмоуправление" — and a word with nowhere to break runs out of its own
      card on a 320 px phone. Break inside the word rather than off the edge. */
@@ -343,11 +343,17 @@
     display:flex;flex-direction:column;gap:6px;}
   .rtw-item{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 11px;
     display:flex;flex-direction:column;gap:6px;}
-  .rtw-item .no{flex:none;width:28px;height:20px;border-radius:5px;background:var(--surface-3);color:var(--muted);
-    font-size:10.5px;font-weight:700;display:flex;align-items:center;justify-content:center;}
+  .rtw-item .no{flex:none;width:28px;height:20px;border-radius:5px;background:var(--surface-3);color:var(--ink-2);
+    font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;}
   .rtw-item-head{display:flex;align-items:flex-start;gap:8px;}
+  /* "Не проверено" beside the title squeezed it to four lines on a 360 px
+     phone (audit F19); there it sits under the title instead. */
+  @media (max-width:430px){
+    :lang(ru) .rtw-item-head{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:8px;row-gap:4px;}
+    :lang(ru) .rtw-item-head .rtw-item-badge{grid-column:2;justify-self:start;}
+  }
   .rtw-item-title{flex:1 1 auto;font-size:12.5px;font-weight:650;color:var(--ink);line-height:1.3;}
-  .rtw-item-badge{flex:none;font-size:10px;font-weight:700;border-radius:6px;padding:2px 6px;white-space:nowrap;}
+  .rtw-item-badge{flex:none;font-size:11px;font-weight:700;border-radius:6px;padding:2px 6px;white-space:nowrap;}
   .rtw-marks{display:flex;gap:4px;}
   /* 44 px at least: gloved, cold, 69 of them a checklist (audit 26.10 U2; was 28 px). */
   .rtw-marks button{flex:1 1 0;min-height:44px;border-radius:6px;border:1px solid var(--border);background:var(--surface);
@@ -411,7 +417,7 @@
   .gcard.on{background:var(--gc);border-color:transparent;color:var(--gink,#fff);}
   .gcard.on::before{opacity:0;}
   .gcard.on .gt b,.gcard.on .gm{color:var(--gink,#fff);}
-  .gcard.on .gn{background:rgba(255,255,255,.28);color:var(--gink,#fff);}
+  .gcard.on .gn{background:transparent;box-shadow:inset 0 0 0 2px var(--gink,#fff);color:var(--gink,#fff);}
   .gcard:active{opacity:.85;}
   .g-1{--gc:var(--good);--gink:var(--g1-ink);} .g-2{--gc:var(--warning);--gink:var(--g2-ink);} .g-3{--gc:var(--serious);--gink:var(--g3-ink);}
   .g-4{--gc:var(--severe);--gink:var(--g4-ink);} .g-5{--gc:var(--critical);--gink:var(--g5-ink);}
@@ -464,7 +470,7 @@
   .mpguide{padding:8px 12px 10px;font-size:12px;color:var(--muted);border-top:1px solid var(--line);line-height:1.3;}
   /* A photograph's category, on its tile. */
   .mtile .mcat{position:absolute;left:4px;bottom:4px;max-width:calc(100% - 8px);padding:2px 6px;border-radius:6px;
-    background:rgba(0,0,0,.62);color:#fff;font-size:10.5px;font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;border:none;font-family:inherit;}
+    background:rgba(0,0,0,.62);color:#fff;font-size:11px;font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;border:none;font-family:inherit;}
   .btn{display:block;width:100%;min-height:44px;padding:10px 14px;border-radius:10px;border:none;font-size:15.5px;font-weight:700;cursor:pointer;
     font-family:inherit;transition:opacity .1s;}
   .btn:active{opacity:.86;}
@@ -513,7 +519,7 @@
     border-radius:8px;background:var(--surface-3);cursor:pointer;}
   .pitem .thumb-bad{width:52px;height:52px;flex:none;}
   .pitem .meta{min-width:0;} .pitem .meta .a{font-weight:700;} .pitem .meta .b{font-size:12.5px;color:var(--muted);}
-  .tag{display:inline-block;font-size:10.5px;font-weight:700;padding:1px 6px;border-radius:6px;background:var(--accent);color:var(--accent-ink);margin-right:6px;vertical-align:middle;}
+  .tag{display:inline-block;font-size:11px;font-weight:700;padding:1px 6px;border-radius:6px;background:var(--accent);color:var(--accent-ink);margin-right:6px;vertical-align:middle;}
   /* A queue of nine rounds across four types is where the colour earns its
      keep — it is the one screen that shows several categories at once. */
   .tag{background:var(--surface);border:1.5px solid var(--muted);color:var(--ink-2);padding:0 6px;}
@@ -612,7 +618,7 @@
   .agrow .agitem{margin-bottom:0;}
   .agrow .dueforget{align-self:stretch;}
   .agitem.pre{border-left-color:var(--warn-ink);}
-  .agitem .tag{flex:none;font-size:10.5px;font-weight:700;padding:2px 7px;border-radius:6px;
+  .agitem .tag{flex:none;font-size:11px;font-weight:700;padding:2px 7px;border-radius:6px;
     background:var(--good);color:var(--g1-ink);}
   .agitem.pre .tag{background:var(--warning);color:#111;}
   /* 1C PM priority (audit 26.10 U1): every priority was --good green, P1
@@ -699,10 +705,22 @@
   .pitem .up.never{color:var(--critical);}
   .pitem .rpt1{color:var(--muted);}
   .pitem .edit{color:var(--accent);}
-  .pitem .del{color:var(--critical);margin-left:8px;border-color:color-mix(in srgb,var(--critical) 30%,transparent);}
+  /* The destructive action is not the loudest one on the row (audit F15): the
+     same plain 44 px button as Report and Edit, red ink only, and furthest
+     from Edit so a thumb aimed at Edit cannot land on it. */
+  .pitem .del{color:var(--crit-ink);margin-left:16px;}
   .pitem .del:active{background:color-mix(in srgb,var(--critical) 15%,transparent);}
   .empty{color:var(--muted);text-align:center;padding:20px;font-size:14px;}
   .hint.warn{color:var(--critical);font-weight:600;}
+  /* Out-of-date data is information, not a grade-5 alarm (audit F16): a
+     warning-tinted notice in the warning ink, regular weight, two lines with
+     the rest a tap away. The class stays "warn" for everything that reads it. */
+  #dueStrayNote.warn{color:var(--warn-ink);font-weight:400;font-size:13px;line-height:1.4;
+    background:color-mix(in srgb,var(--warning) 12%,var(--surface));border:1px solid color-mix(in srgb,var(--warning) 40%,var(--border));
+    border-radius:8px;padding:8px 10px;cursor:pointer;
+    }
+  #dueStrayNote.warn > span{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;}
+  #dueStrayNote.warn.open > span{-webkit-line-clamp:unset;display:block;}
   /* --vvb: how far the bottom of what you can actually SEE sits above the
      bottom of the layout viewport. Zero on a desktop browser and almost always
      zero on a phone — but iOS positions fixed elements against the LAYOUT
@@ -723,7 +741,7 @@
   .steps{display:flex;gap:var(--s1);margin:0 0 var(--s3);}
   .steps button{flex:1;min-width:0;min-height:var(--tap);border:1px solid var(--border);background:var(--surface);
     border-radius:var(--r);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
-    font:inherit;font-size:10.5px;font-weight:650;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;
+    font:inherit;font-size:11px;font-weight:650;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;
     padding:4px 2px;cursor:pointer;font-family:inherit;}
   .steps button b{font-size:13px;line-height:1;font-variant-numeric:tabular-nums;}
   .steps button span{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
@@ -815,7 +833,7 @@
     border-radius:0 0 3px 3px;background:var(--accent);}
   /* A count that means "there is something here for you", not decoration. */
   .tabbar .tb{position:absolute;top:5px;left:50%;margin-left:6px;min-width:17px;height:17px;padding:0 4px;
-    border-radius:999px;background:var(--accent);color:var(--accent-ink);font-size:10px;line-height:17px;
+    border-radius:999px;background:var(--accent);color:var(--accent-ink);font-size:11px;line-height:17px;
     text-align:center;letter-spacing:0;}
   .tabbar .tb.warn{background:var(--warning);color:#111;}
   /* Missed is not a warning, it is a miss. The queue's badge is the accent
@@ -873,7 +891,7 @@
     .card{--cpad:12px;padding:0 var(--cpad) 10px;margin-bottom:9px;border-radius:10px;}
     .card h2{margin-bottom:8px;padding:9px var(--cpad) 7px;}
     label.fld{margin-bottom:8px;}
-    .tabbar button{min-height:44px;font-size:10px;}
+    .tabbar button{min-height:44px;font-size:11px;}
     .tabbar button .ti{font-size:16px;}
     /* Sideways the screen is 390 px tall — a full-width Save would take a tenth
        of it for one button. Half the width, still under the thumb. */
@@ -926,6 +944,8 @@
   .hidden{display:none!important;}
   .dest{border:1px solid var(--border);border-radius:10px;padding:12px 12px 2px;margin-bottom:14px;background:var(--surface-2);}
   .dest.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,var(--surface-2));}
+  /* On the tinted active destination --muted fell to 4:1 in dark (audit F20). */
+  .dest.on .hint,.dest.on label.fld>span{color:var(--ink-2);}
   .dest.needurl{border-color:var(--warn-ink);}
   .dest .need{color:var(--warn-ink);font-size:12.5px;margin:-6px 0 12px;}
   .dest .dhead{display:flex;align-items:center;gap:11px;font-weight:700;font-size:14px;margin-bottom:10px;min-height:var(--tap);
@@ -940,7 +960,7 @@
     width:6px;height:13px;border:solid #fff;border-width:0 3px 3px 0;transform:rotate(45deg);}
   .dest .dhead input[type="checkbox"]:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
   .provqr{width:100%;max-width:280px;margin:0 auto;display:block;background:#fff;border-radius:8px;padding:10px;}
-  .badgelbl{font-size:.72em;font-weight:500;letter-spacing:0;text-transform:none;}
+  .badgelbl{font-size:11px;font-weight:500;letter-spacing:0;text-transform:none;}
 .count-badge{background:var(--accent);color:var(--accent-ink);border-radius:999px;padding:1px 8px;font-size:12px;margin-left:6px;}
   .count-badge.warn{background:var(--warning);color:#111;} .count-badge.crit{background:var(--critical);color:var(--g5-ink);}
   /* temperature reading */
@@ -1059,7 +1079,7 @@
   .guide-b{display:grid;gap:8px;padding:10px 12px;margin-top:2px;border-radius:10px;
     background:var(--surface-2);border:1px solid var(--line);}
   .guide-b div{font-size:12.5px;line-height:1.55;color:var(--ink-2);}
-  .guide-b b{display:block;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;
+  .guide-b b{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;
     color:var(--muted);font-weight:700;margin-bottom:2px;}
   .uclast b{color:var(--ink-2);font-weight:650;}
   .uclast.jump{color:var(--warn-ink);}
@@ -1675,7 +1695,7 @@
   .sp-r:last-of-type{border-bottom:none;}
   .sp-r span{color:var(--muted);} .sp-r b{font-variant-numeric:tabular-nums;color:var(--ink);}
   .sp-r.bad b{color:var(--critical);} .sp-r.warn b{color:var(--warn-ink);}
-  .sp-h{margin:12px 0 2px;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;
+  .sp-h{margin:12px 0 2px;font-size:11px;letter-spacing:.06em;text-transform:uppercase;
     color:var(--muted);font-weight:700;}
   .sp-v{margin-top:12px;padding:10px 12px;border-radius:10px;background:var(--surface);
     border:1px solid var(--line);}
@@ -1720,7 +1740,7 @@
   .mtile img,.mtile video{width:100%;height:100%;object-fit:cover;display:block;}
   .mtile .thumb-bad{width:100%;height:100%;border-radius:0;}
   .mtile .mdel{position:absolute;top:2px;right:2px;width:22px;height:22px;border-radius:50%;border:none;background:rgba(0,0,0,.65);color:#fff;font-size:13px;cursor:pointer;line-height:22px;padding:0;}
-  .mtile .vbadge{position:absolute;left:0;right:0;bottom:0;background:rgba(0,0,0,.55);color:#fff;font-size:10px;text-align:center;padding:1px;}
+  .mtile .vbadge{position:absolute;left:0;right:0;bottom:0;background:rgba(0,0,0,.55);color:#fff;font-size:11px;text-align:center;padding:1px;}
   .mediastrip .empty-m{color:var(--muted);font-size:13px;padding:10px 2px;}
   .mediahint{margin:0 0 8px;}
   #mediaRow{margin-bottom:10px;}
@@ -2892,16 +2912,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=560"></script>
-<script src="upload-defaults.js?v=560"></script>
-<script src="hme.js?v=560"></script>
-<script src="mp-fc.js?v=560"></script>
-<script src="rtw.js?v=560"></script>
-<script src="hme-cascade.js?v=560"></script>
-<script src="assets.js?v=560"></script>
-<script src="temp-limits.js?v=560"></script>
-<script src="normalize.js?v=560"></script>
-<script src="terms.js?v=560"></script>
+<script src="native.js?v=561"></script>
+<script src="upload-defaults.js?v=561"></script>
+<script src="hme.js?v=561"></script>
+<script src="mp-fc.js?v=561"></script>
+<script src="rtw.js?v=561"></script>
+<script src="hme-cascade.js?v=561"></script>
+<script src="assets.js?v=561"></script>
+<script src="temp-limits.js?v=561"></script>
+<script src="normalize.js?v=561"></script>
+<script src="terms.js?v=561"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2920,25 +2940,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=560"></script>
-<script src="edits.js?v=560"></script>
-<script src="due.js?v=560"></script>
-<script src="wear.js?v=560"></script>
-<script src="wear-figs.js?v=560"></script>
-<script src="wear-map.js?v=560"></script>
-<script src="machine-photos.js?v=560"></script>
-<script src="machine-fig.js?v=560"></script>
-<script src="get.js?v=560"></script>
-<script src="points.js?v=560"></script>
-<script src="uc-points.js?v=560"></script>
-<script src="inspect-guide.js?v=560"></script>
-<script src="get-figs.js?v=560"></script>
-<script src="body-points.js?v=560"></script>
-<script src="body-map.js?v=560"></script>
-<script src="lube.js?v=560"></script>
-<script src="lube-overrides.js?v=560"></script>
-<script src="lube2027.js?v=560"></script>
-<script src="report-core.js?v=560"></script>
+<script src="grade.js?v=561"></script>
+<script src="edits.js?v=561"></script>
+<script src="due.js?v=561"></script>
+<script src="wear.js?v=561"></script>
+<script src="wear-figs.js?v=561"></script>
+<script src="wear-map.js?v=561"></script>
+<script src="machine-photos.js?v=561"></script>
+<script src="machine-fig.js?v=561"></script>
+<script src="get.js?v=561"></script>
+<script src="points.js?v=561"></script>
+<script src="uc-points.js?v=561"></script>
+<script src="inspect-guide.js?v=561"></script>
+<script src="get-figs.js?v=561"></script>
+<script src="body-points.js?v=561"></script>
+<script src="body-map.js?v=561"></script>
+<script src="lube.js?v=561"></script>
+<script src="lube-overrides.js?v=561"></script>
+<script src="lube2027.js?v=561"></script>
+<script src="report-core.js?v=561"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -3637,7 +3657,7 @@ const I18N = {
     /* "Synced" is a claim about a system this phone cannot see. What it can
        see is that every round it holds has been accepted, file by file, by every
        destination that is switched on — so that is what the pill says. */
-    net_synced:TERMS.en.all_sent, net_waiting:"{n} waiting to send", net_off:TERMS.en.offline_saved,
+    net_synced:TERMS.en.all_sent, net_waiting:"{n} waiting to send", net_off:TERMS.en.offline_saved, net_off_short:TERMS.en.offline,
     net_nosignal:TERMS.en.offline_saved, net_failing:TERMS.en.attention, net_nosync:TERMS.en.attention,
     lbl_detect:"How it was found (ISO 14224)",
     opt_more_causes:"▾ More causes — general",
@@ -4342,7 +4362,7 @@ const I18N = {
     more_details:"Дополнительные сведения", net_sending:TERMS.ru.sending,
     set_theme:"Оформление", theme_auto:"Авто", theme_light:"Светлое", theme_dark:"Тёмное",
     theme_hint:"«Авто» — как на телефоне. Ночная смена в тёмной кабине и яркий стол — разные задачи.",
-    net_synced:TERMS.ru.all_sent, net_waiting:"Ожидает отправки: {n}", net_off:TERMS.ru.offline_saved,
+    net_synced:TERMS.ru.all_sent, net_waiting:"Ожидает отправки: {n}", net_off:TERMS.ru.offline_saved, net_off_short:TERMS.ru.offline,
     net_nosignal:TERMS.ru.offline_saved, net_failing:TERMS.ru.attention, net_nosync:TERMS.ru.attention,
     lbl_detect:"Как обнаружено (ИСО 14224)",
     opt_more_causes:"▾ Другие причины — общие",
@@ -10567,7 +10587,7 @@ function pmOpenInfo(row){
   $("pmInfoWo").textContent=row.wo;
   $("pmInfoBody").innerHTML=pmInfoRows(row).map(([k,v])=>`
     <div class="rtw-summary-card">
-      <div style="font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);">${esc(k)}</div>
+      <div style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);">${esc(k)}</div>
       <div style="font-size:14px;color:var(--ink);">${esc(v)}</div>
     </div>`).join("");
   $("pmOv").classList.remove("hidden");
@@ -10797,9 +10817,11 @@ function renderDueCm(){
   if(strayNote){
     const sn=[histAge(), dueVsFolder(), dueCoverage(), dueStray(), dueBad(), dueNoProgramme(), dueUnknown(), heldOffNote()]
       .filter(Boolean).join(" · ");
-    strayNote.textContent=sn;
+    strayNote.innerHTML=sn ? `<span>${esc(sn)}</span>` : "";
     strayNote.classList.toggle("hidden", !sn);
     strayNote.classList.toggle("warn", histStale());
+    strayNote.title=sn;
+    if(!strayNote.dataset.wired){ strayNote.dataset.wired="1"; strayNote.onclick=()=>strayNote.classList.toggle("open"); }
   }
   const dayLabel=d=>{
     const dt=new Date(d+"T00:00:00Z");
@@ -11612,9 +11634,11 @@ function rtwRenderChecklist(keepSignDataUrl){
     const open = rtwExpanded.has(def.no) || it.mark==="attention";
     const needsEvidence = it.mark==="attention";
     let badgeLabel, badgeBg, badgeInk, cardBorder;
-    if(!it.mark){ badgeLabel=t("rtw_not_checked"); badgeBg="var(--surface-3)"; badgeInk="var(--muted)"; cardBorder="var(--border)"; }
-    else if(needsEvidence && !rtwIsDone(it)){ badgeLabel=t("rtw_needs_evidence"); badgeBg="var(--warning)"; badgeInk="#fff"; cardBorder="var(--warning)"; }
-    else { badgeLabel=t("rtw_complete"); badgeBg="var(--good)"; badgeInk="#fff"; cardBorder="var(--good)"; }
+    /* Ink that reads on its own fill in both themes (audit F20): --muted on
+       --surface-3 was 3.9:1 in dark, white on the warning and good fills 2-3:1. */
+    if(!it.mark){ badgeLabel=t("rtw_not_checked"); badgeBg="var(--surface-3)"; badgeInk="var(--ink-2)"; cardBorder="var(--border)"; }
+    else if(needsEvidence && !rtwIsDone(it)){ badgeLabel=t("rtw_needs_evidence"); badgeBg="var(--warning)"; badgeInk="var(--g2-ink)"; cardBorder="var(--warning)"; }
+    else { badgeLabel=t("rtw_complete"); badgeBg="var(--good)"; badgeInk="var(--g1-ink)"; cardBorder="var(--good)"; }
     itemsHtml+=`<div class="rtw-item" style="border-color:${cardBorder};">
       <div class="rtw-item-head">
         <div class="no">${esc(def.no)}</div>
@@ -11627,8 +11651,8 @@ function rtwRenderChecklist(keepSignDataUrl){
         <button type="button" class="rtw-mark ${it.mark==='na'?'on-na':''}" data-mark="na" data-no="${esc(def.no)}">${esc(t('rtw_na'))}</button>
       </div>
       <button type="button" class="rtw-evidence-toggle" data-toggle="${esc(def.no)}">
-        <span style="font-size:10.5px;color:var(--muted);">${esc(rtwEvidenceSummary(it)||t("rtw_evidence_optional"))}</span>
-        <span style="font-size:10.5px;color:var(--muted);">${open?"▴":"▾"}</span>
+        <span style="font-size:11px;color:var(--muted);">${esc(rtwEvidenceSummary(it)||t("rtw_evidence_optional"))}</span>
+        <span style="font-size:11px;color:var(--muted);">${open?"▴":"▾"}</span>
       </button>
       <div class="rtw-evidence-body" ${open?"":'style="display:none;"'}>
         <div class="hint" style="margin:0;">${esc(needsEvidence?t("rtw_evidence_required"):t("rtw_evidence_optional"))}</div>
@@ -11651,7 +11675,7 @@ function rtwRenderChecklist(keepSignDataUrl){
       </div>
     </div>`;
   const release=`<div class="rtw-summary-card" style="margin-top:4px;">
-      <div style="font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);">${esc(t('rtw_release_t'))}</div>
+      <div style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);">${esc(t('rtw_release_t'))}</div>
       <div class="rtw-release-field"><label>${esc(t('rtw_senior_mech'))}</label>
         <input id="rtwSup" type="text" placeholder="${esc(t('rtw_senior_mech_ph'))}" value="${esc(d.sup||"")}"></div>
       <div style="display:flex;flex-wrap:wrap;gap:8px;">
@@ -15244,7 +15268,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="560";
+const BUILD="561";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -19099,14 +19123,14 @@ async function netState(){
   let pend=0, qbad=false; try{ pend=(await dbAll()).filter(r=>!r.up).length; }catch(e){ qbad=true; }
   /* The flag, unless the evidence contradicts it: a server that answered after
      the flag went false is a server that answered. */
-  if(!navigator.onLine && !(netOkAt>offSince && netOkAt>netFailAt)) return {cls:pend?"warn":"off", txt:t("net_off")};
+  if(!navigator.onLine && !(netOkAt>offSince && netOkAt>netFailAt)) return {cls:pend?"warn":"off", txt:t("net_off"), short:t("net_off_short")};
   /* Before "failing" and long before "all sent": a queue this phone cannot
      read right now is the one state in which no other verdict is available. */
   if(qbad)                       return {cls:"err",  txt:t("net_qbad")};
   if(lastErr)                    return {cls:"err",  txt:t("net_failing")};
   // Attached to a network, but the last thing we tried did not get through and
   // nothing has since. That is the pit, and it is not "online".
-  if(netFailAt>netOkAt)          return {cls:"warn", txt:t("net_nosignal")};
+  if(netFailAt>netOkAt)          return {cls:"warn", txt:t("net_nosignal"), short:t("net_off_short")};
   if(pend && syncingId)          return {cls:"warn", txt:t("net_sending")};
   if(pend)                       return {cls:"warn", txt:t("net_waiting",{n:pend})};
   return {cls:"on", txt:t("net_synced")};
@@ -19118,7 +19142,10 @@ async function renderNet(){
   const st=await netState();
   if(run!==netRun) return;                       // a newer render already won
   el.className="st "+st.cls;
-  el.innerHTML=`<span class="d"></span>${esc(st.txt)}`;
+  /* The header has room for a state, not a sentence: at 360 px in Russian
+     "Нет связи — работа сохранена здесь" took three lines (audit F18). The
+     pill says the state; its title, and the Saved screen, say the rest. */
+  el.innerHTML=`<span class="d"></span>${esc(st.short||st.txt)}`;
   el.title=st.txt;
 }
 const setNet=renderNet;                          // the old name, still called at init
