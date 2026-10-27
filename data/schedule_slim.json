@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-27T03:07:36+00:00",
+  "generated": "2026-10-27T03:23:16+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -907,6 +907,24 @@
       "wo": "WO-020909",
       "equip": "DZ017",
       "cls": "DOZ",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-08",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-11-08",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-020951",
+      "equip": "EX021",
+      "cls": "EXC",
       "comp": "",
       "desc": "250h service",
       "priority": "P3 Planned (PM)",
