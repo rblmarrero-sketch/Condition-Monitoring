@@ -619,10 +619,14 @@
       s.push('<g class="' + cls + '" data-ucg="' + n + '" transform="translate(' +
              x.toFixed(1) + ',' + y.toFixed(1) + ')" role="button" tabindex="0" aria-label="' +
              n + '">');
-      /* 28 in a 460-wide viewBox, which is a 56 px circle scaled to about 46 on
-         a 412 px phone — over the 44 px floor a gloved thumb needs. 22 looked
-         generous in the drawing and measured 36 on the glass. */
-      s.push('<circle class="um-hit" r="28" fill="transparent"/>');
+      /* 36 in a 460-wide viewBox: the map is drawn about 0.62 px a unit on a
+         320 px phone, so a 72-unit circle is 44 px there, the floor a gloved
+         thumb needs, and more on anything wider. 28 was sized on a 412 px phone
+         and measured 40 on a 360 one and 35 on a 320 (audit 26.10 F21).
+         Neighbours can sit 28 apart (spread), so hit circles overlap; the
+         page's wireNums gives an overlapped tap to the NEAREST number, never
+         to whichever was drawn last. */
+      s.push('<circle class="um-hit" r="36" fill="transparent"/>');
       s.push('<circle class="um-puck" r="13"/>');
       s.push('<text class="um-n" y="4.5" text-anchor="middle">' + n + '</text>');
       s.push('</g>');

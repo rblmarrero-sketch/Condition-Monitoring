@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=564">
+<link rel="manifest" href="manifest.webmanifest?v=565">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=564">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=564">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=564">
+<link rel="apple-touch-icon" href="icon-192.png?v=565">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=565">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=565">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2942,16 +2942,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=564"></script>
-<script src="upload-defaults.js?v=564"></script>
-<script src="hme.js?v=564"></script>
-<script src="mp-fc.js?v=564"></script>
-<script src="rtw.js?v=564"></script>
-<script src="hme-cascade.js?v=564"></script>
-<script src="assets.js?v=564"></script>
-<script src="temp-limits.js?v=564"></script>
-<script src="normalize.js?v=564"></script>
-<script src="terms.js?v=564"></script>
+<script src="native.js?v=565"></script>
+<script src="upload-defaults.js?v=565"></script>
+<script src="hme.js?v=565"></script>
+<script src="mp-fc.js?v=565"></script>
+<script src="rtw.js?v=565"></script>
+<script src="hme-cascade.js?v=565"></script>
+<script src="assets.js?v=565"></script>
+<script src="temp-limits.js?v=565"></script>
+<script src="normalize.js?v=565"></script>
+<script src="terms.js?v=565"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2970,25 +2970,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=564"></script>
-<script src="edits.js?v=564"></script>
-<script src="due.js?v=564"></script>
-<script src="wear.js?v=564"></script>
-<script src="wear-figs.js?v=564"></script>
-<script src="wear-map.js?v=564"></script>
-<script src="machine-photos.js?v=564"></script>
-<script src="machine-fig.js?v=564"></script>
-<script src="get.js?v=564"></script>
-<script src="points.js?v=564"></script>
-<script src="uc-points.js?v=564"></script>
-<script src="inspect-guide.js?v=564"></script>
-<script src="get-figs.js?v=564"></script>
-<script src="body-points.js?v=564"></script>
-<script src="body-map.js?v=564"></script>
-<script src="lube.js?v=564"></script>
-<script src="lube-overrides.js?v=564"></script>
-<script src="lube2027.js?v=564"></script>
-<script src="report-core.js?v=564"></script>
+<script src="grade.js?v=565"></script>
+<script src="edits.js?v=565"></script>
+<script src="due.js?v=565"></script>
+<script src="wear.js?v=565"></script>
+<script src="wear-figs.js?v=565"></script>
+<script src="wear-map.js?v=565"></script>
+<script src="machine-photos.js?v=565"></script>
+<script src="machine-fig.js?v=565"></script>
+<script src="get.js?v=565"></script>
+<script src="points.js?v=565"></script>
+<script src="uc-points.js?v=565"></script>
+<script src="inspect-guide.js?v=565"></script>
+<script src="get-figs.js?v=565"></script>
+<script src="body-points.js?v=565"></script>
+<script src="body-map.js?v=565"></script>
+<script src="lube.js?v=565"></script>
+<script src="lube-overrides.js?v=565"></script>
+<script src="lube2027.js?v=565"></script>
+<script src="report-core.js?v=565"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -7756,10 +7756,25 @@ function renderUCSheet(){
    free the way a <button> does. It carries role="button" and tabindex, which
    promises Enter and Space will work — so they have to. */
 function wireNums(root, pick){
+  /* The hit circles are wider than the space between close numbers, so a tap
+     can land on two. The number whose centre is nearest the finger wins, not
+     the one drawn last (audit 26.10 F21). A click with no position (Enter on a
+     focused number, a test's el.click()) keeps the group it was sent to. */
+  const nearest=(g,e)=>{
+    if(!e||!(e.clientX||e.clientY)) return g;
+    const svg=g.ownerSVGElement||g.closest("svg"); if(!svg) return g;
+    let best=g, bd=Infinity;
+    svg.querySelectorAll("[data-ucg]").forEach(h=>{
+      const pk=h.querySelector(".um-puck")||h, q=pk.getBoundingClientRect();
+      const dx=q.left+q.width/2-e.clientX, dy=q.top+q.height/2-e.clientY, d=dx*dx+dy*dy;
+      if(d<bd){ bd=d; best=h; }
+    });
+    return best;
+  };
   root.querySelectorAll("[data-ucg]").forEach(g=>{
-    const go=()=>pick(+g.dataset.ucg);
+    const go=e=>pick(+nearest(g,e).dataset.ucg);
     g.onclick=go;
-    g.onkeydown=e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); } };
+    g.onkeydown=e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); pick(+g.dataset.ucg); } };
   });
 }
 function ucMemberLabel(k){
@@ -15304,7 +15319,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="564";
+const BUILD="565";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
