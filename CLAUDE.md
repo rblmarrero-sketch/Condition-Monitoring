@@ -4911,6 +4911,31 @@ in the index until the next upload or a rebuild (N3, Pechanka's reconcile,
 covers it). `tests/gsindex.cjs` runs the real script over an in-memory Drive and
 fails 13 assertions against the previous version.
 
+**AND WHAT THE DEEP SCAN OF 2026-10-27 FOUND IN IT (`GAS_SCAN_FIXES_V1`).** In
+`docs/google-upload.gs`; the phone and desk half is the build 566 entry.
+- **Deferrals:** the readers (`metaSince_`, `readRecords_`, and `function.js`'s,
+  for agreement) hand on `cleared`, so the office's "Cancel the deferral"
+  arrives as a cancel. Saving one moves the index clock (`saveOne_`), so an
+  incremental pull delivers it instead of answering `upToDate` until some
+  unrelated upload. An upload into `_meta/` is no device's copy: a second phone
+  re-deferring a round another phone deferred was renamed
+  `X.defer~DEV.json`, a name no reader looks for. Markers are not rounds
+  (`isSidecar_`).
+- **A month index that cannot be read is not read past.** `readIndex_` retries
+  once, then stops `truncated` with the cursor on the last month it did read
+  and names the month (`unreadable`). It used to skip the month, move the
+  cursor over it and call the reply complete, and a phone's full read rebuilt
+  its history without it.
+- **Corrections and conflict decisions are written before the old marker is
+  trashed** (`replaceFile_`), as `saveOne_` and `shardWrite_` already were; a
+  failed create used to leave no marker (a void gone, a decision and its clash
+  gone). The clock moves after the marker is on Drive, not before.
+- **Deleting one device's rival copy takes that device's row out of the index**
+  (`indexDropDev_`), or every phone went on showing the deleted copy.
+`tests/gsscan.cjs` (over `tests/gsfake.cjs`, gsindex's Drive as a module) fails
+15 assertions against `GAS_INDEX_SAFETY_V1`. **Not live until the maintainer
+redeploys the Apps Script (F6).**
+
 **TEXT THAT READS IN BOTH THEMES (build 551, audit 26.10 M4, M5, M6, D7).**
 Measured on screen, not read off a class. Phone: `.posnav button.on` (the
 plain position chips) also matches the undercarriage and tray chips and
