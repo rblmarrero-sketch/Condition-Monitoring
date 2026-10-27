@@ -84,14 +84,16 @@ const key = e => new KeyboardEvent('keydown', { key: e, bubbles: true, cancelabl
   console.log('\n3. TABLES PAGE AT 25, OFFER 50 AND 100, NEVER "SHOW ALL"');
   await p.evaluate(() => { showTab('actions', true); actView = 'table'; renderActions(); }); await p.waitForTimeout(300);
   const T = await p.evaluate(() => ({
-    rows: document.querySelectorAll('#actionTbl tbody tr.hrow').length, shown: $('actShown').textContent.trim(),
+    rows: document.querySelectorAll('#actionTbl tbody tr.hrow').length, shown: (document.querySelector('#actionTbl .pager .muted') || {textContent: ''}).textContent.trim(),
     sizes: [...document.querySelectorAll('#actionTbl .pgsz button')].map(b => b.textContent.trim()),
     all: document.querySelectorAll('[data-pg$=":all"]').length, total: actionRows().filter(x => actionRequired(x.r, x.i)).length }));
+  /* The count is the pager's under the table; #actShown stopped repeating it in
+     build 559 (audit M5), so read it where it is said. */
   ok('25 rows by default', T.rows === 25, T.rows + ' rows');
   ok('"N matching · showing 1–25"', new RegExp('^' + T.total.toLocaleString('en-US') + ' matching · showing 1–25').test(T.shown), T.shown);
   ok('25 / 50 / 100 offered, no show-all anywhere', T.sizes.join(',') === '25,50,100' && T.all === 0, T.sizes.join(',') + ' · ' + T.all + ' show-all');
   await p.evaluate(() => document.querySelector('#actionTbl [data-pg$=":size:100"]').click()); await p.waitForTimeout(300);
-  const T2 = await p.evaluate(() => ({ rows: document.querySelectorAll('#actionTbl tbody tr.hrow').length, shown: $('actShown').textContent.trim(),
+  const T2 = await p.evaluate(() => ({ rows: document.querySelectorAll('#actionTbl tbody tr.hrow').length, shown: (document.querySelector('#actionTbl .pager .muted') || {textContent: ''}).textContent.trim(),
     on: (document.querySelector('#actionTbl .pgsz .on') || {}).textContent }));
   ok('100 a page draws 100 and says so', T2.rows === 100 && /showing 1–100/.test(T2.shown) && T2.on === '100', T2.shown);
   /* Sorting is over the whole list: sort by unit and the first page must hold
@@ -203,7 +205,7 @@ const key = e => new KeyboardEvent('keydown', { key: e, bubbles: true, cancelabl
   await p.click('.lang button[data-lang="ru"]'); await p.waitForTimeout(500);
   const Ru = await p.evaluate(() => { showTab('due', true); const heads = [...document.querySelectorAll('#ddList th')].map(x => x.textContent.trim());
     showTab('actions', true); const k = [...document.querySelectorAll('#actKpis .kpi .k')].map(x => x.textContent.trim());
-    return { heads, k, defs: [...document.querySelectorAll('details.defs > summary')].map(s => s.textContent.trim()), eq: $('equipQ').placeholder, shown: $('actShown').textContent.trim() }; });
+    return { heads, k, defs: [...document.querySelectorAll('details.defs > summary')].map(s => s.textContent.trim()), eq: $('equipQ').placeholder, shown: (document.querySelector('#actionTbl .pager .muted') || {textContent: ''}).textContent.trim() }; });
   ok('Russian headings: ' + TERMS.ru.hours_per_day + ' · ' + TERMS.ru.defer_reason, Ru.heads.includes(TERMS.ru.hours_per_day) && Ru.heads.includes(TERMS.ru.defer_reason), Ru.heads.join(' | '));
   ok('  cards: Работы без ответственного', Ru.k.some(x => /без ответственного/i.test(x)), Ru.k.join(' | '));
   ok('  Definitions → Определения, on every page (' + defsEn + ' of them)',

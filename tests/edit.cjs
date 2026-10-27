@@ -18,7 +18,7 @@ function drive() {
       getBlob: () => ({ getDataAsString: () => f._body, getBytes: () => Buffer.from(f._body),
                         getContentType: () => 'application/json' }),
       getParents: () => it(dir ? [dir] : []),
-      setTrashed: v => { f._trashed = !!v; if (v) { trashed.push(f._path); delete dir._files[name]; } } };
+      setTrashed: v => { f._trashed = !!v; if (v) { trashed.push(f._path); if (dir._files[name] === f) delete dir._files[name]; } } };
     byId[f._id] = f; return f;
   }
   function mkFolder(name, full, parent) {
