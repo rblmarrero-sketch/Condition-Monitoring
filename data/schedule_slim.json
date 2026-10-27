@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-27T05:04:55+00:00",
+  "generated": "2026-10-27T05:28:26+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -769,6 +769,17 @@
         "priority": "P3 Planned (PM)"
       }
     ],
+    "TK146": [
+      {
+        "wo": "WO-020983",
+        "hours": 250,
+        "types": [
+          "MP"
+        ],
+        "plan": "2026-11-02",
+        "priority": "P3 Planned (PM)"
+      }
+    ],
     "TK147": [
       {
         "wo": "WO-019529",
@@ -777,6 +788,27 @@
           "MP"
         ],
         "plan": "2026-10-26",
+        "priority": "P3 Planned (PM)"
+      },
+      {
+        "wo": "WO-020986",
+        "hours": 500,
+        "types": [
+          "LUBE",
+          "MP"
+        ],
+        "plan": "2026-11-06",
+        "priority": "P3 Planned (PM)"
+      }
+    ],
+    "TK148": [
+      {
+        "wo": "WO-020987",
+        "hours": 250,
+        "types": [
+          "MP"
+        ],
+        "plan": "2026-11-03",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -789,6 +821,15 @@
           "MP"
         ],
         "plan": "2026-10-28",
+        "priority": "P3 Planned (PM)"
+      },
+      {
+        "wo": "WO-020989",
+        "hours": 250,
+        "types": [
+          "MP"
+        ],
+        "plan": "2026-11-08",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -812,7 +853,7 @@
           "LUBE",
           "MP"
         ],
-        "plan": "2026-10-29",
+        "plan": "2026-11-07",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -952,6 +993,24 @@
       "completed": ""
     },
     {
+      "wo": "WO-020982",
+      "equip": "GR016",
+      "cls": "GRD",
+      "comp": "",
+      "desc": "500h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-08",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-11-08",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-020975",
       "equip": "LD008",
       "cls": "LDR",
@@ -1009,6 +1068,24 @@
       "wo": "WO-020872",
       "equip": "TK119",
       "cls": "AT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-08",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-11-08",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-020989",
+      "equip": "TK149",
+      "cls": "HT",
       "comp": "",
       "desc": "Magnetic Plug",
       "priority": "P3 Planned (PM)",
@@ -1114,6 +1191,24 @@
       "completed": ""
     },
     {
+      "wo": "WO-019531",
+      "equip": "TK151",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Lubrication / Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-07",
+      "type": "1500 Hours service Planned",
+      "hours": 1500,
+      "plan": "2026-11-07",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-019358",
       "equip": "DZ014",
       "cls": "DOZ",
@@ -1191,6 +1286,24 @@
       "cls": "AT",
       "comp": "",
       "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-06",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-11-06",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-020986",
+      "equip": "TK147",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Lubrication / Magnetic Plug",
       "priority": "P3 Planned (PM)",
       "raised": "2026-11-06",
       "type": "500 Hours service Planned",
@@ -1546,6 +1659,24 @@
       "completed": ""
     },
     {
+      "wo": "WO-020987",
+      "equip": "TK148",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-03",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-11-03",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-020895",
       "equip": "DZ011",
       "cls": "DOZ",
@@ -1639,6 +1770,24 @@
       "wo": "WO-019522",
       "equip": "TK122",
       "cls": "AT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-02",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-11-02",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-020983",
+      "equip": "TK146",
+      "cls": "HT",
       "comp": "",
       "desc": "Magnetic Plug",
       "priority": "P3 Planned (PM)",
@@ -2293,24 +2442,6 @@
       "raised": "2026-10-29",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-10-29",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
-      "wo": "WO-019531",
-      "equip": "TK151",
-      "cls": "HT",
-      "comp": "",
-      "desc": "Lubrication / Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-10-29",
-      "type": "1500 Hours service Planned",
-      "hours": 1500,
       "plan": "2026-10-29",
       "status": "Elimination scheduled",
       "request": "",
@@ -3922,6 +4053,42 @@
       "completed": "2026-10-21"
     },
     {
+      "wo": "WO-020985",
+      "equip": "TK146",
+      "cls": "",
+      "comp": "TK146.HS.CV (Control Valves / Гидрораспределители)",
+      "desc": "Течь в зоне фитингов гидрораспределителя.",
+      "priority": "P4 Planned (Repair)",
+      "raised": "2026-10-20",
+      "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "hours": null,
+      "plan": "2026-11-02",
+      "status": "Elimination scheduled",
+      "request": "DD-00015245",
+      "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Фитинг/штуцер ослаб",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-020984",
+      "equip": "TK146",
+      "cls": "",
+      "comp": "TK146.DRS.COO (Cooling System / Система охлаждения)",
+      "desc": "Течь ОЖ с патрубка теплообменника.",
+      "priority": "P4 Planned (Repair)",
+      "raised": "2026-10-20",
+      "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "hours": null,
+      "plan": "2026-11-02",
+      "status": "Elimination scheduled",
+      "request": "DD-00015242",
+      "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Поврежден шланга/линии",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-019819",
       "equip": "CD008",
       "cls": "GEN",
@@ -4262,6 +4429,24 @@
       "cause": "",
       "pmStatus": "complete",
       "completed": "2026-10-19"
+    },
+    {
+      "wo": "WO-020988",
+      "equip": "TK148",
+      "cls": "",
+      "comp": "TK148.HS.CV (Control Valves / Гидрораспределители)",
+      "desc": "Выявлено течь в зоне фитингов гидрораспределителя.",
+      "priority": "P4 Planned (Repair)",
+      "raised": "2026-10-18",
+      "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "hours": null,
+      "plan": "2026-11-03",
+      "status": "Elimination scheduled",
+      "request": "DD-00015045",
+      "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Фитинг/штуцер ослаб",
+      "pmStatus": "open",
+      "completed": ""
     },
     {
       "wo": "WO-018541",
