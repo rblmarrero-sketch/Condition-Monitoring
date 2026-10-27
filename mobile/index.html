@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=565">
+<link rel="manifest" href="manifest.webmanifest?v=566">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=565">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=565">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=565">
+<link rel="apple-touch-icon" href="icon-192.png?v=566">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=566">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=566">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2942,16 +2942,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=565"></script>
-<script src="upload-defaults.js?v=565"></script>
-<script src="hme.js?v=565"></script>
-<script src="mp-fc.js?v=565"></script>
-<script src="rtw.js?v=565"></script>
-<script src="hme-cascade.js?v=565"></script>
-<script src="assets.js?v=565"></script>
-<script src="temp-limits.js?v=565"></script>
-<script src="normalize.js?v=565"></script>
-<script src="terms.js?v=565"></script>
+<script src="native.js?v=566"></script>
+<script src="upload-defaults.js?v=566"></script>
+<script src="hme.js?v=566"></script>
+<script src="mp-fc.js?v=566"></script>
+<script src="rtw.js?v=566"></script>
+<script src="hme-cascade.js?v=566"></script>
+<script src="assets.js?v=566"></script>
+<script src="temp-limits.js?v=566"></script>
+<script src="normalize.js?v=566"></script>
+<script src="terms.js?v=566"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2970,25 +2970,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=565"></script>
-<script src="edits.js?v=565"></script>
-<script src="due.js?v=565"></script>
-<script src="wear.js?v=565"></script>
-<script src="wear-figs.js?v=565"></script>
-<script src="wear-map.js?v=565"></script>
-<script src="machine-photos.js?v=565"></script>
-<script src="machine-fig.js?v=565"></script>
-<script src="get.js?v=565"></script>
-<script src="points.js?v=565"></script>
-<script src="uc-points.js?v=565"></script>
-<script src="inspect-guide.js?v=565"></script>
-<script src="get-figs.js?v=565"></script>
-<script src="body-points.js?v=565"></script>
-<script src="body-map.js?v=565"></script>
-<script src="lube.js?v=565"></script>
-<script src="lube-overrides.js?v=565"></script>
-<script src="lube2027.js?v=565"></script>
-<script src="report-core.js?v=565"></script>
+<script src="grade.js?v=566"></script>
+<script src="edits.js?v=566"></script>
+<script src="due.js?v=566"></script>
+<script src="wear.js?v=566"></script>
+<script src="wear-figs.js?v=566"></script>
+<script src="wear-map.js?v=566"></script>
+<script src="machine-photos.js?v=566"></script>
+<script src="machine-fig.js?v=566"></script>
+<script src="get.js?v=566"></script>
+<script src="points.js?v=566"></script>
+<script src="uc-points.js?v=566"></script>
+<script src="inspect-guide.js?v=566"></script>
+<script src="get-figs.js?v=566"></script>
+<script src="body-points.js?v=566"></script>
+<script src="body-map.js?v=566"></script>
+<script src="lube.js?v=566"></script>
+<script src="lube-overrides.js?v=566"></script>
+<script src="lube2027.js?v=566"></script>
+<script src="report-core.js?v=566"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -9693,6 +9693,7 @@ function deferSave(m){ deferCache=m; try{ lsSet(DEFER_KEY,JSON.stringify(m)); }c
    states, and the later statement is the one that stands. Already marked `up`
    because it came FROM the server; re-uploading it would be this phone
    claiming somebody else's decision. */
+function deferCleared(d){ return !!(d && (d.cleared || (!d.until && !String(d.why||"").trim() && !String(d.whyKey||"").trim()))); }
 function teamDefer(list){
   if(!Array.isArray(list) || !list.length) return 0;
   const m=deferAll(); let n=0;
@@ -9703,7 +9704,13 @@ function teamDefer(list){
     const k=teamType(d.t)+"|"+String(d.u).toUpperCase();
     const cur=m[k];
     if(cur && String(cur.at||"") > String(d.at||"")) return;   // ours is newer
-    if(d.cleared){ if(cur){ delete m[k]; n++; } return; }
+    /* A cancellation is `cleared`, or, where a backend dropped that field (the
+       Google script, and the Yandex one before it, pass on only u/t/until/why/
+       whyKey/by/at), a marker with no date AND no reason: no real deferral has
+       neither, because the office and this phone refuse one without a reason.
+       Read as "put off, no end date", an office "Cancel the deferral" took the
+       machine OFF every list instead of back on (deep scan, 2026-10-27). */
+    if(deferCleared(d)){ if(cur){ delete m[k]; n++; } return; }
     m[k]={ until:d.until||null, why:d.why||"", by:d.by||"", at:d.at||"", up:1 };
     n++;
   });
@@ -15319,7 +15326,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="565";
+const BUILD="566";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -16275,6 +16282,20 @@ function serverHolds(rec,f){
    revision's upload sitting under the name fails one check or the other;
    only a listing with no `updated` at all is read as before, same as
    `landedAnyway`. */
+/* WHEN A LISTED FILE WAS WRITTEN, IN MILLISECONDS. Google's listing (and
+   Yandex's before it) sends `updated` as epoch ms, a NUMBER, and
+   Date.parse(number) is NaN — so until build 566 both "written since" checks
+   below were skipped against every real backend, and an edited round's
+   sidecar, same name and same length as the copy already there, was taken as
+   landed on a lost reply and read back as confirmed (deep scan, 2026-10-27).
+   A number, a numeric string and a date string are all read; anything else is
+   NaN, which says nothing about when and leaves the check out as before. */
+function listedAt(v){
+  if(typeof v==="number") return isFinite(v) ? v : NaN;
+  const t=String(v==null?"":v).trim();
+  if(!t) return NaN;
+  return /^\d+$/.test(t) ? Number(t) : Date.parse(t);
+}
 function serverListedAsCurrent(idx, name, e){
   const exp=e ? Number(e.byteSize)||0 : 0;
   if(!exp) return false;
@@ -16282,7 +16303,7 @@ function serverListedAsCurrent(idx, name, e){
   const sz=(f.size==null||f.size==="") ? null : Number(f.size);
   if(sz!==exp) return false;
   if(f.updated && e.capturedAt){
-    const u=Date.parse(f.updated), c=Date.parse(e.capturedAt);
+    const u=listedAt(f.updated), c=Date.parse(e.capturedAt);
     if(isFinite(u) && isFinite(c) && u<c-LANDED_SKEW) return false;
   }
   return true;
@@ -17035,7 +17056,7 @@ async function landedAnyway(UP, folder, want, err, since){
   const ok=want.every(w=>{ const f=have.get(w.name); if(!f) return false;
     const s=(f.size==null||f.size==="")?null:Number(f.size);
     if(s==null || (w.size!=null && s!==Number(w.size))) return false;
-    const u=f.updated?Date.parse(f.updated):NaN;
+    const u=listedAt(f.updated);
     if(isFinite(u) && u<from){ stale++; return false; }
     return true; });
   slog("reply-lost", {folder, n:want.length, landed:ok, stale, sentAll:!!err.sentAll, ms:Date.now()-t0, err:String((err&&err.message)||err).slice(0,100)});
@@ -19752,8 +19773,23 @@ async function backendPost(g, body){
 }
 let pushBusy=null, pushKeyMemo={url:"", key:"", at:0};
 function pushSetup(){ if(pushBusy) return pushBusy; pushBusy=pushSetupNow().finally(()=>{ pushBusy=null; }); return pushBusy; }
+/* Android's periodic wake needs no push server: the worker's wake() reads
+   sw.js and the folder index and nothing else. It was registered only at the
+   end of the push setup below, after the step that gives up when the backend
+   has no VAPID key, and the Google backend never has one, so from the move to
+   Google (build 534) no phone set up since was ever woken while closed (deep
+   scan, 2026-10-27). Registered first, on its own, whatever the push side says. */
+function upkeepRegister(){
+  try{
+    if(!("serviceWorker" in navigator)) return;
+    withTimeoutMs(navigator.serviceWorker.ready, 8000)
+      .then(reg=>reg && reg.periodicSync ? reg.periodicSync.register("cm-upkeep",{minInterval:3600000}) : null)
+      .catch(()=>{});
+  }catch(e){}
+}
 async function pushSetupNow(){
   await mirrorSwConfig();
+  upkeepRegister();
   const g=loadDests().find(d=>d.id==="gas" && d.url);
   if(!g) return {k:"nodest"};
   /* The server first: a backend that cannot wake phones makes every question
@@ -19832,8 +19868,6 @@ async function pushSetupNow(){
     }catch(e){ return {k:"unreach", why:String((e&&e.message)||e).slice(0,60)}; }
     lsSet(PUSH_EP, sub.endpoint); lsSet(PUSH_KEY, key);
   }
-  /* Android: a periodic wake as well, where the browser offers one. */
-  try{ if(reg.periodicSync) await reg.periodicSync.register("cm-upkeep",{minInterval:3600000}); }catch(e){}
   return {k:"on", ep:sub.endpoint};
 }
 /* The one tap: must run inside a user gesture. */

@@ -307,6 +307,51 @@ const setListing = files => new Promise((res, rej) => {
   ok(!!r4e.threw, 'a listing written before this photo was even taken is not treated as landed, same size or not', JSON.stringify(r4e));
   ok(r4e.sentKeys.length === 0, 'and is not marked sent', JSON.stringify(r4e.sentKeys));
 
+  console.log('\n   (the same control with `updated` in epoch MILLISECONDS — the shape google-upload.gs listFiles_ really sends)');
+  /* Every case above writes `updated` as an ISO string, a shape no backend has
+     ever sent: Google's listing (and Yandex's) gives a NUMBER, and
+     Date.parse(number) is NaN, so until build 566 this check was skipped on
+     every real listing and passed only here (deep scan, 2026-10-27). */
+  await setListing([{ name: 'p1.jpg', size: 12345, updated: Date.parse('2026-09-16T08:00:00.000Z') }]);
+  const r4f = await p.evaluate(async ({ url, rec }) => {
+    const realB64 = window.blobToB64, realHolds = window.serverHolds;
+    window.blobToB64 = async () => { const e = new Error('cannot read'); e.localRead = true; throw e; };
+    window.serverHolds = () => false;
+    const sent = {};
+    let threw = null;
+    try {
+      await putBatch({ id: 'gas', url, folder: '' },
+        [{ name: 'p1.jpg', blob: { size: 10, type: 'image/jpeg' }, type: 'image/jpeg', aid: 'a1' }],
+        rec, sent);
+    } catch (e) { threw = e.message; }
+    window.blobToB64 = realB64; window.serverHolds = realHolds;
+    return { threw, sentKeys: Object.keys(sent) };
+  }, { url: `http://127.0.0.1:${PORT}/exec`, rec: recWith(12345, CAPTURED) });
+  ok(!!r4f.threw, 'an epoch-ms listing written before this photo was taken is not treated as landed', JSON.stringify(r4f));
+  ok(r4f.sentKeys.length === 0, 'and is not marked sent', JSON.stringify(r4f.sentKeys));
+
+  console.log('\n5. A LOST REPLY ON AN EDITED ROUND IS NOT "LANDED" BECAUSE LAST WEEK\'S COPY IS THE SAME LENGTH');
+  /* landedAnyway, the lost-reply recovery, with the listing Google sends: the
+     sidecar under its stable name, same byte count, written three days before
+     this request. That is the previous revision, so the edit has NOT landed. */
+  const r5 = await p.evaluate(async () => {
+    const real = window.serverList, now = Date.now();
+    const run = async upd => {
+      window.serverList = async () => [{ name: 'TK146_09.03.2026_MP.json', size: 1234, updated: upd }];
+      const err = new Error('Failed to fetch');
+      return landedAnyway({ id: 'gas', url: 'http://127.0.0.1:9/exec' }, 'MP/TK146/2026-03-09',
+        [{ name: 'TK146_09.03.2026_MP.json', size: 1234 }], err, now);
+    };
+    const r = { oldMs: await run(now - 3 * 864e5), oldStr: await run(String(now - 3 * 864e5)),
+                oldIso: await run(new Date(now - 3 * 864e5).toISOString()), freshMs: await run(now + 5000),
+                none: await run(undefined) };
+    window.serverList = real; return r;
+  });
+  ok(r5.oldMs === false, 'a same-length copy written days earlier (epoch ms) is the old revision, not this send', JSON.stringify(r5));
+  ok(r5.oldStr === false && r5.oldIso === false, 'the same as a numeric string or an ISO date', JSON.stringify(r5));
+  ok(r5.freshMs === true, 'a copy written since the request began does count as landed', JSON.stringify(r5));
+  ok(r5.none === true, 'a listing with no `updated` is read as before', JSON.stringify(r5));
+
   ok(errs.length === 0, 'no page errors throughout', errs.slice(0, 3).join(' | '));
   await b.close(); srv.close();
   console.log(fails.length ? `\n${fails.length} FAILED: ` + fails.join(' | ') : '\nall passed');
