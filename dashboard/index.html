@@ -19,7 +19,7 @@
 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
     color-scheme:light;
@@ -128,7 +128,7 @@
   .gres .gd{color:var(--ink-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .gres .gnone{padding:12px 10px;color:var(--muted);font-size:13px;}
   @media (max-width:900px){ .gsearch{flex-basis:180px;} }
-  .ver{font:600 var(--t-micro)/1 ui-monospace,SFMono-Regular,Menlo,monospace;
+  .ver{font:600 var(--t-micro)/1 'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
     color:var(--muted);letter-spacing:.02em;padding:3px 7px;border-radius:5px;
     background:var(--surface-2);border:1px solid var(--border);cursor:help;
     white-space:nowrap;}
@@ -146,6 +146,18 @@
   body.railshut{--sbw:var(--sbw-shut);}
   header.app .spacer{flex:1;}
   .btn{border:1px solid var(--border);background:var(--surface-2);color:var(--ink-2);border-radius:8px;padding:8px 12px;cursor:pointer;font-size:13px;font-family:inherit;}
+  /* LOW AUDIT ITEMS (audit 26.10 L1 L2 L4 L5; L6 is in .minibtn below).
+     L1 a control takes the page's typeface; the browser's own is Arial. */
+  button,input,select,textarea{font-family:inherit;}
+  /* L2 a plain link is the accent, not the browser's blue. */
+  a:not([class]){color:var(--accent);}
+  /* L5 the Due column reads down like Last done: left, even-width digits. */
+  #ddList table.ddtbl{font-variant-numeric:tabular-nums;}
+  #ddList table.ddtbl tr > :nth-child(4){text-align:left;}
+  /* L4 a menu label may take two lines rather than be cut; the status under
+     the title stops at two lines, its whole text on hover. */
+  nav.tabs button span[data-i18n]{white-space:normal;line-height:1.2;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;}
+  nav.tabs .brand .t2{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;}
   .btn:hover{color:var(--ink);} .btn.primary{background:var(--accent);color:#fff;border-color:transparent;font-weight:600;}
   nav.tabs{position:fixed;left:0;top:0;bottom:0;width:var(--sbw);z-index:25;
     display:flex;flex-direction:column;gap:1px;padding:10px 8px;
@@ -154,7 +166,7 @@
     border-bottom:1px solid var(--rail-line);margin-bottom:8px;}
   nav.tabs .brand .bmark{width:34px;height:34px;flex:none;border-radius:9px;
     background:var(--accent);color:#fff;display:grid;place-items:center;
-    font:800 13px/1 ui-monospace,SFMono-Regular,Menlo,monospace;}
+    font:800 13px/1 'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;}
   nav.tabs .brand .t1{font-weight:750;font-size:13.5px;letter-spacing:-.01em;
     color:var(--rail-ink);line-height:1.2;}
   nav.tabs .brand .t2{color:var(--rail-muted);font-size:var(--t-micro);margin-top:2px;}
@@ -172,7 +184,7 @@
   /* A count on the door to the thing it counts. It is a number a person
      reads, so it lives at the floor like every other number. */
   nav.tabs .nb{flex:none;min-width:20px;padding:1px 6px;border-radius:99px;text-align:center;
-    font:700 var(--t-micro)/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;
+    font:700 var(--t-micro)/1.4 'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
     background:var(--critical);color:#fff;}
   nav.tabs .nb.warn{background:var(--warning);color:#3a2a00;}
   nav.tabs .nb:empty{display:none;}
@@ -559,7 +571,7 @@
   .pfwrap{overflow:visible;}
   .pfsvg{width:100%;height:auto;display:block;}
   .pfax{stroke:var(--border);stroke-width:1;}
-  .pfl{fill:var(--muted);font:600 10px ui-monospace,SFMono-Regular,Menlo,monospace;}
+  .pfl{fill:var(--muted);font:600 10px 'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;}
   .pff{stroke:var(--critical);stroke-width:1.5;stroke-dasharray:6 4;}
   .pfp{stroke:var(--serious);stroke-width:1.5;stroke-dasharray:3 4;}
   .pft{stroke:var(--ink-2);stroke-width:1.5;stroke-dasharray:2 4;opacity:.7;}
@@ -624,7 +636,7 @@
      under the chart — the same figure that sentence names in words. */
   .tstack i.tref{position:absolute;left:0;right:0;width:auto;height:0;cursor:default;
     border-top:1.5px dashed color-mix(in srgb,var(--ink) 45%,transparent);z-index:1;}
-  .tmon b{font:700 12px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--ink-2);min-height:12px;}
+  .tmon b{font:700 12px/1 'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--ink-2);min-height:12px;}
   .tmon span{font-size:var(--t-micro);color:var(--muted);font-variant-numeric:tabular-nums;}
   .tmon u{font-size:var(--t-micro);color:var(--muted);text-decoration:none;
     border-top:1px solid var(--border);width:100%;text-align:center;padding-top:2px;}
@@ -1189,12 +1201,12 @@
     border-radius:5px;padding:1px 5px;margin:-1px -5px;cursor:pointer;text-align:left;}
   .xf:hover,.xf:focus-visible{border-color:var(--accent);color:var(--accent);
     background:color-mix(in srgb,var(--accent) 8%,transparent);outline:none;}
-  .xf.num{font:600 var(--t-small)/1.2 ui-monospace,SFMono-Regular,Menlo,monospace;
+  .xf.num{font:600 var(--t-small)/1.2 'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
     display:inline-flex;align-items:center;gap:4px;}
   .xf.num.bad{color:var(--crit-ink);}
   .xf.num i{width:5px;height:5px;border-radius:50%;background:var(--critical);}
   /* Days to the next round. Neutral unless it needs a decision this week. */
-  .duec{font:500 var(--t-small)/1.2 ui-monospace,SFMono-Regular,Menlo,monospace;
+  .duec{font:500 var(--t-small)/1.2 'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
     color:var(--ink-2);white-space:nowrap;}
   .duec.soon{color:var(--warn-ink);font-weight:600;}
   /* Needs triage. It is not an error and not a success: it is work that has
@@ -1346,7 +1358,7 @@
   .pxcap{flex:1;min-width:220px;}
   .pxcap input{flex:1;min-width:0;}
   .pxstr input[type=range]{width:120px;}
-  .pxstr b{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  .pxstr b{font-family:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
     font-size:var(--t-micro);color:var(--ink-2);min-width:34px;text-align:right;}
   .pxpref{text-transform:none;letter-spacing:0;color:var(--ink-2);}
   /* The tick that retires a superseded severity. Its own line under the
@@ -1474,7 +1486,7 @@
   .iedit:focus{border-color:var(--accent);background:var(--surface);outline:none;}
   .iedit.saving{border-color:var(--accent);opacity:.6;}
   .iown::placeholder{color:var(--muted);font-style:italic;}
-  .idue{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;}
+  .idue{font-family:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;}
   .idue.late{color:var(--crit-ink);font-weight:600;}
   .idue.soon{color:var(--warn-ink);font-weight:600;}
   .ist{-webkit-appearance:none;appearance:none;font-weight:600;cursor:pointer;}
@@ -1686,7 +1698,7 @@
      A position that holds six photographs now looks like six photographs. */
   .pos .shots{position:relative;}
   .pos .shotn{position:absolute;top:8px;right:8px;background:rgba(0,0,0,.66);color:#fff;
-    font:700 11px/1 ui-monospace,SFMono-Regular,Menlo,monospace;padding:4px 7px;border-radius:999px;}
+    font:700 11px/1 'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;padding:4px 7px;border-radius:999px;}
   /* Was overflow-x:auto — a horizontal slider inside a card, which is the one
      thing this redesign forbids. It wraps now; a position with nine frames
      shows nine, on as many rows as it needs. */
@@ -1741,7 +1753,7 @@
   table.paired col.cbar{width:62px;}
   table.paired th.side{text-align:center;letter-spacing:.1em;}
     .sidegap{display:inline-block;margin-left:6px;padding:0 5px;border-radius:4px;
-    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10.5px;font-weight:600;line-height:1.65;
+    font-family:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10.5px;font-weight:600;line-height:1.65;
     background:color-mix(in srgb,var(--warning) 24%,var(--surface));color:var(--ink);}
   table.grid.wear td{font-size:12px;padding:6px 8px;}
   .ucsum{margin:12px 16px 0;padding:8px 12px;border-radius:6px;font-size:12.5px;font-weight:650;}
@@ -1794,7 +1806,7 @@
     --t-head:19px;     /* a section title                               */
     --t-num:26px;      /* a KPI                                         */
     --t-hero:42px;     /* the three numbers that lead the page          */
-    --mono:ui-monospace,SFMono-Regular,Menlo,monospace;
+    --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
     /* How wide the page is allowed to get. It was pinned at 1240px, so a
        1600px screen — the one every office actually has — spent 360px on
        nothing while the tables below scrolled for forty screens. */
@@ -1863,7 +1875,7 @@
   /* 34px and 42px were the sizes of a marketing page. A number a reliability
      engineer reads fifty times a day needs to be unmistakable, not enormous —
      and the four lines under it are what make it mean anything. */
-  .kpi .v,.tile .v{font:800 var(--t-num)/1.05 ui-monospace,SFMono-Regular,Menlo,monospace;
+  .kpi .v,.tile .v{font:800 var(--t-num)/1.05 'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
     letter-spacing:-.03em;font-variant-numeric:tabular-nums;margin-top:3px;color:var(--ink);}
   #kpiComp .v{font-size:30px;}
   /* Two lines of context, clamped. "37 of 52 rounds walked before they were
@@ -1899,13 +1911,13 @@
   .lcparts{display:flex;flex-wrap:wrap;gap:var(--s1) var(--s2);margin-top:var(--s3);
     padding-top:var(--s2);border-top:1px solid var(--border);}
   .minibtn{border:1px solid var(--border);background:var(--surface-2);color:var(--ink-2);
-    border-radius:99px;padding:2px 9px;font:inherit;font-size:var(--t-tiny);cursor:pointer;
+    border-radius:7px;padding:2px 9px;font:inherit;font-size:var(--t-tiny);cursor:pointer;
     font-family:inherit;}
   .minibtn:hover{color:var(--ink);border-color:var(--axis);}
   .lcpart{border:1px solid var(--border);background:var(--surface-2);color:var(--ink-2);
     border-radius:99px;padding:3px 9px;font:inherit;font-size:var(--t-tiny);cursor:pointer;
     font-family:inherit;}
-  .lcpart b{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--ink);}
+  .lcpart b{font-family:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--ink);}
   .lcpart:hover{border-color:var(--accent);color:var(--ink);}
   .lcpart.off{cursor:default;opacity:.55;}
   .kpi .v .of{font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0;}
@@ -1922,7 +1934,7 @@
   /* A pull that is late is said in amber, with the way to run it now. */
   .pgsub.stale{color:var(--warn-ink);}
   .pgsub.stale a{color:inherit;font-weight:600;text-decoration:underline;}
-  .pgsub .v{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:700;color:var(--ink);
+  .pgsub .v{font-family:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:700;color:var(--ink);
     font-variant-numeric:tabular-nums;}
   .defs{position:relative;}
   .defs>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:6px;
@@ -1962,9 +1974,9 @@
   /* The compliance headline, on the panel that explains it. */
   .compline{display:flex;align-items:baseline;gap:var(--s2);flex-wrap:wrap;margin:0 0 var(--s2);
     font-size:var(--t-small);color:var(--muted);}
-  .compline .cpv{font:800 22px/1.05 ui-monospace,SFMono-Regular,Menlo,monospace;
+  .compline .cpv{font:800 22px/1.05 'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
     letter-spacing:-.03em;font-variant-numeric:tabular-nums;color:var(--ink);
-    background:none;border:0;padding:0;cursor:pointer;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;}
+    background:none;border:0;padding:0;cursor:pointer;font-family:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;}
   .compline .cpv.good{color:var(--good-ink);} .compline .cpv.warn{color:var(--warn-ink);}
   .compline .cpv.bad{color:var(--crit-ink);}
   .compline .cpv:hover{text-decoration:underline;}
@@ -2048,7 +2060,7 @@
   #fleetTbl .xf.who i{width:20px;height:20px;}
     .covcell{min-width:180px;}
   .covrow{display:flex;align-items:center;gap:9px;}
-  .covpc{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:700;
+  .covpc{font-family:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:700;
     font-variant-numeric:tabular-nums;min-width:38px;text-align:right;color:var(--ink);}
   .covpc.bad{color:var(--crit-ink);}
   .covrow .cbar{flex:1;}
@@ -2078,7 +2090,7 @@
 
   /* 1C stoppage priority: what planning schedules against, so it stays on the
      row. A chip rather than a column — it is a code, not a sentence. */
-  .prio{display:inline-block;margin-left:7px;font:700 10px/1 ui-monospace,SFMono-Regular,Menlo,monospace;
+  .prio{display:inline-block;margin-left:7px;font:700 10px/1 'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
     letter-spacing:.04em;padding:3px 5px;border-radius:4px;vertical-align:1px;
     border:1px solid currentColor;}
   .prio.c{color:var(--crit-ink);} .prio.s{color:var(--serious);}
@@ -2111,7 +2123,7 @@
   .wlh .u{font-weight:700;font-size:14px;line-height:1;font-family:inherit;letter-spacing:-.01em;}
   .wlh .m{font-size:11.5px;color:var(--muted);}
   .wlh .sp{flex:1;}
-  .wlh .cnt{font:700 11px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--muted);
+  .wlh .cnt{font:700 11px/1 'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--muted);
     background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:4px 9px;}
   .wlr{display:grid;grid-template-columns:4px minmax(150px,1.4fr) minmax(120px,1.1fr) 168px 104px 124px auto;
     gap:12px;align-items:center;padding:0 14px 0 0;border-top:1px solid var(--border);
@@ -2294,7 +2306,7 @@
   .who.none span{color:var(--warn-ink);font-weight:650;}
   tr.hrow:hover .who.none i{background:color-mix(in srgb,var(--warning) 16%,transparent);}
   .due{display:inline-flex;align-items:baseline;gap:6px;font-variant-numeric:tabular-nums;}
-  .due b{font:600 12px/1 ui-monospace,SFMono-Regular,Menlo,monospace;}
+  .due b{font:600 12px/1 'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;}
   .due i{font-style:normal;font-size:var(--t-micro);color:var(--muted);}
   .due.late b{color:var(--crit-ink);} .due.late i{color:var(--crit-ink);font-weight:700;}
   .due.soon b{color:var(--serious);}
@@ -2381,7 +2393,7 @@
   .whys .field::before{content:attr(data-n);position:absolute;left:-26px;top:16px;
     width:20px;height:20px;border-radius:50%;background:var(--surface-2);
     border:1px solid var(--border);color:var(--muted);
-    font:700 10px/18px ui-monospace,SFMono-Regular,Menlo,monospace;text-align:center;}
+    font:700 10px/18px 'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;text-align:center;}
   .whys .field.has::before{background:var(--accent);border-color:transparent;color:#fff;}
 
   @media (max-width:760px){
@@ -2475,7 +2487,7 @@
   table.grid tbody tr:hover td{background:color-mix(in srgb,var(--accent) 5%,var(--surface));}
   table.grid tbody tr:last-child td{border-bottom:0;}
   table.grid td.r,table.grid th.r{text-align:right;}
-  table.grid .mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;}
+  table.grid .mono{font-family:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;}
   /* a clickable row says so */
   #fleetTbl tbody tr,#wearTbl tbody tr{cursor:pointer;}
 
@@ -3994,23 +4006,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=562"></script>
+<script src="../data/magnetic_plug.js?v=563"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=562"></script>
-<script src="../mobile/hme.js?v=562"></script>
-<script src="../mobile/mp-fc.js?v=562"></script>
-<script src="../mobile/rtw.js?v=562"></script>
-<script src="../mobile/hme-cascade.js?v=562"></script>
-<script src="../mobile/temp-limits.js?v=562"></script>
+<script src="../data/work_orders.js?v=563"></script>
+<script src="../mobile/hme.js?v=563"></script>
+<script src="../mobile/mp-fc.js?v=563"></script>
+<script src="../mobile/rtw.js?v=563"></script>
+<script src="../mobile/hme-cascade.js?v=563"></script>
+<script src="../mobile/temp-limits.js?v=563"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=562"></script>
-<script src="../mobile/normalize.js?v=562"></script>
-<script src="../mobile/terms.js?v=562"></script>
+<script src="../mobile/assets.js?v=563"></script>
+<script src="../mobile/normalize.js?v=563"></script>
+<script src="../mobile/terms.js?v=563"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -4029,21 +4041,21 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=562"></script>
-<script src="../mobile/edits.js?v=562"></script>
-<script src="../mobile/due.js?v=562"></script>
-<script src="../mobile/wear.js?v=562"></script>
-<script src="../mobile/wear-map.js?v=562"></script>
-<script src="../mobile/lube.js?v=562"></script>
-<script src="../mobile/lube-overrides.js?v=562"></script>
-<script src="../mobile/lube2027.js?v=562"></script>
-<script src="../mobile/lube-tds.js?v=562"></script>
-<script src="lube-master.js?v=562"></script>
-<script src="wear-limits.js?v=562"></script>
+<script src="../mobile/grade.js?v=563"></script>
+<script src="../mobile/edits.js?v=563"></script>
+<script src="../mobile/due.js?v=563"></script>
+<script src="../mobile/wear.js?v=563"></script>
+<script src="../mobile/wear-map.js?v=563"></script>
+<script src="../mobile/lube.js?v=563"></script>
+<script src="../mobile/lube-overrides.js?v=563"></script>
+<script src="../mobile/lube2027.js?v=563"></script>
+<script src="../mobile/lube-tds.js?v=563"></script>
+<script src="lube-master.js?v=563"></script>
+<script src="wear-limits.js?v=563"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=562"></script>
-<script src="../mobile/machine-photos.js?v=562"></script>
+<script src="../mobile/upload-defaults.js?v=563"></script>
+<script src="../mobile/machine-photos.js?v=563"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -4052,17 +4064,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=562"></script>
-<script src="../mobile/get.js?v=562"></script>
-<script src="../mobile/points.js?v=562"></script>
-<script src="../mobile/uc-points.js?v=562"></script>
-<script src="../mobile/inspect-guide.js?v=562"></script>
-<script src="../mobile/get-figs.js?v=562"></script>
-<script src="../mobile/body-points.js?v=562"></script>
-<script src="../mobile/body-map.js?v=562"></script>
-<script src="../mobile/jspdf.umd.min.js?v=562"></script>
-<script src="../mobile/html2canvas.min.js?v=562"></script>
-<script src="../mobile/report-core.js?v=562"></script>
+<script src="../mobile/machine-fig.js?v=563"></script>
+<script src="../mobile/get.js?v=563"></script>
+<script src="../mobile/points.js?v=563"></script>
+<script src="../mobile/uc-points.js?v=563"></script>
+<script src="../mobile/inspect-guide.js?v=563"></script>
+<script src="../mobile/get-figs.js?v=563"></script>
+<script src="../mobile/body-points.js?v=563"></script>
+<script src="../mobile/body-map.js?v=563"></script>
+<script src="../mobile/jspdf.umd.min.js?v=563"></script>
+<script src="../mobile/html2canvas.min.js?v=563"></script>
+<script src="../mobile/report-core.js?v=563"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -18817,10 +18829,10 @@ document.querySelector(".lang").addEventListener("click",e=>{
   setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 })();
 </script>
-<script src="drive.js?v=562"></script>
-<script src="sync-adapter.js?v=562"></script>
-<script src="report.js?v=562"></script>
-<script src="reliability.js?v=562"></script>
+<script src="drive.js?v=563"></script>
+<script src="sync-adapter.js?v=563"></script>
+<script src="report.js?v=563"></script>
+<script src="reliability.js?v=563"></script>
 <script>
 /* THE CLOSED FILTER SAYS WHAT IS CHOSEN. A dropdown narrower than its option
    text ellipsises ("All t…", audit of 2026-10-01). Between 1331 and 1500 px

@@ -5093,6 +5093,18 @@ F17: a `div.fld` label ("Condition grade") wears the field-label style, as
 they are sentence case, and two fields in a Settings row line up at the
 bottom. `tests/phonepolish.cjs` checks these too and fails 28 more assertions
 on build 561.
+
+**LOW AUDIT ITEMS ON BOTH OFFICE PAGES (build 563, audit 26.10 L1-L6).** L1:
+`button,input,select,textarea{font-family:inherit}`, so no control falls back to
+the browser's Arial. L2: a plain link (`a:not([class])`) is the accent, not the
+browser's blue. L3: dashboard/ loads IBM Plex Mono, and every monospace stack on
+it starts with it. dashboard-next already did this, so a number on either page
+is set in the same face, not whatever the OS has. L4: a menu label may take two
+lines rather than be cut ("Maintenance A…"), and the status under the title
+stops at two. L5: the Inspection Schedule's Due column is left-aligned like
+Last done, in tabular figures. L6: `.minibtn` has 7 px corners, not a 99 px
+pill. Changed in its one rule, per D8. `tests/dashlayout.cjs` checks each and
+fails 38 assertions on build 562.
 ---
 
 ## Secrets
