@@ -1,7 +1,7 @@
 {
-  "generated": "2026-10-28T21:42:28.169Z",
+  "generated": "2026-10-28T21:57:48.322Z",
   "source": "https://script.google.com/macros/s/AKfycbwWJ1vb-OjP0VQPcrnoEB8PkuFyhk86mecIrkcomSVFqE5ddJynSwSheuskNGMcwLGf/exec?action=index&slim=1",
-  "pairsSeen": 348,
+  "pairsSeen": 349,
   "hist": {
     "FC|TK028": {
       "d": "2026-08-01"
@@ -653,6 +653,9 @@
     },
     "INSP|TK119": {
       "d": "2026-10-28"
+    },
+    "FC|DZ017": {
+      "d": "2026-10-29"
     }
   }
 }
