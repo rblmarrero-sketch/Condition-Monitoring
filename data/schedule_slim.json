@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-28T23:13:21+00:00",
+  "generated": "2026-10-28T23:30:38+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -724,17 +724,6 @@
         "priority": "P3 Planned (PM)"
       }
     ],
-    "TK120": [
-      {
-        "wo": "WO-019520",
-        "hours": 500,
-        "types": [
-          "MP"
-        ],
-        "plan": "2026-10-28",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
     "TK121": [
       {
         "wo": "WO-020873",
@@ -814,15 +803,6 @@
       }
     ],
     "TK127": [
-      {
-        "wo": "WO-019527",
-        "hours": 250,
-        "types": [
-          "MP"
-        ],
-        "plan": "2026-10-26",
-        "priority": "P3 Planned (PM)"
-      },
       {
         "wo": "WO-020880",
         "hours": 500,
@@ -3363,24 +3343,6 @@
       "completed": ""
     },
     {
-      "wo": "WO-019520",
-      "equip": "TK120",
-      "cls": "AT",
-      "comp": "",
-      "desc": "Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-10-28",
-      "type": "500 Hours service Planned",
-      "hours": 500,
-      "plan": "2026-10-28",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
       "wo": "WO-019524",
       "equip": "TK124",
       "cls": "AT",
@@ -3579,6 +3541,24 @@
       "completed": "2026-10-27"
     },
     {
+      "wo": "WO-019520",
+      "equip": "TK120",
+      "cls": "AT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-27",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-10-27",
+      "status": "Completed",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "complete",
+      "completed": "2026-10-28"
+    },
+    {
       "wo": "WO-019521",
       "equip": "TK121",
       "cls": "AT",
@@ -3599,6 +3579,24 @@
     {
       "wo": "WO-019526",
       "equip": "TK126",
+      "cls": "AT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-27",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-10-27",
+      "status": "Completed",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "complete",
+      "completed": "2026-10-27"
+    },
+    {
+      "wo": "WO-019527",
+      "equip": "TK127",
       "cls": "AT",
       "comp": "",
       "desc": "Magnetic Plug",
@@ -3715,12 +3713,12 @@
       "type": "2000 Hours service Planned",
       "hours": 2000,
       "plan": "2026-10-26",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-26"
     },
     {
       "wo": "WO-020412",
@@ -3750,24 +3748,6 @@
       "raised": "2026-10-26",
       "type": "2000 Hours service Planned",
       "hours": 2000,
-      "plan": "2026-10-26",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
-      "wo": "WO-019527",
-      "equip": "TK127",
-      "cls": "AT",
-      "comp": "",
-      "desc": "Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-10-26",
-      "type": "250 Hours service Planned",
-      "hours": 250,
       "plan": "2026-10-26",
       "status": "Elimination scheduled",
       "request": "",
@@ -7477,12 +7457,12 @@
       "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "hours": null,
       "plan": "2026-10-28",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "DD-00014038",
       "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "cause": "Износ уплотнения",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-28"
     },
     {
       "wo": "WO-020058",
@@ -7495,12 +7475,12 @@
       "type": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "hours": null,
       "plan": "2026-10-28",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "DD-00014029",
       "defType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "cause": "Усталостная трещина",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-28"
     },
     {
       "wo": "WO-019040",
