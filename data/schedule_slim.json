@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-29T01:18:22+00:00",
+  "generated": "2026-10-29T01:32:49+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -747,16 +747,6 @@
       }
     ],
     "TK124": [
-      {
-        "wo": "WO-019524",
-        "hours": 1000,
-        "types": [
-          "INSP",
-          "MP"
-        ],
-        "plan": "2026-10-28",
-        "priority": "P3 Planned (PM)"
-      },
       {
         "wo": "WO-020875",
         "hours": 250,
@@ -3332,24 +3322,6 @@
       "completed": ""
     },
     {
-      "wo": "WO-019524",
-      "equip": "TK124",
-      "cls": "AT",
-      "comp": "",
-      "desc": "General Inspection / Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-10-28",
-      "type": "1000 Hours service Planned",
-      "hours": 1000,
-      "plan": "2026-10-28",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
       "wo": "WO-019525",
       "equip": "TK125",
       "cls": "AT",
@@ -3557,6 +3529,24 @@
       "raised": "2026-10-27",
       "type": "500 Hours service Planned",
       "hours": 500,
+      "plan": "2026-10-27",
+      "status": "Completed",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "complete",
+      "completed": "2026-10-27"
+    },
+    {
+      "wo": "WO-019524",
+      "equip": "TK124",
+      "cls": "AT",
+      "comp": "",
+      "desc": "General Inspection / Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-27",
+      "type": "1000 Hours service Planned",
+      "hours": 1000,
       "plan": "2026-10-27",
       "status": "Completed",
       "request": "",
