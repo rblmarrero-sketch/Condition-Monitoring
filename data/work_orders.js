@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-29T03:51:59+00:00",
+  "generated": "2026-10-29T04:25:13+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -437,13 +437,13 @@ window.CM_WO_DATA = {
     "wo": "Work order number"
   },
   "cmDateFrom": {
-    "raised": 198,
+    "raised": 199,
     "detected": 0,
     "planStart": 0
   },
   "cmCauseFrom": {
     "wo": 98,
-    "wr": 100,
+    "wr": 101,
     "cert": 0,
     "none": 0
   },
@@ -456,6 +456,29 @@ window.CM_WO_DATA = {
     "Bekzhan"
   ],
   "cmWorkOrders": [
+    {
+      "date": "2026-10-29",
+      "dateFrom": "raised",
+      "raised": "2026-10-29",
+      "detected": "2026-10-29",
+      "planStart": null,
+      "closed": null,
+      "asset": "TK114",
+      "defect": "DD-00015897",
+      "requestNo": "DD-00015897",
+      "eqType": "TRUCK, ARTICULATED",
+      "system": "TK114.CH.BED (Bed / Кузов)",
+      "priority": "P4 Planned (Repair)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "cause": "Разрушение от удара",
+      "causeFrom": "wr",
+      "descr": "Предельный износ футеровочных пластин.",
+      "status": "Registered",
+      "by": "Bekzhan",
+      "woNumber": null,
+      "maintType": null,
+      "planned": false
+    },
     {
       "date": "2026-10-27",
       "dateFrom": "raised",
@@ -39181,15 +39204,15 @@ window.CM_WO_DATA = {
       "cmLabel": "500h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-10-28",
-      "planStartDt": "2026-10-28T00:00:00",
+      "planStartDt": "2026-10-28T21:30:00",
       "planEnd": "2026-10-29",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-10-28",
+      "actualStartDt": "2026-10-28T21:30:00",
+      "actualEnd": "2026-10-29"
     },
     {
       "equip": "EX025",
@@ -56669,15 +56692,15 @@ window.CM_WO_DATA = {
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-10-27",
-      "planStartDt": "2026-10-27T00:00:00",
-      "planEnd": "2026-10-28",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "planStartDt": "2026-10-27T08:00:00",
+      "planEnd": "2026-10-27",
+      "actualStart": "2026-10-27",
+      "actualStartDt": "2026-10-27T08:00:00",
+      "actualEnd": "2026-10-27"
     },
     {
       "equip": "GR015",
@@ -105714,15 +105737,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
-      "planStart": "2026-10-28",
-      "planStartDt": "2026-10-28T00:00:00",
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
+      "planStart": "2026-10-29",
+      "planStartDt": "2026-10-29T02:30:00",
       "planEnd": "2026-10-29",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-10-29",
+      "actualStartDt": "2026-10-29T02:30:00",
+      "actualEnd": "2026-10-29"
     },
     {
       "equip": "TK126",
