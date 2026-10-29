@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-29T11:17:49+00:00",
+  "generated": "2026-10-29T11:32:42+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -6518,12 +6518,12 @@
       "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "hours": null,
       "plan": "2026-10-25",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "DD-00014459",
       "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "cause": "Фитинг/штуцер ослаб",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-25"
     },
     {
       "wo": "WO-019935",
@@ -6536,12 +6536,12 @@
       "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "hours": null,
       "plan": "2026-10-25",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "DD-00014458",
       "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "cause": "Поры/трещина шва",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-25"
     },
     {
       "wo": "WO-019938",
@@ -6554,12 +6554,12 @@
       "type": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "hours": null,
       "plan": "2026-10-25",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "DD-00014456",
       "defType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "cause": "Усталостная трещина",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-25"
     },
     {
       "wo": "WO-019939",
@@ -6572,12 +6572,12 @@
       "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "hours": null,
       "plan": "2026-10-25",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "DD-00014455",
       "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "cause": "Трещина корпуса",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-25"
     },
     {
       "wo": "WO-019940",
@@ -6590,12 +6590,12 @@
       "type": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
       "hours": null,
       "plan": "2026-10-25",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "DD-00014454",
       "defType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
       "cause": "Крепеж ослаблен",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-25"
     },
     {
       "wo": "WO-019567",
