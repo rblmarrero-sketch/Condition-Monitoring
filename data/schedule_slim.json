@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-29T12:17:34+00:00",
+  "generated": "2026-10-29T12:32:44+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -8048,12 +8048,12 @@
       "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "hours": null,
       "plan": "2026-10-18",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "DD-00013852",
       "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "cause": "Износ уплотнения",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-19"
     },
     {
       "wo": "WO-017976",

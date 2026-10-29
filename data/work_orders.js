@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-29T12:17:34+00:00",
+  "generated": "2026-10-29T12:32:44+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -2854,7 +2854,7 @@ window.CM_WO_DATA = {
       "raised": "2026-10-02",
       "detected": "2026-10-02",
       "planStart": "2026-10-18",
-      "closed": null,
+      "closed": "2026-10-19",
       "asset": "CN008",
       "defect": "DD-00013852",
       "requestNo": "DD-00013852",
@@ -2865,7 +2865,7 @@ window.CM_WO_DATA = {
       "cause": "Износ уплотнения",
       "causeFrom": "wo",
       "descr": "Утечка гидравлической жидкости из-под резьбового соединения переходного штуцера/адаптера РВД в верхней крышке гидроцилиндра.",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "by": "Irek",
       "woNumber": "WO-019275",
       "maintType": "P4 Planned Repair",
