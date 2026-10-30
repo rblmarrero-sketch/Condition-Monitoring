@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-30T23:08:17+00:00",
+  "generated": "2026-10-30T23:27:47+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -353,7 +353,7 @@ window.CM_WO_DATA = {
     "WE010",
     "WE011"
   ],
-  "duplicateRowsCollapsed": 681,
+  "duplicateRowsCollapsed": 682,
   "roundsDedupedWithinVisit": 2,
   "columns": [
     "Asset description",
@@ -18611,6 +18611,29 @@ window.CM_WO_DATA = {
       "actualEnd": null
     },
     {
+      "equip": "DZ004",
+      "cls": "DOZ",
+      "woNumber": "WO-021307",
+      "maintType": "4000 Hours service Planned",
+      "hours": 4000,
+      "cmLabel": "Filter Cut / General Inspection / Undercarriage",
+      "cmTypes": [
+        "FC",
+        "INSP",
+        "UC"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-11",
+      "planStartDt": "2026-11-11T00:00:00",
+      "planEnd": "2026-11-12",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
       "equip": "DZ005",
       "cls": "DOZ",
       "woNumber": null,
@@ -19635,6 +19658,25 @@ window.CM_WO_DATA = {
       "planStart": "2026-10-31",
       "planStartDt": "2026-10-31T00:00:00",
       "planEnd": "2026-11-01",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
+      "equip": "DZ005",
+      "cls": "DOZ",
+      "woNumber": "WO-021308",
+      "maintType": "500 Hours service Planned",
+      "hours": 500,
+      "cmLabel": "500h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-14",
+      "planStartDt": "2026-11-14T00:00:00",
+      "planEnd": "2026-11-15",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -23637,6 +23679,25 @@ window.CM_WO_DATA = {
       "actualEnd": "2026-10-29"
     },
     {
+      "equip": "DZ009",
+      "cls": "DOZ",
+      "woNumber": "WO-021311",
+      "maintType": "500 Hours service Planned",
+      "hours": 500,
+      "cmLabel": "500h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-13",
+      "planStartDt": "2026-11-13T00:00:00",
+      "planEnd": "2026-11-14",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
       "equip": "DZ010",
       "cls": "DOZ",
       "woNumber": null,
@@ -26225,6 +26286,29 @@ window.CM_WO_DATA = {
       "planStart": "2026-10-30",
       "planStartDt": "2026-10-30T00:00:00",
       "planEnd": "2026-10-31",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
+      "equip": "DZ019",
+      "cls": "DOZ",
+      "woNumber": "WO-021317",
+      "maintType": "3000 Hours service Planned",
+      "hours": 3000,
+      "cmLabel": "Filter Cut / General Inspection / Undercarriage",
+      "cmTypes": [
+        "FC",
+        "INSP",
+        "UC"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-14",
+      "planStartDt": "2026-11-14T00:00:00",
+      "planEnd": "2026-11-15",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
