@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-30T22:08:01+00:00",
+  "generated": "2026-10-30T22:25:51+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -353,7 +353,7 @@ window.CM_WO_DATA = {
     "WE010",
     "WE011"
   ],
-  "duplicateRowsCollapsed": 678,
+  "duplicateRowsCollapsed": 680,
   "roundsDedupedWithinVisit": 2,
   "columns": [
     "Asset description",
@@ -9867,7 +9867,7 @@ window.CM_WO_DATA = {
       ],
       "priority": "P3 Planned (PM)",
       "woStatus": "PCNF",
-      "cmmsStatus": "In progress",
+      "cmmsStatus": "Completed",
       "open": false,
       "planStart": "2026-10-27",
       "planStartDt": "2026-10-27T00:00:00",
@@ -42405,15 +42405,15 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-10-29",
       "planStartDt": "2026-10-29T07:00:00",
       "planEnd": "2026-10-29",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-10-29",
+      "actualStartDt": "2026-10-29T07:00:00",
+      "actualEnd": "2026-10-29"
     },
     {
       "equip": "GE020",
@@ -68189,7 +68189,7 @@ window.CM_WO_DATA = {
       "cmmsStatus": "Elimination scheduled",
       "open": true,
       "planStart": "2026-10-29",
-      "planStartDt": "2026-10-29T00:00:00",
+      "planStartDt": "2026-10-29T14:00:00",
       "planEnd": "2026-10-29",
       "actualStart": null,
       "actualStartDt": null,
@@ -82579,6 +82579,28 @@ window.CM_WO_DATA = {
       "actualEnd": null
     },
     {
+      "equip": "TK103",
+      "cls": "AT",
+      "woNumber": "WO-021280",
+      "maintType": "1000 Hours service Planned",
+      "hours": 1000,
+      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmTypes": [
+        "INSP",
+        "MP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-15",
+      "planStartDt": "2026-11-15T00:00:00",
+      "planEnd": "2026-11-16",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
       "equip": "TK104",
       "cls": "AT",
       "woNumber": null,
@@ -83749,6 +83771,27 @@ window.CM_WO_DATA = {
       "planStart": "2026-10-30",
       "planStartDt": "2026-10-30T00:00:00",
       "planEnd": "2026-10-31",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
+      "equip": "TK104",
+      "cls": "AT",
+      "woNumber": "WO-021281",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "Magnetic Plug",
+      "cmTypes": [
+        "MP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-09",
+      "planStartDt": "2026-11-09T00:00:00",
+      "planEnd": "2026-11-10",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -84929,6 +84972,27 @@ window.CM_WO_DATA = {
       "actualEnd": null
     },
     {
+      "equip": "TK105",
+      "cls": "AT",
+      "woNumber": "WO-021282",
+      "maintType": "500 Hours service Planned",
+      "hours": 500,
+      "cmLabel": "Magnetic Plug",
+      "cmTypes": [
+        "MP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-09",
+      "planStartDt": "2026-11-09T00:00:00",
+      "planEnd": "2026-11-10",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
       "equip": "TK106",
       "cls": "AT",
       "woNumber": null,
@@ -85778,6 +85842,27 @@ window.CM_WO_DATA = {
       "planStart": "2026-11-05",
       "planStartDt": "2026-11-05T00:00:00",
       "planEnd": "2026-11-06",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
+      "equip": "TK106",
+      "cls": "AT",
+      "woNumber": "WO-021286",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "Magnetic Plug",
+      "cmTypes": [
+        "MP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-15",
+      "planStartDt": "2026-11-15T00:00:00",
+      "planEnd": "2026-11-16",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -90340,6 +90425,27 @@ window.CM_WO_DATA = {
       "actualEnd": null
     },
     {
+      "equip": "TK110",
+      "cls": "AT",
+      "woNumber": "WO-021287",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "Magnetic Plug",
+      "cmTypes": [
+        "MP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-12",
+      "planStartDt": "2026-11-12T00:00:00",
+      "planEnd": "2026-11-13",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
       "equip": "TK111",
       "cls": "AT",
       "woNumber": null,
@@ -90506,6 +90612,27 @@ window.CM_WO_DATA = {
       "planStart": "2026-11-01",
       "planStartDt": "2026-11-01T00:00:00",
       "planEnd": "2026-11-02",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
+      "equip": "TK111",
+      "cls": "AT",
+      "woNumber": "WO-021288",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "Magnetic Plug",
+      "cmTypes": [
+        "MP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-12",
+      "planStartDt": "2026-11-12T00:00:00",
+      "planEnd": "2026-11-13",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -91619,6 +91746,27 @@ window.CM_WO_DATA = {
       "planStart": "2026-11-04",
       "planStartDt": "2026-11-04T00:00:00",
       "planEnd": "2026-11-05",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
+      "equip": "TK112",
+      "cls": "AT",
+      "woNumber": "WO-021289",
+      "maintType": "500 Hours service Planned",
+      "hours": 500,
+      "cmLabel": "Magnetic Plug",
+      "cmTypes": [
+        "MP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-13",
+      "planStartDt": "2026-11-13T00:00:00",
+      "planEnd": "2026-11-14",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
