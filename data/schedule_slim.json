@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-31T04:08:14+00:00",
+  "generated": "2026-10-31T04:24:21+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -8851,12 +8851,12 @@
       "type": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "hours": null,
       "plan": "2026-10-30",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "DD-00013881",
       "defType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "cause": "Усталостная трещина",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-30"
     },
     {
       "wo": "WO-020796",

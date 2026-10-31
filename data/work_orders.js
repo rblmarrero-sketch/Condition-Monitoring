@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-31T04:08:14+00:00",
+  "generated": "2026-10-31T04:24:21+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -2440,7 +2440,7 @@ window.CM_WO_DATA = {
       "raised": "2026-10-02",
       "detected": "2026-10-02",
       "planStart": "2026-10-30",
-      "closed": null,
+      "closed": "2026-10-30",
       "asset": "TK104",
       "defect": "DD-00013881",
       "requestNo": "DD-00013881",
@@ -2451,7 +2451,7 @@ window.CM_WO_DATA = {
       "cause": "Усталостная трещина",
       "causeFrom": "wo",
       "descr": "Множественные поперечные трещины наружного резинового слоя РВД контура охлаждения тормозов моста.",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "by": "Irek",
       "woNumber": "WO-019997",
       "maintType": "P4 Planned Repair",
