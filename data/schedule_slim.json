@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-31T06:17:58+00:00",
+  "generated": "2026-10-31T06:28:34+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -405,19 +405,6 @@
           "MP"
         ],
         "plan": "2026-11-08",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "TK046": [
-      {
-        "wo": "WO-020438",
-        "hours": 1000,
-        "types": [
-          "FC",
-          "INSP",
-          "MP"
-        ],
-        "plan": "2026-10-30",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -3703,12 +3690,12 @@
       "type": "500 Hours service Planned",
       "hours": 500,
       "plan": "2026-10-30",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-30"
     },
     {
       "wo": "WO-020438",
@@ -3721,12 +3708,12 @@
       "type": "1000 Hours service Planned",
       "hours": 1000,
       "plan": "2026-10-30",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-30"
     },
     {
       "wo": "WO-019508",
@@ -3865,12 +3852,12 @@
       "type": "500 Hours service Planned",
       "hours": 500,
       "plan": "2026-10-30",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-31"
     },
     {
       "wo": "WO-020311",
