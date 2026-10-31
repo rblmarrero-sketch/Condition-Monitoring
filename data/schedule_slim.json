@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-31T05:07:44+00:00",
+  "generated": "2026-10-31T05:38:11+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -654,15 +654,6 @@
         ],
         "plan": "2026-10-18",
         "priority": "P3 Planned (PM)"
-      },
-      {
-        "wo": "WO-019516",
-        "hours": 500,
-        "types": [
-          "MP"
-        ],
-        "plan": "2026-10-30",
-        "priority": "P3 Planned (PM)"
       }
     ],
     "TK117": [
@@ -1008,15 +999,6 @@
       }
     ],
     "TK156": [
-      {
-        "wo": "WO-019535",
-        "hours": 250,
-        "types": [
-          "MP"
-        ],
-        "plan": "2026-10-29",
-        "priority": "P3 Planned (PM)"
-      },
       {
         "wo": "WO-021270",
         "hours": 3000,
@@ -3703,12 +3685,12 @@
       "type": "250 Hours service Planned",
       "hours": 250,
       "plan": "2026-10-30",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-30"
     },
     {
       "wo": "WO-020440",
@@ -3793,12 +3775,12 @@
       "type": "500 Hours service Planned",
       "hours": 500,
       "plan": "2026-10-30",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-30"
     },
     {
       "wo": "WO-019519",
@@ -3835,6 +3817,24 @@
       "cause": "",
       "pmStatus": "open",
       "completed": ""
+    },
+    {
+      "wo": "WO-019535",
+      "equip": "TK156",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-30",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-10-30",
+      "status": "Completed",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "complete",
+      "completed": "2026-10-30"
     },
     {
       "wo": "WO-019538",
@@ -4033,24 +4033,6 @@
       "cause": "",
       "pmStatus": "complete",
       "completed": "2026-10-29"
-    },
-    {
-      "wo": "WO-019535",
-      "equip": "TK156",
-      "cls": "HT",
-      "comp": "",
-      "desc": "Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-10-29",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-10-29",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
     },
     {
       "wo": "WO-020434",

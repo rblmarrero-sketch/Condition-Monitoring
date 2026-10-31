@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-10-31T05:07:44+00:00",
+  "generated": "2026-10-31T05:38:11+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -39240,15 +39240,15 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-10-30",
-      "planStartDt": "2026-10-30T00:00:00",
-      "planEnd": "2026-10-31",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "planStartDt": "2026-10-30T01:00:00",
+      "planEnd": "2026-10-30",
+      "actualStart": "2026-10-30",
+      "actualStartDt": "2026-10-30T01:00:00",
+      "actualEnd": "2026-10-30"
     },
     {
       "equip": "EX023",
@@ -95523,15 +95523,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-10-30",
-      "planStartDt": "2026-10-30T00:00:00",
-      "planEnd": "2026-10-31",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "planStartDt": "2026-10-30T07:00:00",
+      "planEnd": "2026-10-30",
+      "actualStart": "2026-10-30",
+      "actualStartDt": "2026-10-30T07:00:00",
+      "actualEnd": "2026-10-30"
     },
     {
       "equip": "TK116",
@@ -114129,15 +114129,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
-      "planStart": "2026-10-29",
-      "planStartDt": "2026-10-29T00:00:00",
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
+      "planStart": "2026-10-30",
+      "planStartDt": "2026-10-30T07:00:00",
       "planEnd": "2026-10-30",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-10-30",
+      "actualStartDt": "2026-10-30T07:00:00",
+      "actualEnd": "2026-10-30"
     },
     {
       "equip": "TK156",
