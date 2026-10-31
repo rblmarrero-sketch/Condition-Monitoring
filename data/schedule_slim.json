@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-31T02:18:00+00:00",
+  "generated": "2026-10-31T02:33:02+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -1462,6 +1462,24 @@
       "completed": ""
     },
     {
+      "wo": "WO-021365",
+      "equip": "GR013",
+      "cls": "GRD",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-13",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-11-13",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-021360",
       "equip": "LD004",
       "cls": "LDR",
@@ -1525,6 +1543,24 @@
       "raised": "2026-11-12",
       "type": "2000 Hours service Planned",
       "hours": 2000,
+      "plan": "2026-11-12",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-021366",
+      "equip": "GR014",
+      "cls": "GRD",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-12",
+      "type": "250 Hours service Planned",
+      "hours": 250,
       "plan": "2026-11-12",
       "status": "Elimination scheduled",
       "request": "",
@@ -1777,6 +1813,24 @@
       "raised": "2026-11-09",
       "type": "250 Hours service Planned",
       "hours": 250,
+      "plan": "2026-11-09",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-021364",
+      "equip": "GR012",
+      "cls": "GRD",
+      "comp": "",
+      "desc": "500h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-09",
+      "type": "500 Hours service Planned",
+      "hours": 500,
       "plan": "2026-11-09",
       "status": "Elimination scheduled",
       "request": "",
