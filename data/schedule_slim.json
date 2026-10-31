@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-31T03:37:41+00:00",
+  "generated": "2026-10-31T03:56:02+00:00",
   "byUnit": {
     "CN005": [
       {
@@ -707,16 +707,6 @@
       }
     ],
     "TK119": [
-      {
-        "wo": "WO-019519",
-        "hours": 1000,
-        "types": [
-          "INSP",
-          "MP"
-        ],
-        "plan": "2026-10-30",
-        "priority": "P3 Planned (PM)"
-      },
       {
         "wo": "WO-020872",
         "hours": 250,
@@ -3577,24 +3567,6 @@
       "completed": ""
     },
     {
-      "wo": "WO-019349",
-      "equip": "DZ005",
-      "cls": "DOZ",
-      "comp": "",
-      "desc": "250h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-10-31",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-10-31",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
       "wo": "WO-019382",
       "equip": "EX011",
       "cls": "EXC",
@@ -3719,6 +3691,24 @@
       "cause": "",
       "pmStatus": "open",
       "completed": ""
+    },
+    {
+      "wo": "WO-019349",
+      "equip": "DZ005",
+      "cls": "DOZ",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-30",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-10-30",
+      "status": "Completed",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "complete",
+      "completed": "2026-10-30"
     },
     {
       "wo": "WO-019364",
@@ -3857,12 +3847,12 @@
       "type": "1000 Hours service Planned",
       "hours": 1000,
       "plan": "2026-10-30",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-31"
     },
     {
       "wo": "WO-019533",
