@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-01T23:36:39+00:00",
+  "generated": "2026-11-01T23:52:35+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -442,8 +442,8 @@ window.CM_WO_DATA = {
     "planStart": 0
   },
   "cmCauseFrom": {
-    "wo": 98,
-    "wr": 95,
+    "wo": 99,
+    "wr": 94,
     "cert": 0,
     "none": 0
   },
@@ -4726,7 +4726,7 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
       "cause": "Износ зацепления",
-      "causeFrom": "wr",
+      "causeFrom": "wo",
       "descr": "Разбиты ШСЛ и разбит центральный палец балансирной балки",
       "status": "Registered",
       "by": "Zhomart",
