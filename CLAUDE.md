@@ -1111,6 +1111,23 @@ done one. `tests/deferwhy.cjs` §7c asserts the row is still ON the agenda
 (never silently dropped), carries its reason, and that both badges actually
 move.
 
+**A DEFERRAL ENDS AT THE MACHINE'S NEXT 1C PM (build 567).** Read off a
+handset on 02.11.2026: TK149 LUBE and MP "Not being done — equipment not
+provided" on WO-019530. A deferral is kept per machine and round type, and
+"Not being done" had no end, so it also covered the machine's NEXT work order
+and every one after it until somebody walked the round. Every deferral made on
+the phone now carries `pm`, the next 1C service for that machine and round
+after the one being answered (`nextPmFor`): from that date `DUE.status` and
+`deferState` stop honouring it, and the next PM's own agenda row is work. The
+dialog offers "Next PM dd.mm" (`until = pm`) when 1C has one booked; with none
+booked a deferral holds as before. Walking the round still ends it at once. A
+deferred row on a late day lost its red edge (`.daygroup.past .agitem.deferred`,
+the rule walked rows already had). Both dashboards word it through
+`ddDeferWords`. `pm` reaches other devices only once `docs/google-upload.gs`
+is redeployed (both readers pass it on); until then a phone keeps its own
+`pm` when the server's copy is the same statement, and everyone else sees
+the old behaviour (`tests/deferpm.cjs`, fails 7 on build 566).
+
 **A NAME ABSENT FROM A CACHE NOBODY HAS CHECKED THIS SESSION IS SILENCE, NOT
 A VERDICT.** Read live on 2026-09-15: TK115 (2026-08-05) and DZ007
 (2026-08-02), weeks old and fully synced — every photograph present and
