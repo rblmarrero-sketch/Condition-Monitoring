@@ -533,6 +533,13 @@
     var soonH = Math.max(20, Math.round(interval * 0.2));
 
     var live = !!(d && String(d.at || '') >= String(last.d || ''));
+    /* A DEFERRAL ENDS AT THE MACHINE'S NEXT 1C PM (`pm`, written by the phone
+       since build 567). "Not being done" was kept per machine and round type
+       with no end, so one "equipment not available" took the machine off that
+       round for every later work order until somebody walked it (field,
+       02.11.2026). From the day of the next planned service the round is due
+       again, whatever the deferral said; walking it still ends it at once. */
+    if (live && d.pm) { var toPm = dayDiff(today, d.pm); if (toPm != null && toPm <= 0) live = false; }
     var st = n.over ? 'over' : (n.dueInHours <= soonH ? 'soon' : 'ok');
     var left = null;
     if (live && d.until) {

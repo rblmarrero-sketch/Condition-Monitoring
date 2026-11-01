@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=566">
+<link rel="manifest" href="manifest.webmanifest?v=567">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=566">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=566">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=566">
+<link rel="apple-touch-icon" href="icon-192.png?v=567">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=567">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=567">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -674,6 +674,7 @@
   .agitem.deferred .u{color:var(--ink-2);font-weight:600;}
   .agitem.deferred .tag{background:var(--surface-2);color:var(--ink-2);
     border:1px solid var(--border);}
+  .daygroup.past .agitem.deferred{border-left-color:var(--border);}
   .agitem .defnote{color:var(--warn-ink);font-weight:650;}
   /* A recovery action, offered as a line of text rather than a second button
      of the same weight as the one used every day. */
@@ -2942,16 +2943,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=566"></script>
-<script src="upload-defaults.js?v=566"></script>
-<script src="hme.js?v=566"></script>
-<script src="mp-fc.js?v=566"></script>
-<script src="rtw.js?v=566"></script>
-<script src="hme-cascade.js?v=566"></script>
-<script src="assets.js?v=566"></script>
-<script src="temp-limits.js?v=566"></script>
-<script src="normalize.js?v=566"></script>
-<script src="terms.js?v=566"></script>
+<script src="native.js?v=567"></script>
+<script src="upload-defaults.js?v=567"></script>
+<script src="hme.js?v=567"></script>
+<script src="mp-fc.js?v=567"></script>
+<script src="rtw.js?v=567"></script>
+<script src="hme-cascade.js?v=567"></script>
+<script src="assets.js?v=567"></script>
+<script src="temp-limits.js?v=567"></script>
+<script src="normalize.js?v=567"></script>
+<script src="terms.js?v=567"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2970,25 +2971,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=566"></script>
-<script src="edits.js?v=566"></script>
-<script src="due.js?v=566"></script>
-<script src="wear.js?v=566"></script>
-<script src="wear-figs.js?v=566"></script>
-<script src="wear-map.js?v=566"></script>
-<script src="machine-photos.js?v=566"></script>
-<script src="machine-fig.js?v=566"></script>
-<script src="get.js?v=566"></script>
-<script src="points.js?v=566"></script>
-<script src="uc-points.js?v=566"></script>
-<script src="inspect-guide.js?v=566"></script>
-<script src="get-figs.js?v=566"></script>
-<script src="body-points.js?v=566"></script>
-<script src="body-map.js?v=566"></script>
-<script src="lube.js?v=566"></script>
-<script src="lube-overrides.js?v=566"></script>
-<script src="lube2027.js?v=566"></script>
-<script src="report-core.js?v=566"></script>
+<script src="grade.js?v=567"></script>
+<script src="edits.js?v=567"></script>
+<script src="due.js?v=567"></script>
+<script src="wear.js?v=567"></script>
+<script src="wear-figs.js?v=567"></script>
+<script src="wear-map.js?v=567"></script>
+<script src="machine-photos.js?v=567"></script>
+<script src="machine-fig.js?v=567"></script>
+<script src="get.js?v=567"></script>
+<script src="points.js?v=567"></script>
+<script src="uc-points.js?v=567"></script>
+<script src="inspect-guide.js?v=567"></script>
+<script src="get-figs.js?v=567"></script>
+<script src="body-points.js?v=567"></script>
+<script src="body-map.js?v=567"></script>
+<script src="lube.js?v=567"></script>
+<script src="lube-overrides.js?v=567"></script>
+<script src="lube2027.js?v=567"></script>
+<script src="report-core.js?v=567"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -3521,6 +3522,7 @@ const I18N = {
     due_not_t:"{u} — not doing this round?",
     due_not_m:"{ty}. Defer it to a date, or say it is not being done at all. Either way the reason is kept, so the office can see what was not completed and why.",
     due_put_n:"+{n} d", due_put_to:"deferred to {d}", due_off:"Not being done",
+    due_pm_chip:"Next PM {d}", due_ok_pm:"Defer to next PM {d}", due_put_pm:"deferred to next PM {d}", due_off_pm:"Not being done · back at next PM {d}",
     due_ok_defer:"Defer {n} d", due_ok_off:"Confirm not being done",
     due_why:"Reason", due_why_ph:"in the workshop · off site · no access",
     due_why_pick:"Choose a reason\u2026", due_why_own:"Or write your own",
@@ -4237,6 +4239,7 @@ const I18N = {
     due_not_t:"{u} — не выполняем этот осмотр?",
     due_not_m:"{ty}. Отложите на срок или укажите, что осмотр не будет выполнен. В обоих случаях причина сохраняется — офис увидит, что не выполнено и почему.",
     due_put_n:"+{n} сут", due_put_to:"отложено до {d}", due_off:"Не выполняется",
+    due_pm_chip:"След. ТО {d}", due_ok_pm:"Отложить до след. ТО {d}", due_put_pm:"отложено до след. ТО {d}", due_off_pm:"Не выполняется · вернётся к след. ТО {d}",
     due_ok_defer:"Отложить на {n} сут", due_ok_off:"Подтвердить: не выполняется",
     due_why:"Причина", due_why_ph:"в ремонте · вне участка · нет доступа",
     due_why_pick:"Выберите причину\u2026", due_why_own:"Или впишите свою",
@@ -9711,7 +9714,11 @@ function teamDefer(list){
        Read as "put off, no end date", an office "Cancel the deferral" took the
        machine OFF every list instead of back on (deep scan, 2026-10-27). */
     if(deferCleared(d)){ if(cur){ delete m[k]; n++; } return; }
-    m[k]={ until:d.until||null, why:d.why||"", by:d.by||"", at:d.at||"", up:1 };
+    /* pm (build 567): a backend that does not pass it on yet drops it, so the
+       copy this phone wrote keeps its own when the server's is the same
+       statement (same at). whyKey was dropped here too. */
+    const pm=d.pm || (cur && String(cur.at||"")===String(d.at||"") ? cur.pm : null) || null;
+    m[k]={ until:d.until||null, pm, why:d.why||"", whyKey:d.whyKey||"", by:d.by||"", at:d.at||"", up:1 };
     n++;
   });
   if(n) deferSave(m);
@@ -9725,8 +9732,14 @@ function deferOf(ty,unit){ return deferAll()[ty+"|"+(unit||"").toUpperCase()]||n
    answers a round it was written for or later (DUE.status's own "live"
    test), and a dated one holds only while its date is still ahead (the
    List's own "put" test) — never a second, drifting copy of either rule. */
-function deferState(unit,ty){
+function deferState(unit,ty,plan){
   const d=deferOf(ty,unit); if(!d) return null;
+  /* Ends at the next 1C PM (build 567): that service's own row, and every day
+     from its plan date, is work again. */
+  if(d.pm){
+    if(plan && String(plan)>=String(d.pm)) return null;
+    const toPm=DUE.dayDiff(todayISO(), d.pm); if(toPm!=null && toPm<=0) return null;
+  }
   const last=histEntry(histAll()[ty+"|"+unit]) || {};
   /* d.at is a full ISO timestamp; last.d (a walked round's date) is a bare
      YYYY-MM-DD with no time of day. Comparing them directly as strings meant
@@ -10812,7 +10825,7 @@ function dueWeekRows(){
            it" — dropping the row would give the same blank as a day nobody
            had planned anything on. */
         [...onDate].sort().forEach(code=>out.push({ unit, day:w.plan, code, isPre:false, w,
-          done: schedWalkedFor(unit, code, w.plan), defer: deferState(unit,code) }));
+          done: schedWalkedFor(unit, code, w.plan), defer: deferState(unit,code,w.plan) }));
       }
       if(shiftInsp && w.plan && !schedPreInspDone(unit,w.plan)){
         const wanted=DUE.shift(w.plan,-SCHED_PREINSP_DAYS);
@@ -10820,7 +10833,7 @@ function dueWeekRows(){
            cannot vanish off the front of the window — "this is late" rather
            than silence about an overdue thing. */
         const day=inWindow(wanted) ? wanted : (DUE.dayDiff(today,wanted)<0 ? today : wanted);
-        if(inWindow(day)) out.push({ unit, day, code:"INSP", isPre:true, w, done:null, defer: deferState(unit,"INSP") });
+        if(inWindow(day)) out.push({ unit, day, code:"INSP", isPre:true, w, done:null, defer: deferState(unit,"INSP",w.plan) });
       }
     });
   });
@@ -10936,8 +10949,7 @@ function renderDueCm(){
         /* PUT OFF, AND BY WHOM AND WHY — a deferral without its reason
            visible is the exact fact this rebuilds: a real decision an
            inspector made, showing on screen as nothing. */
-        const defer=e.defer?` <span class="defnote">· ${esc(e.defer.until
-            ? t("due_put_to").replace("{d}", e.defer.until) : t("due_off"))}${
+        const defer=e.defer?` <span class="defnote">· ${esc(deferWords(e.defer))}${
             e.defer.why?" — "+esc(e.defer.why):""}</span>`:"";
         const item=`<button type="button" class="agitem${e.isPre?" pre":""}${e.done?" done":""}${e.defer?" deferred":""}" data-u="${esc(e.unit)}" data-t="${esc(e.code)}">
           <span class="tag">${e.done?"✓ ":e.defer?"⋯ ":""}${esc(e.code)}</span>
@@ -10947,7 +10959,7 @@ function renderDueCm(){
           </span></button>`;
         /* Walked rounds keep the plain row — see the .agrow note in the CSS. */
         if(e.done) return `<div class="duerow agrow">${item}</div>`;
-        return `<div class="duerow agrow">${item}<button class="dueforget" data-f="${esc(e.unit)}" data-ft="${esc(e.code)}"
+        return `<div class="duerow agrow">${item}<button class="dueforget" data-f="${esc(e.unit)}" data-ft="${esc(e.code)}" data-fp="${esc(e.w&&e.w.plan||"")}"
           aria-label="${esc(t("due_not"))}" title="${esc(t("due_not"))}">⋯</button></div>`;
       }).join("")}
     </div>`;
@@ -10956,7 +10968,7 @@ function renderDueCm(){
     const sel=$("typeSel");
     if(b.dataset.t && sel && sel.value!==b.dataset.t){ sel.value=b.dataset.t; sel.dispatchEvent(new Event("change")); }
     selectEquip(b.dataset.u); showPane("paneCapture"); });
-  box.querySelectorAll("[data-f]").forEach(b=>b.onclick=()=>dueNotDoing(b.dataset.ft,b.dataset.f));
+  box.querySelectorAll("[data-f]").forEach(b=>b.onclick=()=>dueNotDoing(b.dataset.ft,b.dataset.f,b.dataset.fp));
 }
 /* THIS PHONE'S OWN RELEASES — "how many RTW is done", asked for by name.
    dbAll() is the actual saved-record store, read fresh on every paint the
@@ -11935,8 +11947,28 @@ function renderDue(){
    Put off to a date, or not being done at all. Both need a reason: a list that
    lets a round vanish without one cannot answer the question it exists for. */
 const DUE_PUT=[1,3,7,30];
-async function dueNotDoing(ty,unit){
+/* The machine's next planned 1C service for this round, after the one being
+   answered (plan) and after today: where every deferral made here ends. */
+function nextPmFor(unit,ty,plan){
+  const after=[todayISO(), plan||""].sort().pop();
+  let best=null;
+  try{ ((SCHED && SCHED.byUnit && SCHED.byUnit[unit])||[]).forEach(w=>{
+    if(!w || !w.plan || String(w.plan)<=after) return;
+    const types=Array.isArray(w.types)?w.types:[];
+    if(ty && types.length && types.indexOf(ty)<0) return;
+    if(!best || w.plan<best) best=w.plan; }); }catch(e){}
+  return best;
+}
+/* One wording for a deferral wherever it is printed. */
+function deferWords(d){
+  if(!d) return "";
+  if(d.until && d.pm && d.until===d.pm) return t("due_put_pm",{d:schedShortDate(d.pm)});
+  if(d.until) return t("due_put_to").replace("{d}", d.until);
+  return d.pm ? t("due_off_pm",{d:schedShortDate(d.pm)}) : t("due_off");
+}
+async function dueNotDoing(ty,unit,plan){
   const u=(unit||"").toUpperCase(); if(!u||!ty) return;
+  const pm=nextPmFor(u,ty,plan);
   const dlg=$("dueDlg"); let until=String(DUE_PUT[0]);
   $("dueDlgT").textContent=t("due_not_t",{u});
   $("dueDlgSub").textContent=t("due_not_m",{ty:t("type_"+ty)});
@@ -12007,6 +12039,7 @@ async function dueNotDoing(ty,unit){
   const paint=()=>{ $("dueWhen").innerHTML=
       DUE_PUT.map(n=>`<button class="btn chipbtn ${String(n)===until?"primary":""}" data-w="${n}">${
         esc(t("due_put_n").replace("{n}",n))}</button>`).join("")
+      + (pm?`<button class="btn chipbtn ${until==="pm"?"primary":""}" data-w="pm">${esc(t("due_pm_chip",{d:schedShortDate(pm)}))}</button>`:"")
       + `<button class="btn chipbtn ${until==="off"?"danger":""}" data-w="off">${esc(t("due_off"))}</button>`;
     /* THE BUTTON SAYS WHAT IT WILL DO, NOT JUST WHETHER IT CAN BE PRESSED.
        A static "OK" beside "Keep it", under a message that names TWO
@@ -12014,7 +12047,7 @@ async function dueNotDoing(ty,unit){
        all"), left a technician unable to tell from the button alone which
        one a press commits to. It now names the actual pending choice. */
     const okBtn=$("dueDlgOk");
-    if(okBtn) okBtn.textContent = until==="off" ? t("due_ok_off") : t("due_ok_defer").replace("{n}",until);
+    if(okBtn) okBtn.textContent = until==="off" ? t("due_ok_off") : until==="pm" ? t("due_ok_pm",{d:schedShortDate(pm)}) : t("due_ok_defer").replace("{n}",until);
     $("dueWhen").querySelectorAll("[data-w]").forEach(b=>b.onclick=()=>{
       until=b.dataset.w; paint();
       /* Choosing WHEN is not choosing WHY. A reason is still required, and
@@ -12051,10 +12084,16 @@ async function dueNotDoing(ty,unit){
      planner's statement made at nine in the morning beat an inspector's made
      at two in the afternoon, and the later one vanished without a word. */
   const at=new Date().toISOString();
+  /* pm: the next 1C PM for this machine and round. Every deferral ends there
+     (DUE.status, deferState); null when 1C has none booked, and then it holds
+     as before until the round is walked. */
+  const pmv=pm||null;
   if(done.until==="off"){
-    deferPut(ty,u,{until:null, why:done.why, whyKey:done.whyKey||"", by, at});
+    deferPut(ty,u,{until:null, pm:pmv, why:done.why, whyKey:done.whyKey||"", by, at});
+  }else if(done.until==="pm" && pmv){
+    deferPut(ty,u,{until:pmv, pm:pmv, why:done.why, whyKey:done.whyKey||"", by, at});
   }else{
-    deferPut(ty,u,{until:DUE.shift(todayISO(),Number(done.until)), why:done.why, whyKey:done.whyKey||"", by, at});
+    deferPut(ty,u,{until:DUE.shift(todayISO(),Number(done.until)), pm:pmv, why:done.why, whyKey:done.whyKey||"", by, at});
   }
   renderDue();
 }
@@ -15326,7 +15365,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="566";
+const BUILD="567";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -18059,7 +18098,7 @@ async function syncDefer(dests){
     const d=m[k]; if(!d || d.up) continue;
     const [ty,unit]=k.split("|");
     const body={ type:"cm-round-deferred", version:1,
-                 u:unit, t:ty, until:d.until||null, why:d.why||"", whyKey:d.whyKey||"",
+                 u:unit, t:ty, until:d.until||null, pm:d.pm||null, why:d.why||"", whyKey:d.whyKey||"",
                  by:d.by||"", at:d.at||todayISO(), dev:DEVICE };
     const blob=new Blob([JSON.stringify(body,null,2)],{type:"application/json"});
     const name=`${unit}_${ty}.defer.json`;
