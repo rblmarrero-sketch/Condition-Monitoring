@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-01T23:07:42+00:00",
+  "generated": "2026-11-01T23:22:37+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -736,7 +736,7 @@
         "types": [
           "MP"
         ],
-        "plan": "2026-11-11",
+        "plan": "2026-12-10",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -1008,6 +1008,24 @@
     ]
   },
   "rtwOpen": [
+    {
+      "wo": "WO-021301",
+      "equip": "TK125",
+      "cls": "AT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-12-10",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-12-10",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
     {
       "wo": "WO-020909",
       "equip": "DZ017",
@@ -1587,24 +1605,6 @@
     {
       "wo": "WO-021481",
       "equip": "TK115",
-      "cls": "AT",
-      "comp": "",
-      "desc": "Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-11",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-11-11",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
-      "wo": "WO-021301",
-      "equip": "TK125",
       "cls": "AT",
       "comp": "",
       "desc": "Magnetic Plug",
@@ -9262,7 +9262,7 @@
       "raised": "2026-09-18",
       "type": "2.01 Wear / Износ",
       "hours": null,
-      "plan": "2026-11-05",
+      "plan": "2026-11-14",
       "status": "Elimination scheduled",
       "request": "DD-00012866",
       "defType": "2.01 Wear / Износ",
