@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-01T05:42:42+00:00",
+  "generated": "2026-11-01T05:57:38+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -437,13 +437,13 @@ window.CM_WO_DATA = {
     "wo": "Work order number"
   },
   "cmDateFrom": {
-    "raised": 192,
+    "raised": 193,
     "detected": 0,
     "planStart": 0
   },
   "cmCauseFrom": {
     "wo": 97,
-    "wr": 95,
+    "wr": 96,
     "cert": 0,
     "none": 0
   },
@@ -456,6 +456,29 @@ window.CM_WO_DATA = {
     "Bekzhan"
   ],
   "cmWorkOrders": [
+    {
+      "date": "2026-11-01",
+      "dateFrom": "raised",
+      "raised": "2026-11-01",
+      "detected": "2026-11-01",
+      "planStart": null,
+      "closed": null,
+      "asset": "TK101",
+      "defect": "DD-00016115",
+      "requestNo": "DD-00016115",
+      "eqType": "TRUCK, ARTICULATED",
+      "system": "TK101.ELS.ALT (Alternator / Генератор)",
+      "priority": "P4 Planned (Repair)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "cause": "Усталостная трещина",
+      "causeFrom": "wr",
+      "descr": "Износ и поперечные трещины на ремне генератора.",
+      "status": "Registered",
+      "by": "Zhomart",
+      "woNumber": null,
+      "maintType": null,
+      "planned": false
+    },
     {
       "date": "2026-10-31",
       "dateFrom": "raised",
@@ -25873,15 +25896,15 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-10-31",
       "planStartDt": "2026-10-31T20:00:00",
       "planEnd": "2026-11-01",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-10-31",
+      "actualStartDt": "2026-10-31T20:00:00",
+      "actualEnd": "2026-11-01"
     },
     {
       "equip": "DZ019",
@@ -92056,15 +92079,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-10-31",
-      "planStartDt": "2026-10-31T00:00:00",
-      "planEnd": "2026-11-01",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "planStartDt": "2026-10-31T08:45:00",
+      "planEnd": "2026-10-31",
+      "actualStart": "2026-10-31",
+      "actualStartDt": "2026-10-31T08:45:00",
+      "actualEnd": "2026-10-31"
     },
     {
       "equip": "TK113",
