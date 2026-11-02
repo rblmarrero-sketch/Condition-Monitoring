@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-02T02:17:38+00:00",
+  "generated": "2026-11-02T02:47:38+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -1704,7 +1704,7 @@ window.CM_WO_DATA = {
       "raised": "2026-10-17",
       "detected": "2026-10-17",
       "planStart": "2026-10-31",
-      "closed": null,
+      "closed": "2026-10-31",
       "asset": "DZ005",
       "defect": "DD-00014955",
       "requestNo": "DD-00014955",
@@ -1715,7 +1715,7 @@ window.CM_WO_DATA = {
       "cause": "Отказ предпуск. подогр.",
       "causeFrom": "wo",
       "descr": "Предпусковой подогреватель двигателя не функционирует.",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "by": "Bekzhan",
       "woNumber": "WO-020309",
       "maintType": "P4 Planned Repair",

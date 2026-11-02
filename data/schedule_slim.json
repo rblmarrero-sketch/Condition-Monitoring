@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-02T02:17:38+00:00",
+  "generated": "2026-11-02T02:47:38+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -6149,12 +6149,12 @@
       "type": "1.18 No start / fails to start / Не запускается / отказ запуска",
       "hours": null,
       "plan": "2026-10-31",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "DD-00014955",
       "defType": "1.18 No start / fails to start / Не запускается / отказ запуска",
       "cause": "Отказ предпуск. подогр.",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-31"
     },
     {
       "wo": "WO-018500",
