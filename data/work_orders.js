@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-02T05:08:34+00:00",
+  "generated": "2026-11-02T05:28:18+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -442,8 +442,8 @@ window.CM_WO_DATA = {
     "planStart": 0
   },
   "cmCauseFrom": {
-    "wo": 101,
-    "wr": 92,
+    "wo": 102,
+    "wr": 91,
     "cert": 0,
     "none": 0
   },
@@ -1772,7 +1772,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-10-15",
       "detected": "2026-10-15",
-      "planStart": null,
+      "planStart": "2026-11-13",
       "closed": null,
       "asset": "DZ009",
       "defect": "DD-00014839",
@@ -1782,12 +1782,12 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
       "cause": "Отказ предпуск. подогр.",
-      "causeFrom": "wr",
+      "causeFrom": "wo",
       "descr": "Предпусковой подогреватель двигателя не включается.",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "by": "Zhomart",
-      "woNumber": null,
-      "maintType": null,
+      "woNumber": "WO-021507",
+      "maintType": "P4 Planned Repair",
       "planned": false
     },
     {
@@ -1795,7 +1795,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-10-15",
       "detected": "2026-10-15",
-      "planStart": null,
+      "planStart": "2026-11-13",
       "closed": null,
       "asset": "DZ009",
       "defect": "DD-00014838",
@@ -1807,10 +1807,10 @@ window.CM_WO_DATA = {
       "cause": "Поврежден шланга/линии",
       "causeFrom": "wo",
       "descr": "В моторном отсеке течь охлаждающей жидкости на стыке фланца патрубка, течь действующая.",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "by": "Zhomart",
-      "woNumber": null,
-      "maintType": null,
+      "woNumber": "WO-021506",
+      "maintType": "P4 Planned Repair",
       "planned": false
     },
     {
@@ -25247,9 +25247,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-14",
-      "planStartDt": "2026-11-14T00:00:00",
-      "planEnd": "2026-11-15",
+      "planStart": "2026-11-16",
+      "planStartDt": "2026-11-16T00:00:00",
+      "planEnd": "2026-11-17",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null

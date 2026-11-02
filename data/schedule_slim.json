@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-02T05:08:34+00:00",
+  "generated": "2026-11-02T05:28:18+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -84,7 +84,7 @@
           "INSP",
           "UC"
         ],
-        "plan": "2026-11-14",
+        "plan": "2026-11-16",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -1046,6 +1046,24 @@
       "completed": ""
     },
     {
+      "wo": "WO-019358",
+      "equip": "DZ014",
+      "cls": "DOZ",
+      "comp": "",
+      "desc": "Filter Cut / General Inspection / Undercarriage",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-16",
+      "type": "2000 Hours service Planned",
+      "hours": 2000,
+      "plan": "2026-11-16",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-021280",
       "equip": "TK103",
       "cls": "AT",
@@ -1200,24 +1218,6 @@
       "type": "4000 Hours service Planned",
       "hours": 4000,
       "plan": "2026-11-15",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
-      "wo": "WO-019358",
-      "equip": "DZ014",
-      "cls": "DOZ",
-      "comp": "",
-      "desc": "Filter Cut / General Inspection / Undercarriage",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-14",
-      "type": "2000 Hours service Planned",
-      "hours": 2000,
-      "plan": "2026-11-14",
       "status": "Elimination scheduled",
       "request": "",
       "defType": "",
@@ -6426,6 +6426,42 @@
       "cause": "",
       "pmStatus": "complete",
       "completed": "2026-10-15"
+    },
+    {
+      "wo": "WO-021507",
+      "equip": "DZ009",
+      "cls": "",
+      "comp": "DZ009.ELS.PH (Preheater / Предпусковой подогреватель)",
+      "desc": "Предпусковой подогреватель двигателя не включается.",
+      "priority": "P4 Planned (Repair)",
+      "raised": "2026-10-15",
+      "type": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "hours": null,
+      "plan": "2026-11-13",
+      "status": "Elimination scheduled",
+      "request": "DD-00014839",
+      "defType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "cause": "Отказ предпуск. подогр.",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-021506",
+      "equip": "DZ009",
+      "cls": "",
+      "comp": "DZ009.DRS.COO (Cooling System / Система охлаждения)",
+      "desc": "В моторном отсеке течь охлаждающей жидкости на стыке фланца патрубка, течь действующая.",
+      "priority": "P4 Planned (Repair)",
+      "raised": "2026-10-15",
+      "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "hours": null,
+      "plan": "2026-11-13",
+      "status": "Elimination scheduled",
+      "request": "DD-00014838",
+      "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Поврежден шланга/линии",
+      "pmStatus": "open",
+      "completed": ""
     },
     {
       "wo": "WO-019115",
