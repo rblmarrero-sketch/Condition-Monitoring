@@ -5222,6 +5222,23 @@ cut reply (`draincut`), so no history was lost, but none arrived either.
 fails on V1. **Not live until the Apps Script is redeployed.** Trashing
 `_meta/index/at.json` on Drive cures the live folder at once.
 
+**THE OFFICE PAGES WEAR THE SITE'S MENU, BAND AND FOOTER ON THE SITE ONLY
+(build 570, CM_SITE_STD_V1).** Rickie 02.11, after the mock-up: "Proceed".
+When an office page is served from the site, under `/cm/`, a script at the end
+of both pages loads `/site/std.js` and `/site/std.css` (SITE_STD_V1, the site
+kit on PECHANKA, not in this repository) and calls `SiteStd.init({page:"cm"})`:
+the site's nine-button menu on top, the navy title band, the site footer. The
+page keeps its own side menu (moved under the site menu, `--std-top`), its
+search and its source chip and Data sources button (moved into the band). Its
+EN/RU buttons move into the band and follow the site's one language setting,
+`askpi_lang` (the page's `cm_dash_lang` follows it); its theme button gives way
+to the band's Light / Auto / Dark. Anywhere else (Firebase, GitHub Pages, every
+test server) the path does not start with `/cm/`, nothing is requested and the
+page is exactly as before; if std.js does not load, nothing runs.
+`tests/sitestd.cjs` serves the pages under `/cm/` with a stand-in std.js and
+fails 8 assertions on build 569. Still to do: tables that scroll sideways
+inside the page (the site rule is none, anywhere) become cards on a phone.
+
 ---
 
 ## Secrets
