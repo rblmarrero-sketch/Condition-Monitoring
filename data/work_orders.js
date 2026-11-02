@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-02T21:12:46+00:00",
+  "generated": "2026-11-02T21:47:40+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -442,8 +442,8 @@ window.CM_WO_DATA = {
     "planStart": 0
   },
   "cmCauseFrom": {
-    "wo": 104,
-    "wr": 89,
+    "wo": 105,
+    "wr": 88,
     "cert": 0,
     "none": 0
   },
@@ -1864,7 +1864,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-10-13",
       "detected": "2026-10-13",
-      "planStart": "2026-10-30",
+      "planStart": "2026-11-10",
       "closed": null,
       "asset": "EX023",
       "defect": "DD-00014672",
@@ -2899,7 +2899,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-09-29",
       "detected": "2026-09-29",
-      "planStart": null,
+      "planStart": "2026-11-12",
       "closed": null,
       "asset": "EX012",
       "defect": "DD-00013626",
@@ -2909,12 +2909,12 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "cause": "Износ уплотнения",
-      "causeFrom": "wr",
+      "causeFrom": "wo",
       "descr": "Течь масла из-под верхней резьбовой технологической пробки(заглушки)кронштейна блока фильтров.",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "by": "Irek",
-      "woNumber": null,
-      "maintType": null,
+      "woNumber": "WO-021541",
+      "maintType": "P4 Planned Repair",
       "planned": false
     },
     {
@@ -46261,15 +46261,15 @@ window.CM_WO_DATA = {
       "cmLabel": "2000h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CLSD",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-10-03",
-      "planStartDt": "2026-10-03T00:00:00",
+      "planStartDt": "2026-10-03T07:00:00",
       "planEnd": "2026-10-03",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-10-03",
+      "actualStartDt": "2026-10-03T07:00:00",
+      "actualEnd": "2026-10-03"
     },
     {
       "equip": "GE056",
@@ -75320,9 +75320,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-10-22",
-      "planStartDt": "2026-10-22T00:00:00",
-      "planEnd": "2026-10-22",
+      "planStart": "2026-12-31",
+      "planStartDt": "2026-12-31T00:00:00",
+      "planEnd": "2026-12-31",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null

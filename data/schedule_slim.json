@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-02T21:12:46+00:00",
+  "generated": "2026-11-02T21:47:40+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -348,7 +348,7 @@
         "types": [
           "MP"
         ],
-        "plan": "2026-10-22",
+        "plan": "2026-12-31",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -973,6 +973,24 @@
     ]
   },
   "rtwOpen": [
+    {
+      "wo": "WO-016283",
+      "equip": "TK039",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-12-31",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-12-31",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
     {
       "wo": "WO-021301",
       "equip": "TK125",
@@ -5132,24 +5150,6 @@
       "completed": "2026-10-23"
     },
     {
-      "wo": "WO-016283",
-      "equip": "TK039",
-      "cls": "HT",
-      "comp": "",
-      "desc": "Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-10-22",
-      "type": "500 Hours service Planned",
-      "hours": 500,
-      "plan": "2026-10-22",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
       "wo": "WO-018499",
       "equip": "TK146",
       "cls": "HT",
@@ -6761,7 +6761,7 @@
       "raised": "2026-10-13",
       "type": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "hours": null,
-      "plan": "2026-10-30",
+      "plan": "2026-11-10",
       "status": "Elimination scheduled",
       "request": "DD-00014672",
       "defType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
@@ -8400,12 +8400,12 @@
       "type": "2000 Hours service Planned",
       "hours": 2000,
       "plan": "2026-10-03",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-03"
     },
     {
       "wo": "WO-016565",
@@ -8874,6 +8874,24 @@
       "cause": "Отсутствует крепеж",
       "pmStatus": "complete",
       "completed": "2026-10-17"
+    },
+    {
+      "wo": "WO-021541",
+      "equip": "EX012",
+      "cls": "",
+      "comp": "EX012.DRS.ENG (Engine / Двигатель)",
+      "desc": "Течь масла из-под верхней резьбовой технологической пробки(заглушки)кронштейна блока фильтров.",
+      "priority": "P4 Planned (Repair)",
+      "raised": "2026-09-29",
+      "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "hours": null,
+      "plan": "2026-11-12",
+      "status": "Elimination scheduled",
+      "request": "DD-00013626",
+      "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Износ уплотнения",
+      "pmStatus": "open",
+      "completed": ""
     },
     {
       "wo": "WO-018002",
