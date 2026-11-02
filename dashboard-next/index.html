@@ -147,7 +147,7 @@
   .gres{position:absolute;top:calc(100% + 6px);left:0;right:0;z-index:60;
     background:var(--surface);border:1px solid var(--border);border-radius:10px;
     box-shadow:var(--e2);max-height:min(70vh,520px);overflow:auto;padding:6px;}
-  .gres .gh{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  .gres .gh{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
     color:var(--muted);padding:8px 10px 4px;}
   .gres button{display:flex;align-items:baseline;gap:8px;width:100%;text-align:left;
     border:0;background:transparent;padding:7px 10px;border-radius:6px;
@@ -228,9 +228,9 @@
      one size step down and a touch less side padding buys back enough width
      that every Russian label prints in full at 1280px and wider, while
      English keeps the mockup's own 14px/9px exactly. */
-  html:lang(ru) nav.tabs button{font-size:11.5px;padding-left:6px;padding-right:6px;gap:6px;}
+  html:lang(ru) nav.tabs button{font-size:12px;padding-left:6px;padding-right:6px;gap:6px;}
   html:lang(ru) nav.tabs .navgrp{padding-left:6px;padding-right:6px;}
-  html:lang(ru) nav.tabs .nb{font-size:11px;min-width:20px;height:19px;padding:0 5px;}
+  html:lang(ru) nav.tabs .nb{font-size:12px;min-width:20px;height:19px;padding:0 5px;}
   nav.tabs button:hover{background:var(--rail-hov);color:var(--rail-ink);}
   /* Item 6: an 8px-radius highlight box, not the 3px accent bar this carried
      before -- Nav.dc.html's active row is a filled, rounded box with no side
@@ -268,7 +268,7 @@
   nav.tabs .navgrp:first-of-type{padding-top:2px;}
   body.railshut nav.tabs .navgrp{padding:14px 0 4px;text-align:center;
     font-size:0;}
-  body.railshut nav.tabs .navgrp::before{content:"\2014";font-size:10px;}
+  body.railshut nav.tabs .navgrp::before{content:"\2014";font-size:12px;}
   main{max-width:var(--page-max);margin:0 0 0 var(--sbw);padding:var(--s3) var(--mainpad) var(--s6);}
   /* The rail folds twice: to an icon rail on a laptop, to a top strip on a
      phone — the same buttons, never a second navigation. */
@@ -318,7 +318,7 @@
     nav.tabs button{width:auto;justify-content:flex-start;gap:8px;padding:8px 12px;}
     nav.tabs button span[data-i18n]{display:inline;}
     nav.tabs .nb{position:static;min-width:20px;height:auto;padding:2px 6px;
-      font-size:10.5px;line-height:1.4;}
+      font-size:12px;line-height:1.4;}
     header.app{margin-left:0;position:static;}
   }
   @media (max-width:900px){ :root{--mainpad:var(--s3);} main{padding:var(--s3) var(--mainpad) var(--s6);} }
@@ -663,7 +663,7 @@
      takes to reach the shortlist — the same 80% line .pcut already draws
      between the last vital row and the first non-vital one. */
   .prow .cum{display:flex;flex-direction:column;align-items:flex-end;gap:3px;
-    font-variant-numeric:tabular-nums;color:var(--muted);min-width:40px;font-size:11.5px;}
+    font-variant-numeric:tabular-nums;color:var(--muted);min-width:40px;font-size:12px;}
   .prow.vital .lbl{font-weight:640;}
   .prow.vital .cum{color:var(--ink-2);}
   .cumtrack{position:relative;width:100%;background:var(--surface-2);border-radius:4px;height:5px;overflow:visible;}
@@ -671,10 +671,10 @@
   .prow.vital .cumfill{background:var(--accent);}
   .cumtrack::after{content:"";position:absolute;top:-2px;bottom:-2px;left:80%;width:0;
     border-left:1px dashed var(--border);}
-  .phead{font-size:11.5px;color:var(--ink-2);background:var(--surface-2);border-radius:6px;
+  .phead{font-size:12px;color:var(--ink-2);background:var(--surface-2);border-radius:6px;
     padding:5px 9px;margin-bottom:2px;}
   .pcut{display:flex;align-items:center;gap:8px;margin:1px 0 2px;
-    font:600 10px/1 system-ui,sans-serif;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);}
+    font:600 12px/1 system-ui,sans-serif;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);}
   .pcut::before,.pcut::after{content:"";flex:1;height:0;border-top:1px dashed var(--border);}
   /* the P-F diagram */
   /* The chart is drawn at the width it has (renderPF measures the box), so
@@ -692,10 +692,10 @@
   .pfband{fill:var(--serious);opacity:.09;}
   .pfbadge{stroke:var(--surface);stroke-width:2;}
   .pfbadge.pfp{fill:var(--serious);} .pfbadge.pff{fill:var(--critical);}
-  .pfbl{font:700 11px 'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;fill:#fff!important;paint-order:stroke;}
+  .pfbl{font:700 12px 'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;fill:#fff!important;paint-order:stroke;}
   /* adding and removing a position's media */
   .medit{padding:4px 8px 0;}
-  .medit .mtog{background:none;border:0;padding:2px 0;color:var(--accent);font-weight:600;font-size:11px;font-family:inherit;
+  .medit .mtog{background:none;border:0;padding:2px 0;color:var(--accent);font-weight:600;font-size:12px;font-family:inherit;
     font-family:inherit;cursor:pointer;}
   .medit .mpanel{padding:6px 0 2px;}
   .medit .mlist{display:flex;flex-wrap:wrap;gap:6px;align-items:center;}
@@ -715,7 +715,7 @@
     display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:19px;
     cursor:pointer;}
   .medit .madd:hover{border-color:var(--accent);color:var(--accent);}
-  .medit .mmsg{font-size:11px;color:var(--muted);min-height:14px;margin-top:4px;}
+  .medit .mmsg{font-size:12px;color:var(--muted);min-height:14px;margin-top:4px;}
   /* The reason on its own line, at a size a person can read what they are
      typing: beside two buttons it shrank to the width of one letter. */
   .medit .mwhy{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:6px;}
@@ -807,7 +807,7 @@
   .covdetails[open] summary{margin-bottom:8px;}
   .trendlgndrow{display:flex;justify-content:space-between;align-items:center;margin-bottom:2px;gap:10px;}
   .trendlgndrow .seg{flex:none;}
-  .tlegend{display:flex;gap:14px;flex-wrap:wrap;font-size:11.5px;color:var(--ink-2);margin-bottom:4px;}
+  .tlegend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--ink-2);margin-bottom:4px;}
   .tlegend span{display:flex;align-items:center;gap:5px;}
   .tlegend i{width:10px;height:10px;border-radius:2px;display:inline-block;}
   .tlegend i.s-cri{background:var(--critical);} .tlegend i.s-sev{background:var(--severe);} .tlegend i.s-deg{background:var(--serious);}
@@ -1052,7 +1052,7 @@
      the drawer never had one) — the same visual treatment, without a nested
      card the drawer never asked for. */
   #drwBody .pk{font-weight:640;font-size:13px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
-  #drwBody .pl{color:var(--muted);font-size:11.5px;margin-bottom:6px;}
+  #drwBody .pl{color:var(--muted);font-size:12px;margin-bottom:6px;}
   #drwBody dl{margin:6px 0 0;display:grid;grid-template-columns:auto 1fr;gap:3px 10px;font-size:12px;}
   #drwBody dt{color:var(--muted);} #drwBody dd{margin:0;text-align:right;}
   #drwBody dd.warnv{color:var(--serious);font-weight:600;}
@@ -1087,7 +1087,7 @@
   .pos .photo{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:var(--surface-2);cursor:zoom-in;}
   .pos .nophoto{width:100%;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;color:var(--muted);background:var(--surface-2);font-size:12px;}
   .pos .body{padding:10px 12px;} .pos .body .pk{font-weight:640;font-size:13px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
-  .pos .body .pl{color:var(--muted);font-size:11.5px;margin-bottom:6px;}
+  .pos .body .pl{color:var(--muted);font-size:12px;margin-bottom:6px;}
   .pos dl{margin:6px 0 0;display:grid;grid-template-columns:auto 1fr;gap:3px 10px;font-size:12px;}
   .pos dt{color:var(--muted);} .pos dd{margin:0;text-align:right;}
   .pos dd.warnv{color:var(--serious);font-weight:600;}
@@ -1103,7 +1103,7 @@
      One tight line per stage; the sentence rides underneath at footnote size,
      one line, whole text in the tooltip. */
   .pgnote{background:var(--surface-2,#f1f4f5);border:1px solid var(--border);
-    border-radius:8px;padding:8px 12px;font-size:11.5px;color:var(--ink-2);line-height:1.45;}
+    border-radius:8px;padding:8px 12px;font-size:12px;color:var(--ink-2);line-height:1.45;}
   .pgrid{display:flex;flex-direction:column;gap:1px;margin:12px 0 4px;}
   .pgrow{display:grid;grid-template-columns:170px 1fr 118px;gap:2px 12px;align-items:center;
     padding:6px 10px;border-radius:7px;}
@@ -1113,13 +1113,13 @@
   .pgbar span{display:block;height:100%;border-radius:6px;background:var(--accent,#8a4526);}
   .pgnum{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;}
   .pgnum b{font-size:13.5px;}
-  .pgnum i{font-style:normal;font-size:10.5px;color:var(--muted);font-weight:600;margin-left:4px;}
+  .pgnum i{font-style:normal;font-size:12px;color:var(--muted);font-weight:600;margin-left:4px;}
   /* The reason a row exists sits under it, not in a tooltip nobody opens. */
   .pgwhy{grid-column:1 / -1;display:flex;align-items:center;gap:8px;
-    font-size:10.5px;color:var(--muted);line-height:1.35;}
+    font-size:12px;color:var(--muted);line-height:1.35;}
   .pgwhy .w{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .pgwhy .from{display:inline-block;margin-left:8px;padding:1px 7px;border-radius:999px;
-    background:var(--border);color:var(--muted);font-size:11px;font-weight:700;
+    background:var(--border);color:var(--muted);font-size:12px;font-weight:700;
     white-space:nowrap;}
 
   /* overflow-x:auto on the wrapper scrolls the table, but on this layout it did
@@ -1158,37 +1158,37 @@
     border-bottom:3px solid #8a4526;padding-bottom:12px;margin-bottom:14px;}
   .poster h3{margin:0;font-size:26px;letter-spacing:-.01em;}
   .poster .phd p{margin:2px 0 0;font-size:13.5px;color:#41505a;}
-  .poster .pmeta{text-align:right;font-size:11.5px;color:#41505a;display:flex;
+  .poster .pmeta{text-align:right;font-size:12px;color:#41505a;display:flex;
     flex-direction:column;gap:1px;}
   .poster .pmeta b{font-size:13.5px;color:#8a4526;letter-spacing:.04em;text-transform:uppercase;}
   .poster table{width:100%;border-collapse:collapse;font-size:14px;}
-  .poster th{text-align:left;font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;
+  .poster th{text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.06em;
     color:#41505a;border-bottom:2px solid #11171a;padding:0 8px 6px 0;vertical-align:bottom;}
   .poster th i{display:block;font-style:normal;font-weight:600;color:#5b686f;
-    text-transform:none;letter-spacing:0;font-size:10px;}
+    text-transform:none;letter-spacing:0;font-size:12px;}
   .poster td{padding:9px 8px 9px 0;border-bottom:1px solid #d6dde1;vertical-align:top;}
-  .poster td i{display:block;font-style:normal;font-size:11px;color:#5b686f;font-weight:600;}
+  .poster td i{display:block;font-style:normal;font-size:12px;color:#5b686f;font-weight:600;}
   /* On screen at actual size the sheet holds the 11px floor the rest of the
      dashboard holds. Paper keeps the tighter setting: an A3 poster at 10px is
      read at arm's length, a monitor is not. */
   @media screen{
-    .posterbox:not(.fit) .poster th{font-size:11.5px;}
-    .posterbox:not(.fit) .poster th i{font-size:11px;}
-    .posterbox:not(.fit) .poster td.big i{font-size:11px;}
-    .posterbox:not(.fit) .poster .ck{font-size:11.5px;}
+    .posterbox:not(.fit) .poster th{font-size:12px;}
+    .posterbox:not(.fit) .poster th i{font-size:12px;}
+    .posterbox:not(.fit) .poster td.big i{font-size:12px;}
+    .posterbox:not(.fit) .poster .ck{font-size:12px;}
   }
   .poster td.pc b{font-size:15px;}
   .poster td.pp b{font-size:15px;color:#8a4526;}
   .poster td.big{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums;
     white-space:nowrap;}
-  .poster td.big i{font-size:10.5px;font-weight:600;}
+  .poster td.big i{font-size:12px;font-weight:600;}
   /* The component code. On the masterlist it is the column heading and on the
      machine it is what the fitter says out loud — "number four left". It is the
      identifier here for a duller reason: one man in twelve cannot separate the
      purple from the tan, and a photocopier separates neither. */
   .ck{display:inline-block;min-width:20px;padding:1px 5px;margin:0 6px 2px 0;
     border-radius:4px;background:var(--surface-3,#eef2f4);color:var(--ink,#11171a);
-    font-size:10.5px;font-weight:700;letter-spacing:.03em;
+    font-size:12px;font-weight:700;letter-spacing:.03em;
     font-variant-numeric:tabular-nums;text-transform:none;}
   .poster .ck{background:#eef2f4;color:#11171a;border:1px solid #d6dde1;}
   .poster td.pcode b{font-size:15px;font-variant-numeric:tabular-nums;}
@@ -1199,7 +1199,7 @@
   .poster tr.lrow td.pc{border-left:6px solid var(--h);padding-left:9px;}
   .poster .miss{color:#c02f2f;}
   .poster .pfoot{margin-top:14px;padding-top:10px;border-top:1px solid #d6dde1;
-    font-size:11.5px;color:#41505a;}
+    font-size:12px;color:#41505a;}
   /* The poster reuses the screen matrix's classes, and those rules colour text
      from THEME TOKENS — var(--muted), var(--ink-2), var(--accent). On white
      paper in dark mode that is grey-on-white at 3:1 and copper that nobody
@@ -1216,7 +1216,7 @@
   .poster table.mtx td.na{color:#aab4ba;background:#fafbfb;}
   .poster .lgnd{border-top-color:#d6dde1;}
   .poster .lg i{font-style:normal;color:#5b686f;font-weight:600;}
-  .poster tr.clsrow td{font-size:11px;font-weight:800;letter-spacing:.09em;
+  .poster tr.clsrow td{font-size:12px;font-weight:800;letter-spacing:.09em;
     text-transform:uppercase;color:#8a4526;border:none;padding:14px 0 5px;}
   .poster tr.clsrow.brk td{padding-top:20px;}
   @media print{ .poster tr.clsrow.brk{break-before:page;page-break-before:always;} }
@@ -1253,7 +1253,7 @@
   details.cat>summary{cursor:pointer;list-style:none;display:flex;
     align-items:center;gap:10px;padding:11px 2px;font-size:13.5px;}
   details.cat>summary::-webkit-details-marker{display:none;}
-  details.cat>summary::before{content:"▸";color:var(--muted);font-size:11px;width:10px;}
+  details.cat>summary::before{content:"▸";color:var(--muted);font-size:12px;width:10px;}
   details.cat[open]>summary::before{content:"▾";}
   details.cat>summary b{font-weight:600;}
   details.cat>summary i{font-style:normal;margin-left:auto;color:var(--muted);
@@ -1262,7 +1262,7 @@
   /* A recommendation list is a table (lctbl): fixed columns, one line a row,
      the supplier's notes the only column that wraps. */
   table.grid.lctbl{table-layout:fixed;}
-  table.grid.lctbl th{font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);}
+  table.grid.lctbl th{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);}
   table.grid.lctbl td{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:middle;}
   table.grid.lctbl td.prose{white-space:normal;color:var(--ink-2);line-height:1.45;vertical-align:top;}
   table.grid.lctbl td:first-child{font-weight:600;color:var(--ink);}
@@ -1278,7 +1278,7 @@
   #lgNoMach thead tr:first-child th:nth-child(1){width:24%;}
   #lgNoMach thead tr:first-child th:nth-child(3){width:136px;}
   #lgNoRef input.cwcf,#lgNoMach input.cwcf{width:100%;box-sizing:border-box;}
-  .kpi .s{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.3;}
+  .kpi .s{font-size:12px;color:var(--muted);margin-top:3px;line-height:1.3;}
 
   /* A cell showing the STANDARD rather than an audit is drawn hollow: the
      colour is right, the fill is not, because nobody has been to the machine.
@@ -1290,11 +1290,11 @@
   table.mtx td.cell i.want{display:none;}
   table.mtx{--h:#8b969c;table-layout:auto;}
   table.mtx td{vertical-align:top;padding:0;}
-  table.mtx tr.clsrow td{border:none;padding:14px 0 5px;font-size:11px;font-weight:800;
+  table.mtx tr.clsrow td{border:none;padding:14px 0 5px;font-size:12px;font-weight:800;
     letter-spacing:.09em;text-transform:uppercase;color:var(--accent,#8a4526);background:none;}
   table.mtx td.mdl{padding:8px 12px 8px 0;}
   table.mtx td.mdl b{display:block;font-size:13.5px;line-height:1.25;font-weight:600;}
-  table.mtx td.mdl i{display:block;font-style:normal;font-size:11px;color:var(--muted);
+  table.mtx td.mdl i{display:block;font-style:normal;font-size:12px;color:var(--muted);
     font-weight:500;margin-top:1px;}
   table.mtx td.cell{position:relative;padding:7px 8px 7px 13px;
     background:color-mix(in srgb, var(--h) 13%, var(--surface,#fff));}
@@ -1307,11 +1307,11 @@
      step back under it again. */
   table.mtx td.cell i.num{display:block;font-style:normal;font-size:13px;color:var(--ink);
     font-weight:600;font-variant-numeric:tabular-nums;margin-top:0;}
-  table.mtx td.cell b + i.num{font-size:11.5px;color:var(--muted);
+  table.mtx td.cell b + i.num{font-size:12px;color:var(--muted);
     font-weight:500;margin-top:3px;}
   /* The column says its product once, at the top, with the colour beside it. */
   table.mtx th i.colp{display:flex;align-items:center;gap:5px;font-style:normal;
-    font-weight:500;font-size:10.5px;color:var(--muted);margin-top:4px;
+    font-weight:500;font-size:12px;color:var(--muted);margin-top:4px;
     text-transform:none;letter-spacing:0;}
   table.mtx th i.colp .sw{width:9px;height:9px;border-radius:2px;flex:none;
     background:var(--h);box-shadow:inset 0 0 0 1px rgba(0,0,0,.22);}
@@ -1320,7 +1320,7 @@
      full name is in the tooltip and in the legend below. */
   table.mtx th i.colp .nm{min-width:0;max-width:118px;overflow:hidden;
     text-overflow:ellipsis;white-space:nowrap;}
-  table.mtx td.cell i.warnv{display:block;font-style:normal;font-size:11px;
+  table.mtx td.cell i.warnv{display:block;font-style:normal;font-size:12px;
     color:var(--serious);font-weight:650;margin-top:3px;}
   /* Compact: the capacity/interval line and the warning sentence leave the
      cell -- both still ride on its title, so a hover gives the same reading
@@ -1346,7 +1346,7 @@
   table.grid.mtx tbody tr:nth-child(even) td.cell,
   table.grid.mtx tbody tr:hover td.cell{
     background:color-mix(in srgb, var(--h) 13%, var(--surface,#fff));}
-  table.mtx td.unset b{display:block;font-size:11.5px;font-weight:600;color:var(--muted);}
+  table.mtx td.unset b{display:block;font-size:12px;font-weight:600;color:var(--muted);}
   table.mtx td.na{text-align:center;color:var(--border);font-size:16px;padding:9px 0;}
   /* The screen matrix as a table: fixed columns (a floor per column is set
      from the column count, so a wide class scrolls inside its own box), one
@@ -1375,13 +1375,13 @@
   .poster table.mtx td.cell i.num{font-size:15px;font-weight:700;color:#11171a;}
   .poster table.mtx td.cell b + i.num{font-size:12px;font-weight:600;color:#41505a;}
   .poster table.mtx th{vertical-align:top;overflow-wrap:break-word;}
-  .posterbox .poster table.mtx thead tr:first-child th{font-size:10.5px;letter-spacing:0;}
+  .posterbox .poster table.mtx thead tr:first-child th{font-size:12px;letter-spacing:0;}
   .poster table.mtx thead tr:first-child th{border-bottom:1px solid #d6dde1;}
   .poster table.mtx tr.pprow th{padding-top:6px;}
   .poster table.mtx tr.pprow .pcolp{margin-top:0;align-items:flex-start;}
   .poster table.mtx th .ck{display:table;margin:0 0 4px;}
   .poster table.mtx td.cell i.pnum span{display:block;white-space:nowrap;}
-  .poster .pcolp{display:flex;align-items:center;gap:5px;margin-top:5px;font-size:11px;font-weight:700;
+  .poster .pcolp{display:flex;align-items:center;gap:5px;margin-top:5px;font-size:12px;font-weight:700;
     text-transform:none;letter-spacing:0;color:#11171a;line-height:1.2;}
   .poster .pcolp .sw{width:11px;height:11px;border-radius:2px;flex:none;background:var(--h);
     box-shadow:inset 0 0 0 1px rgba(0,0,0,.3);}
@@ -1402,7 +1402,7 @@
   }
   /* The verdict is the one thing on this card nobody typed, so it is the one
      thing that has to look computed rather than written. */
-  .pos .band{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.05em;
+  .pos .band{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.05em;
     text-transform:uppercase;padding:3px 8px;border-radius:999px;}
   .pos .b-ok{background:color-mix(in srgb,var(--good) 14%,var(--surface));color:var(--good-ink);}
   .pos .b-watch{background:color-mix(in srgb,var(--warning) 16%,var(--surface));color:var(--warning);}
@@ -1427,7 +1427,7 @@
      unstyled prose in the middle of a form: the loudest statements on the
      screen, drawn quieter than the labels around them. Scoped rules keep
      winning where they apply; these are the fallback for everywhere else. */
-  .band{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.05em;
+  .band{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.05em;
     text-transform:uppercase;padding:3px 8px;border-radius:999px;line-height:1.35;
     white-space:normal;}
   .b-ok{background:color-mix(in srgb,var(--good) 14%,var(--surface));color:var(--good-ink);}
@@ -1440,7 +1440,7 @@
   .lang button.on{background:var(--accent);color:#fff;}
   .pick .pickq{margin-bottom:5px;min-width:0;width:100%;font-size:12.5px;padding:6px 9px;}
   .pick select{min-width:0;width:100%;}
-  .pickn{font-size:11px;color:var(--muted);margin-top:3px;min-height:14px;}
+  .pickn{font-size:12px;color:var(--muted);margin-top:3px;min-height:14px;}
   /* .voidtog's own rule was duplicated almost verbatim by the later toolbar
      redesign pass (padding-bottom:8px there, no user-select) -- consolidated
      into that one canonical block below, keeping user-select:none (an
@@ -1450,7 +1450,7 @@
      never how the control looks. */
   .voidtog input{width:16px;height:16px;accent-color:var(--accent);cursor:pointer;}
   .insp.voided{opacity:.55;}
-  .voidflag{display:inline-block;padding:1px 8px;border-radius:999px;font-size:11px;font-weight:650;
+  .voidflag{display:inline-block;padding:1px 8px;border-radius:999px;font-size:12px;font-weight:650;
     background:var(--surface-3);color:var(--ink-2);border:1px dashed var(--border);}
   .editflag{display:inline-block;padding:1px 7px;border-radius:999px;font-size:var(--t-micro);font-weight:650;
     background:color-mix(in srgb,var(--accent) 18%,transparent);color:var(--accent);}
@@ -1708,8 +1708,8 @@
      zero, which is what this panel used to show for a photograph it had. */
   .edshots figure.pending img{background:var(--e1);border:1px dashed var(--border);
     opacity:.55;cursor:default;}
-  .edshots figcaption{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.3;}
-  .edshots select{width:100%;max-width:100%;margin-top:3px;font-size:11px;padding:2px 4px;min-height:24px;}
+  .edshots figcaption{font-size:12px;color:var(--muted);margin-top:3px;line-height:1.3;}
+  .edshots select{width:100%;max-width:100%;margin-top:3px;font-size:12px;padding:2px 4px;min-height:24px;}
   .edmtools{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:10px;}
   .edmtools .madd{width:auto;height:32px;padding:0 10px;display:inline-flex;align-items:center;gap:6px;
     border:1px dashed var(--border);border-radius:6px;cursor:pointer;font-size:12px;color:var(--ink-2);}
@@ -1818,7 +1818,7 @@
   /* the second row of the toolbar, and the "filtered" mark on the first */
   .controls.more{position:static;margin-top:-10px;padding-top:10px;border-top-left-radius:0;border-top-right-radius:0;box-shadow:none;}
   .controls .dqtog .n{display:inline-grid;place-items:center;min-width:18px;height:18px;margin-left:6px;padding:0 5px;border-radius:999px;
-    background:var(--accent);color:var(--accent-ink,#fff);font-size:11px;font-weight:700;}
+    background:var(--accent);color:var(--accent-ink,#fff);font-size:12px;font-weight:700;}
   body.filtered main > .controls:not(.more){border-left:3px solid var(--accent);}
   .resetb[disabled]{opacity:.4;cursor:default;}
   @media (max-width:1500px){ .hide-m{display:none !important;} }
@@ -1839,7 +1839,7 @@
   .prow[data-drill]:hover{background:var(--surface-2);}
   .prow.sel .pfill{outline:2px solid var(--ink);outline-offset:1px;}
   table.grid th.sortable{cursor:pointer;user-select:none;} table.grid th.sortable:hover{color:var(--ink);}
-  table.grid th .arrow{opacity:.4;font-size:11px;margin-left:3px;} table.grid th.on .arrow{opacity:1;}
+  table.grid th .arrow{opacity:.4;font-size:12px;margin-left:3px;} table.grid th.on .arrow{opacity:1;}
   /* A filter per column, in the header itself, not a single box searching
      everything at once — asked for by name: "why cant we just put a
      search/filter on top of the header". th.cwfh is a second header row,
@@ -1903,7 +1903,7 @@
            background:var(--surface-3);cursor:pointer;}
   .opc .nofile{width:96px;height:72px;display:flex;align-items:center;
            justify-content:center;background:var(--surface-3);color:var(--muted);
-           font-size:10.5px;line-height:1.3;text-align:center;padding:4px;border-radius:6px;}
+           font-size:12px;line-height:1.3;text-align:center;padding:4px;border-radius:6px;}
   .opctl{display:flex;flex-direction:column;gap:6px;min-width:0;}
   .opselc{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:500;
            font-family:inherit;color:var(--ink);text-transform:none;letter-spacing:0;}
@@ -1911,7 +1911,7 @@
   .opc.off .opselc{opacity:.55;}
   .oppt{max-width:320px;}
   .opname{font:600 12px/1.3 var(--mono);color:var(--ink-2);word-break:break-all;}
-  .opstate{font-size:10.5px;color:var(--muted);}
+  .opstate{font-size:12px;color:var(--muted);}
   .opstate.gone{color:var(--crit-ink);}
   .cfdiff{margin:7px 0 0 14px;padding-left:11px;border-left:2px solid var(--border);min-width:0;}
   .cfdiff table.grid{table-layout:fixed;width:100%;}
@@ -1967,7 +1967,7 @@
   .srchead{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;background:var(--surface-2);}
   .srchead .ico{font-size:20px;line-height:1;} .srchead b{font-size:14px;}
   .srchead .muted{font-size:12px;margin-top:3px;}
-  .srchead .state{margin-left:auto;font-size:11px;color:var(--muted);white-space:nowrap;padding-top:2px;}
+  .srchead .state{margin-left:auto;font-size:12px;color:var(--muted);white-space:nowrap;padding-top:2px;}
   .srccard.on .srchead .state{color:var(--good-ink);font-weight:650;}
   .srcbody{padding:14px 16px;display:flex;flex-direction:column;gap:10px;}
   /* Conflict dialog (Stage 6): one card per device, matched to
@@ -2046,7 +2046,7 @@
     #tab-equipment .eqpick{width:100%;}
     .controls .eqpick > input[type=search],.controls .eqpick > select{width:100%;max-width:100%;}
   }
-  .eqpick > .hint{font-size:11px;color:var(--muted);}
+  .eqpick > .hint{font-size:12px;color:var(--muted);}
   .pager{display:flex;align-items:center;gap:10px;padding:8px 10px;
     border-top:1px solid var(--border);background:var(--surface-2);font-size:12px;flex-wrap:wrap;}
   .pager .spacer{flex:1;}
@@ -2066,7 +2066,7 @@
   .cmbr:hover{background:var(--surface-2);}
   .cmbr.act{background:color-mix(in srgb,var(--accent) 14%,transparent);}
   .cmbr.cur b{color:var(--accent);}
-  .cmbf{border-top:1px solid var(--border);padding:5px 12px;font-size:11px;color:var(--muted);background:var(--surface-2);}
+  .cmbf{border-top:1px solid var(--border);padding:5px 12px;font-size:12px;color:var(--muted);background:var(--surface-2);}
   /* The value, out of sight: still the element scripts and the address read. */
   select.cmbsel{position:absolute !important;width:0 !important;height:0 !important;min-height:0 !important;min-width:0 !important;
     opacity:0;overflow:hidden;pointer-events:none;margin:0 !important;padding:0 !important;border:0 !important;}
@@ -2074,7 +2074,7 @@
   ul.plainlist li{padding:4px 0;border-bottom:1px solid var(--border);font-size:12px;
     display:flex;align-items:center;gap:8px;}
   ul.plainlist li img.th{width:44px;height:44px;object-fit:cover;border-radius:4px;flex:none;}
-  .btn.sm{padding:2px 8px;font-size:11px;min-height:0;}
+  .btn.sm{padding:2px 8px;font-size:12px;min-height:0;}
   ul.plainlist li:last-child{border-bottom:0;}
   .src{display:flex;align-items:center;gap:8px;border:1px solid var(--border);background:var(--surface-2);
     color:var(--ink-2);border-radius:999px;padding:6px 13px;font-size:12.5px;cursor:pointer;font-family:inherit;}
@@ -2105,7 +2105,7 @@
      A position that holds six photographs now looks like six photographs. */
   .pos .shots{position:relative;}
   .pos .shotn{position:absolute;top:8px;right:8px;background:rgba(0,0,0,.66);color:#fff;
-    font:700 11px/1 'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;padding:4px 7px;border-radius:999px;}
+    font:700 12px/1 'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;padding:4px 7px;border-radius:999px;}
   /* Was overflow-x:auto — a horizontal slider inside a card, which is the one
      thing this redesign forbids. It wraps now; a position with nine frames
      shows nine, on as many rows as it needs. */
@@ -2163,7 +2163,7 @@
   table.paired col.cbar{width:62px;}
   table.paired th.side{text-align:center;letter-spacing:.1em;}
     .sidegap{display:inline-block;margin-left:6px;padding:0 5px;border-radius:4px;
-    font-family:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10.5px;font-weight:600;line-height:1.65;
+    font-family:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;font-weight:600;line-height:1.65;
     background:color-mix(in srgb,var(--warning) 24%,var(--surface));color:var(--ink);}
   table.grid.wear td{font-size:12px;padding:6px 8px;}
   .ucsum{margin:12px 16px 0;padding:8px 12px;border-radius:6px;font-size:12.5px;font-weight:650;}
@@ -2171,7 +2171,7 @@
   .ucsum.ok{background:color-mix(in srgb,var(--good) 12%,var(--surface));color:var(--good-ink);}
   .ucsum.watch{background:color-mix(in srgb,var(--serious) 13%,var(--surface));color:var(--serious);}
   .ucsum.act{background:color-mix(in srgb,var(--critical) 12%,var(--surface));color:var(--crit-ink);}
-  .ucodd{color:var(--serious);font-weight:650;font-size:11px;white-space:nowrap;}
+  .ucodd{color:var(--serious);font-weight:650;font-size:12px;white-space:nowrap;}
   .ucsum.warnrow{background:var(--surface-2);color:var(--ink-2);font-weight:550;}
   /* A second tile pass lived here \u2014 the one that drew them as a single strip
      with hairlines between. Superseded by the cards below, with one exception
@@ -2208,8 +2208,8 @@
        all meaningful, none of it decoration. Density bought that way is density
        nobody can use, and the two smallest steps were carrying the words that
        make the numbers mean anything. */
-    --t-micro:11px;    /* the uppercase label above a number            */
-    --t-tiny:11.5px;   /* a note under one                              */
+    --t-micro:12px;    /* the uppercase label above a number            */
+    --t-tiny:12px;   /* a note under one                              */
     --t-small:12.5px;  /* table meta, secondary                         */
     --t-body:13px;     /* the default                                   */
     --t-lead:15px;     /* a card title                                  */
@@ -2449,7 +2449,7 @@
     padding:4px 10px;min-height:28px;}
   .defs>summary::-webkit-details-marker{display:none;}
   .defs>summary::before{content:"?";display:inline-grid;place-items:center;width:15px;height:15px;
-    border-radius:50%;border:1.5px solid currentColor;font-size:10px;font-weight:800;}
+    border-radius:50%;border:1.5px solid currentColor;font-size:12px;font-weight:800;}
   .defs>summary:hover{color:var(--ink);border-color:var(--axis);}
   .defs>summary:focus-visible{outline:2px solid var(--accent);outline-offset:1px;}
   .defs[open]>summary{color:var(--ink);border-color:var(--accent);}
@@ -2597,7 +2597,7 @@
   #fleetTbl th.cwfh input.cwcf{width:100%;box-sizing:border-box;}
   #fleetTbl tbody td{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:middle;}
   #fleetTbl td:nth-child(4){min-width:0;}
-  #fleetTbl .ovmeta{font-size:11px;}
+  #fleetTbl .ovmeta{font-size:12px;}
   #fleetTbl .attn.tag{display:inline-block;margin:0 0 0 6px;vertical-align:middle;}
   #fleetTbl .duec,#fleetTbl .triage{white-space:nowrap;}
   #fleetTbl .xf.who{max-width:100%;}
@@ -2635,7 +2635,7 @@
 
   /* 1C stoppage priority: what planning schedules against, so it stays on the
      row. A chip rather than a column — it is a code, not a sentence. */
-  .prio{display:inline-block;margin-left:7px;font:700 10px/1 'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  .prio{display:inline-block;margin-left:7px;font:700 12px/1 'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
     letter-spacing:.04em;padding:3px 5px;border-radius:4px;vertical-align:1px;
     border:1px solid currentColor;}
   .prio.c{color:var(--crit-ink);} .prio.s{color:var(--serious);}
@@ -2666,9 +2666,9 @@
   .wlh{display:flex;align-items:center;gap:10px;padding:11px 14px;background:var(--surface-2);
     border-bottom:1px solid var(--border);}
   .wlh .u{font-weight:700;font-size:14px;line-height:1;font-family:inherit;letter-spacing:-.01em;}
-  .wlh .m{font-size:11.5px;color:var(--muted);}
+  .wlh .m{font-size:12px;color:var(--muted);}
   .wlh .sp{flex:1;}
-  .wlh .cnt{font:700 11px/1 'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--muted);
+  .wlh .cnt{font:700 12px/1 'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--muted);
     background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:4px 9px;}
   .wlr{display:grid;grid-template-columns:4px minmax(150px,1.4fr) minmax(120px,1.1fr) 168px 104px 124px auto;
     gap:12px;align-items:center;padding:0 14px 0 0;border-top:1px solid var(--border);
@@ -2680,7 +2680,7 @@
   .wlr .sev{align-self:stretch;background:var(--sc,var(--none));}
   .wlr .cell{min-width:0;padding:11px 0;}
   .wlr .t1{font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .wlr .t2{font-size:11px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  .wlr .t2{font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
     margin-top:1px;}
   .wlr .go{color:var(--muted);font-size:15px;opacity:0;transition:opacity .13s,transform .13s;}
   .wlr:hover .go{opacity:1;transform:translateX(2px);}
@@ -2739,7 +2739,7 @@
      is one unbreakable box, so in a cell one line wide the ellipsis took the
      whole of it away. As text it is cut at its end, and its title names it. */
   #actionTbl table.acttbl td .need{display:inline;margin-left:6px;padding:0;border:0;background:none;
-    color:var(--warn-ink);font-weight:600;font-size:var(--t-micro,11px);}
+    color:var(--warn-ink);font-weight:600;font-size:var(--t-micro,12px);}
   #actionTbl table.acttbl td>.need:first-child,#actionTbl table.acttbl td .trunc>.need:first-child{margin-left:0;}
   #actionTbl table.acttbl td .need.more{margin-left:4px;font-weight:500;}
   #actionTbl table.acttbl td .st{vertical-align:middle;}
@@ -2768,7 +2768,7 @@
   #ddList table.ddtbl td.ddact .minibtn{display:inline-flex;align-items:center;vertical-align:middle;margin-left:5px;
     min-height:32px;padding:3px 9px;font-size:12px;}
   #ddList table.ddtbl td .need{display:inline;margin-left:0;padding:0;border:0;background:none;
-    color:var(--warn-ink);font-weight:600;font-size:var(--t-micro,11px);}
+    color:var(--warn-ink);font-weight:600;font-size:var(--t-micro,12px);}
   #ddList .shown>span:first-child{white-space:nowrap;}
   #ddList table.ddtbl th.cwfh input.cwcf{width:100%;box-sizing:border-box;}
   /* ── Plan vs Actual, one line a row (build 522) ──────────────────────────
@@ -2781,7 +2781,7 @@
   #paList table.patbl thead th{white-space:normal;line-height:1.25;overflow:hidden;text-overflow:ellipsis;}
   #paList table.patbl th.cwfh input.cwcf{width:100%;box-sizing:border-box;}
   #paList table.patbl tbody td{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:middle;}
-  #paList table.patbl .pa-need{margin-left:6px;color:var(--warn-ink);font-weight:600;font-size:var(--t-micro,11px);}
+  #paList table.patbl .pa-need{margin-left:6px;color:var(--warn-ink);font-weight:600;font-size:var(--t-micro,12px);}
   /* ── Defects raised, one line a row (build 523) ──────────────────────────
      Fixed columns from the colgroup renderCmWoTab writes (CW_W). Short cells
      one line with an ellipsis and their text on the title where cut; 1C's
@@ -2823,7 +2823,7 @@
      (.sr); where it is something the pill cannot say — an overdue action, an
      action nobody owns — it is a small tag on a second line under the pill
      (.tag), so the column never grows wider than the pill. */
-  .attn{font-weight:600;font-size:var(--t-micro,11px);line-height:1.5;white-space:nowrap;}
+  .attn{font-weight:600;font-size:var(--t-micro,12px);line-height:1.5;white-space:nowrap;}
   .attn.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);}
   .attn.tag{display:block;width:max-content;margin-top:3px;padding:0 7px;border-radius:999px;
     color:var(--warn-ink);background:color-mix(in srgb,var(--warning) 16%,transparent);
@@ -2845,12 +2845,12 @@
   .due i{font-style:normal;font-size:var(--t-micro);color:var(--muted);}
   .due.late b{color:var(--crit-ink);} .due.late i{color:var(--crit-ink);font-weight:700;}
   .due.soon b{color:var(--serious);}
-  .st{display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:11.5px;line-height:1;font-family:inherit;color:var(--ink-2);}
+  .st{display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:12px;line-height:1;font-family:inherit;color:var(--ink-2);}
   .st::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--stc,var(--none));flex:none;}
   .st.s-open{--stc:var(--muted);} .st.s-PLAN{--stc:var(--accent);}
   .st.s-WIP{--stc:var(--warning);} .st.s-DONE{--stc:var(--good);}
   .st.s-VERIFIED{--stc:var(--good);} .st.s-NOACT{--stc:var(--muted);}
-  .rcam{display:inline-block;font-weight:700;font-size:9px;line-height:1;font-family:inherit;letter-spacing:.09em;color:var(--accent);
+  .rcam{display:inline-block;font-weight:700;font-size:12px;line-height:1;font-family:inherit;letter-spacing:.09em;color:var(--accent);
     border:1px solid currentColor;border-radius:4px;padding:2px 4px;vertical-align:1px;margin-left:6px;}
 
   /* progress, by state rather than one green nub */
@@ -2859,7 +2859,7 @@
   .segbar i{display:block;transition:flex-grow .3s var(--ease);}
   .segbar i.s-open{background:var(--surface-3);} .segbar i.s-PLAN{background:var(--accent);}
   .segbar i.s-WIP{background:var(--warning);} .segbar i.s-DONE{background:var(--good);}
-  .segkey{display:flex;flex-wrap:wrap;gap:12px;margin-top:7px;font-size:11px;color:var(--muted);}
+  .segkey{display:flex;flex-wrap:wrap;gap:12px;margin-top:7px;font-size:12px;color:var(--muted);}
   .segkey span{display:inline-flex;align-items:center;gap:5px;}
   .segkey b{color:var(--ink-2);font-variant-numeric:tabular-nums;}
   .segkey i{width:8px;height:8px;border-radius:2px;display:inline-block;}
@@ -2917,7 +2917,7 @@
   .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:0 14px;}
   .sbsec{margin-top:6px;padding-top:16px;border-top:1px solid var(--border);}
   .sbsec:first-of-type{border-top:0;padding-top:4px;}
-  .sbsec > h3{margin:0 0 3px;font-weight:700;font-size:10px;line-height:1.2;font-family:inherit;letter-spacing:.12em;
+  .sbsec > h3{margin:0 0 3px;font-weight:700;font-size:12px;line-height:1.2;font-family:inherit;letter-spacing:.12em;
     text-transform:uppercase;color:var(--accent);}
   .sbsec > .hint{font-size:12px;color:var(--muted);margin:0 0 13px;line-height:1.5;}
   .readback{padding:9px 11px;background:var(--surface-2);border:1px solid var(--border);
@@ -2931,7 +2931,7 @@
   .whys .field::before{content:attr(data-n);position:absolute;left:-26px;top:16px;
     width:20px;height:20px;border-radius:50%;background:var(--surface-2);
     border:1px solid var(--border);color:var(--muted);
-    font:700 10px/18px 'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;text-align:center;}
+    font:700 12px/18px 'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;text-align:center;}
   .whys .field.has::before{background:var(--accent);border-color:transparent;color:#fff;}
 
   @media (max-width:760px){
@@ -3051,7 +3051,7 @@
   .prow.sel{background:color-mix(in srgb,var(--accent) 11%,transparent);}
   .ptrack{height:14px;border-radius:7px;box-shadow:inset 0 1px 2px rgba(0,0,0,.10);}
   .pfill{border-radius:7px;transition:width .3s var(--ease);}
-  .phead{border-radius:8px;padding:7px 11px;font-size:11.5px;}
+  .phead{border-radius:8px;padding:7px 11px;font-size:12px;}
 
   /* ── trend ─────────────────────────────────────────────────────────────*/
   .tstack{border-radius:6px;box-shadow:inset 0 1px 2px rgba(0,0,0,.10);}
@@ -3153,7 +3153,7 @@
   /* ONE RULE (audit 26.10 D8): this header was stated four times, each layer
      overriding the last; these are the values that won. */
   table.grid th{text-align:left;white-space:nowrap;vertical-align:bottom;position:sticky;top:0;z-index:1;background:var(--surface);
-    font-weight:700;font-size:11px;line-height:1.3;font-family:inherit;letter-spacing:.03em;text-transform:uppercase;
+    font-weight:700;font-size:12px;line-height:1.3;font-family:inherit;letter-spacing:.03em;text-transform:uppercase;
     color:var(--muted);padding:5px 8px;border-bottom:1px solid var(--border);}
   table.grid td{padding:3px 8px;line-height:1.35;border-bottom:1px solid var(--border);
     border-right:1px solid color-mix(in srgb,var(--border) 55%,transparent);vertical-align:middle;}
@@ -3209,7 +3209,7 @@
     #paWeek .tblwrap{overflow-x:hidden;}
     #paWeek table.grid{table-layout:fixed;width:100%;}
     #paWeek table.grid th:first-child,#paWeek table.grid td:first-child{width:58px;}
-    #paWeek table.grid td,#paWeek table.grid th{padding:3px 4px;font-size:11px;white-space:normal;
+    #paWeek table.grid td,#paWeek table.grid th{padding:3px 4px;font-size:12px;white-space:normal;
       overflow-wrap:anywhere;}
     #paWeek .pline{white-space:normal;}
     #paWeek table.grid tbody tr{height:auto;}
@@ -3220,7 +3220,7 @@
      type, 5 px cell padding, long text ellipsized with the full text on hover, so
      22-column registers fit without a slider. */
   @media (min-width:1100px) and (max-width:1500px){
-    table.grid{font-size:11.5px;}
+    table.grid{font-size:12px;}
     table.grid td,table.grid th{padding-left:5px;padding-right:5px;}
     table.grid th{letter-spacing:.02em;}
     table.grid td{max-width:20ch;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
@@ -3265,6 +3265,41 @@
     #fleetTbl td{max-width:17ch;}
   }
 
+
+  /* CM_STD_TAP_V1 (site standard, 02.11.2026): every control is at least
+     32px on a desk and 44px on a phone. The compact desk sizes above were a
+     deliberate trade for table rows; the site standard (SITE_STD_V1, the
+     same pass mark every Pechanka page meets) sets the floor instead. A row
+     checkbox sits in a label that fills its cell, so the whole cell takes
+     the click. */
+  .btn,.btn.sm,.minibtn,.seg button,.subtabs button,.hview button,.xf,.legend button,
+  details>summary,.lang button,#themeBtn,#srcChip,#dataBtn,.covr,.pager .btn,
+  nav.tabs button,#tabs button,#winTog button,.cpv,.railtog,.prow,.cwpbtn,
+  table.grid th.cwfh input.cwcf{min-height:32px;box-sizing:border-box;}
+  .xf,.railtog,#themeBtn,.lang button{min-width:32px;}
+  details>summary{display:flex;align-items:center;}
+  .insp .head a.meta{min-height:32px;display:inline-flex;align-items:center;}
+  .selcol label{display:flex;align-items:center;min-height:32px;cursor:pointer;}
+  .lbl small{font-size:12px;}
+  /* A few rules above set a smaller floor on a more specific selector
+     (.defs>summary 28px, .method>summary 24px); the standard's floor wins. */
+  details>summary,.defs>summary,.method>summary{min-height:32px !important;}
+  .cpv{min-width:32px;justify-content:center;}
+  @media (max-width:600px){
+    /* On a phone every control is a 44px target, whatever a desk rule
+       above says (a row's Start / Defer, a tab's own search box). */
+    button,select,summary,a.minibtn,.btn,
+    input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=color]){min-height:44px !important;}
+    .cpv,a.minibtn,.btn{min-width:44px;}
+    details>summary,.defs>summary,.method>summary,.hint a{min-height:44px !important;}
+    table.grid th.cwfh input.cwcf,.tmon{min-width:44px;}
+    .btn,.btn.sm,.minibtn,.seg button,.subtabs button,.hview button,.xf,.legend button,
+    details>summary,.lang button,#themeBtn,#srcChip,#dataBtn,.covr,.pager .btn,
+    nav.tabs button,#tabs button,#winTog button,.cpv,.railtog,.prow,.cwpbtn,
+    table.grid th.cwfh input.cwcf,.controls input,.controls select,#gq,
+    .insp .head a.meta,.selcol label,.field select,.field input{min-height:44px;}
+    .xf,.railtog,#themeBtn,.lang button,.selcol label{min-width:44px;}
+  }
 </style>
 </head>
 <body>
@@ -3611,7 +3646,7 @@
           <div class="field" style="margin-top:10px;max-width:220px"><label for="edSmu" data-i18n="ed_smu">Hour meter</label>
             <input id="edSmu" data-rf="smu" type="text" inputmode="numeric"
                    data-i18n-ph="ed_smuph" placeholder="SMU at this inspection"></div>
-          <div class="muted" id="edSmuHint" style="font-size:11.5px;margin-top:2px"></div>
+          <div class="muted" id="edSmuHint" style="font-size:12px;margin-top:2px"></div>
           <div class="row" style="margin-top:10px">
             <div class="field"><label for="edLat" data-i18n="ed_lat">Latitude</label>
               <input id="edLat" data-rf="lat" type="text" inputmode="decimal" placeholder="66.6009"></div>
@@ -3624,7 +3659,7 @@
                has a location, and the link to it, sat in a third "Location
                (GPS)" column the mockup does not have -- moved here, full
                width, next to the fields it is about, real information kept. -->
-          <div class="muted" id="edGpsHint" style="font-size:11.5px;margin-top:2px"></div>
+          <div class="muted" id="edGpsHint" style="font-size:12px;margin-top:2px"></div>
         </div>
       </div>
 
@@ -3817,7 +3852,7 @@
 
 <nav class="tabs" id="tabs" aria-label="Pages">
   <div class="brand"><div class="bmark">CM</div>
-    <div><div class="t1">Condition Monitoring</div><div class="t2" id="sub" data-i18n="sub">Fleet dashboard</div></div>
+    <div><div class="t1" data-i18n="brand">Condition Monitoring</div><div class="t2" id="sub" data-i18n="sub">Fleet dashboard</div></div>
     <button class="railtog" id="railTog" type="button" aria-expanded="true"
             data-i18n-title="rail_tog" title="Collapse the menu">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -4704,7 +4739,7 @@
             <dl class="kv" id="syHealth"></dl>
             <div class="secthd" style="margin-top:var(--s4)"><h2 data-i18n="sy_h_pop">Where the photographs are</h2></div>
             <dl class="kv" id="syPop"></dl>
-            <div class="sub" data-i18n="sy_p_note" style="font-size:11.5px;margin-top:4px">Photographs bundled with this app live beside it, never in the sync folder. They are not missing field uploads and are counted separately.</div>
+            <div class="sub" data-i18n="sy_p_note" style="font-size:12px;margin-top:4px">Photographs bundled with this app live beside it, never in the sync folder. They are not missing field uploads and are counted separately.</div>
           </div>
           <div class="g6">
             <!-- WHY THE THREE SCREENS DISAGREE. The phone said 44, the folder
@@ -4791,7 +4826,7 @@
           <div class="field"><label data-i18n="r_lang">Language</label>
             <div class="seg" id="rLangSeg"></div>
             <select id="rLang" class="vh" aria-hidden="true" tabindex="-1">
-              <option value="en">English</option>
+              <option value="en" lang="en" data-1c>English</option>
               <option value="ru">Русский</option>
               <option value="both" data-i18n="r_lang_both">English + Russian</option>
             </select></div>
@@ -5077,23 +5112,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=567"></script>
+<script src="../data/magnetic_plug.js?v=568"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=567"></script>
-<script src="../mobile/hme.js?v=567"></script>
-<script src="../mobile/mp-fc.js?v=567"></script>
-<script src="../mobile/rtw.js?v=567"></script>
-<script src="../mobile/hme-cascade.js?v=567"></script>
-<script src="../mobile/temp-limits.js?v=567"></script>
+<script src="../data/work_orders.js?v=568"></script>
+<script src="../mobile/hme.js?v=568"></script>
+<script src="../mobile/mp-fc.js?v=568"></script>
+<script src="../mobile/rtw.js?v=568"></script>
+<script src="../mobile/hme-cascade.js?v=568"></script>
+<script src="../mobile/temp-limits.js?v=568"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=567"></script>
-<script src="../mobile/normalize.js?v=567"></script>
-<script src="../mobile/terms.js?v=567"></script>
+<script src="../mobile/assets.js?v=568"></script>
+<script src="../mobile/normalize.js?v=568"></script>
+<script src="../mobile/terms.js?v=568"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -5112,21 +5147,21 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=567"></script>
-<script src="../mobile/edits.js?v=567"></script>
-<script src="../mobile/due.js?v=567"></script>
-<script src="../mobile/wear.js?v=567"></script>
-<script src="../mobile/wear-map.js?v=567"></script>
-<script src="../mobile/lube.js?v=567"></script>
-<script src="../mobile/lube-overrides.js?v=567"></script>
-<script src="../mobile/lube2027.js?v=567"></script>
-<script src="../mobile/lube-tds.js?v=567"></script>
-<script src="../dashboard/lube-master.js?v=567"></script>
-<script src="../dashboard/wear-limits.js?v=567"></script>
+<script src="../mobile/grade.js?v=568"></script>
+<script src="../mobile/edits.js?v=568"></script>
+<script src="../mobile/due.js?v=568"></script>
+<script src="../mobile/wear.js?v=568"></script>
+<script src="../mobile/wear-map.js?v=568"></script>
+<script src="../mobile/lube.js?v=568"></script>
+<script src="../mobile/lube-overrides.js?v=568"></script>
+<script src="../mobile/lube2027.js?v=568"></script>
+<script src="../mobile/lube-tds.js?v=568"></script>
+<script src="../dashboard/lube-master.js?v=568"></script>
+<script src="../dashboard/wear-limits.js?v=568"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=567"></script>
-<script src="../mobile/machine-photos.js?v=567"></script>
+<script src="../mobile/upload-defaults.js?v=568"></script>
+<script src="../mobile/machine-photos.js?v=568"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -5135,17 +5170,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=567"></script>
-<script src="../mobile/get.js?v=567"></script>
-<script src="../mobile/points.js?v=567"></script>
-<script src="../mobile/uc-points.js?v=567"></script>
-<script src="../mobile/inspect-guide.js?v=567"></script>
-<script src="../mobile/get-figs.js?v=567"></script>
-<script src="../mobile/body-points.js?v=567"></script>
-<script src="../mobile/body-map.js?v=567"></script>
-<script src="../mobile/jspdf.umd.min.js?v=567"></script>
-<script src="../mobile/html2canvas.min.js?v=567"></script>
-<script src="../mobile/report-core.js?v=567"></script>
+<script src="../mobile/machine-fig.js?v=568"></script>
+<script src="../mobile/get.js?v=568"></script>
+<script src="../mobile/points.js?v=568"></script>
+<script src="../mobile/uc-points.js?v=568"></script>
+<script src="../mobile/inspect-guide.js?v=568"></script>
+<script src="../mobile/get-figs.js?v=568"></script>
+<script src="../mobile/body-points.js?v=568"></script>
+<script src="../mobile/body-map.js?v=568"></script>
+<script src="../mobile/jspdf.umd.min.js?v=568"></script>
+<script src="../mobile/html2canvas.min.js?v=568"></script>
+<script src="../mobile/report-core.js?v=568"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -5243,7 +5278,7 @@ function causesFor(compCode,defectCode){
    a string is built in code. */
 const I18N={
  en:{
-  sub:"Fleet dashboard", srcnone:"No data connected — click to connect", srcnone_1c:"1C plan live · inspections not connected — click to connect", src_1c_t:"The 1C work-order plan (Plan vs Actual, Defects raised, Inspection Schedule) loads by itself and is current. Only the condition-monitoring rounds — grades, photographs, corrections — come from the inspection backend, and that is not connected in this browser.",
+  brand:"Condition Monitoring", sub:"Fleet dashboard", srcnone:"No data connected — click to connect", srcnone_1c:"1C plan live · inspections not connected — click to connect", src_1c_t:"The 1C work-order plan (Plan vs Actual, Defects raised, Inspection Schedule) loads by itself and is current. Only the condition-monitoring rounds — grades, photographs, corrections — come from the inspection backend, and that is not connected in this browser.",
   datasources:"Data sources", close:"Close", theme:"Light / dark",
   srctitle:"Where this dashboard reads the phones' records from",
   nav_grp_monitor:"Monitor", nav_grp_act:"Act", nav_grp_assets:"Assets", nav_grp_system:"System",
@@ -6264,7 +6299,7 @@ const I18N={
   pa_week_today:"Today", pa_week_late:"Late — planned and not recorded",
  },
  ru:{
-  sub:"Панель парка", srcnone:"Нет подключённых данных — нажмите, чтобы подключить", srcnone_1c:"План 1С актуален · осмотры не подключены — нажмите, чтобы подключить", src_1c_t:"План заказ-нарядов 1С (План/факт, Зарегистрированные дефекты, График осмотров) загружается сам и актуален. Из системы осмотров приходят только обходы мониторинга состояния — оценки, фотографии, исправления, — и она в этом браузере не подключена.",
+  brand:"Мониторинг состояния", sub:"Панель парка", srcnone:"Нет подключённых данных — нажмите, чтобы подключить", srcnone_1c:"План 1С актуален · осмотры не подключены — нажмите, чтобы подключить", src_1c_t:"План заказ-нарядов 1С (План/факт, Зарегистрированные дефекты, График осмотров) загружается сам и актуален. Из системы осмотров приходят только обходы мониторинга состояния — оценки, фотографии, исправления, — и она в этом браузере не подключена.",
   datasources:"Источники данных", close:"Закрыть", theme:"Светлая / тёмная",
   srctitle:"Откуда эта панель читает записи с телефонов",
   nav_grp_monitor:"Мониторинг", nav_grp_act:"Действия", nav_grp_assets:"Активы", nav_grp_system:"Система",
@@ -6901,7 +6936,7 @@ const I18N={
   a_f_owned:"С ответственным", a_f_all:"Все",
   a_k_open:"Открыто", a_k_open_s:"из {n}",
   a_k_overdue:"Просрочено", a_k_overdue_s:"срок прошёл, ещё не закрыто",
-  a_k_overdue_undated:"{n} ещё открыто без срока (due date)",
+  a_k_overdue_undated:"{n} ещё открыто без срока",
   a_k_unowned:"Работы без ответственного", a_k_unowned_s:"ответственный не назначен",
   a_k_oldest:"Самое старое", a_k_oldest_s:"с момента обнаружения",
   a_k_done:"Закрыто", a_k_done_s:"выполнено, проверено или не требуется",
@@ -7189,8 +7224,8 @@ const I18N={
   due_why_wear:"по износу, не по интервалу",
   tab_planact:"План и факт",
   pa_title:"План и факт",
-  pa_purpose:"Плановая дата обслуживания по 1С для каждого наряд-заказа ТОиР, сопоставленная с ближайшим фактически проведённым обходом Condition Monitoring на этой машине.",
-  pa_sub:"Одна строка — один плановый наряд-заказ на ТО из 1С (типы обслуживания «N Hours service Planned») по номеру техники. «Ближайший обход CM» — это ближайшая по дате запись ЛЮБОГО обхода Condition Monitoring на той же единице техники: без привязки к конкретному типу обхода, потому что наряд-заказ 1С и виды обходов CM пока не связаны общим ключом.",
+  pa_purpose:"Плановая дата обслуживания по 1С для каждого наряд-заказа ТОиР, сопоставленная с ближайшим фактически проведённым обходом мониторинга состояния на этой машине.",
+  pa_sub:"Одна строка — один плановый наряд-заказ на ТО из 1С (типы обслуживания «N Hours service Planned») по номеру техники. «Ближайший обход CM» — это ближайшая по дате запись ЛЮБОГО обхода мониторинга состояния на той же единице техники: без привязки к конкретному типу обхода, потому что наряд-заказ 1С и виды обходов CM пока не связаны общим ключом.",
   pa_h2:"Плановое обслуживание и фактический обход",
   pa_c_unit:"Единица", pa_c_wo:"Наряд-заказ", pa_c_type:"Обслуживание", pa_c_plan:"План (1С)",
   pa_c_woactual:"Факт по 1С (закрытие)", pa_c_cmround:"Ближайший обход CM", pa_c_delta:"CM минус план",
@@ -7224,9 +7259,9 @@ const I18N={
   pa_st_preinsp:"Нужна проверка перед ТО",
   pa_seg_open:"Открыто", pa_seg_done:"Завершено", pa_seg_all:"Все",
   pa_csv:"Выгрузить CSV",
-  pa_cmonly:"Показывать только охват Condition Monitoring",
-  pa_cmonly_t:"Скрывает наряды 1С, которые Condition Monitoring пока не отслеживает. Полный план 1С открывается одним нажатием — из выгрузки CSV ничего не скрыто.",
-  pa_coverage:"Condition Monitoring охватывает {pct}% этих нарядов — {n} из {of}.",
+  pa_cmonly:"Показывать только охват мониторинга состояния",
+  pa_cmonly_t:"Скрывает наряды 1С, которые мониторинг состояния пока не отслеживает. Полный план 1С открывается одним нажатием — из выгрузки CSV ничего не скрыто.",
+  pa_coverage:"Мониторинг состояния охватывает {pct}% этих нарядов — {n} из {of}.",
   pa_none:"В этом представлении пусто.",
   pa_k_total:"Открытых нарядов", pa_k_total_s:"ещё не закрыты в 1С",
   pa_k_preinsp:"Скоро общий осмотр", pa_k_preinsp_s:"ТО с приоритетом P3/P4 в пределах {n} дн., предварительный осмотр ещё не проведён",
@@ -8929,7 +8964,7 @@ function pareto(el,pairs,colorFn,drillKey,why,total){
     <${drillKey?"button type=\"button\"":"div"} class="prow${drillKey&&drill[drillKey]===r.key?" sel":""}${r.vital?" vital":""}" ${
       drillKey?`data-drill="${esc(r.key)}" title="${esc(t("p_tip",{l:r.label, n:r.n, p:Math.round(r.cum)}))} · ${esc(t("p_click"))}" aria-pressed="${
         drill[drillKey]===r.key?"true":"false"}"`:`title="${esc(t("p_tip",{l:r.label, n:r.n, p:Math.round(r.cum)}))}"`}>
-      <div class="lbl" title="${esc(r.label)}">${esc(r.label)}${r.sub?` <small>${esc(r.sub)}</small>`:""}</div>
+      <div class="lbl" data-1c title="${esc(r.label)}">${esc(r.label)}${r.sub?` <small>${esc(r.sub)}</small>`:""}</div>
       <div class="ptrack"><div class="pfill" style="width:${Math.max(2,r.n/max*100)}%;background:${colorFn?colorFn(r.key):"var(--accent)"}"></div></div>
       <div class="n">${r.n}</div>
       <div class="cum" title="${esc(t("p_cum"))}: ${Math.round(r.cum)}%">${Math.round(r.cum)}%
@@ -10006,8 +10041,8 @@ function renderActions(){
     const AC_W={queue:128, sev:128, age:62, unit:70, owner:136, due:156, st:180, wo:100};
     const acMin=34+22+cols.reduce((s,[k])=>s+(!k?0:(AC_W[k]||96)),0);
     $("actionTbl").innerHTML=`<div class="tblwrap scrollbox" style="--sb:520px"><table class="grid seltbl acttbl" style="min-width:${acMin}px">
-      <thead><tr><th class="selcol"><input type="checkbox" id="aAll"${allOn?" checked":""}
-          title="${esc(t("a_sel_all"))}" aria-label="${esc(t("a_sel_all"))}"></th>${cols.map(([k,l])=> !k ? `<th class="go"></th>` :
+      <thead><tr><th class="selcol"><label><input type="checkbox" id="aAll"${allOn?" checked":""}
+          title="${esc(t("a_sel_all"))}" aria-label="${esc(t("a_sel_all"))}"></label></th>${cols.map(([k,l])=> !k ? `<th class="go"></th>` :
         `<th class="sortable ac-${k}${actSort.k===k?" on":""}" data-asort="${k}" title="${
           esc(k==="queue"?t("a_queue_tip"):l)}">${esc(l)}<span class="arrow">${
           actSort.k===k?(actSort.dir>0?"▲":"▼"):"↕"}</span></th>`).join("")}</tr>
@@ -10020,8 +10055,8 @@ function renderActions(){
           const sc=sv?SEVC[sv]:"";
           const sid=selId(ekOf(r),i.key);
           return `<tr class="hrow${aSel.has(sid)?" picked":""}" tabindex="0" data-fu="${esc(ekOf(r))}" data-fi="${esc(i.key)}">
-            <td class="selcol"><input type="checkbox" class="asel"${
-              aSel.has(sid)?" checked":""} aria-label="${esc(t("a_sel_one",{u:r.equip}))}"></td>
+            <td class="selcol"><label><input type="checkbox" class="asel"${
+              aSel.has(sid)?" checked":""} aria-label="${esc(t("a_sel_one",{u:r.equip}))}"></label></td>
             <!-- Age, first (Actions.dc.html): how long a finding has been
                  open, in the reading order a planner actually opens this
                  table for. -->
@@ -11297,7 +11332,7 @@ function ucBlock(rec){
     if(!pair) return `<td class="r mono muted">—</td><td class="r mono"></td><td></td>`;
     const w=pair[1];
     return `<td class="r mono">${w.mm!=null?`<b>${esc(w.mm)}</b>`
-        :`<span class="muted" style="font-size:11px">${esc(w.reasonLabel||w.reason||"—")}</span>`}</td>
+        :`<span class="muted" style="font-size:12px">${esc(w.reasonLabel||w.reason||"—")}</span>`}</td>
       <td class="r mono">${w.wearPct!=null?esc(w.wearPct)+"%":w.odd?oddMark():""}</td>
       <td style="width:58px">${w.wearPct!=null?wearBar(w.wearPct):""}</td>`;
   };
@@ -11347,7 +11382,7 @@ function ucBlock(rec){
       + paired.map(([L,R])=>{
           const a=L?find(L.key):null, b=R?find(R.key):null;
           return `<tr><td>${esc(partName(L,R))} ${gap(a,b)}
-              <div class="muted" style="font-size:10.5px">${limits(a,b)}</div></td>
+              <div class="muted" style="font-size:12px">${limits(a,b)}</div></td>
             ${cell(a)}${cell(b)}</tr>`;
         }).join("") + `</tbody></table>`;
   } else {
@@ -11356,8 +11391,8 @@ function ucBlock(rec){
         <th>${esc(t("uc_th_point"))}</th><th class="r">${esc(t("uc_th_meas"))}</th>
         <th class="r">${esc(t("uc_th_worn"))}</th><th style="width:58px"></th></tr></thead><tbody>`+
       list.map(([i,w])=>`<tr><td>${esc(ucName(i,rec))}
-          <div class="muted" style="font-size:10.5px">${w.newMM!=null&&w.newMM!==""?esc(w.newMM)+" → "+esc(w.condemnMM)+" mm":esc(t("uc_noref"))}</div></td>
-        <td class="r mono">${w.mm!=null?`<b>${esc(w.mm)}</b>`:`<span class="muted" style="font-size:11px">${esc(w.reasonLabel||w.reason||"—")}</span>`}</td>
+          <div class="muted" style="font-size:12px">${w.newMM!=null&&w.newMM!==""?esc(w.newMM)+" → "+esc(w.condemnMM)+" mm":esc(t("uc_noref"))}</div></td>
+        <td class="r mono">${w.mm!=null?`<b>${esc(w.mm)}</b>`:`<span class="muted" style="font-size:12px">${esc(w.reasonLabel||w.reason||"—")}</span>`}</td>
         <td class="r mono">${w.wearPct!=null?esc(w.wearPct)+"%":w.odd?oddMark():""}</td>
         <td>${w.wearPct!=null?wearBar(w.wearPct):""}</td></tr>`).join("")+`</tbody></table>`;
     table = `<div class="ucgrid"><div>${col(rows.slice(0,half))}</div><div>${col(rows.slice(half))}</div></div>`;
@@ -11508,11 +11543,11 @@ function renderHistList(recs){
       ${rec._conflict?`<span class="voidflag" title="${esc(t("cf_hint"))}">${esc(t("cf_flag"))}</span>`:""}
       ${!rec._conflict&&rec._keep?`<span class="editflag" title="${esc(t("cf_kept",{d:rec._keep,by:rec._resolvedBy||"—"}))}">${esc(t("cf_resolved"))}</span>`:""}
       ${rec.smu?`<span class="meta">SMU <b>${esc(rec.smu)}</b></span>`:""}
-      <span class="spacer"></span>${rec.by?`<span class="meta">${esc(rec.by)}</span>`:""}${
-      rec.sup?`<span class="meta">✍ ${esc(rec.sup)}</span>`:""}${
+      <span class="spacer"></span>${rec.by?`<span class="meta" data-1c>${esc(rec.by)}</span>`:""}${
+      rec.sup?`<span class="meta" data-1c>✍ ${esc(rec.sup)}</span>`:""}${
       rec.gps?`<a class="meta" href="https://www.google.com/maps?q=${rec.gps.lat},${rec.gps.lon}" target="_blank" rel="noopener">📍 ${rec.gps.lat.toFixed(4)}, ${rec.gps.lon.toFixed(4)}</a>`:""}
-      <button class="btn" data-rpt="${esc(ekOf(rec))}" style="padding:2px 9px;font-size:11.5px">${esc(t("r_one_go"))}</button>
-      <button class="btn" data-edit="${esc(ekOf(rec))}" style="padding:2px 9px;font-size:11.5px">${esc(t("ed_edit"))}</button></div>
+      <button class="btn" data-rpt="${esc(ekOf(rec))}" style="padding:2px 9px;font-size:12px">${esc(t("r_one_go"))}</button>
+      <button class="btn" data-edit="${esc(ekOf(rec))}" style="padding:2px 9px;font-size:12px">${esc(t("ed_edit"))}</button></div>
       ${rec._note?`<div class="sub" style="margin:6px 12px 0">📝 ${esc(rec._note)}</div>`:""}
       ${isWearType(rec.type)?ucBlock(rec):""}
       ${rowObjs.length && (rows||showHead)?`<div class="tblwrap"><table class="grid histtbl">${HCOLG}${
@@ -11580,7 +11615,7 @@ function histFilterName(){
    machine's own history actually carries. Never a hardcoded count. */
 function histPosCatalog(unit){
   const out=new Map();
-  const add=(k,l)=>{ if(k && !out.has(k)) out.set(k,{k,l:l||k}); };
+  const add=(k,l,d)=>{ if(k && !out.has(k)) out.set(k,{k,l:l||k,d:!!d}); };
   const recs=RECS.filter(r=>r.equip===unit);
   if(!recs.length) return [];
   const cls=(ASSET_BY[unit]||{}).cls || recs[0].cls || "";
@@ -11600,7 +11635,7 @@ function histPosCatalog(unit){
   // Whatever the machine's own records actually carry — the only catalogue
   // UC/TB/GET have (their limits key on a per-model measured table), and the
   // fallback for any round with no reference at all.
-  recs.forEach(r=>mpDisplayFold(r).forEach(i=>{ if(i && i.key && !i.general) add(i.key, i.label||i.key); }));
+  recs.forEach(r=>mpDisplayFold(r).forEach(i=>{ if(i && i.key && !i.general) add(i.key, i.label||i.key, 1); }));
   return [...out.values()].sort((a,b)=>a.k.localeCompare(b.k,undefined,{numeric:true}));
 }
 /* The most recent USABLE reading on this position, any round type, newest
@@ -11630,14 +11665,17 @@ function renderHistPosGrid(unit){
   if(!cat.length){ el.innerHTML=`<div class="empty">${esc(t("hist_pos_none_data"))}</div>`; return; }
   const COLOR={ok:"var(--good)",watch:"var(--warning)",act:"var(--critical)",none:"var(--muted)"};
   const LABEL={ok:t("hist_pos_ok"),watch:t("hist_pos_watch"),act:t("hist_pos_act"),none:t("hist_pos_none")};
+  /* The words take the ink of their colour, the edge the fill: amber text on
+     white was 1.8:1 (SITE_STD_V1 contrast). */
+  const INK={ok:"var(--good-ink)",watch:"var(--warn-ink)",act:"var(--crit-ink)",none:"var(--muted)"};
   el.innerHTML=cat.map(p=>{
     const st=histPosState(unit,p.k);
     const bandKey=st?st.band:"none";
     const tag=st?"button type=\"button\"":"div";
     const closeTag=st?"button":"div";
     return `<${tag} class="poscard"${st?` data-rk="${esc(st.rk)}" data-ik="${esc(st.ik)}"`:""} style="border-left-color:${COLOR[bandKey]}">
-      <span class="pn">${esc(p.l)}</span>
-      <span class="ps" style="color:${COLOR[bandKey]}">${esc(LABEL[bandKey])}</span>
+      <span class="pn"${p.d?" data-1c":""}>${esc(p.l)}</span>
+      <span class="ps" style="color:${INK[bandKey]}">${esc(LABEL[bandKey])}</span>
       ${st?`<span class="pd mono">${esc(t("hist_pos_last",{d:st.date}))}</span>`:""}
     </${closeTag}>`;
   }).join("");
@@ -11679,7 +11717,7 @@ function renderHistory(){
       ${rec._conflict?`<span class="voidflag" title="${esc(t("cf_hint"))}">${esc(t("cf_flag"))}</span>`:""}
       ${!rec._conflict&&rec._keep?`<span class="editflag" title="${esc(t("cf_kept",{d:rec._keep,by:rec._resolvedBy||"—"}))}">${esc(t("cf_resolved"))}</span>`:""}
       ${rec.smu?`<span class="meta">SMU <b>${esc(rec.smu)}</b></span>`:""}
-      <span class="spacer"></span>${rec.by?`<span class="meta">${esc(rec.by)}</span>`:""}${rec.sup?`<span class="meta">✍ ${esc(rec.sup)}</span>`:""}${rec.gps?`<a class="meta" href="https://www.google.com/maps?q=${rec.gps.lat},${rec.gps.lon}" target="_blank" rel="noopener">📍 ${rec.gps.lat.toFixed(4)}, ${rec.gps.lon.toFixed(4)}</a>`:""}
+      <span class="spacer"></span>${rec.by?`<span class="meta" data-1c>${esc(rec.by)}</span>`:""}${rec.sup?`<span class="meta" data-1c>✍ ${esc(rec.sup)}</span>`:""}${rec.gps?`<a class="meta" href="https://www.google.com/maps?q=${rec.gps.lat},${rec.gps.lon}" target="_blank" rel="noopener">📍 ${rec.gps.lat.toFixed(4)}, ${rec.gps.lon.toFixed(4)}</a>`:""}
       <button class="btn" data-rpt="${esc(ekOf(rec))}" style="padding:3px 10px;font-size:12px">${esc(t("r_one_go"))}</button>
       <button class="btn" data-edit="${esc(ekOf(rec))}" style="padding:3px 10px;font-size:12px">${esc(t("ed_edit"))}</button></div>
       ${rec._note?`<div class="sub" style="margin:2px 0 8px">📝 ${esc(rec._note)}</div>`:""}
@@ -11718,7 +11756,7 @@ function renderHistory(){
                                     :`<img loading="lazy" src="${esc(m.src)}" alt="">`}
                   <button type="button" class="mx" data-name="${esc(m.name)}" data-pk="${esc(m._pk||"")}" data-on="${m.hidden?"0":"1"}"
                     title="${esc(m.hidden?t("ph_restore"):t("ph_remove"))}">${m.hidden?"↺":"×"}</button>
-                </span>`).join("")||`<span class="muted" style="font-size:11.5px">${esc(t("ph_none"))}</span>`}
+                </span>`).join("")||`<span class="muted" style="font-size:12px">${esc(t("ph_none"))}</span>`}
                 <label class="madd" title="${esc(t("ph_add"))}">+
                   <input type="file" accept="image/*,video/*" multiple hidden></label>
               </div>
@@ -11765,7 +11803,7 @@ function renderHistory(){
             ${lubeDL(rec,i)}
             ${i.comment?`<div class="cm">“${esc(i.comment)}”</div>`:""}
           </div></div>`; }).join("")}</div>
-      ${skippedPos.length?`<div class="muted" style="font-size:11.5px;margin-top:4px;">${
+      ${skippedPos.length?`<div class="muted" style="font-size:12px;margin-top:4px;">${
         esc(t("hist_skip",{n:skippedPos.map(i=>i.key).join(", ")}))}</div>`:""}
     </div>`; }).join("");
   /* One handler on the card rather than one per picture: the lead image and
@@ -12016,11 +12054,11 @@ function renderCoverage(){
         const on = $("fType").value===r.ty;
         return `<tr class="covr${on?" on":""}" data-cvty="${esc(r.ty)}" tabindex="0"
             title="${esc(on?t("cv_off"):t("cv_on"))}"><td><b>${esc(TYPE_LABEL[r.ty]||r.ty)}</b>
-            <div class="muted" style="font-size:11px">${esc(cvEvery(r))}${
+            <div class="muted" style="font-size:12px">${esc(cvEvery(r))}${
               r.scoped?" · "+esc(t("cv_scoped")):""}</div></td>
           <td class="covcell">
             <div class="covrow"><span class="covpc${bad?" bad":""}">${r.pc}%</span>${covBar(r.pc)}</div>
-            <div class="muted mono" style="font-size:11px">${r.seen} / ${r.total}</div></td>
+            <div class="muted mono" style="font-size:12px">${r.seen} / ${r.total}</div></td>
           ${n(r.inspections,0)}
           <td class="num mono${r.never?" bad":" muted"}">${r.never
             ? `<button class="xf num bad" data-cvnever="${esc(r.ty)}"
@@ -16413,7 +16451,7 @@ function segFromSelect(segId, selId){
   if(!seg || !sel) return ()=>{};
   const paint=()=>{
     seg.innerHTML=[...sel.options].map(o=>
-      `<button type="button" data-v="${esc(o.value)}"${o.value===sel.value?' class="on"':''}>${esc(o.textContent)}</button>`).join("");
+      `<button type="button" data-v="${esc(o.value)}"${o.value===sel.value?' class="on"':''}${o.hasAttribute("data-1c")?' data-1c lang="'+esc(o.lang||"")+'"':''}>${esc(o.textContent)}</button>`).join("");
     seg.querySelectorAll("button").forEach(b=>b.onclick=()=>{
       if(sel.value===b.dataset.v) return;
       sel.value=b.dataset.v;
@@ -16437,7 +16475,7 @@ let rStatusTouched=false;
 function paintRStatusSeg(){
   const seg=$("rStatusSeg"), sel=$("rStatus"); if(!seg||!sel) return;
   seg.innerHTML=[...sel.options].map(o=>
-    `<button type="button" data-v="${esc(o.value)}"${o.value===sel.value?' class="on"':''}>${esc(o.textContent)}</button>`).join("");
+    `<button type="button" data-v="${esc(o.value)}"${o.value===sel.value?' class="on"':''}${o.hasAttribute("data-1c")?' data-1c lang="'+esc(o.lang||"")+'"':''}>${esc(o.textContent)}</button>`).join("");
   seg.querySelectorAll("button").forEach(b=>b.onclick=()=>{
     rStatusTouched=true;
     if(sel.value===b.dataset.v) return;
@@ -19525,7 +19563,7 @@ function renderPaWeek(qtyRows){
                lines it is allowed to take). */
             const capTxt=[r.w.woNumber||"—", e.isPreCheck?preTxt:sub2].filter(Boolean).join(" · ");
             const capLine=capTxt
-              ? `<div class="mono muted pa-cap" style="font-size:11px;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;display:block" title="${esc(capTxt)}">${esc(capTxt)}</div>`
+              ? `<div class="mono muted pa-cap" style="font-size:12px;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;display:block" title="${esc(capTxt)}">${esc(capTxt)}</div>`
               : "";
             /* A pill on a day already gone is late, and its title says so —
                a shaded column is not readable to somebody who cannot see
@@ -21052,6 +21090,8 @@ function renderCmWoTab(){
   if($("cwAsOf")) asOfInto($("cwAsOf"), D.generated);
   if($("cwSub")) $("cwSub").textContent =
     t("cw_sub",{ d:D.cmSince||"—", who:(D.cmPeople||[]).join(", ") });
+  /* The names are 1C's own people, shown as 1C spells them (SITE_STD_V1 data-1c). */
+  if($("cwSub")) $("cwSub").toggleAttribute("data-1c", !!(D.cmPeople||[]).length);
 
   if(all === null){
     if($("cwKpis")) $("cwKpis").innerHTML="";
@@ -21082,7 +21122,7 @@ function renderCmWoTab(){
     + `<div class="tile cwpeople"><div class="k" data-i18n="cw_k_people">${esc(t("cw_k_people"))}</div>
         <div class="cwplist">` + Object.keys(per).map(n=>
       `<button type="button" class="cwpbtn${cwWho===n?" on":""}" data-cwwho="${esc(n)}">
-         <span>${esc(n)}</span><span class="n">${per[n]}</span></button>`).join("")
+         <span data-1c>${esc(n)}</span><span class="n">${per[n]}</span></button>`).join("")
       + `</div><div class="s">${esc(t("cw_k_person_s"))}</div></div>`;
   if($("cwKpis")) $("cwKpis").querySelectorAll("[data-cwwho]").forEach(b=>
     b.onclick=()=>{ cwWho = (cwWho===b.dataset.cwwho) ? "" : b.dataset.cwwho; renderCmWoTab(); });
@@ -21623,10 +21663,10 @@ document.querySelector(".lang").addEventListener("click",e=>{
   setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 })();
 </script>
-<script src="../dashboard/drive.js?v=567"></script>
-<script src="../dashboard/sync-adapter.js?v=567"></script>
-<script src="../dashboard/report.js?v=567"></script>
-<script src="../dashboard/reliability.js?v=567"></script>
+<script src="../dashboard/drive.js?v=568"></script>
+<script src="../dashboard/sync-adapter.js?v=568"></script>
+<script src="../dashboard/report.js?v=568"></script>
+<script src="../dashboard/reliability.js?v=568"></script>
 <script>
 /* THE CLOSED FILTER SAYS WHAT IS CHOSEN. A dropdown narrower than its option
    text ellipsises ("All t…", audit of 2026-10-01). Between 1331 and 1500 px
