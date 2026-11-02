@@ -5290,7 +5290,10 @@ site's (Scope with /site/dims.json, Period, Group/Class, Asset range/Category, M
 link, count) on ONE line that wraps only when it must; the page's own selects live in More with their ids, so
 every filter, drill and report works as before (`window.cmUnitOK` in `filtered()`). `tests/cmtpl.cjs` (fails
 7 checks a page on build 572), `tests/sitefb.cjs` (needs `tests/site_std_copy/`, a copy of the site kit's
-std.js/std.css v1.7 - refresh it when the site kit changes). Live numbers: askpi-site cm_audit_kit (CM_AUDIT_V1).
+std.js/std.css v1.7 - refresh it when the site kit changes). Live numbers: askpi-site cm_audit_kit (CM_AUDIT_V1): on build
+572, 03.11 10:04 site, every tab of both pages was 0 on every pass mark except 3 English-in-RU and 1 Russian-in-EN, fixed here:
+the 1C type name in the Plan vs Actual definition is now a RU / EN pair, GET in Russian prose is "коронки и ножи", the Russian
+edit hint names the keys in Russian, and the report language option "Русский" carries lang="ru" data-1c as "English" already did.
 
 ---
 
