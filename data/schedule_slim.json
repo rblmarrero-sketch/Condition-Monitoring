@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-01T23:52:35+00:00",
+  "generated": "2026-11-02T00:07:42+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -7993,24 +7993,6 @@
       "completed": "2026-10-05"
     },
     {
-      "wo": "WO-018756",
-      "equip": "GE020",
-      "cls": "GEN",
-      "comp": "",
-      "desc": "1000h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-10-05",
-      "type": "1000 Hours service Planned",
-      "hours": 1000,
-      "plan": "2026-10-05",
-      "status": "Completed",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "complete",
-      "completed": "2026-10-02"
-    },
-    {
       "wo": "WO-017874",
       "equip": "LD008",
       "cls": "LDR",
@@ -8569,42 +8551,6 @@
       "completed": "2026-10-04"
     },
     {
-      "wo": "WO-017309",
-      "equip": "EX011",
-      "cls": "EXC",
-      "comp": "",
-      "desc": "250h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-10-02",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-10-02",
-      "status": "Completed",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "complete",
-      "completed": "2026-10-02"
-    },
-    {
-      "wo": "WO-017337",
-      "equip": "EX012",
-      "cls": "EXC",
-      "comp": "",
-      "desc": "Filter Cut / General Inspection",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-10-02",
-      "type": "1000 Hours service Planned",
-      "hours": 1000,
-      "plan": "2026-10-02",
-      "status": "Completed",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "complete",
-      "completed": "2026-10-02"
-    },
-    {
       "wo": "WO-016574",
       "equip": "GR015",
       "cls": "GRD",
@@ -8623,24 +8569,6 @@
       "completed": "2026-10-03"
     },
     {
-      "wo": "WO-017318",
-      "equip": "TK109",
-      "cls": "AT",
-      "comp": "",
-      "desc": "Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-10-02",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-10-02",
-      "status": "Completed",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "complete",
-      "completed": "2026-10-02"
-    },
-    {
       "wo": "WO-016605",
       "equip": "TK114",
       "cls": "AT",
@@ -8657,42 +8585,6 @@
       "cause": "",
       "pmStatus": "complete",
       "completed": "2026-10-03"
-    },
-    {
-      "wo": "WO-017311",
-      "equip": "TK117",
-      "cls": "AT",
-      "comp": "",
-      "desc": "Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-10-02",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-10-02",
-      "status": "Completed",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "complete",
-      "completed": "2026-10-02"
-    },
-    {
-      "wo": "WO-017334",
-      "equip": "TK149",
-      "cls": "HT",
-      "comp": "",
-      "desc": "Filter Cut / General Inspection / Magnetic Plug / Dump Body Liner",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-10-02",
-      "type": "4000 Hours service Planned",
-      "hours": 4000,
-      "plan": "2026-10-02",
-      "status": "Completed",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "complete",
-      "completed": "2026-10-02"
     },
     {
       "wo": "WO-017336",
@@ -8873,24 +8765,6 @@
       "cause": "Износ уплотнения",
       "pmStatus": "complete",
       "completed": "2026-10-19"
-    },
-    {
-      "wo": "WO-017976",
-      "equip": "CD004",
-      "cls": "GEN",
-      "comp": "",
-      "desc": "500h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-10-01",
-      "type": "500 Hours service Planned",
-      "hours": 500,
-      "plan": "2026-10-01",
-      "status": "Completed",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "complete",
-      "completed": "2026-10-02"
     },
     {
       "wo": "WO-017982",
@@ -9379,24 +9253,6 @@
       "completed": "2026-10-18"
     },
     {
-      "wo": "WO-018339",
-      "equip": "EX021",
-      "cls": "",
-      "comp": "EX021.HS (Hydraulic System / Гидравлическая система)",
-      "desc": "Запотевание РВД.Обнаружена течь в месте уплотнения РВД.",
-      "priority": "P4 Planned (Repair)",
-      "raised": "2026-09-14",
-      "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "hours": null,
-      "plan": "2026-10-02",
-      "status": "Completed",
-      "request": "DD-00012627",
-      "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "cause": "Поврежден шланга/линии",
-      "pmStatus": "complete",
-      "completed": "2026-10-02"
-    },
-    {
       "wo": "WO-016315",
       "equip": "BL001",
       "cls": "GEN",
@@ -9539,24 +9395,6 @@
       "cause": "",
       "pmStatus": "open",
       "completed": ""
-    },
-    {
-      "wo": "WO-016191",
-      "equip": "TK126",
-      "cls": "",
-      "comp": "TK126.CH.BY (Dump Body / Самосвальный кузов)",
-      "desc": "Предельный износ футеровочных пластин кузова",
-      "priority": "P4 Planned (Repair)",
-      "raised": "2026-08-20",
-      "type": "2.01 Wear / Износ",
-      "hours": null,
-      "plan": "2026-10-01",
-      "status": "Completed",
-      "request": "DD-00011242",
-      "defType": "2.01 Wear / Износ",
-      "cause": "Абразивный износ",
-      "pmStatus": "complete",
-      "completed": "2026-10-02"
     },
     {
       "wo": "WO-013889",
