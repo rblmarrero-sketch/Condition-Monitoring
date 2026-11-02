@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-02T05:42:44+00:00",
+  "generated": "2026-11-02T06:10:10+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -442,8 +442,8 @@ window.CM_WO_DATA = {
     "planStart": 0
   },
   "cmCauseFrom": {
-    "wo": 102,
-    "wr": 91,
+    "wo": 104,
+    "wr": 89,
     "cert": 0,
     "none": 0
   },
@@ -1611,7 +1611,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-10-18",
       "detected": "2026-10-18",
-      "planStart": null,
+      "planStart": "2026-11-15",
       "closed": null,
       "asset": "EX010",
       "defect": "DD-00015063",
@@ -1621,12 +1621,12 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "defectType": "3.03 Out of adjustment / Неверная настройка",
       "cause": "Неверная уставка",
-      "causeFrom": "wr",
+      "causeFrom": "wo",
       "descr": "Фара функционирует некорректно.",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "by": "Bekzhan",
-      "woNumber": null,
-      "maintType": null,
+      "woNumber": "WO-021509",
+      "maintType": "P4 Planned Repair",
       "planned": false
     },
     {
@@ -1634,7 +1634,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-10-18",
       "detected": "2026-10-18",
-      "planStart": null,
+      "planStart": "2026-11-15",
       "closed": null,
       "asset": "EX010",
       "defect": "DD-00015062",
@@ -1644,12 +1644,12 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "cause": "Фитинг/штуцер ослаб",
-      "causeFrom": "wr",
+      "causeFrom": "wo",
       "descr": "Действущая течь РВД на гидрораспределителе, наблюдается масла в зоне фитинга.",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "by": "Bekzhan",
-      "woNumber": null,
-      "maintType": null,
+      "woNumber": "WO-021508",
+      "maintType": "P4 Planned Repair",
       "planned": false
     },
     {

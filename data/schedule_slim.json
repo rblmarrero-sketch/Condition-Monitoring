@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-02T05:42:44+00:00",
+  "generated": "2026-11-02T06:10:10+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -5972,6 +5972,42 @@
       "plan": "2026-11-03",
       "status": "Elimination scheduled",
       "request": "DD-00015045",
+      "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Фитинг/штуцер ослаб",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-021509",
+      "equip": "EX010",
+      "cls": "",
+      "comp": "EX010.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
+      "desc": "Фара функционирует некорректно.",
+      "priority": "P4 Planned (Repair)",
+      "raised": "2026-10-18",
+      "type": "3.03 Out of adjustment / Неверная настройка",
+      "hours": null,
+      "plan": "2026-11-15",
+      "status": "Elimination scheduled",
+      "request": "DD-00015063",
+      "defType": "3.03 Out of adjustment / Неверная настройка",
+      "cause": "Неверная уставка",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-021508",
+      "equip": "EX010",
+      "cls": "",
+      "comp": "EX010.HS.CV (Control Valves / Гидрораспределители)",
+      "desc": "Действущая течь РВД на гидрораспределителе, наблюдается масла в зоне фитинга.",
+      "priority": "P4 Planned (Repair)",
+      "raised": "2026-10-18",
+      "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "hours": null,
+      "plan": "2026-11-15",
+      "status": "Elimination scheduled",
+      "request": "DD-00015062",
       "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "cause": "Фитинг/штуцер ослаб",
       "pmStatus": "open",
