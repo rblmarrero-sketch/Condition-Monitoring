@@ -211,11 +211,13 @@ const SEED = (n) => {
     const over = await p.evaluate(() =>
       document.documentElement.scrollWidth - document.documentElement.clientWidth);
     ok(over <= 0, `all-classes at ${w}px does not scroll the page sideways (over by ${over})`);
-    const scrolls = await p.evaluate(() => {
-      const w = document.querySelector("#lubeMtx").closest(".tblwrap");
-      return !!w && w.scrollWidth > w.clientWidth + 1;
+    /* CM_CARDS_V1 (build 571): the site rule is no sideways scroll bar anywhere, so a matrix that does not fit
+       becomes one card per machine instead of scrolling inside its own box */
+    const st = await p.evaluate(() => {
+      const t = document.querySelector("#lubeMtx"), w = t.closest(".tblwrap");
+      return { cards: t.classList.contains("ascards"), scrolls: !!w && w.scrollWidth > w.clientWidth + 2 };
     });
-    if (w === 820) ok(scrolls, "  the table scrolls inside its own box instead");
+    if (w === 820) ok(st.cards && !st.scrolls, "  the table becomes cards instead, with no scroll bar of its own (cards " + st.cards + ", scrolls " + st.scrolls + ")");
   }
   await p.setViewportSize({ width: 1440, height: 1000 });
 

@@ -5263,6 +5263,14 @@ table the column filters and the sort live in the hidden header — the global
 search still works. `tests/cards.cjs` (both pages, EN/RU, 1440/1280/390) fails
 15 assertions on build 570.
 
+**AND A CARD TABLE KEEPS ITS COLUMN FILTERS (build 572, CM_CARDS_V2).** In card mode the header row is
+hidden, and build 571 hid the filter row with it, so the Lubrication matrix at 1440 (all classes, too wide)
+lost the per-column boxes (`tests/lubemtx.cjs` timed out clicking one). The filter row now stays, as a row of
+named boxes above the cards (`tr:has(th.cwfh)`, each box under its column's name from `data-label`). It is
+matched by selector, not by a class cmCardify adds, because a redraw replaces the rows while the table keeps
+`ascards`: a class-only rule hid the new filter row for one frame, and the focus restore landed on a hidden box.
+The sort still lives in the hidden header.
+
 ---
 
 ## Secrets

@@ -5116,23 +5116,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=571"></script>
+<script src="../data/magnetic_plug.js?v=572"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=571"></script>
-<script src="../mobile/hme.js?v=571"></script>
-<script src="../mobile/mp-fc.js?v=571"></script>
-<script src="../mobile/rtw.js?v=571"></script>
-<script src="../mobile/hme-cascade.js?v=571"></script>
-<script src="../mobile/temp-limits.js?v=571"></script>
+<script src="../data/work_orders.js?v=572"></script>
+<script src="../mobile/hme.js?v=572"></script>
+<script src="../mobile/mp-fc.js?v=572"></script>
+<script src="../mobile/rtw.js?v=572"></script>
+<script src="../mobile/hme-cascade.js?v=572"></script>
+<script src="../mobile/temp-limits.js?v=572"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=571"></script>
-<script src="../mobile/normalize.js?v=571"></script>
-<script src="../mobile/terms.js?v=571"></script>
+<script src="../mobile/assets.js?v=572"></script>
+<script src="../mobile/normalize.js?v=572"></script>
+<script src="../mobile/terms.js?v=572"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -5151,21 +5151,21 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=571"></script>
-<script src="../mobile/edits.js?v=571"></script>
-<script src="../mobile/due.js?v=571"></script>
-<script src="../mobile/wear.js?v=571"></script>
-<script src="../mobile/wear-map.js?v=571"></script>
-<script src="../mobile/lube.js?v=571"></script>
-<script src="../mobile/lube-overrides.js?v=571"></script>
-<script src="../mobile/lube2027.js?v=571"></script>
-<script src="../mobile/lube-tds.js?v=571"></script>
-<script src="../dashboard/lube-master.js?v=571"></script>
-<script src="../dashboard/wear-limits.js?v=571"></script>
+<script src="../mobile/grade.js?v=572"></script>
+<script src="../mobile/edits.js?v=572"></script>
+<script src="../mobile/due.js?v=572"></script>
+<script src="../mobile/wear.js?v=572"></script>
+<script src="../mobile/wear-map.js?v=572"></script>
+<script src="../mobile/lube.js?v=572"></script>
+<script src="../mobile/lube-overrides.js?v=572"></script>
+<script src="../mobile/lube2027.js?v=572"></script>
+<script src="../mobile/lube-tds.js?v=572"></script>
+<script src="../dashboard/lube-master.js?v=572"></script>
+<script src="../dashboard/wear-limits.js?v=572"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=571"></script>
-<script src="../mobile/machine-photos.js?v=571"></script>
+<script src="../mobile/upload-defaults.js?v=572"></script>
+<script src="../mobile/machine-photos.js?v=572"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -5174,17 +5174,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=571"></script>
-<script src="../mobile/get.js?v=571"></script>
-<script src="../mobile/points.js?v=571"></script>
-<script src="../mobile/uc-points.js?v=571"></script>
-<script src="../mobile/inspect-guide.js?v=571"></script>
-<script src="../mobile/get-figs.js?v=571"></script>
-<script src="../mobile/body-points.js?v=571"></script>
-<script src="../mobile/body-map.js?v=571"></script>
-<script src="../mobile/jspdf.umd.min.js?v=571"></script>
-<script src="../mobile/html2canvas.min.js?v=571"></script>
-<script src="../mobile/report-core.js?v=571"></script>
+<script src="../mobile/machine-fig.js?v=572"></script>
+<script src="../mobile/get.js?v=572"></script>
+<script src="../mobile/points.js?v=572"></script>
+<script src="../mobile/uc-points.js?v=572"></script>
+<script src="../mobile/inspect-guide.js?v=572"></script>
+<script src="../mobile/get-figs.js?v=572"></script>
+<script src="../mobile/body-points.js?v=572"></script>
+<script src="../mobile/body-map.js?v=572"></script>
+<script src="../mobile/jspdf.umd.min.js?v=572"></script>
+<script src="../mobile/html2canvas.min.js?v=572"></script>
+<script src="../mobile/report-core.js?v=572"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -21667,10 +21667,10 @@ document.querySelector(".lang").addEventListener("click",e=>{
   setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 })();
 </script>
-<script src="../dashboard/drive.js?v=571"></script>
-<script src="../dashboard/sync-adapter.js?v=571"></script>
-<script src="../dashboard/report.js?v=571"></script>
-<script src="../dashboard/reliability.js?v=571"></script>
+<script src="../dashboard/drive.js?v=572"></script>
+<script src="../dashboard/sync-adapter.js?v=572"></script>
+<script src="../dashboard/report.js?v=572"></script>
+<script src="../dashboard/reliability.js?v=572"></script>
 <script>
 /* THE CLOSED FILTER SAYS WHAT IS CHOSEN. A dropdown narrower than its option
    text ellipsises ("All t…", audit of 2026-10-01). Between 1331 and 1500 px
@@ -21695,7 +21695,15 @@ document.querySelector(".lang").addEventListener("click",e=>{
      as cards, one per row: each value under its column's name. cmCardify()
      decides per table and per width, so a table that fits stays a table. */
   table.grid.ascards{display:block;min-width:0 !important;width:100% !important;table-layout:auto;}
-  table.grid.ascards colgroup,table.grid.ascards thead{display:none;}
+  table.grid.ascards colgroup{display:none;}
+  table.grid.ascards thead{display:block;}
+  table.grid.ascards thead tr:not(.cwfh):not(:has(th.cwfh)){display:none;}
+  /* CM_CARDS_V2: the column filters stay, as a row of named boxes above the cards */
+  table.grid.ascards thead tr:is(.cmfr,.cwfh,:has(th.cwfh)){display:flex;flex-wrap:wrap;gap:6px 10px;margin:0 0 10px;padding:0;border:0;background:none;}
+  table.grid.ascards thead tr:is(.cmfr,.cwfh,:has(th.cwfh)) th{display:block;flex:1 1 170px;max-width:260px;min-width:0;padding:0 !important;border:0 !important;background:none !important;position:static !important;height:auto !important;}
+  table.grid.ascards thead tr:is(.cmfr,.cwfh,:has(th.cwfh)) th:empty,table.grid.ascards thead tr:is(.cmfr,.cwfh,:has(th.cwfh)) th:not(:has(input,select)){display:none;}
+  table.grid.ascards thead tr:is(.cmfr,.cwfh,:has(th.cwfh)) th::before{content:attr(data-label);display:block;color:var(--muted);font:600 12px/1.35 "IBM Plex Sans",system-ui,sans-serif;margin:0 0 2px;}
+  table.grid.ascards thead tr:is(.cmfr,.cwfh,:has(th.cwfh)) th input,table.grid.ascards thead tr:is(.cmfr,.cwfh,:has(th.cwfh)) th select{width:100% !important;min-height:32px;box-sizing:border-box;font-size:13px !important;}
   table.grid.ascards tbody{display:block;}
   table.grid.ascards tr{display:block;border:1px solid var(--border);border-radius:10px;padding:6px 10px;margin:0 0 8px;background:var(--surface);height:auto !important;}
   table.grid.ascards td{display:block;position:relative;min-height:22px;
@@ -21724,6 +21732,8 @@ document.querySelector(".lang").addEventListener("click",e=>{
     const heads=[...(t.tHead?t.tHead.rows:[])].filter(r=>!r.classList.contains("cwfh")&&!r.querySelector("th.cwfh"));
     const h=heads[heads.length-1]; const labs=[];
     if(h) for(const th of h.cells){ const s=LAB(th); for(let i=0;i<(th.colSpan||1);i++) labs.push(i?"":s); }
+    for(const r of (t.tHead?t.tHead.rows:[])) if(r.classList.contains("cwfh")||r.querySelector("th.cwfh")){ r.classList.add("cmfr"); let c=0;
+      for(const th of r.cells){ const l=labs[c]||""; if(th.getAttribute("data-label")!==l) th.setAttribute("data-label",l); c+=th.colSpan||1; } }
     for(const tb of t.tBodies) for(const tr of tb.rows){ let c=0;
       for(const td of tr.cells){ const l=(td.colSpan>1&&tr.cells.length===1)?"":(labs[c]||"");
         if(td.getAttribute("data-label")!==l) td.setAttribute("data-label",l);
