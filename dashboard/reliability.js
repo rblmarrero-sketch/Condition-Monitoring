@@ -145,7 +145,7 @@
     }
     if (!DATA) {
       el.innerHTML = head + `<div class="hint" data-rel="away"${WHY ? ` data-why="${esc(WHY)}"` : ""}>`
-        + `<a href="${SITE}/" target="_blank" rel="noopener">${esc(T("away"))} ↗</a></div>`;
+        + `<a href="${SITE}/" target="_blank" rel="noopener" data-1c>${esc(T("away"))} ↗</a></div>`;
       return null;
     }
     const d = DATA, P = d.scopes.Primary, A = d.scopes.All, W = P.week, wn = d.week.no;
