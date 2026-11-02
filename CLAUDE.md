@@ -5239,6 +5239,30 @@ page is exactly as before; if std.js does not load, nothing runs.
 fails 8 assertions on build 569. Still to do: tables that scroll sideways
 inside the page (the site rule is none, anywhere) become cards on a phone.
 
+**NO TABLE SCROLLS SIDEWAYS INSIDE THE PAGE; ONE THAT DOES NOT FIT BECOMES
+CARDS (build 571, CM_CARDS_V1).** The site rule (SITE_STD_V1 9.1, Rickie 28.10:
+"no horizontal bar, anywhere") reached the office pages: 40-50 inner sideways
+scroll bars per page at 390 px, and the schedule, Plan vs Actual, action
+register and Defects raised tables at 1280. `cmCardify()` (end of both pages)
+runs after every redraw (a childList observer on `main`; it only sets
+attributes and classes, so it never wakes itself), on resize, and when `main`
+changes width (a ResizeObserver: the page's own scroll bar appearing narrows
+every box without a redraw). For each visible `main table.grid` it labels
+every cell with its column's header text (`data-label`; a full-width cell is
+`nolab`), then: if the table and its box fit, nothing; on a desk (over 900 px)
+a table a little too wide is FITTED first — fixed `<col>` widths shrink in
+proportion, a column holding a button keeps its width (a button is never cut),
+every words column keeps 120 px; a table whose widths sit on its header cells
+shrinks them together by at most 20 % — and only what still does not fit, or
+anything on a phone, becomes cards (`table.ascards`: one bordered card per row,
+each value under its column's name, the header and filter row hidden). A desk
+table therefore stays a table at 1280 in both languages. Also: a segment row
+wraps inside its card, `header.app .lang` may not be squeezed, a long host name
+in a hint wraps, the side menu is a swipe strip on a phone. Not done: on a card
+table the column filters and the sort live in the hidden header — the global
+search still works. `tests/cards.cjs` (both pages, EN/RU, 1440/1280/390) fails
+15 assertions on build 570.
+
 ---
 
 ## Secrets

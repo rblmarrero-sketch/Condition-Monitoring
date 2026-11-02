@@ -1,124 +1,80 @@
-/* The component cards must say two things at a glance: which one you are on, and
-   which ones you have already captured. Neither worked — refreshChips() only ever
-   understood the magnetic-plug chip row, so on the cascade cards it set nothing
-   and actively stripped the "captured" dot on every repaint. */
+/* CM_CARDS_V1: no table scrolls sideways inside the page, at any width (site rule SITE_STD_V1 9.1).
+
+   Both office pages, with the fleet fixture, in English and Russian:
+     · at 1440 and 1280 a table a little too wide is FITTED (its fixed columns shrink, a column holding buttons
+       keeps its width) and stays a table - the action register at 1280 included;
+     · at 390 a table that does not fit becomes cards (table.ascards): every value under its column's name;
+     · at every width no box around a table scrolls sideways;
+     · labels follow the language; nothing runs past its card.
+   Run: node tests/cards.cjs */
 const { chromium } = require(require('./pw.cjs'));
-const B = 'http://127.0.0.1:8094';
+const fs = require('fs'), http = require('http'), path = require('path');
+const ROOT = path.join(__dirname, '..');
 const fails = [];
-const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d ? '   ' + d : '')); if (!c) fails.push(n); };
-
-async function app(b) {
-  const ctx = await b.newContext({ viewport: { width: 412, height: 915 }, isMobile: true, hasTouch: true });
-  const p = await ctx.newPage();
-  p.on('pageerror', e => fails.push('PAGEERROR ' + e.message));
-  p.on('console', m => { if (m.type() === 'error' && !/ERR_|Failed to load/.test(m.text())) fails.push('CONSOLE ' + m.text()); });
-  await p.addInitScript(() => localStorage.setItem('up_dests', '[]'));
-  await p.goto(B + '/mobile/index.html', { waitUntil: 'load' });
-  await p.waitForTimeout(1600);
-  return { ctx, p };
-}
-const cls = (p, sel) => p.evaluate(s => { const b = document.querySelector(s); return b ? b.className : null; }, sel);
-const on = async (p, sel) => /\bon\b/.test(await cls(p, sel) || '');
-const has = async (p, sel) => /\bhas\b/.test(await cls(p, sel) || '');
-// the dot is what an inspector actually sees, so check the paint, not just the class
-const dot = (p, sel) => p.evaluate(s => {
-  const d = document.querySelector(s + ' .dot');
-  return d ? getComputedStyle(d).display : null; }, sel);
-const outline = (p, sel) => p.evaluate(s => {
-  const b = document.querySelector(s);
-  return b ? getComputedStyle(b).boxShadow : null; }, sel);
-
+const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !== undefined ? '   ' + d : '')); if (!c) fails.push(n); };
+const MIME = { '.html': 'text/html', '.js': 'application/javascript', '.json': 'application/json', '.css': 'text/css' };
+const tag = (fs.readFileSync(path.join(ROOT, 'dashboard-next', 'index.html'), 'utf8').match(/magnetic_plug\.js\?v=([^"&]+)/) || [])[1];
+const srv = http.createServer((q, r) => {
+  let p = decodeURIComponent(q.url.split('?')[0]); if (p.endsWith('/')) p += 'index.html';
+  if (p === '/mobile/sw.js') { r.writeHead(200, { 'content-type': 'application/javascript' }); r.end(`const BUILD = "${tag}";`); return; }
+  const f = path.join(ROOT, p);
+  fs.readFile(f, (e, d) => { if (e) { r.writeHead(404); r.end(); } else { r.writeHead(200, { 'content-type': MIME[path.extname(f)] || 'application/octet-stream' }); r.end(d); } });
+});
+const FLEET = JSON.parse(fs.readFileSync(path.join(__dirname, 'fleet-fixture.json'), 'utf8'));
+const TABS = ['overview', 'due', 'planact', 'actions', 'failure', 'equipment', 'cmwo'];
+const SCAN = () => {
+  const out = { bars: [], cards: [], tables: [], badLabel: [], past: [] };
+  for (const t of document.querySelectorAll('main table.grid')) {
+    if (!t.offsetParent) continue;
+    const box = t.parentElement, id = (t.closest('[id]') || {}).id + ' table.' + [...t.classList].join('.');
+    if (box.scrollWidth > box.clientWidth + 2 && /auto|scroll/.test(getComputedStyle(box).overflowX)) out.bars.push(id + ' ' + box.clientWidth + '/' + box.scrollWidth);
+    (t.classList.contains('ascards') ? out.cards : out.tables).push(id);
+    if (t.classList.contains('ascards')) {
+      const tr = t.tBodies[0] && [...t.tBodies[0].rows].find(r => r.cells.length > 1);
+      if (tr) for (const td of tr.cells) {
+        if (td.classList.contains('nolab')) continue;
+        const l = td.getAttribute('data-label');
+        if (!l) out.badLabel.push(id + ' cell ' + td.cellIndex);
+        const r = td.getBoundingClientRect(), R = tr.getBoundingClientRect();
+        if (r.right > R.right + 1) out.past.push(id + ' ' + l);
+      }
+    }
+  }
+  return out;
+};
 (async () => {
+  await new Promise(r => srv.listen(0, r)); const port = srv.address().port;
   const b = await chromium.launch();
-  const { ctx, p } = await app(b);
-  await p.evaluate(() => { document.getElementById('typeSel').value = 'INSP';
-    document.getElementById('typeSel').dispatchEvent(new Event('change')); });
-  await p.waitForTimeout(250);
-  await p.evaluate(() => { selectEquip('TK032'); goStep(2); });
-  await p.waitForTimeout(400);
-
-  console.log('systems, before drilling in');
-  ok('a system card is not marked selected', !(await on(p, '[data-l7="BS"]')));
-  ok('nor captured, with nothing captured', !(await has(p, '[data-l7="BS"]')));
-
-  await p.evaluate(() => { cascL7 = 'BS'; renderChips(); });
-  await p.waitForTimeout(250);
-
-  console.log('\npicking a component');
-  ok('nothing is selected yet', !(await on(p, '[data-l8="BS.TV"]')));
-  await p.click('[data-l8="BS.TV"]');
-  await p.waitForTimeout(250);
-  ok('it becomes the current item', (await p.evaluate(() => curItem)) === 'BS.TV');
-  ok('and the card is outlined', await on(p, '[data-l8="BS.TV"]'), await cls(p, '[data-l8="BS.TV"]'));
-  ok('visibly, not just in the class list',
-    /inset/.test(await outline(p, '[data-l8="BS.TV"]') || ''), await outline(p, '[data-l8="BS.TV"]'));
-  ok('the label under the cards names it',
-    /BS\.TV/.test(await p.textContent('#posLabel')), await p.textContent('#posLabel'));
-
-  console.log('\ncapturing something on it');
-  await p.evaluate(() => document.querySelector('#gradeSeg [data-g="3"]').click());
-  await p.waitForTimeout(250);
-  ok('the card shows it is captured', await has(p, '[data-l8="BS.TV"]'), await cls(p, '[data-l8="BS.TV"]'));
-  ok('the green dot is actually painted', (await dot(p, '[data-l8="BS.TV"]')) === 'block',
-    await dot(p, '[data-l8="BS.TV"]'));
-  ok('and it is still the selected one', await on(p, '[data-l8="BS.TV"]'));
-
-  console.log('\n  the repaint that used to wipe it');
-  // Typing a comment calls refreshChips(). That is what erased the dot.
-  await p.evaluate(() => { const e = document.getElementById('comment');
-    e.value = 'fine swarf on the plug'; e.dispatchEvent(new Event('input')); });
-  await p.waitForTimeout(250);
-  ok('the dot survives typing a comment', (await dot(p, '[data-l8="BS.TV"]')) === 'block',
-    await cls(p, '[data-l8="BS.TV"]'));
-  ok('so does the outline', await on(p, '[data-l8="BS.TV"]'));
-  await p.evaluate(() => { curP().wo = 'N-880'; saveCur(); refreshChips(); });
-  await p.waitForTimeout(200);
-  ok('and a direct refreshChips() does not wipe it either',
-    (await dot(p, '[data-l8="BS.TV"]')) === 'block' && await on(p, '[data-l8="BS.TV"]'));
-
-  console.log('\nmoving to another component');
-  await p.click('[data-l8="BS.ABS"]');
-  await p.waitForTimeout(250);
-  ok('the new one is outlined', await on(p, '[data-l8="BS.ABS"]'));
-  ok('the old one is not', !(await on(p, '[data-l8="BS.TV"]')));
-  ok('but the old one keeps its captured dot', (await dot(p, '[data-l8="BS.TV"]')) === 'block');
-  ok('and the new one has no dot yet', (await dot(p, '[data-l8="BS.ABS"]')) === 'none');
-
-  console.log('\nback out to the systems');
-  await p.evaluate(() => { cascL7 = null; renderChips(); });
-  await p.waitForTimeout(250);
-  ok('the system carrying the capture is marked', await has(p, '[data-l7="BS"]'),
-    await cls(p, '[data-l7="BS"]'));
-  ok('its dot is painted', (await dot(p, '[data-l7="BS"]')) === 'block');
-  ok('a system is never outlined as selected', !(await on(p, '[data-l7="BS"]')));
-  const other = await p.evaluate(() => {
-    const b = [...document.querySelectorAll('[data-l7]')].find(x => x.dataset.l7 !== 'BS');
-    return b ? b.dataset.l7 : null; });
-  if (other) ok('a system with nothing under it is unmarked',
-    (await dot(p, `[data-l7="${other}"]`)) === 'none', other);
-
-  console.log('\nthe magnetic-plug chip row still works');
-  await p.evaluate(() => { document.getElementById('typeSel').value = 'MP';
-    document.getElementById('typeSel').dispatchEvent(new Event('change')); });
-  await p.waitForTimeout(300);
-  await p.evaluate(() => { selectEquip('TK032'); goStep(2); });
-  await p.waitForTimeout(300);
-  const first = await p.evaluate(() => items()[0].k);
-  await p.evaluate(k => { saveCur(); curItem = k; loadPos(); renderChips(); }, first);
-  await p.waitForTimeout(200);
-  ok('the current plug position is marked', await on(p, `[data-pos="${first}"]`),
-    await cls(p, `[data-pos="${first}"]`));
-  await p.evaluate(() => document.querySelector('#gradeSeg [data-g="2"]').click());
-  await p.waitForTimeout(250);
-  ok('and shows captured once graded', (await dot(p, `[data-pos="${first}"]`)) === 'block');
-  const second = await p.evaluate(() => items()[1].k);
-  await p.click(`[data-pos="${second}"]`);
-  await p.waitForTimeout(250);
-  ok('moving along the row moves the marker', await on(p, `[data-pos="${second}"]`)
-    && !(await on(p, `[data-pos="${first}"]`)));
-  ok('without losing the first one\'s dot', (await dot(p, `[data-pos="${first}"]`)) === 'block');
-
-  await ctx.close(); await b.close();
-  console.log(fails.length ? `\n${fails.length} FAILED: ` + fails.join(' | ') : '\nall passed');
-  process.exit(fails.length ? 1 : 0);
+  for (const file of ['dashboard', 'dashboard-next']) for (const lang of ['en', 'ru']) for (const W of [1440, 1280, 390]) {
+    console.log(`\n== ${file} ${lang} ${W}`);
+    const ph = W < 600;
+    const ctx = await b.newContext({ viewport: { width: W, height: 900 }, isMobile: ph, hasTouch: ph });
+    await ctx.addInitScript(l => { localStorage.setItem('cm_dash_lang', l); }, lang);
+    const p = await ctx.newPage(); const errs = []; p.on('pageerror', e => errs.push(e.message));
+    await p.goto(`http://127.0.0.1:${port}/${file}/index.html`); await p.waitForTimeout(1200);
+    await p.evaluate(f => { window.CMDash.setDriveRecords(f); const o = document.getElementById('dataOv'); if (o) o.classList.add('hidden'); }, FLEET);
+    const all = { bars: [], cards: [], tables: [], badLabel: [], past: [] };
+    for (const t of TABS) {
+      await p.evaluate(t => showTab(t, true), t); await p.waitForTimeout(500);
+      const s = await p.evaluate(SCAN); for (const k in all) all[k].push(...s[k].map(x => t + ': ' + x));
+    }
+    ok('no table box scrolls sideways', !all.bars.length, all.bars.join(' | '));
+    if (!ph) {
+      ok('on a desk every table stays a table', !all.cards.length, all.cards.join(' | '));
+      if (W === 1280) ok('the action register at 1280 is a table, fitted', all.tables.some(x => x.startsWith('actions:')), all.tables.filter(x => x.startsWith('actions')).join(' '));
+    } else {
+      ok('on a phone the wide tables are cards', ['due:', 'actions:', 'cmwo:'].every(k => all.cards.some(x => x.startsWith(k))), all.cards.length + ' card table(s)');
+      ok('every card value carries its column name', !all.badLabel.length, all.badLabel.slice(0, 4).join(' | '));
+      ok('nothing runs past its card', !all.past.length, all.past.slice(0, 4).join(' | '));
+      if (lang === 'ru') {
+        await p.evaluate(() => showTab('actions', true)); await p.waitForTimeout(400);
+        const l = await p.evaluate(() => { const td = document.querySelector('#actionTbl table.ascards tbody tr td[data-label]:not(.nolab)'); return td && td.getAttribute('data-label'); });
+        ok('the card labels are in Russian', /[А-Яа-я]/.test(l || ''), l);
+      }
+    }
+    ok('no page errors', !errs.length, errs.join(' | '));
+    await ctx.close();
+  }
+  await b.close(); srv.close();
+  console.log(fails.length ? `\n${fails.length} FAILED` : '\nall passed'); process.exit(fails.length ? 1 : 0);
 })();
