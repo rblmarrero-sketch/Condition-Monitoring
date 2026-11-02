@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-02T00:52:41+00:00",
+  "generated": "2026-11-02T01:22:29+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -442,8 +442,8 @@ window.CM_WO_DATA = {
     "planStart": 0
   },
   "cmCauseFrom": {
-    "wo": 99,
-    "wr": 94,
+    "wo": 100,
+    "wr": 93,
     "cert": 0,
     "none": 0
   },
@@ -1657,7 +1657,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-10-18",
       "detected": "2026-10-18",
-      "planStart": null,
+      "planStart": "2026-11-15",
       "closed": null,
       "asset": "DZ005",
       "defect": "DD-00015036",
@@ -1667,12 +1667,12 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "defectType": "4.02 Open circuit / Разрыв цепи",
       "cause": "Обрыв провода",
-      "causeFrom": "wr",
+      "causeFrom": "wo",
       "descr": "Не работает подогреватель сидения.",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "by": "Bekzhan",
-      "woNumber": null,
-      "maintType": null,
+      "woNumber": "WO-021499",
+      "maintType": "P4 Planned Repair",
       "planned": false
     },
     {
@@ -19393,9 +19393,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-14",
-      "planStartDt": "2026-11-14T00:00:00",
-      "planEnd": "2026-11-15",
+      "planStart": "2026-11-15",
+      "planStartDt": "2026-11-15T00:00:00",
+      "planEnd": "2026-11-16",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
