@@ -5282,8 +5282,8 @@ counts coloured like warnings. `#cmTplCss` / `#cmTplJs` (both office pages, iden
 tab's purpose sentence (the hidden `.pgsub[data-i18n]` stays the source, so the language switch and every test
 reading it keep working; data lines such as `#kpiInsp`, `#cwSub`, `#paAsOf` stay lines) · `.cmHdR` at the right
 end with the tab's own actions and its one Definitions; desk controls 32 px (the phone keeps 44); 8 px above and
-below every table cell (checkbox, button and empty-state cells, the fortnight grid and card tables keep their
-own); `.subtabs` drawn as the segmented switch; `.kpi.info` neutral (a tile coloured by its own id keeps it).
+below every table cell (checkbox, button and empty-state cells, the fortnight grid, card tables and the Overview
+compliance bars #covTbl keep their own); `.subtabs` drawn as the segmented switch; `.kpi.info` neutral (a tile coloured by its own id keeps it).
 `#lubeHoNote` stays a visible line on purpose: it is the hand-over instruction (LubeLink is the editor). Phone:
 the global search box holds its 44 px field. Under /cm/ only, `cmSiteFb()` turns the page's filter bar into the
 site's (Scope with /site/dims.json, Period, Group/Class, Asset range/Category, Manufacturer, Model, More, search,

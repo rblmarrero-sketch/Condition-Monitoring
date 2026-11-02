@@ -4,7 +4,7 @@
      header   title, then an (i) tip carrying the tab's purpose sentence (said in the page's language, opened by hover, focus or tap,
               closed by Escape), then the tab's own actions and Definitions at the right end - Definitions never inside a card
      controls on a desk every text box and list in a tab is 32 px; on a phone the 44 px floor stands
-     tables   every cell has 8 px above and below (the Plan vs Actual fortnight grid, card tables and the lube master's own fixed tables excepted)
+     tables   every cell has 8 px above and below (the Plan vs Actual fortnight grid, card tables, the lube master's own fixed tables and the Overview compliance bars excepted)
      switches Lubrication's sub-tabs are the segmented switch (filled, rounded), not underlined tabs
      tiles    a plain count (.kpi.info) is not coloured; a tile with a colour of its own by id (dashboard-next's grade tiles) keeps it
    Run: node tests/cmtpl.cjs   (spawns tests/mock.cjs on 8487) */
@@ -24,7 +24,7 @@ const MEASURE = () => {
   const defs = [...sec.querySelectorAll('details.defs')];
   const src = hd ? [...hd.querySelectorAll('.pgt>.pgsub[data-i18n]')] : [];
   const ctl = [...sec.querySelectorAll('input[type=text],input[type=search],input[type=date],input:not([type]),select')].filter(vis).filter(x => !x.classList.contains('cwcf') && !x.closest('.ascards') && !x.closest('#cmFb') && !x.closest('table[class*="lmx-"]'));
-  const tds = [...sec.querySelectorAll('table.grid:not(.pawk):not(.ascards):not([class*="lmx-"])>tbody>tr>td:not([colspan])')].filter(vis).filter(x => !x.querySelector(':scope>label>input[type=checkbox]') && !x.querySelector(':scope>.btn,:scope>.minibtn,:scope>button')).slice(0, 40);
+  const tds = [...sec.querySelectorAll('table.grid:not(.pawk):not(.ascards):not([class*="lmx-"]):not(#covTbl)>tbody>tr>td:not([colspan])')].filter(vis).filter(x => !x.querySelector(':scope>label>input[type=checkbox]') && !x.querySelector(':scope>.btn,:scope>.minibtn,:scope>button')).slice(0, 40);
   return {
     tpl: !!(hd && hd.classList.contains('cmtpl')),
     tip: tip ? { aria: tip.getAttribute('aria-label') || '', src: src.map(s => s.textContent.trim()).join(' '), hidden: src.every(s => s.hidden) } : null,
