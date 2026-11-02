@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-02T03:05:30+00:00",
+  "generated": "2026-11-02T03:23:36+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -195,7 +195,7 @@
           "FC",
           "INSP"
         ],
-        "plan": "2026-11-05",
+        "plan": "2026-11-01",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -2420,24 +2420,6 @@
       "completed": ""
     },
     {
-      "wo": "WO-020938",
-      "equip": "EX015",
-      "cls": "EXC",
-      "comp": "",
-      "desc": "Filter Cut / General Inspection",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-05",
-      "type": "1000 Hours service Planned",
-      "hours": 1000,
-      "plan": "2026-11-05",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
       "wo": "WO-021097",
       "equip": "GE100",
       "cls": "GEN",
@@ -3374,6 +3356,24 @@
       "completed": ""
     },
     {
+      "wo": "WO-020938",
+      "equip": "EX015",
+      "cls": "EXC",
+      "comp": "",
+      "desc": "Filter Cut / General Inspection",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-01",
+      "type": "1000 Hours service Planned",
+      "hours": 1000,
+      "plan": "2026-11-01",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-019760",
       "equip": "EX022",
       "cls": "EXC",
@@ -3390,24 +3390,6 @@
       "cause": "",
       "pmStatus": "complete",
       "completed": "2026-11-02"
-    },
-    {
-      "wo": "WO-019502",
-      "equip": "LD004",
-      "cls": "LDR",
-      "comp": "",
-      "desc": "250h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-01",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-11-01",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
     },
     {
       "wo": "WO-020447",
@@ -3516,6 +3498,24 @@
       "cause": "",
       "pmStatus": "open",
       "completed": ""
+    },
+    {
+      "wo": "WO-019502",
+      "equip": "LD004",
+      "cls": "LDR",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-10-31",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-10-31",
+      "status": "Completed",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "complete",
+      "completed": "2026-10-31"
     },
     {
       "wo": "WO-020322",
@@ -7199,13 +7199,13 @@
       "raised": "2026-10-10",
       "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "hours": null,
-      "plan": "2026-11-08",
-      "status": "Elimination scheduled",
+      "plan": "2026-10-29",
+      "status": "Completed",
       "request": "DD-00014508",
       "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "cause": "Фитинг/штуцер ослаб",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-01"
     },
     {
       "wo": "WO-020829",
