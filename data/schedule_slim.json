@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-02T02:47:38+00:00",
+  "generated": "2026-11-02T03:05:30+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -529,17 +529,6 @@
       }
     ],
     "TK111": [
-      {
-        "wo": "WO-020283",
-        "hours": 8000,
-        "types": [
-          "INSP",
-          "MP",
-          "TB"
-        ],
-        "plan": "2026-11-01",
-        "priority": "P3 Planned (PM)"
-      },
       {
         "wo": "WO-021288",
         "hours": 250,
@@ -3151,6 +3140,24 @@
       "completed": ""
     },
     {
+      "wo": "WO-019757",
+      "equip": "GR001",
+      "cls": "GRD",
+      "comp": "",
+      "desc": "500h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-02",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-11-02",
+      "status": "Completed",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "complete",
+      "completed": "2026-11-02"
+    },
+    {
       "wo": "WO-020980",
       "equip": "GR013",
       "cls": "GRD",
@@ -3377,30 +3384,12 @@
       "type": "250 Hours service Planned",
       "hours": 250,
       "plan": "2026-11-01",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
-      "wo": "WO-019757",
-      "equip": "GR001",
-      "cls": "GRD",
-      "comp": "",
-      "desc": "500h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-01",
-      "type": "500 Hours service Planned",
-      "hours": 500,
-      "plan": "2026-11-01",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-02"
     },
     {
       "wo": "WO-019502",
@@ -3449,12 +3438,12 @@
       "type": "8000 Hours service Planned",
       "hours": 8000,
       "plan": "2026-11-01",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-02"
     },
     {
       "wo": "WO-020353",
