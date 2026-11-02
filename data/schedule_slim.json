@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-02T22:47:41+00:00",
+  "generated": "2026-11-02T23:02:39+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -1452,6 +1452,24 @@
       "type": "500 Hours service Planned",
       "hours": 500,
       "plan": "2026-11-13",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-007947",
+      "equip": "CO009",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "500h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-12",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-11-12",
       "status": "Elimination scheduled",
       "request": "",
       "defType": "",
@@ -3305,24 +3323,6 @@
       "raised": "2026-11-01",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-11-01",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
-      "wo": "WO-007947",
-      "equip": "CO009",
-      "cls": "GEN",
-      "comp": "",
-      "desc": "500h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-01",
-      "type": "500 Hours service Planned",
-      "hours": 500,
       "plan": "2026-11-01",
       "status": "Elimination scheduled",
       "request": "",
