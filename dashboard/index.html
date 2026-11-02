@@ -2594,6 +2594,7 @@
      entry is the grade's own number on its colour over the count; the name
      is the entry's title and its accessible name. */
   #kpiMix .legend .gn{display:none;}
+  #kpiMix .legend .gn::before{content:attr(data-g);}
   @media (min-width:1100px){
     #kpiMix .legend{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0 4px;margin-top:6px;}
     #kpiMix .legend button{flex-direction:column;justify-content:center;gap:1px;padding:0;width:auto;min-height:32px;}
@@ -7101,7 +7102,7 @@ function renderKpis(){
           aria-pressed="${String(drill.sev)===String(s)?"true":"false"}"
           title="${cnt[s]?esc(t("k_only",{x:SEV[s].l})):esc(t("k_none_here"))}"
           aria-label="${esc(SEV[s].l)}: ${cnt[s]}"
-        ><i style="background:${SEVC[s]}"></i><em class="gn" style="background:${SEVC[s]};color:${s===1||s===5?"#fff":"#111"}">${s}</em><span class="ln">${esc(SEV[s].l)}</span><b>${cnt[s]}</b></button>`).join("")}</div>
+        ><i style="background:${SEVC[s]}"></i><em class="gn" data-g="${s}" aria-hidden="true" style="background:${SEVC[s]};color:${s===1||s===5?"#fff":"#111"}"></em><span class="ln">${esc(SEV[s].l)}</span><b>${cnt[s]}</b></button>`).join("")}</div>
    </div>`;
   $("kpis").querySelectorAll("[data-sev]").forEach(b=>b.onclick=()=>setDrill("sev",Number(b.dataset.sev)));
   /* EACH HEADLINE IS A DOOR, AND THE DOOR OPENS ON THE RIGHT ROOM.
