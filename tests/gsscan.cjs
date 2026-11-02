@@ -94,7 +94,9 @@ section('4b. A FILE IN THE INDEX FOLDER THAT IS NOT A MONTH IS NOT A MONTH', () 
   ok('both months arrive, at.json beside them', (r.rows || []).length === 2, { n: (r.rows || []).length, unreadable: r.unreadable });
   ok('and the reply is complete', !r.truncated && !r.unreadable, { truncated: r.truncated, unreadable: r.unreadable });
   const v = S.get({});
-  ok('the version says V2', v.version === 'GAS_SCAN_FIXES_V2', v.version);
+  /* Read off the script itself: the label changes with every change to the file, and a copy here went stale on the first one (build 567). */
+  const want = (require('fs').readFileSync(require('path').join(__dirname, '..', 'docs/google-upload.gs'), 'utf8').match(/const SCRIPT_VERSION = '([^']+)'/) || [])[1];
+  ok('the health answer carries the script\'s own version', !!want && v.version === want, v.version + ' vs ' + want);
 });
 
 section('5. A CORRECTION OR A DECISION WHOSE WRITE FAILS LEAVES THE OLD ONE STANDING', () => {

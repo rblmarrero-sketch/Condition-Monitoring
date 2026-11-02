@@ -88,7 +88,7 @@ const INDEX_V = 1;
    which had happened; the ping and the health check (GET /exec) both carry
    this, so a plain GET says whether a redeploy landed. Change it with every
    change to this file. */
-const SCRIPT_VERSION = 'GAS_SCAN_FIXES_V2';
+const SCRIPT_VERSION = 'GAS_DEFER_PM_V1';
 // ────────────────────────────────────────────────────────────────────────────
 
 function doPost(e) {
