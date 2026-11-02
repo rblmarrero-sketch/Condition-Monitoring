@@ -2618,6 +2618,9 @@
   .insp .head a.meta{min-height:32px;display:inline-flex;align-items:center;}
   .selcol label{display:flex;align-items:center;min-height:32px;cursor:pointer;}
   .lbl small{font-size:12px;}
+  /* At the 12px floor the Russian capitals with the label tracking ran past a
+     112px tile ("БЕЗ ОТВЕТСТВЕННОГО"); Russian labels are tracked tighter. */
+  html[lang="ru"] .kpi .k,html[lang="ru"] .tile .k{letter-spacing:.02em;}
   /* A few rules above set a smaller floor on a more specific selector
      (.defs>summary 28px, .method>summary 24px); the standard's floor wins. */
   details>summary,.defs>summary,.method>summary{min-height:32px !important;}
