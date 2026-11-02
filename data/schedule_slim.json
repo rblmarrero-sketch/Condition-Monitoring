@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-02T22:19:06+00:00",
+  "generated": "2026-11-02T22:32:37+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -9430,24 +9430,6 @@
       "request": "DD-00012421",
       "defType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "cause": "Усталостная трещина",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
-      "wo": "WO-008615",
-      "equip": "GE095",
-      "cls": "GEN",
-      "comp": "",
-      "desc": "250h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-09-10",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-09-10",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
       "pmStatus": "open",
       "completed": ""
     },
