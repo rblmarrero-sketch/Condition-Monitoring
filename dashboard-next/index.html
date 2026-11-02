@@ -5116,23 +5116,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=572"></script>
+<script src="../data/magnetic_plug.js?v=573"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=572"></script>
-<script src="../mobile/hme.js?v=572"></script>
-<script src="../mobile/mp-fc.js?v=572"></script>
-<script src="../mobile/rtw.js?v=572"></script>
-<script src="../mobile/hme-cascade.js?v=572"></script>
-<script src="../mobile/temp-limits.js?v=572"></script>
+<script src="../data/work_orders.js?v=573"></script>
+<script src="../mobile/hme.js?v=573"></script>
+<script src="../mobile/mp-fc.js?v=573"></script>
+<script src="../mobile/rtw.js?v=573"></script>
+<script src="../mobile/hme-cascade.js?v=573"></script>
+<script src="../mobile/temp-limits.js?v=573"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=572"></script>
-<script src="../mobile/normalize.js?v=572"></script>
-<script src="../mobile/terms.js?v=572"></script>
+<script src="../mobile/assets.js?v=573"></script>
+<script src="../mobile/normalize.js?v=573"></script>
+<script src="../mobile/terms.js?v=573"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -5151,21 +5151,21 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=572"></script>
-<script src="../mobile/edits.js?v=572"></script>
-<script src="../mobile/due.js?v=572"></script>
-<script src="../mobile/wear.js?v=572"></script>
-<script src="../mobile/wear-map.js?v=572"></script>
-<script src="../mobile/lube.js?v=572"></script>
-<script src="../mobile/lube-overrides.js?v=572"></script>
-<script src="../mobile/lube2027.js?v=572"></script>
-<script src="../mobile/lube-tds.js?v=572"></script>
-<script src="../dashboard/lube-master.js?v=572"></script>
-<script src="../dashboard/wear-limits.js?v=572"></script>
+<script src="../mobile/grade.js?v=573"></script>
+<script src="../mobile/edits.js?v=573"></script>
+<script src="../mobile/due.js?v=573"></script>
+<script src="../mobile/wear.js?v=573"></script>
+<script src="../mobile/wear-map.js?v=573"></script>
+<script src="../mobile/lube.js?v=573"></script>
+<script src="../mobile/lube-overrides.js?v=573"></script>
+<script src="../mobile/lube2027.js?v=573"></script>
+<script src="../mobile/lube-tds.js?v=573"></script>
+<script src="../dashboard/lube-master.js?v=573"></script>
+<script src="../dashboard/wear-limits.js?v=573"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=572"></script>
-<script src="../mobile/machine-photos.js?v=572"></script>
+<script src="../mobile/upload-defaults.js?v=573"></script>
+<script src="../mobile/machine-photos.js?v=573"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -5174,17 +5174,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=572"></script>
-<script src="../mobile/get.js?v=572"></script>
-<script src="../mobile/points.js?v=572"></script>
-<script src="../mobile/uc-points.js?v=572"></script>
-<script src="../mobile/inspect-guide.js?v=572"></script>
-<script src="../mobile/get-figs.js?v=572"></script>
-<script src="../mobile/body-points.js?v=572"></script>
-<script src="../mobile/body-map.js?v=572"></script>
-<script src="../mobile/jspdf.umd.min.js?v=572"></script>
-<script src="../mobile/html2canvas.min.js?v=572"></script>
-<script src="../mobile/report-core.js?v=572"></script>
+<script src="../mobile/machine-fig.js?v=573"></script>
+<script src="../mobile/get.js?v=573"></script>
+<script src="../mobile/points.js?v=573"></script>
+<script src="../mobile/uc-points.js?v=573"></script>
+<script src="../mobile/inspect-guide.js?v=573"></script>
+<script src="../mobile/get-figs.js?v=573"></script>
+<script src="../mobile/body-points.js?v=573"></script>
+<script src="../mobile/body-map.js?v=573"></script>
+<script src="../mobile/jspdf.umd.min.js?v=573"></script>
+<script src="../mobile/html2canvas.min.js?v=573"></script>
+<script src="../mobile/report-core.js?v=573"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -8219,6 +8219,7 @@ function filtered(inclVoid){
     if(r._void&&!showVoid) return false;
     if(ty&&r.type!==ty) return false;
     if(c&&r.cls!==c) return false;
+    if(window.cmUnitOK&&!window.cmUnitOK(r.equip)) return false;   /* CM_SITEFB_V1: the site filter bar (Scope, Group, Asset range, Manufacturer, Model) */
     if(cutoff&&(r.date||"")<cutoff) return false;
     if(rangeCeil&&(r.date||"")>rangeCeil) return false;
     if(drill.unit&&r.equip!==drill.unit) return false;
@@ -21667,10 +21668,10 @@ document.querySelector(".lang").addEventListener("click",e=>{
   setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 })();
 </script>
-<script src="../dashboard/drive.js?v=572"></script>
-<script src="../dashboard/sync-adapter.js?v=572"></script>
-<script src="../dashboard/report.js?v=572"></script>
-<script src="../dashboard/reliability.js?v=572"></script>
+<script src="../dashboard/drive.js?v=573"></script>
+<script src="../dashboard/sync-adapter.js?v=573"></script>
+<script src="../dashboard/report.js?v=573"></script>
+<script src="../dashboard/reliability.js?v=573"></script>
 <script>
 /* THE CLOSED FILTER SAYS WHAT IS CHOSEN. A dropdown narrower than its option
    text ellipsises ("All t…", audit of 2026-10-01). Between 1331 and 1500 px
@@ -21775,6 +21776,185 @@ document.querySelector(".lang").addEventListener("click",e=>{
   addEventListener("resize",soon); document.addEventListener("click",()=>setTimeout(soon,0),true); soon();
 })();
 </script>
+<style id="cmTplCss">
+  /* CM_TPL_V1 (03.11.2026, Rickie 09:37 site "Approve" on the mock-up: "Every tabs is different") - one template on all
+     eleven tabs of both office pages:
+       header   title · (i) tip with the tab's purpose sentence · the tab's own actions and Definitions at the right end
+       controls one height (32 px on a desk; the phone keeps its 44 px from CM_STD_TAP_V1), one corner
+       tables   one row rhythm (8 px above and below every cell; side padding stays each table's own - their columns are sized to it)
+       switches Lubrication's underlined sub-tabs take the segmented switch every other tab uses
+       tiles    colour only for good / watch / bad: a plain count (.kpi.info) is not coloured
+     Data lines in the header (counts, "pulled from 1C ...") stay a line. tests/cmtpl.cjs */
+  /* the title sits at ONE height on every tab (tests/dashlayout D1): the header is top-aligned and its first line is always
+     32 px (the tip, the actions), whether or not the tab has a data line under the title */
+  .pagehd.cmtpl{display:flex;align-items:flex-start;gap:8px 10px;flex-wrap:wrap;}
+  .pagehd.cmtpl .pgt{display:flex;align-items:center;gap:4px 8px;flex-wrap:wrap;flex:1 1 auto;min-width:0;min-height:32px;}
+  .pagehd.cmtpl .pgt>h1{line-height:32px;}
+  .pagehd.cmtpl .pgt>h1{flex:0 1 auto !important;}
+  .pagehd.cmtpl .pgt>.pgsub{flex:0 0 100%;}
+  .pagehd.cmtpl>.spacer{display:none;}
+  .pagehd.cmtpl .cmHdR{display:flex;align-items:center;gap:8px;margin-left:auto;flex-wrap:wrap;min-height:32px;}
+  .pagehd.cmtpl .cmHdR>*{margin-top:0;margin-bottom:0;}
+  .cmTip{position:relative;display:inline-grid;place-items:center;width:32px;height:32px;min-width:32px;padding:0;border:0;background:none;cursor:help;color:var(--muted);}
+  .cmTip>i{display:inline-grid;place-items:center;width:18px;height:18px;border-radius:50%;border:1.5px solid currentColor;
+    font:700 12px/1 'IBM Plex Sans',system-ui,sans-serif;font-style:normal;}
+  .cmTip:hover,.cmTip:focus-visible,.cmTip.open{color:var(--ink);}
+  .cmTip:focus-visible{outline:2px solid var(--accent);outline-offset:1px;border-radius:50%;}
+  .cmTip>.tipbox{display:none;position:absolute;left:0;top:calc(100% + 4px);z-index:80;width:max-content;max-width:min(440px,calc(100vw - 32px));
+    padding:10px 12px;border-radius:8px;background:var(--ink);color:var(--surface,#fff);text-align:left;
+    font:400 13px/1.45 'IBM Plex Sans',system-ui,sans-serif;white-space:normal;box-shadow:0 6px 24px rgba(0,0,0,.25);}
+  .cmTip.open>.tipbox{display:block;}
+  @media (max-width:600px){ .cmTip{width:44px;height:44px;min-width:44px;} .cmTip>.tipbox{position:fixed;left:16px;right:16px;top:auto;width:auto;max-width:none;} }
+  @media (min-width:601px){
+    section[id^="tab-"] :is(input[type=text],input[type=search],input[type=date],input[type=number],input:not([type]),select):not(.cwcf):not(table[class*="lmx-"] *){height:32px;min-height:32px;border-radius:8px;box-sizing:border-box;padding-top:0;padding-bottom:0;line-height:30px;}
+    section[id^="tab-"] :is(.btn,.minibtn):not(.kpi){height:auto;min-height:32px;border-radius:8px;box-sizing:border-box;}
+  }
+  section[id^="tab-"] table.grid:not(.pawk):not(.ascards):not([class*="lmx-"])>tbody>tr>td:not([colspan]):not(:has(>label>input[type=checkbox])):not(:has(>.btn,>.minibtn,>button)){padding-top:8px !important;padding-bottom:8px !important;}
+  section[id^="tab-"] .subtabs{display:inline-flex;flex-wrap:wrap;gap:2px;padding:3px;background:var(--surface-2);border:1px solid var(--border);border-radius:10px;}
+  section[id^="tab-"] .subtabs button{border:0 !important;border-radius:7px;padding:0 12px;min-height:32px;font-weight:600;font-size:12.5px;color:var(--ink-2);}
+  section[id^="tab-"] .subtabs button:hover{color:var(--ink);background:var(--surface);}
+  section[id^="tab-"] .subtabs button[aria-selected="true"]{background:var(--accent);color:#fff;}
+  @media (max-width:600px){ section[id^="tab-"] .subtabs button{min-height:44px;} }
+  .kpi.info{--kc:var(--border);} .kpi.info .v{color:var(--ink);}
+  /* the global search box holds its 44 px phone field (the field grew to 44 px, its box stayed 34 and the field stuck out) */
+  @media (max-width:600px){ header.app .gsearch{min-height:44px;height:auto;box-sizing:border-box;} }
+</style>
+<script id="cmTplJs">/* CM_TPL_V1 - see #cmTplCss. Moves nothing it does not own: ids, handlers and the elements themselves are kept,
+   only their place in the header changes (a Definitions control from a card's head to the page header). */
+(function cmTpl(){
+  const tips=[];
+  function sync(b,src){ const t=src.map(s=>s.textContent.trim()).filter(Boolean).join(" "); b.setAttribute("aria-label",t); b.querySelector(".tipbox").textContent=t; b.hidden=!t; }
+  document.querySelectorAll('section[id^="tab-"]').forEach(sec=>{
+    const hd=sec.querySelector(":scope>.pagehd"), pgt=hd&&hd.querySelector(":scope>.pgt"), h1=pgt&&pgt.querySelector("h1"); if(!h1||hd.classList.contains("cmtpl")) return;
+    hd.classList.add("cmtpl");
+    const src=[...pgt.querySelectorAll(":scope>.pgsub[data-i18n]")];
+    if(src.length){
+      const b=document.createElement("button"); b.type="button"; b.className="cmTip"; b.setAttribute("aria-expanded","false");
+      b.innerHTML='<i aria-hidden="true">i</i><span class="tipbox" role="tooltip"></span>';
+      h1.after(b); src.forEach(s=>{ s.hidden=true; new MutationObserver(()=>sync(b,src)).observe(s,{childList:true,characterData:true,subtree:true}); });
+      sync(b,src); tips.push(b);
+      let at=0; const set=o=>{ if(o&&!b.classList.contains("open")) at=Date.now(); b.classList.toggle("open",o); b.setAttribute("aria-expanded",String(o)); };
+      b.addEventListener("mouseenter",()=>set(true)); b.addEventListener("mouseleave",()=>{ if(document.activeElement!==b) set(false); });
+      b.addEventListener("focus",()=>set(true)); b.addEventListener("blur",()=>set(false));
+      /* a tap fires hover and focus first: a click within 400 ms of the tip opening keeps it open, a later one closes it */
+      b.addEventListener("click",e=>{ e.stopPropagation(); set(!(b.classList.contains("open")&&Date.now()-at>400)); });
+    }
+    const R=document.createElement("div"); R.className="cmHdR";
+    [...hd.children].filter(x=>x!==pgt&&!x.classList.contains("spacer")).forEach(x=>R.appendChild(x));
+    sec.querySelectorAll("details.defs").forEach(d=>{ if(d.parentElement!==R) R.appendChild(d); });
+    if(R.children.length) hd.appendChild(R);
+  });
+  document.addEventListener("keydown",e=>{ if(e.key==="Escape") tips.forEach(b=>{ b.classList.remove("open"); b.setAttribute("aria-expanded","false"); }); });
+  document.addEventListener("click",()=>tips.forEach(b=>{ if(document.activeElement!==b){ b.classList.remove("open"); b.setAttribute("aria-expanded","false"); } }));
+})();
+</script>
+<script id="cmSiteFbJs">/* CM_SITEFB_V1 (02.11.2026, Rickie 20:50 "apply the filter bar in the web dashboard"; "Publish site
+   register", "Into the More picker"): under /cm/ the page's filter bar becomes the site's standard bar
+   (KB UI_STANDARD 9.2), as on Assets Down and the Work Order Manager:
+     row 1  Scope (Primary / Support / Auxiliary / All) · Period · the count
+     row 2  Group ▾ · Asset range ▾ · Manufacturer ▾ · Model ▾ · More ▾ · search · Copy link
+     row 3  the active filters as chips · Clear filters
+   Scope, Group, Asset range and Manufacturer come from the site's own register (/site/dims.json,
+   SITE_DIMS_V1, from Assets Down's acd.json), Model from this app's register (SiteStd.models). Without
+   dims.json the bar uses this app's register (Group = class, Asset range = category) and has no Scope.
+   The page's own controls are kept and only moved: Period presses #fRange, the search is #fQ, More
+   holds Type, Class, Grade, Status, Data quality and Show voided, Clear filters presses #fReset - so
+   every filter, drill, address and report works as before. The unit filters reach every view through
+   filtered() (window.cmUnitOK). Outside /cm/ none of this runs. tests/sitefb.cjs */
+function cmSiteFb(){
+  const fb=document.getElementById("filterBar"); if(!fb||!window.SiteStd||!SiteStd.dims||document.getElementById("cmFb")) return;
+  const $$=id=>document.getElementById(id), ru=()=>SiteStd.lang()==="ru", W=(en,r)=>ru()?r:en;
+  const K="cm_sitefb", S={scope:"All",group:[],range:[],make:[],model:[]};
+  try{ Object.assign(S,JSON.parse(localStorage.getItem(K)||"{}")); }catch(e){}
+  const save=()=>{ try{ localStorage.setItem(K,JSON.stringify(S)); }catch(e){} };
+  const bar=document.createElement("div"); bar.className="std-fb"; bar.id="cmFb";
+  bar.innerHTML='<div class="std-fb-r"><span class="std-fb-l" id="cmFbSL"></span><span id="cmFbScope"></span>'
+    +'<span id="cmFbPer"></span><span id="cmFbP"></span><span class="std-fb-sp"></span><span class="std-fb-n" id="cmFbN"></span></div>'
+    +'<div class="cmfbmore" id="cmFbMore" hidden></div><div id="cmFbC"></div>';   /* ONE line, as Assets Down and the WO Manager (FB1_STD_V1): wraps only when it must */
+  fb.appendChild(bar); fb.classList.add("cmfbHost");   /* inside the page's bar, so the page still moves and hides it per tab */
+  const moreBox=$$("cmFbMore"), row=$$("cmFbP");
+  /* the page's own controls, moved: Period stays the page's select (hidden), the rest go into More */
+  const own=[...fb.querySelectorAll(".field")].filter(f=>!f.querySelector("#fRange"));
+  const extra=$$("fMoreRow"); if(extra) [...extra.children].forEach(x=>own.push(x));
+  own.forEach(x=>moreBox.appendChild(x));
+  if(extra) extra.classList.add("cmfbOld");
+  const q=$$("fQ"); const ql=document.querySelector('label[for="fQ"]');
+  let U=[], D=SiteStd.dims([]), site=false, BY=new Map();
+  const P={};
+  [["group","grp"],["range","rng"],["make","mk"],["model","md"]].forEach(([k,f])=>{
+    P[k]=SiteStd.picker({label:()=>(site||k==="make"||k==="model")?SiteStd.ft(f):(k==="group"?W("Class","Класс"):W("Category","Категория")),
+      items:()=>D.facet(k,S), value:S[k], onChange:v=>{ S[k]=v; apply(); }});
+    P[k].el.id="cmFbPk_"+k; row.appendChild(P[k].el); });
+  /* Period: one picker (the page's own list, Custom included) - a row of seven buttons did not fit one line in Russian */
+  const per=$$("fRange")?SiteStd.picker({label:()=>W("Period","Период"),all:()=>W("Any time","За всё время"),multi:false,
+    items:()=>[...$$("fRange").options].filter(o=>o.value&&o.value!=="0"&&!o.hidden&&!o.disabled).map(o=>({v:o.value,l:o.textContent})),
+    value:$$("fRange").value&&$$("fRange").value!=="0"?[$$("fRange").value]:[],
+    onChange:v=>{ const r=$$("fRange"); r.value=v&&v.length?v[0]:"0"; r.dispatchEvent(new Event("change")); }}):null;
+  if(per){ per.el.id="cmFbPerPk"; $$("cmFbPer").appendChild(per.el); }
+  const moreBtn=document.createElement("button"); moreBtn.type="button"; moreBtn.className="std-pk"; moreBtn.id="cmFbMoreBtn";
+  moreBtn.setAttribute("aria-expanded","false"); moreBtn.setAttribute("aria-controls","cmFbMore");
+  moreBtn.onclick=()=>{ moreBox.hidden=!moreBox.hidden; moreBtn.setAttribute("aria-expanded",String(!moreBox.hidden)); };
+  row.appendChild(moreBtn);
+  if(ql) row.appendChild(ql); if(q){ q.classList.add("std-fb-q"); row.appendChild(q); }
+  const lnk=document.createElement("button"); lnk.type="button"; lnk.className="std-pk"; lnk.id="cmFbLink";
+  lnk.onclick=()=>{ const done=()=>{ lnk.textContent="✓"; setTimeout(paint,1600); }; try{ navigator.clipboard.writeText(location.href).then(done,done); }catch(e){ done(); } };
+  row.appendChild(lnk);
+  const selOf=id=>$$(id), moreSet=()=>["fType","fClass","fGrade","fStatus","fDq"].filter(id=>selOf(id)&&selOf(id).value).length+(($$("fVoid")||{}).checked?1:0);
+  window.cmUnitOK=u=>{ const on=S.scope!=="All"||S.group.length||S.range.length||S.make.length||S.model.length; if(!on) return true;
+    const x=BY.get(String(u||"").toUpperCase()); return !!x&&D.match(x,S); };
+  function chipsList(){
+    const ch=[];
+    if(site&&S.scope!=="All") ch.push({label:SiteStd.ft("scope"),value:SiteStd.ft(S.scope),remove:()=>{ S.scope="All"; apply(); }});
+    [["group","grp"],["range","rng"],["make","mk"],["model","md"]].forEach(([k,f])=>S[k].forEach(v=>ch.push({label:P[k].el.dataset.lab||SiteStd.ft(f),value:v,
+      remove:()=>{ S[k]=S[k].filter(x=>x!==v); P[k].set(S[k]); apply(); }})));
+    const r=$$("fRange"); if(r&&r.value&&r.value!=="0"){ const o=r.options[r.selectedIndex]; ch.push({label:W("Period","Период"),value:o?o.textContent:r.value,remove:()=>{ r.value="0"; r.dispatchEvent(new Event("change")); }}); }
+    ["fType","fClass","fGrade","fStatus","fDq"].forEach(id=>{ const s=selOf(id); if(!s||!s.value) return; const lab=document.querySelector('label[for="'+id+'"]');
+      ch.push({label:lab?lab.textContent.trim():id,value:(s.options[s.selectedIndex]||{}).textContent||s.value,remove:()=>{ s.value=""; s.dispatchEvent(new Event("change")); }}); });
+    const v=$$("fVoid"); if(v&&v.checked) ch.push({label:"",value:(v.nextElementSibling||{}).textContent||"voided",remove:()=>{ v.checked=false; v.dispatchEvent(new Event("change")); }});
+    if(q&&q.value.trim()) ch.push({label:W("Search","Поиск"),value:q.value.trim(),remove:()=>{ q.value=""; q.dispatchEvent(new Event("input")); }});
+    return ch;
+  }
+  function paint(){
+    $$("cmFbSL").textContent=SiteStd.ft("scope"); $$("cmFbSL").hidden=!site; $$("cmFbScope").hidden=!site;
+    if(site) SiteStd.fseg($$("cmFbScope"),["Primary","Support","Auxiliary","All"].map(k=>[k,SiteStd.ft(k)+" "+(D.scope[k]||0)]),S.scope,v=>{ S.scope=v; apply(); });
+    const r=$$("fRange"); if(r&&per){ const v=r.value&&r.value!=="0"?[r.value]:[]; if(JSON.stringify(per.get())!==JSON.stringify(v)) per.set(v); }
+    Object.values(P).forEach(x=>x.refresh());
+    const n=moreSet(); moreBtn.innerHTML=W("More","Ещё")+(n?' <b>'+n+'</b>':'')+' ▾';
+    lnk.textContent="⧉"; lnk.title=W("Copy link","Копировать ссылку"); lnk.setAttribute("aria-label",lnk.title);
+    if(q) q.placeholder=W("Unit, defect, action, inspector…","Машина, дефект, действие, инспектор…");
+    try{ const showV=$$("fVoid")&&$$("fVoid").checked, n=filtered().length, of=RECS.filter(r=>showV||!r._void).length;
+      $$("cmFbN").innerHTML="<b>"+n.toLocaleString()+"</b> "+W("of","из")+" <b>"+of.toLocaleString()+"</b> "+W("inspections","осмотров"); }catch(e){}
+    SiteStd.chips($$("cmFbC"),chipsList(),()=>{ S.scope="All"; ["group","range","make","model"].forEach(k=>{ S[k]=[]; P[k].set([]); }); save(); const b=$$("fReset"); if(b) b.click(); else if(typeof renderAll==="function") renderAll(); paint(); });
+  }
+  function apply(){ save(); if(typeof renderAll==="function") renderAll(); else paint(); }
+  /* every redraw of the page (data arriving, a drill, a tab) repaints the bar's count and chips */
+  if(typeof renderAll==="function"&&!renderAll.__cmfb){ const ra=renderAll; renderAll=function(){ const r=ra.apply(this,arguments); try{ paint(); }catch(e){} return r; }; renderAll.__cmfb=1; }
+  function load(units,isSite){ U=units; site=isSite; BY=new Map(U.map(u=>[String(u.a).toUpperCase(),u]));
+    SiteStd.models(new Map(U.map(u=>[u.a,u.m]))).then(M=>{ D=SiteStd.dims(U,M); paint(); if(typeof renderAll==="function") renderAll(); }); D=SiteStd.dims(U); paint(); }
+  const own0=()=>(window.ASSETS||[]).map(a=>{ const mk=String(a.mk||"").split("|"); return {a:a.n,ap:"",g:a.cls?[a.cls]:[],r:a.cat||"",m:mk[0]&&mk.length>1?mk[0]:""}; });
+  fetch("/site/dims.json",{cache:"no-store"}).then(r=>r.ok?r.json():null).then(d=>{ if(d&&d.marker==="SITE_DIMS_V1"&&(d.units||[]).length) load(d.units,true); else load(own0(),false); })
+    .catch(()=>load(own0(),false));
+  const fc=$$("fCount"); if(fc) new MutationObserver(paint).observe(fc,{childList:true,characterData:true,subtree:true});
+  ["fType","fClass","fGrade","fStatus","fDq","fVoid","fRange"].forEach(id=>{ const s=$$(id); if(s) s.addEventListener("change",()=>setTimeout(paint,0)); });
+  if(q) q.addEventListener("input",()=>setTimeout(paint,0));
+  document.addEventListener("std:lang",paint);
+  paint();
+}
+</script>
+<style id="cmSiteFbCss">
+  /* CM_SITEFB_V1 */
+  .cmfbOld,#filterBar.cmfbHost>:not(#cmFb){display:none !important;}
+  #filterBar.cmfbHost{display:block;padding:0;border:0;background:none;box-shadow:none;}
+  html.cmStd #cmFb{margin:0 0 var(--s3,12px);}
+  html.cmStd #cmFb>.std-fb-r{flex-wrap:wrap;row-gap:8px;}
+  html.cmStd #cmFb #cmFbP,html.cmStd #cmFb #cmFbPer{display:contents;}
+  html.cmStd #cmFb .cmfbmore{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:flex-end;padding:8px 0 2px;}
+  html.cmStd #cmFb .cmfbmore[hidden]{display:none;}
+  html.cmStd #cmFb .cmfbmore .field{margin:0;}
+  html.cmStd #cmFb #fQ{flex:1 1 220px;min-width:160px;}
+  html.cmStd #cmFb #cmFbLink{width:32px;padding:0;justify-content:center;}
+  @media (max-width:600px){ html.cmStd #cmFb #cmFbLink{width:44px;} }
+</style>
 <script id="cmStdJs">/* CM_SITE_STD_V1 (02.11.2026, Rickie "Proceed"): the site's own menu, title
    band and footer (SITE_STD_V1, /site/std.js + std.css on PECHANKA) when the
    office page is served from the site, under /cm/. Anywhere else (Firebase,
@@ -21799,6 +21979,7 @@ document.querySelector(".lang").addEventListener("click",e=>{
         theme:{ get:function(){ return document.documentElement.getAttribute("data-theme")||"auto"; },
                 set:function(v){ if(v==="auto") document.documentElement.removeAttribute("data-theme"); else document.documentElement.setAttribute("data-theme",v); } }
       });
+      try{ cmSiteFb(); }catch(e){ if(window.bad) bad("site-fb",e); }
     };
     document.head.appendChild(c);
   };
