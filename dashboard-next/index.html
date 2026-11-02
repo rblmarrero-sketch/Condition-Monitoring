@@ -3277,6 +3277,10 @@
   nav.tabs button,#tabs button,#winTog button,.cpv,.railtog,.prow,.cwpbtn,
   table.grid th.cwfh input.cwcf{min-height:32px;box-sizing:border-box;}
   .xf,.railtog,#themeBtn,.lang button{min-width:32px;}
+  header.app .lang{flex:none;}   /* two 32px buttons: the header may not squeeze the pair (it cut "RU" by 2px) */
+  .seg{max-width:100%;flex-wrap:wrap;}   /* a segment row too long for its card wraps (Russian at 1280) */
+  @media (max-width:600px){ .seg button{white-space:normal;text-align:center;} }
+  .hint a{display:inline-block;max-width:100%;overflow-wrap:anywhere;}   /* a long host name wraps on a phone */
   details>summary{display:flex;align-items:center;}
   .insp .head a.meta{min-height:32px;display:inline-flex;align-items:center;}
   .selcol label{display:flex;align-items:center;min-height:32px;cursor:pointer;}
@@ -4902,7 +4906,7 @@
         <div class="secthd"><h2 data-i18n="r_recent">Recent reports</h2>
           <span class="spacer"></span><span class="hint" id="rRecentHint"></span></div>
         <label class="vh" for="rRecentQ" data-i18n="r_recent_search">Search recent reports</label>
-        <input id="rRecentQ" type="search" class="cwcf" style="margin-bottom:10px;width:100%;box-sizing:border-box" data-i18n-ph="r_recent_searchph" placeholder="Machine, date or scope…">
+        <input id="rRecentQ" type="search" class="cwcf" style="margin-bottom:10px;display:block;width:auto;box-sizing:border-box" data-i18n-ph="r_recent_searchph" placeholder="Machine, date or scope…">
         <div class="scrollbox" style="--sb:280px;border-top:0"><table class="grid" id="rRecentTbl"></table></div>
         <div class="shown" id="rRecentShown"></div>
       </div>
@@ -5112,23 +5116,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=570"></script>
+<script src="../data/magnetic_plug.js?v=572"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=570"></script>
-<script src="../mobile/hme.js?v=570"></script>
-<script src="../mobile/mp-fc.js?v=570"></script>
-<script src="../mobile/rtw.js?v=570"></script>
-<script src="../mobile/hme-cascade.js?v=570"></script>
-<script src="../mobile/temp-limits.js?v=570"></script>
+<script src="../data/work_orders.js?v=572"></script>
+<script src="../mobile/hme.js?v=572"></script>
+<script src="../mobile/mp-fc.js?v=572"></script>
+<script src="../mobile/rtw.js?v=572"></script>
+<script src="../mobile/hme-cascade.js?v=572"></script>
+<script src="../mobile/temp-limits.js?v=572"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=570"></script>
-<script src="../mobile/normalize.js?v=570"></script>
-<script src="../mobile/terms.js?v=570"></script>
+<script src="../mobile/assets.js?v=572"></script>
+<script src="../mobile/normalize.js?v=572"></script>
+<script src="../mobile/terms.js?v=572"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -5147,21 +5151,21 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=570"></script>
-<script src="../mobile/edits.js?v=570"></script>
-<script src="../mobile/due.js?v=570"></script>
-<script src="../mobile/wear.js?v=570"></script>
-<script src="../mobile/wear-map.js?v=570"></script>
-<script src="../mobile/lube.js?v=570"></script>
-<script src="../mobile/lube-overrides.js?v=570"></script>
-<script src="../mobile/lube2027.js?v=570"></script>
-<script src="../mobile/lube-tds.js?v=570"></script>
-<script src="../dashboard/lube-master.js?v=570"></script>
-<script src="../dashboard/wear-limits.js?v=570"></script>
+<script src="../mobile/grade.js?v=572"></script>
+<script src="../mobile/edits.js?v=572"></script>
+<script src="../mobile/due.js?v=572"></script>
+<script src="../mobile/wear.js?v=572"></script>
+<script src="../mobile/wear-map.js?v=572"></script>
+<script src="../mobile/lube.js?v=572"></script>
+<script src="../mobile/lube-overrides.js?v=572"></script>
+<script src="../mobile/lube2027.js?v=572"></script>
+<script src="../mobile/lube-tds.js?v=572"></script>
+<script src="../dashboard/lube-master.js?v=572"></script>
+<script src="../dashboard/wear-limits.js?v=572"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=570"></script>
-<script src="../mobile/machine-photos.js?v=570"></script>
+<script src="../mobile/upload-defaults.js?v=572"></script>
+<script src="../mobile/machine-photos.js?v=572"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -5170,17 +5174,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=570"></script>
-<script src="../mobile/get.js?v=570"></script>
-<script src="../mobile/points.js?v=570"></script>
-<script src="../mobile/uc-points.js?v=570"></script>
-<script src="../mobile/inspect-guide.js?v=570"></script>
-<script src="../mobile/get-figs.js?v=570"></script>
-<script src="../mobile/body-points.js?v=570"></script>
-<script src="../mobile/body-map.js?v=570"></script>
-<script src="../mobile/jspdf.umd.min.js?v=570"></script>
-<script src="../mobile/html2canvas.min.js?v=570"></script>
-<script src="../mobile/report-core.js?v=570"></script>
+<script src="../mobile/machine-fig.js?v=572"></script>
+<script src="../mobile/get.js?v=572"></script>
+<script src="../mobile/points.js?v=572"></script>
+<script src="../mobile/uc-points.js?v=572"></script>
+<script src="../mobile/inspect-guide.js?v=572"></script>
+<script src="../mobile/get-figs.js?v=572"></script>
+<script src="../mobile/body-points.js?v=572"></script>
+<script src="../mobile/body-map.js?v=572"></script>
+<script src="../mobile/jspdf.umd.min.js?v=572"></script>
+<script src="../mobile/html2canvas.min.js?v=572"></script>
+<script src="../mobile/report-core.js?v=572"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -21663,10 +21667,10 @@ document.querySelector(".lang").addEventListener("click",e=>{
   setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 })();
 </script>
-<script src="../dashboard/drive.js?v=570"></script>
-<script src="../dashboard/sync-adapter.js?v=570"></script>
-<script src="../dashboard/report.js?v=570"></script>
-<script src="../dashboard/reliability.js?v=570"></script>
+<script src="../dashboard/drive.js?v=572"></script>
+<script src="../dashboard/sync-adapter.js?v=572"></script>
+<script src="../dashboard/report.js?v=572"></script>
+<script src="../dashboard/reliability.js?v=572"></script>
 <script>
 /* THE CLOSED FILTER SAYS WHAT IS CHOSEN. A dropdown narrower than its option
    text ellipsises ("All t…", audit of 2026-10-01). Between 1331 and 1500 px
@@ -21683,6 +21687,92 @@ document.querySelector(".lang").addEventListener("click",e=>{
   document.addEventListener("mouseover",tip,true);
   document.addEventListener("focusin",tip,true);
   document.addEventListener("change",tip,true);
+})();
+</script>
+<style id="cmCardsCss">
+  /* CM_CARDS_V1 (02.11.2026, site rule SITE_STD_V1 9.1: no sideways scroll bar
+     inside the page, at any width). A table that does not fit its box is drawn
+     as cards, one per row: each value under its column's name. cmCardify()
+     decides per table and per width, so a table that fits stays a table. */
+  table.grid.ascards{display:block;min-width:0 !important;width:100% !important;table-layout:auto;}
+  table.grid.ascards colgroup{display:none;}
+  table.grid.ascards thead{display:block;}
+  table.grid.ascards thead tr:not(.cwfh):not(:has(th.cwfh)){display:none;}
+  /* CM_CARDS_V2: the column filters stay, as a row of named boxes above the cards */
+  table.grid.ascards thead tr:is(.cmfr,.cwfh,:has(th.cwfh)){display:flex;flex-wrap:wrap;gap:6px 10px;margin:0 0 10px;padding:0;border:0;background:none;}
+  table.grid.ascards thead tr:is(.cmfr,.cwfh,:has(th.cwfh)) th{display:block;flex:1 1 170px;max-width:260px;min-width:0;padding:0 !important;border:0 !important;background:none !important;position:static !important;height:auto !important;}
+  table.grid.ascards thead tr:is(.cmfr,.cwfh,:has(th.cwfh)) th:empty,table.grid.ascards thead tr:is(.cmfr,.cwfh,:has(th.cwfh)) th:not(:has(input,select)){display:none;}
+  table.grid.ascards thead tr:is(.cmfr,.cwfh,:has(th.cwfh)) th::before{content:attr(data-label);display:block;color:var(--muted);font:600 12px/1.35 "IBM Plex Sans",system-ui,sans-serif;margin:0 0 2px;}
+  table.grid.ascards thead tr:is(.cmfr,.cwfh,:has(th.cwfh)) th input,table.grid.ascards thead tr:is(.cmfr,.cwfh,:has(th.cwfh)) th select{width:100% !important;min-height:32px;box-sizing:border-box;font-size:13px !important;}
+  table.grid.ascards tbody{display:block;}
+  table.grid.ascards tr{display:block;border:1px solid var(--border);border-radius:10px;padding:6px 10px;margin:0 0 8px;background:var(--surface);height:auto !important;}
+  table.grid.ascards td{display:block;position:relative;min-height:22px;
+    padding:4px 0 4px calc(36% + 10px) !important;border:0 !important;white-space:normal !important;overflow:visible !important;
+    text-overflow:clip !important;max-width:none !important;width:auto !important;height:auto !important;text-align:left !important;}
+  table.grid.ascards td::before{content:attr(data-label);position:absolute;left:0;top:5px;width:36%;
+    color:var(--muted);font:600 12px/1.35 "IBM Plex Sans",system-ui,sans-serif;letter-spacing:0;text-transform:none;white-space:normal;}
+  table.grid.ascards td.nolab{padding-left:0 !important;}
+  table.grid.ascards td.nolab::before{content:none;}
+  table.grid.ascards td>*{max-width:100%;}
+  table.grid.ascards td:empty{display:none;}
+  @media (max-width:600px){
+    nav.tabs{scrollbar-width:none;}   /* the side menu is a swipe strip on a phone, like the site menu */
+    nav.tabs::-webkit-scrollbar{display:none;}
+    #lubeSub{flex-wrap:wrap;overflow:visible;}
+  }
+</style>
+<script id="cmCardsJs">/* CM_CARDS_V1: labels every cell with its column name and turns a table that
+   does not fit its box into cards (table.ascards). Runs after every redraw of
+   the page (a childList observer: it only sets attributes and classes, so it
+   never wakes itself) and on resize. tests/cards.cjs */
+(function(){
+  const LAB=th=>(th.getAttribute("aria-label")||th.textContent||"").replace(/[↕↑↓▲▼⇅]/g,"").replace(/\s+/g," ").trim();
+  function one(t){
+    const box=t.parentElement; if(!box||!t.tBodies.length) return;
+    const heads=[...(t.tHead?t.tHead.rows:[])].filter(r=>!r.classList.contains("cwfh")&&!r.querySelector("th.cwfh"));
+    const h=heads[heads.length-1]; const labs=[];
+    if(h) for(const th of h.cells){ const s=LAB(th); for(let i=0;i<(th.colSpan||1);i++) labs.push(i?"":s); }
+    for(const r of (t.tHead?t.tHead.rows:[])) if(r.classList.contains("cwfh")||r.querySelector("th.cwfh")){ r.classList.add("cmfr"); let c=0;
+      for(const th of r.cells){ const l=labs[c]||""; if(th.getAttribute("data-label")!==l) th.setAttribute("data-label",l); c+=th.colSpan||1; } }
+    for(const tb of t.tBodies) for(const tr of tb.rows){ let c=0;
+      for(const td of tr.cells){ const l=(td.colSpan>1&&tr.cells.length===1)?"":(labs[c]||"");
+        if(td.getAttribute("data-label")!==l) td.setAttribute("data-label",l);
+        if(td.classList.contains("nolab")!==!l) td.classList.toggle("nolab",!l); c+=td.colSpan||1; } }
+    t.classList.remove("ascards");
+    const cols=[...t.querySelectorAll(":scope>colgroup>col")];
+    cols.forEach(c=>{ if(c.dataset.w0===undefined) c.dataset.w0=c.style.width||""; if(c.style.width!==c.dataset.w0) c.style.width=c.dataset.w0; });
+    if(t.dataset.mw0===undefined) t.dataset.mw0=t.style.minWidth||"";
+    t.style.minWidth=t.dataset.mw0;
+    const W=box.clientWidth; if(!W||(t.offsetWidth<=W+1&&box.scrollWidth<=W+2)) return;
+    /* On a desk a table a little too wide is fitted first: its fixed columns
+       shrink in proportion (every cell is one line with an ellipsis and its
+       whole text on hover). Only what still does not fit becomes cards. */
+    if(innerWidth>900){
+      /* a column holding buttons keeps its width (a button is never cut); every words column keeps at least 120px */
+      const row1=t.tBodies[0]&&t.tBodies[0].rows[0], ctl=i=>!!(row1&&row1.cells[i]&&row1.cells[i].querySelector("button,input,select,a.minibtn"));
+      let fixed=0, locked=0, words=0;
+      cols.forEach((c,i)=>{ const w=parseFloat(c.dataset.w0); if(!w) words++; else if(ctl(i)) locked+=w; else fixed+=w; });
+      const r=fixed?(W-2-words*120-locked)/fixed:0;
+      if(r>=0.6){ cols.forEach((c,i)=>{ const w=parseFloat(c.dataset.w0); if(w&&!ctl(i)) c.style.width=Math.floor(w*Math.min(1,r))+"px"; });
+        t.style.minWidth=Math.floor(W-2)+"px"; if(t.offsetWidth<=W+1&&box.scrollWidth<=W+2) return; }
+      else if(!fixed && h){   /* widths set on the header cells: all shrink together, a little */
+        const ths=[...h.cells], r2=(W-2)/t.offsetWidth;
+        if(r2>=0.8){ const ws=ths.map(th=>th.offsetWidth); ths.forEach((th,i)=>{ th.style.width=Math.floor(ws[i]*r2)+"px"; });
+          t.style.minWidth=Math.floor(W-2)+"px"; if(t.offsetWidth<=W+1&&box.scrollWidth<=W+2) return;
+          ths.forEach(th=>th.style.width=""); t.style.minWidth=t.dataset.mw0; }
+      }
+    }
+    t.classList.add("ascards");
+  }
+  let q=0;
+  function run(){ q=0; document.querySelectorAll("main table.grid").forEach(t=>{ if(t.offsetParent) try{ one(t); }catch(e){} }); }
+  function soon(){ if(!q) q=requestAnimationFrame(run); }
+  window.cmCardify=run;
+  const m=document.querySelector("main");
+  if(m){ new MutationObserver(soon).observe(m,{childList:true,subtree:true});
+    /* the page's own scroll bar appearing narrows every box without a redraw */
+    if(window.ResizeObserver){ let w0=0; new ResizeObserver(e=>{ const w=e[0].contentRect.width; if(Math.abs(w-w0)>0.5){ w0=w; soon(); } }).observe(m); } }
+  addEventListener("resize",soon); document.addEventListener("click",()=>setTimeout(soon,0),true); soon();
 })();
 </script>
 <script id="cmStdJs">/* CM_SITE_STD_V1 (02.11.2026, Rickie "Proceed"): the site's own menu, title

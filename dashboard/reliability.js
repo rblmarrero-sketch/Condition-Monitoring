@@ -99,7 +99,8 @@
       + "#relPanel table.reltbl .num{text-align:right;font-variant-numeric:tabular-nums;}"
       + "#relPanel table.reltbl th.num{text-align:right;}"
       + "#relPanel table.reltbl tr.relgrp td{font-weight:600;background:var(--surface-2,rgba(0,0,0,.03));}"
-      + "#relPanel .relsrc a,#relPanel [data-rel=away] a{white-space:nowrap;display:inline-flex;align-items:center;min-height:32px;}";   // a pressable target, not a line of text (tests/phase6.cjs)
+      + "#relPanel .relsrc a,#relPanel [data-rel=away] a{white-space:nowrap;display:inline-flex;align-items:center;min-height:32px;}"
+      + "@media (max-width:600px){#relPanel .relsrc a,#relPanel [data-rel=away] a{white-space:normal;overflow-wrap:anywhere;}}";   // a phone: the host name wraps instead of running past the card   // a pressable target, not a line of text (tests/phase6.cjs)
     document.head.appendChild(st);
   }
 
