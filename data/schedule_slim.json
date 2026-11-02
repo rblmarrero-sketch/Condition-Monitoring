@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-02T00:07:42+00:00",
+  "generated": "2026-11-02T00:22:34+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -9411,6 +9411,24 @@
       "request": "",
       "defType": "",
       "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-021494",
+      "equip": "DZ002",
+      "cls": "",
+      "comp": "DZ002.CH.UC (Undercarriage / Ходовая часть)",
+      "desc": "Разбиты ШСЛ и разбит центральный палец балансирной балки",
+      "priority": "P4 Planned (Repair)",
+      "raised": "2026-08-06",
+      "type": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "hours": null,
+      "plan": "2026-11-09",
+      "status": "Elimination scheduled",
+      "request": "DD-00010354",
+      "defType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "cause": "Износ зацепления",
       "pmStatus": "open",
       "completed": ""
     },
