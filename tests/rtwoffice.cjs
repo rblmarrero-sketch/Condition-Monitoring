@@ -57,7 +57,7 @@ const sidecar = JSON.stringify({ type: 'cm-inspection-entries', version: 2, reco
       rtwWoType: rec.rtwWoType, rtwSchedHours: rec.rtwSchedHours, rtwSchedDate: rec.rtwSchedDate,
       rtwWoPriority: rec.rtwWoPriority, rtwTime: rec.rtwTime,
       hasStrip: html.includes('class="sstrip"'),
-      hasPmService: /PM Service[\s\S]{0,200}250 h Service/.test(html),
+      hasPmService: /PM Service[\s\S]{0,200}250 h</.test(html),
       hasPmType: /Type of PM[\s\S]{0,200}P3 Planned/.test(html),
       hasSchedDate: html.includes('2026-09-18'),
       hasActual: /Actual date[\s\S]{0,200}2026-09-20 09:15/.test(html),

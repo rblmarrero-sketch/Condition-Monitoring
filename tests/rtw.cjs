@@ -331,7 +331,7 @@ const jpg = p => p.evaluate(() => {
   })());
   ok('"PM Service" states the hour tier, not 1C\'s raw sentence repeating the same number', (() => {
     const m = /<div class="sk">PM Service[^<]*(?:<span[^>]*>[^<]*<\/span>)?<\/div><div class="sv">([^<]*)<\/div>/.exec(html);
-    return !!m && m[1] === '4000 h Service';
+    return !!m && m[1] === '4000 h';
   })() && !html.includes('4000 Hours service Planned'));
   ok('1C\'s plan date reaches the header strip, under "Scheduled date"', html.includes('2026-09-18'));
   ok('the actual release date AND time sit beside the scheduled date, under "Actual date", for a direct comparison', (() => {

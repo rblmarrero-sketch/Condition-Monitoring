@@ -190,7 +190,7 @@ const LATER_SCHED = { byUnit: { TK147: [
   // English label and the value survive, not an exact bilingual-free string.
   ok('the date is labelled — no longer bare', /Insp\. date[\s\S]{0,80}<b>2026-09-23<\/b>/.test(r4.withSched), r4.withSched.match(/<div class="msub">[\s\S]{0,200}/));
   ok('the SMU is labelled', /SMU[\s\S]{0,80}<b>1000<\/b> h/.test(r4.withSched), r4.withSched.match(/<div class="msub">[\s\S]{0,300}/));
-  ok('the schedule strip prints the hour tier', /PM Service[\s\S]{0,200}250 h Service/.test(r4.withSched));
+  ok('the schedule strip prints the hour tier', /PM Service[\s\S]{0,200}250 h</.test(r4.withSched));
   ok('...the plan date', r4.withSched.includes('2026-09-25'));
   ok('...and the priority code/class', /Type of PM[\s\S]{0,200}P3 Planned/.test(r4.withSched));
   // statusStrip (called for EVERY type) shares the .sstrip/.sc/.sk/.sv
@@ -199,7 +199,7 @@ const LATER_SCHED = { byUnit: { TK147: [
   // right after the masthead's .msub/.note) is the specific marker.
   ok('a round with nothing in SCHED prints no strip', !r4.noSched.includes('margin-top:10px'), r4.noSched.match(/<div class="msub">[\s\S]{0,300}/));
   ok('...but its own date and SMU are still labelled', /Insp\. date[\s\S]{0,80}<b>2026-09-23<\/b>/.test(r4.noSched) && /SMU[\s\S]{0,80}<b>1000<\/b> h/.test(r4.noSched));
-  ok('RTW is untouched — its own richer strip, not the generic one, still renders', /Actual date/.test(r4.rtw) && /PM Service[\s\S]{0,200}250 h Service/.test(r4.rtw) && r4.rtw.includes('2026-09-25'));
+  ok('RTW is untouched — its own richer strip, not the generic one, still renders', /Actual date/.test(r4.rtw) && /PM Service[\s\S]{0,200}250 h</.test(r4.rtw) && r4.rtw.includes('2026-09-25'));
   ok('no page errors', errs2.length === 0, errs2.join(' | '));
 
   await p2.close();
@@ -239,7 +239,7 @@ const LATER_SCHED = { byUnit: { TK147: [
       return {
         schedHours: rec.schedHours, schedDate: rec.schedDate, schedPriority: rec.schedPriority,
         hasStrip: html.includes('class="sstrip"'),
-        hasPmService: /PM Service[\s\S]{0,200}250 h Service/.test(html),
+        hasPmService: /PM Service[\s\S]{0,200}250 h</.test(html),
         hasPlanDate: html.includes('2026-09-25'),
       };
     });

@@ -355,7 +355,7 @@
           mark: it.mark || "",
           general: it.general ? 1 : 0,
           cats: (Array.isArray(it.att) ? it.att : []).map(e => (e && e.category) || "COMPONENT"),
-          resp: it.resp || "", target: it.target || "", opstat: it.opstat || "", gradeWhy: it.gradeWhy || "",
+          resp: it.resp || "", respRole: it.respRole || "", target: it.target || "", opstat: it.opstat || "", gradeWhy: it.gradeWhy || "",
           defect: it.defect || "", defectCode: it.defectCode || "", iso: it.iso || "",
           cause: it.cause || "",
           /* The action by its CODE, in the language on screen, with the other
