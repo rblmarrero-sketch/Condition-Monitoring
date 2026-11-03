@@ -1698,7 +1698,7 @@
     return '<div class="subhd" style="margin-top:9px;">' + T.L("walk_key") + '</div>'
       + '<div class="ckey">' + key.map(function (p) {
           return '<span class="i"><span class="n">' + esc(p.n) + '</span>'
-            + '<span class="t">' + T.enruI(p.en, p.ru) + '</span></span>';
+            + '<span class="t">' + T.enru(p.en, p.ru, "") + '</span></span>';
         }).join("") + '</div>';
   }
 
