@@ -23,12 +23,17 @@ const SEED = `(function(){
       { key:"HS.DL", label:"Hydraulic lines", grade:1 },
       { key:"DRS.ENG", label:"Engine", grade:3, comment:"Oil leak at the head gasket", wo:"WO-021099", prio:"P4" },
       { key:"HS.MP", label:"Hydraulic pumps", grade:3, comment:"Pump gasket weeping", wo:"WO-021099", prio:"P4" } ] },
+    { equip:"TK160", date:"2026-11-02", type:"TB", cls:"HT", by:"Rayanov", items:
+      Array.from({length:30},(_,n)=>({ key:"F"+(31+n), label:"Floor liner", grade: n<4?5:(n<20?4:1) })) },
+    { equip:"DZ012", date:"2026-11-02", type:"UC", cls:"DOZ", by:"Ospanov", items:
+      Array.from({length:20},(_,n)=>({ key:"ROLLER.L"+(n+1), label:"Track roller", grade: n<3?2:1 })) },
     { equip:"DZ011", date:"2026-11-01", type:"FC", cls:"DOZ", by:"Rayanov", items:[
       { key:"ENG", label:"Engine oil filter", grade:2, defect:"Fine particles", comment:"Watch" } ] }
   ]);
   window.CM_WO_DATA = Object.assign({}, window.CM_WO_DATA||{}, { cmSince:"2026-07-01", cmPeople:["Slam","Irek"],
     cmColumns:{}, cmWorkOrders:[
       { date:"2026-11-02", raised:"2026-11-02", asset:"TK150", defect:"DD-004512", system:"TK150.DRV.FD (Final drives)", defectType:"1.03 Wear", status:"Registered", by:"Slam", raisedBy:"Petrov A.", priority:"P2 Urgent" },
+      { date:"2026-11-03", raised:"2026-11-03", asset:"TK160", defect:"DD-00016249", system:"TK160.CH.BY (Dump Body / Самосвальный кузов)", defectType:"1.08 Crack / fracture", descr:"Limit wear in the unloading zone", status:"Registered", by:"Slam", priority:"P4 Planned (Repair)" },
       { date:"2026-11-03", raised:"2026-11-03", asset:"EX016", defect:"DD-00016300", system:"EX016.DRS.ENG (Engine / Двигатель)", defectType:"1.01 Leakage", status:"Registered", by:"Irek", priority:"P3 Planned (PM)" },
       { date:"2026-11-01", asset:"TK151", defect:"DD-2", status:"Elimination scheduled", by:"Irek", woNumber:"WO-9001", priority:"P2 Urgent" },
       { date:"2026-11-01", asset:"TK152", defect:"DD-3", status:"In Progress", by:"Irek", priority:"P3" },
@@ -51,9 +56,12 @@ async function run(b, path, lng) {
     return { day: (document.getElementById('dsDay') || {}).value, chips: b.querySelectorAll('[data-dsk]').length, trs,
       th: [...b.querySelectorAll('#dsPrev thead th')].map(t => t.textContent), intro: (b.querySelector('#dsPrev p') || {}).textContent || '' }; });
   ok(ds && ds.day === '2026-11-02', 'opens on the newest day with rounds', ds && ds.day);
-  ok(ds && ds.chips === 2, 'both rounds of that day are offered', ds && ds.chips);
+  ok(ds && ds.chips === 4, 'every round of that day is offered', ds && ds.chips);
   ok(ds && ds.th.length === 8, 'eight columns', ds && ds.th.join(' | '));
-  ok(ds && ds.trs.length === 5, 'one row per recorded position; the empty plug 1 is left out', ds && ds.trs.length);
+  ok(ds && ds.trs.length === 7, 'one row per recorded position, one per measured round; the empty plug 1 is left out', ds && ds.trs.length);
+  const tb = ds && ds.trs.filter(r => /TK160/.test(r[1])), uc = ds && ds.trs.filter(r => /DZ012/.test(r[1]));
+  ok(tb && tb.length === 1 && tb[0][5] === 'DD-00016249' && /CH\.BY/.test(tb[0][2]) && /Crack/.test(tb[0][3]) && /^P4/.test(tb[0][6]) && /Critical|Критич/.test(tb[0][7]), 'a dump body round is one row: the defect raised for CH.BY, at its worst severity', tb && tb.map(r => r.join(' | ')).join(' // '));
+  ok(uc && uc.length === 1 && /20/.test(uc[0][2]) && /ROLLER\.L1/.test(uc[0][4]) && uc[0][5] === '—', 'an undercarriage round with no defect is one line: points measured, the worst ones, nothing to raise at Incipient', uc && uc.map(r => r.join(' | ')).join(' // '));
   const f = ds && ds.trs.find(r => /4E/.test(r[2])), n = ds && ds.trs.find(r => /4F/.test(r[2]));
   ok(f && /Wear/.test(f[3]) && /Heavy flakes/.test(f[4]) && f[5] === 'DD-004512' && /^P2/.test(f[6]), 'a plug finding is paired with the one defect raised on its unit', f && f.join(' | '));
   const eng = ds && ds.trs.find(r => /DRS\.ENG/.test(r[2])), mp = ds && ds.trs.find(r => /HS\.MP/.test(r[2]));
@@ -64,7 +72,7 @@ async function run(b, path, lng) {
   await p.evaluate(() => { const c = document.querySelector('#daySum [data-dsk*="EX016"]') || [...document.querySelectorAll('#daySum [data-dsk]')].find(x => /EX016/.test(x.parentNode.textContent)); c.click(); });
   await p.waitForTimeout(200);
   const after = await p.evaluate(() => document.querySelectorAll('#dsPrev tbody tr').length);
-  ok(after === 2, 'unticking a round takes its rows away', after);
+  ok(after === 4, 'unticking a round takes its rows away', after);
   const mail = await p.evaluate(() => CMDaySum.mailHtml(CMDaySum.rowsFor(RECS.filter(r => r.date === '2026-11-02')), RECS.filter(r => r.date === '2026-11-02')));
   ok(/<table style="border-collapse:collapse">/.test(mail) && !/class="/.test(mail), 'the e-mail table has inline styles only', mail.length);
   if (lng === 'ru') ok(/Дата осмотра/.test(ds.th.join(' ')) && /Критичность/.test(ds.th.join(' ')), 'Russian headings', ds.th.join(' | '));
@@ -73,7 +81,7 @@ async function run(b, path, lng) {
   const cw = await p.evaluate(() => ({ chips: [...document.querySelectorAll('#cwStageF [data-cwst]')].map(b => b.textContent.trim()),
     rows: [...document.querySelectorAll('#cwList table.cwtbl tbody tr')].map(tr => [...tr.cells].map(c => c.textContent.trim())),
     nowo: (document.querySelector('#cwStageF .cwnowo') || {}).textContent || '' }));
-  ok(cw.chips.length === 4 && /5$/.test(cw.chips[0]) && /2$/.test(cw.chips[1]) && /2$/.test(cw.chips[2]) && /1$/.test(cw.chips[3]), 'stage chips: all 5, registered 2, in progress 2, completed 1', cw.chips.join(' | '));
+  ok(cw.chips.length === 4 && /6$/.test(cw.chips[0]) && /3$/.test(cw.chips[1]) && /2$/.test(cw.chips[2]) && /1$/.test(cw.chips[3]), 'stage chips: all 6, registered 3, in progress 2, completed 1', cw.chips.join(' | '));
   ok(/1/.test(cw.nowo), 'one defect in progress without a WO number is counted', cw.nowo);
   const r1 = cw.rows.find(r => r.includes('TK150')), r2 = cw.rows.find(r => r.includes('TK151')), r3 = cw.rows.find(r => r.includes('TK152'));
   ok(r1 && r1.includes('Petrov A.'), 'Raised by shows the name 1C has', r1 && r1.slice(-3).join(' | '));
