@@ -55,7 +55,7 @@ async function run(b, path, lng) {
   ok(ds && ds.th.length === 8, 'eight columns', ds && ds.th.join(' | '));
   ok(ds && ds.trs.length === 5, 'one row per recorded position; the empty plug 1 is left out', ds && ds.trs.length);
   const f = ds && ds.trs.find(r => /4E/.test(r[2])), n = ds && ds.trs.find(r => /4F/.test(r[2]));
-  ok(f && /Metal particles/.test(f[3]) && /Heavy flakes/.test(f[4]) && f[5] === 'DD-004512' && /^P2/.test(f[6]), 'a plug finding is paired with the one defect raised on its unit', f && f.join(' | '));
+  ok(f && /Wear/.test(f[3]) && /Heavy flakes/.test(f[4]) && f[5] === 'DD-004512' && /^P2/.test(f[6]), 'a plug finding is paired with the one defect raised on its unit', f && f.join(' | '));
   const eng = ds && ds.trs.find(r => /DRS\.ENG/.test(r[2])), mp = ds && ds.trs.find(r => /HS\.MP/.test(r[2]));
   ok(eng && eng[5] === 'DD-00016300' && /Leakage/.test(eng[3]) && /^P3/.test(eng[6]), 'a finding takes the defect raised for its system code, with 1C type and priority', eng && eng.join(' | '));
   ok(mp && /Not raised in 1C|Нет в 1С/.test(mp[5]), 'a Degraded finding with no defect in 1C says so', mp && mp[5]);
