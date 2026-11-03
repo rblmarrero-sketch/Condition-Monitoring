@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-03T05:40:32+00:00",
+  "generated": "2026-11-03T06:42:52+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -437,13 +437,13 @@ window.CM_WO_DATA = {
     "wo": "Work order number"
   },
   "cmDateFrom": {
-    "raised": 194,
+    "raised": 195,
     "detected": 0,
     "planStart": 0
   },
   "cmCauseFrom": {
     "wo": 105,
-    "wr": 89,
+    "wr": 90,
     "cert": 0,
     "none": 0
   },
@@ -456,6 +456,29 @@ window.CM_WO_DATA = {
     "Bekzhan"
   ],
   "cmWorkOrders": [
+    {
+      "date": "2026-11-03",
+      "dateFrom": "raised",
+      "raised": "2026-11-03",
+      "detected": "2026-11-03",
+      "planStart": null,
+      "closed": null,
+      "asset": "TK110",
+      "defect": "DD-00016249",
+      "requestNo": "DD-00016249",
+      "eqType": "TRUCK, ARTICULATED",
+      "system": "TK110.CH.BY (Dump Body / Самосвальный кузов)",
+      "priority": "P4 Planned (Repair)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "cause": "Усталостная трещина",
+      "causeFrom": "wr",
+      "descr": "Предельный износ в зонах разгрузки (на заднем борту).",
+      "status": "Registered",
+      "by": "Zhomart",
+      "woNumber": null,
+      "maintType": null,
+      "planned": false
+    },
     {
       "date": "2026-11-03",
       "dateFrom": "raised",
@@ -17317,15 +17340,15 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
-      "planStart": "2026-11-03",
-      "planStartDt": "2026-11-03T00:00:00",
-      "planEnd": "2026-11-04",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
+      "planStart": "2026-11-02",
+      "planStartDt": "2026-11-02T21:55:00",
+      "planEnd": "2026-11-02",
+      "actualStart": "2026-11-02",
+      "actualStartDt": "2026-11-02T21:55:00",
+      "actualEnd": "2026-11-02"
     },
     {
       "equip": "DZ003",
@@ -18361,15 +18384,15 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
-      "planStart": "2026-11-03",
-      "planStartDt": "2026-11-03T00:00:00",
-      "planEnd": "2026-11-04",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
+      "planStart": "2026-11-02",
+      "planStartDt": "2026-11-02T20:10:00",
+      "planEnd": "2026-11-02",
+      "actualStart": "2026-11-02",
+      "actualStartDt": "2026-11-02T20:10:00",
+      "actualEnd": "2026-11-02"
     },
     {
       "equip": "DZ004",
@@ -25580,15 +25603,15 @@ window.CM_WO_DATA = {
         "UC"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-10-28",
-      "planStartDt": "2026-10-28T00:00:00",
-      "planEnd": "2026-10-29",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "planStartDt": "2026-10-28T07:00:00",
+      "planEnd": "2026-10-30",
+      "actualStart": "2026-10-28",
+      "actualStartDt": "2026-10-28T07:00:00",
+      "actualEnd": "2026-10-30"
     },
     {
       "equip": "DZ017",
@@ -31635,15 +31658,15 @@ window.CM_WO_DATA = {
       "cmLabel": "500h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
-      "planStart": "2026-11-03",
-      "planStartDt": "2026-11-03T00:00:00",
-      "planEnd": "2026-11-04",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
+      "planStart": "2026-11-02",
+      "planStartDt": "2026-11-02T08:00:00",
+      "planEnd": "2026-11-03",
+      "actualStart": "2026-11-02",
+      "actualStartDt": "2026-11-02T08:00:00",
+      "actualEnd": "2026-11-03"
     },
     {
       "equip": "EX009",
@@ -39349,15 +39372,15 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
-      "planStart": "2026-11-03",
-      "planStartDt": "2026-11-03T00:00:00",
-      "planEnd": "2026-11-04",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
+      "planStart": "2026-11-02",
+      "planStartDt": "2026-11-02T02:55:00",
+      "planEnd": "2026-11-02",
+      "actualStart": "2026-11-02",
+      "actualStartDt": "2026-11-02T02:55:00",
+      "actualEnd": "2026-11-02"
     },
     {
       "equip": "EX025",
@@ -102037,15 +102060,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-02",
-      "planStartDt": "2026-11-02T00:00:00",
-      "planEnd": "2026-11-03",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "planStartDt": "2026-11-02T09:30:00",
+      "planEnd": "2026-11-02",
+      "actualStart": "2026-11-02",
+      "actualStartDt": "2026-11-02T09:30:00",
+      "actualEnd": "2026-11-02"
     },
     {
       "equip": "TK122",
