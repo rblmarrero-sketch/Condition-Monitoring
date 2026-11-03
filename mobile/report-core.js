@@ -1130,7 +1130,7 @@
       ap_sig_err:"Recorded signature could not be loaded",
       ap_sig_miss:"Recorded signature not yet received by the office",
       ma_head:"Maintenance action", ma_action:"Recorded action", ma_cause:"Direct cause",
-      ma_owner:"Owner", ma_wo:"Work order", ma_due:"Due date", ma_none:"Not recorded",
+      ma_owner:"Responsible", ma_wo:"Work order", ma_due:"Due date", ma_none:"Not recorded",
       ma_clear:"No action required — every position inspected was found normal.",
       /* Type-body subheadings and column labels, to the v2 single-inspection
          templates. Honest empty states share c_notrec / c_notmeas / c_nofind. */
@@ -1195,7 +1195,7 @@
       cat_DEFECT:"Defect close-up", cat_MEASURE:"Measurement", cat_PLATE:"Identification plate",
       cat_EXTRA:"Additional",
       /* The plan a graded finding carries. */
-      c_resp:"Responsible", c_target:"Target date", c_opstat:"Status",
+      c_resp:"Responsible", c_target:"Due date", c_opstat:"Status",
       op_RUN:"Running", op_RES:"Restricted", op_STOP:"Stopped",
       g_why:"Graded below the proposed 5 —",
       legend:"How to read this report",
