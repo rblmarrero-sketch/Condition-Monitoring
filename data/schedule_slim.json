@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-03T23:21:29+00:00",
+  "generated": "2026-11-03T23:34:14+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -8965,12 +8965,12 @@
       "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "hours": null,
       "plan": "2026-10-23",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "DD-00013195",
       "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "cause": "Поврежден прокладки",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-10-23"
     },
     {
       "wo": "WO-018629",

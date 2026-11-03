@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-03T23:21:29+00:00",
+  "generated": "2026-11-03T23:34:14+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -353,7 +353,7 @@ window.CM_WO_DATA = {
     "WE010",
     "WE011"
   ],
-  "duplicateRowsCollapsed": 459,
+  "duplicateRowsCollapsed": 461,
   "roundsDedupedWithinVisit": 2,
   "columns": [
     "Asset description",
@@ -3535,7 +3535,7 @@ window.CM_WO_DATA = {
       "raised": "2026-09-23",
       "detected": "2026-09-23",
       "planStart": "2026-10-23",
-      "closed": null,
+      "closed": "2026-10-23",
       "asset": "EX019",
       "defect": "DD-00013195",
       "requestNo": "DD-00013195",
@@ -3546,7 +3546,7 @@ window.CM_WO_DATA = {
       "cause": "Поврежден прокладки",
       "causeFrom": "wo",
       "descr": "Течь под насосом.",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "by": "Irek",
       "raisedBy": "ГДК Баимская",
       "woNumber": "WO-019904",
