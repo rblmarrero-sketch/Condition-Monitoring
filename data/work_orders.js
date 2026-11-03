@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-03T05:19:52+00:00",
+  "generated": "2026-11-03T05:40:32+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -437,13 +437,13 @@ window.CM_WO_DATA = {
     "wo": "Work order number"
   },
   "cmDateFrom": {
-    "raised": 193,
+    "raised": 194,
     "detected": 0,
     "planStart": 0
   },
   "cmCauseFrom": {
     "wo": 105,
-    "wr": 88,
+    "wr": 89,
     "cert": 0,
     "none": 0
   },
@@ -456,6 +456,29 @@ window.CM_WO_DATA = {
     "Bekzhan"
   ],
   "cmWorkOrders": [
+    {
+      "date": "2026-11-03",
+      "dateFrom": "raised",
+      "raised": "2026-11-03",
+      "detected": "2026-11-03",
+      "planStart": null,
+      "closed": null,
+      "asset": "EX007",
+      "defect": "DD-00016247",
+      "requestNo": "DD-00016247",
+      "eqType": "EXCAVATOR, BUCKET",
+      "system": "EX007.HS.MP (Hydraulic Pumps / Гидронасосы)",
+      "priority": "P4 Planned (Repair)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Износ уплотнения",
+      "causeFrom": "wr",
+      "descr": "Утечка рабочей жидкости в месте фланцевого соединения основного гидравлического насоса.",
+      "status": "Registered",
+      "by": "Zhomart",
+      "woNumber": null,
+      "maintType": null,
+      "planned": false
+    },
     {
       "date": "2026-11-01",
       "dateFrom": "raised",
@@ -34525,8 +34548,8 @@ window.CM_WO_DATA = {
       "cmmsStatus": "Elimination scheduled",
       "open": true,
       "planStart": "2026-11-02",
-      "planStartDt": "2026-11-02T00:00:00",
-      "planEnd": "2026-11-03",
+      "planStartDt": "2026-11-02T09:50:00",
+      "planEnd": "2026-11-02",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
