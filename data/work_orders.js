@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-03T12:38:03+00:00",
+  "generated": "2026-11-03T12:59:12+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -434,7 +434,8 @@ window.CM_WO_DATA = {
     "desc": "Defect description",
     "status": "CMMSWork order status",
     "person": "Responsible person",
-    "wo": "Work order number"
+    "wo": "Work order number",
+    "initiator": "Initiator WR"
   },
   "cmDateFrom": {
     "raised": 195,
@@ -475,6 +476,7 @@ window.CM_WO_DATA = {
       "descr": "Предельный износ в зонах разгрузки (на заднем борту).",
       "status": "Registered",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -498,6 +500,7 @@ window.CM_WO_DATA = {
       "descr": "Утечка рабочей жидкости в месте фланцевого соединения основного гидравлического насоса.",
       "status": "Registered",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -521,6 +524,7 @@ window.CM_WO_DATA = {
       "descr": "Износ и поперечные трещины на ремне генератора.",
       "status": "Registered",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -544,6 +548,7 @@ window.CM_WO_DATA = {
       "descr": "Выявлена утечка рабочей жидкости в зоне фильтра системы охлаждения тормозов.",
       "status": "Registered",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -567,6 +572,7 @@ window.CM_WO_DATA = {
       "descr": "Течь в зоне сальника карданного вала.",
       "status": "Registered",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -590,6 +596,7 @@ window.CM_WO_DATA = {
       "descr": "течь масла с гидролиний.",
       "status": "Registered",
       "by": "Bekzhan",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -613,6 +620,7 @@ window.CM_WO_DATA = {
       "descr": "Неисправен фиксатор ремня безопасности",
       "status": "Registered",
       "by": "Bekzhan",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -636,6 +644,7 @@ window.CM_WO_DATA = {
       "descr": "Износ сиденье оператора.",
       "status": "Registered",
       "by": "Bekzhan",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -659,6 +668,7 @@ window.CM_WO_DATA = {
       "descr": "Износ и поперечные трещины на ремне генератора.",
       "status": "Registered",
       "by": "Bekzhan",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -682,6 +692,7 @@ window.CM_WO_DATA = {
       "descr": "Износ и поперечные трещины на ремне генератора.",
       "status": "Registered",
       "by": "Bekzhan",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -705,6 +716,7 @@ window.CM_WO_DATA = {
       "descr": "Предельный износ футеровочных пластин.",
       "status": "Registered",
       "by": "Bekzhan",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -728,6 +740,7 @@ window.CM_WO_DATA = {
       "descr": "Течь масла в зоне рулевого насоса, требуется диагностика",
       "status": "Registered",
       "by": "Bekzhan",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -751,6 +764,7 @@ window.CM_WO_DATA = {
       "descr": "Течь масла из фитингов гидрораспределителя.",
       "status": "Registered",
       "by": "Bekzhan",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -774,6 +788,7 @@ window.CM_WO_DATA = {
       "descr": "Износ и поперечные трещины на ремне генератора.",
       "status": "Registered",
       "by": "Bekzhan",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -797,6 +812,7 @@ window.CM_WO_DATA = {
       "descr": "Подтеки масла с фитинга гидронасоса.",
       "status": "Registered",
       "by": "Bekzhan",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -820,6 +836,7 @@ window.CM_WO_DATA = {
       "descr": "Течь масла с редуктора РПН, масла густой консистенции.Требуется диагностика.",
       "status": "Registered",
       "by": "Bekzhan",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -843,6 +860,7 @@ window.CM_WO_DATA = {
       "descr": "Течь масло с фильтра маслоохладителя тормозной жидкости.",
       "status": "Registered",
       "by": "Bekzhan",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -866,6 +884,7 @@ window.CM_WO_DATA = {
       "descr": "Течь масла с фитинга гидролинии.",
       "status": "Registered",
       "by": "Bekzhan",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -889,6 +908,7 @@ window.CM_WO_DATA = {
       "descr": "Трещины зубчатого профиля ремней.",
       "status": "Registered",
       "by": "Bekzhan",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -912,6 +932,7 @@ window.CM_WO_DATA = {
       "descr": "Критический износ футеровочных пластин кузова.",
       "status": "Registered",
       "by": "Bekzhan",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -935,6 +956,7 @@ window.CM_WO_DATA = {
       "descr": "Утечка маcла с фитинга гидронасоса.",
       "status": "Registered",
       "by": "Bekzhan",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -958,6 +980,7 @@ window.CM_WO_DATA = {
       "descr": "Утечка с щупа РПН, масло не характерного цвета и консистенции. Требуется диагностика.",
       "status": "Registered",
       "by": "Bekzhan",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -981,6 +1004,7 @@ window.CM_WO_DATA = {
       "descr": "Абразивный износ зубьев звёздочки, сколами и разрушением рабочей поверхности.",
       "status": "Registered",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -1004,6 +1028,7 @@ window.CM_WO_DATA = {
       "descr": "Негерметичность крышки заливной горловины топливного бака.",
       "status": "Registered",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -1027,6 +1052,7 @@ window.CM_WO_DATA = {
       "descr": "Течь масла с фитингов гидрораспределителя.",
       "status": "Elimination scheduled",
       "by": "Bekzhan",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-021004",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -1050,6 +1076,7 @@ window.CM_WO_DATA = {
       "descr": "Утечка масла с фитингов рулевого насоса.",
       "status": "Elimination scheduled",
       "by": "Bekzhan",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-021003",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -1073,6 +1100,7 @@ window.CM_WO_DATA = {
       "descr": "Запотевание левого бортового редуктора.",
       "status": "Registered",
       "by": "Bekzhan",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -1096,6 +1124,7 @@ window.CM_WO_DATA = {
       "descr": "В ДВС на блоке наблюдается следы самасливание. Точное происхождение следов не установлено,требуется диагностика и локализация течи.",
       "status": "Elimination scheduled",
       "by": "Bekzhan",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-021490",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -1119,6 +1148,7 @@ window.CM_WO_DATA = {
       "descr": "Усталостное растрескивание рабочего профиля (зубьев) приводных ремней генератора.",
       "status": "Registered",
       "by": "Bekzhan",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -1142,6 +1172,7 @@ window.CM_WO_DATA = {
       "descr": "В радиаторе обнаружены следы засохшей ОЖ",
       "status": "Registered",
       "by": "Bekzhan",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -1165,6 +1196,7 @@ window.CM_WO_DATA = {
       "descr": "Отсутствует крышка бачка стеклоомывателя.",
       "status": "Registered",
       "by": "Bekzhan",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -1188,6 +1220,7 @@ window.CM_WO_DATA = {
       "descr": "Tрещины зубчатого профиля ремней генератора.",
       "status": "Elimination scheduled",
       "by": "Bekzhan",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-020826",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -1211,6 +1244,7 @@ window.CM_WO_DATA = {
       "descr": "Запотевание теплообменника трансмиссии.",
       "status": "Registered",
       "by": "Bekzhan",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -1234,6 +1268,7 @@ window.CM_WO_DATA = {
       "descr": "Течь в зоне фитингов гидрораспределителя.",
       "status": "Completed",
       "by": "Bekzhan",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-020985",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -1257,6 +1292,7 @@ window.CM_WO_DATA = {
       "descr": "Разгерметизация выпускного тракта выхлопной трубы, выброс сажи из под термочехла.",
       "status": "Registered",
       "by": "Bekzhan",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -1280,6 +1316,7 @@ window.CM_WO_DATA = {
       "descr": "Течь ОЖ с патрубка теплообменника.",
       "status": "Completed",
       "by": "Bekzhan",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-020984",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -1303,6 +1340,7 @@ window.CM_WO_DATA = {
       "descr": "Течь масла из левого заднего бортового редуктора.",
       "status": "Registered",
       "by": "Bekzhan",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -1326,6 +1364,7 @@ window.CM_WO_DATA = {
       "descr": "Износ шкива.",
       "status": "Registered",
       "by": "Bekzhan",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -1349,6 +1388,7 @@ window.CM_WO_DATA = {
       "descr": "Трещины зубчатого профиля ремней генератора.",
       "status": "Registered",
       "by": "Bekzhan",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -1372,6 +1412,7 @@ window.CM_WO_DATA = {
       "descr": "Утечка РВД охлаждение тормозов на обжиме в зоне сочленений.",
       "status": "Registered",
       "by": "Bekzhan",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -1395,6 +1436,7 @@ window.CM_WO_DATA = {
       "descr": "Выявлена утечки рабочей жидкости из стыков датчика на гидробаке .",
       "status": "Registered",
       "by": "Bekzhan",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -1418,6 +1460,7 @@ window.CM_WO_DATA = {
       "descr": "Разгерметизация в выхлопной системе - присутствует утечка отработавших газов.",
       "status": "Registered",
       "by": "Bekzhan",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -1441,6 +1484,7 @@ window.CM_WO_DATA = {
       "descr": "Выявлено запотевание в зоне сальника карданного вала.",
       "status": "Registered",
       "by": "Bekzhan",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -1464,6 +1508,7 @@ window.CM_WO_DATA = {
       "descr": "Выявлено течь в зоне фитингов гидрораспределителя.",
       "status": "Elimination scheduled",
       "by": "Bekzhan",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-020988",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -1487,6 +1532,7 @@ window.CM_WO_DATA = {
       "descr": "Ремень генератора в трещинах, требуется замена.",
       "status": "Registered",
       "by": "Bekzhan",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -1510,6 +1556,7 @@ window.CM_WO_DATA = {
       "descr": "Выявлено разрушения крепления фары-поворотника .",
       "status": "Registered",
       "by": "Bekzhan",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -1533,6 +1580,7 @@ window.CM_WO_DATA = {
       "descr": "Трещина лобового стекло.",
       "status": "Registered",
       "by": "Bekzhan",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -1556,6 +1604,7 @@ window.CM_WO_DATA = {
       "descr": "На ковще обнаружена трещина.",
       "status": "Registered",
       "by": "Bekzhan",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -1579,6 +1628,7 @@ window.CM_WO_DATA = {
       "descr": "Обнаружена течь в соединении гидравлических труб на стреле.",
       "status": "Registered",
       "by": "Bekzhan",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -1602,6 +1652,7 @@ window.CM_WO_DATA = {
       "descr": "Разгерметизация выпускного тракта на стыке турбокомпрессора и выхлопной трубы, выброс сажи из под термочехла.",
       "status": "Registered",
       "by": "Bekzhan",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -1625,6 +1676,7 @@ window.CM_WO_DATA = {
       "descr": "Течь охлаждающей жидкости из расширительного бочка.",
       "status": "Registered",
       "by": "Bekzhan",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -1648,6 +1700,7 @@ window.CM_WO_DATA = {
       "descr": "Отсутсвует ручка на форточке кабины.",
       "status": "Registered",
       "by": "Bekzhan",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -1671,6 +1724,7 @@ window.CM_WO_DATA = {
       "descr": "Фара функционирует некорректно.",
       "status": "Elimination scheduled",
       "by": "Bekzhan",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-021509",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -1694,6 +1748,7 @@ window.CM_WO_DATA = {
       "descr": "Действущая течь РВД на гидрораспределителе, наблюдается масла в зоне фитинга.",
       "status": "Elimination scheduled",
       "by": "Bekzhan",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-021508",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -1717,6 +1772,7 @@ window.CM_WO_DATA = {
       "descr": "Не работает подогреватель сидения.",
       "status": "Elimination scheduled",
       "by": "Bekzhan",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-021499",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -1740,6 +1796,7 @@ window.CM_WO_DATA = {
       "descr": "Течь из штока гидроцилиндра, левый.",
       "status": "Registered",
       "by": "Bekzhan",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -1763,6 +1820,7 @@ window.CM_WO_DATA = {
       "descr": "Предпусковой подогреватель двигателя не функционирует.",
       "status": "Completed",
       "by": "Bekzhan",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-020309",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -1786,6 +1844,7 @@ window.CM_WO_DATA = {
       "descr": "Трещины в ремне генератора.",
       "status": "Registered",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -1809,6 +1868,7 @@ window.CM_WO_DATA = {
       "descr": "Течь гидроцилиндра рыхлителя.",
       "status": "Registered",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -1832,6 +1892,7 @@ window.CM_WO_DATA = {
       "descr": "Предпусковой подогреватель двигателя не включается.",
       "status": "Elimination scheduled",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-021507",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -1855,6 +1916,7 @@ window.CM_WO_DATA = {
       "descr": "В моторном отсеке течь охлаждающей жидкости на стыке фланца патрубка, течь действующая.",
       "status": "Elimination scheduled",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-021506",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -1878,6 +1940,7 @@ window.CM_WO_DATA = {
       "descr": "Отсутвие штатной крышки бачка омывателя лобового стекла.",
       "status": "Registered",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -1901,6 +1964,7 @@ window.CM_WO_DATA = {
       "descr": "Ремень генератора в трещинах, требуется замена.",
       "status": "Elimination scheduled",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-020882",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -1924,6 +1988,7 @@ window.CM_WO_DATA = {
       "descr": "Состояние ремня генератора не удовлетворительное.",
       "status": "Elimination scheduled",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-020318",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -1947,6 +2012,7 @@ window.CM_WO_DATA = {
       "descr": "В гидробаке течь рабочей жидкости по уплотнению смотрового стекла указателя уровня.",
       "status": "Registered",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -1970,6 +2036,7 @@ window.CM_WO_DATA = {
       "descr": "На торце пальца гусеничной цепи шов отслоился по контуру сварного шва.",
       "status": "Registered",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -1993,6 +2060,7 @@ window.CM_WO_DATA = {
       "descr": "Отсутвие крепежного болта опорного катка.",
       "status": "Registered",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -2016,6 +2084,7 @@ window.CM_WO_DATA = {
       "descr": "Трещины в отвале.",
       "status": "Registered",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -2039,6 +2108,7 @@ window.CM_WO_DATA = {
       "descr": "Выпускной системе двигателя обнаружено повреждение теплоизоляционного(противопожарного) чехла.",
       "status": "Registered",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -2062,6 +2132,7 @@ window.CM_WO_DATA = {
       "descr": "Течь рабочей жидкости из линии РВД подведенной к фильтру гидросистемы тормозов. Подтеки наблюдаются на фитинге.",
       "status": "Completed",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-020831",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -2085,6 +2156,7 @@ window.CM_WO_DATA = {
       "descr": "В ремнях генератора обнаружены множественные поперечные трещины.",
       "status": "Elimination scheduled",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-020829",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -2108,6 +2180,7 @@ window.CM_WO_DATA = {
       "descr": "Течь с распределителя, требуется диагностика и локализация утечки.",
       "status": "Completed",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-019937",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -2131,6 +2204,7 @@ window.CM_WO_DATA = {
       "descr": "Разгерметизация правой части радиатора охлаждения ДВС.",
       "status": "Completed",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-019935",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -2154,6 +2228,7 @@ window.CM_WO_DATA = {
       "descr": "Усталосные растрескивание приводных ремней генератора.",
       "status": "Completed",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-019938",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -2177,6 +2252,7 @@ window.CM_WO_DATA = {
       "descr": "Потеря герметичности бачка гидроусилителя руля (ГУР).",
       "status": "Completed",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-019939",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -2200,6 +2276,7 @@ window.CM_WO_DATA = {
       "descr": "Установка самодельных защелок/стопоров на крюковой подвеске.",
       "status": "Completed",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-019940",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -2223,6 +2300,7 @@ window.CM_WO_DATA = {
       "descr": "Течь РВД линии с распределителя в гидробак, требуется диагностика и локализация течи.",
       "status": "Completed",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-019567",
       "maintType": "Mining Unplanned",
       "planned": false
@@ -2246,6 +2324,7 @@ window.CM_WO_DATA = {
       "descr": "Патрубок воздуховода системы впуска ДВС имеет трещины.",
       "status": "Elimination scheduled",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-020775",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -2269,6 +2348,7 @@ window.CM_WO_DATA = {
       "descr": "Течь охлаждающей жидкости из расширительного бочка.",
       "status": "Completed",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-020314",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -2292,6 +2372,7 @@ window.CM_WO_DATA = {
       "descr": "Aбразивный износ нижней части корпуса бортового редуктора.",
       "status": "Registered",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -2315,6 +2396,7 @@ window.CM_WO_DATA = {
       "descr": "Трещина в зоне втулки шарнирного крепления стрелы крана. С левой стороны.",
       "status": "Elimination scheduled",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-020797",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -2338,6 +2420,7 @@ window.CM_WO_DATA = {
       "descr": "Замасливание корпуса регулятора зазора тормозов.",
       "status": "Completed",
       "by": "Slam",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-020291",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -2361,6 +2444,7 @@ window.CM_WO_DATA = {
       "descr": "Течь передней левой и задней правой ступиц.",
       "status": "Registered",
       "by": "Slam",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -2384,6 +2468,7 @@ window.CM_WO_DATA = {
       "descr": "Поперечные трещины ремня генератора.",
       "status": "Completed",
       "by": "Slam",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-020058",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -2407,6 +2492,7 @@ window.CM_WO_DATA = {
       "descr": "Течь гидравлического масла по телу РВД линии забора масла на гидропривод вентилятора",
       "status": "Completed",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-019040",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -2430,6 +2516,7 @@ window.CM_WO_DATA = {
       "descr": "Течь охлаждающей жидкости помпы ДВС; потеря герметичности уплотнения помпы.",
       "status": "Registered",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -2453,6 +2540,7 @@ window.CM_WO_DATA = {
       "descr": "Множественные поперечные трещины приводного ремня генератора.",
       "status": "Elimination scheduled",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-020886",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -2476,6 +2564,7 @@ window.CM_WO_DATA = {
       "descr": "Разгерметизация выпускного тракта на стыке турбокомпрессора и выхлопной трубы.",
       "status": "Registered",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -2499,6 +2588,7 @@ window.CM_WO_DATA = {
       "descr": "Глубокие поперечные трещины наружного резинового слоя РВД охлаждения тормозов.",
       "status": "Elimination scheduled",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-020884",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -2522,6 +2612,7 @@ window.CM_WO_DATA = {
       "descr": "Трещины наружного слоя резины сливного патрубка гидрораспределителя.",
       "status": "Completed",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-019034",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -2545,6 +2636,7 @@ window.CM_WO_DATA = {
       "descr": "Трещины футеровочных бронеплит.",
       "status": "Registered",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -2568,6 +2660,7 @@ window.CM_WO_DATA = {
       "descr": "Множественные поперечные трещины наружного резинового слоя РВД контура охлаждения тормозов моста.",
       "status": "Completed",
       "by": "Irek",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-019997",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -2591,6 +2684,7 @@ window.CM_WO_DATA = {
       "descr": "Течь опорных катков: левый борт — № 1, 3, 4, 5, 6; правый борт — № 7.",
       "status": "Registered",
       "by": "Irek",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -2614,6 +2708,7 @@ window.CM_WO_DATA = {
       "descr": "Ослабление болтового крепежа фланца выхлопной трубы на капоте ДВС; зазор и подвижность трубы.",
       "status": "Registered",
       "by": "Irek",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -2637,6 +2732,7 @@ window.CM_WO_DATA = {
       "descr": "Разрушение кабельного ввода датчика контроля остатка каната лебедки.",
       "status": "Elimination scheduled",
       "by": "Irek",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-020796",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -2660,6 +2756,7 @@ window.CM_WO_DATA = {
       "descr": "Неисправность предохранительного замка (язычка) крюка.",
       "status": "Elimination scheduled",
       "by": "Irek",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-020795",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -2683,6 +2780,7 @@ window.CM_WO_DATA = {
       "descr": "Механический излом внутренней ручки двери кабины оператора.",
       "status": "Elimination scheduled",
       "by": "Irek",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-020771",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -2706,6 +2804,7 @@ window.CM_WO_DATA = {
       "descr": "Глубокий механический порез плечевой зоны/боковины шины.",
       "status": "Elimination scheduled",
       "by": "Irek",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-020774",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -2729,6 +2828,7 @@ window.CM_WO_DATA = {
       "descr": "Сетчатое поверхностное растрескивание наружного слоя РВД питания гидромотора лебедки.",
       "status": "Completed",
       "by": "Irek",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-019276",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -2752,6 +2852,7 @@ window.CM_WO_DATA = {
       "descr": "Патрубок воздуховода системы впуска ДВС имеет трещины, следы старения и перегиба.",
       "status": "Elimination scheduled",
       "by": "Irek",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-020772",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -2775,6 +2876,7 @@ window.CM_WO_DATA = {
       "descr": "Пластиковый корпус фильтра предварительной очистки имеет механическое повреждение расколот/разбит.",
       "status": "Elimination scheduled",
       "by": "Irek",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-020773",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -2798,6 +2900,7 @@ window.CM_WO_DATA = {
       "descr": "Утечка гидравлической жидкости из-под резьбового соединения переходного штуцера/адаптера РВД в верхней крышке гидроцилиндра.",
       "status": "Completed",
       "by": "Irek",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-019275",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -2821,6 +2924,7 @@ window.CM_WO_DATA = {
       "descr": "Механический износ на металлическом гидропроводе от контакта ЦСС; риск сквозного пробоя магистрали.",
       "status": "Registered",
       "by": "Irek",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -2844,6 +2948,7 @@ window.CM_WO_DATA = {
       "descr": "Зафиксирована срыв БРС/фитинга трубки ЦСС на блоке распределителя рукояти.",
       "status": "Registered",
       "by": "Irek",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -2867,6 +2972,7 @@ window.CM_WO_DATA = {
       "descr": "Зафиксирована запотевание на РВД от основного гидронасоса к гидрораспределителю.",
       "status": "Registered",
       "by": "Irek",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -2890,6 +2996,7 @@ window.CM_WO_DATA = {
       "descr": "Hастрескивание патрубка выходной магистрали охладителя интеркулера.",
       "status": "Elimination scheduled",
       "by": "Irek",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-019857",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -2913,6 +3020,7 @@ window.CM_WO_DATA = {
       "descr": "Утечка гидравлического масла из соленоида вентилятора охлаждения гидравлической системы.",
       "status": "Registered",
       "by": "Irek",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -2936,6 +3044,7 @@ window.CM_WO_DATA = {
       "descr": "В насосном отсеке перетирание  РВД в месте взаимного контакта и контакта с разрушенным хомутом крепления.",
       "status": "Completed",
       "by": "Irek",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-019254",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -2959,6 +3068,7 @@ window.CM_WO_DATA = {
       "descr": "Течь масла из-под верхней резьбовой технологической пробки(заглушки)кронштейна блока фильтров.",
       "status": "Elimination scheduled",
       "by": "Irek",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-021541",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -2982,6 +3092,7 @@ window.CM_WO_DATA = {
       "descr": "Течь охлаждающей жидкости из дренажа насоса охлаждающей жидкости (помпа ДВС).",
       "status": "Registered",
       "by": "Irek",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -3005,6 +3116,7 @@ window.CM_WO_DATA = {
       "descr": "Утечка масла из-под средней нижней бронезащиты днища, требуется диагностика внутренних узлов для определения.",
       "status": "Registered",
       "by": "Irek",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -3028,6 +3140,7 @@ window.CM_WO_DATA = {
       "descr": "Утечка гидравлической жидкости из внутренней полости (шахты) рамы гусеничной тележки.",
       "status": "Registered",
       "by": "Irek",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -3051,6 +3164,7 @@ window.CM_WO_DATA = {
       "descr": "Зафиксирован сквозной механический разрыв и продавливание днища/футеровки в разгрузочной зоне вследствие ударных нагрузок и предельного абразивного износа металла.",
       "status": "Elimination scheduled",
       "by": "Irek",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-020068",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -3074,6 +3188,7 @@ window.CM_WO_DATA = {
       "descr": "Зафиксирована утечка охлаждающей жидкости в месте штуцерного соединения гибкого шланга контура охлаждения (просачивание антифриза из-под червячного хомута с образованием потёков на несущих конструкциях).",
       "status": "Elimination scheduled",
       "by": "Irek",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-020911",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -3097,6 +3212,7 @@ window.CM_WO_DATA = {
       "descr": "Разгерметизация левой части радиатора охлаждения ДВС (характерные следы и скопления антифриза в средней опорной зоне)",
       "status": "Registered",
       "by": "Irek",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -3120,6 +3236,7 @@ window.CM_WO_DATA = {
       "descr": "Зафиксирована утечка рабочей жидкости (гидравлического масла) по штоку из-под буксы левого и правого гидроцилиндров подъёма отвала вследствие износа/разрушения штоковых уплотнений и грязесъёмников.",
       "status": "Registered",
       "by": "Irek",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -3143,6 +3260,7 @@ window.CM_WO_DATA = {
       "descr": "Зафиксирован механический излом (разрыв и частичный отрыв по металлу и околошовной зоне) защитного кожуха кронштейна крепления гидроцилиндра/раскоса на тыльной стороне отвала.",
       "status": "Elimination scheduled",
       "by": "Irek",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-020913",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -3166,6 +3284,7 @@ window.CM_WO_DATA = {
       "descr": "Течь смазочного материала узла ступицы первого правого опорного катка ходовой тележки.",
       "status": "Registered",
       "by": "Irek",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -3189,6 +3308,7 @@ window.CM_WO_DATA = {
       "descr": "Зафиксированы следы утечки рабочей жидкости (масляные потеки / выдавливание консистентной смазки) в зоне механизма натяжения направляющего колеса (ленивца).",
       "status": "Registered",
       "by": "Irek",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -3212,6 +3332,7 @@ window.CM_WO_DATA = {
       "descr": "Выявлена деструкция (разрушение, расслоение, растрескивание) упругих резинометаллических элементов (подушек) подвески кареток опорных катков.",
       "status": "Registered",
       "by": "Irek",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -3235,6 +3356,7 @@ window.CM_WO_DATA = {
       "descr": "Выявлен критический абразивный износ зубьев ведущего колеса (звёздочки), сопровождающийся механическими сколами и разрушением рабочей поверхности венца. Слева и справо.",
       "status": "Registered",
       "by": "Irek",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -3258,6 +3380,7 @@ window.CM_WO_DATA = {
       "descr": "Механическое разрушение РВД.",
       "status": "Elimination scheduled",
       "by": "Irek",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-018263",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -3281,6 +3404,7 @@ window.CM_WO_DATA = {
       "descr": "Течь масла из левого бортового редуктора",
       "status": "Completed",
       "by": "Slam",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-018435",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -3304,6 +3428,7 @@ window.CM_WO_DATA = {
       "descr": "Течь охлаждающей жидкости из нижней ванны радиатора",
       "status": "Completed",
       "by": "Slam",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-018451",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -3327,6 +3452,7 @@ window.CM_WO_DATA = {
       "descr": "Течь охлаждающей жидкости с теплообменника ДВС",
       "status": "Completed",
       "by": "Slam",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-018450",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -3350,6 +3476,7 @@ window.CM_WO_DATA = {
       "descr": "Течь масла с РВД АКПП.",
       "status": "Completed",
       "by": "Slam",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-018449",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -3373,6 +3500,7 @@ window.CM_WO_DATA = {
       "descr": "Оторван штуцер ЦСС реактивной тяги.",
       "status": "Completed",
       "by": "Slam",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-019695",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -3396,6 +3524,7 @@ window.CM_WO_DATA = {
       "descr": "По сварным швам и на наружной поверхности кузова выявлены трещины",
       "status": "Registered",
       "by": "Slam",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -3419,6 +3548,7 @@ window.CM_WO_DATA = {
       "descr": "Течь под насосом.",
       "status": "Elimination scheduled",
       "by": "Irek",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-019904",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -3442,6 +3572,7 @@ window.CM_WO_DATA = {
       "descr": "Трещина в ковше.",
       "status": "Completed",
       "by": "Irek",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-018629",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -3465,6 +3596,7 @@ window.CM_WO_DATA = {
       "descr": "Трещины в ремнях генератора",
       "status": "Completed",
       "by": "Irek",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-018628",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -3488,6 +3620,7 @@ window.CM_WO_DATA = {
       "descr": "Течь масла через уплотнительное кольцо гидроцилиндра подъёма кузова",
       "status": "Completed",
       "by": "Slam",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-017822",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -3511,6 +3644,7 @@ window.CM_WO_DATA = {
       "descr": "Множественные следы утечек масла.",
       "status": "Completed",
       "by": "Slam",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-017820",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -3534,6 +3668,7 @@ window.CM_WO_DATA = {
       "descr": "Трещина в конструкции ковша.",
       "status": "Registered",
       "by": "Slam",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -3557,6 +3692,7 @@ window.CM_WO_DATA = {
       "descr": "Выявлена течь масла из поддерживающих катков",
       "status": "Registered",
       "by": "Slam",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -3580,6 +3716,7 @@ window.CM_WO_DATA = {
       "descr": "Требуется сварка и футеровка отвала.",
       "status": "Registered",
       "by": "Slam",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -3603,6 +3740,7 @@ window.CM_WO_DATA = {
       "descr": "Течь ГЦ перекосо отвала.",
       "status": "Registered",
       "by": "Slam",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -3626,6 +3764,7 @@ window.CM_WO_DATA = {
       "descr": "Требуется сварка и футеровка отвала.",
       "status": "Completed",
       "by": "Slam",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-019086",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -3649,6 +3788,7 @@ window.CM_WO_DATA = {
       "descr": "На поверхности РВД топливной системы выявлены следы запотевания.",
       "status": "Completed",
       "by": "Slam",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-017800",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -3672,6 +3812,7 @@ window.CM_WO_DATA = {
       "descr": "Продольные повреждения ремня генератора и кондиционера",
       "status": "Completed",
       "by": "Slam",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-017555",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -3695,6 +3836,7 @@ window.CM_WO_DATA = {
       "descr": "Гофрированная труба вышла из посадочного места",
       "status": "Completed",
       "by": "Slam",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-017553",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -3718,6 +3860,7 @@ window.CM_WO_DATA = {
       "descr": "Течь опорных катков.",
       "status": "Registered",
       "by": "Slam",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -3741,6 +3884,7 @@ window.CM_WO_DATA = {
       "descr": "Критический износ кузова, трещины. Требуются футеровка и сварка кузова.",
       "status": "Elimination scheduled",
       "by": "Slam",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-020865",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -3764,6 +3908,7 @@ window.CM_WO_DATA = {
       "descr": "Трешина по шву на передвижной раме мачты.",
       "status": "Completed",
       "by": "Irek",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-017458",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -3787,6 +3932,7 @@ window.CM_WO_DATA = {
       "descr": "Повреждение внешнего слоя РВД ГЦ подъёма кузова",
       "status": "Completed",
       "by": "Slam",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-018409",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -3810,6 +3956,7 @@ window.CM_WO_DATA = {
       "descr": "Люфт ШСЛ цилиндра кузова",
       "status": "Completed",
       "by": "Slam",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-018412",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -3833,6 +3980,7 @@ window.CM_WO_DATA = {
       "descr": "Наблюдаются следы течи гидравлической жидкости",
       "status": "Registered",
       "by": "Slam",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -3856,6 +4004,7 @@ window.CM_WO_DATA = {
       "descr": "Обнаружены масляно-пылевые отложения на РВД бортового редуктора переднего моста.",
       "status": "Completed",
       "by": "Slam",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-017178",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -3879,6 +4028,7 @@ window.CM_WO_DATA = {
       "descr": "утечка охлаждающей жидкости из нижнего бачка радиатора правой секции.",
       "status": "Elimination scheduled",
       "by": "Slam",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-017180",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -3902,6 +4052,7 @@ window.CM_WO_DATA = {
       "descr": "На поверхности шланга РВД выявлены следы запотевания/",
       "status": "Completed",
       "by": "Slam",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-018739",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -3925,6 +4076,7 @@ window.CM_WO_DATA = {
       "descr": "Выявлены следы утечки охлаждающей жидкости под водяным насосом.",
       "status": "Completed",
       "by": "Slam",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-019184",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -3948,6 +4100,7 @@ window.CM_WO_DATA = {
       "descr": "Запотевание РВД.Обнаружена течь в месте уплотнения РВД.",
       "status": "Completed",
       "by": "Slam",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-018339",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -3971,6 +4124,7 @@ window.CM_WO_DATA = {
       "descr": "Обнаружена течь масла из РВД тормозного фильтра.",
       "status": "Completed",
       "by": "Slam",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-017165",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -3994,6 +4148,7 @@ window.CM_WO_DATA = {
       "descr": "Течь масла из КПП",
       "status": "Completed",
       "by": "Slam",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-017019",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -4017,6 +4172,7 @@ window.CM_WO_DATA = {
       "descr": "Наружная утечка охлаждающей жидкости.",
       "status": "Completed",
       "by": "Slam",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-017018",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -4040,6 +4196,7 @@ window.CM_WO_DATA = {
       "descr": "Наблюдаются следы утечки гидравлической жидкости в зоне РВД.",
       "status": "Completed",
       "by": "Slam",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-017023",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -4063,6 +4220,7 @@ window.CM_WO_DATA = {
       "descr": "Обнаружена утечка охлаждающей жидкости из теплообменника.",
       "status": "Completed",
       "by": "Slam",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-017024",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -4086,6 +4244,7 @@ window.CM_WO_DATA = {
       "descr": "Задние шины (левая/правая) имеют полный износ протектора.",
       "status": "Registered",
       "by": "Slam",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -4109,6 +4268,7 @@ window.CM_WO_DATA = {
       "descr": "Трещина на лобовом стекле.",
       "status": "Registered",
       "by": "Irek",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -4132,6 +4292,7 @@ window.CM_WO_DATA = {
       "descr": "Жгут проводов на задние фары не закреплены",
       "status": "Completed",
       "by": "Irek",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-016865",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -4155,6 +4316,7 @@ window.CM_WO_DATA = {
       "descr": "Обнаружено повреждение внешнего слоя шланга РВД с оголением армирующего корда.",
       "status": "Completed",
       "by": "Irek",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-016864",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -4178,6 +4340,7 @@ window.CM_WO_DATA = {
       "descr": "Повреждение кожуха коннектора",
       "status": "Completed",
       "by": "Irek",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-016863",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -4201,6 +4364,7 @@ window.CM_WO_DATA = {
       "descr": "Обнаружена течь на основной линии трубопровода винтового компрессора в месте установки зажимного хомута.",
       "status": "Completed",
       "by": "Slam",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-016862",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -4224,6 +4388,7 @@ window.CM_WO_DATA = {
       "descr": "Наружная течь о/ж",
       "status": "Completed",
       "by": "Slam",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-016861",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -4247,6 +4412,7 @@ window.CM_WO_DATA = {
       "descr": "Наружная утечка топлива. Требуется диагностика",
       "status": "Completed",
       "by": "Slam",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-016860",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -4270,6 +4436,7 @@ window.CM_WO_DATA = {
       "descr": "На поверхности шланга РВД выявлены следы запотевания",
       "status": "Completed",
       "by": "Slam",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-016858",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -4293,6 +4460,7 @@ window.CM_WO_DATA = {
       "descr": "Наружная утечка смазки.",
       "status": "Completed",
       "by": "Slam",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-016859",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -4316,6 +4484,7 @@ window.CM_WO_DATA = {
       "descr": "Обнаружено повреждение внешнего слоя шланга РВД с оголением армирующего корда.",
       "status": "Completed",
       "by": "Slam",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-016857",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -4339,6 +4508,7 @@ window.CM_WO_DATA = {
       "descr": "Трещина лобового стекла.",
       "status": "Registered",
       "by": "Slam",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -4362,6 +4532,7 @@ window.CM_WO_DATA = {
       "descr": "Трешина по шву на передвижной раме мачты.",
       "status": "Elimination scheduled",
       "by": "Irek",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-016854",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -4385,6 +4556,7 @@ window.CM_WO_DATA = {
       "descr": "Механическое разрушение РВД.",
       "status": "Completed",
       "by": "Irek",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-016855",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -4408,6 +4580,7 @@ window.CM_WO_DATA = {
       "descr": "Трещина на кронштейне цилиндра мачты.",
       "status": "Completed",
       "by": "Irek",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-016853",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -4431,6 +4604,7 @@ window.CM_WO_DATA = {
       "descr": "Запотевание РВД.",
       "status": "Completed",
       "by": "Irek",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-017026",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -4454,6 +4628,7 @@ window.CM_WO_DATA = {
       "descr": "Течь с рулевого насоса, требуется диагностика.",
       "status": "Completed",
       "by": "Irek",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-017065",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -4477,6 +4652,7 @@ window.CM_WO_DATA = {
       "descr": "Течь сальника заднего моста",
       "status": "Registered",
       "by": "Irek",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -4500,6 +4676,7 @@ window.CM_WO_DATA = {
       "descr": "Трещина или излом вследствии усталостного износа металла",
       "status": "Completed",
       "by": "Irek",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-016809",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -4523,6 +4700,7 @@ window.CM_WO_DATA = {
       "descr": "Трещина крепления цилиндра мачты",
       "status": "Completed",
       "by": "Slam",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-016856",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -4546,6 +4724,7 @@ window.CM_WO_DATA = {
       "descr": "Hydraulic tube crack № 185-61-29000, Track roller seal leak No. 185-40-15000",
       "status": "Registered",
       "by": "Slam",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -4569,6 +4748,7 @@ window.CM_WO_DATA = {
       "descr": "износ поддерживающих катков",
       "status": "Completed",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-017446",
       "maintType": "Mining Unplanned",
       "planned": false
@@ -4592,6 +4772,7 @@ window.CM_WO_DATA = {
       "descr": "износ поддерживающих катков",
       "status": "Registered",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -4615,6 +4796,7 @@ window.CM_WO_DATA = {
       "descr": "износ поддерживающих катков",
       "status": "Registered",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -4638,6 +4820,7 @@ window.CM_WO_DATA = {
       "descr": "Предельный износ футеровочных пластин кузова",
       "status": "Completed",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-016191",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -4661,6 +4844,7 @@ window.CM_WO_DATA = {
       "descr": "Предельный износ футеровочных пластин кузова",
       "status": "Completed",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-015252",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -4684,6 +4868,7 @@ window.CM_WO_DATA = {
       "descr": "Предельный износ футеровочных пластин кузова",
       "status": "Completed",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-014885",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -4707,6 +4892,7 @@ window.CM_WO_DATA = {
       "descr": "Не правильный монтаж ролика схода ленты",
       "status": "Completed",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-015047",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -4730,6 +4916,7 @@ window.CM_WO_DATA = {
       "descr": "Износ опорного ролика на главном разгрузочном конвейере",
       "status": "Completed",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-015046",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -4753,6 +4940,7 @@ window.CM_WO_DATA = {
       "descr": "Износ опорного ролика на питающем конвейере конусной дробилки",
       "status": "Completed",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-014448",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -4776,6 +4964,7 @@ window.CM_WO_DATA = {
       "descr": "Разбиты ШСЛ и разбит центральный палец балансирной балки",
       "status": "Elimination scheduled",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-021494",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -4799,6 +4988,7 @@ window.CM_WO_DATA = {
       "descr": "Отсутствует дворник на переднем стекле",
       "status": "Elimination scheduled",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-021495",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -4822,6 +5012,7 @@ window.CM_WO_DATA = {
       "descr": "Чрезмерный люфт в шарнирном соединении отвала и толкающего бруса с правой стороны",
       "status": "Completed",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-015579",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -4845,6 +5036,7 @@ window.CM_WO_DATA = {
       "descr": "Трещина заднего стекла",
       "status": "Registered",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -4868,6 +5060,7 @@ window.CM_WO_DATA = {
       "descr": "Трещина в основании (дне) кузова самосвала.",
       "status": "Completed",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-016190",
       "maintType": "P4 Planned Repair",
       "planned": false
@@ -4891,6 +5084,7 @@ window.CM_WO_DATA = {
       "descr": "Трещина сваречного шва между внутренных листов левых правых продольных балок",
       "status": "Completed",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": "WO-014648",
       "maintType": "Mining Unplanned",
       "planned": false
@@ -4914,6 +5108,7 @@ window.CM_WO_DATA = {
       "descr": "Трещина с левой стороны рамы в области цилиндра подъема кузова",
       "status": "Registered",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
@@ -4937,6 +5132,7 @@ window.CM_WO_DATA = {
       "descr": "Разрушение компонентов бортовой передачи",
       "status": "Registered",
       "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
       "planned": false
