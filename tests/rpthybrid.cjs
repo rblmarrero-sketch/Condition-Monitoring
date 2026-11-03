@@ -120,7 +120,7 @@ const textOf = (p, key, lang) => p.evaluate(({ key, lang }) => {
   ok(/Recorded action\s*Repair now/.test(r.text), "it prints the recorded action", 1);
   ok(/Direct cause\s*Bearing failure/.test(r.text), "  and the direct cause", 1);
   ok(/Owner\s*A\. Ivanov/.test(r.text) && /Work order\s*WO-5521/.test(r.text)
-     && /Due date\s*2026-08-30/.test(r.text), "  and owner, work order, due date", 1);
+     && /Due date\s*30\.08\.2026/.test(r.text), "  and owner, work order, due date", 1);
   const kNo = await p.evaluate(seed("02", 4, false));   // graded, no action fields
   const noAct = (await textOf(p, kNo, "en")).text;
   ok(/Owner\s*Not recorded/.test(noAct) && /Work order\s*Not recorded/.test(noAct),

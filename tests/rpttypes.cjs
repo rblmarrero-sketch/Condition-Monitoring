@@ -138,7 +138,7 @@ const textOf = (p, key, lang) => p.evaluate(({ key, lang }) => {
      So this checks the FACTS are on the sheet, which is what the strip was
      ever for, rather than the furniture that used to hold them. */
   ok(!/Inspected by/.test(mp), "the four-cell metadata strip is gone");
-  ok(/TK900/.test(mp) && /2026-08-10/.test(mp), "  the unit and the date are on the masthead");
+  ok(/TK900/.test(mp) && /10\.08\.2026/.test(mp), "  the unit and the date are on the masthead");
   ok(/Ivanov/.test(mp), "  and the inspector is on the approval table");
   ok(/Maintenance action/.test(mp), "the maintenance-action strip");
   ok(/CM Technician/.test(mp) && /Reliability Engineer/.test(mp) && /Maintenance Supervisor/.test(mp),

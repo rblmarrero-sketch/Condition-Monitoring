@@ -333,7 +333,7 @@ const LAY = (secs) => {
       older: (html.match(/class="sec olderr"/g) || []).length,
       /* The dated columns of the measurement history — how an undercarriage
          round with no photographs is still accounted for. */
-      cols: (html.match(/class="r n" style="width:46px">\d\d-\d\d/g) || []).length,
+      cols: (html.match(/class="r n" style="width:46px">\d\d[-.]\d\d/g) || []).length,
       oneSections: one.length,
       oneMaps: (one.map(s => s.html).join('').match(/class="ucmap[ "]/g) || []).length,
     };

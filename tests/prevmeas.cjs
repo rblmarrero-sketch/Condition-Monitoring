@@ -216,7 +216,7 @@ const run = async (p, recs, unit, want, photos) => {
      r.full.map(x => x.head).join(' | ') || 'none');
   const jul = r.full[0] || {};
   ok('headed by its date, type, hour meter and inspector',
-     /2026-07-29/.test(jul.head || '') && /7180/.test(jul.head || '')
+     /29\.07\.2026/.test(jul.head || '') && /7180/.test(jul.head || '')
      && /Хасенов/.test(jul.head || ''), jul.head);
   ok('and its verdict, in the same words the latest round uses',
      /Watch/i.test(jul.head || ''), jul.head);

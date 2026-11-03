@@ -59,8 +59,8 @@ const sidecar = JSON.stringify({ type: 'cm-inspection-entries', version: 2, reco
       hasStrip: html.includes('class="sstrip"'),
       hasPmService: /PM Service[\s\S]{0,200}250 h</.test(html),
       hasPmType: /Type of PM[\s\S]{0,200}P3 Planned/.test(html),
-      hasSchedDate: html.includes('2026-09-18'),
-      hasActual: /Actual date[\s\S]{0,200}2026-09-20 09:15/.test(html),
+      hasSchedDate: html.includes('18.09.2026'),
+      hasActual: /Actual date[\s\S]{0,200}20.09.2026 09:15/.test(html),
     };
   });
   ok('the record found in the folder is the one just seeded', !r.norec);

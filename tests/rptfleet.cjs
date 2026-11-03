@@ -65,7 +65,7 @@ const textOf = (p, target, lang) => p.evaluate(({ target, lang }) => {
   const t = await textOf(p, target, "en");
 
   console.log("\n1. THE COVER CARRIES A PERIOD");
-  ok(/2026-08-01 → 2026-08-11/.test(t), "period spans the earliest to the latest round",
+  ok(/01\.08\.2026 → 11\.08\.2026/.test(t), "period spans the earliest to the latest round",
      (t.match(/Period[^·]*/) || [""])[0].slice(0, 40));
 
   console.log("\n2. THE INSPECTION PROGRAMME, BY TYPE");

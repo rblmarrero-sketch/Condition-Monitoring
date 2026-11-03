@@ -333,10 +333,10 @@ const jpg = p => p.evaluate(() => {
     const m = /<div class="sk">PM Service[^<]*(?:<span[^>]*>[^<]*<\/span>)?<\/div><div class="sv">([^<]*)<\/div>/.exec(html);
     return !!m && m[1] === '4000 h';
   })() && !html.includes('4000 Hours service Planned'));
-  ok('1C\'s plan date reaches the header strip, under "Scheduled date"', html.includes('2026-09-18'));
+  ok('1C\'s plan date reaches the header strip, under "Scheduled date"', html.includes('18.09.2026'));
   ok('the actual release date AND time sit beside the scheduled date, under "Actual date", for a direct comparison', (() => {
     const m = /<div class="sk">Actual date[^<]*(?:<span[^>]*>[^<]*<\/span>)?<\/div><div class="sv">([^<]*)<\/div>/.exec(html);
-    return !!m && m[1] === rec.date + ' 14:37';
+    return !!m && m[1] === rec.date.split('-').reverse().join('.') + ' 14:37';
   })());
   ok('the release date is compared against the schedule, calculated — not typed', (() => {
     const days = Math.round((Date.parse(rec.date + 'T00:00:00Z') - Date.parse('2026-09-18T00:00:00Z')) / 86400000);
