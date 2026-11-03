@@ -24,7 +24,7 @@
       copyfail: 'Could not copy. Select the table and press Ctrl+C.',
       c_date: 'Date inspected', c_unit: 'Unit', c_comp: 'Component', c_type: 'Type of defect',
       c_desc: 'Description', c_no: 'Defect no.', nodef: 'Not raised in 1C', c_prio: 'Priority', c_sev: 'Severity',
-      normal_n: '{n} other points', intro: 'Condition monitoring, {d}: {r} round(s), {u} unit(s), {f} finding(s).',
+      normal_n: '{n} other points', meas: '{n} points measured', worst: 'Worst: {p}', intro: 'Condition monitoring, {d}: {r} round(s), {u} unit(s), {f} finding(s).',
       byline: 'Inspected by: {p}', foot: 'Reports of each round attached.', all_on: 'All', all_off: 'None',
       sel: '{n} of {m} rounds'
     },
@@ -37,7 +37,7 @@
       copyfail: 'Не удалось скопировать. Выделите таблицу и нажмите Ctrl+C.',
       c_date: 'Дата осмотра', c_unit: 'Единица', c_comp: 'Узел', c_type: 'Тип дефекта',
       c_desc: 'Описание', c_no: '№ дефекта', nodef: 'Нет в 1С', c_prio: 'Приоритет', c_sev: 'Критичность',
-      normal_n: 'Остальные точки: {n}', intro: 'Мониторинг состояния, {d}: обходов {r}, единиц {u}, дефектов {f}.',
+      normal_n: 'Остальные точки: {n}', meas: 'Замерено точек: {n}', worst: 'Худшие: {p}', intro: 'Мониторинг состояния, {d}: обходов {r}, единиц {u}, дефектов {f}.',
       byline: 'Осмотр провёл: {p}', foot: 'Отчёты по каждому обходу приложены.', all_on: 'Все', all_off: 'Ни одного',
       sel: '{n} из {m} обходов'
     }
@@ -91,9 +91,36 @@
   function prio1c(d) { var m = /^(P\d)\s*(.*)$/.exec(String(d.priority || '').trim()); return m ? (m[1] + ' ' + m[2].replace(/[()]/g, '')).trim() : (d.priority || ''); }
   function type1c(d) { return String(d.defectType || '').trim(); }
   /* the table rows for the chosen rounds */
+  /* CM_DAYSUM_V3 (Rickie 04.11): a measured round (Dump body liner, Undercarriage) is not listed station by
+     station - 40 rows of F31..F95 bury the e-mail. It gives one row per defect raised in 1C against that
+     system (dump body CH.BY / CH.BED, undercarriage CH.UC / CH.ROL / TRK / IDL / SPR), with the round's
+     worst severity; with no such defect, ONE line: how many points were measured and the worst of them,
+     saying "Not raised in 1C" when the worst is Degraded or worse, so a Critical tray never drops out. */
+  var WEAR_SYS = { TB: /\.CH\.(BY|BED)\b/i, UC: /\.CH\.(UC|ROL|TRK|IDL|SPR)\b/i };
+  function wearRows(r, its, used, out) {
+    var re = WEAR_SYS[r.type], g = 0, worst = [];
+    its.forEach(function (i) { var x = grade(r, i); if (x > g) g = x; });
+    its.filter(function (i) { return grade(r, i) === g && g > 1; }).forEach(function (i) { worst.push(i.key || i.label); });
+    var ds = defectsOf(r).filter(function (d) { return !used[d.defect] && re.test(String(d.system || '')); });
+    var base = { date: r.date, unit: r.equip, round: typeName(r.type), by: r.by || '', g: g, sev: sevName(g) };
+    var wl = worst.length ? w('worst', { p: worst.slice(0, 6).join(', ') + (worst.length > 6 ? ' +' + (worst.length - 6) : '') }) : '';
+    if (ds.length) ds.forEach(function (d) { used[d.defect] = 1;
+      out.push(Object.assign({}, base, { comp: String(d.system || '').replace(/^[^.]+\./, ''), type: type1c(d), desc: d.descr || '',
+        no: d.defect, nodef: false, st: d.status || '', prio: prio1c(d) })); });
+    else out.push(Object.assign({}, base, { comp: w('meas', { n: its.length }), type: '', desc: wl,
+      no: g >= 3 ? w('nodef') : '', nodef: g >= 3, st: '', prio: '' }));
+  }
   function rowsFor(list) {
     var out = [], used = {};
+    list = list.slice().sort(function (a, b) { return (WEAR_SYS[b.type] ? 1 : 0) - (WEAR_SYS[a.type] ? 1 : 0); });
+    var wearDone = {};
     list.forEach(function (r) {
+      if (WEAR_SYS[r.type]) { var wi = (r.items || []).filter(function (i) { return !isGeneral(i) && grade(r, i); });
+        if (wi.length) { wearRows(r, wi, used, out); wearDone[rk(r)] = 1; } }
+    });
+    var wearOut = out; out = [];
+    list.forEach(function (r) {
+      if (wearDone[rk(r)]) return;
       var its = (r.items || []).filter(function (i) { return !isGeneral(i) && recorded(r, i); });
       var bad = its.filter(function (i) { return grade(r, i) > 1 || i.defect || i.defectCode; });
       var ok = its.filter(function (i) { return bad.indexOf(i) < 0; });
@@ -111,7 +138,8 @@
       if (many && ok.length) out.push({ date: r.date, unit: r.equip, round: typeName(r.type), comp: w('normal_n', { n: ok.length }),
         type: '', desc: '', no: '', prio: '', sev: sevName(1), g: 1, by: r.by || '' });
     });
-    return out;
+    var all = out.concat(wearOut);
+    return all.sort(function (a, b) { return String(a.unit).localeCompare(String(b.unit)); });
   }
   var COLS = [['date', 'c_date'], ['unit', 'c_unit'], ['comp', 'c_comp'], ['type', 'c_type'], ['desc', 'c_desc'], ['no', 'c_no'], ['prio', 'c_prio'], ['sev', 'c_sev']];
   var INK = { 1: '#1d6b3a', 2: '#4a6b1d', 3: '#8a5a00', 4: '#a33d00', 5: '#a32020' };

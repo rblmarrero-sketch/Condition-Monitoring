@@ -6436,3 +6436,13 @@ a link, button or bold word in it. Pointing at any cut text in `main` sets its f
 lines were cut to plain words (`sy_notlinked`, `pa_k_preinsp_s`, `lube_kt_gap_note`); the measurement-limits
 panel says "no connection to the server" instead of the browser's "Failed to fetch" (`errWords`).
 `tests/plainwords.cjs`.
+
+**THE DAY SUMMARY NAMES THE DEFECT RAISED IN 1C, AND A MEASURED ROUND IS ONE LINE (builds 581, 583, Rickie 04.11).**
+The number column of Reports -> Day summary is the defect raised in 1C (DD-...), never the work order the
+round was walked against (every position carries that). A finding is matched in `CM_WO_DATA.cmWorkOrders`:
+same unit, raised on the inspection day or up to 7 days after, the same system code (EX007.HS.MP <-> HS.MP);
+a lone leftover finding pairs with a lone leftover defect; each defect is used once. A Degraded or worse
+finding with none says "Not raised in 1C". A Dump body liner or Undercarriage round (`WEAR_SYS` in
+`dashboard/day-summary.js`: CH.BY / CH.BED, CH.UC / CH.ROL / TRK / IDL / SPR) is never listed station by
+station: one row per defect raised against that system at the round's worst severity, or, with none, one
+line - points measured and the worst stations (`tests/daysum.cjs`).
