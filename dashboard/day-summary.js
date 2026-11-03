@@ -68,7 +68,7 @@
       its.forEach(function (i) {
         if (many && ok.indexOf(i) >= 0) return;
         var g = grade(r, i), f = bad.indexOf(i) >= 0;
-        out.push({ date: r.date, unit: r.equip, round: typeName(r.type), comp: (i.key ? i.key + ' ' : '') + (i.label || ''),
+        out.push({ date: r.date, unit: r.equip, round: typeName(r.type), comp: (i.key && String(i.label || '').indexOf(i.key) !== 0 ? i.key + ' ' : '') + (i.label || ''),
           type: f ? (i.defect || i.defectCode || '') : '', desc: f ? (i.comment || '') : '', no: f ? (i.wo || '') : '',
           prio: f ? prio(i) : '', sev: sevName(g), g: g, by: r.by || '' });
       });
