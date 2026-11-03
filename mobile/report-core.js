@@ -1702,6 +1702,7 @@
         }).join("") + '</div>';
   }
 
+  CMR.dmy = dmy;
   CMR.mapBlock = function (T, mapHTML, topMargin, zones, key) {
     if (!mapHTML) return "";
     /* Two different machines are drawn here. A track frame carries a chain row
@@ -1804,7 +1805,7 @@
     if (!it) return "";
     var bits = [];
     if (it.resp) bits.push(T.I("c_resp") + ": " + respHtml(T, it));
-    if (it.target) bits.push(T.I("c_target") + ": " + esc(it.target));
+    if (it.target) bits.push(T.I("c_target") + ": " + esc(dmy(it.target)));
     if (it.opstat && !noOp) bits.push(T.I("c_opstat") + ": " + T.I("op_" + it.opstat));
     var h = bits.length ? '<div class="code">' + bits.join(" · ") + '</div>' : "";
     if (it.gradeWhy) h += '<div class="code">' + T.I("g_why") + ' ' + esc(it.gradeWhy) + '</div>';
@@ -2652,7 +2653,7 @@
       + f(T("ma_cause"), it.cause || it.defect || "")
       + f(T("ma_owner"), respPlain(T, it))
       + f(T("ma_wo"), it.wo || "")
-      + f(T("ma_due"), it.target || "")
+      + f(T("ma_due"), dmy(it.target || ""))
       + '</div>';
   }
   /* The three-role approval table. The technician's row is filled from the
@@ -2671,7 +2672,7 @@
         + '<td>' + (open ? '<span class="sg"></span>' : '<span class="nm">' + esc(name) + '</span>') + '</td>'
         + '<td>' + esc(status) + '</td>'
         + '<td>' + (sig ? '<img src="' + esc(sig) + '" alt="">' : '')
-                 + (date ? '<span class="nm">' + esc(date) + '</span>' : (sig ? '' : '<span class="sg"></span>')) + '</td></tr>';
+                 + (date ? '<span class="nm">' + esc(dmy(date)) + '</span>' : (sig ? '' : '<span class="sg"></span>')) + '</td></tr>';
     }
     /* Four honest states, never blurred: a signature the report holds; one
        the record says exists but this surface could not load (signErr) or
@@ -2794,6 +2795,12 @@
   }
   function respPlain(T, it) { var k = respRoleOf(it); return k ? T(k) : String((it && it.resp) || ""); }
   function respHtml(T, it) { var k = respRoleOf(it); return k ? T.I(k) : esc((it && it.resp) || ""); }
+  /* EVERY DATE ON A REPORT READS DAY.MONTH.YEAR (31.10.2026), the way this
+     site writes dates and the folder names its files (asked for 03.11.2026).
+     Records keep ISO YYYY-MM-DD; only what is printed changes. dm() is the
+     short day.month a narrow column uses. Anything else passes through. */
+  function dmy(s) { return String(s == null ? "" : s).replace(/\b(\d{4})-(\d{2})-(\d{2})\b/g, "$3.$2.$1"); }
+  function dm(s) { var m = /(\d{4})-(\d{2})-(\d{2})/.exec(String(s || "")); return m ? m[3] + "." + m[2] : String(s || ""); }
   /* A work-order number that already says what it is ("WO-020895") is not
      labelled again: "WO WO-020895" was printed on every card. */
   function woText(T, wo) {
@@ -3134,7 +3141,7 @@
      alongside the record without touching its date. */
   function rtwActualDate(rec) {
     if (!rec.date) return "";
-    return esc(rec.date) + (rec.rtwTime ? " " + esc(rec.rtwTime) : "");
+    return esc(dmy(rec.date)) + (rec.rtwTime ? " " + esc(rec.rtwTime) : "");
   }
   /* THE RELEASE DATE AGAINST THE SCHEDULE — CALCULATED, NEVER TYPED.
      `rec.date` is when this checklist was actually completed and signed;
@@ -3200,7 +3207,7 @@
     var cells = "";
     if (pmService) cells += cell(T.I("rtw_pm_service"), pmService);
     if (rec.rtwWoPriority) cells += cell(T.I("rtw_pm_type"), esc(rtwPmTypeText(rec.rtwWoPriority, T)));
-    if (rec.rtwSchedDate) cells += cell(T.I("rtw_sched"), esc(rec.rtwSchedDate));
+    if (rec.rtwSchedDate) cells += cell(T.I("rtw_sched"), esc(dmy(rec.rtwSchedDate)));
     if (rec.date) cells += cell(T.I("rtw_actual"), rtwActualDate(rec));
     if (vsSched) cells += cell(T.I("rtw_vs_sched"), vsSched);
     return '<div class="sstrip" style="margin-top:10px;">' + cells + '</div>';
@@ -3238,7 +3245,7 @@
     var cells = "";
     if (pmService) cells += cell(T.I("rtw_pm_service"), pmService);
     if (rec.schedPriority) cells += cell(T.I("rtw_pm_type"), esc(rtwPmTypeText(rec.schedPriority, T)));
-    if (rec.schedDate) cells += cell(T.I("rtw_sched"), esc(rec.schedDate));
+    if (rec.schedDate) cells += cell(T.I("rtw_sched"), esc(dmy(rec.schedDate)));
     return '<div class="sstrip" style="margin-top:10px;">' + cells + '</div>';
   }
   /* The release result gets its OWN treatment, not a cell beside the others
@@ -3584,7 +3591,7 @@
            earlierRoundSections' own smu/by line already prints, not a
            second copy of it. */
         + '<div class="msub"><span class="unum">' + esc(rec.equip) + '</span>'
-          + (rec.date ? ' · ' + T.I("f_insp_date") + ' <b>' + esc(rec.date) + '</b>' : '')
+          + (rec.date ? ' · ' + T.I("f_insp_date") + ' <b>' + esc(dmy(rec.date)) + '</b>' : '')
           + (rec.smu ? ' · ' + T.I("f_smu") + ' <b>' + esc(rec.smu) + '</b> ' + esc(T("u_h")) : '')
           + (rec.model ? ' · ' + esc(rec.model) : '')
           + (mine.length > 1 ? ' · ' + T.S("rounds_n", { n: mine.length - 1 }) : '')
@@ -4006,7 +4013,7 @@
       : (rn >= 2 ? '<span class="muted">—</span>' : esc(T("sm_clean")));
     return { html: '<tr>'
       + '<td class="stripe" style="border-left-color:' + col + '">' + label + '</td>'
-      + '<td class="c n">' + esc(r.date || "") + '</td>'
+      + '<td class="c n">' + esc(dmy(r.date || "")) + '</td>'
       + '<td class="c n">' + (r.smu ? esc(r.smu) : "—") + '</td>'
       + '<td class="c">' + (rn ? '<b style="color:' + col + '">' + rn + ' – ' + esc(gword(T, rn)) + '</b>'
           : '<span class="muted">—</span>') + '</td>'
@@ -4146,7 +4153,7 @@
       + mastHead(T, '<i>' + T.I("rr_report") + '</i> <b class="repno">EQH-' + esc(equip) + '-' + esc(today.replace(/-/g, "")) + '</b>')
       + '<div class="m1">' + T.I("uh_title") + '</div>'
       + '<div class="msub"><span class="unum">' + esc(equip) + '</span>'
-        + ' · ' + T.I("sm_report_date") + ' <b>' + esc(today) + '</b>'
+        + ' · ' + T.I("sm_report_date") + ' <b>' + esc(dmy(today)) + '</b>'
         + (smu ? ' · ' + T.I("f_smu") + ' <b>' + esc(String(smu)) + '</b> ' + esc(T("u_h")) : '')
         + (model ? ' · ' + esc(model) : '') + '</div>'
       + '<div class="quiet" style="margin-top:2px;">' + T.S("uh_sub") + '</div>'
@@ -4164,7 +4171,7 @@
       + '<div style="margin-top:18px;"><div class="eyebrow" style="margin-bottom:9px;">' + T.I("sm_cond_head") + '</div>'
         + '<table class="sumtbl"><tr><th>' + T.L("sm_insp") + '</th>'
         + '<th class="c" style="width:70px">' + T.L("sm_last") + '</th>'
-        + '<th class="c" style="width:50px">SMU</th>'
+        + '<th class="c" style="width:50px">' + esc(T("f_smu")) + '</th>'
         + '<th class="c" style="width:86px">' + T.L("rr_rating") + '</th>'
         + '<th style="width:120px">' + T.L("sm_result") + '</th>'
         + '<th style="width:96px">' + T.L("sm_next") + '</th>'
@@ -4344,7 +4351,7 @@
       + '<div class="m1">' + T.I("sm_title") + '</div>'
       + '<div class="msub"><span class="unum">' + esc(equip) + '</span>'
         + (model ? ' · ' + esc(model) : '') + (smu ? ' · ' + T.I("f_smu") + ' <b>' + esc(String(smu)) + '</b> ' + esc(T("u_h")) : '')
-        + ' · ' + T.I("sm_report_date") + ' ' + esc(today) + '</div>'
+        + ' · ' + T.I("sm_report_date") + ' ' + esc(dmy(today)) + '</div>'
       + '</div>'
       + '<div class="rule" style="margin:11px 0 0"></div>'
       /* The overview strip — the reference's EQUIPMENT / MODEL / LATEST SMU /
@@ -4353,12 +4360,12 @@
         + '<div class="ms"><i>' + T.I("f_unit") + '</i><b>' + esc(equip) + '</b></div>'
         + '<div class="ms"><i>' + T.I("f_model") + '</i><b>' + (model ? esc(model) : esc(cls) || '<span class="miss">' + esc(T("ma_none")) + '</span>') + '</b></div>'
         + '<div class="ms"><i>' + T.I("sm_latest_smu") + '</i><b>' + (smu ? esc(String(smu)) + ' h' : '<span class="miss">' + esc(T("ma_none")) + '</span>') + '</b></div>'
-        + '<div class="ms"><i>' + T.I("sm_report_date") + '</i><b>' + esc(today) + '</b></div>'
+        + '<div class="ms"><i>' + T.I("sm_report_date") + '</i><b>' + esc(dmy(today)) + '</b></div>'
       + '</div>'
       + '<div style="margin-top:20px;"><div class="eyebrow" style="margin-bottom:9px;">' + T.I("sm_cond_head") + '</div>'
         + '<table><tr><th>' + T.L("sm_insp") + '</th>'
         + '<th class="c" style="width:74px">' + T.L("sm_last") + '</th>'
-        + '<th class="c" style="width:56px">SMU</th>'
+        + '<th class="c" style="width:56px">' + esc(T("f_smu")) + '</th>'
         + '<th class="c" style="width:96px">' + T.L("rr_rating") + '</th>'
         + '<th style="width:150px">' + T.L("sm_result") + '</th>'
         + '<th>' + T.L("sm_next") + '</th></tr>' + rows + '</table></div>'
@@ -4491,7 +4498,7 @@
         + '<td>' + doit + prioTag(it) + findLine + '</td>'
         + '<td>' + (it.resp ? respHtml(T, it) : miss) + '</td>'
         + '<td>' + (it.wo ? esc(it.wo) : miss) + '</td>'
-        + '<td class="c n">' + (it.target ? esc(it.target) : miss) + '</td></tr>';
+        + '<td class="c n">' + (it.target ? esc(dmy(it.target)) : miss) + '</td></tr>';
     });
     return h + '</table>';
   }
@@ -4544,7 +4551,7 @@
       sh.wide = wide;
       out.push({ nb: false, gap: 4, html: '<div class="sec olderr">'
         + '<div class="ohd">'
-          + '<b>' + esc(rec.date || "") + '</b>'
+          + '<b>' + esc(dmy(rec.date || "")) + '</b>'
           /* An explicit separator, not a styled span. T.both's block variants
              put the translation on its own line, which is right in a table
              cell and wrong on a header line — it printed "Magnetic
@@ -4686,7 +4693,7 @@
         + T.L("c_item") + '</th>'
         + '<th class="n" style="width:72px">' + T.L("c_limit") + '</th>'
         + runs.map(function (r) { return '<th class="r n" style="width:46px">'
-            + esc(String(r.date || "").slice(5)) + '</th>'; }).join("")
+            + esc(dm(r.date)) + '</th>'; }).join("")
         + '<th class="r" style="width:58px">' + T.L("c_chg") + '</th>'
         + '<th class="r" style="width:50px">' + T.L("c_worn") + '</th>'
         + '<th class="r" style="width:64px">' + T.L("c_life") + '</th>'
@@ -5190,7 +5197,7 @@
        stays the one-sentence form for the tables, where no label sits above
        it. */
     if (it.resp) row(T.I("c_resp"), respHtml(T, it));
-    if (it.target) row(T.I("c_target"), '<span class="num">' + esc(it.target) + '</span>');
+    if (it.target) row(T.I("c_target"), '<span class="num">' + esc(dmy(it.target)) + '</span>');
     if (it.opstat && !sh.opOnce) row(T.I("c_opstat"), T.I("op_" + it.opstat));
     if (it.gradeWhy) row(T.I("g_why"), esc(it.gradeWhy));
     /* The lubrication round's whole answer. It is NOT a reading: a reading is
@@ -5523,7 +5530,7 @@
            : { y:String(st.getFullYear()), m:p2(st.getMonth()+1), d:p2(st.getDate()),
                hh:p2(st.getHours()), mm:p2(st.getMinutes()) };
     var today = sp.y+"-"+sp.m+"-"+sp.d;
-    var stampTxt = today+" "+sp.hh+":"+sp.mm;
+    var stampTxt = dmy(today)+" "+sp.hh+":"+sp.mm;
 
     /* A ROUND OR A MONTH IS A MANAGEMENT REPORT BY DEFAULT, NOT A STACK OF
        INSPECTION SHEETS STAPLED TOGETHER.
@@ -5602,7 +5609,7 @@
       return '<tr class="'+(i%2?"zebra":"")+'">'
         + '<td class="stripe" style="border-left-color:'+col+'"><span class="unit">'+esc(rec.equip)+'</span></td>'
         + '<td>'+T.both(rec.typeLabel||rec.type, rec.typeAlt)+'</td>'
-        + '<td class="c n">'+esc(rec.date||"")+'</td>'
+        + '<td class="c n">'+esc(dmy(rec.date||""))+'</td>'
         + '<td class="c n">'+rec.items.length+'</td>'
         + '<td>'+words+'</td></tr>';
     }).join("");
@@ -5614,7 +5621,7 @@
       + '<div class="rule" style="margin:13px 0 0"></div>'
       + '<div class="muted num" style="font-size:10.5px;padding:7px 0 20px;">'
         + T.I("generated")+' '+esc(stampTxt)
-        + (X.first?' · '+T.I("period")+' '+esc(X.first)+(X.last&&X.last!==X.first?' → '+esc(X.last):""):"")
+        + (X.first?' · '+T.I("period")+' '+esc(dmy(X.first))+(X.last&&X.last!==X.first?' → '+esc(dmy(X.last)):""):"")
         + (typeLine?" · "+typeLine:"")+'</div>'
       /* On the face, under the date, before anything a reader would act on. */
       + statusHTML(T, docStatus(recs))
@@ -5647,7 +5654,7 @@
         + '<div class="stat"><div class="k">'+T.L("mach")+'</div><div class="v">'+X.unitN+'</div>'
           + '<div class="s">'+T.I("ins")+': '+X.rounds+'</div></div>'
         + '<div class="stat"><div class="k">'+T.L("pts")+'</div><div class="v">'+X.pts+'</div>'
-          + '<div class="s">'+esc(X.first||"—")+(X.last&&X.last!==X.first?" → "+esc(X.last):"")+'</div></div>'
+          + '<div class="s">'+esc(dmy(X.first)||"—")+(X.last&&X.last!==X.first?" → "+esc(dmy(X.last)):"")+'</div></div>'
         + '<div class="stat"><div class="k">'+T.L("work")+'</div>'
           + '<div class="v" style="color:'+(X.total?GRADE_HEX[3]:GRADE_HEX[1])+'">'+X.total+'</div>'
           + '<div class="s">'+T.I("findings")+'</div></div>'
@@ -5742,7 +5749,7 @@
           + '<td class="c">'+(f.roll?sevChip(ctx,f.sev):gradeChip(it.grade)||sevChip(ctx,f.sev))+'</td>'
           + '<td>'+find+more+'</td>'
           + '<td>'+todo+'</td>'
-          + '<td class="c n">'+esc(String(rec.date||"").slice(5))+'</td></tr>';
+          + '<td class="c n">'+esc(dm(rec.date))+'</td></tr>';
       });
       wl += '</table>';
       /* The action-control summary — open, overdue, and what is missing an
@@ -5784,8 +5791,8 @@
           + '<span class="c">'+esc(rec.clsLabel||"")+'</span>'
           + '<span class="c" style="margin-left:auto;">'+esc(rec.typeLabel||rec.type)+'</span></div>'
         + '<div class="meta">'
-          + '<span class="m"><i>'+T.I("c_date")+'</i><span class="num">'+esc(rec.date||"")+'</span></span>'
-          + (rec.smu?'<span class="m"><i>SMU</i><span class="num">'+esc(rec.smu)+'</span></span>':"")
+          + '<span class="m"><i>'+T.I("c_date")+'</i><span class="num">'+esc(dmy(rec.date||""))+'</span></span>'
+          + (rec.smu?'<span class="m"><i>'+T.I("f_smu")+'</i><span class="num">'+esc(rec.smu)+'</span></span>':"")
           + (rec.by?'<span class="m"><i>'+T.I("by_who")+'</i>'+esc(rec.by)+'</span>':"")
           + '<span class="m"><i>'+T.I("pts")+'</i><span class="num">'+rec.items.length+'</span></span>'
         + '</div>'
@@ -5851,8 +5858,8 @@
           + '<span class="c">'+esc(rec.clsLabel||"")+'</span>'
           + '<span class="c" style="margin-left:auto;">'+esc(rec.typeLabel||rec.type)+'</span></div>'
         + '<div class="meta">'
-          + '<span class="m"><i>'+T.I("c_date")+'</i><span class="num">'+esc(rec.date||"")+'</span></span>'
-          + (rec.smu?'<span class="m"><i>SMU</i><span class="num">'+esc(rec.smu)+'</span></span>':"")
+          + '<span class="m"><i>'+T.I("c_date")+'</i><span class="num">'+esc(dmy(rec.date||""))+'</span></span>'
+          + (rec.smu?'<span class="m"><i>'+T.I("f_smu")+'</i><span class="num">'+esc(rec.smu)+'</span></span>':"")
           + (rec.by?'<span class="m"><i>'+T.I("by_who")+'</i>'+esc(rec.by)+'</span>':"")
           + '<span class="m"><i>'+T.I("pts")+'</i><span class="num">'+rec.items.length+'</span></span>'
           + (gpsPair(rec.gps)?'<span class="m"><i>'+T.I("gps")+'</i><span class="num">'
@@ -5968,7 +5975,7 @@
         + '<div class="body">'+T.S("lg_iso_d")+'</div>'
       + '</div></div>'
       + '<div class="hair" style="margin:20px 0 8px;"></div>'
-      + '<div class="muted" style="font-size:9.5px;">'+T.I("footer")+' · '+esc(today)+'</div>'
+      + '<div class="muted" style="font-size:9.5px;">'+T.I("footer")+' · '+esc(dmy(today))+'</div>'
       + '</div>'});
 
     /* The fleet document already prints the full banner on its cover; the
