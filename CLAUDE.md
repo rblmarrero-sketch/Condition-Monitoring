@@ -6425,3 +6425,14 @@ as the fallback; the Status cell still prints 1C's own text, coloured by stage. 
 the chart what its two numbers are (findings per inspection; inspections that month). `tests/daysum.cjs`.
 `tests/cmraised.cjs` fails between 00:00 and 12:00 site on the live branch too (it compares 1C dates with the
 UTC day) — not caused by this build.
+
+**NOTES INTO (i), POINT TO READ, SHORT CARD LINES (build 580, CM_PLAIN2_V1, Rickie 04.11.2026 "Build it next").**
+`#cmPlain2Js` (both office pages, identical): an explanation of 90+ characters in a card (`.sub`, `.hint`,
+`p.lede`) is not printed; it goes into an (i) beside the card's heading, or in its place when the card has
+none. The text stays in the page (`.cmp2fold`, a screen-reader clip), so every suite that reads its
+`textContent` / `innerText` still finds it. Kept on screen: warnings (`.warn`, `.bad`, `.note` boxes), data lines,
+`#lubeHoNote`, `#dueStrayNote`, anything in a table, dialog, drawer or the day-summary preview, and anything with
+a link, button or bold word in it. Pointing at any cut text in `main` sets its full text as the title. Four card
+lines were cut to plain words (`sy_notlinked`, `pa_k_preinsp_s`, `lube_kt_gap_note`); the measurement-limits
+panel says "no connection to the server" instead of the browser's "Failed to fetch" (`errWords`).
+`tests/plainwords.cjs`.

@@ -5122,23 +5122,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=579"></script>
+<script src="../data/magnetic_plug.js?v=582"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=579"></script>
-<script src="../mobile/hme.js?v=579"></script>
-<script src="../mobile/mp-fc.js?v=579"></script>
-<script src="../mobile/rtw.js?v=579"></script>
-<script src="../mobile/hme-cascade.js?v=579"></script>
-<script src="../mobile/temp-limits.js?v=579"></script>
+<script src="../data/work_orders.js?v=582"></script>
+<script src="../mobile/hme.js?v=582"></script>
+<script src="../mobile/mp-fc.js?v=582"></script>
+<script src="../mobile/rtw.js?v=582"></script>
+<script src="../mobile/hme-cascade.js?v=582"></script>
+<script src="../mobile/temp-limits.js?v=582"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=579"></script>
-<script src="../mobile/normalize.js?v=579"></script>
-<script src="../mobile/terms.js?v=579"></script>
+<script src="../mobile/assets.js?v=582"></script>
+<script src="../mobile/normalize.js?v=582"></script>
+<script src="../mobile/terms.js?v=582"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -5157,21 +5157,21 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=579"></script>
-<script src="../mobile/edits.js?v=579"></script>
-<script src="../mobile/due.js?v=579"></script>
-<script src="../mobile/wear.js?v=579"></script>
-<script src="../mobile/wear-map.js?v=579"></script>
-<script src="../mobile/lube.js?v=579"></script>
-<script src="../mobile/lube-overrides.js?v=579"></script>
-<script src="../mobile/lube2027.js?v=579"></script>
-<script src="../mobile/lube-tds.js?v=579"></script>
-<script src="../dashboard/lube-master.js?v=579"></script>
-<script src="../dashboard/wear-limits.js?v=579"></script>
+<script src="../mobile/grade.js?v=582"></script>
+<script src="../mobile/edits.js?v=582"></script>
+<script src="../mobile/due.js?v=582"></script>
+<script src="../mobile/wear.js?v=582"></script>
+<script src="../mobile/wear-map.js?v=582"></script>
+<script src="../mobile/lube.js?v=582"></script>
+<script src="../mobile/lube-overrides.js?v=582"></script>
+<script src="../mobile/lube2027.js?v=582"></script>
+<script src="../mobile/lube-tds.js?v=582"></script>
+<script src="../dashboard/lube-master.js?v=582"></script>
+<script src="../dashboard/wear-limits.js?v=582"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=579"></script>
-<script src="../mobile/machine-photos.js?v=579"></script>
+<script src="../mobile/upload-defaults.js?v=582"></script>
+<script src="../mobile/machine-photos.js?v=582"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -5180,17 +5180,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=579"></script>
-<script src="../mobile/get.js?v=579"></script>
-<script src="../mobile/points.js?v=579"></script>
-<script src="../mobile/uc-points.js?v=579"></script>
-<script src="../mobile/inspect-guide.js?v=579"></script>
-<script src="../mobile/get-figs.js?v=579"></script>
-<script src="../mobile/body-points.js?v=579"></script>
-<script src="../mobile/body-map.js?v=579"></script>
-<script src="../mobile/jspdf.umd.min.js?v=579"></script>
-<script src="../mobile/html2canvas.min.js?v=579"></script>
-<script src="../mobile/report-core.js?v=579"></script>
+<script src="../mobile/machine-fig.js?v=582"></script>
+<script src="../mobile/get.js?v=582"></script>
+<script src="../mobile/points.js?v=582"></script>
+<script src="../mobile/uc-points.js?v=582"></script>
+<script src="../mobile/inspect-guide.js?v=582"></script>
+<script src="../mobile/get-figs.js?v=582"></script>
+<script src="../mobile/body-points.js?v=582"></script>
+<script src="../mobile/body-map.js?v=582"></script>
+<script src="../mobile/jspdf.umd.min.js?v=582"></script>
+<script src="../mobile/html2canvas.min.js?v=582"></script>
+<script src="../mobile/report-core.js?v=582"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -5370,7 +5370,7 @@ const I18N={
   lube_kt_cov:"Metrics covered", lube_kt_cov_tag:"programme", lube_kt_cov_note:"of {n} on the sheet",
   lube_kt_src:"Sourced references", lube_kt_src_tag:"machine ref", lube_kt_src_note:"of {n} compartments have an OEM specification",
   lube_kt_uns:"Unsourced", lube_kt_uns_note:"no manual page recorded",
-  lube_kt_gap:"Not on the sheet", lube_kt_gap_tag:"gap", lube_kt_gap_note:"measured in the field, absent from the programme",
+  lube_kt_gap:"Not on the sheet", lube_kt_gap_tag:"gap", lube_kt_gap_note:"Seen in the field, not in the programme",
   lp_covered:"Fleet in the reference", lp_covered_w:"Units whose model has a reference entry at all. A machine outside this line is not failing, it is unseen.",
   lp_sourced:"Reference sourced", lp_sourced_w:"Capacity and specification traced to a manual page, per model — so this one is short and finishable.",
   lp_audited:"Ever audited", lp_audited_w:"Somebody opened the compartment and recorded what was in it, at any time.",
@@ -5595,7 +5595,7 @@ const I18N={
   sy_h_idx_noask:"not asked yet this session",
   sy_h_att:"Attachments accounted for", sy_h_held:"Inspections requiring correction",
   sy_h_excl:"On inspections needing correction", sy_h_excl_m:"{n} not in the folder",
-  sy_notlinked:"no backend attached — nothing to compare against",
+  sy_notlinked:"Not connected — nothing to compare",
   sy_nolink:"Nothing to compare against yet", sy_nolink_s:"The file list has not arrived from the server. Until it does there is nothing to check these attachments against, and reporting 0% would describe this browser rather than the field. It fills in when the data source refreshes.",
   sy_never:"never", sy_justnow:"just now", sy_min:"{n} min ago",
   sy_hr:"{n} h ago", sy_day:"{n} days ago",
@@ -6288,7 +6288,7 @@ const I18N={
   pa_coverage:"Condition Monitoring covers {pct}% of these work orders — {n} of {of}.",
   pa_none:"Nothing in this view.",
   pa_k_total:"Open work orders", pa_k_total_s:"not yet marked complete in 1C",
-  pa_k_preinsp:"General Inspection due soon", pa_k_preinsp_s:"a P3/P4 PM is within {n} d and no pre-check has been carried out",
+  pa_k_preinsp:"General Inspection due soon", pa_k_preinsp_s:"PM within {n} days, no pre-check yet",
   pa_k_ontime:"On time", pa_k_ontime_s:"CM round within {n} d of the plan date",
   pa_k_late:"Late or early", pa_k_late_s:"CM round found, outside {n} d of the plan date",
   pa_k_missing:"No CM round", pa_k_missing_s:"nothing recorded on the unit within {w} d",
@@ -6390,7 +6390,7 @@ const I18N={
   lube_kt_cov:"Охват метрик", lube_kt_cov_tag:"программа", lube_kt_cov_note:"из {n} в реестре",
   lube_kt_src:"Источник указан", lube_kt_src_tag:"справочник", lube_kt_src_note:"из {n} узлов есть заводская спецификация",
   lube_kt_uns:"Без источника", lube_kt_uns_note:"страница руководства не указана",
-  lube_kt_gap:"Не в реестре", lube_kt_gap_tag:"пробел", lube_kt_gap_note:"измерено в поле, в программе отсутствует",
+  lube_kt_gap:"Не в реестре", lube_kt_gap_tag:"пробел", lube_kt_gap_note:"Найдено в поле, нет в программе",
   lp_title:"Программа в честных цифрах",
   lp_sub:"Какая часть парка проверена, подтверждена и стандартизована — относительно реестра, а не тех машин, куда кто-то дошёл.",
   lp_note:"Ниже этой строки считается ПАРК: {n} узлов на {u} единицах, охваченных справочником, из {s} единиц реестра. Выше — то, что нашли, когда смотрели. Эти два числа постоянно путают.",
@@ -6609,7 +6609,7 @@ const I18N={
   sy_h_idx_noask:"в этой сессии ещё не запрашивался",
   sy_h_att:"Вложений учтено", sy_h_held:"Осмотры, требующие исправления",
   sy_h_excl:"На осмотрах, требующих исправления", sy_h_excl_m:"{n} нет в папке",
-  sy_notlinked:"хранилище не подключено — не с чем сравнивать",
+  sy_notlinked:"Не подключено — не с чем сравнивать",
   sy_nolink:"Пока не с чем сравнивать", sy_nolink_s:"Список файлов ещё не получен с сервера. Пока его нет, сверять вложения не с чем, а «0%» описывал бы этот браузер, а не работу в поле. Данные появятся после обновления источника.",
   sy_never:"никогда", sy_justnow:"только что", sy_min:"{n} мин назад",
   sy_hr:"{n} ч назад", sy_day:"{n} дн. назад",
@@ -7280,7 +7280,7 @@ const I18N={
   pa_coverage:"Мониторинг состояния охватывает {pct}% этих нарядов — {n} из {of}.",
   pa_none:"В этом представлении пусто.",
   pa_k_total:"Открытых нарядов", pa_k_total_s:"ещё не закрыты в 1С",
-  pa_k_preinsp:"Скоро общий осмотр", pa_k_preinsp_s:"ТО с приоритетом P3/P4 в пределах {n} дн., предварительный осмотр ещё не проведён",
+  pa_k_preinsp:"Скоро общий осмотр", pa_k_preinsp_s:"ТО в течение {n} дн., предварительного осмотра нет",
   pa_k_ontime:"В срок", pa_k_ontime_s:"обход CM в пределах {n} дн. от плана",
   pa_k_late:"Позже или раньше", pa_k_late_s:"обход CM найден, но за пределами {n} дн. от плана",
   pa_k_missing:"Нет обхода CM", pa_k_missing_s:"по единице ничего не записано в пределах {w} дн.",
@@ -21699,11 +21699,11 @@ document.querySelector(".lang").addEventListener("click",e=>{
   setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 })();
 </script>
-<script src="../dashboard/drive.js?v=579"></script>
-<script src="../dashboard/sync-adapter.js?v=579"></script>
-<script src="../dashboard/report.js?v=579"></script>
-<script src="../dashboard/reliability.js?v=579"></script>
-<script src="../dashboard/day-summary.js?v=579"></script>
+<script src="../dashboard/drive.js?v=582"></script>
+<script src="../dashboard/sync-adapter.js?v=582"></script>
+<script src="../dashboard/report.js?v=582"></script>
+<script src="../dashboard/reliability.js?v=582"></script>
+<script src="../dashboard/day-summary.js?v=582"></script>
 <script>
 /* THE CLOSED FILTER SAYS WHAT IS CHOSEN. A dropdown narrower than its option
    text ellipsises ("All t…", audit of 2026-10-01). Between 1331 and 1500 px
@@ -21878,6 +21878,61 @@ document.querySelector(".lang").addEventListener("click",e=>{
   });
   document.addEventListener("keydown",e=>{ if(e.key==="Escape") tips.forEach(b=>{ b.classList.remove("open"); b.setAttribute("aria-expanded","false"); }); });
   document.addEventListener("click",()=>tips.forEach(b=>{ if(document.activeElement!==b){ b.classList.remove("open"); b.setAttribute("aria-expanded","false"); } }));
+})();
+</script>
+<style id="cmPlain2Css">/* CM_PLAIN2_V1 (Rickie 04.11.2026: the wording scan - "keep it simple", notes into (i), no cut text you cannot read) */
+.cmp2fold{position:absolute!important;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.cmTip.cmp2tip{margin-left:6px;vertical-align:middle}
+.cmp2spot{margin-top:8px}.cmp2spot>.cmp2tip{margin-left:0}
+</style>
+<script id="cmPlain2Js">/* CM_PLAIN2_V1 - two rules for every tab of the office page, both pages:
+   1. An explanation of more than ~90 characters under a card heading is not printed: it goes into an (i) beside the
+      heading (the same tip CM_TPL_V1 uses for the tab's own purpose line). The text stays in the page for screen
+      readers and for every test that reads it; only the screen loses it. Kept on screen: warnings (.warn, .bad,
+      amber .note boxes), data lines (counts, "as of"), the LubeLink hand-over line, anything inside a table, a
+      dialog, a drawer or the report preview.
+   2. Any text the page cuts short ("..." or clipped) shows its full text when you point at it. */
+(function cmPlain2(){
+  'use strict';
+  var KEEP='#lubeHoNote,#dueStrayNote,#kpiInsp,#cwAsOf,#paAsOf,.warn,.bad,.note,.asof,[data-keep]';
+  function head(el){ var s=el.closest('.section,.card,section'); if(!s) return null;
+    var h=null; s.querySelectorAll('.secthd h2,.secthd h3,h2,h3').forEach(function(x){ if(!h && (x.compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)) h=x; });
+    if(!h){ var all=s.querySelectorAll('.secthd h2,.secthd h3,h2,h3'); for(var i=all.length-1;i>=0;i--) if(all[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING){ h=all[i]; break; } }
+    return h; }
+  function tipFor(h){ var b=h.querySelector(':scope>.cmp2tip'); if(b) return b;
+    b=document.createElement('button'); b.type='button'; b.className='cmTip cmp2tip'; b.setAttribute('aria-expanded','false');
+    b.innerHTML='<i aria-hidden="true">i</i><span class="tipbox" role="tooltip"></span>'; h.appendChild(b); b._src=[];
+    var at=0; var set=function(o){ if(o&&!b.classList.contains('open')) at=Date.now(); b.classList.toggle('open',o); b.setAttribute('aria-expanded',String(o)); };
+    b.addEventListener('mouseenter',function(){ set(true); }); b.addEventListener('mouseleave',function(){ if(document.activeElement!==b) set(false); });
+    b.addEventListener('focus',function(){ set(true); }); b.addEventListener('blur',function(){ set(false); });
+    b.addEventListener('click',function(e){ e.stopPropagation(); set(!(b.classList.contains('open')&&Date.now()-at>400)); });
+    return b; }
+  function sync(b){ var t=b._src.map(function(s){ return s.textContent.replace(/\s+/g,' ').trim(); }).filter(Boolean).join(' '); b.querySelector('.tipbox').textContent=t; b.setAttribute('aria-label',t); b.hidden=!t; }
+  function fold(root){
+    (root||document).querySelectorAll('main .section p.sub, main .section div.sub, main .section .hint, main .section p.lede, main .section .secthd .sub').forEach(function(el){
+      if(el._cmp2||el.closest(KEEP)||el.closest('table,dialog,.drawer,.drw,#drwBody,#dsPrev,.modal,.sheet,[role=dialog]')) return;
+      if(el.matches(KEEP)) return;
+      var txt=el.textContent.replace(/\s+/g,' ').trim(); if(txt.length<90) return;
+      if(el.querySelector('a,button,input,select,b,strong,.warn,.bad')) return;
+      var h=head(el); if(h&&h.closest(KEEP)) return;
+      if(!h){ h=document.createElement('div'); h.className='cmp2spot'; el.parentNode.insertBefore(h,el); } /* no heading in the card: the (i) sits where the note was */
+      var b=tipFor(h); el._cmp2=1; el.classList.add('cmp2fold'); b._src.push(el); sync(b);
+      new MutationObserver(function(){ sync(b); }).observe(el,{childList:true,characterData:true,subtree:true});
+    }); }
+  var pend=0; function later(){ if(pend) return; pend=1; requestAnimationFrame(function(){ pend=0; try{ fold(); }catch(e){ window.cmPlain2Err=String(e); } }); }
+  var m=document.querySelector('main'); if(m) new MutationObserver(later).observe(m,{childList:true,subtree:true});
+  later();
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape') document.querySelectorAll('.cmp2tip.open').forEach(function(b){ b.classList.remove('open'); }); });
+  document.addEventListener('click',function(){ document.querySelectorAll('.cmp2tip.open').forEach(function(b){ if(document.activeElement!==b) b.classList.remove('open'); }); });
+  function cut(e){ if(e.clientWidth<4) return false; var cs=getComputedStyle(e);
+    return (cs.overflowX!=='visible'&&e.scrollWidth>e.clientWidth+1)||(cs.overflowY!=='visible'&&e.scrollHeight>e.clientHeight+2); }
+  document.addEventListener('mouseover',function(ev){ var t=ev.target; if(!t||!t.closest||!t.closest('main')) return;
+    for(var i=0,e=t;i<4&&e&&e.tagName!=='MAIN';i++,e=e.parentElement){
+      if(/^(INPUT|SELECT|TEXTAREA|OPTION)$/.test(e.tagName)) return;
+      if(e.hasAttribute('title')&&!e.hasAttribute('data-cmfull')) return;
+      if(e.matches&&e.matches('.kpi .k,.tile .k')) return;
+      if(cut(e)){ var s=(e.textContent||'').replace(/\s+/g,' ').trim(); if(s){ e.title=s.length>600?s.slice(0,600)+'…':s; e.setAttribute('data-cmfull',''); } return; } } },true);
+  window.cmPlain2={fold:fold};
 })();
 </script>
 <script id="cmSiteFbJs">/* CM_SITEFB_V1 (02.11.2026, Rickie 20:50 "apply the filter bar in the web dashboard"; "Publish site
