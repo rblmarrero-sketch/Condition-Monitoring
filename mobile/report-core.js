@@ -1075,7 +1075,7 @@
       work:"What needs doing", work_sub:"worst first",
       work_none:"No action outstanding on any machine in this report.",
       c_unit:"Machine", c_comp:"Component", c_find:"Finding", c_cause:"Direct cause",
-      c_do:"What to do", c_wo:"WO", c_meas:"Measured", c_worn:"worn",
+      c_do:"What to do", c_wo:"WO", u_h:"h", u_mm:"mm", fc_oil:"oil", pm_svc:"{n} h", ap_supt:"Maintenance Superintendent", c_meas:"Measured", c_worn:"worn",
       c_left:"Left", c_right:"Right",
       c_item:"Item", c_grade:"Grade", c_sev:"Severity", c_defect:"Defect",
       c_read:"Readings / comment", c_date:"Date", c_type:"Type",
@@ -1277,7 +1277,7 @@
       work:"Что нужно сделать", work_sub:"сначала самое срочное",
       work_none:"Ни по одной машине в отчёте действий не требуется.",
       c_unit:"Машина", c_comp:"Узел", c_find:"Замечание", c_cause:"Прямая причина",
-      c_do:"Что делать", c_wo:"ЗН", c_meas:"Замер", c_worn:"износ",
+      c_do:"Что делать", c_wo:"ЗН", u_h:"ч", u_mm:"мм", fc_oil:"масло", pm_svc:"{n} ч", ap_supt:"Начальник по обслуживанию", c_meas:"Замер", c_worn:"износ",
       c_left:"Слева", c_right:"Справа",
       c_item:"Узел", c_grade:"Степень", c_sev:"Категория", c_defect:"Дефект",
       c_read:"Показания / комментарий", c_date:"Дата", c_type:"Тип",
@@ -1698,7 +1698,7 @@
     return '<div class="subhd" style="margin-top:9px;">' + T.L("walk_key") + '</div>'
       + '<div class="ckey">' + key.map(function (p) {
           return '<span class="i"><span class="n">' + esc(p.n) + '</span>'
-            + '<span class="t">' + (T.bi ? T.pair(p.en, p.ru, "") : esc(p.en)) + '</span></span>';
+            + '<span class="t">' + T.enru(p.en, p.ru, "") + '</span></span>';
         }).join("") + '</div>';
   }
 
@@ -1803,7 +1803,7 @@
   function planTag(T, it, noOp) {
     if (!it) return "";
     var bits = [];
-    if (it.resp) bits.push(T.I("c_resp") + ": " + esc(it.resp));
+    if (it.resp) bits.push(T.I("c_resp") + ": " + respHtml(T, it));
     if (it.target) bits.push(T.I("c_target") + ": " + esc(it.target));
     if (it.opstat && !noOp) bits.push(T.I("c_opstat") + ": " + T.I("op_" + it.opstat));
     var h = bits.length ? '<div class="code">' + bits.join(" · ") + '</div>' : "";
@@ -2225,7 +2225,7 @@
       return '<td style="padding-left:0;">'
         + T.both(it.name || it.key, it.nameAlt, "alti")
         + (anyRef ? '<div class="code">' + (ref
-            ? esc(w.newMM + " → " + w.condemnMM + " mm") : "—") + '</div>' : "")
+            ? esc(w.newMM + " → " + w.condemnMM + " " + T("u_mm")) : "—") + '</div>' : "")
         + '</td>'
         + '<td class="r n">' + (w.mm != null ? '<b>' + esc(w.mm) + '</b>'
             : '<span class="muted" style="font-size:9px">' + reasonText(T, w) + '</span>') + '</td>'
@@ -2274,7 +2274,7 @@
              same model, and printing "21 → 33.5 mm" twice on one row is two
              thirds of a line of paper saying one thing. */
           + (anyRef ? '<div class="code">' + (ref
-              ? esc(w.newMM + " → " + w.condemnMM + " mm") : "—") + '</div>' : "")
+              ? esc(w.newMM + " → " + w.condemnMM + " " + T("u_mm")) : "—") + '</div>' : "")
           + '</td>'
           + num(L) + '<td class="sp"></td>' + num(R) + '</tr>'; });
       return x + '</table>'; };
@@ -2344,7 +2344,7 @@
       + '<th>' + T.L("c_do") + '</th></tr>';
     list.forEach(function (it, i) {
       var read = (it.readings || []).slice();
-      if (it.w && it.w.mm != null) read.unshift(it.w.mm + " mm" + (it.w.pct != null ? " · " + it.w.pct + "%" : ""));
+      if (it.w && it.w.mm != null) read.unshift(it.w.mm + " " + T("u_mm") + (it.w.pct != null ? " · " + it.w.pct + "%" : ""));
       if (it.w && it.w.reason) read.unshift(it.w.reasonLabel || it.w.reason);
       /* The product belongs on the summary row too. A superintendent scanning
          the table for "what is actually in these machines" must not have to
@@ -2650,7 +2650,7 @@
       + '<div class="mact">'
       + f(T("ma_action"), it.action || "")
       + f(T("ma_cause"), it.cause || it.defect || "")
-      + f(T("ma_owner"), it.resp || "")
+      + f(T("ma_owner"), respPlain(T, it))
       + f(T("ma_wo"), it.wo || "")
       + f(T("ma_due"), it.target || "")
       + '</div>';
@@ -2780,6 +2780,26 @@
      read from the one normalised item shape both surfaces build. A field the
      template prints but the round did not capture says so in the cell — "Not
      recorded", "Not measured", "No finding" — never blank and never invented. */
+  /* THE OWNER A GRADE PROPOSED IS A ROLE, AND A ROLE IS SAID IN THE SHEET'S
+     LANGUAGE. The phone writes the default owner in its own language ("Мастер
+     по обслуживанию") and keeps a stable key beside it (respRole), so an
+     English sheet printed the Russian words. A name somebody typed is
+     printed exactly as typed; only the two default role labels, in either
+     language, or a record carrying the key, are translated. */
+  var RESP_ROLE = { "maintenance supervisor": "sup", "мастер по обслуживанию": "sup",
+    "maintenance superintendent": "supt", "начальник по обслуживанию": "supt" };
+  function respRoleOf(it) {
+    var k = it && (it.respRole || RESP_ROLE[String(it.resp || "").trim().toLowerCase()]);
+    return k === "sup" ? "ap_sup" : k === "supt" ? "ap_supt" : "";
+  }
+  function respPlain(T, it) { var k = respRoleOf(it); return k ? T(k) : String((it && it.resp) || ""); }
+  function respHtml(T, it) { var k = respRoleOf(it); return k ? T.I(k) : esc((it && it.resp) || ""); }
+  /* A work-order number that already says what it is ("WO-020895") is not
+     labelled again: "WO WO-020895" was printed on every card. */
+  function woText(T, wo) {
+    var v = String(wo || "");
+    return /^(WO|ЗН)[-\s]?\d/i.test(v) ? esc(v) : esc(T("c_wo")) + " " + esc(v);
+  }
   function tbMiss(T, k) { return '<span class="muted">' + esc(T(k || "c_notrec")) + '</span>'; }
   /* "NOT RECORDED" IS FOR A FIELD THAT SHOULD CARRY SOMETHING AND DOES NOT.
      A position graded Normal with no defect on it has no direct cause and no
@@ -2810,7 +2830,7 @@
   }
   function tbAct(T, it) {
     return it.action ? '<b>' + T.both(it.action, it.actionAlt, "alti") + '</b>'
-      + (it.wo ? ' <span class="code">' + esc(T("c_wo")) + ' ' + esc(it.wo) + '</span>' : "")
+      + (it.wo ? ' <span class="code">' + woText(T, it.wo) + '</span>' : "")
       : tbMiss(T);
   }
   function tbPoint(T, it) {
@@ -2995,7 +3015,7 @@
      come after, through evidenceSections, as the template's Required evidence. */
   function fcFindings(ctx, T, rec) {
     var hours = function (it) {
-      return [it.comp && (it.comp + " h"), it.oil && ("oil " + it.oil + " h")].filter(Boolean); };
+      return [it.comp && (it.comp + " " + T("u_h")), it.oil && (T("fc_oil") + " " + it.oil + " " + T("u_h"))].filter(Boolean); };
     return findingBoard(ctx, T, rec, "tb_fc", {
       /* The template's own two labels, as rows: service hours, and debris /
          defect (the particle count and what was found, one row, as the
@@ -3074,9 +3094,14 @@
     var m = /^(P[1-4])\b/i.exec(String(s || "").trim());
     return m ? m[1].toUpperCase() : (s || "");
   }
-  function rtwPmTypeText(s) {
-    var m = /^(P[1-4])\s+(\S+)/i.exec(String(s || "").trim());
-    return m ? (m[1].toUpperCase() + " " + m[2]) : (s || "");
+  /* 1C writes the class word in English ("P3 Planned"); a Russian sheet
+     says it in Russian. A word not on the list is printed as 1C wrote it. */
+  var PRIO_RU = { planned: "Плановое", urgent: "Срочное", emergency: "Аварийное", critical: "Критическое" };
+  function rtwPmTypeText(s, T) {
+    var m = /^(P[1-5])\s+(\S+)/i.exec(String(s || "").trim());
+    if (!m) return s || "";
+    var w = m[2], ru = PRIO_RU[w.toLowerCase()];
+    return m[1].toUpperCase() + " " + (T && T.lang === "ru" && ru ? ru : w);
   }
   /* WHAT KIND OF SERVICE THIS RELEASE WAS RAISED AGAINST, IN ONE CELL.
      A planned PM's own `type` text is ALWAYS "{hours} Hours service Planned"
@@ -3095,12 +3120,12 @@
      text of its own (schedOrdersFor's schedule entries are hours/plan/
      priority only, never a free-text type), so the fallback is simply
      unused there rather than a second copy of this sentence. */
-  function pmServiceText(hours, typeText) {
-    if (hours != null) return esc(hours) + " h Service";
+  function pmServiceText(T, hours, typeText) {
+    if (hours != null) return esc(T("pm_svc", { n: hours }));
     if (typeText) return esc(typeText);
     return "";
   }
-  function rtwPmService(rec) { return pmServiceText(rec.rtwSchedHours, rec.rtwWoType); }
+  function rtwPmService(T, rec) { return pmServiceText(T, rec.rtwSchedHours, rec.rtwWoType); }
   /* THE COMPLETION DATE, WITH THE TIME OF DAY WHEN THE PHONE RECORDED ONE.
      rec.date stays the plain YYYY-MM-DD every other reader of this record
      depends on (file names, DUE.next, teamDate/idDate) — the time of day is
@@ -3161,7 +3186,7 @@
      five cells — see rtwPmService's and rtwPrioCode's own comments. */
   function rtwHeaderStrip(T, rec) {
     var vsSched = rtwVsSchedule(T, rec);
-    var pmService = rtwPmService(rec);
+    var pmService = rtwPmService(T, rec);
     if (!pmService && !rec.rtwWoPriority && !rec.rtwSchedDate && !rec.date && !vsSched) return "";
     /* k is always T.I(...) here — a bilingual label that is ALREADY markup
        (its own escaped text plus a raw <span class="alti"> for the second
@@ -3174,7 +3199,7 @@
     function cell(k, v) { return '<div class="sc"><div class="sk">' + k + '</div><div class="sv">' + v + '</div></div>'; }
     var cells = "";
     if (pmService) cells += cell(T.I("rtw_pm_service"), pmService);
-    if (rec.rtwWoPriority) cells += cell(T.I("rtw_pm_type"), esc(rtwPmTypeText(rec.rtwWoPriority)));
+    if (rec.rtwWoPriority) cells += cell(T.I("rtw_pm_type"), esc(rtwPmTypeText(rec.rtwWoPriority, T)));
     if (rec.rtwSchedDate) cells += cell(T.I("rtw_sched"), esc(rec.rtwSchedDate));
     if (rec.date) cells += cell(T.I("rtw_actual"), rtwActualDate(rec));
     if (vsSched) cells += cell(T.I("rtw_vs_sched"), vsSched);
@@ -3207,12 +3232,12 @@
      fields — printing both would say some of the same things twice. */
   function schedStrip(T, rec) {
     if (rec.type === "RTW") return "";
-    var pmService = pmServiceText(rec.schedHours, "");
+    var pmService = pmServiceText(T, rec.schedHours, "");
     if (!pmService && !rec.schedPriority && !rec.schedDate) return "";
     function cell(k, v) { return '<div class="sc"><div class="sk">' + k + '</div><div class="sv">' + v + '</div></div>'; }
     var cells = "";
     if (pmService) cells += cell(T.I("rtw_pm_service"), pmService);
-    if (rec.schedPriority) cells += cell(T.I("rtw_pm_type"), esc(rtwPmTypeText(rec.schedPriority)));
+    if (rec.schedPriority) cells += cell(T.I("rtw_pm_type"), esc(rtwPmTypeText(rec.schedPriority, T)));
     if (rec.schedDate) cells += cell(T.I("rtw_sched"), esc(rec.schedDate));
     return '<div class="sstrip" style="margin-top:10px;">' + cells + '</div>';
   }
@@ -3337,7 +3362,7 @@
           return (it.w && it.w.mm != null) ? '<b>' + esc(it.w.mm) + '</b>' : tbMiss(T, "c_notmeas"); } },
       { th: T.L("c_reference"), cls: "n", w: "82px", get: function (it) {
           return (it.w && it.w.newMM != null && it.w.newMM !== "")
-            ? esc(it.w.newMM + " → " + it.w.condemnMM + " mm") : tbMiss(T, "ac_na"); } },
+            ? esc(it.w.newMM + " → " + it.w.condemnMM + " " + T("u_mm")) : tbMiss(T, "ac_na"); } },
       { th: T.L("c_worn"), cls: "r n", w: "48px", get: function (it) {
           return (it.w && it.w.pct != null) ? esc(it.w.pct) + "%" : ""; } },
       { th: T.L("c_retention"), get: function (it) { return it.defect ? esc(it.defect) : tbMiss(T, "c_nofind"); } },
@@ -3354,7 +3379,7 @@
       if (it.w && it.w.mm != null) r.push([T.I("c_measured"), '<span class="num"><b>' + esc(it.w.mm) + '</b> mm'
         + (it.w.pct != null ? ' · ' + esc(it.w.pct) + '% ' + T.I("c_worn") : "") + '</span>']);
       if (it.w && it.w.newMM != null && it.w.newMM !== "")
-        r.push([T.I("c_reference"), '<span class="num">' + esc(it.w.newMM + " → " + it.w.condemnMM + " mm") + '</span>']);
+        r.push([T.I("c_reference"), '<span class="num">' + esc(it.w.newMM + " → " + it.w.condemnMM + " " + T("u_mm")) + '</span>']);
       return r;
     };
   }
@@ -3439,6 +3464,16 @@
      first (by percent worn), each with its zone, new and minimum reference,
      measured value, percent and the grade/action. The complete register
      follows on its own page through measSections. */
+  /* The phone files a tray station's zone with its ENGLISH name
+     (zoneLabel), so a Russian sheet printed "Floor — tail". The zone key is
+     on the reading too; body-points.js names every zone in both languages. */
+  function zoneText(T, it) {
+    var B = root.BODY, z = it.zone, q = null;
+    if (B && z && B.models) B.models.some(function (id) {
+      q = (B.zones(id) || []).filter(function (x) { return x.k === z; })[0] || null; return !!q; });
+    if (q) return T.enruI(q.en, q.ru);
+    return it.zoneLabel ? esc(it.zoneLabel) : (z ? esc(z) : "");
+  }
   function tbControlling(ctx, T, rec) {
     var its = (rec.items || []).filter(function (it) { return it.w && it.w.pct != null; })
       .sort(function (a, b) { return Number(b.w.pct) - Number(a.w.pct); }).slice(0, 8);
@@ -3446,7 +3481,7 @@
     return '<div class="subhd" style="margin-top:12px;">' + T.I("tb_tb_ctrl") + '</div>'
       + typeTable([
         { th: T.L("c_station"), get: function (it) { return tbPoint(T, it); } },
-        { th: T.L("c_zone"), w: "96px", get: function (it) { return it.zoneLabel ? esc(it.zoneLabel) : (it.zone ? esc(it.zone) : ""); } },
+        { th: T.L("c_zone"), w: "96px", get: function (it) { return zoneText(T, it); } },
         { th: T.L("c_new"), cls: "r n", w: "48px", get: function (it) { return (it.w.newMM != null && it.w.newMM !== "") ? esc(it.w.newMM) : ""; } },
         { th: T.L("c_minimum"), cls: "r n", w: "56px", get: function (it) { return (it.w.condemnMM != null && it.w.condemnMM !== "") ? esc(it.w.condemnMM) : ""; } },
         { th: T.L("c_measured"), cls: "r n", w: "58px", get: function (it) { return it.w.mm != null ? '<b>' + esc(it.w.mm) + '</b>' : tbMiss(T, "c_notmeas"); } },
@@ -3550,7 +3585,7 @@
            second copy of it. */
         + '<div class="msub"><span class="unum">' + esc(rec.equip) + '</span>'
           + (rec.date ? ' · ' + T.I("f_insp_date") + ' <b>' + esc(rec.date) + '</b>' : '')
-          + (rec.smu ? ' · ' + T.I("f_smu") + ' <b>' + esc(rec.smu) + '</b> h' : '')
+          + (rec.smu ? ' · ' + T.I("f_smu") + ' <b>' + esc(rec.smu) + '</b> ' + esc(T("u_h")) : '')
           + (rec.model ? ' · ' + esc(rec.model) : '')
           + (mine.length > 1 ? ' · ' + T.S("rounds_n", { n: mine.length - 1 }) : '')
         + '</div>'
@@ -4112,7 +4147,7 @@
       + '<div class="m1">' + T.I("uh_title") + '</div>'
       + '<div class="msub"><span class="unum">' + esc(equip) + '</span>'
         + ' · ' + T.I("sm_report_date") + ' <b>' + esc(today) + '</b>'
-        + (smu ? ' · ' + T.I("f_smu") + ' <b>' + esc(String(smu)) + '</b> h' : '')
+        + (smu ? ' · ' + T.I("f_smu") + ' <b>' + esc(String(smu)) + '</b> ' + esc(T("u_h")) : '')
         + (model ? ' · ' + esc(model) : '') + '</div>'
       + '<div class="quiet" style="margin-top:2px;">' + T.S("uh_sub") + '</div>'
       + '</div>'
@@ -4308,7 +4343,7 @@
       + mastHead(T, '<i>' + T.I("rr_report") + '</i> <b class="repno">EQ-' + esc(equip) + '-' + esc(today.replace(/-/g, "")) + '</b>')
       + '<div class="m1">' + T.I("sm_title") + '</div>'
       + '<div class="msub"><span class="unum">' + esc(equip) + '</span>'
-        + (model ? ' · ' + esc(model) : '') + (smu ? ' · ' + T.I("f_smu") + ' <b>' + esc(String(smu)) + '</b> h' : '')
+        + (model ? ' · ' + esc(model) : '') + (smu ? ' · ' + T.I("f_smu") + ' <b>' + esc(String(smu)) + '</b> ' + esc(T("u_h")) : '')
         + ' · ' + T.I("sm_report_date") + ' ' + esc(today) + '</div>'
       + '</div>'
       + '<div class="rule" style="margin:11px 0 0"></div>'
@@ -4454,7 +4489,7 @@
         + '<td>' + comp + '</td>'
         + '<td class="c">' + grade + '</td>'
         + '<td>' + doit + prioTag(it) + findLine + '</td>'
-        + '<td>' + (it.resp ? esc(it.resp) : miss) + '</td>'
+        + '<td>' + (it.resp ? respHtml(T, it) : miss) + '</td>'
         + '<td>' + (it.wo ? esc(it.wo) : miss) + '</td>'
         + '<td class="c n">' + (it.target ? esc(it.target) : miss) + '</td></tr>';
     });
@@ -5142,7 +5177,7 @@
     if (it.detect && sh.detect) row(T.I("c_detection"), T.both(it.detect, it.detectAlt, "alti"));
     /* The action in both languages: the host resolves it by code (actionAlt). */
     if (it.action && !sh.action) row(T.I("c_action"), '<b>' + T.both(it.action, it.actionAlt, "alti") + '</b>'
-      + prioTag(it) + (it.wo ? ' <span class="code">' + esc(T("c_wo")) + ' ' + esc(it.wo) + '</span>' : ""));
+      + prioTag(it) + (it.wo ? ' <span class="code">' + woText(T, it.wo) + '</span>' : ""));
     else if (it.wo || (it.prio && !sh.prio)) row(T.I("c_wo"),
       (it.prio && !sh.prio ? prioTag(it) + " " : "") + '<span class="num">' + esc(it.wo || "") + '</span>');
     if (sh.fb && !it.action && !it.wo && gnum(it.grade) >= 3) row(T.I("c_action"), tbMiss(T));
@@ -5154,7 +5189,7 @@
        Status: ...", the label said twice, read off the TK105 sheet. planTag
        stays the one-sentence form for the tables, where no label sits above
        it. */
-    if (it.resp) row(T.I("c_resp"), esc(it.resp));
+    if (it.resp) row(T.I("c_resp"), respHtml(T, it));
     if (it.target) row(T.I("c_target"), '<span class="num">' + esc(it.target) + '</span>');
     if (it.opstat && !sh.opOnce) row(T.I("c_opstat"), T.I("op_" + it.opstat));
     if (it.gradeWhy) row(T.I("g_why"), esc(it.gradeWhy));
@@ -5186,7 +5221,7 @@
     /* A finding card states its own readings as labelled rows (sh.rows), so the
        host's pre-joined one-line copy of them is not printed beside them. */
     var read = sh.noReadings ? [] : (it.readings || []).slice();
-    if (it.w && it.w.mm != null && !sh.noReadings) read.unshift(it.w.mm + " mm" + (it.w.pct != null ? " · " + it.w.pct + "%" : ""));
+    if (it.w && it.w.mm != null && !sh.noReadings) read.unshift(it.w.mm + " " + T("u_mm") + (it.w.pct != null ? " · " + it.w.pct + "%" : ""));
     if (read.length) row(T.I("c_reading"), '<span class="num">' + esc(read.join(" · ")) + '</span>');
     return '<div class="cel">' + top + '<div class="bd">'
       /* The code, its name and the grade all belong to the same fact — WHICH
@@ -5699,7 +5734,7 @@
               +(it.cause?esc(it.cause):'<span class="muted">'+T.I("cause_tbd")+'</span>')+'</div>';
         var todo = (!f.roll && it.action)
           ? '<b>'+esc(it.action)+'</b>'+prioTag(it)
-            +(it.wo?'<div class="code">'+esc(T("c_wo"))+' '+esc(it.wo)+'</div>':"")
+            +(it.wo?'<div class="code">'+woText(T,it.wo)+'</div>':"")
           : '<span class="muted">'+T.I("do_tbd")+'</span>';
         wl += '<tr class="'+(i%2?"zebra":"")+'">'
           + '<td class="stripe" style="border-left-color:'+col+'"><span class="unit">'+esc(rec.equip)+'</span></td>'

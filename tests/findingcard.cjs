@@ -109,7 +109,7 @@ const count = (hay, needle) => hay.split(needle).length - 1;
     const r = await render(keys[1], lang, bi);
     ok('  [' + tag + '] the particle count is printed once', count(r.text, 'PC 9') === 1, String(count(r.text, 'PC 9')));
     ok('  [' + tag + '] the filter with a finding is a card, the clean one a line', r.cels.length === 1 && /ENG/.test(r.cels[0].pk));
-    ok('  [' + tag + '] the clean filter keeps its hours on its line', /HYD/.test(r.text) && /1000 h/.test(r.text));
+    ok('  [' + tag + '] the clean filter keeps its hours on its line', /HYD/.test(r.text) && /1000 (h|ч)/.test(r.text));
   }
 
   console.log('\nTEMP — one temperature per point');

@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=573">
+<link rel="manifest" href="manifest.webmanifest?v=575">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=573">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=573">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=573">
+<link rel="apple-touch-icon" href="icon-192.png?v=575">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=575">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=575">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2943,16 +2943,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=573"></script>
-<script src="upload-defaults.js?v=573"></script>
-<script src="hme.js?v=573"></script>
-<script src="mp-fc.js?v=573"></script>
-<script src="rtw.js?v=573"></script>
-<script src="hme-cascade.js?v=573"></script>
-<script src="assets.js?v=573"></script>
-<script src="temp-limits.js?v=573"></script>
-<script src="normalize.js?v=573"></script>
-<script src="terms.js?v=573"></script>
+<script src="native.js?v=575"></script>
+<script src="upload-defaults.js?v=575"></script>
+<script src="hme.js?v=575"></script>
+<script src="mp-fc.js?v=575"></script>
+<script src="rtw.js?v=575"></script>
+<script src="hme-cascade.js?v=575"></script>
+<script src="assets.js?v=575"></script>
+<script src="temp-limits.js?v=575"></script>
+<script src="normalize.js?v=575"></script>
+<script src="terms.js?v=575"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2971,25 +2971,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=573"></script>
-<script src="edits.js?v=573"></script>
-<script src="due.js?v=573"></script>
-<script src="wear.js?v=573"></script>
-<script src="wear-figs.js?v=573"></script>
-<script src="wear-map.js?v=573"></script>
-<script src="machine-photos.js?v=573"></script>
-<script src="machine-fig.js?v=573"></script>
-<script src="get.js?v=573"></script>
-<script src="points.js?v=573"></script>
-<script src="uc-points.js?v=573"></script>
-<script src="inspect-guide.js?v=573"></script>
-<script src="get-figs.js?v=573"></script>
-<script src="body-points.js?v=573"></script>
-<script src="body-map.js?v=573"></script>
-<script src="lube.js?v=573"></script>
-<script src="lube-overrides.js?v=573"></script>
-<script src="lube2027.js?v=573"></script>
-<script src="report-core.js?v=573"></script>
+<script src="grade.js?v=575"></script>
+<script src="edits.js?v=575"></script>
+<script src="due.js?v=575"></script>
+<script src="wear.js?v=575"></script>
+<script src="wear-figs.js?v=575"></script>
+<script src="wear-map.js?v=575"></script>
+<script src="machine-photos.js?v=575"></script>
+<script src="machine-fig.js?v=575"></script>
+<script src="get.js?v=575"></script>
+<script src="points.js?v=575"></script>
+<script src="uc-points.js?v=575"></script>
+<script src="inspect-guide.js?v=575"></script>
+<script src="get-figs.js?v=575"></script>
+<script src="body-points.js?v=575"></script>
+<script src="body-map.js?v=575"></script>
+<script src="lube.js?v=575"></script>
+<script src="lube-overrides.js?v=575"></script>
+<script src="lube2027.js?v=575"></script>
+<script src="report-core.js?v=575"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -9420,7 +9420,7 @@ $("saveBtn").onclick=async ()=>{
          proposed, why it was lowered, and the trail of every change. */
       gradeMan:p.gradeMan?1:0, gradeSug:p.gradeSug||null, gradeWhy:p.gradeWhy||"", gradeAudit:p.gradeAudit||null,
       /* The plan a grade of 3, 4 or 5 has to carry. */
-      resp:p.resp||"", target:p.target||"", opstat:p.opstat||"", notified:p.notified?1:0,
+      resp:p.resp||"", respRole:p.respRole||"", respAuto:p.respAuto||"", target:p.target||"", opstat:p.opstat||"", notified:p.notified?1:0,
       action:p.action||"", wo:p.wo||"", particle:p.particle||"", comp:p.comp||"", oil:p.oil||"", defect:p.defect||"", cause:p.cause||"", comment:p.comment||"", tempV:p.tempV||"", tempA:p.tempA||"", tempM:p.tempM||"", detect:p.detect||DETECT_DEFAULT,
       prio:p.prio||"",
       /* The lubrication round's WHOLE answer, and it was not on this list.
@@ -14434,7 +14434,7 @@ $("shareBtn").onclick=guard(async ()=>{ const r=await buildPackage(); if(!r.coun
 function gradeExtras(p){
   return { gradeMan:p.gradeMan?1:0, gradeSug:p.gradeSug||"", gradeWhy:p.gradeWhy||"",
            gradeAudit:Array.isArray(p.gradeAudit)?p.gradeAudit:[],
-           resp:p.resp||"", target:p.target||"", opstat:p.opstat||"", notified:p.notified?1:0 };
+           resp:p.resp||"", respRole:p.respRole||"", target:p.target||"", opstat:p.opstat||"", notified:p.notified?1:0 };
 }
 function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 function itemLabelFor(rec,k){
@@ -14894,7 +14894,7 @@ function teamRecToReport(rec){
              general:it.general?1:0, cats:(it.att||[]).map(e=>e.category||"COMPONENT"),
              mark:it.mark||"",
              grade:GRADE.num(it.grade)||"", sev:gradeIso(it.grade)||it.sev||"",
-             resp:it.resp||"", target:it.target||"", opstat:it.opstat||"", gradeWhy:it.gradeWhy||"",
+             resp:it.resp||"", respRole:it.respRole||"", target:it.target||"", opstat:it.opstat||"", gradeWhy:it.gradeWhy||"",
              /* recToExport0 (the uploader) freezes these to English at capture
                 time, alongside the raw code the app itself reads everywhere
                 else (defectCode/causeCode/it.action/it.detection) — this phone's
@@ -15365,7 +15365,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="573";
+const BUILD="575";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
