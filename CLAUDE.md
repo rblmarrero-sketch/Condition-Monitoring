@@ -5271,6 +5271,30 @@ matched by selector, not by a class cmCardify adds, because a redraw replaces th
 `ascards`: a class-only rule hid the new filter row for one frame, and the focus restore landed on a hidden box.
 The sort still lives in the hidden header.
 
+
+**ONE TEMPLATE ON EVERY TAB, AND THE SITE'S FILTER BAR UNDER /cm/ (build 573, CM_TPL_V1 + CM_SITEFB_V1).**
+Rickie 03.11 09:05 site: "Its messy. Every tabs is different"; mock-up approved 09:37. Measured first, per
+component per tab: titles, card headings, tile labels and table headers already agreed; what differed was the
+header (a purpose line on some tabs, a button mid-header on others), where Definitions sat (page header on some
+tabs, inside a card on Actions, Schedule and Wear), six control heights (32-40 px), each table's own cell
+padding (rows 40-122 px), Lubrication's underlined sub-tabs against the filled switch everywhere else, and plain
+counts coloured like warnings. `#cmTplCss` / `#cmTplJs` (both office pages, identical): title · (i) tip with the
+tab's purpose sentence (the hidden `.pgsub[data-i18n]` stays the source, so the language switch and every test
+reading it keep working; data lines such as `#kpiInsp`, `#cwSub`, `#paAsOf` stay lines) · `.cmHdR` at the right
+end with the tab's own actions and its one Definitions; desk controls 32 px (the phone keeps 44); 8 px above and
+below every table cell (checkbox, button and empty-state cells, the fortnight grid, card tables and the Overview
+compliance bars #covTbl keep their own); `.subtabs` drawn as the segmented switch; `.kpi.info` neutral (a tile coloured by its own id keeps it).
+`#lubeHoNote` stays a visible line on purpose: it is the hand-over instruction (LubeLink is the editor). Phone:
+the global search box holds its 44 px field. Under /cm/ only, `cmSiteFb()` turns the page's filter bar into the
+site's (Scope with /site/dims.json, Period, Group/Class, Asset range/Category, Manufacturer, Model, More, search,
+link, count) on ONE line that wraps only when it must; the page's own selects live in More with their ids, so
+every filter, drill and report works as before (`window.cmUnitOK` in `filtered()`). `tests/cmtpl.cjs` (fails
+7 checks a page on build 572), `tests/sitefb.cjs` (needs `tests/site_std_copy/`, a copy of the site kit's
+std.js/std.css v1.7 - refresh it when the site kit changes). Live numbers: askpi-site cm_audit_kit (CM_AUDIT_V1): on build
+572, 03.11 10:04 site, every tab of both pages was 0 on every pass mark except 3 English-in-RU and 1 Russian-in-EN, fixed here:
+the 1C type name in the Plan vs Actual definition is now a RU / EN pair, GET in Russian prose is "коронки и ножи", the Russian
+edit hint names the keys in Russian, and the report language option "Русский" carries lang="ru" data-1c as "English" already did.
+
 ---
 
 ## Secrets
