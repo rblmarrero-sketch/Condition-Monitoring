@@ -6410,3 +6410,18 @@ has always assumed was already true. `dbnullerr.cjs`, `recovery.cjs`,
 `dbPut`/`dbDel` in any way — pass clean against the fix; `sync-writeback-
 race.cjs` §7 itself passed four consecutive runs after it, having failed
 two of three before.
+
+**DAY SUMMARY, DEFECT STAGES, AND WHAT 2.4 MEANS (build 578, CM_DAYSUM_V1 + CM_PLAIN_V1, Rickie 04.11.2026).**
+Reports carries "Day summary for the e-mail" (`dashboard/day-summary.js`, both office pages, EN/RU): pick a
+day (and an inspector), tick rounds, and it builds one row per recorded position — date, unit, component, type
+of defect, description, defect/WO no., priority, severity. A Normal position carries the severity only; a
+position nothing was recorded on is left out; a round with more than 12 points lists the non-Normal ones and
+one line for the rest. "Copy table for e-mail" puts inline-styled HTML (mail programs keep nothing else) and a
+tab-separated copy on the clipboard; CSV too. It only reads RECS through the page's own `sevOf` / `prioName`.
+Defects raised: stage chips All / Registered / In progress / Completed (`cwStage`: 1C's status text, and a WO
+number means in progress), a Work order column, "WO missing" in red on an in-progress defect with no number,
+and "Raised by" shows 1C's "Initiator WR" (new `raisedBy` in the ingester) with the CM name on its tooltip and
+as the fallback; the Status cell still prints 1C's own text, coloured by stage. The Condition trend says under
+the chart what its two numbers are (findings per inspection; inspections that month). `tests/daysum.cjs`.
+`tests/cmraised.cjs` fails between 00:00 and 12:00 site on the live branch too (it compares 1C dates with the
+UTC day) — not caused by this build.

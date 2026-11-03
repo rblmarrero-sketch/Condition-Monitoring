@@ -132,7 +132,7 @@ const cells = p => p.$$eval('#cwList tbody tr', rs => rs.map(r =>
   ok('  and every other column is 1C\'s value, unaltered',
      tk[3] === 'TRUCK, DUMP' && tk[4] === 'DRS.FDR' && tk[5] === 'P2 Urgent'
      && tk[6] === 'Ferrous debris' && tk[7] === 'Metal particles on plug, 3mm'
-     && tk[8] === 'Bearing wear' && tk[9] === 'In progress' && tk[10] === 'Nurbol',
+     && tk[8] === 'Bearing wear' && tk[9] === 'In progress' && tk[10] === 'WO-070001' && tk[11] === 'Nurbol' /* CM_PLAIN_V1: Work order column before Raised by */,
      tk.join(' | '));
   ok('  including the description the inspector typed',
      tk[7] === 'Metal particles on plug, 3mm', tk[7]);
@@ -156,7 +156,7 @@ const cells = p => p.$$eval('#cwList tbody tr', rs => rs.map(r =>
   ok('  every column has a heading — as many headings as cells', hdr.ths.length === hdr.tds && hdr.tds > 0,
      hdr.ths.length + ' headings over ' + hdr.tds + ' cells');
   ok('  and the heading over the description is "' + hdr.want + '", the cause\'s is the cause\'s, the last is Raised by',
-     hdr.ths[7] === hdr.want && hdr.ths[8] === hdr.cause && hdr.ths[10] === hdr.by, hdr.ths.join(' | '));
+     hdr.ths[7] === hdr.want && hdr.ths[8] === hdr.cause && hdr.ths[11] === hdr.by, hdr.ths.join(' | '));
   ok('  including the system component the office asked to see',
      tk[4] === 'DRS.FDR', tk[4]);
   /* A reference with no code keeps its row and shows what IS there. */
@@ -173,14 +173,14 @@ const cells = p => p.$$eval('#cwList tbody tr', rs => rs.map(r =>
   ok('  but the headline still counts three — the count is of defects',
      kpiAfter === '3', kpiAfter);
   ok('  and the service row says what it is rather than showing a blank type',
-     (rows.find(r => r[10] === 'Bekzhan') || [])[6] === 'planned service',
-     JSON.stringify(rows.find(r => r[10] === 'Bekzhan')));
+     (rows.find(r => r[11] === 'Bekzhan') || [])[6] === 'planned service',
+     JSON.stringify(rows.find(r => r[11] === 'Bekzhan')));
   await p.evaluate(() => { document.getElementById('cwPlanned').checked = false; renderCmWoTab(); });
 
   await p.evaluate(() => { document.querySelector('#cwKpis [data-cwwho="Irek"]').click(); });
   rows = await cells(p);
-  ok('tapping a person narrows to theirs', rows.length === 1 && rows[0][10] === 'Irek',
-     rows.map(r => r[10]).join(' '));
+  ok('tapping a person narrows to theirs', rows.length === 1 && rows[0][11] === 'Irek',
+     rows.map(r => r[11]).join(' '));
   await p.evaluate(() => { document.querySelector('#cwKpis [data-cwwho="Irek"]').click(); });
 
   await p.fill('#cwQ', 'DD-000456');

@@ -2644,6 +2644,12 @@
     .insp .head a.meta,.selcol label,.field select,.field input{min-height:44px;}
     .xf,.railtog,#themeBtn,.lang button,.selcol label{min-width:44px;}
   }
+
+#trendChart .trkey{margin:6px 0 0;font-size:12px;color:var(--muted)}
+
+#cwStageF{margin:8px 0}
+.cwst{font-weight:600}.cwst.reg{color:var(--warn-ink,#8a5a00)}.cwst.prog{color:var(--accent)}.cwst.done{color:var(--good-ink,#1d6b3a)}
+.cwnowo{color:var(--crit-ink,#a32020);font-weight:600;font-size:12px;margin-left:8px}
 </style>
 </head>
 <body>
@@ -4063,23 +4069,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=577"></script>
+<script src="../data/magnetic_plug.js?v=578"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=577"></script>
-<script src="../mobile/hme.js?v=577"></script>
-<script src="../mobile/mp-fc.js?v=577"></script>
-<script src="../mobile/rtw.js?v=577"></script>
-<script src="../mobile/hme-cascade.js?v=577"></script>
-<script src="../mobile/temp-limits.js?v=577"></script>
+<script src="../data/work_orders.js?v=578"></script>
+<script src="../mobile/hme.js?v=578"></script>
+<script src="../mobile/mp-fc.js?v=578"></script>
+<script src="../mobile/rtw.js?v=578"></script>
+<script src="../mobile/hme-cascade.js?v=578"></script>
+<script src="../mobile/temp-limits.js?v=578"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=577"></script>
-<script src="../mobile/normalize.js?v=577"></script>
-<script src="../mobile/terms.js?v=577"></script>
+<script src="../mobile/assets.js?v=578"></script>
+<script src="../mobile/normalize.js?v=578"></script>
+<script src="../mobile/terms.js?v=578"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -4098,21 +4104,21 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=577"></script>
-<script src="../mobile/edits.js?v=577"></script>
-<script src="../mobile/due.js?v=577"></script>
-<script src="../mobile/wear.js?v=577"></script>
-<script src="../mobile/wear-map.js?v=577"></script>
-<script src="../mobile/lube.js?v=577"></script>
-<script src="../mobile/lube-overrides.js?v=577"></script>
-<script src="../mobile/lube2027.js?v=577"></script>
-<script src="../mobile/lube-tds.js?v=577"></script>
-<script src="lube-master.js?v=577"></script>
-<script src="wear-limits.js?v=577"></script>
+<script src="../mobile/grade.js?v=578"></script>
+<script src="../mobile/edits.js?v=578"></script>
+<script src="../mobile/due.js?v=578"></script>
+<script src="../mobile/wear.js?v=578"></script>
+<script src="../mobile/wear-map.js?v=578"></script>
+<script src="../mobile/lube.js?v=578"></script>
+<script src="../mobile/lube-overrides.js?v=578"></script>
+<script src="../mobile/lube2027.js?v=578"></script>
+<script src="../mobile/lube-tds.js?v=578"></script>
+<script src="lube-master.js?v=578"></script>
+<script src="wear-limits.js?v=578"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=577"></script>
-<script src="../mobile/machine-photos.js?v=577"></script>
+<script src="../mobile/upload-defaults.js?v=578"></script>
+<script src="../mobile/machine-photos.js?v=578"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -4121,17 +4127,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=577"></script>
-<script src="../mobile/get.js?v=577"></script>
-<script src="../mobile/points.js?v=577"></script>
-<script src="../mobile/uc-points.js?v=577"></script>
-<script src="../mobile/inspect-guide.js?v=577"></script>
-<script src="../mobile/get-figs.js?v=577"></script>
-<script src="../mobile/body-points.js?v=577"></script>
-<script src="../mobile/body-map.js?v=577"></script>
-<script src="../mobile/jspdf.umd.min.js?v=577"></script>
-<script src="../mobile/html2canvas.min.js?v=577"></script>
-<script src="../mobile/report-core.js?v=577"></script>
+<script src="../mobile/machine-fig.js?v=578"></script>
+<script src="../mobile/get.js?v=578"></script>
+<script src="../mobile/points.js?v=578"></script>
+<script src="../mobile/uc-points.js?v=578"></script>
+<script src="../mobile/inspect-guide.js?v=578"></script>
+<script src="../mobile/get-figs.js?v=578"></script>
+<script src="../mobile/body-points.js?v=578"></script>
+<script src="../mobile/body-map.js?v=578"></script>
+<script src="../mobile/jspdf.umd.min.js?v=578"></script>
+<script src="../mobile/html2canvas.min.js?v=578"></script>
+<script src="../mobile/report-core.js?v=578"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -4811,6 +4817,7 @@ const I18N={
   tr_baseline:"trailing 3-month average",
   tr_delta_flat:"steady",
   tr_tip:"{rate} finding(s) per inspection — {f} finding(s) from {r} inspection(s) on {u} unit(s)",
+  tr_key:"Top number: findings per inspection (e.g. 2.4 = about 2 findings each round). Bottom number: inspections that month.",
   tr_none:"Not enough months yet", tr_none_s:"Two months of inspections and this draws itself.",
   tr_short:"Not enough history behind this month to call a direction yet.",
   tr_thin:"{m}: {n} finding(s) from {r} inspection(s) \u2014 too few to read a rate from. A percentage on numbers this small is noise.",
@@ -5122,6 +5129,8 @@ const I18N={
   cw_c_system:"System component", cw_c_prio:"Priority", cw_c_dtype:"Defect type",
   cw_c_descr:"Defect description", cw_c_cause:"Cause of defect",
   cw_c_status:"Status", cw_c_by:"Raised by",
+  cw_c_wo:"Work order", cw_st_all:"All", cw_st_reg:"Registered", cw_st_prog:"In progress", cw_st_done:"Completed",
+  cw_nowo:"WO missing", cw_nowo_n:"{n} in progress without a WO number", cw_by_tip:"Responsible in 1C: {p}",
   cw_colfilter_ph:"Filter…",
   cw_colfilter_aria:"Filter {c}",
   pa_st_ontime:"On time", pa_st_late:"Late", pa_st_early:"Early", pa_st_missing:"No CM round",
@@ -5716,6 +5725,7 @@ const I18N={
   tr_baseline:"среднее за предыдущие 3 месяца",
   tr_delta_flat:"стабильно",
   tr_tip:"{rate} дефект(ов) на осмотр — дефектов: {f}, осмотров: {r}, единиц: {u}",
+  tr_key:"Верхнее число: дефектов на один осмотр (2,4 ≈ 2 дефекта за обход). Нижнее: осмотров за месяц.",
   tr_none:"Пока мало месяцев", tr_none_s:"Двух месяцев осмотров достаточно, чтобы график построился.",
   tr_short:"Истории пока недостаточно, чтобы говорить о направлении.",
   tr_thin:"{m}: дефектов {n} из {r} осмотр(ов) — слишком мало, чтобы считать показатель. Процент на таких числах это шум.",
@@ -6017,6 +6027,8 @@ const I18N={
   cw_c_system:"Узел / система", cw_c_prio:"Приоритет", cw_c_dtype:"Тип дефекта",
   cw_c_descr:"Описание дефекта", cw_c_cause:"Причина дефекта",
   cw_c_status:"Статус", cw_c_by:"Заявил",
+  cw_c_wo:"Наряд", cw_st_all:"Все", cw_st_reg:"Зарегистрирован", cw_st_prog:"В работе", cw_st_done:"Выполнен",
+  cw_nowo:"Нет наряда", cw_nowo_n:"В работе без номера наряда: {n}", cw_by_tip:"Ответственный в 1С: {p}",
   cw_colfilter_ph:"Фильтр…",
   cw_colfilter_aria:"Фильтр: {c}",
   pa_st_ontime:"В срок", pa_st_late:"Позже", pa_st_early:"Раньше", pa_st_missing:"Нет обхода CM",
@@ -10312,7 +10324,7 @@ function renderTrend(){
   $("trendKey").innerHTML=
       [5,4,3,2].map(n=>`<span><i style="--c:${SEVC[n]}"></i>${esc(SEV[n].l)}</span>`).join("")
     + `<span>${esc(t("tr_rounds"))}</span>`;
-  $("trendChart").innerHTML=`<div class="trend">${bars}</div>`;
+  $("trendChart").innerHTML=`<div class="trend">${bars}</div><p class="trkey">${esc(t("tr_key"))}</p>`; /* CM_PLAIN_V1: say what the two numbers under each bar are */
   $("trendChart").querySelectorAll("[data-tm]").forEach(b=>b.onclick=()=>setDrill("month",b.dataset.tm));
   /* One sentence of direction, because a chart nobody reads out loud is a
      chart nobody acts on. Compares the last month's RATE with the rate of the
@@ -13665,6 +13677,7 @@ let CUR_TAB="overview";
    figures from /site_kpi.json. reliability.js ignores the period / class it is
    still handed (the work-order panel's controls, retired 2026-10-26). */
 function relShow(){
+  if(typeof daySumShow==="function") daySumShow(); /* CM_DAYSUM_V1 */
   const el=$("relPanel"); if(!el||!window.CMRel) return;
   // Held on the function, not a module-level const: showTab() can run during
   // boot (a #reports address) before a const further down would exist.
@@ -17185,11 +17198,11 @@ function cwCsv(){
                "asset","defect_no","work_request_number","equipment_type",
                "system_component","priority","defect_type","defect_description",
                "cause_of_defect","cause_source","status","raised_by","work_order","maintenance_type",
-               "is_planned_service"]];
+               "is_planned_service","stage","responsible_cm"]];
   cwRows().forEach(r=>rows.push([r.date||"", r.dateFrom||"", r.raised||"", r.detected||"",
     r.planStart||"", r.asset||"", r.defect||"", r.requestNo||"",
     r.eqType||"", r.system||"", r.priority||"", r.defectType||"", r.descr||"", r.cause||"",
-    r.causeFrom||"", r.status||"", r.by||"", r.woNumber||"", r.maintType||"", r.planned?1:0]));
+    r.causeFrom||"", r.status||"", r.raisedBy||r.by||"", r.woNumber||"", r.maintType||"", r.planned?1:0, cwStage(r), r.by||""])); /* CM_PLAIN_V1 */
   const csv=rows.map(r=>r.map(v=>{ const x=String(v==null?"":v);
     return /[",\n]/.test(x) ? '"'+x.replace(/"/g,'""')+'"' : x; }).join(",")).join("\n");
   const a=document.createElement("a");
@@ -18304,7 +18317,7 @@ const CW_COLS = [
   ["date","cw_c_date"], ["asset","cw_c_asset"], ["defect","cw_c_defect"],
   ["eqType","cw_c_eqtype"], ["system","cw_c_system"], ["priority","cw_c_prio"],
   ["defectType","cw_c_dtype"], ["descr","cw_c_descr"], ["cause","cw_c_cause"],
-  ["status","cw_c_status"], ["by","cw_c_by"],
+  ["status","cw_c_status"], ["wo","cw_c_wo"], ["by","cw_c_by"], /* CM_PLAIN_V1 */
 ];
 /* What a column actually reads and sorts by — matching what the cell shows,
    including the two fields (defect type, description, cause) that print as
@@ -18315,6 +18328,8 @@ function cwColVal(r, k){
   if(k==="defectType") return r.planned ? "planned service" : (r.defectType||"");
   if(k==="descr") return r.planned ? "" : (r.descr||"");
   if(k==="cause") return r.planned ? "" : (r.cause||"");
+  if(k==="wo") return r.woNumber || ""; /* CM_PLAIN_V1 */
+  if(k==="by") return r.raisedBy || r.by || "";
   return r[k] || "";
 }
 function cwAll(){
@@ -18340,7 +18355,12 @@ function cwWordMatch(v, q){
   }
   return false;
 }
-function cwRows(){
+let cwStageSel = ""; /* CM_PLAIN_V1 */
+function cwStage(r){ const s=String((r&&r.status)||"").toLowerCase();
+  if(/complet|closed|cancel|заверш|закрыт|выполн/.test(s)) return "done";
+  if(r&&r.woNumber || /progress|elimination|schedul|work|выполня|устранен/.test(s)) return "prog";
+  return "reg"; }
+function cwRows(noStage){
   const all = cwAll() || [];
   const planned = !!($("cwPlanned")||{}).checked;
   const q = (($("cwQ")||{}).value||"").trim().toUpperCase();
@@ -18348,6 +18368,7 @@ function cwRows(){
     .filter(r => planned || !r.planned)
     .filter(r => !cwWho || r.by === cwWho)
     .filter(r => !cwStatusSel || (r.status||"") === cwStatusSel)
+    .filter(r => noStage || !cwStageSel || cwStage(r) === cwStageSel) /* CM_PLAIN_V1 */
     .filter(r => !q || [r.asset, r.defect, r.requestNo, r.cause, r.defectType, r.eqType,
                         r.system, r.descr, r.woNumber]
       .some(v => cwWordMatch(v, q)))
@@ -18457,6 +18478,16 @@ function renderCmWoTab(){
 
   /* paged() is called even at zero rows — it still registers the pager's
      own click wiring for this key, and returns the empty shape cleanly. */
+  /* CM_PLAIN_V1 (Rickie 04.11.2026): the defect's stage in three words - Registered (no work order yet),
+     In progress (a work order is raised and not finished; it must carry its WO number), Completed. Counted from
+     the rows the other filters leave, so a chip never promises rows that are not there. */
+  { let sf=$("cwStageF"); if(!sf){ sf=document.createElement("div"); sf.id="cwStageF"; sf.className="seg"; box.parentNode.insertBefore(sf,box); }
+    const base=cwRows(true), cnt={all:base.length,reg:0,prog:0,done:0}; base.forEach(r=>cnt[cwStage(r)]++);
+    const noWo=base.filter(r=>cwStage(r)==="prog"&&!r.woNumber).length;
+    sf.innerHTML=[["","all"],["reg","reg"],["prog","prog"],["done","done"]].map(([k,c])=>
+      `<button type="button" data-cwst="${k}"${cwStageSel===k?' class="on"':''}>${esc(t("cw_st_"+c))}<span class="n">${cnt[c]}</span></button>`).join("")
+      +(noWo?`<span class="cwnowo">${esc(t("cw_nowo_n",{n:String(noWo)}))}</span>`:"");
+    sf.querySelectorAll("[data-cwst]").forEach(b=>b.onclick=()=>{ cwStageSel=b.dataset.cwst; renderCmWoTab(); }); }
   const pg = paged("cmwo", shown, renderCmWoTab);
   const cell = v => v ? esc(v) : `<span class="muted">—</span>`;
   /* SORT and a FILTER PER COLUMN, in the header itself — reusing the exact
@@ -18488,12 +18519,12 @@ function renderCmWoTab(){
         <td class="cwc2">${r.planned ? `<span class="muted">${esc(t("cw_is_planned"))}</span>` : c2(r.defectType)}</td>
         <td class="cwc2">${r.planned ? `<span class="muted">—</span>` : c2(r.descr)}</td>
         <td class="cwc2">${r.planned ? `<span class="muted">—</span>` : c2(r.cause)}</td>
-        <td>${cell(r.status)}</td><td>${cell(r.by)}</td></tr>`).join("")
+        <td title="${esc(t("cw_st_"+cwStage(r)))}"><span class="cwst ${cwStage(r)}">${r.status?esc(r.status):"—"}</span></td><td class="mono">${r.woNumber?esc(r.woNumber):(cwStage(r)==="prog"?`<span class="cwnowo">${esc(t("cw_nowo"))}</span>`:`<span class="muted">—</span>`)}</td><td title="${esc(r.raisedBy?t("cw_by_tip",{p:r.by||"—"}):"")}" data-1c>${cell(r.raisedBy||r.by)}</td></tr>`).join("") /* CM_PLAIN_V1 */
     : `<tr><td colspan="${CW_COLS.length}" class="empty">${esc(t("cw_none"))}</td></tr>`;
   /* Date · Asset · Defect no. · Equipment type · System · Priority · Defect
      type · Description · Cause · Status · Raised by — the description takes
      what the others leave. */
-  const CW_W=[90,64,100,92,116,84,108,0,104,88,64];
+  const CW_W=[90,64,100,80,100,84,108,0,104,92,84,100]; /* CM_PLAIN_V1: + WO column, wider Raised by */
   const CW_COLG=`<colgroup>${CW_W.map(w=>w?`<col style="width:${w}px">`:"<col>").join("")}</colgroup>`;
   box.innerHTML = `<div class="tblwrap"><table class="grid cwtbl" style="min-width:${CW_W.reduce((a,b)=>a+b,0)+140}px">${CW_COLG}<thead>${thead}</thead><tbody>${tbody}</tbody></table></div>`
     /* The pager's own strip, and the count in the words every other table on
@@ -18905,10 +18936,11 @@ document.querySelector(".lang").addEventListener("click",e=>{
   setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 })();
 </script>
-<script src="drive.js?v=577"></script>
-<script src="sync-adapter.js?v=577"></script>
-<script src="report.js?v=577"></script>
-<script src="reliability.js?v=577"></script>
+<script src="drive.js?v=578"></script>
+<script src="sync-adapter.js?v=578"></script>
+<script src="report.js?v=578"></script>
+<script src="reliability.js?v=578"></script>
+<script src="day-summary.js?v=578"></script>
 <script>
 /* THE CLOSED FILTER SAYS WHAT IS CHOSEN. A dropdown narrower than its option
    text ellipsises ("All t…", audit of 2026-10-01). Between 1331 and 1500 px

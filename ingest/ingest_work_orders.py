@@ -357,6 +357,10 @@ CM_FIELDS = {
     "status":   ["CMMSWork order status"],      # the office asked for the CMMS one by name
     "person":   ["Responsible person", "Responsible", "Responsible person name"],
     "wo":       ["Work order number"],
+    # WHO RAISED THE DEFECT (CM_PLAIN_V1, Rickie 04.11.2026). "Responsible
+    # person" is one of the five CM names and only says the row is this
+    # team's; the person who actually wrote the defect up is 1C's initiator.
+    "initiator": ["Initiator WR", "Contact person initiator WR", "Initiator"],
 }
 # "DD-000001" — two or more letters, a dash, digits. Taken out of the work
 # request reference, which in this workbook carries the code inside a longer
@@ -851,6 +855,9 @@ def main():
                     "descr": str(cm_get("desc") or "").strip() or None,
                     "status": str(cm_get("status") or "").strip() or None,
                     "by": who,
+                    # The name 1C has for whoever raised it, as 1C wrote it;
+                    # None when the cell is empty (the panel then shows "by").
+                    "raisedBy": (str(cm_get("initiator") or "").strip() or None) if cm_idx.get("initiator") is not None else None,
                     "woNumber": str(cm_get("wo") or "").strip() or None,
                     "maintType": str(row[col["Maintenence type"]] or "").strip() or None,
                     # THE TWO SIDES OF ONE STORY, AND THEY ARE NOT THE SAME
