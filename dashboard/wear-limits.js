@@ -32,6 +32,10 @@
    inspector's, proposed at the reading, so a temperature change applies from
    today and has no "re-grade all history". */
 (function (root) {
+  /* CM_PLAIN2_V1: a browser's own network message ("Failed to fetch") is English and says nothing to a planner. */
+  function errWords(e) { var m = String((e && e.message) || e || "");
+    if (/failed to fetch|networkerror|load failed|network request failed/i.test(m)) return (typeof lang !== "undefined" && lang === "ru") ? "нет связи с сервером" : "no connection to the server";
+    return m; }
   "use strict";
   const DOC = "_meta/wear/limits.json";
   const LOGDIR = "_meta/wear/log/";
@@ -340,7 +344,7 @@
       S.doc = d; S.state = d ? "ready" : "none"; S.err = "";
       if (moved) apply(S.doc); else if (W() && W().setLimits) W().setLimits(S.doc);
     } catch (e) {
-      S.state = "error"; S.err = String((e && e.message) || e);
+      S.state = "error"; S.err = errWords(e);
       if (root.bad) root.bad("wear-limits-load", e);
     }
     redraw();
@@ -597,7 +601,7 @@
       if (!root.confirm(tr("void_ask"))) return;
       b.disabled = true;
       try { const r = await voidChange(b.dataset.wlvoid); S.msg = r.none ? "" : tr("saved", { rev: r.rev }); S.msgBad = false; }
-      catch (e) { S.msg = String((e && e.message) || e); S.msgBad = true; }
+      catch (e) { S.msg = errWords(e); S.msgBad = true; }
       draw();
     });
     const f = q("#wlForm");
@@ -619,7 +623,7 @@
         S.msg = r.none ? "" : (r.merged ? tr("saved_merged", { rev: r.rev }) : tr("saved", { rev: r.rev })) + (r.logged === false ? tr("log_fail") : "");
         draw();
       } catch (e) {
-        btn.disabled = false; m.textContent = String((e && e.message) || e); m.className = "wl-msg bad";
+        btn.disabled = false; m.textContent = errWords(e); m.className = "wl-msg bad";
       }
     };
   }
