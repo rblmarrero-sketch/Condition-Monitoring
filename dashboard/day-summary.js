@@ -23,7 +23,7 @@
       copy: 'Copy table for e-mail', csv: 'Export CSV', copied: 'Table copied. Paste it into the e-mail.',
       copyfail: 'Could not copy. Select the table and press Ctrl+C.',
       c_date: 'Date inspected', c_unit: 'Unit', c_comp: 'Component', c_type: 'Type of defect',
-      c_desc: 'Description', c_no: 'Defect / WO no.', c_prio: 'Priority', c_sev: 'Severity',
+      c_desc: 'Description', c_no: 'Defect no.', nodef: 'Not raised in 1C', c_prio: 'Priority', c_sev: 'Severity',
       normal_n: '{n} other points', intro: 'Condition monitoring, {d}: {r} round(s), {u} unit(s), {f} finding(s).',
       byline: 'Inspected by: {p}', foot: 'Reports of each round attached.', all_on: 'All', all_off: 'None',
       sel: '{n} of {m} rounds'
@@ -36,7 +36,7 @@
       copy: 'Копировать таблицу для письма', csv: 'Экспорт CSV', copied: 'Таблица скопирована. Вставьте её в письмо.',
       copyfail: 'Не удалось скопировать. Выделите таблицу и нажмите Ctrl+C.',
       c_date: 'Дата осмотра', c_unit: 'Единица', c_comp: 'Узел', c_type: 'Тип дефекта',
-      c_desc: 'Описание', c_no: '№ дефекта / наряда', c_prio: 'Приоритет', c_sev: 'Критичность',
+      c_desc: 'Описание', c_no: '№ дефекта', nodef: 'Нет в 1С', c_prio: 'Приоритет', c_sev: 'Критичность',
       normal_n: 'Остальные точки: {n}', intro: 'Мониторинг состояния, {d}: обходов {r}, единиц {u}, дефектов {f}.',
       byline: 'Осмотр провёл: {p}', foot: 'Отчёты по каждому обходу приложены.', all_on: 'Все', all_off: 'Ни одного',
       sel: '{n} из {m} обходов'
@@ -57,20 +57,56 @@
   function prio(i) { if (!i.prio) return ''; try { var p = prioName(i.prio, L()); return /^P\d/.test(p) ? p : i.prio + ' ' + p; } catch (x) { return i.prio; } }
   function isGeneral(i) { return !i || i.general || i.key === 'MACHINE' || i.key === '__general'; }
   function recorded(r, i) { return grade(r, i) || i.defect || i.defectCode || i.comment || i.photos; }
+  /* CM_DAYSUM_V2 (Rickie 04.11): the number column is the DEFECT raised in 1C for the finding (DD-...),
+     never the work order the round was walked against - every position carries that one, so it said
+     nothing about the finding. A finding is matched to a defect in 1C's Defects raised list
+     (CM_WO_DATA.cmWorkOrders): same unit, raised on the inspection day or up to DEF_DAYS after it, the
+     same system code (EX007.HS.MP <-> HS.MP). What is left over pairs up only when exactly one finding and
+     one defect remain (a magnetic plug's code is not 1C's). Each defect is used once. */
+  var DEF_DAYS = 7;
+  function addDays(d, n) { var t = new Date(d + 'T00:00:00Z'); t.setUTCDate(t.getUTCDate() + n); return t.toISOString().slice(0, 10); }
+  function defectsOf(r) {
+    var all = (window.CM_WO_DATA && window.CM_WO_DATA.cmWorkOrders) || [];
+    var u = String(r.equip || '').toUpperCase(), to = addDays(r.date, DEF_DAYS);
+    return all.filter(function (d) {
+      var on = String(d.raised || d.date || '').slice(0, 10);
+      return d && d.defect && String(d.asset || '').toUpperCase() === u && on >= r.date && on <= to;
+    });
+  }
+  function sysHas(d, key) {
+    if (!key) return false;
+    var s = String(d.system || '').toUpperCase(), k = String(key).toUpperCase();
+    return s.indexOf('.' + k + ' ') >= 0 || s.indexOf('.' + k + '(') >= 0 || s.slice(-k.length - 1) === '.' + k;
+  }
+  function matchDefects(r, finds, used) {
+    var cand = defectsOf(r).filter(function (d) { return !used[d.defect]; }), got = new Map();
+    finds.forEach(function (i) {
+      var d = cand.find(function (x) { return !used[x.defect] && sysHas(x, i.key); });
+      if (d) { got.set(i, d); used[d.defect] = 1; }
+    });
+    var leftF = finds.filter(function (i) { return !got.has(i); }), leftD = cand.filter(function (d) { return !used[d.defect]; });
+    if (leftF.length === 1 && leftD.length === 1) { got.set(leftF[0], leftD[0]); used[leftD[0].defect] = 1; }
+    return got;
+  }
+  function prio1c(d) { var m = /^(P\d)\s*(.*)$/.exec(String(d.priority || '').trim()); return m ? (m[1] + ' ' + m[2].replace(/[()]/g, '')).trim() : (d.priority || ''); }
+  function type1c(d) { return String(d.defectType || '').trim(); }
   /* the table rows for the chosen rounds */
   function rowsFor(list) {
-    var out = [];
+    var out = [], used = {};
     list.forEach(function (r) {
       var its = (r.items || []).filter(function (i) { return !isGeneral(i) && recorded(r, i); });
       var bad = its.filter(function (i) { return grade(r, i) > 1 || i.defect || i.defectCode; });
       var ok = its.filter(function (i) { return bad.indexOf(i) < 0; });
       var many = its.length > 12;
+      var dd = matchDefects(r, bad.filter(function (i) { return grade(r, i) >= 3 || i.defect || i.defectCode; }), used);
       its.forEach(function (i) {
         if (many && ok.indexOf(i) >= 0) return;
-        var g = grade(r, i), f = bad.indexOf(i) >= 0;
+        var g = grade(r, i), f = bad.indexOf(i) >= 0, d = dd.get(i);
+        var need = f && (g >= 3 || i.defect || i.defectCode);
         out.push({ date: r.date, unit: r.equip, round: typeName(r.type), comp: (i.key && String(i.label || '').indexOf(i.key) !== 0 ? i.key + ' ' : '') + (i.label || ''),
-          type: f ? (i.defect || i.defectCode || '') : '', desc: f ? (i.comment || '') : '', no: f ? (i.wo || '') : '',
-          prio: f ? prio(i) : '', sev: sevName(g), g: g, by: r.by || '' });
+          type: f ? ((d && type1c(d)) || i.defect || i.defectCode || '') : '', desc: f ? (i.comment || (d && d.descr) || '') : '',
+          no: d ? d.defect : (need ? w('nodef') : ''), nodef: !d && need, st: d ? (d.status || '') : '',
+          prio: f ? ((d && prio1c(d)) || prio(i)) : '', sev: sevName(g), g: g, by: r.by || '' });
       });
       if (many && ok.length) out.push({ date: r.date, unit: r.equip, round: typeName(r.type), comp: w('normal_n', { n: ok.length }),
         type: '', desc: '', no: '', prio: '', sev: sevName(1), g: 1, by: r.by || '' });
@@ -93,7 +129,7 @@
       return '<tr>' + COLS.map(function (c) {
         var v = x[c[0]];
         if (c[0] === 'unit') v = x.unit + (x.round ? ' · ' + x.round : '');
-        var st = c[0] === 'sev' && x.g ? td.replace('"', '"color:' + INK[x.g] + ';font-weight:600;') : td;
+        var st = c[0] === 'sev' && x.g ? td.replace('"', '"color:' + INK[x.g] + ';font-weight:600;') : (c[0] === 'no' && x.nodef ? td.replace('"', '"color:#a33d00;') : td);
         return '<td ' + st + '>' + e(v || (c[0] === 'sev' ? '' : '—')) + '</td>';
       }).join('') + '</tr>';
     }).join('');

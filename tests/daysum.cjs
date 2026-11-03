@@ -20,13 +20,16 @@ const SEED = `(function(){
       { key:"4E", label:"Left Rear Final Drive", grade:4, defect:"Metal particles", defectCode:"DT-12", comment:"Heavy flakes on plug", wo:"DD-004512", prio:"P2" },
       { key:"4F", label:"Right Rear Final Drive", grade:1, comment:"" } ] },
     { equip:"EX016", date:"2026-11-02", type:"INSP", cls:"EXC", by:"Ospanov", items:[
-      { key:"HS.DL", label:"Hydraulic lines", grade:1 } ] },
+      { key:"HS.DL", label:"Hydraulic lines", grade:1 },
+      { key:"DRS.ENG", label:"Engine", grade:3, comment:"Oil leak at the head gasket", wo:"WO-021099", prio:"P4" },
+      { key:"HS.MP", label:"Hydraulic pumps", grade:3, comment:"Pump gasket weeping", wo:"WO-021099", prio:"P4" } ] },
     { equip:"DZ011", date:"2026-11-01", type:"FC", cls:"DOZ", by:"Rayanov", items:[
       { key:"ENG", label:"Engine oil filter", grade:2, defect:"Fine particles", comment:"Watch" } ] }
   ]);
   window.CM_WO_DATA = Object.assign({}, window.CM_WO_DATA||{}, { cmSince:"2026-07-01", cmPeople:["Slam","Irek"],
     cmColumns:{}, cmWorkOrders:[
-      { date:"2026-11-01", asset:"TK150", defect:"DD-1", status:"Registered", by:"Slam", raisedBy:"Petrov A.", priority:"P2 Urgent" },
+      { date:"2026-11-02", raised:"2026-11-02", asset:"TK150", defect:"DD-004512", system:"TK150.DRV.FD (Final drives)", defectType:"1.03 Wear", status:"Registered", by:"Slam", raisedBy:"Petrov A.", priority:"P2 Urgent" },
+      { date:"2026-11-03", raised:"2026-11-03", asset:"EX016", defect:"DD-00016300", system:"EX016.DRS.ENG (Engine / Двигатель)", defectType:"1.01 Leakage", status:"Registered", by:"Irek", priority:"P3 Planned (PM)" },
       { date:"2026-11-01", asset:"TK151", defect:"DD-2", status:"Elimination scheduled", by:"Irek", woNumber:"WO-9001", priority:"P2 Urgent" },
       { date:"2026-11-01", asset:"TK152", defect:"DD-3", status:"In Progress", by:"Irek", priority:"P3" },
       { date:"2026-10-30", asset:"TK153", defect:"DD-4", status:"Completed", by:"Slam", raisedBy:"Ivanov B.", woNumber:"WO-9002", priority:"P4" } ] });
@@ -50,9 +53,13 @@ async function run(b, path, lng) {
   ok(ds && ds.day === '2026-11-02', 'opens on the newest day with rounds', ds && ds.day);
   ok(ds && ds.chips === 2, 'both rounds of that day are offered', ds && ds.chips);
   ok(ds && ds.th.length === 8, 'eight columns', ds && ds.th.join(' | '));
-  ok(ds && ds.trs.length === 3, 'one row per recorded position; the empty plug 1 is left out', ds && ds.trs.length);
+  ok(ds && ds.trs.length === 5, 'one row per recorded position; the empty plug 1 is left out', ds && ds.trs.length);
   const f = ds && ds.trs.find(r => /4E/.test(r[2])), n = ds && ds.trs.find(r => /4F/.test(r[2]));
-  ok(f && /Metal particles/.test(f[3]) && /Heavy flakes/.test(f[4]) && f[5] === 'DD-004512' && /^P2/.test(f[6]), 'a finding carries type, description, number and priority', f && f.join(' | '));
+  ok(f && /Metal particles/.test(f[3]) && /Heavy flakes/.test(f[4]) && f[5] === 'DD-004512' && /^P2/.test(f[6]), 'a plug finding is paired with the one defect raised on its unit', f && f.join(' | '));
+  const eng = ds && ds.trs.find(r => /DRS\.ENG/.test(r[2])), mp = ds && ds.trs.find(r => /HS\.MP/.test(r[2]));
+  ok(eng && eng[5] === 'DD-00016300' && /Leakage/.test(eng[3]) && /^P3/.test(eng[6]), 'a finding takes the defect raised for its system code, with 1C type and priority', eng && eng.join(' | '));
+  ok(mp && /Not raised in 1C|Нет в 1С/.test(mp[5]), 'a Degraded finding with no defect in 1C says so', mp && mp[5]);
+  ok(ds && !ds.trs.some(r => /WO-0/.test(r[5])), 'the round work order is never shown as the defect number', ds && ds.trs.map(r => r[5]).join(','));
   ok(n && n[3] === '—' && n[4] === '—' && n[5] === '—' && n[7].length > 2, 'a Normal position carries the severity only', n && n.join(' | '));
   await p.evaluate(() => { const c = document.querySelector('#daySum [data-dsk*="EX016"]') || [...document.querySelectorAll('#daySum [data-dsk]')].find(x => /EX016/.test(x.parentNode.textContent)); c.click(); });
   await p.waitForTimeout(200);
@@ -66,7 +73,7 @@ async function run(b, path, lng) {
   const cw = await p.evaluate(() => ({ chips: [...document.querySelectorAll('#cwStageF [data-cwst]')].map(b => b.textContent.trim()),
     rows: [...document.querySelectorAll('#cwList table.cwtbl tbody tr')].map(tr => [...tr.cells].map(c => c.textContent.trim())),
     nowo: (document.querySelector('#cwStageF .cwnowo') || {}).textContent || '' }));
-  ok(cw.chips.length === 4 && /4$/.test(cw.chips[0]) && /1$/.test(cw.chips[1]) && /2$/.test(cw.chips[2]) && /1$/.test(cw.chips[3]), 'stage chips: all 4, registered 1, in progress 2, completed 1', cw.chips.join(' | '));
+  ok(cw.chips.length === 4 && /5$/.test(cw.chips[0]) && /2$/.test(cw.chips[1]) && /2$/.test(cw.chips[2]) && /1$/.test(cw.chips[3]), 'stage chips: all 5, registered 2, in progress 2, completed 1', cw.chips.join(' | '));
   ok(/1/.test(cw.nowo), 'one defect in progress without a WO number is counted', cw.nowo);
   const r1 = cw.rows.find(r => r.includes('TK150')), r2 = cw.rows.find(r => r.includes('TK151')), r3 = cw.rows.find(r => r.includes('TK152'));
   ok(r1 && r1.includes('Petrov A.'), 'Raised by shows the name 1C has', r1 && r1.slice(-3).join(' | '));
