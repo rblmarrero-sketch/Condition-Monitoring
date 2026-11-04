@@ -6472,3 +6472,18 @@ CSV `responsible`, Definitions). `raisedBy` stays in the data, unused. Failure A
 with no name: the magnetic-plug / filter-cut defects (mp-fc.js, DT14/DT15) are coded by failure MECHANISM (Table
 B.2: 2.4 Wear, 2.5 Breakage, 5.1 Blockage, 5.2 Contamination) while the rest carry failure-MODE codes; `ISO_MECH`
 names Table B.2 and the panel looks there when the mode table has no entry.
+
+**THE DAY SUMMARY IS AN E-MAIL NOW, OVER ANY RANGE OF DAYS (build 587, CM_DAYMAIL_V1, Rickie 04.11 15:41 "Proceed").**
+Reports → Day summary (`dashboard/day-summary.js`, both office pages): From / To (and Today, Yesterday, Last 3
+days, This week), Inspector, and an e-mail language switch EN + RU (default), EN or RU (`cm_daymail_lang`; it is
+the e-mail's language, not the page's). "Copy for e-mail" puts on the clipboard: a greeting, a navy title band
+with the range, five count tiles by grade, an ACTION REQUIRED box for every Critical point (unit, finding, the
+grade's own action, the 1C defect), the findings WORST FIRST with a coloured grade badge, Critical and Severe
+rows tinted, headings in both languages, the 1C defect number and priority ("Not raised in 1C" when there is
+none), the grade's action, and "↻ Repeat" when the same unit and point had a finding graded 2+ (CM history) or a
+1C defect on the same system in the last 180 days (`REPEAT_DAYS`; magnetic-plug points match on the history
+only, 1C's codes are systems). Normal points are ONE line per round under "Inspected — no findings", in the
+round type's own sentence (`ok_MP` …); "List every Normal point" (`cm_daymail_every`) brings back one row each.
+Every unit number links to its Equipment History on dashboard-next, and a box links to the dashboard (company
+network or VPN). "Copy subject" gives e.g. "CM daily report 01–02.11.2026 — 1 Critical, 1 Severe · Отчёт МС …".
+Tables and inline styles only — Outlook keeps nothing else. `tests/daysum.cjs`.
