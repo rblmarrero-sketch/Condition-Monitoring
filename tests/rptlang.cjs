@@ -33,7 +33,7 @@ const alts = h => (h.match(/class="alt[l2i]?"/g) || []).length;
       const ov = document.getElementById('dataOv'); if (ov) ov.classList.add('hidden');
     });
     await p.waitForTimeout(300);
-    const U = await p.evaluate(() => { showTab('reports', true);
+    const U = await p.evaluate(() => { localStorage.setItem('cm_rpt_view','pdf'); showTab('reports', true);
       return { opts: [...document.querySelectorAll('#rLang option')].map(o => o.value).join(','), def: $('rLang').value,
                sub: (document.querySelector('#tab-reports .pgsub') || {}).textContent || '',
                scales: [...document.querySelectorAll('#rScale option')].map(o => o.value).join(',') }; });
@@ -133,7 +133,7 @@ const alts = h => (h.match(/class="alt[l2i]?"/g) || []).length;
     ok('  and it is remembered', (await p.evaluate(() => $('rLang').value)) === 'en');
 
     await p.click('.lang button[data-lang="ru"]'); await p.waitForTimeout(400);
-    const R = await p.evaluate(() => { showTab('reports', true); renderReportPreview();
+    const R = await p.evaluate(() => { localStorage.setItem('cm_rpt_view','pdf'); showTab('reports', true); renderReportPreview();
       return { label: (document.querySelector('label[for="rLang"]') || {}).textContent || '', both: [...document.querySelectorAll('#rLang option')].map(o => o.textContent).join('|'),
                scales: [...document.querySelectorAll('#rScale option')].map(o => o.textContent).join('|') }; });
     await p.waitForTimeout(900);

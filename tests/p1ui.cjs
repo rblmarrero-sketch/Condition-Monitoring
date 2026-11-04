@@ -170,7 +170,7 @@ const key = e => new KeyboardEvent('keydown', { key: e, bubbles: true, cancelabl
   const C7 = await p.evaluate(() => ({ text: $('equipQ').value, closed: $('equipSelList').classList.contains('hidden'), sel: $('equipSel').value }));
   ok('a search with no match says so and changes nothing; Escape restores the chosen machine', /No match/.test(C6.foot) && C6.sel === target && C7.closed && C7.text === target && C7.sel === target, C6.foot + ' → ' + C7.text);
   /* The report picker and the lubrication model picker are the same control. */
-  await p.evaluate(() => showTab('reports', true)); await p.waitForTimeout(300);
+  await p.evaluate(() => (localStorage.setItem('cm_rpt_view','pdf'), showTab('reports', true))); await p.waitForTimeout(300);
   const Rp = await p.evaluate(() => { $('rScope').value = 'unit'; refreshReportTargets(); return { role: $('rTargetQ').getAttribute('role'), list: !!$('rTargetList'), lbl: $('rTargetLbl').textContent, n: CMB.rTarget.o.items().length }; });
   ok('Reports: the machine picker is the same combobox over every machine', Rp.role === 'combobox' && Rp.list && Rp.n === C0.units && /Equipment/.test(Rp.lbl), JSON.stringify(Rp));
   await p.fill('#rTargetQ', target); await p.keyboard.press('ArrowDown'); await p.keyboard.press('Enter'); await p.waitForTimeout(300);
