@@ -441,3 +441,9 @@ per CLAUDE.md's "TWO OFFICE DASHBOARDS, BOTH PERMANENT":
   who uses either dashboard daily has hit every path this document
   checks" — this remains a parity and regression record, not a substitute
   for real use, on either surface, surfacing something this document missed.
+
+## Menu groups (build 584, CM_FLOW_V1)
+dashboard-next's own groups (Monitor / Act / Assets / System) are replaced by the workflow groups both pages now
+share (Today · Plan the rounds · Follow up findings · Analyse · Report · Settings), at Rickie's request of 04.11 that
+both pages get the same change. Not a design difference any more.
+

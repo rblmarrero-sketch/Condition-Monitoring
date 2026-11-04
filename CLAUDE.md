@@ -6446,3 +6446,21 @@ finding with none says "Not raised in 1C". A Dump body liner or Undercarriage ro
 `dashboard/day-summary.js`: CH.BY / CH.BED, CH.UC / CH.ROL / TRK / IDL / SPR) is never listed station by
 station: one row per defect raised against that system at the round's worst severity, or, with none, one
 line - points measured and the worst stations (`tests/daysum.cjs`).
+
+**ONE WORKFLOW, ONE FILTER BAR, ONE TEMPLATE ON EVERY TAB (build 584, CM_FLOW_V1, Rickie 04.11 "Go").** A fresh
+audit of both office pages under /cm/ (every tab, EN/RU, 1440/1280/390) found the menu in no order, the filter bar
+shown on five tabs and missing on six, each 1C tab with its own search in its own place, two status filters on
+Defects raised, headers without an (i), a "99+" badge on Plan vs Actual and English left in Russian. Now, on BOTH
+pages: the menu is grouped by the day's work (`navgrp`: Today · Plan the rounds · Follow up findings · Analyse ·
+Report · Settings), ids and routes unchanged. The bar shows on every tab that lists machines: on the three 1C tabs
+(`UNIT_TABS`: due, planact, cmwo) `body.fbUnit` puts away Period, Grade, Status, data-quality, void and the count,
+and their chips, because those are about inspections; Class, the site's Category/Manufacturer/Model (`cmUnitOK`),
+Type (not on Defects raised, `fbNoType`) and the search apply through `barUnitOK()` / `barQ()`. Each tab's own
+search and Round boxes (`ddQ`, `ddType`, `paQ`, `paType`, `cwQ`, `cwStatus`) are visually hidden (`.vh`), still in
+the DOM and still applied, so scripts and tests that drive them keep working. Every header has its (i): purpose
+sentences `ov_purpose`, `fa_purpose`, `cw_purpose`, `sy_purpose`, `lu_purpose`; a JS-written note folds too
+(`.pgsub[data-tip]`, cwSub). Defects raised has one Definitions (`cwDefs`). Reports shows one view at a time (Day
+summary first · PDF report · Reliability, `cm_rpt_view`) and Data & Sync two (Sync · Measurement limits,
+`cm_sync_view`); `window.cmViews(tab)`, views not chosen get `.cmvHide`. A test that clicks the PDF form or the
+limits panel sets the view first. The Plan vs Actual badge is gone; badges are for late work only.
+

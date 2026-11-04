@@ -105,7 +105,8 @@ const ROUTES = ['overview', 'failure', 'wear', 'actions', 'due', 'planact', 'cmw
   const groups = await p.$$eval('nav.tabs .navgrp', els => els.map(e => ({
     text: e.textContent.trim(), tag: e.tagName, tabIndex: e.tabIndex,
   })));
-  ok('four group labels exist (Monitor/Act/Assets/System)', groups.length === 4, JSON.stringify(groups));
+  /* CM_FLOW_V1 (build 584, Rickie 04.11): the workflow groups replaced Monitor / Act / Assets / System on both pages */
+  ok('six workflow group labels exist (Today / Plan / Follow up / Analyse / Report / Settings)', groups.length === 6 && groups[0].text === 'Today' && groups[5].text === 'Settings', JSON.stringify(groups));
   ok('group labels are not buttons and not in the tab order',
      groups.every(g => g.tag !== 'BUTTON' && g.tabIndex < 0), JSON.stringify(groups));
 
@@ -132,7 +133,7 @@ const ROUTES = ['overview', 'failure', 'wear', 'actions', 'due', 'planact', 'cmw
      dictCheck.missingFromRu.length === 0 && dictCheck.missingFromEn.length === 0,
      JSON.stringify(dictCheck));
   const newKeys = await p.evaluate(() => {
-    const need = ['nav_grp_monitor', 'nav_grp_act', 'nav_grp_assets', 'nav_grp_system', 'win_90', 'win_all', 'ov_genrpt'];
+    const need = ['nav_g_today', 'nav_g_plan', 'nav_g_follow', 'nav_g_analyse', 'nav_g_report', 'nav_g_settings', 'win_90', 'win_all', 'ov_genrpt'];
     return need.every(k => I18N.en[k] && I18N.ru[k]);
   });
   ok('every key this stage added is really in both dictionaries (not just on screen)', newKeys);

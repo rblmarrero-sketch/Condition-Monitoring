@@ -220,8 +220,11 @@ const MEASURE = () => {
           if (h && Math.abs((R(e).left - R(c).left) - hx) > 2) out.empty.push(`${t}: ${Math.round(R(e).left - R(c).left)} vs ${Math.round(hx)}`); });
       }
       showTab('due', true); await new Promise(r => setTimeout(r, 300));
-      const q = R(document.getElementById('ddQ')), ty = R(document.getElementById('ddType')), csv = R(document.getElementById('ddCsv')), seg = R(document.getElementById('ddSeg'));
-      out.due = { row: Math.abs(q.bottom - ty.bottom) <= 2 && Math.abs((csv.top + csv.bottom) / 2 - (q.top + q.bottom) / 2) <= 24, below: q.top >= seg.bottom - 1, csvRight: csv.left > ty.right, qFirst: q.left < ty.left };
+      /* CM_FLOW_V1 (build 584): the schedule's search and Round are the filter bar's search and Type now; its own
+         boxes are kept in the DOM but out of sight, and Export sits under the views at the right. */
+      const csv = R(document.getElementById('ddCsv')), seg = R(document.getElementById('ddSeg')), fb = R(document.getElementById('filterBar'));
+      const own = ['ddQ', 'ddType'].map(id => R(document.getElementById(id).closest('label')));
+      out.due = { row: own.every(r => r.width <= 2), below: csv.top >= seg.bottom - 1, csvRight: csv.right > seg.right, qFirst: fb.bottom <= seg.top + 1 && fb.height > 0 };
       showTab('actions', true); await new Promise(r => setTimeout(r, 300));
       const panel = document.getElementById('actProgressPanel'), bar = document.getElementById('actBar');
       out.prog = panel && vis(panel) ? /closed out|закрыт/i.test(bar.textContent) : false;
@@ -230,7 +233,7 @@ const MEASURE = () => {
     ok('M2 cards stacked in a column are 16 px apart', !mb.gap.length, mb.gap.join(' | '));
     ok('M4 every card title is 15 px', !mb.title.length, mb.title.join(' | '));
     ok('M13 an empty state sits inside the card padding', !mb.empty.length, mb.empty.join(' | '));
-    ok('M15 the schedule has one toolbar under its views: search, Round, then Export', mb.due.row && mb.due.below && mb.due.csvRight && mb.due.qFirst, JSON.stringify(mb.due));
+    ok('M15 the schedule is filtered from the bar above it, Export under its views at the right', mb.due.row && mb.due.below && mb.due.csvRight && mb.due.qFirst, JSON.stringify(mb.due));
     ok('M6 the closed-out figure is said once on Actions', !mb.prog);
     /* LOW (audit 26.10 L1-L6) */
     const lo = await p.evaluate(async (file) => {

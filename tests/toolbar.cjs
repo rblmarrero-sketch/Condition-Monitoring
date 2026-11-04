@@ -74,9 +74,11 @@ const SEED = () => {
 
   console.log('\n4. THE SUPPORT PAGES, AND RUSSIAN');
   const H = await p.evaluate(() => { $('fDq').value = 'owner'; renderAll(); const out = {};
-    ['overview', 'lube', 'sync', 'reports', 'due', 'actions'].forEach(k => { showTab(k, true); out[k] = [document.querySelector('#filterBar').classList.contains('hidden'), $('fMoreRow').classList.contains('hidden')].join('/'); });
+    const gone = el => el.classList.contains('hidden') || getComputedStyle(el).display === 'none';
+    ['overview', 'lube', 'sync', 'reports', 'due', 'actions'].forEach(k => { showTab(k, true); out[k] = [document.querySelector('#filterBar').classList.contains('hidden'), gone($('fMoreRow'))].join('/'); });
     showTab('overview', true); $('fDq').value = ''; renderAll(); return out; });
-  ok('both rows go away on Lubrication, Data & Sync, Reports and Due, and come back on the analysis pages', H.lube === 'true/true' && H.sync === 'true/true' && H.reports === 'true/true' && H.due === 'true/true' && H.overview === 'false/false' && H.actions === 'false/false', JSON.stringify(H));
+  /* CM_FLOW_V1 (build 584): Due lists machines, so it keeps the bar (Class, Type, search) but not the More row (data quality, withdrawn) */
+  ok('both rows go away on Lubrication, Data & Sync and Reports; on Due only the More row; both come back on the analysis pages', H.lube === 'true/true' && H.sync === 'true/true' && H.reports === 'true/true' && H.due === 'false/true' && H.overview === 'false/false' && H.actions === 'false/false', JSON.stringify(H));
   await p.click('.lang button[data-lang="ru"]'); await p.waitForTimeout(400);
   const R = await p.evaluate(() => ({ labels: [...document.querySelectorAll('#filterBar label')].map(l => l.textContent.trim()), more: $('fMore').textContent.trim(), reset: $('fReset').textContent.trim(),
     status: [...document.querySelectorAll('#fStatus option')].map(o => o.textContent) }));

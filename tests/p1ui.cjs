@@ -170,7 +170,7 @@ const key = e => new KeyboardEvent('keydown', { key: e, bubbles: true, cancelabl
   const C7 = await p.evaluate(() => ({ text: $('equipQ').value, closed: $('equipSelList').classList.contains('hidden'), sel: $('equipSel').value }));
   ok('a search with no match says so and changes nothing; Escape restores the chosen machine', /No match/.test(C6.foot) && C6.sel === target && C7.closed && C7.text === target && C7.sel === target, C6.foot + ' → ' + C7.text);
   /* The report picker and the lubrication model picker are the same control. */
-  await p.evaluate(() => showTab('reports', true)); await p.waitForTimeout(300);
+  await p.evaluate(() => (localStorage.setItem('cm_rpt_view','pdf'), showTab('reports', true))); await p.waitForTimeout(300);
   const Rp = await p.evaluate(() => { $('rScope').value = 'unit'; refreshReportTargets(); return { role: $('rTargetQ').getAttribute('role'), list: !!$('rTargetList'), lbl: $('rTargetLbl').textContent, n: CMB.rTarget.o.items().length }; });
   ok('Reports: the machine picker is the same combobox over every machine', Rp.role === 'combobox' && Rp.list && Rp.n === C0.units && /Equipment/.test(Rp.lbl), JSON.stringify(Rp));
   await p.fill('#rTargetQ', target); await p.keyboard.press('ArrowDown'); await p.keyboard.press('Enter'); await p.waitForTimeout(300);
@@ -189,8 +189,9 @@ const key = e => new KeyboardEvent('keydown', { key: e, bubbles: true, cancelabl
     out[k] = !document.querySelector('#filterBar').classList.contains('hidden'); });
     showTab('overview', true);
     return { bar: out, g: $('gq').getAttribute('aria-label'), f: $('fQ').placeholder, dd: (document.querySelector('label[for="ddQ"], #ddQ') && ($('ddQ').closest('label').querySelector('span') || {}).textContent) || '', eq: $('equipQ').placeholder }; });
-  ok('the bar shows on the analysis pages and not on Due, Lubrication, Data & Sync or Reports',
-     Sp.bar.overview && Sp.bar.actions && Sp.bar.equipment && !Sp.bar.due && !Sp.bar.lube && !Sp.bar.sync && !Sp.bar.reports, JSON.stringify(Sp.bar));
+  /* CM_FLOW_V1 (build 584): Due lists machines, so it keeps the bar (in machine mode: Class, Type, search) */
+  ok('the bar shows on the pages that list machines (Due included) and not on Lubrication, Data & Sync or Reports',
+     Sp.bar.overview && Sp.bar.actions && Sp.bar.equipment && Sp.bar.due && !Sp.bar.lube && !Sp.bar.sync && !Sp.bar.reports, JSON.stringify(Sp.bar));
   ok('Global search / Filter records / Search this table / Search equipment', /^Global search/.test(Sp.g) && /^Filter records/.test(Sp.f) && /Search this table/.test(Sp.dd) && /^Search equipment/.test(Sp.eq),
      [Sp.g, Sp.f, Sp.dd, Sp.eq].join(' | '));
 

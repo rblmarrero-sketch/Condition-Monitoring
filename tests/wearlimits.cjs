@@ -62,7 +62,7 @@ async function boot(b, file, o) {
   await p.goto(B + "/" + file, { waitUntil: "load" });
   await p.waitForFunction(() => window.CMWearLimits && window.WEAR && window.CMDrive && CMDrive.configured(), null, { timeout: 20000 });
   await p.waitForFunction(() => ["none", "ready"].includes(CMWearLimits.state().state), null, { timeout: 30000 });
-  await p.evaluate(r => { window.CMDash.importRecords(r); if (typeof showTab === "function") showTab("sync"); }, RECS);
+  await p.evaluate(r => { window.CMDash.importRecords(r); if (typeof showTab === "function") { localStorage.setItem("cm_sync_view","lim"); showTab("sync"); } }, RECS);
   await p.waitForTimeout(300);
   return { ctx, p, errs };
 }

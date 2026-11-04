@@ -55,6 +55,7 @@ const FLEET = JSON.parse(fs.readFileSync(path.join(__dirname, 'fleet-fixture.jso
 
 async function boot(b, port, url) {
   const ctx = await b.newContext({ viewport: { width: 1366, height: 1000 } });
+  await ctx.addInitScript(() => { try { localStorage.setItem('cm_rpt_view', 'pdf'); } catch (e) {} });   /* CM_FLOW_V1: the PDF view */
   const p = await ctx.newPage();
   const errs = []; p.on('pageerror', e => errs.push(e.message));
   await p.goto(`http://127.0.0.1:${port}/${url}`, { waitUntil: 'load' });

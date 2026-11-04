@@ -194,7 +194,7 @@ const SEED=fs.readFileSync('e2e.cjs','utf8').match(/const SEED = `([\s\S]*?)`;/)
     'DZ002 has one round in this fixture');
 
   console.log('\n  and it produces a PDF');
-  await dash.evaluate(()=>showTab('reports'));
+  await dash.evaluate(()=>(localStorage.setItem('cm_rpt_view','pdf'), showTab('reports')));
   await dash.waitForTimeout(400);
   await dash.evaluate(()=>{ const s=document.getElementById('rScope'); s.value='round'; s.dispatchEvent(new Event('change')); });
   await dash.waitForTimeout(400);

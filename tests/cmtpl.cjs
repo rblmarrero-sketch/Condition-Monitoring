@@ -22,7 +22,7 @@ const MEASURE = () => {
   const sec = [...document.querySelectorAll('section[id^="tab-"]')].find(s => !s.classList.contains('hidden'));
   const hd = sec.querySelector(':scope>.pagehd'), tip = hd && hd.querySelector('.cmTip');
   const defs = [...sec.querySelectorAll('details.defs')];
-  const src = hd ? [...hd.querySelectorAll('.pgt>.pgsub[data-i18n]')] : [];
+  const src = hd ? [...hd.querySelectorAll('.pgt>.pgsub[data-i18n],.pgt>.pgsub[data-tip]')] : [];
   const ctl = [...sec.querySelectorAll('input[type=text],input[type=search],input[type=date],input:not([type]),select')].filter(vis).filter(x => !x.classList.contains('cwcf') && !x.closest('.ascards') && !x.closest('#cmFb') && !x.closest('table[class*="lmx-"]'));
   const tds = [...sec.querySelectorAll('table.grid:not(.pawk):not(.ascards):not([class*="lmx-"]):not(#covTbl)>tbody>tr>td:not([colspan])')].filter(vis).filter(x => !x.querySelector(':scope>label>input[type=checkbox]') && !x.querySelector(':scope>.btn,:scope>.minibtn,:scope>button')).slice(0, 40);
   return {
