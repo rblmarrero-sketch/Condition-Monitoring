@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-04T05:49:51+00:00",
+  "generated": "2026-11-04T06:21:59+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -438,13 +438,13 @@ window.CM_WO_DATA = {
     "initiator": "Initiator WR"
   },
   "cmDateFrom": {
-    "raised": 195,
+    "raised": 196,
     "detected": 0,
     "planStart": 0
   },
   "cmCauseFrom": {
     "wo": 105,
-    "wr": 90,
+    "wr": 91,
     "cert": 0,
     "none": 0
   },
@@ -457,6 +457,30 @@ window.CM_WO_DATA = {
     "Bekzhan"
   ],
   "cmWorkOrders": [
+    {
+      "date": "2026-11-04",
+      "dateFrom": "raised",
+      "raised": "2026-11-04",
+      "detected": "2026-11-04",
+      "planStart": null,
+      "closed": null,
+      "asset": "DZ016",
+      "defect": "DD-00016308",
+      "requestNo": "DD-00016308",
+      "eqType": "DOZER, TRACK TYPE",
+      "system": "DZ016.DRS.TRA (Transmission / Трансмиссия)",
+      "priority": "P4 Planned (Repair)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Фитинг/штуцер ослаб",
+      "causeFrom": "wr",
+      "descr": "Разгерметизация и утечка рабочего масла в районе гидравлического соединения и маслопроводов трансмиссии.",
+      "status": "Registered",
+      "by": "Zhomart",
+      "raisedBy": "ГДК Баимская",
+      "woNumber": null,
+      "maintType": null,
+      "planned": false
+    },
     {
       "date": "2026-11-03",
       "dateFrom": "raised",
