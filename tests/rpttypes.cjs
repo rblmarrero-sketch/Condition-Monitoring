@@ -194,7 +194,7 @@ const textOf = (p, key, lang) => p.evaluate(({ key, lang }) => {
 
   console.log("\n5b. AN ALL-WEAR ROUND STILL RATES ITSELF — no point was hand-graded");
   const ucw = await textOf(p, k("DZ901", "2026-08-18", "UC"), "en");
-  ok(/PITCH1\.L/.test(ucw) && /80%/.test(ucw), "  the controlling point at 80% worn is on the sheet");
+  ok(/Controlling point\s*Link pitch[^%]{0,120}80%/.test(ucw) && !/Controlling point\s*PITCH1/.test(ucw), "  the controlling point at 80% worn is on the sheet, named in words", (ucw.match(/Controlling point.{0,50}/) || [""])[0]);
   ok(!/No condition rating recorded/.test(ucw),
      "  the DECISION cell is not blank just because nobody picked a grade");
   ok(/4 – Severe/.test(ucw), "  80% worn (20% remaining) computes to Severe, GRADE.fromWorn's own answer");

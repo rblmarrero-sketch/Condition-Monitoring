@@ -172,7 +172,7 @@
   /* Both sides of the machine, captioned, in both languages. */
   function sideLabel(sd) {
     const k = sd === "L" ? "uc_left_h" : "uc_right_h";
-    const x = L(k), y = inOther(() => L(k));
+    const x = L(k), y = RBI ? inOther(() => L(k)) : "";
     return WEAR.escMap(y && y !== x ? `${x} / ${y}` : x);
   }
 
