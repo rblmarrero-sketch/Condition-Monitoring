@@ -189,8 +189,9 @@ const key = e => new KeyboardEvent('keydown', { key: e, bubbles: true, cancelabl
     out[k] = !document.querySelector('#filterBar').classList.contains('hidden'); });
     showTab('overview', true);
     return { bar: out, g: $('gq').getAttribute('aria-label'), f: $('fQ').placeholder, dd: (document.querySelector('label[for="ddQ"], #ddQ') && ($('ddQ').closest('label').querySelector('span') || {}).textContent) || '', eq: $('equipQ').placeholder }; });
-  ok('the bar shows on the analysis pages and not on Due, Lubrication, Data & Sync or Reports',
-     Sp.bar.overview && Sp.bar.actions && Sp.bar.equipment && !Sp.bar.due && !Sp.bar.lube && !Sp.bar.sync && !Sp.bar.reports, JSON.stringify(Sp.bar));
+  /* CM_FLOW_V1 (build 584): Due lists machines, so it keeps the bar (in machine mode: Class, Type, search) */
+  ok('the bar shows on the pages that list machines (Due included) and not on Lubrication, Data & Sync or Reports',
+     Sp.bar.overview && Sp.bar.actions && Sp.bar.equipment && Sp.bar.due && !Sp.bar.lube && !Sp.bar.sync && !Sp.bar.reports, JSON.stringify(Sp.bar));
   ok('Global search / Filter records / Search this table / Search equipment', /^Global search/.test(Sp.g) && /^Filter records/.test(Sp.f) && /Search this table/.test(Sp.dd) && /^Search equipment/.test(Sp.eq),
      [Sp.g, Sp.f, Sp.dd, Sp.eq].join(' | '));
 
