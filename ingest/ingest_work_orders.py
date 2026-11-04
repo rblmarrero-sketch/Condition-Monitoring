@@ -855,6 +855,10 @@ def main():
                     "descr": str(cm_get("desc") or "").strip() or None,
                     "status": str(cm_get("status") or "").strip() or None,
                     "by": who,
+                    # CM_RESPNAME_V1 (Rickie 05.11.2026 "take the responsible person complete name from wo"): the
+                    # Responsible person exactly as the work order has it. "by" stays the team member it matched
+                    # (which decides the row is the CM team's); the dashboards show and count byFull.
+                    "byFull": (str(row[cm_idx["person"]] or "").strip() or None) if cm_idx["person"] is not None else None,
                     # The name 1C has for whoever raised it, as 1C wrote it;
                     # None when the cell is empty (the panel then shows "by").
                     "raisedBy": (str(cm_get("initiator") or "").strip() or None) if cm_idx.get("initiator") is not None else None,

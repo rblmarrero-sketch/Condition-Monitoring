@@ -52,7 +52,7 @@ const CM = {
   cmWorkOrders: [
     { date: '2026-09-05', asset: 'GR013', defect: null, requestNo: 'verbal request from pit supervisor',
       eqType: 'GRADER', system: 'WE.BKT', priority: 'P2', defectType: 'Vibration', descr: 'Cab vibration under load', cause: 'Unknown',
-      status: 'Open', by: 'Irek', woNumber: 'WO-070004', maintType: 'Defect elimination', planned: false },
+      status: 'Open', by: 'Irek', byFull: 'Irek Testov', woNumber: 'WO-070004', maintType: 'Defect elimination', planned: false },
     { date: '2026-08-15', asset: 'EX021', defect: 'DD-000456', requestNo: 'DD-000456',
       eqType: 'EXCAVATOR, BUCKET', system: 'HS.PMP', priority: 'P3 Planned',
       defectType: 'Oil leak', descr: 'Oil weeping at pump seal', cause: 'Seal failure',
@@ -118,8 +118,11 @@ const cells = p => p.$$eval('#cwList tbody tr', rs => rs.map(r =>
   ok('  the planned service one of them is responsible for is NOT in it',
      total.v !== '4', 'four would mean a service had been counted as a finding');
   const per = Object.fromEntries(kpi.slice(1).map(x => [x.k, x.v]));
-  ok('  and it is broken down by person, all five named even at zero',
-     JSON.stringify(per) === '{"Nurbol":"1","Slam":"0","Irek":"1","Zhomart":"1","Bekzhan":"0"}',
+  /* CM_RESPNAME_V1 (Rickie 05.11): the card names only the people the work orders name - nobody at zero - and
+     uses the responsible person's complete name from the WO (byFull) where the file has it, the matched first name
+     where it does not (a file written before the ingester carried it). */
+  ok('  and it is broken down by person: only the names in the data, the complete name from the WO, none at zero',
+     JSON.stringify(per) === '{"Irek Testov":"1","Nurbol":"1","Zhomart":"1"}',
      JSON.stringify(per));
 
   console.log('\n3. THE ROWS ARE 1C\'S OWN VALUES');
@@ -177,11 +180,11 @@ const cells = p => p.$$eval('#cwList tbody tr', rs => rs.map(r =>
      JSON.stringify(rows.find(r => r[11] === 'Bekzhan')));
   await p.evaluate(() => { document.getElementById('cwPlanned').checked = false; renderCmWoTab(); });
 
-  await p.evaluate(() => { document.querySelector('#cwKpis [data-cwwho="Irek"]').click(); });
+  await p.evaluate(() => { document.querySelector('#cwKpis [data-cwwho="Irek Testov"]').click(); });
   rows = await cells(p);
-  ok('tapping a person narrows to theirs', rows.length === 1 && rows[0][11] === 'Irek',
+  ok('tapping a person narrows to theirs', rows.length === 1 && rows[0][11] === 'Irek Testov',
      rows.map(r => r[11]).join(' '));
-  await p.evaluate(() => { document.querySelector('#cwKpis [data-cwwho="Irek"]').click(); });
+  await p.evaluate(() => { document.querySelector('#cwKpis [data-cwwho="Irek Testov"]').click(); });
 
   await p.fill('#cwQ', 'DD-000456');
   await p.waitForTimeout(200);

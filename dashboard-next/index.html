@@ -5141,23 +5141,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=589"></script>
+<script src="../data/magnetic_plug.js?v=590"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=589"></script>
-<script src="../mobile/hme.js?v=589"></script>
-<script src="../mobile/mp-fc.js?v=589"></script>
-<script src="../mobile/rtw.js?v=589"></script>
-<script src="../mobile/hme-cascade.js?v=589"></script>
-<script src="../mobile/temp-limits.js?v=589"></script>
+<script src="../data/work_orders.js?v=590"></script>
+<script src="../mobile/hme.js?v=590"></script>
+<script src="../mobile/mp-fc.js?v=590"></script>
+<script src="../mobile/rtw.js?v=590"></script>
+<script src="../mobile/hme-cascade.js?v=590"></script>
+<script src="../mobile/temp-limits.js?v=590"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=589"></script>
-<script src="../mobile/normalize.js?v=589"></script>
-<script src="../mobile/terms.js?v=589"></script>
+<script src="../mobile/assets.js?v=590"></script>
+<script src="../mobile/normalize.js?v=590"></script>
+<script src="../mobile/terms.js?v=590"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -5176,21 +5176,21 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=589"></script>
-<script src="../mobile/edits.js?v=589"></script>
-<script src="../mobile/due.js?v=589"></script>
-<script src="../mobile/wear.js?v=589"></script>
-<script src="../mobile/wear-map.js?v=589"></script>
-<script src="../mobile/lube.js?v=589"></script>
-<script src="../mobile/lube-overrides.js?v=589"></script>
-<script src="../mobile/lube2027.js?v=589"></script>
-<script src="../mobile/lube-tds.js?v=589"></script>
-<script src="../dashboard/lube-master.js?v=589"></script>
-<script src="../dashboard/wear-limits.js?v=589"></script>
+<script src="../mobile/grade.js?v=590"></script>
+<script src="../mobile/edits.js?v=590"></script>
+<script src="../mobile/due.js?v=590"></script>
+<script src="../mobile/wear.js?v=590"></script>
+<script src="../mobile/wear-map.js?v=590"></script>
+<script src="../mobile/lube.js?v=590"></script>
+<script src="../mobile/lube-overrides.js?v=590"></script>
+<script src="../mobile/lube2027.js?v=590"></script>
+<script src="../mobile/lube-tds.js?v=590"></script>
+<script src="../dashboard/lube-master.js?v=590"></script>
+<script src="../dashboard/wear-limits.js?v=590"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=589"></script>
-<script src="../mobile/machine-photos.js?v=589"></script>
+<script src="../mobile/upload-defaults.js?v=590"></script>
+<script src="../mobile/machine-photos.js?v=590"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -5199,17 +5199,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=589"></script>
-<script src="../mobile/get.js?v=589"></script>
-<script src="../mobile/points.js?v=589"></script>
-<script src="../mobile/uc-points.js?v=589"></script>
-<script src="../mobile/inspect-guide.js?v=589"></script>
-<script src="../mobile/get-figs.js?v=589"></script>
-<script src="../mobile/body-points.js?v=589"></script>
-<script src="../mobile/body-map.js?v=589"></script>
-<script src="../mobile/jspdf.umd.min.js?v=589"></script>
-<script src="../mobile/html2canvas.min.js?v=589"></script>
-<script src="../mobile/report-core.js?v=589"></script>
+<script src="../mobile/machine-fig.js?v=590"></script>
+<script src="../mobile/get.js?v=590"></script>
+<script src="../mobile/points.js?v=590"></script>
+<script src="../mobile/uc-points.js?v=590"></script>
+<script src="../mobile/inspect-guide.js?v=590"></script>
+<script src="../mobile/get-figs.js?v=590"></script>
+<script src="../mobile/body-points.js?v=590"></script>
+<script src="../mobile/body-map.js?v=590"></script>
+<script src="../mobile/jspdf.umd.min.js?v=590"></script>
+<script src="../mobile/html2canvas.min.js?v=590"></script>
+<script src="../mobile/report-core.js?v=590"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -19967,7 +19967,7 @@ function cwCsv(){
   cwRows().forEach(r=>rows.push([r.date||"", r.dateFrom||"", r.raised||"", r.detected||"",
     r.planStart||"", r.asset||"", r.defect||"", r.requestNo||"",
     r.eqType||"", r.system||"", r.priority||"", r.defectType||"", r.descr||"", r.cause||"",
-    r.causeFrom||"", r.status||"", r.by||"", r.woNumber||"", r.maintType||"", r.planned?1:0, cwStage(r)])); /* CM_PLAIN_V1; responsible = 1C Responsible person (04.11) */
+    r.causeFrom||"", r.status||"", cwBy(r), r.woNumber||"", r.maintType||"", r.planned?1:0, cwStage(r)])); /* CM_PLAIN_V1; responsible = 1C Responsible person (04.11) */
   const csv=rows.map(r=>r.map(v=>{ const x=String(v==null?"":v);
     return /[",\n]/.test(x) ? '"'+x.replace(/"/g,'""')+'"' : x; }).join(",")).join("\n");
   const a=document.createElement("a");
@@ -21069,6 +21069,9 @@ function renderAll(all){
    planned service or a defect. Deciding any of that a second time in this
    file is how two screens come to disagree about one count. */
 let cwWho = "";              // "" = everyone on the team
+/* CM_RESPNAME_V1 (Rickie 05.11): the responsible person's complete name as the work order has it (byFull);
+   a file written before the ingester carried it falls back to the matched first name. */
+const cwBy = r => String((r && (r.byFull || r.by)) || "");
 let cwStatusSel = "";
 /* Sort and per-column filters, asked for by name: "we need filter and sort
    as well, why cant we just put a search/filter on top of the header" — a
@@ -21096,7 +21099,7 @@ function cwColVal(r, k){
   if(k==="descr") return r.planned ? "" : (r.descr||"");
   if(k==="cause") return r.planned ? "" : (r.cause||"");
   if(k==="wo") return r.woNumber || ""; /* CM_PLAIN_V1 */
-  if(k==="by") return r.by || "";   /* Rickie 04.11: the responsible person, not 1C's initiator (the organisation) */
+  if(k==="by") return cwBy(r);   /* Rickie 04.11: the responsible person, not 1C's initiator (the organisation) */
   return r[k] || "";
 }
 function cwAll(){
@@ -21133,7 +21136,7 @@ function cwRows(noStage){
   const q = (($("cwQ")||{}).value||"").trim().toUpperCase();
   const rows = all
     .filter(r => planned || !r.planned)
-    .filter(r => !cwWho || r.by === cwWho)
+    .filter(r => !cwWho || cwBy(r) === cwWho)
     .filter(r => !cwStatusSel || (r.status||"") === cwStatusSel)
     .filter(r => noStage || !cwStageSel || cwStage(r) === cwStageSel) /* CM_PLAIN_V1 */
     .filter(r => barUnitOK(r.asset) && (!barQ() || [r.asset, r.defect, r.requestNo, r.cause, r.defectType, r.eqType,
@@ -21218,8 +21221,10 @@ function renderCmWoTab(){
   const defects = all.filter(r=>!r.planned);
   const shown = cwRows();
   const per = {};
-  (D.cmPeople||[]).forEach(n=>per[n]=0);
-  defects.forEach(r=>{ per[r.by]=(per[r.by]||0)+1; });
+  /* CM_RESPNAME_V1: only the people the work orders actually name, most first - a fixed list showed a team member with 0 */
+  defects.forEach(r=>{ const n=cwBy(r); if(n) per[n]=(per[n]||0)+1; });
+  const perSorted={}; Object.keys(per).sort((a,b)=>per[b]-per[a]||a.localeCompare(b)).forEach(n=>perSorted[n]=per[n]);
+  if(cwWho && !per[cwWho]) cwWho="";
 
   /* Defects.dc.html: one hero tile (the total) beside a SEPARATE "By
      person" panel of pill buttons -- not six equal-sized cards. The total
@@ -21233,7 +21238,7 @@ function renderCmWoTab(){
          <span class="v">${defects.length}</span>
          <span class="s">${esc(t("cw_k_total_s",{d:D.cmSince||"—"}))}</span></div>`
     + `<div class="tile cwpeople"><div class="k" data-i18n="cw_k_people">${esc(t("cw_k_people"))}</div>
-        <div class="cwplist">` + Object.keys(per).map(n=>
+        <div class="cwplist">` + Object.keys(perSorted).map(n=>
       `<button type="button" class="cwpbtn${cwWho===n?" on":""}" data-cwwho="${esc(n)}">
          <span data-1c>${esc(n)}</span><span class="n">${per[n]}</span></button>`).join("")
       + `</div><div class="s">${esc(t("cw_k_person_s"))}</div></div>`;
@@ -21301,7 +21306,7 @@ function renderCmWoTab(){
         <td class="cwc2">${r.planned ? `<span class="muted">${esc(t("cw_is_planned"))}</span>` : c2(r.defectType)}</td>
         <td class="cwc2">${r.planned ? `<span class="muted">—</span>` : c2(r.descr)}</td>
         <td class="cwc2">${r.planned ? `<span class="muted">—</span>` : c2(r.cause)}</td>
-        <td title="${esc(t("cw_st_"+cwStage(r)))}"><span class="cwst ${cwStage(r)}">${r.status?esc(r.status):"—"}</span></td><td class="mono">${r.woNumber?esc(r.woNumber):(cwStage(r)==="prog"?`<span class="cwnowo">${esc(t("cw_nowo"))}</span>`:`<span class="muted">—</span>`)}</td><td>${cell(r.by)}</td></tr>`).join("") /* CM_PLAIN_V1 */
+        <td title="${esc(t("cw_st_"+cwStage(r)))}"><span class="cwst ${cwStage(r)}">${r.status?esc(r.status):"—"}</span></td><td class="mono">${r.woNumber?esc(r.woNumber):(cwStage(r)==="prog"?`<span class="cwnowo">${esc(t("cw_nowo"))}</span>`:`<span class="muted">—</span>`)}</td><td data-1c>${cell(cwBy(r))}</td></tr>`).join("") /* CM_PLAIN_V1 */
     : `<tr><td colspan="${CW_COLS.length}" class="empty">${esc(t("cw_none"))}</td></tr>`;
   /* Date · Asset · Defect no. · Equipment type · System · Priority · Defect
      type · Description · Cause · Status · Raised by — the description takes
@@ -21786,11 +21791,11 @@ document.querySelector(".lang").addEventListener("click",e=>{
   setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 })();
 </script>
-<script src="../dashboard/drive.js?v=589"></script>
-<script src="../dashboard/sync-adapter.js?v=589"></script>
-<script src="../dashboard/report.js?v=589"></script>
-<script src="../dashboard/reliability.js?v=589"></script>
-<script src="../dashboard/day-summary.js?v=589"></script>
+<script src="../dashboard/drive.js?v=590"></script>
+<script src="../dashboard/sync-adapter.js?v=590"></script>
+<script src="../dashboard/report.js?v=590"></script>
+<script src="../dashboard/reliability.js?v=590"></script>
+<script src="../dashboard/day-summary.js?v=590"></script>
 <script>
 /* THE CLOSED FILTER SAYS WHAT IS CHOSEN. A dropdown narrower than its option
    text ellipsises ("All t…", audit of 2026-10-01). Between 1331 and 1500 px
