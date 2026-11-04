@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-03T23:49:15+00:00",
+  "generated": "2026-11-04T00:09:23+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -1710,7 +1710,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-10-18",
       "detected": "2026-10-18",
-      "planStart": "2026-11-15",
+      "planStart": "2026-11-16",
       "closed": null,
       "asset": "EX010",
       "defect": "DD-00015063",
@@ -1734,7 +1734,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-10-18",
       "detected": "2026-10-18",
-      "planStart": "2026-11-15",
+      "planStart": "2026-11-16",
       "closed": null,
       "asset": "EX010",
       "defect": "DD-00015062",
@@ -21658,9 +21658,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-15",
-      "planStartDt": "2026-11-15T00:00:00",
-      "planEnd": "2026-11-16",
+      "planStart": "2026-11-19",
+      "planStartDt": "2026-11-19T00:00:00",
+      "planEnd": "2026-11-20",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -33020,9 +33020,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-15",
-      "planStartDt": "2026-11-15T00:00:00",
-      "planEnd": "2026-11-16",
+      "planStart": "2026-11-16",
+      "planStartDt": "2026-11-16T00:00:00",
+      "planEnd": "2026-11-17",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
