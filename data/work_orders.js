@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-04T02:39:30+00:00",
+  "generated": "2026-11-04T03:00:28+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -2983,7 +2983,7 @@ window.CM_WO_DATA = {
       "raised": "2026-09-30",
       "detected": "2026-09-30",
       "planStart": "2026-10-19",
-      "closed": null,
+      "closed": "2026-10-19",
       "asset": "EX003",
       "defect": "DD-00013755",
       "requestNo": "DD-00013755",
@@ -2994,7 +2994,7 @@ window.CM_WO_DATA = {
       "cause": "Усталостная трещина",
       "causeFrom": "wo",
       "descr": "Hастрескивание патрубка выходной магистрали охладителя интеркулера.",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "by": "Irek",
       "raisedBy": "ГДК Баимская",
       "woNumber": "WO-019857",
