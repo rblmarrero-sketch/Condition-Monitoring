@@ -1,8 +1,8 @@
 /* CM_DAYSUM_V1 + CM_PLAIN_V1 (Rickie 04.11.2026). On BOTH office pages, in English and Russian:
-   1. Reports -> "Day summary for the e-mail": pick a day, tick rounds, one row per recorded position
-      (date, unit, component, type of defect, description, defect/WO no., priority, severity); a Normal
-      position carries the severity only; a position nothing was recorded on is left out; unticking a
-      round takes its rows away; the copied table is plain inline-styled HTML a mail program keeps.
+   1. Reports -> "Day summary for the e-mail" (CM_DAYMAIL_V1): From/To days, tick rounds; the e-mail is
+      EN + RU (or one), headings in both, findings worst first with the 1C defect number, a Critical point
+      in an ACTION REQUIRED box, a repeat flagged, Normal points on one line per round, links to the
+      dashboard; inline styles only, so a mail program keeps it.
    2. Defects raised: the stage chips (All / Registered / In progress / Completed) count and filter, the
       Work order column shows the number, an In-progress defect with no number says "WO missing", and
       "Responsible" shows the person 1C has as responsible (04.11; the initiator field holds the organisation).
@@ -51,31 +51,57 @@ async function run(b, path, lng) {
   const tag = path.split('/')[0] + ' ' + lng;
   console.log('\n' + tag + ' - day summary');
   await p.evaluate(() => showTab('reports')); await p.waitForTimeout(400);
-  const ds = await p.evaluate(() => { const b = document.getElementById('daySum'); if (!b) return null;
-    const trs = [...b.querySelectorAll('#dsPrev tbody tr')].map(tr => [...tr.cells].map(c => c.textContent.trim()));
-    return { day: (document.getElementById('dsDay') || {}).value, chips: b.querySelectorAll('[data-dsk]').length, trs,
-      th: [...b.querySelectorAll('#dsPrev thead th')].map(t => t.textContent), intro: (b.querySelector('#dsPrev p') || {}).textContent || '' }; });
-  ok(ds && ds.day === '2026-11-02', 'opens on the newest day with rounds', ds && ds.day);
+  await p.evaluate(() => { try { localStorage.removeItem('cm_daymail_lang'); localStorage.removeItem('cm_daymail_every'); } catch (x) {} CMDaySum.state.lang = 'both'; CMDaySum.state.every = false; CMDaySum.draw(); });
+  await p.evaluate(() => CMDash.importRecords([{ equip:"TK150", date:"2026-10-15", type:"MP", cls:"HT", by:"Rayanov", items:[{ key:"4E", label:"Left Rear Final Drive", grade:3, defect:"Metal particles", comment:"flakes" }] }]));
+  await p.evaluate(() => CMDaySum.draw()); await p.waitForTimeout(200);
+  const read = () => p.evaluate(() => { const b = document.getElementById('daySum'); if (!b) return null;
+    const ft = b.querySelector('#dsPrev table[data-ds="find"]'), ct = b.querySelector('#dsPrev table[data-ds="clean"]');
+    return { to: (document.getElementById('dsDay') || {}).value, from: (document.getElementById('dsFrom') || {}).value, chips: b.querySelectorAll('[data-dsk]').length,
+      th: ft ? [...ft.querySelectorAll('thead th')].map(t => t.textContent.trim()) : [],
+      trs: ft ? [...ft.querySelectorAll('tr')].filter(tr => !tr.querySelector('th')).map(tr => [...tr.cells].map(c => c.textContent.trim())) : [],
+      clean: ct ? [...ct.querySelectorAll('tr')].map(tr => tr.textContent.replace(/\s+/g, ' ').trim()) : [],
+      crit: ((b.querySelector('#dsPrev [data-ds="crit"]') || {}).textContent || '').replace(/\s+/g, ' '),
+      html: (b.querySelector('#dsPrev') || {}).innerHTML || '', subj: (document.getElementById('dsSubjTxt') || {}).textContent || '' }; });
+  let ds = await read();
+  ok(ds && ds.to === '2026-11-02' && ds.from === '2026-11-02', 'opens on the newest day with rounds (From = To)', ds && ds.from + '..' + ds.to);
   ok(ds && ds.chips === 4, 'every round of that day is offered', ds && ds.chips);
-  ok(ds && ds.th.length === 8, 'eight columns', ds && ds.th.join(' | '));
-  ok(ds && ds.trs.length === 7, 'one row per recorded position, one per measured round; the empty plug 1 is left out', ds && ds.trs.length);
-  const tb = ds && ds.trs.filter(r => /TK160/.test(r[1])), uc = ds && ds.trs.filter(r => /DZ012/.test(r[1]));
-  ok(tb && tb.length === 1 && tb[0][5] === 'DD-00016249' && /CH\.BY/.test(tb[0][2]) && /Crack/.test(tb[0][3]) && /^P4/.test(tb[0][6]) && /Critical|Критич/.test(tb[0][7]), 'a dump body round is one row: the defect raised for CH.BY, at its worst severity', tb && tb.map(r => r.join(' | ')).join(' // '));
-  ok(uc && uc.length === 1 && /20/.test(uc[0][2]) && /ROLLER\.L1/.test(uc[0][4]) && uc[0][5] === '—', 'an undercarriage round with no defect is one line: points measured, the worst ones, nothing to raise at Incipient', uc && uc.map(r => r.join(' | ')).join(' // '));
-  const f = ds && ds.trs.find(r => /4E/.test(r[2])), n = ds && ds.trs.find(r => /4F/.test(r[2]));
-  ok(f && /Wear/.test(f[3]) && /Heavy flakes/.test(f[4]) && f[5] === 'DD-004512' && /^P2/.test(f[6]), 'a plug finding is paired with the one defect raised on its unit', f && f.join(' | '));
-  const eng = ds && ds.trs.find(r => /DRS\.ENG/.test(r[2])), mp = ds && ds.trs.find(r => /HS\.MP/.test(r[2]));
-  ok(eng && eng[5] === 'DD-00016300' && /Leakage/.test(eng[3]) && /^P3/.test(eng[6]), 'a finding takes the defect raised for its system code, with 1C type and priority', eng && eng.join(' | '));
-  ok(mp && /Not raised in 1C|Нет в 1С/.test(mp[5]), 'a Degraded finding with no defect in 1C says so', mp && mp[5]);
-  ok(ds && !ds.trs.some(r => /WO-0/.test(r[5])), 'the round work order is never shown as the defect number', ds && ds.trs.map(r => r[5]).join(','));
-  ok(n && n[3] === '—' && n[4] === '—' && n[5] === '—' && n[7].length > 2, 'a Normal position carries the severity only', n && n.join(' | '));
-  await p.evaluate(() => { const c = document.querySelector('#daySum [data-dsk*="EX016"]') || [...document.querySelectorAll('#daySum [data-dsk]')].find(x => /EX016/.test(x.parentNode.textContent)); c.click(); });
+  ok(ds && ds.th.length === 6 && ds.th.every(t => /[A-Za-z]/.test(t) && /[А-Яа-я]/.test(t)), 'six column headings, each in English and Russian', ds && ds.th.join(' | '));
+  const g = ds.trs.map(r => Number((r[0].match(/^(\d)/) || [])[1]));
+  ok(g.length && g.every((x, i) => !i || g[i - 1] >= x), 'findings are worst first', g.join(','));
+  ok(ds.trs.length === 5, 'the findings: the tray, the plug, two engine/pump points, the undercarriage line', ds.trs.length);
+  const tb = ds.trs.find(r => /TK160/.test(r[2])), uc = ds.trs.find(r => /DZ012/.test(r[2]));
+  ok(tb && /^5/.test(tb[0]) && /DD-00016249/.test(tb[5]) && /CH\.BY/.test(tb[3]) && /Crack/.test(tb[4]) && /P4/.test(tb[5]), 'a dump body round is one row: the defect raised for CH.BY, at its worst severity', tb && tb.join(' | '));
+  ok(uc && /20/.test(uc[3]) && /ROLLER\.L1/.test(uc[4]) && uc[5] === '—', 'an undercarriage round with no defect is one line: points measured, the worst ones', uc && uc.join(' | '));
+  const f = ds.trs.find(r => /4E/.test(r[3]));
+  ok(f && /Wear/.test(f[4]) && /Heavy flakes/.test(f[4]) && /DD-004512/.test(f[5]) && /P2/.test(f[5]), 'a plug finding is paired with the one defect raised on its unit', f && f.join(' | '));
+  ok(f && /Repeat/.test(f[4]) && /Повтор/.test(f[4]) && /15\.10/.test(f[4]), 'a point graded before in the last 180 days is flagged as a repeat, with the grade and the day', f && f[4]);
+  ok(tb && !/Repeat|Повтор/.test(tb[4]), 'a point with no earlier finding is not flagged', tb && tb[4]);
+  const eng = ds.trs.find(r => /DRS\.ENG/.test(r[3])), mp = ds.trs.find(r => /HS\.MP/.test(r[3]));
+  ok(eng && /DD-00016300/.test(eng[5]) && /Leakage/.test(eng[4]) && /P3/.test(eng[5]), 'a finding takes the defect raised for its system code, with 1C type and priority', eng && eng.join(' | '));
+  ok(mp && /Not raised in 1C/.test(mp[5]) && /Нет в 1С/.test(mp[5]), 'a Degraded finding with no defect in 1C says so, in both languages', mp && mp[5]);
+  ok(!ds.trs.some(r => /WO-0/.test(r[5])), 'the round work order is never shown as the defect number', ds.trs.map(r => r[5]).join(','));
+  ok(ds.clean.some(r => /TK150/.test(r) && /4F/.test(r)) && !ds.trs.some(r => /4F/.test(r[3])), 'a Normal point is on one line under "no findings", not in the findings table', ds.clean.join(' // '));
+  ok(/TK160/.test(ds.crit) && /ACTION REQUIRED/.test(ds.crit) && /ТРЕБУЮТСЯ/.test(ds.crit), 'a Critical point gets the ACTION REQUIRED box', ds.crit.slice(0, 90));
+  ok(/dashboard-next\/#equipment\?eq=TK150/.test(ds.html) && /dashboard-next\/#overview/.test(ds.html), 'unit numbers link to their Equipment History and the box links to the dashboard', '');
+  ok(/1 Critical/.test(ds.subj) && /Критическ/.test(ds.subj) && /02\.11\.2026/.test(ds.subj), 'the subject counts the worst grades in both languages', ds.subj);
+  const mail = await p.evaluate(() => { const L = RECS.filter(r => r.date === '2026-11-02'); return CMDaySum.mailHtml(CMDaySum.rowsFor(L), L); });
+  ok(!/class="/.test(mail) && /style="/.test(mail) && !/<style/.test(mail), 'the e-mail has inline styles only', mail.length);
+  await p.evaluate(() => document.querySelector('#dsLang [data-v="en"]').click()); await p.waitForTimeout(200);
+  ds = await read();
+  ok(ds.th.length === 6 && ds.th.every(t => !/[А-Яа-я]/.test(t)) && !/[А-Яа-я]/.test(ds.subj), 'E-mail language EN: no Russian in the headings or the subject', ds.th.join(' | '));
+  await p.evaluate(() => document.querySelector('#dsLang [data-v="ru"]').click()); await p.waitForTimeout(200);
+  ds = await read();
+  ok(ds.th[0] === 'Критичность' && /Отчёт МС/.test(ds.subj), 'E-mail language RU: Russian headings and subject', ds.th[0] + ' / ' + ds.subj);
+  await p.evaluate(() => document.querySelector('#dsLang [data-v="both"]').click()); await p.waitForTimeout(200);
+  await p.evaluate(() => { const s = document.getElementById('dsFrom'); s.value = '2026-11-01'; s.dispatchEvent(new Event('change')); }); await p.waitForTimeout(250);
+  ds = await read();
+  ok(ds.chips === 5 && ds.trs.some(r => /DZ011/.test(r[2])) && /01–02\.11\.2026/.test(ds.subj), 'a From date takes in several days of rounds', ds.chips + ' ' + ds.subj);
+  await p.evaluate(() => { const c = [...document.querySelectorAll('#daySum [data-dsk]')].find(x => /EX016/.test(x.parentNode.textContent)); c.click(); });
   await p.waitForTimeout(200);
-  const after = await p.evaluate(() => document.querySelectorAll('#dsPrev tbody tr').length);
-  ok(after === 4, 'unticking a round takes its rows away', after);
-  const mail = await p.evaluate(() => CMDaySum.mailHtml(CMDaySum.rowsFor(RECS.filter(r => r.date === '2026-11-02')), RECS.filter(r => r.date === '2026-11-02')));
-  ok(/<table style="border-collapse:collapse">/.test(mail) && !/class="/.test(mail), 'the e-mail table has inline styles only', mail.length);
-  if (lng === 'ru') ok(/Дата осмотра/.test(ds.th.join(' ')) && /Критичность/.test(ds.th.join(' ')), 'Russian headings', ds.th.join(' | '));
+  ds = await read();
+  ok(!ds.trs.some(r => /EX016/.test(r[2])) && !ds.clean.some(r => /EX016/.test(r)), 'unticking a round takes its rows away', ds.trs.length);
+  if (lng === 'ru') { const lab = await p.evaluate(() => [...document.querySelectorAll('#daySum .dsBar .fld>span')].map(x => x.textContent).join(' | '));
+    ok(/С/.test(lab) && /По/.test(lab) && /Язык письма/.test(lab), 'the controls speak Russian on a Russian page', lab); }
   console.log(tag + ' - defects raised');
   await p.evaluate(() => { showTab('cmwo'); renderCmWoTab(); }); await p.waitForTimeout(300);
   const cw = await p.evaluate(() => ({ chips: [...document.querySelectorAll('#cwStageF [data-cwst]')].map(b => b.textContent.trim()),
