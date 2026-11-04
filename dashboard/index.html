@@ -6070,6 +6070,7 @@ const I18N={
   cw_d_done_s:"Закрыт или выполнен в 1С.",
   cw_d_by:"Кто заявил",
   cw_d_by_s:"Инициатор по данным 1С; если его нет — сотрудник группы мониторинга.",
+  ov_purpose:"Какая техника требует внимания в первую очередь и почему",
   cw_tab:"Заявленные дефекты", cw_title:"Дефекты, заявленные службой мониторинга",
   cw_sub:"Наряды по дефектам, заявленные: {who}, начиная с {d}. Данные из выгрузки 1С — дата, номер, тип, причина и статус приведены так, как их хранит 1С.",
   cw_h2:"Наряды по дефектам",
@@ -6985,7 +6986,7 @@ function dqMissing(rec,i){
 }
 function renderChips(){
   const c=[];
-  const UT=typeof CUR_TAB!=="undefined"&&UNIT_TABS[CUR_TAB], NOAPPLY=UT?[t("c_period"),t("c_status"),t("c_dq"),t("c_owner"),t("c_month"),t("c_sev"),t("c_defect"),t("c_cause")].concat(CUR_TAB==="cmwo"?[t("c_type")]:[]):[];
+  const CT=(function(){ try{ return CUR_TAB; }catch(e){ return ""; } })(), UT=!!UNIT_TABS[CT], NOAPPLY=UT?[t("c_period"),t("c_status"),t("c_dq"),t("c_owner"),t("c_month"),t("c_sev"),t("c_defect"),t("c_cause")].concat(CT==="cmwo"?[t("c_type")]:[]):[];
   const add=(label,val,onX)=>{ if(NOAPPLY.indexOf(label)<0) c.push({label,val,onX}); };   /* CM_FLOW_V1: a chip only for what this list applies */
   if($("fType").value)  add(t("c_type"), TYPE_LABEL[$("fType").value]||$("fType").value, ()=>{ $("fType").value=""; renderAll(); });
   if($("fClass").value) add(t("c_class"), $("fClass").value, ()=>{ $("fClass").value=""; renderAll(); });
@@ -19415,7 +19416,7 @@ function cmSiteFb(){
   function L(){ return (typeof lang!=="undefined"&&lang==="ru")?"ru":"en"; }
   var V={
     reports:{key:"cm_rpt_view",def:"ds",list:[
-      ["ds",function(s){ return [document.getElementById("daySum")]; }],
+      ["ds",function(s){ return [s.querySelector(":scope>#daySum")]; }]   /* made by dashboard/day-summary.js */,
       ["pdf",function(s){ return [s.querySelector(":scope>.grid12")]; }],
       ["rel",function(s){ return [document.getElementById("relPanel")]; }]]},
     sync:{key:"cm_sync_view",def:"sync",list:[
@@ -19431,7 +19432,7 @@ function cmSiteFb(){
     var cur=""; try{ cur=localStorage.getItem(c.key)||""; }catch(e){}
     if(!c.list.some(function(d){ return d[0]===cur; })) cur=c.def;
     seg.innerHTML=c.list.map(function(d){ return '<button type="button" data-v="'+d[0]+'" aria-pressed="'+(d[0]===cur)+'"'+(d[0]===cur?' class="on"':'')+'>'+W[L()][d[0]]+'</button>'; }).join("");
-    if(t==="reports"){ var ds=document.getElementById("daySum"), g=sec.querySelector(":scope>.grid12"); if(ds&&g&&ds.nextElementSibling!==g) sec.insertBefore(ds,g); }
+    if(t==="reports"){ var ds=sec.querySelector(":scope>#daySum"), g=sec.querySelector(":scope>.grid12"); if(ds&&g&&ds.nextElementSibling!==g) sec.insertBefore(ds,g); }
     c.list.forEach(function(d){ d[1](sec).forEach(function(el){ if(el) el.classList.toggle("cmvHide", d[0]!==cur); }); });
   }
   window.cmViews=function(t){ try{ draw(t); }catch(e){ window.cmFlowErr=e; } };

@@ -118,7 +118,7 @@ const reset = q => fetch(BASE + '/__reset?' + q).then(r => r.text());
   ok('  and the view is at most two screens', G.tall <= 2, G.tall + ' screens');
 
   console.log('\n3. REPORTS — GUIDED FORM, PREVIEW, RECENT');
-  await p.evaluate(() => showTab('reports', true)); await p.waitForTimeout(400);
+  await p.evaluate(() => (localStorage.setItem('cm_rpt_view','pdf'), showTab('reports', true))); await p.waitForTimeout(400);
   const R = await p.evaluate(() => ({
     steps: document.querySelectorAll('#tab-reports .rstep').length,
     title: document.querySelector('#tab-reports h1').textContent,

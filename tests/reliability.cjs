@@ -76,7 +76,7 @@ async function panel(b, file, lang, mode, fix) {
   const errs = []; p.on('pageerror', e => errs.push(e.message));
   await p.goto(`http://127.0.0.1:${PORT}/${file}#reports`, { waitUntil: 'load' });
   await p.waitForFunction(() => window.CMRel && window.showTab, null, { timeout: 15000 });
-  await p.evaluate(() => showTab('reports'));
+  await p.evaluate(() => (localStorage.setItem('cm_rpt_view','rel'), showTab('reports')));
   await p.waitForFunction(() => { const el = document.getElementById('relPanel'); return el && (el.querySelector('#relKpis') || el.querySelector('[data-rel="away"]')); },
     null, { timeout: 15000 }).catch(() => {});
   return { ctx, p, errs };
