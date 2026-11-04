@@ -251,18 +251,24 @@ const cells = p => p.$$eval('#cwList tbody tr', rs => rs.map(r =>
      that touched nothing on the table below. showTab()'s own `own` list
      already puts that bar away for Due/Lube/Sync/Reports/Plan vs Actual;
      cmwo was left off it. */
-  let barState = await p.evaluate(() => ({
-    bar: document.querySelector('#filterBar').classList.contains('hidden'),
-    chips: document.getElementById('chips').classList.contains('hidden') }));
-  ok('the global bar is put away on Defects raised, the same as Due/Lube/Sync',
-     barState.bar === true, JSON.stringify(barState));
-  ok('  and so are its filter chips', barState.chips === true, JSON.stringify(barState));
+  /* CM_FLOW_V1 (build 584): the bar is now ON this tab, because the list is machines; what it shows applies.
+     Period / Grade / Status (about inspections) are put away with their chips; the search narrows the table. */
+  let barState = await p.evaluate(() => {
+    const vis = id => { const e = document.getElementById(id); const f = e && (e.closest('.field') || e.closest('label')); return !!(f && f.getClientRects().length && getComputedStyle(f).display !== 'none'); };
+    return { bar: document.querySelector('#filterBar').classList.contains('hidden'), unit: document.body.classList.contains('fbUnit'),
+      period: vis('fRange'), grade: vis('fGrade'), type: vis('fType'), q: vis('fQ') }; });
+  ok('the bar is on Defects raised, in machine mode', !barState.bar && barState.unit, JSON.stringify(barState));
+  ok('  Period, Grade and Type are put away here', !barState.period && !barState.grade && !barState.type, JSON.stringify(barState));
+  const nAll = await p.evaluate(() => document.querySelectorAll('#cwList table.cwtbl tbody tr').length);
+  const u1 = await p.evaluate(() => { const c = document.querySelector('#cwList table.cwtbl tbody tr td:nth-child(2)'); return c ? c.textContent.trim() : ''; });
+  await p.fill('#fQ', u1); await p.waitForTimeout(400);
+  const nQ = await p.evaluate(() => [...document.querySelectorAll('#cwList table.cwtbl tbody tr')].map(r => r.textContent));
+  ok('  the bar search narrows this table', !!u1 && nQ.length > 0 && nQ.length <= nAll && nQ.every(t => t.indexOf(u1) >= 0), u1 + ': ' + nAll + ' -> ' + nQ.length);
+  await p.fill('#fQ', ''); await p.waitForTimeout(300);
   await p.click('[data-tab="overview"]');
   await p.waitForTimeout(150);
-  barState = await p.evaluate(() => ({
-    bar: document.querySelector('#filterBar').classList.contains('hidden') }));
-  ok('  and it comes back on a tab the bar actually narrows',
-     barState.bar === false, JSON.stringify(barState));
+  barState = await p.evaluate(() => ({ unit: document.body.classList.contains('fbUnit') }));
+  ok('  and on an inspection tab the full bar is back', barState.unit === false, JSON.stringify(barState));
   await p.click('[data-tab="cmwo"]');
   await p.waitForTimeout(150);
 

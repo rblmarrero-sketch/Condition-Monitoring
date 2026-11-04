@@ -280,11 +280,14 @@ const rows = p => p.$$eval('#ddList tbody tr', a => a.map(tr => ({
      walked 60 days ago and excluded by a 30-day window would make a machine
      that is up to date look like one nobody has ever visited. So it is put away
      here, and the tab carries its own controls instead. */
-  ok('the global record filters are put away on this tab',
-     await p.evaluate(() => document.querySelector("#filterBar").classList.contains("hidden")));
+  /* CM_FLOW_V1 (build 584): the bar is on this tab, in machine mode - Period, Grade and Status are put away
+     (a 30-day window over a due list would be wrong), Class, Type and the search apply to the list. */
+  ok('the period, grade and status filters are put away on this tab',
+     await p.evaluate(() => document.body.classList.contains('fbUnit') && !document.querySelector('#filterBar').classList.contains('hidden')
+       && ['fRange', 'fGrade', 'fStatus'].every(id => { const e = document.getElementById(id); const f = e && (e.closest('.field') || e.closest('label')); return !f || getComputedStyle(f).display === 'none'; })));
   ok('and come back on a tab they do work on', await (async () => {
     await p.click('[data-tab="overview"]'); await p.waitForTimeout(150);
-    const back = await p.evaluate(() => !document.querySelector("#filterBar").classList.contains("hidden"));
+    const back = await p.evaluate(() => !document.body.classList.contains('fbUnit'));
     await p.click('[data-tab="due"]'); await p.waitForTimeout(150);
     return back;
   })());
