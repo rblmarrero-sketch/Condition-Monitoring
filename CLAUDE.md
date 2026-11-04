@@ -6487,3 +6487,16 @@ round type's own sentence (`ok_MP` …); "List every Normal point" (`cm_daymail_
 Every unit number links to its Equipment History on dashboard-next, and a box links to the dashboard (company
 network or VPN). "Copy subject" gives e.g. "CM daily report 01–02.11.2026 — 1 Critical, 1 Severe · Отчёт МС …".
 Tables and inline styles only — Outlook keeps nothing else. `tests/daysum.cjs`.
+
+**THE CONTENT WEARS THE SITE STANDARD (build 588, CM_STDLOOK_V1, Rickie 04.11 15:07 "the theme and layout still
+different from the standard", mock-up "Go" 15:53).** Measured against Assets Down and WO Manager, both office pages
+differed in nine places. One block, `<style id="cmStdLook">` at the end of both pages (identical), sets: in the
+LIGHT theme the standard neutrals as the pages' own tokens (`--page` #eef0f1, `--surface` white, `--surface-2`
+#f6f7f8, `--border` #dde2e6, `--ink` #16212a, `--muted` #5b6670, `--accent` navy #16304F) — which also turns
+dashboard-next's warm cream into the same greys — and a light side menu like WO Manager's (`--rail` #f5f5f3, dark
+ink); in both themes: cards with 14 px corners, a border and the soft shadow; a KPI strip as separate cards with
+the colour on the number only (no bar on top); KPI labels 11 px grey uppercase; a copper bar before every card
+title (`.secthd>h2`, `.section>h2`); table headings 11 px grey uppercase on light grey; a chosen tab of a switch
+and the main button navy (`--cmsl-on`, #3b6290 in dark so white text still reads); "Data sources" in the site
+band an outline pill. Dark keeps its own colours (and its dark rail). Grades, overdue and priority colours are
+untouched. dashboard-next's 44 px column-filter boxes are untouched (27.10 decision).
