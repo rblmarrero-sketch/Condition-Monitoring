@@ -58,7 +58,7 @@ const SCAN = ([w]) => {
   };
   /* A box one pixel wide holding a word is not clipped text — it is a label
      for a screen reader, which is the opposite of a defect. */
-  const offscreenLabel = el => el.clientWidth <= 2 || !!el.closest(".vh,[hidden],[aria-hidden=true]")
+  const offscreenLabel = el => el.clientWidth <= 2 || !!el.closest(".vh,.cmp2fold,[hidden],[aria-hidden=true]")
     || el.classList.contains("vh");
   const vis = el => {
     const r = el.getBoundingClientRect();
