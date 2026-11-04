@@ -432,7 +432,8 @@
     anchor.parentNode.insertBefore(s, anchor);
     var st = document.createElement('style'); st.id = 'daySumCss';
     st.textContent = '#daySum .dsBar{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;margin:8px 0}' +
-      '#daySum .dsSeg{display:inline-flex;flex-wrap:wrap}#daySum .dsEvery{display:inline-flex;align-items:center;gap:6px;font-size:13px;cursor:pointer}' +
+      '#daySum .dsSeg{display:inline-flex;flex-wrap:wrap}#daySum .dsEvery{display:inline-flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;min-height:32px}' +
+      '@media (max-width:899px){#daySum .dsEvery{min-height:44px}#daySum .dsPrev a{display:inline-block;min-height:32px;line-height:32px}}' +
       '#daySum .dsRounds{margin:6px 0 10px}#daySum .dsChips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}' +
       '#daySum .dsChip{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--line,#d5dbe0);border-radius:7px;padding:4px 8px;font-size:13px;cursor:pointer}' +
       '#daySum .dsSubjLine{font-size:13px;margin:6px 0;overflow-wrap:anywhere}' +
