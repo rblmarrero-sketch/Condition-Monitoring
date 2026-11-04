@@ -3442,6 +3442,14 @@
      the controlling point and its percent, and the decision from the worst
      grade. Counts are facts; an unmeasured point is counted, never called
      Normal. */
+  /* The controlling point is named in words ("Track roller — Left 3"), not as
+     the walk key: "ROLLER.L3 34%" printed a station code a reader had to
+     decode, in either language. The name already carries the side. */
+  function ctrlCell(T, it) {
+    var k = String(it.key || it.code || "");
+    var nm = it.name && it.name !== k ? T.both(it.name, it.nameAlt, "alti") : esc(it.code || k);
+    return nm + ' <span class="num">' + esc(it.w.pct) + '%</span>';
+  }
   function ucCondSummary(T, rec) {
     var its = (rec.items || []).filter(function (it) { return it.w; });
     var atlimit = 0, above80 = 0, notmeas = 0, ctrl = null;
@@ -3463,7 +3471,7 @@
       + c("uc_atlimit", String(atlimit), atlimit ? "pend" : "ok")
       + c("uc_above80", String(above80), above80 ? "pend" : "ok")
       + c("uc_notmeas", String(notmeas), notmeas ? "pend" : "ok")
-      + c("uc_controlling", ctrl ? (esc(ctrl.code || ctrl.key) + ' <span class="num">' + esc(ctrl.w.pct) + '%</span>') : tbMiss(T, "c_notmeas"), "")
+      + c("uc_controlling", ctrl ? ctrlCell(T, ctrl) : tbMiss(T, "c_notmeas"), "")
       + c("uc_decision", dec, "")
       + '</div>';
   }

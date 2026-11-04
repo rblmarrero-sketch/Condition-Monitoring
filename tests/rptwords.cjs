@@ -37,6 +37,8 @@ const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
             resp: 'Ivanov I.', target: '2026-11-04' } ] }, sched),
       Object.assign({ equip: 'DZ017', date: '2026-10-29', type: 'FC', cls: 'DOZ', by: 'Zhomart Khasenov', smu: '5890',
         items: [ { key: 'ENG', label: 'Engine Oil Filter', grade: 3, comp: '500', oil: '500', comment: 'Частицы', action: 'Plan repair', wo: 'WO-019758' } ] }, sched),
+      { equip: 'DZ011', date: '2026-11-02', type: 'UC', cls: 'DOZ', by: 'Kazhybekov Bekzhan', smu: '32100',
+        items: [ { key: 'ROLLER.L3', mm: 240 }, { key: 'ROLLER.R3', mm: 255 }, { key: 'IDLER.L-OUT', mm: 0 } ].filter(x => x.mm) },
     ];
     window.CMDash.importRecords(recs);
     const ov = document.getElementById('dataOv'); if (ov) ov.classList.add('hidden');
@@ -54,6 +56,18 @@ const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
   const insEn = await text('one:DZ011|2026-10-31|INSP', 'en', false);
   const fcRu = await text('one:DZ017|2026-10-29|FC', 'ru', false);
   const fcEn = await text('one:DZ017|2026-10-29|FC', 'en', false);
+
+  const ucRu = await text('one:DZ011|2026-11-02|UC', 'ru', false);
+  const ucEn = await text('one:DZ011|2026-11-02|UC', 'en', false);
+  const ucBi = await text('one:DZ011|2026-11-02|UC', 'en', true);
+  console.log('\nUndercarriage: controlling point and side captions');
+  const ctrlOf = (t, lab) => (t.match(new RegExp(lab + '.{0,60}')) || [''])[0];
+  ok('Russian: the controlling point is named in words, not as ROLLER.L3',
+     /Определяющая точка\s*Опорный каток/.test(ucRu) && !/ROLLER\.L3/.test(ctrlOf(ucRu, 'Определяющая точка')), ctrlOf(ucRu, 'Определяющая точка'));
+  ok('English: the controlling point is named in words', /Controlling point\s*Track roller/.test(ucEn) && !/ROLLER\.L3/.test(ctrlOf(ucEn, 'Controlling point')), ctrlOf(ucEn, 'Controlling point'));
+  ok('Russian sheet: the side captions are Russian only', /ЛЕВАЯ/.test(ucRu) && !/LEFT|RIGHT/.test(ucRu), (ucRu.match(/.{0,12}ЛЕВАЯ.{0,12}/) || [''])[0]);
+  ok('English sheet: the side captions are English only', /LEFT/.test(ucEn) && !/ЛЕВАЯ|ПРАВАЯ/.test(ucEn));
+  ok('bilingual sheet keeps both', /LEFT \/ ЛЕВАЯ/.test(ucBi) && /RIGHT \/ ПРАВАЯ/.test(ucBi));
 
   console.log('\nRussian sheet');
   ok('the PM service is said in Russian', /4000 ч/.test(insRu) && !/ТО 4000|h [Ss]ervice/.test(insRu), (insRu.match(/.{0,20}4000.{0,20}/) || [''])[0]);
