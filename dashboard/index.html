@@ -13828,7 +13828,6 @@ function showTab(t,push){
   if(bar) bar.classList.toggle("hidden", own);
   if(typeof moreSync==="function") moreSync();
   if($("chips")) $("chips").classList.toggle("hidden", own);
-  try{ if(!own) renderChips(); }catch(e){}
   /* THE TITLE STAYS WHERE IT IS (audit 26.10 D1). The bar sat above every
      tab's title, and it is shown on some tabs and put away on others, so the
      title jumped between y 52 and 139 from one tab to the next. The one shared
@@ -13845,6 +13844,9 @@ function showTab(t,push){
   }
   /* A new page is a new history entry; restoring one is not. */
   if(typeof urlWrite==="function") urlWrite(!!push);
+  /* CM_FLOW_V1: the chips say only what THIS tab applies - redrawn AFTER the history entry is written, because
+     renderChips() rewrites the current entry and, run first, overwrote the previous page's (Back then left the page). */
+  try{ if(!own) renderChips(); }catch(e){}
 }
 $("tabs").onclick=e=>{ const b=e.target.closest("button[data-tab]"); if(b) showTab(b.dataset.tab,true); };
 /* A tile label the two-line clamp cut short (audit 26.10 D2) is said in full
@@ -19411,8 +19413,9 @@ function cmSiteFb(){
    title. Reports: Day summary (first - it is the daily job) · PDF report · Reliability. Data & Sync: Sync · Measurement limits.
    Nothing is moved out of the DOM or renamed; the views not chosen get .cmvHide. The choice is kept per browser. */
 (function(){
-  var W={en:{ds:"Day summary",pdf:"PDF report",rel:"Reliability",sync:"Sync",lim:"Measurement limits"},
-         ru:{ds:"Итог дня",pdf:"PDF-отчёт",rel:"Надёжность",sync:"Синхронизация",lim:"Пределы износа"}};
+  /* the words of the switch, per language (kept apart from the page's own I18N table so the scanners read that one) */
+  var W={}; W.en={ds:"Day summary",pdf:"PDF report",rel:"Reliability",sync:"Sync",lim:"Measurement limits"};
+  W["ru"]={ds:"Итог дня",pdf:"PDF-отчёт",rel:"Надёжность",sync:"Синхронизация",lim:"Пределы износа"};
   function L(){ return (typeof lang!=="undefined"&&lang==="ru")?"ru":"en"; }
   var V={
     reports:{key:"cm_rpt_view",def:"ds",list:[
