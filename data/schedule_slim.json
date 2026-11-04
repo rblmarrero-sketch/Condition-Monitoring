@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-04T02:10:41+00:00",
+  "generated": "2026-11-04T02:24:17+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -902,7 +902,7 @@
           "LUBE",
           "MP"
         ],
-        "plan": "2026-11-05",
+        "plan": "2026-11-11",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -1710,6 +1710,24 @@
       "raised": "2026-11-11",
       "type": "250 Hours service Planned",
       "hours": 250,
+      "plan": "2026-11-11",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-020997",
+      "equip": "TK157",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Filter Cut / General Inspection / Lubrication / Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-11",
+      "type": "3000 Hours service Planned",
+      "hours": 3000,
       "plan": "2026-11-11",
       "status": "Elimination scheduled",
       "request": "",
@@ -2646,24 +2664,6 @@
       "raised": "2026-11-05",
       "type": "500 Hours service Planned",
       "hours": 500,
-      "plan": "2026-11-05",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
-      "wo": "WO-020997",
-      "equip": "TK157",
-      "cls": "HT",
-      "comp": "",
-      "desc": "Filter Cut / General Inspection / Lubrication / Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-05",
-      "type": "3000 Hours service Planned",
-      "hours": 3000,
       "plan": "2026-11-05",
       "status": "Elimination scheduled",
       "request": "",
