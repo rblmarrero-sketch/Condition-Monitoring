@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-04T03:48:55+00:00",
+  "generated": "2026-11-04T04:20:33+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -219,18 +219,6 @@
           "INSP"
         ],
         "plan": "2026-11-14",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "GR013": [
-      {
-        "wo": "WO-020980",
-        "hours": 2000,
-        "types": [
-          "FC",
-          "INSP"
-        ],
-        "plan": "2026-11-02",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -3277,12 +3265,12 @@
       "type": "2000 Hours service Planned",
       "hours": 2000,
       "plan": "2026-11-02",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-03"
     },
     {
       "wo": "WO-020970",
