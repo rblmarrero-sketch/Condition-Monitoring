@@ -5,7 +5,7 @@
       round takes its rows away; the copied table is plain inline-styled HTML a mail program keeps.
    2. Defects raised: the stage chips (All / Registered / In progress / Completed) count and filter, the
       Work order column shows the number, an In-progress defect with no number says "WO missing", and
-      "Raised by" shows the name 1C has for whoever raised it (falling back to the CM name).
+      "Responsible" shows the person 1C has as responsible (04.11; the initiator field holds the organisation).
    3. The Condition trend says what its two numbers are.
    Run: node tests/daysum.cjs [port]   (needs tests/ed-srv.cjs on the port) */
 const { chromium } = require(require('./pw.cjs'));
@@ -84,8 +84,8 @@ async function run(b, path, lng) {
   ok(cw.chips.length === 4 && /6$/.test(cw.chips[0]) && /3$/.test(cw.chips[1]) && /2$/.test(cw.chips[2]) && /1$/.test(cw.chips[3]), 'stage chips: all 6, registered 3, in progress 2, completed 1', cw.chips.join(' | '));
   ok(/1/.test(cw.nowo), 'one defect in progress without a WO number is counted', cw.nowo);
   const r1 = cw.rows.find(r => r.includes('TK150')), r2 = cw.rows.find(r => r.includes('TK151')), r3 = cw.rows.find(r => r.includes('TK152'));
-  ok(r1 && r1.includes('Petrov A.'), 'Raised by shows the name 1C has', r1 && r1.slice(-3).join(' | '));
-  ok(r2 && r2.includes('WO-9001') && r2.includes('Irek'), 'In progress shows its WO; no initiator falls back to the CM name', r2 && r2.slice(-3).join(' | '));
+  ok(r1 && r1.includes('Slam') && !r1.includes('Petrov A.'), 'Responsible shows 1C\'s responsible person, not the initiator (04.11)', r1 && r1.slice(-3).join(' | '));
+  ok(r2 && r2.includes('WO-9001') && r2.includes('Irek'), 'In progress shows its WO and its responsible person', r2 && r2.slice(-3).join(' | '));
   ok(r3 && r3.some(c => /WO missing|Нет наряда/.test(c)), 'In progress with no WO says so', r3 && r3.slice(-3).join(' | '));
   await p.evaluate(() => document.querySelector('#cwStageF [data-cwst="prog"]').click()); await p.waitForTimeout(200);
   const nprog = await p.evaluate(() => document.querySelectorAll('#cwList table.cwtbl tbody tr').length);

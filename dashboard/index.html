@@ -3530,7 +3530,7 @@
           <dt data-i18n="cw_d_reg">Registered</dt><dd data-i18n="cw_d_reg_s">Raised in 1C, no work started.</dd>
           <dt data-i18n="cw_d_prog">In progress</dt><dd data-i18n="cw_d_prog_s">A work order is open or the repair is scheduled. It must carry a work order number.</dd>
           <dt data-i18n="cw_d_done">Completed</dt><dd data-i18n="cw_d_done_s">Closed or completed in 1C.</dd>
-          <dt data-i18n="cw_d_by">Raised by</dt><dd data-i18n="cw_d_by_s">The person 1C has as the initiator; when 1C has none, the CM team member.</dd>
+          <dt data-i18n="cw_d_by">Responsible</dt><dd data-i18n="cw_d_by_s">The CM team member 1C has as the responsible person for the defect.</dd>
         </dl></div></details>
     </div>
     <!-- A COLUMN THIS FILE COULD NOT FIND IS SAID OUT LOUD. An empty cell
@@ -4103,23 +4103,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=585"></script>
+<script src="../data/magnetic_plug.js?v=586"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=585"></script>
-<script src="../mobile/hme.js?v=585"></script>
-<script src="../mobile/mp-fc.js?v=585"></script>
-<script src="../mobile/rtw.js?v=585"></script>
-<script src="../mobile/hme-cascade.js?v=585"></script>
-<script src="../mobile/temp-limits.js?v=585"></script>
+<script src="../data/work_orders.js?v=586"></script>
+<script src="../mobile/hme.js?v=586"></script>
+<script src="../mobile/mp-fc.js?v=586"></script>
+<script src="../mobile/rtw.js?v=586"></script>
+<script src="../mobile/hme-cascade.js?v=586"></script>
+<script src="../mobile/temp-limits.js?v=586"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=585"></script>
-<script src="../mobile/normalize.js?v=585"></script>
-<script src="../mobile/terms.js?v=585"></script>
+<script src="../mobile/assets.js?v=586"></script>
+<script src="../mobile/normalize.js?v=586"></script>
+<script src="../mobile/terms.js?v=586"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -4138,21 +4138,21 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=585"></script>
-<script src="../mobile/edits.js?v=585"></script>
-<script src="../mobile/due.js?v=585"></script>
-<script src="../mobile/wear.js?v=585"></script>
-<script src="../mobile/wear-map.js?v=585"></script>
-<script src="../mobile/lube.js?v=585"></script>
-<script src="../mobile/lube-overrides.js?v=585"></script>
-<script src="../mobile/lube2027.js?v=585"></script>
-<script src="../mobile/lube-tds.js?v=585"></script>
-<script src="lube-master.js?v=585"></script>
-<script src="wear-limits.js?v=585"></script>
+<script src="../mobile/grade.js?v=586"></script>
+<script src="../mobile/edits.js?v=586"></script>
+<script src="../mobile/due.js?v=586"></script>
+<script src="../mobile/wear.js?v=586"></script>
+<script src="../mobile/wear-map.js?v=586"></script>
+<script src="../mobile/lube.js?v=586"></script>
+<script src="../mobile/lube-overrides.js?v=586"></script>
+<script src="../mobile/lube2027.js?v=586"></script>
+<script src="../mobile/lube-tds.js?v=586"></script>
+<script src="lube-master.js?v=586"></script>
+<script src="wear-limits.js?v=586"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=585"></script>
-<script src="../mobile/machine-photos.js?v=585"></script>
+<script src="../mobile/upload-defaults.js?v=586"></script>
+<script src="../mobile/machine-photos.js?v=586"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -4161,17 +4161,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=585"></script>
-<script src="../mobile/get.js?v=585"></script>
-<script src="../mobile/points.js?v=585"></script>
-<script src="../mobile/uc-points.js?v=585"></script>
-<script src="../mobile/inspect-guide.js?v=585"></script>
-<script src="../mobile/get-figs.js?v=585"></script>
-<script src="../mobile/body-points.js?v=585"></script>
-<script src="../mobile/body-map.js?v=585"></script>
-<script src="../mobile/jspdf.umd.min.js?v=585"></script>
-<script src="../mobile/html2canvas.min.js?v=585"></script>
-<script src="../mobile/report-core.js?v=585"></script>
+<script src="../mobile/machine-fig.js?v=586"></script>
+<script src="../mobile/get.js?v=586"></script>
+<script src="../mobile/points.js?v=586"></script>
+<script src="../mobile/uc-points.js?v=586"></script>
+<script src="../mobile/inspect-guide.js?v=586"></script>
+<script src="../mobile/get-figs.js?v=586"></script>
+<script src="../mobile/body-points.js?v=586"></script>
+<script src="../mobile/body-map.js?v=586"></script>
+<script src="../mobile/jspdf.umd.min.js?v=586"></script>
+<script src="../mobile/html2canvas.min.js?v=586"></script>
+<script src="../mobile/report-core.js?v=586"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -4208,6 +4208,18 @@ const DEF={};      (HME.defectTypes||[]).forEach(d=>DEF[d.code]=d);
 const CAUSE_BY={}; CAUSES.forEach(c=>CAUSE_BY[c.code]=c);
 const COMP_BY={};  (HME.components||[]).forEach(c=>COMP_BY[c.code]=c);
 const ISO_BY=HME.isoFailureModeCodes||{};
+/* ISO 14224 Table B.2 failure MECHANISM names. The magnetic-plug and filter-cut defects (DT14/DT15, mobile/mp-fc.js)
+   are coded by mechanism (2.4 Wear, 5.2 Contamination…) where every other defect carries a failure-MODE code (ELP, STD…),
+   so a lookup in the mode table alone printed "2.4" with no name (Rickie 04.11 "what it means by 2.4?"). */
+const ISO_MECH={"1.0":{en:"Mechanical failure",ru:"Механический отказ"},"1.1":{en:"Leakage",ru:"Утечка"},"1.2":{en:"Vibration",ru:"Вибрация"},
+  "1.3":{en:"Clearance / alignment failure",ru:"Нарушение зазора / соосности"},"1.4":{en:"Deformation",ru:"Деформация"},"1.5":{en:"Looseness",ru:"Ослабление"},
+  "1.6":{en:"Sticking",ru:"Заедание"},"2.0":{en:"Material failure",ru:"Отказ материала"},"2.1":{en:"Cavitation",ru:"Кавитация"},"2.2":{en:"Corrosion",ru:"Коррозия"},
+  "2.3":{en:"Erosion",ru:"Эрозия"},"2.4":{en:"Wear",ru:"Износ"},"2.5":{en:"Breakage",ru:"Поломка"},"2.6":{en:"Fatigue",ru:"Усталость"},
+  "2.7":{en:"Overheating",ru:"Перегрев"},"2.8":{en:"Burst",ru:"Разрыв"},"3.0":{en:"Instrument failure",ru:"Отказ КИП"},
+  "4.0":{en:"Electrical failure",ru:"Электрический отказ"},"5.0":{en:"External influence",ru:"Внешнее воздействие"},
+  "5.1":{en:"Blockage / plugged",ru:"Засорение / закупорка"},"5.2":{en:"Contamination",ru:"Загрязнение"},"5.3":{en:"Miscellaneous external influences",ru:"Прочие внешние воздействия"},
+  "6.0":{en:"Miscellaneous",ru:"Прочее"}};
+
 const LEG=HME.legacy||{components:{},defects:{},causes:{},actions:{},labels:{}};
 /* WHICH REGISTER COMPONENTS THIS MACHINE ACTUALLY HAS — the same lookup
    mobile/index.html's componentsForUnit() uses to build the phone's own
@@ -5157,8 +5169,8 @@ const I18N={
   cw_d_prog_s:"A work order is open or the repair is scheduled. It must carry a work order number.",
   cw_d_done:"Completed",
   cw_d_done_s:"Closed or completed in 1C.",
-  cw_d_by:"Raised by",
-  cw_d_by_s:"The person 1C has as the initiator; when 1C has none, the CM team member.",
+  cw_d_by:"Responsible",
+  cw_d_by_s:"The CM team member 1C has as the responsible person for the defect.",
   cw_tab:"Defects raised", cw_title:"Defects raised by Condition Monitoring",
   cw_sub:"Defect work orders raised by {who}, from {d} onward. Read from 1C's own export — the date, the number, the type, the cause and the status are as 1C holds them.",
   cw_h2:"Defect work orders",
@@ -5177,7 +5189,7 @@ const I18N={
   cw_nocause:"{n} defect(s) carry no cause in 1C — not on the work order, the work request or the certification. The site treats the cause as mandatory, so these are worth chasing in 1C.",
   cw_c_system:"System component", cw_c_prio:"Priority", cw_c_dtype:"Defect type",
   cw_c_descr:"Defect description", cw_c_cause:"Cause of defect",
-  cw_c_status:"Status", cw_c_by:"Raised by",
+  cw_c_status:"Status", cw_c_by:"Responsible",
   cw_c_wo:"Work order", cw_st_all:"All", cw_st_reg:"Registered", cw_st_prog:"In progress", cw_st_done:"Completed",
   cw_nowo:"WO missing", cw_nowo_n:"{n} in progress without a WO number", cw_by_tip:"Responsible in 1C: {p}",
   cw_colfilter_ph:"Filter…",
@@ -6069,8 +6081,8 @@ const I18N={
   cw_d_prog_s:"Наряд открыт или ремонт запланирован. Должен быть указан номер наряда.",
   cw_d_done:"Выполнен",
   cw_d_done_s:"Закрыт или выполнен в 1С.",
-  cw_d_by:"Кто заявил",
-  cw_d_by_s:"Инициатор по данным 1С; если его нет — сотрудник группы мониторинга.",
+  cw_d_by:"Ответственный",
+  cw_d_by_s:"Сотрудник группы мониторинга, указанный в 1С ответственным за дефект.",
   ov_purpose:"Какая техника требует внимания в первую очередь и почему",
   cw_tab:"Заявленные дефекты", cw_title:"Дефекты, заявленные службой мониторинга",
   cw_sub:"Наряды по дефектам, заявленные: {who}, начиная с {d}. Данные из выгрузки 1С — дата, номер, тип, причина и статус приведены так, как их хранит 1С.",
@@ -6090,7 +6102,7 @@ const I18N={
   cw_nocause:"У {n} дефектов в 1С не указана причина — ни в наряде, ни в заявке, ни в сертификации. Причина обязательна, поэтому такие строки стоит проверить в 1С.",
   cw_c_system:"Узел / система", cw_c_prio:"Приоритет", cw_c_dtype:"Тип дефекта",
   cw_c_descr:"Описание дефекта", cw_c_cause:"Причина дефекта",
-  cw_c_status:"Статус", cw_c_by:"Заявил",
+  cw_c_status:"Статус", cw_c_by:"Ответственный",
   cw_c_wo:"Наряд", cw_st_all:"Все", cw_st_reg:"Зарегистрирован", cw_st_prog:"В работе", cw_st_done:"Выполнен",
   cw_nowo:"Нет наряда", cw_nowo_n:"В работе без номера наряда: {n}", cw_by_tip:"Ответственный в 1С: {p}",
   cw_colfilter_ph:"Фильтр…",
@@ -7620,7 +7632,7 @@ function renderFailure(){
   const src=f.length ? t("e_found",{n:f.length}) : t("e_found_none");
   const d=cnt(x=>defectKeyOf(x.i), x=>x.i.defectCode?`· ${x.i.defectCode}`:"", k=>defectKeyLabel(k));
   const c=cnt(x=>causeKeyOf(x.i),  x=>x.i.causeCode?`· ${x.i.causeCode}`:"",  k=>causeKeyLabel(k));
-  const i=cnt(x=>{ const m=ISO_BY[x.i.iso]; return x.i.iso?`${x.i.iso} ${m?(m[lang]||m.en||m):""}`:""; });
+  const i=cnt(x=>{ const m=ISO_BY[x.i.iso]||ISO_MECH[x.i.iso]; return x.i.iso?`${x.i.iso} ${m?(m[lang]||m.en||m):""}`:""; });
   pareto($("paretoDefect"), d.rows, null, "defect",
     f.length ? src+t("e_defect_tail") : src, d.total);
   pareto($("paretoCause"),  c.rows, ()=>"var(--serious)", "cause",
@@ -17285,12 +17297,12 @@ function cwCsv(){
   const rows=[["date","date_source","raised","detected","planned_start",
                "asset","defect_no","work_request_number","equipment_type",
                "system_component","priority","defect_type","defect_description",
-               "cause_of_defect","cause_source","status","raised_by","work_order","maintenance_type",
-               "is_planned_service","stage","responsible_cm"]];
+               "cause_of_defect","cause_source","status","responsible","work_order","maintenance_type",
+               "is_planned_service","stage"]];
   cwRows().forEach(r=>rows.push([r.date||"", r.dateFrom||"", r.raised||"", r.detected||"",
     r.planStart||"", r.asset||"", r.defect||"", r.requestNo||"",
     r.eqType||"", r.system||"", r.priority||"", r.defectType||"", r.descr||"", r.cause||"",
-    r.causeFrom||"", r.status||"", r.raisedBy||r.by||"", r.woNumber||"", r.maintType||"", r.planned?1:0, cwStage(r), r.by||""])); /* CM_PLAIN_V1 */
+    r.causeFrom||"", r.status||"", r.by||"", r.woNumber||"", r.maintType||"", r.planned?1:0, cwStage(r)])); /* CM_PLAIN_V1; responsible = 1C Responsible person (04.11) */
   const csv=rows.map(r=>r.map(v=>{ const x=String(v==null?"":v);
     return /[",\n]/.test(x) ? '"'+x.replace(/"/g,'""')+'"' : x; }).join(",")).join("\n");
   const a=document.createElement("a");
@@ -18419,7 +18431,7 @@ function cwColVal(r, k){
   if(k==="descr") return r.planned ? "" : (r.descr||"");
   if(k==="cause") return r.planned ? "" : (r.cause||"");
   if(k==="wo") return r.woNumber || ""; /* CM_PLAIN_V1 */
-  if(k==="by") return r.raisedBy || r.by || "";
+  if(k==="by") return r.by || "";   /* Rickie 04.11: the responsible person, not 1C's initiator (the organisation) */
   return r[k] || "";
 }
 function cwAll(){
@@ -18611,7 +18623,7 @@ function renderCmWoTab(){
         <td class="cwc2">${r.planned ? `<span class="muted">${esc(t("cw_is_planned"))}</span>` : c2(r.defectType)}</td>
         <td class="cwc2">${r.planned ? `<span class="muted">—</span>` : c2(r.descr)}</td>
         <td class="cwc2">${r.planned ? `<span class="muted">—</span>` : c2(r.cause)}</td>
-        <td title="${esc(t("cw_st_"+cwStage(r)))}"><span class="cwst ${cwStage(r)}">${r.status?esc(r.status):"—"}</span></td><td class="mono">${r.woNumber?esc(r.woNumber):(cwStage(r)==="prog"?`<span class="cwnowo">${esc(t("cw_nowo"))}</span>`:`<span class="muted">—</span>`)}</td><td title="${esc(r.raisedBy?t("cw_by_tip",{p:r.by||"—"}):"")}" data-1c>${cell(r.raisedBy||r.by)}</td></tr>`).join("") /* CM_PLAIN_V1 */
+        <td title="${esc(t("cw_st_"+cwStage(r)))}"><span class="cwst ${cwStage(r)}">${r.status?esc(r.status):"—"}</span></td><td class="mono">${r.woNumber?esc(r.woNumber):(cwStage(r)==="prog"?`<span class="cwnowo">${esc(t("cw_nowo"))}</span>`:`<span class="muted">—</span>`)}</td><td>${cell(r.by)}</td></tr>`).join("") /* CM_PLAIN_V1 */
     : `<tr><td colspan="${CW_COLS.length}" class="empty">${esc(t("cw_none"))}</td></tr>`;
   /* Date · Asset · Defect no. · Equipment type · System · Priority · Defect
      type · Description · Cause · Status · Raised by — the description takes
@@ -19028,11 +19040,11 @@ document.querySelector(".lang").addEventListener("click",e=>{
   setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 })();
 </script>
-<script src="drive.js?v=585"></script>
-<script src="sync-adapter.js?v=585"></script>
-<script src="report.js?v=585"></script>
-<script src="reliability.js?v=585"></script>
-<script src="day-summary.js?v=585"></script>
+<script src="drive.js?v=586"></script>
+<script src="sync-adapter.js?v=586"></script>
+<script src="report.js?v=586"></script>
+<script src="reliability.js?v=586"></script>
+<script src="day-summary.js?v=586"></script>
 <script>
 /* THE CLOSED FILTER SAYS WHAT IS CHOSEN. A dropdown narrower than its option
    text ellipsises ("All t…", audit of 2026-10-01). Between 1331 and 1500 px

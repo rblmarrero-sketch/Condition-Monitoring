@@ -6464,3 +6464,11 @@ summary first · PDF report · Reliability, `cm_rpt_view`) and Data & Sync two (
 `cm_sync_view`); `window.cmViews(tab)`, views not chosen get `.cmvHide`. A test that clicks the PDF form or the
 limits panel sets the view first. The Plan vs Actual badge is gone; badges are for late work only.
 
+
+**DEFECTS RAISED SHOWS WHO IS RESPONSIBLE; THE ISO PANEL NAMES EVERY CODE (build 586, Rickie 04.11).** The "Raised by"
+column read 1C's "Initiator WR", which holds the organisation ("ГДК Баимская") on every one of 195 defects. It is
+"Responsible" now and reads `by` — 1C's "Responsible person", matched to the CM team (cell, column filter, sort,
+CSV `responsible`, Definitions). `raisedBy` stays in the data, unused. Failure Analysis → ISO 14224 printed "2.4"
+with no name: the magnetic-plug / filter-cut defects (mp-fc.js, DT14/DT15) are coded by failure MECHANISM (Table
+B.2: 2.4 Wear, 2.5 Breakage, 5.1 Blockage, 5.2 Contamination) while the rest carry failure-MODE codes; `ISO_MECH`
+names Table B.2 and the panel looks there when the mode table has no entry.

@@ -155,7 +155,7 @@ const cells = p => p.$$eval('#cwList tbody tr', rs => rs.map(r =>
     want: t('cw_c_descr'), cause: t('cw_c_cause'), by: t('cw_c_by') }));
   ok('  every column has a heading — as many headings as cells', hdr.ths.length === hdr.tds && hdr.tds > 0,
      hdr.ths.length + ' headings over ' + hdr.tds + ' cells');
-  ok('  and the heading over the description is "' + hdr.want + '", the cause\'s is the cause\'s, the last is Raised by',
+  ok('  and the heading over the description is "' + hdr.want + '", the cause\'s is the cause\'s, the last is Responsible',
      hdr.ths[7] === hdr.want && hdr.ths[8] === hdr.cause && hdr.ths[11] === hdr.by, hdr.ths.join(' | '));
   ok('  including the system component the office asked to see',
      tk[4] === 'DRS.FDR', tk[4]);
