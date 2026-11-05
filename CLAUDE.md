@@ -5296,7 +5296,7 @@ the 1C type name in the Plan vs Actual definition is now a RU / EN pair, GET in 
 edit hint names the keys in Russian, and the report language option "Русский" carries lang="ru" data-1c as "English" already did.
 
 **THE OFFICE PAGES TAKE WORK ORDER MANAGER'S LAYOUT UNDER /cm/ (build 592, CM_WOMLOOK_V1, Rickie 05.11 21:10 "look more of WO
-Manager or Action Tracker", mock-up "Go" 22:13).** Measured against both: the navy band started right of the side menu, a strip
+Manager or Action Tracker", mock-up "Go" 22:31).** Measured against both: the navy band started right of the side menu, a strip
 with a second search box, "392 new from Drive" and v591 sat between the band and the page, the filter bar was a card inside the
 page under a 24 px page title, the KPI tiles cut their labels and lines ("OPEN MAINTENANCE…", "stop or repair…"), card titles
 had a copper bar and the menu counts were red / amber pills. `<style id="cmWomLook">` + `cmWomLookJs` at the end of both pages
@@ -5309,7 +5309,10 @@ section's first row (`order:-1`), full width, pinned (`position:sticky`); the "S
 and the count is shown on the tab heading (`.cmwCount`, a copy of `#cmFbN`; hidden on the 1C tabs as the count is). Tab
 heading 17 px; `#kpiInsp` hidden (the band chip says the same). KPI tiles are cards (12 px corners, no top bar), labels and
 lines not clamped, the Overview's 8 four a row (eight from 1700 px). Card titles plain, `.nb.warn` grey (red stays for late
-work). Defects raised: Raised and Asset columns 100 / 72 px (a full date and a 5-letter unit never cut). Tests: new
+work). Defects raised: Raised, Asset and Defect no columns 100 / 72 / 100 px and marked `data-keep`, which the desk fit in
+`cmCardify` now treats like a button column (never shrunk): with the 232 px menu the fit shrank them 14 % and cut the date. A
+strip of six cards (dashboard-next's Overview) is two rows of three (six from 1700 px), so the tag beside a number
+("all owners", "no owner") is never cut. Tests: new
 `tests/cmwomlook.cjs` (both pages, EN / RU, 1440 / 1920 / 390); `tests/sitestd.cjs` now expects the menu under the band,
 `tests/cmfluid.cjs` measures the cards without the full-width bar row. A desk-to-phone resize leaves 4 px of sideways scroll
 on build 591 too; not changed here.

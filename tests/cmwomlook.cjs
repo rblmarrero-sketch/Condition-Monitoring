@@ -1,4 +1,4 @@
-/* CM_WOMLOOK_V1 (build 592, Rickie 05.11.2026 21:10 "look more of WO Manager or Action Tracker", mock-up "Go" 22:13).
+/* CM_WOMLOOK_V1 (build 592, Rickie 05.11.2026 21:10 "look more of WO Manager or Action Tracker", mock-up "Go" 22:31).
    Under /cm/, desk widths: the band runs the full width and the side menu sits under it with a navy title block; no strip
    between band and page (the one search box is in the filter bar and still narrows the lists; build number in the footer);
    the filter bar is the first row under the band (one line at 1920, and at 1440 in English); the tab heading carries the

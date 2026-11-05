@@ -21326,7 +21326,7 @@ function renderCmWoTab(){
      type · Description · Cause · Status · Raised by — the description takes
      what the others leave. */
   const CW_W=cwWidths(box.clientWidth); /* CM_PLAIN_V1: + WO column, wider Raised by; CM_FLUID_V1: grows with the screen */
-  const CW_COLG=`<colgroup>${CW_W.map(w=>w?`<col style="width:${w}px">`:"<col>").join("")}</colgroup>`;
+  const CW_COLG=`<colgroup>${CW_W.map((w,i)=>w?`<col style="width:${w}px"${i<3?' data-keep="1"':""}>`:"<col>").join("")}</colgroup>`;   /* CM_WOMLOOK_V1: date, unit and defect number are never shrunk by the desk fit */
   box.innerHTML = `<div class="tblwrap"><table class="grid cwtbl" style="min-width:${CW_W.reduce((a,b)=>a+b,0)+140}px">${CW_COLG}<thead>${thead}</thead><tbody>${tbody}</tbody></table></div>`
     /* The pager's own strip, and the count in the words every other table on
        this page uses — "{n} matching · showing a–b". Written once in t(),
@@ -21888,7 +21888,7 @@ document.querySelector(".lang").addEventListener("click",e=>{
        whole text on hover). Only what still does not fit becomes cards. */
     if(innerWidth>900){
       /* a column holding buttons keeps its width (a button is never cut); every words column keeps at least 120px */
-      const row1=t.tBodies[0]&&t.tBodies[0].rows[0], ctl=i=>!!(row1&&row1.cells[i]&&row1.cells[i].querySelector("button,input,select,a.minibtn"));
+      const row1=t.tBodies[0]&&t.tBodies[0].rows[0], ctl=i=>!!((cols[i]&&cols[i].dataset.keep==="1")||(row1&&row1.cells[i]&&row1.cells[i].querySelector("button,input,select,a.minibtn")));   /* CM_WOMLOOK_V1: data-keep columns hold their width too */
       let fixed=0, locked=0, words=0;
       cols.forEach((c,i)=>{ const w=parseFloat(c.dataset.w0); if(!w) words++; else if(ctl(i)) locked+=w; else fixed+=w; });
       const r=fixed?(W-2-words*120-locked)/fixed:0;
@@ -22286,7 +22286,7 @@ html.cmStd #stdFoot{max-width:none;margin-right:0;padding-left:var(--cmPadB);pad
 html.cmStd #filterBar.cmfbHost,html.cmStd #fMoreRow{margin-left:0;margin-right:0;}
 </style>
 <style id="cmWomLook">
-/* CM_WOMLOOK_V1 (Rickie 05.11.2026 21:10 "still not happy with the re-style ... look more of WO Manager or Action Tracker", mock-up "Go" 22:13).
+/* CM_WOMLOOK_V1 (Rickie 05.11.2026 21:10 "still not happy with the re-style ... look more of WO Manager or Action Tracker", mock-up "Go" 22:31).
    Under /cm/ only (html.cmStd), desk widths only: the phone layout is unchanged.
    - the navy band runs the full width and the side menu sits UNDER it, with a navy title block (Work Order Manager's layout);
    - no strip between the band and the page: the one search box is in the filter bar (it still jumps to a unit / action, and it
@@ -22326,6 +22326,7 @@ html.cmStd .pagehd.cmtpl .cmwCount{font:13px/1.4 'IBM Plex Mono',ui-monospace,mo
 html.cmStd body.fbUnit .cmwCount{display:none;}
 html.cmStd main .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;background:transparent;border:0;margin-bottom:16px;}
 html.cmStd main #kpis:has(>:nth-child(7)){grid-template-columns:repeat(4,minmax(0,1fr));}
+html.cmStd main #kpis:has(>:nth-child(6)):not(:has(>:nth-child(7))){grid-template-columns:repeat(3,minmax(0,1fr));}   /* CM_WOMLOOK_V1: six cards = two rows of three, so a tag beside the number is never cut */
 html.cmStd #kpiInsp{display:none;}
 html.cmStd main .kpi,html.cmStd main .kpis>.tile{border:1px solid var(--border);border-radius:12px;background:var(--surface);padding:14px 16px;box-shadow:none;}
 html.cmStd main .kpi::before,html.cmStd main .kpis>.tile::before{display:none;}
@@ -22338,7 +22339,7 @@ html.cmStd main .section{border-radius:12px;}
 @media (min-width:1101px){html.cmStd{--sbw:232px;}}
 @media (min-width:821px) and (max-width:1100px){html.cmStd nav.tabs .navgrp{font-size:0;line-height:0;height:1px;margin:8px 6px;padding:0;background:var(--border);overflow:hidden;}}
 html.cmStd body.railshut nav.tabs .navgrp{font-size:0;line-height:0;height:1px;margin:8px 6px;padding:0;background:var(--border);overflow:hidden;}
-@media (min-width:1700px){html.cmStd main #kpis:has(>:nth-child(7)){grid-template-columns:repeat(8,minmax(0,1fr));}}
+@media (min-width:1700px){html.cmStd main #kpis:has(>:nth-child(7)){grid-template-columns:repeat(8,minmax(0,1fr));}html.cmStd main #kpis:has(>:nth-child(6)):not(:has(>:nth-child(7))){grid-template-columns:repeat(6,minmax(0,1fr));}}
 html.cmStd{--cmw-rail:#f5f5f3;--cmw-chip:#e9ebee;}
 @media (prefers-color-scheme:dark){html.cmStd:not([data-theme="light"]){--cmw-rail:var(--surface);--cmw-chip:var(--surface-2);}}
 html.cmStd[data-theme="dark"]{--cmw-rail:var(--surface);--cmw-chip:var(--surface-2);}
