@@ -6500,3 +6500,16 @@ title (`.secthd>h2`, `.section>h2`); table headings 11 px grey uppercase on ligh
 and the main button navy (`--cmsl-on`, #3b6290 in dark so white text still reads); "Data sources" in the site
 band an outline pill. Dark keeps its own colours (and its dark rail). Grades, overdue and priority colours are
 untouched. dashboard-next's 44 px column-filter boxes are untouched (27.10 decision).
+
+**ONE PAGE COLUMN ON ANY SCREEN (build 591, CM_FLUID_V1, Rickie 05.11 12:20 "still feels different from other pages ... adjust
+to any monitor or laptop").** Under /cm/ (`html.cmStd`), `<style id="cmFluid">` on both office pages makes the band's title, the
+search row, the filter bar, every card and the footer start on one left edge (the side menu + a 24 px gutter; 20 px under 1280,
+12 px on a phone) and end on the right gutter, with no width cap. Before: main capped at 1680 px and anchored left, the band's
+text in the template's 1440 px centred column, so at 1920 the title sat 140 px right of the cards and a 2560 screen had 640 px
+empty on the right. The filter bar is a card in the column (it was a strip from the menu to the screen edge). Padding in % is of
+the containing block, so main / header.app / footer subtract `--sbw` and the band's inner row does not. Defects raised: the
+column widths come from `cwWidths(box width)` - the compact CM_PLAIN_V1 widths on a laptop, and on a wider screen the room above
+a 520 px description goes first to the cut columns; equipment type, priority and responsible print on two lines (`.cw2`) instead
+of an ellipsis; a resize of 60 px or more redraws the table; the stage chips sit on the Export CSV row. The site template does the
+same for every page from SITE_STD_V1 v1.9 (askpi-site). `tests/cmfluid.cjs` measures it at 1280 / 1536 / 1920 / 2560, EN and RU,
+Overview and Defects raised, and fails 72 assertions on build 590.
