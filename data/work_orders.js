@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-05T06:07:50+00:00",
+  "generated": "2026-11-05T06:22:53+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -2062,8 +2062,8 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-10-13",
       "detected": "2026-10-13",
-      "planStart": "2026-11-10",
-      "closed": null,
+      "planStart": "2026-11-03",
+      "closed": "2026-11-03",
       "asset": "EX023",
       "defect": "DD-00014672",
       "requestNo": "DD-00014672",
@@ -2074,7 +2074,7 @@ window.CM_WO_DATA = {
       "cause": "Усталостная трещина",
       "causeFrom": "wo",
       "descr": "Состояние ремня генератора не удовлетворительное.",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "by": "Zhomart",
       "byFull": "Zhomart Khasenov",
       "raisedBy": "ГДК Баимская",
@@ -88284,15 +88284,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-03",
-      "planStartDt": "2026-11-03T00:00:00",
-      "planEnd": "2026-11-04",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "planStartDt": "2026-11-03T11:05:00",
+      "planEnd": "2026-11-03",
+      "actualStart": "2026-11-03",
+      "actualStartDt": "2026-11-03T11:05:00",
+      "actualEnd": "2026-11-03"
     },
     {
       "equip": "TK109",
