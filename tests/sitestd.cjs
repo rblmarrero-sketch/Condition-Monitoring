@@ -8,7 +8,7 @@
        Data sources button are kept, the EN/RU buttons are handed over;
      · the site's one language (askpi_lang) wins over the page's own (cm_dash_lang), both ways;
      · the band's theme switch sets the page's data-theme;
-     · the side menu starts under the site menu (--std-top), not under it;
+     · the side menu starts under the site menu and, since build 592 (CM_WOMLOOK_V1), under the band too;
      · no page errors.
    Run: node tests/sitestd.cjs */
 const { chromium } = require(require('./pw.cjs'));
@@ -50,13 +50,13 @@ const srv = http.createServer((q, r) => {
     ok('under /cm/ std.js and std.css are loaded', hits.includes('/site/std.js') && hits.includes('/site/std.css'), hits.join(' '));
     const st = await p.evaluate(() => ({ cls: document.documentElement.classList.contains('cmStd'), page: window.__std && window.__std.page,
       keep: window.__std && window.__std.keep, el: window.__std && window.__std.lang && window.__std.lang.el, lang: document.documentElement.lang,
-      top: getComputedStyle(document.querySelector('nav.tabs')).top, themeBtn: getComputedStyle(document.getElementById('themeBtn')).display }));
+      top: getComputedStyle(document.querySelector('nav.tabs')).top, bandB: document.getElementById('stdBand') ? document.getElementById('stdBand').getBoundingClientRect().bottom : 0, themeBtn: getComputedStyle(document.getElementById('themeBtn')).display }));
     ok('the site standard is applied (page "cm")', st.cls && st.page === 'cm', JSON.stringify(st.page));
     ok('the source chip and Data sources stay the page\'s own', JSON.stringify(st.keep) === '["#srcChip","#dataBtn"]', JSON.stringify(st.keep));
     ok('the page\'s EN/RU buttons are handed to the band', st.el === 'header.app .lang', st.el);
     ok('the site language wins: askpi_lang ru over cm_dash_lang en', st.lang === 'ru', st.lang);
     ok('and the page remembers it', await p.evaluate(() => localStorage.getItem('cm_dash_lang')) === 'ru');
-    ok('the side menu starts under the site menu', st.top === '50px', st.top);
+    ok('the side menu starts under the site menu and the band (CM_WOMLOOK_V1: under the band, as WO Manager)', st.top === (st.bandB > 0 ? Math.round(st.bandB) : 50) + 'px', st.top + ' / band ' + st.bandB);
     ok('the page\'s own theme button gives way to the band\'s', st.themeBtn === 'none', st.themeBtn);
     await p.evaluate(() => window.__std.theme.set('dark'));
     ok('the band\'s Dark sets the page theme', await p.evaluate(() => document.documentElement.getAttribute('data-theme') === 'dark' && window.__std.theme.get() === 'dark'));
