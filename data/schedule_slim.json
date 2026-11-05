@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-05T22:12:35+00:00",
+  "generated": "2026-11-05T22:27:50+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -518,16 +518,6 @@
       }
     ],
     "TK118": [
-      {
-        "wo": "WO-020838",
-        "hours": 1000,
-        "types": [
-          "INSP",
-          "MP"
-        ],
-        "plan": "2026-11-04",
-        "priority": "P3 Planned (PM)"
-      },
       {
         "wo": "WO-021296",
         "hours": 250,
@@ -2418,24 +2408,6 @@
       "completed": ""
     },
     {
-      "wo": "WO-020891",
-      "equip": "DZ006",
-      "cls": "DOZ",
-      "comp": "",
-      "desc": "500h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-05",
-      "type": "500 Hours service Planned",
-      "hours": 500,
-      "plan": "2026-11-05",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
       "wo": "WO-021033",
       "equip": "DZ008",
       "cls": "DOZ",
@@ -2634,24 +2606,6 @@
       "completed": ""
     },
     {
-      "wo": "WO-020923",
-      "equip": "EX010",
-      "cls": "EXC",
-      "comp": "",
-      "desc": "250h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-04",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-11-04",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
       "wo": "WO-021090",
       "equip": "EX018",
       "cls": "EXC",
@@ -2716,12 +2670,12 @@
       "type": "250 Hours service Planned",
       "hours": 250,
       "plan": "2026-11-04",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-04"
     },
     {
       "wo": "WO-021091",
@@ -2788,12 +2742,12 @@
       "type": "1000 Hours service Planned",
       "hours": 1000,
       "plan": "2026-11-04",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-05"
     },
     {
       "wo": "WO-021085",
