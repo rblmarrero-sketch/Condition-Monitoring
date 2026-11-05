@@ -5317,6 +5317,17 @@ strip of six cards (dashboard-next's Overview) is two rows of three (six from 17
 `tests/cmfluid.cjs` measures the cards without the full-width bar row. A desk-to-phone resize leaves 4 px of sideways scroll
 on build 591 too; not changed here.
 
+
+**DASHBOARD-NEXT TAKES THE MOCK-UP'S LOOK TOO (build 594, CM_NEXTLOOK_V1, Rickie 06.11 10:00 "your mock up is not the same as the
+actual").** The site's Condition monitoring button opens `/cm/dashboard-next/`; the CM_WOMLOOK_V1 mock-up was drawn on `dashboard/`.
+`<style id="cmNextLook">` (dashboard-next only, under /cm/, 821 px up): the side menu shows its icons, the KPI strip is three cards a
+row at every desk width with a 30 px number and no tag beside it, the trend key shows its colour swatches (`#trendKey i` had no
+style outside `.secthd`, so the key was words with no colours), the severity mix is a compact ruled list, and Defects raised shows
+one card per person (`cw_k_tap`) beside the total. `cwWidths` keeps 400 px for the description (was 520) and, past every column's
+maximum, gives a wide screen's rest to equipment type, system component, defect type and cause, the description stopping at
+~700 px; `fleetColgroup` widens Inspected, Owner and Required action 1.6x from 1700 px. dashboard-next keeps its own features
+(Generate report, Monthly / Weekly, Severity mix, Columns).
+
 ---
 
 ## Secrets

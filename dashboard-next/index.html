@@ -5141,23 +5141,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=593"></script>
+<script src="../data/magnetic_plug.js?v=594"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=593"></script>
-<script src="../mobile/hme.js?v=593"></script>
-<script src="../mobile/mp-fc.js?v=593"></script>
-<script src="../mobile/rtw.js?v=593"></script>
-<script src="../mobile/hme-cascade.js?v=593"></script>
-<script src="../mobile/temp-limits.js?v=593"></script>
+<script src="../data/work_orders.js?v=594"></script>
+<script src="../mobile/hme.js?v=594"></script>
+<script src="../mobile/mp-fc.js?v=594"></script>
+<script src="../mobile/rtw.js?v=594"></script>
+<script src="../mobile/hme-cascade.js?v=594"></script>
+<script src="../mobile/temp-limits.js?v=594"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=593"></script>
-<script src="../mobile/normalize.js?v=593"></script>
-<script src="../mobile/terms.js?v=593"></script>
+<script src="../mobile/assets.js?v=594"></script>
+<script src="../mobile/normalize.js?v=594"></script>
+<script src="../mobile/terms.js?v=594"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -5176,21 +5176,21 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=593"></script>
-<script src="../mobile/edits.js?v=593"></script>
-<script src="../mobile/due.js?v=593"></script>
-<script src="../mobile/wear.js?v=593"></script>
-<script src="../mobile/wear-map.js?v=593"></script>
-<script src="../mobile/lube.js?v=593"></script>
-<script src="../mobile/lube-overrides.js?v=593"></script>
-<script src="../mobile/lube2027.js?v=593"></script>
-<script src="../mobile/lube-tds.js?v=593"></script>
-<script src="../dashboard/lube-master.js?v=593"></script>
-<script src="../dashboard/wear-limits.js?v=593"></script>
+<script src="../mobile/grade.js?v=594"></script>
+<script src="../mobile/edits.js?v=594"></script>
+<script src="../mobile/due.js?v=594"></script>
+<script src="../mobile/wear.js?v=594"></script>
+<script src="../mobile/wear-map.js?v=594"></script>
+<script src="../mobile/lube.js?v=594"></script>
+<script src="../mobile/lube-overrides.js?v=594"></script>
+<script src="../mobile/lube2027.js?v=594"></script>
+<script src="../mobile/lube-tds.js?v=594"></script>
+<script src="../dashboard/lube-master.js?v=594"></script>
+<script src="../dashboard/wear-limits.js?v=594"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=593"></script>
-<script src="../mobile/machine-photos.js?v=593"></script>
+<script src="../mobile/upload-defaults.js?v=594"></script>
+<script src="../mobile/machine-photos.js?v=594"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -5199,17 +5199,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=593"></script>
-<script src="../mobile/get.js?v=593"></script>
-<script src="../mobile/points.js?v=593"></script>
-<script src="../mobile/uc-points.js?v=593"></script>
-<script src="../mobile/inspect-guide.js?v=593"></script>
-<script src="../mobile/get-figs.js?v=593"></script>
-<script src="../mobile/body-points.js?v=593"></script>
-<script src="../mobile/body-map.js?v=593"></script>
-<script src="../mobile/jspdf.umd.min.js?v=593"></script>
-<script src="../mobile/html2canvas.min.js?v=593"></script>
-<script src="../mobile/report-core.js?v=593"></script>
+<script src="../mobile/machine-fig.js?v=594"></script>
+<script src="../mobile/get.js?v=594"></script>
+<script src="../mobile/points.js?v=594"></script>
+<script src="../mobile/uc-points.js?v=594"></script>
+<script src="../mobile/inspect-guide.js?v=594"></script>
+<script src="../mobile/get-figs.js?v=594"></script>
+<script src="../mobile/body-points.js?v=594"></script>
+<script src="../mobile/body-map.js?v=594"></script>
+<script src="../mobile/jspdf.umd.min.js?v=594"></script>
+<script src="../mobile/html2canvas.min.js?v=594"></script>
+<script src="../mobile/report-core.js?v=594"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -6304,7 +6304,7 @@ const I18N={
   cw_sub:"Defect work orders raised by {who}, from {d} onward. Read from 1C's own export — the date, the number, the type, the cause and the status are as 1C holds them.",
   cw_h2:"Defect work orders",
   cw_h2sub:"One row per defect. 1C repeats a work order per line item, so a defect with two parts booked against it is shown once.",
-  cw_k_total:"Defects raised", cw_k_total_s:"since {d}", cw_k_person_s:"Press a name to show only theirs.", cw_k_people:"By person",
+  cw_k_total:"Defects raised", cw_k_total_s:"since {d}", cw_k_person_s:"Press a name to show only theirs.", cw_k_people:"By person", cw_k_tap:"tap to show only theirs",
   cw_status:"Status", cw_status_all:"Any status", cw_find:"Search", cw_findph:"unit, defect no, cause",
   cw_showplanned:"Show planned services too", cw_csv:"Export CSV",
   cw_is_planned:"planned service",
@@ -7310,7 +7310,7 @@ const I18N={
   cw_sub:"Наряды по дефектам, заявленные: {who}, начиная с {d}. Данные из выгрузки 1С — дата, номер, тип, причина и статус приведены так, как их хранит 1С.",
   cw_h2:"Наряды по дефектам",
   cw_h2sub:"Одна строка на дефект. 1С повторяет наряд по каждой позиции, поэтому дефект с двумя позициями показан один раз.",
-  cw_k_total:"Заявлено дефектов", cw_k_total_s:"с {d}", cw_k_person_s:"Нажмите на имя, чтобы показать только его.", cw_k_people:"По сотрудникам",
+  cw_k_total:"Заявлено дефектов", cw_k_total_s:"с {d}", cw_k_person_s:"Нажмите на имя, чтобы показать только его.", cw_k_people:"По сотрудникам", cw_k_tap:"нажмите, чтобы показать только его",
   cw_status:"Статус", cw_status_all:"Любой статус", cw_find:"Поиск", cw_findph:"ед., № дефекта, причина",
   cw_showplanned:"Показывать и плановые ТО", cw_csv:"Экспорт CSV",
   cw_is_planned:"плановое ТО",
@@ -8746,7 +8746,8 @@ const FLEET_MQ = window.matchMedia ? window.matchMedia("(max-width:1500px)") : n
 function fleetColgroup(cs){
   const narrow = FLEET_MQ && FLEET_MQ.matches;
   return `<colgroup>${cs.filter(([,,cl])=>!(narrow && /\bhide-m\b/.test(cl||""))).map(([k])=>{
-    const w=(lang==="ru" && FLEET_W_RU[k]) || FLEET_W[k];
+    let w=(lang==="ru" && FLEET_W_RU[k]) || FLEET_W[k];
+    if(w && innerWidth>=1700 && (k==="date"||k==="owner"||k==="act")) w=Math.round(w*1.6);   /* CM_NEXTLOOK_V1: a wide screen gives the inspector and the owner room before the defect column */
     return w ? `<col style="width:${w}px">` : "<col>"; }).join("")}</colgroup>`;
 }
 if(FLEET_MQ && FLEET_MQ.addEventListener) FLEET_MQ.addEventListener("change", ()=>{ try{ if(CUR_TAB==="overview") renderFleet(); }catch(e){} });
@@ -21160,10 +21161,11 @@ function cwRows(noStage){
    to the width its usual text needs, then the description takes what is left. */
 function cwWidths(avail){
   const base=[100,72,100,104,100,84,108,0,104,92,84,110], max=[104,80,112,170,190,140,190,0,180,112,120,180];   /* CM_WOMLOOK_V1: a full date and a 5-letter unit never cut */
-  const sum=base.reduce((a,b)=>a+b,0); let extra=(avail||0)-sum-520-24;
+  const sum=base.reduce((a,b)=>a+b,0); let extra=(avail||0)-sum-400-24;   /* CM_NEXTLOOK_V1: the description keeps 400 px before the cut columns grow (was 520) */
   if(extra<=0) return base;
   const w=base.slice(); const need=max.map((m,i)=>Math.max(0,m-base[i])); const tot=need.reduce((a,b)=>a+b,0);
   const f=Math.min(1,extra/tot); for(let i=0;i<w.length;i++) w[i]=Math.round(base[i]+need[i]*f);
+  const more=extra-tot-300; if(more>0){ const sh=[0,0,0,.15,.3,0,.3,0,.25,0,0,0]; for(let i=0;i<w.length;i++) w[i]+=Math.round(more*sh[i]); }   /* CM_NEXTLOOK_V1: on a wide screen the description stops at ~700 px and the cut columns get the rest */
   return w;
 }
 let cwFluidW=0; window.addEventListener("resize",()=>{ const b=$("cwList"); if(!b||!b.offsetParent) return;
@@ -21253,7 +21255,7 @@ function renderCmWoTab(){
          <span class="s">${esc(t("cw_k_total_s",{d:D.cmSince||"—"}))}</span></div>`
     + `<div class="tile cwpeople"><div class="k" data-i18n="cw_k_people">${esc(t("cw_k_people"))}</div>
         <div class="cwplist">` + Object.keys(perSorted).map(n=>
-      `<button type="button" class="cwpbtn${cwWho===n?" on":""}" data-cwwho="${esc(n)}">
+      `<button type="button" class="cwpbtn${cwWho===n?" on":""}" data-cwwho="${esc(n)}" data-tap="${esc(t("cw_k_tap"))}">
          <span data-1c>${esc(n)}</span><span class="n">${per[n]}</span></button>`).join("")
       + `</div><div class="s">${esc(t("cw_k_person_s"))}</div></div>`;
   if($("cwKpis")) $("cwKpis").querySelectorAll("[data-cwwho]").forEach(b=>
@@ -21805,11 +21807,11 @@ document.querySelector(".lang").addEventListener("click",e=>{
   setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 })();
 </script>
-<script src="../dashboard/drive.js?v=593"></script>
-<script src="../dashboard/sync-adapter.js?v=593"></script>
-<script src="../dashboard/report.js?v=593"></script>
-<script src="../dashboard/reliability.js?v=593"></script>
-<script src="../dashboard/day-summary.js?v=593"></script>
+<script src="../dashboard/drive.js?v=594"></script>
+<script src="../dashboard/sync-adapter.js?v=594"></script>
+<script src="../dashboard/report.js?v=594"></script>
+<script src="../dashboard/reliability.js?v=594"></script>
+<script src="../dashboard/day-summary.js?v=594"></script>
 <script>
 /* THE CLOSED FILTER SAYS WHAT IS CHOSEN. A dropdown narrower than its option
    text ellipsises ("All t…", audit of 2026-10-01). Between 1331 and 1500 px
@@ -22343,6 +22345,34 @@ html.cmStd body.railshut nav.tabs .navgrp{font-size:0;line-height:0;height:1px;m
 html.cmStd{--cmw-rail:#f5f5f3;--cmw-chip:#e9ebee;}
 @media (prefers-color-scheme:dark){html.cmStd:not([data-theme="light"]){--cmw-rail:var(--surface);--cmw-chip:var(--surface-2);}}
 html.cmStd[data-theme="dark"]{--cmw-rail:var(--surface);--cmw-chip:var(--surface-2);}
+</style>
+<style id="cmNextLook">
+/* CM_NEXTLOOK_V1 (build 594, Rickie 06.11.2026 10:00 "your mock up is not the same as the actual" -> restyle dashboard-next):
+   the site's Condition monitoring button opens THIS page; the mock-up approved on 05.11 was drawn on dashboard/. Under /cm/,
+   desk widths: the side menu carries its icons, the KPI strip is three cards a row like the mock-up's four (number 30 px, no
+   tag beside it), the trend key shows its colours, the severity mix is a compact list, and Defects raised shows one card per
+   person. dashboard-next keeps its own features (Generate report, Monthly / Weekly, Severity mix, column chooser). */
+@media (min-width:821px){
+html.cmStd nav.tabs button svg{display:block;}
+html.cmStd main #kpis,html.cmStd main #kpis:has(>:nth-child(6)):not(:has(>:nth-child(7))){grid-template-columns:repeat(3,minmax(0,1fr));}
+html.cmStd main #kpis .kpi .v{font-size:30px;font-weight:600;margin-top:6px;}
+html.cmStd main #kpis .kpi .hd>.tag{display:none;}
+html.cmStd #trendKey{gap:6px 16px;font-size:12px;color:var(--muted);align-items:center;}
+html.cmStd #trendKey>span{display:inline-flex;align-items:center;}
+html.cmStd #trendKey i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;background:var(--c);}
+html.cmStd .sevmix{gap:0;}
+html.cmStd .sevmixrow{min-height:34px;padding:4px 10px;border:0;border-bottom:1px solid var(--border);border-radius:0;background:transparent;}
+html.cmStd .sevmixrow:last-child{border-bottom:0;}
+html.cmStd .sevmixrow.on{border-radius:8px;}
+html.cmStd #cwKpis{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,4fr);gap:12px;}
+html.cmStd #cwKpis .cwpeople{border:0;background:transparent;padding:0;box-shadow:none;}
+html.cmStd #cwKpis .cwpeople>.k,html.cmStd #cwKpis .cwpeople>.s{display:none;}
+html.cmStd #cwKpis .cwplist{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:0;height:100%;}
+html.cmStd #cwKpis .cwpbtn{display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:6px;min-height:0;height:100%;padding:14px 16px;border-radius:12px;background:var(--surface);text-align:left;}
+html.cmStd #cwKpis .cwpbtn>span[data-1c]{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);}
+html.cmStd #cwKpis .cwpbtn .n{order:2;font:600 30px/1.05 'IBM Plex Mono',ui-monospace,monospace;color:var(--ink);}
+html.cmStd #cwKpis .cwpbtn::after{content:attr(data-tap);order:3;font-size:13px;color:var(--muted);}
+}
 </style>
 <script id="cmWomLookJs">
 /* CM_WOMLOOK_V1 - the few moves the layout above needs (under /cm/ only; the page works the same without them). */
