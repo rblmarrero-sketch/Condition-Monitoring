@@ -5295,7 +5295,7 @@ std.js/std.css v1.7 - refresh it when the site kit changes). Live numbers: askpi
 the 1C type name in the Plan vs Actual definition is now a RU / EN pair, GET in Russian prose is "коронки и ножи", the Russian
 edit hint names the keys in Russian, and the report language option "Русский" carries lang="ru" data-1c as "English" already did.
 
-**THE OFFICE PAGES TAKE WORK ORDER MANAGER'S LAYOUT UNDER /cm/ (build 592, CM_WOMLOOK_V1, Rickie 05.11 21:10 "look more of WO
+**THE OFFICE PAGES TAKE WORK ORDER MANAGER'S LAYOUT UNDER /cm/ (builds 592–593, CM_WOMLOOK_V1, Rickie 05.11 21:10 "look more of WO
 Manager or Action Tracker", mock-up "Go" 22:31).** Measured against both: the navy band started right of the side menu, a strip
 with a second search box, "392 new from Drive" and v591 sat between the band and the page, the filter bar was a card inside the
 page under a 24 px page title, the KPI tiles cut their labels and lines ("OPEN MAINTENANCE…", "stop or repair…"), card titles
