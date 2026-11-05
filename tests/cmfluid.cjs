@@ -46,7 +46,7 @@ const srv = http.createServer((q, r) => {
           const L = {}; for (const k in parts) if (vis(parts[k])) L[k] = Math.round(R(parts[k]).left);
           const right = {}; for (const k of ['bar']) if (vis(parts[k])) right[k] = Math.round(innerWidth - R(parts[k]).right);
           { const sd = R(document.querySelector('#stdBand .std-side')), tt = R(document.querySelector('#stdBand .std-tt')); if (!sd || !tt) right.side = -1; else if (sd.top < tt.bottom - 2) right.side = Math.round(innerWidth - sd.right); }   /* wrapped under the title on a narrow band: not a right edge */
-          let cardR = 0; if (sec) for (const c of sec.querySelectorAll(':scope>*')) if (vis(c) && R(c).height > 20) cardR = Math.max(cardR, R(c).right);
+          let cardR = 0; if (sec) for (const c of sec.querySelectorAll(':scope>*')) if (vis(c) && R(c).height > 20 && c.id !== 'filterBar')   /* CM_WOMLOOK_V1 (592): the bar host is a full-width pinned row; the bar's own edge is measured as 'bar' */ cardR = Math.max(cardR, R(c).right);
           right.cards = Math.round(innerWidth - cardR);
           return { sbw: Math.round(sbw), L, right, sw: document.documentElement.scrollWidth, vw: innerWidth };
         });
