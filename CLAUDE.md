@@ -5328,6 +5328,18 @@ maximum, gives a wide screen's rest to equipment type, system component, defect 
 ~700 px; `fleetColgroup` widens Inspected, Owner and Required action 1.6x from 1700 px. dashboard-next keeps its own features
 (Generate report, Monthly / Weekly, Severity mix, Columns).
 
+
+**ONE OFFICE DASHBOARD: THE CLASSIC PAGE IS RETIRED (build 595, CM_RETIRE_V1, Rickie 06.11.2026 10:42 "we need only one dashboard
+which is the next ... old one should be retired so not confusing").** This supersedes "TWO OFFICE DASHBOARDS, BOTH PERMANENT"
+above. `/cm/dashboard-next/` is the office dashboard. `dashboard/index.html` starts with `<script id="cmRetire">`: on any host
+that is not localhost / 127.0.0.1 it `location.replace`s to `dashboard-next/`, keeping the query and the #tab, so an old bookmark
+lands on the same tab; `?classic` opens the old page on purpose. The landing page no longer links to it. Checked before
+retiring: the same eleven tabs on both, no function only the classic page has; its only ids missing from dashboard-next are the
+Failure Analysis "Reset filters" button, two read-outs in the follow-up drawer and controls dashboard-next has under other names
+(orphan photo dialog, recent reports table). The shared scripts in `dashboard/` (drive.js, report.js, reliability.js,
+day-summary.js, lube-master.js, wear-limits.js) are dashboard-next's too and stay. New work goes to dashboard-next only;
+the classic page's code is kept so the suites that load it on 127.0.0.1 still run (`tests/retire.cjs`).
+
 ---
 
 ## Secrets
