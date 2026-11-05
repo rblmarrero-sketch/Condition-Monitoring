@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-05T23:17:50+00:00",
+  "generated": "2026-11-05T23:32:43+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -2762,6 +2762,24 @@
       "cause": "",
       "pmStatus": "open",
       "completed": ""
+    },
+    {
+      "wo": "WO-020895",
+      "equip": "DZ011",
+      "cls": "DOZ",
+      "comp": "",
+      "desc": "Filter Cut / General Inspection / Undercarriage",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-03",
+      "type": "4000 Hours service Planned",
+      "hours": 4000,
+      "plan": "2026-11-03",
+      "status": "Completed",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "complete",
+      "completed": "2026-11-04"
     },
     {
       "wo": "WO-021083",
