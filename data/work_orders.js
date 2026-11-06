@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-06T09:07:37+00:00",
+  "generated": "2026-11-06T09:27:38+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -66342,6 +66342,25 @@ window.CM_WO_DATA = {
       "actualEnd": "2026-10-10"
     },
     {
+      "equip": "LS012",
+      "cls": "GEN",
+      "woNumber": "WO-021669",
+      "maintType": "1000 Hours service Planned",
+      "hours": 1000,
+      "cmLabel": "1000h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-09",
+      "planStartDt": "2026-11-09T00:00:00",
+      "planEnd": "2026-11-09",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
       "equip": "LS013",
       "cls": "GEN",
       "woNumber": "GD-002827",
@@ -68620,6 +68639,25 @@ window.CM_WO_DATA = {
       "actualStart": "2026-10-29",
       "actualStartDt": "2026-10-29T14:00:00",
       "actualEnd": "2026-10-29"
+    },
+    {
+      "equip": "LS054",
+      "cls": "GEN",
+      "woNumber": "WO-021657",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "250h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-09",
+      "planStartDt": "2026-11-09T00:00:00",
+      "planEnd": "2026-11-09",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
     },
     {
       "equip": "LS058",
