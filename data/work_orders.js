@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-06T08:17:38+00:00",
+  "generated": "2026-11-06T08:32:37+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -80657,6 +80657,27 @@ window.CM_WO_DATA = {
       "actualStart": "2026-09-24",
       "actualStartDt": "2026-09-24T05:00:00",
       "actualEnd": "2026-09-24"
+    },
+    {
+      "equip": "TK092",
+      "cls": "HT",
+      "woNumber": "WO-021672",
+      "maintType": "500 Hours service Planned",
+      "hours": 500,
+      "cmLabel": "Magnetic Plug",
+      "cmTypes": [
+        "MP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-09",
+      "planStartDt": "2026-11-09T00:00:00",
+      "planEnd": "2026-11-09",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
     },
     {
       "equip": "TK101",

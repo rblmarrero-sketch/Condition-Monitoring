@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-06T08:17:38+00:00",
+  "generated": "2026-11-06T08:32:37+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -310,6 +310,17 @@
           "MP"
         ],
         "plan": "2026-11-08",
+        "priority": "P3 Planned (PM)"
+      }
+    ],
+    "TK092": [
+      {
+        "wo": "WO-021672",
+        "hours": 500,
+        "types": [
+          "MP"
+        ],
+        "plan": "2026-11-09",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -1703,6 +1714,24 @@
       "cls": "LDR",
       "comp": "",
       "desc": "500h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-09",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-11-09",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-021672",
+      "equip": "TK092",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Magnetic Plug",
       "priority": "P3 Planned (PM)",
       "raised": "2026-11-09",
       "type": "500 Hours service Planned",
