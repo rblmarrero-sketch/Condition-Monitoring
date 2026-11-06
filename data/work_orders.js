@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-06T02:37:39+00:00",
+  "generated": "2026-11-06T02:52:41+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -2637,7 +2637,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-10-03",
       "detected": "2026-10-03",
-      "planStart": "2026-11-06",
+      "planStart": "2026-11-05",
       "closed": null,
       "asset": "TK143",
       "defect": "DD-00013971",
@@ -2688,7 +2688,7 @@ window.CM_WO_DATA = {
       "raised": "2026-10-03",
       "detected": "2026-10-03",
       "planStart": "2026-11-06",
-      "closed": null,
+      "closed": "2026-11-06",
       "asset": "TK143",
       "defect": "DD-00013969",
       "requestNo": "DD-00013969",
@@ -2699,7 +2699,7 @@ window.CM_WO_DATA = {
       "cause": "Усталостная трещина",
       "causeFrom": "wo",
       "descr": "Глубокие поперечные трещины наружного резинового слоя РВД охлаждения тормозов.",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "by": "Zhomart",
       "byFull": "Zhomart Khasenov",
       "raisedBy": "ГДК Баимская",
@@ -86098,15 +86098,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CLSD",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-05",
-      "planStartDt": "2026-11-05T00:00:00",
-      "planEnd": "2026-11-06",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "planStartDt": "2026-11-05T10:30:00",
+      "planEnd": "2026-11-05",
+      "actualStart": "2026-11-05",
+      "actualStartDt": "2026-11-05T10:30:00",
+      "actualEnd": "2026-11-05"
     },
     {
       "equip": "TK106",
@@ -104169,15 +104169,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-05",
-      "planStartDt": "2026-11-05T00:00:00",
-      "planEnd": "2026-11-06",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "planStartDt": "2026-11-05T14:00:00",
+      "planEnd": "2026-11-05",
+      "actualStart": "2026-11-05",
+      "actualStartDt": "2026-11-05T14:00:00",
+      "actualEnd": "2026-11-05"
     },
     {
       "equip": "TK123",
@@ -111215,15 +111215,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
-      "planStart": "2026-11-06",
-      "planStartDt": "2026-11-06T00:00:00",
-      "planEnd": "2026-11-07",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
+      "planStart": "2026-11-05",
+      "planStartDt": "2026-11-05T21:00:00",
+      "planEnd": "2026-11-06",
+      "actualStart": "2026-11-05",
+      "actualStartDt": "2026-11-05T21:00:00",
+      "actualEnd": "2026-11-06"
     },
     {
       "equip": "TK146",
