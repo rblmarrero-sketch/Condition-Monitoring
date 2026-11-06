@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-06T03:37:43+00:00",
+  "generated": "2026-11-06T03:58:07+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -507,17 +507,6 @@
           "MP"
         ],
         "plan": "2026-11-09",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "TK121": [
-      {
-        "wo": "WO-020873",
-        "hours": 250,
-        "types": [
-          "MP"
-        ],
-        "plan": "2026-11-06",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -1475,24 +1464,6 @@
       "completed": ""
     },
     {
-      "wo": "WO-019495",
-      "equip": "GR003",
-      "cls": "GRD",
-      "comp": "",
-      "desc": "500h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-11",
-      "type": "500 Hours service Planned",
-      "hours": 500,
-      "plan": "2026-11-11",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
       "wo": "WO-021288",
       "equip": "TK111",
       "cls": "AT",
@@ -2231,26 +2202,26 @@
       "completed": ""
     },
     {
-      "wo": "WO-020824",
-      "equip": "TK107",
-      "cls": "AT",
+      "wo": "WO-020976",
+      "equip": "GR008",
+      "cls": "GRD",
       "comp": "",
-      "desc": "Magnetic Plug",
+      "desc": "250h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-11-06",
       "type": "250 Hours service Planned",
       "hours": 250,
       "plan": "2026-11-06",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-06"
     },
     {
-      "wo": "WO-020873",
-      "equip": "TK121",
+      "wo": "WO-020824",
+      "equip": "TK107",
       "cls": "AT",
       "comp": "",
       "desc": "Magnetic Plug",
@@ -2411,22 +2382,22 @@
       "completed": ""
     },
     {
-      "wo": "WO-020976",
-      "equip": "GR008",
+      "wo": "WO-019495",
+      "equip": "GR003",
       "cls": "GRD",
       "comp": "",
-      "desc": "250h service",
+      "desc": "500h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-11-05",
-      "type": "250 Hours service Planned",
-      "hours": 250,
+      "type": "500 Hours service Planned",
+      "hours": 500,
       "plan": "2026-11-05",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-06"
     },
     {
       "wo": "WO-021098",
@@ -2456,6 +2427,24 @@
       "raised": "2026-11-05",
       "type": "500 Hours service Planned",
       "hours": 500,
+      "plan": "2026-11-05",
+      "status": "Completed",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "complete",
+      "completed": "2026-11-05"
+    },
+    {
+      "wo": "WO-020873",
+      "equip": "TK121",
+      "cls": "AT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-05",
+      "type": "250 Hours service Planned",
+      "hours": 250,
       "plan": "2026-11-05",
       "status": "Completed",
       "request": "",

@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-06T03:37:43+00:00",
+  "generated": "2026-11-06T03:58:07+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -53540,15 +53540,15 @@ window.CM_WO_DATA = {
       "cmLabel": "500h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
-      "planStart": "2026-11-11",
-      "planStartDt": "2026-11-11T00:00:00",
-      "planEnd": "2026-11-12",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
+      "planStart": "2026-11-05",
+      "planStartDt": "2026-11-05T21:00:00",
+      "planEnd": "2026-11-06",
+      "actualStart": "2026-11-05",
+      "actualStartDt": "2026-11-05T21:00:00",
+      "actualEnd": "2026-11-06"
     },
     {
       "equip": "GR004",
@@ -55106,15 +55106,15 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
-      "planStart": "2026-11-05",
-      "planStartDt": "2026-11-05T00:00:00",
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
+      "planStart": "2026-11-06",
+      "planStartDt": "2026-11-06T01:00:00",
       "planEnd": "2026-11-06",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-06",
+      "actualStartDt": "2026-11-06T01:00:00",
+      "actualEnd": "2026-11-06"
     },
     {
       "equip": "GR009",
@@ -101923,15 +101923,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
-      "planStart": "2026-11-06",
-      "planStartDt": "2026-11-06T00:00:00",
-      "planEnd": "2026-11-07",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
+      "planStart": "2026-11-05",
+      "planStartDt": "2026-11-05T20:00:00",
+      "planEnd": "2026-11-05",
+      "actualStart": "2026-11-05",
+      "actualStartDt": "2026-11-05T20:00:00",
+      "actualEnd": "2026-11-05"
     },
     {
       "equip": "TK122",
