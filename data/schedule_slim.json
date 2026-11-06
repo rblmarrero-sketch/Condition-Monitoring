@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-06T08:32:37+00:00",
+  "generated": "2026-11-06T08:52:56+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -110,30 +110,6 @@
           "INSP"
         ],
         "plan": "2026-11-03",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "EX006": [
-      {
-        "wo": "WO-021095",
-        "hours": 1000,
-        "types": [
-          "FC",
-          "INSP"
-        ],
-        "plan": "2026-11-05",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "EX007": [
-      {
-        "wo": "WO-021099",
-        "hours": 2000,
-        "types": [
-          "FC",
-          "INSP"
-        ],
-        "plan": "2026-11-06",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -1691,6 +1667,42 @@
       "completed": ""
     },
     {
+      "wo": "WO-021649",
+      "equip": "GE012",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-09",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-11-09",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-021658",
+      "equip": "GE097",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "2000h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-09",
+      "type": "2000 Hours service Planned",
+      "hours": 2000,
+      "plan": "2026-11-09",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-021364",
       "equip": "GR012",
       "cls": "GRD",
@@ -2177,24 +2189,6 @@
       "completed": ""
     },
     {
-      "wo": "WO-021099",
-      "equip": "EX007",
-      "cls": "EXC",
-      "comp": "",
-      "desc": "Filter Cut / General Inspection",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-06",
-      "type": "2000 Hours service Planned",
-      "hours": 2000,
-      "plan": "2026-11-06",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
       "wo": "WO-021101",
       "equip": "GE109",
       "cls": "GEN",
@@ -2355,24 +2349,6 @@
       "cause": "",
       "pmStatus": "complete",
       "completed": "2026-11-05"
-    },
-    {
-      "wo": "WO-021095",
-      "equip": "EX006",
-      "cls": "EXC",
-      "comp": "",
-      "desc": "Filter Cut / General Inspection",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-05",
-      "type": "1000 Hours service Planned",
-      "hours": 1000,
-      "plan": "2026-11-05",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
     },
     {
       "wo": "WO-020923",
@@ -2553,6 +2529,42 @@
       "cause": "",
       "pmStatus": "open",
       "completed": ""
+    },
+    {
+      "wo": "WO-021095",
+      "equip": "EX006",
+      "cls": "EXC",
+      "comp": "",
+      "desc": "Filter Cut / General Inspection",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-04",
+      "type": "1000 Hours service Planned",
+      "hours": 1000,
+      "plan": "2026-11-04",
+      "status": "Completed",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "complete",
+      "completed": "2026-11-05"
+    },
+    {
+      "wo": "WO-021099",
+      "equip": "EX007",
+      "cls": "EXC",
+      "comp": "",
+      "desc": "Filter Cut / General Inspection",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-04",
+      "type": "2000 Hours service Planned",
+      "hours": 2000,
+      "plan": "2026-11-04",
+      "status": "Completed",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "complete",
+      "completed": "2026-11-04"
     },
     {
       "wo": "WO-021090",
