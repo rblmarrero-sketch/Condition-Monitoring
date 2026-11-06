@@ -2627,7 +2627,13 @@
       return it.defect || it.cause || isAct(it) || isWatch(it); });
     flagged.sort(function (a, b) { return gnum(b.grade) - gnum(a.grade); });
     var it = flagged[0] || {};
-    var miss = '<b class="miss">' + esc(T("ma_none")) + '</b>';
+    /* A round whose worst point is only worth WATCHING (Incipient, no defect,
+       no cause) asks nobody for an action, an owner or a date: "Not recorded"
+       four times under it read as a form left half-filled (TK157 MP,
+       06.11.2026). Those fields take a dash; from Degraded up, or wherever a
+       defect or cause was written, an empty field is still said. */
+    var need = gnum(it.grade) >= 3 || isAct(it) || !!(it.defect || it.cause) || (it.w && it.w.band === "act");
+    var miss = need ? '<b class="miss">' + esc(T("ma_none")) + '</b>' : '<b class="muted">\u2014</b>';
     function f(k, v) {
       return '<span class="f"><i>' + esc(k) + '</i>' + (v ? '<b>' + esc(v) + '</b>' : miss) + '</span>';
     }
