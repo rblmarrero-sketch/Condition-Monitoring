@@ -5373,6 +5373,13 @@
     });
     /* Both angles' photographs, in order, without repeating a frame that the
        correction panel had already filed onto both. */
+    /* Both angles' captions (Edit photo), keyed by photograph. */
+    if (base.photoCaps || extra.photoCaps) {
+      var pc = {}, q;
+      for (q in (base.photoCaps || {})) pc[q] = base.photoCaps[q];
+      for (q in (extra.photoCaps || {})) if (!pc[q]) pc[q] = extra.photoCaps[q];
+      out.photoCaps = pc;
+    }
     var seen = {}, ph = [];
     (base.photos || []).concat(extra.photos || []).forEach(function (u) {
       if (u && !seen[u]) { seen[u] = 1; ph.push(u); } });
@@ -5474,6 +5481,12 @@
      finished <figure>, since the tile itself is now drawn by capTile() at
      the sheet's own standard size, the same rule a component's gallery
      already gets. */
+  /* A component's photograph on the fleet summary and the appendix: the
+     component's name, and under it the caption typed in Edit photo. */
+  function shotCap(s) {
+    var c = s.it.photoCaps && s.it.photoCaps[s.u];
+    return esc(s.it.name || s.it.key) + (c ? '<br><span class="pcap">' + esc(c) + '</span>' : "");
+  }
   function genShotItem(T, x) {
     var u = (x && typeof x === "object") ? x.u : x;
     var cat = (x && typeof x === "object" && x.cat) ? x.cat : "";
@@ -5848,7 +5861,7 @@
         selC.push({it:it,u:it.photos[0]}); });
       if(selC.length){
         m2 += '<div class="subhd" style="margin-top:11px;">'+T.I("photos")+'</div>'
-          + capGallery(selC.map(function(s){ return { u: esc(s.u), capHtml: esc(s.it.name||s.it.key) }; }));
+          + capGallery(selC.map(function(s){ return { u: esc(s.u), capHtml: shotCap(s) }; }));
       }
       if(rec.gap && rec.gap.missing>0) m2 += '<div class="evgap" style="margin-top:11px;"><b>'
         + T.I("ev_gap_t")+'</b> '+T.I("ev_gap",{n:rec.gap.missing, e:rec.gap.expected, r:rec.gap.received})+'</div>';
@@ -5947,7 +5960,7 @@
       rec.items.forEach(function(it){ (it.photos||[]).forEach(function(u){ shots.push({it:it,u:u}); }); });
       if(shots.length){
         var ph=cont+'<div class="subhd" style="margin-top:11px;">'+T.I("photos")+'</div>'
-          + capGallery(shots.map(function(s){ return { u: esc(s.u), capHtml: esc(s.it.name||s.it.key) }; }));
+          + capGallery(shots.map(function(s){ return { u: esc(s.u), capHtml: shotCap(s) }; }));
         extra.push({nb:false, html:ph+'</div></div>'});
       }
       /* The fleet path prints one block per round too, so the same two facts
