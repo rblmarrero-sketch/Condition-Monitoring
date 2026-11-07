@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-07T03:17:44+00:00",
+  "generated": "2026-11-07T03:32:41+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -2199,24 +2199,6 @@
       "completed": ""
     },
     {
-      "wo": "WO-021007",
-      "equip": "DZ001",
-      "cls": "DOZ",
-      "comp": "",
-      "desc": "250h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-07",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-11-07",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
       "wo": "WO-019359",
       "equip": "DZ016",
       "cls": "DOZ",
@@ -2244,24 +2226,6 @@
       "raised": "2026-11-07",
       "type": "1000 Hours service Planned",
       "hours": 1000,
-      "plan": "2026-11-07",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
-      "wo": "WO-020968",
-      "equip": "LD001",
-      "cls": "LDR",
-      "comp": "",
-      "desc": "500h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-07",
-      "type": "500 Hours service Planned",
-      "hours": 500,
       "plan": "2026-11-07",
       "status": "Elimination scheduled",
       "request": "",
@@ -2361,6 +2325,24 @@
       "completed": ""
     },
     {
+      "wo": "WO-021007",
+      "equip": "DZ001",
+      "cls": "DOZ",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-06",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-11-06",
+      "status": "Completed",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "complete",
+      "completed": "2026-11-06"
+    },
+    {
       "wo": "WO-021101",
       "equip": "GE109",
       "cls": "GEN",
@@ -2413,6 +2395,24 @@
       "cause": "",
       "pmStatus": "complete",
       "completed": "2026-11-06"
+    },
+    {
+      "wo": "WO-020968",
+      "equip": "LD001",
+      "cls": "LDR",
+      "comp": "",
+      "desc": "500h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-06",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-11-06",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
     },
     {
       "wo": "WO-020824",
@@ -8130,7 +8130,7 @@
       "raised": "2026-10-02",
       "type": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "hours": null,
-      "plan": "2026-11-10",
+      "plan": "2026-11-13",
       "status": "Elimination scheduled",
       "request": "DD-00013864",
       "defType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
@@ -8166,7 +8166,7 @@
       "raised": "2026-10-02",
       "type": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "hours": null,
-      "plan": "2026-11-09",
+      "plan": "2026-11-13",
       "status": "Elimination scheduled",
       "request": "DD-00013857",
       "defType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
