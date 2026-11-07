@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-07T23:37:36+00:00",
+  "generated": "2026-11-07T23:52:36+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5553,6 +5553,18 @@ window.CM_WO_DATA = {
       "priority": "P2 Urgent",
       "by": "Nikolay Khrapov",
       "wo": "WO-021914"
+    },
+    {
+      "asset": "BS018",
+      "defect": "DD-00016506",
+      "raised": "2026-11-08",
+      "system": "BS018.OC.HE (Heating / Отопление)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Не работает ФЕН в кунге",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Roman Besedovskiy",
+      "wo": "WO-021923"
     },
     {
       "asset": "GR008",
@@ -55176,11 +55188,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "FL007",
-      "defect": "DD-00010207",
+      "defect": "DD-00010202",
       "raised": "2026-08-04",
-      "system": "FL007.CH (Structure & Chassis / Рама и конструкция)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Требуется устранить течь масла",
+      "system": "FL007.BS (Braking System / Тормозная система)",
+      "defectType": "1.25 Reduced capacity / output / Снижение производительности / выхода",
+      "descr": "Не работает ручной тормоз",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -55188,11 +55200,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "FL007",
-      "defect": "DD-00010202",
+      "defect": "DD-00010207",
       "raised": "2026-08-04",
-      "system": "FL007.BS (Braking System / Тормозная система)",
-      "defectType": "1.25 Reduced capacity / output / Снижение производительности / выхода",
-      "descr": "Не работает ручной тормоз",
+      "system": "FL007.CH (Structure & Chassis / Рама и конструкция)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Требуется устранить течь масла",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
