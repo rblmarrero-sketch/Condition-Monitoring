@@ -39,10 +39,10 @@ const SEED = `(function(){
       { date:"2026-11-01", asset:"TK152", defect:"DD-3", status:"In Progress", by:"Irek", priority:"P3" },
       { date:"2026-10-30", asset:"TK153", defect:"DD-4", status:"Completed", by:"Slam", raisedBy:"Ivanov B.", woNumber:"WO-9002", priority:"P4" } ],
     otherDefects:[
-      { asset:"EX016", defect:"DD-00015100", raised:"2026-10-28", system:"EX016.DRS.ENG (Engine / Двигатель)", status:"Elimination scheduled", by:"Kim D." },
-      { asset:"EX016", defect:"DD-00015101", raised:"2026-11-05", system:"EX016.DRS.ENG (Engine / Двигатель)", status:"Registered", by:"Kim D." },
+      { asset:"EX016", defect:"DD-00015100", raised:"2026-10-28", system:"EX016.DRS.ENG (Engine / Двигатель)", status:"Elimination scheduled", by:"Bekzhan", regBy:"Kim D." },
+      { asset:"EX016", defect:"DD-00015101", raised:"2026-11-05", system:"EX016.DRS.ENG (Engine / Двигатель)", status:"Registered", by:"Bekzhan", regBy:"Kim D." },
       { asset:"EX016", defect:"DD-00014000", raised:"2026-10-01", system:"EX016.HS.MP (Hydraulic pumps)", status:"Completed", by:"Lee S." },
-      { asset:"DZ011", defect:"DD-00015500", raised:"2026-10-25", system:"DZ011.ENG.ENG (Engine)", status:"In Progress", by:"Lee S." } ] });
+      { asset:"DZ011", defect:"DD-00015500", raised:"2026-10-25", system:"DZ011.ENG.ENG (Engine)", status:"In Progress", by:"Bekzhan" } ] });
   return {};
 })()`;
 async function run(b, path, lng) {
@@ -85,7 +85,7 @@ async function run(b, path, lng) {
   ok(eng && /DD-00016300/.test(eng[5]) && /Leakage/.test(eng[4]) && /P3/.test(eng[5]), 'a finding takes the defect raised for its system code, with 1C type and priority', eng && eng.join(' | '));
   ok(mp && /Not raised in 1C/.test(mp[5]) && /Нет в 1С/.test(mp[5]), 'a Degraded finding with no defect in 1C says so, in both languages', mp && mp[5]);
   /* CM_EXISTDEF_V1 (08.11): another supervisor's open defect on the same unit and system, raised before the inspection */
-  ok(eng && /DD-00015100/.test(eng[6]) && /Elimination scheduled/.test(eng[6]) && /Kim D\./.test(eng[6]) && /Responsible[^:]*: ?Kim D\./.test(eng[6]) && /Status in 1C[^:]*: ?Elimination/.test(eng[6]) && !/DD-00015101/.test(eng[6]), 'Existing defect (labelled status in 1C and responsible, 08.11): another supervisor\'s open defect on the same system, raised before the inspection (not one raised after)', eng && eng[6]);
+  ok(eng && /DD-00015100/.test(eng[6]) && /Elimination scheduled/.test(eng[6]) && /Kim D\./.test(eng[6]) && /Registered by[^:]*: ?Kim D\./.test(eng[6]) && !/Bekzhan/.test(eng[6]) && /Status in 1C[^:]*: ?Elimination/.test(eng[6]) && /Date[^:]*: ?28\.10/.test(eng[6]) && !/DD-00015101/.test(eng[6]), 'Existing defect (labelled status in 1C and responsible, 08.11): another supervisor\'s open defect on the same system, raised before the inspection (not one raised after)', eng && eng[6]);
   ok(mp && mp[6] === '—' && /Not raised in 1C/.test(mp[5]), 'Existing defect: a completed defect of someone else is not an existing one', mp && mp[6]);
   ok(!ds.trs.some(r => /WO-0/.test(r[5])), 'the round work order is never shown as the defect number', ds.trs.map(r => r[5]).join(','));
   ok(ds.clean.some(r => /TK150/.test(r) && /4F/.test(r)) && !ds.trs.some(r => /4F/.test(r[3])), 'a Normal point is on one line under "no findings", not in the findings table', ds.clean.join(' // '));
@@ -105,7 +105,7 @@ async function run(b, path, lng) {
   ds = await read();
   ok(ds.chips === 5 && ds.trs.some(r => /DZ011/.test(r[2])) && /01–02\.11\.2026/.test(ds.subj), 'a From date takes in several days of rounds', ds.chips + ' ' + ds.subj);
   const dz = ds.trs.find(r => /DZ011/.test(r[2]));
-  ok(dz && /DD-00015500/.test(dz[6]) && /In Progress/.test(dz[6]) && /from the comment/.test(dz[6]) && /из комментария/.test(dz[6]), 'Existing defect: a number written in the comment ("dd 15500") is found in 1C with its status', dz && dz[6]);
+  ok(dz && /DD-00015500/.test(dz[6]) && /In Progress/.test(dz[6]) && /Registered by[^:]*: ?not filled in 1C/.test(dz[6]) && !/Bekzhan/.test(dz[6]) && /from the comment/.test(dz[6]) && /из комментария/.test(dz[6]), 'Existing defect: a number written in the comment ("dd 15500") is found in 1C with its status', dz && dz[6]);
   await p.evaluate(() => { const c = [...document.querySelectorAll('#daySum [data-dsk]')].find(x => /EX016/.test(x.parentNode.textContent)); c.click(); });
   await p.waitForTimeout(200);
   ds = await read();
