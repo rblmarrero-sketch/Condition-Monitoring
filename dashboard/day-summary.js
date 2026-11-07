@@ -158,7 +158,7 @@
   var M = {
     en: { title: 'Condition Monitoring — Daily Report', hello: 'Good day, colleagues. Below are the condition monitoring results; the report of each round is attached.',
       rounds: 'rounds', units: 'units', act: 'ACTION REQUIRED', find: 'Findings', worst: 'worst first', clean: 'Inspected — no findings',
-      t_sev: 'Severity', t_date: 'Date', t_unit: 'Unit · round', t_comp: 'Component', t_def: 'Defect · description', t_no: 'Defect no. · priority', t_ex: 'Existing defect', ex_cited: 'from the comment',
+      t_sev: 'Severity', t_date: 'Date', t_unit: 'Unit · round', t_comp: 'Component', t_def: 'Defect · description', t_no: 'Defect no. · priority', t_ex: 'Existing defect', ex_cited: 'from the comment', ex_st: 'Status in 1C', ex_by: 'Responsible', ex_on: 'Raised',
       nodef: 'Not raised in 1C', rep: 'Repeat', rep_cm: '{g} on {d}', rep_1c: 'earlier defect {n} ({s})', pts: '{n} points', meas: '{n} points measured', worstK: 'worst: {p}',
       others: 'other points normal', online: 'View more details online', online_t: 'Photos, full readings and each unit’s history are on the CM dashboard. Click a unit number to open its Equipment History.',
       open: 'Open the CM dashboard', net: 'Company network or VPN', by: 'Inspected by', att: 'The report of each round is attached.',
@@ -169,7 +169,7 @@
       ok_GET: 'Ground engaging tools within wear limits.', ok_TEMP: 'Temperatures within limits.', ok_LUBE: 'Lubrication audit: no deviations.', ok_: 'No defects found.' },
     ru: { title: 'Мониторинг состояния — ежедневный отчёт', hello: 'Добрый день, коллеги. Ниже результаты мониторинга состояния; отчёт по каждому обходу приложен.',
       rounds: 'обходов', units: 'единиц', act: 'ТРЕБУЮТСЯ ДЕЙСТВИЯ', find: 'Замечания', worst: 'по степени критичности', clean: 'Осмотрено — без замечаний',
-      t_sev: 'Критичность', t_date: 'Дата', t_unit: 'Единица · обход', t_comp: 'Узел', t_def: 'Дефект · описание', t_no: '№ дефекта · приоритет', t_ex: 'Существующий дефект', ex_cited: 'из комментария',
+      t_sev: 'Критичность', t_date: 'Дата', t_unit: 'Единица · обход', t_comp: 'Узел', t_def: 'Дефект · описание', t_no: '№ дефекта · приоритет', t_ex: 'Существующий дефект', ex_cited: 'из комментария', ex_st: 'Статус в 1С', ex_by: 'Ответственный', ex_on: 'Создан',
       nodef: 'Нет в 1С', rep: 'Повтор', rep_cm: '{g} от {d}', rep_1c: 'ранее дефект {n} ({s})', pts: 'точек: {n}', meas: 'замерено точек: {n}', worstK: 'худшие: {p}',
       others: 'остальные точки в норме', online: 'Подробности онлайн', online_t: 'Фото, все замеры и история каждой единицы — на панели мониторинга состояния. Нажмите номер единицы, чтобы открыть её историю.',
       open: 'Открыть панель МС', net: 'Сеть компании или VPN', by: 'Осмотр провели', att: 'Отчёт по каждому обходу приложен.',
@@ -251,7 +251,9 @@
     });
     return out.slice(0, EX_MAX);
   }
-  function exText(ex) { return ex.map(function (d) { return d.n + (d.s ? ' (' + d.s + ')' : '') + (d.by ? ' ' + d.by : ''); }).join('; '); }
+  function exText(ex) { var l = L(); return ex.map(function (d) { var a = [];
+    if (d.s) a.push(m(l, 'ex_st') + ': ' + d.s); if (d.by) a.push(m(l, 'ex_by') + ': ' + d.by); if (d.on) a.push(m(l, 'ex_on') + ' ' + dm(d.on));
+    return d.n + (a.length ? ' (' + a.join('; ') + ')' : ''); }).join('; '); }
   function repBi(rp) { var L2 = langs(); return '↻ ' + L2.map(function (l) { return m(l, 'rep'); }).join(' · ') + ': ' + repText(rp, L2[0]) + (L2.length > 1 && repText(rp, 'en') !== repText(rp, 'ru') ? ' · ' + repText(rp, 'ru') : ''); }
   /* split the rows into findings (anything graded 2 or worse, or carrying a defect) and the clean lines */
   function shape(rows, list) {
@@ -324,8 +326,12 @@
             (x.g >= 3 ? '<br><span style="color:#3d474f">→ ' + e(L2.map(function (l) { return gAct(x.g, l); }).join(' · ')) + '</span>' : '') +
             (x.rep ? '<br><span style="color:#a33d00;font-weight:700">' + e(repBi(x.rep)) + '</span>' : '');
           var no = x.nodef ? '<span style="color:#a33d00;font-weight:700">' + bi('nodef', null, true, '#a33d00') + '</span>' : (x.no ? '<b>' + e(x.no) + '</b>' + (x.prio ? '<br>' + e(x.prio) : '') : (x.prio ? e(x.prio) : '—'));
-          var ex = (x.ex || []).map(function (d) { return '<b>' + e(d.n) + '</b>' + (d.s ? '<br><span style="color:#3d474f">' + e(d.s) + '</span>' : '') +
-            (d.by ? '<br><span style="color:#5b6670;font-size:12px">' + e(d.by) + (d.on ? ' · ' + e(dm(d.on)) : '') + '</span>' : '') +
+          /* 08.11: labelled, so "Registered Bekzhan" is not read as "registered by Bekzhan" -- the defect may have been
+             registered by a mechanic; the name is 1C's Responsible person, the one to follow it up in 1C */
+          var exL = function (k) { return '<span style="color:#5b6670;font-size:12px">' + e(L2.map(function (l) { return m(l, k); }).join(' · ')) + ':</span> '; };
+          var ex = (x.ex || []).map(function (d) { return '<b>' + e(d.n) + '</b>' + (d.s ? '<br>' + exL('ex_st') + '<span style="color:#3d474f">' + e(d.s) + '</span>' : '') +
+            (d.by ? '<br>' + exL('ex_by') + '<span style="color:#16212a;font-weight:600">' + e(d.by) + '</span>' : '') +
+            (d.on ? '<br>' + exL('ex_on') + '<span style="color:#3d474f">' + e(dm(d.on)) + '</span>' : '') +
             (d.cited ? '<br><span style="color:#5b6670;font-size:12px">' + e(L2.map(function (l) { return m(l, 'ex_cited'); }).join(' · ')) + '</span>' : ''); }).join('<br><br>') || '—';
           return '<tr><td ' + TD + '><span style="background:' + p[0] + ';color:' + p[1] + ';' + F + 'font-size:12px;font-weight:700;padding:3px 8px;white-space:nowrap">' + x.g + ' ' + e(gName(x.g, L2[0])) + '</span>' +
             (L2.length > 1 ? '<div style="' + F + 'font-size:11px;color:#5b6670;margin-top:3px">' + e(gName(x.g, 'ru')) + '</div>' : '') + '</td>' +
