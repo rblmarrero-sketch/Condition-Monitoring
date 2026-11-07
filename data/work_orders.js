@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-07T21:13:16+00:00",
+  "generated": "2026-11-07T21:32:42+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -355,7 +355,7 @@ window.CM_WO_DATA = {
     "WE010",
     "WE011"
   ],
-  "duplicateRowsCollapsed": 486,
+  "duplicateRowsCollapsed": 490,
   "roundsDedupedWithinVisit": 2,
   "columns": [
     "Asset description",
@@ -5517,6 +5517,18 @@ window.CM_WO_DATA = {
       "priority": "P2 Urgent",
       "by": "Nikolay Khrapov",
       "wo": "WO-021912"
+    },
+    {
+      "asset": "TK115",
+      "defect": "DD-00016502",
+      "raised": "2026-11-08",
+      "system": "Injectors / Форсунки",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка топлива с форсунок ДВС",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Roman Besedovskiy",
+      "wo": "WO-021921"
     },
     {
       "asset": "TK027",
@@ -138537,15 +138549,15 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-05",
       "planStartDt": "2026-11-05T00:00:00",
       "planEnd": "2026-11-05",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-05",
+      "actualStartDt": "2026-11-05T00:00:00",
+      "actualEnd": "2026-11-05"
     },
     {
       "equip": "LS041",
@@ -183391,11 +183403,10 @@ window.CM_WO_DATA = {
       "equip": "TK151",
       "cls": "HT",
       "woNumber": null,
-      "maintType": "1500 Hours service Planned",
-      "hours": 1500,
-      "cmLabel": "Lubrication / Magnetic Plug",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "LUBE",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -183413,10 +183424,11 @@ window.CM_WO_DATA = {
       "equip": "TK151",
       "cls": "HT",
       "woNumber": null,
-      "maintType": "250 Hours service Planned",
-      "hours": 250,
-      "cmLabel": "Magnetic Plug",
+      "maintType": "1500 Hours service Planned",
+      "hours": 1500,
+      "cmLabel": "Lubrication / Magnetic Plug",
       "cmTypes": [
+        "LUBE",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -184151,15 +184163,11 @@ window.CM_WO_DATA = {
       "equip": "TK154",
       "cls": "HT",
       "woNumber": null,
-      "maintType": "6000 Hours service Planned",
-      "hours": 6000,
-      "cmLabel": "Filter Cut / General Inspection / Lubrication / Magnetic Plug / Dump Body Liner",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "FC",
-        "INSP",
-        "LUBE",
-        "MP",
-        "TB"
+        "MP"
       ],
       "priority": "P3 Planned (PM)",
       "woStatus": null,
@@ -184176,11 +184184,15 @@ window.CM_WO_DATA = {
       "equip": "TK154",
       "cls": "HT",
       "woNumber": null,
-      "maintType": "250 Hours service Planned",
-      "hours": 250,
-      "cmLabel": "Magnetic Plug",
+      "maintType": "6000 Hours service Planned",
+      "hours": 6000,
+      "cmLabel": "Filter Cut / General Inspection / Lubrication / Magnetic Plug / Dump Body Liner",
       "cmTypes": [
-        "MP"
+        "FC",
+        "INSP",
+        "LUBE",
+        "MP",
+        "TB"
       ],
       "priority": "P3 Planned (PM)",
       "woStatus": null,
@@ -185142,15 +185154,12 @@ window.CM_WO_DATA = {
       "equip": "TK158",
       "cls": "HT",
       "woNumber": null,
-      "maintType": "4000 Hours service Planned",
-      "hours": 4000,
-      "cmLabel": "Filter Cut / General Inspection / Lubrication / Magnetic Plug / Dump Body Liner",
+      "maintType": "500 Hours service Planned",
+      "hours": 500,
+      "cmLabel": "Lubrication / Magnetic Plug",
       "cmTypes": [
-        "FC",
-        "INSP",
         "LUBE",
-        "MP",
-        "TB"
+        "MP"
       ],
       "priority": "P3 Planned (PM)",
       "woStatus": null,
@@ -185167,12 +185176,15 @@ window.CM_WO_DATA = {
       "equip": "TK158",
       "cls": "HT",
       "woNumber": null,
-      "maintType": "500 Hours service Planned",
-      "hours": 500,
-      "cmLabel": "Lubrication / Magnetic Plug",
+      "maintType": "4000 Hours service Planned",
+      "hours": 4000,
+      "cmLabel": "Filter Cut / General Inspection / Lubrication / Magnetic Plug / Dump Body Liner",
       "cmTypes": [
+        "FC",
+        "INSP",
         "LUBE",
-        "MP"
+        "MP",
+        "TB"
       ],
       "priority": "P3 Planned (PM)",
       "woStatus": null,
