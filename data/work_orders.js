@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-07T04:07:53+00:00",
+  "generated": "2026-11-07T04:23:27+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -97600,15 +97600,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
-      "planStart": "2026-11-07",
-      "planStartDt": "2026-11-07T00:00:00",
-      "planEnd": "2026-11-08",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
+      "planStart": "2026-11-06",
+      "planStartDt": "2026-11-06T01:00:00",
+      "planEnd": "2026-11-07",
+      "actualStart": "2026-11-06",
+      "actualStartDt": "2026-11-06T01:00:00",
+      "actualEnd": "2026-11-07"
     },
     {
       "equip": "TK118",
@@ -111897,15 +111897,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-06",
-      "planStartDt": "2026-11-06T00:00:00",
+      "planStartDt": "2026-11-06T19:00:00",
       "planEnd": "2026-11-07",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-06",
+      "actualStartDt": "2026-11-06T19:00:00",
+      "actualEnd": "2026-11-07"
     },
     {
       "equip": "TK147",
@@ -114213,15 +114213,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-05",
       "planStartDt": "2026-11-05T20:00:00",
       "planEnd": "2026-11-06",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-05",
+      "actualStartDt": "2026-11-05T20:00:00",
+      "actualEnd": "2026-11-06"
     },
     {
       "equip": "TK158",

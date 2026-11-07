@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-07T04:07:53+00:00",
+  "generated": "2026-11-07T04:23:27+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -456,17 +456,6 @@
         "priority": "P3 Planned (PM)"
       }
     ],
-    "TK117": [
-      {
-        "wo": "WO-020837",
-        "hours": 500,
-        "types": [
-          "MP"
-        ],
-        "plan": "2026-11-07",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
     "TK118": [
       {
         "wo": "WO-021296",
@@ -559,16 +548,6 @@
       }
     ],
     "TK147": [
-      {
-        "wo": "WO-020986",
-        "hours": 500,
-        "types": [
-          "LUBE",
-          "MP"
-        ],
-        "plan": "2026-11-06",
-        "priority": "P3 Planned (PM)"
-      },
       {
         "wo": "WO-021276",
         "hours": 250,
@@ -696,20 +675,6 @@
           "MP"
         ],
         "plan": "2026-11-10",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "TK157": [
-      {
-        "wo": "WO-020997",
-        "hours": 3000,
-        "types": [
-          "FC",
-          "INSP",
-          "LUBE",
-          "MP"
-        ],
-        "plan": "2026-11-05",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -2289,24 +2254,6 @@
       "completed": ""
     },
     {
-      "wo": "WO-020837",
-      "equip": "TK117",
-      "cls": "AT",
-      "comp": "",
-      "desc": "Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-07",
-      "type": "500 Hours service Planned",
-      "hours": 500,
-      "plan": "2026-11-07",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
       "wo": "WO-020875",
       "equip": "TK124",
       "cls": "AT",
@@ -2451,6 +2398,24 @@
       "completed": "2026-11-07"
     },
     {
+      "wo": "WO-020837",
+      "equip": "TK117",
+      "cls": "AT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-06",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-11-06",
+      "status": "Completed",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "complete",
+      "completed": "2026-11-07"
+    },
+    {
       "wo": "WO-020986",
       "equip": "TK147",
       "cls": "HT",
@@ -2461,12 +2426,12 @@
       "type": "500 Hours service Planned",
       "hours": 500,
       "plan": "2026-11-06",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-07"
     },
     {
       "wo": "WO-020999",
@@ -2695,12 +2660,12 @@
       "type": "3000 Hours service Planned",
       "hours": 3000,
       "plan": "2026-11-05",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-06"
     },
     {
       "wo": "WO-021089",
