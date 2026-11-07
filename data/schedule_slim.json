@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-07T03:32:41+00:00",
+  "generated": "2026-11-07T03:52:42+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -709,7 +709,7 @@
           "LUBE",
           "MP"
         ],
-        "plan": "2026-11-11",
+        "plan": "2026-11-05",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -1011,6 +1011,24 @@
       "completed": ""
     },
     {
+      "wo": "WO-021664",
+      "equip": "CD006",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "500h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-14",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-11-14",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-021317",
       "equip": "DZ019",
       "cls": "DOZ",
@@ -1128,6 +1146,24 @@
       "raised": "2026-11-14",
       "type": "250 Hours service Planned",
       "hours": 250,
+      "plan": "2026-11-14",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-021675",
+      "equip": "TK133",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "500h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-14",
+      "type": "500 Hours service Planned",
+      "hours": 500,
       "plan": "2026-11-14",
       "status": "Elimination scheduled",
       "request": "",
@@ -1596,24 +1632,6 @@
       "raised": "2026-11-11",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-11-11",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
-      "wo": "WO-020997",
-      "equip": "TK157",
-      "cls": "HT",
-      "comp": "",
-      "desc": "Filter Cut / General Inspection / Lubrication / Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-11",
-      "type": "3000 Hours service Planned",
-      "hours": 3000,
       "plan": "2026-11-11",
       "status": "Elimination scheduled",
       "request": "",
@@ -2407,12 +2425,12 @@
       "type": "500 Hours service Planned",
       "hours": 500,
       "plan": "2026-11-06",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-06"
     },
     {
       "wo": "WO-020824",
@@ -2665,6 +2683,24 @@
       "cause": "",
       "pmStatus": "complete",
       "completed": "2026-11-06"
+    },
+    {
+      "wo": "WO-020997",
+      "equip": "TK157",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Filter Cut / General Inspection / Lubrication / Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-05",
+      "type": "3000 Hours service Planned",
+      "hours": 3000,
+      "plan": "2026-11-05",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
     },
     {
       "wo": "WO-021089",
@@ -7716,7 +7752,7 @@
       "raised": "2026-10-09",
       "type": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "hours": null,
-      "plan": "2026-11-10",
+      "plan": "2026-11-13",
       "status": "Elimination scheduled",
       "request": "DD-00014452",
       "defType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
@@ -8184,7 +8220,7 @@
       "raised": "2026-10-02",
       "type": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "hours": null,
-      "plan": "2026-11-09",
+      "plan": "2026-11-13",
       "status": "Elimination scheduled",
       "request": "DD-00013855",
       "defType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
