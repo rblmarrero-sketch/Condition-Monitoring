@@ -42,6 +42,8 @@ const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
                  { key: '4F', label: 'RH final drive', grade: 2, wo: 'WO-020997' } ] },
       { equip: 'TK158', date: '2026-11-06', type: 'MP', cls: 'HT', by: 'Kazhybekov Bekzhan', smu: '9000',
         items: [ { key: '4E', label: 'LH final drive', grade: 3, wo: 'WO-021000', comment: 'Стружка' } ] },
+      { equip: 'DZ016', date: '2026-11-07', type: 'UC', cls: 'DOZ', by: 'Zhomart Khasenov', smu: '15941',
+        items: [ { key: 'ROLLER.R1', mm: 236 }, { key: 'ROLLER.L1', mm: 254 } ] },
       { equip: 'DZ011', date: '2026-11-02', type: 'UC', cls: 'DOZ', by: 'Kazhybekov Bekzhan', smu: '32100',
         items: [ { key: 'ROLLER.L3', mm: 240 }, { key: 'ROLLER.R3', mm: 255 }, { key: 'IDLER.L-OUT', mm: 0 } ].filter(x => x.mm) },
     ];
@@ -71,6 +73,10 @@ const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
   const actOf = t => (t.match(/Действие по обслуживанию[\s\S]{0,260}/) || [''])[0];
   ok('an Incipient-only round does not print "Не записано" under the action box', !/Не записано/.test(actOf(mpWatch)), actOf(mpWatch).slice(0, 160));
   ok('a Degraded finding with no action still says "Не записано"', /Не записано/.test(actOf(mpDeg)), actOf(mpDeg).slice(0, 160));
+  const ucSev = await text('one:DZ016|2026-11-07|UC', 'ru', false);
+  const ucG = (ucSev.match(/СТЕПЕНЬ\s*(\d)/) || [])[1];
+  ok('a measured round graded Degraded or worse says "Не записано" for its missing action, not dashes',
+     Number(ucG) >= 3 && /Не записано/.test(actOf(ucSev)), 'grade ' + ucG + ' · ' + actOf(ucSev).slice(0, 140));
   console.log('\nUndercarriage: controlling point and side captions');
   const ctrlOf = (t, lab) => (t.match(new RegExp(lab + '.{0,60}')) || [''])[0];
   ok('Russian: the controlling point is named in words, not as ROLLER.L3',
