@@ -28,7 +28,7 @@ const SEED = `(function(){
     { equip:"DZ012", date:"2026-11-02", type:"UC", cls:"DOZ", by:"Ospanov", items:
       Array.from({length:20},(_,n)=>({ key:"ROLLER.L"+(n+1), label:"Track roller", grade: n<3?2:1 })) },
     { equip:"DZ011", date:"2026-11-01", type:"FC", cls:"DOZ", by:"Rayanov", items:[
-      { key:"ENG", label:"Engine oil filter", grade:2, defect:"Fine particles", comment:"Watch" } ] }
+      { key:"ENG", label:"Engine oil filter", grade:2, defect:"Fine particles", comment:"Watch, already raised dd 15500" } ] }
   ]);
   window.CM_WO_DATA = Object.assign({}, window.CM_WO_DATA||{}, { cmSince:"2026-07-01", cmPeople:["Slam","Irek"],
     cmColumns:{}, cmWorkOrders:[
@@ -37,7 +37,12 @@ const SEED = `(function(){
       { date:"2026-11-03", raised:"2026-11-03", asset:"EX016", defect:"DD-00016300", system:"EX016.DRS.ENG (Engine / Двигатель)", defectType:"1.01 Leakage", status:"Registered", by:"Irek", priority:"P3 Planned (PM)" },
       { date:"2026-11-01", asset:"TK151", defect:"DD-2", status:"Elimination scheduled", by:"Irek", woNumber:"WO-9001", priority:"P2 Urgent" },
       { date:"2026-11-01", asset:"TK152", defect:"DD-3", status:"In Progress", by:"Irek", priority:"P3" },
-      { date:"2026-10-30", asset:"TK153", defect:"DD-4", status:"Completed", by:"Slam", raisedBy:"Ivanov B.", woNumber:"WO-9002", priority:"P4" } ] });
+      { date:"2026-10-30", asset:"TK153", defect:"DD-4", status:"Completed", by:"Slam", raisedBy:"Ivanov B.", woNumber:"WO-9002", priority:"P4" } ],
+    otherDefects:[
+      { asset:"EX016", defect:"DD-00015100", raised:"2026-10-28", system:"EX016.DRS.ENG (Engine / Двигатель)", status:"Elimination scheduled", by:"Kim D." },
+      { asset:"EX016", defect:"DD-00015101", raised:"2026-11-05", system:"EX016.DRS.ENG (Engine / Двигатель)", status:"Registered", by:"Kim D." },
+      { asset:"EX016", defect:"DD-00014000", raised:"2026-10-01", system:"EX016.HS.MP (Hydraulic pumps)", status:"Completed", by:"Lee S." },
+      { asset:"DZ011", defect:"DD-00015500", raised:"2026-10-25", system:"DZ011.ENG.ENG (Engine)", status:"In Progress", by:"Lee S." } ] });
   return {};
 })()`;
 async function run(b, path, lng) {
@@ -65,7 +70,7 @@ async function run(b, path, lng) {
   let ds = await read();
   ok(ds && ds.to === '2026-11-02' && ds.from === '2026-11-02', 'opens on the newest day with rounds (From = To)', ds && ds.from + '..' + ds.to);
   ok(ds && ds.chips === 4, 'every round of that day is offered', ds && ds.chips);
-  ok(ds && ds.th.length === 6 && ds.th.every(t => /[A-Za-z]/.test(t) && /[А-Яа-я]/.test(t)), 'six column headings, each in English and Russian', ds && ds.th.join(' | '));
+  ok(ds && ds.th.length === 7 && ds.th.every(t => /[A-Za-z]/.test(t) && /[А-Яа-я]/.test(t)), 'seven column headings (Existing defect, 08.11), each in English and Russian', ds && ds.th.join(' | '));
   const g = ds.trs.map(r => Number((r[0].match(/^(\d)/) || [])[1]));
   ok(g.length && g.every((x, i) => !i || g[i - 1] >= x), 'findings are worst first', g.join(','));
   ok(ds.trs.length === 5, 'the findings: the tray, the plug, two engine/pump points, the undercarriage line', ds.trs.length);
@@ -79,6 +84,9 @@ async function run(b, path, lng) {
   const eng = ds.trs.find(r => /DRS\.ENG/.test(r[3])), mp = ds.trs.find(r => /HS\.MP/.test(r[3]));
   ok(eng && /DD-00016300/.test(eng[5]) && /Leakage/.test(eng[4]) && /P3/.test(eng[5]), 'a finding takes the defect raised for its system code, with 1C type and priority', eng && eng.join(' | '));
   ok(mp && /Not raised in 1C/.test(mp[5]) && /Нет в 1С/.test(mp[5]), 'a Degraded finding with no defect in 1C says so, in both languages', mp && mp[5]);
+  /* CM_EXISTDEF_V1 (08.11): another supervisor's open defect on the same unit and system, raised before the inspection */
+  ok(eng && /DD-00015100/.test(eng[6]) && /Elimination scheduled/.test(eng[6]) && /Kim D\./.test(eng[6]) && !/DD-00015101/.test(eng[6]), 'Existing defect: another supervisor\'s open defect on the same system, raised before the inspection (not one raised after)', eng && eng[6]);
+  ok(mp && mp[6] === '—' && /Not raised in 1C/.test(mp[5]), 'Existing defect: a completed defect of someone else is not an existing one', mp && mp[6]);
   ok(!ds.trs.some(r => /WO-0/.test(r[5])), 'the round work order is never shown as the defect number', ds.trs.map(r => r[5]).join(','));
   ok(ds.clean.some(r => /TK150/.test(r) && /4F/.test(r)) && !ds.trs.some(r => /4F/.test(r[3])), 'a Normal point is on one line under "no findings", not in the findings table', ds.clean.join(' // '));
   ok(/TK160/.test(ds.crit) && /ACTION REQUIRED/.test(ds.crit) && /ТРЕБУЮТСЯ/.test(ds.crit), 'a Critical point gets the ACTION REQUIRED box', ds.crit.slice(0, 90));
@@ -88,7 +96,7 @@ async function run(b, path, lng) {
   ok(!/class="/.test(mail) && /style="/.test(mail) && !/<style/.test(mail), 'the e-mail has inline styles only', mail.length);
   await p.evaluate(() => document.querySelector('#dsLang [data-v="en"]').click()); await p.waitForTimeout(200);
   ds = await read();
-  ok(ds.th.length === 6 && ds.th.every(t => !/[А-Яа-я]/.test(t)) && !/[А-Яа-я]/.test(ds.subj), 'E-mail language EN: no Russian in the headings or the subject', ds.th.join(' | '));
+  ok(ds.th.length === 7 && ds.th.every(t => !/[А-Яа-я]/.test(t)) && !/[А-Яа-я]/.test(ds.subj), 'E-mail language EN: no Russian in the headings or the subject', ds.th.join(' | '));
   await p.evaluate(() => document.querySelector('#dsLang [data-v="ru"]').click()); await p.waitForTimeout(200);
   ds = await read();
   ok(ds.th[0] === 'Критичность' && /Отчёт МС/.test(ds.subj), 'E-mail language RU: Russian headings and subject', ds.th[0] + ' / ' + ds.subj);
@@ -96,6 +104,8 @@ async function run(b, path, lng) {
   await p.evaluate(() => { const s = document.getElementById('dsFrom'); s.value = '2026-11-01'; s.dispatchEvent(new Event('change')); }); await p.waitForTimeout(250);
   ds = await read();
   ok(ds.chips === 5 && ds.trs.some(r => /DZ011/.test(r[2])) && /01–02\.11\.2026/.test(ds.subj), 'a From date takes in several days of rounds', ds.chips + ' ' + ds.subj);
+  const dz = ds.trs.find(r => /DZ011/.test(r[2]));
+  ok(dz && /DD-00015500/.test(dz[6]) && /In Progress/.test(dz[6]) && /from the comment/.test(dz[6]) && /из комментария/.test(dz[6]), 'Existing defect: a number written in the comment ("dd 15500") is found in 1C with its status', dz && dz[6]);
   await p.evaluate(() => { const c = [...document.querySelectorAll('#daySum [data-dsk]')].find(x => /EX016/.test(x.parentNode.textContent)); c.click(); });
   await p.waitForTimeout(200);
   ds = await read();
