@@ -2627,14 +2627,24 @@
        same fact, two answers, on the same page. */
     var flagged = (rec.items || []).filter(function (it) {
       return it.defect || it.cause || isAct(it) || isWatch(it); });
-    flagged.sort(function (a, b) { return gnum(b.grade) - gnum(a.grade); });
+    /* A measured point's grade is its wear (GRADE.fromWorn, with the
+       office's warning), never it.grade: DZ016 UC 07.11 was Severe from a
+       65 % roller and the box printed dashes. */
+    var GRw = (typeof window !== "undefined") && window.GRADE;
+    var eg = function (x) {
+      var n = gnum(x.grade);
+      if (!n && x.w && x.w.pct != null && isFinite(Number(x.w.pct)) && GRw && GRw.fromWorn)
+        n = GRw.fromWorn(Number(x.w.pct), x.w.warnPct);
+      return n || 0;
+    };
+    flagged.sort(function (a, b) { return eg(b) - eg(a); });
     var it = flagged[0] || {};
     /* A round whose worst point is only worth WATCHING (Incipient, no defect,
        no cause) asks nobody for an action, an owner or a date: "Not recorded"
        four times under it read as a form left half-filled (TK157 MP,
        06.11.2026). Those fields take a dash; from Degraded up, or wherever a
        defect or cause was written, an empty field is still said. */
-    var need = gnum(it.grade) >= 3 || isAct(it) || !!(it.defect || it.cause) || (it.w && it.w.band === "act");
+    var need = eg(it) >= 3 || isAct(it) || !!(it.defect || it.cause) || (it.w && it.w.band === "act");
     var miss = need ? '<b class="miss">' + esc(T("ma_none")) + '</b>' : '<b class="muted">\u2014</b>';
     function f(k, v) {
       return '<span class="f"><i>' + esc(k) + '</i>' + (v ? '<b>' + esc(v) + '</b>' : miss) + '</span>';
