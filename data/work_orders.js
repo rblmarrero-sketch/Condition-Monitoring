@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-07T21:47:45+00:00",
+  "generated": "2026-11-07T22:02:54+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -355,7 +355,7 @@ window.CM_WO_DATA = {
     "WE010",
     "WE011"
   ],
-  "duplicateRowsCollapsed": 490,
+  "duplicateRowsCollapsed": 491,
   "roundsDedupedWithinVisit": 2,
   "columns": [
     "Asset description",
@@ -85917,7 +85917,7 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "CNF",
+      "woStatus": "CLSD",
       "cmmsStatus": "Completed",
       "open": false,
       "planStart": "2026-11-06",
@@ -121769,15 +121769,15 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CLSD",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-05",
       "planStartDt": "2026-11-05T00:00:00",
       "planEnd": "2026-11-05",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-05",
+      "actualStartDt": "2026-11-05T10:00:00",
+      "actualEnd": "2026-11-05"
     },
     {
       "equip": "GE100",
@@ -129372,7 +129372,7 @@ window.CM_WO_DATA = {
       "cmLabel": "500h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "CNF",
+      "woStatus": "CLSD",
       "cmmsStatus": "Completed",
       "open": false,
       "planStart": "2026-11-06",
@@ -138549,7 +138549,7 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "CNF",
+      "woStatus": "CLSD",
       "cmmsStatus": "Completed",
       "open": false,
       "planStart": "2026-11-05",
@@ -156213,6 +156213,28 @@ window.CM_WO_DATA = {
     {
       "equip": "TK106",
       "cls": "AT",
+      "woNumber": null,
+      "maintType": "1000 Hours service Planned",
+      "hours": 1000,
+      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmTypes": [
+        "INSP",
+        "MP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": null,
+      "cmmsStatus": "Registered",
+      "open": true,
+      "planStart": null,
+      "planStartDt": null,
+      "planEnd": null,
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
+      "equip": "TK106",
+      "cls": "AT",
       "woNumber": "GD-002220",
       "maintType": "500 Hours service Planned",
       "hours": 500,
@@ -158038,7 +158060,7 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "CNF",
+      "woStatus": "CLSD",
       "cmmsStatus": "Completed",
       "open": false,
       "planStart": "2026-11-06",
@@ -168241,7 +168263,7 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "CNF",
+      "woStatus": "CLSD",
       "cmmsStatus": "Completed",
       "open": false,
       "planStart": "2026-11-06",
@@ -176300,7 +176322,7 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "CNF",
+      "woStatus": "CLSD",
       "cmmsStatus": "Completed",
       "open": false,
       "planStart": "2026-11-07",
@@ -182605,7 +182627,7 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "CNF",
+      "woStatus": "CLSD",
       "cmmsStatus": "Completed",
       "open": false,
       "planStart": "2026-11-06",
@@ -185140,7 +185162,7 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "CNF",
+      "woStatus": "CLSD",
       "cmmsStatus": "Completed",
       "open": false,
       "planStart": "2026-11-05",
