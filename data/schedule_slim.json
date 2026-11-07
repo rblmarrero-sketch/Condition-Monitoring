@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-07T01:12:45+00:00",
+  "generated": "2026-11-07T01:27:39+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -604,7 +604,7 @@
           "LUBE",
           "MP"
         ],
-        "plan": "2026-11-17",
+        "plan": "2026-11-22",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -638,7 +638,7 @@
           "LUBE",
           "MP"
         ],
-        "plan": "2026-11-18",
+        "plan": "2026-11-16",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -785,6 +785,24 @@
       "completed": ""
     },
     {
+      "wo": "WO-021275",
+      "equip": "TK148",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Lubrication / Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-22",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-11-22",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-019352",
       "equip": "DZ007",
       "cls": "DOZ",
@@ -795,24 +813,6 @@
       "type": "1000 Hours service Planned",
       "hours": 1000,
       "plan": "2026-11-19",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
-      "wo": "WO-019531",
-      "equip": "TK151",
-      "cls": "HT",
-      "comp": "",
-      "desc": "Lubrication / Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-18",
-      "type": "1500 Hours service Planned",
-      "hours": 1500,
-      "plan": "2026-11-18",
       "status": "Elimination scheduled",
       "request": "",
       "defType": "",
@@ -857,24 +857,6 @@
       "completed": ""
     },
     {
-      "wo": "WO-021275",
-      "equip": "TK148",
-      "cls": "HT",
-      "comp": "",
-      "desc": "Lubrication / Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-17",
-      "type": "500 Hours service Planned",
-      "hours": 500,
-      "plan": "2026-11-17",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
       "wo": "WO-017741",
       "equip": "CN007",
       "cls": "CRN",
@@ -902,6 +884,24 @@
       "raised": "2026-11-16",
       "type": "500 Hours service Planned",
       "hours": 500,
+      "plan": "2026-11-16",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-019531",
+      "equip": "TK151",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Lubrication / Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-16",
+      "type": "1500 Hours service Planned",
+      "hours": 1500,
       "plan": "2026-11-16",
       "status": "Elimination scheduled",
       "request": "",
