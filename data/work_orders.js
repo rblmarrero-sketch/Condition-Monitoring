@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-07T01:42:40+00:00",
+  "generated": "2026-11-07T02:02:50+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -50993,6 +50993,25 @@ window.CM_WO_DATA = {
       "actualEnd": null
     },
     {
+      "equip": "GE099",
+      "cls": "GEN",
+      "woNumber": "WO-021656",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "250h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-12",
+      "planStartDt": "2026-11-12T00:00:00",
+      "planEnd": "2026-11-12",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
       "equip": "GE100",
       "cls": "GEN",
       "woNumber": null,
@@ -73700,6 +73719,30 @@ window.CM_WO_DATA = {
       "actualStart": "2026-10-09",
       "actualStartDt": "2026-10-09T19:00:00",
       "actualEnd": "2026-10-10"
+    },
+    {
+      "equip": "TK030",
+      "cls": "HT",
+      "woNumber": "WO-021634",
+      "maintType": "4000 Hours service Planned",
+      "hours": 4000,
+      "cmLabel": "Filter Cut / General Inspection / Magnetic Plug / Dump Body Liner",
+      "cmTypes": [
+        "FC",
+        "INSP",
+        "MP",
+        "TB"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-12",
+      "planStartDt": "2026-11-12T00:00:00",
+      "planEnd": "2026-11-12",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
     },
     {
       "equip": "TK031",

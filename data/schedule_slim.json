@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-07T01:42:40+00:00",
+  "generated": "2026-11-07T02:02:50+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -229,6 +229,20 @@
           "MP"
         ],
         "plan": "2026-11-10",
+        "priority": "P3 Planned (PM)"
+      }
+    ],
+    "TK030": [
+      {
+        "wo": "WO-021634",
+        "hours": 4000,
+        "types": [
+          "FC",
+          "INSP",
+          "MP",
+          "TB"
+        ],
+        "plan": "2026-11-12",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -1361,6 +1375,24 @@
       "completed": ""
     },
     {
+      "wo": "WO-021656",
+      "equip": "GE099",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-12",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-11-12",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-021366",
       "equip": "GR014",
       "cls": "GRD",
@@ -1388,6 +1420,24 @@
       "raised": "2026-11-12",
       "type": "250 Hours service Planned",
       "hours": 250,
+      "plan": "2026-11-12",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-021634",
+      "equip": "TK030",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Filter Cut / General Inspection / Magnetic Plug / Dump Body Liner",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-12",
+      "type": "4000 Hours service Planned",
+      "hours": 4000,
       "plan": "2026-11-12",
       "status": "Elimination scheduled",
       "request": "",
