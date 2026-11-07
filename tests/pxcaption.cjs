@@ -78,6 +78,26 @@ async function page(b, path) {
   const fig = (gen.match(/<figcaption>[\s\S]*?<\/figcaption>/g) || []);
   ok(fig.some(f => /pcap">TK126 - All good</.test(f)), "the overview tile carries the caption", fig.length + " captions");
   ok(fig.filter(f => /pcap/.test(f)).length === 1, "and only the photograph that has one");
+  console.log("── the fleet summary, its appendix, and a folded magnetic plug keep it too");
+  const more = await p.evaluate(() => {
+    const mk = c => { const cv = document.createElement("canvas"); cv.width = 40; cv.height = 30;
+      const g = cv.getContext("2d"); g.fillStyle = c; g.fillRect(0, 0, 40, 30); return cv.toDataURL(); };
+    const a = mk("#a33"), b2 = mk("#3a3"), c = mk("#33a"), d = mk("#aa3");
+    const run = (recs, mode) => CMR.sections({ lang: "en", bi: false, mode, title: "t", titleAlt: "", sub: "s", subAlt: "",
+      stamp: new Date(), records: recs, sevLabel: s => s, sevLabelAlt: s => s, extra: [] }).map(s => s.html).join("");
+    const fleet = run([
+      { equip: "TK126", date: "2026-11-05", type: "INSP", by: "x", items: [{ key: "HS.MP", name: "Hydraulic pump", grade: 4,
+        defect: "Leak", photos: [a], photoCaps: { [a]: "Fleet caption A" } }] },
+      { equip: "TK127", date: "2026-11-05", type: "INSP", by: "x", items: [{ key: "HS.MP", name: "Hydraulic pump", grade: 5,
+        defect: "Leak", photos: [b2], photoCaps: { [b2]: "Fleet caption B" } }] }], "fleet");
+    const mp = run([{ equip: "TK128", date: "2026-11-05", type: "MP", by: "x", items: [
+      { key: "4C", name: "4C", grade: 2, photos: [c], photoCaps: { [c]: "Old angle caption" } },
+      { key: "4E", name: "4E", grade: 3, photos: [d], photoCaps: { [d]: "New angle caption" } }] }], "unit");
+    return { fa: (fleet.match(/Fleet caption A/g) || []).length, fb: (fleet.match(/Fleet caption B/g) || []).length,
+             mo: mp.indexOf("Old angle caption") >= 0, mn: mp.indexOf("New angle caption") >= 0 };
+  });
+  ok(more.fa >= 1 && more.fb >= 1, "the fleet report prints both captions", JSON.stringify(more));
+  ok(more.mo && more.mn, "a retired 4C angle folded into 4E keeps both captions");
   ok(errs.length === 0, "no page errors", errs.join(" | ") || "none");
   await p.close();
 }
