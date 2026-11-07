@@ -289,6 +289,7 @@ def dedupe_within_visit(work_orders, class_rounds):
 # per defect raised, not per service due — so it gets its own collection
 # rather than being mixed into workOrders, where every reader expects a
 # planned service and a cmTypes mapping that means nothing here.
+OTHER_DAYS = 60                  # CM_EXISTDEF_V1: a completed defect of another person stays this long
 CM_SINCE = "2026-07-01"          # the kick-off; rows before it are not this team's record
 CM_PEOPLE = ["nurbol", "slam", "irek", "zhomart", "bekzhan"]
 # 1C's own header spellings, as the office reads them off the sheet, with the
@@ -775,6 +776,8 @@ def main():
 
     cm_idx, cm_report = resolve_cm_columns(col)
     cm_rows = []
+    other_rows = []   # CM_EXISTDEF_V1: other people's defects, open or raised in the last OTHER_DAYS
+    other_since = (datetime.now(timezone.utc) - timedelta(days=OTHER_DAYS)).date().isoformat()
     hours_re = re.compile(r"(\d+)\s*Hours?", re.I)
     work_orders = []
     kept_units = set()
@@ -802,6 +805,30 @@ def main():
         # defect work order is dropped two lines below; this is the only
         # point in the pass where it can still be seen.
         who = cm_person_match(row[cm_idx["person"]]) if cm_idx["person"] is not None else None
+        # OTHER PEOPLE'S DEFECTS (CM_EXISTDEF_V1, Rickie 08.11.2026): an inspector finds a defect, goes to 1C
+        # to raise it and finds one already raised by another supervisor. The day summary names that defect
+        # ("Existing defect"), so it needs every defect still open in 1C, not only the CM team's own.
+        # Slim on purpose: this file is loaded whole by the office pages.
+        if not who:
+            _oget = lambda f: (row[cm_idx[f]] if cm_idx.get(f) is not None else None)
+            _m = DEFECT_RE.search(str(_oget("request") or ""))
+            if _m:
+                _st = str(_oget("status") or "").strip()
+                _raised, _ = parse_1c_date(_oget("date"))
+                _done = bool(re.search(r"complet|выполн|closed|закры", _st, re.I))
+                if _raised and (not _done or _raised >= other_since):
+                    other_rows.append({
+                        "asset": str(_oget("asset") or equip).strip(),
+                        "defect": _m.group(1).upper(),
+                        "raised": _raised,
+                        "system": str(_oget("sysComp") or "").strip() or None,
+                        "defectType": str(_oget("defType") or "").strip() or None,
+                        "descr": (str(_oget("desc") or "").strip()[:140] or None),
+                        "status": _st or None,
+                        "priority": str(_oget("priority") or "").strip() or None,
+                        "by": str(_oget("person") or "").strip() or None,
+                        "wo": str(_oget("wo") or "").strip() or None,
+                    })
         if who:
             cm_get = lambda f: (row[cm_idx[f]] if cm_idx[f] is not None else None)
             raised_iso, _ = parse_1c_date(cm_get("date"))
@@ -949,6 +976,13 @@ def main():
         cm_dedup.append(r)
     cm_dedup.sort(key=lambda r: (r["date"] or "", r["asset"] or "", r["defect"] or ""), reverse=True)
 
+    _seen_o, other_dedup = {r["defect"] for r in cm_dedup if r.get("defect")}, []
+    for r in sorted(other_rows, key=lambda r: r["raised"] or "", reverse=True):
+        if r["defect"] in _seen_o:
+            continue
+        _seen_o.add(r["defect"])
+        other_dedup.append(r)
+
     work_orders.sort(key=lambda w: (w["equip"], w["planStart"] or ""))
 
     # One "now" for this whole run -- build_rtw_open's own recently-completed
@@ -995,6 +1029,9 @@ def main():
         "cmSince": CM_SINCE,
         "cmPeople": [n.capitalize() for n in CM_PEOPLE],
         "cmWorkOrders": cm_dedup,
+        # CM_EXISTDEF_V1: defects raised by anyone else, still open in 1C or raised in the last OTHER_DAYS,
+        # one row per defect number (1C repeats a defect per line item).
+        "otherDefects": other_dedup,
         "workOrders": work_orders,
     }
 

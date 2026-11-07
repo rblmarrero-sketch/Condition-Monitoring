@@ -23,7 +23,7 @@
       copy: 'Copy for e-mail', csv: 'Export CSV', copied: 'Copied. Paste it into the e-mail body.',
       copyfail: 'Could not copy. Select the table and press Ctrl+C.',
       c_date: 'Date inspected', c_unit: 'Unit', c_comp: 'Component', c_type: 'Type of defect',
-      c_desc: 'Description', c_no: 'Defect no.', nodef: 'Not raised in 1C', c_prio: 'Priority', c_sev: 'Severity',
+      c_desc: 'Description', c_no: 'Defect no.', c_ex: 'Existing defect', nodef: 'Not raised in 1C', c_prio: 'Priority', c_sev: 'Severity',
       normal_n: '{n} other points', meas: '{n} points measured', worst: 'Worst: {p}', intro: 'Condition monitoring, {d}: {r} round(s), {u} unit(s), {f} finding(s).',
       byline: 'Inspected by: {p}', foot: 'Reports of each round attached.', all_on: 'All', all_off: 'None',
       sel: '{n} of {m} rounds'
@@ -36,7 +36,7 @@
       copy: 'Копировать для письма', csv: 'Экспорт CSV', copied: 'Скопировано. Вставьте в текст письма.',
       copyfail: 'Не удалось скопировать. Выделите таблицу и нажмите Ctrl+C.',
       c_date: 'Дата осмотра', c_unit: 'Единица', c_comp: 'Узел', c_type: 'Тип дефекта',
-      c_desc: 'Описание', c_no: '№ дефекта', nodef: 'Нет в 1С', c_prio: 'Приоритет', c_sev: 'Критичность',
+      c_desc: 'Описание', c_no: '№ дефекта', c_ex: 'Существующий дефект', nodef: 'Нет в 1С', c_prio: 'Приоритет', c_sev: 'Критичность',
       normal_n: 'Остальные точки: {n}', meas: 'Замерено точек: {n}', worst: 'Худшие: {p}', intro: 'Мониторинг состояния, {d}: обходов {r}, единиц {u}, дефектов {f}.',
       byline: 'Осмотр провёл: {p}', foot: 'Отчёты по каждому обходу приложены.', all_on: 'Все', all_off: 'Ни одного',
       sel: '{n} из {m} обходов'
@@ -133,7 +133,7 @@
         var g = grade(r, i), f = bad.indexOf(i) >= 0, d = dd.get(i);
         var need = f && (g >= 3 || i.defect || i.defectCode);
         out.push({ rk: rk(r), type0: r.type, key: i.key || '', date: r.date, unit: r.equip, round: typeName(r.type), comp: (i.key && String(i.label || '').indexOf(i.key) !== 0 ? i.key + ' ' : '') + (i.label || ''),
-          type: f ? ((d && type1c(d)) || i.defect || i.defectCode || '') : '', desc: f ? (i.comment || (d && d.descr) || '') : '',
+          type: f ? ((d && type1c(d)) || i.defect || i.defectCode || '') : '', desc: f ? (i.comment || (d && d.descr) || '') : '', cmt: i.comment || '',
           no: d ? d.defect : (need ? w('nodef') : ''), nodef: !d && need, st: d ? (d.status || '') : '',
           prio: f ? ((d && prio1c(d)) || prio(i)) : '', sev: sevName(g), g: g, by: r.by || '' });
       });
@@ -158,7 +158,7 @@
   var M = {
     en: { title: 'Condition Monitoring — Daily Report', hello: 'Good day, colleagues. Below are the condition monitoring results; the report of each round is attached.',
       rounds: 'rounds', units: 'units', act: 'ACTION REQUIRED', find: 'Findings', worst: 'worst first', clean: 'Inspected — no findings',
-      t_sev: 'Severity', t_date: 'Date', t_unit: 'Unit · round', t_comp: 'Component', t_def: 'Defect · description', t_no: 'Defect no. · priority',
+      t_sev: 'Severity', t_date: 'Date', t_unit: 'Unit · round', t_comp: 'Component', t_def: 'Defect · description', t_no: 'Defect no. · priority', t_ex: 'Existing defect', ex_cited: 'from the comment',
       nodef: 'Not raised in 1C', rep: 'Repeat', rep_cm: '{g} on {d}', rep_1c: 'earlier defect {n} ({s})', pts: '{n} points', meas: '{n} points measured', worstK: 'worst: {p}',
       others: 'other points normal', online: 'View more details online', online_t: 'Photos, full readings and each unit’s history are on the CM dashboard. Click a unit number to open its Equipment History.',
       open: 'Open the CM dashboard', net: 'Company network or VPN', by: 'Inspected by', att: 'The report of each round is attached.',
@@ -169,7 +169,7 @@
       ok_GET: 'Ground engaging tools within wear limits.', ok_TEMP: 'Temperatures within limits.', ok_LUBE: 'Lubrication audit: no deviations.', ok_: 'No defects found.' },
     ru: { title: 'Мониторинг состояния — ежедневный отчёт', hello: 'Добрый день, коллеги. Ниже результаты мониторинга состояния; отчёт по каждому обходу приложен.',
       rounds: 'обходов', units: 'единиц', act: 'ТРЕБУЮТСЯ ДЕЙСТВИЯ', find: 'Замечания', worst: 'по степени критичности', clean: 'Осмотрено — без замечаний',
-      t_sev: 'Критичность', t_date: 'Дата', t_unit: 'Единица · обход', t_comp: 'Узел', t_def: 'Дефект · описание', t_no: '№ дефекта · приоритет',
+      t_sev: 'Критичность', t_date: 'Дата', t_unit: 'Единица · обход', t_comp: 'Узел', t_def: 'Дефект · описание', t_no: '№ дефекта · приоритет', t_ex: 'Существующий дефект', ex_cited: 'из комментария',
       nodef: 'Нет в 1С', rep: 'Повтор', rep_cm: '{g} от {d}', rep_1c: 'ранее дефект {n} ({s})', pts: 'точек: {n}', meas: 'замерено точек: {n}', worstK: 'худшие: {p}',
       others: 'остальные точки в норме', online: 'Подробности онлайн', online_t: 'Фото, все замеры и история каждой единицы — на панели мониторинга состояния. Нажмите номер единицы, чтобы открыть её историю.',
       open: 'Открыть панель МС', net: 'Сеть компании или VPN', by: 'Осмотр провели', att: 'Отчёт по каждому обходу приложен.',
@@ -224,6 +224,34 @@
     if (rp.dd) p.push(m(l, 'rep_1c', { n: rp.dd.n, s: rp.dd.s || dm(rp.dd.d) }));
     return p.join('; ');
   }
+  /* CM_EXISTDEF_V1 (Rickie 08.11.2026): "sometimes they find a defect, come to the office to raise it in 1C and find
+     it is already raised by another supervisor; they put that number in the comment. Add a column: existing defect."
+     Two sources, both shown: a defect number the inspector wrote in the finding's comment (DD-…, any number of
+     digits), looked up in 1C for its status and owner; and any defect raised in 1C by someone else on the same unit
+     and system, raised on or before the inspection and still open (CM_WO_DATA.otherDefects, from the ingester).
+     A finding with an existing defect is no longer flagged "Not raised in 1C". */
+  var EX_MAX = 3;
+  function exOpen(d) { return !/complet|выполн|closed|закры/i.test(String(d.status || '')); }
+  function exKey(n) { var m2 = /^([A-Za-zА-Яа-я]{2,})\s*-?\s*0*(\d+)$/.exec(String(n || '').trim()); return m2 ? m2[1].toUpperCase().replace('ДД', 'DD') + '-' + m2[2] : ''; }
+  function existOf(x) {
+    if (!((x.g || 0) >= 2 || x.type)) return [];
+    var D = window.CM_WO_DATA || {}, other = D.otherDefects || [], all = other.concat(D.cmWorkOrders || []), by = {};
+    all.forEach(function (d) { if (d && d.defect) { var k = exKey(d.defect); if (k && !by[k]) by[k] = d; } });
+    var out = [], seen = {}; if (x.no && !x.nodef) seen[exKey(x.no)] = 1;
+    (String(x.cmt || '').match(/(?:DD|GD|ДД)\s*-?\s*\d{3,}/gi) || []).forEach(function (t) {
+      var k = exKey(t.replace(/\s+/g, '')); if (!k || seen[k]) return; seen[k] = 1; var d = by[k];
+      out.push({ n: d ? d.defect : t.replace(/\s+/g, '').toUpperCase(), s: d ? (d.status || '') : '', by: d ? (d.by || d.byFull || '') : '', on: d ? String(d.raised || d.date || '').slice(0, 10) : '', cited: 1 });
+    });
+    var u = String(x.unit || '').toUpperCase(), sysKey = x.wear ? String(x.comp || '').split(' ')[0] : x.key;
+    other.forEach(function (d) {
+      if (out.length >= EX_MAX || !d || !d.defect) return;
+      var k = exKey(d.defect), on = String(d.raised || '').slice(0, 10);
+      if (seen[k] || String(d.asset || '').toUpperCase() !== u || !on || on > x.date || !exOpen(d) || !sysHas(d, sysKey)) return;
+      seen[k] = 1; out.push({ n: d.defect, s: d.status || '', by: d.by || '', on: on });
+    });
+    return out.slice(0, EX_MAX);
+  }
+  function exText(ex) { return ex.map(function (d) { return d.n + (d.s ? ' (' + d.s + ')' : '') + (d.by ? ' ' + d.by : ''); }).join('; '); }
   function repBi(rp) { var L2 = langs(); return '↻ ' + L2.map(function (l) { return m(l, 'rep'); }).join(' · ') + ': ' + repText(rp, L2[0]) + (L2.length > 1 && repText(rp, 'en') !== repText(rp, 'ru') ? ' · ' + repText(rp, 'ru') : ''); }
   /* split the rows into findings (anything graded 2 or worse, or carrying a defect) and the clean lines */
   function shape(rows, list) {
@@ -234,7 +262,7 @@
     var clean = list.filter(function (r) { return cleanBy[rk(r)]; }).map(function (r) { var c = cleanBy[rk(r)];
       return { r: r, n: c.n, keys: c.keys.filter(Boolean), partial: !!hasFind[rk(r)], rows: rows.filter(function (x) { return x.rk === rk(r) && finds.indexOf(x) < 0; }) }; })
       .sort(function (a, b) { return String(b.r.date).localeCompare(String(a.r.date)) || String(a.r.equip).localeCompare(String(b.r.equip)); });
-    finds.forEach(function (x) { x.rep = repeatOf(x); });
+    finds.forEach(function (x) { x.rep = repeatOf(x); x.ex = existOf(x); if (x.ex.length && x.nodef) { x.nodef = false; x.no = ''; } });
     var cnt = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
     finds.forEach(function (x) { if (x.g >= 1 && x.g <= 5) cnt[x.g]++; });
     clean.forEach(function (c) { cnt[1] += c.n; });
@@ -285,7 +313,7 @@
       ' <span style="font-weight:400;font-size:13px;color:#5b6670">— ' + bi('worst') + '</span></div></td></tr>';
     if (sh.finds.length) {
       h += '<tr><td><table data-ds="find" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse"><thead><tr>' +
-        ['t_sev', 't_date', 't_unit', 't_comp', 't_def', 't_no'].map(function (k) { return '<th ' + TH + '>' + bi(k, null, true) + '</th>'; }).join('') + '</tr></thead><tbody>' +
+        ['t_sev', 't_date', 't_unit', 't_comp', 't_def', 't_no', 't_ex'].map(function (k) { return '<th ' + TH + '>' + bi(k, null, true) + '</th>'; }).join('') + '</tr></thead><tbody>' +
         sh.finds.map(function (x) {
           var bg = ROWBG[x.g] || '#ffffff', p = PILL[x.g] || PILL[3];
           var TD = 'style="' + F + 'font-size:13px;color:#16212a;padding:8px;border-bottom:1px solid #e3e7ea;vertical-align:top;background:' + bg + '"';
@@ -296,9 +324,12 @@
             (x.g >= 3 ? '<br><span style="color:#3d474f">→ ' + e(L2.map(function (l) { return gAct(x.g, l); }).join(' · ')) + '</span>' : '') +
             (x.rep ? '<br><span style="color:#a33d00;font-weight:700">' + e(repBi(x.rep)) + '</span>' : '');
           var no = x.nodef ? '<span style="color:#a33d00;font-weight:700">' + bi('nodef', null, true, '#a33d00') + '</span>' : (x.no ? '<b>' + e(x.no) + '</b>' + (x.prio ? '<br>' + e(x.prio) : '') : (x.prio ? e(x.prio) : '—'));
+          var ex = (x.ex || []).map(function (d) { return '<b>' + e(d.n) + '</b>' + (d.s ? '<br><span style="color:#3d474f">' + e(d.s) + '</span>' : '') +
+            (d.by ? '<br><span style="color:#5b6670;font-size:12px">' + e(d.by) + (d.on ? ' · ' + e(dm(d.on)) : '') + '</span>' : '') +
+            (d.cited ? '<br><span style="color:#5b6670;font-size:12px">' + e(L2.map(function (l) { return m(l, 'ex_cited'); }).join(' · ')) + '</span>' : ''); }).join('<br><br>') || '—';
           return '<tr><td ' + TD + '><span style="background:' + p[0] + ';color:' + p[1] + ';' + F + 'font-size:12px;font-weight:700;padding:3px 8px;white-space:nowrap">' + x.g + ' ' + e(gName(x.g, L2[0])) + '</span>' +
             (L2.length > 1 ? '<div style="' + F + 'font-size:11px;color:#5b6670;margin-top:3px">' + e(gName(x.g, 'ru')) + '</div>' : '') + '</td>' +
-            '<td ' + TD + '>' + e(dm(x.date)) + '</td><td ' + TD + '>' + link(x.unit) + ' · ' + e(typeBi(x.type0)) + '</td><td ' + TD + '>' + comp + '</td><td ' + TD + '>' + (def || '—') + '</td><td ' + TD + '>' + no + '</td></tr>';
+            '<td ' + TD + '>' + e(dm(x.date)) + '</td><td ' + TD + '>' + link(x.unit) + ' · ' + e(typeBi(x.type0)) + '</td><td ' + TD + '>' + comp + '</td><td ' + TD + '>' + (def || '—') + '</td><td ' + TD + '>' + no + '</td><td ' + TD + '>' + ex + '</td></tr>';
         }).join('') + '</tbody></table></td></tr>';
     } else h += '<tr><td style="' + F + 'font-size:13px;color:#1d6b3a;padding:4px 0">✓ ' + bi('nofind') + '</td></tr>';
     /* inspected, nothing found */
@@ -334,7 +365,7 @@
     out.push(biText('hello'), '', subject(sh), '');
     if (sh.finds.length) { out.push(biText('find').toUpperCase());
       sh.finds.forEach(function (x) { out.push('[' + x.g + ' ' + gBi(x.g) + '] ' + dm(x.date) + ' ' + x.unit + ' · ' + typeBi(x.type0) + ' — ' + [x.comp, x.type, x.desc].filter(Boolean).join(' — ') +
-        (x.no ? ' — ' + (x.nodef ? biText('nodef') : x.no + (x.prio ? ' ' + x.prio : '')) : '') + (x.rep ? ' — ' + repBi(x.rep) : '')); }); out.push(''); }
+        (x.no ? ' — ' + (x.nodef ? biText('nodef') : x.no + (x.prio ? ' ' + x.prio : '')) : '') + (x.ex && x.ex.length ? ' — ' + biText('t_ex') + ': ' + exText(x.ex) : '') + (x.rep ? ' — ' + repBi(x.rep) : '')); }); out.push(''); }
     if (sh.clean.length) { out.push(biText('clean').toUpperCase());
       sh.clean.forEach(function (c) { out.push('✓ ' + dm(c.r.date) + ' ' + c.r.equip + ' · ' + typeBi(c.r.type) + (c.keys.length ? ' (' + c.keys.join(', ') + ')' : '')); }); out.push(''); }
     out.push(biText('online') + ': ' + DASH_URL + '#overview', biText('att'));
@@ -402,9 +433,9 @@
     if (q('dsSubj')) q('dsSubj').onclick = function () { clip(null, subject(shape(rows, list)), msgOf(q2('subjok'))); };
     if (q('dsCsv')) q('dsCsv').onclick = function () {
       var C = [['date', 'c_date'], ['unit', 'c_unit'], ['comp', 'c_comp'], ['type', 'c_type'], ['desc', 'c_desc'], ['no', 'c_no'], ['prio', 'c_prio'], ['sev', 'c_sev']];
-      var lines = [C.map(function (c) { return w(c[1]); }).concat(['Round', 'Repeat']).join(',')].concat(rows.map(function (x) {
+      var lines = [C.map(function (c) { return w(c[1]); }).concat(['Round', 'Repeat', w('c_ex')]).join(',')].concat(rows.map(function (x) {
         var rp = x.rep || repeatOf(x);
-        return C.map(function (c) { return x[c[0]] || ''; }).concat([x.round, rp ? repText(rp, L()) : '']).map(function (v) { v = String(v); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }).join(',');
+        return C.map(function (c) { return x[c[0]] || ''; }).concat([x.round, rp ? repText(rp, L()) : '', exText(x.ex || existOf(x))]).map(function (v) { v = String(v); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }).join(',');
       }));
       var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['﻿' + lines.join('\r\n')], { type: 'text/csv' }));
       a.download = 'cm_day_summary_' + S.from + (S.to !== S.from ? '_' + S.to : '') + '.csv'; document.body.appendChild(a); a.click(); a.remove();
