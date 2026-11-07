@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-07T22:47:49+00:00",
+  "generated": "2026-11-07T23:07:50+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5573,6 +5573,18 @@ window.CM_WO_DATA = {
       "system": "DZ014.HS.DL (Hydraulic Lines / Гидролинии)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Утечка масла гидросистемы",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "wo": null
+    },
+    {
+      "asset": "LD007",
+      "defect": "DD-00016504",
+      "raised": "2026-11-08",
+      "system": "LD007.HS.CYL (Cylinders / Гидроцилиндры)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь РВД гидроцилиндра поворота",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Dmitriy Stepanenko",
@@ -107459,15 +107471,15 @@ window.CM_WO_DATA = {
       "cmLabel": "500h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-04",
       "planStartDt": "2026-11-04T00:00:00",
       "planEnd": "2026-11-04",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-04",
+      "actualStartDt": "2026-11-04T07:00:00",
+      "actualEnd": "2026-11-04"
     },
     {
       "equip": "EX019",
@@ -147033,15 +147045,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-02",
       "planStartDt": "2026-11-02T07:00:00",
       "planEnd": "2026-11-02",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-02",
+      "actualStartDt": "2026-11-02T13:00:00",
+      "actualEnd": "2026-11-02"
     },
     {
       "equip": "TK039",
