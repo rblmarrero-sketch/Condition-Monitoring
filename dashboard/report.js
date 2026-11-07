@@ -74,6 +74,15 @@
   /* ---- photographs -------------------------------------------------------
      The folder picker indexes by file name, so rebuild the names both ends
      agreed on; Drive records already carry a usable URL. */
+  /* The captions typed in Edit photo, keyed by the photograph's src (the
+     engine may drop a duplicate frame, so a parallel list could slip). */
+  function photoCaps(it, rec) {
+    const o = {};
+    if (!(window.CMDash && window.CMDash.mediaOf)) return o;
+    (window.CMDash.mediaOf(it, rec) || []).forEach(m => {
+      if (m.kind !== "video" && !m.excluded && m.caption) o[m.src] = m.caption; });
+    return o;
+  }
   function photoSrcs(it, rec) {
     /* One source of truth with the history screen. This used to rebuild the
        names itself and stopped at "_4", so a report could never carry more
@@ -320,7 +329,7 @@
          no single inspection point. It has no item to be printed under, so
          until now classifying one removed it from the report entirely. */
       general: wantPhotos && window.CMDash && CMDash.generalMedia
-        ? CMDash.generalMedia(rec).filter(m => m.kind !== "video" && !m.excluded).map(m => m.cat ? { u: m.src, cat: m.cat } : m.src)
+        ? CMDash.generalMedia(rec).filter(m => m.kind !== "video" && !m.excluded).map(m => (m.cat || m.caption) ? { u: m.src, cat: m.cat || "", cap: m.caption || "" } : m.src)
         : [],
       /* What this inspection says it photographed, against what actually
          reached this dashboard. A report that prints four pictures where six
@@ -389,6 +398,7 @@
           zone: it.zone || "", zoneLabel: it.zoneLabel || "",
           lube: lubeBlock(rec, it),
           photos: wantPhotos ? photoSrcs(it, rec) : [],
+          photoCaps: wantPhotos ? photoCaps(it, rec) : {},
           w: w ? { mm: w.mm, newMM: w.newMM, condemnMM: w.condemnMM, pct: w.wearPct,
                    band: w.band || "", refSrc: w.refSrc || "", odd: w.odd || "", warnPct: w.warnPct,
                    reason: w.reason || "", reasonLabel: w.reasonLabel || "",

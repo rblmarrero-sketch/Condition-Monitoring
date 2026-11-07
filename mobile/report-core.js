@@ -841,6 +841,8 @@
    row. */
 #rptRoot .capgal-row{align-items:flex-start;}
 #rptRoot .capgal figcaption{font-size:9.5px;color:#3d474f;margin-top:4px;line-height:1.3;}
+#rptRoot .pcap{font-size:9.5px;color:#3d474f;line-height:13px;font-style:italic;overflow-wrap:anywhere;}
+#rptRoot .pcapl{margin-top:4px;}
 #rptRoot .genwhy{font-size:9.5px;color:#5b6670;margin-top:6px;line-height:1.4;}
 /* Said plainly and without alarm. A missing file is a synchronisation problem,
    and a reader who cannot tell that from a bad measurement will distrust the
@@ -4951,8 +4953,16 @@
      (PH_BORDER) applies here too, so the tile's own 1px border does not
      silently steal a pixel from the photograph filling it. */
   var PH_BORDER = 1;
-  function tiledRow(urls, targetW, gap, x0) {
+  /* Captions typed in Edit photo sit under their own tile. The row grows by
+     the lines the longest caption needs (never cut), about 32 characters a
+     line at 9.5 px in a ~184 px tile. */
+  var CAP_LINE = 13, CAP_CH = 30;
+  function capLines(c) { return c ? Math.ceil(String(c).length / CAP_CH) : 0; }
+  function tiledRow(urls, targetW, gap, x0, caps) {
     var side = tileSize(targetW, gap);
+    var nl = 0;
+    if (caps) urls.forEach(function (u) { nl = Math.max(nl, capLines(caps[u])); });
+    var capH = nl ? nl * CAP_LINE + 6 : 0;
     var innerW = side - PH_BORDER * 2, innerH = innerW;
     var cells = urls.map(function (u, i) {
       var ratio = photoRatio(u);
@@ -4981,9 +4991,11 @@
         + 'px;background:#fff;border:' + PH_BORDER + 'px solid #dfe4e9;border-radius:3px;overflow:hidden;">'
         + '<img src="' + u + '" style="position:absolute;left:' + ox + 'px;top:' + oy
         + 'px;width:' + dispW + 'px;height:' + dispH + 'px;max-width:none;max-height:none;display:block;">'
-        + '</div>';
+        + '</div>'
+        + (caps && caps[u] ? '<div class="pcap" style="position:absolute;left:' + tx + 'px;top:' + (side + 4)
+          + 'px;width:' + side + 'px;">' + esc(caps[u]) + '</div>' : '');
     }).join("");
-    return { html: '<div class="phgrow" style="position:relative;width:100%;height:' + side + 'px;">' + cells + '</div>', h: side };
+    return { html: '<div class="phgrow" style="position:relative;width:100%;height:' + (side + capH) + 'px;">' + cells + '</div>', h: side + capH };
   }
   /* THE RULE APPLIED TO A COMPONENT'S OWN GALLERY APPLIES TO EVERY OTHER
      CAPTIONED PHOTO BOARD TOO — Machine overview, additional photos and
@@ -5045,6 +5057,7 @@
        No placeholder box either — a grey rectangle saying "no photograph" is
        the same area as a photograph and carries none of the information. */
     var ph = it.photos || [];
+    var pcaps = it.photoCaps || null;
     var top = "";
     if (ph.length) {
       /* On the PHOTOGRAPHS sheet every frame is the same size, in rows across
@@ -5088,7 +5101,7 @@
            shape — a rule assumed inert because nothing currently reaches it
            is one new branch away from reaching it. */
         top = '<div class="phg gallery g3plus" style="grid-template-columns:1fr">'
-          + galRows.map(function (r) { return tiledRow(r, GAL_ROW_W, GAL_GAP, 0).html; }).join("")
+          + galRows.map(function (r) { return tiledRow(r, GAL_ROW_W, GAL_GAP, 0, pcaps).html; }).join("")
           + '</div>';
       } else if (ph.length > 1) {
         /* ONE SIZE, IN ROWS — the layout the magnetic plug sheet already used,
@@ -5153,7 +5166,7 @@
         if (sh && sh.wide) {
           var mpRows = chunkPh(ph, ncols);
           top = '<div class="phg gallery g3plus" style="grid-template-columns:1fr">'
-            + mpRows.map(function (r) { return tiledRow(r, GAL_ROW_W, GAL_GAP, 0).html; }).join("")
+            + mpRows.map(function (r) { return tiledRow(r, GAL_ROW_W, GAL_GAP, 0, pcaps).html; }).join("")
             + '</div>';
         } else {
           top = '<div class="phg' + (ncols === 4 ? ' g4' : '') + '" style="grid-template-columns:repeat('
@@ -5176,9 +5189,16 @@
            uses, cropped rather than padded, the same as two, three or
            four. */
         top = '<div class="phg gallery g3plus" style="grid-template-columns:1fr">'
-          + tiledRow(ph, GAL_ROW_W, GAL_GAP, 0).html + '</div>';
+          + tiledRow(ph, GAL_ROW_W, GAL_GAP, 0, pcaps).html + '</div>';
       } else {
         top = '<img class="ph" src="' + ph[0] + '">';
+      }
+      /* Where the photographs are not tiles (a narrow card), their captions
+         follow them as a short list, numbered when there is more than one. */
+      if (pcaps && top.indexOf('class="pcap"') < 0) {
+        var cl = ph.map(function (u, i) { return pcaps[u] ? (ph.length > 1 ? (i + 1) + '. ' : '') + esc(pcaps[u]) : ""; })
+          .filter(Boolean);
+        if (cl.length) top += '<div class="pcap pcapl">' + cl.join('<br>') + '</div>';
       }
     }
     var rows = "";
@@ -5440,7 +5460,8 @@
         var g = (rec.general || []).slice();
         gen.forEach(function (it) {
           (it.photos || []).forEach(function (u, i) {
-            g.push({ u: u, cat: (it.cats && it.cats[i]) || "" }); });
+            g.push({ u: u, cat: (it.cats && it.cats[i]) || "",
+                     cap: (it.photoCaps && it.photoCaps[u]) || "" }); });
         });
         copy.general = g;
       }
@@ -5456,7 +5477,12 @@
   function genShotItem(T, x) {
     var u = (x && typeof x === "object") ? x.u : x;
     var cat = (x && typeof x === "object" && x.cat) ? x.cat : "";
-    return { u: esc(u), capHtml: cat ? T.I("cat_" + cat) : "" };
+    /* The caption the office typed in Edit photo, under what the photograph
+       is of — in the office's own words, so in no second language. */
+    var cap = (x && typeof x === "object" && x.cap) ? String(x.cap).trim() : "";
+    var html = cat ? T.I("cat_" + cat) : "";
+    if (cap) html += (html ? '<br>' : '') + '<span class="pcap">' + esc(cap) + '</span>';
+    return { u: esc(u), capHtml: html };
   }
   /* The rule, reachable by the suite. It decides what a document calls
      itself, so it is asked directly rather than inferred from rendered text —
