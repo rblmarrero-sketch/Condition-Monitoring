@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-07T23:07:50+00:00",
+  "generated": "2026-11-07T23:22:42+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5573,6 +5573,18 @@ window.CM_WO_DATA = {
       "system": "DZ014.HS.DL (Hydraulic Lines / Гидролинии)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Утечка масла гидросистемы",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "wo": null
+    },
+    {
+      "asset": "LD008",
+      "defect": "DD-00016505",
+      "raised": "2026-11-08",
+      "system": "LD008.HS.CYL (Cylinders / Гидроцилиндры)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь масла 2-х РВД поворотных цилиндров",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Dmitriy Stepanenko",
@@ -25596,18 +25608,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "TK029",
-      "defect": "DD-00014755",
-      "raised": "2026-10-14",
-      "system": "TK029.ELS.ALT (Alternator / Генератор)",
-      "defectType": "1.27 Belt drive issue (slip/break) / Проблема ременного привода (проскальзывание/обрыв)",
-      "descr": "При наборе оборотов просвистывает ремень генератора",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "wo": "WO-019944"
-    },
-    {
-      "asset": "TK029",
       "defect": "DD-00014769",
       "raised": "2026-10-14",
       "system": "TK029.DRS.TRA (Transmission / Трансмиссия)",
@@ -25617,6 +25617,18 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
       "wo": "WO-019946"
+    },
+    {
+      "asset": "TK029",
+      "defect": "DD-00014755",
+      "raised": "2026-10-14",
+      "system": "TK029.ELS.ALT (Alternator / Генератор)",
+      "defectType": "1.27 Belt drive issue (slip/break) / Проблема ременного привода (проскальзывание/обрыв)",
+      "descr": "При наборе оборотов просвистывает ремень генератора",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "wo": "WO-019944"
     },
     {
       "asset": "EX003",
@@ -152639,6 +152651,27 @@ window.CM_WO_DATA = {
       "planStart": "2026-11-14",
       "planStartDt": "2026-11-14T00:00:00",
       "planEnd": "2026-11-15",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
+      "equip": "TK101",
+      "cls": "AT",
+      "woNumber": "WO-021922",
+      "maintType": "500 Hours service Planned",
+      "hours": 500,
+      "cmLabel": "Magnetic Plug",
+      "cmTypes": [
+        "MP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-28",
+      "planStartDt": "2026-11-28T00:00:00",
+      "planEnd": "2026-11-28",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
