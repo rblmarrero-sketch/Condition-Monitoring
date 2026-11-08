@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-08T01:37:42+00:00",
+  "generated": "2026-11-08T01:52:44+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5585,6 +5585,19 @@ window.CM_WO_DATA = {
   ],
   "otherDefects": [
     {
+      "asset": "TK036",
+      "defect": "DD-00016511",
+      "raised": "2026-11-08",
+      "system": "TK036.DRS.CLU (Clutch / Сцепление)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Не работает сцепление",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-021926"
+    },
+    {
       "asset": "TK110",
       "defect": "DD-00016496",
       "raised": "2026-11-08",
@@ -5804,6 +5817,19 @@ window.CM_WO_DATA = {
       "by": "Roman Besedovskiy",
       "regBy": "Беседовский Роман Иванович",
       "wo": "WO-021924"
+    },
+    {
+      "asset": "TK032",
+      "defect": "DD-00016510",
+      "raised": "2026-11-08",
+      "system": "TK032.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка топлива с ДВС",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-021925"
     },
     {
       "asset": "DZ014",
@@ -35368,6 +35394,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021732"
     },
     {
+      "asset": "TK162",
+      "defect": "DD-00014083",
+      "raised": "2026-10-05",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK162 TRANSMISSION OldNumber (UT162)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка масла с РК",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": null
+    },
+    {
       "asset": "LV158",
       "defect": "DD-00014121",
       "raised": "2026-10-05",
@@ -35478,19 +35517,6 @@ window.CM_WO_DATA = {
       "system": "LV062.BS (Braking System / Тормозная система)",
       "defectType": "2.01 Wear / Износ",
       "descr": "Требуется замена задних тросов ручного тормоза (вытянуты)",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": null
-    },
-    {
-      "asset": "TK162",
-      "defect": "DD-00014083",
-      "raised": "2026-10-05",
-      "system": "TRUCK, WATER URAL 4672M1-20, TK162 TRANSMISSION OldNumber (UT162)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка масла с РК",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -192789,15 +192815,15 @@ window.CM_WO_DATA = {
       "cmLabel": "500h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-02",
       "planStartDt": "2026-11-02T07:00:00",
       "planEnd": "2026-11-02",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-03",
+      "actualStartDt": "2026-11-03T03:00:00",
+      "actualEnd": "2026-11-03"
     },
     {
       "equip": "TK167",
