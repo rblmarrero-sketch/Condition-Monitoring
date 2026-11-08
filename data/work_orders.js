@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-08T03:17:41+00:00",
+  "generated": "2026-11-08T03:37:50+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -355,7 +355,7 @@ window.CM_WO_DATA = {
     "WE010",
     "WE011"
   ],
-  "duplicateRowsCollapsed": 510,
+  "duplicateRowsCollapsed": 511,
   "roundsDedupedWithinVisit": 2,
   "columns": [
     "Asset description",
@@ -5910,6 +5910,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "TK126",
+      "defect": "DD-00016515",
+      "raised": "2026-11-08",
+      "system": "TK126.CH.BY (Dump Body / Самосвальный кузов)",
+      "defectType": "6.03 Structural crack / Трещина конструкции",
+      "descr": "Требуется замена футировочных пластин кузова",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": null
+    },
+    {
       "asset": "TK122",
       "defect": "DD-00016508",
       "raised": "2026-11-08",
@@ -5986,19 +5999,6 @@ window.CM_WO_DATA = {
       "by": "Roman Besedovskiy",
       "regBy": "Беседовский Роман Иванович",
       "wo": "WO-021894"
-    },
-    {
-      "asset": "TK007",
-      "defect": "DD-00016470",
-      "raised": "2026-11-07",
-      "system": "TK007.ELS.ECU (Electronic Control Unit (ECU) / Электронный блок управления (ЭБУ)",
-      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
-      "descr": "Появился ЧЕК (компьютерная диагностика)",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Roman Besedovskiy",
-      "regBy": "Беседовский Роман Иванович",
-      "wo": "WO-021895"
     },
     {
       "asset": "TK115",
@@ -6222,32 +6222,6 @@ window.CM_WO_DATA = {
       "wo": "WO-021905"
     },
     {
-      "asset": "GE099",
-      "defect": "DD-00016475",
-      "raised": "2026-11-07",
-      "system": "GE099.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Не запускается",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Roman Besedovskiy",
-      "regBy": "Беседовский Роман Иванович",
-      "wo": "WO-021897"
-    },
-    {
-      "asset": "CD001",
-      "defect": "DD-00016464",
-      "raised": "2026-11-07",
-      "system": "CD001.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Сломалось крепление фары",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Roman Besedovskiy",
-      "regBy": "Беседовский Роман Иванович",
-      "wo": "WO-021889"
-    },
-    {
       "asset": "TK092",
       "defect": "DD-00016463",
       "raised": "2026-11-07",
@@ -6313,6 +6287,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021891"
     },
     {
+      "asset": "GE099",
+      "defect": "DD-00016475",
+      "raised": "2026-11-07",
+      "system": "GE099.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Не запускается",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-021897"
+    },
+    {
       "asset": "FL005",
       "defect": "DD-00016480",
       "raised": "2026-11-07",
@@ -6350,6 +6337,32 @@ window.CM_WO_DATA = {
       "by": "Aleksey Dobrikov",
       "regBy": "Добриков Алексей Владимирович",
       "wo": "WO-021903"
+    },
+    {
+      "asset": "TK007",
+      "defect": "DD-00016470",
+      "raised": "2026-11-07",
+      "system": "TK007.ELS.ECU (Electronic Control Unit (ECU) / Электронный блок управления (ЭБУ)",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "Появился ЧЕК (компьютерная диагностика)",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-021895"
+    },
+    {
+      "asset": "CD001",
+      "defect": "DD-00016464",
+      "raised": "2026-11-07",
+      "system": "CD001.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Сломалось крепление фары",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-021889"
     },
     {
       "asset": "LV147",
@@ -141039,15 +141052,15 @@ window.CM_WO_DATA = {
       "cmLabel": "500h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
-      "planStart": "2026-11-08",
-      "planStartDt": "2026-11-08T00:00:00",
-      "planEnd": "2026-11-09",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
+      "planStart": "2026-11-07",
+      "planStartDt": "2026-11-07T21:30:00",
+      "planEnd": "2026-11-07",
+      "actualStart": "2026-11-07",
+      "actualStartDt": "2026-11-07T21:30:00",
+      "actualEnd": "2026-11-07"
     },
     {
       "equip": "LD009",
@@ -152306,15 +152319,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-03",
       "planStartDt": "2026-11-03T00:00:00",
       "planEnd": "2026-11-03",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-03",
+      "actualStartDt": "2026-11-03T00:00:00",
+      "actualEnd": "2026-11-03"
     },
     {
       "equip": "TK037",
@@ -159589,6 +159602,27 @@ window.CM_WO_DATA = {
       "planStart": "2026-11-17",
       "planStartDt": "2026-11-17T00:00:00",
       "planEnd": "2026-11-17",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
+      "equip": "TK103",
+      "cls": "AT",
+      "woNumber": "WO-021930",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "Magnetic Plug",
+      "cmTypes": [
+        "MP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-29",
+      "planStartDt": "2026-11-29T00:00:00",
+      "planEnd": "2026-11-29",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -186792,15 +186826,15 @@ window.CM_WO_DATA = {
       "cmLabel": "4000h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-03",
       "planStartDt": "2026-11-03T00:00:00",
       "planEnd": "2026-11-03",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-03",
+      "actualStartDt": "2026-11-03T19:00:00",
+      "actualEnd": "2026-11-04"
     },
     {
       "equip": "TK135",
