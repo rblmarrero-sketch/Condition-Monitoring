@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-08T11:17:40+00:00",
+  "generated": "2026-11-08T11:37:46+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5650,6 +5650,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021926"
     },
     {
+      "asset": "DZ003",
+      "defect": "DD-00016542",
+      "raised": "2026-11-08",
+      "system": "DZ003.CH.BL (Blade / Отвал)",
+      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "descr": "Протянуть ножи",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022002"
+    },
+    {
       "asset": "TK034",
       "defect": "DD-00016525",
       "raised": "2026-11-08",
@@ -6079,19 +6092,6 @@ window.CM_WO_DATA = {
       "wo": "WO-021996"
     },
     {
-      "asset": "TK042",
-      "defect": "DD-00016537",
-      "raised": "2026-11-08",
-      "system": "TK042.DRS.COO.FAN Cooling Fan & Drive / Вентилятор и привод вентилятора",
-      "defectType": "5.01 Blockage/plugged / Заблокировано",
-      "descr": "Не выключается вентилятор охлаждения двигателя",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-021998"
-    },
-    {
       "asset": "TK027",
       "defect": "DD-00016492",
       "raised": "2026-11-08",
@@ -6137,11 +6137,37 @@ window.CM_WO_DATA = {
       "system": "EX010.DRS.FS (Fuel System / Топливная система)",
       "defectType": "3.01 Control failure / Ошибка управления",
       "descr": "Не запускается ДВС",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022000"
+    },
+    {
+      "asset": "TK042",
+      "defect": "DD-00016537",
+      "raised": "2026-11-08",
+      "system": "TK042.DRS.COO.FAN Cooling Fan & Drive / Вентилятор и привод вентилятора",
+      "defectType": "5.01 Blockage/plugged / Заблокировано",
+      "descr": "Не выключается вентилятор охлаждения двигателя",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-021998"
+    },
+    {
+      "asset": "TK110",
+      "defect": "DD-00016541",
+      "raised": "2026-11-08",
+      "system": "TK110.DRS.FUE (Fuel System / Топливная система)",
+      "defectType": "3.01 Control failure / Ошибка управления",
+      "descr": "Не запускается ДВС",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022001"
     },
     {
       "asset": "SN002",
@@ -57910,6 +57936,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
+      "wo": null
+    },
+    {
       "asset": "BS005",
       "defect": "DD-00011312",
       "raised": "2026-08-21",
@@ -57998,19 +58037,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
@@ -59418,8 +59444,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000076",
+      "asset": "H07",
+      "defect": "EB-00000075",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -59431,8 +59457,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H07",
-      "defect": "EB-00000075",
+      "asset": "H04",
+      "defect": "EB-00000076",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -60329,6 +60355,19 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "CR001",
+      "defect": "DD-00009554",
+      "raised": "2026-07-24",
+      "system": "CR001.DRS.AIR (Air Intake System / Система впуска воздуха)",
+      "defectType": "3.02 No (faulty) signal/ indication/alarm / Отсутвие сигнала, индикации",
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Rinat Musaferov",
+      "regBy": "Мусаферов Ринат Искакович",
+      "wo": null
+    },
+    {
+      "asset": "CR001",
       "defect": "DD-00009555",
       "raised": "2026-07-24",
       "system": "CR001.DRS.AIR (Air Intake System / Система впуска воздуха)",
@@ -60351,19 +60390,6 @@ window.CM_WO_DATA = {
       "priority": "P1 Breakdown",
       "by": "Temir Marochko",
       "regBy": "Temir Marochko",
-      "wo": null
-    },
-    {
-      "asset": "CR001",
-      "defect": "DD-00009554",
-      "raised": "2026-07-24",
-      "system": "CR001.DRS.AIR (Air Intake System / Система впуска воздуха)",
-      "defectType": "3.02 No (faulty) signal/ indication/alarm / Отсутвие сигнала, индикации",
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Rinat Musaferov",
-      "regBy": "Мусаферов Ринат Искакович",
       "wo": null
     },
     {
