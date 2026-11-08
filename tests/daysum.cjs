@@ -85,7 +85,7 @@ async function run(b, path, lng) {
   ok(eng && /DD-00016300/.test(eng[5]) && /Leakage/.test(eng[4]) && /P3/.test(eng[5]), 'a finding takes the defect raised for its system code, with 1C type and priority', eng && eng.join(' | '));
   ok(mp && /Not raised in 1C/.test(mp[5]) && /Нет в 1С/.test(mp[5]), 'a Degraded finding with no defect in 1C says so, in both languages', mp && mp[5]);
   /* CM_EXISTDEF_V1 (08.11): another supervisor's open defect on the same unit and system, raised before the inspection */
-  ok(eng && /DD-00015100/.test(eng[6]) && /Elimination scheduled/.test(eng[6]) && /Kim D\./.test(eng[6]) && /Responsible in 1C[^:]*: ?Kim D\./.test(eng[6]) && /Contact person[^:]*: ?Petrov A\./.test(eng[6]) && /Status in 1C[^:]*: ?Elimination/.test(eng[6]) && /Date[^:]*: ?28\.10/.test(eng[6]) && !/DD-00015101/.test(eng[6]), 'Existing defect (labelled status in 1C and responsible, 08.11): another supervisor\'s open defect on the same system, raised before the inspection (not one raised after)', eng && eng[6]);
+  ok(eng && /DD-00015100/.test(eng[6]) && /Elimination scheduled/.test(eng[6]) && /DD-00015100 · Elimination scheduled · 28\.10 · Kim D\./.test(eng[6]) && !/Petrov/.test(eng[6]) && !/Status in 1C|Responsible|Contact person|Date:|Статус|Ответственный|Контактное/.test(eng[6]) && !/DD-00015101/.test(eng[6]), 'Existing defect (number · status · date · responsible, no labels, 08.11 19:56): another supervisor\'s open defect on the same system, raised before the inspection (not one raised after)', eng && eng[6]);
   ok(mp && mp[6] === '—' && /Not raised in 1C/.test(mp[5]), 'Existing defect: a completed defect of someone else is not an existing one', mp && mp[6]);
   ok(!ds.trs.some(r => /WO-0/.test(r[5])), 'the round work order is never shown as the defect number', ds.trs.map(r => r[5]).join(','));
   ok(ds.clean.some(r => /TK150/.test(r) && /4F/.test(r)) && !ds.trs.some(r => /4F/.test(r[3])), 'a Normal point is on one line under "no findings", not in the findings table', ds.clean.join(' // '));
@@ -105,7 +105,7 @@ async function run(b, path, lng) {
   ds = await read();
   ok(ds.chips === 5 && ds.trs.some(r => /DZ011/.test(r[2])) && /01–02\.11\.2026/.test(ds.subj), 'a From date takes in several days of rounds', ds.chips + ' ' + ds.subj);
   const dz = ds.trs.find(r => /DZ011/.test(r[2]));
-  ok(dz && /DD-00015500/.test(dz[6]) && /In Progress/.test(dz[6]) && /Responsible in 1C[^:]*: ?Lee S\./.test(dz[6]) && !/Contact person/.test(dz[6]) && /from the comment/.test(dz[6]) && /из комментария/.test(dz[6]), 'Existing defect: a number written in the comment ("dd 15500") is found in 1C with its status', dz && dz[6]);
+  ok(dz && /DD-00015500/.test(dz[6]) && /In Progress/.test(dz[6]) && /DD-00015500 · In Progress · [0-9]{2}\.[0-9]{2} · Lee S\./.test(dz[6]) && /from the comment/.test(dz[6]) && /из комментария/.test(dz[6]), 'Existing defect: a number written in the comment ("dd 15500") is found in 1C with its status', dz && dz[6]);
   await p.evaluate(() => { const c = [...document.querySelectorAll('#daySum [data-dsk]')].find(x => /EX016/.test(x.parentNode.textContent)); c.click(); });
   await p.waitForTimeout(200);
   ds = await read();
