@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-08T13:47:35+00:00",
+  "generated": "2026-11-08T14:02:36+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5637,6 +5637,32 @@ window.CM_WO_DATA = {
   ],
   "otherDefects": [
     {
+      "asset": "DZ009",
+      "defect": "DD-00016543",
+      "raised": "2026-11-09",
+      "system": "DZ009.DRS.COO (Cooling System / Система охлаждения)",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "Низкий уровень О/Ж",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022003"
+    },
+    {
+      "asset": "DZ002",
+      "defect": "DD-00016544",
+      "raised": "2026-11-09",
+      "system": "DZ002.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Низкий уровень масла в ДВС",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022004"
+    },
+    {
       "asset": "TK036",
       "defect": "DD-00016511",
       "raised": "2026-11-08",
@@ -5949,19 +5975,6 @@ window.CM_WO_DATA = {
       "wo": "WO-021997"
     },
     {
-      "asset": "LV061",
-      "defect": "DD-00016498",
-      "raised": "2026-11-08",
-      "system": "LV061.DRS.TRA (Transmission / Трансмиссия)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Замена раздаточной коробки (лопнул корпус)",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-021919"
-    },
-    {
       "asset": "TK110",
       "defect": "DD-00016520",
       "raised": "2026-11-08",
@@ -6168,6 +6181,19 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022001"
+    },
+    {
+      "asset": "LV061",
+      "defect": "DD-00016498",
+      "raised": "2026-11-08",
+      "system": "LV061.DRS.TRA (Transmission / Трансмиссия)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Замена раздаточной коробки (лопнул корпус)",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-021919"
     },
     {
       "asset": "SN002",
@@ -7307,7 +7333,7 @@ window.CM_WO_DATA = {
       "system": "CR004.DRS.AIR (Air Intake System / Система впуска воздуха)",
       "defectType": "5.02 Contamination / Contamination",
       "descr": "воздушный фильтр пропускает",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Murashko",
       "regBy": "Мурашко Сергей Борисович",
@@ -59444,8 +59470,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H07",
-      "defect": "EB-00000075",
+      "asset": "H04",
+      "defect": "EB-00000076",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -59457,8 +59483,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000076",
+      "asset": "H07",
+      "defect": "EB-00000075",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
