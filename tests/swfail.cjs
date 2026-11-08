@@ -70,7 +70,7 @@ const bodyText = (p) => p.evaluate(() => (document.body && document.body.innerTe
 
   console.log('  a good first visit installs the offline copy');
   {
-    const ctx = await b.newContext({ viewport: { width: 412, height: 915 }, isMobile: true, hasTouch: true });
+    const ctx = await b.newContext({ viewport: { width: 412, height: 915 }, isMobile: true, hasTouch: true }); await ctx.addInitScript(require('./settled.cjs'));
     const p = await boot(ctx, APP);
     ok('the app loads', /Condition|Inspection|Осмотр/i.test(await bodyText(p)) || !!(await p.$('#saveBtn')));
     ok('a service worker takes over', await swReady(p));
@@ -112,7 +112,7 @@ const bodyText = (p) => p.evaluate(() => (document.body && document.body.innerTe
   console.log('\n  the case that caused the report: an update on a link that dies part-way');
   {
     MODE = 'ok'; allow = null;
-    const ctx = await b.newContext({ viewport: { width: 412, height: 915 }, isMobile: true, hasTouch: true });
+    const ctx = await b.newContext({ viewport: { width: 412, height: 915 }, isMobile: true, hasTouch: true }); await ctx.addInitScript(require('./settled.cjs'));
     const p = await boot(ctx, APP);
     await swReady(p);
     await p.waitForTimeout(2500);
@@ -142,7 +142,7 @@ const bodyText = (p) => p.evaluate(() => (document.body && document.body.innerTe
   console.log('\n  a phone that has never had a complete copy is told so, kindly');
   {
     MODE = 'ok'; allow = ['/index.html', '/', '/sw.js'];      // page and worker only
-    const ctx = await b.newContext({ viewport: { width: 412, height: 915 }, isMobile: true, hasTouch: true });
+    const ctx = await b.newContext({ viewport: { width: 412, height: 915 }, isMobile: true, hasTouch: true }); await ctx.addInitScript(require('./settled.cjs'));
     const p = await boot(ctx, APP);
     await p.waitForTimeout(3000);
     ok('the page itself still renders', !!(await p.$('body')));
@@ -196,7 +196,7 @@ const bodyText = (p) => p.evaluate(() => (document.body && document.body.innerTe
        on the screen they are already looking at, not behind a gear icon nobody
        taps. */
     MODE = 'ok'; allow = null; deny = null;
-    const ctx = await b.newContext({ viewport: { width: 412, height: 915 }, isMobile: true, hasTouch: true });
+    const ctx = await b.newContext({ viewport: { width: 412, height: 915 }, isMobile: true, hasTouch: true }); await ctx.addInitScript(require('./settled.cjs'));
     const p = await boot(ctx, APP);
     await swReady(p);
     await p.waitForTimeout(6000);
@@ -216,7 +216,7 @@ const bodyText = (p) => p.evaluate(() => (document.body && document.body.innerTe
 
     console.log('\n  and when it is not ready it is impossible to miss');
     deny = ['/wear-figs.js'];
-    const ctx2 = await b.newContext({ viewport: { width: 412, height: 915 }, isMobile: true, hasTouch: true });
+    const ctx2 = await b.newContext({ viewport: { width: 412, height: 915 }, isMobile: true, hasTouch: true }); await ctx2.addInitScript(require('./settled.cjs'));
     const p2 = await boot(ctx2, APP);
     /* Sampling at a fixed 9s was a race this suite had been winning by luck.
        The app is DELIBERATELY silent while a worker might still be arriving —
@@ -299,7 +299,7 @@ const bodyText = (p) => p.evaluate(() => (document.body && document.body.innerTe
        intercept the service worker's own fetch, so the worker would quietly
        fetch the real file and the test would prove nothing. */
     MODE = 'ok'; allow = null; deny = ['/assets.js'];
-    const ctx = await b.newContext({ viewport: { width: 412, height: 915 }, isMobile: true, hasTouch: true });
+    const ctx = await b.newContext({ viewport: { width: 412, height: 915 }, isMobile: true, hasTouch: true }); await ctx.addInitScript(require('./settled.cjs'));
     const p = await ctx.newPage();
     await p.goto(APP, { waitUntil: 'load' }).catch(() => {});
     await p.waitForTimeout(2500);
@@ -323,7 +323,7 @@ const bodyText = (p) => p.evaluate(() => (document.body && document.body.innerTe
        answer with nothing on screen suggesting why. It cost five suites the
        moment it existed, and the Phase 3 backend can be same-origin. */
     MODE = 'ok'; allow = null;
-    const ctx = await b.newContext({ viewport: { width: 412, height: 915 }, isMobile: true, hasTouch: true });
+    const ctx = await b.newContext({ viewport: { width: 412, height: 915 }, isMobile: true, hasTouch: true }); await ctx.addInitScript(require('./settled.cjs'));
     const p = await boot(ctx, APP);
     await swReady(p);
     await p.waitForTimeout(2000);

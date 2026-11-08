@@ -71,7 +71,7 @@ async function evalSettled(p, fn){
 
   console.log('  an idle phone puts the new build on by itself');
   {
-    const ctx = await b.newContext({ viewport: { width: 412, height: 915 }, isMobile: true, hasTouch: true });
+    const ctx = await b.newContext({ viewport: { width: 412, height: 915 }, isMobile: true, hasTouch: true }); await ctx.addInitScript(require('./settled.cjs'));
     const p = await ctx.newPage();
     p.on('pageerror', e => fails.push('PAGEERROR ' + e.message));
     await p.addInitScript(() => localStorage.setItem('up_dests', '[]'));
@@ -111,7 +111,7 @@ async function evalSettled(p, fn){
   console.log('\n  a phone being used is left alone');
   {
     BUMP = null;
-    const ctx = await b.newContext({ viewport: { width: 412, height: 915 }, isMobile: true, hasTouch: true });
+    const ctx = await b.newContext({ viewport: { width: 412, height: 915 }, isMobile: true, hasTouch: true }); await ctx.addInitScript(require('./settled.cjs'));
     const p = await ctx.newPage();
     p.on('pageerror', e => fails.push('PAGEERROR ' + e.message));
     await p.addInitScript(() => localStorage.setItem('up_dests', '[]'));
@@ -200,7 +200,7 @@ async function evalSettled(p, fn){
        are off the phone the update may land — and the round must be on the
        screen again afterwards, photograph and all, with no question asked. */
     BUMP = null;
-    const ctx = await b.newContext({ viewport: { width: 412, height: 915 }, isMobile: true, hasTouch: true });
+    const ctx = await b.newContext({ viewport: { width: 412, height: 915 }, isMobile: true, hasTouch: true }); await ctx.addInitScript(require('./settled.cjs'));
     const p = await ctx.newPage();
     p.on('pageerror', e => fails.push('PAGEERROR ' + e.message));
     await p.addInitScript(() => localStorage.setItem('up_dests', '[]'));
@@ -245,7 +245,7 @@ async function evalSettled(p, fn){
   console.log('\n  an update that cannot finish never takes over');
   {
     BUMP = null;
-    const ctx = await b.newContext({ viewport: { width: 412, height: 915 }, isMobile: true, hasTouch: true });
+    const ctx = await b.newContext({ viewport: { width: 412, height: 915 }, isMobile: true, hasTouch: true }); await ctx.addInitScript(require('./settled.cjs'));
     const p = await ctx.newPage();
     p.on('pageerror', e => fails.push('PAGEERROR ' + e.message));
     await p.addInitScript(() => localStorage.setItem('up_dests', '[]'));
