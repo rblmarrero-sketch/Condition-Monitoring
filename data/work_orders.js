@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-08T02:07:39+00:00",
+  "generated": "2026-11-08T02:27:39+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -355,7 +355,7 @@ window.CM_WO_DATA = {
     "WE010",
     "WE011"
   ],
-  "duplicateRowsCollapsed": 507,
+  "duplicateRowsCollapsed": 508,
   "roundsDedupedWithinVisit": 2,
   "columns": [
     "Asset description",
@@ -2337,8 +2337,8 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-10-10",
       "detected": "2026-10-10",
-      "planStart": "2026-11-08",
-      "closed": null,
+      "planStart": "2026-11-06",
+      "closed": "2026-11-06",
       "asset": "TK109",
       "defect": "DD-00014502",
       "requestNo": "DD-00014502",
@@ -2349,7 +2349,7 @@ window.CM_WO_DATA = {
       "cause": "Усталостная трещина",
       "causeFrom": "wo",
       "descr": "В ремнях генератора обнаружены множественные поперечные трещины.",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "by": "Zhomart",
       "byFull": "Zhomart Khasenov",
       "regBy": "Хасенов Жомарт",
@@ -5663,6 +5663,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021908"
     },
     {
+      "asset": "BS017",
+      "defect": "DD-00016512",
+      "raised": "2026-11-08",
+      "system": "BS017.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка топлива",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-021927"
+    },
+    {
       "asset": "TK143",
       "defect": "DD-00016488",
       "raised": "2026-11-08",
@@ -7941,7 +7954,7 @@ window.CM_WO_DATA = {
       "asset": "GE058",
       "defect": "DD-00016374",
       "raised": "2026-11-05",
-      "system": "GE058 AD710 AKSA",
+      "system": "GE058.ELS.MW (Machine Wiring / Электропроводка машины)",
       "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
       "descr": "Отсутствие внутреннего освещения",
       "status": "Registered",
@@ -35394,12 +35407,12 @@ window.CM_WO_DATA = {
       "wo": "WO-021732"
     },
     {
-      "asset": "TK162",
-      "defect": "DD-00014083",
+      "asset": "LV158",
+      "defect": "DD-00014121",
       "raised": "2026-10-05",
-      "system": "TRUCK, WATER URAL 4672M1-20, TK162 TRANSMISSION OldNumber (UT162)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка масла с РК",
+      "system": "LV158.CH.SU (Suspension / Подвеска)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Требуется замена нижних и верхних шаровых опор, замена втулок и стоек стабилизатора",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -35407,12 +35420,12 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "LV158",
-      "defect": "DD-00014121",
+      "asset": "TK162",
+      "defect": "DD-00014083",
       "raised": "2026-10-05",
-      "system": "LV158.CH.SU (Suspension / Подвеска)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Требуется замена нижних и верхних шаровых опор, замена втулок и стоек стабилизатора",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK162 TRANSMISSION OldNumber (UT162)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка масла с РК",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -57273,19 +57286,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "LD001",
-      "defect": "DD-00011485",
-      "raised": "2026-08-24",
-      "system": "LD001.CH (Structure & Chassis / Рама и конструкция)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Переднее правое крыло повреждено",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Evgeniy Frolin",
-      "regBy": "Фролин Евгений Владимирович",
-      "wo": "WO-020969"
-    },
-    {
       "asset": "GR012",
       "defect": "DD-00011496",
       "raised": "2026-08-24",
@@ -57546,19 +57546,6 @@ window.CM_WO_DATA = {
       "wo": "WO-018103"
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
-      "wo": null
-    },
-    {
       "asset": "DZ022",
       "defect": "DD-00011314",
       "raised": "2026-08-21",
@@ -57663,6 +57650,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
+      "wo": null
+    },
+    {
       "asset": "CR004",
       "defect": "DD-00011234",
       "raised": "2026-08-20",
@@ -57739,19 +57739,6 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-015155"
-    },
-    {
-      "asset": "DZ016",
-      "defect": "DD-00011171",
-      "raised": "2026-08-19",
-      "system": "DZ016.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Трещины на рассеивателях задних фонарей",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Evgeniy Frolin",
-      "regBy": "Фролин Евгений Владимирович",
-      "wo": "WO-015585"
     },
     {
       "asset": "LV066",
@@ -59237,11 +59224,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "FL007",
-      "defect": "DD-00010202",
+      "defect": "DD-00010207",
       "raised": "2026-08-04",
-      "system": "FL007.BS (Braking System / Тормозная система)",
-      "defectType": "1.25 Reduced capacity / output / Снижение производительности / выхода",
-      "descr": "Не работает ручной тормоз",
+      "system": "FL007.CH (Structure & Chassis / Рама и конструкция)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Требуется устранить течь масла",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -59250,11 +59237,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "FL007",
-      "defect": "DD-00010207",
+      "defect": "DD-00010202",
       "raised": "2026-08-04",
-      "system": "FL007.CH (Structure & Chassis / Рама и конструкция)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Требуется устранить течь масла",
+      "system": "FL007.BS (Braking System / Тормозная система)",
+      "defectType": "1.25 Reduced capacity / output / Снижение производительности / выхода",
+      "descr": "Не работает ручной тормоз",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -102287,15 +102274,15 @@ window.CM_WO_DATA = {
       "cmLabel": "500h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
-      "planStart": "2026-11-04",
-      "planStartDt": "2026-11-04T00:00:00",
-      "planEnd": "2026-11-05",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
+      "planStart": "2026-11-07",
+      "planStartDt": "2026-11-07T18:00:00",
+      "planEnd": "2026-11-08",
+      "actualStart": "2026-11-07",
+      "actualStartDt": "2026-11-07T18:00:00",
+      "actualEnd": "2026-11-08"
     },
     {
       "equip": "DZ019",

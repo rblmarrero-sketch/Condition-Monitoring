@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-08T02:07:39+00:00",
+  "generated": "2026-11-08T02:27:39+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -2324,6 +2324,24 @@
       "completed": ""
     },
     {
+      "wo": "WO-020910",
+      "equip": "DZ018",
+      "cls": "DOZ",
+      "comp": "",
+      "desc": "500h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-07",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-11-07",
+      "status": "Completed",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "complete",
+      "completed": "2026-11-08"
+    },
+    {
       "wo": "WO-021107",
       "equip": "GE020",
       "cls": "GEN",
@@ -2801,24 +2819,6 @@
       "raised": "2026-11-04",
       "type": "4000 Hours service Planned",
       "hours": 4000,
-      "plan": "2026-11-04",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
-      "wo": "WO-020910",
-      "equip": "DZ018",
-      "cls": "DOZ",
-      "comp": "",
-      "desc": "500h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-04",
-      "type": "500 Hours service Planned",
-      "hours": 500,
       "plan": "2026-11-04",
       "status": "Elimination scheduled",
       "request": "",
@@ -7553,13 +7553,13 @@
       "raised": "2026-10-10",
       "type": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "hours": null,
-      "plan": "2026-11-08",
-      "status": "Elimination scheduled",
+      "plan": "2026-11-06",
+      "status": "Completed",
       "request": "DD-00014502",
       "defType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "cause": "Усталостная трещина",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-06"
     },
     {
       "wo": "WO-018777",
