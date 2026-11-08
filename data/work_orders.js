@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-08T20:37:43+00:00",
+  "generated": "2026-11-08T21:07:29+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5786,6 +5786,19 @@ window.CM_WO_DATA = {
       "system": "SN002.CH.SCN (Screen / Грохот)",
       "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "descr": "просели пружины грохота",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": null
+    },
+    {
+      "asset": "CR008",
+      "defect": "DD-00016566",
+      "raised": "2026-11-09",
+      "system": "CR008.FEED.BEL (Feeder Belt / Лента питателя)",
+      "defectType": "8.05 Conveyor belt wear / Износ конвейерной ленты",
+      "descr": "критический износ ленты питателя",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Oleg Dymbrylov",
@@ -20457,19 +20470,6 @@ window.CM_WO_DATA = {
       "wo": "WO-020479"
     },
     {
-      "asset": "TK092",
-      "defect": "DD-00015410",
-      "raised": "2026-10-22",
-      "system": "TK092.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "течь масла из-под клапанной крышки",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-021514"
-    },
-    {
       "asset": "GR009",
       "defect": "DD-00015361",
       "raised": "2026-10-22",
@@ -20598,6 +20598,19 @@ window.CM_WO_DATA = {
       "by": "Andrey Taran",
       "regBy": "Таран Андрей Андреевич",
       "wo": "WO-020537"
+    },
+    {
+      "asset": "TK092",
+      "defect": "DD-00015410",
+      "raised": "2026-10-22",
+      "system": "TK092.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "течь масла из-под клапанной крышки",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-021514"
     },
     {
       "asset": "TK144",
@@ -102618,6 +102631,25 @@ window.CM_WO_DATA = {
       "actualEnd": "2026-11-08"
     },
     {
+      "equip": "DZ018",
+      "cls": "DOZ",
+      "woNumber": "WO-022024",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "250h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-22",
+      "planStartDt": "2026-11-22T00:00:00",
+      "planEnd": "2026-11-22",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
       "equip": "DZ019",
       "cls": "DOZ",
       "woNumber": null,
@@ -102815,6 +102847,25 @@ window.CM_WO_DATA = {
       "planStart": "2026-11-14",
       "planStartDt": "2026-11-14T00:00:00",
       "planEnd": "2026-11-15",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
+      "equip": "DZ019",
+      "cls": "DOZ",
+      "woNumber": "WO-022026",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "250h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-27",
+      "planStartDt": "2026-11-27T00:00:00",
+      "planEnd": "2026-11-27",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -103035,6 +103086,44 @@ window.CM_WO_DATA = {
       "actualStart": "2026-11-01",
       "actualStartDt": "2026-11-01T01:30:00",
       "actualEnd": "2026-11-01"
+    },
+    {
+      "equip": "DZ020",
+      "cls": "DOZ",
+      "woNumber": "WO-022027",
+      "maintType": "500 Hours service Planned",
+      "hours": 500,
+      "cmLabel": "500h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-16",
+      "planStartDt": "2026-11-16T00:00:00",
+      "planEnd": "2026-11-16",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
+      "equip": "DZ020",
+      "cls": "DOZ",
+      "woNumber": "WO-022028",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "250h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-29",
+      "planStartDt": "2026-11-29T00:00:00",
+      "planEnd": "2026-11-29",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
     },
     {
       "equip": "DZ021",
