@@ -3924,6 +3924,7 @@
       <option value="today" data-i18n="f_today">Today</option>
       <option value="yesterday" data-i18n="f_yesterday">Yesterday</option>
       <option value="30" data-i18n="f_30">Last 30 days</option>
+      <option value="week" data-i18n="f_week">Week</option><!-- CM_WEEK_V1 (Rickie 08.11 "implement to all"): a Monday-Sunday week, fWeek says which -->
       <option value="90" data-i18n="f_90">Last 90 days</option><option value="365" data-i18n="f_365">Last 12 months</option>
       <option value="custom" data-i18n="f_custom">Custom range…</option></select></div>
     <!-- Only for the "custom" preset -- two plain date pickers, narrowing
@@ -3934,6 +3935,7 @@
       <span style="display:flex;flex-direction:column;gap:5px"><label for="fRangeFrom" data-i18n="f_from">From</label><input type="date" id="fRangeFrom"></span>
       <span style="display:flex;flex-direction:column;gap:5px"><label for="fRangeTo" data-i18n="f_to">To</label><input type="date" id="fRangeTo"></span>
     </div>
+    <input type="hidden" id="fWeek"><!-- CM_WEEK_V1: the chosen week, 2026-W44; empty = this week -->
     <label class="voidtog" data-i18n-title="f_voidtip" title="Voided inspections are withdrawn from every count, but nothing is deleted">
       <input type="checkbox" id="fVoid"><span data-i18n="f_void">Show voided</span></label>
     <!-- The rarer filters -- status, search, data quality -- behind one
@@ -5141,23 +5143,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=602"></script>
+<script src="../data/magnetic_plug.js?v=603"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=602"></script>
-<script src="../mobile/hme.js?v=602"></script>
-<script src="../mobile/mp-fc.js?v=602"></script>
-<script src="../mobile/rtw.js?v=602"></script>
-<script src="../mobile/hme-cascade.js?v=602"></script>
-<script src="../mobile/temp-limits.js?v=602"></script>
+<script src="../data/work_orders.js?v=603"></script>
+<script src="../mobile/hme.js?v=603"></script>
+<script src="../mobile/mp-fc.js?v=603"></script>
+<script src="../mobile/rtw.js?v=603"></script>
+<script src="../mobile/hme-cascade.js?v=603"></script>
+<script src="../mobile/temp-limits.js?v=603"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=602"></script>
-<script src="../mobile/normalize.js?v=602"></script>
-<script src="../mobile/terms.js?v=602"></script>
+<script src="../mobile/assets.js?v=603"></script>
+<script src="../mobile/normalize.js?v=603"></script>
+<script src="../mobile/terms.js?v=603"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -5176,21 +5178,21 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=602"></script>
-<script src="../mobile/edits.js?v=602"></script>
-<script src="../mobile/due.js?v=602"></script>
-<script src="../mobile/wear.js?v=602"></script>
-<script src="../mobile/wear-map.js?v=602"></script>
-<script src="../mobile/lube.js?v=602"></script>
-<script src="../mobile/lube-overrides.js?v=602"></script>
-<script src="../mobile/lube2027.js?v=602"></script>
-<script src="../mobile/lube-tds.js?v=602"></script>
-<script src="../dashboard/lube-master.js?v=602"></script>
-<script src="../dashboard/wear-limits.js?v=602"></script>
+<script src="../mobile/grade.js?v=603"></script>
+<script src="../mobile/edits.js?v=603"></script>
+<script src="../mobile/due.js?v=603"></script>
+<script src="../mobile/wear.js?v=603"></script>
+<script src="../mobile/wear-map.js?v=603"></script>
+<script src="../mobile/lube.js?v=603"></script>
+<script src="../mobile/lube-overrides.js?v=603"></script>
+<script src="../mobile/lube2027.js?v=603"></script>
+<script src="../mobile/lube-tds.js?v=603"></script>
+<script src="../dashboard/lube-master.js?v=603"></script>
+<script src="../dashboard/wear-limits.js?v=603"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=602"></script>
-<script src="../mobile/machine-photos.js?v=602"></script>
+<script src="../mobile/upload-defaults.js?v=603"></script>
+<script src="../mobile/machine-photos.js?v=603"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -5199,17 +5201,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=602"></script>
-<script src="../mobile/get.js?v=602"></script>
-<script src="../mobile/points.js?v=602"></script>
-<script src="../mobile/uc-points.js?v=602"></script>
-<script src="../mobile/inspect-guide.js?v=602"></script>
-<script src="../mobile/get-figs.js?v=602"></script>
-<script src="../mobile/body-points.js?v=602"></script>
-<script src="../mobile/body-map.js?v=602"></script>
-<script src="../mobile/jspdf.umd.min.js?v=602"></script>
-<script src="../mobile/html2canvas.min.js?v=602"></script>
-<script src="../mobile/report-core.js?v=602"></script>
+<script src="../mobile/machine-fig.js?v=603"></script>
+<script src="../mobile/get.js?v=603"></script>
+<script src="../mobile/points.js?v=603"></script>
+<script src="../mobile/uc-points.js?v=603"></script>
+<script src="../mobile/inspect-guide.js?v=603"></script>
+<script src="../mobile/get-figs.js?v=603"></script>
+<script src="../mobile/body-points.js?v=603"></script>
+<script src="../mobile/body-map.js?v=603"></script>
+<script src="../mobile/jspdf.umd.min.js?v=603"></script>
+<script src="../mobile/html2canvas.min.js?v=603"></script>
+<script src="../mobile/report-core.js?v=603"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -5557,7 +5559,9 @@ const I18N={
 
   f_type:"Inspection type", f_class:"Equipment class", f_period:"Period", f_search:"Search",
   f_alltime:"All time", f_30:"Last 30 days", f_90:"Last 90 days", f_365:"Last 12 months",
-  f_today:"Today", f_yesterday:"Yesterday", f_custom:"Custom range…", f_from:"From", f_to:"To",
+  f_today:"Today", f_yesterday:"Yesterday", f_week:"Week", f_custom:"Custom range…",
+  wk_tag:"W{n}", wk_prev:"Previous week", wk_next:"Next week", wk_pick:"Choose a week", wk_now:"now", wk_older:"Older:", wk_year:"year", wk_wk:"week", wk_go:"Go",
+  wk_cur:"this week", wk_future:"That week has not started yet", f_from:"From", f_to:"To",
   f_period_widened:"Data window widened to All time to show this period.",
   f_customrange:"{from} – {to}",
   f_alltypes:"All types", f_allclasses:"All classes", f_allgrades:"All grades", f_grade_s:"Grade", f_grade:"Condition grade",
@@ -6590,7 +6594,9 @@ const I18N={
 
   f_type:"Тип осмотра", f_class:"Класс техники", f_period:"Период", f_search:"Поиск",
   f_alltime:"За всё время", f_30:"Последние 30 дней", f_90:"Последние 90 дней", f_365:"Последние 12 мес.",
-  f_today:"Сегодня", f_yesterday:"Вчера", f_custom:"Свой период…", f_from:"С", f_to:"По",
+  f_today:"Сегодня", f_yesterday:"Вчера", f_week:"Неделя", f_custom:"Свой период…",
+  wk_tag:"Нед. {n}", wk_prev:"Предыдущая неделя", wk_next:"Следующая неделя", wk_pick:"Выбрать неделю", wk_now:"сейчас", wk_older:"Ранее:", wk_year:"год", wk_wk:"неделя", wk_go:"Перейти",
+  wk_cur:"эта неделя", wk_future:"Эта неделя ещё не началась", f_from:"С", f_to:"По",
   f_period_widened:"Окно данных расширено до «за всё время», чтобы показать этот период.",
   f_customrange:"{from} – {to}",
   f_alltypes:"Все типы", f_allclasses:"Все классы", f_allgrades:"Все оценки", f_grade_s:"Оценка", f_grade:"Оценка состояния",
@@ -8189,10 +8195,27 @@ function renderWindowTog(){
    never a second copy of what each option means. `to` is null for every
    preset except Today/Yesterday/Custom, meaning "no upper bound" exactly as
    it always did. */
+/* CM_WEEK_V1 (08.11.2026, Rickie 11:19 "lets do it, implement to all"): Period -> Week, as on Assets Down, Asset history and the
+   WO Manager (WEEK_PER_V1 there). Monday-Sunday, site days, ISO numbers as the Weekly report numbers them (W42 = 12-18.10.2026).
+   fWeek holds the chosen week (2026-W44, in the address as wk=); empty = this week, which ends today. */
+function cmWkMon(day){ return day-(day+3)%7; }                               /* day = days since 01.01.1970 (a Thursday) */
+function cmWkDay(iso){ return Math.round(Date.parse(iso+"T00:00:00Z")/864e5); }
+function cmWkIso(day){ return new Date(day*864e5).toISOString().slice(0,10); }
+function cmWkOf(m0){ const th=m0+3, y=new Date(th*864e5).getUTCFullYear(); return {y, w:Math.floor((th-Date.UTC(y,0,1)/864e5)/7)+1}; }
+function cmWkMonOf(y,w){ return cmWkMon(Math.round(Date.UTC(y,0,4)/864e5))+(w-1)*7; }
+function cmWeek(){
+  const today=cmWkDay(todayISO()), m0now=cmWkMon(today), m=/^(\d{4})-W(\d{1,2})$/.exec(($("fWeek")||{}).value||"");
+  let m0=m?cmWkMonOf(+m[1],+m[2]):m0now; if(m0>m0now) m0=m0now;
+  const o=cmWkOf(m0), live=m0===m0now;
+  return {m0, y:o.y, w:o.w, live, from:cmWkIso(m0), to:cmWkIso(live?today:m0+6)};
+}
+function cmWeekSet(m0){ const o=cmWkOf(m0); $("fWeek").value=o.y+"-W"+String(o.w).padStart(2,"0"); if($("fRange").value!=="week") $("fRange").value="week";
+  syncPeriodCustom(); periodWindowCheck(); renderAll(); cmWeekPaint(); }
 function periodRange(){
   const v=$("fRange")?$("fRange").value:"0";
   if(v==="today"){ const d=todayISO(); return {from:d, to:d, days:1}; }
   if(v==="yesterday"){ const d=DUE.shift(todayISO(),-1); return {from:d, to:d, days:1}; }
+  if(v==="week"){ const w=cmWeek(); return {from:w.from, to:w.to, days:DUE.dayDiff(w.from,w.to)+1}; }   /* CM_WEEK_V1 */
   if(v==="custom"){
     const from=($("fRangeFrom")&&$("fRangeFrom").value)||null;
     const to=($("fRangeTo")&&$("fRangeTo").value)||null;
@@ -8210,6 +8233,7 @@ function periodActive(){ const pr=periodRange(); return !!(pr.from||pr.to); }
 function periodLabel(){
   const v=$("fRange")?$("fRange").value:"0";
   if(v==="today"||v==="yesterday") return $("fRange").selectedOptions[0].textContent;
+  if(v==="week"){ const w=cmWeek(); return t("wk_tag",{n:w.w})+" · "+w.from.slice(8,10)+"."+w.from.slice(5,7)+" – "+(w.live?t("wk_now"):w.to.slice(8,10)+"."+w.to.slice(5,7)); }   /* CM_WEEK_V1 */
   if(v==="custom"){
     const pr=periodRange();
     return t("f_customrange",{from:pr.from||"…", to:pr.to||"…"});
@@ -8360,7 +8384,7 @@ function renderChips(){
   if($("fType").value)  add(t("c_type"), TYPE_LABEL[$("fType").value]||$("fType").value, ()=>{ $("fType").value=""; renderAll(); });
   if($("fClass").value) add(t("c_class"), $("fClass").value, ()=>{ $("fClass").value=""; renderAll(); });
   if(periodActive()) add(t("c_period"), periodLabel(), ()=>{
-    $("fRange").value="0";
+    $("fRange").value="0"; if($("fWeek")) $("fWeek").value="";   /* CM_WEEK_V1 */
     if($("fRangeFrom")) $("fRangeFrom").value="";
     if($("fRangeTo")) $("fRangeTo").value="";
     syncPeriodCustom(); periodWindowCheck(); renderAll(); });
@@ -8397,7 +8421,7 @@ function renderChips(){
 /* One function, two doors: the chip bar's clear-all and the Reset on the
    toolbar. Two clear controls that clear different amounts is worse than one. */
 function clearFilters(){
-  $("fType").value=""; $("fClass").value=""; $("fRange").value="0"; $("fQ").value="";
+  $("fType").value=""; $("fClass").value=""; $("fRange").value="0"; $("fQ").value=""; if($("fWeek")) $("fWeek").value="";   /* CM_WEEK_V1 */
   if($("fRangeFrom")) $("fRangeFrom").value="";
   if($("fRangeTo")) $("fRangeTo").value="";
   syncPeriodCustom(); periodWindowCheck();
@@ -16183,7 +16207,7 @@ document.addEventListener("mouseover",e=>{
    Kept short and readable, so the address bar stays something a person can
    look at: #actions?type=MP&unit=TK149 */
 const URL_KEYS=[["type","fType"],["class","fClass"],["range","fRange"],
-                ["from","fRangeFrom"],["to","fRangeTo"],
+                ["from","fRangeFrom"],["to","fRangeTo"],["wk","fWeek"]/*CM_WEEK_V1*/,
                 ["q","fQ"],["dq","fDq"],["st","fStatus"]];
 let urlQuiet=0;                       // set while applying, so writing does not loop
 /* THE ADDRESS SOMEBODY ARRIVED ON, CAPTURED BEFORE ANYTHING CAN OVERWRITE IT.
@@ -21401,7 +21425,8 @@ function passMemo(key, mk){
    built (periodRange() et al., above) but never wired to this event, which
    is this project's own signature defect one control away: the code ran,
    nothing on screen ever called it. */
-if($("fRange")) $("fRange").onchange=()=>{ syncPeriodCustom(); periodWindowCheck(); renderAll(); };
+if($("fRange")) $("fRange").onchange=()=>{ if($("fRange").value!=="week"&&$("fWeek")) $("fWeek").value="";   /* CM_WEEK_V1: a week is chosen afresh */
+  syncPeriodCustom(); periodWindowCheck(); renderAll(); if(window.cmWeekPaint) cmWeekPaint(); };
 ["fRangeFrom","fRangeTo"].forEach(id=>{ const el=$(id); if(el) el.onchange=()=>{ periodWindowCheck(); renderAll(); }; });
 /* Boot: fRange may already read "custom" (restored from the URL/saved
    filters below), and the box that shows it has to be in sync with that
@@ -21810,11 +21835,11 @@ document.querySelector(".lang").addEventListener("click",e=>{
   setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 })();
 </script>
-<script src="../dashboard/drive.js?v=602"></script>
-<script src="../dashboard/sync-adapter.js?v=602"></script>
-<script src="../dashboard/report.js?v=602"></script>
-<script src="../dashboard/reliability.js?v=602"></script>
-<script src="../dashboard/day-summary.js?v=602"></script>
+<script src="../dashboard/drive.js?v=603"></script>
+<script src="../dashboard/sync-adapter.js?v=603"></script>
+<script src="../dashboard/report.js?v=603"></script>
+<script src="../dashboard/reliability.js?v=603"></script>
+<script src="../dashboard/day-summary.js?v=603"></script>
 <script>
 /* THE CLOSED FILTER SAYS WHAT IS CHOSEN. A dropdown narrower than its option
    text ellipsises ("All t…", audit of 2026-10-01). Between 1331 and 1500 px
@@ -22115,7 +22140,7 @@ function cmSiteFb(){
   function paint(){
     $$("cmFbSL").textContent=SiteStd.ft("scope"); $$("cmFbSL").hidden=!site; $$("cmFbScope").hidden=!site;
     if(site) SiteStd.fseg($$("cmFbScope"),["Primary","Support","Auxiliary","All"].map(k=>[k,SiteStd.ft(k)+" "+(D.scope[k]||0)]),S.scope,v=>{ S.scope=v; apply(); });
-    const r=$$("fRange"); if(r&&per){ const v=r.value&&r.value!=="0"?[r.value]:[]; if(JSON.stringify(per.get())!==JSON.stringify(v)) per.set(v); }
+    const r=$$("fRange"); if(r&&per){ const v=r.value&&r.value!=="0"?[r.value]:[]; if(JSON.stringify(per.get())!==JSON.stringify(v)) per.set(v); else per.refresh(); }
     Object.values(P).forEach(x=>x.refresh());
     const n=moreSet(); moreBtn.innerHTML=W("More","Ещё")+(n?' <b>'+n+'</b>':'')+' ▾';
     lnk.textContent="⧉"; lnk.title=W("Copy link","Копировать ссылку"); lnk.setAttribute("aria-label",lnk.title);
@@ -22138,6 +22163,75 @@ function cmSiteFb(){
   document.addEventListener("std:lang",paint);
   paint();
 }
+</script>
+<style id="cmWeekCss">/* CM_WEEK_V1: the week stepper beside Period, the bar's own control look (34 px, 8 px corners); 44 px on a phone */
+.cmwk{display:none;align-items:stretch;height:34px;box-sizing:border-box;border:1px solid var(--line,#dde2e6);border-radius:8px;background:var(--surface,#fff);overflow:hidden;flex:0 0 auto;vertical-align:middle}
+html.cmwkOn .cmwk{display:inline-flex}
+.cmwk button{all:unset;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;padding:0 10px;font:600 13px "IBM Plex Mono",monospace;color:var(--ink,#16212a)}
+.cmwk .cmwka{font:600 15px "IBM Plex Sans",sans-serif;color:var(--muted,#51606b);min-width:30px;padding:0 6px}
+.cmwk button+button{border-left:1px solid var(--line,#dde2e6)}.cmwk button:hover,.cmwk button:focus-visible{background:var(--surface-2,#f1f4f7)}
+.cmwk button:focus-visible{outline:2px solid var(--accent,#16304F);outline-offset:-2px}.cmwk button[disabled]{color:#c9d0d6;cursor:default;background:none}
+.cmwkpop{position:fixed;max-height:calc(100vh - 16px);overflow:auto;overscroll-behavior:contain;box-sizing:border-box;z-index:400;min-width:230px;padding:5px;border-radius:12px;background:var(--surface,#fff);border:1px solid var(--line,#dde2e6);box-shadow:0 12px 32px rgba(20,33,43,.18)}
+.cmwkpop .h{padding:6px 10px 2px;font:600 11px "IBM Plex Sans",sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--muted,#8a96a0)}
+.cmwkpop button.i{display:flex;width:100%;align-items:center;gap:8px;min-height:32px;padding:0 10px;border:0;border-radius:8px;background:none;font:500 13px "IBM Plex Sans",sans-serif;color:var(--ink,#1d2a35);cursor:pointer;text-align:left;white-space:nowrap}
+.cmwkpop button.i i{width:14px;font-style:normal;font-weight:700;color:var(--accent,#16304F)}.cmwkpop button.i small{margin-left:auto;padding-left:18px;font:500 12px "IBM Plex Mono",monospace;color:var(--muted,#5b6670)}
+.cmwkpop button.i:hover,.cmwkpop button.i:focus-visible{background:var(--surface-2,#f1f4f7);outline:none}
+.cmwkpop .o{display:flex;align-items:center;gap:6px;padding:8px 10px 4px;border-top:1px solid var(--line,#dfe5ea);margin-top:4px;font:500 12px "IBM Plex Sans",sans-serif;color:var(--muted,#5b6670)}
+.cmwkpop .o input{width:58px;height:28px;box-sizing:border-box;border:1px solid var(--line,#dde2e6);border-radius:6px;padding:0 6px;font:500 12.5px "IBM Plex Mono",monospace}.cmwkpop .o input.w{width:44px}
+.cmwkpop .o button{height:28px;padding:0 10px;border:1px solid var(--accent,#16304F);border-radius:6px;background:var(--accent,#16304F);color:#fff;font:600 12px "IBM Plex Sans",sans-serif;cursor:pointer}
+@media (max-width:600px){.cmwk{height:44px}.cmwk button{min-width:44px}.cmwkpop button.i{min-height:44px}.cmwkpop .o input,.cmwkpop .o button{height:44px}}
+</style>
+<script id="cmWeekJs">/* CM_WEEK_V1 (08.11.2026): the stepper (‹ W44 ›) beside Period while a week is chosen, the week list (last 12 weeks and a
+   year / week box) under the week number, and the Period list's own "Week" item named with the week. State: fRange = "week",
+   fWeek = 2026-W44 (empty = this week). Every count reads periodRange(), as Custom does. */
+(function(){
+  if(!document.getElementById("fRange")) return;
+  const $$=id=>document.getElementById(id);
+  const st=document.createElement("span"); st.className="cmwk"; st.id="cmWk"; st.setAttribute("role","group");
+  st.innerHTML='<button type="button" class="cmwka" data-d="-1">‹</button><button type="button" class="cmwkn" aria-haspopup="menu" aria-expanded="false"></button><button type="button" class="cmwka" data-d="1">›</button>';
+  const [bP,bN,bX]=st.children;
+  const pop=document.createElement("div"); pop.className="cmwkpop"; pop.hidden=true; pop.setAttribute("role","menu"); document.body.appendChild(pop);
+  const tag=w=>t("wk_tag",{n:w}), dm=d=>{ const x=cmWkIso(d); return x.slice(8,10)+"."+x.slice(5,7); };
+  function place(){ const pk=$$("cmFbPerPk"), fld=$$("fRange").closest(".field"), host=pk||fld; if(host&&st.previousElementSibling!==host) host.after(st); }
+  let busy=false;
+  function paint(){ if(busy) return; busy=true;
+    try{ place(); const on=$$("fRange").value==="week"; document.documentElement.classList.toggle("cmwkOn",on);
+      const opt=[...$$("fRange").options].find(o=>o.value==="week"), w=cmWeek();
+      if(opt){ const tx=t("f_week")+" "+w.w; if(opt.textContent!==tx) opt.textContent=tx; }
+      if(on){ if(bN.textContent!==tag(w.w)) bN.textContent=tag(w.w); bX.disabled=w.live;
+        bP.title=t("wk_prev"); bX.title=t("wk_next"); bN.title=t("wk_pick"); bP.setAttribute("aria-label",t("wk_prev")); bX.setAttribute("aria-label",t("wk_next"));
+        st.setAttribute("aria-label",t("f_week")+" "+tag(w.w)); }
+    }catch(e){ if(window.bad) bad("cm-week",e); }
+    busy=false; }
+  window.cmWeekPaint=paint;
+  bP.onclick=()=>{ cmWeekSet(cmWeek().m0-7); };
+  bX.onclick=()=>{ const w=cmWeek(); if(!w.live) cmWeekSet(w.m0+7); };
+  function closeP(back){ if(pop.hidden) return; pop.hidden=true; bN.setAttribute("aria-expanded","false"); if(back) bN.focus(); }
+  bN.onclick=e=>{ e.stopPropagation(); if(!pop.hidden){ closeP(true); return; }
+    const w=cmWeek(), m0=cmWkMon(cmWkDay(todayISO())); let h="", yr=null;
+    for(let i=0;i<12;i++){ const d=m0-7*i, o=cmWkOf(d), on=w.m0===d;
+      if(o.y!==yr){ yr=o.y; h+='<div class="h">'+yr+'</div>'; }
+      h+='<button type="button" class="i" role="menuitemradio" aria-checked="'+on+'" data-m0="'+d+'"><i aria-hidden="true">'+(on?"✓":"")+'</i>'+esc(tag(o.w))+'<small>'+dm(d)+' – '+(i===0?esc(t("wk_now")):dm(d+6))+'</small></button>'; }
+    h+='<div class="o">'+esc(t("wk_older"))+' <label>'+esc(t("wk_year"))+' <input class="y" inputmode="numeric" maxlength="4" value="'+w.y+'"></label> <label>'+esc(t("wk_wk"))+' <input class="w" inputmode="numeric" maxlength="2"></label> <button type="button" class="g">'+esc(t("wk_go"))+'</button></div>';
+    pop.innerHTML=h; pop.hidden=false; bN.setAttribute("aria-expanded","true");
+    const r=bN.getBoundingClientRect(), pw=pop.offsetWidth, ph=pop.offsetHeight; let y=r.bottom+6; if(y+ph>innerHeight-8&&r.top-ph-6>8) y=r.top-ph-6; else if(y+ph>innerHeight-8) y=Math.max(8,innerHeight-8-ph);   /* a phone: as much of the list as fits, the rest scrolls inside it */
+    pop.style.top=Math.round(y)+"px"; pop.style.left=Math.round(Math.max(8,Math.min(r.left,innerWidth-pw-8)))+"px";
+    const xs=[...pop.querySelectorAll("button.i")]; xs.forEach(x=>{ x.onclick=()=>{ closeP(true); cmWeekSet(+x.dataset.m0); }; });
+    const iy=pop.querySelector("input.y"), iw=pop.querySelector("input.w");
+    const jump=()=>{ const yy=parseInt(iy.value,10), ww=parseInt(iw.value,10), ok=yy>=2000&&yy<=2100&&ww>=1&&ww<=(cmWkOf(cmWkMonOf(yy,53)).w===53?53:52);
+      if(!ok){ iw.setCustomValidity("1–53"); iw.reportValidity(); return; }
+      const d=cmWkMonOf(yy,ww); if(d>m0){ iw.setCustomValidity(t("wk_future")); iw.reportValidity(); return; }
+      iw.setCustomValidity(""); closeP(true); cmWeekSet(d); };
+    pop.querySelector("button.g").onclick=jump; iy.onkeydown=iw.onkeydown=ev=>{ if(ev.key==="Enter"){ ev.preventDefault(); jump(); } };
+    pop.onkeydown=ev=>{ const k=xs.indexOf(document.activeElement); if((ev.key==="ArrowDown"||ev.key==="ArrowUp")&&k>=0){ ev.preventDefault(); xs[(k+(ev.key==="ArrowDown"?1:xs.length-1))%xs.length].focus(); } };
+    if(e.detail===0){ const f=pop.querySelector('[aria-checked="true"]')||xs[0]; if(f) f.focus(); } };
+  document.addEventListener("mousedown",e=>{ if(!pop.hidden&&!pop.contains(e.target)&&e.target!==bN) closeP(); });
+  document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&!pop.hidden){ e.preventDefault(); closeP(true); } });
+  addEventListener("resize",()=>closeP()); addEventListener("scroll",()=>closeP(),{passive:true});
+  if(typeof renderAll==="function"&&!renderAll.__cmwk){ const ra=renderAll; renderAll=function(){ const r=ra.apply(this,arguments); try{ paint(); }catch(e){} return r; }; renderAll.__cmwk=1; }
+  document.addEventListener("std:lang",()=>setTimeout(paint,0));
+  paint(); setTimeout(paint,0); setTimeout(paint,1500);   /* the site bar is built after std.js loads: place the stepper again then */
+})();
 </script>
 <style id="cmSiteFbCss">
   /* CM_SITEFB_V1 */

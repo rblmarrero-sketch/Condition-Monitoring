@@ -5328,6 +5328,14 @@ maximum, gives a wide screen's rest to equipment type, system component, defect 
 ~700 px; `fleetColgroup` widens Inspected, Owner and Required action 1.6x from 1700 px. dashboard-next keeps its own features
 (Generate report, Monthly / Weekly, Severity mix, Columns).
 
+
+**PERIOD BY WEEK (build 603, CM_WEEK_V1, Rickie 08.11 11:19 "lets do it, implement to all", mock-up approved).** dashboard-next's
+Period list (`#fRange`) has `week`: Monday to Sunday, site days (`DUE.today()`), ISO numbers as the Weekly report (W42 = 12-18.10).
+`#fWeek` holds the chosen week (`2026-W44`, `wk=` in the address; empty = this week, which ends today); `cmWeek()` is the one rule
+and `periodRange()` / `periodLabel()` read it, so every count follows as for Custom. A stepper `#cmWk` (‹ W44 ›) sits beside the
+Period control (the site bar's picker under /cm/, the select elsewhere) with the last 12 weeks and a year / week box; choosing any
+other period clears the week. The site's other pages get the same through askpi-site `week_per_kit` (WEEK_PER_V1, `/wkper_v1.js`).
+The retired classic `dashboard/` keeps its day-count periods. `tests/cmweek.cjs`.
 ---
 
 ## Secrets
