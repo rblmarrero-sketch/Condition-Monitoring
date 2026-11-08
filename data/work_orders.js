@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-08T17:37:44+00:00",
+  "generated": "2026-11-08T17:52:37+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5843,6 +5843,32 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-022017"
+    },
+    {
+      "asset": "CN002",
+      "defect": "DD-00016562",
+      "raised": "2026-11-09",
+      "system": "CN002.CH.HS (Hydraulic System / Гидравлическая система)",
+      "defectType": "3.02 No (faulty) signal/ indication/alarm / Отсутвие сигнала, индикации",
+      "descr": "Ошибка датчика выносной опоры",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022020"
+    },
+    {
+      "asset": "TK089",
+      "defect": "DD-00016563",
+      "raised": "2026-11-09",
+      "system": "TK089.AU.CS (Control System / Система управления)",
+      "defectType": "3.13 Warning light / alarm active / Сигнальная лампа / аварийная сигнализация активна",
+      "descr": "Требуется диагностика двигателя  (Горит Чек)",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022021"
     },
     {
       "asset": "LD008",
