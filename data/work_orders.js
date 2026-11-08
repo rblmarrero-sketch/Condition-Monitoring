@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-08T07:18:50+00:00",
+  "generated": "2026-11-08T07:32:44+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -7483,6 +7483,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021815"
     },
     {
+      "asset": "TK134",
+      "defect": "DD-00016367",
+      "raised": "2026-11-05",
+      "system": "TK134.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.04 Abnormal noise / vibration Аномальный шум / вибрация",
+      "descr": "Посторонний шум ДВС",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-021800"
+    },
+    {
       "asset": "TK096",
       "defect": "DD-00016348",
       "raised": "2026-11-05",
@@ -7520,19 +7533,6 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-021888"
-    },
-    {
-      "asset": "TK134",
-      "defect": "DD-00016367",
-      "raised": "2026-11-05",
-      "system": "TK134.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.04 Abnormal noise / vibration Аномальный шум / вибрация",
-      "descr": "Посторонний шум ДВС",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Roman Besedovskiy",
-      "regBy": "Беседовский Роман Иванович",
-      "wo": "WO-021800"
     },
     {
       "asset": "EX006",
