@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-08T10:12:49+00:00",
+  "generated": "2026-11-08T10:32:39+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -6079,6 +6079,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021954"
     },
     {
+      "asset": "TK046",
+      "defect": "DD-00016536",
+      "raised": "2026-11-08",
+      "system": "TK046.ELS.BAT (Batteries / Аккумуляторные батареи)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Затруднённый запуск. Тяжело прокручивает двигатель.",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-021996"
+    },
+    {
       "asset": "SN002",
       "defect": "DD-00016524",
       "raised": "2026-11-08",
@@ -6232,19 +6245,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "TK046",
-      "defect": "DD-00016536",
-      "raised": "2026-11-08",
-      "system": "TK046.ELS.BAT (Batteries / Аккумуляторные батареи)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Затруднённый запуск. Тяжело прокручивает двигатель.",
-      "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
       "wo": null
     },
     {
@@ -8133,19 +8133,6 @@ window.CM_WO_DATA = {
       "wo": "WO-021768"
     },
     {
-      "asset": "TK040",
-      "defect": "DD-00016379",
-      "raised": "2026-11-05",
-      "system": "TK040.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Не запускается ДВС, неисправность отопителя кабины",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-021809"
-    },
-    {
       "asset": "TK091",
       "defect": "DD-00016380",
       "raised": "2026-11-05",
@@ -8170,6 +8157,19 @@ window.CM_WO_DATA = {
       "by": "Roman Besedovskiy",
       "regBy": "Беседовский Роман Иванович",
       "wo": "WO-021807"
+    },
+    {
+      "asset": "TK040",
+      "defect": "DD-00016379",
+      "raised": "2026-11-05",
+      "system": "TK040.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Не запускается ДВС, неисправность отопителя кабины",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-021809"
     },
     {
       "asset": "GR003",
@@ -9712,7 +9712,7 @@ window.CM_WO_DATA = {
       "system": "EX019.HS.DL (Hydraulic Lines / Гидролинии)",
       "defectType": "1.13 Fluid contamination (water/dirt) / Загрязнение жидкости (вода/пыль)",
       "descr": "Расслоение РВД гидросистемы",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Aleksey Dobrikov",
       "regBy": "Добриков Алексей Владимирович",
