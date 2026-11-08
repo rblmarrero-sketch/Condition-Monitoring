@@ -45,6 +45,17 @@ async function phone(b, seed) {
   const ctx = await b.newContext({ viewport: { width: 412, height: 915 }, isMobile: true, hasTouch: true });
   const p = await ctx.newPage();
   p.on('pageerror', e => fails.push('PAGEERROR ' + e.message));
+  /* Since build 607 the phone reads the rest of the folder by itself while it
+     has signal (autoDrainIfShort), so a read stops short only when the signal
+     does. cutAfter lets the first folder read through and then drops the link. */
+  if (seed.cutAfter) {
+    let reads = 0;
+    await ctx.route('**/exec**', r => {
+      const a = new URL(r.request().url()).searchParams.get('action');
+      if (a === 'records' || a === 'index') { reads++; if (reads > seed.cutAfter) return r.abort(); }
+      return r.continue();
+    });
+  }
   await p.addInitScript(s => {
     if (s.offline) Object.defineProperty(navigator, 'onLine', { get: () => false });
     /* Offline is a network that answers nothing, not a flag: the app no longer
@@ -171,7 +182,7 @@ const entry = (p, k) => p.evaluate(k => histAll()[k] || null, k);
        wrong, and the reason n=40 would prove nothing: forty files fit in one
        call, so every read of them is complete. */
     await reset('n=700');
-    const a = await phone(b, { hist: LAUNDERED });
+    const a = await phone(b, { hist: LAUNDERED, cutAfter: 1 });
     await a.p.waitForTimeout(2500);
     const trunc = await a.p.evaluate(() => teamLastComplete === false);
     ok('the read really did stop short of the folder', trunc,

@@ -20278,7 +20278,28 @@ try{ if(histRepair()) renderDue&&renderDue(); }catch(e){}
    discarded. That is a screen claiming to be doing something it has no way of
    finishing, which is the reassuring direction of this project's oldest
    failure. A repair that needs the folder waits for a launch that has it. */
-const healIfReached = ok => ok ? histHealOnce().then(teamHealOnce) : null;
+/* NOBODY SHOULD HAVE TO PRESS "GET FULL HISTORY" (08.11.2026). An automatic
+   pull reads one page: when the phone's saved history is short (storage ran
+   out, a fresh install) or the folder says more pages are waiting, the rest
+   used to arrive one page per five-minute pull, or by the button. While the
+   phone has signal it now reads the rest at once, the same walk the button
+   makes; offline nothing is asked and what is saved stays on screen. */
+let autoDraining=false;
+async function autoDrainIfShort(){
+  if(autoDraining || histHealing) return;
+  if(!(teamPending || histIsShort())) return;
+  autoDraining=true;
+  /* The short flag is cleared before the walk and set again by any save that
+     fails during it (histSave/teamSave), so it ends true only if storage still
+     refused something; a paged read never clears it by itself (teamPull clears
+     it only on a single complete page). */
+  const wasShort=histIsShort();
+  let ok=false;
+  try{ histShort(false); ok=await histDrain(); if(ok) histNoteFolder(); }
+  catch(e){ /* no signal or the folder did not answer: the next pull tries again */ }
+  finally{ autoDraining=false; if(!ok && wasShort) histShort(true); try{ renderDue(); }catch(e){} }
+}
+const healIfReached = ok => ok ? histHealOnce().then(teamHealOnce).then(autoDrainIfShort) : null;
 /* What the worker fetched while the app was closed. Read here, dropped by
    teamPull once it has been merged — not before, or a pull that could not use
    it (busy, cursor moved) would have thrown it away unread. */
