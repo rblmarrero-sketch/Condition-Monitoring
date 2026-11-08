@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-08T06:47:42+00:00",
+  "generated": "2026-11-08T07:02:44+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -6462,7 +6462,7 @@ window.CM_WO_DATA = {
       "system": "TK104.DRS.FUE (Fuel System / Топливная система)",
       "defectType": "3.01 Control failure / Ошибка управления",
       "descr": "Отсутствует давление топлива",
-      "status": "Completed",
+      "status": "Registered",
       "priority": "P2 Urgent",
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
@@ -9605,7 +9605,7 @@ window.CM_WO_DATA = {
       "asset": "TK109",
       "defect": "DD-00016250",
       "raised": "2026-11-03",
-      "system": "TK109 HM400 KOMATSU",
+      "system": "TK109.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Утечка по уплотнению коленчатого вала",
       "status": "Completed",
@@ -57115,19 +57115,6 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-016240"
-    },
-    {
-      "asset": "TK124",
-      "defect": "DD-00011980",
-      "raised": "2026-09-03",
-      "system": "TK124.ELS (Electrical System / Электросистема)",
-      "defectType": "4.04 Faulty power/voltage / Неверные показатели тока",
-      "descr": "Ошибка L03",
-      "status": "In progress",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Kiselev",
-      "regBy": "Киселев Алексей Александрович",
-      "wo": "WO-016229"
     },
     {
       "asset": "DZ003",
