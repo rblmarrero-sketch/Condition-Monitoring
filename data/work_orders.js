@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-08T16:37:41+00:00",
+  "generated": "2026-11-08T16:52:38+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -355,7 +355,7 @@ window.CM_WO_DATA = {
     "WE010",
     "WE011"
   ],
-  "duplicateRowsCollapsed": 517,
+  "duplicateRowsCollapsed": 521,
   "roundsDedupedWithinVisit": 2,
   "columns": [
     "Asset description",
@@ -5760,11 +5760,50 @@ window.CM_WO_DATA = {
       "system": "DZ019.ELS (Electrical System / Электросистема)",
       "defectType": "3.01 Control failure / Ошибка управления",
       "descr": "Не работает звуковай сигнал",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022013"
+    },
+    {
+      "asset": "GR013",
+      "defect": "DD-00016556",
+      "raised": "2026-11-09",
+      "system": "GR013.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "Не горит габорит",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022014"
+    },
+    {
+      "asset": "GR008",
+      "defect": "DD-00016557",
+      "raised": "2026-11-09",
+      "system": "GR008.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "Не горит ближний свет",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022015"
+    },
+    {
+      "asset": "CD010",
+      "defect": "DD-00016558",
+      "raised": "2026-11-09",
+      "system": "CD010.OC.DO (Doors / Двери)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Протяжка креплений зеркал заднего вида",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022016"
     },
     {
       "asset": "LD008",
@@ -58105,19 +58144,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
-      "wo": null
-    },
-    {
       "asset": "BS005",
       "defect": "DD-00011312",
       "raised": "2026-08-21",
@@ -58206,6 +58232,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
