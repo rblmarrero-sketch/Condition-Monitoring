@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-08T14:17:38+00:00",
+  "generated": "2026-11-08T14:32:39+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5663,6 +5663,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022004"
     },
     {
+      "asset": "BS011",
+      "defect": "DD-00016546",
+      "raised": "2026-11-09",
+      "system": "BS011.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Замена ремня привода водяного насоса",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022006"
+    },
+    {
       "asset": "TK036",
       "defect": "DD-00016511",
       "raised": "2026-11-08",
@@ -6362,6 +6375,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "TK148",
+      "defect": "DD-00016545",
+      "raised": "2026-11-08",
+      "system": "TK148.DRS.FD.RRF Rear-Right Final Drive / Правая конечная передача",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка с ботового редуктора",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
       "wo": null
     },
     {
@@ -58756,11 +58782,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "TK008",
-      "defect": "DD-00010861",
+      "defect": "DD-00010860",
       "raised": "2026-08-14",
-      "system": "TK008.CH.SU (Suspension / Подвеска)",
-      "defectType": "1.04 Abnormal noise / vibration Аномальный шум / вибрация",
-      "descr": "Стук в передней подвеске",
+      "system": "TK008.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Не работает фен",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -58769,11 +58795,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "TK008",
-      "defect": "DD-00010860",
+      "defect": "DD-00010861",
       "raised": "2026-08-14",
-      "system": "TK008.OC.HE (Heating / Отопление)",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Не работает фен",
+      "system": "TK008.CH.SU (Suspension / Подвеска)",
+      "defectType": "1.04 Abnormal noise / vibration Аномальный шум / вибрация",
+      "descr": "Стук в передней подвеске",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
