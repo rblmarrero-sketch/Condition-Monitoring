@@ -1138,6 +1138,7 @@
          templates. Honest empty states share c_notrec / c_notmeas / c_nofind. */
       tb_mp:"Equipment and component evidence",
       tb_mp_skip:"Also on this round, not inspected: {n}",
+      tb_mp_skip_h:"Also on this round, not inspected:",
       tb_fc:"Filter findings", tb_fc_ev:"Required evidence",
       tb_insp:"Findings by component or system", tb_insp_ph:"Photographs with findings",
       tb_temp:"Temperature results", tb_temp_lim:"Technical limitation",
@@ -1335,6 +1336,7 @@
       ma_clear:"Действий не требуется — все осмотренные позиции в норме.",
       tb_mp:"Данные и фото по компонентам",
       tb_mp_skip:"Также на этом осмотре, не проверено: {n}",
+      tb_mp_skip_h:"Также на этом осмотре, не проверено:",
       tb_fc:"Результаты по фильтрам", tb_fc_ev:"Обязательные фотографии",
       tb_insp:"Выявленное по узлам и системам", tb_insp_ph:"Фотографии выявленного",
       tb_temp:"Результаты по температуре", tb_temp_lim:"Техническое ограничение",
@@ -3032,7 +3034,14 @@
       + (skipped.length ? '<div class="muted" style="font-size:9.5px;margin-top:4px;">'
           /* T.I is already escaped HTML; escaping it again printed its own
              span tag on the sheet (TK105, 2026-10-07) */
-          + T.I("tb_mp_skip", { n: skipped.map(function (it) { return it.code || it.key; }).join(", ") })
+          /* Named as the cards above name a point: code, then its name in the
+             report's language. The bare codes read "not inspected: 1" (TK149,
+             08.11.2026) and "4AL, TRANS" (TK119), which a reader cannot place. */
+          + T.I("tb_mp_skip_h") + ' ' + skipped.map(function (it) {
+              var k = it.code || it.key;
+              return it.name && it.name !== k
+                ? esc(k) + ' ' + T.both(it.name, it.nameAlt, "alti") : esc(k);
+            }).join("; ")
           + '</div>' : "");
   }
   /* FC — one row per filter: identity, service hours, grade, debris/defect,

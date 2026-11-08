@@ -81,6 +81,10 @@ const cardCount = (p, key) => p.evaluate((key) => {
   ok(/not inspected/i.test(tk150), 'the skip note is on the sheet', tk150.match(/not inspected[^.]*/i));
   ok(/\b1\b/.test(tk150.match(/not inspected[^.]*/i)[0]) && /\b4\b/.test(tk150.match(/not inspected[^.]*/i)[0]),
      '  both skipped positions are named', tk150.match(/not inspected[^.]*/i)[0]);
+  /* By name, not by a bare code a reader cannot place (TK149 printed
+     "not inspected: 1", TK119 "4AL, TRANS", 08.11.2026). */
+  ok(/1\s+Engine/.test(tk150.match(/not inspected[^.]*/i)[0]) && /4\s+Differential/.test(tk150.match(/not inspected[^.]*/i)[0]),
+     '  each with its name, not the bare code', tk150.match(/not inspected[^.]*/i)[0]);
 
   console.log('\na graded position — even Normal, even bare — is a real reading and keeps its card');
   const ru150 = await textOf(p, k('TK150', '2026-09-17', 'MP'), 'ru');
