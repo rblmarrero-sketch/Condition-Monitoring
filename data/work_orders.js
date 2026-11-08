@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-08T15:17:40+00:00",
+  "generated": "2026-11-08T15:32:42+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5689,6 +5689,32 @@ window.CM_WO_DATA = {
       "wo": "WO-022006"
     },
     {
+      "asset": "GR012",
+      "defect": "DD-00016548",
+      "raised": "2026-11-09",
+      "system": "GR012.DRS.FUE (Fuel System / Топливная система)",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "Не запускается ДВС",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022008"
+    },
+    {
+      "asset": "DZ001",
+      "defect": "DD-00016549",
+      "raised": "2026-11-09",
+      "system": "DZ001.OC.HE (Heating / Отопление)",
+      "defectType": "3.01 Control failure / Ошибка управления",
+      "descr": "Не работает отопитель",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022009"
+    },
+    {
       "asset": "TK036",
       "defect": "DD-00016511",
       "raised": "2026-11-08",
@@ -5752,19 +5778,6 @@ window.CM_WO_DATA = {
       "by": "Roman Besedovskiy",
       "regBy": "Беседовский Роман Иванович",
       "wo": "WO-021969"
-    },
-    {
-      "asset": "CR002",
-      "defect": "DD-00016497",
-      "raised": "2026-11-08",
-      "system": "CR002.LS.TNK (Grease Tank / Бак смазки)",
-      "defectType": "5.02 Contamination / Contamination",
-      "descr": "засорение воздушного фильтра жидкостные подогревателя маслостанции",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Murashko",
-      "regBy": "Мурашко Сергей Борисович",
-      "wo": "WO-021918"
     },
     {
       "asset": "GR001",
@@ -6222,6 +6235,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021919"
     },
     {
+      "asset": "CR002",
+      "defect": "DD-00016497",
+      "raised": "2026-11-08",
+      "system": "CR002.LS.TNK (Grease Tank / Бак смазки)",
+      "defectType": "5.02 Contamination / Contamination",
+      "descr": "засорение воздушного фильтра жидкостные подогревателя маслостанции",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Murashko",
+      "regBy": "Мурашко Сергей Борисович",
+      "wo": "WO-021918"
+    },
+    {
       "asset": "SN002",
       "defect": "DD-00016524",
       "raised": "2026-11-08",
@@ -6631,7 +6657,7 @@ window.CM_WO_DATA = {
       "system": "TK104.DRS.FUE (Fuel System / Топливная система)",
       "defectType": "3.01 Control failure / Ошибка управления",
       "descr": "Отсутствует давление топлива",
-      "status": "Registered",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
@@ -57988,19 +58014,6 @@ window.CM_WO_DATA = {
       "wo": "WO-018103"
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
-      "wo": null
-    },
-    {
       "asset": "DZ022",
       "defect": "DD-00011314",
       "raised": "2026-08-21",
@@ -58102,6 +58115,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
@@ -59509,8 +59535,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000076",
+      "asset": "H07",
+      "defect": "EB-00000075",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -59522,8 +59548,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H07",
-      "defect": "EB-00000075",
+      "asset": "H04",
+      "defect": "EB-00000076",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
