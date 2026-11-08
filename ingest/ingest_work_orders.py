@@ -362,6 +362,10 @@ CM_FIELDS = {
     # person" is one of the five CM names and only says the row is this
     # team's; the person who actually wrote the defect up is 1C's initiator.
     "initiator": ["Initiator WR", "Contact person initiator WR", "Initiator"],
+    # WHO REGISTERED IT (CM_EXISTDEF_V1, Rickie 08.11.2026). EAM.3.2.1: "Initiator's contact person defines the
+    # employee responsible for the defect detection"; "Initiator" is the business unit (ГДК Баимская on every row).
+    # A defect a mechanic registered carries his name here, while Responsible person may be a CM name.
+    "regBy":    ["Contact person initiator WR", "Initiator's contact person", "Initiator contact person"],
 }
 # "DD-000001" — two or more letters, a dash, digits. Taken out of the work
 # request reference, which in this workbook carries the code inside a longer
@@ -827,6 +831,7 @@ def main():
                         "status": _st or None,
                         "priority": str(_oget("priority") or "").strip() or None,
                         "by": str(_oget("person") or "").strip() or None,
+                        "regBy": str(_oget("regBy") or "").strip() or None,
                         "wo": str(_oget("wo") or "").strip() or None,
                     })
         if who:
@@ -886,6 +891,7 @@ def main():
                     # Responsible person exactly as the work order has it. "by" stays the team member it matched
                     # (which decides the row is the CM team's); the dashboards show and count byFull.
                     "byFull": (str(row[cm_idx["person"]] or "").strip() or None) if cm_idx["person"] is not None else None,
+                    "regBy": (str(cm_get("regBy") or "").strip() or None) if cm_idx.get("regBy") is not None else None,
                     # The name 1C has for whoever raised it, as 1C wrote it;
                     # None when the cell is empty (the panel then shows "by").
                     "raisedBy": (str(cm_get("initiator") or "").strip() or None) if cm_idx.get("initiator") is not None else None,

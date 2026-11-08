@@ -28,7 +28,7 @@ def row(**kw):
     r.update(kw); return [r.get(c) for c in COLS]
 rows = [
     row(**{"Equip no": "EX016", "Work order number": "WO-1", "Work request number": "DD-00015100",
-           "Work request creation date": d(5), "Responsible person": "Kim D.", "CMMSWork order status": "Elimination scheduled",
+           "Work request creation date": d(5), "Responsible person": "Kim D.", "Contact person initiator WR": "Petrov A. (mechanic)", "CMMSWork order status": "Elimination scheduled",
            "System component": "EX016.DRS.ENG (Engine)"}),
     row(**{"Equip no": "EX016", "Work order number": "WO-2", "Work request number": "DD-00014000",
            "Work request creation date": d(90), "Responsible person": "Lee S.", "CMMSWork order status": "Completed",
@@ -50,6 +50,7 @@ with tempfile.TemporaryDirectory() as tmp:
     od = {r["defect"]: r for r in data.get("otherDefects", [])}
     ok("an open defect raised by another supervisor is kept", "DD-00015100" in od and od["DD-00015100"]["by"] == "Kim D.", list(od))
     ok("its status, system and date travel with it", od.get("DD-00015100", {}).get("status") == "Elimination scheduled" and "DRS.ENG" in (od.get("DD-00015100", {}).get("system") or "") and od.get("DD-00015100", {}).get("raised"))
+    ok("who registered it (Contact person initiator WR) travels as regBy", od.get("DD-00015100", {}).get("regBy") == "Petrov A. (mechanic)", od.get("DD-00015100", {}).get("regBy"))
     ok("a completed one older than 60 days is left out", "DD-00014000" not in od)
     ok("a completed one from the last 60 days is kept (a comment may cite it)", "DD-00014900" in od)
     ok("the CM team's own defect is not repeated here", "DD-00015200" not in od and any(r.get("defect") == "DD-00015200" for r in data["cmWorkOrders"]))
