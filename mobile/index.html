@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=603">
+<link rel="manifest" href="manifest.webmanifest?v=604">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=603">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=603">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=603">
+<link rel="apple-touch-icon" href="icon-192.png?v=604">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=604">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=604">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2943,16 +2943,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=603"></script>
-<script src="upload-defaults.js?v=603"></script>
-<script src="hme.js?v=603"></script>
-<script src="mp-fc.js?v=603"></script>
-<script src="rtw.js?v=603"></script>
-<script src="hme-cascade.js?v=603"></script>
-<script src="assets.js?v=603"></script>
-<script src="temp-limits.js?v=603"></script>
-<script src="normalize.js?v=603"></script>
-<script src="terms.js?v=603"></script>
+<script src="native.js?v=604"></script>
+<script src="upload-defaults.js?v=604"></script>
+<script src="hme.js?v=604"></script>
+<script src="mp-fc.js?v=604"></script>
+<script src="rtw.js?v=604"></script>
+<script src="hme-cascade.js?v=604"></script>
+<script src="assets.js?v=604"></script>
+<script src="temp-limits.js?v=604"></script>
+<script src="normalize.js?v=604"></script>
+<script src="terms.js?v=604"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2971,25 +2971,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=603"></script>
-<script src="edits.js?v=603"></script>
-<script src="due.js?v=603"></script>
-<script src="wear.js?v=603"></script>
-<script src="wear-figs.js?v=603"></script>
-<script src="wear-map.js?v=603"></script>
-<script src="machine-photos.js?v=603"></script>
-<script src="machine-fig.js?v=603"></script>
-<script src="get.js?v=603"></script>
-<script src="points.js?v=603"></script>
-<script src="uc-points.js?v=603"></script>
-<script src="inspect-guide.js?v=603"></script>
-<script src="get-figs.js?v=603"></script>
-<script src="body-points.js?v=603"></script>
-<script src="body-map.js?v=603"></script>
-<script src="lube.js?v=603"></script>
-<script src="lube-overrides.js?v=603"></script>
-<script src="lube2027.js?v=603"></script>
-<script src="report-core.js?v=603"></script>
+<script src="grade.js?v=604"></script>
+<script src="edits.js?v=604"></script>
+<script src="due.js?v=604"></script>
+<script src="wear.js?v=604"></script>
+<script src="wear-figs.js?v=604"></script>
+<script src="wear-map.js?v=604"></script>
+<script src="machine-photos.js?v=604"></script>
+<script src="machine-fig.js?v=604"></script>
+<script src="get.js?v=604"></script>
+<script src="points.js?v=604"></script>
+<script src="uc-points.js?v=604"></script>
+<script src="inspect-guide.js?v=604"></script>
+<script src="get-figs.js?v=604"></script>
+<script src="body-points.js?v=604"></script>
+<script src="body-map.js?v=604"></script>
+<script src="lube.js?v=604"></script>
+<script src="lube-overrides.js?v=604"></script>
+<script src="lube2027.js?v=604"></script>
+<script src="report-core.js?v=604"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -3721,6 +3721,14 @@ const I18N = {
     rdy_v_ready:"Ready for the field",
     rdy_v_old:"Ready — some data is old",
     rdy_v_setup:"Setup needed before you go",
+    rdy_v_data:"Due list or history not saved — download before you go",
+    rdy_dat_t:"Due list and history on this phone",
+    rdy_dat_ok:"Saved for offline use: the 1C schedule (downloaded {t}) and the history of {n} machines ({r} rounds).",
+    rdy_dat_old:"The 1C schedule on this phone was downloaded {t}. Stay on signal so it can refresh before you go.",
+    rdy_dat_nosched:"The 1C due list is not saved on this phone.",
+    rdy_dat_nohist:"The inspection history is not fully saved on this phone.",
+    rdy_dat_fix:" Without signal the Due list and history will be empty — download them while you have signal.",
+    rdy_fix_pull:"Download now",
     rdy_v_storage:"Phone storage is almost full",
     rdy_v_update:"Update not finished",
     rdy_v_photos:"Photos still to send",
@@ -4422,6 +4430,14 @@ const I18N = {
     rdy_v_ready:"Готов к выезду",
     rdy_v_old:"Готов — часть данных устарела",
     rdy_v_setup:"Нужна настройка перед выездом",
+    rdy_v_data:"План или история не сохранены — загрузите перед выездом",
+    rdy_dat_t:"План и история на телефоне",
+    rdy_dat_ok:"Сохранено для работы без связи: план 1C (загружен {t}) и история по {n} единицам ({r} осмотров).",
+    rdy_dat_old:"План 1C на телефоне загружен {t}. Оставайтесь на связи, чтобы он обновился перед выездом.",
+    rdy_dat_nosched:"План 1C не сохранён на телефоне.",
+    rdy_dat_nohist:"История осмотров сохранена на телефоне не полностью.",
+    rdy_dat_fix:" Без связи план и история будут пустыми — загрузите их, пока есть связь.",
+    rdy_fix_pull:"Загрузить сейчас",
     rdy_v_storage:"Память телефона почти заполнена",
     rdy_v_update:"Обновление не завершено",
     rdy_v_photos:"Фото ещё не отправлены",
@@ -10364,13 +10380,53 @@ let SCHED = null;                     // {generated, byUnit, rtwOpen} once loade
    that, by then, genuinely had 179. A build-keyed key means a new build
    never even sees a cache an older build wrote; the one-time cost is the
    same ~20 kB fetch every build already re-fetches once anyway. */
+/* ONE COPY, NOT ONE PER BUILD (08.11.2026). The copy was keyed
+   "cm_sched_cache_v"+BUILD and nothing ever deleted the old ones. The file
+   was ~20 kB when that was written and is ~260 kB now (1C PM's own list), so
+   every update left a quarter of a megabyte behind, and after a dozen
+   updates the phone's localStorage (about 5 MB on iOS) was full: the newest
+   schedule could not be saved, and histSave/teamSave threw the history away
+   to make room. Offline, the Due list and the history were then empty -
+   "when they go offline the history and the due list disappear". One key now,
+   stamped with the build that wrote it: a copy from another build is still
+   shown (stale beats nothing) but is never taken as fresh, which keeps the
+   shape protection the per-build key existed for. */
+const SCHED_LS="cm_sched_cache";
+function schedLegacyKeys(){
+  const out=[];
+  try{ for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i);
+    if(k && /^cm_sched_cache_v/.test(k)) out.push(k); } }catch(e){}
+  return out;
+}
 function schedCacheGet(){
-  try{ return JSON.parse(localStorage.getItem("cm_sched_cache_v"+BUILD)||"null"); }
-  catch(e){ return null; }
+  try{
+    const j=JSON.parse(localStorage.getItem(SCHED_LS)||"null");
+    if(j && j.data) return j;
+  }catch(e){}
+  /* A phone still holding only the old per-build copies: the newest of them. */
+  let best=null;
+  for(const k of schedLegacyKeys()){
+    try{ const j=JSON.parse(localStorage.getItem(k)||"null");
+      if(j && j.data && (!best || (j.at||0)>(best.at||0))) best=Object.assign({b:k.slice(16)}, j); }catch(e){}
+  }
+  return best;
+}
+/* Frees what the old builds left, keeping the newest copy under the one key. */
+function schedPrune(){
+  const ks=schedLegacyKeys(); if(!ks.length) return 0;
+  let keep=null;
+  try{ if(!localStorage.getItem(SCHED_LS)) keep=schedCacheGet(); }catch(e){}
+  ks.forEach(k=>lsDel(k));
+  if(keep) lsSet(SCHED_LS, JSON.stringify(keep));
+  return ks.length;
 }
 function schedCacheSet(j){
-  try{ lsSet("cm_sched_cache_v"+BUILD, JSON.stringify({ at: Date.now(), data: j })); }
-  catch(e){ /* quota — the toggle just falls back to fetching every time */ }
+  const body=JSON.stringify({ at: Date.now(), b: BUILD, data: j });
+  if(lsSet(SCHED_LS, body)) return true;
+  schedPrune();
+  if(lsSet(SCHED_LS, body)) return true;
+  bad("sched-cache-save", new Error("schedule copy could not be stored ("+body.length+" chars)"));
+  return false;
 }
 /* Called once when the toggle turns on, and again whenever Due is opened
    while it stays on and the cached copy has aged past SCHED_STALE_MS — the
@@ -10407,7 +10463,7 @@ const SCHED_RETRY_GAP=60000;
    caller repaints only on true. */
 async function schedEnsureLoaded(force){
   const cached = schedCacheGet();
-  if(!force && cached && Date.now()-cached.at < SCHED_STALE_MS){
+  if(!force && cached && cached.b===BUILD && Date.now()-cached.at < SCHED_STALE_MS){
     const changed = SCHED !== cached.data; SCHED=cached.data; return changed;
   }
   let changed = false;
@@ -15365,7 +15421,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="603";
+const BUILD="604";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -18536,6 +18592,9 @@ function yardVerdict(rows){
      recovering and a queue that has stopped moving are the things an
      inspector must act on first. */
   if(hasKey("storage_nowrite")) return {k:"bad", s:"rdy_v_storage"};
+  /* After the queue's own verdicts (work at risk comes first), before
+     everything amber: a due list that is empty offline is not "ready". */
+  if(rows.some(r=>r.key==="data" && r.k==="bad")) return {k:"bad", s:"rdy_v_data"};
   if(hasKey("queue"))    return {k:"warn", s:"rdy_v_photos"};
   if(hasKey("build"))    return {k:"warn", s:"rdy_v_update"};
   if(hasKey("bg"))       return {k:"warn", s:"rdy_v_bg"};
@@ -18562,7 +18621,7 @@ let lastYard=null;
 /* The verdicts worth interrupting somebody for: work that is not away, an
    update that did not finish, a phone that is out of room. "Some data is
    old" and "updates only while open" stay on the card, not on the bar. */
-const YARD_LOUD={rdy_v_photos:1, rdy_v_update:1, rdy_v_storage:1, rdy_v_setup:1, rdy_v_recover:1};
+const YARD_LOUD={rdy_v_data:1, rdy_v_photos:1, rdy_v_update:1, rdy_v_storage:1, rdy_v_setup:1, rdy_v_recover:1};
 /* How long a queue may sit with nothing attempted, while the server answers,
    before the card stops saying "waiting" and asks for a person. */
 const STALL_MS=6*3600000;
@@ -18772,6 +18831,31 @@ async function yardCheck(){
       const cam=await within(4000, ()=>cameraState(), {k:"unknown"});
       if(cam.k==="denied") add("warn",t("rdy_cam_t"),t("rdy_cam_denied"),null,"camera");
       else if(cam.k==="ok") add("ok",t("rdy_cam_t"),t("rdy_cam_ok"),null,"camera");
+    }
+
+    /* 5b. WHAT THE DUE LIST AND THE HISTORY WILL SHOW WITH NO SIGNAL.
+       Green has to mean the phone can work offline, and the due list and the
+       history are read from this phone's own storage once the signal goes.
+       Checked from storage itself, never from what is in memory: a phone
+       whose storage refused the copy shows everything while it has signal
+       and nothing once it has not (08.11.2026). */
+    {
+      const sc=(()=>{ try{ return schedCacheGet(); }catch(e){ return null; } })();
+      const schedOk=!!(sc && sc.data && sc.data.byUnit);
+      const histN=(()=>{ try{ return Object.keys(JSON.parse(localStorage.getItem("cm_hist")||"{}")).length; }catch(e){ return 0; } })();
+      const teamN=(()=>{ try{ return (JSON.parse(localStorage.getItem("cm_team")||"[]")||[]).length; }catch(e){ return 0; } })();
+      const short=histIsShort();
+      const pull={ label:t("rdy_fix_pull"), run:async()=>{
+        try{ await teamPull(true); }catch(e){} try{ await schedEnsureLoaded(true); }catch(e){} } };
+      const when=at=>{ const d=new Date(at), n=new Date();
+        return (d.toDateString()===n.toDateString() ? "" : String(d.getDate()).padStart(2,"0")+"."
+          +String(d.getMonth()+1).padStart(2,"0")+" ")+hhmm(at); };
+      const miss=[];
+      if(!schedOk) miss.push(t("rdy_dat_nosched"));
+      if(!histN || !teamN || short) miss.push(t("rdy_dat_nohist"));
+      if(miss.length) add("bad",t("rdy_dat_t"),miss.join(" ")+t("rdy_dat_fix"),pull,"data");
+      else if(Date.now()-(sc.at||0) > 12*3600000) add("warn",t("rdy_dat_t"),t("rdy_dat_old",{t:when(sc.at)}),pull,"data");
+      else add("ok",t("rdy_dat_t"),t("rdy_dat_ok",{t:when(sc.at),n:histN,r:teamN}),null,"data");
     }
 
     /* 6. the machines, the limits and the lubricants */
@@ -20265,6 +20349,11 @@ document.addEventListener("visibilitychange",()=>{
    It costs one call, it is idempotent, and the answer is recorded honestly so
    ⚙ can say what is true rather than reassure. */
 if(persistState===null) askPersist().catch(e=>bad("persist", e));
+try{ schedPrune(); }catch(e){ bad("sched-prune", e); }
+/* At boot, not only when Due is opened: an update reloads the app, and a
+   technician who updates in the office and drives out without opening Due
+   must still have the schedule on the phone. */
+if(!document.hidden) schedRefresh("boot");
 schedTimer = setInterval(()=>schedRefresh("timer"), SCHED_MS);
 document.addEventListener("visibilitychange",()=>{
   if(!document.hidden) schedRefresh("visible");

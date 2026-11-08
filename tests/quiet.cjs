@@ -34,6 +34,11 @@ const vis = (p, sel) => p.evaluate(s => { const e = document.querySelector(s);
   const p = await ctx.newPage();
   p.on('pageerror', e => fails.push('PAGEERROR ' + e.message));
   p.on('console', m => { if (m.type() === 'error' && !/ERR_|Failed to load resource/.test(m.text())) fails.push('CONSOLE ' + m.text()); });
+  /* A settled phone has the fleet's history saved (the readiness card checks
+     it since build 604: green must mean the due list works offline). */
+  await p.addInitScript(() => { if (!localStorage.getItem('cm_team')) {
+    localStorage.setItem('cm_hist', JSON.stringify({ 'MP|TK146': { d: '2026-11-01' } }));
+    localStorage.setItem('cm_team', JSON.stringify([{ t: 'MP', u: 'TK146', d: '2026-11-01', g: 1, by: 'B. Ivanov' }])); } });
   await p.addInitScript(() => { localStorage.setItem('cm_holder', JSON.stringify({name:'Test Holder', badge:'T1', at:'2026-10-01T00:00:00Z'})); });
 await p.addInitScript(() => localStorage.setItem('up_dests', JSON.stringify(
     [{ id: 'gas', on: true, url: 'http://127.0.0.1:9/dead', sec: '', folder: '' }])));

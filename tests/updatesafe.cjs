@@ -74,7 +74,7 @@ async function waitLabel(p, text, ms) {
   return false;
 }
 async function phone(b) {
-  const ctx = await b.newContext({ viewport: { width: 412, height: 915 }, isMobile: true, hasTouch: true });
+  const ctx = await b.newContext({ viewport: { width: 412, height: 915 }, isMobile: true, hasTouch: true }); await ctx.addInitScript(require('./settled.cjs'));
   /* Count the two calls the page must never make. Kept in localStorage so the
      figure survives the reload an update causes. */
   await ctx.addInitScript(() => {

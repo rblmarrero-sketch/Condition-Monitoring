@@ -59,7 +59,7 @@ await ctx.addInitScript(u => localStorage.setItem('up_dests', JSON.stringify([
   /* Seven: six questions about the phone and its link, and whose phone it is.
      The wake-up row appears only where a person can act on it, and this
      backend is the Apps Script, which cannot wake a phone. */
-  ok('every readiness question is answered', yard.length === 7, yard.length + ' checks');
+  ok('every readiness question is answered', yard.length === 8, yard.length + ' checks');
   /* Should the row appear anyway (a backend that can, permission not yet
      given), amber is right for it. Every other row must be green. */
   const bgT = await p.evaluate(() => t('rdy_bg_t'));
