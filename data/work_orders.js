@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-08T10:47:36+00:00",
+  "generated": "2026-11-08T11:02:36+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -355,7 +355,7 @@ window.CM_WO_DATA = {
     "WE010",
     "WE011"
   ],
-  "duplicateRowsCollapsed": 516,
+  "duplicateRowsCollapsed": 517,
   "roundsDedupedWithinVisit": 2,
   "columns": [
     "Asset description",
@@ -5734,7 +5734,7 @@ window.CM_WO_DATA = {
       "system": "TK004.BS.SHO (Brake Shoes / Тормозные колодки)",
       "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
       "descr": "Утечка воздуха в районе КПП, диагностика тоормозной системы, неисправность механизма подъема кузовной платформы",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Aleksey Dobrikov",
       "regBy": "Добриков Алексей Владимирович",
@@ -5747,7 +5747,7 @@ window.CM_WO_DATA = {
       "system": "EMERGENCY EQUIPMENT, AMBULANCE TREKOL 287591, LV101 ALARM SYSTEM OldNumber (ET001)",
       "defectType": "4.20 Auxiliary electrical circuit fault / Неисправность вспомогательных электроцепей",
       "descr": "Не работает СГУ с проблесковыми маяками. Не работает штатный отопитель.",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
@@ -5871,17 +5871,17 @@ window.CM_WO_DATA = {
       "wo": "WO-021929"
     },
     {
-      "asset": "PU005",
-      "defect": "DD-00016491",
+      "asset": "CD001",
+      "defect": "DD-00016493",
       "raised": "2026-11-08",
-      "system": "PU005.AU.CS (Control System / Система управления)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Не запускается",
-      "status": "Elimination scheduled",
+      "system": "CD001.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Не работает отопитель двигателя",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-021912"
+      "wo": "WO-021914"
     },
     {
       "asset": "TK115",
@@ -5923,17 +5923,17 @@ window.CM_WO_DATA = {
       "wo": "WO-021964"
     },
     {
-      "asset": "TK027",
-      "defect": "DD-00016492",
+      "asset": "GR001",
+      "defect": "DD-00016538",
       "raised": "2026-11-08",
-      "system": "TK027.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
+      "system": "GR001.ELS.LIG (Head Lighting System / Система головного освещения)",
       "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
-      "descr": "Неисправность задних фонарей при включении движения задним ходом",
-      "status": "Elimination scheduled",
+      "descr": "Не горит ближний свет",
+      "status": "Completed",
       "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-021913"
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-021997"
     },
     {
       "asset": "LV061",
@@ -5973,19 +5973,6 @@ window.CM_WO_DATA = {
       "by": "Aleksey Dobrikov",
       "regBy": "Добриков Алексей Владимирович",
       "wo": "WO-021995"
-    },
-    {
-      "asset": "CD001",
-      "defect": "DD-00016493",
-      "raised": "2026-11-08",
-      "system": "CD001.OC.HE (Heating / Отопление)",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Не работает отопитель двигателя",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-021914"
     },
     {
       "asset": "BS018",
@@ -6090,6 +6077,71 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-021996"
+    },
+    {
+      "asset": "TK042",
+      "defect": "DD-00016537",
+      "raised": "2026-11-08",
+      "system": "TK042.DRS.COO.FAN Cooling Fan & Drive / Вентилятор и привод вентилятора",
+      "defectType": "5.01 Blockage/plugged / Заблокировано",
+      "descr": "Не выключается вентилятор охлаждения двигателя",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-021998"
+    },
+    {
+      "asset": "TK027",
+      "defect": "DD-00016492",
+      "raised": "2026-11-08",
+      "system": "TK027.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "Неисправность задних фонарей при включении движения задним ходом",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-021913"
+    },
+    {
+      "asset": "TK105",
+      "defect": "DD-00016539",
+      "raised": "2026-11-08",
+      "system": "TK105.ELS.ALT (Alternator / Генератор)",
+      "defectType": "1.27 Belt drive issue (slip/break) / Проблема ременного привода (проскальзывание/обрыв)",
+      "descr": "Обрыв ремня генератора",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-021999"
+    },
+    {
+      "asset": "PU005",
+      "defect": "DD-00016491",
+      "raised": "2026-11-08",
+      "system": "PU005.AU.CS (Control System / Система управления)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Не запускается",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-021912"
+    },
+    {
+      "asset": "EX010",
+      "defect": "DD-00016540",
+      "raised": "2026-11-08",
+      "system": "EX010.DRS.FS (Fuel System / Топливная система)",
+      "defectType": "3.01 Control failure / Ошибка управления",
+      "descr": "Не запускается ДВС",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022000"
     },
     {
       "asset": "SN002",
@@ -6339,19 +6391,6 @@ window.CM_WO_DATA = {
       "wo": "WO-021879"
     },
     {
-      "asset": "TK171",
-      "defect": "DD-00016483",
-      "raised": "2026-11-07",
-      "system": "TRUCK, WATER URAL 4672M1-20, TK171 HEATING",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Не работает автономный отопитель в насосном отсеке.",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-021904"
-    },
-    {
       "asset": "EX011",
       "defect": "DD-00016456",
       "raised": "2026-11-07",
@@ -6469,19 +6508,6 @@ window.CM_WO_DATA = {
       "wo": "WO-021886"
     },
     {
-      "asset": "TK034",
-      "defect": "DD-00016484",
-      "raised": "2026-11-07",
-      "system": "TK034.ELS.ALT (Alternator / Генератор)",
-      "defectType": "4.23 Charging system fault (alternator/regulator) / Неисправность системы зарядки (генератор/регулят",
-      "descr": "Индикация неисправности системы зарядки аккумуляторов",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-021905"
-    },
-    {
       "asset": "TK170",
       "defect": "DD-00016469",
       "raised": "2026-11-07",
@@ -6534,6 +6560,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021887"
     },
     {
+      "asset": "TK169",
+      "defect": "DD-00016482",
+      "raised": "2026-11-07",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK169 ENGINE",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Замена вискомуфты системы ОЖ",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-021903"
+    },
+    {
       "asset": "TK115",
       "defect": "DD-00016450",
       "raised": "2026-11-07",
@@ -6560,19 +6599,6 @@ window.CM_WO_DATA = {
       "wo": "WO-021897"
     },
     {
-      "asset": "FL005",
-      "defect": "DD-00016480",
-      "raised": "2026-11-07",
-      "system": "FL005.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
-      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
-      "descr": "Монтаж светодиодных фонарей на штатные места.",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-021901"
-    },
-    {
       "asset": "EX010",
       "defect": "DD-00016451",
       "raised": "2026-11-07",
@@ -6586,6 +6612,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021875"
     },
     {
+      "asset": "FL005",
+      "defect": "DD-00016480",
+      "raised": "2026-11-07",
+      "system": "FL005.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "Монтаж светодиодных фонарей на штатные места.",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-021901"
+    },
+    {
       "asset": "DZ016",
       "defect": "DD-00016495",
       "raised": "2026-11-07",
@@ -6597,19 +6636,6 @@ window.CM_WO_DATA = {
       "by": "Eduard Shapoval",
       "regBy": "Шаповал Эдуард Владимирович",
       "wo": "WO-021916"
-    },
-    {
-      "asset": "TK169",
-      "defect": "DD-00016482",
-      "raised": "2026-11-07",
-      "system": "TRUCK, WATER URAL 4672M1-20, TK169 ENGINE",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Замена вискомуфты системы ОЖ",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-021903"
     },
     {
       "asset": "TK007",
@@ -6649,6 +6675,32 @@ window.CM_WO_DATA = {
       "by": "Roman Besedovskiy",
       "regBy": "Беседовский Роман Иванович",
       "wo": "WO-021891"
+    },
+    {
+      "asset": "TK034",
+      "defect": "DD-00016484",
+      "raised": "2026-11-07",
+      "system": "TK034.ELS.ALT (Alternator / Генератор)",
+      "defectType": "4.23 Charging system fault (alternator/regulator) / Неисправность системы зарядки (генератор/регулят",
+      "descr": "Индикация неисправности системы зарядки аккумуляторов",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-021905"
+    },
+    {
+      "asset": "TK171",
+      "defect": "DD-00016483",
+      "raised": "2026-11-07",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK171 HEATING",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Не работает автономный отопитель в насосном отсеке.",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-021904"
     },
     {
       "asset": "LV147",
@@ -8165,7 +8217,7 @@ window.CM_WO_DATA = {
       "system": "TK040.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
       "descr": "Не запускается ДВС, неисправность отопителя кабины",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Aleksey Dobrikov",
       "regBy": "Добриков Алексей Владимирович",
@@ -20756,19 +20808,6 @@ window.CM_WO_DATA = {
       "wo": "WO-020385"
     },
     {
-      "asset": "EX002",
-      "defect": "DD-00015319",
-      "raised": "2026-10-21",
-      "system": "EX002.CH.BUC (Bucket / Ковш)",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "Ремонт демонтированного оборотного ковша",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": "WO-020496"
-    },
-    {
       "asset": "EX020",
       "defect": "DD-00015320",
       "raised": "2026-10-21",
@@ -21131,6 +21170,19 @@ window.CM_WO_DATA = {
       "by": "Roman Besedovskiy",
       "regBy": "Беседовский Роман Иванович",
       "wo": "WO-020361"
+    },
+    {
+      "asset": "EX002",
+      "defect": "DD-00015319",
+      "raised": "2026-10-21",
+      "system": "EX002.CH.BUC (Bucket / Ковш)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Ремонт демонтированного оборотного ковша",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": "WO-020496"
     },
     {
       "asset": "DZ017",
@@ -43402,19 +43454,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK015",
-      "defect": "DD-00013323",
-      "raised": "2026-09-25",
-      "system": "TK015.CH (Structure & Chassis / Рама и конструкция)",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "Восстановление",
-      "status": "In progress",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": "WO-018027"
-    },
-    {
       "asset": "GR008",
       "defect": "DD-00013313",
       "raised": "2026-09-25",
@@ -44934,6 +44973,19 @@ window.CM_WO_DATA = {
       "by": "Andrey Taran",
       "regBy": "Таран Андрей Андреевич",
       "wo": "WO-018106"
+    },
+    {
+      "asset": "TK015",
+      "defect": "DD-00013323",
+      "raised": "2026-09-25",
+      "system": "TK015.CH (Structure & Chassis / Рама и конструкция)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Восстановление",
+      "status": "In progress",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": "WO-018027"
     },
     {
       "asset": "DR009",
@@ -60289,19 +60341,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "CR001",
-      "defect": "DD-00009554",
-      "raised": "2026-07-24",
-      "system": "CR001.DRS.AIR (Air Intake System / Система впуска воздуха)",
-      "defectType": "3.02 No (faulty) signal/ indication/alarm / Отсутвие сигнала, индикации",
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Rinat Musaferov",
-      "regBy": "Мусаферов Ринат Искакович",
-      "wo": null
-    },
-    {
       "asset": "CN004.CH",
       "defect": "EB-00000070",
       "raised": "2026-07-24",
@@ -60312,6 +60351,19 @@ window.CM_WO_DATA = {
       "priority": "P1 Breakdown",
       "by": "Temir Marochko",
       "regBy": "Temir Marochko",
+      "wo": null
+    },
+    {
+      "asset": "CR001",
+      "defect": "DD-00009554",
+      "raised": "2026-07-24",
+      "system": "CR001.DRS.AIR (Air Intake System / Система впуска воздуха)",
+      "defectType": "3.02 No (faulty) signal/ indication/alarm / Отсутвие сигнала, индикации",
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Rinat Musaferov",
+      "regBy": "Мусаферов Ринат Искакович",
       "wo": null
     },
     {
