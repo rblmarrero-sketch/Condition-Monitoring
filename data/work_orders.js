@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-08T08:47:39+00:00",
+  "generated": "2026-11-08T09:02:40+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5832,6 +5832,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021954"
     },
     {
+      "asset": "GR015",
+      "defect": "DD-00016530",
+      "raised": "2026-11-08",
+      "system": "GR015.DRS.COO.THS (Thermostat / Термостат)",
+      "defectType": "3.01 Control failure / Ошибка управления",
+      "descr": "Не нагревается двигатель",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-021992"
+    },
+    {
       "asset": "HX042",
       "defect": "DD-00016527",
       "raised": "2026-11-08",
@@ -6183,19 +6196,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "GR015",
-      "defect": "DD-00016530",
-      "raised": "2026-11-08",
-      "system": "GR015.DRS.COO.THS (Thermostat / Термостат)",
-      "defectType": "3.01 Control failure / Ошибка управления",
-      "descr": "Не нагревается двигатель",
-      "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": null
-    },
-    {
       "asset": "TK118",
       "defect": "DD-00016467",
       "raised": "2026-11-07",
@@ -6220,32 +6220,6 @@ window.CM_WO_DATA = {
       "by": "Roman Besedovskiy",
       "regBy": "Беседовский Роман Иванович",
       "wo": "WO-021899"
-    },
-    {
-      "asset": "TK115",
-      "defect": "DD-00016450",
-      "raised": "2026-11-07",
-      "system": "TK115.OC.HE (Heating / Отопление)",
-      "defectType": "3.01 Control failure / Ошибка управления",
-      "descr": "Не исправен отопитель",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": "WO-021874"
-    },
-    {
-      "asset": "EX010",
-      "defect": "DD-00016451",
-      "raised": "2026-11-07",
-      "system": "EX010.CH.BUC (Bucket / Ковш)",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "Износ коронок",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": "WO-021875"
     },
     {
       "asset": "DZ004",
@@ -6495,6 +6469,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021887"
     },
     {
+      "asset": "TK115",
+      "defect": "DD-00016450",
+      "raised": "2026-11-07",
+      "system": "TK115.OC.HE (Heating / Отопление)",
+      "defectType": "3.01 Control failure / Ошибка управления",
+      "descr": "Не исправен отопитель",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-021874"
+    },
+    {
       "asset": "GE099",
       "defect": "DD-00016475",
       "raised": "2026-11-07",
@@ -6519,6 +6506,19 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-021901"
+    },
+    {
+      "asset": "EX010",
+      "defect": "DD-00016451",
+      "raised": "2026-11-07",
+      "system": "EX010.CH.BUC (Bucket / Ковш)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Износ коронок",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-021875"
     },
     {
       "asset": "DZ016",
