@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-09T11:17:55+00:00",
+  "generated": "2026-11-09T11:35:44+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5559,19 +5559,6 @@ window.CM_WO_DATA = {
   ],
   "otherDefects": [
     {
-      "asset": "BSL001",
-      "defect": "DD-00016561",
-      "raised": "2026-11-09",
-      "system": "IVECO AMT 633910 BSL001",
-      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
-      "descr": "Неисправность сигнальных световых приборов автопоезда",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-022019"
-    },
-    {
       "asset": "DZ002",
       "defect": "DD-00016544",
       "raised": "2026-11-09",
@@ -5713,6 +5700,71 @@ window.CM_WO_DATA = {
       "by": "Aleksey Dobrikov",
       "regBy": "Добриков Алексей Владимирович",
       "wo": "WO-022006"
+    },
+    {
+      "asset": "CD010",
+      "defect": "DD-00016558",
+      "raised": "2026-11-09",
+      "system": "CD010.OC.DO (Doors / Двери)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Протяжка креплений зеркал заднего вида",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022016"
+    },
+    {
+      "asset": "GE036",
+      "defect": "DD-00016551",
+      "raised": "2026-11-09",
+      "system": "GE036.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Отогрев, запуск ДВС",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022011"
+    },
+    {
+      "asset": "EX009",
+      "defect": "DD-00016608",
+      "raised": "2026-11-09",
+      "system": "EX009.DRS.PD (Pump Drive / Привод насоса)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Замена масла в РПН",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022172"
+    },
+    {
+      "asset": "LS021",
+      "defect": "DD-00016552",
+      "raised": "2026-11-09",
+      "system": "LS021.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Отогрев, проверка техжидкостей, запуск ДВС",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022012"
+    },
+    {
+      "asset": "TK125",
+      "defect": "DD-00016609",
+      "raised": "2026-11-09",
+      "system": "TK125.BS (Braking System / Тормозная система)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка РВД охлаждения тормозов",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022173"
     },
     {
       "asset": "GE109",
@@ -6027,6 +6079,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022170"
     },
     {
+      "asset": "TK001",
+      "defect": "DD-00016561",
+      "raised": "2026-11-09",
+      "system": "TK001.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "Неисправность сигнальных световых приборов автопоезда",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022019"
+    },
+    {
       "asset": "TK002",
       "defect": "DD-00016604",
       "raised": "2026-11-09",
@@ -6313,32 +6378,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022017"
     },
     {
-      "asset": "CD010",
-      "defect": "DD-00016558",
-      "raised": "2026-11-09",
-      "system": "CD010.OC.DO (Doors / Двери)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Протяжка креплений зеркал заднего вида",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022016"
-    },
-    {
-      "asset": "LS021",
-      "defect": "DD-00016552",
-      "raised": "2026-11-09",
-      "system": "LS021.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Отогрев, проверка техжидкостей, запуск ДВС",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022012"
-    },
-    {
       "asset": "GR012",
       "defect": "DD-00016550",
       "raised": "2026-11-09",
@@ -6350,19 +6389,6 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022010"
-    },
-    {
-      "asset": "GE036",
-      "defect": "DD-00016551",
-      "raised": "2026-11-09",
-      "system": "GE036.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Отогрев, запуск ДВС",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022011"
     },
     {
       "asset": "SN001",
@@ -6636,6 +6662,19 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022002"
+    },
+    {
+      "asset": "EX004",
+      "defect": "DD-00016533",
+      "raised": "2026-11-08",
+      "system": "EX004.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.12 Low fluid level / Низкий уровень жидкости",
+      "descr": "Долив техжидкостей, продувка воздушных фильтров",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-021993"
     },
     {
       "asset": "TK038",
@@ -6963,6 +7002,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "EX016",
+      "defect": "DD-00016519",
+      "raised": "2026-11-08",
+      "system": "EX016.CH.AL (Central Lubrication System / Централизованная система смазки)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Доливка масла в поворотный редуктор + замена тавотниц",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-021954"
+    },
+    {
       "asset": "HX042",
       "defect": "DD-00016527",
       "raised": "2026-11-08",
@@ -7028,19 +7080,6 @@ window.CM_WO_DATA = {
       "wo": "WO-021996"
     },
     {
-      "asset": "EX016",
-      "defect": "DD-00016519",
-      "raised": "2026-11-08",
-      "system": "EX016.CH.AL (Central Lubrication System / Централизованная система смазки)",
-      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
-      "descr": "Доливка масла в поворотный редуктор + замена тавотниц",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Roman Besedovskiy",
-      "regBy": "Беседовский Роман Иванович",
-      "wo": "WO-021954"
-    },
-    {
       "asset": "GR008",
       "defect": "DD-00016494",
       "raised": "2026-11-08",
@@ -7091,19 +7130,6 @@ window.CM_WO_DATA = {
       "by": "Roman Besedovskiy",
       "regBy": "Беседовский Роман Иванович",
       "wo": "WO-021927"
-    },
-    {
-      "asset": "EX004",
-      "defect": "DD-00016533",
-      "raised": "2026-11-08",
-      "system": "EX004.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.12 Low fluid level / Низкий уровень жидкости",
-      "descr": "Долив техжидкостей, продувка воздушных фильтров",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-021993"
     },
     {
       "asset": "DZ004",
@@ -7457,6 +7483,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021903"
     },
     {
+      "asset": "LV086",
+      "defect": "DD-00016458",
+      "raised": "2026-11-07",
+      "system": "LV086.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Обрыв резьбы крепления форсунки ДВС",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-021882"
+    },
+    {
       "asset": "TK157",
       "defect": "DD-00016471",
       "raised": "2026-11-07",
@@ -7533,19 +7572,6 @@ window.CM_WO_DATA = {
       "by": "Aleksey Dobrikov",
       "regBy": "Добриков Алексей Владимирович",
       "wo": "WO-021881"
-    },
-    {
-      "asset": "LV086",
-      "defect": "DD-00016458",
-      "raised": "2026-11-07",
-      "system": "LV086.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Обрыв резьбы крепления форсунки ДВС",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-021882"
     },
     {
       "asset": "DZ011",
@@ -8835,6 +8861,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021810"
     },
     {
+      "asset": "TK134",
+      "defect": "DD-00016367",
+      "raised": "2026-11-05",
+      "system": "TK134.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.04 Abnormal noise / vibration Аномальный шум / вибрация",
+      "descr": "Посторонний шум ДВС",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-021800"
+    },
+    {
       "asset": "TK092",
       "defect": "DD-00016346",
       "raised": "2026-11-05",
@@ -9119,19 +9158,6 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-021888"
-    },
-    {
-      "asset": "TK134",
-      "defect": "DD-00016367",
-      "raised": "2026-11-05",
-      "system": "TK134.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.04 Abnormal noise / vibration Аномальный шум / вибрация",
-      "descr": "Посторонний шум ДВС",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Roman Besedovskiy",
-      "regBy": "Беседовский Роман Иванович",
-      "wo": "WO-021800"
     },
     {
       "asset": "DZ001",
@@ -57936,6 +57962,19 @@ window.CM_WO_DATA = {
       "wo": "WO-015456"
     },
     {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
+      "wo": null
+    },
+    {
       "asset": "TK046",
       "defect": "DD-00011270",
       "raised": "2026-08-21",
@@ -58037,19 +58076,6 @@ window.CM_WO_DATA = {
       "priority": "P2 Urgent",
       "by": "Andrey Shipelov",
       "regBy": "Шипелов Андрей Анатольевич",
-      "wo": null
-    },
-    {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
@@ -58821,19 +58847,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "H07",
-      "defect": "EB-00000079",
-      "raised": "2026-08-13",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
-      "wo": null
-    },
-    {
-      "asset": "H07",
       "defect": "EB-00000078",
       "raised": "2026-08-13",
       "system": null,
@@ -58843,6 +58856,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Sergey Gulin",
+      "wo": null
+    },
+    {
+      "asset": "H07",
+      "defect": "EB-00000079",
+      "raised": "2026-08-13",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
