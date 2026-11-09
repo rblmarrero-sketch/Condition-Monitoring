@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-09T01:17:42+00:00",
+  "generated": "2026-11-09T01:32:43+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5832,6 +5832,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022110"
     },
     {
+      "asset": "CR008",
+      "defect": "DD-00016573",
+      "raised": "2026-11-09",
+      "system": "CR008.CONV.BEL (Conveyor Belt / Конвейерная лента)",
+      "defectType": "8.01 Conveyor belt cut / tear / Порез / разрыв конвейерной ленты",
+      "descr": "сквозные порезы транспортерной ленты",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-022131"
+    },
+    {
       "asset": "SN002",
       "defect": "DD-00016565",
       "raised": "2026-11-09",
@@ -5853,19 +5866,6 @@ window.CM_WO_DATA = {
       "descr": "критический износ ленты питателя",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": null
-    },
-    {
-      "asset": "CR008",
-      "defect": "DD-00016573",
-      "raised": "2026-11-09",
-      "system": "CR008.CONV.BEL (Conveyor Belt / Конвейерная лента)",
-      "defectType": "8.01 Conveyor belt cut / tear / Порез / разрыв конвейерной ленты",
-      "descr": "сквозные порезы транспортерной ленты",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": null
@@ -43454,19 +43454,6 @@ window.CM_WO_DATA = {
       "wo": "WO-018336"
     },
     {
-      "asset": "DZ002",
-      "defect": "DD-00013460",
-      "raised": "2026-09-26",
-      "system": "DZ002.OC.FS (Fire Suppression / Система пожаротушения)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Отсутсвуют транспортные контейнеры для огнетушителя",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Pavel Kostin",
-      "regBy": "Костин Павел Александрович",
-      "wo": "WO-018284"
-    },
-    {
       "asset": "LD003",
       "defect": "DD-00013451",
       "raised": "2026-09-26",
@@ -43517,6 +43504,19 @@ window.CM_WO_DATA = {
       "by": "Pavel Kostin",
       "regBy": "Костин Павел Александрович",
       "wo": "WO-020350"
+    },
+    {
+      "asset": "DZ002",
+      "defect": "DD-00013460",
+      "raised": "2026-09-26",
+      "system": "DZ002.OC.FS (Fire Suppression / Система пожаротушения)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Отсутсвуют транспортные контейнеры для огнетушителя",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": "WO-018284"
     },
     {
       "asset": "GR013",
@@ -133717,6 +133717,25 @@ window.CM_WO_DATA = {
       "actualEnd": null
     },
     {
+      "equip": "GR013",
+      "cls": "GRD",
+      "woNumber": "WO-022132",
+      "maintType": "500 Hours service Planned",
+      "hours": 500,
+      "cmLabel": "500h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-25",
+      "planStartDt": "2026-11-25T00:00:00",
+      "planEnd": "2026-11-25",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
       "equip": "GR014",
       "cls": "GRD",
       "woNumber": null,
@@ -133894,6 +133913,25 @@ window.CM_WO_DATA = {
       "actualEnd": null
     },
     {
+      "equip": "GR014",
+      "cls": "GRD",
+      "woNumber": "WO-022133",
+      "maintType": "500 Hours service Planned",
+      "hours": 500,
+      "cmLabel": "500h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-24",
+      "planStartDt": "2026-11-24T00:00:00",
+      "planEnd": "2026-11-24",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
       "equip": "GR015",
       "cls": "GRD",
       "woNumber": null,
@@ -134050,6 +134088,25 @@ window.CM_WO_DATA = {
       "planStart": "2026-11-10",
       "planStartDt": "2026-11-10T00:00:00",
       "planEnd": "2026-11-11",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
+      "equip": "GR015",
+      "cls": "GRD",
+      "woNumber": "WO-022134",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "250h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-20",
+      "planStartDt": "2026-11-20T00:00:00",
+      "planEnd": "2026-11-20",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
