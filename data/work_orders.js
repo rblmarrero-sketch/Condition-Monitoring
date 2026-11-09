@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-09T03:07:44+00:00",
+  "generated": "2026-11-09T03:37:31+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -2702,7 +2702,7 @@ window.CM_WO_DATA = {
       "raised": "2026-10-03",
       "detected": "2026-10-03",
       "planStart": "2026-11-05",
-      "closed": null,
+      "closed": "2026-11-05",
       "asset": "TK143",
       "defect": "DD-00013971",
       "requestNo": "DD-00013971",
@@ -2713,7 +2713,7 @@ window.CM_WO_DATA = {
       "cause": "Усталостная трещина",
       "causeFrom": "wo",
       "descr": "Множественные поперечные трещины приводного ремня генератора.",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "by": "Zhomart",
       "byFull": "Zhomart Khasenov",
       "regBy": "Хасенов Жомарт",
@@ -5905,6 +5905,19 @@ window.CM_WO_DATA = {
       "descr": "критический износ конвейерной ленты главного конвейера",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": null
+    },
+    {
+      "asset": "CR006",
+      "defect": "DD-00016577",
+      "raised": "2026-11-09",
+      "system": "CR006.CONV.MAIN (Main Conveyor / Главный конвейер)",
+      "defectType": "8.01 Conveyor belt cut / tear / Порез / разрыв конвейерной ленты",
+      "descr": "порыв конвейерной ленты",
+      "status": "Registered",
+      "priority": "P2 Urgent",
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": null
@@ -27308,19 +27321,6 @@ window.CM_WO_DATA = {
       "wo": "WO-020046"
     },
     {
-      "asset": "DZ018",
-      "defect": "DD-00014817",
-      "raised": "2026-10-15",
-      "system": "DZ018.CH.BL (Blade / Отвал)",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "Предельный износ футеровочных пластин отвала",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Evgeniy Frolin",
-      "regBy": "Фролин Евгений Владимирович",
-      "wo": "WO-020912"
-    },
-    {
       "asset": "TK097",
       "defect": "DD-00014843",
       "raised": "2026-10-15",
@@ -27371,6 +27371,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-020532"
+    },
+    {
+      "asset": "DZ018",
+      "defect": "DD-00014817",
+      "raised": "2026-10-15",
+      "system": "DZ018.CH.BL (Blade / Отвал)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Предельный износ футеровочных пластин отвала",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Evgeniy Frolin",
+      "regBy": "Фролин Евгений Владимирович",
+      "wo": "WO-020912"
     },
     {
       "asset": "LS041",
