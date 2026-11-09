@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-09T11:38:51+00:00",
+  "generated": "2026-11-09T11:52:42+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5676,6 +5676,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022131"
     },
     {
+      "asset": "SN001",
+      "defect": "DD-00016547",
+      "raised": "2026-11-09",
+      "system": "SN001.SCN.MED (Screen Media / Сита)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "износ сит",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Murashko",
+      "regBy": "Мурашко Сергей Борисович",
+      "wo": "WO-022007"
+    },
+    {
       "asset": "EX023",
       "defect": "DD-00016600",
       "raised": "2026-11-09",
@@ -6391,19 +6404,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022010"
     },
     {
-      "asset": "SN001",
-      "defect": "DD-00016547",
-      "raised": "2026-11-09",
-      "system": "SN001.SCN.MED (Screen Media / Сита)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "износ сит",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Murashko",
-      "regBy": "Мурашко Сергей Борисович",
-      "wo": "WO-022007"
-    },
-    {
       "asset": "EX005",
       "defect": "DD-00016534",
       "raised": "2026-11-08",
@@ -6677,6 +6677,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021993"
     },
     {
+      "asset": "CR002",
+      "defect": "DD-00016497",
+      "raised": "2026-11-08",
+      "system": "CR002.LS.TNK (Grease Tank / Бак смазки)",
+      "defectType": "5.02 Contamination / Contamination",
+      "descr": "засорение воздушного фильтра жидкостные подогревателя маслостанции",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Murashko",
+      "regBy": "Мурашко Сергей Борисович",
+      "wo": "WO-021918"
+    },
+    {
       "asset": "TK038",
       "defect": "DD-00016514",
       "raised": "2026-11-08",
@@ -6818,6 +6831,19 @@ window.CM_WO_DATA = {
       "by": "Aleksey Dobrikov",
       "regBy": "Добриков Алексей Владимирович",
       "wo": "WO-021995"
+    },
+    {
+      "asset": "EX016",
+      "defect": "DD-00016519",
+      "raised": "2026-11-08",
+      "system": "EX016.CH.AL (Central Lubrication System / Централизованная система смазки)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Доливка масла в поворотный редуктор + замена тавотниц",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-021954"
     },
     {
       "asset": "TK148",
@@ -7002,19 +7028,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "EX016",
-      "defect": "DD-00016519",
-      "raised": "2026-11-08",
-      "system": "EX016.CH.AL (Central Lubrication System / Централизованная система смазки)",
-      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
-      "descr": "Доливка масла в поворотный редуктор + замена тавотниц",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Roman Besedovskiy",
-      "regBy": "Беседовский Роман Иванович",
-      "wo": "WO-021954"
-    },
-    {
       "asset": "HX042",
       "defect": "DD-00016527",
       "raised": "2026-11-08",
@@ -7026,19 +7039,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-021976"
-    },
-    {
-      "asset": "CR002",
-      "defect": "DD-00016497",
-      "raised": "2026-11-08",
-      "system": "CR002.LS.TNK (Grease Tank / Бак смазки)",
-      "defectType": "5.02 Contamination / Contamination",
-      "descr": "засорение воздушного фильтра жидкостные подогревателя маслостанции",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Murashko",
-      "regBy": "Мурашко Сергей Борисович",
-      "wo": "WO-021918"
     },
     {
       "asset": "LV061",
