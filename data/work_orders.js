@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-09T21:42:37+00:00",
+  "generated": "2026-11-09T21:58:08+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -21424,7 +21424,7 @@ window.CM_WO_DATA = {
       "raised": "2026-10-22",
       "system": "LV108.CH.SU (Suspension / Подвеска)",
       "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "диагностика подвески, проверка уровней масла мостов, КПП",
+      "descr": "диагностика подвески, ходовой части, трансмиссии, проверка ДВС, ТКР, электросистемпроверка, уровней масла мостов, КПП",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
