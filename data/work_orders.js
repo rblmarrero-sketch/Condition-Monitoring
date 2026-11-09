@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-09T07:17:39+00:00",
+  "generated": "2026-11-09T07:32:54+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5846,19 +5846,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "CR008",
-      "defect": "DD-00016576",
-      "raised": "2026-11-09",
-      "system": "CR008.CONV.BEL (Conveyor Belt / Конвейерная лента)",
-      "defectType": "8.01 Conveyor belt cut / tear / Порез / разрыв конвейерной ленты",
-      "descr": "критический износ конвейерной ленты главного конвейера",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": null
-    },
-    {
-      "asset": "CR008",
       "defect": "DD-00016566",
       "raised": "2026-11-09",
       "system": "CR008.FEED.BEL (Feeder Belt / Лента питателя)",
@@ -5960,6 +5947,19 @@ window.CM_WO_DATA = {
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": null
+    },
+    {
+      "asset": "CR008",
+      "defect": "DD-00016576",
+      "raised": "2026-11-09",
+      "system": "CR008.CONV.BEL (Conveyor Belt / Конвейерная лента)",
+      "defectType": "8.01 Conveyor belt cut / tear / Порез / разрыв конвейерной ленты",
+      "descr": "критический износ конвейерной ленты главного конвейера",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-022164"
     },
     {
       "asset": "CD001",
