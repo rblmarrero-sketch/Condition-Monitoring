@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-09T04:37:36+00:00",
+  "generated": "2026-11-09T04:52:47+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5949,6 +5949,32 @@ window.CM_WO_DATA = {
       "wo": "WO-022158"
     },
     {
+      "asset": "PU004",
+      "defect": "DD-00016585",
+      "raised": "2026-11-09",
+      "system": "PU004.ELS.STM (Starter Motor / Стартер)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Не работает стартер",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-022160"
+    },
+    {
+      "asset": "TK088",
+      "defect": "DD-00016587",
+      "raised": "2026-11-09",
+      "system": "TK088.CH.FR (Frame / Рама)",
+      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "descr": "ОТкрутились болты подрамника",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-022161"
+    },
+    {
       "asset": "BS001",
       "defect": "DD-00016584",
       "raised": "2026-11-09",
@@ -5972,6 +5998,32 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": null
+    },
+    {
+      "asset": "LS038",
+      "defect": "DD-00016589",
+      "raised": "2026-11-09",
+      "system": "LS038.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "замена топливопроводов низкого давления,",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "LS038",
+      "defect": "DD-00016590",
+      "raised": "2026-11-09",
+      "system": "LS038.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "замена ремня генератора",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
       "wo": null
     },
     {
@@ -6027,6 +6079,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "CR002",
+      "defect": "DD-00016588",
+      "raised": "2026-11-09",
+      "system": "CR002.FEED.BEL (Feeder Belt / Лента питателя)",
+      "defectType": "8.01 Conveyor belt cut / tear / Порез / разрыв конвейерной ленты",
+      "descr": "порез конвейерной ленты питателя",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": null
+    },
+    {
       "asset": "LD008",
       "defect": "DD-00016554",
       "raised": "2026-11-09",
@@ -6072,6 +6137,19 @@ window.CM_WO_DATA = {
       "system": "GE049.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Замена насоса ОЖ",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "GE109",
+      "defect": "DD-00016586",
+      "raised": "2026-11-09",
+      "system": "GE109.ELS.WH (Wiring Harness / Жгут проводов)",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "замена клемм АКБ",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -23798,12 +23876,12 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK059",
-      "defect": "DD-00015111",
+      "asset": "PU006",
+      "defect": "DD-00015163",
       "raised": "2026-10-19",
-      "system": "TK059.ELS.PH (Preheater / Предпусковой подогреватель)",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Не работает ПЖД",
+      "system": "PU006.ELS.ECU (Electronic Control Unit (ECU) / Электронный блок управления (ЭБУ)",
+      "defectType": "4.01 Short circuiting / Короткое замыкание",
+      "descr": "не исправен тахометр",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -23811,12 +23889,12 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "PU006",
-      "defect": "DD-00015163",
+      "asset": "TK059",
+      "defect": "DD-00015111",
       "raised": "2026-10-19",
-      "system": "PU006.ELS.ECU (Electronic Control Unit (ECU) / Электронный блок управления (ЭБУ)",
-      "defectType": "4.01 Short circuiting / Короткое замыкание",
-      "descr": "не исправен тахометр",
+      "system": "TK059.ELS.PH (Preheater / Предпусковой подогреватель)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Не работает ПЖД",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -53776,19 +53854,6 @@ window.CM_WO_DATA = {
       "wo": "WO-017955"
     },
     {
-      "asset": "DZ002",
-      "defect": "DD-00012614",
-      "raised": "2026-09-14",
-      "system": "DZ002.CH.BL (Blade/Отвал)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Черезмерный люфт в шарнирном соеденении отвала и толкающего  бруса",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Pavel Kostin",
-      "regBy": "Костин Павел Александрович",
-      "wo": "WO-021497"
-    },
-    {
       "asset": "TK109",
       "defect": "DD-00012628",
       "raised": "2026-09-14",
@@ -53800,6 +53865,19 @@ window.CM_WO_DATA = {
       "by": "Pavel Kostin",
       "regBy": "Костин Павел Александрович",
       "wo": "WO-017135"
+    },
+    {
+      "asset": "DZ002",
+      "defect": "DD-00012614",
+      "raised": "2026-09-14",
+      "system": "DZ002.CH.BL (Blade/Отвал)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Черезмерный люфт в шарнирном соеденении отвала и толкающего  бруса",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": "WO-021497"
     },
     {
       "asset": "FL001",
@@ -57650,19 +57728,6 @@ window.CM_WO_DATA = {
       "wo": "WO-018103"
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
-      "wo": null
-    },
-    {
       "asset": "DZ022",
       "defect": "DD-00011314",
       "raised": "2026-08-21",
@@ -57764,6 +57829,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
@@ -58951,19 +59029,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "TK010",
-      "defect": "DD-00010485",
-      "raised": "2026-08-09",
-      "system": "TK010.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь радиатора",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": null
-    },
-    {
-      "asset": "TK010",
       "defect": "DD-00010486",
       "raised": "2026-08-09",
       "system": "TK010.CH.SU (Suspension / Подвеска)",
@@ -58982,6 +59047,19 @@ window.CM_WO_DATA = {
       "system": "TK010.CH.HS (Hydraulic System / Гидравлическая система)",
       "defectType": "1.25 Reduced capacity / output / Снижение производительности / выхода",
       "descr": "Общая потеря мощности КМУ, некорректная работа аутригеров (подклинивание)",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": null
+    },
+    {
+      "asset": "TK010",
+      "defect": "DD-00010485",
+      "raised": "2026-08-09",
+      "system": "TK010.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь радиатора",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -59158,8 +59236,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H07",
-      "defect": "EB-00000075",
+      "asset": "H04",
+      "defect": "EB-00000076",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -59171,8 +59249,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000076",
+      "asset": "H07",
+      "defect": "EB-00000075",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -115013,15 +115091,15 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-08",
       "planStartDt": "2026-11-08T00:00:00",
       "planEnd": "2026-11-09",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-08",
+      "actualStartDt": "2026-11-08T13:30:00",
+      "actualEnd": "2026-11-08"
     },
     {
       "equip": "EX021",
@@ -161335,15 +161413,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-09",
       "planStartDt": "2026-11-09T00:00:00",
       "planEnd": "2026-11-10",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-08",
+      "actualStartDt": "2026-11-08T19:00:00",
+      "actualEnd": "2026-11-09"
     },
     {
       "equip": "TK104",
