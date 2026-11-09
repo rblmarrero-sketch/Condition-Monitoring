@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-09T10:02:39+00:00",
+  "generated": "2026-11-09T10:32:29+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5949,6 +5949,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "LD003",
+      "defect": "DD-00016607",
+      "raised": "2026-11-09",
+      "system": "LD003.OC.GL (Glass / Стекла)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Не исправен стеклоочиститель",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022171"
+    },
+    {
       "asset": "CD001",
       "defect": "DD-00016595",
       "raised": "2026-11-09",
@@ -7808,19 +7821,6 @@ window.CM_WO_DATA = {
       "wo": "WO-021823"
     },
     {
-      "asset": "LV008",
-      "defect": "DD-00016401",
-      "raised": "2026-11-06",
-      "system": "LV008.CH.UC (Undercarriage / Ходовая часть)",
-      "defectType": "3.13 Warning light / alarm active / Сигнальная лампа / аварийная сигнализация активна",
-      "descr": "Индикация неисправности системы ABS",
-      "status": "Completed",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-021830"
-    },
-    {
       "asset": "TK171",
       "defect": "DD-00016392",
       "raised": "2026-11-06",
@@ -7871,6 +7871,19 @@ window.CM_WO_DATA = {
       "by": "Aleksey Kiselev",
       "regBy": "Киселев Алексей Александрович",
       "wo": "WO-021822"
+    },
+    {
+      "asset": "LV008",
+      "defect": "DD-00016401",
+      "raised": "2026-11-06",
+      "system": "LV008.CH.UC (Undercarriage / Ходовая часть)",
+      "defectType": "3.13 Warning light / alarm active / Сигнальная лампа / аварийная сигнализация активна",
+      "descr": "Индикация неисправности системы ABS",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-021830"
     },
     {
       "asset": "PU005",
