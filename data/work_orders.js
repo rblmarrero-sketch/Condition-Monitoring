@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-09T04:07:43+00:00",
+  "generated": "2026-11-09T04:22:54+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5897,6 +5897,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022140"
     },
     {
+      "asset": "LV036",
+      "defect": "DD-00016580",
+      "raised": "2026-11-09",
+      "system": "LV036.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка ОЖ",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-022156"
+    },
+    {
       "asset": "CR006",
       "defect": "DD-00016577",
       "raised": "2026-11-09",
@@ -5910,6 +5923,45 @@ window.CM_WO_DATA = {
       "wo": "WO-022155"
     },
     {
+      "asset": "TK027",
+      "defect": "DD-00016581",
+      "raised": "2026-11-09",
+      "system": "TK027.DRS.COO.FAN Cooling Fan & Drive / Вентилятор и привод вентилятора",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Вентилятор задевает за диффузор",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-022157"
+    },
+    {
+      "asset": "TK041",
+      "defect": "DD-00016582",
+      "raised": "2026-11-09",
+      "system": "TK041.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка выхлопных газов с выхлопной системы",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-022158"
+    },
+    {
+      "asset": "BS001",
+      "defect": "DD-00016584",
+      "raised": "2026-11-09",
+      "system": "BS001.OC.HE (Heating / Отопление)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Не работает отпитель салона",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-022159"
+    },
+    {
       "asset": "SN002",
       "defect": "DD-00016565",
       "raised": "2026-11-09",
@@ -5920,6 +5972,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": null
+    },
+    {
+      "asset": "EX003",
+      "defect": "DD-00016583",
+      "raised": "2026-11-09",
+      "system": "EX003.CH.STR (Superstructure / Надстройка)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "отсутствует палуба со стороны радиаторов охлаждения ДВС",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
       "wo": null
     },
     {
@@ -5942,6 +6007,19 @@ window.CM_WO_DATA = {
       "system": "CR008.CONV.BEL (Conveyor Belt / Конвейерная лента)",
       "defectType": "8.01 Conveyor belt cut / tear / Порез / разрыв конвейерной ленты",
       "descr": "критический износ конвейерной ленты главного конвейера",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": null
+    },
+    {
+      "asset": "CR003",
+      "defect": "DD-00016567",
+      "raised": "2026-11-09",
+      "system": "CR003.CRS.JAW (Jaw Crusher / Щековая дробилка)",
+      "defectType": "7.12 Wear of the side liners in the crushing chamber / Износ боковых футеровок камеры дробления",
+      "descr": "Износ боковых нижних футеровок камеры дробления",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Oleg Dymbrylov",
@@ -19561,19 +19639,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "EX015",
-      "defect": "DD-00015454",
-      "raised": "2026-10-23",
-      "system": "EX015.CH.STR (Superstructure / Надстройка)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Трещина поручня перед топливным баком",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": "WO-020950"
-    },
-    {
-      "asset": "EX015",
       "defect": "DD-00015458",
       "raised": "2026-10-23",
       "system": "EX015.HS.DL (Hydraulic Lines / Гидролинии)",
@@ -19597,6 +19662,19 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-020949"
+    },
+    {
+      "asset": "EX015",
+      "defect": "DD-00015454",
+      "raised": "2026-10-23",
+      "system": "EX015.CH.STR (Superstructure / Надстройка)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Трещина поручня перед топливным баком",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-020950"
     },
     {
       "asset": "TK155",
@@ -20775,7 +20853,7 @@ window.CM_WO_DATA = {
       "system": "TK155.DRS.COO.RAD Radiator / Радиатор",
       "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "descr": "Трещина рамки диффузоров",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P4 Planned (Repair)",
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
@@ -59991,11 +60069,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "CR001",
-      "defect": "DD-00009555",
+      "defect": "DD-00009554",
       "raised": "2026-07-24",
       "system": "CR001.DRS.AIR (Air Intake System / Система впуска воздуха)",
-      "defectType": "1.10 Rupture / Burst / Разрыв",
-      "descr": "Разрыв патрубка интеркуллера ДВС №7Y-1182",
+      "defectType": "3.02 No (faulty) signal/ indication/alarm / Отсутвие сигнала, индикации",
+      "descr": null,
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Rinat Musaferov",
@@ -60004,11 +60082,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "CR001",
-      "defect": "DD-00009554",
+      "defect": "DD-00009555",
       "raised": "2026-07-24",
       "system": "CR001.DRS.AIR (Air Intake System / Система впуска воздуха)",
-      "defectType": "3.02 No (faulty) signal/ indication/alarm / Отсутвие сигнала, индикации",
-      "descr": null,
+      "defectType": "1.10 Rupture / Burst / Разрыв",
+      "descr": "Разрыв патрубка интеркуллера ДВС №7Y-1182",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Rinat Musaferov",
@@ -171712,15 +171790,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-08",
-      "planStartDt": "2026-11-08T00:00:00",
-      "planEnd": "2026-11-09",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "planStartDt": "2026-11-08T13:00:00",
+      "planEnd": "2026-11-08",
+      "actualStart": "2026-11-08",
+      "actualStartDt": "2026-11-08T13:00:00",
+      "actualEnd": "2026-11-08"
     },
     {
       "equip": "TK114",
