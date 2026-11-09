@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-09T09:17:57+00:00",
+  "generated": "2026-11-09T09:33:01+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5947,6 +5947,45 @@ window.CM_WO_DATA = {
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": null
+    },
+    {
+      "asset": "DZ020",
+      "defect": "DD-00016602",
+      "raised": "2026-11-09",
+      "system": "DZ020.OC.HE (Heating / Отопление)",
+      "defectType": "3.01 Control failure / Ошибка управления",
+      "descr": "Не исправен эл. мотор отопителя",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022167"
+    },
+    {
+      "asset": "EX006",
+      "defect": "DD-00016603",
+      "raised": "2026-11-09",
+      "system": "EX006.CH.BUC (Bucket / Ковш)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Слом стопора пальца трапеции ковша",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022166"
+    },
+    {
+      "asset": "CR006",
+      "defect": "DD-00016601",
+      "raised": "2026-11-09",
+      "system": "CR006.CH.CRS (Crusher Unit / Дробильный узел)",
+      "defectType": "7.05 Jaw crusher jaw die wear / Износ щеки щековой дробилки",
+      "descr": "износ неподвижной плиты дробления",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Murashko",
+      "regBy": "Мурашко Сергей Борисович",
+      "wo": "WO-022165"
     },
     {
       "asset": "CR008",
@@ -58534,6 +58573,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "TK008",
+      "defect": "DD-00010860",
+      "raised": "2026-08-14",
+      "system": "TK008.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Не работает фен",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": null
+    },
+    {
       "asset": "FL005",
       "defect": "DD-00010822",
       "raised": "2026-08-14",
@@ -58553,19 +58605,6 @@ window.CM_WO_DATA = {
       "system": "TK008.CH.SU (Suspension / Подвеска)",
       "defectType": "1.04 Abnormal noise / vibration Аномальный шум / вибрация",
       "descr": "Стук в передней подвеске",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": null
-    },
-    {
-      "asset": "TK008",
-      "defect": "DD-00010860",
-      "raised": "2026-08-14",
-      "system": "TK008.OC.HE (Heating / Отопление)",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Не работает фен",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
