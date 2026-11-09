@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-09T10:48:10+00:00",
+  "generated": "2026-11-09T11:17:55+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5559,6 +5559,19 @@ window.CM_WO_DATA = {
   ],
   "otherDefects": [
     {
+      "asset": "BSL001",
+      "defect": "DD-00016561",
+      "raised": "2026-11-09",
+      "system": "IVECO AMT 633910 BSL001",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "Неисправность сигнальных световых приборов автопоезда",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022019"
+    },
+    {
       "asset": "DZ002",
       "defect": "DD-00016544",
       "raised": "2026-11-09",
@@ -5687,6 +5700,19 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022163"
+    },
+    {
+      "asset": "BS011",
+      "defect": "DD-00016546",
+      "raised": "2026-11-09",
+      "system": "BS011.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Замена ремня привода водяного насоса",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022006"
     },
     {
       "asset": "GE109",
@@ -6326,19 +6352,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022010"
     },
     {
-      "asset": "BS011",
-      "defect": "DD-00016546",
-      "raised": "2026-11-09",
-      "system": "BS011.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Замена ремня привода водяного насоса",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022006"
-    },
-    {
       "asset": "GE036",
       "defect": "DD-00016551",
       "raised": "2026-11-09",
@@ -6363,19 +6376,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Murashko",
       "regBy": "Мурашко Сергей Борисович",
       "wo": "WO-022007"
-    },
-    {
-      "asset": "BSL001",
-      "defect": "DD-00016561",
-      "raised": "2026-11-09",
-      "system": "IVECO AMT 633910 BSL001",
-      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
-      "descr": "Неисправность сигнальных световых приборов автопоезда",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-022019"
     },
     {
       "asset": "EX005",
@@ -6768,6 +6768,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021921"
     },
     {
+      "asset": "EX007",
+      "defect": "DD-00016535",
+      "raised": "2026-11-08",
+      "system": "EX007.HS.PD (Hydraulic Motors / Гидромоторы)",
+      "defectType": "1.12 Low fluid level / Низкий уровень жидкости",
+      "descr": "Доливка масла в РПН",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-021995"
+    },
+    {
       "asset": "TK148",
       "defect": "DD-00016545",
       "raised": "2026-11-08",
@@ -7039,19 +7052,6 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-021915"
-    },
-    {
-      "asset": "EX007",
-      "defect": "DD-00016535",
-      "raised": "2026-11-08",
-      "system": "EX007.HS.PD (Hydraulic Motors / Гидромоторы)",
-      "defectType": "1.12 Low fluid level / Низкий уровень жидкости",
-      "descr": "Доливка масла в РПН",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-021995"
     },
     {
       "asset": "TK101",
@@ -8822,6 +8822,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021809"
     },
     {
+      "asset": "TK091",
+      "defect": "DD-00016380",
+      "raised": "2026-11-05",
+      "system": "TK091.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка ДТ",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-021810"
+    },
+    {
       "asset": "TK092",
       "defect": "DD-00016346",
       "raised": "2026-11-05",
@@ -8898,19 +8911,6 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": null
-    },
-    {
-      "asset": "TK091",
-      "defect": "DD-00016380",
-      "raised": "2026-11-05",
-      "system": "TK091.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка ДТ",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-021810"
     },
     {
       "asset": "EX013",
