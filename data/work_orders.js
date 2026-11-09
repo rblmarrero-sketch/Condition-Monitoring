@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-09T06:47:50+00:00",
+  "generated": "2026-11-09T07:02:44+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5676,6 +5676,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022131"
     },
     {
+      "asset": "EX023",
+      "defect": "DD-00016600",
+      "raised": "2026-11-09",
+      "system": "EX023.CH.UC (Undercarriage / Ходовая часть)",
+      "defectType": "8.06 Roller / idler failure / Отказ ролика / роликоопоры",
+      "descr": "Заклинивание опорных катков",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022163"
+    },
+    {
       "asset": "GE109",
       "defect": "DD-00016586",
       "raised": "2026-11-09",
@@ -5947,19 +5960,6 @@ window.CM_WO_DATA = {
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": null
-    },
-    {
-      "asset": "EX023",
-      "defect": "DD-00016600",
-      "raised": "2026-11-09",
-      "system": "EX023.CH.UC (Undercarriage / Ходовая часть)",
-      "defectType": "8.06 Roller / idler failure / Отказ ролика / роликоопоры",
-      "descr": "Заклинивание опорных катков",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": "WO-022163"
     },
     {
       "asset": "CD001",
@@ -6664,6 +6664,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021925"
     },
     {
+      "asset": "TK115",
+      "defect": "DD-00016502",
+      "raised": "2026-11-08",
+      "system": "Injectors / Форсунки",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка топлива с форсунок ДВС",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-021921"
+    },
+    {
       "asset": "TK148",
       "defect": "DD-00016545",
       "raised": "2026-11-08",
@@ -6961,19 +6974,6 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-021964"
-    },
-    {
-      "asset": "TK115",
-      "defect": "DD-00016502",
-      "raised": "2026-11-08",
-      "system": "Injectors / Форсунки",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка топлива с форсунок ДВС",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Roman Besedovskiy",
-      "regBy": "Беседовский Роман Иванович",
-      "wo": "WO-021921"
     },
     {
       "asset": "GR015",
