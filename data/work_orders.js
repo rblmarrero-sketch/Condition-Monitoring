@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-09T16:17:42+00:00",
+  "generated": "2026-11-09T16:32:49+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5598,6 +5598,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022178"
     },
     {
+      "asset": "CN020",
+      "defect": "DD-00016623",
+      "raised": "2026-11-10",
+      "system": "CN020.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Не работает автономный отопитель в кабина машиниста.",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": null
+    },
+    {
       "asset": "TK089",
       "defect": "DD-00016611",
       "raised": "2026-11-10",
@@ -5624,19 +5637,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "DZ004",
-      "defect": "DD-00016619",
-      "raised": "2026-11-10",
-      "system": "DZ004.CH.BL (Blade / Отвал)",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "Износ ножей",
-      "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": null
-    },
-    {
       "asset": "DZ016",
       "defect": "DD-00016613",
       "raised": "2026-11-10",
@@ -5648,6 +5648,45 @@ window.CM_WO_DATA = {
       "by": "Aleksey Kiselev",
       "regBy": "Киселев Алексей Александрович",
       "wo": null
+    },
+    {
+      "asset": "PU009",
+      "defect": "DD-00016622",
+      "raised": "2026-11-10",
+      "system": "PU009.DRS.PD (Pump Drive / Привод насоса)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Не качает водяной насос",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022183"
+    },
+    {
+      "asset": "DZ004",
+      "defect": "DD-00016619",
+      "raised": "2026-11-10",
+      "system": "DZ004.CH.BL (Blade / Отвал)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Износ ножей",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022180"
+    },
+    {
+      "asset": "EX003",
+      "defect": "DD-00016620",
+      "raised": "2026-11-10",
+      "system": "EX003.CH.STR (Superstructure / Надстройка)",
+      "defectType": "1.04 Abnormal noise / vibration Аномальный шум / вибрация",
+      "descr": "Смазка поворотного круга",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022181"
     },
     {
       "asset": "DZ002",
@@ -5921,6 +5960,19 @@ window.CM_WO_DATA = {
       "by": "Eduard Shapoval",
       "regBy": "Шаповал Эдуард Владимирович",
       "wo": "WO-022179"
+    },
+    {
+      "asset": "TK010",
+      "defect": "DD-00016621",
+      "raised": "2026-11-09",
+      "system": "TK010.CH.BY (Dump Body / Самосвальный кузов)",
+      "defectType": "6.03 Structural crack / Трещина конструкции",
+      "descr": "Трещины на кузове.",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Eduard Shapoval",
+      "regBy": "Шаповал Эдуард Владимирович",
+      "wo": "WO-022182"
     },
     {
       "asset": "GE109",
@@ -6235,19 +6287,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022019"
     },
     {
-      "asset": "TK002",
-      "defect": "DD-00016604",
-      "raised": "2026-11-09",
-      "system": "TK002.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь уплотнения масляного фильтра, ремонт тормозной системы",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022168"
-    },
-    {
       "asset": "DZ020",
       "defect": "DD-00016602",
       "raised": "2026-11-09",
@@ -6259,6 +6298,19 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022167"
+    },
+    {
+      "asset": "TK002",
+      "defect": "DD-00016604",
+      "raised": "2026-11-09",
+      "system": "TK002.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь уплотнения масляного фильтра, ремонт тормозной системы",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022168"
     },
     {
       "asset": "EX006",
@@ -24487,12 +24539,12 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK059",
-      "defect": "DD-00015111",
+      "asset": "LV120",
+      "defect": "DD-00015139",
       "raised": "2026-10-19",
-      "system": "TK059.ELS.PH (Preheater / Предпусковой подогреватель)",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Не работает ПЖД",
+      "system": "LV120.ELS.ECU (Electronic Control Unit (ECU) / Электронный блок управления (ЭБУ)",
+      "defectType": "4.04 Faulty power/voltage / Неверные показатели тока",
+      "descr": "Горит check",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -24500,12 +24552,12 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "LV120",
-      "defect": "DD-00015139",
+      "asset": "TK059",
+      "defect": "DD-00015111",
       "raised": "2026-10-19",
-      "system": "LV120.ELS.ECU (Electronic Control Unit (ECU) / Электронный блок управления (ЭБУ)",
-      "defectType": "4.04 Faulty power/voltage / Неверные показатели тока",
-      "descr": "Горит check",
+      "system": "TK059.ELS.PH (Preheater / Предпусковой подогреватель)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Не работает ПЖД",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -36889,12 +36941,12 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK162",
-      "defect": "DD-00014083",
+      "asset": "LV158",
+      "defect": "DD-00014121",
       "raised": "2026-10-05",
-      "system": "TRUCK, WATER URAL 4672M1-20, TK162 TRANSMISSION OldNumber (UT162)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка масла с РК",
+      "system": "LV158.CH.SU (Suspension / Подвеска)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Требуется замена нижних и верхних шаровых опор, замена втулок и стоек стабилизатора",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -36902,12 +36954,12 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "LV158",
-      "defect": "DD-00014121",
+      "asset": "TK162",
+      "defect": "DD-00014083",
       "raised": "2026-10-05",
-      "system": "LV158.CH.SU (Suspension / Подвеска)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Требуется замена нижних и верхних шаровых опор, замена втулок и стоек стабилизатора",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK162 TRANSMISSION OldNumber (UT162)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка масла с РК",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -58092,19 +58144,6 @@ window.CM_WO_DATA = {
       "wo": "WO-015456"
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
-      "wo": null
-    },
-    {
       "asset": "TK046",
       "defect": "DD-00011270",
       "raised": "2026-08-21",
@@ -58206,6 +58245,19 @@ window.CM_WO_DATA = {
       "priority": "P2 Urgent",
       "by": "Andrey Shipelov",
       "regBy": "Шипелов Андрей Анатольевич",
+      "wo": null
+    },
+    {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
@@ -58781,19 +58833,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK008",
-      "defect": "DD-00010860",
-      "raised": "2026-08-14",
-      "system": "TK008.OC.HE (Heating / Отопление)",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Не работает фен",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": null
-    },
-    {
       "asset": "FL005",
       "defect": "DD-00010822",
       "raised": "2026-08-14",
@@ -58813,6 +58852,19 @@ window.CM_WO_DATA = {
       "system": "TK008.CH.SU (Suspension / Подвеска)",
       "defectType": "1.04 Abnormal noise / vibration Аномальный шум / вибрация",
       "descr": "Стук в передней подвеске",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": null
+    },
+    {
+      "asset": "TK008",
+      "defect": "DD-00010860",
+      "raised": "2026-08-14",
+      "system": "TK008.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Не работает фен",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -60433,6 +60485,19 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "LV011",
+      "defect": "DD-00009705",
+      "raised": "2026-07-27",
+      "system": "LV011.OC.AC (Air Conditioning / Кондиционирование)",
+      "defectType": "1.25 Reduced capacity / output / Снижение производительности / выхода",
+      "descr": "Требуется замена кондиционера",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": null
+    },
+    {
+      "asset": "LV011",
       "defect": "DD-00009702",
       "raised": "2026-07-27",
       "system": "LV011.BS (Braking System / Тормозная система)",
@@ -60451,19 +60516,6 @@ window.CM_WO_DATA = {
       "system": "LV011.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Требуется замена всех патрубков системы охлаждения",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": null
-    },
-    {
-      "asset": "LV011",
-      "defect": "DD-00009705",
-      "raised": "2026-07-27",
-      "system": "LV011.OC.AC (Air Conditioning / Кондиционирование)",
-      "defectType": "1.25 Reduced capacity / output / Снижение производительности / выхода",
-      "descr": "Требуется замена кондиционера",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
