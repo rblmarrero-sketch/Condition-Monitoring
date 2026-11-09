@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-09T02:17:37+00:00",
+  "generated": "2026-11-09T02:37:42+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5988,19 +5988,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022002"
     },
     {
-      "asset": "TK034",
-      "defect": "DD-00016525",
-      "raised": "2026-11-08",
-      "system": "TK034.OC.HE (Heating / Отопление)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Не работает печка салона",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Roman Besedovskiy",
-      "regBy": "Беседовский Роман Иванович",
-      "wo": "WO-021968"
-    },
-    {
       "asset": "TK110",
       "defect": "DD-00016496",
       "raised": "2026-11-08",
@@ -6131,19 +6118,6 @@ window.CM_WO_DATA = {
       "wo": "WO-021911"
     },
     {
-      "asset": "EX006",
-      "defect": "DD-00016500",
-      "raised": "2026-11-08",
-      "system": "EX006.ELS.DSC (Powertrain Control System / Система управления силовой передачей)",
-      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
-      "descr": "Горит ошибка 11956-04, требуется замена датчика угла поворота 4444902",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Roman Besedovskiy",
-      "regBy": "Беседовский Роман Иванович",
-      "wo": "WO-021920"
-    },
-    {
       "asset": "BS010",
       "defect": "DD-00016513",
       "raised": "2026-11-08",
@@ -6259,19 +6233,6 @@ window.CM_WO_DATA = {
       "by": "Aleksey Dobrikov",
       "regBy": "Добриков Алексей Владимирович",
       "wo": "WO-021995"
-    },
-    {
-      "asset": "BS018",
-      "defect": "DD-00016506",
-      "raised": "2026-11-08",
-      "system": "BS018.OC.HE (Heating / Отопление)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Не работает ФЕН в кунге",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Roman Besedovskiy",
-      "regBy": "Беседовский Роман Иванович",
-      "wo": "WO-021923"
     },
     {
       "asset": "GR008",
@@ -6493,6 +6454,45 @@ window.CM_WO_DATA = {
       "by": "Roman Besedovskiy",
       "regBy": "Беседовский Роман Иванович",
       "wo": "WO-021929"
+    },
+    {
+      "asset": "TK034",
+      "defect": "DD-00016525",
+      "raised": "2026-11-08",
+      "system": "TK034.OC.HE (Heating / Отопление)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Не работает печка салона",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-021968"
+    },
+    {
+      "asset": "BS018",
+      "defect": "DD-00016506",
+      "raised": "2026-11-08",
+      "system": "BS018.OC.HE (Heating / Отопление)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Не работает ФЕН в кунге",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-021923"
+    },
+    {
+      "asset": "EX006",
+      "defect": "DD-00016500",
+      "raised": "2026-11-08",
+      "system": "EX006.ELS.DSC (Powertrain Control System / Система управления силовой передачей)",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "Горит ошибка 11956-04, требуется замена датчика угла поворота 4444902",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-021920"
     },
     {
       "asset": "SN002",
@@ -191698,6 +191698,27 @@ window.CM_WO_DATA = {
     {
       "equip": "TK155",
       "cls": "HT",
+      "woNumber": "WO-022149",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "Magnetic Plug",
+      "cmTypes": [
+        "MP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-18",
+      "planStartDt": "2026-11-18T00:00:00",
+      "planEnd": "2026-11-18",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
+      "equip": "TK155",
+      "cls": "HT",
       "woNumber": "WO-022148",
       "maintType": "1500 Hours service Planned",
       "hours": 1500,
@@ -191958,6 +191979,27 @@ window.CM_WO_DATA = {
       "actualEnd": null
     },
     {
+      "equip": "TK156",
+      "cls": "HT",
+      "woNumber": "WO-022150",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "Magnetic Plug",
+      "cmTypes": [
+        "MP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-20",
+      "planStartDt": "2026-11-20T00:00:00",
+      "planEnd": "2026-11-20",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
       "equip": "TK157",
       "cls": "HT",
       "woNumber": null,
@@ -192175,6 +192217,27 @@ window.CM_WO_DATA = {
       "actualStart": "2026-11-05",
       "actualStartDt": "2026-11-05T20:00:00",
       "actualEnd": "2026-11-06"
+    },
+    {
+      "equip": "TK157",
+      "cls": "HT",
+      "woNumber": "WO-022151",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "Magnetic Plug",
+      "cmTypes": [
+        "MP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-20",
+      "planStartDt": "2026-11-20T00:00:00",
+      "planEnd": "2026-11-20",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
     },
     {
       "equip": "TK158",
@@ -192703,6 +192766,51 @@ window.CM_WO_DATA = {
       "actualEnd": "2026-11-04"
     },
     {
+      "equip": "TK159",
+      "cls": "HT",
+      "woNumber": "WO-022153",
+      "maintType": "3000 Hours service Planned",
+      "hours": 3000,
+      "cmLabel": "Filter Cut / General Inspection / Lubrication / Magnetic Plug",
+      "cmTypes": [
+        "FC",
+        "INSP",
+        "LUBE",
+        "MP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-17",
+      "planStartDt": "2026-11-17T00:00:00",
+      "planEnd": "2026-11-17",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
+      "equip": "TK159",
+      "cls": "HT",
+      "woNumber": "WO-022152",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "Magnetic Plug",
+      "cmTypes": [
+        "MP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-28",
+      "planStartDt": "2026-11-28T00:00:00",
+      "planEnd": "2026-11-28",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
       "equip": "TK160",
       "cls": "HT",
       "woNumber": null,
@@ -193067,6 +193175,27 @@ window.CM_WO_DATA = {
       "planStart": "2026-11-12",
       "planStartDt": "2026-11-12T00:00:00",
       "planEnd": "2026-11-13",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
+      "equip": "TK161",
+      "cls": "HT",
+      "woNumber": "WO-022154",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "Magnetic Plug",
+      "cmTypes": [
+        "MP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-22",
+      "planStartDt": "2026-11-22T00:00:00",
+      "planEnd": "2026-11-22",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
