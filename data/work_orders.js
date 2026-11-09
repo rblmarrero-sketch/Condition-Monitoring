@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-09T16:47:44+00:00",
+  "generated": "2026-11-09T17:02:48+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5598,19 +5598,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022178"
     },
     {
-      "asset": "CN020",
-      "defect": "DD-00016623",
-      "raised": "2026-11-10",
-      "system": "CN020.OC.HE (Heating / Отопление)",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Не работает автономный отопитель в кабина машиниста.",
-      "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": null
-    },
-    {
       "asset": "TK089",
       "defect": "DD-00016611",
       "raised": "2026-11-10",
@@ -5648,6 +5635,19 @@ window.CM_WO_DATA = {
       "by": "Aleksey Kiselev",
       "regBy": "Киселев Алексей Александрович",
       "wo": null
+    },
+    {
+      "asset": "CN020",
+      "defect": "DD-00016623",
+      "raised": "2026-11-10",
+      "system": "CN020.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Не работает автономный отопитель в кабина машиниста.",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022184"
     },
     {
       "asset": "PU009",
