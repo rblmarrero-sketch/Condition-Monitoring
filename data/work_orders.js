@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-09T23:02:47+00:00",
+  "generated": "2026-11-09T23:23:06+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -6040,6 +6040,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022100"
     },
     {
+      "asset": "TK088",
+      "defect": "DD-00016587",
+      "raised": "2026-11-09",
+      "system": "TK088.CH.FR (Frame / Рама)",
+      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "descr": "ОТкрутились болты подрамника",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-022161"
+    },
+    {
       "asset": "LV061",
       "defect": "DD-00016575",
       "raised": "2026-11-09",
@@ -6064,6 +6077,19 @@ window.CM_WO_DATA = {
       "by": "Roman Besedovskiy",
       "regBy": "Беседовский Роман Иванович",
       "wo": "WO-022137"
+    },
+    {
+      "asset": "LV036",
+      "defect": "DD-00016580",
+      "raised": "2026-11-09",
+      "system": "LV036.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка ОЖ",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-022156"
     },
     {
       "asset": "GE109",
@@ -6430,19 +6456,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022164"
     },
     {
-      "asset": "TK088",
-      "defect": "DD-00016587",
-      "raised": "2026-11-09",
-      "system": "TK088.CH.FR (Frame / Рама)",
-      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
-      "descr": "ОТкрутились болты подрамника",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Roman Besedovskiy",
-      "regBy": "Беседовский Роман Иванович",
-      "wo": "WO-022161"
-    },
-    {
       "asset": "TK041",
       "defect": "DD-00016582",
       "raised": "2026-11-09",
@@ -6480,19 +6493,6 @@ window.CM_WO_DATA = {
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": "WO-022155"
-    },
-    {
-      "asset": "LV036",
-      "defect": "DD-00016580",
-      "raised": "2026-11-09",
-      "system": "LV036.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка ОЖ",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Roman Besedovskiy",
-      "regBy": "Беседовский Роман Иванович",
-      "wo": "WO-022156"
     },
     {
       "asset": "TK042",
@@ -7054,6 +7054,32 @@ window.CM_WO_DATA = {
       "wo": "WO-021919"
     },
     {
+      "asset": "BS017",
+      "defect": "DD-00016512",
+      "raised": "2026-11-08",
+      "system": "BS017.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка топлива",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-021927"
+    },
+    {
+      "asset": "HX042",
+      "defect": "DD-00016527",
+      "raised": "2026-11-08",
+      "system": "HX042.CH.STR (Superstructure / Надстройка)",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "Повышенный расход масла, сизый дым (замена ДВС)",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-021976"
+    },
+    {
       "asset": "TK148",
       "defect": "DD-00016545",
       "raised": "2026-11-08",
@@ -7236,19 +7262,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "HX042",
-      "defect": "DD-00016527",
-      "raised": "2026-11-08",
-      "system": "HX042.CH.STR (Superstructure / Надстройка)",
-      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
-      "descr": "Повышенный расход масла, сизый дым (замена ДВС)",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-021976"
-    },
-    {
       "asset": "TK042",
       "defect": "DD-00016537",
       "raised": "2026-11-08",
@@ -7312,19 +7325,6 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-021992"
-    },
-    {
-      "asset": "BS017",
-      "defect": "DD-00016512",
-      "raised": "2026-11-08",
-      "system": "BS017.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка топлива",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Roman Besedovskiy",
-      "regBy": "Беседовский Роман Иванович",
-      "wo": "WO-021927"
     },
     {
       "asset": "DZ004",
