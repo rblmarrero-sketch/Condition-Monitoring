@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-09T02:37:42+00:00",
+  "generated": "2026-11-09T02:52:39+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5962,19 +5962,6 @@ window.CM_WO_DATA = {
       "wo": "WO-021994"
     },
     {
-      "asset": "TK036",
-      "defect": "DD-00016511",
-      "raised": "2026-11-08",
-      "system": "TK036.DRS.CLU (Clutch / Сцепление)",
-      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
-      "descr": "Не работает сцепление",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Roman Besedovskiy",
-      "regBy": "Беседовский Роман Иванович",
-      "wo": "WO-021926"
-    },
-    {
       "asset": "DZ003",
       "defect": "DD-00016542",
       "raised": "2026-11-08",
@@ -5999,19 +5986,6 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-021917"
-    },
-    {
-      "asset": "TK040",
-      "defect": "DD-00016526",
-      "raised": "2026-11-08",
-      "system": "TK040.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка масла ДВС",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Roman Besedovskiy",
-      "regBy": "Беседовский Роман Иванович",
-      "wo": "WO-021969"
     },
     {
       "asset": "GR001",
@@ -6118,19 +6092,6 @@ window.CM_WO_DATA = {
       "wo": "WO-021911"
     },
     {
-      "asset": "BS010",
-      "defect": "DD-00016513",
-      "raised": "2026-11-08",
-      "system": "BS010.ELS.ECU (Electronic Control Unit (ECU) / Электронный блок управления (ЭБУ)",
-      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
-      "descr": "Горит ЧЕК, компьютерная диагностика",
-      "status": "Completed",
-      "priority": "P2 Urgent",
-      "by": "Roman Besedovskiy",
-      "regBy": "Беседовский Роман Иванович",
-      "wo": "WO-021928"
-    },
-    {
       "asset": "GR015",
       "defect": "DD-00016530",
       "raised": "2026-11-08",
@@ -6142,6 +6103,19 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-021992"
+    },
+    {
+      "asset": "BS010",
+      "defect": "DD-00016513",
+      "raised": "2026-11-08",
+      "system": "BS010.ELS.ECU (Electronic Control Unit (ECU) / Электронный блок управления (ЭБУ)",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "Горит ЧЕК, компьютерная диагностика",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-021928"
     },
     {
       "asset": "CD001",
@@ -6254,7 +6228,7 @@ window.CM_WO_DATA = {
       "system": "BS002.OC.GL (Glass / Стекла)",
       "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
       "descr": "Не работает стеклоочиcтитель",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Roman Besedovskiy",
       "regBy": "Беседовский Роман Иванович",
@@ -6287,19 +6261,6 @@ window.CM_WO_DATA = {
       "wo": "WO-021967"
     },
     {
-      "asset": "TK032",
-      "defect": "DD-00016510",
-      "raised": "2026-11-08",
-      "system": "TK032.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка топлива с ДВС",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Roman Besedovskiy",
-      "regBy": "Беседовский Роман Иванович",
-      "wo": "WO-021925"
-    },
-    {
       "asset": "EX016",
       "defect": "DD-00016519",
       "raised": "2026-11-08",
@@ -6324,6 +6285,19 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-021996"
+    },
+    {
+      "asset": "TK032",
+      "defect": "DD-00016510",
+      "raised": "2026-11-08",
+      "system": "TK032.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка топлива с ДВС",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-021925"
     },
     {
       "asset": "TK027",
@@ -6456,6 +6430,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021929"
     },
     {
+      "asset": "TK040",
+      "defect": "DD-00016526",
+      "raised": "2026-11-08",
+      "system": "TK040.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка масла ДВС",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-021969"
+    },
+    {
       "asset": "TK034",
       "defect": "DD-00016525",
       "raised": "2026-11-08",
@@ -6488,11 +6475,24 @@ window.CM_WO_DATA = {
       "system": "EX006.ELS.DSC (Powertrain Control System / Система управления силовой передачей)",
       "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
       "descr": "Горит ошибка 11956-04, требуется замена датчика угла поворота 4444902",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Roman Besedovskiy",
       "regBy": "Беседовский Роман Иванович",
       "wo": "WO-021920"
+    },
+    {
+      "asset": "TK036",
+      "defect": "DD-00016511",
+      "raised": "2026-11-08",
+      "system": "TK036.DRS.CLU (Clutch / Сцепление)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Не работает сцепление",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-021926"
     },
     {
       "asset": "SN002",
