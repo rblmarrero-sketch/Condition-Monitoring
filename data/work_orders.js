@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-09T22:47:53+00:00",
+  "generated": "2026-11-09T23:02:47+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -6001,6 +6001,71 @@ window.CM_WO_DATA = {
       "wo": "WO-022167"
     },
     {
+      "asset": "BS001",
+      "defect": "DD-00016584",
+      "raised": "2026-11-09",
+      "system": "BS001.OC.HE (Heating / Отопление)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Не работает отпитель салона",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-022159"
+    },
+    {
+      "asset": "PU004",
+      "defect": "DD-00016585",
+      "raised": "2026-11-09",
+      "system": "PU004.ELS.STM (Starter Motor / Стартер)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Не работает стартер",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-022160"
+    },
+    {
+      "asset": "CD001",
+      "defect": "DD-00016570",
+      "raised": "2026-11-09",
+      "system": "CD001.HS.PD (Hydraulic Motors / Гидромоторы)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Не работает вибратор",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-022100"
+    },
+    {
+      "asset": "LV061",
+      "defect": "DD-00016575",
+      "raised": "2026-11-09",
+      "system": "LV061.OC.GL (Glass / Стекла)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Требуется замена щеток стеклоочистителя",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-022140"
+    },
+    {
+      "asset": "LV052",
+      "defect": "DD-00016574",
+      "raised": "2026-11-09",
+      "system": "LV052.OC.GL (Glass / Стекла)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Требуется замена щеток стеклоочистителя",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-022137"
+    },
+    {
       "asset": "GE109",
       "defect": "DD-00016586",
       "raised": "2026-11-09",
@@ -6365,19 +6430,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022164"
     },
     {
-      "asset": "BS001",
-      "defect": "DD-00016584",
-      "raised": "2026-11-09",
-      "system": "BS001.OC.HE (Heating / Отопление)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Не работает отпитель салона",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Roman Besedovskiy",
-      "regBy": "Беседовский Роман Иванович",
-      "wo": "WO-022159"
-    },
-    {
       "asset": "TK088",
       "defect": "DD-00016587",
       "raised": "2026-11-09",
@@ -6389,19 +6441,6 @@ window.CM_WO_DATA = {
       "by": "Roman Besedovskiy",
       "regBy": "Беседовский Роман Иванович",
       "wo": "WO-022161"
-    },
-    {
-      "asset": "PU004",
-      "defect": "DD-00016585",
-      "raised": "2026-11-09",
-      "system": "PU004.ELS.STM (Starter Motor / Стартер)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Не работает стартер",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Roman Besedovskiy",
-      "regBy": "Беседовский Роман Иванович",
-      "wo": "WO-022160"
     },
     {
       "asset": "TK041",
@@ -6456,32 +6495,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022156"
     },
     {
-      "asset": "LV061",
-      "defect": "DD-00016575",
-      "raised": "2026-11-09",
-      "system": "LV061.OC.GL (Glass / Стекла)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Требуется замена щеток стеклоочистителя",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Roman Besedovskiy",
-      "regBy": "Беседовский Роман Иванович",
-      "wo": "WO-022140"
-    },
-    {
-      "asset": "LV052",
-      "defect": "DD-00016574",
-      "raised": "2026-11-09",
-      "system": "LV052.OC.GL (Glass / Стекла)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Требуется замена щеток стеклоочистителя",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Roman Besedovskiy",
-      "regBy": "Беседовский Роман Иванович",
-      "wo": "WO-022137"
-    },
-    {
       "asset": "TK042",
       "defect": "DD-00016571",
       "raised": "2026-11-09",
@@ -6506,19 +6519,6 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-022109"
-    },
-    {
-      "asset": "CD001",
-      "defect": "DD-00016570",
-      "raised": "2026-11-09",
-      "system": "CD001.HS.PD (Hydraulic Motors / Гидромоторы)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Не работает вибратор",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Roman Besedovskiy",
-      "regBy": "Беседовский Роман Иванович",
-      "wo": "WO-022100"
     },
     {
       "asset": "DZ012",
@@ -7041,6 +7041,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021954"
     },
     {
+      "asset": "LV061",
+      "defect": "DD-00016498",
+      "raised": "2026-11-08",
+      "system": "LV061.DRS.TRA (Transmission / Трансмиссия)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Замена раздаточной коробки (лопнул корпус)",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-021919"
+    },
+    {
       "asset": "TK148",
       "defect": "DD-00016545",
       "raised": "2026-11-08",
@@ -7234,19 +7247,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-021976"
-    },
-    {
-      "asset": "LV061",
-      "defect": "DD-00016498",
-      "raised": "2026-11-08",
-      "system": "LV061.DRS.TRA (Transmission / Трансмиссия)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Замена раздаточной коробки (лопнул корпус)",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-021919"
     },
     {
       "asset": "TK042",
