@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-09T20:43:08+00:00",
+  "generated": "2026-11-09T20:57:44+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -8510,6 +8510,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "EX019",
+      "defect": "DD-00016418",
+      "raised": "2026-11-06",
+      "system": "EX019.CH.BUC (Bucket / Ковш)",
+      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
+      "descr": "Установка рабочего оборудования: харвестерная головка, грейферный захват.",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Ilshat Sabitov",
+      "regBy": "Сабитов Ильшат Рашидович",
+      "wo": "WO-021848"
+    },
+    {
       "asset": "GE108",
       "defect": "DD-00016424",
       "raised": "2026-11-06",
@@ -8586,19 +8599,6 @@ window.CM_WO_DATA = {
       "by": "Ilshat Sabitov",
       "regBy": "Сабитов Ильшат Рашидович",
       "wo": "WO-021845"
-    },
-    {
-      "asset": "EX019",
-      "defect": "DD-00016418",
-      "raised": "2026-11-06",
-      "system": "EX019.CH.BUC (Bucket / Ковш)",
-      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
-      "descr": "Установка рабочего оборудования: харвестерная головка, грейферный захват.",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Ilshat Sabitov",
-      "regBy": "Сабитов Ильшат Рашидович",
-      "wo": "WO-021848"
     },
     {
       "asset": "DZ009",
