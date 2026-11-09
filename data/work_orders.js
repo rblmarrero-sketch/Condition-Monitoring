@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-09T22:12:34+00:00",
+  "generated": "2026-11-09T22:27:40+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -16531,19 +16531,6 @@ window.CM_WO_DATA = {
       "wo": "WO-021486"
     },
     {
-      "asset": "CR002",
-      "defect": "DD-00015701",
-      "raised": "2026-10-26",
-      "system": "CR002.HS.CYL (Cylinders / Гидроцилиндры)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "поломка гидроцилиндра разгрузки конусной дробилки",
-      "status": "Completed",
-      "priority": "P4 Planned (Repair)",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": "WO-020830"
-    },
-    {
       "asset": "EX021",
       "defect": "DD-00015663",
       "raised": "2026-10-26",
@@ -17309,6 +17296,19 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-020842"
+    },
+    {
+      "asset": "CR002",
+      "defect": "DD-00015701",
+      "raised": "2026-10-26",
+      "system": "CR002.HS.CYL (Cylinders / Гидроцилиндры)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "поломка гидроцилиндра разгрузки конусной дробилки",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-020830"
     },
     {
       "asset": "LV078",
