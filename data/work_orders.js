@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-09T17:17:58+00:00",
+  "generated": "2026-11-09T17:27:01+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5611,19 +5611,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "CR006",
-      "defect": "DD-00016618",
-      "raised": "2026-11-10",
-      "system": "CR006.CONV.MAIN (Main Conveyor / Главный конвейер)",
-      "defectType": "8.06 Roller / idler failure / Отказ ролика / роликоопоры",
-      "descr": "замена роликов",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Murashko",
-      "regBy": "Мурашко Сергей Борисович",
-      "wo": null
-    },
-    {
       "asset": "DZ016",
       "defect": "DD-00016613",
       "raised": "2026-11-10",
@@ -5635,6 +5622,19 @@ window.CM_WO_DATA = {
       "by": "Aleksey Kiselev",
       "regBy": "Киселев Алексей Александрович",
       "wo": null
+    },
+    {
+      "asset": "CR006",
+      "defect": "DD-00016618",
+      "raised": "2026-11-10",
+      "system": "CR006.CONV.MAIN (Main Conveyor / Главный конвейер)",
+      "defectType": "8.06 Roller / idler failure / Отказ ролика / роликоопоры",
+      "descr": "замена роликов",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Murashko",
+      "regBy": "Мурашко Сергей Борисович",
+      "wo": "WO-022185"
     },
     {
       "asset": "CN020",
@@ -5975,6 +5975,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022182"
     },
     {
+      "asset": "DZ020",
+      "defect": "DD-00016602",
+      "raised": "2026-11-09",
+      "system": "DZ020.OC.HE (Heating / Отопление)",
+      "defectType": "3.01 Control failure / Ошибка управления",
+      "descr": "Не исправен эл. мотор отопителя",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022167"
+    },
+    {
       "asset": "GE109",
       "defect": "DD-00016586",
       "raised": "2026-11-09",
@@ -6285,19 +6298,6 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-022019"
-    },
-    {
-      "asset": "DZ020",
-      "defect": "DD-00016602",
-      "raised": "2026-11-09",
-      "system": "DZ020.OC.HE (Heating / Отопление)",
-      "defectType": "3.01 Control failure / Ошибка управления",
-      "descr": "Не исправен эл. мотор отопителя",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": "WO-022167"
     },
     {
       "asset": "TK002",
