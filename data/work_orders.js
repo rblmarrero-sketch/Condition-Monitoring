@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-09T15:47:45+00:00",
+  "generated": "2026-11-09T16:03:00+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5585,6 +5585,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022177"
     },
     {
+      "asset": "TK110",
+      "defect": "DD-00016616",
+      "raised": "2026-11-10",
+      "system": "TK110.DRS.FUE (Fuel System / Топливная система)",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "Не запускается ДВС",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022178"
+    },
+    {
       "asset": "TK089",
       "defect": "DD-00016611",
       "raised": "2026-11-10",
@@ -5595,6 +5608,32 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Aleksey Kiselev",
       "regBy": "Киселев Алексей Александрович",
+      "wo": null
+    },
+    {
+      "asset": "CR006",
+      "defect": "DD-00016618",
+      "raised": "2026-11-10",
+      "system": "CR006.CONV.MAIN (Main Conveyor / Главный конвейер)",
+      "defectType": "8.06 Roller / idler failure / Отказ ролика / роликоопоры",
+      "descr": "замена роликов",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Murashko",
+      "regBy": "Мурашко Сергей Борисович",
+      "wo": null
+    },
+    {
+      "asset": "DZ004",
+      "defect": "DD-00016619",
+      "raised": "2026-11-10",
+      "system": "DZ004.CH.BL (Blade / Отвал)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Износ ножей",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
       "wo": null
     },
     {
@@ -5858,6 +5897,32 @@ window.CM_WO_DATA = {
       "wo": "WO-022173"
     },
     {
+      "asset": "LD003",
+      "defect": "DD-00016607",
+      "raised": "2026-11-09",
+      "system": "LD003.OC.GL (Glass / Стекла)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Не исправен стеклоочиститель",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022171"
+    },
+    {
+      "asset": "TK037",
+      "defect": "DD-00016617",
+      "raised": "2026-11-09",
+      "system": "TK037.CH.BED (Bed / Кузов)",
+      "defectType": "6.03 Structural crack / Трещина конструкции",
+      "descr": "Трещины на кузове.",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Eduard Shapoval",
+      "regBy": "Шаповал Эдуард Владимирович",
+      "wo": "WO-022179"
+    },
+    {
       "asset": "GE109",
       "defect": "DD-00016586",
       "raised": "2026-11-09",
@@ -6116,19 +6181,6 @@ window.CM_WO_DATA = {
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": null
-    },
-    {
-      "asset": "LD003",
-      "defect": "DD-00016607",
-      "raised": "2026-11-09",
-      "system": "LD003.OC.GL (Glass / Стекла)",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "Не исправен стеклоочиститель",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": "WO-022171"
     },
     {
       "asset": "CD001",
@@ -16310,19 +16362,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "LD004",
-      "defect": "DD-00015762",
-      "raised": "2026-10-27",
-      "system": "Boom / Стрела",
-      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
-      "descr": "Диагностика неисправности стабилизатора стрелы",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": null
-    },
-    {
       "asset": "LD007",
       "defect": "DD-00015787",
       "raised": "2026-10-27",
@@ -16333,6 +16372,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
+      "wo": null
+    },
+    {
+      "asset": "LD004",
+      "defect": "DD-00015762",
+      "raised": "2026-10-27",
+      "system": "Boom / Стрела",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "Диагностика неисправности стабилизатора стрелы",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
       "wo": null
     },
     {
@@ -36837,12 +36889,12 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "LV158",
-      "defect": "DD-00014121",
+      "asset": "TK162",
+      "defect": "DD-00014083",
       "raised": "2026-10-05",
-      "system": "LV158.CH.SU (Suspension / Подвеска)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Требуется замена нижних и верхних шаровых опор, замена втулок и стоек стабилизатора",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK162 TRANSMISSION OldNumber (UT162)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка масла с РК",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -36850,12 +36902,12 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK162",
-      "defect": "DD-00014083",
+      "asset": "LV158",
+      "defect": "DD-00014121",
       "raised": "2026-10-05",
-      "system": "TRUCK, WATER URAL 4672M1-20, TK162 TRANSMISSION OldNumber (UT162)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка масла с РК",
+      "system": "LV158.CH.SU (Suspension / Подвеска)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Требуется замена нижних и верхних шаровых опор, замена втулок и стоек стабилизатора",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -59561,8 +59613,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000076",
+      "asset": "H07",
+      "defect": "EB-00000075",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -59574,8 +59626,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H07",
-      "defect": "EB-00000075",
+      "asset": "H04",
+      "defect": "EB-00000076",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
