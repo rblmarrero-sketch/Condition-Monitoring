@@ -40,17 +40,22 @@ const R = f => fs.readFileSync(path.join(__dirname, "..", f), "utf8");
   console.log("1. ONE TABLE, AND IT IS THE ONE THE SITE GAVE");
   const TERMS = require("../mobile/terms.js");
   ok("terms.js carries the reasons", Array.isArray(TERMS.WHY), (TERMS.WHY || []).length + " reason(s)");
-  ok("  all ten of them", (TERMS.WHY || []).length === 10, (TERMS.WHY || []).length);
+  ok("  all thirteen of them", (TERMS.WHY || []).length === 13, (TERMS.WHY || []).length);
   /* Named, not counted: a list that quietly loses one is a list that stops
      matching the paper the site works from. */
   const want = ["sched", "dup", "operator", "notgiven", "repair",
-                "clean", "access", "unsafe", "transport", "tools"];
+                "clean", "access", "unsafe", "transport", "tools",
+                /* 10.11.2026: when the PM was not on the planned day */
+                "pmnight", "pmearly", "pmlate"];
   ok("  in the order they were given", TERMS.WHY.map(w => w.k).join(",") === want.join(","),
      TERMS.WHY.map(w => w.k).join(","));
   ok("  every one has both languages",
      TERMS.WHY.every(w => w.en && w.ru && w.en !== w.ru),
      TERMS.WHY.filter(w => !w.en || !w.ru || w.en === w.ru).map(w => w.k).join(",") || "all two-language");
-  ok("  and the keys are unique", new Set(TERMS.WHY.map(w => w.k)).size === 10);
+  ok("  and the keys are unique", new Set(TERMS.WHY.map(w => w.k)).size === 13);
+  ok("  the PM-timing reasons read in both languages",
+     TERMS.whyLabel("pmnight", "en") === "PM done on night shift" && TERMS.whyLabel("pmearly", "ru") === "ТО выполнено раньше графика"
+     && TERMS.whyLabel("pmlate", "en") === "PM done later than scheduled");
   ok("a key reads back in each language",
      TERMS.whyLabel("repair", "en") === "Equipment under repair" &&
      TERMS.whyLabel("repair", "ru") === "Техника в ремонте",
@@ -157,7 +162,7 @@ const R = f => fs.readFileSync(path.join(__dirname, "..", f), "utf8");
     title: document.getElementById("dueDlgT").textContent,
   }));
   ok("the dialog opens on that round", dlg.open, dlg.title);
-  ok("  the picker offers the ten and a blank", dlg.opts.length === 11 && dlg.opts[0] === "",
+  ok("  the picker offers every reason and a blank", dlg.opts.length === TERMS.WHY.length + 1 && dlg.opts[0] === "",
      dlg.opts.length + " option(s)");
   ok("  in the language on screen", dlg.first === "Incorrect schedule", dlg.first);
 
@@ -306,7 +311,7 @@ const R = f => fs.readFileSync(path.join(__dirname, "..", f), "utf8");
     return { opts: [...document.getElementById("dfWhySel").options].map(o => o.value),
              second: [...document.getElementById("dfWhySel").options][1].textContent };
   });
-  ok("the office picker offers the same ten", off.opts.length === 11, off.opts.length + " option(s)");
+  ok("the office picker offers the same reasons", off.opts.length === TERMS.WHY.length + 1, off.opts.length + " option(s)");
   ok("  the same keys, in the same order",
      off.opts.slice(1).join(",") === want.join(","), off.opts.slice(1).join(","));
   /* THE HALF THAT MATTERS ACROSS A LANGUAGE BOUNDARY: a Russian phone stores

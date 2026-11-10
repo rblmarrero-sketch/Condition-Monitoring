@@ -96,7 +96,8 @@
   };
   /* ── WHY A ROUND WAS NOT WALKED ──────────────────────────────────────────
      The ten the site actually gives, in the order they are offered, each with
-     a STABLE KEY beside its two labels.
+     a STABLE KEY beside its two labels (ten from the site's sheet, three
+     PM-timing reasons added 10.11.2026).
 
      The key is the point. A reason is free text printed verbatim, and free
      text alone puts "in the workshop", "In workshop", "в ремонте" and "ремонт"
@@ -123,6 +124,10 @@
     { k: "unsafe",    en: "Unsafe conditions",             ru: "Небезопасные условия" },
     { k: "transport", en: "No transport to site",          ru: "Нет транспорта до места работ" },
     { k: "tools",     en: "Inspection tools unavailable",  ru: "Нет инструментов для осмотра" },
+    /* Asked for 10.11.2026: the service was not on the day the agenda shows. */
+    { k: "pmnight",   en: "PM done on night shift",          ru: "ТО выполнено в ночную смену" },
+    { k: "pmearly",   en: "PM done earlier than scheduled",  ru: "ТО выполнено раньше графика" },
+    { k: "pmlate",    en: "PM done later than scheduled",    ru: "ТО выполнено позже графика" },
   ];
   T.WHY = WHY;
   /* The label for a key, in a language. Empty for a reason nobody chose from
