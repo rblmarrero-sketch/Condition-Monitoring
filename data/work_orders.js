@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-10T16:07:43+00:00",
+  "generated": "2026-11-10T16:22:41+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5897,6 +5897,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022183"
     },
     {
+      "asset": "DZ004",
+      "defect": "DD-00016619",
+      "raised": "2026-11-10",
+      "system": "DZ004.CH.BL (Blade / Отвал)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Износ ножей",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022180"
+    },
+    {
       "asset": "TK168",
       "defect": "DD-00016663",
       "raised": "2026-11-10",
@@ -6144,6 +6157,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "TK146",
+      "defect": "DD-00016624",
+      "raised": "2026-11-10",
+      "system": "TK146.BS.TV (Treadle Valve / Педальный тормозной клапан)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "плохой контакт",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Dmitriy Ishchenko",
+      "regBy": "Ищенко Дмитрий Александрович",
+      "wo": "WO-022186"
+    },
+    {
       "asset": "CN023",
       "defect": "DD-00016667",
       "raised": "2026-11-10",
@@ -6209,19 +6235,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022229"
     },
     {
-      "asset": "DZ004",
-      "defect": "DD-00016619",
-      "raised": "2026-11-10",
-      "system": "DZ004.CH.BL (Blade / Отвал)",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "Износ ножей",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": "WO-022180"
-    },
-    {
       "asset": "TK091",
       "defect": "DD-00016659",
       "raised": "2026-11-10",
@@ -6261,19 +6274,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022227"
     },
     {
-      "asset": "LD002",
-      "defect": "DD-00016653",
-      "raised": "2026-11-10",
-      "system": "LD002.OC.GL (Glass / Стекла)",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "Износ щетки стеклоочистителя",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": "WO-022226"
-    },
-    {
       "asset": "TK119",
       "defect": "DD-00016650",
       "raised": "2026-11-10",
@@ -6285,6 +6285,19 @@ window.CM_WO_DATA = {
       "by": "Aleksey Kiselev",
       "regBy": "Киселев Алексей Александрович",
       "wo": "WO-022225"
+    },
+    {
+      "asset": "LD002",
+      "defect": "DD-00016653",
+      "raised": "2026-11-10",
+      "system": "LD002.OC.GL (Glass / Стекла)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Износ щетки стеклоочистителя",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022226"
     },
     {
       "asset": "CR002",
@@ -6376,19 +6389,6 @@ window.CM_WO_DATA = {
       "by": "Roman Besedovskiy",
       "regBy": "Беседовский Роман Иванович",
       "wo": "WO-022197"
-    },
-    {
-      "asset": "TK146",
-      "defect": "DD-00016624",
-      "raised": "2026-11-10",
-      "system": "TK146.BS.TV (Treadle Valve / Педальный тормозной клапан)",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "плохой контакт",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Dmitriy Ishchenko",
-      "regBy": "Ищенко Дмитрий Александрович",
-      "wo": "WO-022186"
     },
     {
       "asset": "EX024",
@@ -7821,6 +7821,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021996"
     },
     {
+      "asset": "GR015",
+      "defect": "DD-00016530",
+      "raised": "2026-11-08",
+      "system": "GR015.DRS.COO.THS (Thermostat / Термостат)",
+      "defectType": "3.01 Control failure / Ошибка управления",
+      "descr": "Не нагревается двигатель",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-021992"
+    },
+    {
       "asset": "TK148",
       "defect": "DD-00016545",
       "raised": "2026-11-08",
@@ -8027,19 +8040,6 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-021964"
-    },
-    {
-      "asset": "GR015",
-      "defect": "DD-00016530",
-      "raised": "2026-11-08",
-      "system": "GR015.DRS.COO.THS (Thermostat / Термостат)",
-      "defectType": "3.01 Control failure / Ошибка управления",
-      "descr": "Не нагревается двигатель",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": "WO-021992"
     },
     {
       "asset": "DZ004",
