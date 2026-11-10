@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-10T07:13:01+00:00",
+  "generated": "2026-11-10T07:27:42+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -6716,6 +6716,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "TK044",
+      "defect": "DD-00016606",
+      "raised": "2026-11-09",
+      "system": "TK044.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь радиатора охлаждения ДВС, утечка воздуха пневмосистемы",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022169"
+    },
+    {
       "asset": "LD008",
       "defect": "DD-00016554",
       "raised": "2026-11-09",
@@ -6753,19 +6766,6 @@ window.CM_WO_DATA = {
       "by": "Roman Besedovskiy",
       "regBy": "Беседовский Роман Иванович",
       "wo": "WO-022162"
-    },
-    {
-      "asset": "TK044",
-      "defect": "DD-00016606",
-      "raised": "2026-11-09",
-      "system": "TK044.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь радиатора охлаждения ДВС, утечка воздуха пневмосистемы",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022169"
     },
     {
       "asset": "GR001",
