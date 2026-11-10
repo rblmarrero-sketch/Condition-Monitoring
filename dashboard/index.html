@@ -18431,11 +18431,27 @@ const CW_COLS = [
    including the two fields (defect type, description, cause) that print as
    "planned service" / an em-dash on a planned-service row rather than 1C's
    raw (and here, meaningless) values. */
+/* TR_WO_V1 (11.11.2026, Rickie 08:22 "the defect raised came from work order manager"): 1C's description and cause
+   in English on the English page. The texts are the same WO.xlsx cells the Work Order Manager shows, translated
+   once on PECHANKA by the site translation library (approved phrases, glossary, offline engine) into
+   /tr/wo_en.json; this panel reads that list - it never translates anything itself. Only when served by PECHANKA
+   (/cm/...): anywhere else there is no list and the panel is exactly as before. The Russian stays on hover; the
+   Russian page, the CSV and the counts keep 1C's own text; a text not translated yet stays Russian. */
+const CW_EN = { map:null, gen:"", at:0 };
+function cwEnLoad(){
+  if(!/^\/cm\//.test(location.pathname) || Date.now()-CW_EN.at < 15*60*1000) return; CW_EN.at = Date.now();
+  fetch("/tr/wo_en.json", {cache:"no-store"}).then(r => r.ok ? r.json() : null).then(j => {
+    if(!j || !j.map || j.generated === CW_EN.gen) return; CW_EN.map = j.map; CW_EN.gen = j.generated;
+    const box = $("cwList"); if(lang === "en" && box && box.offsetParent) renderCmWoTab();
+  }).catch(() => {});
+}
+function cwEn(v){ return (lang === "en" && CW_EN.map && v) ? (CW_EN.map[String(v).replace(/\s+/g," ").trim()] || "") : ""; }
+function cwShow(v){ return cwEn(v) || v || ""; }
 function cwColVal(r, k){
   if(k==="defect") return r.defect || r.requestNo || "";
   if(k==="defectType") return r.planned ? "planned service" : (r.defectType||"");
-  if(k==="descr") return r.planned ? "" : (r.descr||"");
-  if(k==="cause") return r.planned ? "" : (r.cause||"");
+  if(k==="descr") return r.planned ? "" : cwShow(r.descr);   /* TR_WO_V1: sorted and filtered as shown */
+  if(k==="cause") return r.planned ? "" : cwShow(r.cause);   /* TR_WO_V1: sorted and filtered as shown */
   if(k==="wo") return r.woNumber || ""; /* CM_PLAIN_V1 */
   if(k==="by") return cwBy(r);   /* Rickie 04.11: the responsible person, not 1C's initiator (the organisation) */
   return r[k] || "";
@@ -18478,9 +18494,9 @@ function cwRows(noStage){
     .filter(r => !cwStatusSel || (r.status||"") === cwStatusSel)
     .filter(r => noStage || !cwStageSel || cwStage(r) === cwStageSel) /* CM_PLAIN_V1 */
     .filter(r => barUnitOK(r.asset) && (!barQ() || [r.asset, r.defect, r.requestNo, r.cause, r.defectType, r.eqType,
-                        r.system, r.descr, r.woNumber].some(v => cwWordMatch(v, barQ())))) /* CM_FLOW_V1: the bar */
+                        r.system, r.descr, r.woNumber, cwEn(r.descr), cwEn(r.cause)].some(v => cwWordMatch(v, barQ())))) /* CM_FLOW_V1: the bar; TR_WO_V1: the English too */
     .filter(r => !q || [r.asset, r.defect, r.requestNo, r.cause, r.defectType, r.eqType,
-                        r.system, r.descr, r.woNumber]
+                        r.system, r.descr, r.woNumber, cwEn(r.descr), cwEn(r.cause)]   /* TR_WO_V1: the English too */
       .some(v => cwWordMatch(v, q)))
     .filter(r => CW_COLS.every(([k]) => {
       const fq = (cwColQ[k]||"").trim().toUpperCase();
@@ -18507,7 +18523,7 @@ function cwWidths(avail){
 let cwFluidW=0; window.addEventListener("resize",()=>{ const b=$("cwList"); if(!b||!b.offsetParent) return;
   if(Math.abs(b.clientWidth-cwFluidW)>60){ cwFluidW=b.clientWidth; try{ renderCmWoTab(); }catch(e){ bad("cw-resize",e); } } });
 function renderCmWoTab(){
-  const box = $("cwList"); if(!box) return; cwFluidW=box.clientWidth;
+  const box = $("cwList"); if(!box) return; cwEnLoad();   /* TR_WO_V1 */ cwFluidW=box.clientWidth;
   /* A column filter lives INSIDE the table this function rebuilds wholesale
      on every keystroke — the same way cwQ already drives a rebuild on every
      keystroke, just one level further in. Capture which cwcf input (if any)
@@ -18635,6 +18651,7 @@ function renderCmWoTab(){
      title. 1C's own values are printed whole into the cell — the ellipsis
      only hides the end of them on screen — so nothing here is reformatted. */
   const c2 = v => v ? `<span class="cw2" title="${esc(v)}">${esc(v)}</span>` : `<span class="muted">—</span>`;
+  const c2t = v => v ? `<span class="cw2" title="${esc(v)}"${cwEn(v)?' data-tr="en"':''}>${esc(cwShow(v))}</span>` : `<span class="muted">—</span>`;   /* TR_WO_V1: English shown, 1C's Russian on the title */
   const tbody = shown.length ? pg.rows.map(r=>`<tr${r.planned?' class="muted"':''}>
         <td class="mono" title="${esc(r.planStart ? t("cw_plan_on",{d:r.planStart}) : t("cw_plan_none"))}">${cell(r.date)}</td>
         <td><b>${cell(r.asset)}</b></td>
@@ -18643,8 +18660,8 @@ function renderCmWoTab(){
                            : `<span class="muted">—</span>`)}</td>
         <td class="cwc2">${c2(r.eqType)}</td><td class="mono cwc2">${c2(r.system)}</td><td class="cwc2">${c2(r.priority)}</td>
         <td class="cwc2">${r.planned ? `<span class="muted">${esc(t("cw_is_planned"))}</span>` : c2(r.defectType)}</td>
-        <td class="cwc2">${r.planned ? `<span class="muted">—</span>` : c2(r.descr)}</td>
-        <td class="cwc2">${r.planned ? `<span class="muted">—</span>` : c2(r.cause)}</td>
+        <td class="cwc2">${r.planned ? `<span class="muted">—</span>` : c2t(r.descr)}</td>
+        <td class="cwc2">${r.planned ? `<span class="muted">—</span>` : c2t(r.cause)}</td>
         <td title="${esc(t("cw_st_"+cwStage(r)))}"><span class="cwst ${cwStage(r)}">${r.status?esc(r.status):"—"}</span></td><td class="mono">${r.woNumber?esc(r.woNumber):(cwStage(r)==="prog"?`<span class="cwnowo">${esc(t("cw_nowo"))}</span>`:`<span class="muted">—</span>`)}</td><td data-1c class="cwc2">${c2(cwBy(r))}</td></tr>`).join("") /* CM_PLAIN_V1; CM_FLUID_V1: type, priority, name on two lines, not cut */
     : `<tr><td colspan="${CW_COLS.length}" class="empty">${esc(t("cw_none"))}</td></tr>`;
   /* Date · Asset · Defect no. · Equipment type · System · Priority · Defect
