@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-10T11:47:33+00:00",
+  "generated": "2026-11-10T12:03:00+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5988,6 +5988,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "CN023",
+      "defect": "DD-00016667",
+      "raised": "2026-11-10",
+      "system": "CN023.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Установка дополнительного автономного отопителя в кабине водителя",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022239"
+    },
+    {
       "asset": "TK047",
       "defect": "DD-00016665",
       "raised": "2026-11-10",
@@ -6235,19 +6248,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022188"
     },
     {
-      "asset": "CR006",
-      "defect": "DD-00016618",
-      "raised": "2026-11-10",
-      "system": "CR006.CONV.MAIN (Main Conveyor / Главный конвейер)",
-      "defectType": "8.06 Roller / idler failure / Отказ ролика / роликоопоры",
-      "descr": "замена роликов",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Murashko",
-      "regBy": "Мурашко Сергей Борисович",
-      "wo": "WO-022185"
-    },
-    {
       "asset": "CN020",
       "defect": "DD-00016623",
       "raised": "2026-11-10",
@@ -6285,6 +6285,19 @@ window.CM_WO_DATA = {
       "by": "Aleksey Dobrikov",
       "regBy": "Добриков Алексей Владимирович",
       "wo": "WO-022181"
+    },
+    {
+      "asset": "CR006",
+      "defect": "DD-00016618",
+      "raised": "2026-11-10",
+      "system": "CR006.CONV.MAIN (Main Conveyor / Главный конвейер)",
+      "defectType": "8.06 Roller / idler failure / Отказ ролика / роликоопоры",
+      "descr": "замена роликов",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Murashko",
+      "regBy": "Мурашко Сергей Борисович",
+      "wo": "WO-022185"
     },
     {
       "asset": "DZ001",
