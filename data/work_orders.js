@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-10T09:17:56+00:00",
+  "generated": "2026-11-10T09:32:37+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5650,6 +5650,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022178"
     },
     {
+      "asset": "DZ002",
+      "defect": "DD-00016612",
+      "raised": "2026-11-10",
+      "system": "DZ002.CH.BL (Blade/Отвал)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Износ ножей",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022175"
+    },
+    {
       "asset": "GR013",
       "defect": "DD-00016651",
       "raised": "2026-11-10",
@@ -5871,6 +5884,45 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "TK169",
+      "defect": "DD-00016630",
+      "raised": "2026-11-10",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK169 ENGINE",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Заклинил термостат",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-022205"
+    },
+    {
+      "asset": "EX002",
+      "defect": "DD-00016655",
+      "raised": "2026-11-10",
+      "system": "EX002.CH.BUC (Bucket / Ковш)",
+      "defectType": "6.03 Structural crack / Трещина конструкции",
+      "descr": "Лопнула коронка адаптера зуба ковша(обварка замка коронки)",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Kiselev",
+      "regBy": "Киселев Алексей Александрович",
+      "wo": "WO-022228"
+    },
+    {
+      "asset": "EX002",
+      "defect": "DD-00016656",
+      "raised": "2026-11-10",
+      "system": "EX002.CH.BUC (Bucket / Ковш)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Замена коронки ковша № 15",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022229"
+    },
+    {
       "asset": "TK031",
       "defect": "DD-00016654",
       "raised": "2026-11-10",
@@ -5960,19 +6012,6 @@ window.CM_WO_DATA = {
       "by": "Roman Besedovskiy",
       "regBy": "Беседовский Роман Иванович",
       "wo": "WO-022208"
-    },
-    {
-      "asset": "TK169",
-      "defect": "DD-00016630",
-      "raised": "2026-11-10",
-      "system": "TRUCK, WATER URAL 4672M1-20, TK169 ENGINE",
-      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
-      "descr": "Заклинил термостат",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Roman Besedovskiy",
-      "regBy": "Беседовский Роман Иванович",
-      "wo": "WO-022205"
     },
     {
       "asset": "DR008",
@@ -6092,19 +6131,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022183"
     },
     {
-      "asset": "DZ004",
-      "defect": "DD-00016619",
-      "raised": "2026-11-10",
-      "system": "DZ004.CH.BL (Blade / Отвал)",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "Износ ножей",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": "WO-022180"
-    },
-    {
       "asset": "EX003",
       "defect": "DD-00016620",
       "raised": "2026-11-10",
@@ -6118,17 +6144,17 @@ window.CM_WO_DATA = {
       "wo": "WO-022181"
     },
     {
-      "asset": "DZ002",
-      "defect": "DD-00016612",
+      "asset": "DZ004",
+      "defect": "DD-00016619",
       "raised": "2026-11-10",
-      "system": "DZ002.CH.BL (Blade/Отвал)",
+      "system": "DZ004.CH.BL (Blade / Отвал)",
       "defectType": "2.01 Wear / Износ",
       "descr": "Износ ножей",
       "status": "Elimination scheduled",
       "priority": "P2 Urgent",
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
-      "wo": "WO-022175"
+      "wo": "WO-022180"
     },
     {
       "asset": "DZ001",
@@ -6534,6 +6560,32 @@ window.CM_WO_DATA = {
       "wo": "WO-022071"
     },
     {
+      "asset": "GR001",
+      "defect": "DD-00016605",
+      "raised": "2026-11-09",
+      "system": "GR001.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "descr": "Люфт ступици",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022170"
+    },
+    {
+      "asset": "CN002",
+      "defect": "DD-00016562",
+      "raised": "2026-11-09",
+      "system": "CN002.CH.HS (Hydraulic System / Гидравлическая система)",
+      "defectType": "3.02 No (faulty) signal/ indication/alarm / Отсутвие сигнала, индикации",
+      "descr": "Ошибка датчика выносной опоры",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022020"
+    },
+    {
       "asset": "GE109",
       "defect": "DD-00016586",
       "raised": "2026-11-09",
@@ -6820,19 +6872,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022162"
     },
     {
-      "asset": "GR001",
-      "defect": "DD-00016605",
-      "raised": "2026-11-09",
-      "system": "GR001.DRS.AXL (Axles / Мосты)",
-      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
-      "descr": "Люфт ступици",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": "WO-022170"
-    },
-    {
       "asset": "TK001",
       "defect": "DD-00016561",
       "raised": "2026-11-09",
@@ -6974,19 +7013,6 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-022021"
-    },
-    {
-      "asset": "CN002",
-      "defect": "DD-00016562",
-      "raised": "2026-11-09",
-      "system": "CN002.CH.HS (Hydraulic System / Гидравлическая система)",
-      "defectType": "3.02 No (faulty) signal/ indication/alarm / Отсутвие сигнала, индикации",
-      "descr": "Ошибка датчика выносной опоры",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-022020"
     },
     {
       "asset": "GE006",
@@ -58027,19 +58053,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
-      "wo": null
-    },
-    {
       "asset": "DZ022",
       "defect": "DD-00011314",
       "raised": "2026-08-21",
@@ -58050,6 +58063,19 @@ window.CM_WO_DATA = {
       "priority": "P2 Urgent",
       "by": "Andrey Shipelov",
       "regBy": "Шипелов Андрей Анатольевич",
+      "wo": null
+    },
+    {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
