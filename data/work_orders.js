@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-10T16:37:46+00:00",
+  "generated": "2026-11-10T16:52:47+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5676,6 +5676,45 @@ window.CM_WO_DATA = {
       "wo": "WO-022249"
     },
     {
+      "asset": "TK021",
+      "defect": "DD-00016680",
+      "raised": "2026-11-11",
+      "system": "TK021.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Не работает автономный отопитель.",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022253"
+    },
+    {
+      "asset": "GR012",
+      "defect": "DD-00016678",
+      "raised": "2026-11-11",
+      "system": "GR012.DRS.FUE (Fuel System / Топливная система)",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "Не запускается ДВС",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022252"
+    },
+    {
+      "asset": "TK042",
+      "defect": "DD-00016679",
+      "raised": "2026-11-11",
+      "system": "Fuel Filters / Топливные фильтры",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь ДТ ФГОТ",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022250"
+    },
+    {
       "asset": "EX008",
       "defect": "DD-00016674",
       "raised": "2026-11-11",
@@ -5908,6 +5947,19 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022180"
+    },
+    {
+      "asset": "LD002",
+      "defect": "DD-00016653",
+      "raised": "2026-11-10",
+      "system": "LD002.OC.GL (Glass / Стекла)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Износ щетки стеклоочистителя",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022226"
     },
     {
       "asset": "TK168",
@@ -6157,6 +6209,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "CR002",
+      "defect": "DD-00016642",
+      "raised": "2026-11-10",
+      "system": "CR002.FEED.BEL (Feeder Belt / Лента питателя)",
+      "defectType": "8.01 Conveyor belt cut / tear / Порез / разрыв конвейерной ленты",
+      "descr": "разрыв конвейерной ленты питателя нужна замена",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-022221"
+    },
+    {
       "asset": "TK146",
       "defect": "DD-00016624",
       "raised": "2026-11-10",
@@ -6285,32 +6350,6 @@ window.CM_WO_DATA = {
       "by": "Aleksey Kiselev",
       "regBy": "Киселев Алексей Александрович",
       "wo": "WO-022225"
-    },
-    {
-      "asset": "LD002",
-      "defect": "DD-00016653",
-      "raised": "2026-11-10",
-      "system": "LD002.OC.GL (Glass / Стекла)",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "Износ щетки стеклоочистителя",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": "WO-022226"
-    },
-    {
-      "asset": "CR002",
-      "defect": "DD-00016642",
-      "raised": "2026-11-10",
-      "system": "CR002.FEED.BEL (Feeder Belt / Лента питателя)",
-      "defectType": "8.01 Conveyor belt cut / tear / Порез / разрыв конвейерной ленты",
-      "descr": "разрыв конвейерной ленты питателя нужна замена",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": "WO-022221"
     },
     {
       "asset": "TK042",
@@ -59756,8 +59795,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000076",
+      "asset": "H07",
+      "defect": "EB-00000075",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -59769,8 +59808,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H07",
-      "defect": "EB-00000075",
+      "asset": "H04",
+      "defect": "EB-00000076",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -60576,6 +60615,19 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "LV011",
+      "defect": "DD-00009705",
+      "raised": "2026-07-27",
+      "system": "LV011.OC.AC (Air Conditioning / Кондиционирование)",
+      "defectType": "1.25 Reduced capacity / output / Снижение производительности / выхода",
+      "descr": "Требуется замена кондиционера",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": null
+    },
+    {
+      "asset": "LV011",
       "defect": "DD-00009702",
       "raised": "2026-07-27",
       "system": "LV011.BS (Braking System / Тормозная система)",
@@ -60594,19 +60646,6 @@ window.CM_WO_DATA = {
       "system": "LV011.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Требуется замена всех патрубков системы охлаждения",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": null
-    },
-    {
-      "asset": "LV011",
-      "defect": "DD-00009705",
-      "raised": "2026-07-27",
-      "system": "LV011.OC.AC (Air Conditioning / Кондиционирование)",
-      "defectType": "1.25 Reduced capacity / output / Снижение производительности / выхода",
-      "descr": "Требуется замена кондиционера",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
