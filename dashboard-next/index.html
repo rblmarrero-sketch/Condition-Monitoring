@@ -5143,23 +5143,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=609"></script>
+<script src="../data/magnetic_plug.js?v=610"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=609"></script>
-<script src="../mobile/hme.js?v=609"></script>
-<script src="../mobile/mp-fc.js?v=609"></script>
-<script src="../mobile/rtw.js?v=609"></script>
-<script src="../mobile/hme-cascade.js?v=609"></script>
-<script src="../mobile/temp-limits.js?v=609"></script>
+<script src="../data/work_orders.js?v=610"></script>
+<script src="../mobile/hme.js?v=610"></script>
+<script src="../mobile/mp-fc.js?v=610"></script>
+<script src="../mobile/rtw.js?v=610"></script>
+<script src="../mobile/hme-cascade.js?v=610"></script>
+<script src="../mobile/temp-limits.js?v=610"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=609"></script>
-<script src="../mobile/normalize.js?v=609"></script>
-<script src="../mobile/terms.js?v=609"></script>
+<script src="../mobile/assets.js?v=610"></script>
+<script src="../mobile/normalize.js?v=610"></script>
+<script src="../mobile/terms.js?v=610"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -5178,21 +5178,21 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=609"></script>
-<script src="../mobile/edits.js?v=609"></script>
-<script src="../mobile/due.js?v=609"></script>
-<script src="../mobile/wear.js?v=609"></script>
-<script src="../mobile/wear-map.js?v=609"></script>
-<script src="../mobile/lube.js?v=609"></script>
-<script src="../mobile/lube-overrides.js?v=609"></script>
-<script src="../mobile/lube2027.js?v=609"></script>
-<script src="../mobile/lube-tds.js?v=609"></script>
-<script src="../dashboard/lube-master.js?v=609"></script>
-<script src="../dashboard/wear-limits.js?v=609"></script>
+<script src="../mobile/grade.js?v=610"></script>
+<script src="../mobile/edits.js?v=610"></script>
+<script src="../mobile/due.js?v=610"></script>
+<script src="../mobile/wear.js?v=610"></script>
+<script src="../mobile/wear-map.js?v=610"></script>
+<script src="../mobile/lube.js?v=610"></script>
+<script src="../mobile/lube-overrides.js?v=610"></script>
+<script src="../mobile/lube2027.js?v=610"></script>
+<script src="../mobile/lube-tds.js?v=610"></script>
+<script src="../dashboard/lube-master.js?v=610"></script>
+<script src="../dashboard/wear-limits.js?v=610"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=609"></script>
-<script src="../mobile/machine-photos.js?v=609"></script>
+<script src="../mobile/upload-defaults.js?v=610"></script>
+<script src="../mobile/machine-photos.js?v=610"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -5201,17 +5201,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=609"></script>
-<script src="../mobile/get.js?v=609"></script>
-<script src="../mobile/points.js?v=609"></script>
-<script src="../mobile/uc-points.js?v=609"></script>
-<script src="../mobile/inspect-guide.js?v=609"></script>
-<script src="../mobile/get-figs.js?v=609"></script>
-<script src="../mobile/body-points.js?v=609"></script>
-<script src="../mobile/body-map.js?v=609"></script>
-<script src="../mobile/jspdf.umd.min.js?v=609"></script>
-<script src="../mobile/html2canvas.min.js?v=609"></script>
-<script src="../mobile/report-core.js?v=609"></script>
+<script src="../mobile/machine-fig.js?v=610"></script>
+<script src="../mobile/get.js?v=610"></script>
+<script src="../mobile/points.js?v=610"></script>
+<script src="../mobile/uc-points.js?v=610"></script>
+<script src="../mobile/inspect-guide.js?v=610"></script>
+<script src="../mobile/get-figs.js?v=610"></script>
+<script src="../mobile/body-points.js?v=610"></script>
+<script src="../mobile/body-map.js?v=610"></script>
+<script src="../mobile/jspdf.umd.min.js?v=610"></script>
+<script src="../mobile/html2canvas.min.js?v=610"></script>
+<script src="../mobile/report-core.js?v=610"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -21121,11 +21121,27 @@ const CW_COLS = [
    including the two fields (defect type, description, cause) that print as
    "planned service" / an em-dash on a planned-service row rather than 1C's
    raw (and here, meaningless) values. */
+/* TR_WO_V1 (11.11.2026, Rickie 08:22 "the defect raised came from work order manager"): 1C's description and cause
+   in English on the English page. The texts are the same WO.xlsx cells the Work Order Manager shows, translated
+   once on PECHANKA by the site translation library (approved phrases, glossary, offline engine) into
+   /tr/wo_en.json; this panel reads that list - it never translates anything itself. Only when served by PECHANKA
+   (/cm/...): anywhere else there is no list and the panel is exactly as before. The Russian stays on hover; the
+   Russian page, the CSV and the counts keep 1C's own text; a text not translated yet stays Russian. */
+const CW_EN = { map:null, gen:"", at:0 };
+function cwEnLoad(){
+  if(!/^\/cm\//.test(location.pathname) || Date.now()-CW_EN.at < 15*60*1000) return; CW_EN.at = Date.now();
+  fetch("/tr/wo_en.json", {cache:"no-store"}).then(r => r.ok ? r.json() : null).then(j => {
+    if(!j || !j.map || j.generated === CW_EN.gen) return; CW_EN.map = j.map; CW_EN.gen = j.generated;
+    const box = $("cwList"); if(lang === "en" && box && box.offsetParent) renderCmWoTab();
+  }).catch(() => {});
+}
+function cwEn(v){ return (lang === "en" && CW_EN.map && v) ? (CW_EN.map[String(v).replace(/\s+/g," ").trim()] || "") : ""; }
+function cwShow(v){ return cwEn(v) || v || ""; }
 function cwColVal(r, k){
   if(k==="defect") return r.defect || r.requestNo || "";
   if(k==="defectType") return r.planned ? "planned service" : (r.defectType||"");
-  if(k==="descr") return r.planned ? "" : (r.descr||"");
-  if(k==="cause") return r.planned ? "" : (r.cause||"");
+  if(k==="descr") return r.planned ? "" : cwShow(r.descr);   /* TR_WO_V1: sorted and filtered as shown */
+  if(k==="cause") return r.planned ? "" : cwShow(r.cause);   /* TR_WO_V1: sorted and filtered as shown */
   if(k==="wo") return r.woNumber || ""; /* CM_PLAIN_V1 */
   if(k==="by") return cwBy(r);   /* Rickie 04.11: the responsible person, not 1C's initiator (the organisation) */
   return r[k] || "";
@@ -21168,9 +21184,9 @@ function cwRows(noStage){
     .filter(r => !cwStatusSel || (r.status||"") === cwStatusSel)
     .filter(r => noStage || !cwStageSel || cwStage(r) === cwStageSel) /* CM_PLAIN_V1 */
     .filter(r => barUnitOK(r.asset) && (!barQ() || [r.asset, r.defect, r.requestNo, r.cause, r.defectType, r.eqType,
-                        r.system, r.descr, r.woNumber].some(v => cwWordMatch(v, barQ())))) /* CM_FLOW_V1: the bar */
+                        r.system, r.descr, r.woNumber, cwEn(r.descr), cwEn(r.cause)].some(v => cwWordMatch(v, barQ())))) /* CM_FLOW_V1: the bar; TR_WO_V1: the English too */
     .filter(r => !q || [r.asset, r.defect, r.requestNo, r.cause, r.defectType, r.eqType,
-                        r.system, r.descr, r.woNumber]
+                        r.system, r.descr, r.woNumber, cwEn(r.descr), cwEn(r.cause)]   /* TR_WO_V1: the English too */
       .some(v => cwWordMatch(v, q)))
     .filter(r => CW_COLS.every(([k]) => {
       const fq = (cwColQ[k]||"").trim().toUpperCase();
@@ -21198,7 +21214,7 @@ function cwWidths(avail){
 let cwFluidW=0; window.addEventListener("resize",()=>{ const b=$("cwList"); if(!b||!b.offsetParent) return;
   if(Math.abs(b.clientWidth-cwFluidW)>60){ cwFluidW=b.clientWidth; try{ renderCmWoTab(); }catch(e){ bad("cw-resize",e); } } });
 function renderCmWoTab(){
-  const box = $("cwList"); if(!box) return; cwFluidW=box.clientWidth;
+  const box = $("cwList"); if(!box) return; cwEnLoad();   /* TR_WO_V1 */ cwFluidW=box.clientWidth;
   /* A column filter lives INSIDE the table this function rebuilds wholesale
      on every keystroke — the same way cwQ already drives a rebuild on every
      keystroke, just one level further in. Capture which cwcf input (if any)
@@ -21339,6 +21355,7 @@ function renderCmWoTab(){
      title. 1C's own values are printed whole into the cell — the ellipsis
      only hides the end of them on screen — so nothing here is reformatted. */
   const c2 = v => v ? `<span class="cw2" title="${esc(v)}">${esc(v)}</span>` : `<span class="muted">—</span>`;
+  const c2t = v => v ? `<span class="cw2" title="${esc(v)}"${cwEn(v)?' data-tr="en"':''}>${esc(cwShow(v))}</span>` : `<span class="muted">—</span>`;   /* TR_WO_V1: English shown, 1C's Russian on the title */
   const tbody = shown.length ? pg.rows.map(r=>`<tr${r.planned?' class="muted"':''}>
         <td class="mono" title="${esc(r.planStart ? t("cw_plan_on",{d:r.planStart}) : t("cw_plan_none"))}">${cell(r.date)}</td>
         <td><b>${cell(r.asset)}</b></td>
@@ -21347,8 +21364,8 @@ function renderCmWoTab(){
                            : `<span class="muted">—</span>`)}</td>
         <td class="cwc2">${c2(r.eqType)}</td><td class="mono cwc2">${c2(r.system)}</td><td class="cwc2">${c2(r.priority)}</td>
         <td class="cwc2">${r.planned ? `<span class="muted">${esc(t("cw_is_planned"))}</span>` : c2(r.defectType)}</td>
-        <td class="cwc2">${r.planned ? `<span class="muted">—</span>` : c2(r.descr)}</td>
-        <td class="cwc2">${r.planned ? `<span class="muted">—</span>` : c2(r.cause)}</td>
+        <td class="cwc2">${r.planned ? `<span class="muted">—</span>` : c2t(r.descr)}</td>
+        <td class="cwc2">${r.planned ? `<span class="muted">—</span>` : c2t(r.cause)}</td>
         <td title="${esc(t("cw_st_"+cwStage(r)))}"><span class="cwst ${cwStage(r)}">${r.status?esc(r.status):"—"}</span></td><td class="mono">${r.woNumber?esc(r.woNumber):(cwStage(r)==="prog"?`<span class="cwnowo">${esc(t("cw_nowo"))}</span>`:`<span class="muted">—</span>`)}</td><td data-1c class="cwc2">${c2(cwBy(r))}</td></tr>`).join("") /* CM_PLAIN_V1; CM_FLUID_V1: type, priority, name on two lines, not cut */
     : `<tr><td colspan="${CW_COLS.length}" class="empty">${esc(t("cw_none"))}</td></tr>`;
   /* Date · Asset · Defect no. · Equipment type · System · Priority · Defect
@@ -21835,11 +21852,11 @@ document.querySelector(".lang").addEventListener("click",e=>{
   setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 })();
 </script>
-<script src="../dashboard/drive.js?v=609"></script>
-<script src="../dashboard/sync-adapter.js?v=609"></script>
-<script src="../dashboard/report.js?v=609"></script>
-<script src="../dashboard/reliability.js?v=609"></script>
-<script src="../dashboard/day-summary.js?v=609"></script>
+<script src="../dashboard/drive.js?v=610"></script>
+<script src="../dashboard/sync-adapter.js?v=610"></script>
+<script src="../dashboard/report.js?v=610"></script>
+<script src="../dashboard/reliability.js?v=610"></script>
+<script src="../dashboard/day-summary.js?v=610"></script>
 <script>
 /* THE CLOSED FILTER SAYS WHAT IS CHOSEN. A dropdown narrower than its option
    text ellipsises ("All t…", audit of 2026-10-01). Between 1331 and 1500 px

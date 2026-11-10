@@ -5336,6 +5336,16 @@ and `periodRange()` / `periodLabel()` read it, so every count follows as for Cus
 Period control (the site bar's picker under /cm/, the select elsewhere) with the last 12 weeks and a year / week box; choosing any
 other period clears the week. The site's other pages get the same through askpi-site `week_per_kit` (WEEK_PER_V1, `/wkper_v1.js`).
 The retired classic `dashboard/` keeps its day-count periods. `tests/cmweek.cjs`.
+**DEFECTS RAISED SHOWS 1C'S DESCRIPTION AND CAUSE IN ENGLISH ON THE ENGLISH PAGE (build 610, TR_WO_V1, Rickie 11.11 08:22
+"the defect raised came from work order manager").** The texts are the same WO.xlsx cells the Work Order Manager shows;
+PECHANKA's site translation library (askpi-site `tr_wo_kit`: approved phrases, glossary, offline engine) writes their English
+to `/tr/wo_en.json` every 15 min, and both office pages read that list (`cwEnLoad` / `cwEn` / `cwShow`, beside `cwColVal`). This
+app translates nothing itself. Only when served by PECHANKA (`/cm/...`); anywhere else the list is never asked for and the
+panel is exactly as before. On the English page Description and Cause show the English, 1C's Russian on the cell's title; a
+text with no English yet stays Russian, never blank. Sort and the column filter read what the cell shows (`cwColVal`); the
+search box and the filter bar find a row by the English AND the Russian. The data, the CSV, the counts and the Russian page keep
+1C's own text. `tests/cwen.cjs` (both pages; fails 10 on build 609).
+
 ---
 
 ## Secrets
