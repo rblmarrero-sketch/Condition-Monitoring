@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-10T03:17:39+00:00",
+  "generated": "2026-11-10T03:33:09+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -10889,6 +10889,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021549"
     },
     {
+      "asset": "DR008",
+      "defect": "DD-00016151",
+      "raised": "2026-11-02",
+      "system": "DR008.CH.UC (Undercarriage / Ходовая часть)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Недостаточное сцепление грунтозацепов на скользкой поверхности",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Evgeniy Frolin",
+      "regBy": "Фролин Евгений Владимирович",
+      "wo": "WO-021471"
+    },
+    {
       "asset": "EX005",
       "defect": "DD-00016215",
       "raised": "2026-11-02",
@@ -11680,19 +11693,6 @@ window.CM_WO_DATA = {
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": "WO-021472"
-    },
-    {
-      "asset": "DR008",
-      "defect": "DD-00016151",
-      "raised": "2026-11-02",
-      "system": "DR008.CH.UC (Undercarriage / Ходовая часть)",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "Недостаточное сцепление грунтозацепов на скользкой поверхности",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Evgeniy Frolin",
-      "regBy": "Фролин Евгений Владимирович",
-      "wo": "WO-021471"
     },
     {
       "asset": "SN003",
@@ -39294,6 +39294,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "DZ020",
+      "defect": "DD-00013872",
+      "raised": "2026-10-02",
+      "system": "DZ020.DRS.EXH (Exhaust System / Система выпуска)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Негерметичность соединения выпускного коллектора и глушителя",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Evgeniy Frolin",
+      "regBy": "Фролин Евгений Владимирович",
+      "wo": "WO-020074"
+    },
+    {
       "asset": "EX023",
       "defect": "DD-00013854",
       "raised": "2026-10-02",
@@ -39331,19 +39344,6 @@ window.CM_WO_DATA = {
       "by": "Evgeniy Frolin",
       "regBy": "Фролин Евгений Владимирович",
       "wo": "WO-021542"
-    },
-    {
-      "asset": "DZ020",
-      "defect": "DD-00013872",
-      "raised": "2026-10-02",
-      "system": "DZ020.DRS.EXH (Exhaust System / Система выпуска)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Негерметичность соединения выпускного коллектора и глушителя",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Evgeniy Frolin",
-      "regBy": "Фролин Евгений Владимирович",
-      "wo": "WO-020074"
     },
     {
       "asset": "CR003",
@@ -58067,19 +58067,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "DZ008",
-      "defect": "DD-00010973",
-      "raised": "2026-08-16",
-      "system": "DZ008.CH.UC (Undercarriage / Ходовая часть)",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "Предельный износ отбойников кареток опорных роликов",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Evgeniy Frolin",
-      "regBy": "Фролин Евгений Владимирович",
-      "wo": "WO-017110"
-    },
-    {
-      "asset": "DZ008",
       "defect": "DD-00010972",
       "raised": "2026-08-16",
       "system": "DZ008.CH.BL (Blade / Отвал)",
@@ -58090,6 +58077,19 @@ window.CM_WO_DATA = {
       "by": "Evgeniy Frolin",
       "regBy": "Фролин Евгений Владимирович",
       "wo": "WO-017108"
+    },
+    {
+      "asset": "DZ008",
+      "defect": "DD-00010973",
+      "raised": "2026-08-16",
+      "system": "DZ008.CH.UC (Undercarriage / Ходовая часть)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Предельный износ отбойников кареток опорных роликов",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Evgeniy Frolin",
+      "regBy": "Фролин Евгений Владимирович",
+      "wo": "WO-017110"
     },
     {
       "asset": "TK158",
