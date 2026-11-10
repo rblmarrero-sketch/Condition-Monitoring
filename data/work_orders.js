@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-10T01:12:39+00:00",
+  "generated": "2026-11-10T01:28:02+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5624,6 +5624,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "SN001",
+      "defect": "DD-00016625",
+      "raised": "2026-11-10",
+      "system": "SN001.CONV.SDC (Side Discharge Conveyor / Боковой разгрузочный конвейер)",
+      "defectType": "8.06 Roller / idler failure / Отказ ролика / роликоопоры",
+      "descr": "Порыв ленты конвейера, поломка роликов",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-022188"
+    },
+    {
       "asset": "CR006",
       "defect": "DD-00016618",
       "raised": "2026-11-10",
@@ -6196,19 +6209,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK111",
-      "defect": "DD-00016591",
-      "raised": "2026-11-09",
-      "system": "TK111.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь масла c тривода генератора",
-      "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": null
-    },
-    {
       "asset": "TK113",
       "defect": "DD-00016568",
       "raised": "2026-11-09",
@@ -6363,6 +6363,19 @@ window.CM_WO_DATA = {
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": null
+    },
+    {
+      "asset": "TK111",
+      "defect": "DD-00016591",
+      "raised": "2026-11-09",
+      "system": "TK111.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь масла c тривода генератора",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-022192"
     },
     {
       "asset": "CD001",
@@ -7119,19 +7132,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK107",
-      "defect": "DD-00016507",
-      "raised": "2026-11-08",
-      "system": "TK107.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь масла с ДВС",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": null
-    },
-    {
       "asset": "TK122",
       "defect": "DD-00016508",
       "raised": "2026-11-08",
@@ -7260,6 +7260,19 @@ window.CM_WO_DATA = {
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": null
+    },
+    {
+      "asset": "TK107",
+      "defect": "DD-00016507",
+      "raised": "2026-11-08",
+      "system": "TK107.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь масла с ДВС",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-022189"
     },
     {
       "asset": "TK042",
@@ -10031,19 +10044,6 @@ window.CM_WO_DATA = {
       "wo": "WO-021722"
     },
     {
-      "asset": "TK038",
-      "defect": "DD-00016296",
-      "raised": "2026-11-04",
-      "system": "TK038.BS.RV (Retarder Valve / Клапан ретардера)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Не работает горный тормоз",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Roman Besedovskiy",
-      "regBy": "Беседовский Роман Иванович",
-      "wo": "WO-021713"
-    },
-    {
       "asset": "GR004",
       "defect": "DD-00016288",
       "raised": "2026-11-04",
@@ -10055,6 +10055,19 @@ window.CM_WO_DATA = {
       "by": "Evgeniy Frolin",
       "regBy": "Фролин Евгений Владимирович",
       "wo": "WO-021708"
+    },
+    {
+      "asset": "TK038",
+      "defect": "DD-00016296",
+      "raised": "2026-11-04",
+      "system": "TK038.BS.RV (Retarder Valve / Клапан ретардера)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Не работает горный тормоз",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-021713"
     },
     {
       "asset": "GR004",
@@ -14464,6 +14477,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "TK107",
+      "defect": "DD-00015879",
+      "raised": "2026-10-29",
+      "system": "TK107.DRS.FD (Final Drives / Конечные передачи)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Внутренняя утечка в редукторе конечной передачи спереди справа",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Evgeniy Frolin",
+      "regBy": "Фролин Евгений Владимирович",
+      "wo": null
+    },
+    {
       "asset": "EX021",
       "defect": "DD-00015850",
       "raised": "2026-10-29",
@@ -15153,19 +15179,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK107",
-      "defect": "DD-00015879",
-      "raised": "2026-10-29",
-      "system": "TK107.DRS.FD (Final Drives / Конечные передачи)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Внутренняя утечка в редукторе конечной передачи спереди справа",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Evgeniy Frolin",
-      "regBy": "Фролин Евгений Владимирович",
-      "wo": null
-    },
-    {
       "asset": "TK109",
       "defect": "DD-00015894",
       "raised": "2026-10-29",
@@ -15185,19 +15198,6 @@ window.CM_WO_DATA = {
       "system": "TK111.CH.BED (Bed / Кузов)",
       "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
       "descr": "Оторвано крепление брызговика кузова",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": null
-    },
-    {
-      "asset": "TK111",
-      "defect": "DD-00015880",
-      "raised": "2026-10-29",
-      "system": "TK111.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Диагностика течи масла с сальника коренного",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Dmitriy Stepanenko",
@@ -15268,6 +15268,19 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": null
+    },
+    {
+      "asset": "TK111",
+      "defect": "DD-00015880",
+      "raised": "2026-10-29",
+      "system": "TK111.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Диагностика течи масла с сальника коренного",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-022190"
     },
     {
       "asset": "CR006",
@@ -16388,19 +16401,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK111",
-      "defect": "DD-00015754",
-      "raised": "2026-10-27",
-      "system": "TK111.BS (Braking System / Тормозная система)",
-      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
-      "descr": "Требуется заправка энергоаккумуляторов",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": null
-    },
-    {
       "asset": "TK115",
       "defect": "DD-00015791",
       "raised": "2026-10-27",
@@ -16490,6 +16490,19 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": null
+    },
+    {
+      "asset": "TK111",
+      "defect": "DD-00015754",
+      "raised": "2026-10-27",
+      "system": "TK111.BS (Braking System / Тормозная система)",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "Требуется заправка энергоаккумуляторов",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-022191"
     },
     {
       "asset": "DR009",
@@ -24552,12 +24565,12 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "LV120",
-      "defect": "DD-00015139",
+      "asset": "TK059",
+      "defect": "DD-00015111",
       "raised": "2026-10-19",
-      "system": "LV120.ELS.ECU (Electronic Control Unit (ECU) / Электронный блок управления (ЭБУ)",
-      "defectType": "4.04 Faulty power/voltage / Неверные показатели тока",
-      "descr": "Горит check",
+      "system": "TK059.ELS.PH (Preheater / Предпусковой подогреватель)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Не работает ПЖД",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -24565,12 +24578,12 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK059",
-      "defect": "DD-00015111",
+      "asset": "LV120",
+      "defect": "DD-00015139",
       "raised": "2026-10-19",
-      "system": "TK059.ELS.PH (Preheater / Предпусковой подогреватель)",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Не работает ПЖД",
+      "system": "LV120.ELS.ECU (Electronic Control Unit (ECU) / Электронный блок управления (ЭБУ)",
+      "defectType": "4.04 Faulty power/voltage / Неверные показатели тока",
+      "descr": "Горит check",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -57520,6 +57533,19 @@ window.CM_WO_DATA = {
       "wo": "WO-015456"
     },
     {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
+      "wo": null
+    },
+    {
       "asset": "TK046",
       "defect": "DD-00011270",
       "raised": "2026-08-21",
@@ -57621,19 +57647,6 @@ window.CM_WO_DATA = {
       "priority": "P2 Urgent",
       "by": "Andrey Shipelov",
       "regBy": "Шипелов Андрей Анатольевич",
-      "wo": null
-    },
-    {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
@@ -59041,8 +59054,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H07",
-      "defect": "EB-00000075",
+      "asset": "H04",
+      "defect": "EB-00000076",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -59054,8 +59067,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000076",
+      "asset": "H07",
+      "defect": "EB-00000075",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -60004,19 +60017,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "DZ021",
-      "defect": "DD-00010111",
-      "raised": "2026-07-23",
-      "system": "DZ021.HS.DL (Hydraulic Lines / Гидролинии)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Повреждение (разрыв) трубки подачи гидравлического масла ( # 185–62-17000)",
-      "status": "Registered",
-      "priority": "P1 Breakdown",
-      "by": "Andrey Shipelov",
-      "regBy": "Шипелов Андрей Анатольевич",
-      "wo": null
-    },
-    {
-      "asset": "DZ021",
       "defect": "DD-00010110",
       "raised": "2026-07-23",
       "system": "DZ021.DRS.COO.RAD (Radiator / Радиатор)",
@@ -60024,6 +60024,19 @@ window.CM_WO_DATA = {
       "descr": "Radiator coolant leak",
       "status": "Registered",
       "priority": "P2 Urgent",
+      "by": "Andrey Shipelov",
+      "regBy": "Шипелов Андрей Анатольевич",
+      "wo": null
+    },
+    {
+      "asset": "DZ021",
+      "defect": "DD-00010111",
+      "raised": "2026-07-23",
+      "system": "DZ021.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Повреждение (разрыв) трубки подачи гидравлического масла ( # 185–62-17000)",
+      "status": "Registered",
+      "priority": "P1 Breakdown",
       "by": "Andrey Shipelov",
       "regBy": "Шипелов Андрей Анатольевич",
       "wo": null
@@ -168167,9 +168180,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-11",
-      "planStartDt": "2026-11-11T00:00:00",
-      "planEnd": "2026-11-12",
+      "planStart": "2026-11-22",
+      "planStartDt": "2026-11-22T00:00:00",
+      "planEnd": "2026-11-22",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -168188,9 +168201,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-23",
-      "planStartDt": "2026-11-23T00:00:00",
-      "planEnd": "2026-11-23",
+      "planStart": "2026-12-06",
+      "planStartDt": "2026-12-06T00:00:00",
+      "planEnd": "2026-12-06",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
