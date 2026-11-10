@@ -5230,9 +5230,9 @@
     /* The caller's own facts for this round type (a filter's service hours, a
        thermograph's temperatures), ahead of the common ones. */
     if (sh.rows) (sh.rows(it, sh) || []).forEach(function (r) { if (r && r[1] !== "") row(r[0], r[1]); });
-    if (it.defect && !sh.defect) row(T.I("c_defect"), esc(it.defect)
+    if (it.defect && !sh.defect) row(T.I("c_defect"), T.both(it.defect, it.defectAlt, "alti")
       + (it.iso ? ' <span class="code">ISO ' + esc(it.iso) + '</span>' : ""));
-    if (it.cause && !sh.cause) row(T.I("c_cause"), esc(it.cause));
+    if (it.cause && !sh.cause) row(T.I("c_cause"), T.both(it.cause, it.causeAlt, "alti"));
     /* what was seen, how it was found, THEN what is being done about it */
     if (it.detect && sh.detect) row(T.I("c_detection"), T.both(it.detect, it.detectAlt, "alti"));
     /* The action in both languages: the host resolves it by code (actionAlt). */

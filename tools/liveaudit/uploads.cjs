@@ -18,7 +18,7 @@ const land = rounds.map(d => {
   want.forEach((sz, n) => { const f = by[n];
     if (!f) miss.push(n); else if (!f.size) empty.push(n); else if (sz && f.size < sz) short.push(n + ' (' + f.size + ' < ' + sz + ')'); });
   return { round: `${d.row.u} ${d.row.t} ${d.row.d}`, by: d.row.by, devs: [...devs].filter(Boolean), sidecars: side,
-    files: d.listing.length, claimed: want.size, miss, empty, short };
+    files: d.listing.length, claimed: want.size, miss, empty, short, listErr: d.listErr || '' };
 });
 const traces = fs.readdirSync(path.join(OUT, 'diag')).sort().map(n => {
   const d = JSON.parse(fs.readFileSync(path.join(OUT, 'diag', n)));
@@ -36,9 +36,12 @@ traces.forEach(t => { const x = devs[t.dev] = devs[t.dev] || { dev: t.dev, trace
   x.traces++; x.builds.add(t.build); if (t.at > x.lastAt) { x.lastAt = t.at; x.lastBuild = t.build; x.lastPending = t.pending; x.lastWhy = t.why; }
   if (t.why === 'run-error') x.failRuns++; t.unread.forEach(u => x.unread.add(u)); });
 const devList = Object.values(devs).map(x => Object.assign({}, x, { builds: [...x.builds], unread: [...x.unread] }));
-const bad = land.filter(r => r.miss.length || r.empty.length || r.short.length || !r.sidecars);
+const unlisted = land.filter(r => r.listErr);
+const bad = land.filter(r => !r.listErr && (r.miss.length || r.empty.length || r.short.length || !r.sidecars));
 fs.writeFileSync(path.join(OUT, 'uploads.json'), JSON.stringify({ land, traces, devices: devList }, null, 1));
-console.log(`rounds: ${land.length}, complete on the server: ${land.length - bad.length}`);
+console.log(`rounds: ${land.length}, complete on the server: ${land.length - bad.length - unlisted.length}`
+  + (unlisted.length ? `, could not be checked: ${unlisted.length}` : ''));
+unlisted.forEach(r => console.log('  ?? ' + r.round + ' could not be listed (' + r.listErr.slice(0, 80) + ') - not a finding, check again'));
 bad.forEach(r => console.log('  !! ' + r.round + ' (' + r.devs.join(',') + ')' + (r.miss.length ? ' missing ' + r.miss.length + ': ' + r.miss.slice(0, 5).join(', ') : '')
   + (r.empty.length ? ' empty: ' + r.empty.join(', ') : '') + (r.short.length ? ' short: ' + r.short.join(', ') : '') + (!r.sidecars ? ' NO SIDECAR' : '')));
 console.log(`phones: ${devList.length}`);

@@ -365,8 +365,20 @@
           general: it.general ? 1 : 0,
           cats: (Array.isArray(it.att) ? it.att : []).map(e => (e && e.category) || "COMPONENT"),
           resp: it.resp || "", respRole: it.respRole || "", target: it.target || "", opstat: it.opstat || "", gradeWhy: it.gradeWhy || "",
-          defect: it.defect || "", defectCode: it.defectCode || "", iso: it.iso || "",
-          cause: it.cause || "",
+          /* The defect and the cause by their CODE, in the report's language,
+             with the other beside it, as the action already is. The text on the
+             record is the phone's language at capture: TK148 INSP 10.11, a
+             Russian sheet printed "Abnormal / accelerated wear" twice. A code the
+             catalogue does not know keeps the recorded text. */
+          defect: (it.defectCode && typeof defName === "function" && defName(it.defectCode) !== it.defectCode)
+                  ? defName(it.defectCode) : (it.defect || ""),
+          defectAlt: (it.defectCode && typeof defName === "function" && defName(it.defectCode) !== it.defectCode)
+                  ? inOther(() => defName(it.defectCode)) : "",
+          defectCode: it.defectCode || "", iso: it.iso || "",
+          cause: (it.causeCode && typeof causeName === "function" && causeName(it.causeCode) !== it.causeCode)
+                  ? causeName(it.causeCode) : (it.cause || ""),
+          causeAlt: (it.causeCode && typeof causeName === "function" && causeName(it.causeCode) !== it.causeCode)
+                  ? inOther(() => causeName(it.causeCode)) : "",
           /* The action by its CODE, in the language on screen, with the other
              language beside it — the label frozen on the record is the phone's
              language at capture, and an English sheet printed "Monitor /

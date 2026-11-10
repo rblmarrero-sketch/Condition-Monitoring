@@ -15,13 +15,23 @@ if (!OUT || !/^\d{4}-\d{2}-\d{2}$/.test(SINCE || '')) { console.error('usage: fe
   const rows = (ix.rows || []).filter(r => r.d >= SINCE);
   for (const r of rows) {
     const folder = `${r.t}/${r.u}/${r.d}`, fn = path.join(OUT, 'rounds', folder.replace(/\//g, '_') + '.json');
-    const L = await get({ action: 'list', folder, max: '500' }); const files = (L && L.files) || [];
+    /* A listing that did not answer is not an empty folder (TK148 INSP 10.11:
+       the server held 12 files, one list call failed, and the audit printed
+       NO SIDECAR). Ask up to three times; if it still fails, say so. */
+    let L = null, listErr = '';
+    for (let i = 0; i < 3; i++) {
+      try { L = await get({ action: 'list', folder, max: '500' }); } catch (e) { L = null; listErr = String(e && e.message || e); }
+      if (L && L.ok !== false && Array.isArray(L.files)) { listErr = ''; break; }
+      if (L) listErr = String(L.error || 'no file list in the reply');
+      await new Promise(r => setTimeout(r, 2000 * (i + 1)));
+    }
+    const files = listErr ? [] : L.files;
     const recs = [];
     for (const s of files.filter(f => /\.json$/.test(f.name) && !/\.(edit|conflict|deleted|defer)/.test(f.name))) {
       const t = body(await get({ action: 'file', id: s.id }));
       ((t && t.records) || []).forEach(x => { x._file = s.name; recs.push(x); });
     }
-    fs.writeFileSync(fn, JSON.stringify({ folder, row: r, listing: files.map(f => ({ name: f.name, size: f.size, updated: f.updated })), recs }));
+    fs.writeFileSync(fn, JSON.stringify({ folder, row: r, listing: files.map(f => ({ name: f.name, size: f.size, updated: f.updated })), recs, listErr }));
   }
   const D = await get({ action: 'list', folder: '_meta/diag', max: '1000' });
   const since = Date.parse(SINCE + 'T00:00:00Z');
