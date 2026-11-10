@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-10T19:37:56+00:00",
+  "generated": "2026-11-10T19:52:57+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -355,7 +355,7 @@ window.CM_WO_DATA = {
     "WE010",
     "WE011"
   ],
-  "duplicateRowsCollapsed": 470,
+  "duplicateRowsCollapsed": 471,
   "roundsDedupedWithinVisit": 2,
   "columns": [
     "Asset description",
@@ -5778,6 +5778,32 @@ window.CM_WO_DATA = {
       "by": "Aleksey Dobrikov",
       "regBy": "Добриков Алексей Владимирович",
       "wo": "WO-022254"
+    },
+    {
+      "asset": "DZ022",
+      "defect": "DD-00016684",
+      "raised": "2026-11-11",
+      "system": "DZ022.CH.UC (Undercarriage / Ходовая часть)",
+      "defectType": "1.06 Deformation / bending / buckling Деформация / изгиб / коробление",
+      "descr": "Деформация защит кареток ходовой части",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Evgeniy Frolin",
+      "regBy": "Фролин Евгений Владимирович",
+      "wo": "WO-022256"
+    },
+    {
+      "asset": "TK061",
+      "defect": "DD-00016683",
+      "raised": "2026-11-11",
+      "system": "TK061.BS.HOS (Hoses and Piping / Шланги и трубопроводы)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "устранение утечки воздуха",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
     },
     {
       "asset": "DZ018",
@@ -15946,6 +15972,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022190"
     },
     {
+      "asset": "DZ022",
+      "defect": "DD-00015865",
+      "raised": "2026-10-29",
+      "system": "DZ022.OC.FS (Fire Suppression / Система пожаротушения)",
+      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "descr": "Требуется установить крепление огнетушителя",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Roman Kochetov",
+      "regBy": "Кочетов Роман Иванович",
+      "wo": "WO-022257"
+    },
+    {
       "asset": "DR011",
       "defect": "DD-00015883",
       "raised": "2026-10-29",
@@ -15956,19 +15995,6 @@ window.CM_WO_DATA = {
       "priority": "P2 Urgent",
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
-      "wo": null
-    },
-    {
-      "asset": "DZ022",
-      "defect": "DD-00015865",
-      "raised": "2026-10-29",
-      "system": "DZ022.OC.FS (Fire Suppression / Система пожаротушения)",
-      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
-      "descr": "Требуется установить крепление огнетушителя",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Roman Kochetov",
-      "regBy": "Кочетов Роман Иванович",
       "wo": null
     },
     {
@@ -58326,19 +58352,6 @@ window.CM_WO_DATA = {
       "wo": "WO-018103"
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
-      "wo": null
-    },
-    {
       "asset": "DZ022",
       "defect": "DD-00011314",
       "raised": "2026-08-21",
@@ -58440,6 +58453,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
@@ -60654,6 +60680,19 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "LV011",
+      "defect": "DD-00009705",
+      "raised": "2026-07-27",
+      "system": "LV011.OC.AC (Air Conditioning / Кондиционирование)",
+      "defectType": "1.25 Reduced capacity / output / Снижение производительности / выхода",
+      "descr": "Требуется замена кондиционера",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": null
+    },
+    {
+      "asset": "LV011",
       "defect": "DD-00009703",
       "raised": "2026-07-27",
       "system": "LV011.DRS.ENG (Engine / Двигатель)",
@@ -60672,19 +60711,6 @@ window.CM_WO_DATA = {
       "system": "LV011.BS (Braking System / Тормозная система)",
       "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
       "descr": "Требуется замена тормозного флажка стояночного тормоза правого колеса, требуется замена тросов ручного тормоза",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": null
-    },
-    {
-      "asset": "LV011",
-      "defect": "DD-00009705",
-      "raised": "2026-07-27",
-      "system": "LV011.OC.AC (Air Conditioning / Кондиционирование)",
-      "defectType": "1.25 Reduced capacity / output / Снижение производительности / выхода",
-      "descr": "Требуется замена кондиционера",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -130473,6 +130499,25 @@ window.CM_WO_DATA = {
       "actualEnd": null
     },
     {
+      "equip": "GR002",
+      "cls": "GRD",
+      "woNumber": "WO-022255",
+      "maintType": "500 Hours service Planned",
+      "hours": 500,
+      "cmLabel": "500h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-29",
+      "planStartDt": "2026-11-29T00:00:00",
+      "planEnd": "2026-11-29",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
       "equip": "GR003",
       "cls": "GRD",
       "woNumber": null,
@@ -193596,9 +193641,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-28",
-      "planStartDt": "2026-11-28T00:00:00",
-      "planEnd": "2026-11-28",
+      "planStart": "2026-11-27",
+      "planStartDt": "2026-11-27T00:00:00",
+      "planEnd": "2026-11-27",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -193986,9 +194031,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-22",
-      "planStartDt": "2026-11-22T00:00:00",
-      "planEnd": "2026-11-22",
+      "planStart": "2026-11-23",
+      "planStartDt": "2026-11-23T00:00:00",
+      "planEnd": "2026-11-23",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
