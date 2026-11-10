@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-10T02:12:45+00:00",
+  "generated": "2026-11-10T02:32:48+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5622,6 +5622,19 @@ window.CM_WO_DATA = {
       "by": "Aleksey Kiselev",
       "regBy": "Киселев Алексей Александрович",
       "wo": null
+    },
+    {
+      "asset": "TK096",
+      "defect": "DD-00016626",
+      "raised": "2026-11-10",
+      "system": "TK096.OC.HE (Heating / Отопление)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Не работает отпление кабины",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-022197"
     },
     {
       "asset": "TK146",
@@ -59054,8 +59067,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000076",
+      "asset": "H07",
+      "defect": "EB-00000075",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -59067,8 +59080,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H07",
-      "defect": "EB-00000075",
+      "asset": "H04",
+      "defect": "EB-00000076",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
