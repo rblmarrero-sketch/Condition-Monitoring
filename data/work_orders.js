@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-10T22:07:53+00:00",
+  "generated": "2026-11-10T22:22:42+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -1245,7 +1245,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-10-23",
       "detected": "2026-10-23",
-      "planStart": "2026-11-16",
+      "planStart": "2026-11-19",
       "closed": null,
       "asset": "TK158",
       "defect": "DD-00015505",
@@ -1271,7 +1271,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-10-23",
       "detected": "2026-10-23",
-      "planStart": "2026-11-16",
+      "planStart": "2026-11-19",
       "closed": null,
       "asset": "TK158",
       "defect": "DD-00015502",
@@ -6300,6 +6300,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "EX011",
+      "defect": "DD-00016666",
+      "raised": "2026-11-10",
+      "system": "EX011.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "Не запускается ДВС",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022238"
+    },
+    {
       "asset": "CR002",
       "defect": "DD-00016642",
       "raised": "2026-11-10",
@@ -6337,19 +6350,6 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-022239"
-    },
-    {
-      "asset": "EX011",
-      "defect": "DD-00016666",
-      "raised": "2026-11-10",
-      "system": "EX011.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
-      "descr": "Не запускается ДВС",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": "WO-022238"
     },
     {
       "asset": "TK047",
@@ -18339,6 +18339,19 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "TK158",
+      "defect": "DD-00015697",
+      "raised": "2026-10-26",
+      "system": "TK158.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь масла из РВД цилиндров подъёма кузова",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Evgeniy Frolin",
+      "regBy": "Фролин Евгений Владимирович",
+      "wo": "WO-021002"
+    },
+    {
+      "asset": "TK158",
       "defect": "DD-00015695",
       "raised": "2026-10-26",
       "system": "TK158.DRS.FD.RLF Rear-Left Final Drive / Левая конечная передача",
@@ -18375,19 +18388,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-021131"
-    },
-    {
-      "asset": "TK158",
-      "defect": "DD-00015697",
-      "raised": "2026-10-26",
-      "system": "TK158.HS.DL (Hydraulic Lines / Гидролинии)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь масла из РВД цилиндров подъёма кузова",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Evgeniy Frolin",
-      "regBy": "Фролин Евгений Владимирович",
-      "wo": "WO-021002"
     },
     {
       "asset": "SN002",
@@ -193412,9 +193412,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-24",
-      "planStartDt": "2026-11-24T00:00:00",
-      "planEnd": "2026-11-24",
+      "planStart": "2026-11-27",
+      "planStartDt": "2026-11-27T00:00:00",
+      "planEnd": "2026-11-27",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
