@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-10T15:37:39+00:00",
+  "generated": "2026-11-10T15:52:44+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5635,6 +5635,45 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022243"
+    },
+    {
+      "asset": "TK104",
+      "defect": "DD-00016675",
+      "raised": "2026-11-11",
+      "system": "TK104.DRS.TRA (Transmission / Трансмиссия)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Низкий уровень масла в КПП",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022247"
+    },
+    {
+      "asset": "TK159",
+      "defect": "DD-00016676",
+      "raised": "2026-11-11",
+      "system": "TK159.ELS (Electrical System / Электросистема)",
+      "defectType": "3.01 Control failure / Ошибка управления",
+      "descr": "Не работает звуковой сигнал",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022248"
+    },
+    {
+      "asset": "EX025",
+      "defect": "DD-00016677",
+      "raised": "2026-11-11",
+      "system": "EX025.CH.BUC (Bucket / Ковш)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Износ коронок",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022249"
     },
     {
       "asset": "EX008",
