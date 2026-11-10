@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-10T11:18:07+00:00",
+  "generated": "2026-11-10T11:32:42+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5884,6 +5884,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "EX011",
+      "defect": "DD-00016666",
+      "raised": "2026-11-10",
+      "system": "EX011.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "Не запускается ДВС",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": null
+    },
+    {
       "asset": "DZ016",
       "defect": "DD-00016613",
       "raised": "2026-11-10",
@@ -5973,6 +5986,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": null
+    },
+    {
+      "asset": "TK047",
+      "defect": "DD-00016665",
+      "raised": "2026-11-10",
+      "system": "TK047.BS.SHO (Brake Shoes / Тормозные колодки)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Заклинивание левого переднего колеса",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022237"
     },
     {
       "asset": "TK169",
@@ -58066,6 +58092,19 @@ window.CM_WO_DATA = {
       "wo": "WO-015456"
     },
     {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
+      "wo": null
+    },
+    {
       "asset": "TK046",
       "defect": "DD-00011270",
       "raised": "2026-08-21",
@@ -58154,19 +58193,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
