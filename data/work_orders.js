@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-10T23:15:11+00:00",
+  "generated": "2026-11-10T23:22:50+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5754,6 +5754,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022252"
     },
     {
+      "asset": "DZ022",
+      "defect": "DD-00016684",
+      "raised": "2026-11-11",
+      "system": "DZ022.CH.UC (Undercarriage / Ходовая часть)",
+      "defectType": "1.06 Deformation / bending / buckling Деформация / изгиб / коробление",
+      "descr": "Деформация защит кареток ходовой части",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Evgeniy Frolin",
+      "regBy": "Фролин Евгений Владимирович",
+      "wo": "WO-022256"
+    },
+    {
       "asset": "TK021",
       "defect": "DD-00016680",
       "raised": "2026-11-11",
@@ -5778,19 +5791,6 @@ window.CM_WO_DATA = {
       "by": "Aleksey Dobrikov",
       "regBy": "Добриков Алексей Владимирович",
       "wo": "WO-022254"
-    },
-    {
-      "asset": "DZ022",
-      "defect": "DD-00016684",
-      "raised": "2026-11-11",
-      "system": "DZ022.CH.UC (Undercarriage / Ходовая часть)",
-      "defectType": "1.06 Deformation / bending / buckling Деформация / изгиб / коробление",
-      "descr": "Деформация защит кареток ходовой части",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Evgeniy Frolin",
-      "regBy": "Фролин Евгений Владимирович",
-      "wo": "WO-022256"
     },
     {
       "asset": "TK149",
@@ -5988,19 +5988,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022212"
     },
     {
-      "asset": "TK096",
-      "defect": "DD-00016626",
-      "raised": "2026-11-10",
-      "system": "TK096.OC.HE (Heating / Отопление)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Не работает отпление кабины",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Roman Besedovskiy",
-      "regBy": "Беседовский Роман Иванович",
-      "wo": "WO-022197"
-    },
-    {
       "asset": "TK167",
       "defect": "DD-00016628",
       "raised": "2026-11-10",
@@ -6012,6 +5999,19 @@ window.CM_WO_DATA = {
       "by": "Roman Besedovskiy",
       "regBy": "Беседовский Роман Иванович",
       "wo": "WO-022199"
+    },
+    {
+      "asset": "TK096",
+      "defect": "DD-00016626",
+      "raised": "2026-11-10",
+      "system": "TK096.OC.HE (Heating / Отопление)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Не работает отпление кабины",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-022197"
     },
     {
       "asset": "DR008",
@@ -6059,7 +6059,7 @@ window.CM_WO_DATA = {
       "system": "TK042.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Утечка ДТ с ДВС",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Roman Besedovskiy",
       "regBy": "Беседовский Роман Иванович",
@@ -7067,19 +7067,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022007"
     },
     {
-      "asset": "CD001",
-      "defect": "DD-00016595",
-      "raised": "2026-11-09",
-      "system": "CD001.OC.HE (Heating / Отопление)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "не работает отпитель салона",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Roman Besedovskiy",
-      "regBy": "Беседовский Роман Иванович",
-      "wo": "WO-022162"
-    },
-    {
       "asset": "PU004",
       "defect": "DD-00016585",
       "raised": "2026-11-09",
@@ -7091,6 +7078,19 @@ window.CM_WO_DATA = {
       "by": "Roman Besedovskiy",
       "regBy": "Беседовский Роман Иванович",
       "wo": "WO-022160"
+    },
+    {
+      "asset": "CD001",
+      "defect": "DD-00016595",
+      "raised": "2026-11-09",
+      "system": "CD001.OC.HE (Heating / Отопление)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "не работает отпитель салона",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-022162"
     },
     {
       "asset": "TK037",
