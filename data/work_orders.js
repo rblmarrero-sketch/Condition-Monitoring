@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-10T04:42:50+00:00",
+  "generated": "2026-11-10T04:57:45+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5611,6 +5611,32 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "TK031",
+      "defect": "DD-00016633",
+      "raised": "2026-11-10",
+      "system": "TK031.BS.PU (Pneumatic Control / Пневмоуправление)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Падает давление в обоих контурах (долго накачивает)",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "TK031",
+      "defect": "DD-00016635",
+      "raised": "2026-11-10",
+      "system": "TK031.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Не исправен фен в кабине (Е03)",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
       "asset": "TK109",
       "defect": "DD-00016629",
       "raised": "2026-11-10",
@@ -5635,6 +5661,19 @@ window.CM_WO_DATA = {
       "by": "Aleksey Kiselev",
       "regBy": "Киселев Алексей Александрович",
       "wo": null
+    },
+    {
+      "asset": "PU005",
+      "defect": "DD-00016632",
+      "raised": "2026-11-10",
+      "system": "PU005.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Отогрев и запуск ДВС",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-022209"
     },
     {
       "asset": "GE004",
@@ -5713,6 +5752,19 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Ishchenko",
       "regBy": "Ищенко Дмитрий Александрович",
       "wo": "WO-022186"
+    },
+    {
+      "asset": "EX024",
+      "defect": "DD-00016634",
+      "raised": "2026-11-10",
+      "system": "EX024.CH.BUC (Bucket / Ковш)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Износ футеровок ковша",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Evgeniy Frolin",
+      "regBy": "Фролин Евгений Владимирович",
+      "wo": "WO-022212"
     },
     {
       "asset": "SN001",
@@ -9901,32 +9953,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "EX024",
-      "defect": "DD-00016303",
-      "raised": "2026-11-04",
-      "system": "EX024.ELS.DSC (Powertrain Control System / Система управления силовой передачей)",
-      "defectType": "4.02 Open circuit / Разрыв цепи",
-      "descr": "Активная ошибка датчика давления насоса",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": null
-    },
-    {
-      "asset": "EX024",
-      "defect": "DD-00016305",
-      "raised": "2026-11-04",
-      "system": "EX024.HS.CV (Control Valves / Гидрораспределители)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь масла из под крепления РВД распределителя (снизу)",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": null
-    },
-    {
       "asset": "CD010",
       "defect": "DD-00016295",
       "raised": "2026-11-04",
@@ -10055,6 +10081,32 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": null
+    },
+    {
+      "asset": "EX024",
+      "defect": "DD-00016303",
+      "raised": "2026-11-04",
+      "system": "EX024.ELS.DSC (Powertrain Control System / Система управления силовой передачей)",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "Активная ошибка датчика давления насоса",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-022214"
+    },
+    {
+      "asset": "EX024",
+      "defect": "DD-00016305",
+      "raised": "2026-11-04",
+      "system": "EX024.HS.CV (Control Valves / Гидрораспределители)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь масла из под крепления РВД распределителя (снизу)",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-022213"
     },
     {
       "asset": "TK115",
@@ -10850,6 +10902,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "EX025",
+      "defect": "DD-00016227",
+      "raised": "2026-11-03",
+      "system": "EX025.CH.BUC (Bucket / Ковш)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Износ футеровок ковша",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Evgeniy Frolin",
+      "regBy": "Фролин Евгений Владимирович",
+      "wo": "WO-021549"
+    },
+    {
       "asset": "EX008",
       "defect": "DD-00016238",
       "raised": "2026-11-03",
@@ -10939,19 +11004,6 @@ window.CM_WO_DATA = {
       "by": "Roman Besedovskiy",
       "regBy": "Беседовский Роман Иванович",
       "wo": "WO-021551"
-    },
-    {
-      "asset": "EX025",
-      "defect": "DD-00016227",
-      "raised": "2026-11-03",
-      "system": "EX025.CH.BUC (Bucket / Ковш)",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "Износ футеровок ковша",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Evgeniy Frolin",
-      "regBy": "Фролин Евгений Владимирович",
-      "wo": "WO-021549"
     },
     {
       "asset": "DR008",
@@ -11799,6 +11851,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021476"
     },
     {
+      "asset": "EX024",
+      "defect": "DD-00016107",
+      "raised": "2026-11-01",
+      "system": "EX024.CH.AL (Central Lubrication System / Централизованная система смазки)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Порыв шлангов РВД на смазку ковша системы ЦСС",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Roman Kochetov",
+      "regBy": "Кочетов Роман Иванович",
+      "wo": null
+    },
+    {
       "asset": "DZ010",
       "defect": "DD-00016100",
       "raised": "2026-11-01",
@@ -12381,19 +12446,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "EX024",
-      "defect": "DD-00016107",
-      "raised": "2026-11-01",
-      "system": "EX024.CH.AL (Central Lubrication System / Централизованная система смазки)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Порыв шлангов РВД на смазку ковша системы ЦСС",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Roman Kochetov",
-      "regBy": "Кочетов Роман Иванович",
       "wo": null
     },
     {
@@ -13229,19 +13281,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "EX024",
-      "defect": "DD-00016011",
-      "raised": "2026-10-31",
-      "system": "EX024.CH.BUC (Bucket / Ковш)",
-      "defectType": "6.03 Structural crack / Трещина конструкции",
-      "descr": "Износ межзубовой защиты и угловых пяток",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Roman Besedovskiy",
-      "regBy": "Беседовский Роман Иванович",
-      "wo": null
-    },
-    {
       "asset": "EX021",
       "defect": "DD-00016020",
       "raised": "2026-10-31",
@@ -13344,6 +13383,19 @@ window.CM_WO_DATA = {
       "by": "Andrey Shipelov",
       "regBy": "Шипелов Андрей Анатольевич",
       "wo": null
+    },
+    {
+      "asset": "EX024",
+      "defect": "DD-00016011",
+      "raised": "2026-10-31",
+      "system": "EX024.CH.BUC (Bucket / Ковш)",
+      "defectType": "6.03 Structural crack / Трещина конструкции",
+      "descr": "Износ межзубовой защиты и угловых пяток",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-022211"
     },
     {
       "asset": "TK113",
@@ -15361,6 +15413,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022190"
     },
     {
+      "asset": "EX024",
+      "defect": "DD-00015845",
+      "raised": "2026-10-28",
+      "system": "EX024.CH.BUC (Bucket / Ковш)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Замена РВД",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": null
+    },
+    {
       "asset": "CR006",
       "defect": "DD-00015825",
       "raised": "2026-10-28",
@@ -15749,19 +15814,6 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-021139"
-    },
-    {
-      "asset": "EX024",
-      "defect": "DD-00015845",
-      "raised": "2026-10-28",
-      "system": "EX024.CH.BUC (Bucket / Ковш)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Замена РВД",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": null
     },
     {
       "asset": "EX021",
@@ -59132,8 +59184,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000076",
+      "asset": "H07",
+      "defect": "EB-00000075",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -59145,8 +59197,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H07",
-      "defect": "EB-00000075",
+      "asset": "H04",
+      "defect": "EB-00000076",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -61329,19 +61381,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "EX024",
-      "defect": "DD-00007435",
-      "raised": "2026-06-21",
-      "system": "EX024.CH.AL (Central Lubrication System / Централизованная система смазки)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Требуется ремонт системы централизованной смазки (не работает насос)",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Pavel Kostin",
-      "regBy": "Костин Павел Александрович",
-      "wo": null
-    },
-    {
       "asset": "EX016",
       "defect": "DD-00007442",
       "raised": "2026-06-21",
@@ -61379,6 +61418,19 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Simbirev",
       "regBy": "Симбирёв Александр Николаевич",
       "wo": null
+    },
+    {
+      "asset": "EX024",
+      "defect": "DD-00007435",
+      "raised": "2026-06-21",
+      "system": "EX024.CH.AL (Central Lubrication System / Централизованная система смазки)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Требуется ремонт системы централизованной смазки (не работает насос)",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": "WO-022210"
     },
     {
       "asset": "DR003",
