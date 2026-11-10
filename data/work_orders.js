@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-10T23:37:59+00:00",
+  "generated": "2026-11-10T23:53:13+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5832,6 +5832,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022265"
     },
     {
+      "asset": "TK104",
+      "defect": "DD-00016688",
+      "raised": "2026-11-11",
+      "system": "TK104.DRS.TRA (Transmission / Трансмиссия)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь масла трансмиссии",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-022271"
+    },
+    {
       "asset": "TK061",
       "defect": "DD-00016683",
       "raised": "2026-11-11",
@@ -5994,7 +6007,7 @@ window.CM_WO_DATA = {
       "system": "TK167.OC (Operator Cab / Кабина оператора)",
       "defectType": "6.03 Structural crack / Трещина конструкции",
       "descr": "Сломалось заднее крепление кабины",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Roman Besedovskiy",
       "regBy": "Беседовский Роман Иванович",
@@ -6326,6 +6339,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022238"
     },
     {
+      "asset": "TK031",
+      "defect": "DD-00016635",
+      "raised": "2026-11-10",
+      "system": "TK031.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Ремонт отопителя",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022269"
+    },
+    {
       "asset": "LV123",
       "defect": "DD-00016637",
       "raised": "2026-11-10",
@@ -6440,19 +6466,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
-      "wo": null
-    },
-    {
-      "asset": "TK031",
-      "defect": "DD-00016635",
-      "raised": "2026-11-10",
-      "system": "TK031.OC.HE (Heating / Отопление)",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Не исправен фен в кабине (Е03)",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
       "wo": null
     },
     {
@@ -25176,19 +25189,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "LV120",
-      "defect": "DD-00015139",
-      "raised": "2026-10-19",
-      "system": "LV120.ELS.ECU (Electronic Control Unit (ECU) / Электронный блок управления (ЭБУ)",
-      "defectType": "4.04 Faulty power/voltage / Неверные показатели тока",
-      "descr": "Горит check",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
       "asset": "TK059",
       "defect": "DD-00015111",
       "raised": "2026-10-19",
@@ -25221,6 +25221,19 @@ window.CM_WO_DATA = {
       "system": "LV024.CH.SU (Suspension / Подвеска)",
       "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
       "descr": "замена сайлентблоков рычагов передней подвески",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "LV120",
+      "defect": "DD-00015139",
+      "raised": "2026-10-19",
+      "system": "LV120.ELS.ECU (Electronic Control Unit (ECU) / Электронный блок управления (ЭБУ)",
+      "defectType": "4.04 Faulty power/voltage / Неверные показатели тока",
+      "descr": "Горит check",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -58404,6 +58417,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
+      "wo": null
+    },
+    {
       "asset": "BS005",
       "defect": "DD-00011312",
       "raised": "2026-08-21",
@@ -58492,19 +58518,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
@@ -59263,19 +59276,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "H07",
-      "defect": "EB-00000078",
-      "raised": "2026-08-13",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Sergey Gulin",
-      "wo": null
-    },
-    {
-      "asset": "H07",
       "defect": "EB-00000079",
       "raised": "2026-08-13",
       "system": null,
@@ -59285,6 +59285,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Eduard Shapoval",
       "regBy": "Eduard Shapoval",
+      "wo": null
+    },
+    {
+      "asset": "H07",
+      "defect": "EB-00000078",
+      "raised": "2026-08-13",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Sergey Gulin",
       "wo": null
     },
     {
