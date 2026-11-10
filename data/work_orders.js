@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-10T17:07:47+00:00",
+  "generated": "2026-11-10T17:22:45+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5674,6 +5674,32 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022249"
+    },
+    {
+      "asset": "DZ018",
+      "defect": "DD-00016681",
+      "raised": "2026-11-11",
+      "system": "DZ018.HS.CV (Control Valves / Гидрораспределители)",
+      "defectType": "3.01 Control failure / Ошибка управления",
+      "descr": "Неисправность рыхлителя",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": null
+    },
+    {
+      "asset": "LV032",
+      "defect": "DD-00016682",
+      "raised": "2026-11-11",
+      "system": "LV032.OC.HE (Heating / Отопление)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Отопитель салона дует холодным воздухом",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022254"
     },
     {
       "asset": "TK021",
