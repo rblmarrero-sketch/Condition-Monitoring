@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-10T15:02:50+00:00",
+  "generated": "2026-11-10T15:22:57+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5635,6 +5635,19 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022243"
+    },
+    {
+      "asset": "EX008",
+      "defect": "DD-00016674",
+      "raised": "2026-11-11",
+      "system": "EX008.ELS.AS (Alarm System / Система сигнализации)",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "Не работает проблесковый маячок. Слабый звуковой сигнал.",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022246"
     },
     {
       "asset": "TK111",
@@ -23135,19 +23148,6 @@ window.CM_WO_DATA = {
       "wo": "WO-020496"
     },
     {
-      "asset": "LS037",
-      "defect": "DD-00015237",
-      "raised": "2026-10-20",
-      "system": "LS037.DRS.ENG (Engine / Двигатель)",
-      "defectType": "4.02 Open circuit / Разрыв цепи",
-      "descr": "неисправен механизм регулировки\\изменения оборотов",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-021709"
-    },
-    {
       "asset": "TK112",
       "defect": "DD-00015184",
       "raised": "2026-10-20",
@@ -23952,6 +23952,19 @@ window.CM_WO_DATA = {
       "by": "Roman Besedovskiy",
       "regBy": "Беседовский Роман Иванович",
       "wo": null
+    },
+    {
+      "asset": "LS037",
+      "defect": "DD-00015237",
+      "raised": "2026-10-20",
+      "system": "LS037.DRS.ENG (Engine / Двигатель)",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "неисправен механизм регулировки\\изменения оборотов",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-021709"
     },
     {
       "asset": "CN013",
