@@ -42,6 +42,9 @@ const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
                  { key: '4F', label: 'RH final drive', grade: 2, wo: 'WO-020997' } ] },
       { equip: 'TK158', date: '2026-11-06', type: 'MP', cls: 'HT', by: 'Kazhybekov Bekzhan', smu: '9000',
         items: [ { key: '4E', label: 'LH final drive', grade: 3, wo: 'WO-021000', comment: 'Стружка' } ] },
+      { equip: 'TK148', date: '2026-11-10', type: 'INSP', cls: 'HT', by: 'Kazhybekov Bekzhan', smu: '9000',
+        items: [ { key: 'FD.RRF', label: 'Правая конечная передача', grade: 5, defect: 'Abnormal / accelerated wear',
+                   defectCode: 'FM-MEC-03', iso: 'SER', action: 'RA-08', comment: 'Требуется замена компонента' } ] },
       { equip: 'DZ016', date: '2026-11-07', type: 'UC', cls: 'DOZ', by: 'Zhomart Khasenov', smu: '15941',
         items: [ { key: 'ROLLER.R1', mm: 236 }, { key: 'ROLLER.L1', mm: 254 } ] },
       { equip: 'DZ011', date: '2026-11-02', type: 'UC', cls: 'DOZ', by: 'Kazhybekov Bekzhan', smu: '32100',
@@ -77,6 +80,13 @@ const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
   const ucG = (ucSev.match(/СТЕПЕНЬ\s*(\d)/) || [])[1];
   ok('a measured round graded Degraded or worse says "Не записано" for its missing action, not dashes',
      Number(ucG) >= 3 && /Не записано/.test(actOf(ucSev)), 'grade ' + ucG + ' · ' + actOf(ucSev).slice(0, 140));
+  const defRu = await text('one:TK148|2026-11-10|INSP', 'ru', false);
+  const defBi = await text('one:TK148|2026-11-10|INSP', 'ru', true);
+  console.log('\nA defect is named in the report\'s language (TK148 INSP 10.11)');
+  ok('Russian sheet: the defect is Russian, not the English text the phone saved',
+     /Аномальный \/ ускоренный износ/.test(defRu) && !/accelerated wear/.test(defRu),
+     (defRu.match(/Дефект.{0,60}/) || [''])[0]);
+  ok('bilingual sheet carries both', /Аномальный \/ ускоренный износ/.test(defBi) && /Abnormal \/ accelerated wear/.test(defBi));
   console.log('\nUndercarriage: controlling point and side captions');
   const ctrlOf = (t, lab) => (t.match(new RegExp(lab + '.{0,60}')) || [''])[0];
   ok('Russian: the controlling point is named in words, not as ROLLER.L3',
