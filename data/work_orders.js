@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-10T09:48:10+00:00",
+  "generated": "2026-11-10T10:02:56+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5663,6 +5663,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022175"
     },
     {
+      "asset": "EX002",
+      "defect": "DD-00016655",
+      "raised": "2026-11-10",
+      "system": "EX002.CH.BUC (Bucket / Ковш)",
+      "defectType": "6.03 Structural crack / Трещина конструкции",
+      "descr": "Лопнула коронка адаптера зуба ковша(обварка замка коронки)",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Kiselev",
+      "regBy": "Киселев Алексей Александрович",
+      "wo": "WO-022228"
+    },
+    {
       "asset": "GR013",
       "defect": "DD-00016651",
       "raised": "2026-11-10",
@@ -5884,6 +5897,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "DZ004",
+      "defect": "DD-00016657",
+      "raised": "2026-11-10",
+      "system": "DZ004.CH.BL (Blade / Отвал)",
+      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
+      "descr": "Сильный износ ножей отвала(нужны сварочные работы по демонтажу ножей отвала)",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Kiselev",
+      "regBy": "Киселев Алексей Александрович",
+      "wo": "WO-022230"
+    },
+    {
       "asset": "TK169",
       "defect": "DD-00016630",
       "raised": "2026-11-10",
@@ -5898,19 +5924,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "EX002",
-      "defect": "DD-00016655",
-      "raised": "2026-11-10",
-      "system": "EX002.CH.BUC (Bucket / Ковш)",
-      "defectType": "6.03 Structural crack / Трещина конструкции",
-      "descr": "Лопнула коронка адаптера зуба ковша(обварка замка коронки)",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Kiselev",
-      "regBy": "Киселев Алексей Александрович",
-      "wo": "WO-022228"
-    },
-    {
-      "asset": "EX002",
       "defect": "DD-00016656",
       "raised": "2026-11-10",
       "system": "EX002.CH.BUC (Bucket / Ковш)",
@@ -5921,6 +5934,45 @@ window.CM_WO_DATA = {
       "by": "Aleksey Dobrikov",
       "regBy": "Добриков Алексей Владимирович",
       "wo": "WO-022229"
+    },
+    {
+      "asset": "DZ004",
+      "defect": "DD-00016619",
+      "raised": "2026-11-10",
+      "system": "DZ004.CH.BL (Blade / Отвал)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Износ ножей",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022180"
+    },
+    {
+      "asset": "TK091",
+      "defect": "DD-00016659",
+      "raised": "2026-11-10",
+      "system": "High Pressure Pump / ТНВД (насос высокого давления)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Устранение утечки ДТ",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022232"
+    },
+    {
+      "asset": "EX001",
+      "defect": "DD-00016658",
+      "raised": "2026-11-10",
+      "system": "EX001.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Протяжка болтов крепления защиты ДВС",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022231"
     },
     {
       "asset": "TK031",
@@ -6142,19 +6194,6 @@ window.CM_WO_DATA = {
       "by": "Aleksey Dobrikov",
       "regBy": "Добриков Алексей Владимирович",
       "wo": "WO-022181"
-    },
-    {
-      "asset": "DZ004",
-      "defect": "DD-00016619",
-      "raised": "2026-11-10",
-      "system": "DZ004.CH.BL (Blade / Отвал)",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "Износ ножей",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": "WO-022180"
     },
     {
       "asset": "DZ001",
@@ -6586,6 +6625,32 @@ window.CM_WO_DATA = {
       "wo": "WO-022020"
     },
     {
+      "asset": "GE006",
+      "defect": "DD-00016559",
+      "raised": "2026-11-09",
+      "system": "GE006.AU.CS (Control System / Система управления)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Запускается и глохнет.",
+      "status": "Completed",
+      "priority": "P1 Breakdown",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022017"
+    },
+    {
+      "asset": "EX002",
+      "defect": "DD-00016564",
+      "raised": "2026-11-09",
+      "system": "EX002.ELS.LIG (Head Lighting System / Система головного освещения)",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "Требуется замена фары на кабине (еле горит)",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022022"
+    },
+    {
       "asset": "GE109",
       "defect": "DD-00016586",
       "raised": "2026-11-09",
@@ -6989,19 +7054,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022109"
     },
     {
-      "asset": "EX002",
-      "defect": "DD-00016564",
-      "raised": "2026-11-09",
-      "system": "EX002.ELS.LIG (Head Lighting System / Система головного освещения)",
-      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
-      "descr": "Требуется замена фары на кабине (еле горит)",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-022022"
-    },
-    {
       "asset": "TK089",
       "defect": "DD-00016563",
       "raised": "2026-11-09",
@@ -7013,19 +7065,6 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-022021"
-    },
-    {
-      "asset": "GE006",
-      "defect": "DD-00016559",
-      "raised": "2026-11-09",
-      "system": "GE006.AU.CS (Control System / Система управления)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Запускается и глохнет.",
-      "status": "Elimination scheduled",
-      "priority": "P1 Breakdown",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-022017"
     },
     {
       "asset": "GR012",
@@ -7522,6 +7561,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021976"
     },
     {
+      "asset": "TK042",
+      "defect": "DD-00016537",
+      "raised": "2026-11-08",
+      "system": "TK042.DRS.COO.FAN Cooling Fan & Drive / Вентилятор и привод вентилятора",
+      "defectType": "5.01 Blockage/plugged / Заблокировано",
+      "descr": "Не выключается вентилятор охлаждения двигателя",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-021998"
+    },
+    {
       "asset": "TK148",
       "defect": "DD-00016545",
       "raised": "2026-11-08",
@@ -7702,19 +7754,6 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-022189"
-    },
-    {
-      "asset": "TK042",
-      "defect": "DD-00016537",
-      "raised": "2026-11-08",
-      "system": "TK042.DRS.COO.FAN Cooling Fan & Drive / Вентилятор и привод вентилятора",
-      "defectType": "5.01 Blockage/plugged / Заблокировано",
-      "descr": "Не выключается вентилятор охлаждения двигателя",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-021998"
     },
     {
       "asset": "TK046",
@@ -58053,19 +58092,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "DZ022",
-      "defect": "DD-00011314",
-      "raised": "2026-08-21",
-      "system": "DZ022.HS (Hydraulic System / Гидравлическая система)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Повреждение (трещина) трубки подачи гидравлического масла (# 1186 – 73 – 04000 ).",
-      "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Andrey Shipelov",
-      "regBy": "Шипелов Андрей Анатольевич",
-      "wo": null
-    },
-    {
       "asset": "H04",
       "defect": "EB-00000082",
       "raised": "2026-08-21",
@@ -58076,6 +58102,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Eduard Shapoval",
       "regBy": "Eduard Shapoval",
+      "wo": null
+    },
+    {
+      "asset": "DZ022",
+      "defect": "DD-00011314",
+      "raised": "2026-08-21",
+      "system": "DZ022.HS (Hydraulic System / Гидравлическая система)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Повреждение (трещина) трубки подачи гидравлического масла (# 1186 – 73 – 04000 ).",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Andrey Shipelov",
+      "regBy": "Шипелов Андрей Анатольевич",
       "wo": null
     },
     {
