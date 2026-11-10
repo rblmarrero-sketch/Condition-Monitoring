@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-10T08:47:37+00:00",
+  "generated": "2026-11-10T09:02:43+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5650,6 +5650,32 @@ window.CM_WO_DATA = {
       "wo": "WO-022178"
     },
     {
+      "asset": "GR013",
+      "defect": "DD-00016651",
+      "raised": "2026-11-10",
+      "system": "GR013.CH.AL (Central Lubrication System / Централизованная система смазки)",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "Отрегулировать подачу смазки",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": null
+    },
+    {
+      "asset": "GR013",
+      "defect": "DD-00016652",
+      "raised": "2026-11-10",
+      "system": "GR013.HS.CYL (Cylinders / Гидроцилиндры)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка с гидроцелиндра поворота",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": null
+    },
+    {
       "asset": "TK170",
       "defect": "DD-00016646",
       "raised": "2026-11-10",
@@ -5843,6 +5869,32 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": null
+    },
+    {
+      "asset": "TK031",
+      "defect": "DD-00016654",
+      "raised": "2026-11-10",
+      "system": "TK031.BS.PU (Pneumatic Control / Пневмоуправление)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Устранение утечки пневмосистемы",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022227"
+    },
+    {
+      "asset": "LD002",
+      "defect": "DD-00016653",
+      "raised": "2026-11-10",
+      "system": "LD002.OC.GL (Glass / Стекла)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Износ щетки стеклоочистителя",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022226"
     },
     {
       "asset": "TK119",
@@ -7990,19 +8042,6 @@ window.CM_WO_DATA = {
       "wo": "WO-021901"
     },
     {
-      "asset": "TK034",
-      "defect": "DD-00016484",
-      "raised": "2026-11-07",
-      "system": "TK034.ELS.ALT (Alternator / Генератор)",
-      "defectType": "4.23 Charging system fault (alternator/regulator) / Неисправность системы зарядки (генератор/регулят",
-      "descr": "Индикация неисправности системы зарядки аккумуляторов",
-      "status": "Completed",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-021905"
-    },
-    {
       "asset": "TK171",
       "defect": "DD-00016483",
       "raised": "2026-11-07",
@@ -8053,6 +8092,19 @@ window.CM_WO_DATA = {
       "by": "Aleksey Dobrikov",
       "regBy": "Добриков Алексей Владимирович",
       "wo": "WO-021882"
+    },
+    {
+      "asset": "TK034",
+      "defect": "DD-00016484",
+      "raised": "2026-11-07",
+      "system": "TK034.ELS.ALT (Alternator / Генератор)",
+      "defectType": "4.23 Charging system fault (alternator/regulator) / Неисправность системы зарядки (генератор/регулят",
+      "descr": "Индикация неисправности системы зарядки аккумуляторов",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-021905"
     },
     {
       "asset": "TK157",
