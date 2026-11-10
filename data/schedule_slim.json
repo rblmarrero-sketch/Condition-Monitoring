@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-10T06:12:57+00:00",
+  "generated": "2026-11-10T06:32:56+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -1086,7 +1086,7 @@
         "types": [
           "MP"
         ],
-        "plan": "2026-11-25",
+        "plan": "2026-11-26",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -1097,7 +1097,7 @@
         "types": [
           "MP"
         ],
-        "plan": "2026-11-18",
+        "plan": "2026-11-16",
         "priority": "P3 Planned (PM)"
       },
       {
@@ -1107,7 +1107,7 @@
           "LUBE",
           "MP"
         ],
-        "plan": "2026-11-26",
+        "plan": "2026-11-29",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -1130,7 +1130,7 @@
         "types": [
           "MP"
         ],
-        "plan": "2026-11-20",
+        "plan": "2026-11-22",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -1152,7 +1152,7 @@
         "types": [
           "MP"
         ],
-        "plan": "2026-11-06",
+        "plan": "2026-11-24",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -1412,6 +1412,24 @@
       "raised": "2026-11-29",
       "type": "250 Hours service Planned",
       "hours": 250,
+      "plan": "2026-11-29",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-022148",
+      "equip": "TK155",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Lubrication / Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-29",
+      "type": "1500 Hours service Planned",
+      "hours": 1500,
       "plan": "2026-11-29",
       "status": "Elimination scheduled",
       "request": "",
@@ -1889,15 +1907,15 @@
       "completed": ""
     },
     {
-      "wo": "WO-022148",
-      "equip": "TK155",
+      "wo": "WO-022147",
+      "equip": "TK154",
       "cls": "HT",
       "comp": "",
-      "desc": "Lubrication / Magnetic Plug",
+      "desc": "Magnetic Plug",
       "priority": "P3 Planned (PM)",
       "raised": "2026-11-26",
-      "type": "1500 Hours service Planned",
-      "hours": 1500,
+      "type": "250 Hours service Planned",
+      "hours": 250,
       "plan": "2026-11-26",
       "status": "Elimination scheduled",
       "request": "",
@@ -2087,24 +2105,6 @@
       "completed": ""
     },
     {
-      "wo": "WO-022147",
-      "equip": "TK154",
-      "cls": "HT",
-      "comp": "",
-      "desc": "Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-25",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-11-25",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
       "wo": "WO-022041",
       "equip": "EX010",
       "cls": "EXC",
@@ -2162,6 +2162,24 @@
       "wo": "WO-021940",
       "equip": "TK112",
       "cls": "AT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-24",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-11-24",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-020999",
+      "equip": "TK158",
+      "cls": "HT",
       "comp": "",
       "desc": "Magnetic Plug",
       "priority": "P3 Planned (PM)",
@@ -2348,6 +2366,24 @@
       "raised": "2026-11-22",
       "type": "500 Hours service Planned",
       "hours": 500,
+      "plan": "2026-11-22",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-022150",
+      "equip": "TK156",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-22",
+      "type": "250 Hours service Planned",
+      "hours": 250,
       "plan": "2026-11-22",
       "status": "Elimination scheduled",
       "request": "",
@@ -2546,24 +2582,6 @@
       "raised": "2026-11-20",
       "type": "2000 Hours service Planned",
       "hours": 2000,
-      "plan": "2026-11-20",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
-      "wo": "WO-022150",
-      "equip": "TK156",
-      "cls": "HT",
-      "comp": "",
-      "desc": "Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-20",
-      "type": "250 Hours service Planned",
-      "hours": 250,
       "plan": "2026-11-20",
       "status": "Elimination scheduled",
       "request": "",
@@ -2780,24 +2798,6 @@
       "raised": "2026-11-18",
       "type": "500 Hours service Planned",
       "hours": 500,
-      "plan": "2026-11-18",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
-      "wo": "WO-022149",
-      "equip": "TK155",
-      "cls": "HT",
-      "comp": "",
-      "desc": "Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-18",
-      "type": "250 Hours service Planned",
-      "hours": 250,
       "plan": "2026-11-18",
       "status": "Elimination scheduled",
       "request": "",
@@ -3122,6 +3122,24 @@
       "raised": "2026-11-16",
       "type": "1500 Hours service Planned",
       "hours": 1500,
+      "plan": "2026-11-16",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-022149",
+      "equip": "TK155",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-16",
+      "type": "250 Hours service Planned",
+      "hours": 250,
       "plan": "2026-11-16",
       "status": "Elimination scheduled",
       "request": "",
@@ -4661,6 +4679,24 @@
       "completed": "2026-11-08"
     },
     {
+      "wo": "WO-022224",
+      "equip": "TK156",
+      "cls": "",
+      "comp": "TK156.HS.CV (Control Valves / Гидрораспределители)",
+      "desc": "Утечка рабочей жидкости в зоне штуцеров гидравлического распределителя системы охлаждения тормозов.",
+      "priority": "P4 Planned (Repair)",
+      "raised": "2026-11-07",
+      "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "hours": null,
+      "plan": "2026-11-22",
+      "status": "Elimination scheduled",
+      "request": "DD-00016478",
+      "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Фитинг/штуцер ослаб",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-021007",
       "equip": "DZ001",
       "cls": "DOZ",
@@ -4803,24 +4839,6 @@
       "cause": "",
       "pmStatus": "complete",
       "completed": "2026-11-07"
-    },
-    {
-      "wo": "WO-020999",
-      "equip": "TK158",
-      "cls": "HT",
-      "comp": "",
-      "desc": "Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-06",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-11-06",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
     },
     {
       "wo": "WO-021096",
@@ -6839,6 +6857,42 @@
       "completed": "2026-10-27"
     },
     {
+      "wo": "WO-022223",
+      "equip": "TK153",
+      "cls": "",
+      "comp": "TK153.SS.SP (Steering Pump / Насос рулевого управления)",
+      "desc": "Течь масла в зоне рулевого насоса, требуется диагностика",
+      "priority": "P4 Planned (Repair)",
+      "raised": "2026-10-27",
+      "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "hours": null,
+      "plan": "2026-11-21",
+      "status": "Elimination scheduled",
+      "request": "DD-00015781",
+      "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Фитинг/штуцер ослаб",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-022222",
+      "equip": "TK153",
+      "cls": "",
+      "comp": "TK153.HS.CV (Control Valves / Гидрораспределители)",
+      "desc": "Течь масла из фитингов гидрораспределителя.",
+      "priority": "P4 Planned (Repair)",
+      "raised": "2026-10-27",
+      "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "hours": null,
+      "plan": "2026-11-21",
+      "status": "Elimination scheduled",
+      "request": "DD-00015780",
+      "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Фитинг/штуцер ослаб",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-020411",
       "equip": "CN009",
       "cls": "CRN",
@@ -7460,7 +7514,7 @@
       "raised": "2026-10-23",
       "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "hours": null,
-      "plan": "2026-11-06",
+      "plan": "2026-11-16",
       "status": "Elimination scheduled",
       "request": "DD-00015505",
       "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
@@ -7478,7 +7532,7 @@
       "raised": "2026-10-23",
       "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "hours": null,
-      "plan": "2026-11-06",
+      "plan": "2026-11-16",
       "status": "Elimination scheduled",
       "request": "DD-00015502",
       "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
