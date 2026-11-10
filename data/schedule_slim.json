@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-10T00:42:43+00:00",
+  "generated": "2026-11-10T00:57:41+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -375,7 +375,7 @@
           "INSP",
           "MP"
         ],
-        "plan": "2026-11-08",
+        "plan": "2026-11-16",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -408,7 +408,7 @@
         "types": [
           "MP"
         ],
-        "plan": "2026-11-14",
+        "plan": "2026-11-27",
         "priority": "P3 Planned (PM)"
       },
       {
@@ -417,7 +417,7 @@
         "types": [
           "MP"
         ],
-        "plan": "2026-11-28",
+        "plan": "2026-12-10",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -1223,6 +1223,24 @@
       "completed": ""
     },
     {
+      "wo": "WO-021922",
+      "equip": "TK101",
+      "cls": "AT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-12-10",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-12-10",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-021982",
       "equip": "DZ008",
       "cls": "DOZ",
@@ -1421,24 +1439,6 @@
       "completed": ""
     },
     {
-      "wo": "WO-021922",
-      "equip": "TK101",
-      "cls": "AT",
-      "comp": "",
-      "desc": "Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-28",
-      "type": "500 Hours service Planned",
-      "hours": 500,
-      "plan": "2026-11-28",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
       "wo": "WO-021933",
       "equip": "TK106",
       "cls": "AT",
@@ -1592,6 +1592,24 @@
       "raised": "2026-11-27",
       "type": "4000 Hours service Planned",
       "hours": 4000,
+      "plan": "2026-11-27",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-021277",
+      "equip": "TK101",
+      "cls": "AT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-27",
+      "type": "250 Hours service Planned",
+      "hours": 250,
       "plan": "2026-11-27",
       "status": "Elimination scheduled",
       "request": "",
@@ -3005,6 +3023,24 @@
       "completed": ""
     },
     {
+      "wo": "WO-021113",
+      "equip": "TK042",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Filter Cut / General Inspection / Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-16",
+      "type": "1000 Hours service Planned",
+      "hours": 1000,
+      "plan": "2026-11-16",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-021944",
       "equip": "TK117",
       "cls": "AT",
@@ -3374,24 +3410,6 @@
       "raised": "2026-11-14",
       "type": "500 Hours service Planned",
       "hours": 500,
-      "plan": "2026-11-14",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
-      "wo": "WO-021277",
-      "equip": "TK101",
-      "cls": "AT",
-      "comp": "",
-      "desc": "Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-14",
-      "type": "250 Hours service Planned",
-      "hours": 250,
       "plan": "2026-11-14",
       "status": "Elimination scheduled",
       "request": "",
@@ -4364,24 +4382,6 @@
       "raised": "2026-11-08",
       "type": "500 Hours service Planned",
       "hours": 500,
-      "plan": "2026-11-08",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
-      "wo": "WO-021113",
-      "equip": "TK042",
-      "cls": "HT",
-      "comp": "",
-      "desc": "Filter Cut / General Inspection / Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-08",
-      "type": "1000 Hours service Planned",
-      "hours": 1000,
       "plan": "2026-11-08",
       "status": "Elimination scheduled",
       "request": "",

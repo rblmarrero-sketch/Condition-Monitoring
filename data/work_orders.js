@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-10T00:42:43+00:00",
+  "generated": "2026-11-10T00:57:41+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -7308,7 +7308,7 @@ window.CM_WO_DATA = {
       "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
       "descr": "ошибка по датчику распредвала",
       "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
+      "priority": "P4 Planned (Repair)",
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-021964"
@@ -154323,9 +154323,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-08",
-      "planStartDt": "2026-11-08T00:00:00",
-      "planEnd": "2026-11-08",
+      "planStart": "2026-11-16",
+      "planStartDt": "2026-11-16T00:00:00",
+      "planEnd": "2026-11-16",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -158826,9 +158826,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-14",
-      "planStartDt": "2026-11-14T00:00:00",
-      "planEnd": "2026-11-15",
+      "planStart": "2026-11-27",
+      "planStartDt": "2026-11-27T00:00:00",
+      "planEnd": "2026-11-27",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -158847,9 +158847,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-28",
-      "planStartDt": "2026-11-28T00:00:00",
-      "planEnd": "2026-11-28",
+      "planStart": "2026-12-10",
+      "planStartDt": "2026-12-10T00:00:00",
+      "planEnd": "2026-12-10",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
