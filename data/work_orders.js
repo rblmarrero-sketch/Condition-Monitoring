@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-10T04:07:39+00:00",
+  "generated": "2026-11-10T04:27:38+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5611,6 +5611,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "TK109",
+      "defect": "DD-00016629",
+      "raised": "2026-11-10",
+      "system": "TK109.BS.RCH (Brake Chambers / Тормозные камеры)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка масла с правой передней бортовой",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": null
+    },
+    {
       "asset": "DZ016",
       "defect": "DD-00016613",
       "raised": "2026-11-10",
@@ -5622,6 +5635,32 @@ window.CM_WO_DATA = {
       "by": "Aleksey Kiselev",
       "regBy": "Киселев Алексей Александрович",
       "wo": null
+    },
+    {
+      "asset": "GE004",
+      "defect": "DD-00016631",
+      "raised": "2026-11-10",
+      "system": "GE004.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Отогрев и запуск ДВС",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-022208"
+    },
+    {
+      "asset": "TK169",
+      "defect": "DD-00016630",
+      "raised": "2026-11-10",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK169 ENGINE",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Заклинил термостат",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-022205"
     },
     {
       "asset": "DR008",
@@ -6157,6 +6196,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022110"
     },
     {
+      "asset": "DZ012",
+      "defect": "DD-00016569",
+      "raised": "2026-11-09",
+      "system": "DZ012.CH.FR (Frame / Рама)",
+      "defectType": "6.03 Structural crack / Трещина конструкции",
+      "descr": "Ремонт защиты",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-022071"
+    },
+    {
       "asset": "GE109",
       "defect": "DD-00016586",
       "raised": "2026-11-09",
@@ -6571,19 +6623,6 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-022109"
-    },
-    {
-      "asset": "DZ012",
-      "defect": "DD-00016569",
-      "raised": "2026-11-09",
-      "system": "DZ012.CH.FR (Frame / Рама)",
-      "defectType": "6.03 Structural crack / Трещина конструкции",
-      "descr": "Ремонт защиты",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Roman Besedovskiy",
-      "regBy": "Беседовский Роман Иванович",
-      "wo": "WO-022071"
     },
     {
       "asset": "EX002",
@@ -7821,6 +7860,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021881"
     },
     {
+      "asset": "EX021",
+      "defect": "DD-00016417",
+      "raised": "2026-11-06",
+      "system": "EX021.CH.BUC (Bucket / Ковш)",
+      "defectType": "2.06 Abrasive wear / Абразивный износ",
+      "descr": "Осевой люфт проушин ковша",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": null
+    },
+    {
       "asset": "DZ011",
       "defect": "DD-00016387",
       "raised": "2026-11-06",
@@ -8289,32 +8341,6 @@ window.CM_WO_DATA = {
       "wo": "WO-021829"
     },
     {
-      "asset": "EX021",
-      "defect": "DD-00016417",
-      "raised": "2026-11-06",
-      "system": "EX021.CH.BUC (Bucket / Ковш)",
-      "defectType": "2.06 Abrasive wear / Абразивный износ",
-      "descr": "Осевой люфт проушин ковша",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": null
-    },
-    {
-      "asset": "EX021",
-      "defect": "DD-00016419",
-      "raised": "2026-11-06",
-      "system": "EX021.HS.MP (Hydraulic Pumps / Гидронасосы)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Подтеки масла на главном насосе управления с датчика компенсатора",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": null
-    },
-    {
       "asset": "TK089",
       "defect": "DD-00016437",
       "raised": "2026-11-06",
@@ -8560,6 +8586,19 @@ window.CM_WO_DATA = {
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": null
+    },
+    {
+      "asset": "EX021",
+      "defect": "DD-00016419",
+      "raised": "2026-11-06",
+      "system": "EX021.HS.MP (Hydraulic Pumps / Гидронасосы)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Подтеки масла на главном насосе управления с датчика компенсатора",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-022202"
     },
     {
       "asset": "EX019",
@@ -11344,19 +11383,6 @@ window.CM_WO_DATA = {
       "wo": "WO-021468"
     },
     {
-      "asset": "EX021",
-      "defect": "DD-00016146",
-      "raised": "2026-11-02",
-      "system": "EX021.HS.DL (Hydraulic Lines / Гидролинии)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Заменить  РВД (стрела-платформа)",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": null
-    },
-    {
       "asset": "TK038",
       "defect": "DD-00016185",
       "raised": "2026-11-02",
@@ -11667,6 +11693,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": null
+    },
+    {
+      "asset": "EX021",
+      "defect": "DD-00016146",
+      "raised": "2026-11-02",
+      "system": "EX021.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Заменить  РВД (стрела-платформа)",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022203"
     },
     {
       "asset": "TK121",
@@ -25410,19 +25449,6 @@ window.CM_WO_DATA = {
       "wo": "WO-020592"
     },
     {
-      "asset": "EX021",
-      "defect": "DD-00015034",
-      "raised": "2026-10-18",
-      "system": "EX021.HS.DL (Hydraulic Lines / Гидролинии)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Мокреет РВД стреловой (второй от кабины)",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": null
-    },
-    {
       "asset": "EX016",
       "defect": "DD-00015021",
       "raised": "2026-10-18",
@@ -25473,6 +25499,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": null
+    },
+    {
+      "asset": "EX021",
+      "defect": "DD-00015034",
+      "raised": "2026-10-18",
+      "system": "EX021.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Мокреет РВД стреловой (второй от кабины)",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-022204"
     },
     {
       "asset": "DZ016",
@@ -27126,19 +27165,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "EX021",
-      "defect": "DD-00014882",
-      "raised": "2026-10-16",
-      "system": "EX021.OC.FS (Fire Suppression / Система пожаротушения)",
-      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
-      "descr": "Требуются сварочные работы по креплению огнетушителя",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Roman Kochetov",
-      "regBy": "Кочетов Роман Иванович",
-      "wo": null
-    },
-    {
       "asset": "TK120",
       "defect": "DD-00014859",
       "raised": "2026-10-16",
@@ -27267,6 +27293,19 @@ window.CM_WO_DATA = {
       "by": "Roman Kochetov",
       "regBy": "Кочетов Роман Иванович",
       "wo": null
+    },
+    {
+      "asset": "EX021",
+      "defect": "DD-00014882",
+      "raised": "2026-10-16",
+      "system": "EX021.OC.FS (Fire Suppression / Система пожаротушения)",
+      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "descr": "Требуются сварочные работы по креплению огнетушителя",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Roman Kochetov",
+      "regBy": "Кочетов Роман Иванович",
+      "wo": "WO-022206"
     },
     {
       "asset": "DZ020",
@@ -32664,6 +32703,19 @@ window.CM_WO_DATA = {
       "wo": "WO-019294"
     },
     {
+      "asset": "EX021",
+      "defect": "DD-00014377",
+      "raised": "2026-10-08",
+      "system": "EX021.DRS.FD (Final Drives / Конечные передачи)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь масла с контрольной пробки правой бортовой",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Valentin Trapilo",
+      "regBy": "Трапило Валентин Святославович",
+      "wo": null
+    },
+    {
       "asset": "EX011",
       "defect": "DD-00014421",
       "raised": "2026-10-08",
@@ -33925,19 +33977,6 @@ window.CM_WO_DATA = {
       "wo": "WO-020908"
     },
     {
-      "asset": "EX021",
-      "defect": "DD-00014377",
-      "raised": "2026-10-08",
-      "system": "EX021.DRS.FD (Final Drives / Конечные передачи)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь масла с контрольной пробки правой бортовой",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Valentin Trapilo",
-      "regBy": "Трапило Валентин Святославович",
-      "wo": null
-    },
-    {
       "asset": "DZ020",
       "defect": "DD-00014378",
       "raised": "2026-10-08",
@@ -34809,19 +34848,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "EX021",
-      "defect": "DD-00014249",
-      "raised": "2026-10-07",
-      "system": "EX021.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
-      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
-      "descr": "Отсутствует светильник в насосном отсеке",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Valentin Trapilo",
-      "regBy": "Трапило Валентин Святославович",
-      "wo": null
-    },
-    {
       "asset": "TK014",
       "defect": "DD-00014219",
       "raised": "2026-10-07",
@@ -34924,6 +34950,19 @@ window.CM_WO_DATA = {
       "by": "Andrey Shcherbina",
       "regBy": "Щербина Андрей Николаевич",
       "wo": null
+    },
+    {
+      "asset": "EX021",
+      "defect": "DD-00014249",
+      "raised": "2026-10-07",
+      "system": "EX021.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
+      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "descr": "Отсутствует светильник в насосном отсеке",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Valentin Trapilo",
+      "regBy": "Трапило Валентин Святославович",
+      "wo": "WO-022207"
     },
     {
       "asset": "EX002",
@@ -57572,6 +57611,19 @@ window.CM_WO_DATA = {
       "wo": "WO-015456"
     },
     {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
+      "wo": null
+    },
+    {
       "asset": "TK046",
       "defect": "DD-00011270",
       "raised": "2026-08-21",
@@ -57673,19 +57725,6 @@ window.CM_WO_DATA = {
       "priority": "P2 Urgent",
       "by": "Andrey Shipelov",
       "regBy": "Шипелов Андрей Анатольевич",
-      "wo": null
-    },
-    {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
