@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-10T01:42:46+00:00",
+  "generated": "2026-11-10T01:57:46+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -699,7 +699,7 @@
         "types": [
           "MP"
         ],
-        "plan": "2026-11-21",
+        "plan": "2026-11-22",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -721,7 +721,7 @@
           "MP",
           "TB"
         ],
-        "plan": "2026-11-19",
+        "plan": "2026-11-20",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -2321,6 +2321,24 @@
       "completed": ""
     },
     {
+      "wo": "WO-021947",
+      "equip": "TK119",
+      "cls": "AT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-22",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-11-22",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-021275",
       "equip": "TK148",
       "cls": "HT",
@@ -2395,24 +2413,6 @@
     {
       "wo": "WO-021942",
       "equip": "TK114",
-      "cls": "AT",
-      "comp": "",
-      "desc": "Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-21",
-      "type": "500 Hours service Planned",
-      "hours": 500,
-      "plan": "2026-11-21",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
-      "wo": "WO-021947",
-      "equip": "TK119",
       "cls": "AT",
       "comp": "",
       "desc": "Magnetic Plug",
@@ -2537,6 +2537,24 @@
       "completed": ""
     },
     {
+      "wo": "WO-021949",
+      "equip": "TK120",
+      "cls": "AT",
+      "comp": "",
+      "desc": "General Inspection / Magnetic Plug / Dump Body Liner",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-20",
+      "type": "2000 Hours service Planned",
+      "hours": 2000,
+      "plan": "2026-11-20",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-022150",
       "equip": "TK156",
       "cls": "HT",
@@ -2618,24 +2636,6 @@
       "raised": "2026-11-19",
       "type": "8000 Hours service Planned",
       "hours": 8000,
-      "plan": "2026-11-19",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
-      "wo": "WO-021949",
-      "equip": "TK120",
-      "cls": "AT",
-      "comp": "",
-      "desc": "General Inspection / Magnetic Plug / Dump Body Liner",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-19",
-      "type": "2000 Hours service Planned",
-      "hours": 2000,
       "plan": "2026-11-19",
       "status": "Elimination scheduled",
       "request": "",
@@ -6999,6 +6999,42 @@
       "cause": "",
       "pmStatus": "complete",
       "completed": "2026-10-26"
+    },
+    {
+      "wo": "WO-022194",
+      "equip": "TK114",
+      "cls": "",
+      "comp": "TK114.BS (Braking System / Тормозная система)",
+      "desc": "Течь масло с фильтра маслоохладителя тормозной жидкости.",
+      "priority": "P4 Planned (Repair)",
+      "raised": "2026-10-26",
+      "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "hours": null,
+      "plan": "2026-11-21",
+      "status": "Elimination scheduled",
+      "request": "DD-00015725",
+      "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Фитинг/штуцер ослаб",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-022195",
+      "equip": "TK114",
+      "cls": "",
+      "comp": "TK114.HS.DL (Hydraulic Lines / Гидролинии)",
+      "desc": "Течь масла с фитинга гидролинии.",
+      "priority": "P4 Planned (Repair)",
+      "raised": "2026-10-26",
+      "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "hours": null,
+      "plan": "2026-11-21",
+      "status": "Elimination scheduled",
+      "request": "DD-00015724",
+      "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Фитинг/штуцер ослаб",
+      "pmStatus": "open",
+      "completed": ""
     },
     {
       "wo": "WO-019501",

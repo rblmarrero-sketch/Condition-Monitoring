@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-10T01:42:46+00:00",
+  "generated": "2026-11-10T01:57:46+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -446,8 +446,8 @@ window.CM_WO_DATA = {
     "planStart": 0
   },
   "cmCauseFrom": {
-    "wo": 105,
-    "wr": 91,
+    "wo": 107,
+    "wr": 89,
     "cert": 0,
     "none": 0
   },
@@ -985,7 +985,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-10-26",
       "detected": "2026-10-26",
-      "planStart": null,
+      "planStart": "2026-11-21",
       "closed": null,
       "asset": "TK114",
       "defect": "DD-00015725",
@@ -995,15 +995,15 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "cause": "Фитинг/штуцер ослаб",
-      "causeFrom": "wr",
+      "causeFrom": "wo",
       "descr": "Течь масло с фильтра маслоохладителя тормозной жидкости.",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "by": "Bekzhan",
       "byFull": "Bekzhan Kazhybekov",
       "regBy": "Кажыбеков Бекжан",
       "raisedBy": "ГДК Баимская",
-      "woNumber": null,
-      "maintType": null,
+      "woNumber": "WO-022194",
+      "maintType": "P4 Planned Repair",
       "planned": false
     },
     {
@@ -1011,7 +1011,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-10-26",
       "detected": "2026-10-26",
-      "planStart": null,
+      "planStart": "2026-11-21",
       "closed": null,
       "asset": "TK114",
       "defect": "DD-00015724",
@@ -1021,15 +1021,15 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "cause": "Фитинг/штуцер ослаб",
-      "causeFrom": "wr",
+      "causeFrom": "wo",
       "descr": "Течь масла с фитинга гидролинии.",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "by": "Bekzhan",
       "byFull": "Bekzhan Kazhybekov",
       "regBy": "Кажыбеков Бекжан",
       "raisedBy": "ГДК Баимская",
-      "woNumber": null,
-      "maintType": null,
+      "woNumber": "WO-022195",
+      "maintType": "P4 Planned Repair",
       "planned": false
     },
     {
@@ -5624,6 +5624,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "TK146",
+      "defect": "DD-00016624",
+      "raised": "2026-11-10",
+      "system": "TK146.BS.TV (Treadle Valve / Педальный тормозной клапан)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "плохой контакт",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Dmitriy Ishchenko",
+      "regBy": "Ищенко Дмитрий Александрович",
+      "wo": "WO-022186"
+    },
+    {
       "asset": "SN001",
       "defect": "DD-00016625",
       "raised": "2026-11-10",
@@ -5661,19 +5674,6 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-022184"
-    },
-    {
-      "asset": "TK146",
-      "defect": "DD-00016624",
-      "raised": "2026-11-10",
-      "system": "TK146.BS.TV (Treadle Valve / Педальный тормозной клапан)",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "плохой контакт",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Dmitriy Ishchenko",
-      "regBy": "Ищенко Дмитрий Александрович",
-      "wo": "WO-022186"
     },
     {
       "asset": "PU009",
@@ -11435,19 +11435,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK121",
-      "defect": "DD-00016145",
-      "raised": "2026-11-02",
-      "system": "TK121.HS.DL (Hydraulic Lines / Гидролинии)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Заменить РВД на подъем кузова",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": null
-    },
-    {
       "asset": "BS007",
       "defect": "DD-00016189",
       "raised": "2026-11-02",
@@ -11628,6 +11615,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": null
+    },
+    {
+      "asset": "TK121",
+      "defect": "DD-00016145",
+      "raised": "2026-11-02",
+      "system": "TK121.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Заменить РВД на подъем кузова",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022196"
     },
     {
       "asset": "BS019",
@@ -13203,19 +13203,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK113",
-      "defect": "DD-00016024",
-      "raised": "2026-10-31",
-      "system": "TK113.DRS.AXL (Axles / Мосты)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка масла с сальника хвостовика сраднего моста",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Roman Kochetov",
-      "regBy": "Кочетов Роман Иванович",
-      "wo": null
-    },
-    {
       "asset": "EX018",
       "defect": "DD-00016048",
       "raised": "2026-10-31",
@@ -13279,6 +13266,19 @@ window.CM_WO_DATA = {
       "by": "Andrey Shipelov",
       "regBy": "Шипелов Андрей Анатольевич",
       "wo": null
+    },
+    {
+      "asset": "TK113",
+      "defect": "DD-00016024",
+      "raised": "2026-10-31",
+      "system": "TK113.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка масла с сальника хвостовика сраднего моста",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Roman Kochetov",
+      "regBy": "Кочетов Роман Иванович",
+      "wo": "WO-022193"
     },
     {
       "asset": "EX010",
@@ -16427,19 +16427,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "LD007",
-      "defect": "DD-00015787",
-      "raised": "2026-10-27",
-      "system": "LD007.OC.GL (Glass / Стекла)",
-      "defectType": "2.13 Thermal cracking / heat damage / Термические трещины / тепловое повреждение",
-      "descr": "Заменить лобовое стекло",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": null
-    },
-    {
       "asset": "LD004",
       "defect": "DD-00015762",
       "raised": "2026-10-27",
@@ -16450,6 +16437,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
+      "wo": null
+    },
+    {
+      "asset": "LD007",
+      "defect": "DD-00015787",
+      "raised": "2026-10-27",
+      "system": "LD007.OC.GL (Glass / Стекла)",
+      "defectType": "2.13 Thermal cracking / heat damage / Термические трещины / тепловое повреждение",
+      "descr": "Заменить лобовое стекло",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
       "wo": null
     },
     {
@@ -59874,19 +59874,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "LV011",
-      "defect": "DD-00009705",
-      "raised": "2026-07-27",
-      "system": "LV011.OC.AC (Air Conditioning / Кондиционирование)",
-      "defectType": "1.25 Reduced capacity / output / Снижение производительности / выхода",
-      "descr": "Требуется замена кондиционера",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": null
-    },
-    {
-      "asset": "LV011",
       "defect": "DD-00009702",
       "raised": "2026-07-27",
       "system": "LV011.BS (Braking System / Тормозная система)",
@@ -59905,6 +59892,19 @@ window.CM_WO_DATA = {
       "system": "LV011.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Требуется замена всех патрубков системы охлаждения",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": null
+    },
+    {
+      "asset": "LV011",
+      "defect": "DD-00009705",
+      "raised": "2026-07-27",
+      "system": "LV011.OC.AC (Air Conditioning / Кондиционирование)",
+      "defectType": "1.25 Reduced capacity / output / Снижение производительности / выхода",
+      "descr": "Требуется замена кондиционера",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -60017,19 +60017,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "DZ021",
-      "defect": "DD-00010110",
-      "raised": "2026-07-23",
-      "system": "DZ021.DRS.COO.RAD (Radiator / Радиатор)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Radiator coolant leak",
-      "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Andrey Shipelov",
-      "regBy": "Шипелов Андрей Анатольевич",
-      "wo": null
-    },
-    {
-      "asset": "DZ021",
       "defect": "DD-00010111",
       "raised": "2026-07-23",
       "system": "DZ021.HS.DL (Hydraulic Lines / Гидролинии)",
@@ -60037,6 +60024,19 @@ window.CM_WO_DATA = {
       "descr": "Повреждение (разрыв) трубки подачи гидравлического масла ( # 185–62-17000)",
       "status": "Registered",
       "priority": "P1 Breakdown",
+      "by": "Andrey Shipelov",
+      "regBy": "Шипелов Андрей Анатольевич",
+      "wo": null
+    },
+    {
+      "asset": "DZ021",
+      "defect": "DD-00010110",
+      "raised": "2026-07-23",
+      "system": "DZ021.DRS.COO.RAD (Radiator / Радиатор)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Radiator coolant leak",
+      "status": "Registered",
+      "priority": "P2 Urgent",
       "by": "Andrey Shipelov",
       "regBy": "Шипелов Андрей Анатольевич",
       "wo": null
@@ -177058,9 +177058,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-21",
-      "planStartDt": "2026-11-21T00:00:00",
-      "planEnd": "2026-11-21",
+      "planStart": "2026-11-22",
+      "planStartDt": "2026-11-22T00:00:00",
+      "planEnd": "2026-11-22",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -178320,9 +178320,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-19",
-      "planStartDt": "2026-11-19T00:00:00",
-      "planEnd": "2026-11-20",
+      "planStart": "2026-11-20",
+      "planStartDt": "2026-11-20T00:00:00",
+      "planEnd": "2026-11-21",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
