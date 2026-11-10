@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-10T21:07:40+00:00",
+  "generated": "2026-11-10T21:22:44+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5793,6 +5793,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022256"
     },
     {
+      "asset": "TK149",
+      "defect": "DD-00016685",
+      "raised": "2026-11-11",
+      "system": "TK149.DRS.TRA (Transmission / Трансмиссия)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Трансмиссия в аварийном режиме передачи не переключаются",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Evgeniy Frolin",
+      "regBy": "Фролин Евгений Владимирович",
+      "wo": "WO-022262"
+    },
+    {
       "asset": "TK061",
       "defect": "DD-00016683",
       "raised": "2026-11-11",
@@ -9017,19 +9030,6 @@ window.CM_WO_DATA = {
       "wo": "WO-021870"
     },
     {
-      "asset": "TK005",
-      "defect": "DD-00016407",
-      "raised": "2026-11-06",
-      "system": "TK005.DRS.AXL (Axles / Мосты)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Сломана шпилька на переднем правом колесе",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-021837"
-    },
-    {
       "asset": "WE004",
       "defect": "DD-00016404",
       "raised": "2026-11-06",
@@ -9158,6 +9158,19 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-022202"
+    },
+    {
+      "asset": "TK005",
+      "defect": "DD-00016407",
+      "raised": "2026-11-06",
+      "system": "TK005.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Сломана шпилька на переднем правом колесе",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-021837"
     },
     {
       "asset": "SN001",
