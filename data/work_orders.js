@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-11T15:42:39+00:00",
+  "generated": "2026-11-11T16:02:49+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5657,11 +5657,24 @@ window.CM_WO_DATA = {
       "system": "TK109.ELS.LIG (Head Lighting System / Система головного освещения)",
       "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
       "descr": "Не горит ближний свет",
-      "status": "Registered",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
-      "wo": null
+      "wo": "WO-022437"
+    },
+    {
+      "asset": "EX021",
+      "defect": "DD-00016731",
+      "raised": "2026-11-12",
+      "system": "EX021.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Порыв РВД",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022438"
     },
     {
       "asset": "PU010",
@@ -5768,6 +5781,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022249"
     },
     {
+      "asset": "TK034",
+      "defect": "DD-00016672",
+      "raised": "2026-11-11",
+      "system": "TK034.CH.BED (Bed / Кузов)",
+      "defectType": "1.19 No movement / no drive / Нет движения / нет привода",
+      "descr": "Не поднимается кузов. Не работает сигнальный маячок.",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022244"
+    },
+    {
       "asset": "DZ006",
       "defect": "DD-00016720",
       "raised": "2026-11-11",
@@ -5844,6 +5870,19 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022425"
+    },
+    {
+      "asset": "LV032",
+      "defect": "DD-00016682",
+      "raised": "2026-11-11",
+      "system": "LV032.OC.HE (Heating / Отопление)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Отопитель салона дует холодным воздухом",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022254"
     },
     {
       "asset": "LV087",
@@ -6197,19 +6236,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022262"
     },
     {
-      "asset": "LV032",
-      "defect": "DD-00016682",
-      "raised": "2026-11-11",
-      "system": "LV032.OC.HE (Heating / Отопление)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Отопитель салона дует холодным воздухом",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022254"
-    },
-    {
       "asset": "TK021",
       "defect": "DD-00016680",
       "raised": "2026-11-11",
@@ -6273,19 +6299,6 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022245"
-    },
-    {
-      "asset": "TK034",
-      "defect": "DD-00016672",
-      "raised": "2026-11-11",
-      "system": "TK034.CH.BED (Bed / Кузов)",
-      "defectType": "1.19 No movement / no drive / Нет движения / нет привода",
-      "descr": "Не поднимается кузов. Не работает сигнальный маячок.",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-022244"
     },
     {
       "asset": "TK169",
@@ -6665,6 +6678,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022188"
     },
     {
+      "asset": "CN023",
+      "defect": "DD-00016667",
+      "raised": "2026-11-10",
+      "system": "CN023.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Установка дополнительного автономного отопителя в кабине водителя",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022239"
+    },
+    {
       "asset": "TK168",
       "defect": "DD-00016663",
       "raised": "2026-11-10",
@@ -6949,19 +6975,6 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Ishchenko",
       "regBy": "Ищенко Дмитрий Александрович",
       "wo": "WO-022186"
-    },
-    {
-      "asset": "CN023",
-      "defect": "DD-00016667",
-      "raised": "2026-11-10",
-      "system": "CN023.OC.HE (Heating / Отопление)",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Установка дополнительного автономного отопителя в кабине водителя",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-022239"
     },
     {
       "asset": "TK047",
