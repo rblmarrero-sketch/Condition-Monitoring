@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-11T10:17:58+00:00",
+  "generated": "2026-11-11T10:33:44+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -6002,19 +6002,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022271"
     },
     {
-      "asset": "EX006",
-      "defect": "DD-00016687",
-      "raised": "2026-11-11",
-      "system": "EX006.CH.BUC (Bucket / Ковш)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Сварка стопорного кольца",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022265"
-    },
-    {
       "asset": "TK096",
       "defect": "DD-00016686",
       "raised": "2026-11-11",
@@ -6026,6 +6013,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022263"
+    },
+    {
+      "asset": "EX006",
+      "defect": "DD-00016687",
+      "raised": "2026-11-11",
+      "system": "EX006.CH.BUC (Bucket / Ковш)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Сварка стопорного кольца",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022265"
     },
     {
       "asset": "TK149",
@@ -6912,19 +6912,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022212"
     },
     {
-      "asset": "SN001",
-      "defect": "DD-00016625",
-      "raised": "2026-11-10",
-      "system": "SN001.CONV.SDC (Side Discharge Conveyor / Боковой разгрузочный конвейер)",
-      "defectType": "8.06 Roller / idler failure / Отказ ролика / роликоопоры",
-      "descr": "Порыв ленты конвейера, поломка роликов",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": "WO-022188"
-    },
-    {
       "asset": "CR006",
       "defect": "DD-00016618",
       "raised": "2026-11-10",
@@ -6949,6 +6936,19 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022174"
+    },
+    {
+      "asset": "SN001",
+      "defect": "DD-00016625",
+      "raised": "2026-11-10",
+      "system": "SN001.CONV.SDC (Side Discharge Conveyor / Боковой разгрузочный конвейер)",
+      "defectType": "8.06 Roller / idler failure / Отказ ролика / роликоопоры",
+      "descr": "Порыв ленты конвейера, поломка роликов",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-022188"
     },
     {
       "asset": "DZ002",
@@ -8901,19 +8901,6 @@ window.CM_WO_DATA = {
       "wo": "WO-021882"
     },
     {
-      "asset": "TK034",
-      "defect": "DD-00016484",
-      "raised": "2026-11-07",
-      "system": "TK034.ELS.ALT (Alternator / Генератор)",
-      "defectType": "4.23 Charging system fault (alternator/regulator) / Неисправность системы зарядки (генератор/регулят",
-      "descr": "Индикация неисправности системы зарядки аккумуляторов",
-      "status": "Completed",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-021905"
-    },
-    {
       "asset": "CO009",
       "defect": "DD-00016457",
       "raised": "2026-11-07",
@@ -8990,6 +8977,19 @@ window.CM_WO_DATA = {
       "by": "Roman Besedovskiy",
       "regBy": "Беседовский Роман Иванович",
       "wo": "WO-022220"
+    },
+    {
+      "asset": "TK034",
+      "defect": "DD-00016484",
+      "raised": "2026-11-07",
+      "system": "TK034.ELS.ALT (Alternator / Генератор)",
+      "defectType": "4.23 Charging system fault (alternator/regulator) / Неисправность системы зарядки (генератор/регулят",
+      "descr": "Индикация неисправности системы зарядки аккумуляторов",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-021905"
     },
     {
       "asset": "EX021",
@@ -9668,6 +9668,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021848"
     },
     {
+      "asset": "SN001",
+      "defect": "DD-00016442",
+      "raised": "2026-11-06",
+      "system": "SN001.FEED.BEL (Feeder Belt / Лента питателя)",
+      "defectType": "8.05 Conveyor belt wear / Износ конвейерной ленты",
+      "descr": "повреждения ленты питателя",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-022374"
+    },
+    {
       "asset": "GE108",
       "defect": "DD-00016424",
       "raised": "2026-11-06",
@@ -9796,19 +9809,6 @@ window.CM_WO_DATA = {
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": "WO-022377"
-    },
-    {
-      "asset": "SN001",
-      "defect": "DD-00016442",
-      "raised": "2026-11-06",
-      "system": "SN001.FEED.BEL (Feeder Belt / Лента питателя)",
-      "defectType": "8.05 Conveyor belt wear / Износ конвейерной ленты",
-      "descr": "повреждения ленты питателя",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": "WO-022374"
     },
     {
       "asset": "SN001",
@@ -15610,16 +15610,16 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "CR002",
-      "defect": "DD-00015992",
+      "defect": "DD-00015991",
       "raised": "2026-10-30",
-      "system": "CR002.HS.CYL (Cylinders / Гидроцилиндры)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "течь аутригера",
+      "system": "CR002.CRS.CHM (Crushing Chamber / Камера дробления)",
+      "defectType": "6.08 Guarding / cover damage / Повреждение ограждений / кожухов",
+      "descr": "сварочные работы разгрузочной камеры",
       "status": "Elimination scheduled",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Murashko",
       "regBy": "Мурашко Сергей Борисович",
-      "wo": "WO-021293"
+      "wo": "WO-021292"
     },
     {
       "asset": "CR002",
@@ -15636,16 +15636,16 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "CR002",
-      "defect": "DD-00015991",
+      "defect": "DD-00015992",
       "raised": "2026-10-30",
-      "system": "CR002.CRS.CHM (Crushing Chamber / Камера дробления)",
-      "defectType": "6.08 Guarding / cover damage / Повреждение ограждений / кожухов",
-      "descr": "сварочные работы разгрузочной камеры",
+      "system": "CR002.HS.CYL (Cylinders / Гидроцилиндры)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "течь аутригера",
       "status": "Elimination scheduled",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Murashko",
       "regBy": "Мурашко Сергей Борисович",
-      "wo": "WO-021292"
+      "wo": "WO-021293"
     },
     {
       "asset": "SN003",
