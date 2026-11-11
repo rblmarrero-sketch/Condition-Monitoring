@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-11T06:17:54+00:00",
+  "generated": "2026-11-11T06:37:42+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -356,7 +356,7 @@ window.CM_WO_DATA = {
     "WE010",
     "WE011"
   ],
-  "duplicateRowsCollapsed": 478,
+  "duplicateRowsCollapsed": 479,
   "roundsDedupedWithinVisit": 2,
   "columns": [
     "Asset description",
@@ -5677,6 +5677,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022249"
     },
     {
+      "asset": "EX024",
+      "defect": "DD-00016703",
+      "raised": "2026-11-11",
+      "system": "EX024.CH.AL (Central Lubrication System / Централизованная система смазки)",
+      "defectType": "1.13 Fluid contamination (water/dirt) / Загрязнение жидкости (вода/пыль)",
+      "descr": "Требуется ревизия распределителя ЦСС, очистка",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": null
+    },
+    {
       "asset": "EX022",
       "defect": "DD-00016692",
       "raised": "2026-11-11",
@@ -5804,6 +5817,58 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
+      "wo": null
+    },
+    {
+      "asset": "LS013",
+      "defect": "DD-00016705",
+      "raised": "2026-11-11",
+      "system": "LS013.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь масла",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "LV021",
+      "defect": "DD-00016706",
+      "raised": "2026-11-11",
+      "system": "LV021.CH.STR (Superstructure / Надстройка)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Требуется ремонт крепления заднего борта",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "LV032",
+      "defect": "DD-00016707",
+      "raised": "2026-11-11",
+      "system": "LV032 HILUX 2.5 TOYOTA",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "ремонт блока климата и отопителя салона.",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "TK097",
+      "defect": "DD-00016704",
+      "raised": "2026-11-11",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK097 TIE ROD ENDS OldNumber (UT097)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Люфты и стуки в передних рулевых тягах, наконечниках",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
       "wo": null
     },
     {
@@ -9461,19 +9526,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "SN001",
-      "defect": "DD-00016410",
-      "raised": "2026-11-06",
-      "system": "SN001.CONV.SDC (Side Discharge Conveyor / Боковой разгрузочный конвейер)",
-      "defectType": "8.03 Conveyor belt splice failure / Разрушение стыка конвейерной ленты",
-      "descr": "изношены соеденения на стыках ленты правого конвейера",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": null
-    },
-    {
-      "asset": "SN001",
       "defect": "DD-00016442",
       "raised": "2026-11-06",
       "system": "SN001.FEED.BEL (Feeder Belt / Лента питателя)",
@@ -9614,6 +9666,19 @@ window.CM_WO_DATA = {
       "by": "Ilshat Sabitov",
       "regBy": "Сабитов Ильшат Рашидович",
       "wo": "WO-021845"
+    },
+    {
+      "asset": "SN001",
+      "defect": "DD-00016410",
+      "raised": "2026-11-06",
+      "system": "SN001.CONV.SDC (Side Discharge Conveyor / Боковой разгрузочный конвейер)",
+      "defectType": "8.03 Conveyor belt splice failure / Разрушение стыка конвейерной ленты",
+      "descr": "изношены соеденения на стыках ленты правого конвейера",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-022367"
     },
     {
       "asset": "SN001",
