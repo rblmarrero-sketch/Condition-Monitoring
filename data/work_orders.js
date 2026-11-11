@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-11T03:37:47+00:00",
+  "generated": "2026-11-11T03:52:45+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -29961,6 +29961,19 @@ window.CM_WO_DATA = {
       "wo": "WO-019942"
     },
     {
+      "asset": "TK029",
+      "defect": "DD-00014755",
+      "raised": "2026-10-14",
+      "system": "TK029.ELS.ALT (Alternator / Генератор)",
+      "defectType": "1.27 Belt drive issue (slip/break) / Проблема ременного привода (проскальзывание/обрыв)",
+      "descr": "При наборе оборотов просвистывает ремень генератора",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": "WO-019944"
+    },
+    {
       "asset": "TK149",
       "defect": "DD-00014761",
       "raised": "2026-10-14",
@@ -30115,19 +30128,6 @@ window.CM_WO_DATA = {
       "by": "Andrey Shcherbina",
       "regBy": "Щербина Андрей Николаевич",
       "wo": null
-    },
-    {
-      "asset": "TK029",
-      "defect": "DD-00014755",
-      "raised": "2026-10-14",
-      "system": "TK029.ELS.ALT (Alternator / Генератор)",
-      "defectType": "1.27 Belt drive issue (slip/break) / Проблема ременного привода (проскальзывание/обрыв)",
-      "descr": "При наборе оборотов просвистывает ремень генератора",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": "WO-019944"
     },
     {
       "asset": "LV026",
