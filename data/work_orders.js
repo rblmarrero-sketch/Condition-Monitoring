@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-11T05:47:46+00:00",
+  "generated": "2026-11-11T06:01:59+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -356,7 +356,7 @@ window.CM_WO_DATA = {
     "WE010",
     "WE011"
   ],
-  "duplicateRowsCollapsed": 477,
+  "duplicateRowsCollapsed": 478,
   "roundsDedupedWithinVisit": 2,
   "columns": [
     "Asset description",
@@ -5703,6 +5703,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "TR015",
+      "defect": "DD-00016701",
+      "raised": "2026-11-11",
+      "system": "TR015.BS.PU (Pneumatic Control / Пневмоуправление)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "У трала не работают тормоза",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
       "asset": "TK092",
       "defect": "DD-00016697",
       "raised": "2026-11-11",
@@ -5748,6 +5761,32 @@ window.CM_WO_DATA = {
       "system": "TK006.DRS.TRA (Transmission / Трансмиссия)",
       "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
       "descr": "Замена сцепления (буксует)",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "TK037",
+      "defect": "DD-00016699",
+      "raised": "2026-11-11",
+      "system": "TK037.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь заднего сальника среднего моста",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "TK037",
+      "defect": "DD-00016700",
+      "raised": "2026-11-11",
+      "system": "TK037.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Потёки масла с ГБЦ",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -9422,19 +9461,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "SN001",
-      "defect": "DD-00016409",
-      "raised": "2026-11-06",
-      "system": "SN001.CONV.SDC (Side Discharge Conveyor / Боковой разгрузочный конвейер)",
-      "defectType": "8.06 Roller / idler failure / Отказ ролика / роликоопоры",
-      "descr": "износ роликов правого бокового конвейера",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": null
-    },
-    {
-      "asset": "SN001",
       "defect": "DD-00016410",
       "raised": "2026-11-06",
       "system": "SN001.CONV.SDC (Side Discharge Conveyor / Боковой разгрузочный конвейер)",
@@ -9588,6 +9614,19 @@ window.CM_WO_DATA = {
       "by": "Ilshat Sabitov",
       "regBy": "Сабитов Ильшат Рашидович",
       "wo": "WO-021845"
+    },
+    {
+      "asset": "SN001",
+      "defect": "DD-00016409",
+      "raised": "2026-11-06",
+      "system": "SN001.CONV.SDC (Side Discharge Conveyor / Боковой разгрузочный конвейер)",
+      "defectType": "8.06 Roller / idler failure / Отказ ролика / роликоопоры",
+      "descr": "износ роликов правого бокового конвейера",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-022366"
     },
     {
       "asset": "DZ009",
@@ -18313,6 +18352,19 @@ window.CM_WO_DATA = {
       "wo": "WO-020830"
     },
     {
+      "asset": "TK023",
+      "defect": "DD-00015691",
+      "raised": "2026-10-26",
+      "system": "TK023.SS.SG (Steering Gearbox / Рулевой механизм)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Проверить развал-схождение переднего моста (при повороте закусывает колесо)",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-021131"
+    },
+    {
       "asset": "LV078",
       "defect": "DD-00015728",
       "raised": "2026-10-26",
@@ -18519,19 +18571,6 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-020990"
-    },
-    {
-      "asset": "TK023",
-      "defect": "DD-00015691",
-      "raised": "2026-10-26",
-      "system": "TK023.SS.SG (Steering Gearbox / Рулевой механизм)",
-      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
-      "descr": "Проверить развал-схождение переднего моста (при повороте закусывает колесо)",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-021131"
     },
     {
       "asset": "SN002",
@@ -21238,6 +21277,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021135"
     },
     {
+      "asset": "GE100",
+      "defect": "DD-00015496",
+      "raised": "2026-10-23",
+      "system": "GE100.DRS.ENG (Engine / Двигатель)",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "ремонт ПЖД",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-021128"
+    },
+    {
       "asset": "TK091",
       "defect": "DD-00015440",
       "raised": "2026-10-23",
@@ -21392,19 +21444,6 @@ window.CM_WO_DATA = {
       "by": "Andrey Taran",
       "regBy": "Таран Андрей Андреевич",
       "wo": "WO-021698"
-    },
-    {
-      "asset": "GE100",
-      "defect": "DD-00015496",
-      "raised": "2026-10-23",
-      "system": "GE100.DRS.ENG (Engine / Двигатель)",
-      "defectType": "4.02 Open circuit / Разрыв цепи",
-      "descr": "ремонт ПЖД",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-021128"
     },
     {
       "asset": "TK155",
@@ -22317,6 +22356,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021133"
     },
     {
+      "asset": "LV065",
+      "defect": "DD-00015372",
+      "raised": "2026-10-22",
+      "system": "LV065.ELS.LIG (Head Lighting System / Система головного освещения)",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "Требуется закрепить правый задний брызговик",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": "WO-020540"
+    },
+    {
       "asset": "TK089",
       "defect": "DD-00015406",
       "raised": "2026-10-22",
@@ -22562,19 +22614,6 @@ window.CM_WO_DATA = {
       "by": "Andrey Taran",
       "regBy": "Таран Андрей Андреевич",
       "wo": "WO-020550"
-    },
-    {
-      "asset": "LV065",
-      "defect": "DD-00015372",
-      "raised": "2026-10-22",
-      "system": "LV065.ELS.LIG (Head Lighting System / Система головного освещения)",
-      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
-      "descr": "Требуется закрепить правый задний брызговик",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": "WO-020540"
     },
     {
       "asset": "TK105",
@@ -57521,19 +57560,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "FL003",
-      "defect": "DD-00011525",
-      "raised": "2026-08-25",
-      "system": "FL003.OC.AC (Air Conditioning / Кондиционирование)",
-      "defectType": "4.10 Motor electrical fault (winding/insulation) / Эл. отказ двигателя (обмотка/изоляция)",
-      "descr": "Шум при работе отопителя",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-021134"
-    },
-    {
       "asset": "LD001",
       "defect": "DD-00011484",
       "raised": "2026-08-24",
@@ -58470,19 +58496,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK008",
-      "defect": "DD-00010860",
-      "raised": "2026-08-14",
-      "system": "TK008.OC.HE (Heating / Отопление)",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Не работает фен",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": null
-    },
-    {
       "asset": "FL005",
       "defect": "DD-00010822",
       "raised": "2026-08-14",
@@ -58502,6 +58515,19 @@ window.CM_WO_DATA = {
       "system": "TK008.CH.SU (Suspension / Подвеска)",
       "defectType": "1.04 Abnormal noise / vibration Аномальный шум / вибрация",
       "descr": "Стук в передней подвеске",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": null
+    },
+    {
+      "asset": "TK008",
+      "defect": "DD-00010860",
+      "raised": "2026-08-14",
+      "system": "TK008.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Не работает фен",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -64177,19 +64203,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "CN005",
-      "defect": "DD-00002665",
-      "raised": "2026-04-09",
-      "system": "CN005.HS.DL (Hydraulic Lines / Гидролинии)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь гидравлического масла на нижнем кране гидробака",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": "WO-020554"
-    },
-    {
       "asset": "CR003",
       "defect": "DD-00002602",
       "raised": "2026-04-08",
@@ -65280,19 +65293,6 @@ window.CM_WO_DATA = {
       "by": "Ilshat Sabitov",
       "regBy": "Сабитов Ильшат Рашидович",
       "wo": null
-    },
-    {
-      "asset": "CN012",
-      "defect": "DD-00001152",
-      "raised": "2026-03-18",
-      "system": "CN012.OC.HE (Heating / Отопление)",
-      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
-      "descr": "\"Неисправность воздушного отопителя кабины крановой установки",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Ilshat Sabitov",
-      "regBy": "Сабитов Ильшат Рашидович",
-      "wo": "WO-001703"
     },
     {
       "asset": "CR001",
