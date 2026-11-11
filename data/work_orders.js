@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-11T22:33:01+00:00",
+  "generated": "2026-11-11T23:07:33+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5716,19 +5716,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "EX012",
-      "defect": "DD-00016746",
-      "raised": "2026-11-12",
-      "system": "EX012.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Требуется замена фар на светодиодные",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": null
-    },
-    {
       "asset": "BS015",
       "defect": "DD-00016741",
       "raised": "2026-11-12",
@@ -5883,6 +5870,32 @@ window.CM_WO_DATA = {
       "by": "Aleksey Dobrikov",
       "regBy": "Добриков Алексей Владимирович",
       "wo": "WO-022432"
+    },
+    {
+      "asset": "BL001",
+      "defect": "DD-00016747",
+      "raised": "2026-11-12",
+      "system": "BL001.HS.PD (Hydraulic Motors / Гидромоторы)",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "Отсутствует ход",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022457"
+    },
+    {
+      "asset": "EX012",
+      "defect": "DD-00016746",
+      "raised": "2026-11-12",
+      "system": "EX012.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Требуется замена фар на светодиодные",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-022456"
     },
     {
       "asset": "TK010",
@@ -13282,19 +13295,6 @@ window.CM_WO_DATA = {
       "wo": "WO-021566"
     },
     {
-      "asset": "DZ007",
-      "defect": "DD-00016176",
-      "raised": "2026-11-02",
-      "system": "DZ007.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.12 Low fluid level / Низкий уровень жидкости",
-      "descr": "Замена масла в ДВС через 50 м-ч после замены ДВС",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Evgeniy Frolin",
-      "regBy": "Фролин Евгений Владимирович",
-      "wo": "WO-021504"
-    },
-    {
       "asset": "TK085",
       "defect": "DD-00016163",
       "raised": "2026-11-02",
@@ -13306,6 +13306,19 @@ window.CM_WO_DATA = {
       "by": "Roman Besedovskiy",
       "regBy": "Беседовский Роман Иванович",
       "wo": "WO-021476"
+    },
+    {
+      "asset": "DZ007",
+      "defect": "DD-00016176",
+      "raised": "2026-11-02",
+      "system": "DZ007.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.12 Low fluid level / Низкий уровень жидкости",
+      "descr": "Замена масла в ДВС через 50 м-ч после замены ДВС",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Evgeniy Frolin",
+      "regBy": "Фролин Евгений Владимирович",
+      "wo": "WO-021504"
     },
     {
       "asset": "EX024",
@@ -106255,25 +106268,6 @@ window.CM_WO_DATA = {
       "actualStart": "2026-10-22",
       "actualStartDt": "2026-10-22T15:00:00",
       "actualEnd": "2026-10-22"
-    },
-    {
-      "equip": "EX004",
-      "cls": "EXC",
-      "woNumber": "WO-021117",
-      "maintType": "500 Hours service Planned",
-      "hours": 500,
-      "cmLabel": "500h service",
-      "cmTypes": null,
-      "priority": "P4 Planned (Repair)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
-      "planStart": "2026-11-03",
-      "planStartDt": "2026-11-03T07:00:00",
-      "planEnd": "2026-11-08",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
     },
     {
       "equip": "EX005",

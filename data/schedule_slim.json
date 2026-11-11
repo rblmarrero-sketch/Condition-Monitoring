@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-11T22:33:01+00:00",
+  "generated": "2026-11-11T23:07:33+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -5850,24 +5850,6 @@
       "completed": "2026-11-05"
     },
     {
-      "wo": "WO-021117",
-      "equip": "EX004",
-      "cls": "EXC",
-      "comp": "",
-      "desc": "500h service",
-      "priority": "P4 Planned (Repair)",
-      "raised": "2026-11-03",
-      "type": "500 Hours service Planned",
-      "hours": 500,
-      "plan": "2026-11-03",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
       "wo": "WO-020970",
       "equip": "LD002",
       "cls": "LDR",
@@ -11664,6 +11646,14 @@
       "p": "P2",
       "r": "2026-11-12",
       "x": "Отогрев,долив техжидкостей, запуск ДВС"
+    },
+    {
+      "d": "DD-00016747",
+      "u": "BL001",
+      "s": "BL001.HS.PD (Hydraulic Motors / Гидромоторы)",
+      "p": "P2",
+      "r": "2026-11-12",
+      "x": "Отсутствует ход"
     },
     {
       "d": "DD-00016745",
