@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-11T13:47:45+00:00",
+  "generated": "2026-11-11T14:02:43+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5612,6 +5612,19 @@ window.CM_WO_DATA = {
   ],
   "otherDefects": [
     {
+      "asset": "CR003",
+      "defect": "DD-00016724",
+      "raised": "2026-11-12",
+      "system": "CR003.CONV.MAIN (Main Conveyor / Главный конвейер)",
+      "defectType": "8.06 Roller / idler failure / Отказ ролика / роликоопоры",
+      "descr": "износ подшипника приводного барабана главного ковейера",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Murashko",
+      "regBy": "Мурашко Сергей Борисович",
+      "wo": "WO-022431"
+    },
+    {
       "asset": "GR003",
       "defect": "DD-00016670",
       "raised": "2026-11-11",
@@ -5714,6 +5727,45 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022426"
+    },
+    {
+      "asset": "TK154",
+      "defect": "DD-00016718",
+      "raised": "2026-11-11",
+      "system": "TK154.OC.HE (Heating / Отопление)",
+      "defectType": "3.01 Control failure / Ошибка управления",
+      "descr": "Не исправен эл. двигатель отопителя",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022425"
+    },
+    {
+      "asset": "CR004",
+      "defect": "DD-00016710",
+      "raised": "2026-11-11",
+      "system": "CR004.CH.CV (Conveyor / Конвейер)",
+      "defectType": "8.06 Roller / idler failure / Отказ ролика / роликоопоры",
+      "descr": "износ подшипника приводного барабана питателя",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Murashko",
+      "regBy": "Мурашко Сергей Борисович",
+      "wo": "WO-022379"
+    },
+    {
+      "asset": "GR012",
+      "defect": "DD-00016678",
+      "raised": "2026-11-11",
+      "system": "GR012.DRS.FUE (Fuel System / Топливная система)",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "Не запускается ДВС",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022252"
     },
     {
       "asset": "LV087",
@@ -6106,19 +6158,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022256"
     },
     {
-      "asset": "GR012",
-      "defect": "DD-00016678",
-      "raised": "2026-11-11",
-      "system": "GR012.DRS.FUE (Fuel System / Топливная система)",
-      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
-      "descr": "Не запускается ДВС",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": "WO-022252"
-    },
-    {
       "asset": "TK042",
       "defect": "DD-00016679",
       "raised": "2026-11-11",
@@ -6197,17 +6236,17 @@ window.CM_WO_DATA = {
       "wo": "WO-022427"
     },
     {
-      "asset": "TK154",
-      "defect": "DD-00016718",
+      "asset": "GR012",
+      "defect": "DD-00016723",
       "raised": "2026-11-11",
-      "system": "TK154.OC.HE (Heating / Отопление)",
-      "defectType": "3.01 Control failure / Ошибка управления",
-      "descr": "Не исправен эл. двигатель отопителя",
+      "system": "GR012.DRS.ENG (Engine / Двигатель)",
+      "defectType": "5.06 Water ingress / Попадание воды",
+      "descr": "Запуск ДВС- чистка бака",
       "status": "Elimination scheduled",
       "priority": "P2 Urgent",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": "WO-022425"
+      "by": "Vladimir Ladik",
+      "regBy": "Ладик Владимир Владимирович",
+      "wo": "WO-022430"
     },
     {
       "asset": "DZ009",
@@ -6273,19 +6312,6 @@ window.CM_WO_DATA = {
       "by": "Ilshat Sabitov",
       "regBy": "Сабитов Ильшат Рашидович",
       "wo": "WO-022383"
-    },
-    {
-      "asset": "CR004",
-      "defect": "DD-00016710",
-      "raised": "2026-11-11",
-      "system": "CR004.CH.CV (Conveyor / Конвейер)",
-      "defectType": "8.06 Roller / idler failure / Отказ ролика / роликоопоры",
-      "descr": "износ подшипника приводного барабана питателя",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Murashko",
-      "regBy": "Мурашко Сергей Борисович",
-      "wo": "WO-022379"
     },
     {
       "asset": "BS002",
@@ -6808,19 +6834,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022238"
     },
     {
-      "asset": "TK146",
-      "defect": "DD-00016624",
-      "raised": "2026-11-10",
-      "system": "TK146.BS.TV (Treadle Valve / Педальный тормозной клапан)",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "плохой контакт",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Dmitriy Ishchenko",
-      "regBy": "Ищенко Дмитрий Александрович",
-      "wo": "WO-022186"
-    },
-    {
       "asset": "CR002",
       "defect": "DD-00016642",
       "raised": "2026-11-10",
@@ -6832,6 +6845,19 @@ window.CM_WO_DATA = {
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": "WO-022221"
+    },
+    {
+      "asset": "TK146",
+      "defect": "DD-00016624",
+      "raised": "2026-11-10",
+      "system": "TK146.BS.TV (Treadle Valve / Педальный тормозной клапан)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "плохой контакт",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Dmitriy Ishchenko",
+      "regBy": "Ищенко Дмитрий Александрович",
+      "wo": "WO-022186"
     },
     {
       "asset": "CN023",
@@ -7536,6 +7562,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022162"
     },
     {
+      "asset": "GR012",
+      "defect": "DD-00016550",
+      "raised": "2026-11-09",
+      "system": "GR012.CH.RP (Ripper/Рыхлитель)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Износ коронок",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022010"
+    },
+    {
       "asset": "GE109",
       "defect": "DD-00016586",
       "raised": "2026-11-09",
@@ -7833,19 +7872,6 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-022109"
-    },
-    {
-      "asset": "GR012",
-      "defect": "DD-00016550",
-      "raised": "2026-11-09",
-      "system": "GR012.CH.RP (Ripper/Рыхлитель)",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "Износ коронок",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": "WO-022010"
     },
     {
       "asset": "CR002",
@@ -38268,12 +38294,12 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK162",
-      "defect": "DD-00014083",
+      "asset": "LV158",
+      "defect": "DD-00014121",
       "raised": "2026-10-05",
-      "system": "TRUCK, WATER URAL 4672M1-20, TK162 TRANSMISSION OldNumber (UT162)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка масла с РК",
+      "system": "LV158.CH.SU (Suspension / Подвеска)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Требуется замена нижних и верхних шаровых опор, замена втулок и стоек стабилизатора",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -38281,12 +38307,12 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "LV158",
-      "defect": "DD-00014121",
+      "asset": "TK162",
+      "defect": "DD-00014083",
       "raised": "2026-10-05",
-      "system": "LV158.CH.SU (Suspension / Подвеска)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Требуется замена нижних и верхних шаровых опор, замена втулок и стоек стабилизатора",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK162 TRANSMISSION OldNumber (UT162)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка масла с РК",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -47095,19 +47121,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "GE101",
-      "defect": "DD-00013342",
-      "raised": "2026-09-25",
-      "system": "GE101.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Замена шлангов ОЖ",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": null
-    },
-    {
       "asset": "LV130",
       "defect": "DD-00013348",
       "raised": "2026-09-25",
@@ -47127,6 +47140,19 @@ window.CM_WO_DATA = {
       "system": "LV130.DRS.ENG (Engine / Двигатель)",
       "defectType": "3.13 Warning light / alarm active / Сигнальная лампа / аварийная сигнализация активна",
       "descr": "Горит лампа \"Проверьте двигатель\"",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": null
+    },
+    {
+      "asset": "GE101",
+      "defect": "DD-00013342",
+      "raised": "2026-09-25",
+      "system": "GE101.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Замена шлангов ОЖ",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -60408,19 +60434,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "LV011",
-      "defect": "DD-00009705",
-      "raised": "2026-07-27",
-      "system": "LV011.OC.AC (Air Conditioning / Кондиционирование)",
-      "defectType": "1.25 Reduced capacity / output / Снижение производительности / выхода",
-      "descr": "Требуется замена кондиционера",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": null
-    },
-    {
-      "asset": "LV011",
       "defect": "DD-00009702",
       "raised": "2026-07-27",
       "system": "LV011.BS (Braking System / Тормозная система)",
@@ -60439,6 +60452,19 @@ window.CM_WO_DATA = {
       "system": "LV011.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Требуется замена всех патрубков системы охлаждения",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": null
+    },
+    {
+      "asset": "LV011",
+      "defect": "DD-00009705",
+      "raised": "2026-07-27",
+      "system": "LV011.OC.AC (Air Conditioning / Кондиционирование)",
+      "defectType": "1.25 Reduced capacity / output / Снижение производительности / выхода",
+      "descr": "Требуется замена кондиционера",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
