@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-11T21:42:47+00:00",
+  "generated": "2026-11-11T21:54:28+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5872,6 +5872,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022432"
     },
     {
+      "asset": "CN018",
+      "defect": "DD-00016744",
+      "raised": "2026-11-12",
+      "system": "CN018.CH.GAN (Crane / Кран)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "EKT Замена подшипников 4-й секции стрелы телескопа, проверка работоспособности крановой установки, инспекция канатов телескопирования, прове",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022453"
+    },
+    {
       "asset": "GR003",
       "defect": "DD-00016670",
       "raised": "2026-11-11",
@@ -6938,6 +6951,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022205"
     },
     {
+      "asset": "TK146",
+      "defect": "DD-00016624",
+      "raised": "2026-11-10",
+      "system": "TK146.BS.TV (Treadle Valve / Педальный тормозной клапан)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "плохой контакт",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Dmitriy Ishchenko",
+      "regBy": "Ищенко Дмитрий Александрович",
+      "wo": "WO-022186"
+    },
+    {
       "asset": "TK168",
       "defect": "DD-00016663",
       "raised": "2026-11-10",
@@ -7209,19 +7235,6 @@ window.CM_WO_DATA = {
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": "WO-022221"
-    },
-    {
-      "asset": "TK146",
-      "defect": "DD-00016624",
-      "raised": "2026-11-10",
-      "system": "TK146.BS.TV (Treadle Valve / Педальный тормозной клапан)",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "плохой контакт",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Dmitriy Ishchenko",
-      "regBy": "Ищенко Дмитрий Александрович",
-      "wo": "WO-022186"
     },
     {
       "asset": "TK119",
@@ -40063,19 +40076,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "TK126",
-      "defect": "DD-00013940",
-      "raised": "2026-10-03",
-      "system": "TK126.DRS (Drive System / Система передачи)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Люфт карданного вала промежуточного соединения (шлицы и крестовина)",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Evgeniy Frolin",
-      "regBy": "Фролин Евгений Владимирович",
-      "wo": "WO-020879"
-    },
-    {
-      "asset": "TK126",
       "defect": "DD-00013942",
       "raised": "2026-10-03",
       "system": "TK126.DRS.FD (Final Drives / Конечные передачи)",
@@ -40086,6 +40086,19 @@ window.CM_WO_DATA = {
       "by": "Evgeniy Frolin",
       "regBy": "Фролин Евгений Владимирович",
       "wo": "WO-020878"
+    },
+    {
+      "asset": "TK126",
+      "defect": "DD-00013940",
+      "raised": "2026-10-03",
+      "system": "TK126.DRS (Drive System / Система передачи)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Люфт карданного вала промежуточного соединения (шлицы и крестовина)",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Evgeniy Frolin",
+      "regBy": "Фролин Евгений Владимирович",
+      "wo": "WO-020879"
     },
     {
       "asset": "TK126",
