@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-11T09:47:38+00:00",
+  "generated": "2026-11-11T10:03:36+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5690,6 +5690,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022382"
     },
     {
+      "asset": "LV087",
+      "defect": "DD-00016716",
+      "raised": "2026-11-11",
+      "system": "LV087.DRS.TRA (Transmission / Трансмиссия)",
+      "defectType": "1.19 No movement / no drive / Нет движения / нет привода",
+      "descr": "не едет",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Ilshat Sabitov",
+      "regBy": "Сабитов Ильшат Рашидович",
+      "wo": null
+    },
+    {
       "asset": "EX024",
       "defect": "DD-00016703",
       "raised": "2026-11-11",
@@ -5765,6 +5778,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "TK015",
+      "defect": "DD-00016715",
+      "raised": "2026-11-11",
+      "system": "TK015.CH (Structure & Chassis / Рама и конструкция)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Восстановление",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
       "wo": null
     },
     {
@@ -6130,6 +6156,19 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-022241"
+    },
+    {
+      "asset": "LV144",
+      "defect": "DD-00016717",
+      "raised": "2026-11-11",
+      "system": "LV144.OC.DO (Doors / Двери)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Ремонт механизма открывания водительской двери",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022417"
     },
     {
       "asset": "EX005",
@@ -6704,19 +6743,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022238"
     },
     {
-      "asset": "CR002",
-      "defect": "DD-00016642",
-      "raised": "2026-11-10",
-      "system": "CR002.FEED.BEL (Feeder Belt / Лента питателя)",
-      "defectType": "8.01 Conveyor belt cut / tear / Порез / разрыв конвейерной ленты",
-      "descr": "разрыв конвейерной ленты питателя нужна замена",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": "WO-022221"
-    },
-    {
       "asset": "TK146",
       "defect": "DD-00016624",
       "raised": "2026-11-10",
@@ -6728,6 +6754,19 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Ishchenko",
       "regBy": "Ищенко Дмитрий Александрович",
       "wo": "WO-022186"
+    },
+    {
+      "asset": "CR002",
+      "defect": "DD-00016642",
+      "raised": "2026-11-10",
+      "system": "CR002.FEED.BEL (Feeder Belt / Лента питателя)",
+      "defectType": "8.01 Conveyor belt cut / tear / Порез / разрыв конвейерной ленты",
+      "descr": "разрыв конвейерной ленты питателя нужна замена",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-022221"
     },
     {
       "asset": "CN023",
@@ -7536,19 +7575,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "CR002",
-      "defect": "DD-00016588",
-      "raised": "2026-11-09",
-      "system": "CR002.FEED.BEL (Feeder Belt / Лента питателя)",
-      "defectType": "8.01 Conveyor belt cut / tear / Порез / разрыв конвейерной ленты",
-      "descr": "порез конвейерной ленты питателя",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": null
-    },
-    {
       "asset": "CR008",
       "defect": "DD-00016566",
       "raised": "2026-11-09",
@@ -7637,19 +7663,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "SN002",
-      "defect": "DD-00016565",
-      "raised": "2026-11-09",
-      "system": "SN002.CH.SCN (Screen / Грохот)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "просели пружины грохота",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
       "wo": null
     },
     {
@@ -7768,6 +7781,32 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022010"
+    },
+    {
+      "asset": "CR002",
+      "defect": "DD-00016588",
+      "raised": "2026-11-09",
+      "system": "CR002.FEED.BEL (Feeder Belt / Лента питателя)",
+      "defectType": "8.01 Conveyor belt cut / tear / Порез / разрыв конвейерной ленты",
+      "descr": "порез конвейерной ленты питателя",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-022408"
+    },
+    {
+      "asset": "SN002",
+      "defect": "DD-00016565",
+      "raised": "2026-11-09",
+      "system": "SN002.CH.SCN (Screen / Грохот)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "просели пружины грохота",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-022404"
     },
     {
       "asset": "CR003",
@@ -15518,6 +15557,32 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "CR002",
+      "defect": "DD-00015998",
+      "raised": "2026-10-30",
+      "system": "CR002.CRS.CHM (Crushing Chamber / Камера дробления)",
+      "defectType": "6.02 Crack at weld / HAZ / Трещина по шву / зоне терм. влияния",
+      "descr": "износ футеровки приемного бункера камеры дробления",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Murashko",
+      "regBy": "Мурашко Сергей Борисович",
+      "wo": "WO-021295"
+    },
+    {
+      "asset": "CR002",
+      "defect": "DD-00015986",
+      "raised": "2026-10-30",
+      "system": "CR002.CH.ROL (Track Rollers / Поддерживающие ролики)",
+      "defectType": "8.06 Roller / idler failure / Отказ ролика / роликоопоры",
+      "descr": "заклинивание ролика",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Murashko",
+      "regBy": "Мурашко Сергей Борисович",
+      "wo": "WO-021248"
+    },
+    {
       "asset": "TK122",
       "defect": "DD-00015988",
       "raised": "2026-10-30",
@@ -15545,19 +15610,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "CR002",
-      "defect": "DD-00015998",
-      "raised": "2026-10-30",
-      "system": "CR002.CRS.CHM (Crushing Chamber / Камера дробления)",
-      "defectType": "6.02 Crack at weld / HAZ / Трещина по шву / зоне терм. влияния",
-      "descr": "износ футеровки приемного бункера камеры дробления",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Murashko",
-      "regBy": "Мурашко Сергей Борисович",
-      "wo": "WO-021295"
-    },
-    {
-      "asset": "CR002",
       "defect": "DD-00015992",
       "raised": "2026-10-30",
       "system": "CR002.HS.CYL (Cylinders / Гидроцилиндры)",
@@ -15571,19 +15623,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "CR002",
-      "defect": "DD-00015991",
-      "raised": "2026-10-30",
-      "system": "CR002.CRS.CHM (Crushing Chamber / Камера дробления)",
-      "defectType": "6.08 Guarding / cover damage / Повреждение ограждений / кожухов",
-      "descr": "сварочные работы разгрузочной камеры",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Murashko",
-      "regBy": "Мурашко Сергей Борисович",
-      "wo": "WO-021292"
-    },
-    {
-      "asset": "CR002",
       "defect": "DD-00015987",
       "raised": "2026-10-30",
       "system": "CR002.HS.HOS (Hoses & Piping / Шланги и трубки)",
@@ -15594,6 +15633,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Murashko",
       "regBy": "Мурашко Сергей Борисович",
       "wo": "WO-021279"
+    },
+    {
+      "asset": "CR002",
+      "defect": "DD-00015991",
+      "raised": "2026-10-30",
+      "system": "CR002.CRS.CHM (Crushing Chamber / Камера дробления)",
+      "defectType": "6.08 Guarding / cover damage / Повреждение ограждений / кожухов",
+      "descr": "сварочные работы разгрузочной камеры",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Murashko",
+      "regBy": "Мурашко Сергей Борисович",
+      "wo": "WO-021292"
     },
     {
       "asset": "SN003",
@@ -15620,19 +15672,6 @@ window.CM_WO_DATA = {
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": "WO-021262"
-    },
-    {
-      "asset": "CR002",
-      "defect": "DD-00015986",
-      "raised": "2026-10-30",
-      "system": "CR002.CH.ROL (Track Rollers / Поддерживающие ролики)",
-      "defectType": "8.06 Roller / idler failure / Отказ ролика / роликоопоры",
-      "descr": "заклинивание ролика",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Murashko",
-      "regBy": "Мурашко Сергей Борисович",
-      "wo": "WO-021248"
     },
     {
       "asset": "CR008",
@@ -135248,15 +135287,15 @@ window.CM_WO_DATA = {
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CLSD",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-10",
       "planStartDt": "2026-11-10T00:00:00",
       "planEnd": "2026-11-11",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-10",
+      "actualStartDt": "2026-11-10T19:00:00",
+      "actualEnd": "2026-11-11"
     },
     {
       "equip": "GR015",
@@ -174385,15 +174424,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-11",
       "planStartDt": "2026-11-11T00:00:00",
       "planEnd": "2026-11-12",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-10",
+      "actualStartDt": "2026-11-10T19:00:00",
+      "actualEnd": "2026-11-10"
     },
     {
       "equip": "TK115",
@@ -185761,15 +185800,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-10",
       "planStartDt": "2026-11-10T00:00:00",
       "planEnd": "2026-11-11",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-10",
+      "actualStartDt": "2026-11-10T18:00:00",
+      "actualEnd": "2026-11-10"
     },
     {
       "equip": "TK125",
