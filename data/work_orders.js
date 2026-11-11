@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-11T05:17:47+00:00",
+  "generated": "2026-11-11T05:33:03+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -9461,19 +9461,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "SN001",
-      "defect": "DD-00016408",
-      "raised": "2026-11-06",
-      "system": "SN001.SCN.SBX (Screen Box / Короб грохота)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "поломка перильных ограждений площадок обслуживания",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": null
-    },
-    {
-      "asset": "SN001",
       "defect": "DD-00016411",
       "raised": "2026-11-06",
       "system": "SN001.CH.FR (Frame / Рама)",
@@ -9484,6 +9471,19 @@ window.CM_WO_DATA = {
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": null
+    },
+    {
+      "asset": "SN001",
+      "defect": "DD-00016408",
+      "raised": "2026-11-06",
+      "system": "SN001.SCN.SBX (Screen Box / Короб грохота)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "поломка перильных ограждений площадок обслуживания",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-022365"
     },
     {
       "asset": "TK005",
@@ -10929,6 +10929,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "CR004",
+      "defect": "DD-00016309",
+      "raised": "2026-11-04",
+      "system": "CR004.CRS.LNR (Liners (Mantle & Concaves) / Футеровка (броня)",
+      "defectType": "7.01 Cone crusher liner wear / Износ брони конусной дробилки",
+      "descr": "футеровка конуса и чаши изношена",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-021890"
+    },
+    {
       "asset": "TK039",
       "defect": "DD-00016277",
       "raised": "2026-11-04",
@@ -11109,19 +11122,6 @@ window.CM_WO_DATA = {
       "by": "Roman Besedovskiy",
       "regBy": "Беседовский Роман Иванович",
       "wo": "WO-021692"
-    },
-    {
-      "asset": "CR004",
-      "defect": "DD-00016309",
-      "raised": "2026-11-04",
-      "system": "CR004.CRS.LNR (Liners (Mantle & Concaves) / Футеровка (броня)",
-      "defectType": "7.01 Cone crusher liner wear / Износ брони конусной дробилки",
-      "descr": "футеровка конуса и чаши изношена",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": "WO-021890"
     },
     {
       "asset": "TK030",
@@ -19315,6 +19315,19 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "CR004",
+      "defect": "DD-00015654",
+      "raised": "2026-10-25",
+      "system": "CR004.CONV.MDC (Main Discharge Conveyor / Главный разгрузочный конвейер)",
+      "defectType": "8.09 Scraper / cleaner failure / Отказ / износ скребка / очистителя",
+      "descr": "износ очестителя ленты",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-020790"
+    },
+    {
+      "asset": "CR004",
       "defect": "DD-00015652",
       "raised": "2026-10-25",
       "system": "CR004.CONV.MDC (Main Discharge Conveyor / Главный разгрузочный конвейер)",
@@ -19338,19 +19351,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-021511"
-    },
-    {
-      "asset": "CR004",
-      "defect": "DD-00015654",
-      "raised": "2026-10-25",
-      "system": "CR004.CONV.MDC (Main Discharge Conveyor / Главный разгрузочный конвейер)",
-      "defectType": "8.09 Scraper / cleaner failure / Отказ / износ скребка / очистителя",
-      "descr": "износ очестителя ленты",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": "WO-020790"
     },
     {
       "asset": "CR004",
@@ -34927,6 +34927,19 @@ window.CM_WO_DATA = {
       "wo": "WO-019269"
     },
     {
+      "asset": "LV066",
+      "defect": "DD-00014358",
+      "raised": "2026-10-08",
+      "system": "LV066.CH.SU (Suspension / Подвеска)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Замена правой верхней шаровой опоры",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": "WO-019267"
+    },
+    {
       "asset": "DZ020",
       "defect": "DD-00014378",
       "raised": "2026-10-08",
@@ -35068,19 +35081,6 @@ window.CM_WO_DATA = {
       "by": "Andrey Taran",
       "regBy": "Таран Андрей Андреевич",
       "wo": "WO-019225"
-    },
-    {
-      "asset": "LV066",
-      "defect": "DD-00014358",
-      "raised": "2026-10-08",
-      "system": "LV066.CH.SU (Suspension / Подвеска)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Замена правой верхней шаровой опоры",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": "WO-019267"
     },
     {
       "asset": "CN008",
@@ -61655,19 +61655,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "CN009",
-      "defect": "DD-00007372",
-      "raised": "2026-06-20",
-      "system": "CN009.SS.SG (Steering Gearbox / Рулевой механизм)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "В кабине машиниста болтаються подлокотники (консоль управления)",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Amanzhan Kunaev",
-      "regBy": "Кунаев Аманжан",
-      "wo": "WO-020766"
-    },
-    {
       "asset": "TK031",
       "defect": "DD-00007315",
       "raised": "2026-06-19",
@@ -64188,19 +64175,6 @@ window.CM_WO_DATA = {
       "by": "Andrey Taran",
       "regBy": "Таран Андрей Андреевич",
       "wo": null
-    },
-    {
-      "asset": "CN005",
-      "defect": "DD-00002663",
-      "raised": "2026-04-09",
-      "system": "CN005.CH.UC (Undercarriage / Ходовая часть)",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "Требуется замена пальца рессоры передняя ось слева (выработка)",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": "WO-020555"
     },
     {
       "asset": "CN005",
@@ -124244,6 +124218,25 @@ window.CM_WO_DATA = {
     {
       "equip": "GE057",
       "cls": "GEN",
+      "woNumber": null,
+      "maintType": "500 Hours service Planned",
+      "hours": 500,
+      "cmLabel": "500h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": null,
+      "cmmsStatus": "Registered",
+      "open": true,
+      "planStart": null,
+      "planStartDt": null,
+      "planEnd": null,
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
+      "equip": "GE057",
+      "cls": "GEN",
       "woNumber": "GD-002091",
       "maintType": "500 Hours service Planned",
       "hours": 500,
@@ -128170,6 +128163,25 @@ window.CM_WO_DATA = {
       "planStart": "2026-11-20",
       "planStartDt": "2026-11-20T00:00:00",
       "planEnd": "2026-11-20",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
+      "equip": "GE100",
+      "cls": "GEN",
+      "woNumber": null,
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "250h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": null,
+      "cmmsStatus": "Registered",
+      "open": true,
+      "planStart": null,
+      "planStartDt": null,
+      "planEnd": null,
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
