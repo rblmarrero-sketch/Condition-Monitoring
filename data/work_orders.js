@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-11T07:37:53+00:00",
+  "generated": "2026-11-11T07:52:38+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -20159,6 +20159,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021132"
     },
     {
+      "asset": "DZ016",
+      "defect": "DD-00015562",
+      "raised": "2026-10-24",
+      "system": "DZ016.HS.CV (Control Valves / Гидрораспределители)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь масла из под сливной пробки гидравлического распределителя рыхлителя",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Evgeniy Frolin",
+      "regBy": "Фролин Евгений Владимирович",
+      "wo": "WO-020907"
+    },
+    {
       "asset": "EX021",
       "defect": "DD-00015561",
       "raised": "2026-10-24",
@@ -20378,19 +20391,6 @@ window.CM_WO_DATA = {
       "by": "Evgeniy Frolin",
       "regBy": "Фролин Евгений Владимирович",
       "wo": "WO-021705"
-    },
-    {
-      "asset": "DZ016",
-      "defect": "DD-00015562",
-      "raised": "2026-10-24",
-      "system": "DZ016.HS.CV (Control Valves / Гидрораспределители)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь масла из под сливной пробки гидравлического распределителя рыхлителя",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Evgeniy Frolin",
-      "regBy": "Фролин Евгений Владимирович",
-      "wo": "WO-020907"
     },
     {
       "asset": "GR015",
@@ -26477,6 +26477,32 @@ window.CM_WO_DATA = {
       "wo": "WO-020592"
     },
     {
+      "asset": "DZ016",
+      "defect": "DD-00015074",
+      "raised": "2026-10-18",
+      "system": "DZ016.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь масла в районе масляного фильтра",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Evgeniy Frolin",
+      "regBy": "Фролин Евгений Владимирович",
+      "wo": "WO-020906"
+    },
+    {
+      "asset": "DZ016",
+      "defect": "DD-00015023",
+      "raised": "2026-10-18",
+      "system": "DZ016.HS.CYL (Cylinders / Гидроцилиндры)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь правого целиндра отвала",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Roman Kochetov",
+      "regBy": "Кочетов Роман Иванович",
+      "wo": "WO-020905"
+    },
+    {
       "asset": "EX016",
       "defect": "DD-00015021",
       "raised": "2026-10-18",
@@ -26540,32 +26566,6 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-022204"
-    },
-    {
-      "asset": "DZ016",
-      "defect": "DD-00015074",
-      "raised": "2026-10-18",
-      "system": "DZ016.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь масла в районе масляного фильтра",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Evgeniy Frolin",
-      "regBy": "Фролин Евгений Владимирович",
-      "wo": "WO-020906"
-    },
-    {
-      "asset": "DZ016",
-      "defect": "DD-00015023",
-      "raised": "2026-10-18",
-      "system": "DZ016.HS.CYL (Cylinders / Гидроцилиндры)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь правого целиндра отвала",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Roman Kochetov",
-      "regBy": "Кочетов Роман Иванович",
-      "wo": "WO-020905"
     },
     {
       "asset": "DZ016",
@@ -102535,15 +102535,15 @@ window.CM_WO_DATA = {
         "UC"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CLSD",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-07",
       "planStartDt": "2026-11-07T00:00:00",
       "planEnd": "2026-11-08",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-07",
+      "actualStartDt": "2026-11-07T09:30:00",
+      "actualEnd": "2026-11-08"
     },
     {
       "equip": "DZ017",
@@ -140448,15 +140448,15 @@ window.CM_WO_DATA = {
       "cmLabel": "500h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-09",
       "planStartDt": "2026-11-09T00:00:00",
       "planEnd": "2026-11-10",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-08",
+      "actualStartDt": "2026-11-08T20:00:00",
+      "actualEnd": "2026-11-08"
     },
     {
       "equip": "LD006",
