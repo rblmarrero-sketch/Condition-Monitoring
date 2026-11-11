@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-11T04:12:52+00:00",
+  "generated": "2026-11-11T04:33:06+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5726,6 +5726,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "CR006",
+      "defect": "DD-00016695",
+      "raised": "2026-11-11",
+      "system": "CR006.CONV.MAIN (Main Conveyor / Главный конвейер)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Замена дисковых роликов",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Rinat Musaferov",
+      "regBy": "Мусаферов Ринат Искакович",
       "wo": null
     },
     {
@@ -19977,6 +19990,19 @@ window.CM_WO_DATA = {
       "wo": "WO-020648"
     },
     {
+      "asset": "TK085",
+      "defect": "DD-00015550",
+      "raised": "2026-10-24",
+      "system": "TK085.ELS (Electrical System / Электросистема)",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "Не работает обогрев правого зеркала заднего вида",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": "WO-021132"
+    },
+    {
       "asset": "EX021",
       "defect": "DD-00015561",
       "raised": "2026-10-24",
@@ -20196,19 +20222,6 @@ window.CM_WO_DATA = {
       "by": "Evgeniy Frolin",
       "regBy": "Фролин Евгений Владимирович",
       "wo": "WO-021705"
-    },
-    {
-      "asset": "TK085",
-      "defect": "DD-00015550",
-      "raised": "2026-10-24",
-      "system": "TK085.ELS (Electrical System / Электросистема)",
-      "defectType": "4.02 Open circuit / Разрыв цепи",
-      "descr": "Не работает обогрев правого зеркала заднего вида",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": "WO-021132"
     },
     {
       "asset": "DZ016",
@@ -21173,6 +21186,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021695"
     },
     {
+      "asset": "HX041",
+      "defect": "DD-00015438",
+      "raised": "2026-10-23",
+      "system": "HX041.DRS.FS (Fuel System / Топливная система)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "ДВС пошёл в разнос.",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-021135"
+    },
+    {
       "asset": "TK091",
       "defect": "DD-00015440",
       "raised": "2026-10-23",
@@ -21327,19 +21353,6 @@ window.CM_WO_DATA = {
       "by": "Andrey Taran",
       "regBy": "Таран Андрей Андреевич",
       "wo": "WO-021698"
-    },
-    {
-      "asset": "HX041",
-      "defect": "DD-00015438",
-      "raised": "2026-10-23",
-      "system": "HX041.DRS.FS (Fuel System / Топливная система)",
-      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
-      "descr": "ДВС пошёл в разнос.",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-021135"
     },
     {
       "asset": "GE100",
