@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-11T20:08:01+00:00",
+  "generated": "2026-11-11T21:00:29+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5688,6 +5688,45 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022439"
+    },
+    {
+      "asset": "BS015",
+      "defect": "DD-00016741",
+      "raised": "2026-11-12",
+      "system": "BS015.OC.HE (Heating / Отопление)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Отопитель дует холодным воздухом (замена термостатов)",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022449"
+    },
+    {
+      "asset": "LV008",
+      "defect": "DD-00016740",
+      "raised": "2026-11-12",
+      "system": "LV008.ELS.WH (Wiring Harness / Жгут проводов)",
+      "defectType": "4.12 Cable / harness damage / Повреждение кабеля / жгута",
+      "descr": "Ремонт электропроводки на задние фонари",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022447"
+    },
+    {
+      "asset": "CR002",
+      "defect": "DD-00016739",
+      "raised": "2026-11-12",
+      "system": "CR002.FEED.BEL (Feeder Belt / Лента питателя)",
+      "defectType": "8.01 Conveyor belt cut / tear / Порез / разрыв конвейерной ленты",
+      "descr": "Порез лениты питателя",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-022446"
     },
     {
       "asset": "BS016",
@@ -47303,19 +47342,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "GE101",
-      "defect": "DD-00013342",
-      "raised": "2026-09-25",
-      "system": "GE101.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Замена шлангов ОЖ",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": null
-    },
-    {
       "asset": "LV130",
       "defect": "DD-00013348",
       "raised": "2026-09-25",
@@ -47335,6 +47361,19 @@ window.CM_WO_DATA = {
       "system": "LV130.DRS.ENG (Engine / Двигатель)",
       "defectType": "3.13 Warning light / alarm active / Сигнальная лампа / аварийная сигнализация активна",
       "descr": "Горит лампа \"Проверьте двигатель\"",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": null
+    },
+    {
+      "asset": "GE101",
+      "defect": "DD-00013342",
+      "raised": "2026-09-25",
+      "system": "GE101.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Замена шлангов ОЖ",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -59796,8 +59835,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H07",
-      "defect": "EB-00000075",
+      "asset": "H04",
+      "defect": "EB-00000076",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -59809,8 +59848,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000076",
+      "asset": "H07",
+      "defect": "EB-00000075",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -61575,6 +61614,19 @@ window.CM_WO_DATA = {
       "by": "Andrey Taran",
       "regBy": "Таран Андрей Андреевич",
       "wo": "WO-012433"
+    },
+    {
+      "asset": "DR011",
+      "defect": "DD-00008217",
+      "raised": "2026-07-03",
+      "system": "DR011.PS.AL (Air Lines / Воздухопроводы)",
+      "defectType": "1.25 Reduced capacity / output / Снижение производительности / выхода",
+      "descr": "Разрыв прубопровода пневмо системы",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Roman Kochetov",
+      "regBy": "Кочетов Роман Иванович",
+      "wo": null
     },
     {
       "asset": "TK067",
