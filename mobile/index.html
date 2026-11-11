@@ -12094,7 +12094,7 @@ function firRender(){
     defHtml=`<div class="fir-card"><h4>${esc(t("fir_def_t"))}</h4>
       <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
         <b style="font-size:16px;">${esc(f.d)} · ${esc(f.u||"")}</b>
-        ${firEditing?"":`<button type="button" class="btn" id="firDefChange" style="min-height:var(--tap);flex:none;width:auto;padding:0 16px">${esc(t("fir_def_change"))}</button>`}</div>
+        ${firEditing?"":`<button type="button" class="btn" id="firDefChange" style="min-height:var(--tap);flex:0 0 auto;width:auto;padding:0 16px">${esc(t("fir_def_change"))}</button>`}</div>
       ${(f.s||f.p||f.x)?`<div class="hint" style="margin:0">${esc([f.p,f.s,f.r?ddmmyyyy(f.r):"",f.x].filter(Boolean).join(" · "))}</div>`:""}</div>`;
   } else {
     defHtml=`<div class="fir-card"><h4>${esc(t("fir_def_t"))}</h4>
