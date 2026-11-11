@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-11T03:17:43+00:00",
+  "generated": "2026-11-11T03:37:47+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -23266,6 +23266,19 @@ window.CM_WO_DATA = {
       "wo": "WO-020503"
     },
     {
+      "asset": "EX006",
+      "defect": "DD-00015304",
+      "raised": "2026-10-21",
+      "system": "EX006.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "каплевидная утечка РВД пилотного распределителя",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-021127"
+    },
+    {
       "asset": "TK148",
       "defect": "DD-00015311",
       "raised": "2026-10-21",
@@ -23394,19 +23407,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-021129"
-    },
-    {
-      "asset": "EX006",
-      "defect": "DD-00015304",
-      "raised": "2026-10-21",
-      "system": "EX006.HS.DL (Hydraulic Lines / Гидролинии)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "каплевидная утечка РВД пилотного распределителя",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-021127"
     },
     {
       "asset": "EX002",
@@ -27062,6 +27062,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021120"
     },
     {
+      "asset": "EX006",
+      "defect": "DD-00014969",
+      "raised": "2026-10-17",
+      "system": "EX006.CH.BOO (Boom / Стрела)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "уплотнение ковшевых пальцев",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-021125"
+    },
+    {
       "asset": "GE058",
       "defect": "DD-00014973",
       "raised": "2026-10-17",
@@ -27164,19 +27177,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": null
-    },
-    {
-      "asset": "EX006",
-      "defect": "DD-00014969",
-      "raised": "2026-10-17",
-      "system": "EX006.CH.BOO (Boom / Стрела)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "уплотнение ковшевых пальцев",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-021125"
     },
     {
       "asset": "TK157",
@@ -29922,6 +29922,45 @@ window.CM_WO_DATA = {
       "wo": "WO-021119"
     },
     {
+      "asset": "TK029",
+      "defect": "DD-00014769",
+      "raised": "2026-10-14",
+      "system": "TK029.DRS.TRA (Transmission / Трансмиссия)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Требуется замена кулисы и чехла кулисы",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": "WO-019946"
+    },
+    {
+      "asset": "TK029",
+      "defect": "DD-00014754",
+      "raised": "2026-10-14",
+      "system": "TK029.BS (Braking System / Тормозная система)",
+      "defectType": "1.04 Abnormal noise / vibration Аномальный шум / вибрация",
+      "descr": "С левой стороны скрипят тормозные колодки",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": "WO-019943"
+    },
+    {
+      "asset": "TK029",
+      "defect": "DD-00014753",
+      "raised": "2026-10-14",
+      "system": "TK029.CH.SU (Suspension / Подвеска)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Требуется замена втулок балансиров",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": "WO-019942"
+    },
+    {
       "asset": "TK149",
       "defect": "DD-00014761",
       "raised": "2026-10-14",
@@ -30079,19 +30118,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "TK029",
-      "defect": "DD-00014754",
-      "raised": "2026-10-14",
-      "system": "TK029.BS (Braking System / Тормозная система)",
-      "defectType": "1.04 Abnormal noise / vibration Аномальный шум / вибрация",
-      "descr": "С левой стороны скрипят тормозные колодки",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": "WO-019943"
-    },
-    {
-      "asset": "TK029",
       "defect": "DD-00014755",
       "raised": "2026-10-14",
       "system": "TK029.ELS.ALT (Alternator / Генератор)",
@@ -30102,32 +30128,6 @@ window.CM_WO_DATA = {
       "by": "Andrey Taran",
       "regBy": "Таран Андрей Андреевич",
       "wo": "WO-019944"
-    },
-    {
-      "asset": "TK029",
-      "defect": "DD-00014769",
-      "raised": "2026-10-14",
-      "system": "TK029.DRS.TRA (Transmission / Трансмиссия)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Требуется замена кулисы и чехла кулисы",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": "WO-019946"
-    },
-    {
-      "asset": "TK029",
-      "defect": "DD-00014753",
-      "raised": "2026-10-14",
-      "system": "TK029.CH.SU (Suspension / Подвеска)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Требуется замена втулок балансиров",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": "WO-019942"
     },
     {
       "asset": "LV026",
