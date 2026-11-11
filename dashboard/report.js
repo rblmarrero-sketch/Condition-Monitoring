@@ -54,6 +54,26 @@
     try { return fn(); } finally { if (hadL) lang = wasL; RBI = wasB; }
   }
 
+  /* CM_UREP_V1 (Rickie 11.11.2026, "generate report for 1 equipment for one type of inspection on date range"):
+     a one-machine target may carry a type and a date range, as "UNIT|TYPE|FROM|TO" (each part may be empty;
+     dates are yyyy-mm-dd and both ends are included). A plain "UNIT" is the whole history, as before, so every
+     caller that passes a unit alone (Equipment History's report button, a recent report) is unchanged. */
+  function unitTarget(target) {
+    const p = String(target == null ? "" : target).split("|");
+    return { u: p[0] || "", type: p[1] || "", from: p[2] || "", to: p[3] || "" };
+  }
+  function unitTargetJoin(u, type, from, to) {
+    return (type || from || to) ? [u, type || "", from || "", to || ""].join("|") : (u || "");
+  }
+  /* What the subtitle says the report covers: "TK148 · Magnetic Plug · 01.10.2026 – 31.10.2026". */
+  function unitTargetLabel(target) {
+    const f = unitTarget(target), d = x => (CMR.dmy ? CMR.dmy(x) : x);
+    const parts = [f.u];
+    if (f.type) parts.push(L("type_" + f.type));
+    if (f.from || f.to) parts.push((f.from ? d(f.from) : "…") + " – " + (f.to ? d(f.to) : "…"));
+    return parts.join(" · ");
+  }
+
   function recsForScope(scope, target) {
     const R = allRecs().filter(r => !r._void);
     /* One inspection, by its storage key — what the button on a history card
@@ -63,8 +83,12 @@
     /* The equipment condition summary is one machine's rounds too — the engine
        picks the latest of each type from them. Same records as `unit`, a
        different report. */
-    if (scope === "unit" || scope === "summary") return R.filter(r => r.equip === target)
-      .sort((a, b) => (a.date || "").localeCompare(b.date || ""));
+    if (scope === "unit" || scope === "summary") {
+      const f = unitTarget(target);
+      return R.filter(r => r.equip === f.u && (!f.type || r.type === f.type)
+          && (!f.from || (r.date || "") >= f.from) && (!f.to || (r.date || "") <= f.to))
+        .sort((a, b) => (a.date || "").localeCompare(b.date || ""));
+    }
     if (scope === "round") return R.filter(r => r.date === target)
       .sort((a, b) => a.equip.localeCompare(b.equip));
     return R.filter(r => (r.date || "").slice(0, 7) === target)
@@ -649,6 +673,17 @@
 
      A caller that needs this context asks for it. There is no second copy to
      go stale. */
+  function unitScopeText(scope, target) {
+    if (scope !== "unit" || String(target).indexOf("|") < 0) return "";
+    const f = unitTarget(target), d = x => (CMR.dmy ? CMR.dmy(x) : x);
+    const parts = [f.type ? L("type_" + f.type) : L("r_u_all")];
+    if (f.from || f.to) parts.push((f.from ? d(f.from) : "…") + " – " + (f.to ? d(f.to) : "…"));
+    return L("r_u_covers", { x: parts.join(" · ") });
+  }
+  function subTarget(scope, target) {
+    if ((scope === "unit" || scope === "summary") && String(target).indexOf("|") >= 0) return unitTargetLabel(target);
+    return CMR.dmy ? CMR.dmy(target) : target;
+  }
   function ctxFor(recs, opts) {
     opts = opts || {};
     const scope = opts.scope || "";
@@ -674,8 +709,8 @@
           : (scope === "round" || scope === "month") ? scope : undefined,
       title: L("rep_title_doc"),
       titleAlt: RBI ? inOther(() => L("rep_title_doc")) : "",
-      sub: scope ? `${L("r_" + scope)} — ${CMR.dmy ? CMR.dmy(target) : target}` : "",
-      subAlt: (scope && RBI) ? `${inOther(() => L("r_" + scope))} — ${CMR.dmy ? CMR.dmy(target) : target}` : "",
+      sub: scope ? `${L("r_" + scope)} — ${subTarget(scope, target)}` : "",
+      subAlt: (scope && RBI) ? `${inOther(() => L("r_" + scope))} — ${inOther(() => subTarget(scope, target))}` : "",
       stamp: opts.stamp || new Date(),
       sevLabel: sev,
       sevLabelAlt: RBI ? (s => inOther(() => sev(s))) : null,
@@ -694,6 +729,11 @@
          Equipment History and Trend is the compact document the template
          asks for and not a bound copy of every round on the machine. */
       appendix: !!opts.appendix,
+      /* CM_UREP_V1: a one-machine report narrowed to a type and / or dates says so under its masthead, and
+         does not list the other types as "never inspected" (they are only left out of this report). */
+      unitScope: unitScopeText(scope, target),
+      unitScopeAlt: RBI ? inOther(() => unitScopeText(scope, target)) : "",
+      unitScopeType: (scope === "unit" && String(target).indexOf("|") >= 0) ? unitTarget(target).type : "",
     };
   }
 
@@ -873,5 +913,5 @@
     } finally { st.remove(); }
   }
 
-  window.CMReport = { generate, recsForScope, normalise, ctxFor, artFor, getSection, getStats, sectionsFor, estimate, withReport, rate, noteRate };
+  window.CMReport = { generate, recsForScope, unitTarget, unitTargetJoin, unitTargetLabel, normalise, ctxFor, artFor, getSection, getStats, sectionsFor, estimate, withReport, rate, noteRate };
 })();

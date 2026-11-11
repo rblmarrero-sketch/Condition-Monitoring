@@ -3894,7 +3894,15 @@
             <input id="rTargetQ" type="search" data-i18n-ph="eq_findph" data-i18n-aria="eq_findph" aria-label="Filter" placeholder="Filter…">
             <select id="rTarget"></select>
             <span class="hint" id="rTargetShown"></span>
-          </span></div></div>
+          </span>
+          <!-- CM_UREP_V1 (Rickie 11.11.2026): one machine, one inspection type, a date range. Shown for
+               "One machine - its history and trend" only; empty = every type / every date, as before. -->
+          <div class="row" id="rUnitFilt" hidden style="gap:16px;flex-wrap:wrap;margin-top:8px">
+            <div class="field"><label for="rUType" data-i18n="r_u_type">Inspection type</label>
+              <select id="rUType"><option value="" data-i18n="r_u_all">All types</option></select></div>
+            <div class="field"><label for="rUFrom" data-i18n="r_u_from">From</label><input type="date" id="rUFrom"></div>
+            <div class="field"><label for="rUTo" data-i18n="r_u_to">To</label><input type="date" id="rUTo"></div>
+          </div></div></div>
         <div class="rstep"><div class="rnum">3</div><div class="rbody">
           <label data-i18n="r_opts">Options</label>
           <div class="row" style="gap:12px;flex-wrap:wrap">
@@ -4103,23 +4111,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=610"></script>
+<script src="../data/magnetic_plug.js?v=612"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=610"></script>
-<script src="../mobile/hme.js?v=610"></script>
-<script src="../mobile/mp-fc.js?v=610"></script>
-<script src="../mobile/rtw.js?v=610"></script>
-<script src="../mobile/hme-cascade.js?v=610"></script>
-<script src="../mobile/temp-limits.js?v=610"></script>
+<script src="../data/work_orders.js?v=612"></script>
+<script src="../mobile/hme.js?v=612"></script>
+<script src="../mobile/mp-fc.js?v=612"></script>
+<script src="../mobile/rtw.js?v=612"></script>
+<script src="../mobile/hme-cascade.js?v=612"></script>
+<script src="../mobile/temp-limits.js?v=612"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=610"></script>
-<script src="../mobile/normalize.js?v=610"></script>
-<script src="../mobile/terms.js?v=610"></script>
+<script src="../mobile/assets.js?v=612"></script>
+<script src="../mobile/normalize.js?v=612"></script>
+<script src="../mobile/terms.js?v=612"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -4138,21 +4146,21 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=610"></script>
-<script src="../mobile/edits.js?v=610"></script>
-<script src="../mobile/due.js?v=610"></script>
-<script src="../mobile/wear.js?v=610"></script>
-<script src="../mobile/wear-map.js?v=610"></script>
-<script src="../mobile/lube.js?v=610"></script>
-<script src="../mobile/lube-overrides.js?v=610"></script>
-<script src="../mobile/lube2027.js?v=610"></script>
-<script src="../mobile/lube-tds.js?v=610"></script>
-<script src="lube-master.js?v=610"></script>
-<script src="wear-limits.js?v=610"></script>
+<script src="../mobile/grade.js?v=612"></script>
+<script src="../mobile/edits.js?v=612"></script>
+<script src="../mobile/due.js?v=612"></script>
+<script src="../mobile/wear.js?v=612"></script>
+<script src="../mobile/wear-map.js?v=612"></script>
+<script src="../mobile/lube.js?v=612"></script>
+<script src="../mobile/lube-overrides.js?v=612"></script>
+<script src="../mobile/lube2027.js?v=612"></script>
+<script src="../mobile/lube-tds.js?v=612"></script>
+<script src="lube-master.js?v=612"></script>
+<script src="wear-limits.js?v=612"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=610"></script>
-<script src="../mobile/machine-photos.js?v=610"></script>
+<script src="../mobile/upload-defaults.js?v=612"></script>
+<script src="../mobile/machine-photos.js?v=612"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -4161,17 +4169,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=610"></script>
-<script src="../mobile/get.js?v=610"></script>
-<script src="../mobile/points.js?v=610"></script>
-<script src="../mobile/uc-points.js?v=610"></script>
-<script src="../mobile/inspect-guide.js?v=610"></script>
-<script src="../mobile/get-figs.js?v=610"></script>
-<script src="../mobile/body-points.js?v=610"></script>
-<script src="../mobile/body-map.js?v=610"></script>
-<script src="../mobile/jspdf.umd.min.js?v=610"></script>
-<script src="../mobile/html2canvas.min.js?v=610"></script>
-<script src="../mobile/report-core.js?v=610"></script>
+<script src="../mobile/machine-fig.js?v=612"></script>
+<script src="../mobile/get.js?v=612"></script>
+<script src="../mobile/points.js?v=612"></script>
+<script src="../mobile/uc-points.js?v=612"></script>
+<script src="../mobile/inspect-guide.js?v=612"></script>
+<script src="../mobile/get-figs.js?v=612"></script>
+<script src="../mobile/body-points.js?v=612"></script>
+<script src="../mobile/body-map.js?v=612"></script>
+<script src="../mobile/jspdf.umd.min.js?v=612"></script>
+<script src="../mobile/html2canvas.min.js?v=612"></script>
+<script src="../mobile/report-core.js?v=612"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -4593,7 +4601,7 @@ const I18N={
   sy_quar:"Inspections requiring correction",
   eq_findph:"Search equipment: unit, class, model\u2026",
   cmb_n:"{n} of {of}", cmb_all:"{n} \u2014 type to narrow, \u2191\u2193 to move, Enter to choose", cmb_none:"No match",
-  r_month_l:"Month", r_unit_l:"Equipment",
+  r_month_l:"Month", r_unit_l:"Equipment", r_u_type:"Inspection type", r_u_all:"All types", r_u_from:"From", r_u_to:"To", r_u_none:"No inspections of this machine match this type and these dates.",  r_u_covers:"Report covers: {x}",
   pg_prev:"Previous", pg_next:"Next",
   pg_of:"{n} matching · showing {a}–{b}",
   pg_per:"Rows per page",
@@ -4779,7 +4787,7 @@ const I18N={
   sev_NOF:"No failure", sev_INC:"Incipient", sev_DEG:"Degraded", sev_CRI:"Critical",
   type_MP:"Magnetic Plug", type_FC:"Filter Cut", type_INSP:"Inspection", type_TEMP:"Temperature",
   type_UC:"Undercarriage", type_GET:"Ground engaging tools", type_TB:"Dump body liner",
-  type_LUBE:"Lubrication audit", type_RTW:"Return to Work",
+  type_LUBE:"Lubrication audit", type_RTW:"Return to Work", type_FIR:"Failure investigation (FIR)",
   lube_product:"Product in service", lube_evidence:"Evidence", lube_sampled:"Sampled", lube_sno:"Sample number", lube_filtered:"Offline filtration done",
   lube_unlisted:"Not on the catalogue",
   lube_ev_label:"Label photographed", lube_ev_batch:"Tank / pump batch",
@@ -5528,7 +5536,7 @@ const I18N={
   sy_quar:"Осмотры, требующие исправления",
   eq_findph:"Поиск техники: номер, класс, модель\u2026",
   cmb_n:"{n} из {of}", cmb_all:"{n} — вводите текст, ↑↓ для перехода, Enter для выбора", cmb_none:"Ничего не найдено",
-  r_month_l:"Месяц", r_unit_l:"Техника",
+  r_month_l:"Месяц", r_unit_l:"Техника", r_u_type:"Вид осмотра", r_u_all:"Все виды", r_u_from:"С", r_u_to:"По", r_u_none:"Нет осмотров этой машины этого вида за эти даты.", r_u_covers:"Отчёт охватывает: {x}",
   pg_prev:"Назад", pg_next:"Вперёд",
   pg_of:"совпадений: {n} · показаны {a}–{b}",
   pg_per:"Строк на странице",
@@ -5702,7 +5710,7 @@ const I18N={
   sev_NOF:"Без отказа", sev_INC:"Зарождающийся", sev_DEG:"Частичный", sev_CRI:"Критический",
   type_MP:"Магнитная пробка", type_FC:"Разрез фильтра", type_INSP:"Осмотр", type_TEMP:"Температура",
   type_UC:"Ходовая часть", type_GET:"Рабочий инструмент", type_TB:"Футеровка кузова",
-  type_LUBE:"Аудит смазочных материалов", type_RTW:"Возврат в работу",
+  type_LUBE:"Аудит смазочных материалов", type_RTW:"Возврат в работу", type_FIR:"Расследование отказа (FIR)",
   lube_product:"Продукт в узле", lube_evidence:"Подтверждение", lube_sampled:"Проба отобрана", lube_sno:"Номер пробы", lube_filtered:"Автономная фильтрация выполнена",
   lube_unlisted:"Нет в каталоге",
   lube_ev_label:"Фото этикетки", lube_ev_batch:"Партия из ёмкости",
@@ -6215,7 +6223,7 @@ const PRIO_BY={}; PRIORITIES.forEach(p=>PRIO_BY[p.k]=p);
 const prioName=(k,l)=>{ const p=PRIO_BY[String(k||"").toUpperCase()]; return p?(p[l||lang]||p.en):(k||""); };
 const prioClass=k=>{ const p=PRIO_BY[String(k||"").toUpperCase()]; return p?p.c:"n"; };
 const TYPE_ORDER=["MP","FC","INSP","TEMP","UC","GET","TB","LUBE"];
-const TYPE_LABEL=new Proxy({},{ get:(_,k)=> (TYPE_ORDER.indexOf(k)>=0||k==="RTW")?t("type_"+k):undefined });
+const TYPE_LABEL=new Proxy({},{ get:(_,k)=> (TYPE_ORDER.indexOf(k)>=0||k==="RTW"||k==="FIR")?t("type_"+k):undefined });
 /* "Carries millimetres." Undercarriage demands them at every point; ground
    engaging tools accept them wherever somebody had a tape. Everything below
    this line — the bands, the severities, the Pareto, the action register —
@@ -6393,7 +6401,7 @@ function sevConflicts(){
          every single time, for every RTW round this fleet has ever filed.
          Excluded here the same way a measured round already is below: by
          what the round type IS, not by what happens to be on it. */
-      if(r.type==="RTW") return;
+      if(r.type==="RTW"||r.type==="FIR") return;   /* CM_FIR_V1: a FIR carries no grade either */
       (r.items||[]).forEach(i=>{
         if(!i || i.general || !i.sev) return;
         const w=wearOf(r,i); if(w && w.band) return;      // measured, not graded
@@ -14219,9 +14227,30 @@ $("rScope").onchange=refreshReportTargets;
 /* WHAT THE PDF WILL CONTAIN, BEFORE IT IS MADE. A report is a document
    somebody hands to a meeting; the size and the status of it are decided
    before pressing the button, not discovered after. */
+/* CM_UREP_V1: the type and dates of a one-machine report travel inside the target ("UNIT|TYPE|FROM|TO",
+   dashboard/report.js unitTarget), so preview, estimate, photo fetch, the PDF and "Make again" all read
+   the same records. */
+function rUnitFiltSync(){
+  const box=$("rUnitFilt"), ts=$("rUType"); if(!box||!ts) return;
+  const scope=($("rScope")||{}).value, u=($("rTarget")||{}).value||"";
+  box.hidden = scope!=="unit";
+  if(box.hidden) return;
+  const have=[...new Set(RECS.filter(r=>r.equip===u && !r._void).map(r=>r.type).filter(Boolean))]
+    .sort((a,b)=>String(TYPE_LABEL[a]||a).localeCompare(String(TYPE_LABEL[b]||b)));
+  const cur=ts.value;
+  ts.innerHTML=`<option value="">${esc(t("r_u_all"))}</option>`+have.map(k=>`<option value="${esc(k)}">${esc(TYPE_LABEL[k]||k)}</option>`).join("");
+  ts.value = have.indexOf(cur)>=0 ? cur : "";
+}
+function rTargetFull(){
+  const scope=($("rScope")||{}).value, u=($("rTarget")||{}).value||"";
+  if(scope!=="unit" || !window.CMReport || !CMReport.unitTargetJoin) return u;
+  return CMReport.unitTargetJoin(u, ($("rUType")||{}).value, ($("rUFrom")||{}).value, ($("rUTo")||{}).value);
+}
+["rUType","rUFrom","rUTo"].forEach(id=>{ const el=$(id); if(el) el.addEventListener("change", ()=>renderReportPreview()); });
 function renderReportPreview(){
   const el=$("rPreview"); if(!el) return;
-  const scope=($("rScope")||{}).value, target=($("rTarget")||{}).value;
+  try{ rUnitFiltSync(); }catch(e){}
+  const scope=($("rScope")||{}).value, target=rTargetFull();
   const photos=($("rPhotos")||{}).value!=="0";
   if(!target || !window.CMReport || !CMReport.recsForScope){ el.innerHTML=esc(t("r_prev_none")); return; }
   let recs=[]; try{ recs=CMReport.recsForScope(scope,target)||[]; }catch(e){ recs=[]; }
@@ -14237,7 +14266,8 @@ function renderReportPreview(){
        + (st.status==="final" ? `<span class="st final">${esc(t("r_st_final"))}</span>`
                               : `<span class="st">${esc(t("r_st_prov",{m:st.need-st.have}))}</span>`);
   }else if(scope==="unit"||scope==="summary"){
-    html=t("r_prev_unit",{u:esc(target), n:recs.length, a:esc(dates[0]||"—"), b:esc(dates[dates.length-1]||"—"), p:nPhotos});
+    if(!recs.length && String(target).indexOf("|")>=0){ el.innerHTML=esc(t("r_u_none")); return; }
+    html=t("r_prev_unit",{u:esc(window.CMReport.unitTargetLabel?CMReport.unitTargetLabel(target):target), n:recs.length, a:esc(dates[0]||"—"), b:esc(dates[dates.length-1]||"—"), p:nPhotos});
   }else if(scope==="round"){
     html=t("r_prev_round",{d:esc(target), n:recs.length, m:units, p:nPhotos});
   }else{
@@ -14297,7 +14327,7 @@ function renderRecentReports(){
      translated label, in both languages. */
   const scopeName={one:t("r_one"), unit:t("r_unit"), summary:t("r_summary"), round:t("r_round"), month:t("r_month")};
   ul.innerHTML=list.map((x,ix)=>`<li>
-      <span><b>${esc(x.target)}</b> <span class="muted">· ${esc(scopeName[x.scope]||x.scope)}</span>
+      <span><b>${esc(String(x.target).indexOf("|")>=0&&window.CMReport&&CMReport.unitTargetLabel?CMReport.unitTargetLabel(x.target):x.target)}</b> <span class="muted">· ${esc(scopeName[x.scope]||x.scope)}</span>
         ${x.pages?` <span class="muted">· ${esc(t("r_rec_pages",{n:x.pages}))}</span>`:""}${
         x.status==="final"?` <span class="pill g">${esc(t("r_st_final"))}</span>`:x.status==="prov"?` <span class="tag">${esc(t("r_st_prov_s"))}</span>`:""}</span>
       <span class="sp"></span><span class="when">${esc(x.at||"")}</span>
@@ -14312,10 +14342,13 @@ function renderRecentReports(){
 /* Choose a target that the bounded picker may not be showing. */
 function selectReportTarget(v){
   const sel=$("rTarget"); if(!sel) return false;
+  let uf=null; if(String(v).indexOf("|")>=0 && window.CMReport && CMReport.unitTarget){ uf=CMReport.unitTarget(v); v=uf.u; }
   if(![...sel.options].some(o=>o.value===v)){
     const o=document.createElement("option"); o.value=v; o.textContent=v; sel.insertBefore(o, sel.firstChild);
   }
-  sel.value=v; renderReportPreview(); return sel.value===v;
+  sel.value=v;
+  if(uf){ rUnitFiltSync(); $("rUType").value=uf.type; $("rUFrom").value=uf.from; $("rUTo").value=uf.to; }
+  renderReportPreview(); return sel.value===v;
 }
 if($("rTarget")) $("rTarget").onchange=renderReportPreview;
 if($("rPhotos")) $("rPhotos").onchange=renderReportPreview;
@@ -14464,6 +14497,7 @@ async function runReport(scope, target, btn, opts){
   const label = btn ? btn.textContent : "";
   const say = s => { if(msg) msg.textContent = s; else if(btn) btn.textContent = s; };
   if(!target){ say(t("r_none")); return 0; }
+  if(scope==="unit" && String(target).indexOf("|")>=0 && window.CMReport && !window.CMReport.recsForScope(scope,target).length){ say(t("r_u_none")); return 0; }
   const photos = opts.photos !== false, scale = opts.scale || 1.8;
   let fetchNote = "";
   if(btn) btn.disabled = true;
@@ -14511,7 +14545,7 @@ async function runReport(scope, target, btn, opts){
   }
   finally{ if(btn) btn.disabled=false; }
 }
-$("rGo").onclick=()=>runReport($("rScope").value, $("rTarget").value, $("rGo"), reportOpts());
+$("rGo").onclick=()=>runReport($("rScope").value, rTargetFull(), $("rGo"), reportOpts());
 /* THE MACHINE PICKER, FILTERED.
 
    One option per machine and 1,128 machines: nobody scrolls that, so people
@@ -15975,7 +16009,7 @@ function dueTabRows(){
        entry in due.js's DUE.EVERY, so DUE.next() below would otherwise fall
        back to the 30-day generic interval and print a bogus overdue/due-soon
        row. Same exclusion as the phone's dueRows(). */
-    if(ty==="RTW") return;
+    if(ty==="RTW"||ty==="FIR") return;
     const rate=window.DUE ? DUE.rateFrom(trail[unit]||[]) : null;
     /* The machine, not only the round — see the note on the phone's copy of
        this. Both surfaces schedule from due.js and both were asking it the
@@ -16060,7 +16094,7 @@ function dueNeverRows(only){
        work order, not "this class does this round" — the first RTW round
        recorded anywhere must not put every other machine of that class on a
        fabricated RTW programme. */
-    if(ty==="RTW") return;
+    if(ty==="RTW"||ty==="FIR") return;
     const a=ASSET_BY[unit]; if(!a || !a.cls) return;
     const k=String(a.cls).toUpperCase();
     if(CATCHALL[k]){
@@ -19079,11 +19113,11 @@ document.querySelector(".lang").addEventListener("click",e=>{
   setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 })();
 </script>
-<script src="drive.js?v=610"></script>
-<script src="sync-adapter.js?v=610"></script>
-<script src="report.js?v=610"></script>
-<script src="reliability.js?v=610"></script>
-<script src="day-summary.js?v=610"></script>
+<script src="drive.js?v=612"></script>
+<script src="sync-adapter.js?v=612"></script>
+<script src="report.js?v=612"></script>
+<script src="reliability.js?v=612"></script>
+<script src="day-summary.js?v=612"></script>
 <script>
 /* THE CLOSED FILTER SAYS WHAT IS CHOSEN. A dropdown narrower than its option
    text ellipsises ("All t…", audit of 2026-10-01). Between 1331 and 1500 px

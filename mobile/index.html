@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=610">
+<link rel="manifest" href="manifest.webmanifest?v=612">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=610">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=610">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=610">
+<link rel="apple-touch-icon" href="icon-192.png?v=612">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=612">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=612">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -341,6 +341,21 @@
   /* ===================== Return to Work ===================== */
   .rtw-ov{position:fixed;inset:0;background:var(--page);z-index:60;display:flex;flex-direction:column;}
   .rtw-ov.hidden{display:none;}
+  /* CM_FIR_V1 sheet */
+  .fir-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px;}
+  .fir-card h4{margin:0;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);}
+  .fir-card input,.fir-card textarea{width:100%;box-sizing:border-box;min-height:var(--tap);font:inherit;font-size:15px;padding:8px 10px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--ink);}
+  .fir-defs{display:flex;flex-direction:column;gap:6px;max-height:46vh;overflow:auto;}
+  .fir-def{display:block;width:100%;text-align:left;min-height:var(--tap);padding:8px 10px;border:1px solid var(--border);border-radius:8px;background:var(--surface-2);color:var(--ink);font:inherit;}
+  .fir-def b{font-size:14px;} .fir-def .m{display:block;font-size:12px;color:var(--ink-2);margin-top:2px;}
+  .fir-def .pr{float:right;font-size:11px;font-weight:700;color:var(--ink-2);}
+  .fir-def .pr.hi{color:var(--crit-ink,#b42318);}
+  .fir-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;}
+  .fir-ph{position:relative;display:flex;flex-direction:column;gap:4px;}
+  .fir-ph img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:8px;border:1px solid var(--border);background:var(--surface-2);}
+  .fir-ph .x{position:absolute;top:4px;right:4px;width:var(--tap);height:var(--tap);border-radius:50%;border:none;background:rgba(0,0,0,.6);color:#fff;font-size:18px;}
+  .fir-ph input{font-size:13px;min-height:40px;}
+  .fir-btns{display:flex;gap:8px;} .fir-btns .btn{flex:1 1 0;min-height:var(--tap);}
   .rtw-screen{display:flex;flex-direction:column;height:100%;min-height:0;}
   .rtw-ov-head{flex:none;background:var(--surface);border-bottom:1px solid var(--border);
     padding:calc(env(safe-area-inset-top) + 10px) 12px 10px;display:flex;align-items:center;gap:10px;}
@@ -2650,6 +2665,27 @@
 <input type="file" id="rtwPhotoInput" accept="image/*" class="hidden">
 <input type="file" id="rtwGeneralPhotoInput" accept="image/*" multiple class="hidden">
 
+<!-- CM_FIR_V1: photographs and a note for a Failure Investigation Report, started from a 1C defect. Same shell as
+     the RTW sheet. Saved as a record of type FIR and sent like any round; the office FIR page takes the photographs
+     into the FIR of that defect. -->
+<div id="firOv" class="rtw-ov hidden">
+  <div class="rtw-screen">
+    <div class="rtw-ov-head">
+      <button type="button" class="rtw-ov-back" id="firBack" data-i18n-title="back_title" title="Back">‹</button>
+      <div>
+        <b data-i18n="fir_title">Failure investigation (FIR)</b>
+        <div class="hint" data-i18n="fir_sub">Photographs and notes for the FIR in the office</div>
+      </div>
+    </div>
+    <div class="rtw-ov-body" id="firBody"></div>
+    <div class="rtw-footer">
+      <div class="hint" id="firHint" style="text-align:center;margin:0;"></div>
+      <button type="button" class="btn primary" id="firSaveBtn" data-i18n="fir_save">Save for the FIR</button>
+    </div>
+  </div>
+</div>
+<input type="file" id="firGalInput" accept="image/*" multiple class="hidden">
+
 <!-- THE 1C PM ROW'S OWN DETAIL — "View", the half of "tap and View or RTW"
      that stays put. A work order is picked from the 1C PM tab itself now
      (see duePmList's own rows); this is what a tap opens first: the six
@@ -2672,6 +2708,7 @@
     </div>
     <div class="rtw-ov-body" id="pmInfoBody"></div>
     <div class="rtw-footer">
+      <button type="button" class="btn" id="pmStartFirBtn" data-i18n="pm_start_fir" style="display:none">Start FIR</button>
       <button type="button" class="btn primary" id="pmStartRtwBtn" data-i18n="pm_start_rtw">Start Return to Work</button>
     </div>
   </div>
@@ -2943,16 +2980,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=610"></script>
-<script src="upload-defaults.js?v=610"></script>
-<script src="hme.js?v=610"></script>
-<script src="mp-fc.js?v=610"></script>
-<script src="rtw.js?v=610"></script>
-<script src="hme-cascade.js?v=610"></script>
-<script src="assets.js?v=610"></script>
-<script src="temp-limits.js?v=610"></script>
-<script src="normalize.js?v=610"></script>
-<script src="terms.js?v=610"></script>
+<script src="native.js?v=612"></script>
+<script src="upload-defaults.js?v=612"></script>
+<script src="hme.js?v=612"></script>
+<script src="mp-fc.js?v=612"></script>
+<script src="rtw.js?v=612"></script>
+<script src="hme-cascade.js?v=612"></script>
+<script src="assets.js?v=612"></script>
+<script src="temp-limits.js?v=612"></script>
+<script src="normalize.js?v=612"></script>
+<script src="terms.js?v=612"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2971,25 +3008,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=610"></script>
-<script src="edits.js?v=610"></script>
-<script src="due.js?v=610"></script>
-<script src="wear.js?v=610"></script>
-<script src="wear-figs.js?v=610"></script>
-<script src="wear-map.js?v=610"></script>
-<script src="machine-photos.js?v=610"></script>
-<script src="machine-fig.js?v=610"></script>
-<script src="get.js?v=610"></script>
-<script src="points.js?v=610"></script>
-<script src="uc-points.js?v=610"></script>
-<script src="inspect-guide.js?v=610"></script>
-<script src="get-figs.js?v=610"></script>
-<script src="body-points.js?v=610"></script>
-<script src="body-map.js?v=610"></script>
-<script src="lube.js?v=610"></script>
-<script src="lube-overrides.js?v=610"></script>
-<script src="lube2027.js?v=610"></script>
-<script src="report-core.js?v=610"></script>
+<script src="grade.js?v=612"></script>
+<script src="edits.js?v=612"></script>
+<script src="due.js?v=612"></script>
+<script src="wear.js?v=612"></script>
+<script src="wear-figs.js?v=612"></script>
+<script src="wear-map.js?v=612"></script>
+<script src="machine-photos.js?v=612"></script>
+<script src="machine-fig.js?v=612"></script>
+<script src="get.js?v=612"></script>
+<script src="points.js?v=612"></script>
+<script src="uc-points.js?v=612"></script>
+<script src="inspect-guide.js?v=612"></script>
+<script src="get-figs.js?v=612"></script>
+<script src="body-points.js?v=612"></script>
+<script src="body-map.js?v=612"></script>
+<script src="lube.js?v=612"></script>
+<script src="lube-overrides.js?v=612"></script>
+<script src="lube2027.js?v=612"></script>
+<script src="report-core.js?v=612"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -3091,6 +3128,10 @@ const TYPE_META = {
      an unscheduled type cannot just be left to fall through the interval
      table's D.FALLBACK. */
   RTW:  { suffix:"RTW",  showReadings:false, rtw:true, title:{en:"Checklist item",ru:"Пункт чек-листа"} },
+  /* CM_FIR_V1: field photographs and a note for a Failure Investigation Report. Not a round: it is started from a
+     1C defect (the site's procedure is 1C defect -> FIR -> RCA), carries no grade and no interval, and has its own
+     sheet (#firOv). The office FIR page on Pechanka takes the photographs straight into the FIR's photo section. */
+  FIR:  { suffix:"FIR",  showReadings:false, fir:true, title:{en:"Photograph",ru:"Фото"} },
 };
 const TYPE_ORDER = ["MP","FC","INSP","TEMP","UC","GET","TB","LUBE"];
 
@@ -3313,7 +3354,19 @@ const I18N = {
     pos_count:"item(s)", photo_count:"photo(s)",
     type_MP:"Magnetic Plug", type_FC:"Filter Cut", type_INSP:"Inspection", type_TEMP:"Temperature",
     type_UC:"Undercarriage", type_GET:"Ground engaging tools", type_TB:"Dump body liner",
-    type_LUBE:"Lubrication audit", type_RTW:"Return to Work",
+    type_LUBE:"Lubrication audit", type_RTW:"Return to Work", type_FIR:"Failure investigation (FIR)",
+    fir_title:"Failure investigation (FIR)", fir_sub:"Photographs and notes for the FIR in the office",
+    fir_def_t:"1C defect", fir_def_q:"Search defect number, unit or system", fir_def_none:"No 1C defect matches. A FIR starts from a defect already raised in 1C.",
+    fir_def_use:"Use {d}", fir_def_manual:"Not in this phone's list yet (it refreshes hourly). Unit:", fir_def_change:"Change",
+    fir_def_list:"{n} defect(s) of the last 60 days, P1 and P2 first", fir_unit_ph:"Unit, e.g. TK148",
+    fir_photos_t:"Photographs", fir_photos_s:"They go straight into the FIR's photo section. Up to {n}.",
+    fir_take:"Take photo", fir_gallery:"From gallery", fir_cap_ph:"What the photo shows",
+    fir_note_t:"What was found", fir_note_ph:"Damage, conditions, what was done on site",
+    fir_by:"Your name", fir_by_ph:"First and last name", fir_save:"Save for the FIR",
+    fir_need_def:"Choose the 1C defect first.", fir_need_ph:"Add at least one photograph or a note.", fir_need_by:"Write your name.",
+    fir_ready:"Ready to save · {n} photo(s)", fir_dup_t:"FIR already on this phone",
+    fir_dup_b:"{x} already has a FIR saved today for {d}. Open it from Saved and add to it.",
+    pm_start_fir:"Start FIR",
     lube_src_field:"in service now", lube_src_2027:"2027 specification",
     lube_src_both:"in service · 2027",
     lube_prod:"Product in service", lube_other:"Name it as printed on the label",
@@ -4041,7 +4094,19 @@ const I18N = {
     pos_count:"поз.", photo_count:"фото",
     type_MP:"Магнитная пробка", type_FC:"Разрез фильтра", type_INSP:"Осмотр", type_TEMP:"Температура",
     type_UC:"Ходовая часть", type_GET:"Рабочий инструмент", type_TB:"Футеровка кузова",
-    type_LUBE:"Аудит смазочных материалов", type_RTW:"Возврат в работу",
+    type_LUBE:"Аудит смазочных материалов", type_RTW:"Возврат в работу", type_FIR:"Расследование отказа (FIR)",
+    fir_title:"Расследование отказа (FIR)", fir_sub:"Фото и заметки для FIR в офисе",
+    fir_def_t:"Дефект 1С", fir_def_q:"Поиск по номеру дефекта, машине или системе", fir_def_none:"Нет подходящего дефекта 1С. FIR начинается с дефекта, уже заведённого в 1С.",
+    fir_def_use:"Выбрать {d}", fir_def_manual:"Его ещё нет в списке телефона (обновляется каждый час). Машина:", fir_def_change:"Изменить",
+    fir_def_list:"Дефектов за 60 дней: {n}, сначала P1 и P2", fir_unit_ph:"Машина, напр. TK148",
+    fir_photos_t:"Фотографии", fir_photos_s:"Попадают прямо в раздел фото FIR. Не более {n}.",
+    fir_take:"Сделать фото", fir_gallery:"Из галереи", fir_cap_ph:"Что на фото",
+    fir_note_t:"Что обнаружено", fir_note_ph:"Повреждение, условия, что сделано на месте",
+    fir_by:"Ваше имя", fir_by_ph:"Имя и фамилия", fir_save:"Сохранить для FIR",
+    fir_need_def:"Сначала выберите дефект 1С.", fir_need_ph:"Добавьте хотя бы одно фото или заметку.", fir_need_by:"Укажите своё имя.",
+    fir_ready:"Можно сохранить · фото: {n}", fir_dup_t:"FIR уже есть на телефоне",
+    fir_dup_b:"Для {x} сегодня уже сохранён FIR по {d}. Откройте его в «Сохранённых» и дополните.",
+    pm_start_fir:"Начать FIR",
     lube_src_field:"сейчас в эксплуатации", lube_src_2027:"спецификация 2027",
     lube_src_both:"в эксплуатации · 2027",
     lube_prod:"Продукт в узле", lube_other:"Название как на этикетке",
@@ -5600,8 +5665,12 @@ $("classBtn").onclick=()=>openPicker("cat");
 /* The code in front of the name. An <option> cannot be tinted reliably on
    either platform, and the code is the identity anyway — the colour is only
    ever the reinforcement. */
-function fillTypeSel(){ $("typeSel").innerHTML=TYPE_ORDER.map(k=>`<option value="${k}">${k} · ${t("type_"+k)}</option>`).join(""); $("typeSel").value=type; }
-$("typeSel").onchange=(e)=>{ type=e.target.value; lsSet("insp_type",type);
+function fillTypeSel(){ $("typeSel").innerHTML=TYPE_ORDER.map(k=>`<option value="${k}">${k} · ${t("type_"+k)}</option>`).join("")
+  /* CM_FIR_V1: FIR is in the same list, but it is not a round: choosing it opens the FIR sheet and the list goes back
+     to the round type that was chosen before. */
+  +`<option value="FIR">FIR · ${t("type_FIR")}</option>`; $("typeSel").value=type; }
+$("typeSel").onchange=(e)=>{ if(e.target.value==="FIR"){ e.target.value=type; firOpen(); return; }
+  type=e.target.value; lsSet("insp_type",type);
   draft={positions:{}}; editing=null; curItem=""; applyForm(); setEditing(null); };
 function renderChips(){ const tr=currentTree();
   try{ renderMachinePhotos(); }catch(e){}
@@ -10720,6 +10789,8 @@ function pmOpenInfo(row){
       <div style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);">${esc(k)}</div>
       <div style="font-size:14px;color:var(--ink);">${esc(v)}</div>
     </div>`).join("");
+  /* CM_FIR_V1: a defect work order can start a FIR for its defect. */
+  $("pmStartFirBtn").style.display = /DD-?\d{5,}/i.test(String(row.request||"")) ? "" : "none";
   $("pmOv").classList.remove("hidden");
 }
 function pmCloseInfo(){ $("pmOv").classList.add("hidden"); pmInfoRow=null; }
@@ -11101,7 +11172,7 @@ function dueRows(only){
        line above only skips a type in NEITHER table; RTW is in one, so
        without this it would fall through to DUE.next()'s D.FALLBACK 30-day
        rule below and print a bogus "overdue"/"due soon" row. */
-    if(ty==="RTW") continue;
+    if(ty==="RTW"||ty==="FIR") continue;
     const last=histEntry(h[k]);
     /* A date the fleet cannot verify does not put a machine on this list. It
        is still on screen — as never done, which is what it is. */
@@ -11252,7 +11323,7 @@ function roundsOnClass(){
          place that turns "done once" into "on this round forever," rather
          than in neverRows()/dueRows() separately: this is the single source
          both read from. */
-      if(ty==="RTW") continue;
+      if(ty==="RTW"||ty==="FIR") continue;
       if(!histFirm(histEntry(h[key]),gated)) continue;
       const a=ASSET_BY[unit]; if(!a) continue;
       const k=PTS.classOf(a.cls||a.cat||"");
@@ -11399,7 +11470,7 @@ function scheduleCompareRows(only){
   for(const k of Object.keys(h)){
     const [ty,unit]=k.split("|");
     if(only && ty!==only) continue;
-    if(ty==="RTW") continue;            // triggered by a work order, not a clock
+    if(ty==="RTW"||ty==="FIR") continue;   // triggered by a work order or a defect, not a clock
     if(!DUE.EVERY[ty] && !TYPE_META[ty]) continue;
     const last=histEntry(h[k]);
     if(!histFirm(last,gated)) continue;
@@ -11946,6 +12017,245 @@ $("rtwSaveBtn").onclick=()=>rtwSave();
 $("rtwChecklistBack").onclick=()=>rtwClose();
 $("pmInfoBack").onclick=()=>pmCloseInfo();
 $("pmStartRtwBtn").onclick=()=>{ if(pmInfoRow) rtwPickRow(pmInfoRow); };
+
+/* ===================== FIR: field photographs for a Failure Investigation Report (CM_FIR_V1) =====================
+   Rickie 11.11.2026: "in the inspection dropdown you can select FIR. select the defect number or if FIR draft is
+   created. just attach the photo" ... "the photos can go to FIR photo section straight and can be
+   removed/changed/add. They can start a new FIR as long as there is already a defect number in 1C. Usually that's the
+   original procedure, 1C defect, create FIR, create RCA."
+   So: pick the 1C defect (SCHED.firDefects, written by ingest_work_orders.py's build_fir_defects: every defect of the
+   last 60 days, P1/P2 first), add up to FIR_MAX photographs with a caption each, a note and a name, Save. The record
+   is type FIR and goes out like any round (sidecar + photographs, the same receipts and read-back). On Pechanka
+   fir_field.py takes it into the FIR of that defect: a draft is made when there is none, the photographs go straight
+   into its photo section, and the office can remove or change them there. A FIR saved again here (Edit in Saved)
+   sends what was added; the office keeps its own choice for what it already took.
+   Each photograph has its own position key (F1, F2 ...) given once, so removing one never renames the others. */
+const FIR_MAX=6;
+let firDraft=null, firEditing=null, firSaving=false;
+const firPool=urlPool();
+function firDefects(){ return (SCHED && Array.isArray(SCHED.firDefects)) ? SCHED.firDefects : []; }
+function firNorm(d){ const m=String(d||"").toUpperCase().replace(/\s+/g,"").match(/^DD-?(\d{5,})$/); return m?("DD-"+m[1]):""; }
+async function firOpen(def){
+  firEditing=null;
+  try{ await schedEnsureLoaded(); }catch(e){}
+  firDraft={ def:null, unit:"", q:"", photos:[], note:"", by:((holderGet()||{}).name||(()=>{ try{ return localStorage.getItem("cm_fir_by")||""; }catch(e){ return ""; } })()||"") };
+  if(def) firDraft.def=def;
+  $("firOv").classList.remove("hidden");
+  firRender();
+}
+function firOpenForEdit(rec){
+  if(!rec || rec.type!=="FIR") return;
+  firEditing=rec;
+  const photos=[];
+  for(const [k,p] of positionsOf(rec)){
+    for(const b of photosOf(p)) photos.push({ key:k, att:b, cap:p.comment||"" });
+  }
+  photos.sort((a,b)=>(parseInt(a.key.slice(1))||0)-(parseInt(b.key.slice(1))||0));
+  firDraft={ def:{ d:rec.firDefect||"", u:rec.equip||"", s:rec.firSystem||"", p:rec.firPriority||"", r:"", x:"" },
+    unit:rec.equip||"", q:"", photos, note:rec.firNote||"", by:rec.by||"" };
+  $("firOv").classList.remove("hidden");
+  firRender();
+}
+function firClose(){ $("firOv").classList.add("hidden"); firDraft=null; firEditing=null; firPool.free(); }
+function firHarvest(){
+  if(!firDraft) return;
+  const n=$("firNote"); if(n) firDraft.note=n.value;
+  const b=$("firBy"); if(b) firDraft.by=b.value;
+  const u=$("firUnit"); if(u) firDraft.unit=u.value;
+  document.querySelectorAll("#firBody [data-fcap]").forEach(i=>{ const ph=firDraft.photos.find(x=>x.key===i.dataset.fcap); if(ph) ph.cap=i.value; });
+}
+function firDefRow(f){
+  const hi=f.p==="P1"||f.p==="P2";
+  return `<button type="button" class="fir-def" data-fdef="${esc(f.d)}">${f.p?`<span class="pr${hi?" hi":""}">${esc(f.p)}</span>`:""}<b>${esc(f.d)} · ${esc(f.u||"")}</b>
+    <span class="m">${esc([f.s, f.r?ddmmyyyy(f.r):"", f.x].filter(Boolean).join(" · "))}</span></button>`;
+}
+function firListHtml(){
+  const q=String(firDraft.q||"").trim().toUpperCase();
+  const all=firDefects();
+  const hits=(q ? all.filter(f=>[f.d,f.u,f.s,f.x].some(v=>String(v||"").toUpperCase().indexOf(q)>=0)) : all).slice(0,40);
+  let h=`<div class="hint" style="margin:0">${esc(t("fir_def_list",{n:all.length}))}</div><div class="fir-defs">${hits.map(firDefRow).join("")}</div>`;
+  const man=firNorm(q);
+  if(man && !all.some(f=>f.d===man)){
+    h+=`<div class="hint" style="margin:0">${esc(t("fir_def_manual"))}</div>
+      <input id="firUnit" type="text" autocapitalize="characters" placeholder="${esc(t("fir_unit_ph"))}" value="${esc(firDraft.unit||"")}">
+      <button type="button" class="btn" data-fman="${esc(man)}">${esc(t("fir_def_use",{d:man}))}</button>`;
+  } else if(!hits.length){
+    h+=`<div class="hint warn" style="margin:0">${esc(t("fir_def_none"))}</div>`;
+  }
+  return h;
+}
+function firRender(){
+  if(!firDraft) return;
+  firPool.free();
+  const d=firDraft;
+  let defHtml;
+  if(d.def){
+    const f=d.def;
+    defHtml=`<div class="fir-card"><h4>${esc(t("fir_def_t"))}</h4>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+        <b style="font-size:16px;">${esc(f.d)} · ${esc(f.u||"")}</b>
+        ${firEditing?"":`<button type="button" class="btn" id="firDefChange" style="min-height:var(--tap);flex:0 0 auto;width:auto;padding:0 16px">${esc(t("fir_def_change"))}</button>`}</div>
+      ${(f.s||f.p||f.x)?`<div class="hint" style="margin:0">${esc([f.p,f.s,f.r?ddmmyyyy(f.r):"",f.x].filter(Boolean).join(" · "))}</div>`:""}</div>`;
+  } else {
+    defHtml=`<div class="fir-card"><h4>${esc(t("fir_def_t"))}</h4>
+      <input id="firQ" type="search" autocapitalize="characters" placeholder="${esc(t("fir_def_q"))}" value="${esc(d.q||"")}">
+      <div id="firList">${firListHtml()}</div></div>`;
+  }
+  const tiles=d.photos.map(ph=>`<div class="fir-ph"><img src="${firPool.url(ph.att)}" alt="${esc(ph.key)}">
+      <button type="button" class="x" data-fdel="${esc(ph.key)}" aria-label="${esc(t("media_del"))}">✕</button>
+      <input type="text" data-fcap="${esc(ph.key)}" placeholder="${esc(t("fir_cap_ph"))}" value="${esc(ph.cap||"")}"></div>`).join("");
+  const full=d.photos.length>=FIR_MAX;
+  const body=defHtml+`
+    <div class="fir-card"><h4>${esc(t("fir_photos_t"))} · ${d.photos.length}/${FIR_MAX}</h4>
+      <div class="hint" style="margin:0">${esc(t("fir_photos_s",{n:FIR_MAX}))}</div>
+      ${tiles?`<div class="fir-grid">${tiles}</div>`:""}
+      <div class="fir-btns"><button type="button" class="btn" id="firTake" ${full?"disabled":""}>📷 ${esc(t("fir_take"))}</button>
+        <button type="button" class="btn" id="firGal" ${full?"disabled":""}>🖼 ${esc(t("fir_gallery"))}</button></div></div>
+    <div class="fir-card"><h4>${esc(t("fir_note_t"))}</h4>
+      <textarea id="firNote" rows="3" placeholder="${esc(t("fir_note_ph"))}">${esc(d.note||"")}</textarea></div>
+    <div class="fir-card"><h4>${esc(t("fir_by"))}</h4>
+      <input id="firBy" type="text" placeholder="${esc(t("fir_by_ph"))}" value="${esc(d.by||"")}"></div>`;
+  $("firBody").innerHTML=body;
+  firFooter();
+}
+function firMissing(){
+  const d=firDraft; if(!d) return "x";
+  if(!d.def || !d.def.d || !d.def.u) return t("fir_need_def");
+  if(!d.photos.length && !String(d.note||"").trim()) return t("fir_need_ph");
+  if(String(d.by||"").trim().length<3) return t("fir_need_by");
+  return "";
+}
+function firFooter(){
+  if(!firDraft) return;
+  const miss=firMissing();
+  $("firHint").textContent = miss || t("fir_ready",{n:firDraft.photos.length});
+  $("firSaveBtn").disabled = !!miss || firSaving;
+}
+function firNextKey(){
+  let n=0; for(const ph of firDraft.photos){ const v=parseInt(String(ph.key).slice(1))||0; if(v>n) n=v; }
+  if(firEditing) for(const k of Object.keys(firEditing.positions||{})){ const v=parseInt(String(k).slice(1))||0; if(v>n) n=v; }
+  return "F"+(n+1);
+}
+async function firAddFiles(files){
+  if(!firDraft || !files.length) return;
+  firHarvest();
+  const secured=new Map();
+  await Promise.all(files.map(async f=>{ try{ secured.set(f, await ownBytes(f)); }catch(e){} }));
+  let skipped=0, odd="";
+  for(const f of files){
+    if(!firDraft) return;
+    if(firDraft.photos.length>=FIR_MAX){ skipped++; continue; }
+    const got=await intakeNoted(secured.get(f)||f);
+    if(!firDraft) return;
+    firDraft.photos.push({ key:firNextKey(), att:got.att, cap:"" });
+    if(got.why && !odd) odd=got.why;
+  }
+  firRender();
+  if(skipped) dlg([t("gal_full_t"), t("gal_full_b",{n:skipped, p:FIR_MAX})]);
+  else if(odd) dlg([t("gal_odd_t"), t(intakeWhyKey(odd),{n:1, names:""})]);
+}
+async function firSave(){
+  if(firSaving || !firDraft) return;
+  firHarvest();
+  const miss=firMissing(); if(miss){ firFooter(); return; }
+  firSaving=true; firFooter();
+  try{
+    const d=firDraft, f=d.def;
+    const equip=String(f.u||"").trim().toUpperCase(), date=firEditing ? firEditing.date : todayISO();
+    if(!firEditing){
+      /* The sidecar is named <unit>_<date>_FIR.json, so a second FIR for the same machine on the same day from this
+         phone would replace the first on the server. The same defect is the same FIR: add to the saved one. */
+      let dup=null; try{ dup=(await dbAll()).find(r=>r&&r.type==="FIR"&&r.equip===equip&&r.date===date); }catch(e){}
+      if(dup){ dlg([t("fir_dup_t"), t("fir_dup_b",{x:equip, d:dup.firDefect||""})]); return; }
+    }
+    const by=String(d.by||"").trim(); lsSet("cm_fir_by", by);
+    const id=firEditing ? firEditing.id : `FIR__${equip}__${date}__${DEVICE}__${Date.now()}`;
+    const created=firEditing ? (firEditing.created||new Date().toISOString()) : new Date().toISOString();
+    if(!gps) await getGps(true);
+    const rec={ id, cls:(firEditing&&firEditing.cls)||assetClassOf(equip)||"", type:"FIR", equip, date, smu:"", by,
+      sup:"", sign:null, gps:gps||null, dev:DEVICE, positions:{}, created, up:0, upTo:{},
+      rev:(firEditing?(firEditing.rev||0)+1:1), phv:2,
+      holder:(firEditing ? (firEditing.holder||"") : ((holderGet()||{}).name||"")),
+      holderBadge:(firEditing ? (firEditing.holderBadge||"") : ((holderGet()||{}).badge||"")),
+      firDefect:f.d, firSystem:f.s||"", firPriority:f.p||"", firNote:String(d.note||"").trim() };
+    for(const ph of d.photos){
+      const pos={ photos:[ph.att] };
+      if(String(ph.cap||"").trim()) pos.comment=String(ph.cap).trim();
+      /* keep the manifest entry the photograph already had in the saved round */
+      const old=firEditing && firEditing.positions && firEditing.positions[ph.key];
+      if(old && old.att) pos.att=old.att;
+      rec.positions[ph.key]=pos;
+    }
+    /* The identical tail every Save runs (see rtwSave). */
+    await reArmForSave(rec);
+    await holdAwake(SAVE_GUARD_MS);
+    showSaveGuard(SAVE_GUARD_MS);
+    try{ await attSync(rec); }catch(e){}
+    try{ await dbPut(rec); }
+    catch(e){
+      const why=String((e&&e.message)||e||"");
+      const pair=t("m_save_failed"); dlg([pair[0], pair[1].split("{why}").join(why)]);
+      slog("save-write-fail",{u:rec.equip||"?", id:rec.id, why:why.slice(0,200),
+        phase:(e&&e.phase)||"", hadReqErr:!!(e&&e.hadReqErr), vis:visInfo()});
+      sendTrace("save-write-fail");
+      return;
+    }
+    const verifyBad = await verifySavedRec(id).catch(()=>[]);
+    firClose();
+    renderPending(); syncThenArm();
+    showSaved(rec);
+    setTimeout(applyUpdateIfIdle, 400);
+    if(persistState===null) askPersist();
+    if(verifyBad.length){
+      const names=[...new Set(verifyBad)].join(", ");
+      slog("verify-fail",{u:rec.equip||"?", id:rec.id, n:verifyBad.length, names:names.slice(0,300)});
+      sendTrace("verify-fail");
+      dlg([t("verify_fail_t"), t("verify_fail_b",{x:equip, n:verifyBad.length, names})]);
+    }else{
+      const m=t("m_saved"); dlg([m[0], m[1].replace("{x}",equip)]);
+    }
+  } finally { firSaving=false; firFooter(); }
+}
+document.addEventListener("DOMContentLoaded", function(){
+  const body=$("firBody"); if(!body) return;
+  body.addEventListener("click", async (e)=>{
+    if(!firDraft) return;
+    const def=e.target.closest("[data-fdef]");
+    if(def){ firHarvest(); const f=firDefects().find(x=>x.d===def.dataset.fdef); if(f){ firDraft.def=f; firDraft.unit=f.u||""; } firRender(); return; }
+    const man=e.target.closest("[data-fman]");
+    if(man){ firHarvest(); const u=String(firDraft.unit||"").trim().toUpperCase();
+      if(!u){ const i=$("firUnit"); if(i) i.focus(); return; }
+      firDraft.def={ d:man.dataset.fman, u, s:"", p:"", r:"", x:"" }; firRender(); return; }
+    if(e.target.closest("#firDefChange")){ firHarvest(); firDraft.def=null; firRender(); return; }
+    const del=e.target.closest("[data-fdel]");
+    if(del){ firHarvest(); firDraft.photos=firDraft.photos.filter(p=>p.key!==del.dataset.fdel); firRender(); return; }
+    if(e.target.closest("#firTake")){
+      if(firDraft.photos.length>=FIR_MAX) return;
+      const f = await (window.CMNative ? CMNative.photo() : oneFileFrom("camera"));
+      if(f) await firAddFiles([f]);
+      return;
+    }
+    if(e.target.closest("#firGal")){ firHarvest(); $("firGalInput").click(); return; }
+  });
+  body.addEventListener("input", (e)=>{
+    if(!firDraft) return;
+    if(e.target.id==="firQ"){ firDraft.q=e.target.value; firHarvest(); const l=$("firList"); if(l) l.innerHTML=firListHtml(); return; }
+    if(e.target.id==="firUnit"){ firDraft.unit=e.target.value; return; }
+    firHarvest(); firFooter();
+  });
+});
+$("firGalInput").onchange=async (e)=>{ const files=[...(e.target.files||[])]; e.target.value=""; await firAddFiles(files); };
+$("firSaveBtn").onclick=()=>firSave();
+$("firBack").onclick=()=>firClose();
+/* From the 1C PM sheet: a defect work order starts a FIR for its own defect. */
+$("pmStartFirBtn").onclick=()=>{
+  const r=pmInfoRow; if(!r) return;
+  const d=firNorm((String(r.request||"").match(/DD-?\d{5,}/i)||[""])[0]);
+  if(!d) return;
+  const known=firDefects().find(f=>f.d===d);
+  pmCloseInfo();
+  firOpen(known || { d, u:r.equip||"", s:r.comp||"", p:(String(r.priority||"").match(/P[1-5]/)||[""])[0], r:r.raised||"", x:r.desc||"" });
+};
 
 function renderDue(){
   {
@@ -14145,9 +14455,11 @@ async function renderPending(){
       let use=rec;
       try{ const cur=await dbGet(rec.id); if(cur) use=cur; }catch(e){ bad("edit-reread",e); }
       try{ await reArmForSave(use); }catch(e){ bad("edit-detach",e); }
-      return use.type==="RTW" ? rtwOpenForEdit(use) : editRecord(use);
+      return use.type==="RTW" ? rtwOpenForEdit(use) : use.type==="FIR" ? firOpenForEdit(use) : editRecord(use);
     };
     row.querySelector(".rpt1").onclick=guard(async(ev)=>{ev.stopPropagation();await reportOne(rec);});
+    /* CM_FIR_V1: the FIR document is made on the office FIR page, not on the phone. */
+    if(rec.type==="FIR") row.querySelector(".rpt1").style.display="none";
     row.querySelector(".edit").onclick=(ev)=>{ev.stopPropagation();openEdit();};
     row.querySelector(".meta").onclick=openEdit; row.querySelector(".thumb").onclick=openEdit;
     /* THE "?" ON A SAVED ROUND IS THE FILE-BACKED-FILE DEFECT, HOURS EARLY.
@@ -15421,7 +15733,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="610";
+const BUILD="612";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -18190,6 +18502,8 @@ function recToExport0(rec){
        Left off this export once, a teammate's phone could open a synced RTW
        round and print a report with every item marked but no verdict on it. */
     rtwWo:rec.rtwWo||"", rtwResult:rec.rtwResult||"", rtwComment:rec.rtwComment||"",
+    /* CM_FIR_V1: the 1C defect a FIR round is for, and the field note. The office FIR page reads these. */
+    firDefect:rec.firDefect||"", firNote:rec.firNote||"", firSystem:rec.firSystem||"", firPriority:rec.firPriority||"",
     /* What 1C actually scheduled this release against — the maintenance
        type, the hour tier and the plan date — so the header can say what
        was due, not just which work order number it closed. A defect WO
