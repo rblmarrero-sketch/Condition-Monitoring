@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-11T16:47:57+00:00",
+  "generated": "2026-11-11T17:22:32+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5690,6 +5690,32 @@ window.CM_WO_DATA = {
       "wo": "WO-022439"
     },
     {
+      "asset": "BS015",
+      "defect": "DD-00016735",
+      "raised": "2026-11-12",
+      "system": "BS015.ELS (Electrical System / Электросистема)",
+      "defectType": "3.12 Incorrect parameter / setpoint / Неверный параметр / уставка",
+      "descr": "Некорректная работа спидометра. Занижает показания скорости.",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022442"
+    },
+    {
+      "asset": "BS017",
+      "defect": "DD-00016734",
+      "raised": "2026-11-12",
+      "system": "BS017.DRS.ENG (Engine / Двигатель)",
+      "defectType": "3.13 Warning light / alarm active / Сигнальная лампа / аварийная сигнализация активна",
+      "descr": "Индикация неисправности двигателя. Посторонний звук в работе ДВС",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022441"
+    },
+    {
       "asset": "DR009",
       "defect": "DD-00016733",
       "raised": "2026-11-12",
@@ -5935,6 +5961,32 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-022253"
+    },
+    {
+      "asset": "TK169",
+      "defect": "DD-00016669",
+      "raised": "2026-11-11",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK169 HEATING",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Не работает автономный отопитель в насосном отсеке.",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022241"
+    },
+    {
+      "asset": "TK042",
+      "defect": "DD-00016679",
+      "raised": "2026-11-11",
+      "system": "Fuel Filters / Топливные фильтры",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь ДТ ФГОТ",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022250"
     },
     {
       "asset": "LV087",
@@ -6299,32 +6351,6 @@ window.CM_WO_DATA = {
       "by": "Evgeniy Frolin",
       "regBy": "Фролин Евгений Владимирович",
       "wo": "WO-022256"
-    },
-    {
-      "asset": "TK042",
-      "defect": "DD-00016679",
-      "raised": "2026-11-11",
-      "system": "Fuel Filters / Топливные фильтры",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь ДТ ФГОТ",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022250"
-    },
-    {
-      "asset": "TK169",
-      "defect": "DD-00016669",
-      "raised": "2026-11-11",
-      "system": "TRUCK, WATER URAL 4672M1-20, TK169 HEATING",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Не работает автономный отопитель в насосном отсеке.",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-022241"
     },
     {
       "asset": "TK111",
@@ -6769,6 +6795,45 @@ window.CM_WO_DATA = {
       "wo": "WO-022237"
     },
     {
+      "asset": "TK031",
+      "defect": "DD-00016654",
+      "raised": "2026-11-10",
+      "system": "TK031.BS.PU (Pneumatic Control / Пневмоуправление)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Устранение утечки пневмосистемы",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022227"
+    },
+    {
+      "asset": "TK096",
+      "defect": "DD-00016626",
+      "raised": "2026-11-10",
+      "system": "TK096.OC.HE (Heating / Отопление)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Не работает отпление кабины",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-022197"
+    },
+    {
+      "asset": "TK169",
+      "defect": "DD-00016630",
+      "raised": "2026-11-10",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK169 ENGINE",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Заклинил термостат",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-022205"
+    },
+    {
       "asset": "TK168",
       "defect": "DD-00016663",
       "raised": "2026-11-10",
@@ -7055,32 +7120,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022186"
     },
     {
-      "asset": "TK169",
-      "defect": "DD-00016630",
-      "raised": "2026-11-10",
-      "system": "TRUCK, WATER URAL 4672M1-20, TK169 ENGINE",
-      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
-      "descr": "Заклинил термостат",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Roman Besedovskiy",
-      "regBy": "Беседовский Роман Иванович",
-      "wo": "WO-022205"
-    },
-    {
-      "asset": "TK031",
-      "defect": "DD-00016654",
-      "raised": "2026-11-10",
-      "system": "TK031.BS.PU (Pneumatic Control / Пневмоуправление)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Устранение утечки пневмосистемы",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022227"
-    },
-    {
       "asset": "TK119",
       "defect": "DD-00016650",
       "raised": "2026-11-10",
@@ -7105,19 +7144,6 @@ window.CM_WO_DATA = {
       "by": "Evgeniy Frolin",
       "regBy": "Фролин Евгений Владимирович",
       "wo": "WO-022200"
-    },
-    {
-      "asset": "TK096",
-      "defect": "DD-00016626",
-      "raised": "2026-11-10",
-      "system": "TK096.OC.HE (Heating / Отопление)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Не работает отпление кабины",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Roman Besedovskiy",
-      "regBy": "Беседовский Роман Иванович",
-      "wo": "WO-022197"
     },
     {
       "asset": "EX024",
@@ -7698,7 +7724,7 @@ window.CM_WO_DATA = {
       "system": "TK044.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Течь радиатора охлаждения ДВС, утечка воздуха пневмосистемы",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Aleksey Dobrikov",
       "regBy": "Добриков Алексей Владимирович",
@@ -58210,19 +58236,6 @@ window.CM_WO_DATA = {
       "wo": "WO-015456"
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
-      "wo": null
-    },
-    {
       "asset": "TK046",
       "defect": "DD-00011270",
       "raised": "2026-08-21",
@@ -58311,6 +58324,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
