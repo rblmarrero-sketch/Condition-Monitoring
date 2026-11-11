@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-11T18:32:52+00:00",
+  "generated": "2026-11-11T19:03:00+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5807,6 +5807,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022432"
     },
     {
+      "asset": "DZ018",
+      "defect": "DD-00016698",
+      "raised": "2026-11-11",
+      "system": "DZ018 SD90-C5 SHANTUI",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "требуется заменить болты крепления башмака гус. ленты",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-022363"
+    },
+    {
       "asset": "GR003",
       "defect": "DD-00016670",
       "raised": "2026-11-11",
@@ -6260,19 +6273,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": null
-    },
-    {
-      "asset": "DZ018",
-      "defect": "DD-00016698",
-      "raised": "2026-11-11",
-      "system": "DZ018 SD90-C5 SHANTUI",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "требуется заменить болты крепления башмака гус. ленты",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": "WO-022363"
     },
     {
       "asset": "CR006",
