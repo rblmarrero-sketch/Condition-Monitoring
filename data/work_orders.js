@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-11T08:07:34+00:00",
+  "generated": "2026-11-11T08:27:48+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -2157,7 +2157,7 @@ window.CM_WO_DATA = {
       "raised": "2026-10-13",
       "detected": "2026-10-13",
       "planStart": "2026-11-05",
-      "closed": null,
+      "closed": "2026-11-06",
       "asset": "TK127",
       "defect": "DD-00014674",
       "requestNo": "DD-00014674",
@@ -2168,7 +2168,7 @@ window.CM_WO_DATA = {
       "cause": "Усталостная трещина",
       "causeFrom": "wo",
       "descr": "Ремень генератора в трещинах, требуется замена.",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "by": "Zhomart",
       "byFull": "Zhomart Khasenov",
       "regBy": "Хасенов Жомарт",
@@ -5433,7 +5433,7 @@ window.CM_WO_DATA = {
       "raised": "2026-08-06",
       "detected": "2026-08-06",
       "planStart": "2026-11-09",
-      "closed": null,
+      "closed": "2026-11-12",
       "asset": "DZ002",
       "defect": "DD-00010352",
       "requestNo": "DD-00010352",
@@ -5444,7 +5444,7 @@ window.CM_WO_DATA = {
       "cause": "Некачественное выполнение",
       "causeFrom": "wo",
       "descr": "Отсутствует дворник на переднем стекле",
-      "status": "Elimination scheduled",
+      "status": "In progress",
       "by": "Zhomart",
       "byFull": "Zhomart Khasenov",
       "regBy": "Хасенов Жомарт",
@@ -5820,6 +5820,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "CR004",
+      "defect": "DD-00016710",
+      "raised": "2026-11-11",
+      "system": "CR004.CH.CV (Conveyor / Конвейер)",
+      "defectType": "8.06 Roller / idler failure / Отказ ролика / роликоопоры",
+      "descr": "износ подшипника приводного барабана питателя",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Sergey Murashko",
+      "regBy": "Мурашко Сергей Борисович",
+      "wo": null
+    },
+    {
       "asset": "DZ011",
       "defect": "DD-00016693",
       "raised": "2026-11-11",
@@ -6117,6 +6130,19 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-022241"
+    },
+    {
+      "asset": "BS002",
+      "defect": "DD-00016709",
+      "raised": "2026-11-11",
+      "system": "BS002.OC.GL (Glass / Стекла)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Ремонт крепления механизма стеклоочистителей",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022371"
     },
     {
       "asset": "EX021",
@@ -15232,6 +15258,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021283"
     },
     {
+      "asset": "LD003",
+      "defect": "DD-00015936",
+      "raised": "2026-10-30",
+      "system": "Bucket / Ковш",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Предельный износ футеровки ковша",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Evgeniy Frolin",
+      "regBy": "Фролин Евгений Владимирович",
+      "wo": "WO-021208"
+    },
+    {
       "asset": "DZ018",
       "defect": "DD-00015945",
       "raised": "2026-10-30",
@@ -15542,19 +15581,6 @@ window.CM_WO_DATA = {
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": "WO-021240"
-    },
-    {
-      "asset": "LD003",
-      "defect": "DD-00015936",
-      "raised": "2026-10-30",
-      "system": "Bucket / Ковш",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "Предельный износ футеровки ковша",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Evgeniy Frolin",
-      "regBy": "Фролин Евгений Владимирович",
-      "wo": "WO-021208"
     },
     {
       "asset": "TK123",
@@ -21368,6 +21394,32 @@ window.CM_WO_DATA = {
       "wo": "WO-021128"
     },
     {
+      "asset": "TK155",
+      "defect": "DD-00015451",
+      "raised": "2026-10-23",
+      "system": "TK155.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.15 Abnormal smoke / abnormal exhaust / Дымность / ненормальный выхлоп",
+      "descr": "Неисправность выхлопной системы просечка газов с выхлопной трубы",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-020994"
+    },
+    {
+      "asset": "TK155",
+      "defect": "DD-00015448",
+      "raised": "2026-10-23",
+      "system": "TK155.BS.CV (Control Valve / Управляющий клапан)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь масла с распределителя тормозов",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-020996"
+    },
+    {
       "asset": "TK091",
       "defect": "DD-00015440",
       "raised": "2026-10-23",
@@ -21522,32 +21574,6 @@ window.CM_WO_DATA = {
       "by": "Andrey Taran",
       "regBy": "Таран Андрей Андреевич",
       "wo": "WO-021698"
-    },
-    {
-      "asset": "TK155",
-      "defect": "DD-00015448",
-      "raised": "2026-10-23",
-      "system": "TK155.BS.CV (Control Valve / Управляющий клапан)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь масла с распределителя тормозов",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": "WO-020996"
-    },
-    {
-      "asset": "TK155",
-      "defect": "DD-00015451",
-      "raised": "2026-10-23",
-      "system": "TK155.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.15 Abnormal smoke / abnormal exhaust / Дымность / ненормальный выхлоп",
-      "descr": "Неисправность выхлопной системы просечка газов с выхлопной трубы",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": "WO-020994"
     },
     {
       "asset": "EX015",
@@ -33588,45 +33614,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "EX005",
-      "defect": "DD-00014474",
-      "raised": "2026-10-09",
-      "system": "EX005.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка масла с бугельной плиты блока цилиндров.",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Shcherbina",
-      "regBy": "Щербина Андрей Николаевич",
-      "wo": null
-    },
-    {
-      "asset": "EX005",
-      "defect": "DD-00014471",
-      "raised": "2026-10-09",
-      "system": "EX005.HS.CV (Control Valves / Гидрораспределители)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка масла с блока клапанов.",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Shcherbina",
-      "regBy": "Щербина Андрей Николаевич",
-      "wo": null
-    },
-    {
-      "asset": "EX005",
-      "defect": "DD-00014472",
-      "raised": "2026-10-09",
-      "system": "EX005.HS.MP (Hydraulic Pumps / Гидронасосы)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка с уплотнения уголка гидронасоса.",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Shcherbina",
-      "regBy": "Щербина Андрей Николаевич",
-      "wo": null
-    },
-    {
       "asset": "GR009",
       "defect": "DD-00014449",
       "raised": "2026-10-09",
@@ -33729,6 +33716,45 @@ window.CM_WO_DATA = {
       "by": "Evgeniy Frolin",
       "regBy": "Фролин Евгений Владимирович",
       "wo": "WO-019294"
+    },
+    {
+      "asset": "EX005",
+      "defect": "DD-00014474",
+      "raised": "2026-10-09",
+      "system": "EX005.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка масла с бугельной плиты блока цилиндров.",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Shcherbina",
+      "regBy": "Щербина Андрей Николаевич",
+      "wo": "WO-022372"
+    },
+    {
+      "asset": "EX005",
+      "defect": "DD-00014471",
+      "raised": "2026-10-09",
+      "system": "EX005.HS.CV (Control Valves / Гидрораспределители)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка масла с блока клапанов.",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Shcherbina",
+      "regBy": "Щербина Андрей Николаевич",
+      "wo": "WO-022369"
+    },
+    {
+      "asset": "EX005",
+      "defect": "DD-00014472",
+      "raised": "2026-10-09",
+      "system": "EX005.HS.MP (Hydraulic Pumps / Гидронасосы)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка с уплотнения уголка гидронасоса.",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Shcherbina",
+      "regBy": "Щербина Андрей Николаевич",
+      "wo": "WO-022370"
     },
     {
       "asset": "EX021",
@@ -135448,15 +135474,15 @@ window.CM_WO_DATA = {
       "cmLabel": "500h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CLSD",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-08",
       "planStartDt": "2026-11-08T00:00:00",
       "planEnd": "2026-11-09",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-08",
+      "actualStartDt": "2026-11-08T19:00:00",
+      "actualEnd": "2026-11-09"
     },
     {
       "equip": "GR016",
@@ -186860,15 +186886,15 @@ window.CM_WO_DATA = {
         "TB"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CLSD",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-07",
       "planStartDt": "2026-11-07T00:00:00",
       "planEnd": "2026-11-08",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-07",
+      "actualStartDt": "2026-11-07T07:00:00",
+      "actualEnd": "2026-11-08"
     },
     {
       "equip": "TK126",
