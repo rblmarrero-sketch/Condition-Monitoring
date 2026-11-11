@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-11T14:37:43+00:00",
+  "generated": "2026-11-11T14:52:41+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5625,6 +5625,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022431"
     },
     {
+      "asset": "GE065",
+      "defect": "DD-00016725",
+      "raised": "2026-11-12",
+      "system": "GE065.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Отогрев,долив техжидкостей, запуск ДВС",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022432"
+    },
+    {
       "asset": "GR003",
       "defect": "DD-00016670",
       "raised": "2026-11-11",
@@ -6574,6 +6587,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022199"
     },
     {
+      "asset": "SN001",
+      "defect": "DD-00016625",
+      "raised": "2026-11-10",
+      "system": "SN001.CONV.SDC (Side Discharge Conveyor / Боковой разгрузочный конвейер)",
+      "defectType": "8.06 Roller / idler failure / Отказ ролика / роликоопоры",
+      "descr": "Порыв ленты конвейера, поломка роликов",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-022188"
+    },
+    {
       "asset": "TK168",
       "defect": "DD-00016663",
       "raised": "2026-11-10",
@@ -7027,19 +7053,6 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022174"
-    },
-    {
-      "asset": "SN001",
-      "defect": "DD-00016625",
-      "raised": "2026-11-10",
-      "system": "SN001.CONV.SDC (Side Discharge Conveyor / Боковой разгрузочный конвейер)",
-      "defectType": "8.06 Roller / idler failure / Отказ ролика / роликоопоры",
-      "descr": "Порыв ленты конвейера, поломка роликов",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": "WO-022188"
     },
     {
       "asset": "DZ002",
@@ -24631,6 +24644,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021709"
     },
     {
+      "asset": "TK122",
+      "defect": "DD-00015224",
+      "raised": "2026-10-20",
+      "system": "TK122.DRS.TRA (Transmission / Трансмиссия)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь масла из РВД охлаждения коробки передач",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Evgeniy Frolin",
+      "regBy": "Фролин Евгений Владимирович",
+      "wo": "WO-021485"
+    },
+    {
       "asset": "CN013",
       "defect": "DD-00015229",
       "raised": "2026-10-20",
@@ -24668,19 +24694,6 @@ window.CM_WO_DATA = {
       "by": "Evgeniy Frolin",
       "regBy": "Фролин Евгений Владимирович",
       "wo": "WO-021488"
-    },
-    {
-      "asset": "TK122",
-      "defect": "DD-00015224",
-      "raised": "2026-10-20",
-      "system": "TK122.DRS.TRA (Transmission / Трансмиссия)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь масла из РВД охлаждения коробки передач",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Evgeniy Frolin",
-      "regBy": "Фролин Евгений Владимирович",
-      "wo": "WO-021485"
     },
     {
       "asset": "TK122",
