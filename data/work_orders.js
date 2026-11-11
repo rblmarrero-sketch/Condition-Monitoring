@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-11T14:08:23+00:00",
+  "generated": "2026-11-11T14:22:47+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5729,19 +5729,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022426"
     },
     {
-      "asset": "TK154",
-      "defect": "DD-00016718",
-      "raised": "2026-11-11",
-      "system": "TK154.OC.HE (Heating / Отопление)",
-      "defectType": "3.01 Control failure / Ошибка управления",
-      "descr": "Не исправен эл. двигатель отопителя",
-      "status": "Completed",
-      "priority": "P2 Urgent",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": "WO-022425"
-    },
-    {
       "asset": "CR004",
       "defect": "DD-00016710",
       "raised": "2026-11-11",
@@ -5766,6 +5753,19 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022252"
+    },
+    {
+      "asset": "TK154",
+      "defect": "DD-00016718",
+      "raised": "2026-11-11",
+      "system": "TK154.OC.HE (Heating / Отопление)",
+      "defectType": "3.01 Control failure / Ошибка управления",
+      "descr": "Не исправен эл. двигатель отопителя",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022425"
     },
     {
       "asset": "LV087",
