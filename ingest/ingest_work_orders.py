@@ -522,6 +522,34 @@ def _completed_recently(date_iso, as_of, window_days):
 # not inlined into main(), so it can be unit-tested without the
 # openpyxl/network dependencies the rest of this script needs (see
 # tests/rtwopen.py).
+FIR_DAYS = 60   # CM_FIR_V1: a defect raised in the last FIR_DAYS can be picked for a FIR on the phone
+
+
+def build_fir_defects(cm_dedup, other_dedup, as_of=None):
+    """CM_FIR_V1 (Rickie 11.11.2026): the 1C defects a FIR can be started from on the phone.
+
+    The site's procedure is 1C defect -> FIR -> RCA, so a FIR needs a defect number that already exists
+    in 1C. Every defect raised in the last FIR_DAYS days, the CM team's and everyone else's, one row per
+    defect number; P1 and P2 first (a FIR is due on those), then newest first. Slim: d defect, u unit,
+    s system code, p priority code (P1..P5 or None), r raised date, x a short description.
+    """
+    since = ((as_of or datetime.now(timezone.utc)) - timedelta(days=FIR_DAYS)).date().isoformat()
+    seen, out = set(), []
+    for r in list(cm_dedup) + list(other_dedup):
+        d = r.get("defect")
+        raised = r.get("raised") or r.get("date")
+        if not d or d in seen or not raised or raised < since:
+            continue
+        seen.add(d)
+        m = re.search(r"\bP([1-5])\b", str(r.get("priority") or ""), re.I)
+        out.append({"d": d, "u": (r.get("asset") or "").upper() or None, "s": r.get("system"),
+                    "p": ("P" + m.group(1)) if m else None, "r": raised,
+                    "x": (str(r.get("descr") or "")[:80] or None)})
+    out.sort(key=lambda f: f["r"], reverse=True)
+    out.sort(key=lambda f: 0 if f["p"] in ("P1", "P2") else 1)
+    return out
+
+
 def build_rtw_open(work_orders, cm_dedup, as_of=None):
     # `type`/`hours`/`plan` feed Return to Work's own header strip (the work
     # order, its maintenance type, its scheduled hour tier and 1C's own plan
@@ -1079,6 +1107,7 @@ def main():
         "generated": out["generated"],
         "byUnit": slim_by_unit,
         "rtwOpen": rtw_open,
+        "firDefects": build_fir_defects(cm_dedup, other_dedup, as_of=now),
     }, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     # THE RELIABILITY FILE. Its own file, not more of work_orders.js: that is
     # a <script> every office page loads at once, and this is read only when

@@ -5346,6 +5346,21 @@ text with no English yet stays Russian, never blank. Sort and the column filter 
 search box and the filter bar find a row by the English AND the Russian. The data, the CSV, the counts and the Russian page keep
 1C's own text. `tests/cwen.cjs` (both pages; fails 10 on build 609).
 
+**FIR IN THE PHONE APP (build 611, CM_FIR_V1, Rickie 11.11 "1C defect, create FIR, create RCA").** The inspection type
+list ends with "FIR · Failure investigation (FIR)". It is not a round (not in `TYPE_ORDER`, `TYPE_META.FIR.fir`):
+choosing it opens `#firOv` and the list goes back to the round type it had. The sheet asks for the 1C defect first —
+`SCHED.firDefects`, written into `data/schedule_slim.json` by `build_fir_defects()` (ingest: every defect of the last
+60 days, the CM team's and everyone else's, one row per DD number, P1/P2 first; keys d/u/s/p/r/x). A DD number typed
+by hand that is not in the list yet is accepted with its unit. Then up to `FIR_MAX` (6) photographs with a caption
+each, a note and a name. Save writes a record of type FIR (`firDefect`, `firSystem`, `firPriority`, `firNote` in the
+record and the sidecar) through the same Save tail as RTW; each photograph is its own position `F1`, `F2` … given once
+(`firNextKey`), so removing one never renames the others; files are `<unit>_F<n>_<date>_FIR.jpg`. One FIR per machine
+per day per phone (the sidecar is `<unit>_<date>_FIR.json`): a second is refused with the reason. Edit in Saved reopens
+the FIR sheet (the defect is fixed); the phone's report button is hidden for FIR — the FIR document is made on the
+office FIR page (Pechanka `/rca/`, askpi-site `fir_rca_kit`), whose importer takes the photographs straight into the
+FIR of that defect. The 1C PM sheet shows "Start FIR" on a defect work order. FIR is kept off every programme and grade
+count like RTW (phone history, both dashboards). `tests/firround.cjs`, `tests/firdefects.py`.
+
 ---
 
 ## Secrets
