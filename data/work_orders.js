@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-11T16:02:49+00:00",
+  "generated": "2026-11-11T16:32:29+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5677,6 +5677,32 @@ window.CM_WO_DATA = {
       "wo": "WO-022438"
     },
     {
+      "asset": "TK112",
+      "defect": "DD-00016732",
+      "raised": "2026-11-12",
+      "system": "TK112.ELS.LIG (Head Lighting System / Система головного освещения)",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "Не горит ближний свет",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022439"
+    },
+    {
+      "asset": "DR009",
+      "defect": "DD-00016733",
+      "raised": "2026-11-12",
+      "system": "DR009.CH.UC (Undercarriage / Ходовая часть)",
+      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
+      "descr": "Требуется шиповка гусеничной ленты",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Kiselev",
+      "regBy": "Киселев Алексей Александрович",
+      "wo": "WO-022440"
+    },
+    {
       "asset": "PU010",
       "defect": "DD-00016728",
       "raised": "2026-11-12",
@@ -5883,6 +5909,32 @@ window.CM_WO_DATA = {
       "by": "Aleksey Dobrikov",
       "regBy": "Добриков Алексей Владимирович",
       "wo": "WO-022254"
+    },
+    {
+      "asset": "EX008",
+      "defect": "DD-00016674",
+      "raised": "2026-11-11",
+      "system": "EX008.ELS.AS (Alarm System / Система сигнализации)",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "Не работает проблесковый маячок. Слабый звуковой сигнал.",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022246"
+    },
+    {
+      "asset": "TK021",
+      "defect": "DD-00016680",
+      "raised": "2026-11-11",
+      "system": "TK021.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Не работает автономный отопитель.",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022253"
     },
     {
       "asset": "LV087",
@@ -6236,19 +6288,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022262"
     },
     {
-      "asset": "TK021",
-      "defect": "DD-00016680",
-      "raised": "2026-11-11",
-      "system": "TK021.OC.HE (Heating / Отопление)",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Не работает автономный отопитель.",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-022253"
-    },
-    {
       "asset": "DZ022",
       "defect": "DD-00016684",
       "raised": "2026-11-11",
@@ -6275,17 +6314,17 @@ window.CM_WO_DATA = {
       "wo": "WO-022250"
     },
     {
-      "asset": "EX008",
-      "defect": "DD-00016674",
+      "asset": "TK169",
+      "defect": "DD-00016669",
       "raised": "2026-11-11",
-      "system": "EX008.ELS.AS (Alarm System / Система сигнализации)",
-      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
-      "descr": "Не работает проблесковый маячок. Слабый звуковой сигнал.",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK169 HEATING",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Не работает автономный отопитель в насосном отсеке.",
       "status": "Elimination scheduled",
       "priority": "P2 Urgent",
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-022246"
+      "wo": "WO-022241"
     },
     {
       "asset": "TK111",
@@ -6299,19 +6338,6 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022245"
-    },
-    {
-      "asset": "TK169",
-      "defect": "DD-00016669",
-      "raised": "2026-11-11",
-      "system": "TRUCK, WATER URAL 4672M1-20, TK169 HEATING",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Не работает автономный отопитель в насосном отсеке.",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-022241"
     },
     {
       "asset": "TK092",
@@ -6691,6 +6717,58 @@ window.CM_WO_DATA = {
       "wo": "WO-022239"
     },
     {
+      "asset": "EX001",
+      "defect": "DD-00016658",
+      "raised": "2026-11-10",
+      "system": "EX001.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Протяжка болтов крепления защиты ДВС",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022231"
+    },
+    {
+      "asset": "EX002",
+      "defect": "DD-00016656",
+      "raised": "2026-11-10",
+      "system": "EX002.CH.BUC (Bucket / Ковш)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Замена коронки ковша № 15",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022229"
+    },
+    {
+      "asset": "TK091",
+      "defect": "DD-00016659",
+      "raised": "2026-11-10",
+      "system": "High Pressure Pump / ТНВД (насос высокого давления)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Устранение утечки ДТ",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022232"
+    },
+    {
+      "asset": "TK047",
+      "defect": "DD-00016665",
+      "raised": "2026-11-10",
+      "system": "TK047.BS.SHO (Brake Shoes / Тормозные колодки)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Заклинивание левого переднего колеса",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022237"
+    },
+    {
       "asset": "TK168",
       "defect": "DD-00016663",
       "raised": "2026-11-10",
@@ -6977,19 +7055,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022186"
     },
     {
-      "asset": "TK047",
-      "defect": "DD-00016665",
-      "raised": "2026-11-10",
-      "system": "TK047.BS.SHO (Brake Shoes / Тормозные колодки)",
-      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
-      "descr": "Заклинивание левого переднего колеса",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022237"
-    },
-    {
       "asset": "TK169",
       "defect": "DD-00016630",
       "raised": "2026-11-10",
@@ -7001,45 +7066,6 @@ window.CM_WO_DATA = {
       "by": "Roman Besedovskiy",
       "regBy": "Беседовский Роман Иванович",
       "wo": "WO-022205"
-    },
-    {
-      "asset": "EX002",
-      "defect": "DD-00016656",
-      "raised": "2026-11-10",
-      "system": "EX002.CH.BUC (Bucket / Ковш)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Замена коронки ковша № 15",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022229"
-    },
-    {
-      "asset": "TK091",
-      "defect": "DD-00016659",
-      "raised": "2026-11-10",
-      "system": "High Pressure Pump / ТНВД (насос высокого давления)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Устранение утечки ДТ",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022232"
-    },
-    {
-      "asset": "EX001",
-      "defect": "DD-00016658",
-      "raised": "2026-11-10",
-      "system": "EX001.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Протяжка болтов крепления защиты ДВС",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022231"
     },
     {
       "asset": "TK031",
@@ -7666,6 +7692,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022010"
     },
     {
+      "asset": "TK044",
+      "defect": "DD-00016606",
+      "raised": "2026-11-09",
+      "system": "TK044.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь радиатора охлаждения ДВС, утечка воздуха пневмосистемы",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022169"
+    },
+    {
       "asset": "GE109",
       "defect": "DD-00016586",
       "raised": "2026-11-09",
@@ -7859,19 +7898,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": null
-    },
-    {
-      "asset": "TK044",
-      "defect": "DD-00016606",
-      "raised": "2026-11-09",
-      "system": "TK044.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь радиатора охлаждения ДВС, утечка воздуха пневмосистемы",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022169"
     },
     {
       "asset": "LD008",
@@ -60525,6 +60551,19 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "LV011",
+      "defect": "DD-00009705",
+      "raised": "2026-07-27",
+      "system": "LV011.OC.AC (Air Conditioning / Кондиционирование)",
+      "defectType": "1.25 Reduced capacity / output / Снижение производительности / выхода",
+      "descr": "Требуется замена кондиционера",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": null
+    },
+    {
+      "asset": "LV011",
       "defect": "DD-00009702",
       "raised": "2026-07-27",
       "system": "LV011.BS (Braking System / Тормозная система)",
@@ -60543,19 +60582,6 @@ window.CM_WO_DATA = {
       "system": "LV011.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Требуется замена всех патрубков системы охлаждения",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": null
-    },
-    {
-      "asset": "LV011",
-      "defect": "DD-00009705",
-      "raised": "2026-07-27",
-      "system": "LV011.OC.AC (Air Conditioning / Кондиционирование)",
-      "defectType": "1.25 Reduced capacity / output / Снижение производительности / выхода",
-      "descr": "Требуется замена кондиционера",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
