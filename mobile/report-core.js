@@ -4142,7 +4142,7 @@
       var row = typeRow(T, ty, latestByType[ty], byType[ty] && byType[ty][1]);
       if (row.rn > worst) worst = row.rn; return row.html;
     }).join("");
-    var notCoveredNote = notCovered.length
+    var notCoveredNote = (notCovered.length && !ctx.unitScopeType)
       ? '<div class="muted" style="font-size:9.5px;margin-top:6px;">'
         + esc(T("uh_not_covered", { list: notCovered.map(function (ty) {
             return T.key("method_" + ty, "") ? T("method_" + ty) : ty; }).join(", ") }))
@@ -4192,6 +4192,9 @@
         + (smu ? ' · ' + T.I("f_smu") + ' <b>' + esc(String(smu)) + '</b> ' + esc(T("u_h")) : '')
         + (model ? ' · ' + esc(model) : '') + '</div>'
       + '<div class="quiet" style="margin-top:2px;">' + T.S("uh_sub") + '</div>'
+      /* CM_UREP_V1: the office asked for this machine's history narrowed to one type and / or a date range;
+         the reader is told what the report covers, in the host's own words (dashboard/report.js). */
+      + (ctx.unitScope ? '<div class="msub uscope" style="margin-top:4px;"><b>' + T.both(ctx.unitScope, ctx.unitScopeAlt, "alti") + '</b></div>' : '')
       + '</div>'
       + '<div class="rule" style="margin:11px 0 0"></div>'
       + '<div class="rrate" style="margin-top:12px">'

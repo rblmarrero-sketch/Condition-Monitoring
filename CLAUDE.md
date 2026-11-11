@@ -5361,6 +5361,18 @@ office FIR page (Pechanka `/rca/`, askpi-site `fir_rca_kit`), whose importer tak
 FIR of that defect. The 1C PM sheet shows "Start FIR" on a defect work order. FIR is kept off every programme and grade
 count like RTW (phone history, both dashboards). `tests/firround.cjs`, `tests/firdefects.py`.
 
+**ONE MACHINE, ONE INSPECTION TYPE, A DATE RANGE (build 612, CM_UREP_V1, Rickie 11.11 "generate report for 1 equipment
+for one type of inspection on date range").** Reports → "Equipment — one machine + trend" has Inspection type (All
+types, or the types that machine has) and From / To under the machine picker, on both office pages (`#rUnitFilt`,
+`rUnitFiltSync`, `rTargetFull`). The choice travels in the target as `UNIT|TYPE|FROM|TO` (`dashboard/report.js`
+`unitTarget` / `unitTargetJoin` / `unitTargetLabel`; both dates included, an empty part means "any"), so the preview,
+the estimate, the photo fetch, the PDF, its file name and "Make again" all read the same records. A plain `UNIT`
+(Equipment History's own report button, an older recent report) is the whole history, unchanged. The document says
+what it covers under its masthead (`ctx.unitScope`, "Report covers: Magnetic Plug · 01.10.2026 – 31.10.2026",
+`r_u_covers`) and, when a type is chosen, does not list the other types as never inspected (`ctx.unitScopeType`). No
+match is said in the preview and Generate makes no PDF (`r_u_none`). Shared engine change in `report-core.js`; the
+phone never sets either field. `tests/unitrange.cjs`.
+
 ---
 
 ## Secrets

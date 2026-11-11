@@ -56,7 +56,7 @@ for t in bump.cjs noprodhit.cjs prodguard.cjs pwguard.cjs idxcap.cjs fboverlay.c
          cards.cjs v4.cjs wear.cjs uc.cjs ucmap.cjs sheet.cjs ucside.cjs ucreach.cjs map2.cjs stale.cjs ver.cjs \
          cf.cjs cfd.cjs cfp.cjs f4.cjs s3.cjs s1.cjs edit.cjs ed2.cjs gs.cjs gsdupdir.cjs gsindex.cjs uicontrast.cjs phonetap.cjs phonepolish.cjs puckhit.cjs upkeepreg.cjs defercancel.cjs dashlayout.cjs cards.cjs sitestd.cjs cmtpl.cjs sitefb.cjs cmfluid.cjs cmwomlook.cjs histpull.cjs gassafety.cjs drv.cjs \
          dash.cjs fold2.cjs stab.cjs team.cjs wedge.cjs audit.cjs offline.cjs \
-         pick.cjs lang.cjs rtw.cjs rtwopen.cjs firdefects.cjs firround.cjs relingest.cjs reliability.cjs srcpill.cjs installprog.cjs truncate.cjs favicon.cjs holder.cjs resumewords.cjs; do
+         pick.cjs lang.cjs rtw.cjs rtwopen.cjs firdefects.cjs firround.cjs unitrange.cjs relingest.cjs reliability.cjs srcpill.cjs installprog.cjs truncate.cjs favicon.cjs holder.cjs resumewords.cjs; do
   if [ -f "$t" ]; then run "$t"; else MISSING="$MISSING $t"; fi
 done
 pkill -f 'ed-srv.cjs|mock.cjs|stab-srv.cjs|hang.cjs|up-srv.cjs' 2>/dev/null
