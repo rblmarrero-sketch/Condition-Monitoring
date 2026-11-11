@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-11T11:47:57+00:00",
+  "generated": "2026-11-11T12:02:40+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5677,6 +5677,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022249"
     },
     {
+      "asset": "DZ006",
+      "defect": "DD-00016720",
+      "raised": "2026-11-11",
+      "system": "DZ006.DRS.TRA (Transmission / Трансмиссия)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Низкий уровень",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022428"
+    },
+    {
       "asset": "DZ018",
       "defect": "DD-00016711",
       "raised": "2026-11-11",
@@ -5794,19 +5807,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK015",
-      "defect": "DD-00016715",
-      "raised": "2026-11-11",
-      "system": "TK015.CH (Structure & Chassis / Рама и конструкция)",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "Восстановление",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": null
-    },
-    {
       "asset": "TK061",
       "defect": "DD-00016683",
       "raised": "2026-11-11",
@@ -5830,6 +5830,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "TK015",
+      "defect": "DD-00016715",
+      "raised": "2026-11-11",
+      "system": "TK015.CH (Structure & Chassis / Рама и конструкция)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Восстановление",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
       "wo": null
     },
     {
@@ -5869,19 +5882,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "DZ006",
-      "defect": "DD-00016720",
-      "raised": "2026-11-11",
-      "system": "DZ006.DRS.TRA (Transmission / Трансмиссия)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Низкий уровень",
-      "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
       "wo": null
     },
     {
@@ -6182,6 +6182,19 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-022241"
+    },
+    {
+      "asset": "TK092",
+      "defect": "DD-00016721",
+      "raised": "2026-11-11",
+      "system": "TK092.CH.SU (Suspension / Подвеска)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Люфт втулок переднего стабилизатора, монтаж патрубка интеркуллера",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022427"
     },
     {
       "asset": "TK154",
@@ -38242,12 +38255,12 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "LV158",
-      "defect": "DD-00014121",
+      "asset": "TK162",
+      "defect": "DD-00014083",
       "raised": "2026-10-05",
-      "system": "LV158.CH.SU (Suspension / Подвеска)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Требуется замена нижних и верхних шаровых опор, замена втулок и стоек стабилизатора",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK162 TRANSMISSION OldNumber (UT162)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка масла с РК",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -38255,12 +38268,12 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK162",
-      "defect": "DD-00014083",
+      "asset": "LV158",
+      "defect": "DD-00014121",
       "raised": "2026-10-05",
-      "system": "TRUCK, WATER URAL 4672M1-20, TK162 TRANSMISSION OldNumber (UT162)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка масла с РК",
+      "system": "LV158.CH.SU (Suspension / Подвеска)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Требуется замена нижних и верхних шаровых опор, замена втулок и стоек стабилизатора",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -47069,6 +47082,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "GE101",
+      "defect": "DD-00013342",
+      "raised": "2026-09-25",
+      "system": "GE101.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Замена шлангов ОЖ",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": null
+    },
+    {
       "asset": "LV130",
       "defect": "DD-00013348",
       "raised": "2026-09-25",
@@ -47088,19 +47114,6 @@ window.CM_WO_DATA = {
       "system": "LV130.DRS.ENG (Engine / Двигатель)",
       "defectType": "3.13 Warning light / alarm active / Сигнальная лампа / аварийная сигнализация активна",
       "descr": "Горит лампа \"Проверьте двигатель\"",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": null
-    },
-    {
-      "asset": "GE101",
-      "defect": "DD-00013342",
-      "raised": "2026-09-25",
-      "system": "GE101.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Замена шлангов ОЖ",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
