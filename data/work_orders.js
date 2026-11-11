@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-11T19:18:34+00:00",
+  "generated": "2026-11-11T19:37:52+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5807,19 +5807,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022432"
     },
     {
-      "asset": "DZ018",
-      "defect": "DD-00016698",
-      "raised": "2026-11-11",
-      "system": "DZ018 SD90-C5 SHANTUI",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "требуется заменить болты крепления башмака гус. ленты",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": "WO-022363"
-    },
-    {
       "asset": "GR003",
       "defect": "DD-00016670",
       "raised": "2026-11-11",
@@ -6041,6 +6028,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022250"
     },
     {
+      "asset": "DZ018",
+      "defect": "DD-00016698",
+      "raised": "2026-11-11",
+      "system": "DZ018.CH.UC (Undercarriage / Ходовая часть)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "требуется заменить болты крепления башмака гус. ленты",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-022363"
+    },
+    {
       "asset": "LV087",
       "defect": "DD-00016716",
       "raised": "2026-11-11",
@@ -6109,7 +6109,7 @@ window.CM_WO_DATA = {
       "asset": "TK044",
       "defect": "DD-00016708",
       "raised": "2026-11-11",
-      "system": "TK044 65201 KAMAZ",
+      "system": "TK044.CH.FR (Frame / Рама)",
       "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
       "descr": "Требуется регулировка подушек кузова и регулировка фиксаторов кузова",
       "status": "Registered",
@@ -6252,7 +6252,7 @@ window.CM_WO_DATA = {
       "asset": "LV032",
       "defect": "DD-00016707",
       "raised": "2026-11-11",
-      "system": "LV032 HILUX 2.5 TOYOTA",
+      "system": "LV032.OC.HE (Heating / Отопление)",
       "defectType": "4.02 Open circuit / Разрыв цепи",
       "descr": "ремонт блока климата и отопителя салона.",
       "status": "Registered",
