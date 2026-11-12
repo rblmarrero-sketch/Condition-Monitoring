@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-12T14:42:30+00:00",
+  "generated": "2026-11-12T15:00:20+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -5670,8 +5670,21 @@ window.CM_WO_DATA = {
       "system": "DZ008.OC.HE (Heating / Отопление)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Утечка О/Ж",
-      "status": "Registered",
+      "status": "Completed",
       "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022485"
+    },
+    {
+      "asset": "DZ008",
+      "defect": "DD-00016792",
+      "raised": "2026-11-13",
+      "system": "DZ008.OC.HE (Heating / Отопление)",
+      "defectType": "3.01 Control failure / Ошибка управления",
+      "descr": "Не исправен отопитель кабины",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": null
@@ -5896,6 +5909,45 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-022435"
+    },
+    {
+      "asset": "BS015",
+      "defect": "DD-00016735",
+      "raised": "2026-11-12",
+      "system": "BS015.ELS (Electrical System / Электросистема)",
+      "defectType": "3.12 Incorrect parameter / setpoint / Неверный параметр / уставка",
+      "descr": "Некорректная работа спидометра. Занижает показания скорости.",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022442"
+    },
+    {
+      "asset": "BS016",
+      "defect": "DD-00016738",
+      "raised": "2026-11-12",
+      "system": "BS016.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Неисправность автономных отопителей в рассажирском салоне",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022445"
+    },
+    {
+      "asset": "BS007",
+      "defect": "DD-00016736",
+      "raised": "2026-11-12",
+      "system": "BS007.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Не работает автономный отопитель в кабине.",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022443"
     },
     {
       "asset": "LS057",
@@ -6210,19 +6262,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022447"
     },
     {
-      "asset": "BS016",
-      "defect": "DD-00016738",
-      "raised": "2026-11-12",
-      "system": "BS016.OC.HE (Heating / Отопление)",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Неисправность автономных отопителей в рассажирском салоне",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-022445"
-    },
-    {
       "asset": "DZ008",
       "defect": "DD-00016768",
       "raised": "2026-11-12",
@@ -6234,32 +6273,6 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-022468"
-    },
-    {
-      "asset": "BS007",
-      "defect": "DD-00016736",
-      "raised": "2026-11-12",
-      "system": "BS007.OC.HE (Heating / Отопление)",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Не работает автономный отопитель в кабине.",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-022443"
-    },
-    {
-      "asset": "BS015",
-      "defect": "DD-00016735",
-      "raised": "2026-11-12",
-      "system": "BS015.ELS (Electrical System / Электросистема)",
-      "defectType": "3.12 Incorrect parameter / setpoint / Неверный параметр / уставка",
-      "descr": "Некорректная работа спидометра. Занижает показания скорости.",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-022442"
     },
     {
       "asset": "EX011",
@@ -58132,6 +58145,19 @@ window.CM_WO_DATA = {
       "wo": "WO-015456"
     },
     {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
+      "wo": null
+    },
+    {
       "asset": "TK046",
       "defect": "DD-00011270",
       "raised": "2026-08-21",
@@ -58220,19 +58246,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
