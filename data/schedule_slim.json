@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-12T20:13:14+00:00",
+  "generated": "2026-11-12T20:43:02+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -4469,12 +4469,12 @@
       "type": "250 Hours service Planned",
       "hours": 250,
       "plan": "2026-11-10",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-10"
     },
     {
       "wo": "WO-021305",
@@ -11413,6 +11413,14 @@
       "p": "P2",
       "r": "2026-11-13",
       "x": "ДВС потеря мощности"
+    },
+    {
+      "d": "DD-00016806",
+      "u": "TK103",
+      "s": "TK103.DRS.AXL (Axles / Мосты)",
+      "p": "P2",
+      "r": "2026-11-13",
+      "x": "неисправность карданного вала"
     },
     {
       "d": "DD-00016805",
