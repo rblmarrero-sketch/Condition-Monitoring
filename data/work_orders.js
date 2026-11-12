@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-12T17:08:42+00:00",
+  "generated": "2026-11-12T17:37:29+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -5755,19 +5755,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "BS003",
-      "defect": "DD-00016803",
-      "raised": "2026-11-13",
-      "system": "BS003.ELS.LIG (Head Lighting System / Система головного освещения)",
-      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
-      "descr": "Неисправность головного освещения",
-      "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": null
-    },
-    {
       "asset": "DZ008",
       "defect": "DD-00016792",
       "raised": "2026-11-13",
@@ -5779,6 +5766,19 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": null
+    },
+    {
+      "asset": "BS003",
+      "defect": "DD-00016803",
+      "raised": "2026-11-13",
+      "system": "BS003.ELS.LIG (Head Lighting System / Система головного освещения)",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "Неисправность головного освещения",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022493"
     },
     {
       "asset": "TK039",
@@ -5857,6 +5857,32 @@ window.CM_WO_DATA = {
       "by": "Aleksey Dobrikov",
       "regBy": "Добриков Алексей Владимирович",
       "wo": "WO-022481"
+    },
+    {
+      "asset": "TK035",
+      "defect": "DD-00016805",
+      "raised": "2026-11-13",
+      "system": "TK035.BS.BPC (Brake Packs / Тормозные пакеты)",
+      "defectType": "1.20 Slow response / sluggish operation / Медленная реакция / вялая работа",
+      "descr": "Не тормозит левая сторона",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022495"
+    },
+    {
+      "asset": "TK032",
+      "defect": "DD-00016804",
+      "raised": "2026-11-13",
+      "system": "TK032.ELS.LIG (Head Lighting System / Система головного освещения)",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "Неисправность фары головного света",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022494"
     },
     {
       "asset": "CR003",
@@ -6104,6 +6130,19 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022486"
+    },
+    {
+      "asset": "EX011",
+      "defect": "DD-00016767",
+      "raised": "2026-11-12",
+      "system": "EX011.CH.UC (Undercarriage / Ходовая часть)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Заклинило натяжное колесо",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-022467"
     },
     {
       "asset": "LS057",
@@ -6468,19 +6507,6 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-022468"
-    },
-    {
-      "asset": "EX011",
-      "defect": "DD-00016767",
-      "raised": "2026-11-12",
-      "system": "EX011.CH.UC (Undercarriage / Ходовая часть)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Заклинило натяжное колесо",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": "WO-022467"
     },
     {
       "asset": "TK010",
