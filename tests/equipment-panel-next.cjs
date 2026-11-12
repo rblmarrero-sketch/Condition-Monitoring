@@ -96,7 +96,7 @@ async function boot(b, port, lang) {
   const ctx = await b.newContext({ viewport: { width: 1366, height: 1000 } });
   const p = await ctx.newPage();
   const errs = []; p.on('pageerror', e => errs.push(e.message));
-  await p.addInitScript(() => { Object.defineProperty(navigator, 'onLine', { get: () => true }); });
+  await p.addInitScript(() => { Object.defineProperty(navigator, 'onLine', { get: () => true }); /* dashboard-next shows the last 90 days by default and the fixture's dates are fixed */ try { localStorage.setItem('cm_dash_window', '0'); } catch (e) {} });
   await p.goto(`http://127.0.0.1:${port}/dashboard-next/index.html`, { waitUntil: 'load' });
   if (lang) await p.evaluate(l => { try { localStorage.setItem('cm_dash_lang', l); } catch (e) {} }, lang);
   await p.reload({ waitUntil: 'load' });

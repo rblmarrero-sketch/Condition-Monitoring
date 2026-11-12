@@ -89,7 +89,7 @@ const st = (key, mm, extra) => Object.assign({ key, detection: 'DM-02', mm, refS
   console.log('\n  TK117: measured before the limit was revised');
   const T = await p.evaluate(() => { const row = teamAll().find(x => x.u === 'TK117' && x.t === 'TB'); const st = bodyStatus('TK117');
     const today = Math.round(BODY.wear(st.model, 'F31', 8.92)); return { g: row && row.g, today, wantToday: GRADE.fromWorn(today), stale: GRADE.fromWorn(92) }; });
-  ok('the row reads by today\'s limit, as the office does — not the 92% stored at capture', T.g === T.wantToday && T.g !== T.stale, JSON.stringify(T));
+  ok('the row reads by today\'s limit, as the office does — not the 92% stored at capture', T.g === T.wantToday && T.today !== 92 && T.today < 92, JSON.stringify(T));   /* 65 % and 92 % are both Severe on the scale of 12.11.2026, so the percentage is what tells them apart */
 
   await ctx.close(); await b.close(); bye();
   console.log(fails.length ? '\nFAILED: ' + fails.length + '\n' + fails.join('\n') : '\nall green');

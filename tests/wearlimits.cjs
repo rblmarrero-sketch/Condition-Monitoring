@@ -140,7 +140,7 @@ const pct = (d, i, j) => d.p.evaluate(([i, j]) => {
   console.log("\n4b. NEW → WARNING → CRITICAL");
   const g = await A.p.evaluate(() => [GRADE.fromWorn(10, 60), GRADE.fromWorn(25, 60), GRADE.fromWorn(50, 60),
     GRADE.fromWorn(65, 60), GRADE.fromWorn(100, 60), GRADE.fromWorn(85), GRADE.fromWorn(50)].join(","));
-  ok("with a warning: thirds to the warning, Severe past it, Critical at the limit; without: the fixed scale", g === "1,2,3,4,5,5,3", g);
+  ok("with a warning: thirds to the warning, Severe past it, Critical at the limit; without: the fixed scale", g === "1,2,3,4,5,4,3", g);
   const w22 = await A.p.evaluate(t => { const r = RECS.find(x => x.equip === "DZ022" && x.date === t);
     const w = wearOf(r, r.items[0]); return { pct: w.wearPct, warn: w.warnPct, band: w.band, g: UC_GRADE(w.wearPct, w.warnPct) }; }, TODAY);
   ok("91 mm against 98.5 → 93 → 90 is 88 % worn, past the warning (65 %): Severe, not Critical",

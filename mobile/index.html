@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=613">
+<link rel="manifest" href="manifest.webmanifest?v=614">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=613">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=613">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=613">
+<link rel="apple-touch-icon" href="icon-192.png?v=614">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=614">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=614">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -342,7 +342,7 @@
   .rtw-ov{position:fixed;inset:0;background:var(--page);z-index:60;display:flex;flex-direction:column;}
   .rtw-ov.hidden{display:none;}
   /* CM_FIR_V1 sheet */
-  .fir-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px;}
+  .fir-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:12px;display:flex;flex-direction:column;gap:8px;}
   .fir-card h4{margin:0;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);}
   .fir-card input,.fir-card textarea{width:100%;box-sizing:border-box;min-height:var(--tap);font:inherit;font-size:15px;padding:8px 10px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--ink);}
   .fir-defs{display:flex;flex-direction:column;gap:6px;max-height:46vh;overflow:auto;}
@@ -2980,16 +2980,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=613"></script>
-<script src="upload-defaults.js?v=613"></script>
-<script src="hme.js?v=613"></script>
-<script src="mp-fc.js?v=613"></script>
-<script src="rtw.js?v=613"></script>
-<script src="hme-cascade.js?v=613"></script>
-<script src="assets.js?v=613"></script>
-<script src="temp-limits.js?v=613"></script>
-<script src="normalize.js?v=613"></script>
-<script src="terms.js?v=613"></script>
+<script src="native.js?v=614"></script>
+<script src="upload-defaults.js?v=614"></script>
+<script src="hme.js?v=614"></script>
+<script src="mp-fc.js?v=614"></script>
+<script src="rtw.js?v=614"></script>
+<script src="hme-cascade.js?v=614"></script>
+<script src="assets.js?v=614"></script>
+<script src="temp-limits.js?v=614"></script>
+<script src="normalize.js?v=614"></script>
+<script src="terms.js?v=614"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -3008,25 +3008,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=613"></script>
-<script src="edits.js?v=613"></script>
-<script src="due.js?v=613"></script>
-<script src="wear.js?v=613"></script>
-<script src="wear-figs.js?v=613"></script>
-<script src="wear-map.js?v=613"></script>
-<script src="machine-photos.js?v=613"></script>
-<script src="machine-fig.js?v=613"></script>
-<script src="get.js?v=613"></script>
-<script src="points.js?v=613"></script>
-<script src="uc-points.js?v=613"></script>
-<script src="inspect-guide.js?v=613"></script>
-<script src="get-figs.js?v=613"></script>
-<script src="body-points.js?v=613"></script>
-<script src="body-map.js?v=613"></script>
-<script src="lube.js?v=613"></script>
-<script src="lube-overrides.js?v=613"></script>
-<script src="lube2027.js?v=613"></script>
-<script src="report-core.js?v=613"></script>
+<script src="grade.js?v=614"></script>
+<script src="edits.js?v=614"></script>
+<script src="due.js?v=614"></script>
+<script src="wear.js?v=614"></script>
+<script src="wear-figs.js?v=614"></script>
+<script src="wear-map.js?v=614"></script>
+<script src="machine-photos.js?v=614"></script>
+<script src="machine-fig.js?v=614"></script>
+<script src="get.js?v=614"></script>
+<script src="points.js?v=614"></script>
+<script src="uc-points.js?v=614"></script>
+<script src="inspect-guide.js?v=614"></script>
+<script src="get-figs.js?v=614"></script>
+<script src="body-points.js?v=614"></script>
+<script src="body-map.js?v=614"></script>
+<script src="lube.js?v=614"></script>
+<script src="lube-overrides.js?v=614"></script>
+<script src="lube2027.js?v=614"></script>
+<script src="report-core.js?v=614"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -3164,6 +3164,8 @@ const $ = (id)=>document.getElementById(id);
 const I18N = {
   en:{ app_title:"Condition Monitoring", net_online:"online", net_offline:"offline — OK",
     sec_inspection:"Inspection", hdr_change:"Change",
+    lose_t:"Leave the round in progress?", lose_m:"{u} · {r} has {n} point(s) recorded and is not saved yet. Opening a saved round discards it.",
+    lose_go:"Discard and open", lose_stay:"Keep working",
     res_t:"Carry on where you left off?",
     res_m:"{u} · {r} — {n} reading(s) taken on {d} and not yet saved.",
     res_go:"Carry on", res_discard:"Discard it",
@@ -3916,6 +3918,8 @@ const I18N = {
   },
   ru:{ app_title:"Мониторинг состояния", net_online:"онлайн", net_offline:"офлайн — ОК",
     sec_inspection:"Осмотр", hdr_change:"Изменить",
+    lose_t:"Оставить начатый осмотр?", lose_m:"{u} · {r}: записано точек — {n}, осмотр ещё не сохранён. Если открыть сохранённый осмотр, начатый будет удалён.",
+    lose_go:"Удалить и открыть", lose_stay:"Продолжить осмотр",
     res_t:"Продолжить начатое?",
     res_m:"{u} · {r} — замеров: {n}, дата {d}, ещё не сохранено.",
     res_go:"Продолжить", res_discard:"Удалить черновик",
@@ -5663,6 +5667,21 @@ function memCopy(u, like, dflt){
     : new Blob([u], {type});
   return ownMark(f);
 }
+/* Same file, same place: `to` takes the memory copies `from` already holds
+   (matched by position, name and size), so a write of `to` reads nothing. */
+function graftOwned(to, from){
+  try{
+    if(!to || !from || to===from) return;
+    for(const [k,p] of Object.entries(to.positions||{})){
+      const q=(from.positions||{})[k]; if(!p || !q || typeof p!=="object") continue;
+      const pool=(Array.isArray(q.photos)?q.photos:[]).concat(q.video?[q.video]:[]).filter(isOwnBlob);
+      const hit=b=>(b instanceof Blob && !isOwnBlob(b)) ? pool.filter(o=>(o.name||"")===(b.name||"") && o.size===b.size && (o.name||""))[0] : null;
+      if(Array.isArray(p.photos)) for(let i=0;i<p.photos.length;i++){ const h=hit(p.photos[i]); if(h) p.photos[i]=h; }
+      const hv=hit(p.video); if(hv) p.video=hv;
+    }
+    if(to.sign instanceof Blob && !isOwnBlob(to.sign) && isOwnBlob(from.sign) && from.sign.size===to.sign.size) to.sign=from.sign;
+  }catch(e){}
+}
 async function detachRec(rec){
   const left=[];
   if(!rec || typeof rec!=="object") return left;
@@ -6529,10 +6548,13 @@ async function takeMachinePhoto(cat){
     f = got ? (got[0]||null) : await oneFileFrom("mgallery");
   }
   if(!f) return;                                    // cancelled — not an error
-  const p=(draft.positions[GEN_KEY] ||= {});
   const got=await intakeNoted(f);
-  addPos(p, got.att, cat);
+  /* Found AFTER the wait (the entry is deleted when its last photograph is
+     removed meanwhile), and a list that is full says so, as addPicked does. */
+  const p=(draft.positions[GEN_KEY] ||= {});
+  const took=addPos(p, got.att, cat);
   renderMachinePhotos(); draftFlush();
+  if(took===false){ dlg([t("gal_full_t"), t("gal_full_b",{n:1, p:MAX_PHOTOS})]); return; }
   if(got.why) dlg([t("gal_odd_t"), t(intakeWhyKey(got.why),{n:1, names:f.name||""})]);
 }
 function dropMachinePhoto(cat,i){
@@ -9267,7 +9289,8 @@ signPad.addEventListener("pointerdown",e=>{ signing=true; signPad.setPointerCapt
 signPad.addEventListener("pointermove",e=>{ if(!signing) return; const c=signPad.getContext("2d");
   c.lineTo(...signXY(e)); c.stroke(); signDirty=true; e.preventDefault(); });
 ["pointerup","pointercancel","pointerleave"].forEach(ev=>signPad.addEventListener(ev,()=>{ signing=false; }));
-function clearSign(){ signDirty=false; const c=signPad.getContext("2d");
+let signKeep=null;     /* the stored signature of the round being edited */
+function clearSign(){ signDirty=false; signKeep=null; const c=signPad.getContext("2d");
   c.fillStyle="#fff"; c.fillRect(0,0,signPad.width,signPad.height); renderSignFold(); }
 $("signClear").onclick=clearSign;
 $("supName").value=localStorage.getItem("supervisor")||"";
@@ -9291,6 +9314,7 @@ function signBlob(){
   });
 }
 function loadSign(blob){ clearSign(); if(!blob) return;
+  signKeep=blob;
   signOpen=true; renderSignFold();
   const url=URL.createObjectURL(blob);
   const done=()=>{ try{ URL.revokeObjectURL(url); }catch(_){ } };
@@ -9392,7 +9416,7 @@ function editRecord(rec){ if(rec.cls && CLASSES[rec.cls]){ eqClass=rec.cls; lsSe
   draft={positions:{}};
   for(const [k,pp] of Object.entries(rec.positions)) draft.positions[k]={grade:GRADE.num(pp.grade),sev:gradeIso(pp.grade)||pp.sev||"",sevMan:pp.sevMan||0,
     gradeMan:pp.gradeMan||0, gradeSug:pp.gradeSug||null, gradeWhy:pp.gradeWhy||"", gradeAudit:pp.gradeAudit||null,
-    resp:pp.resp||"", respRole:pp.respRole||"", target:pp.target||"", opstat:pp.opstat||"", notified:pp.notified||0,action:pp.action,wo:pp.wo,particle:pp.particle,comp:pp.comp,oil:pp.oil,comment:pp.comment,defect:pp.defect,cause:pp.cause,tempV:pp.tempV||"",tempA:pp.tempA||"",tempM:pp.tempM||"",
+    resp:pp.resp||"", respRole:pp.respRole||"", respAuto:pp.respAuto||"", target:pp.target||"", opstat:pp.opstat||"", notified:pp.notified||0,action:pp.action,wo:pp.wo,particle:pp.particle,comp:pp.comp,oil:pp.oil,comment:pp.comment,defect:pp.defect,cause:pp.cause,tempV:pp.tempV||"",tempA:pp.tempA||"",tempM:pp.tempM||"",
     prio:pp.prio||"",
     mm:(pp.mm==null?null:Number(pp.mm)),stood:pp.stood?1:0,reason:pp.reason||"",detect:pp.detect||"",
     /* Same four fields, coming back. Reopening a lubrication round to fix a
@@ -9533,7 +9557,11 @@ $("saveBtn").onclick=async ()=>{
      fails; if the pad was dirty and both attempts still came back empty,
      refuse the save instead of filing the round with sign:null. */
   const wasSigned = signDirty;
-  const signResult = await signBlob();
+  let signResult = await signBlob();
+  /* An edit of a signed round whose signature did not get onto the pad (it
+     had not decoded yet, or would not) keeps the signature it has: the round
+     used to be saved unsigned with nothing said. Clear removes it. */
+  if(!signResult && !wasSigned && editing && signKeep) signResult=signKeep;
   if(wasSigned && !signResult){
     dlg([t("m_sign_fail_t"), t("m_sign_fail_m")]);
     return;
@@ -9688,7 +9716,7 @@ $("saveBtn").onclick=async ()=>{
        stated reason. Without it, every field trace this investigation has
        is blind to whether the round that later failed to sync had already
        failed THIS check minutes earlier at the machine. */
-    slog("verify-fail",{u:rec.equip||"?", id:rec.id, n:verifyBad.length, names:names.slice(0,300)});
+    slog("verify-fail",{u:rec.equip||"?", id:rec.id, n:verifyBad.length, names:names.slice(0,300), why:(verifyBad.whys||[]).join(", ").slice(0,300)});
     sendTrace("verify-fail");
     dlg([t("verify_fail_t"), t("verify_fail_b",{x:equip, n:verifyBad.length, names})]);
   }else{
@@ -10602,7 +10630,8 @@ async function schedEnsureLoaded(force){
   if(schedLoading || Date.now()-schedLastTry < SCHED_RETRY_GAP) return changed;
   schedLoading=true; schedLastTry=Date.now();
   try{
-    const res = await fetch(SCHED_URL + (SCHED_URL.indexOf("?")<0?"?":"&") + "_=" + Date.now());
+    /* Bounded: a stalled request held schedLoading, and no refresh ran until the socket gave up. */
+    const res = await fetchT(SCHED_URL + (SCHED_URL.indexOf("?")<0?"?":"&") + "_=" + Date.now(), {}, 30000);
     if(!res.ok) throw new Error("HTTP "+res.status);
     const j = await res.json();
     /* A PULL THAT HAS NOT MOVED IS NOT A CHANGE. The cache's timestamp is
@@ -12064,7 +12093,7 @@ async function rtwSave(){
     if(persistState===null) askPersist();
     if(verifyBad.length){
       const names=[...new Set(verifyBad)].join(", ");
-      slog("verify-fail",{u:rec.equip||"?", id:rec.id, n:verifyBad.length, names:names.slice(0,300)});
+      slog("verify-fail",{u:rec.equip||"?", id:rec.id, n:verifyBad.length, names:names.slice(0,300), why:(verifyBad.whys||[]).join(", ").slice(0,300)});
       sendTrace("verify-fail");
       dlg([t("verify_fail_t"), t("verify_fail_b",{x:equip, n:verifyBad.length, names})]);
     }else{
@@ -12270,7 +12299,7 @@ async function firSave(){
     if(persistState===null) askPersist();
     if(verifyBad.length){
       const names=[...new Set(verifyBad)].join(", ");
-      slog("verify-fail",{u:rec.equip||"?", id:rec.id, n:verifyBad.length, names:names.slice(0,300)});
+      slog("verify-fail",{u:rec.equip||"?", id:rec.id, n:verifyBad.length, names:names.slice(0,300), why:(verifyBad.whys||[]).join(", ").slice(0,300)});
       sendTrace("verify-fail");
       dlg([t("verify_fail_t"), t("verify_fail_b",{x:equip, n:verifyBad.length, names})]);
     }else{
@@ -14326,7 +14355,10 @@ $("mergeFile").onchange=async (e)=>{ const f=e.target.files[0]; e.target.value="
     if(inc.sign && !cur.sign){ cur.sign=inc.sign; touched=true; }
     if(inc.gps && !cur.gps){ cur.gps=inc.gps; touched=true; }
     if(inc.smu && !cur.smu){ cur.smu=inc.smu; touched=true; }
-    if(touched){ cur.up=0; cur.upTo={}; cur.rev=(cur.rev||0)+1; await dbPut(cur); noteDone(cur); }   // changed -> re-upload
+    /* The list of files already sent belongs to the revision before the
+       merge: kept, the record file (same name) was never sent again and the
+       merged findings stayed on this phone while the round read Confirmed. */
+    if(touched){ cur.up=0; cur.upTo={}; delete cur.sent; delete cur.conf; cur.rev=(cur.rev||0)+1; await dbPut(cur); noteDone(cur); }   // changed -> re-upload
   }
   renderPending(); renderDue(); syncThenArm();
   const m=t("m_merged"); dlg([m[0], m[1].replace("{a}",added).replace("{b}",items).replace("{c}",dup)]);
@@ -14514,6 +14546,13 @@ async function renderPending(){
        (tests/staleedit.cjs). A read that fails keeps what it has - the
        unreadable-photo handling downstream names it, as before. */
     const openEdit=async()=>{
+      /* A tap on a saved row replaced a round in progress with no question:
+         thirty photographs into a machine, a look at an earlier round, and
+         the one being walked was gone. Asked first. */
+      if(!editing && curEquip){
+        const nIn=Object.values(draft.positions||{}).filter(hasData).length;
+        if(nIn && !(await ask(t("lose_t"), t("lose_m",{u:curEquip, r:t("type_"+type), n:nIn}), t("lose_go"), true, t("lose_stay")))) return;
+      }
       let use=rec;
       try{ const cur=await dbGet(rec.id); if(cur) use=cur; }catch(e){ bad("edit-reread",e); }
       try{ await reArmForSave(use); }catch(e){ bad("edit-detach",e); }
@@ -15795,7 +15834,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="613";
+const BUILD="614";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -16178,57 +16217,38 @@ function showSaveGuard(ms){
 async function verifySavedRec(id){
   let rec; try{ rec=await dbGet(id); }catch(e){ return []; }
   if(!rec) return [];
-  const bad=[];
+  const bad=[], whys=[];
+  /* ONE READ, HASHED AS READ, AND TRIED AGAIN BEFORE IT IS CALLED BAD. This
+     read each photograph twice (once to prove it reads, once inside sha256Of)
+     with no second try, and a hash that could not be taken ("") counted as a
+     mismatch - so a store still settling after the write reported "could not
+     be read back" on photographs that uploaded byte for byte minutes later
+     (TK148, TK153, TK154, 10-12.11.2026). A file is reported only when three
+     reads a moment apart all fail or disagree with the manifest, and the
+     trace says which it was (verify-fail `why`). */
+  const one=async(k, blob, attMap)=>{
+    const att=attMap[attIdOf(blob)]||null;
+    let why="";
+    for(let n=0;n<3;n++){
+      if(n) await new Promise(r=>setTimeout(r, 250*n));
+      try{
+        const u=await readBlobBytes(blob);
+        if(att && u.length!==(att.byteSize||0)){ why="size "+u.length+"/"+(att.byteSize||0); continue; }
+        if(att && att.sha256){
+          const h=await sha256Hex(u.buffer.byteLength===u.length ? u.buffer : u.slice().buffer);
+          if(h && h!==att.sha256){ why="hash"; continue; }
+        }
+        return;
+      }catch(e){ why="read "+String((e&&e.name)||(e&&e.message)||e).slice(0,40); }
+    }
+    bad.push(itemLabelFor(rec,k)); whys.push(k+":"+why);
+  };
   for(const [k,p] of positionsOf(rec)){
     const attMap=p.att||{};
-    const ph=photosOf(p);
-    for(let i=0;i<ph.length;i++){
-      try{
-        const blob=ph[i];
-        await readBlobBytes(blob);
-        const aid=attIdOf(blob);
-        if(aid && attMap[aid]){
-          const att=attMap[aid];
-          const expectedSize=att.byteSize||0;
-          const expectedHash=att.sha256||"";
-          if(blob.size!==expectedSize){
-            bad.push(itemLabelFor(rec,k));
-            continue;
-          }
-          if(expectedHash){
-            const storedHash=await sha256Of(blob);
-            if(storedHash!==expectedHash){
-              bad.push(itemLabelFor(rec,k));
-              continue;
-            }
-          }
-        }
-      }catch(e){ bad.push(itemLabelFor(rec,k)); }
-    }
-    if(isBlob(p.video)){
-      try{
-        const blob=p.video;
-        await readBlobBytes(blob);
-        const aid=attIdOf(blob);
-        if(aid && attMap[aid]){
-          const att=attMap[aid];
-          const expectedSize=att.byteSize||0;
-          const expectedHash=att.sha256||"";
-          if(blob.size!==expectedSize){
-            bad.push(itemLabelFor(rec,k));
-            continue;
-          }
-          if(expectedHash){
-            const storedHash=await sha256Of(blob);
-            if(storedHash!==expectedHash){
-              bad.push(itemLabelFor(rec,k));
-              continue;
-            }
-          }
-        }
-      }catch(e){ bad.push(itemLabelFor(rec,k)); }
-    }
+    for(const blob of photosOf(p)) await one(k, blob, attMap);
+    if(isBlob(p.video)) await one(k, p.video, attMap);
   }
+  bad.whys=whys;
   return bad;
 }
 function dataUrlBytes(s){ const i=s.indexOf(","); const bin=atob(i>=0?s.slice(i+1):s);
@@ -16699,6 +16719,7 @@ async function canBatch(UP){
       body:JSON.stringify({op:"ping",secret:UP.sec||""})}, 20000);
     const j=JSON.parse(await r.text());
     const v=!!(j&&j.batch);
+    if(j && j.ok===false && !v) return false;   // a refusal is not an answer about batching - do not remember it
     setBatchCap(UP.url,v); return v;
   }catch(e){ return false; }                    // a dead link is not an answer — do not remember it
 }
@@ -17451,13 +17472,35 @@ const t_up_timeout=()=>t("up_timeout");
    of keeping a copy of them (tests/replylost.cjs sets reply to seconds). */
 const UP_CLOCKS={ idle:45000, reply:180000, max:900000 };
 /* The three clocks are read off UP_CLOCKS (tests shorten them there). */
+/* A POST TO GOOGLE IS GIVEN THE TIME ITS SIZE NEEDS, NOT FIFTEEN MINUTES
+   (CM_UPCLOCK_V1, asked for 12.11.2026). The idle and reply clocks cannot run
+   for script.google.com (no upload listeners, see below), so every request,
+   an 18 KB record file included, had only UP_CLOCKS.max: a connection that
+   died without saying so held "Sending..." for up to 15 minutes a request,
+   and the retry clock, a Sync press and an app update all waited behind it.
+   The limit is now UP_SIMPLE_BASE plus the body at UP_SIMPLE_BPS - slower than
+   the slowest link in the phones' traces - and never more than the old one.
+   A Sync press also ends a request that has outlived what its size should
+   take at a working speed, so the press starts a fresh attempt. */
+const UP_SIMPLE_BASE=120000, UP_SIMPLE_BPS=15000, UP_PRESS_BASE=60000, UP_PRESS_BPS=30000;
+function upSimpleMax(bytes){ return Math.min(UP_CLOCKS.max, UP_SIMPLE_BASE + Math.round((bytes||0)/UP_SIMPLE_BPS*1000)); }
+const UP_LIVE=new Set();
+function upAbortStuck(){
+  let n=0; const now=Date.now();
+  UP_LIVE.forEach(r=>{ if(now-r.t0 > UP_PRESS_BASE + (r.bytes||0)/UP_PRESS_BPS*1000){ n++; try{ r.kill(); }catch(e){} } });
+  if(n) slog("press-abort",{n});
+  return n;
+}
 function postT(url, body, idle, max, reply){
   prodWriteGuard(url);
   if(typeof XMLHttpRequest==="undefined")
     return fetchT(url,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body}, max||UP_CLOCKS.max);
   return new Promise((res,rej)=>{
     const x=new XMLHttpRequest(); let t=null, cap=null, why="", sentAll=false;
-    const stop=()=>{ clearTimeout(t); clearTimeout(cap); };
+    const bytes=(body&&body.length)||0;
+    const live={ t0:Date.now(), bytes, kill:()=>{ why="press"; try{ x.abort(); }catch(_){ } } };
+    UP_LIVE.add(live);
+    const stop=()=>{ clearTimeout(t); clearTimeout(cap); UP_LIVE.delete(live); };
     const arm=ms=>{ clearTimeout(t); t=setTimeout(()=>{ why="idle"; try{ x.abort(); }catch(_){ } }, ms); };
     const onUp=()=>arm(idle||UP_CLOCKS.idle);
     /* Whether the WHOLE body reached the server before this failed — the
@@ -17465,7 +17508,7 @@ function postT(url, body, idle, max, reply){
        caller asks the server what it holds in the second case. */
     const fail=e=>{ stop(); try{ e.sentAll=sentAll; }catch(_){} rej(e); };
     try{ x.open("POST",url,true); x.setRequestHeader("Content-Type","text/plain;charset=utf-8"); }
-    catch(e){ return rej(e); }
+    catch(e){ stop(); return rej(e); }
     /* CM_FBOVERLAY_V1: an Apps Script web app cannot answer a CORS preflight, and a listener on x.upload makes
        this POST non-simple - so for script.google.com the upload listeners stay off (overall max still bounds it). */
     const simpleOnly=/^https:\/\/script\.google(usercontent)?\.com\//i.test(String(url||""));
@@ -17474,8 +17517,9 @@ function postT(url, body, idle, max, reply){
     x.onload=()=>{ stop(); res({ ok:x.status>=200&&x.status<300, status:x.status, text:()=>Promise.resolve(x.responseText||"") }); };
     x.onerror=()=>fail(new TypeError("Failed to fetch"));
     x.onabort=()=>fail(new Error(why ? t_up_timeout() : "aborted"));
-    cap=setTimeout(()=>{ why="max"; try{ x.abort(); }catch(_){ } }, max||UP_CLOCKS.max);
-    if(simpleOnly) arm(max||UP_CLOCKS.max); else onUp();
+    const lim=max||(simpleOnly ? upSimpleMax(bytes) : UP_CLOCKS.max);
+    cap=setTimeout(()=>{ why="max"; try{ x.abort(); }catch(_){ } }, lim);
+    if(simpleOnly) arm(lim); else onUp();
     try{ x.send(body); }catch(e){ stop(); rej(e); }
   });
 }
@@ -18168,7 +18212,7 @@ let pressPending=false;
    a phone with room again should try the write once more. */
 const bookFail=new Set();
 async function syncNow(manual){
-  if(syncing){ if(manual){ pressPending=true; slog("press-queued",{}); } return; }
+  if(syncing){ if(manual){ pressPending=true; slog("press-queued",{}); upAbortStuck(); } return; }
   if(!UP.on){ renderSync(); return; }
   /* No navigator.onLine gate: a flag stuck at false would have kept every
      round on this phone for ever. A send with no network fails at once and
@@ -18229,6 +18273,12 @@ async function syncNow(manual){
              Same order on the wire: the sidecar still goes first. It is
              merely written after there is something true to write. */
           const files=[];
+          /* The payload is built from copies in memory, not from the store's
+             pointers: the names write just below rewrites this record, and
+             the files those pointers named were then gone when the upload
+             came to read them - "could not be read (NotFoundError)" on a
+             round's first attempt, fine on the next (TK122, TK153, 11.2026). */
+          try{ await detachRec(rec); }catch(e){ bad("sync-detach", e); }
           const ffr=await filesForRecord(rec);
           for(const f of ffr){
             /* THE BYTES THAT ACTUALLY LEAVE, HASHED AS THEY LEAVE.
@@ -18398,6 +18448,9 @@ async function syncNow(manual){
         if(RCPT) attReceipt(fresh,RCPT);
         if(fresh.up) { fresh.upAt=new Date().toISOString(); delete fresh.sent; }
         else fresh.sent=sent;
+        /* The copies this run already holds are used for the write, so the
+           photographs are not read a second time to record a flag. */
+        graftOwned(fresh, rec);
         await dbPut(fresh);
         /* The record now carries the same list, so the side store has nothing
            left to say — and a round that is through has nothing to resume.
@@ -18408,7 +18461,8 @@ async function syncNow(manual){
            The names are taken from the payload actually sent rather than
            rebuilt afterwards, because rebuilding is how the two lists come to
            disagree about what was supposed to be there. */
-        if(fresh.up && payload) justDone.push({rec:fresh, names:payload.map(f=>f.name), stored:Object.assign({},STORED||{}),
+        /* The read-back needs the round's identity, not its photographs. */
+        if(fresh.up && payload) justDone.push({rec:Object.assign({}, fresh, {positions:null, sign:null}), names:payload.map(f=>f.name), stored:Object.assign({},STORED||{}),
           /* What each file weighed on the wire, so the read-back can compare a
              length rather than only look for a name. */
           sizes:payload.reduce((m,f)=>{ if(f.wireSize) m[f.name]=f.wireSize; return m; },{})});
@@ -18440,6 +18494,9 @@ async function syncNow(manual){
            the round clears properly. */
         if(bookFail.size<500) bookFail.add(rec.id);
       }
+      /* This record's turn is over: its copies are let go, or a backlog of
+         twenty rounds held every photograph of all of them until the run ended. */
+      try{ for(const p of Object.values(rec.positions||{})){ if(p&&typeof p==="object"){ if(Array.isArray(p.photos)) p.photos=[]; p.video=null; } } rec.sign=null; }catch(e){}
       if(errs.length) lastErr=errs.join(" · ");
       if(todo.length) netSeen(progressed);          // evidence, not navigator.onLine
       // The breaker exists so a dead link is not retried against all 50 records.
@@ -19643,6 +19700,10 @@ async function armRetry(){
   const pend=await pendingCount();
   if(pend===0) { retryAt=RETRY_MIN; done(); return; }   // nothing waiting — and only a READ zero says so
   retryTimer=setTimeout(async ()=>{
+    /* A tick that lands while another run is sending did nothing, and is
+       not a failed attempt: it used to lengthen the wait each time, so a run
+       that then failed left the next automatic retry five minutes away. */
+    if(syncing){ armRetry(); return; }
     const before=await pendingCount();
     await syncNow();
     const after=await pendingCount();
@@ -20072,7 +20133,7 @@ function checkForNewBuild(){
         else{
           if(reg.installing) started=true;
           else{
-            try{ await reg.update(); }catch(e){ why=whyOf(e); }
+            try{ await withTimeoutMs(reg.update(), 60000); }catch(e){ why=whyOf(e); }
             started=!!(reg.installing||reg.waiting);
             if(!started && !why){ await new Promise(r=>setTimeout(r,1500)); started=!!(reg.installing||reg.waiting); }
           }
@@ -20299,13 +20360,16 @@ async function pushSetupNow(){
      older key re-subscribes. */
   let key=null;
   if(pushKeyMemo.url===g.url && Date.now()-pushKeyMemo.at<600000 && pushKeyMemo.key) key=pushKeyMemo.key;
+  /* A backend with no key (Google has none) is remembered for an hour too:
+     every readiness check asked again and waited on the answer. */
+  else if(pushKeyMemo.url===g.url && pushKeyMemo.none && Date.now()-pushKeyMemo.at<3600000) return {k:"nobackend", why:"no key"};
   else{
     try{
       const q=new URLSearchParams({action:"vapid"}); if(g.sec) q.set("secret",g.sec);
       const r=await withTimeoutMs(fetch(g.url+(g.url.indexOf("?")<0?"?":"&")+q.toString()), 10000);
       const j=await r.json();
       if(j && j.ok && j.key){ key=j.key; pushKeyMemo={url:g.url, key, at:Date.now()}; }
-      else return {k:"nobackend", why:(j&&j.error)||"no key"};
+      else{ if(j && j.ok!==false) pushKeyMemo={url:g.url, key:null, none:1, at:Date.now()}; return {k:"nobackend", why:(j&&j.error)||"no key"}; }
     }catch(e){ return {k:"unreach", why:String((e&&e.message)||e).slice(0,60)}; }
   }
   if(!pushSupported()) return {k: isStandalone()?"nosupport":"install"};
@@ -20531,7 +20595,10 @@ loadBaselines().then(n=>{ if(n) { renderUC(); refreshChips(); } });
 async function offerDraft(){
   let d=null;
   try{ d=await dbGet(DRAFT_ID); }catch(e){ return; }
-  const n=d && d.positions ? Object.keys(d.positions).length : 0;
+  /* A position that holds only the 1C work order it was stamped with when
+     it was opened is not a reading: on a machine with an open order, looking
+     at four points was offered back as "4 reading(s) taken and not saved". */
+  const n=d && d.positions ? Object.keys(d.positions).filter(k=>{ const q=d.positions[k]||{}; return hasData(q) || !q.wo; }).length : 0;
   if(!n || !d.equip) return;
   /* A draft whose round was saved and whose deletion failed is not work in
      progress — it is a copy of something already in the queue. Never offered
@@ -20558,13 +20625,16 @@ async function offerDraft(){
   if(d.smu) $("smu").value=d.smu;
   if(d.by) $("inspector").value=d.by;
   if(d.sup) $("supName").value=d.sup;
+  /* Copied BEFORE the form goes live: selectEquip opens the round for work,
+     and a photograph taken while a long draft was still being copied was
+     replaced by the assignment below. */
+  try{ const left=await detachRec(d); if(left.length) slog("draft-detach-left",{u:d.equip||"?", n:left.length, names:left.join(", ").slice(0,200)}); }
+  catch(e){ bad("draft-detach", e); }
   selectEquip(d.equip);
   /* The draft came out of the store, so its photographs are the store's
      pointers, and the next autosave rewrites the draft and kills them - Save
      was then refused with "Error preparing Blob/File data". They are copied
-     into memory now, while the files behind them still exist (CM_OWNBYTES_V1). */
-  try{ const left=await detachRec(d); if(left.length) slog("draft-detach-left",{u:d.equip||"?", n:left.length, names:left.join(", ").slice(0,200)}); }
-  catch(e){ bad("draft-detach", e); }
+     into memory (above), while the files behind them still exist (CM_OWNBYTES_V1). */
   draft={positions:d.positions||{}};
   curItem = (d.item && draft.positions[d.item]) ? d.item : "";
   hdrOpen=false;
@@ -20668,10 +20738,15 @@ try{ if(histRepair()) renderDue&&renderDue(); }catch(e){}
    used to arrive one page per five-minute pull, or by the button. While the
    phone has signal it now reads the rest at once, the same walk the button
    makes; offline nothing is asked and what is saved stays on screen. */
-let autoDraining=false;
+let autoDraining=false, autoDrainAt=0;
+const AUTO_DRAIN_GAP=600000;
 async function autoDrainIfShort(){
   if(autoDraining || histHealing) return;
   if(!(teamPending || histIsShort())) return;
+  /* One walk at most every AUTO_DRAIN_GAP: with storage full, or a folder
+     whose cursor will not move, every pull started another whole read. */
+  if(Date.now()-autoDrainAt < AUTO_DRAIN_GAP) return;
+  autoDrainAt=Date.now();
   autoDraining=true;
   /* The short flag is cleared before the walk and set again by any save that
      fails during it (histSave/teamSave), so it ends true only if storage still
@@ -20681,7 +20756,12 @@ async function autoDrainIfShort(){
   let ok=false;
   try{ histShort(false); ok=await histDrain(); if(ok) histNoteFolder(); }
   catch(e){ /* no signal or the folder did not answer: the next pull tries again */ }
-  finally{ autoDraining=false; if(!ok && wasShort) histShort(true); try{ renderDue(); }catch(e){} }
+  /* A full read replaces the saved team list with its first page and merges
+     the rest, so one that stopped part-way has left a list holding the oldest
+     months only. It is marked short whatever started it, so the next walk
+     finishes the job; it used to be marked only if it was short before, and a
+     walk started by a cut reply alone was never resumed. */
+  finally{ autoDraining=false; if(!ok) histShort(true); try{ renderDue(); }catch(e){} }
 }
 const healIfReached = ok => ok ? histHealOnce().then(teamHealOnce).then(autoDrainIfShort) : null;
 /* What the worker fetched while the app was closed. Read here, dropped by
@@ -20699,7 +20779,10 @@ function teamPrefetchDrop(){ try{ caches.open("cm_config").then(c=>c.delete("__t
 const pullIn = (pre) => teamPull(false,false,null,pre).then(healIfReached)
   .catch(e=>{ histNote((e&&e.message)||e); renderDue&&renderDue(); });
 teamPrefetched().then(pre=>pullIn(pre||undefined));
-window.addEventListener("online", pullIn);
+/* The listener handed pullIn its Event as `pre`: truthy, so every "online"
+   skipped the 60 s gap and started a second pull beside one in flight, which
+   could end a full read after its first page (sweep 12.11.2026). */
+window.addEventListener("online", ()=>pullIn());
 
 /* ── WHAT COMES IN HAS TO ARRIVE BY ITSELF TOO ─────────────────────────────
 

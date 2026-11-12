@@ -5387,6 +5387,44 @@ so an autosave reads nothing. `offerDraft` detaches the restored draft at once. 
 `dbPutRaw` is the bare write. `tests/ownstore.cjs` makes every store read a pointer and has `put` refuse one, as WebKit
 does; it fails 6 assertions on build 612.
 
+**THE SWEEP OF 12.11.2026 (build 614, CM_SWEEP614_V1).** Full sweep on 613 (9 red), three code reviews, the 36 real
+reports of 10-12.11 read as an editor. `tests/sweep614.cjs` holds the new rules.
+- **Wear scale (site decision 12.11): above 80 % worn is Severe (plan into the next shutdown); Critical only at or past
+  the limit.** `GRADE.fromRemaining`: below 40 % remaining is 4, at or below 0 is 5 (was 5 below 20 %). UC, GET and
+  the tray share it; an office warning (`fromWorn(pct, warnPct)`) still decides where one is set. History re-grades on
+  screen.
+- **Upload clock on Google (asked for, CM_UPCLOCK_V1).** `postT` to script.google.com had only `UP_CLOCKS.max` (15 min)
+  whatever the size. The limit is `upSimpleMax(bytes)`: 120 s + the body at 15 KB/s, never over the old one. A Sync
+  press during a run ends a request that has outlived 60 s + its size at 30 KB/s (`upAbortStuck`, `UP_LIVE`).
+- **Sync and the store.** `syncNow` copies a round to memory (`detachRec`) BEFORE building its payload: the names
+  write rewrote the record and the payload's store pointers died ("could not be read (NotFoundError)" on a first
+  attempt). The write-back reuses those copies (`graftOwned`), `justDone` keeps no photographs, and a round's copies
+  are let go when its turn ends.
+- **`verifySavedRec`** reads once, hashes what it read, tries three times and logs why (`verify-fail.why`); a hash it
+  could not take no longer counts as a mismatch.
+- **Phone, smaller:** an edit keeps the round's signature unless Clear is pressed (`signKeep`); a tap on a Saved row
+  asks before replacing a round in progress (`lose_t`); `offerDraft` does not count a position that holds only its 1C
+  work-order stamp, and copies the draft before the form goes live; `editRecord` restores `respAuto`; the `online`
+  listener no longer passes its Event to `teamPull` as `pre`; a retry tick during a run is not a failed attempt; an
+  unfinished full read is always marked short, and an automatic one runs at most every 10 min (`AUTO_DRAIN_GAP`); a
+  merged-in round drops `sent` / `conf`; "no push key" is remembered for an hour; the schedule fetch and `reg.update()`
+  are bounded; a refused ping is not remembered as "no batching"; a full machine-photo list says so; FIR cards have the
+  phone's corner.
+- **Reports (`report-core.js`):** FIR has its own sheet (1C defect, system, priority, recorded by, note, photographs;
+  no rating bar, scale, action block or three-role sign-off; `dashboard/report.js` carries `fir*`). On MP / FC / INSP /
+  TEMP the Maintenance action block is not printed when there are finding cards (the cards carry action, owner, WO and
+  date); a clean round keeps its one sentence; wear rounds, LUBE and GET keep the block. "Direct cause" is the cause,
+  never the defect. UC: "N points need action" counts `isAct` only, a point counted "not measured" is a row of the
+  table, the decision is not repeated in the summary strip. Bilingual: rating labels, UC summary labels and the
+  sign-off table use `T.I`. RU "Техник МС".
+- **Dashboards:** a long round name wraps inside its card on a phone (`table.grid.ascards td .tag`).
+- **Stale tests corrected, not app defects:** `design` (the office pages take the site standard's 12-14 px corners),
+  `skin2` (the chosen chip is navy since 588), `rptest` (a quote at its floor has settled), `field` (FIR is not a round),
+  `cards` / `tablekit-next` / `equipment-panel-next` (dashboard-next's 90-day default against a fixture with fixed
+  dates: they set `cm_dash_window` to 0).
+- **Not done, known:** "Retake" on a machine photograph adds a photograph (the first stays the thumbnail); changing
+  type or machine mid-round still discards the draft without a question; an RTW edit rebuilds its attachment manifest.
+
 ---
 
 ## Secrets

@@ -49,7 +49,7 @@ const SCAN = () => {
     console.log(`\n== ${file} ${lang} ${W}`);
     const ph = W < 600;
     const ctx = await b.newContext({ viewport: { width: W, height: 900 }, isMobile: ph, hasTouch: ph });
-    await ctx.addInitScript(l => { localStorage.setItem('cm_dash_lang', l); }, lang);
+    await ctx.addInitScript(l => { localStorage.setItem('cm_dash_lang', l); /* dashboard-next shows the last 90 days by default and the fixture's dates are fixed */ localStorage.setItem('cm_dash_window', '0'); }, lang);
     const p = await ctx.newPage(); const errs = []; p.on('pageerror', e => errs.push(e.message));
     await p.goto(`http://127.0.0.1:${port}/${file}/index.html`); await p.waitForTimeout(1200);
     await p.evaluate(f => { window.CMDash.setDriveRecords(f); const o = document.getElementById('dataOv'); if (o) o.classList.add('hidden'); }, FLEET);

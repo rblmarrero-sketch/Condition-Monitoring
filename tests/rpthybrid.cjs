@@ -84,16 +84,16 @@ const textOf = (p, key, lang) => p.evaluate(({ key, lang }) => {
      (r.text.match(/MP-TK901-\d+/) || ["none"])[0]);
 
   console.log("\n2. THE RATING IS THE WORST GRADED POINT, AND THE WORD AND DECISION FOLLOW IT");
-  ok(/CONDITION RATING\s*4/.test(r.text), "worst of {2,4} is 4, not the first point's 2", (r.text.match(/CONDITION RATING\s*\d/) || [""])[0]);
+  ok(/CONDITION RATING[^0-9]{0,24}4/.test(r.text), "worst of {2,4} is 4, not the first point's 2", (r.text.match(/CONDITION RATING\s*\d/) || [""])[0]);
   /* SEVERITY, not LEVEL: the office asked for the proper name on 2026-09-14,
      and the ISO 14224 class the grade exports as rides beside it as a chip —
      beside, not as the column's name, because this fleet's scale has five
      steps and the standard has four. */
-  ok(/SEVERITY\s*4 – Severe/.test(r.text), "  the level word comes off that number", (r.text.match(/SEVERITY\s*4[^A-Za-z]*\w+/) || [""])[0]);
+  ok(/SEVERITY[^0-9]{0,16}4 – Severe/.test(r.text), "  the level word comes off that number", (r.text.match(/SEVERITY\s*4[^A-Za-z]*\w+/) || [""])[0]);
   /* No \b after DEG: innerText runs the chip straight into "DECISION", so the
      class ends up as "DEGDE" and a word boundary never arrives. */
   ok(/SEVERITY[\s\S]{0,40}?DEG/.test(r.text), "    with the ISO class beside it", (r.text.match(/SEVERITY[^C]{0,44}/) || [""])[0]);
-  ok(/DECISION\s*Repair soon/.test(r.text), "  and so does the decision", (r.text.match(/DECISION\s*[^C]+/) || [""])[0].slice(0, 40));
+  ok(/DECISION[^A-Za-z]{0,16}Repair soon/.test(r.text), "  and so does the decision", (r.text.match(/DECISION\s*[^C]+/) || [""])[0].slice(0, 40));
   /* The scale carries the app's own words for THIS round — the same second
      line the phone shows on its grade cards (GRADE.meaning, per round family)
      — so the number is never colour-alone and the key is not a fifth
@@ -111,19 +111,21 @@ const textOf = (p, key, lang) => p.evaluate(({ key, lang }) => {
   for (const g of [1, 2, 3, 4, 5]) {
     const k = await p.evaluate(seed("1"+g, g, false));
     const t = (await textOf(p, k, "en")).text;
-    ok(t.indexOf(want[g]) >= 0 && new RegExp("CONDITION RATING\\s*" + g).test(t),
+    ok(t.indexOf(want[g]) >= 0 && new RegExp("CONDITION RATING[^0-9]{0,24}" + g).test(t),
        `rating ${g} → "${want[g]}"`, (t.match(/DECISION\s*[A-Z][^A-ZС]+/) || [""])[0].slice(0, 42));
   }
 
   console.log("\n4. THE MAINTENANCE-ACTION STRIP IS HONEST");
   r = await textOf(p, key, "en");        // the withAction round
-  ok(/Recorded action\s*Repair now/.test(r.text), "it prints the recorded action", 1);
-  ok(/Direct cause\s*Bearing failure/.test(r.text), "  and the direct cause", 1);
-  ok(/Responsible\s*A\. Ivanov/.test(r.text) && /Work order\s*WO-5521/.test(r.text)
-     && /Due date\s*30\.08\.2026/.test(r.text), "  and owner, work order, due date", 1);
+  /* Build 614: on a round of finding cards the card IS the action; the block
+     under them is not printed a second time. */
+  ok(/Repair now/.test(r.text) && !/Recorded action/.test(r.text), "the card prints the recorded action, and no block repeats it", 1);
+  ok(/Bearing failure/.test(r.text), "  and the direct cause", 1);
+  ok(/A\. Ivanov/.test(r.text) && /WO-5521/.test(r.text)
+     && /30\.08\.2026/.test(r.text), "  and owner, work order, due date", 1);
   const kNo = await p.evaluate(seed("02", 4, false));   // graded, no action fields
   const noAct = (await textOf(p, kNo, "en")).text;
-  ok(/Responsible\s*Not recorded/.test(noAct) && /Work order\s*Not recorded/.test(noAct),
+  ok(/Action[^A-Za-z]{0,30}Not recorded/.test(noAct),
      "  and reads Not recorded for what the round does not carry — never invented",
      (noAct.match(/Responsible\s*\w[\w .]*/) || [""])[0].slice(0, 24));
 
@@ -150,7 +152,7 @@ const textOf = (p, key, lang) => p.evaluate(({ key, lang }) => {
   const ru = (await textOf(p, key, "ru")).text;
   ok(/ОЦЕНКА СОСТОЯНИЯ/.test(ru) && /РЕШЕНИЕ/.test(ru), "the rating block is in Russian", 1);
   ok(ru.indexOf("Скорый ремонт") >= 0, "  the decision is translated", 1);
-  ok(ru.indexOf("Техник CM") >= 0 && ru.indexOf("Мастер по обслуживанию") >= 0,
+  ok(ru.indexOf("Техник МС") >= 0 && ru.indexOf("Мастер по обслуживанию") >= 0,
      "  the approval roles are translated", 1);
   /* The scale line is single-language by design — its five words in the
      reader's language only, no inline pair. */

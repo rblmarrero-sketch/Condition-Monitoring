@@ -18,7 +18,10 @@ const SRC = { dash: fs.readFileSync(path.join(__dirname, '..', 'dashboard', 'ind
 (async () => {
   console.log('1. THE FILES');
   for (const [k, s] of Object.entries(SRC)) {
-    const big = (s.match(/border-radius:\s*(1[1-9]|[2-8]\d|9[0-8])px/g) || []);
+    /* CM_STDLOOK_V1 / CM_FLUID_V1 / CM_WOMLOOK_V1 (builds 588-594): the office pages wear the site standard,
+       whose cards are 12-14 px and whose band pill is 16 px. Those blocks are the site's scale, not this one's. */
+    const own = s.replace(/<style id="cm(StdLook|Fluid|WomLook)">[\s\S]*?<\/style>/g, '');
+    const big = (own.match(/border-radius:\s*(1[1-9]|[2-8]\d|9[0-8])px/g) || []);
     ok(k + ': no corner over 10 px except pills', big.length === 0, big.slice(0, 5).join(', ') || 'none');
     ok(k + ': the spacing scale and the corner tokens are declared', /--s1:4px/.test(s) && /--s2:8px/.test(s) && /--s3:12px/.test(s) && /--s4:16px/.test(s) && /--s5:24px/.test(s) && /--r:10px/.test(s) && /--r-sm:8px/.test(s));
     ok(k + ': numerals are tabular somewhere on the surface', /font-variant-numeric:\s*tabular-nums/.test(s));
@@ -40,7 +43,7 @@ const SRC = { dash: fs.readFileSync(path.join(__dirname, '..', 'dashboard', 'ind
       const rows = [...document.querySelectorAll('#actionTbl tbody tr.hrow')].slice(0, 10).map(tr => Math.round(tr.getBoundingClientRect().height));
       showTab('due', true);
       const due = [...document.querySelectorAll('#ddList tbody tr')].slice(0, 10).map(tr => Math.round(tr.getBoundingClientRect().height));
-      const kpi = document.querySelector('#dueKpis, #kpis'); const cs = kpi && getComputedStyle(kpi);
+      const kpi = document.querySelector('#dueKpis .kpi, #dueKpis .tile, #kpis .kpi, #kpis .tile'); const cs = kpi && getComputedStyle(kpi);
       const card = document.querySelector('.section'); const cc = card && getComputedStyle(card);
       const focusable = [...document.querySelectorAll('button, a[href], input, select')].filter(e => e.checkVisibility && e.checkVisibility());
       const noFocusRing = focusable.filter(e => { const s = getComputedStyle(e, ':focus-visible'); return false; });
@@ -49,8 +52,8 @@ const SRC = { dash: fs.readFileSync(path.join(__dirname, '..', 'dashboard', 'ind
     });
     ok('action rows are 40–48 px', R.rows.length > 0 && R.rows.every(h => h >= 36 && h <= 52), R.rows.join(','));
     ok('schedule rows are 40–48 px', R.due.length > 0 && R.due.every(h => h >= 36 && h <= 52), R.due.join(','));
-    ok('a card has a small corner and a subtle shadow', /^(8|10|12)px/.test(R.cardRadius || '') && (R.shadow === 'none' || /rgba?\(/.test(R.shadow)), R.cardRadius + ' · ' + R.shadow);
-    ok('the KPI strip has the same corner', /^(8|10|12)px/.test(R.kpiRadius || ''), R.kpiRadius);
+    ok('a card has a small corner and a subtle shadow', /^(8|10|12|14)px/.test(R.cardRadius || '') && (R.shadow === 'none' || /rgba?\(/.test(R.shadow)), R.cardRadius + ' · ' + R.shadow);
+    ok('a KPI tile has the same corner', /^(8|10|12|14)px/.test(R.kpiRadius || ''), R.kpiRadius);
     ok('no box on the page scrolls inside itself', R.scrollers === 0, R.scrollers + ' scroller(s)');
     const focus = await p.evaluate(async () => { showTab('overview', true); const b2 = document.querySelector('#kpis button'); if (!b2) return null; b2.focus(); return getComputedStyle(b2).outlineStyle; });
     /* :focus-visible is decided by the browser; the rule must exist for it. */

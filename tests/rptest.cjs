@@ -95,15 +95,19 @@ const SEED = () => {
      to ×0.5–×2, assert ×0.25–×4. On an office machine the seed is already
      right and the loop does not run at all, so the extra documents are only
      ever made where the machine differs from the seed. */
-  const MAX_RUNS = 8;
+  const MAX_RUNS = 12;
   let runs = 1, quote = est.seconds, tf = took / quote;
   const trail = [est.seconds.toFixed(0)];
-  while ((tf <= 0.5 || tf >= 2) && runs < MAX_RUNS) {
+  /* A quote that no longer moves is the learner at its floor: on a fast machine it can never halve again. */
+  let settled = false;
+  while ((tf <= 0.5 || tf >= 2) && runs < MAX_RUNS && !settled) {
     const dlN = p.waitForEvent('download', { timeout: 600000 }); dlN.catch(() => {});
     await p.evaluate(o => window.CMReport.generate('unit', 'TK101', o), OPT);
     await dlN;
     runs++;
+    const was = quote;
     quote = (await p.evaluate(o => CMReport.estimate('unit', 'TK101', o), OPT)).seconds;
+    settled = quote === was;
     trail.push(quote.toFixed(0));
     tf = took / quote;
   }
