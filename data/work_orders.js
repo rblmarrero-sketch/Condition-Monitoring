@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-12T10:17:54+00:00",
+  "generated": "2026-11-12T10:47:34+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -5755,6 +5755,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022472"
     },
     {
+      "asset": "DZ009",
+      "defect": "DD-00016779",
+      "raised": "2026-11-12",
+      "system": "DZ009.OC (Operator Cab / Кабина оператора)",
+      "defectType": "6.03 Structural crack / Трещина конструкции",
+      "descr": "Лопнул поручень кабины",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Kiselev",
+      "regBy": "Киселев Алексей Александрович",
+      "wo": "WO-022474"
+    },
+    {
       "asset": "LS057",
       "defect": "DD-00016758",
       "raised": "2026-11-12",
@@ -6236,6 +6249,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022463"
     },
     {
+      "asset": "EX019",
+      "defect": "DD-00016782",
+      "raised": "2026-11-12",
+      "system": "EX019.CH.RB(Hydraulic Rock Breaker / Гидромолот)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Заправка гидромолота азотом",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022477"
+    },
+    {
       "asset": "BL001",
       "defect": "DD-00016747",
       "raised": "2026-11-12",
@@ -6249,6 +6275,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022457"
     },
     {
+      "asset": "LS013",
+      "defect": "DD-00016781",
+      "raised": "2026-11-12",
+      "system": "LS013.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Отогрев,запуск ДВС",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022476"
+    },
+    {
       "asset": "TK016",
       "defect": "DD-00016748",
       "raised": "2026-11-12",
@@ -6260,6 +6299,19 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-022460"
+    },
+    {
+      "asset": "EX016",
+      "defect": "DD-00016780",
+      "raised": "2026-11-12",
+      "system": "EX016.CH.FR (Frame / Рама)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Смазка поворотного круга, долив техжидкостей",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022475"
     },
     {
       "asset": "EX012",
@@ -26646,19 +26698,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "LV071",
-      "defect": "DD-00015107",
-      "raised": "2026-10-19",
-      "system": "LV071.ELS.AS (Alarm System / Система сигнализации)",
-      "defectType": "4.01 Short circuiting / Короткое замыкание",
-      "descr": "Не исправен датчик уровня топлива",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-021727"
-    },
-    {
       "asset": "CR008",
       "defect": "DD-00015147",
       "raised": "2026-10-19",
@@ -26683,6 +26722,19 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-020947"
+    },
+    {
+      "asset": "LV071",
+      "defect": "DD-00015107",
+      "raised": "2026-10-19",
+      "system": "LV071.ELS.AS (Alarm System / Система сигнализации)",
+      "defectType": "4.01 Short circuiting / Короткое замыкание",
+      "descr": "Не исправен датчик уровня топлива",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-021727"
     },
     {
       "asset": "TK152",
@@ -57976,6 +58028,19 @@ window.CM_WO_DATA = {
       "wo": "WO-015456"
     },
     {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
+      "wo": null
+    },
+    {
       "asset": "TK046",
       "defect": "DD-00011270",
       "raised": "2026-08-21",
@@ -58077,19 +58142,6 @@ window.CM_WO_DATA = {
       "priority": "P2 Urgent",
       "by": "Andrey Shipelov",
       "regBy": "Шипелов Андрей Анатольевич",
-      "wo": null
-    },
-    {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
@@ -59497,8 +59549,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H07",
-      "defect": "EB-00000075",
+      "asset": "H04",
+      "defect": "EB-00000076",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -59510,8 +59562,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000076",
+      "asset": "H07",
+      "defect": "EB-00000075",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -60304,6 +60356,19 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "LV011",
+      "defect": "DD-00009705",
+      "raised": "2026-07-27",
+      "system": "LV011.OC.AC (Air Conditioning / Кондиционирование)",
+      "defectType": "1.25 Reduced capacity / output / Снижение производительности / выхода",
+      "descr": "Требуется замена кондиционера",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": null
+    },
+    {
+      "asset": "LV011",
       "defect": "DD-00009702",
       "raised": "2026-07-27",
       "system": "LV011.BS (Braking System / Тормозная система)",
@@ -60322,19 +60387,6 @@ window.CM_WO_DATA = {
       "system": "LV011.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Требуется замена всех патрубков системы охлаждения",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": null
-    },
-    {
-      "asset": "LV011",
-      "defect": "DD-00009705",
-      "raised": "2026-07-27",
-      "system": "LV011.OC.AC (Air Conditioning / Кондиционирование)",
-      "defectType": "1.25 Reduced capacity / output / Снижение производительности / выхода",
-      "descr": "Требуется замена кондиционера",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -129219,15 +129271,15 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-11",
       "planStartDt": "2026-11-11T00:00:00",
       "planEnd": "2026-11-11",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-11",
+      "actualStartDt": "2026-11-11T00:00:00",
+      "actualEnd": "2026-11-11"
     },
     {
       "equip": "GE104",
