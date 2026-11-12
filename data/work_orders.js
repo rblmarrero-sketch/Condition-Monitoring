@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-12T19:28:03+00:00",
+  "generated": "2026-11-12T19:43:08+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -32769,19 +32769,6 @@ window.CM_WO_DATA = {
       "wo": "WO-019655"
     },
     {
-      "asset": "CD010",
-      "defect": "DD-00014603",
-      "raised": "2026-10-12",
-      "system": "CD010.CH.SU (Suspension / Подвеска)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Разрушение вибрационных подушек.",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Shcherbina",
-      "regBy": "Щербина Андрей Николаевич",
-      "wo": null
-    },
-    {
       "asset": "TK164",
       "defect": "DD-00014594",
       "raised": "2026-10-12",
@@ -32832,6 +32819,19 @@ window.CM_WO_DATA = {
       "by": "Evgeniy Frolin",
       "regBy": "Фролин Евгений Владимирович",
       "wo": "WO-019637"
+    },
+    {
+      "asset": "CD010",
+      "defect": "DD-00014603",
+      "raised": "2026-10-12",
+      "system": "CD010.CH.SU (Suspension / Подвеска)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Разрушение вибрационных подушек.",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Shcherbina",
+      "regBy": "Щербина Андрей Николаевич",
+      "wo": "WO-021723"
     },
     {
       "asset": "TK118",
