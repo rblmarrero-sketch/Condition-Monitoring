@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-12T05:10:09+00:00",
+  "generated": "2026-11-12T05:25:30+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -5716,6 +5716,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022439"
     },
     {
+      "asset": "DR009",
+      "defect": "DD-00016733",
+      "raised": "2026-11-12",
+      "system": "DR009.CH.UC (Undercarriage / Ходовая часть)",
+      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
+      "descr": "Требуется шиповка гусеничной ленты",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Kiselev",
+      "regBy": "Киселев Алексей Александрович",
+      "wo": "WO-022440"
+    },
+    {
       "asset": "LS057",
       "defect": "DD-00016758",
       "raised": "2026-11-12",
@@ -5976,6 +5989,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022444"
     },
     {
+      "asset": "DZ008",
+      "defect": "DD-00016768",
+      "raised": "2026-11-12",
+      "system": "DZ008.DRS.COO.RAD (Radiator / Радиатор)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка антифриза по патрубку радиатора",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-022468"
+    },
+    {
       "asset": "BS007",
       "defect": "DD-00016736",
       "raised": "2026-11-12",
@@ -6026,19 +6052,6 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-022467"
-    },
-    {
-      "asset": "DR009",
-      "defect": "DD-00016733",
-      "raised": "2026-11-12",
-      "system": "DR009.CH.UC (Undercarriage / Ходовая часть)",
-      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
-      "descr": "Требуется шиповка гусеничной ленты",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Kiselev",
-      "regBy": "Киселев Алексей Александрович",
-      "wo": "WO-022440"
     },
     {
       "asset": "TK010",
@@ -6444,6 +6457,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022263"
     },
     {
+      "asset": "EX006",
+      "defect": "DD-00016687",
+      "raised": "2026-11-11",
+      "system": "EX006.CH.BUC (Bucket / Ковш)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Сварка стопорного кольца",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022265"
+    },
+    {
       "asset": "LV087",
       "defect": "DD-00016716",
       "raised": "2026-11-11",
@@ -6741,19 +6767,6 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-022271"
-    },
-    {
-      "asset": "EX006",
-      "defect": "DD-00016687",
-      "raised": "2026-11-11",
-      "system": "EX006.CH.BUC (Bucket / Ковш)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Сварка стопорного кольца",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022265"
     },
     {
       "asset": "TK149",
@@ -7289,6 +7302,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022221"
     },
     {
+      "asset": "TK031",
+      "defect": "DD-00016635",
+      "raised": "2026-11-10",
+      "system": "TK031.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Ремонт отопителя",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022269"
+    },
+    {
       "asset": "TK168",
       "defect": "DD-00016663",
       "raised": "2026-11-10",
@@ -7521,19 +7547,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": null
-    },
-    {
-      "asset": "TK031",
-      "defect": "DD-00016635",
-      "raised": "2026-11-10",
-      "system": "TK031.OC.HE (Heating / Отопление)",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Ремонт отопителя",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022269"
     },
     {
       "asset": "EX011",
@@ -10149,6 +10162,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021837"
     },
     {
+      "asset": "EX019",
+      "defect": "DD-00016418",
+      "raised": "2026-11-06",
+      "system": "EX019.CH.BUC (Bucket / Ковш)",
+      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
+      "descr": "Установка рабочего оборудования: харвестерная головка, грейферный захват.",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Ilshat Sabitov",
+      "regBy": "Сабитов Ильшат Рашидович",
+      "wo": "WO-021848"
+    },
+    {
       "asset": "TK089",
       "defect": "DD-00016437",
       "raised": "2026-11-06",
@@ -10316,19 +10342,6 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-022202"
-    },
-    {
-      "asset": "EX019",
-      "defect": "DD-00016418",
-      "raised": "2026-11-06",
-      "system": "EX019.CH.BUC (Bucket / Ковш)",
-      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
-      "descr": "Установка рабочего оборудования: харвестерная головка, грейферный захват.",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Ilshat Sabitov",
-      "regBy": "Сабитов Ильшат Рашидович",
-      "wo": "WO-021848"
     },
     {
       "asset": "SN001",
@@ -11696,6 +11709,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021693"
     },
     {
+      "asset": "TK039",
+      "defect": "DD-00016277",
+      "raised": "2026-11-04",
+      "system": "TK039.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Проверка ступиц (болтается заднее правое колесо)",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-021835"
+    },
+    {
       "asset": "SR001",
       "defect": "DD-00016298",
       "raised": "2026-11-04",
@@ -11850,19 +11876,6 @@ window.CM_WO_DATA = {
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": "WO-021890"
-    },
-    {
-      "asset": "TK039",
-      "defect": "DD-00016277",
-      "raised": "2026-11-04",
-      "system": "TK039.DRS.AXL (Axles / Мосты)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Проверка ступиц (болтается заднее правое колесо)",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-021835"
     },
     {
       "asset": "EX024",
@@ -22187,6 +22200,19 @@ window.CM_WO_DATA = {
       "wo": "WO-020996"
     },
     {
+      "asset": "TK092",
+      "defect": "DD-00015466",
+      "raised": "2026-10-23",
+      "system": "TK092.HS.CYL (Cylinders / Гидроцилиндры)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Бьет гидроцилиндр подъема кузова",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": "WO-021698"
+    },
+    {
       "asset": "TK091",
       "defect": "DD-00015440",
       "raised": "2026-10-23",
@@ -22315,19 +22341,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": null
-    },
-    {
-      "asset": "TK092",
-      "defect": "DD-00015466",
-      "raised": "2026-10-23",
-      "system": "TK092.HS.CYL (Cylinders / Гидроцилиндры)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Бьет гидроцилиндр подъема кузова",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": "WO-021698"
     },
     {
       "asset": "EX015",
@@ -60161,6 +60174,19 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "LV011",
+      "defect": "DD-00009705",
+      "raised": "2026-07-27",
+      "system": "LV011.OC.AC (Air Conditioning / Кондиционирование)",
+      "defectType": "1.25 Reduced capacity / output / Снижение производительности / выхода",
+      "descr": "Требуется замена кондиционера",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": null
+    },
+    {
+      "asset": "LV011",
       "defect": "DD-00009702",
       "raised": "2026-07-27",
       "system": "LV011.BS (Braking System / Тормозная система)",
@@ -60179,19 +60205,6 @@ window.CM_WO_DATA = {
       "system": "LV011.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Требуется замена всех патрубков системы охлаждения",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": null
-    },
-    {
-      "asset": "LV011",
-      "defect": "DD-00009705",
-      "raised": "2026-07-27",
-      "system": "LV011.OC.AC (Air Conditioning / Кондиционирование)",
-      "defectType": "1.25 Reduced capacity / output / Снижение производительности / выхода",
-      "descr": "Требуется замена кондиционера",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -145393,15 +145406,15 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-12",
       "planStartDt": "2026-11-12T00:00:00",
       "planEnd": "2026-11-12",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-10",
+      "actualStartDt": "2026-11-10T23:00:00",
+      "actualEnd": "2026-11-11"
     },
     {
       "equip": "LS038",
@@ -151632,15 +151645,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CLSD",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-10",
       "planStartDt": "2026-11-10T00:00:00",
       "planEnd": "2026-11-10",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-07",
+      "actualStartDt": "2026-11-07T07:00:00",
+      "actualEnd": "2026-11-08"
     },
     {
       "equip": "TK030",
@@ -159247,15 +159260,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-09",
       "planStartDt": "2026-11-09T00:00:00",
       "planEnd": "2026-11-09",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-09",
+      "actualStartDt": "2026-11-09T07:00:00",
+      "actualEnd": "2026-11-09"
     },
     {
       "equip": "TK101",
