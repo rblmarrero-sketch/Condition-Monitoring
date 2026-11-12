@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-12T01:42:51+00:00",
+  "generated": "2026-11-12T01:57:43+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5716,6 +5716,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "LV066",
+      "defect": "DD-00016749",
+      "raised": "2026-11-12",
+      "system": "LV066.BS.BPC (Brake Packs / Тормозные пакеты)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Ремонт стояночного тормоза",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
       "asset": "BS015",
       "defect": "DD-00016741",
       "raised": "2026-11-12",
@@ -5870,6 +5883,19 @@ window.CM_WO_DATA = {
       "by": "Aleksey Dobrikov",
       "regBy": "Добриков Алексей Владимирович",
       "wo": "WO-022432"
+    },
+    {
+      "asset": "TK016",
+      "defect": "DD-00016748",
+      "raised": "2026-11-12",
+      "system": "TK016.BS.HOS (Hoses and Piping / Шланги и трубопроводы)",
+      "defectType": "1.06 Deformation / bending / buckling Деформация / изгиб / коробление",
+      "descr": "неисправен  пистолет для раздачи масла",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-022460"
     },
     {
       "asset": "EX012",
@@ -97086,7 +97112,7 @@ window.CM_WO_DATA = {
       "open": true,
       "planStart": "2026-11-28",
       "planStartDt": "2026-11-28T00:00:00",
-      "planEnd": "2026-11-28",
+      "planEnd": "2026-11-29",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
