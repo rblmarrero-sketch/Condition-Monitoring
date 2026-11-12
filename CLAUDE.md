@@ -5373,6 +5373,20 @@ what it covers under its masthead (`ctx.unitScope`, "Report covers: Magnetic Plu
 match is said in the preview and Generate makes no PDF (`r_u_none`). Shared engine change in `report-core.js`; the
 phone never sets either field. `tests/unitrange.cjs`.
 
+**A RECORD IS WRITTEN WITH BYTES THE PAGE HOLDS, NEVER WITH THE STORE'S OWN POINTER (build 613, CM_OWNBYTES_V1).**
+"Not saved — Error preparing Blob/File data to be stored in object store": TK154 on 12.11 (DCMT4U), TK158 on 06.11
+(DRGZCS), and every `writeback-fail` / `confirm-writeback-fail` in the iPhone traces. A Blob read out of IndexedDB is a
+pointer to a file the store owns; WebKit deletes that file when the record is rewritten and refuses to put such a
+pointer back. Edit was fixed on 04.10 (`openEdit`); three doors still handed the store its own pointers: the draft
+restored by `offerDraft` after the app reloads itself for an update (nearly daily builds), the upload bookkeeping that
+reads a round and writes it back, and any future writer. `dbPut` now runs `detachRec` first: every Blob in the record
+that the page did not make from bytes (`OWN_BLOBS`, marked by `ownMark` in `ownBytes`, `attWrap`, `reArmForSave`,
+`recoverKept`, `signBlob`, `blobFromB64`) is read and replaced by a copy in memory; the page's own copies pass free,
+so an autosave reads nothing. `offerDraft` detaches the restored draft at once. A file that cannot be read is logged
+(`db-detach-left`) and the put is still tried. `save-write-fail` now carries `kept` (photographs unreadable at Save).
+`dbPutRaw` is the bare write. `tests/ownstore.cjs` makes every store read a pointer and has `put` refuse one, as WebKit
+does; it fails 6 assertions on build 612.
+
 ---
 
 ## Secrets
