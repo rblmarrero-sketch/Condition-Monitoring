@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-12T04:53:47+00:00",
+  "generated": "2026-11-12T05:10:09+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -5768,6 +5768,32 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "TK110",
+      "defect": "DD-00016766",
+      "raised": "2026-11-12",
+      "system": "TK110.DRS.COO.RAD Radiator / Радиатор",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка антифриза с радиатора",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": null
+    },
+    {
+      "asset": "TK110",
+      "defect": "DD-00016765",
+      "raised": "2026-11-12",
+      "system": "TK110.DRS.FD (Final Drives / Конечные передачи)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "течь переднего  правого бортового редуктора",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": null
+    },
+    {
       "asset": "BS006",
       "defect": "DD-00016754",
       "raised": "2026-11-12",
@@ -5989,6 +6015,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022441"
     },
     {
+      "asset": "EX011",
+      "defect": "DD-00016767",
+      "raised": "2026-11-12",
+      "system": "EX011.CH.UC (Undercarriage / Ходовая часть)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Заклинило натяжное колесо",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-022467"
+    },
+    {
       "asset": "DR009",
       "defect": "DD-00016733",
       "raised": "2026-11-12",
@@ -6000,6 +6039,19 @@ window.CM_WO_DATA = {
       "by": "Aleksey Kiselev",
       "regBy": "Киселев Алексей Александрович",
       "wo": "WO-022440"
+    },
+    {
+      "asset": "TK010",
+      "defect": "DD-00016745",
+      "raised": "2026-11-12",
+      "system": "TK010.CH.STR (Superstructure / Надстройка)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Не работает крановая установка",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022455"
     },
     {
       "asset": "LS038",
@@ -6130,19 +6182,6 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-022456"
-    },
-    {
-      "asset": "TK010",
-      "defect": "DD-00016745",
-      "raised": "2026-11-12",
-      "system": "TK010.CH.STR (Superstructure / Надстройка)",
-      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
-      "descr": "Не работает крановая установка",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022455"
     },
     {
       "asset": "CN018",
@@ -60122,19 +60161,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "LV011",
-      "defect": "DD-00009705",
-      "raised": "2026-07-27",
-      "system": "LV011.OC.AC (Air Conditioning / Кондиционирование)",
-      "defectType": "1.25 Reduced capacity / output / Снижение производительности / выхода",
-      "descr": "Требуется замена кондиционера",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": null
-    },
-    {
-      "asset": "LV011",
       "defect": "DD-00009702",
       "raised": "2026-07-27",
       "system": "LV011.BS (Braking System / Тормозная система)",
@@ -60153,6 +60179,19 @@ window.CM_WO_DATA = {
       "system": "LV011.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Требуется замена всех патрубков системы охлаждения",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": null
+    },
+    {
+      "asset": "LV011",
+      "defect": "DD-00009705",
+      "raised": "2026-07-27",
+      "system": "LV011.OC.AC (Air Conditioning / Кондиционирование)",
+      "defectType": "1.25 Reduced capacity / output / Снижение производительности / выхода",
+      "descr": "Требуется замена кондиционера",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
