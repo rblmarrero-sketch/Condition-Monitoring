@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-12T15:18:37+00:00",
+  "generated": "2026-11-12T15:36:38+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -5950,6 +5950,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022443"
     },
     {
+      "asset": "TK104",
+      "defect": "DD-00016791",
+      "raised": "2026-11-12",
+      "system": "TK104.HS (Hydraulic System / Гидравлическая система)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка с РВД",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022486"
+    },
+    {
       "asset": "LS057",
       "defect": "DD-00016758",
       "raised": "2026-11-12",
@@ -6262,6 +6275,32 @@ window.CM_WO_DATA = {
       "wo": "WO-022447"
     },
     {
+      "asset": "TK014",
+      "defect": "DD-00016774",
+      "raised": "2026-11-12",
+      "system": "TK014.DRS.TRA (Transmission / Трансмиссия)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Диагностика КПП, сцепления",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022470"
+    },
+    {
+      "asset": "BS015",
+      "defect": "DD-00016776",
+      "raised": "2026-11-12",
+      "system": "BS015.OC.HE (Heating / Отопление)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Отопитель салона ремонт,устранение утечек крана отопителя",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022471"
+    },
+    {
       "asset": "DZ008",
       "defect": "DD-00016768",
       "raised": "2026-11-12",
@@ -6457,19 +6496,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022473"
     },
     {
-      "asset": "BS015",
-      "defect": "DD-00016776",
-      "raised": "2026-11-12",
-      "system": "BS015.OC.HE (Heating / Отопление)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Отопитель салона ремонт,устранение утечек крана отопителя",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022471"
-    },
-    {
       "asset": "CN018",
       "defect": "DD-00016744",
       "raised": "2026-11-12",
@@ -6481,19 +6507,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022453"
-    },
-    {
-      "asset": "TK014",
-      "defect": "DD-00016774",
-      "raised": "2026-11-12",
-      "system": "TK014.DRS.TRA (Transmission / Трансмиссия)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Диагностика КПП, сцепления",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022470"
     },
     {
       "asset": "TK143",
@@ -8667,6 +8680,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "CR008",
+      "defect": "DD-00016576",
+      "raised": "2026-11-09",
+      "system": "CR008.CONV.BEL (Conveyor Belt / Конвейерная лента)",
+      "defectType": "8.01 Conveyor belt cut / tear / Порез / разрыв конвейерной ленты",
+      "descr": "критический износ конвейерной ленты главного конвейера",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-022164"
+    },
+    {
       "asset": "LD008",
       "defect": "DD-00016554",
       "raised": "2026-11-09",
@@ -8704,19 +8730,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Murashko",
       "regBy": "Мурашко Сергей Борисович",
       "wo": "WO-022165"
-    },
-    {
-      "asset": "CR008",
-      "defect": "DD-00016576",
-      "raised": "2026-11-09",
-      "system": "CR008.CONV.BEL (Conveyor Belt / Конвейерная лента)",
-      "defectType": "8.01 Conveyor belt cut / tear / Порез / разрыв конвейерной ленты",
-      "descr": "критический износ конвейерной ленты главного конвейера",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": "WO-022164"
     },
     {
       "asset": "TK041",
