@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-12T11:16:51+00:00",
+  "generated": "2026-11-12T11:22:57+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -5638,6 +5638,19 @@ window.CM_WO_DATA = {
   ],
   "otherDefects": [
     {
+      "asset": "GE004",
+      "defect": "DD-00016784",
+      "raised": "2026-11-12",
+      "system": "GE004.ELS.ALT (Alternator / Генератор)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Глохнет не запускается",
+      "status": "Elimination scheduled",
+      "priority": "P1 Breakdown",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022478"
+    },
+    {
       "asset": "CR003",
       "defect": "DD-00016724",
       "raised": "2026-11-12",
@@ -5781,6 +5794,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022434"
     },
     {
+      "asset": "EX008",
+      "defect": "DD-00016737",
+      "raised": "2026-11-12",
+      "system": "EX008.HS.CYL (Cylinders / Гидроцилиндры)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь РВД ГЦ ковша",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022444"
+    },
+    {
       "asset": "LS057",
       "defect": "DD-00016758",
       "raised": "2026-11-12",
@@ -5882,19 +5908,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
-      "wo": null
-    },
-    {
-      "asset": "TK119",
-      "defect": "DD-00016783",
-      "raised": "2026-11-12",
-      "system": "TK119.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка Д/Т в поддон ДВС",
-      "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
       "wo": null
     },
     {
@@ -6106,19 +6119,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022445"
     },
     {
-      "asset": "EX008",
-      "defect": "DD-00016737",
-      "raised": "2026-11-12",
-      "system": "EX008.HS.CYL (Cylinders / Гидроцилиндры)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь РВД ГЦ ковша",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022444"
-    },
-    {
       "asset": "DZ008",
       "defect": "DD-00016768",
       "raised": "2026-11-12",
@@ -6249,6 +6249,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022465"
     },
     {
+      "asset": "TK119",
+      "defect": "DD-00016783",
+      "raised": "2026-11-12",
+      "system": "TK119.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка Д/Т в поддон ДВС",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022480"
+    },
+    {
       "asset": "EX019",
       "defect": "DD-00016761",
       "raised": "2026-11-12",
@@ -6273,19 +6286,6 @@ window.CM_WO_DATA = {
       "by": "Aleksey Dobrikov",
       "regBy": "Добриков Алексей Владимирович",
       "wo": "WO-022479"
-    },
-    {
-      "asset": "GE004",
-      "defect": "DD-00016784",
-      "raised": "2026-11-12",
-      "system": "GE004.ELS.ALT (Alternator / Генератор)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Глохнет не запускается",
-      "status": "Elimination scheduled",
-      "priority": "P1 Breakdown",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-022478"
     },
     {
       "asset": "EX019",
@@ -6717,6 +6717,58 @@ window.CM_WO_DATA = {
       "wo": "WO-022371"
     },
     {
+      "asset": "EX005",
+      "defect": "DD-00016714",
+      "raised": "2026-11-11",
+      "system": "EX005.CH.AL (Central Lubrication System / Централизованная система смазки)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Не продавливает ЦСС",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022394"
+    },
+    {
+      "asset": "TK092",
+      "defect": "DD-00016721",
+      "raised": "2026-11-11",
+      "system": "TK092.CH.SU (Suspension / Подвеска)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Люфт втулок переднего стабилизатора, монтаж патрубка интеркуллера",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022427"
+    },
+    {
+      "asset": "LV141",
+      "defect": "DD-00016717",
+      "raised": "2026-11-11",
+      "system": "LV141.OC.DO (Doors / Двери)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Ремонт механизма открывания водительской двери",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022417"
+    },
+    {
+      "asset": "TK034",
+      "defect": "DD-00016691",
+      "raised": "2026-11-11",
+      "system": "TK034.ELS.WH (Wiring Harness / Жгут проводов)",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "Ремонт подъема кузова, фен в кабине",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022356"
+    },
+    {
       "asset": "LV087",
       "defect": "DD-00016716",
       "raised": "2026-11-11",
@@ -6964,19 +7016,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022362"
     },
     {
-      "asset": "TK034",
-      "defect": "DD-00016691",
-      "raised": "2026-11-11",
-      "system": "TK034.ELS.WH (Wiring Harness / Жгут проводов)",
-      "defectType": "4.02 Open circuit / Разрыв цепи",
-      "descr": "Ремонт подъема кузова, фен в кабине",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022356"
-    },
-    {
       "asset": "TK089",
       "defect": "DD-00016689",
       "raised": "2026-11-11",
@@ -7042,19 +7081,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022245"
     },
     {
-      "asset": "TK092",
-      "defect": "DD-00016721",
-      "raised": "2026-11-11",
-      "system": "TK092.CH.SU (Suspension / Подвеска)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Люфт втулок переднего стабилизатора, монтаж патрубка интеркуллера",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022427"
-    },
-    {
       "asset": "GR012",
       "defect": "DD-00016723",
       "raised": "2026-11-11",
@@ -7081,19 +7107,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022429"
     },
     {
-      "asset": "EX005",
-      "defect": "DD-00016714",
-      "raised": "2026-11-11",
-      "system": "EX005.CH.AL (Central Lubrication System / Централизованная система смазки)",
-      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
-      "descr": "Не продавливает ЦСС",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022394"
-    },
-    {
       "asset": "CD004",
       "defect": "DD-00016713",
       "raised": "2026-11-11",
@@ -7118,19 +7131,6 @@ window.CM_WO_DATA = {
       "by": "Ilshat Sabitov",
       "regBy": "Сабитов Ильшат Рашидович",
       "wo": "WO-022383"
-    },
-    {
-      "asset": "LV141",
-      "defect": "DD-00016717",
-      "raised": "2026-11-11",
-      "system": "LV141.OC.DO (Doors / Двери)",
-      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
-      "descr": "Ремонт механизма открывания водительской двери",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022417"
     },
     {
       "asset": "EX021",
@@ -11189,6 +11189,162 @@ window.CM_WO_DATA = {
       "wo": "WO-021800"
     },
     {
+      "asset": "DZ020",
+      "defect": "DD-00016342",
+      "raised": "2026-11-05",
+      "system": "DZ020.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Замена РВД",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Rinat Musaferov",
+      "regBy": "Мусаферов Ринат Искакович",
+      "wo": "WO-021779"
+    },
+    {
+      "asset": "EX001",
+      "defect": "DD-00016343",
+      "raised": "2026-11-05",
+      "system": "EX001.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Замена РВД",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Rinat Musaferov",
+      "regBy": "Мусаферов Ринат Искакович",
+      "wo": "WO-021780"
+    },
+    {
+      "asset": "EX002",
+      "defect": "DD-00016345",
+      "raised": "2026-11-05",
+      "system": "EX002.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Замена РВД",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Rinat Musaferov",
+      "regBy": "Мусаферов Ринат Искакович",
+      "wo": "WO-021781"
+    },
+    {
+      "asset": "EX003",
+      "defect": "DD-00016347",
+      "raised": "2026-11-05",
+      "system": "EX003.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Замена РВД",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Rinat Musaferov",
+      "regBy": "Мусаферов Ринат Искакович",
+      "wo": "WO-021782"
+    },
+    {
+      "asset": "EX004",
+      "defect": "DD-00016349",
+      "raised": "2026-11-05",
+      "system": "EX004.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Замена РВД",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Rinat Musaferov",
+      "regBy": "Мусаферов Ринат Искакович",
+      "wo": "WO-021784"
+    },
+    {
+      "asset": "EX006",
+      "defect": "DD-00016350",
+      "raised": "2026-11-05",
+      "system": "EX006.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Замена РВД",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Rinat Musaferov",
+      "regBy": "Мусаферов Ринат Искакович",
+      "wo": "WO-021785"
+    },
+    {
+      "asset": "EX007",
+      "defect": "DD-00016354",
+      "raised": "2026-11-05",
+      "system": "EX007.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Замена РВД",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Rinat Musaferov",
+      "regBy": "Мусаферов Ринат Искакович",
+      "wo": "WO-021789"
+    },
+    {
+      "asset": "EX008",
+      "defect": "DD-00016355",
+      "raised": "2026-11-05",
+      "system": "EX008.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Замена РВД",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Rinat Musaferov",
+      "regBy": "Мусаферов Ринат Искакович",
+      "wo": "WO-021790"
+    },
+    {
+      "asset": "EX009",
+      "defect": "DD-00016356",
+      "raised": "2026-11-05",
+      "system": "EX009.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Замена РВД",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Rinat Musaferov",
+      "regBy": "Мусаферов Ринат Искакович",
+      "wo": "WO-021791"
+    },
+    {
+      "asset": "EX009",
+      "defect": "DD-00016357",
+      "raised": "2026-11-05",
+      "system": "EX009.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Замена РВД",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Rinat Musaferov",
+      "regBy": "Мусаферов Ринат Искакович",
+      "wo": "WO-021792"
+    },
+    {
+      "asset": "EX010",
+      "defect": "DD-00016358",
+      "raised": "2026-11-05",
+      "system": "EX010.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Замена РВД",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Rinat Musaferov",
+      "regBy": "Мусаферов Ринат Искакович",
+      "wo": "WO-021793"
+    },
+    {
+      "asset": "EX011",
+      "defect": "DD-00016359",
+      "raised": "2026-11-05",
+      "system": "EX011.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Замена РВД",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Rinat Musaferov",
+      "regBy": "Мусаферов Ринат Искакович",
+      "wo": "WO-021794"
+    },
+    {
       "asset": "TK092",
       "defect": "DD-00016346",
       "raised": "2026-11-05",
@@ -11304,162 +11460,6 @@ window.CM_WO_DATA = {
       "by": "Rinat Musaferov",
       "regBy": "Мусаферов Ринат Искакович",
       "wo": "WO-021795"
-    },
-    {
-      "asset": "EX011",
-      "defect": "DD-00016359",
-      "raised": "2026-11-05",
-      "system": "EX011.HS.DL (Hydraulic Lines / Гидролинии)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Замена РВД",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Rinat Musaferov",
-      "regBy": "Мусаферов Ринат Искакович",
-      "wo": "WO-021794"
-    },
-    {
-      "asset": "EX010",
-      "defect": "DD-00016358",
-      "raised": "2026-11-05",
-      "system": "EX010.HS.DL (Hydraulic Lines / Гидролинии)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Замена РВД",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Rinat Musaferov",
-      "regBy": "Мусаферов Ринат Искакович",
-      "wo": "WO-021793"
-    },
-    {
-      "asset": "EX009",
-      "defect": "DD-00016357",
-      "raised": "2026-11-05",
-      "system": "EX009.HS.DL (Hydraulic Lines / Гидролинии)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Замена РВД",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Rinat Musaferov",
-      "regBy": "Мусаферов Ринат Искакович",
-      "wo": "WO-021792"
-    },
-    {
-      "asset": "EX009",
-      "defect": "DD-00016356",
-      "raised": "2026-11-05",
-      "system": "EX009.HS.DL (Hydraulic Lines / Гидролинии)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Замена РВД",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Rinat Musaferov",
-      "regBy": "Мусаферов Ринат Искакович",
-      "wo": "WO-021791"
-    },
-    {
-      "asset": "EX008",
-      "defect": "DD-00016355",
-      "raised": "2026-11-05",
-      "system": "EX008.HS.DL (Hydraulic Lines / Гидролинии)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Замена РВД",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Rinat Musaferov",
-      "regBy": "Мусаферов Ринат Искакович",
-      "wo": "WO-021790"
-    },
-    {
-      "asset": "EX007",
-      "defect": "DD-00016354",
-      "raised": "2026-11-05",
-      "system": "EX007.HS.DL (Hydraulic Lines / Гидролинии)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Замена РВД",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Rinat Musaferov",
-      "regBy": "Мусаферов Ринат Искакович",
-      "wo": "WO-021789"
-    },
-    {
-      "asset": "EX006",
-      "defect": "DD-00016350",
-      "raised": "2026-11-05",
-      "system": "EX006.HS.DL (Hydraulic Lines / Гидролинии)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Замена РВД",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Rinat Musaferov",
-      "regBy": "Мусаферов Ринат Искакович",
-      "wo": "WO-021785"
-    },
-    {
-      "asset": "EX002",
-      "defect": "DD-00016345",
-      "raised": "2026-11-05",
-      "system": "EX002.HS.DL (Hydraulic Lines / Гидролинии)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Замена РВД",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Rinat Musaferov",
-      "regBy": "Мусаферов Ринат Искакович",
-      "wo": "WO-021781"
-    },
-    {
-      "asset": "EX004",
-      "defect": "DD-00016349",
-      "raised": "2026-11-05",
-      "system": "EX004.HS.DL (Hydraulic Lines / Гидролинии)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Замена РВД",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Rinat Musaferov",
-      "regBy": "Мусаферов Ринат Искакович",
-      "wo": "WO-021784"
-    },
-    {
-      "asset": "EX003",
-      "defect": "DD-00016347",
-      "raised": "2026-11-05",
-      "system": "EX003.HS.DL (Hydraulic Lines / Гидролинии)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Замена РВД",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Rinat Musaferov",
-      "regBy": "Мусаферов Ринат Искакович",
-      "wo": "WO-021782"
-    },
-    {
-      "asset": "EX001",
-      "defect": "DD-00016343",
-      "raised": "2026-11-05",
-      "system": "EX001.HS.DL (Hydraulic Lines / Гидролинии)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Замена РВД",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Rinat Musaferov",
-      "regBy": "Мусаферов Ринат Искакович",
-      "wo": "WO-021780"
-    },
-    {
-      "asset": "DZ020",
-      "defect": "DD-00016342",
-      "raised": "2026-11-05",
-      "system": "DZ020.HS.DL (Hydraulic Lines / Гидролинии)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Замена РВД",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Rinat Musaferov",
-      "regBy": "Мусаферов Ринат Искакович",
-      "wo": "WO-021779"
     },
     {
       "asset": "DZ016",
@@ -87721,15 +87721,15 @@ window.CM_WO_DATA = {
       "cmLabel": "500h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CLSD",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-12",
       "planStartDt": "2026-11-12T00:00:00",
       "planEnd": "2026-11-12",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-10",
+      "actualStartDt": "2026-11-10T01:00:00",
+      "actualEnd": "2026-11-10"
     },
     {
       "equip": "CR001",
@@ -144696,15 +144696,15 @@ window.CM_WO_DATA = {
       "cmLabel": "1000h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-09",
       "planStartDt": "2026-11-09T00:00:00",
       "planEnd": "2026-11-09",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-09",
+      "actualStartDt": "2026-11-09T23:00:00",
+      "actualEnd": "2026-11-10"
     },
     {
       "equip": "LS013",
