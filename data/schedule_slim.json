@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-12T05:38:04+00:00",
+  "generated": "2026-11-12T05:53:50+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -359,30 +359,6 @@
           "MP"
         ],
         "plan": "2026-11-23",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "TK042": [
-      {
-        "wo": "WO-021113",
-        "hours": 1000,
-        "types": [
-          "FC",
-          "INSP",
-          "MP"
-        ],
-        "plan": "2026-11-16",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "TK085": [
-      {
-        "wo": "WO-021110",
-        "hours": 500,
-        "types": [
-          "MP"
-        ],
-        "plan": "2026-11-08",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -3503,12 +3479,12 @@
       "type": "1000 Hours service Planned",
       "hours": 1000,
       "plan": "2026-11-16",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-08"
     },
     {
       "wo": "WO-022347",
@@ -4925,12 +4901,12 @@
       "type": "500 Hours service Planned",
       "hours": 500,
       "plan": "2026-11-08",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-09"
     },
     {
       "wo": "WO-020836",
@@ -11389,6 +11365,14 @@
       "x": "Отопитель дует холодным воздухом (замена термостатов)"
     },
     {
+      "d": "DD-00016769",
+      "u": "EX007",
+      "s": "EX007.CH.UC (Undercarriage / Ходовая часть)",
+      "p": "P2",
+      "r": "2026-11-12",
+      "x": "Установка болта защиты бортовой, замена тавотниц"
+    },
+    {
       "d": "DD-00016740",
       "u": "LV008",
       "s": "LV008.ELS.WH (Wiring Harness / Жгут проводов)",
@@ -11701,6 +11685,14 @@
       "x": "Сварка стопорного кольца"
     },
     {
+      "d": "DD-00016690",
+      "u": "TK007",
+      "s": "TK007.DRS.AXL (Axles / Мосты)",
+      "p": "P2",
+      "r": "2026-11-11",
+      "x": "Замена шпилек заднего колеса¶"
+    },
+    {
       "d": "DD-00016692",
       "u": "EX022",
       "s": "EX022.DRS.ENG (Engine / Двигатель)",
@@ -11715,14 +11707,6 @@
       "p": "P2",
       "r": "2026-11-11",
       "x": "Ремонт подъема кузова, фен в кабине"
-    },
-    {
-      "d": "DD-00016690",
-      "u": "TK007",
-      "s": "TK007.DRS.AXL (Axles / Мосты)",
-      "p": "P2",
-      "r": "2026-11-11",
-      "x": "Замена шпилек заднего колеса¶"
     },
     {
       "d": "DD-00016689",
