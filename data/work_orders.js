@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-12T01:07:42+00:00",
+  "generated": "2026-11-12T01:22:43+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5872,19 +5872,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022432"
     },
     {
-      "asset": "BL001",
-      "defect": "DD-00016747",
-      "raised": "2026-11-12",
-      "system": "BL001.HS.PD (Hydraulic Motors / Гидромоторы)",
-      "defectType": "4.02 Open circuit / Разрыв цепи",
-      "descr": "Отсутствует ход",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022457"
-    },
-    {
       "asset": "EX012",
       "defect": "DD-00016746",
       "raised": "2026-11-12",
@@ -5896,6 +5883,19 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-022456"
+    },
+    {
+      "asset": "BL001",
+      "defect": "DD-00016747",
+      "raised": "2026-11-12",
+      "system": "BL001.HS.PD (Hydraulic Motors / Гидромоторы)",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "Отсутствует ход",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022457"
     },
     {
       "asset": "TK010",
