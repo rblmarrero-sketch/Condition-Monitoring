@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-12T10:50:53+00:00",
+  "generated": "2026-11-12T10:58:16+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -5768,6 +5768,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022474"
     },
     {
+      "asset": "TK038",
+      "defect": "DD-00016727",
+      "raised": "2026-11-12",
+      "system": "TK038.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь ДТ",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022434"
+    },
+    {
       "asset": "LS057",
       "defect": "DD-00016758",
       "raised": "2026-11-12",
@@ -5869,6 +5882,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
+      "wo": null
+    },
+    {
+      "asset": "TK119",
+      "defect": "DD-00016783",
+      "raised": "2026-11-12",
+      "system": "TK119.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка Д/Т в поддон ДВС",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
       "wo": null
     },
     {
@@ -6197,19 +6223,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022435"
     },
     {
-      "asset": "TK038",
-      "defect": "DD-00016727",
-      "raised": "2026-11-12",
-      "system": "TK038.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь ДТ",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022434"
-    },
-    {
       "asset": "GE065",
       "defect": "DD-00016725",
       "raised": "2026-11-12",
@@ -6247,6 +6260,32 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022463"
+    },
+    {
+      "asset": "TK004",
+      "defect": "DD-00016785",
+      "raised": "2026-11-12",
+      "system": "TK004.BS.PU (Pneumatic Control / Пневмоуправление)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Устранение утечек пневмосистемы",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022479"
+    },
+    {
+      "asset": "GE004",
+      "defect": "DD-00016784",
+      "raised": "2026-11-12",
+      "system": "GE004.ELS.ALT (Alternator / Генератор)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Глохнет не запускается",
+      "status": "Elimination scheduled",
+      "priority": "P1 Breakdown",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022478"
     },
     {
       "asset": "EX019",
@@ -6665,6 +6704,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022355"
     },
     {
+      "asset": "BS002",
+      "defect": "DD-00016709",
+      "raised": "2026-11-11",
+      "system": "BS002.OC.GL (Glass / Стекла)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Ремонт крепления механизма стеклоочистителей",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022371"
+    },
+    {
       "asset": "LV087",
       "defect": "DD-00016716",
       "raised": "2026-11-11",
@@ -7079,19 +7131,6 @@ window.CM_WO_DATA = {
       "by": "Aleksey Dobrikov",
       "regBy": "Добриков Алексей Владимирович",
       "wo": "WO-022417"
-    },
-    {
-      "asset": "BS002",
-      "defect": "DD-00016709",
-      "raised": "2026-11-11",
-      "system": "BS002.OC.GL (Glass / Стекла)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Ремонт крепления механизма стеклоочистителей",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022371"
     },
     {
       "asset": "EX021",
@@ -128758,15 +128797,15 @@ window.CM_WO_DATA = {
       "cmLabel": "4000h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-13",
       "planStartDt": "2026-11-13T00:00:00",
       "planEnd": "2026-11-13",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-11",
+      "actualStartDt": "2026-11-11T19:00:00",
+      "actualEnd": "2026-11-12"
     },
     {
       "equip": "GE101",
