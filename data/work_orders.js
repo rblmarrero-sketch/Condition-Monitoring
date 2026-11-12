@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-12T07:43:11+00:00",
+  "generated": "2026-11-12T08:12:39+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -6197,19 +6197,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022463"
     },
     {
-      "asset": "TK143",
-      "defect": "DD-00016753",
-      "raised": "2026-11-12",
-      "system": "TK143.ELS.WH (Wiring Harness / Жгут проводов)",
-      "defectType": "4.02 Open circuit / Разрыв цепи",
-      "descr": "не регулируется опускание кузова",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": "WO-022461"
-    },
-    {
       "asset": "BL001",
       "defect": "DD-00016747",
       "raised": "2026-11-12",
@@ -6260,6 +6247,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022453"
+    },
+    {
+      "asset": "TK143",
+      "defect": "DD-00016753",
+      "raised": "2026-11-12",
+      "system": "TK143.ELS.WH (Wiring Harness / Жгут проводов)",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "не регулируется опускание кузова",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-022461"
     },
     {
       "asset": "GR003",
