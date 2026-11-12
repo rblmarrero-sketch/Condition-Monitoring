@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-12T20:46:15+00:00",
+  "generated": "2026-11-12T20:57:58+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -8394,32 +8394,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022167"
     },
     {
-      "asset": "BS001",
-      "defect": "DD-00016584",
-      "raised": "2026-11-09",
-      "system": "BS001.OC.HE (Heating / Отопление)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Не работает отпитель салона",
-      "status": "Completed",
-      "priority": "P2 Urgent",
-      "by": "Roman Besedovskiy",
-      "regBy": "Беседовский Роман Иванович",
-      "wo": "WO-022159"
-    },
-    {
-      "asset": "PU004",
-      "defect": "DD-00016585",
-      "raised": "2026-11-09",
-      "system": "PU004.ELS.STM (Starter Motor / Стартер)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Не работает стартер",
-      "status": "Completed",
-      "priority": "P2 Urgent",
-      "by": "Roman Besedovskiy",
-      "regBy": "Беседовский Роман Иванович",
-      "wo": "WO-022160"
-    },
-    {
       "asset": "CD001",
       "defect": "DD-00016570",
       "raised": "2026-11-09",
@@ -8665,6 +8639,32 @@ window.CM_WO_DATA = {
       "by": "Aleksey Dobrikov",
       "regBy": "Добриков Алексей Владимирович",
       "wo": "WO-022169"
+    },
+    {
+      "asset": "BS001",
+      "defect": "DD-00016584",
+      "raised": "2026-11-09",
+      "system": "BS001.OC.HE (Heating / Отопление)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Не работает отпитель салона",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-022159"
+    },
+    {
+      "asset": "PU004",
+      "defect": "DD-00016585",
+      "raised": "2026-11-09",
+      "system": "PU004.ELS.STM (Starter Motor / Стартер)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Не работает стартер",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-022160"
     },
     {
       "asset": "GE109",
@@ -23721,19 +23721,6 @@ window.CM_WO_DATA = {
       "wo": "WO-021513"
     },
     {
-      "asset": "TK042",
-      "defect": "DD-00015348",
-      "raised": "2026-10-22",
-      "system": "TK042.DRS.TRA (Transmission / Трансмиссия)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Нужен осмотр кулисы (плохо включаются передачи)",
-      "status": "Completed",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-021133"
-    },
-    {
       "asset": "LV065",
       "defect": "DD-00015372",
       "raised": "2026-10-22",
@@ -23745,6 +23732,19 @@ window.CM_WO_DATA = {
       "by": "Andrey Taran",
       "regBy": "Таран Андрей Андреевич",
       "wo": "WO-020540"
+    },
+    {
+      "asset": "TK042",
+      "defect": "DD-00015348",
+      "raised": "2026-10-22",
+      "system": "TK042.DRS.TRA (Transmission / Трансмиссия)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Нужен осмотр кулисы (плохо включаются передачи)",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-021133"
     },
     {
       "asset": "TK089",
