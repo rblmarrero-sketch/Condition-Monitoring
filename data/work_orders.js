@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-12T16:47:34+00:00",
+  "generated": "2026-11-12T17:05:38+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -5683,11 +5683,24 @@ window.CM_WO_DATA = {
       "system": "DZ008.DRS.EXH (Exhaust System / Система выпуска)",
       "defectType": "6.03 Structural crack / Трещина конструкции",
       "descr": "Лопнул глушитель",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Aleksey Kiselev",
       "regBy": "Киселев Алексей Александрович",
       "wo": "WO-022488"
+    },
+    {
+      "asset": "TK154",
+      "defect": "DD-00016802",
+      "raised": "2026-11-13",
+      "system": "TK154.OC.DO (Doors / Двери)",
+      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "descr": "Не открывается дверь",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022492"
     },
     {
       "asset": "TK104",
@@ -5742,6 +5755,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "BS003",
+      "defect": "DD-00016803",
+      "raised": "2026-11-13",
+      "system": "BS003.ELS.LIG (Head Lighting System / Система головного освещения)",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "Неисправность головного освещения",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": null
+    },
+    {
       "asset": "DZ008",
       "defect": "DD-00016792",
       "raised": "2026-11-13",
@@ -5752,19 +5778,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
-      "wo": null
-    },
-    {
-      "asset": "EX002",
-      "defect": "DD-00016799",
-      "raised": "2026-11-13",
-      "system": "EX002.HS.MP (Hydraulic Pumps / Гидронасосы)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка масла гидрораспределителя",
-      "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
       "wo": null
     },
     {
@@ -5779,6 +5792,45 @@ window.CM_WO_DATA = {
       "by": "Aleksey Dobrikov",
       "regBy": "Добриков Алексей Владимирович",
       "wo": "WO-022487"
+    },
+    {
+      "asset": "FL001",
+      "defect": "DD-00016801",
+      "raised": "2026-11-13",
+      "system": "FL001.ELS (Electrical System / Электросистема)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Не включается зажигание. Не запускается.",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022491"
+    },
+    {
+      "asset": "TK027",
+      "defect": "DD-00016800",
+      "raised": "2026-11-13",
+      "system": "TK027.DRS.COO.RAD Radiator / Радиатор",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Трещина патрубка охладителя",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022490"
+    },
+    {
+      "asset": "EX002",
+      "defect": "DD-00016799",
+      "raised": "2026-11-13",
+      "system": "EX002.HS.MP (Hydraulic Pumps / Гидронасосы)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка масла гидрораспределителя",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022489"
     },
     {
       "asset": "TK044",
@@ -7731,6 +7783,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022225"
     },
     {
+      "asset": "EX011",
+      "defect": "DD-00016666",
+      "raised": "2026-11-10",
+      "system": "EX011.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "Не запускается ДВС",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022238"
+    },
+    {
       "asset": "TK168",
       "defect": "DD-00016663",
       "raised": "2026-11-10",
@@ -7963,19 +8028,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": null
-    },
-    {
-      "asset": "EX011",
-      "defect": "DD-00016666",
-      "raised": "2026-11-10",
-      "system": "EX011.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
-      "descr": "Не запускается ДВС",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": "WO-022238"
     },
     {
       "asset": "DR008",
