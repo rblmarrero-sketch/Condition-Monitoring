@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=612">
+<link rel="manifest" href="manifest.webmanifest?v=613">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=612">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=612">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=612">
+<link rel="apple-touch-icon" href="icon-192.png?v=613">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=613">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=613">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2980,16 +2980,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=612"></script>
-<script src="upload-defaults.js?v=612"></script>
-<script src="hme.js?v=612"></script>
-<script src="mp-fc.js?v=612"></script>
-<script src="rtw.js?v=612"></script>
-<script src="hme-cascade.js?v=612"></script>
-<script src="assets.js?v=612"></script>
-<script src="temp-limits.js?v=612"></script>
-<script src="normalize.js?v=612"></script>
-<script src="terms.js?v=612"></script>
+<script src="native.js?v=613"></script>
+<script src="upload-defaults.js?v=613"></script>
+<script src="hme.js?v=613"></script>
+<script src="mp-fc.js?v=613"></script>
+<script src="rtw.js?v=613"></script>
+<script src="hme-cascade.js?v=613"></script>
+<script src="assets.js?v=613"></script>
+<script src="temp-limits.js?v=613"></script>
+<script src="normalize.js?v=613"></script>
+<script src="terms.js?v=613"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -3008,25 +3008,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=612"></script>
-<script src="edits.js?v=612"></script>
-<script src="due.js?v=612"></script>
-<script src="wear.js?v=612"></script>
-<script src="wear-figs.js?v=612"></script>
-<script src="wear-map.js?v=612"></script>
-<script src="machine-photos.js?v=612"></script>
-<script src="machine-fig.js?v=612"></script>
-<script src="get.js?v=612"></script>
-<script src="points.js?v=612"></script>
-<script src="uc-points.js?v=612"></script>
-<script src="inspect-guide.js?v=612"></script>
-<script src="get-figs.js?v=612"></script>
-<script src="body-points.js?v=612"></script>
-<script src="body-map.js?v=612"></script>
-<script src="lube.js?v=612"></script>
-<script src="lube-overrides.js?v=612"></script>
-<script src="lube2027.js?v=612"></script>
-<script src="report-core.js?v=612"></script>
+<script src="grade.js?v=613"></script>
+<script src="edits.js?v=613"></script>
+<script src="due.js?v=613"></script>
+<script src="wear.js?v=613"></script>
+<script src="wear-figs.js?v=613"></script>
+<script src="wear-map.js?v=613"></script>
+<script src="machine-photos.js?v=613"></script>
+<script src="machine-fig.js?v=613"></script>
+<script src="get.js?v=613"></script>
+<script src="points.js?v=613"></script>
+<script src="uc-points.js?v=613"></script>
+<script src="inspect-guide.js?v=613"></script>
+<script src="get-figs.js?v=613"></script>
+<script src="body-points.js?v=613"></script>
+<script src="body-map.js?v=613"></script>
+<script src="lube.js?v=613"></script>
+<script src="lube-overrides.js?v=613"></script>
+<script src="lube2027.js?v=613"></script>
+<script src="report-core.js?v=613"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -5624,7 +5624,69 @@ function dbWriteFail(why){ dbFailStreak++; if(dbFailStreak>=DB_RECONNECT_AT) dbR
    success path beside it) a one-shot: the FIRST terminal event a
    transaction reports is the one this code acts on, whichever of
    complete/error/abort it turns out to be. */
-async function dbPut(rec){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readwrite"); let reqErr=null, done=false; const rq=t.objectStore(STORE).put(rec); rq.onerror=()=>{ reqErr=rq.error||null; };
+/* A RECORD IS WRITTEN WITH BYTES THIS PAGE HOLDS, NEVER WITH A HANDLE THE
+   STORE HANDED OUT (CM_OWNBYTES_V1, 12.11.2026).
+
+   "Error preparing Blob/File data to be stored in object store" - TK154 on
+   12.11, TK158 on 06.11, TK157 on 04.10, and the writeback-fail /
+   confirm-writeback-fail lines in every iPhone's trace. It is WebKit refusing
+   to copy a Blob into IndexedDB because the file behind it is gone. A Blob
+   read OUT of IndexedDB is not bytes: it is a pointer to a file the store
+   owns, and the store deletes that file the next time the record is written.
+   Any object holding the old pointer is then dead, and putting it back fails
+   the whole write. Edit was fixed on 04.10 (openEdit copies to memory); three
+   other doors still handed the store its own pointers back:
+     - the draft brought back after a reload (offerDraft). The app reloads by
+       itself to take a new build once the phone is idle, and builds shipped
+       nearly every day this month, so a round half-walked over an update had
+       its earlier photographs restored as pointers; the next autosave
+       rewrote the draft and killed them, and Save was refused;
+     - the upload bookkeeping (syncNow, confirmRun), which reads a round,
+       uploads for minutes, and writes it back;
+     - anything written later by code that does not know this.
+   So the rule is in dbPut, the one door every write goes through: every Blob
+   in the record that this page did not itself make from bytes is read and
+   replaced by a copy in memory before the put. A copy this page made is
+   marked (OWN_BLOBS) and passes for free, so an autosave of a 40-photograph
+   round reads nothing. A file that cannot be read is left as it is and the
+   put is tried anyway - what happens then is what happened before - and the
+   name is logged, never dropped. (tests/ownstore.cjs) */
+const OWN_BLOBS=(typeof WeakSet!=="undefined") ? new WeakSet() : null;
+function ownMark(b){ try{ if(OWN_BLOBS && b instanceof Blob) OWN_BLOBS.add(b); }catch(e){} return b; }
+function isOwnBlob(b){ try{ return !!(OWN_BLOBS && OWN_BLOBS.has(b)); }catch(e){ return false; } }
+/* A copy in memory of what `like` was: a File stays a File with its name (the
+   attachment id lives in the name), a Blob stays a Blob. */
+function memCopy(u, like, dflt){
+  const type=(like&&like.type)||dflt||"";
+  const f=(typeof File!=="undefined" && like instanceof File)
+    ? new File([u], like.name||"", {type, lastModified:like.lastModified||Date.now()})
+    : new Blob([u], {type});
+  return ownMark(f);
+}
+async function detachRec(rec){
+  const left=[];
+  if(!rec || typeof rec!=="object") return left;
+  const one=async(b, put, tag)=>{
+    if(!(b instanceof Blob) || !b.size || isOwnBlob(b)) return;
+    try{ put(memCopy(await readBlobBytes(b), b)); }
+    catch(e){ left.push(tag+":"+((b&&b.name)||"")); }
+  };
+  for(const [k,p] of Object.entries(rec.positions||{})){
+    if(!p || typeof p!=="object") continue;
+    const ph=Array.isArray(p.photos)?p.photos:null;
+    if(ph) for(let i=0;i<ph.length;i++) await one(ph[i], v=>{ ph[i]=v; }, k);
+    await one(p.video, v=>{ p.video=v; }, k+"/video");
+    await one(p.photoBlob, v=>{ p.photoBlob=v; }, k+"/photo");
+  }
+  await one(rec.sign, v=>{ rec.sign=v; }, "sign");
+  return left;
+}
+async function dbPut(rec){
+  let left=[];
+  try{ left=await detachRec(rec); }catch(e){ bad("db-detach", e); }
+  if(left.length) slog("db-detach-left", {id:String((rec&&rec.id)||"").slice(0,80), n:left.length, names:left.join(", ").slice(0,200)});
+  return dbPutRaw(rec); }
+async function dbPutRaw(rec){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readwrite"); let reqErr=null, done=false; const rq=t.objectStore(STORE).put(rec); rq.onerror=()=>{ reqErr=rq.error||null; };
   const fail=(phase,fallbackMsg)=>{ if(done) return; done=true; dbWriteFail("dbPut:"+phase); const e=reqErr||t.error||new Error(fallbackMsg); try{ e.phase=phase; e.hadReqErr=!!reqErr; }catch(_){} rej(e); };
   t.oncomplete=()=>{ if(done) return; done=true; dbVer++; dbWriteOk(); res(); }; t.onerror=()=>fail("error","save failed — storage may be full"); t.onabort=()=>fail("abort","save aborted — storage may be full"); }); }
 /* The round being typed lives in this store too, under a reserved id, so it
@@ -9214,7 +9276,7 @@ function signBlob(){
   if(!signDirty) return Promise.resolve(null);
   return new Promise(res=>{
     signPad.toBlob(b=>{
-      if(b && b.size>0) return res(b);
+      if(b && b.size>0) return res(ownMark(b));
       /* toBlob() itself failed (returned null) or produced an empty blob --
          the one capture in this app with no read-back of what it produced,
          until now. toDataURL() is a different code path over the same
@@ -9223,7 +9285,7 @@ function signBlob(){
       try{
         const durl=signPad.toDataURL("image/png");
         const bytes=dataUrlBytes(durl);
-        res(bytes && bytes.length ? new Blob([bytes],{type:"image/png"}) : null);
+        res(bytes && bytes.length ? ownMark(new Blob([bytes],{type:"image/png"})) : null);
       }catch(e){ res(null); }
     }, "image/png");
   });
@@ -9587,7 +9649,7 @@ $("saveBtn").onclick=async ()=>{
     const e=putErr;
     const why=String((e&&e.message)||e||"");
     const pair=t("m_save_failed"); dlg([pair[0], pair[1].split("{why}").join(why)]);
-    slog("save-write-fail",{u:rec.equip||"?", id:rec.id, why:why.slice(0,200),
+    slog("save-write-fail",{u:rec.equip||"?", id:rec.id, why:why.slice(0,200), kept:keptBlobs.length,
       phase:(e&&e.phase)||"", hadReqErr:!!(e&&e.hadReqErr), vis:visInfo()});
     /* This is the one failure a technician is standing at the machine for
        RIGHT NOW — worth its own trace immediately rather than waiting for
@@ -14179,7 +14241,7 @@ $("dueFile").onchange=async (e)=>{ const f=e.target.files[0]; e.target.value="";
    unit inspected by both phones merges into one record instead of doubling. */
 function b64of(blob){ return blobToB64(blob); }
 function blobFromB64(b64,type){ const bin=atob(b64); const u=new Uint8Array(bin.length);
-  for(let i=0;i<bin.length;i++) u[i]=bin.charCodeAt(i); return new Blob([u],{type:type||"application/octet-stream"}); }
+  for(let i=0;i<bin.length;i++) u[i]=bin.charCodeAt(i); return ownMark(new Blob([u],{type:type||"application/octet-stream"})); }
 async function recToBundle(rec){
   const out={ id:rec.id, cls:rec.cls, type:rec.type, equip:rec.equip, date:rec.date, smu:rec.smu,
     by:rec.by, sup:rec.sup||"", gps:rec.gps||null, dev:rec.dev||DEVICE, created:rec.created, up:rec.up?1:0, positions:{} };
@@ -15733,7 +15795,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="612";
+const BUILD="613";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -16251,7 +16313,9 @@ function attWrap(blob,aid){
   const have=attIdOf(blob);
   if(have) return blob;
   const id=aid||attNew();
-  try{ return new File([blob], id+"."+extOf(blob), {type:blob.type||"image/jpeg"}); }
+  /* A File wrapped round a copy this page made is still this page's copy; one
+     wrapped round the picker's own file is still the picker's file. */
+  try{ const f=new File([blob], id+"."+extOf(blob), {type:blob.type||"image/jpeg"}); return isOwnBlob(blob)?ownMark(f):f; }
   catch(e){ return blob; }               // no File constructor: behave as before
 }
 async function sha256Hex(buf){
@@ -16420,7 +16484,7 @@ async function reencode(blob,max){
    information; a wrong one is a lie the next reader believes. */
 async function ownBytes(blob){
   const u=await readBlobBytes(blob);
-  return new Blob([u], { type: blob.type || "" });
+  return ownMark(new Blob([u], { type: blob.type || "" }));
 }
 async function intakeNoted(blob){
   const r=await standardise(blob);
@@ -16480,16 +16544,16 @@ async function reArmForSave(rec){
       const b=ph[i]; if(!isBlob(b)) continue;
       try{
         const u=await readBlobBytes(b);
-        ph[i]=(typeof File!=="undefined") ? new File([u], b.name||"", {type:b.type||"image/jpeg"})
-                                           : new Blob([u], {type:b.type||""});
+        ph[i]=ownMark((typeof File!=="undefined") ? new File([u], b.name||"", {type:b.type||"image/jpeg"})
+                                           : new Blob([u], {type:b.type||""}));
       }catch(e){ kept.push({k, i, name:b.name||"", video:false}); }
     }
     if(isBlob(p.video)){
       const b=p.video;
       try{
         const u=await readBlobBytes(b);
-        p.video=(typeof File!=="undefined") ? new File([u], b.name||"", {type:b.type||"video/mp4"})
-                                             : new Blob([u], {type:b.type||""});
+        p.video=ownMark((typeof File!=="undefined") ? new File([u], b.name||"", {type:b.type||"video/mp4"})
+                                             : new Blob([u], {type:b.type||""}));
       }catch(e){ kept.push({k, i:-1, name:b.name||"", video:true}); }
     }
   }
@@ -16513,7 +16577,7 @@ async function recoverKept(rec, kept){
       const hit=cand.filter(isBlob).filter(b=>(b.name||"")===w.name)[0]; if(!hit) continue;
       try{
         const u=await readBlobBytes(hit);
-        const f=(typeof File!=="undefined") ? new File([u], w.name, {type:hit.type||(w.video?"video/mp4":"image/jpeg")}) : new Blob([u], {type:hit.type||""});
+        const f=ownMark((typeof File!=="undefined") ? new File([u], w.name, {type:hit.type||(w.video?"video/mp4":"image/jpeg")}) : new Blob([u], {type:hit.type||""}));
         if(w.video) p.video=f; else p.photos[w.i]=f;
         n++; break;
       }catch(e){}
@@ -20495,6 +20559,12 @@ async function offerDraft(){
   if(d.by) $("inspector").value=d.by;
   if(d.sup) $("supName").value=d.sup;
   selectEquip(d.equip);
+  /* The draft came out of the store, so its photographs are the store's
+     pointers, and the next autosave rewrites the draft and kills them - Save
+     was then refused with "Error preparing Blob/File data". They are copied
+     into memory now, while the files behind them still exist (CM_OWNBYTES_V1). */
+  try{ const left=await detachRec(d); if(left.length) slog("draft-detach-left",{u:d.equip||"?", n:left.length, names:left.join(", ").slice(0,200)}); }
+  catch(e){ bad("draft-detach", e); }
   draft={positions:d.positions||{}};
   curItem = (d.item && draft.positions[d.item]) ? d.item : "";
   hdrOpen=false;
