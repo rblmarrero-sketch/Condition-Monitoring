@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-12T06:07:52+00:00",
+  "generated": "2026-11-12T06:27:54+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -5729,6 +5729,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022440"
     },
     {
+      "asset": "CR002",
+      "defect": "DD-00016739",
+      "raised": "2026-11-12",
+      "system": "CR002.FEED.BEL (Feeder Belt / Лента питателя)",
+      "defectType": "8.01 Conveyor belt cut / tear / Порез / разрыв конвейерной ленты",
+      "descr": "Порез лениты питателя",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-022446"
+    },
+    {
       "asset": "LS057",
       "defect": "DD-00016758",
       "raised": "2026-11-12",
@@ -5813,6 +5826,45 @@ window.CM_WO_DATA = {
       "system": "BS006.CH.STR (Superstructure / Надстройка)",
       "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "descr": "Монтажные работы: фены в кунге-переоборудовать забор воздуха из салона (при заборе с улицы, выхлопные газы попадают в салон, т.к. заборник р",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "BS011",
+      "defect": "DD-00016771",
+      "raised": "2026-11-12",
+      "system": "BS011.BS.RCH (Brake Chambers / Тормозные камеры)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Ревизия тормозной системы (стояночный тормоз срабатывает не сразу, ТС немного катится, потом останавливается)",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "BS011",
+      "defect": "DD-00016770",
+      "raised": "2026-11-12",
+      "system": "BS011.CH.FR (Frame / Рама)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "диагностика и устранение стука под кабиной",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "BS011",
+      "defect": "DD-00016772",
+      "raised": "2026-11-12",
+      "system": "BS011.ELS.WH (Wiring Harness / Жгут проводов)",
+      "defectType": "4.12 Cable / harness damage / Повреждение кабеля / жгута",
+      "descr": "Ремонт фонарей ЗХ (не говорят), проводки и сигнала ЗХ",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -5961,19 +6013,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022447"
-    },
-    {
-      "asset": "CR002",
-      "defect": "DD-00016739",
-      "raised": "2026-11-12",
-      "system": "CR002.FEED.BEL (Feeder Belt / Лента питателя)",
-      "defectType": "8.01 Conveyor belt cut / tear / Порез / разрыв конвейерной ленты",
-      "descr": "Порез лениты питателя",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": "WO-022446"
     },
     {
       "asset": "BS016",
@@ -28128,6 +28167,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "LS048",
+      "defect": "DD-00014962",
+      "raised": "2026-10-17",
+      "system": "LS048.ELS.MW (Machine Wiring / Электропроводка машины)",
+      "defectType": "4.14 Battery / starting circuit fault / Неисправность аккумулятора / цепи пуска",
+      "descr": "Замена АКБ",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
       "asset": "EX006",
       "defect": "DD-00014971",
       "raised": "2026-10-17",
@@ -28147,19 +28199,6 @@ window.CM_WO_DATA = {
       "system": "LS048.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
       "descr": "Замена ФОВ",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "LS048",
-      "defect": "DD-00014962",
-      "raised": "2026-10-17",
-      "system": "LS048.ELS.MW (Machine Wiring / Электропроводка машины)",
-      "defectType": "4.14 Battery / starting circuit fault / Неисправность аккумулятора / цепи пуска",
-      "descr": "Замена АКБ",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -117797,15 +117836,15 @@ window.CM_WO_DATA = {
       "cmLabel": "500h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CLSD",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-08",
       "planStartDt": "2026-11-08T00:00:00",
       "planEnd": "2026-11-08",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-08",
+      "actualStartDt": "2026-11-08T19:00:00",
+      "actualEnd": "2026-11-09"
     },
     {
       "equip": "FL004",
@@ -145428,6 +145467,25 @@ window.CM_WO_DATA = {
       "actualStart": "2026-11-10",
       "actualStartDt": "2026-11-10T23:00:00",
       "actualEnd": "2026-11-11"
+    },
+    {
+      "equip": "LS037",
+      "cls": "GEN",
+      "woNumber": "WO-022321",
+      "maintType": "1000 Hours service Planned",
+      "hours": 1000,
+      "cmLabel": "1000h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "CRTD",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-21",
+      "planStartDt": "2026-11-21T00:00:00",
+      "planEnd": "2026-11-21",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
     },
     {
       "equip": "LS038",
