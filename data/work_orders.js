@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-12T06:27:54+00:00",
+  "generated": "2026-11-12T06:57:32+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -7367,6 +7367,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022269"
     },
     {
+      "asset": "TK119",
+      "defect": "DD-00016650",
+      "raised": "2026-11-10",
+      "system": "TK119.DRS.FUE (Fuel System / Топливная система)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "ДТ в системе смазки ДВС",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Kiselev",
+      "regBy": "Киселев Алексей Александрович",
+      "wo": "WO-022225"
+    },
+    {
       "asset": "TK168",
       "defect": "DD-00016663",
       "raised": "2026-11-10",
@@ -7612,19 +7625,6 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022238"
-    },
-    {
-      "asset": "TK119",
-      "defect": "DD-00016650",
-      "raised": "2026-11-10",
-      "system": "TK119.DRS.FUE (Fuel System / Топливная система)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "ДТ в системе смазки ДВС",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Kiselev",
-      "regBy": "Киселев Алексей Александрович",
-      "wo": "WO-022225"
     },
     {
       "asset": "DR008",
