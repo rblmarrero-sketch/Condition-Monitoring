@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-12T03:18:07+00:00",
+  "generated": "2026-11-12T03:33:17+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -724,16 +724,6 @@
     ],
     "TK122": [
       {
-        "wo": "WO-021299",
-        "hours": 1000,
-        "types": [
-          "INSP",
-          "MP"
-        ],
-        "plan": "2026-11-12",
-        "priority": "P3 Planned (PM)"
-      },
-      {
         "wo": "WO-021953",
         "hours": 250,
         "types": [
@@ -994,15 +984,6 @@
     ],
     "TK153": [
       {
-        "wo": "WO-021273",
-        "hours": 250,
-        "types": [
-          "MP"
-        ],
-        "plan": "2026-11-11",
-        "priority": "P3 Planned (PM)"
-      },
-      {
         "wo": "WO-022146",
         "hours": 500,
         "types": [
@@ -1059,18 +1040,6 @@
       }
     ],
     "TK156": [
-      {
-        "wo": "WO-021270",
-        "hours": 3000,
-        "types": [
-          "FC",
-          "INSP",
-          "LUBE",
-          "MP"
-        ],
-        "plan": "2026-11-10",
-        "priority": "P3 Planned (PM)"
-      },
       {
         "wo": "WO-022150",
         "hours": 250,
@@ -4258,12 +4227,12 @@
       "type": "250 Hours service Planned",
       "hours": 250,
       "plan": "2026-11-12",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-12"
     },
     {
       "wo": "WO-021329",
@@ -4384,12 +4353,12 @@
       "type": "1000 Hours service Planned",
       "hours": 1000,
       "plan": "2026-11-12",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-12"
     },
     {
       "wo": "WO-021269",
@@ -4492,12 +4461,12 @@
       "type": "250 Hours service Planned",
       "hours": 250,
       "plan": "2026-11-11",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-11"
     },
     {
       "wo": "WO-021655",
@@ -4654,12 +4623,12 @@
       "type": "3000 Hours service Planned",
       "hours": 3000,
       "plan": "2026-11-10",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-12"
     },
     {
       "wo": "WO-021676",
@@ -10792,12 +10761,12 @@
       "type": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
       "hours": null,
       "plan": "2026-11-09",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "DD-00010354",
       "defType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
       "cause": "Износ зацепления",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-11"
     },
     {
       "wo": "WO-021495",
@@ -12024,6 +11993,14 @@
       "x": "плохой контакт"
     },
     {
+      "d": "DD-00016642",
+      "u": "CR002",
+      "s": "CR002.FEED.BEL (Feeder Belt / Лента питателя)",
+      "p": "P2",
+      "r": "2026-11-10",
+      "x": "разрыв конвейерной ленты питателя нужна замена"
+    },
+    {
       "d": "DD-00016668",
       "u": "DZ014",
       "s": "DZ014.HS.DL (Hydraulic Lines / Гидролинии)",
@@ -12046,14 +12023,6 @@
       "p": "P2",
       "r": "2026-11-10",
       "x": "Не запускается ДВС"
-    },
-    {
-      "d": "DD-00016642",
-      "u": "CR002",
-      "s": "CR002.FEED.BEL (Feeder Belt / Лента питателя)",
-      "p": "P2",
-      "r": "2026-11-10",
-      "x": "разрыв конвейерной ленты питателя нужна замена"
     },
     {
       "d": "DD-00016650",
@@ -17990,6 +17959,14 @@
       "p": "P2",
       "r": "2026-10-23",
       "x": "Трещины ковша вдоль проушин крепления рукояти"
+    },
+    {
+      "d": "DD-00015506",
+      "u": "TK023",
+      "s": "TK023.BS.RCH (Brake Chambers / Тормозные камеры)",
+      "p": "P2",
+      "r": "2026-10-23",
+      "x": "Не тормозит среднее правое колесо."
     },
     {
       "d": "DD-00015343",
@@ -30800,6 +30777,14 @@
       "x": "Устранить утечку смазки левого штока подъема стрелы около штуцера"
     },
     {
+      "d": "DD-00016755",
+      "u": "LD010",
+      "s": "LD010.CH.STR (Superstructure / Надстройка)",
+      "p": "P4",
+      "r": "2026-11-12",
+      "x": "Инспекция при передаче техники от ХСК в ГДК"
+    },
+    {
       "d": "DD-00016749",
       "u": "LV066",
       "s": "LV066.BS.BPC (Brake Packs / Тормозные пакеты)",
@@ -34566,14 +34551,6 @@
       "p": "P4",
       "r": "2026-10-23",
       "x": "Активная ошибка АБС (оборван провод)"
-    },
-    {
-      "d": "DD-00015506",
-      "u": "TK023",
-      "s": "TK023.BS.RCH (Brake Chambers / Тормозные камеры)",
-      "p": "P4",
-      "r": "2026-10-23",
-      "x": "При торможении не тормозит средняя ось"
     },
     {
       "d": "DD-00015501",

@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-12T03:18:07+00:00",
+  "generated": "2026-11-12T03:33:17+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 810,
@@ -5433,7 +5433,7 @@ window.CM_WO_DATA = {
       "raised": "2026-08-06",
       "detected": "2026-08-06",
       "planStart": "2026-11-09",
-      "closed": null,
+      "closed": "2026-11-11",
       "asset": "DZ002",
       "defect": "DD-00010354",
       "requestNo": "DD-00010354",
@@ -5444,7 +5444,7 @@ window.CM_WO_DATA = {
       "cause": "Износ зацепления",
       "causeFrom": "wo",
       "descr": "Разбиты ШСЛ и разбит центральный палец балансирной балки",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "by": "Zhomart",
       "byFull": "Zhomart Khasenov",
       "regBy": "Хасенов Жомарт",
@@ -5774,6 +5774,19 @@ window.CM_WO_DATA = {
       "system": "EX005.HS.CYL (Cylinders / Гидроцилиндры)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Устранить утечку смазки левого штока подъема стрелы около штуцера",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "LD010",
+      "defect": "DD-00016755",
+      "raised": "2026-11-12",
+      "system": "LD010.CH.STR (Superstructure / Надстройка)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Инспекция при передаче техники от ХСК в ГДК",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -7107,6 +7120,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022186"
     },
     {
+      "asset": "CR002",
+      "defect": "DD-00016642",
+      "raised": "2026-11-10",
+      "system": "CR002.FEED.BEL (Feeder Belt / Лента питателя)",
+      "defectType": "8.01 Conveyor belt cut / tear / Порез / разрыв конвейерной ленты",
+      "descr": "разрыв конвейерной ленты питателя нужна замена",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-022221"
+    },
+    {
       "asset": "TK168",
       "defect": "DD-00016663",
       "raised": "2026-11-10",
@@ -7365,19 +7391,6 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022238"
-    },
-    {
-      "asset": "CR002",
-      "defect": "DD-00016642",
-      "raised": "2026-11-10",
-      "system": "CR002.FEED.BEL (Feeder Belt / Лента питателя)",
-      "defectType": "8.01 Conveyor belt cut / tear / Порез / разрыв конвейерной ленты",
-      "descr": "разрыв конвейерной ленты питателя нужна замена",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": "WO-022221"
     },
     {
       "asset": "TK119",
@@ -22123,19 +22136,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "TK023",
-      "defect": "DD-00015506",
-      "raised": "2026-10-23",
-      "system": "TK023.BS.RCH (Brake Chambers / Тормозные камеры)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "При торможении не тормозит средняя ось",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "TK023",
       "defect": "DD-00015501",
       "raised": "2026-10-23",
       "system": "TK023.DRS.AXL (Axles / Мосты)",
@@ -22198,6 +22198,19 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-020948"
+    },
+    {
+      "asset": "TK023",
+      "defect": "DD-00015506",
+      "raised": "2026-10-23",
+      "system": "TK023.BS.RCH (Brake Chambers / Тормозные камеры)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Не тормозит среднее правое колесо.",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022462"
     },
     {
       "asset": "CR006",
@@ -57664,19 +57677,6 @@ window.CM_WO_DATA = {
       "wo": "WO-015456"
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
-      "wo": null
-    },
-    {
       "asset": "TK046",
       "defect": "DD-00011270",
       "raised": "2026-08-21",
@@ -57778,6 +57778,19 @@ window.CM_WO_DATA = {
       "priority": "P2 Urgent",
       "by": "Andrey Shipelov",
       "regBy": "Шипелов Андрей Анатольевич",
+      "wo": null
+    },
+    {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
@@ -59963,19 +59976,6 @@ window.CM_WO_DATA = {
       "by": "Andrey Taran",
       "regBy": "Таран Андрей Андреевич",
       "wo": "WO-021740"
-    },
-    {
-      "asset": "GE097",
-      "defect": "DD-00009871",
-      "raised": "2026-07-29",
-      "system": "GE097.CH.STR (Superstructure / Надстройка)",
-      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
-      "descr": "Требуется протяжка болтов корпуса",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": "WO-021700"
     },
     {
       "asset": "TK089",
@@ -108833,15 +108833,15 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-12",
       "planStartDt": "2026-11-12T00:00:00",
       "planEnd": "2026-11-13",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-11",
+      "actualStartDt": "2026-11-11T22:00:00",
+      "actualEnd": "2026-11-12"
     },
     {
       "equip": "EX009",
@@ -181800,15 +181800,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-12",
       "planStartDt": "2026-11-12T00:00:00",
       "planEnd": "2026-11-13",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-11",
+      "actualStartDt": "2026-11-11T18:00:00",
+      "actualEnd": "2026-11-12"
     },
     {
       "equip": "TK122",
@@ -192417,15 +192417,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-11",
       "planStartDt": "2026-11-11T00:00:00",
       "planEnd": "2026-11-12",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-11",
+      "actualStartDt": "2026-11-11T13:00:00",
+      "actualEnd": "2026-11-11"
     },
     {
       "equip": "TK153",
@@ -193275,15 +193275,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-10",
       "planStartDt": "2026-11-10T00:00:00",
       "planEnd": "2026-11-11",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-11",
+      "actualStartDt": "2026-11-11T19:00:00",
+      "actualEnd": "2026-11-12"
     },
     {
       "equip": "TK156",
