@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-12T04:18:59+00:00",
+  "generated": "2026-11-12T04:48:20+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -5781,6 +5781,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "CR002",
+      "defect": "DD-00016764",
+      "raised": "2026-11-12",
+      "system": "CR002.FEED.HOP (Hopper / Бункер)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "износ отбортовки бункера питателя",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": null
+    },
+    {
       "asset": "DZ001",
       "defect": "DD-00016760",
       "raised": "2026-11-12",
@@ -5989,6 +6002,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022440"
     },
     {
+      "asset": "LS038",
+      "defect": "DD-00016763",
+      "raised": "2026-11-12",
+      "system": "LS038.ELS.MW (Machine Wiring / Электропроводка машины)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Ремонт - заводится и сразу глохнет",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022466"
+    },
+    {
       "asset": "PU010",
       "defect": "DD-00016728",
       "raised": "2026-11-12",
@@ -6026,6 +6052,32 @@ window.CM_WO_DATA = {
       "by": "Aleksey Dobrikov",
       "regBy": "Добриков Алексей Владимирович",
       "wo": "WO-022432"
+    },
+    {
+      "asset": "TK084",
+      "defect": "DD-00016762",
+      "raised": "2026-11-12",
+      "system": "TK084.CH.BY (Dump Body / Самосвальный кузов)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Сварка замков заднего борта, трещина заднего моста",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022465"
+    },
+    {
+      "asset": "EX019",
+      "defect": "DD-00016761",
+      "raised": "2026-11-12",
+      "system": "EX019.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Замена шланга гидромолота",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022463"
     },
     {
       "asset": "TK143",
@@ -6340,6 +6392,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022363"
     },
     {
+      "asset": "TK096",
+      "defect": "DD-00016686",
+      "raised": "2026-11-11",
+      "system": "TK096.OC.HE (Heating / Отопление)",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "Ремонт фена отсека водяного насоса",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022263"
+    },
+    {
       "asset": "LV087",
       "defect": "DD-00016716",
       "raised": "2026-11-11",
@@ -6637,19 +6702,6 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-022271"
-    },
-    {
-      "asset": "TK096",
-      "defect": "DD-00016686",
-      "raised": "2026-11-11",
-      "system": "TK096.OC.HE (Heating / Отопление)",
-      "defectType": "4.02 Open circuit / Разрыв цепи",
-      "descr": "Ремонт фена отсека водяного насоса",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022263"
     },
     {
       "asset": "EX006",
@@ -10045,6 +10097,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021829"
     },
     {
+      "asset": "TK005",
+      "defect": "DD-00016407",
+      "raised": "2026-11-06",
+      "system": "TK005.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Сломана шпилька на переднем правом колесе",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-021837"
+    },
+    {
       "asset": "TK089",
       "defect": "DD-00016437",
       "raised": "2026-11-06",
@@ -10199,19 +10264,6 @@ window.CM_WO_DATA = {
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": "WO-022365"
-    },
-    {
-      "asset": "TK005",
-      "defect": "DD-00016407",
-      "raised": "2026-11-06",
-      "system": "TK005.DRS.AXL (Axles / Мосты)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Сломана шпилька на переднем правом колесе",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-021837"
     },
     {
       "asset": "EX021",
@@ -27985,19 +28037,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "LS048",
-      "defect": "DD-00014962",
-      "raised": "2026-10-17",
-      "system": "LS048.ELS.MW (Machine Wiring / Электропроводка машины)",
-      "defectType": "4.14 Battery / starting circuit fault / Неисправность аккумулятора / цепи пуска",
-      "descr": "Замена АКБ",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
       "asset": "EX002",
       "defect": "DD-00014967",
       "raised": "2026-10-17",
@@ -28043,6 +28082,19 @@ window.CM_WO_DATA = {
       "system": "LS048.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
       "descr": "Замена ФОВ",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "LS048",
+      "defect": "DD-00014962",
+      "raised": "2026-10-17",
+      "system": "LS048.ELS.MW (Machine Wiring / Электропроводка машины)",
+      "defectType": "4.14 Battery / starting circuit fault / Неисправность аккумулятора / цепи пуска",
+      "descr": "Замена АКБ",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -60070,6 +60122,19 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "LV011",
+      "defect": "DD-00009705",
+      "raised": "2026-07-27",
+      "system": "LV011.OC.AC (Air Conditioning / Кондиционирование)",
+      "defectType": "1.25 Reduced capacity / output / Снижение производительности / выхода",
+      "descr": "Требуется замена кондиционера",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": null
+    },
+    {
+      "asset": "LV011",
       "defect": "DD-00009702",
       "raised": "2026-07-27",
       "system": "LV011.BS (Braking System / Тормозная система)",
@@ -60088,19 +60153,6 @@ window.CM_WO_DATA = {
       "system": "LV011.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Требуется замена всех патрубков системы охлаждения",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": null
-    },
-    {
-      "asset": "LV011",
-      "defect": "DD-00009705",
-      "raised": "2026-07-27",
-      "system": "LV011.OC.AC (Air Conditioning / Кондиционирование)",
-      "defectType": "1.25 Reduced capacity / output / Снижение производительности / выхода",
-      "descr": "Требуется замена кондиционера",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -154825,6 +154877,27 @@ window.CM_WO_DATA = {
       "actualStart": "2026-10-24",
       "actualStartDt": "2026-10-24T19:00:00",
       "actualEnd": "2026-10-25"
+    },
+    {
+      "equip": "TK040",
+      "cls": "HT",
+      "woNumber": "WO-022464",
+      "maintType": "500 Hours service Planned",
+      "hours": 500,
+      "cmLabel": "Magnetic Plug",
+      "cmTypes": [
+        "MP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "CRTD",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-23",
+      "planStartDt": "2026-11-23T00:00:00",
+      "planEnd": "2026-11-23",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
     },
     {
       "equip": "TK041",
