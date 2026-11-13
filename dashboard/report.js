@@ -333,6 +333,8 @@
          empty strip, because rtwHeaderStrip() (report-core.js) returns ""
          when every one of these fields is absent — the exact shape of "a
          real value rendered as nothing" this project keeps finding. */
+      /* A FIR's own facts (CM_FIR_V1): the 1C defect it investigates. */
+      firDefect: rec.firDefect || "", firSystem: rec.firSystem || "", firPriority: rec.firPriority || "", firNote: rec.firNote || "",
       rtwWoType: rec.rtwWoType || "", rtwSchedHours: (rec.rtwSchedHours != null ? rec.rtwSchedHours : null),
       rtwSchedDate: rec.rtwSchedDate || "", rtwWoPriority: rec.rtwWoPriority || "", rtwTime: rec.rtwTime || "",
       /* The same 1C schedule facts, generalised to every round type (see the

@@ -1147,6 +1147,8 @@
       tb_tb_ctrl:"Controlling readings",
       uc_atlimit:"At / past limit", uc_above80:"Above 80%", uc_notmeas:"Not measured",
       uc_controlling:"Controlling point", uc_decision:"Decision",
+      fir_defect:"1C defect", fir_system:"System / component", fir_prio:"Priority", fir_by:"Recorded by",
+      fir_note:"Note", fir_photos:"Photographs",
       c_particle:"Particle finding", c_svchours:"Service hours", c_debris:"Debris / defect",
       c_detection:"Detection", c_opstate:"Operating state", c_measured:"Measured",
       c_ambient:"Ambient", c_method:"Method", c_comparison:"Comparison",
@@ -1324,7 +1326,7 @@
       dec_5:"Требуется решение по обслуживанию",
       dec_0:"Оценка состояния не записана",
       ap_role:"РОЛЬ", ap_name:"ИМЯ", ap_status:"СТАТУС", ap_date:"ДАТА / ПОДПИСЬ",
-      ap_tech:"Техник CM", ap_rel:"Инженер по надёжности", ap_sup:"Мастер по обслуживанию",
+      ap_tech:"Техник МС", ap_rel:"Инженер по надёжности", ap_sup:"Мастер по обслуживанию",
       ap_tech_s:"Осмотр завершён", ap_rel_s:"Проверено / возвращено",
       ap_sup_s:"Утверждено / требуется работа",
       ap_sup_v:"Проверено на месте (подпись)",
@@ -1345,6 +1347,8 @@
       tb_tb_ctrl:"Определяющие замеры",
       uc_atlimit:"На пределе / за пределом", uc_above80:"Свыше 80%", uc_notmeas:"Не измерено",
       uc_controlling:"Определяющая точка", uc_decision:"Решение",
+      fir_defect:"Дефект 1С", fir_system:"Система / узел", fir_prio:"Приоритет", fir_by:"Записал",
+      fir_note:"Примечание", fir_photos:"Фотографии",
       c_particle:"Частицы", c_svchours:"Наработка", c_debris:"Загрязнение / дефект",
       c_detection:"Метод выявления", c_opstate:"Режим работы", c_measured:"Замер",
       c_ambient:"Окр. среда", c_method:"Метод", c_comparison:"Сравнение",
@@ -2195,6 +2199,11 @@
   function measSections(ctx, T, rec, tailHTML, ownPage) {
     var out = [];
     var rows = rec.items.filter(function (it) { return it.w && (it.w.mm != null || it.w.reason); });
+    /* A point opened and not measured is counted "not measured" in the
+       verdict and the summary, which say "see the table below": on a round
+       that has readings it is a row of that table too (DZ004 UC 12.11.2026,
+       track roller 7 was counted and not listed). */
+    if (rows.length) rows = rec.items.filter(function (it) { return it.w; });
     /* The signature has to land somewhere. On a lubrication round the grid
        below produces nothing, so it rides on the lube table instead of being
        dropped with it. */
@@ -2591,12 +2600,12 @@
     var isoCode = n ? GRADE_ISO[n] : "";
     return '<div class="rrate">'
       + '<div class="rc" style="border-left:4px solid ' + col + '">'
-        + '<div class="rk">' + esc(T("rr_rating")) + '</div>'
+        + '<div class="rk">' + T.I("rr_rating") + '</div>'
         + '<div class="rv" style="color:' + GRADE_TEXT[n] + '">' + (n || "—") + '</div></div>'
-      + '<div class="rc"><div class="rk">' + esc(T("rr_level")) + '</div>'
+      + '<div class="rc"><div class="rk">' + T.I("rr_level") + '</div>'
         + '<div class="rv" style="color:' + (n ? GRADE_TEXT[n] : "inherit") + '">' + level
         + (isoCode ? ' <span class="isoc">' + esc(isoCode) + '</span>' : '') + '</div></div>'
-      + '<div class="rc rd"><div class="rk">' + esc(T("rr_decision")) + '</div>'
+      + '<div class="rc rd"><div class="rk">' + T.I("rr_decision") + '</div>'
         + '<div class="rv">' + dec + '</div></div>'
       + '</div>' + (compact ? "" : scale);
   }
@@ -2640,6 +2649,14 @@
       return n || 0;
     };
     flagged.sort(function (a, b) { return eg(b) - eg(a); });
+    /* ON A SHEET OF FINDING CARDS THE CARD IS THE ACTION. Every flagged point
+       of a magnetic plug, filter cut, general inspection or temperature round
+       has its own card with its action, owner, work order and date; this
+       block then said the worst card's again and dropped the others'
+       (DZ019 INSP 12.11.2026: the same three lines three times). It stays
+       where there are no cards (wear rounds, lubrication, GET's register)
+       and as the one sentence of a clean round. */
+    if (flagged.length && /^(MP|FC|INSP|TEMP)$/.test(rec.type)) return "";
     var it = flagged[0] || {};
     /* A round whose worst point is only worth WATCHING (Incipient, no defect,
        no cause) asks nobody for an action, an owner or a date: "Not recorded"
@@ -2670,7 +2687,9 @@
     return '<div class="subhd" style="margin-top:13px;">' + T.I("ma_head") + '</div>'
       + '<div class="mact">'
       + f(T("ma_action"), it.action || "")
-      + f(T("ma_cause"), it.cause || it.defect || "")
+      /* The cause only: with none recorded this printed the DEFECT under
+         "Direct cause" (TK148 INSP 10.11.2026). */
+      + f(T("ma_cause"), it.cause || "")
       + f(T("ma_owner"), respPlain(T, it))
       + f(T("ma_wo"), it.wo || "")
       + f(T("ma_due"), dmy(it.target || ""))
@@ -2688,9 +2707,9 @@
      and stays an open line where it does not: nothing is invented. */
   function approvalBlock(T, rec, onlySup) {
     function row(role, name, status, date, open, sig) {
-      return '<tr><td class="rl">' + esc(role) + '</td>'
+      return '<tr><td class="rl">' + role + '</td>'
         + '<td>' + (open ? '<span class="sg"></span>' : '<span class="nm">' + esc(name) + '</span>') + '</td>'
-        + '<td>' + esc(status) + '</td>'
+        + '<td>' + status + '</td>'
         + '<td>' + (sig ? '<img src="' + esc(sig) + '" alt="">' : '')
                  + (date ? '<span class="nm">' + esc(dmy(date)) + '</span>' : (sig ? '' : '<span class="sg"></span>')) + '</td></tr>';
     }
@@ -2699,10 +2718,10 @@
        has not received (signed, no file); a verifier named without a
        signature; nothing recorded. */
     var verified = !!(rec.sup || rec.signUrl || rec.signErr || rec.signed);
-    var supStatus = rec.signUrl ? T("ap_sup_v")
-                  : rec.signErr ? T("ap_sig_err")
-                  : rec.signed  ? T("ap_sig_miss")
-                  : T("ap_sup_n");
+    var supStatus = rec.signUrl ? T.I("ap_sup_v")
+                  : rec.signErr ? T.I("ap_sig_err")
+                  : rec.signed  ? T.I("ap_sig_miss")
+                  : T.I("ap_sup_n");
     /* RETURN TO WORK HAS ONE SIGNER, NOT THREE. Every other round type is
        walked by a CM technician and reviewed by a reliability engineer
        before a supervisor verifies it — RTW is a repair-release checklist
@@ -2716,24 +2735,24 @@
     if (onlySup) {
       /* The role printed here is the Senior Mechanic who signs an RTW
          release, not the Maintenance Supervisor every other type's own
-         `row(T("ap_sup"), ...)` names — a separate label already exists
+         `row(T.I("ap_sup"), ...)` names — a separate label already exists
          (`rtw_senior`) for exactly this row and the branch never used it. */
       return '<table class="appr"><thead><tr>'
-        + '<th>' + esc(T("ap_role")) + '</th><th>' + esc(T("ap_name")) + '</th>'
-        + '<th>' + esc(T("ap_status")) + '</th><th>' + esc(T("ap_date")) + '</th></tr></thead><tbody>'
+        + '<th>' + T.I("ap_role") + '</th><th>' + T.I("ap_name") + '</th>'
+        + '<th>' + T.I("ap_status") + '</th><th>' + T.I("ap_date") + '</th></tr></thead><tbody>'
         + (verified
-            ? row(T("rtw_senior"), rec.sup || T("ma_none"), supStatus, rec.signUrl ? (rec.date || "") : "", false, rec.signUrl || "")
-            : row(T("rtw_senior"), "", T("ap_sup_s"), "", true))
+            ? row(T.I("rtw_senior"), rec.sup || T("ma_none"), supStatus, rec.signUrl ? (rec.date || "") : "", false, rec.signUrl || "")
+            : row(T.I("rtw_senior"), "", T.I("ap_sup_s"), "", true))
         + '</tbody></table>';
     }
     return '<table class="appr"><thead><tr>'
-      + '<th>' + esc(T("ap_role")) + '</th><th>' + esc(T("ap_name")) + '</th>'
-      + '<th>' + esc(T("ap_status")) + '</th><th>' + esc(T("ap_date")) + '</th></tr></thead><tbody>'
-      + row(T("ap_tech"), rec.by || T("ma_none"), T("ap_tech_s"), rec.by ? (rec.date || "") : "", !rec.by)
-      + row(T("ap_rel"), "", T("ap_rel_s"), "", true)
+      + '<th>' + T.I("ap_role") + '</th><th>' + T.I("ap_name") + '</th>'
+      + '<th>' + T.I("ap_status") + '</th><th>' + T.I("ap_date") + '</th></tr></thead><tbody>'
+      + row(T.I("ap_tech"), rec.by || T("ma_none"), T.I("ap_tech_s"), rec.by ? (rec.date || "") : "", !rec.by)
+      + row(T.I("ap_rel"), "", T.I("ap_rel_s"), "", true)
       + (verified
-          ? row(T("ap_sup"), rec.sup || T("ma_none"), supStatus, rec.signUrl ? (rec.date || "") : "", false, rec.signUrl || "")
-          : row(T("ap_sup"), "", T("ap_sup_s"), "", true))
+          ? row(T.I("ap_sup"), rec.sup || T("ma_none"), supStatus, rec.signUrl ? (rec.date || "") : "", false, rec.signUrl || "")
+          : row(T.I("ap_sup"), "", T.I("ap_sup_s"), "", true))
       + '</tbody></table>';
   }
   /* WHAT THE MASTHEAD DOES NOT ALREADY SAY, WHICH IS THE LOCATION AND NOTHING
@@ -3488,9 +3507,8 @@
       if (w.pct != null && (!ctrl || Number(w.pct) > Number(ctrl.w.pct))) ctrl = it;
     });
     var n = roundRating(rec);
-    var dec = T.I("dec_" + (n || 0));
     function c(k, v, cls) {
-      return '<div class="sc"><div class="sk">' + esc(T(k)) + '</div>'
+      return '<div class="sc"><div class="sk">' + T.I(k) + '</div>'
         + '<div class="sv ' + (cls || "") + '">' + v + '</div></div>';
     }
     return '<div class="subhd" style="margin-top:12px;">' + T.I("tb_uc_sum") + '</div>'
@@ -3499,7 +3517,8 @@
       + c("uc_above80", String(above80), above80 ? "pend" : "ok")
       + c("uc_notmeas", String(notmeas), notmeas ? "pend" : "ok")
       + c("uc_controlling", ctrl ? ctrlCell(T, ctrl) : tbMiss(T, "c_notmeas"), "")
-      + c("uc_decision", dec, "")
+      /* The decision is on the rating bar of the same page; it was printed
+         here a second time (sweep 12.11.2026). */
       + '</div>';
   }
   /* TB — the controlling readings the template opens with: the worst stations
@@ -3671,6 +3690,28 @@
          the sign-off is the SAME three composed blocks every other type
          ends with, unchanged — the Senior Mechanic's name and signature are
          `rec.sup`/`rec.signUrl` exactly as every other type's verifier is. */
+      /* FIR - a failure investigation's photographs against a 1C defect. It
+         has no grades, so no rating bar, no condition scale, no "no action
+         required" and no three-role sign-off: until 12.11.2026 it fell
+         through to the graded sheet, which printed all four and none of the
+         FIR's own facts. The FIR document itself is made on the office FIR
+         page; this sheet is the record of what the phone sent. */
+      if (rec.type === "FIR") {
+        var fcell = function (k, v) { return v ? '<div class="sc"><div class="sk">' + T.I(k) + '</div><div class="sv">' + esc(v) + '</div></div>' : ""; };
+        var firPh = (rec.items || []).filter(function (it) { return it && it.photos && it.photos.length; });
+        secs.push({ nb: n > 0, html: '<div class="sec">' + head + mstrip
+          + '<div class="sstrip" style="margin-top:10px;">'
+          + fcell("fir_defect", rec.firDefect) + fcell("fir_system", rec.firSystem)
+          + fcell("fir_prio", rec.firPriority) + fcell("fir_by", rec.by) + '</div>'
+          + (rec.firNote ? '<div class="mact"><span class="f" style="flex-basis:100%"><i>' + T.I("fir_note")
+              + '</i><b>' + esc(rec.firNote) + '</b></span></div>' : "")
+          + (firPh.length ? '<div class="subhd" style="margin-top:12px;">' + T.I("fir_photos") + '</div>'
+              + '<div class="board gal b1">' + firPh.map(function (it) { return cell(ctx, T, it, {}, true); }).join("") + '</div>' : "")
+          + generalBlock(T, rec)
+          + '</div>' });
+        evidenceSections(T, rec).forEach(function (x) { secs.push(x); });
+        return;
+      }
       if (rec.type === "RTW") {
         secs.push({ nb: n > 0, html: '<div class="sec">' + head + mstrip
           + rtwHeaderStrip(T, rec) + rtwSummary(T, rec) + rtwChecklist(ctx, T, rec)
@@ -3864,7 +3905,9 @@
       var unread = rec.items.filter(function (it) { return it.w && it.w.mm == null; }).length;
       var verd = (vc === "ok" && unread)
         ? T.S("verdict_part", { m: rec.items.length - unread, of: rec.items.length, n: unread })
-        : T.S("verdict_" + vc, { n: flagged(rec).length, of: rec.items.length })
+        /* "14 of 33 points need action" counted every point worth WATCHING
+           beside the one that needs action (DZ004 UC 12.11.2026). */
+        : T.S("verdict_" + vc, { n: (vc === "act" ? rec.items.filter(isAct).length : flagged(rec).length), of: rec.items.length })
           + (unread ? T.S("unread_n", { n: unread, of: rec.items.length }) : "");
       if (oddN(rec)) verd += " " + T.S("odd_n", { n: oddN(rec) });
       var maps = CMR.mapBlock(T, rec.mapHTML, 8, rec.zones, rec.mapKey);
@@ -4199,11 +4242,11 @@
       + '<div class="rule" style="margin:11px 0 0"></div>'
       + '<div class="rrate" style="margin-top:12px">'
         + '<div class="rc" style="border-left:4px solid ' + wcol + '">'
-          + '<div class="rk">' + esc(T("rr_rating")) + '</div>'
+          + '<div class="rk">' + T.I("rr_rating") + '</div>'
           + '<div class="rv" style="color:' + (worst ? GRADE_TEXT[worst] : "inherit") + '">' + (worst || "—") + '</div></div>'
         + '<div class="rc"><div class="rk">' + esc(T("uh_open_items")) + '</div>'
           + '<div class="rv">' + (openWork.act ? openWork.act.length : 0) + '</div></div>'
-        + '<div class="rc rd"><div class="rk">' + esc(T("rr_decision")) + '</div>'
+        + '<div class="rc rd"><div class="rk">' + T.I("rr_decision") + '</div>'
           + '<div class="rv">' + T.I("dec_" + (worst || 0)) + '</div></div>'
       + '</div>'
       + '<div style="margin-top:18px;"><div class="eyebrow" style="margin-bottom:9px;">' + T.I("sm_cond_head") + '</div>'
@@ -5243,7 +5286,10 @@
       + prioTag(it) + (it.wo ? ' <span class="code">' + woText(T, it.wo) + '</span>' : ""));
     else if (it.wo || (it.prio && !sh.prio)) row(T.I("c_wo"),
       (it.prio && !sh.prio ? prioTag(it) + " " : "") + '<span class="num">' + esc(it.wo || "") + '</span>');
-    if (sh.fb && !it.action && !it.wo && gnum(it.grade) >= 3) row(T.I("c_action"), tbMiss(T));
+    /* A finding from Degraded up needs an action (GRADE.requires): where none
+       was recorded the card says so, on every card - the Maintenance action
+       block that used to say it is no longer printed beside finding cards. */
+    if (!it.action && !sh.action && gnum(it.grade) >= 3) row(T.I("c_action"), tbMiss(T));
     /* One fact a row, on EVERY card (build 536). planTag packs owner, date and
        status into one sentence that opens with the word the label above it
        has just said - which is what the finding cards stopped printing, and

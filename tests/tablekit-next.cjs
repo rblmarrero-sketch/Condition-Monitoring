@@ -59,7 +59,7 @@ const TABLES = [['failure', 'failAffTbl'], ['wear', 'wearTbl'], ['overview', 'co
   const p = await ctx.newPage();
   const errs = [];
   p.on('pageerror', e => errs.push(e.message));
-  await p.addInitScript(() => { try { localStorage.clear(); } catch (e) {} });
+  await p.addInitScript(() => { try { localStorage.clear(); /* dashboard-next shows the last 90 days by default and the fixture's dates are fixed */ localStorage.setItem('cm_dash_window', '0'); } catch (e) {} });
   await p.goto(`http://127.0.0.1:${port}/dashboard-next/index.html`, { waitUntil: 'load' });
   await p.waitForTimeout(1500);
   await p.evaluate(f => { window.CMDash.setDriveRecords(f); const ov = document.getElementById('dataOv'); if (ov) ov.classList.add('hidden'); }, FLEET);

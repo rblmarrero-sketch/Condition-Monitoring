@@ -5151,23 +5151,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=613"></script>
+<script src="../data/magnetic_plug.js?v=614"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=613"></script>
-<script src="../mobile/hme.js?v=613"></script>
-<script src="../mobile/mp-fc.js?v=613"></script>
-<script src="../mobile/rtw.js?v=613"></script>
-<script src="../mobile/hme-cascade.js?v=613"></script>
-<script src="../mobile/temp-limits.js?v=613"></script>
+<script src="../data/work_orders.js?v=614"></script>
+<script src="../mobile/hme.js?v=614"></script>
+<script src="../mobile/mp-fc.js?v=614"></script>
+<script src="../mobile/rtw.js?v=614"></script>
+<script src="../mobile/hme-cascade.js?v=614"></script>
+<script src="../mobile/temp-limits.js?v=614"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=613"></script>
-<script src="../mobile/normalize.js?v=613"></script>
-<script src="../mobile/terms.js?v=613"></script>
+<script src="../mobile/assets.js?v=614"></script>
+<script src="../mobile/normalize.js?v=614"></script>
+<script src="../mobile/terms.js?v=614"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -5186,21 +5186,21 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=613"></script>
-<script src="../mobile/edits.js?v=613"></script>
-<script src="../mobile/due.js?v=613"></script>
-<script src="../mobile/wear.js?v=613"></script>
-<script src="../mobile/wear-map.js?v=613"></script>
-<script src="../mobile/lube.js?v=613"></script>
-<script src="../mobile/lube-overrides.js?v=613"></script>
-<script src="../mobile/lube2027.js?v=613"></script>
-<script src="../mobile/lube-tds.js?v=613"></script>
-<script src="../dashboard/lube-master.js?v=613"></script>
-<script src="../dashboard/wear-limits.js?v=613"></script>
+<script src="../mobile/grade.js?v=614"></script>
+<script src="../mobile/edits.js?v=614"></script>
+<script src="../mobile/due.js?v=614"></script>
+<script src="../mobile/wear.js?v=614"></script>
+<script src="../mobile/wear-map.js?v=614"></script>
+<script src="../mobile/lube.js?v=614"></script>
+<script src="../mobile/lube-overrides.js?v=614"></script>
+<script src="../mobile/lube2027.js?v=614"></script>
+<script src="../mobile/lube-tds.js?v=614"></script>
+<script src="../dashboard/lube-master.js?v=614"></script>
+<script src="../dashboard/wear-limits.js?v=614"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=613"></script>
-<script src="../mobile/machine-photos.js?v=613"></script>
+<script src="../mobile/upload-defaults.js?v=614"></script>
+<script src="../mobile/machine-photos.js?v=614"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -5209,17 +5209,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=613"></script>
-<script src="../mobile/get.js?v=613"></script>
-<script src="../mobile/points.js?v=613"></script>
-<script src="../mobile/uc-points.js?v=613"></script>
-<script src="../mobile/inspect-guide.js?v=613"></script>
-<script src="../mobile/get-figs.js?v=613"></script>
-<script src="../mobile/body-points.js?v=613"></script>
-<script src="../mobile/body-map.js?v=613"></script>
-<script src="../mobile/jspdf.umd.min.js?v=613"></script>
-<script src="../mobile/html2canvas.min.js?v=613"></script>
-<script src="../mobile/report-core.js?v=613"></script>
+<script src="../mobile/machine-fig.js?v=614"></script>
+<script src="../mobile/get.js?v=614"></script>
+<script src="../mobile/points.js?v=614"></script>
+<script src="../mobile/uc-points.js?v=614"></script>
+<script src="../mobile/inspect-guide.js?v=614"></script>
+<script src="../mobile/get-figs.js?v=614"></script>
+<script src="../mobile/body-points.js?v=614"></script>
+<script src="../mobile/body-map.js?v=614"></script>
+<script src="../mobile/jspdf.umd.min.js?v=614"></script>
+<script src="../mobile/html2canvas.min.js?v=614"></script>
+<script src="../mobile/report-core.js?v=614"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -7480,7 +7480,7 @@ function bodyModelOf(unit){
 const UC_BAND = (pct, warn) => pct>=100 ? "act" : pct>=(warn!=null&&warn!==""?Number(warn):80) ? "watch" : "ok";
 /* A measured point's grade comes from its remaining life — GRADE.fromWorn —
    on the same bands the phone's cards state for undercarriage and GET:
-   1 at 80–100% remaining … 5 below 20% or past the limit. */
+   1 at 80–100% remaining … 4 below 40%, 5 at or past the limit (12.11.2026). */
 const UC_GRADE = (pct, warn) => GRADE.fromWorn(pct, warn) || "";
 function wearOf(rec,it){
   if(!isWearType(rec.type)) return null;
@@ -21886,11 +21886,11 @@ document.querySelector(".lang").addEventListener("click",e=>{
   setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 })();
 </script>
-<script src="../dashboard/drive.js?v=613"></script>
-<script src="../dashboard/sync-adapter.js?v=613"></script>
-<script src="../dashboard/report.js?v=613"></script>
-<script src="../dashboard/reliability.js?v=613"></script>
-<script src="../dashboard/day-summary.js?v=613"></script>
+<script src="../dashboard/drive.js?v=614"></script>
+<script src="../dashboard/sync-adapter.js?v=614"></script>
+<script src="../dashboard/report.js?v=614"></script>
+<script src="../dashboard/reliability.js?v=614"></script>
+<script src="../dashboard/day-summary.js?v=614"></script>
 <script>
 /* THE CLOSED FILTER SAYS WHAT IS CHOSEN. A dropdown narrower than its option
    text ellipsises ("All t…", audit of 2026-10-01). Between 1331 and 1500 px
@@ -21934,6 +21934,7 @@ document.querySelector(".lang").addEventListener("click",e=>{
   table.grid.ascards td.nolab{padding-left:0 !important;}
   table.grid.ascards td.nolab::before{content:none;}
   table.grid.ascards td>*{max-width:100%;}
+  table.grid.ascards td .tag{white-space:normal !important;}   /* a long round name wraps inside its card */
   table.grid.ascards td:empty{display:none;}
   @media (max-width:600px){
     nav.tabs{scrollbar-width:none;}   /* the side menu is a swipe strip on a phone, like the site menu */

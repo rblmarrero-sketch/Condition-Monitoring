@@ -44,7 +44,7 @@ const SHOT = `(function(){ const bytes=new Uint8Array([0xff,0xd8,0xff,0xdb,1,2,3
   {
     const G = require(path.join(ROOT, 'mobile/grade.js'));
     ok('a graded position counts by its grade', G.roundGrade([{ key: '4C', grade: 2 }, { key: '4D', grade: 3 }]) === 3);
-    ok('a measured station counts by its remaining life', G.roundGrade([{ key: 'IDLER', wearPct: 85 }]) === G.fromWorn(85) && G.fromWorn(85) === 5);
+    ok('a measured station counts by its remaining life', G.roundGrade([{ key: 'IDLER', wearPct: 85 }]) === G.fromWorn(85) && G.fromWorn(85) === 4 && G.fromWorn(100) === 5);   /* site scale of 12.11.2026: Critical only at the limit */
     ok('the machine\'s own photographs carry none', G.roundGrade([{ key: 'MACHINE', general: 1, grade: 5 }]) === null);
     ok('and nothing recorded is null, not 1', G.roundGrade([{ key: '4C' }, { key: '4D', grade: '' }]) === null);
   }

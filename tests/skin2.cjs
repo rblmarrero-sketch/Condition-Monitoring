@@ -102,7 +102,7 @@ const SEED = () => {
     /* A pressed segment is a white chip on a grey trough in light mode. If it
        is still white in dark mode it is a hole punched in the page. */
     ok('the selected filter chip is not a light chip on a dark page',
-       dark ? !bright(r.segOn) : bright(r.segOn), r.segOn);
+       /* navy in light since CM_STDLOOK_V1 (build 588); it must still not be a white hole in dark */ !dark || !bright(r.segOn), r.segOn);
 
     ok('the hero number reads', r.cardInk >= 4.5, r.cardInk.toFixed(2) + ':1');
     ok('so does its label', r.cardLabel >= 3.0, r.cardLabel.toFixed(2) + ':1');

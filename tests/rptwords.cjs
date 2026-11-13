@@ -75,7 +75,8 @@ const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
   console.log('\nMaintenance action box on a round worth watching only');
   const actOf = t => (t.match(/Действие по обслуживанию[\s\S]{0,260}/) || [''])[0];
   ok('an Incipient-only round does not print "Не записано" under the action box', !/Не записано/.test(actOf(mpWatch)), actOf(mpWatch).slice(0, 160));
-  ok('a Degraded finding with no action still says "Не записано"', /Не записано/.test(actOf(mpDeg)), actOf(mpDeg).slice(0, 160));
+  /* on its card: the action block is not printed beside finding cards (build 614) */
+  ok('a Degraded finding with no action still says "Не записано"', /Действие[^А-Яа-я]{0,40}Не записано/.test(mpDeg) && !/Записанное действие/.test(mpDeg), mpDeg.slice(0, 200));
   const ucSev = await text('one:DZ016|2026-11-07|UC', 'ru', false);
   const ucG = (ucSev.match(/СТЕПЕНЬ\s*(\d)/) || [])[1];
   ok('a measured round graded Degraded or worse says "Не записано" for its missing action, not dashes',

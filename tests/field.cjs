@@ -80,7 +80,7 @@ await ctx.addInitScript(u => localStorage.setItem('up_dests', JSON.stringify([
       x.fillStyle = '#5b6670'; x.fillRect(0, 0, 640, 480);
       return new Promise(r => c.toBlob(r, 'image/jpeg', 0.7)); };
     const out = [];
-    for (const ty of [...sel.options].map(o => o.value)) {
+    for (const ty of [...sel.options].map(o => o.value).filter(v => !(TYPE_META[v] || {}).fir)) {   /* FIR is not a round (build 611) */
       sel.value = ty; sel.dispatchEvent(new Event('change'));
       let unit = null, ks = [];
       const tryOne = async n => { selectEquip(n); await new Promise(r => setTimeout(r, 320));

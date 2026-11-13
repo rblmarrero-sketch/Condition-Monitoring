@@ -89,7 +89,7 @@ const SEED = `(async () => {
      5 – Critical; 20–39% left is 4 – Severe. */
   ok('a point past condemn is a Critical finding here too',
     num.mix[5] >= uc.DZ002.act, num.mix[5]+' critical, '+uc.DZ002.act+' past condemn on DZ002');
-  ok('a point over 80% worn (under 20% remaining) is Critical too', num.mix[5] >= uc.DZ002.act+uc.DZ001.watch+uc.DZ002.watch,
+  ok('a point over 80% worn and short of the limit is Severe (site scale of 12.11.2026)', (num.mix[4]||0) >= uc.DZ001.watch+uc.DZ002.watch,
     num.mix[5]+' critical vs '+(uc.DZ002.act+uc.DZ001.watch+uc.DZ002.watch)+' at or past 80%');
 
   console.log('\n  the fleet table says which machine to look at');

@@ -140,7 +140,7 @@ const textOf = (p, key, lang) => p.evaluate(({ key, lang }) => {
   ok(!/Inspected by/.test(mp), "the four-cell metadata strip is gone");
   ok(/TK900/.test(mp) && /10\.08\.2026/.test(mp), "  the unit and the date are on the masthead");
   ok(/Ivanov/.test(mp), "  and the inspector is on the approval table");
-  ok(/Maintenance action/.test(mp), "the maintenance-action strip");
+  ok(/Plan corrective work/.test(mp) && !/Recorded action/.test(mp), "the finding card carries the action; no block repeats it (build 614)");
   ok(/CM Technician/.test(mp) && /Reliability Engineer/.test(mp) && /Maintenance Supervisor/.test(mp),
      "the three-role approval table");
 
@@ -194,7 +194,7 @@ const textOf = (p, key, lang) => p.evaluate(({ key, lang }) => {
 
   console.log("\n5b. AN ALL-WEAR ROUND STILL RATES ITSELF — no point was hand-graded");
   const ucw = await textOf(p, k("DZ901", "2026-08-18", "UC"), "en");
-  ok(/Controlling point\s*Link pitch[^%]{0,120}80%/.test(ucw) && !/Controlling point\s*PITCH1/.test(ucw), "  the controlling point at 80% worn is on the sheet, named in words", (ucw.match(/Controlling point.{0,50}/) || [""])[0]);
+  ok(/Controlling point[^A-Za-z]{0,30}Link pitch[^%]{0,160}80%/.test(ucw) && !/Controlling point[^A-Za-z]{0,30}PITCH1/.test(ucw), "  the controlling point at 80% worn is on the sheet, named in words", (ucw.match(/Controlling point.{0,50}/) || [""])[0]);
   ok(!/No condition rating recorded/.test(ucw),
      "  the DECISION cell is not blank just because nobody picked a grade");
   ok(/4 – Severe/.test(ucw), "  80% worn (20% remaining) computes to Severe, GRADE.fromWorn's own answer");

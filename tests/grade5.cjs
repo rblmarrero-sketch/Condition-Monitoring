@@ -52,7 +52,7 @@ const J = o => JSON.stringify(o).slice(0, 420);
   ok('five colours, amber takes dark ink', [1,2,3,4,5].map(G.hex).every(h => /^#[0-9a-f]{6}$/i.test(h)) && new Set([1,2,3,4,5].map(G.hex)).size === 5 && G.ink(2) !== '#fff' && G.ink(5) === '#fff');
   ok('the worst of a list, letters and numbers mixed', G.worst([{grade:'A'},{grade:3},{grade:'B'}]) === 3 && G.worst([]) === null);
   ok('remaining life grades a measured point: 85% left → 1, 65 → 2, 45 → 3, 25 → 4, 10 → 5, past the limit → 5',
-     [85,65,45,25,10].map(G.fromRemaining).join('') === '12345' && G.fromWorn(105) === 5 && G.fromWorn(15) === 1);
+     [85,65,45,25,10,0].map(G.fromRemaining).join('') === '123445' && G.fromWorn(105) === 5 && G.fromWorn(15) === 1);
   ok('what each grade asks for: 3 action + target, 4 adds comment + close-up, 5 adds defect + notification',
      !G.requires(1).action && G.requires(3).action && G.requires(3).target && !G.requires(3).comment
      && G.requires(4).closeup && G.requires(4).comment && !G.requires(4).notify

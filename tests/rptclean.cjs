@@ -192,10 +192,12 @@ const LAY = ([equip]) => {
 
   console.log('\n2. a round with a real finding still says what is missing');
   ok('the finding\'s own cause is printed', /Bearing wear/.test(found.html));
-  ok('  the maintenance strip carries the fields, not the sentence',
-     !/class="mact none"/.test(found.html) && /Repair soon/.test(found.html));
-  ok('  and a field that SHOULD carry something still reads "Not recorded"',
-     /Not recorded/.test(found.html));
+  /* Build 614: the finding's card carries its action; the block under the
+     cards said it a second time and is not printed beside them. */
+  ok('  the finding card carries the action, and no block repeats it',
+     !/class="mact/.test(found.html) && /Repair soon/.test(found.html));
+  ok('  and nothing is called "Not recorded" when nothing required is missing',
+     !/Not recorded/.test(found.html));
 
   console.log('\n3. the inspector\'s own words reach the sheet, in the grade\'s ink');
   ok('a comment on a table-bodied round is printed',
@@ -221,7 +223,7 @@ const LAY = ([equip]) => {
      the grade is the site's and only the CODE is the standard's — "almost ISO
      14224", in the office's own words. */
   ok('the heading is the proper name for what the column holds',
-     />SEVERITY</.test(clean.html) && !/>LEVEL</.test(clean.html)
+     />SEVERITY\s*</.test(clean.html) && !/>LEVEL\s*</.test(clean.html)
      && !/SEVERITY \/ ISO/.test(clean.html));
   ok('  the grade carries its ISO class', /class="isoc">NOF</.test(clean.html)
      && /class="isoc">DEG</.test(found.html));

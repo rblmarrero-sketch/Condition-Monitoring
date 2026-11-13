@@ -90,11 +90,11 @@
       fc:   { 1: 'No abnormal particles', 2: 'A few fine particles', 3: 'Noticeable particles or small flakes',
               4: 'Many particles, coarse flakes or sharp pieces', 5: 'Large fragments or component pieces' },
       uc:   { 1: '80–100% life remaining; even wear', 2: '60–79% remaining; minor wear',
-              3: '40–59% remaining, or uneven wear starting', 4: '20–39% remaining, severe wear or near limit',
-              5: 'Below 20%, past limit, broken or loose' },
+              3: '40–59% remaining, or uneven wear starting', 4: 'Below 40% remaining, severe wear or near limit',
+              5: 'At or past limit, broken or loose' },
       get:  { 1: '80–100% remaining; secure; no damage', 2: '60–79% remaining; minor wear',
-              3: '40–59% remaining; worn but usable', 4: '20–39% remaining, damaged or near limit',
-              5: 'Below 20%, past limit, broken, loose or missing' },
+              3: '40–59% remaining; worn but usable', 4: 'Below 40% remaining, damaged or near limit',
+              5: 'At or past limit, broken, loose or missing' },
       gen:  { 1: 'No defect; working normally', 2: 'Slight abnormal condition; monitor',
               3: 'Clear defect; equipment remains usable', 4: 'Serious defect; repair soon',
               5: 'Unsafe, failed or not fit to operate' },
@@ -109,11 +109,11 @@
       fc:   { 1: 'Посторонних частиц нет', 2: 'Несколько мелких частиц', 3: 'Заметные частицы или мелкие чешуйки',
               4: 'Много частиц, крупные чешуйки или острые кусочки', 5: 'Крупные фрагменты или части деталей' },
       uc:   { 1: 'Остаток ресурса 80–100%; износ равномерный', 2: 'Остаток 60–79%; незначительный износ',
-              3: 'Остаток 40–59% или начало неравномерного износа', 4: 'Остаток 20–39%, сильный износ или близко к пределу',
-              5: 'Менее 20%, за пределом, сломано или ослаблено' },
+              3: 'Остаток 40–59% или начало неравномерного износа', 4: 'Остаток менее 40%, сильный износ или близко к пределу',
+              5: 'На пределе или за ним, сломано или ослаблено' },
       get:  { 1: 'Остаток 80–100%; закреплено; без повреждений', 2: 'Остаток 60–79%; незначительный износ',
-              3: 'Остаток 40–59%; изношено, но пригодно', 4: 'Остаток 20–39%, повреждено или близко к пределу',
-              5: 'Менее 20%, за пределом, сломано, ослаблено или отсутствует' },
+              3: 'Остаток 40–59%; изношено, но пригодно', 4: 'Остаток менее 40%, повреждено или близко к пределу',
+              5: 'На пределе или за ним, сломано, ослаблено или отсутствует' },
       gen:  { 1: 'Дефектов нет; работает нормально', 2: 'Небольшое отклонение; наблюдать',
               3: 'Явный дефект; техника пригодна к работе', 4: 'Серьёзный дефект; ремонт в ближайшее время',
               5: 'Опасно, отказ или непригодно к эксплуатации' },
@@ -207,7 +207,12 @@
     if (r >= 80) return 1;
     if (r >= 60) return 2;
     if (r >= 40) return 3;
-    if (r >= 20) return 4;
+    /* Decided by the site on 12.11.2026: a point above 80 % worn is planned
+       into the next shutdown (Severe); the machine is stopped (Critical) only
+       at or past the wear limit. Below 20 % remaining used to be Critical, so
+       an 81 % grouser printed "do not run this machine" beside a legend that
+       said to plan it. */
+    if (r > 0) return 4;
     return 5;
   }
   /* With a WARNING the office set (dashboard/wear-limits.js), the scale is
