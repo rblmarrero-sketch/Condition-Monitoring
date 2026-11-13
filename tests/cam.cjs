@@ -43,7 +43,7 @@ const CAM = () => {
   await p.goto(B + '/mobile/index.html', { waitUntil: 'load' });
   await p.waitForFunction(() => (document.getElementById('verNum') || {}).textContent !== '?', null, { timeout: 30000 });
   await p.waitForTimeout(500);
-  const T = t => p.evaluate(x => { const s = document.getElementById('typeSel'); s.value = x; s.dispatchEvent(new Event('change')); }, t);
+  const T = t => p.evaluate(x => { /* a new round: with one in hand the app now asks before it is discarded (build 614) */ draft = { positions: {} }; const s = document.getElementById('typeSel'); s.value = x; s.dispatchEvent(new Event('change')); }, t);
   const openFirst = () => p.evaluate(() => {
     const k = (typeof ucOrder === 'function' ? ucOrder() : [])[0];
     if (k) { saveCur(); curItem = k; loadPos(); renderChips(); return k; }

@@ -20,7 +20,7 @@ const settled = async p => {
 const dismiss = async p => { for (let i = 0; i < 3; i++) {
   if (await p.evaluate(() => document.getElementById('dlg').open)) { await p.click('#dlgOk'); await p.waitForTimeout(250); } else break; } };
 const setType = async (p, ty) => {
-  await p.evaluate(t => { const s = document.getElementById('typeSel'); s.value = t; s.dispatchEvent(new Event('change')); }, ty);
+  await p.evaluate(t => { /* a new round: with one in hand the app asks first (build 614) */ draft = { positions: {} }; const s = document.getElementById('typeSel'); s.value = t; s.dispatchEvent(new Event('change')); }, ty);
   await p.waitForTimeout(350);
 };
 /* selectEquip re-renders the picker asynchronously and the undercarriage map
@@ -229,6 +229,7 @@ const pick = async (p, u, want) => {
   const counts = await p.evaluate(() => {
     const n = {};
     ['MP', 'UC', 'GET'].forEach(ty => {
+      /* a new round: with one in hand the app asks first (build 614) */ draft = { positions: {} }; 
       const s = document.getElementById('typeSel'); s.value = ty; s.dispatchEvent(new Event('change'));
       n[ty] = ASSETS.filter(a => eligible(a.n, a)).length;
     });

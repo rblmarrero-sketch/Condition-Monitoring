@@ -5422,8 +5422,15 @@ reports of 10-12.11 read as an editor. `tests/sweep614.cjs` holds the new rules.
   `skin2` (the chosen chip is navy since 588), `rptest` (a quote at its floor has settled), `field` (FIR is not a round),
   `cards` / `tablekit-next` / `equipment-panel-next` (dashboard-next's 90-day default against a fixture with fixed
   dates: they set `cm_dash_window` to 0).
-- **Not done, known:** "Retake" on a machine photograph adds a photograph (the first stays the thumbnail); changing
-  type or machine mid-round still discards the draft without a question; an RTW edit rebuilds its attachment manifest.
+- **The three left open, fixed in build 615.** (1) A machine-photograph slot holds ONE photograph: Retake replaces it
+  (`takeMachinePhoto`); "Additional" (`EXTRA`) is the one list, each photograph on its own row with its ✕ and an
+  "Add another" button (`ph_add`). (2) A round in progress is not discarded by one tap: changing the round type, the
+  class or the machine (lists, a CM Due row, a scanned label) and opening a Saved row all ask first (`roundInHand`,
+  `leaveRoundOk`, `lose_*`; `leaveAsked` while a confirmed switch is applied). `selectEquip`, `selectCat` and the
+  type list's change stay synchronous when nothing is in hand. **A test that switches type as SETUP with data left
+  from an earlier step starts a new round first (`draft = { positions: {} }`)**, as `cam`, `uc`, `getfig`, `lubecap`
+  and `rate` now do. (3) An RTW edit carries `att` in and out (`rtwOpenForEdit`, `rtwSave`), so files keep their
+  numbers.
 
 ---
 
