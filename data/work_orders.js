@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-13T13:47:40+00:00",
+  "generated": "2026-11-13T14:02:45+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -5716,6 +5716,19 @@ window.CM_WO_DATA = {
   ],
   "otherDefects": [
     {
+      "asset": "DZ022",
+      "defect": "DD-00016843",
+      "raised": "2026-11-14",
+      "system": "DZ022.OC.GL (Glass / Стекла)",
+      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "descr": "Разбито зеркало",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": null
+    },
+    {
       "asset": "EX015",
       "defect": "DD-00016786",
       "raised": "2026-11-13",
@@ -6015,6 +6028,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022525"
     },
     {
+      "asset": "LD001",
+      "defect": "DD-00016841",
+      "raised": "2026-11-13",
+      "system": "LD001.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "Замена лампы",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022526"
+    },
+    {
       "asset": "TK104",
       "defect": "DD-00016795",
       "raised": "2026-11-13",
@@ -6023,19 +6049,6 @@ window.CM_WO_DATA = {
       "descr": "Утечка по РВД трансмиссионых филтров",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": null
-    },
-    {
-      "asset": "LD001",
-      "defect": "DD-00016841",
-      "raised": "2026-11-13",
-      "system": "LD001.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
-      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
-      "descr": "Замена лампы",
-      "status": "Registered",
-      "priority": "P2 Urgent",
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": null
@@ -8329,6 +8342,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022238"
     },
     {
+      "asset": "CR006",
+      "defect": "DD-00016618",
+      "raised": "2026-11-10",
+      "system": "CR006.CONV.MAIN (Main Conveyor / Главный конвейер)",
+      "defectType": "8.06 Roller / idler failure / Отказ ролика / роликоопоры",
+      "descr": "замена роликов",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Murashko",
+      "regBy": "Мурашко Сергей Борисович",
+      "wo": "WO-022185"
+    },
+    {
       "asset": "TK168",
       "defect": "DD-00016663",
       "raised": "2026-11-10",
@@ -8587,19 +8613,6 @@ window.CM_WO_DATA = {
       "by": "Evgeniy Frolin",
       "regBy": "Фролин Евгений Владимирович",
       "wo": "WO-022212"
-    },
-    {
-      "asset": "CR006",
-      "defect": "DD-00016618",
-      "raised": "2026-11-10",
-      "system": "CR006.CONV.MAIN (Main Conveyor / Главный конвейер)",
-      "defectType": "8.06 Roller / idler failure / Отказ ролика / роликоопоры",
-      "descr": "замена роликов",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Murashko",
-      "regBy": "Мурашко Сергей Борисович",
-      "wo": "WO-022185"
     },
     {
       "asset": "DZ001",
@@ -9187,6 +9200,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022165"
     },
     {
+      "asset": "CR006",
+      "defect": "DD-00016577",
+      "raised": "2026-11-09",
+      "system": "CR006.CONV.MAIN (Main Conveyor / Главный конвейер)",
+      "defectType": "8.01 Conveyor belt cut / tear / Порез / разрыв конвейерной ленты",
+      "descr": "порыв конвейерной ленты",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-022155"
+    },
+    {
       "asset": "GE109",
       "defect": "DD-00016586",
       "raised": "2026-11-09",
@@ -9419,19 +9445,6 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-022192"
-    },
-    {
-      "asset": "CR006",
-      "defect": "DD-00016577",
-      "raised": "2026-11-09",
-      "system": "CR006.CONV.MAIN (Main Conveyor / Главный конвейер)",
-      "defectType": "8.01 Conveyor belt cut / tear / Порез / разрыв конвейерной ленты",
-      "descr": "порыв конвейерной ленты",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": "WO-022155"
     },
     {
       "asset": "DZ014",
