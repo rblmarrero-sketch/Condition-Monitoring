@@ -5151,23 +5151,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=619"></script>
+<script src="../data/magnetic_plug.js?v=620"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=619"></script>
-<script src="../mobile/hme.js?v=619"></script>
-<script src="../mobile/mp-fc.js?v=619"></script>
-<script src="../mobile/rtw.js?v=619"></script>
-<script src="../mobile/hme-cascade.js?v=619"></script>
-<script src="../mobile/temp-limits.js?v=619"></script>
+<script src="../data/work_orders.js?v=620"></script>
+<script src="../mobile/hme.js?v=620"></script>
+<script src="../mobile/mp-fc.js?v=620"></script>
+<script src="../mobile/rtw.js?v=620"></script>
+<script src="../mobile/hme-cascade.js?v=620"></script>
+<script src="../mobile/temp-limits.js?v=620"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=619"></script>
-<script src="../mobile/normalize.js?v=619"></script>
-<script src="../mobile/terms.js?v=619"></script>
+<script src="../mobile/assets.js?v=620"></script>
+<script src="../mobile/normalize.js?v=620"></script>
+<script src="../mobile/terms.js?v=620"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -5186,21 +5186,21 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=619"></script>
-<script src="../mobile/edits.js?v=619"></script>
-<script src="../mobile/due.js?v=619"></script>
-<script src="../mobile/wear.js?v=619"></script>
-<script src="../mobile/wear-map.js?v=619"></script>
-<script src="../mobile/lube.js?v=619"></script>
-<script src="../mobile/lube-overrides.js?v=619"></script>
-<script src="../mobile/lube2027.js?v=619"></script>
-<script src="../mobile/lube-tds.js?v=619"></script>
-<script src="../dashboard/lube-master.js?v=619"></script>
-<script src="../dashboard/wear-limits.js?v=619"></script>
+<script src="../mobile/grade.js?v=620"></script>
+<script src="../mobile/edits.js?v=620"></script>
+<script src="../mobile/due.js?v=620"></script>
+<script src="../mobile/wear.js?v=620"></script>
+<script src="../mobile/wear-map.js?v=620"></script>
+<script src="../mobile/lube.js?v=620"></script>
+<script src="../mobile/lube-overrides.js?v=620"></script>
+<script src="../mobile/lube2027.js?v=620"></script>
+<script src="../mobile/lube-tds.js?v=620"></script>
+<script src="../dashboard/lube-master.js?v=620"></script>
+<script src="../dashboard/wear-limits.js?v=620"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=619"></script>
-<script src="../mobile/machine-photos.js?v=619"></script>
+<script src="../mobile/upload-defaults.js?v=620"></script>
+<script src="../mobile/machine-photos.js?v=620"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -5209,17 +5209,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=619"></script>
-<script src="../mobile/get.js?v=619"></script>
-<script src="../mobile/points.js?v=619"></script>
-<script src="../mobile/uc-points.js?v=619"></script>
-<script src="../mobile/inspect-guide.js?v=619"></script>
-<script src="../mobile/get-figs.js?v=619"></script>
-<script src="../mobile/body-points.js?v=619"></script>
-<script src="../mobile/body-map.js?v=619"></script>
-<script src="../mobile/jspdf.umd.min.js?v=619"></script>
-<script src="../mobile/html2canvas.min.js?v=619"></script>
-<script src="../mobile/report-core.js?v=619"></script>
+<script src="../mobile/machine-fig.js?v=620"></script>
+<script src="../mobile/get.js?v=620"></script>
+<script src="../mobile/points.js?v=620"></script>
+<script src="../mobile/uc-points.js?v=620"></script>
+<script src="../mobile/inspect-guide.js?v=620"></script>
+<script src="../mobile/get-figs.js?v=620"></script>
+<script src="../mobile/body-points.js?v=620"></script>
+<script src="../mobile/body-map.js?v=620"></script>
+<script src="../mobile/jspdf.umd.min.js?v=620"></script>
+<script src="../mobile/html2canvas.min.js?v=620"></script>
+<script src="../mobile/report-core.js?v=620"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -21892,11 +21892,11 @@ document.querySelector(".lang").addEventListener("click",e=>{
   setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 })();
 </script>
-<script src="../dashboard/drive.js?v=619"></script>
-<script src="../dashboard/sync-adapter.js?v=619"></script>
-<script src="../dashboard/report.js?v=619"></script>
-<script src="../dashboard/reliability.js?v=619"></script>
-<script src="../dashboard/day-summary.js?v=619"></script>
+<script src="../dashboard/drive.js?v=620"></script>
+<script src="../dashboard/sync-adapter.js?v=620"></script>
+<script src="../dashboard/report.js?v=620"></script>
+<script src="../dashboard/reliability.js?v=620"></script>
+<script src="../dashboard/day-summary.js?v=620"></script>
 <script>
 /* THE CLOSED FILTER SAYS WHAT IS CHOSEN. A dropdown narrower than its option
    text ellipsises ("All t…", audit of 2026-10-01). Between 1331 and 1500 px
@@ -22586,15 +22586,20 @@ html.cmStd main table.grid.cmHeld thead tr:not(:has(th.cwfh)) th{position:relati
    (a card table has no heading). */
 (function(){ try{
   var de=document.documentElement;
-  function isPin(e){ for(var n=0;e&&e!==document.body&&e!==de&&n<12;e=e.parentElement,n++){ if(/^(TD|TH|TR|THEAD|TBODY|TABLE)$/.test(e.tagName)) return null; var p=getComputedStyle(e).position; if(p==="fixed"||p==="sticky") return e; } return null; }
-  function pinB(){ var y=1,best=0,x=Math.round(innerWidth/2),seen=[]; for(var k=0;k<4;k++){ var hit=null,hs=document.elementsFromPoint?document.elementsFromPoint(x,y):[];
-      for(var i=0;i<hs.length;i++){ if(hs[i].closest&&hs[i].closest(".std-sfpop,.std-pkpop,.std-pop,table")) continue; var e=isPin(hs[i]); if(e&&seen.indexOf(e)<0){hit=e;break;} }
-      if(!hit) break; seen.push(hit); var r=hit.getBoundingClientRect(); if(r.top>y+1||r.bottom<=y||r.height>innerHeight*0.5) break; best=Math.max(best,r.bottom); y=Math.ceil(r.bottom)+1; }
-    return best; }
+  /* build 618: the pinned bars are found the way the held-heading check finds them (site_std v2.7.4): every fixed / sticky element
+     outside a table, wide, not tall, chained from the top of the window. Asking only what lies under the middle of the window stopped
+     short on a 2560 screen (Overview's compliance heading 14 px under the bar, live audit 13.11 19:24). The list is kept until the page
+     adds or removes elements, at most 2 s. */
+  var pinList=null,pinAt=0; if(window.MutationObserver) new MutationObserver(function(){ pinAt=0; }).observe(de,{childList:true,subtree:true});
+  function pinEls(){ var now=Date.now(); if(pinList&&now-pinAt<2000) return pinList; pinAt=now; pinList=[];
+    var tw=document.createTreeWalker(document.body,1,{acceptNode:function(e){ return /^(TABLE|SCRIPT|STYLE|svg|SVG)$/.test(e.tagName)||(e.classList&&(e.classList.contains("std-sfpop")||e.classList.contains("std-pkpop")||e.classList.contains("std-pop")))?2:1; }});
+    for(var e=tw.nextNode();e;e=tw.nextNode()){ var p=getComputedStyle(e).position; if(p==="fixed"||p==="sticky") pinList.push(e); } return pinList; }
+  function pinB(){ var rs=[]; pinEls().forEach(function(e){ if(!e.isConnected) return; var r=e.getBoundingClientRect(); if(r.height>0&&r.width>innerWidth*0.3&&r.height<innerHeight*0.5&&r.top<innerHeight*0.5&&getComputedStyle(e).visibility!=="hidden") rs.push(r); });
+    rs.sort(function(a,b){ return a.top-b.top; }); var y=0; rs.forEach(function(r){ if(r.top<=y+2) y=Math.max(y,r.bottom); }); return y; }
   function boxed(tb){ for(var e=tb.parentElement;e&&e!==document.body;e=e.parentElement){ var c=getComputedStyle(e); if(c.overflowX!=="visible"||c.overflowY!=="visible") return true; } return false; }
   var raf=0;
   function run(){ raf=0; if(!de.classList.contains("cmStd")) return; var top=pinB();
-    [].forEach.call(document.querySelectorAll("main table.grid"),function(tb){ var th=tb.tHead; if(!th||!tb.offsetParent||tb.classList.contains("ascards")) { if(tb.classList.contains("cmHeld")) clear(tb); return; }
+    [].forEach.call(document.querySelectorAll("main table.grid, main table[data-ds=find]"),function(tb){ var th=tb.tHead; if(!th||!tb.offsetParent||tb.classList.contains("ascards")) { if(tb.classList.contains("cmHeld")) clear(tb); return; }
       if(boxed(tb)){ var r=tb.getBoundingClientRect(), h=th.getBoundingClientRect().height, d=Math.max(0,Math.min(top-r.top,r.height-h-2)), v=d>0?"translateY("+Math.round(d)+"px)":"";
         [].forEach.call(th.rows,function(row){ [].forEach.call(row.cells,function(c){ if(c.style.transform!==v) c.style.transform=v; }); }); tb.classList.toggle("cmHeld",d>0); }
       else { var t=top; [].forEach.call(th.rows,function(row){ var v=t+"px"; [].forEach.call(row.cells,function(c){ if(getComputedStyle(c).position==="sticky"&&c.style.top!==v) c.style.top=v; }); t+=Math.round(row.getBoundingClientRect().height); }); } }); }
