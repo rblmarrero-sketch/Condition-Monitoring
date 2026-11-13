@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-13T03:47:50+00:00",
+  "generated": "2026-11-13T04:05:18+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -5794,6 +5794,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "GR001",
+      "defect": "DD-00016814",
+      "raised": "2026-11-13",
+      "system": "GR001.CH.UC (Undercarriage / Ходовая часть)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "неисправность ступицы задней левой",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": null
+    },
+    {
       "asset": "BS003",
       "defect": "DD-00016803",
       "raised": "2026-11-13",
@@ -6249,6 +6262,32 @@ window.CM_WO_DATA = {
       "wo": "WO-022467"
     },
     {
+      "asset": "TK143",
+      "defect": "DD-00016753",
+      "raised": "2026-11-12",
+      "system": "TK143.ELS.WH (Wiring Harness / Жгут проводов)",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "не регулируется опускание кузова",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-022461"
+    },
+    {
+      "asset": "DZ008",
+      "defect": "DD-00016768",
+      "raised": "2026-11-12",
+      "system": "DZ008.DRS.COO.RAD (Radiator / Радиатор)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка антифриза по патрубку радиатора",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-022468"
+    },
+    {
       "asset": "LS057",
       "defect": "DD-00016758",
       "raised": "2026-11-12",
@@ -6600,19 +6639,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022471"
     },
     {
-      "asset": "DZ008",
-      "defect": "DD-00016768",
-      "raised": "2026-11-12",
-      "system": "DZ008.DRS.COO.RAD (Radiator / Радиатор)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка антифриза по патрубку радиатора",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": "WO-022468"
-    },
-    {
       "asset": "TK010",
       "defect": "DD-00016745",
       "raised": "2026-11-12",
@@ -6650,19 +6676,6 @@ window.CM_WO_DATA = {
       "by": "Aleksey Dobrikov",
       "regBy": "Добриков Алексей Владимирович",
       "wo": "WO-022432"
-    },
-    {
-      "asset": "TK143",
-      "defect": "DD-00016753",
-      "raised": "2026-11-12",
-      "system": "TK143.ELS.WH (Wiring Harness / Жгут проводов)",
-      "defectType": "4.02 Open circuit / Разрыв цепи",
-      "descr": "не регулируется опускание кузова",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": "WO-022461"
     },
     {
       "asset": "TK084",
@@ -12489,6 +12502,32 @@ window.CM_WO_DATA = {
       "wo": "WO-022213"
     },
     {
+      "asset": "TK030",
+      "defect": "DD-00016299",
+      "raised": "2026-11-04",
+      "system": "TK030.DRS.CLU (Clutch / Сцепление)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Замена комплекта сцепления.",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-021836"
+    },
+    {
+      "asset": "LV012",
+      "defect": "DD-00016304",
+      "raised": "2026-11-04",
+      "system": "LV012.ELS.PH (Preheater / Предпусковой подогреватель)",
+      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
+      "descr": "Диагностика ПЖД",
+      "status": "Elimination scheduled",
+      "priority": "P1 Breakdown",
+      "by": "Ilshat Sabitov",
+      "regBy": "Сабитов Ильшат Рашидович",
+      "wo": "WO-021730"
+    },
+    {
       "asset": "CR002",
       "defect": "DD-00016310",
       "raised": "2026-11-04",
@@ -12513,19 +12552,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-021745"
-    },
-    {
-      "asset": "LV012",
-      "defect": "DD-00016304",
-      "raised": "2026-11-04",
-      "system": "LV012.ELS.PH (Preheater / Предпусковой подогреватель)",
-      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
-      "descr": "Диагностика ПЖД",
-      "status": "Elimination scheduled",
-      "priority": "P1 Breakdown",
-      "by": "Ilshat Sabitov",
-      "regBy": "Сабитов Ильшат Рашидович",
-      "wo": "WO-021730"
     },
     {
       "asset": "LV042",
@@ -12617,19 +12643,6 @@ window.CM_WO_DATA = {
       "by": "Roman Besedovskiy",
       "regBy": "Беседовский Роман Иванович",
       "wo": "WO-021692"
-    },
-    {
-      "asset": "TK030",
-      "defect": "DD-00016299",
-      "raised": "2026-11-04",
-      "system": "TK030.DRS.CLU (Clutch / Сцепление)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Замена комплекта сцепления.",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-021836"
     },
     {
       "asset": "LV042",
@@ -57885,19 +57898,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "DZ022",
-      "defect": "DD-00011314",
-      "raised": "2026-08-21",
-      "system": "DZ022.HS (Hydraulic System / Гидравлическая система)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Повреждение (трещина) трубки подачи гидравлического масла (# 1186 – 73 – 04000 ).",
-      "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Andrey Shipelov",
-      "regBy": "Шипелов Андрей Анатольевич",
-      "wo": null
-    },
-    {
       "asset": "H04",
       "defect": "EB-00000082",
       "raised": "2026-08-21",
@@ -57908,6 +57908,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Eduard Shapoval",
       "regBy": "Eduard Shapoval",
+      "wo": null
+    },
+    {
+      "asset": "DZ022",
+      "defect": "DD-00011314",
+      "raised": "2026-08-21",
+      "system": "DZ022.HS (Hydraulic System / Гидравлическая система)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Повреждение (трещина) трубки подачи гидравлического масла (# 1186 – 73 – 04000 ).",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Andrey Shipelov",
+      "regBy": "Шипелов Андрей Анатольевич",
       "wo": null
     },
     {
@@ -59315,8 +59328,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H07",
-      "defect": "EB-00000075",
+      "asset": "H04",
+      "defect": "EB-00000076",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -59328,8 +59341,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000076",
+      "asset": "H07",
+      "defect": "EB-00000075",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -170770,15 +170783,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-13",
       "planStartDt": "2026-11-13T00:00:00",
-      "planEnd": "2026-11-14",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "planEnd": "2026-11-13",
+      "actualStart": "2026-11-13",
+      "actualStartDt": "2026-11-13T03:30:00",
+      "actualEnd": "2026-11-13"
     },
     {
       "equip": "TK112",
