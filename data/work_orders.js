@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-13T08:39:46+00:00",
+  "generated": "2026-11-13T08:52:43+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -5950,6 +5950,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022505"
     },
     {
+      "asset": "TK084",
+      "defect": "DD-00016828",
+      "raised": "2026-11-13",
+      "system": "TK084.CH.BED (Bed / Кузов)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Отказ в работе механизма подъема кузовной платформы",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022512"
+    },
+    {
       "asset": "TK039",
       "defect": "DD-00016793",
       "raised": "2026-11-13",
@@ -5963,6 +5976,32 @@ window.CM_WO_DATA = {
       "wo": "WO-022487"
     },
     {
+      "asset": "EX005",
+      "defect": "DD-00016827",
+      "raised": "2026-11-13",
+      "system": "EX005.CH.AL (Central Lubrication System / Централизованная система смазки)",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "Ремонт Линкольн",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022511"
+    },
+    {
+      "asset": "EX008",
+      "defect": "DD-00016826",
+      "raised": "2026-11-13",
+      "system": "EX008.CH.BOO (Boom / Стрела)",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "Замена тавотниц, долив масла ДВС",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022510"
+    },
+    {
       "asset": "FL001",
       "defect": "DD-00016801",
       "raised": "2026-11-13",
@@ -5974,6 +6013,19 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-022491"
+    },
+    {
+      "asset": "TK171",
+      "defect": "DD-00016825",
+      "raised": "2026-11-13",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK171 PNEUMATIC",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Отказ тормозной системы переднегомоста, течь РВД гидромотора",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022509"
     },
     {
       "asset": "TK027",
