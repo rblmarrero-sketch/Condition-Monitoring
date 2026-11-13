@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-13T17:12:48+00:00",
+  "generated": "2026-11-13T17:32:50+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -5794,6 +5794,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022541"
     },
     {
+      "asset": "EX015",
+      "defect": "DD-00016858",
+      "raised": "2026-11-14",
+      "system": "EX015.CH.BUC (Bucket / Ковш)",
+      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "descr": "Межзубъевая защита",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022542"
+    },
+    {
       "asset": "TK005",
       "defect": "DD-00016855",
       "raised": "2026-11-14",
@@ -5820,19 +5833,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022529"
     },
     {
-      "asset": "TK029",
-      "defect": "DD-00016854",
-      "raised": "2026-11-14",
-      "system": "TK029.DRS.FUE.INJ Injectors / Форсунки",
-      "defectType": "3.13 Warning light / alarm active / Сигнальная лампа / аварийная сигнализация активна",
-      "descr": "Индикация неисправности двигателя \"check engine\"",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-022538"
-    },
-    {
       "asset": "LD006",
       "defect": "DD-00016844",
       "raised": "2026-11-14",
@@ -5844,6 +5844,19 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022528"
+    },
+    {
+      "asset": "TK029",
+      "defect": "DD-00016854",
+      "raised": "2026-11-14",
+      "system": "TK029.DRS.FUE.INJ Injectors / Форсунки",
+      "defectType": "3.13 Warning light / alarm active / Сигнальная лампа / аварийная сигнализация активна",
+      "descr": "Индикация неисправности двигателя \"check engine\"",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022538"
     },
     {
       "asset": "DZ022",
@@ -8537,6 +8550,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022185"
     },
     {
+      "asset": "DZ001",
+      "defect": "DD-00016610",
+      "raised": "2026-11-10",
+      "system": "DZ001.CH.BL (Blade/Отвал)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Износ ножей отвала",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022174"
+    },
+    {
       "asset": "TK168",
       "defect": "DD-00016663",
       "raised": "2026-11-10",
@@ -8795,19 +8821,6 @@ window.CM_WO_DATA = {
       "by": "Evgeniy Frolin",
       "regBy": "Фролин Евгений Владимирович",
       "wo": "WO-022212"
-    },
-    {
-      "asset": "DZ001",
-      "defect": "DD-00016610",
-      "raised": "2026-11-10",
-      "system": "DZ001.CH.BL (Blade/Отвал)",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "Износ ножей отвала",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": "WO-022174"
     },
     {
       "asset": "DZ002",
@@ -58392,19 +58405,6 @@ window.CM_WO_DATA = {
       "wo": "WO-015456"
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
-      "wo": null
-    },
-    {
       "asset": "TK046",
       "defect": "DD-00011270",
       "raised": "2026-08-21",
@@ -58506,6 +58506,19 @@ window.CM_WO_DATA = {
       "priority": "P2 Urgent",
       "by": "Andrey Shipelov",
       "regBy": "Шипелов Андрей Анатольевич",
+      "wo": null
+    },
+    {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
@@ -59900,8 +59913,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000076",
+      "asset": "H07",
+      "defect": "EB-00000075",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -59913,8 +59926,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H07",
-      "defect": "EB-00000075",
+      "asset": "H04",
+      "defect": "EB-00000076",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
