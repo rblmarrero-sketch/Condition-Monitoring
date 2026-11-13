@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=614">
+<link rel="manifest" href="manifest.webmanifest?v=615">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=614">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=614">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=614">
+<link rel="apple-touch-icon" href="icon-192.png?v=615">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=615">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=615">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2980,16 +2980,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=614"></script>
-<script src="upload-defaults.js?v=614"></script>
-<script src="hme.js?v=614"></script>
-<script src="mp-fc.js?v=614"></script>
-<script src="rtw.js?v=614"></script>
-<script src="hme-cascade.js?v=614"></script>
-<script src="assets.js?v=614"></script>
-<script src="temp-limits.js?v=614"></script>
-<script src="normalize.js?v=614"></script>
-<script src="terms.js?v=614"></script>
+<script src="native.js?v=615"></script>
+<script src="upload-defaults.js?v=615"></script>
+<script src="hme.js?v=615"></script>
+<script src="mp-fc.js?v=615"></script>
+<script src="rtw.js?v=615"></script>
+<script src="hme-cascade.js?v=615"></script>
+<script src="assets.js?v=615"></script>
+<script src="temp-limits.js?v=615"></script>
+<script src="normalize.js?v=615"></script>
+<script src="terms.js?v=615"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -3008,25 +3008,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=614"></script>
-<script src="edits.js?v=614"></script>
-<script src="due.js?v=614"></script>
-<script src="wear.js?v=614"></script>
-<script src="wear-figs.js?v=614"></script>
-<script src="wear-map.js?v=614"></script>
-<script src="machine-photos.js?v=614"></script>
-<script src="machine-fig.js?v=614"></script>
-<script src="get.js?v=614"></script>
-<script src="points.js?v=614"></script>
-<script src="uc-points.js?v=614"></script>
-<script src="inspect-guide.js?v=614"></script>
-<script src="get-figs.js?v=614"></script>
-<script src="body-points.js?v=614"></script>
-<script src="body-map.js?v=614"></script>
-<script src="lube.js?v=614"></script>
-<script src="lube-overrides.js?v=614"></script>
-<script src="lube2027.js?v=614"></script>
-<script src="report-core.js?v=614"></script>
+<script src="grade.js?v=615"></script>
+<script src="edits.js?v=615"></script>
+<script src="due.js?v=615"></script>
+<script src="wear.js?v=615"></script>
+<script src="wear-figs.js?v=615"></script>
+<script src="wear-map.js?v=615"></script>
+<script src="machine-photos.js?v=615"></script>
+<script src="machine-fig.js?v=615"></script>
+<script src="get.js?v=615"></script>
+<script src="points.js?v=615"></script>
+<script src="uc-points.js?v=615"></script>
+<script src="inspect-guide.js?v=615"></script>
+<script src="get-figs.js?v=615"></script>
+<script src="body-points.js?v=615"></script>
+<script src="body-map.js?v=615"></script>
+<script src="lube.js?v=615"></script>
+<script src="lube-overrides.js?v=615"></script>
+<script src="lube2027.js?v=615"></script>
+<script src="report-core.js?v=615"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -3164,8 +3164,8 @@ const $ = (id)=>document.getElementById(id);
 const I18N = {
   en:{ app_title:"Condition Monitoring", net_online:"online", net_offline:"offline — OK",
     sec_inspection:"Inspection", hdr_change:"Change",
-    lose_t:"Leave the round in progress?", lose_m:"{u} · {r} has {n} point(s) recorded and is not saved yet. Opening a saved round discards it.",
-    lose_go:"Discard and open", lose_stay:"Keep working",
+    lose_t:"Leave the round in progress?", lose_m:"{u} · {r} has {n} point(s) recorded and is not saved yet. If you continue, it is discarded.",
+    lose_go:"Discard and continue", lose_stay:"Keep working",
     res_t:"Carry on where you left off?",
     res_m:"{u} · {r} — {n} reading(s) taken on {d} and not yet saved.",
     res_go:"Carry on", res_discard:"Discard it",
@@ -3303,7 +3303,7 @@ const I18N = {
     req_notify:"the notification tick", req_why:"a reason for setting it below the proposed 5",
     m_need_grade_t:"{g} needs more than a grade",
     m_need_grade_m:"{k} is graded {g}, so it needs {x}. Planning cannot act on a finding that does not say what is wrong or what to do.",
-    ph_title:"Machine photographs", ph_req:"Required", ph_opt:"Optional", ph_take:"Take", ph_retake:"Retake",
+    ph_title:"Machine photographs", ph_req:"Required", ph_opt:"Optional", ph_take:"Take", ph_retake:"Retake", ph_add:"Add another",
     ph_done:"{n} of {r} required photographs taken",
     ph_OVERVIEW:"Equipment overview", ph_OVERVIEW_h:"The whole machine in frame — not a close-up.",
     ph_LEFT:"Left side", ph_LEFT_h:"The whole left undercarriage, idler to sprocket.",
@@ -3918,8 +3918,8 @@ const I18N = {
   },
   ru:{ app_title:"Мониторинг состояния", net_online:"онлайн", net_offline:"офлайн — ОК",
     sec_inspection:"Осмотр", hdr_change:"Изменить",
-    lose_t:"Оставить начатый осмотр?", lose_m:"{u} · {r}: записано точек — {n}, осмотр ещё не сохранён. Если открыть сохранённый осмотр, начатый будет удалён.",
-    lose_go:"Удалить и открыть", lose_stay:"Продолжить осмотр",
+    lose_t:"Оставить начатый осмотр?", lose_m:"{u} · {r}: записано точек — {n}, осмотр ещё не сохранён. Если продолжить, он будет удалён.",
+    lose_go:"Удалить и продолжить", lose_stay:"Продолжить осмотр",
     res_t:"Продолжить начатое?",
     res_m:"{u} · {r} — замеров: {n}, дата {d}, ещё не сохранено.",
     res_go:"Продолжить", res_discard:"Удалить черновик",
@@ -4052,7 +4052,7 @@ const I18N = {
     req_notify:"отметку об уведомлении", req_why:"причину оценки ниже предложенной 5",
     m_need_grade_t:"Для «{g}» нужна не только оценка",
     m_need_grade_m:"{k} оценено как {g}, поэтому нужно указать: {x}. По находке без дефекта и действия планирование работать не может.",
-    ph_title:"Фотографии машины", ph_req:"Обязательно", ph_opt:"По желанию", ph_take:"Снять", ph_retake:"Переснять",
+    ph_title:"Фотографии машины", ph_req:"Обязательно", ph_opt:"По желанию", ph_take:"Снять", ph_retake:"Переснять", ph_add:"Добавить ещё",
     ph_done:"Снято {n} из {r} обязательных",
     ph_OVERVIEW:"Общий вид машины", ph_OVERVIEW_h:"Вся машина в кадре — не крупный план.",
     ph_LEFT:"Левая сторона", ph_LEFT_h:"Вся левая ходовая, от натяжного колеса до звёздочки.",
@@ -5739,6 +5739,17 @@ async function dbDel(id){ const d=await idb(); return new Promise((res,rej)=>{ c
 /* ===================== class + type + component chips ===================== */
 function fillClassSel(){ $("classBtn").textContent = eqCat==="ALL"
   ? `${t("opt_all_equip")} (${ASSETS.length})` : `${eqCat} (${CAT_COUNT[eqCat]||0})`; }
+/* A ROUND IN PROGRESS IS NOT THROWN AWAY BY ONE TAP. Choosing another round
+   type, class or machine - from the lists, a Due row or a scanned label -
+   and opening a saved round all start from an empty form, and each used to
+   empty it without a word. Asked once, at the tap; the functions underneath
+   (selectEquip, selectCat, the type list's own change) stay as they were. */
+function roundInHand(){ return (!editing && curEquip) ? Object.values(draft.positions||{}).filter(hasData).length : 0; }
+async function leaveRoundOk(){
+  const n=roundInHand(); if(!n) return true;
+  return !!(await ask(t("lose_t"), t("lose_m",{u:curEquip, r:t("type_"+type), n}), t("lose_go"), true, t("lose_stay")));
+}
+let leaveAsked=false;     /* true while a switch the inspector has confirmed is being applied */
 function selectCat(c){ eqCat=c; lsSet("equip_cat",eqCat);
   eqClass = eqCat==="ALL" ? "GEN" : classForCat(eqCat); lsSet("equip_class",eqClass);
   curEquip=""; updateEquipBtn(); draft={positions:{}}; editing=null; curItem=""; applyForm(); setEditing(null); }
@@ -5751,7 +5762,14 @@ function fillTypeSel(){ $("typeSel").innerHTML=TYPE_ORDER.map(k=>`<option value=
      to the round type that was chosen before. */
   +`<option value="FIR">FIR · ${t("type_FIR")}</option>`; $("typeSel").value=type; }
 $("typeSel").onchange=(e)=>{ if(e.target.value==="FIR"){ e.target.value=type; firOpen(); return; }
-  type=e.target.value; lsSet("insp_type",type);
+  const v=e.target.value;
+  if(v!==type && !leaveAsked && roundInHand()){
+    e.target.value=type;                       // the list shows the round still in hand until the answer
+    leaveRoundOk().then(ok=>{ if(!ok) return; leaveAsked=true;
+      try{ e.target.value=v; e.target.dispatchEvent(new Event("change")); } finally{ leaveAsked=false; } });
+    return;
+  }
+  type=v; lsSet("insp_type",type);
   draft={positions:{}}; editing=null; curItem=""; applyForm(); setEditing(null); };
 function renderChips(){ const tr=currentTree();
   try{ renderMachinePhotos(); }catch(e){}
@@ -6552,6 +6570,11 @@ async function takeMachinePhoto(cat){
   /* Found AFTER the wait (the entry is deleted when its last photograph is
      removed meanwhile), and a list that is full says so, as addPicked does. */
   const p=(draft.positions[GEN_KEY] ||= {});
+  /* RETAKE REPLACES. A slot (overview, left, right, tray, GET, plate) shows
+     one photograph and its button says Retake - which added a second one,
+     left the first as the thumbnail and sent both. "Additional" is the one
+     list: it keeps every photograph and shows them all. */
+  if(cat!=="EXTRA"){ const old=genPhotos(draft,cat); if(old.length) p.photos=(p.photos||[]).filter(x=>old.indexOf(x)<0); }
   const took=addPos(p, got.att, cat);
   renderMachinePhotos(); draftFlush();
   if(took===false){ dlg([t("gal_full_t"), t("gal_full_b",{n:1, p:MAX_PHOTOS})]); return; }
@@ -6575,6 +6598,14 @@ function renderMachinePhotos(){
   box.innerHTML=slots.map(s=>{
     const ph=genPhotos(draft,s.cat);
     if(s.req){ need++; if(ph.length) have++; }
+    if(s.cat==="EXTRA" && ph.length){
+      /* Every additional photograph on a row of its own, then the row that adds another. */
+      return ph.map((b,i)=>`<div class="mprow" data-cat="EXTRA" data-i="${i}"><img src="${mpPool.url(b)}" alt="${esc(photoCatLabel("EXTRA"))} ${i+1}">
+      <div class="mpt"><b>${esc(photoCatLabel("EXTRA"))} ${i+1}</b><span class="has">✓</span></div>
+      <button type="button" class="mdel2" data-drop="EXTRA" data-di="${i}" aria-label="${esc(t("media_del"))}">✕</button></div>`).join("")
+        + `<div class="mprow" data-cat="EXTRA" data-i="-1"><div class="mpt"><b>${esc(photoCatLabel("EXTRA"))}</b><span>${esc(t("ph_opt"))}</span></div>
+      <button type="button" class="mpb" data-take="EXTRA">${esc(t("ph_add"))}</button></div>`;
+    }
     const img=ph[0]?`<img src="${mpPool.url(ph[0])}" alt="${esc(photoCatLabel(s.cat))}">`:"";
     const st = ph.length ? `<span class="has">✓</span>`
              : s.req ? `<span class="req">${esc(t("ph_req"))}</span>` : `<span>${esc(t("ph_opt"))}</span>`;
@@ -6585,11 +6616,11 @@ function renderMachinePhotos(){
     </div>`; }).join("");
   const c=$("mpCount"); if(c){ c.textContent=t("ph_done",{n:have,r:need}); c.classList.toggle("miss", have<need); }
   box.querySelectorAll(".mprow img").forEach(img=>{
-    const cat=img.closest(".mprow").dataset.cat;
-    attachThumbRetry(img, genPhotos(draft,cat)[0], mpPool, ()=>markThumbUnreadableHere(img));
+    const row=img.closest(".mprow"), cat=row.dataset.cat;
+    attachThumbRetry(img, genPhotos(draft,cat)[Number(row.dataset.i)||0], mpPool, ()=>markThumbUnreadableHere(img));
   });
   box.querySelectorAll("[data-take]").forEach(b=>b.onclick=guard(()=>takeMachinePhoto(b.dataset.take)));
-  box.querySelectorAll("[data-drop]").forEach(b=>b.onclick=()=>dropMachinePhoto(b.dataset.drop,0));
+  box.querySelectorAll("[data-drop]").forEach(b=>b.onclick=()=>dropMachinePhoto(b.dataset.drop,Number(b.dataset.di)||0));
   /* ONCE THE ROUND HAS THE PHOTOGRAPHS IT OWES, THE LIST FOLDS ITSELF. Five
      rows of thumbnails and buttons stay open for the whole round otherwise,
      at the top of the step, above the fields still being filled in — and
@@ -9162,10 +9193,13 @@ $("detectBtn").onclick=()=>openPicker("detect");
 $("pickSearch").oninput=(e)=>renderPickList(e.target.value);
 $("pickCancel").onclick=closePicker;
 $("pickList").onclick=(e)=>{ const b=e.target.closest(".pickitem"); if(!b) return; const k=b.dataset.k;
-  if(pickMode==="cat"){ selectCat(k); closePicker(); return; }
+  if(pickMode==="cat"){ closePicker(); if(!roundInHand()) selectCat(k); else leaveRoundOk().then(ok=>{ if(ok) selectCat(k); }); return; }
   if(pickMode==="equip"){
     if(k==="__addhint__"){ $("pickSearch").focus(); return; }   // it is a prompt, not a choice
-    selectEquip(k==="__custom__" ? $("pickSearch").value : k); closePicker(); return; }
+    const v=(k==="__custom__" ? $("pickSearch").value : k); closePicker();
+    if(roundInHand() && String(v||"").trim().toUpperCase().replace(/\s+/g,"")===curEquip) return;     // the machine already in hand
+    if(!roundInHand()) selectEquip(v); else leaveRoundOk().then(ok=>{ if(ok) selectEquip(v); });
+    return; }
   if(pickMode==="item"){ saveCur(); curItem=k; closePicker(); renderChips(); loadPos(); return; }
   if(k==="__all__"){ showAllDefects=true; renderPickList($("pickSearch").value); return; }
   if(k==="__more__"){ showAllCauses=true; renderPickList($("pickSearch").value); return; }
@@ -11182,10 +11216,16 @@ function renderDueCm(){
       }).join("")}
     </div>`;
   }).join("");
-  box.querySelectorAll("[data-u]").forEach(b=>b.onclick=()=>{
+  box.querySelectorAll("[data-u]").forEach(b=>b.onclick=async()=>{
     const sel=$("typeSel");
-    if(b.dataset.t && sel && sel.value!==b.dataset.t){ sel.value=b.dataset.t; sel.dispatchEvent(new Event("change")); }
-    selectEquip(b.dataset.u); showPane("paneCapture"); });
+    /* The row of the round already in hand opens it; any other asks first. */
+    if(roundInHand() && b.dataset.u===curEquip && (!b.dataset.t || b.dataset.t===type)){ showPane("paneCapture"); return; }
+    if(roundInHand() && !(await leaveRoundOk())) return;
+    leaveAsked=true;
+    try{
+      if(b.dataset.t && sel && sel.value!==b.dataset.t){ sel.value=b.dataset.t; sel.dispatchEvent(new Event("change")); }
+      selectEquip(b.dataset.u); showPane("paneCapture");
+    } finally{ leaveAsked=false; } });
   box.querySelectorAll("[data-f]").forEach(b=>b.onclick=()=>dueNotDoing(b.dataset.ft,b.dataset.f,b.dataset.fp));
 }
 /* THIS PHONE'S OWN RELEASES — "how many RTW is done", asked for by name.
@@ -11743,14 +11783,17 @@ async function rtwOpenForEdit(rec){
   const items={};
   RTW_ITEMS.forEach(def=>{
     const p=(rec.positions||{})[def.no]||{};
-    items[def.no]={ mark:p.mark||null, comment:p.comment||"", photos:(p.photos||[]).slice() };
+    /* The manifest comes in with the photographs (and goes back out at Save):
+       without it an edit re-numbered every file, and after a photograph was
+       removed the last old file stayed on the server as a duplicate. */
+    items[def.no]={ mark:p.mark||null, comment:p.comment||"", photos:(p.photos||[]).slice(), att:(p.att&&typeof p.att==="object")?p.att:null };
   });
   const gen=(rec.positions||{})[GEN_KEY]||{};
   rtwDraft={ wo:rec.rtwWo||"", equip:rec.equip||"", cls:rec.cls||"",
     component:"", priority:rec.rtwWoPriority||"", date:rec.date||todayISO(), time:rec.rtwTime||nowHHMM(),
     woType:rec.rtwWoType||"", woHours:(rec.rtwSchedHours!=null?rec.rtwSchedHours:null), woPlan:rec.rtwSchedDate||"",
     items, sup:rec.sup||"", result:rec.rtwResult||"R", overallComment:rec.rtwComment||"", released:false,
-    general:{ photos:(gen.photos||[]).slice(), comment:gen.comment||"" } };
+    general:{ photos:(gen.photos||[]).slice(), comment:gen.comment||"", att:(gen.att&&typeof gen.att==="object")?gen.att:null } };
   rtwExpanded=new Set(Object.keys(items).filter(no=>items[no].mark==="attention"));
   $("rtwOv").classList.remove("hidden");
   $("rtwChecklistScr").classList.remove("hidden");
@@ -12063,9 +12106,11 @@ async function rtwSave(){
     RTW_ITEMS.forEach(def=>{
       const it=d.items[def.no];
       rec.positions[def.no]={ mark:it.mark||null, comment:(it.comment||"").trim(), photos:(it.photos||[]).slice() };
+      if(it.att && typeof it.att==="object") rec.positions[def.no].att=it.att;
     });
     if((d.general.photos||[]).length || (d.general.comment||"").trim()){
       rec.positions[GEN_KEY]={ comment:(d.general.comment||"").trim(), photos:(d.general.photos||[]).slice() };
+      if(d.general.att && typeof d.general.att==="object") rec.positions[GEN_KEY].att=d.general.att;
     }
     /* From here down: the identical tail every round type's Save handler
        runs (mobile/index.html's $("saveBtn").onclick) — reArmForSave,
@@ -14549,10 +14594,7 @@ async function renderPending(){
       /* A tap on a saved row replaced a round in progress with no question:
          thirty photographs into a machine, a look at an earlier round, and
          the one being walked was gone. Asked first. */
-      if(!editing && curEquip){
-        const nIn=Object.values(draft.positions||{}).filter(hasData).length;
-        if(nIn && !(await ask(t("lose_t"), t("lose_m",{u:curEquip, r:t("type_"+type), n:nIn}), t("lose_go"), true, t("lose_stay")))) return;
-      }
+      if(!(await leaveRoundOk())) return;
       let use=rec;
       try{ const cur=await dbGet(rec.id); if(cur) use=cur; }catch(e){ bad("edit-reread",e); }
       try{ await reArmForSave(use); }catch(e){ bad("edit-detach",e); }
@@ -15693,7 +15735,10 @@ function onScanned(text){
     return true;
   }
   const u=extractUnit(text); if(!u) return false;
-  selectEquip(u); stopScan(); return true;
+  stopScan();
+  if(u===curEquip && roundInHand()) return true;            // the label of the machine already in hand
+  if(!roundInHand()) selectEquip(u); else leaveRoundOk().then(ok=>{ if(ok) selectEquip(u); });
+  return true;
 }
 function extractUnit(text){ if(!text) return null; const m=String(text).match(/([A-Za-z]{1,4}\s?\d+)/); return m?m[1].toUpperCase().replace(/\s+/g,""):String(text).trim().toUpperCase(); }
 async function startScan(){ if(!await needScan()){ dlg(t("m_lib_scan")); return; }
@@ -15834,7 +15879,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="614";
+const BUILD="615";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
