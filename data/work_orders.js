@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-13T15:37:43+00:00",
+  "generated": "2026-11-13T15:52:44+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -5722,24 +5722,63 @@ window.CM_WO_DATA = {
       "system": "EX023.CH.BUC (Bucket / Ковш)",
       "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
       "descr": "Утеря фиксатора коронки",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022533"
     },
     {
-      "asset": "TK097",
-      "defect": "DD-00016850",
+      "asset": "EX015",
+      "defect": "DD-00016851",
       "raised": "2026-11-14",
-      "system": "TRUCK, WATER URAL 4672M1-20, TK097 HEAD LAMPS AND TAIL LIGHTS OldNumber (UT097)",
-      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
-      "descr": "Неисправность габаритного освещения. Индикация неисправности двигателя \"чек\".",
-      "status": "Registered",
+      "system": "EX015.CH.BUC (Bucket / Ковш)",
+      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "descr": "Обрыв меж адаптерной защиты",
+      "status": "Completed",
       "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": null
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022535"
+    },
+    {
+      "asset": "DZ001",
+      "defect": "DD-00016848",
+      "raised": "2026-11-14",
+      "system": "DZ001.CH.BL (Blade/Отвал)",
+      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
+      "descr": "Демонтаж ножей отвала при помощи сварочных работ",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Kiselev",
+      "regBy": "Киселев Алексей Александрович",
+      "wo": "WO-022532"
+    },
+    {
+      "asset": "GR013",
+      "defect": "DD-00016852",
+      "raised": "2026-11-14",
+      "system": "GR013.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "Не горит ближний свет",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022536"
+    },
+    {
+      "asset": "TK127",
+      "defect": "DD-00016853",
+      "raised": "2026-11-14",
+      "system": "TK127.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "Не горит габарит",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022537"
     },
     {
       "asset": "TK021",
@@ -5753,6 +5792,19 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-022529"
+    },
+    {
+      "asset": "TK029",
+      "defect": "DD-00016854",
+      "raised": "2026-11-14",
+      "system": "TK029.DRS.FUE.INJ Injectors / Форсунки",
+      "defectType": "3.13 Warning light / alarm active / Сигнальная лампа / аварийная сигнализация активна",
+      "descr": "Индикация неисправности двигателя \"check engine\"",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022538"
     },
     {
       "asset": "LD006",
@@ -5781,17 +5833,17 @@ window.CM_WO_DATA = {
       "wo": "WO-022527"
     },
     {
-      "asset": "DZ001",
-      "defect": "DD-00016848",
+      "asset": "TK097",
+      "defect": "DD-00016850",
       "raised": "2026-11-14",
-      "system": "DZ001.CH.BL (Blade/Отвал)",
-      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
-      "descr": "Демонтаж ножей отвала при помощи сварочных работ",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK097 HEAD LAMPS AND TAIL LIGHTS OldNumber (UT097)",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "Неисправность габаритного освещения. Индикация неисправности двигателя \"чек\".",
       "status": "Elimination scheduled",
       "priority": "P2 Urgent",
-      "by": "Aleksey Kiselev",
-      "regBy": "Киселев Алексей Александрович",
-      "wo": "WO-022532"
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022534"
     },
     {
       "asset": "BS009",
