@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-13T04:55:01+00:00",
+  "generated": "2026-11-13T05:23:14+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -16961,19 +16961,6 @@ window.CM_WO_DATA = {
       "wo": "WO-021262"
     },
     {
-      "asset": "CR008",
-      "defect": "DD-00015976",
-      "raised": "2026-10-30",
-      "system": "CR008.CONV.BEL (Conveyor Belt / Конвейерная лента)",
-      "defectType": "8.02 Conveyor belt mistracking / Смещение / увод конвейерной ленты",
-      "descr": "ленты конвеера смещены",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": "WO-021240"
-    },
-    {
       "asset": "TK123",
       "defect": "DD-00015948",
       "raised": "2026-10-30",
@@ -16985,6 +16972,19 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-021491"
+    },
+    {
+      "asset": "CR008",
+      "defect": "DD-00015976",
+      "raised": "2026-10-30",
+      "system": "CR008.CONV.BEL (Conveyor Belt / Конвейерная лента)",
+      "defectType": "8.02 Conveyor belt mistracking / Смещение / увод конвейерной ленты",
+      "descr": "ленты конвеера смещены",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-021240"
     },
     {
       "asset": "DZ021",
@@ -106260,7 +106260,7 @@ window.CM_WO_DATA = {
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "CRTD",
+      "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
       "planStart": "2026-11-16",
