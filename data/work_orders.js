@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-13T02:19:51+00:00",
+  "generated": "2026-11-13T02:47:45+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -11748,6 +11748,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021797"
     },
     {
+      "asset": "DZ016",
+      "defect": "DD-00016372",
+      "raised": "2026-11-05",
+      "system": "DZ016.CH.UC (Undercarriage / Ходовая часть)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Износ опорных катков 2 шт.",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-021888"
+    },
+    {
       "asset": "TK092",
       "defect": "DD-00016346",
       "raised": "2026-11-05",
@@ -11824,19 +11837,6 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": null
-    },
-    {
-      "asset": "DZ016",
-      "defect": "DD-00016372",
-      "raised": "2026-11-05",
-      "system": "DZ016.CH.UC (Undercarriage / Ходовая часть)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Износ опорных катков 2 шт.",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": "WO-021888"
     },
     {
       "asset": "DZ001",
