@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-13T23:18:03+00:00",
+  "generated": "2026-11-13T23:32:51+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -370,6 +370,20 @@
           "MP"
         ],
         "plan": "2026-11-23",
+        "priority": "P3 Planned (PM)"
+      }
+    ],
+    "TK041": [
+      {
+        "wo": "WO-022308",
+        "hours": 4000,
+        "types": [
+          "FC",
+          "INSP",
+          "MP",
+          "TB"
+        ],
+        "plan": "2026-11-20",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -2721,6 +2735,24 @@
       "completed": ""
     },
     {
+      "wo": "WO-022308",
+      "equip": "TK041",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Filter Cut / General Inspection / Magnetic Plug / Dump Body Liner",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-20",
+      "type": "4000 Hours service Planned",
+      "hours": 4000,
+      "plan": "2026-11-20",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-021932",
       "equip": "TK105",
       "cls": "AT",
@@ -2820,6 +2852,24 @@
       "raised": "2026-11-19",
       "type": "500 Hours service Planned",
       "hours": 500,
+      "plan": "2026-11-19",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-022320",
+      "equip": "LS054",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-19",
+      "type": "250 Hours service Planned",
+      "hours": 250,
       "plan": "2026-11-19",
       "status": "Elimination scheduled",
       "request": "",
@@ -31017,6 +31067,14 @@
       "x": "Замена щеток стеклоочистителя"
     },
     {
+      "d": "DD-00016867",
+      "u": "TK032",
+      "s": "TK032 65201 KAMAZ",
+      "p": "P4",
+      "r": "2026-11-14",
+      "x": "Диагностика передней подвески, р/у, замена амотризаторов"
+    },
+    {
       "d": "DD-00016866",
       "u": "TK035",
       "s": "TK035.ELS.WH (Wiring Harness / Жгут проводов)",
@@ -31039,6 +31097,22 @@
       "p": "P4",
       "r": "2026-11-14",
       "x": "Необходима замена рулевой тяги"
+    },
+    {
+      "d": "DD-00016869",
+      "u": "EX008",
+      "s": "EX008.DRS.COO.RAD (Radiator / Радиатор)",
+      "p": "P4",
+      "r": "2026-11-14",
+      "x": "продувка радиатора ОЖ"
+    },
+    {
+      "d": "DD-00016868",
+      "u": "EX006",
+      "s": "EX006.OC.GL (Glass / Стекла)",
+      "p": "P4",
+      "r": "2026-11-14",
+      "x": "замена правого зеркала"
     },
     {
       "d": "DD-00016863",

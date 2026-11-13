@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-13T23:18:03+00:00",
+  "generated": "2026-11-13T23:32:51+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -5807,6 +5807,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022542"
     },
     {
+      "asset": "TK032",
+      "defect": "DD-00016867",
+      "raised": "2026-11-14",
+      "system": "TK032 65201 KAMAZ",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Диагностика передней подвески, р/у, замена амотризаторов",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
       "asset": "TK035",
       "defect": "DD-00016866",
       "raised": "2026-11-14",
@@ -5839,6 +5852,32 @@ window.CM_WO_DATA = {
       "system": "TK005.SS.RE (Tie Rod Ends / Наконечники рулевых тяг)",
       "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
       "descr": "Необходима замена рулевой тяги",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "EX008",
+      "defect": "DD-00016869",
+      "raised": "2026-11-14",
+      "system": "EX008.DRS.COO.RAD (Radiator / Радиатор)",
+      "defectType": "1.02 Overheating / high temperature Перегрев / высокая температура",
+      "descr": "продувка радиатора ОЖ",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "EX006",
+      "defect": "DD-00016868",
+      "raised": "2026-11-14",
+      "system": "EX006.OC.GL (Glass / Стекла)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "замена правого зеркала",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -84600,7 +84639,7 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "CRTD",
+      "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
       "planStart": "2026-11-20",
@@ -108621,7 +108660,7 @@ window.CM_WO_DATA = {
       "cmLabel": "500h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "CRTD",
+      "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
       "planStart": "2026-11-20",
@@ -147587,6 +147626,25 @@ window.CM_WO_DATA = {
       "actualEnd": null
     },
     {
+      "equip": "LS054",
+      "cls": "GEN",
+      "woNumber": "WO-022320",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "250h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-19",
+      "planStartDt": "2026-11-19T00:00:00",
+      "planEnd": "2026-11-19",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
       "equip": "LS058",
       "cls": "GEN",
       "woNumber": "GD-003206",
@@ -155992,6 +156050,30 @@ window.CM_WO_DATA = {
       "actualStart": "2026-10-25",
       "actualStartDt": "2026-10-25T07:00:00",
       "actualEnd": "2026-10-25"
+    },
+    {
+      "equip": "TK041",
+      "cls": "HT",
+      "woNumber": "WO-022308",
+      "maintType": "4000 Hours service Planned",
+      "hours": 4000,
+      "cmLabel": "Filter Cut / General Inspection / Magnetic Plug / Dump Body Liner",
+      "cmTypes": [
+        "FC",
+        "INSP",
+        "MP",
+        "TB"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-20",
+      "planStartDt": "2026-11-20T00:00:00",
+      "planEnd": "2026-11-20",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
     },
     {
       "equip": "TK042",
