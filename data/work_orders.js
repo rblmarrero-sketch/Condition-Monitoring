@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-13T04:32:56+00:00",
+  "generated": "2026-11-13T04:55:01+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -5433,7 +5433,7 @@ window.CM_WO_DATA = {
       "raised": "2026-08-06",
       "detected": "2026-08-06",
       "planStart": "2026-11-09",
-      "closed": null,
+      "closed": "2026-11-11",
       "asset": "DZ002",
       "defect": "DD-00010354",
       "requestNo": "DD-00010354",
@@ -5444,7 +5444,7 @@ window.CM_WO_DATA = {
       "cause": "Износ зацепления",
       "causeFrom": "wo",
       "descr": "Разбиты ШСЛ и разбит центральный палец балансирной балки",
-      "status": "Registered",
+      "status": "Completed",
       "by": "Zhomart",
       "byFull": "Zhomart Khasenov",
       "regBy": "Хасенов Жомарт",
@@ -5805,6 +5805,19 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-022493"
+    },
+    {
+      "asset": "EX016",
+      "defect": "DD-00016815",
+      "raised": "2026-11-13",
+      "system": "EX016.CH.BUC (Bucket / Ковш)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Замена коронки",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022505"
     },
     {
       "asset": "TK039",
@@ -6275,32 +6288,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022469"
     },
     {
-      "asset": "TK143",
-      "defect": "DD-00016753",
-      "raised": "2026-11-12",
-      "system": "TK143.ELS.WH (Wiring Harness / Жгут проводов)",
-      "defectType": "4.02 Open circuit / Разрыв цепи",
-      "descr": "не регулируется опускание кузова",
-      "status": "Completed",
-      "priority": "P2 Urgent",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": "WO-022461"
-    },
-    {
-      "asset": "DZ008",
-      "defect": "DD-00016768",
-      "raised": "2026-11-12",
-      "system": "DZ008.DRS.COO.RAD (Radiator / Радиатор)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка антифриза по патрубку радиатора",
-      "status": "Completed",
-      "priority": "P2 Urgent",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": "WO-022468"
-    },
-    {
       "asset": "BS015",
       "defect": "DD-00016741",
       "raised": "2026-11-12",
@@ -6338,6 +6325,45 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022455"
+    },
+    {
+      "asset": "TK143",
+      "defect": "DD-00016753",
+      "raised": "2026-11-12",
+      "system": "TK143.ELS.WH (Wiring Harness / Жгут проводов)",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "не регулируется опускание кузова",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-022461"
+    },
+    {
+      "asset": "EX019",
+      "defect": "DD-00016761",
+      "raised": "2026-11-12",
+      "system": "EX019.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Замена шланга гидромолота",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022463"
+    },
+    {
+      "asset": "DZ008",
+      "defect": "DD-00016768",
+      "raised": "2026-11-12",
+      "system": "DZ008.DRS.COO.RAD (Radiator / Радиатор)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка антифриза по патрубку радиатора",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-022468"
     },
     {
       "asset": "LS057",
@@ -6637,19 +6663,6 @@ window.CM_WO_DATA = {
       "by": "Aleksey Dobrikov",
       "regBy": "Добриков Алексей Владимирович",
       "wo": "WO-022470"
-    },
-    {
-      "asset": "EX019",
-      "defect": "DD-00016761",
-      "raised": "2026-11-12",
-      "system": "EX019.HS.DL (Hydraulic Lines / Гидролинии)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Замена шланга гидромолота",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022463"
     },
     {
       "asset": "BS015",
@@ -32902,7 +32915,7 @@ window.CM_WO_DATA = {
       "asset": "DZ021",
       "defect": "DD-00014588",
       "raised": "2026-10-12",
-      "system": "Бульдозер гусеничный SHANTUI SD60-C5 VIN CHSDA60AKSC000312/Dozer track Shantui SD60-C5",
+      "system": "DZ021 SD60-C5 SHANTUI",
       "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
       "descr": "Не исправность автономного отопителя",
       "status": "Registered",
@@ -57807,6 +57820,19 @@ window.CM_WO_DATA = {
       "wo": "WO-015456"
     },
     {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
+      "wo": null
+    },
+    {
       "asset": "TK046",
       "defect": "DD-00011270",
       "raised": "2026-08-21",
@@ -57895,19 +57921,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
@@ -58273,19 +58286,6 @@ window.CM_WO_DATA = {
       "by": null,
       "regBy": "Кунсбаев Ратмир Ахсанович",
       "wo": null
-    },
-    {
-      "asset": "LV065",
-      "defect": "DD-00011029",
-      "raised": "2026-08-17",
-      "system": "LV065.CH.SU (Suspension / Подвеска)",
-      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
-      "descr": "Ослабло крепление подкрылка (левое заднее колесо)",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-020539"
     },
     {
       "asset": "DZ018",
