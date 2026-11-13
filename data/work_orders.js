@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-13T11:42:51+00:00",
+  "generated": "2026-11-13T11:57:42+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -5989,6 +5989,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022523"
     },
     {
+      "asset": "DZ021",
+      "defect": "DD-00016840",
+      "raised": "2026-11-13",
+      "system": "DZ021.CH.RP (Ripper/Рыхлитель)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Износ коронки",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022524"
+    },
+    {
       "asset": "TK104",
       "defect": "DD-00016795",
       "raised": "2026-11-13",
@@ -5997,6 +6010,19 @@ window.CM_WO_DATA = {
       "descr": "Утечка по РВД трансмиссионых филтров",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": null
+    },
+    {
+      "asset": "LD001",
+      "defect": "DD-00016841",
+      "raised": "2026-11-13",
+      "system": "LD001.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "Замена лампы",
+      "status": "Registered",
+      "priority": "P2 Urgent",
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": null
@@ -6090,19 +6116,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": null
-    },
-    {
-      "asset": "DZ021",
-      "defect": "DD-00016840",
-      "raised": "2026-11-13",
-      "system": "DZ021.CH.RP (Ripper/Рыхлитель)",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "Износ коронки",
-      "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
       "wo": null
     },
     {
@@ -6247,6 +6260,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022506"
+    },
+    {
+      "asset": "CR003",
+      "defect": "DD-00016842",
+      "raised": "2026-11-13",
+      "system": "CR003.HS (Hydraulic System / Гидравлическая система)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "утечка с гидравлического фильтра",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Murashko",
+      "regBy": "Мурашко Сергей Борисович",
+      "wo": "WO-022525"
     },
     {
       "asset": "CR005",
@@ -12684,6 +12710,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021835"
     },
     {
+      "asset": "TK038",
+      "defect": "DD-00016296",
+      "raised": "2026-11-04",
+      "system": "TK038.BS.RV (Retarder Valve / Клапан ретардера)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Не работает горный тормоз",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-021713"
+    },
+    {
       "asset": "SR001",
       "defect": "DD-00016298",
       "raised": "2026-11-04",
@@ -12955,19 +12994,6 @@ window.CM_WO_DATA = {
       "by": "Evgeniy Frolin",
       "regBy": "Фролин Евгений Владимирович",
       "wo": "WO-021708"
-    },
-    {
-      "asset": "TK038",
-      "defect": "DD-00016296",
-      "raised": "2026-11-04",
-      "system": "TK038.BS.RV (Retarder Valve / Клапан ретардера)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Не работает горный тормоз",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Roman Besedovskiy",
-      "regBy": "Беседовский Роман Иванович",
-      "wo": "WO-021713"
     },
     {
       "asset": "DZ017",
@@ -14153,6 +14179,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021468"
     },
     {
+      "asset": "TK085",
+      "defect": "DD-00016163",
+      "raised": "2026-11-02",
+      "system": "TK085.DRS.CLU (Clutch / Сцепление)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Разбита кулиса + пропадает сцепление",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-021476"
+    },
+    {
       "asset": "TK038",
       "defect": "DD-00016185",
       "raised": "2026-11-02",
@@ -14541,19 +14580,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Nazmutdinov",
       "regBy": "Назмутдинов Сергей Зуфарович",
       "wo": "WO-021566"
-    },
-    {
-      "asset": "TK085",
-      "defect": "DD-00016163",
-      "raised": "2026-11-02",
-      "system": "TK085.DRS.CLU (Clutch / Сцепление)",
-      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
-      "descr": "Разбита кулиса + пропадает сцепление",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Roman Besedovskiy",
-      "regBy": "Беседовский Роман Иванович",
-      "wo": "WO-021476"
     },
     {
       "asset": "DZ007",
