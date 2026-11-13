@@ -5425,6 +5425,21 @@ reports of 10-12.11 read as an editor. `tests/sweep614.cjs` holds the new rules.
 - **Not done, known:** "Retake" on a machine photograph adds a photograph (the first stays the thumbnail); changing
   type or machine mid-round still discards the draft without a question; an RTW edit rebuilds its attachment manifest.
 
+
+**EVERY TABLE SCROLLED PAST KEEPS ITS HEADING UNDER THE PINNED BARS, IN THE SITE'S NAVY (build 615, CM_TBL_V1, Rickie 13.11.2026
+13:40 "ensure that this bug is not happening in other tables. keep it as a check and rule", 13:44 "fast track the Table
+standardization").** On Assets Down the register heading stopped too low under the page's own pinned bar; checked here with the
+site template's held-header audit, every long table on both office pages under /cm/ was worse: the headings are `position:sticky`
+inside a box that scrolls sideways, where sticky cannot work, so they scrolled away under the filter bar (Actions, Inspection
+Schedule, Plan vs Actual, Defects raised, Failure Analysis), and where sticky did work it stuck at 0, under the 63 px bar.
+`#cmTblJs` (end of both pages, identical, only under `html.cmStd`): a table with no scrolling box around it gets its sticky `top` at
+the bottom of the pinned bars; a table inside one has its heading moved down by the distance it was scrolled past (the site
+template's v2.7 method, `cmHeld`); a card table (`ascards`) is left alone. `#cmTblCss`: headings navy `#2B4C7E` with white text, the
+column-filter row white, both solid. Off the site nothing changes. `tests/cmheld.cjs` runs the template's own audit
+(`tests/site_std_copy/held_audit.js`, site_std v2.7: every table scrolled past must have its heading directly under the pinned bars,
+not under them, not scrolled away, not lower, and solid) on every tab of both pages, and proves it can see by planting a see-through
+heading; on build 614 every long table on both pages fails it (grey heading, scrolled away or under the bar).
+
 ---
 
 ## Secrets
