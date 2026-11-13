@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-13T07:07:56+00:00",
+  "generated": "2026-11-13T07:22:33+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -18443,32 +18443,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "EX005",
-      "defect": "DD-00015815",
-      "raised": "2026-10-28",
-      "system": "EX005.HS.DL (Hydraulic Lines / Гидролинии)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Запотевание переходного РВД поворотного редуктора.",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "EX005",
-      "defect": "DD-00015814",
-      "raised": "2026-10-28",
-      "system": "EX005.HS.DL (Hydraulic Lines / Гидролинии)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "каплевидная утечка масла по соединению ДВС и гидромотора, устранение утечки",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
       "asset": "DZ021",
       "defect": "DD-00015821",
       "raised": "2026-10-28",
@@ -18480,6 +18454,32 @@ window.CM_WO_DATA = {
       "by": "Roman Kochetov",
       "regBy": "Кочетов Роман Иванович",
       "wo": null
+    },
+    {
+      "asset": "EX005",
+      "defect": "DD-00015814",
+      "raised": "2026-10-28",
+      "system": "EX005.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "каплевидная утечка масла по соединению ДВС и гидромотора, устранение утечки",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022376"
+    },
+    {
+      "asset": "EX005",
+      "defect": "DD-00015815",
+      "raised": "2026-10-28",
+      "system": "EX005.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Запотевание переходного РВД поворотного редуктора.",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022378"
     },
     {
       "asset": "EX004",
