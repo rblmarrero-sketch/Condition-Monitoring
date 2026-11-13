@@ -5447,6 +5447,15 @@ column-filter row white, both solid. Off the site nothing changes. `tests/cmheld
 not under them, not scrolled away, not lower, and solid) on every tab of both pages, and proves it can see by planting a see-through
 heading; on build 614 every long table on both pages fails it (grey heading, scrolled away or under the bar).
 
+**A HELD HEADING FOLLOWS ITS TABLE WHEN THE PAGE MOVES IT WITHOUT A SCROLL (build 617, Rickie 13.11.2026 16:12 "its floating").**
+Seen on Assets Down: the register heading sat about 280 px down, inside the rows. A heading moved down by `cmHeld` (and by the site
+template, `hold()` in std.js) was only repositioned on a scroll, a window resize or, here, a new element in `main`. When something
+above the table grew after the last scroll (a style or size change, not a new element), the table moved down and its heading kept
+the old offset. `#cmTblJs` now also runs on a size change of the page (`ResizeObserver` on the document) and once a second while a
+table is `cmHeld`. site_std v2.7.2 (askpi-site) makes the same change in the template. `tests/cmheld.cjs` moves a held table 300 px
+down with a margin (no scroll, no new element) and requires the heading to stay at the bars; on build 616 the heading sits 300 px
+below them. `tests/site_std_copy/held_audit.js` is v2.7.2: a heading painted with an opaque gradient counts as solid.
+
 **NCR FROM THE PHONE (build 616, CM_NCR_V1, Rickie 13.11.2026 "lets build").** The inspection type list ends with
 "NCR · Non-conformance (NCR)", after FIR. Like FIR it is not a round (`TYPE_META.NCR.ncr`): choosing it opens `#ncrOv`
 and the list goes back. Two ways in: an NCR already in PECHANKA's NCR register (`SCHED.ncrList`, written into

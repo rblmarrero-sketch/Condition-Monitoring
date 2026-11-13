@@ -39,6 +39,12 @@ const srv = http.createServer((q, r) => { const u = decodeURIComponent(q.url.spl
     const pl = await p.evaluate(() => { const t = [...document.querySelectorAll('main table.grid')].find(t => t.offsetParent && t.tHead); scrollTo(0, scrollY + t.getBoundingClientRect().top + 300); dispatchEvent(new Event('scroll'));
       return new Promise(r => setTimeout(() => { t.tHead.rows[0].cells[1].style.setProperty('opacity', '.5', 'important'); const a = __stdHeldAudit(); t.tHead.rows[0].cells[1].style.removeProperty('opacity'); r(a.bad.length); }, 300)); });
     ok(`${file}: the audit sees a planted see-through heading`, pl >= 1, pl);
+    /* build 617: the page moves the table down WITHOUT a scroll (no scroll event, no new element): the heading follows, it does not float */
+    const fl = await p.evaluate(() => { const de = document.documentElement; de.style.overflowAnchor = 'none'; const t = [...document.querySelectorAll('main table.grid')].find(t => t.offsetParent && t.tHead);
+      scrollTo(0, scrollY + t.getBoundingClientRect().top + 300); dispatchEvent(new Event('scroll'));
+      return new Promise(r => setTimeout(() => { t.style.marginTop = '300px'; setTimeout(() => { const a = __stdHeldAudit(), top = Math.round(t.tHead.rows[0].cells[0].getBoundingClientRect().top);
+        t.style.marginTop = ''; de.style.overflowAnchor = ''; r({ bad: a.bad.filter(x => /px (under|below)/.test(x)), top, bars: a.barsEnd }); }, 1300); }, 400)); });
+    ok(`${file}: content above a held table grows without a scroll - its heading follows (the 16:12 "floating" bug)`, !fl.bad.length && Math.abs(fl.top - fl.bars) <= 3, `heading ${fl.top}, bars end ${fl.bars}${fl.bad.length ? ' · ' + fl.bad.join('; ') : ''}`);
     ok(`${file}: no page errors`, !errs.length, errs.slice(0, 2).join(' | '));
     await ctx.close(); }
   ok('long tables measured', n >= 10, n);
