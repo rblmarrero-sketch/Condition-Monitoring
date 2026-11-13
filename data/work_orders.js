@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-13T02:50:52+00:00",
+  "generated": "2026-11-13T03:02:50+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -5885,6 +5885,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022481"
     },
     {
+      "asset": "TK103",
+      "defect": "DD-00016806",
+      "raised": "2026-11-13",
+      "system": "TK103.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.06 Deformation / bending / buckling Деформация / изгиб / коробление",
+      "descr": "неисправность карданного вала",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-022496"
+    },
+    {
       "asset": "CR005",
       "defect": "DD-00016807",
       "raised": "2026-11-13",
@@ -5948,19 +5961,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022498"
-    },
-    {
-      "asset": "TK103",
-      "defect": "DD-00016806",
-      "raised": "2026-11-13",
-      "system": "TK103.DRS.AXL (Axles / Мосты)",
-      "defectType": "1.06 Deformation / bending / buckling Деформация / изгиб / коробление",
-      "descr": "неисправность карданного вала",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": "WO-022496"
     },
     {
       "asset": "TK035",
@@ -16623,6 +16623,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021208"
     },
     {
+      "asset": "TK122",
+      "defect": "DD-00015988",
+      "raised": "2026-10-30",
+      "system": "TK122.SS.CYL (Steering Cylinders / Рулевые цилиндры)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Люфт соединения",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-021487"
+    },
+    {
       "asset": "DZ018",
       "defect": "DD-00015945",
       "raised": "2026-10-30",
@@ -16842,19 +16855,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Murashko",
       "regBy": "Мурашко Сергей Борисович",
       "wo": "WO-021248"
-    },
-    {
-      "asset": "TK122",
-      "defect": "DD-00015988",
-      "raised": "2026-10-30",
-      "system": "TK122.SS.CYL (Steering Cylinders / Рулевые цилиндры)",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "Люфт соединения",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": "WO-021487"
     },
     {
       "asset": "CR002",
@@ -18885,6 +18885,19 @@ window.CM_WO_DATA = {
       "wo": "WO-020928"
     },
     {
+      "asset": "TK122",
+      "defect": "DD-00015788",
+      "raised": "2026-10-27",
+      "system": "TK122.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка по хвостовику",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-021486"
+    },
+    {
       "asset": "TK106",
       "defect": "DD-00015745",
       "raised": "2026-10-27",
@@ -19026,19 +19039,6 @@ window.CM_WO_DATA = {
       "by": "Evgeniy Frolin",
       "regBy": "Фролин Евгений Владимирович",
       "wo": "WO-020867"
-    },
-    {
-      "asset": "TK122",
-      "defect": "DD-00015788",
-      "raised": "2026-10-27",
-      "system": "TK122.DRS.AXL (Axles / Мосты)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка по хвостовику",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": "WO-021486"
     },
     {
       "asset": "EX021",
@@ -25697,6 +25697,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021709"
     },
     {
+      "asset": "TK122",
+      "defect": "DD-00015222",
+      "raised": "2026-10-20",
+      "system": "TK122.DRS.FD (Final Drives / Конечные передачи)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь масла из редукторов конечной передачи передней оси L и R",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Evgeniy Frolin",
+      "regBy": "Фролин Евгений Владимирович",
+      "wo": "WO-021488"
+    },
+    {
       "asset": "TK007",
       "defect": "DD-00015230",
       "raised": "2026-10-20",
@@ -25864,19 +25877,6 @@ window.CM_WO_DATA = {
       "by": "Andrey Taran",
       "regBy": "Таран Андрей Андреевич",
       "wo": "WO-020321"
-    },
-    {
-      "asset": "TK122",
-      "defect": "DD-00015222",
-      "raised": "2026-10-20",
-      "system": "TK122.DRS.FD (Final Drives / Конечные передачи)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь масла из редукторов конечной передачи передней оси L и R",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Evgeniy Frolin",
-      "regBy": "Фролин Евгений Владимирович",
-      "wo": "WO-021488"
     },
     {
       "asset": "TK089",
@@ -129588,15 +129588,15 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CLSD",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-06",
       "planStartDt": "2026-11-06T00:00:00",
       "planEnd": "2026-11-06",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-06",
+      "actualStartDt": "2026-11-06T22:00:00",
+      "actualEnd": "2026-11-07"
     },
     {
       "equip": "GE110",
