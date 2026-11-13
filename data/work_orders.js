@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-13T12:45:32+00:00",
+  "generated": "2026-11-13T12:57:47+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -9174,6 +9174,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022158"
     },
     {
+      "asset": "CR006",
+      "defect": "DD-00016601",
+      "raised": "2026-11-09",
+      "system": "CR006.CH.CRS (Crusher Unit / Дробильный узел)",
+      "defectType": "7.05 Jaw crusher jaw die wear / Износ щеки щековой дробилки",
+      "descr": "износ неподвижной плиты дробления",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Murashko",
+      "regBy": "Мурашко Сергей Борисович",
+      "wo": "WO-022165"
+    },
+    {
       "asset": "GE109",
       "defect": "DD-00016586",
       "raised": "2026-11-09",
@@ -9406,19 +9419,6 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-022192"
-    },
-    {
-      "asset": "CR006",
-      "defect": "DD-00016601",
-      "raised": "2026-11-09",
-      "system": "CR006.CH.CRS (Crusher Unit / Дробильный узел)",
-      "defectType": "7.05 Jaw crusher jaw die wear / Износ щеки щековой дробилки",
-      "descr": "износ неподвижной плиты дробления",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Murashko",
-      "regBy": "Мурашко Сергей Борисович",
-      "wo": "WO-022165"
     },
     {
       "asset": "CR006",
