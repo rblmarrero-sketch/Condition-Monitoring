@@ -83,6 +83,7 @@ version that runs this automatically and commits the refreshed file.
 """
 import io
 import json
+import os
 import re
 import sys
 import urllib.request
@@ -523,6 +524,36 @@ def _completed_recently(date_iso, as_of, window_days):
 # openpyxl/network dependencies the rest of this script needs (see
 # tests/rtwopen.py).
 FIR_DAYS = 60   # CM_FIR_V1: a defect raised in the last FIR_DAYS can be picked for a FIR on the phone
+
+
+NCR_PHONE = os.environ.get("NCR_PHONE", "/opt/askpi-auto/ncr/data/phone.json")
+
+
+def build_ncr_list(path=None):
+    """CM_NCR_V1: the NCRs still open in PECHANKA's NCR register, for the phone's NCR sheet.
+
+    ncr_kit writes them to ncr/data/phone.json (draft and open NCRs only; keys n site no.,
+    r Mine Ref No, u unit, m model, p part no., x one line, s status, d date, dd 1C defect;
+    no PO, contractor or prices). Off PECHANKA, or before ncr_kit is installed, the file is
+    not there and the list is empty: the phone then offers New NCR only."""
+    path = path or NCR_PHONE
+    try:
+        with open(path, encoding="utf-8") as fh:
+            rows = json.load(fh)
+    except (OSError, ValueError):
+        return []
+    if isinstance(rows, dict):
+        rows = rows.get("ncrs") or []
+    keep = ("n", "r", "u", "m", "p", "x", "s", "d", "dd")
+    out = []
+    for row in rows if isinstance(rows, list) else []:
+        if not isinstance(row, dict) or not str(row.get("n") or "").strip():
+            continue
+        if str(row.get("s") or "") not in ("Draft", "Open"):
+            continue
+        out.append({k: str(row.get(k) or "")[:160] for k in keep})
+    out.sort(key=lambda r: (r["d"], r["n"]), reverse=True)
+    return out[:400]
 
 
 def build_fir_defects(cm_dedup, other_dedup, as_of=None):
@@ -1108,6 +1139,7 @@ def main():
         "byUnit": slim_by_unit,
         "rtwOpen": rtw_open,
         "firDefects": build_fir_defects(cm_dedup, other_dedup, as_of=now),
+        "ncrList": build_ncr_list(),
     }, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     # THE RELIABILITY FILE. Its own file, not more of work_orders.js: that is
     # a <script> every office page loads at once, and this is read only when

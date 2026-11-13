@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=615">
+<link rel="manifest" href="manifest.webmanifest?v=616">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=615">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=615">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=615">
+<link rel="apple-touch-icon" href="icon-192.png?v=616">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=616">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=616">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -356,6 +356,13 @@
   .fir-ph .x{position:absolute;top:4px;right:4px;width:var(--tap);height:var(--tap);border-radius:50%;border:none;background:rgba(0,0,0,.6);color:#fff;font-size:18px;}
   .fir-ph input{font-size:13px;min-height:40px;}
   .fir-btns{display:flex;gap:8px;} .fir-btns .btn{flex:1 1 0;min-height:var(--tap);}
+  /* CM_NCR_V1 sheet: the FIR sheet's own cards, plus the new-or-existing switch and the label scan */
+  .ncr-seg{display:flex;gap:6px;} .ncr-seg .btn{flex:1 1 0;min-height:var(--tap);}
+  .ncr-seg .btn.on{background:var(--accent,#16304F);color:#fff;border-color:var(--accent,#16304F);}
+  .ncr-row{display:flex;gap:8px;align-items:stretch;} .ncr-row input{flex:1 1 auto;} .ncr-row .btn{flex:0 0 auto;width:auto;padding:0 14px;min-height:var(--tap);}
+  .ncr-card select{width:100%;box-sizing:border-box;min-height:var(--tap);font:inherit;font-size:15px;padding:8px 10px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--ink);}
+  .ncr-card label.chk{display:flex;gap:8px;align-items:center;font-size:14px;min-height:var(--tap);}
+  .ncr-card label.chk input{width:22px;min-height:22px;height:22px;}
   .rtw-screen{display:flex;flex-direction:column;height:100%;min-height:0;}
   .rtw-ov-head{flex:none;background:var(--surface);border-bottom:1px solid var(--border);
     padding:calc(env(safe-area-inset-top) + 10px) 12px 10px;display:flex;align-items:center;gap:10px;}
@@ -2686,6 +2693,28 @@
 </div>
 <input type="file" id="firGalInput" accept="image/*" multiple class="hidden">
 
+<!-- CM_NCR_V1: photographs and a note for a Non-conformance report (NCR) - a part that does not conform, found during a
+     repair, a PM or in the store. For an NCR already in the office register (SCHED.ncrList) or a new one (unit, part
+     number - typed or read off the label -, the 1C defect / work order when there is one). Saved as a record of type
+     NCR and sent like any round; PECHANKA's ncr_field importer puts it into the NCR register (askpi-site ncr_kit). -->
+<div id="ncrOv" class="rtw-ov hidden">
+  <div class="rtw-screen">
+    <div class="rtw-ov-head">
+      <button type="button" class="rtw-ov-back" id="ncrBack" data-i18n-title="back_title" title="Back">‹</button>
+      <div>
+        <b data-i18n="ncr_title">Non-conformance report (NCR)</b>
+        <div class="hint" data-i18n="ncr_sub">Photographs and notes for the NCR in the office</div>
+      </div>
+    </div>
+    <div class="rtw-ov-body" id="ncrBody"></div>
+    <div class="rtw-footer">
+      <div class="hint" id="ncrHint" style="text-align:center;margin:0;"></div>
+      <button type="button" class="btn primary" id="ncrSaveBtn" data-i18n="ncr_save">Save for the NCR</button>
+    </div>
+  </div>
+</div>
+<input type="file" id="ncrGalInput" accept="image/*" multiple class="hidden">
+
 <!-- THE 1C PM ROW'S OWN DETAIL — "View", the half of "tap and View or RTW"
      that stays put. A work order is picked from the 1C PM tab itself now
      (see duePmList's own rows); this is what a tap opens first: the six
@@ -2980,16 +3009,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=615"></script>
-<script src="upload-defaults.js?v=615"></script>
-<script src="hme.js?v=615"></script>
-<script src="mp-fc.js?v=615"></script>
-<script src="rtw.js?v=615"></script>
-<script src="hme-cascade.js?v=615"></script>
-<script src="assets.js?v=615"></script>
-<script src="temp-limits.js?v=615"></script>
-<script src="normalize.js?v=615"></script>
-<script src="terms.js?v=615"></script>
+<script src="native.js?v=616"></script>
+<script src="upload-defaults.js?v=616"></script>
+<script src="hme.js?v=616"></script>
+<script src="mp-fc.js?v=616"></script>
+<script src="rtw.js?v=616"></script>
+<script src="hme-cascade.js?v=616"></script>
+<script src="assets.js?v=616"></script>
+<script src="temp-limits.js?v=616"></script>
+<script src="normalize.js?v=616"></script>
+<script src="terms.js?v=616"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -3008,25 +3037,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=615"></script>
-<script src="edits.js?v=615"></script>
-<script src="due.js?v=615"></script>
-<script src="wear.js?v=615"></script>
-<script src="wear-figs.js?v=615"></script>
-<script src="wear-map.js?v=615"></script>
-<script src="machine-photos.js?v=615"></script>
-<script src="machine-fig.js?v=615"></script>
-<script src="get.js?v=615"></script>
-<script src="points.js?v=615"></script>
-<script src="uc-points.js?v=615"></script>
-<script src="inspect-guide.js?v=615"></script>
-<script src="get-figs.js?v=615"></script>
-<script src="body-points.js?v=615"></script>
-<script src="body-map.js?v=615"></script>
-<script src="lube.js?v=615"></script>
-<script src="lube-overrides.js?v=615"></script>
-<script src="lube2027.js?v=615"></script>
-<script src="report-core.js?v=615"></script>
+<script src="grade.js?v=616"></script>
+<script src="edits.js?v=616"></script>
+<script src="due.js?v=616"></script>
+<script src="wear.js?v=616"></script>
+<script src="wear-figs.js?v=616"></script>
+<script src="wear-map.js?v=616"></script>
+<script src="machine-photos.js?v=616"></script>
+<script src="machine-fig.js?v=616"></script>
+<script src="get.js?v=616"></script>
+<script src="points.js?v=616"></script>
+<script src="uc-points.js?v=616"></script>
+<script src="inspect-guide.js?v=616"></script>
+<script src="get-figs.js?v=616"></script>
+<script src="body-points.js?v=616"></script>
+<script src="body-map.js?v=616"></script>
+<script src="lube.js?v=616"></script>
+<script src="lube-overrides.js?v=616"></script>
+<script src="lube2027.js?v=616"></script>
+<script src="report-core.js?v=616"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -3132,6 +3161,8 @@ const TYPE_META = {
      1C defect (the site's procedure is 1C defect -> FIR -> RCA), carries no grade and no interval, and has its own
      sheet (#firOv). The office FIR page on Pechanka takes the photographs straight into the FIR's photo section. */
   FIR:  { suffix:"FIR",  showReadings:false, fir:true, title:{en:"Photograph",ru:"Фото"} },
+  /* CM_NCR_V1: a non-conformance report's photographs (askpi-site ncr_kit). Not a round either, like FIR. */
+  NCR:  { suffix:"NCR",  showReadings:false, fir:true, ncr:true, title:{en:"Photograph",ru:"Фото"} },
 };
 const TYPE_ORDER = ["MP","FC","INSP","TEMP","UC","GET","TB","LUBE"];
 
@@ -3369,6 +3400,23 @@ const I18N = {
     fir_ready:"Ready to save · {n} photo(s)", fir_dup_t:"FIR already on this phone",
     fir_dup_b:"{x} already has a FIR saved today for {d}. Open it from Saved and add to it.",
     pm_start_fir:"Start FIR",
+    type_NCR:"Non-conformance report (NCR)",
+    ncr_title:"Non-conformance report (NCR)", ncr_sub:"Photographs and notes for the NCR in the office",
+    ncr_which_t:"Which NCR", ncr_new:"New NCR", ncr_open:"NCR in the office",
+    ncr_list:"{n} draft / open NCR(s) in the office register", ncr_q:"Search NCR, unit or part number",
+    ncr_none:"No NCR matches. Start a new one.", ncr_change:"Change", ncr_draft:"Draft",
+    ncr_unit_t:"Unit", ncr_unit_ph:"Unit, e.g. DZ007", ncr_shelf:"No unit - a part from the store / shelf",
+    ncr_part_t:"Part number", ncr_part_ph:"Catalogue number on the part or its label", ncr_scan:"Scan label",
+    ncr_scan_none:"No code was found in the photo of the label. Type the number; the photo is kept.",
+    ncr_scan_na:"This phone cannot read codes. Type the number from the label; the photo is kept.",
+    ncr_scan_cap:"Part label", ncr_dd_t:"1C defect / work order (optional)", ncr_dd_none:"— none —",
+    ncr_qty_t:"Defective quantity", ncr_photos_t:"Photographs",
+    ncr_photos_s:"They go into the NCR's photographs. Up to {n}; the office chooses 6 for the report.",
+    ncr_note_t:"What is wrong", ncr_note_ph:"Supplied vs original: size, marking, damage - with measurements",
+    ncr_save:"Save for the NCR", ncr_need_ncr:"Choose the NCR, or switch to New NCR.", ncr_need_part:"Write the part number (or scan the label).",
+    ncr_need_unit:"Write the unit, or tick 'No unit'.", ncr_need_ph:"Add at least one photograph or a note.", ncr_need_by:"Write your name.",
+    ncr_ready:"Ready to save · {n} photo(s)", ncr_dup_t:"NCR already on this phone",
+    ncr_dup_b:"{x} already has an NCR saved today on this phone. Open it from Saved and add to it.",
     lube_src_field:"in service now", lube_src_2027:"2027 specification",
     lube_src_both:"in service · 2027",
     lube_prod:"Product in service", lube_other:"Name it as printed on the label",
@@ -4111,6 +4159,23 @@ const I18N = {
     fir_ready:"Можно сохранить · фото: {n}", fir_dup_t:"FIR уже есть на телефоне",
     fir_dup_b:"Для {x} сегодня уже сохранён FIR по {d}. Откройте его в «Сохранённых» и дополните.",
     pm_start_fir:"Начать FIR",
+    type_NCR:"Отчёт о несоответствии (NCR)",
+    ncr_title:"Отчёт о несоответствии (NCR)", ncr_sub:"Фото и заметки для NCR в офисе",
+    ncr_which_t:"Какой NCR", ncr_new:"Новый NCR", ncr_open:"NCR в офисе",
+    ncr_list:"Черновики / открытые NCR в реестре офиса: {n}", ncr_q:"Поиск по NCR, машине или каталожному номеру",
+    ncr_none:"Нет подходящего NCR. Начните новый.", ncr_change:"Изменить", ncr_draft:"Черновик",
+    ncr_unit_t:"Машина", ncr_unit_ph:"Машина, напр. DZ007", ncr_shelf:"Без машины — запчасть со склада / полки",
+    ncr_part_t:"Каталожный номер", ncr_part_ph:"Номер на запчасти или на этикетке", ncr_scan:"Сканировать",
+    ncr_scan_none:"На фото этикетки код не найден. Введите номер; фото сохранено.",
+    ncr_scan_na:"Этот телефон не читает коды. Введите номер с этикетки; фото сохранено.",
+    ncr_scan_cap:"Этикетка запчасти", ncr_dd_t:"Дефект / заказ-наряд 1С (если есть)", ncr_dd_none:"— нет —",
+    ncr_qty_t:"Кол-во дефектных", ncr_photos_t:"Фотографии",
+    ncr_photos_s:"Попадают в фото NCR. Не более {n}; 6 для отчёта выбирает офис.",
+    ncr_note_t:"Что не так", ncr_note_ph:"Поставлено / оригинал: размер, маркировка, повреждение — с замерами",
+    ncr_save:"Сохранить для NCR", ncr_need_ncr:"Выберите NCR или переключитесь на «Новый NCR».", ncr_need_part:"Укажите каталожный номер (или отсканируйте этикетку).",
+    ncr_need_unit:"Укажите машину или отметьте «Без машины».", ncr_need_ph:"Добавьте хотя бы одно фото или заметку.", ncr_need_by:"Укажите своё имя.",
+    ncr_ready:"Можно сохранить · фото: {n}", ncr_dup_t:"NCR уже есть на телефоне",
+    ncr_dup_b:"Для {x} сегодня на этом телефоне уже сохранён NCR. Откройте его в «Сохранённых» и дополните.",
     lube_src_field:"сейчас в эксплуатации", lube_src_2027:"спецификация 2027",
     lube_src_both:"в эксплуатации · 2027",
     lube_prod:"Продукт в узле", lube_other:"Название как на этикетке",
@@ -5760,8 +5825,9 @@ $("classBtn").onclick=()=>openPicker("cat");
 function fillTypeSel(){ $("typeSel").innerHTML=TYPE_ORDER.map(k=>`<option value="${k}">${k} · ${t("type_"+k)}</option>`).join("")
   /* CM_FIR_V1: FIR is in the same list, but it is not a round: choosing it opens the FIR sheet and the list goes back
      to the round type that was chosen before. */
-  +`<option value="FIR">FIR · ${t("type_FIR")}</option>`; $("typeSel").value=type; }
+  +`<option value="FIR">FIR · ${t("type_FIR")}</option>`+`<option value="NCR">NCR · ${t("type_NCR")}</option>`; $("typeSel").value=type; }
 $("typeSel").onchange=(e)=>{ if(e.target.value==="FIR"){ e.target.value=type; firOpen(); return; }
+  if(e.target.value==="NCR"){ e.target.value=type; ncrOpen(); return; }   /* CM_NCR_V1 */
   const v=e.target.value;
   if(v!==type && !leaveAsked && roundInHand()){
     e.target.value=type;                       // the list shows the round still in hand until the answer
@@ -11303,7 +11369,7 @@ function dueRows(only){
        line above only skips a type in NEITHER table; RTW is in one, so
        without this it would fall through to DUE.next()'s D.FALLBACK 30-day
        rule below and print a bogus "overdue"/"due soon" row. */
-    if(ty==="RTW"||ty==="FIR") continue;
+    if(ty==="RTW"||ty==="FIR"||ty==="NCR") continue;
     const last=histEntry(h[k]);
     /* A date the fleet cannot verify does not put a machine on this list. It
        is still on screen — as never done, which is what it is. */
@@ -11454,7 +11520,7 @@ function roundsOnClass(){
          place that turns "done once" into "on this round forever," rather
          than in neverRows()/dueRows() separately: this is the single source
          both read from. */
-      if(ty==="RTW"||ty==="FIR") continue;
+      if(ty==="RTW"||ty==="FIR"||ty==="NCR") continue;
       if(!histFirm(histEntry(h[key]),gated)) continue;
       const a=ASSET_BY[unit]; if(!a) continue;
       const k=PTS.classOf(a.cls||a.cat||"");
@@ -11601,7 +11667,7 @@ function scheduleCompareRows(only){
   for(const k of Object.keys(h)){
     const [ty,unit]=k.split("|");
     if(only && ty!==only) continue;
-    if(ty==="RTW"||ty==="FIR") continue;   // triggered by a work order or a defect, not a clock
+    if(ty==="RTW"||ty==="FIR"||ty==="NCR") continue;   // triggered by a work order or a defect, not a clock
     if(!DUE.EVERY[ty] && !TYPE_META[ty]) continue;
     const last=histEntry(h[k]);
     if(!histFirm(last,gated)) continue;
@@ -12392,6 +12458,293 @@ $("pmStartFirBtn").onclick=()=>{
   pmCloseInfo();
   firOpen(known || { d, u:r.equip||"", s:r.comp||"", p:(String(r.priority||"").match(/P[1-5]/)||[""])[0], r:r.raised||"", x:r.desc||"" });
 };
+
+/* ===================== NCR: photographs for a Non-conformance report (CM_NCR_V1) =====================
+   Rickie 13.11.2026: "the photos will be taken using Mobile app (6 photos), same as the FIR" ... "yes anyone [can start
+   one]" ... "[part-label scan] yes" ... "a defect or Work order maybe".
+   NCR is chosen from the inspection type list like FIR (not a round). Either an NCR already in the office register
+   (SCHED.ncrList: the draft / open NCRs PECHANKA's ncr_kit writes, put into schedule_slim.json by the ingest - site
+   number n, Mine Ref No r, unit u, model m, part p, one line x, status s, date d, defect dd) or a New NCR: the unit (or
+   "no unit" for a part from the store), the part number - typed, or read off the label with "Scan label" (the label
+   photo is kept as the first photograph) -, the 1C defect / work order when there is one, the defective quantity.
+   Then photographs with a caption each, a note and a name. Saved as a record of type NCR through the same Save tail as
+   FIR; position keys N1, N2 ... given once. PECHANKA's ncr_field.py (every 5 min) puts it into that NCR, or starts a
+   Draft NCR in the register; the NCR document (Word / PDF) is made there, so the phone's report button is hidden.
+   One NCR per unit per day per phone (the sidecar is <unit>_<date>_NCR.json); a part with no unit is filed under
+   STORE-<part number>, so two store parts the same day are two NCRs. */
+const NCR_MAX=12;
+let ncrDraft=null, ncrEditing=null, ncrSaving=false;
+const ncrPool=urlPool();
+function ncrList(){ return (SCHED && Array.isArray(SCHED.ncrList)) ? SCHED.ncrList : []; }
+function ncrNorm(s){ return String(s||"").toUpperCase().replace(/[^0-9A-Z]/g,""); }
+function ncrEquip(d){
+  const u=String((d.mode==="open"&&d.ncr ? d.ncr.u : d.unit)||"").trim().toUpperCase();
+  if(u && !(d.mode==="new" && d.shelf)) return u;
+  const p=ncrNorm(d.mode==="open"&&d.ncr ? d.ncr.p : d.part).slice(0,14);
+  return "STORE"+(p?"-"+p:"");
+}
+async function ncrOpen(){
+  ncrEditing=null;
+  try{ await schedEnsureLoaded(); }catch(e){}
+  ncrDraft={ mode:ncrList().length?"open":"new", ncr:null, q:"", unit:"", shelf:false, part:"", dd:"", qty:"", photos:[], note:"",
+    by:((holderGet()||{}).name||(()=>{ try{ return localStorage.getItem("cm_ncr_by")||localStorage.getItem("cm_fir_by")||""; }catch(e){ return ""; } })()||"") };
+  $("ncrOv").classList.remove("hidden");
+  ncrRender();
+}
+function ncrOpenForEdit(rec){
+  if(!rec || rec.type!=="NCR") return;
+  ncrEditing=rec;
+  const photos=[];
+  for(const [k,p] of positionsOf(rec)){ for(const b of photosOf(p)) photos.push({ key:k, att:b, cap:p.comment||"" }); }
+  photos.sort((a,b)=>(parseInt(a.key.slice(1))||0)-(parseInt(b.key.slice(1))||0));
+  const open=!!rec.ncrSite;
+  ncrDraft={ mode:open?"open":"new", ncr:open?{ n:rec.ncrSite, r:rec.ncrRef||"", u:rec.ncrUnit||"", p:rec.ncrPart||"", x:"" }:null, q:"",
+    unit:rec.ncrUnit||"", shelf:!rec.ncrUnit, part:rec.ncrPart||"", dd:[rec.ncrDefect||"", rec.ncrWo||""].join("|").replace(/^\|$/,""),
+    qty:rec.ncrQty||"", photos, note:rec.ncrNote||"", by:rec.by||"" };
+  $("ncrOv").classList.remove("hidden");
+  ncrRender();
+}
+function ncrClose(){ $("ncrOv").classList.add("hidden"); ncrDraft=null; ncrEditing=null; ncrPool.free(); }
+function ncrHarvest(){
+  if(!ncrDraft) return;
+  const g=(id)=>{ const e=$(id); return e ? e.value : null; };
+  let v;
+  if((v=g("ncrNote"))!==null) ncrDraft.note=v;
+  if((v=g("ncrBy"))!==null) ncrDraft.by=v;
+  if((v=g("ncrUnit"))!==null) ncrDraft.unit=v;
+  if((v=g("ncrPart"))!==null) ncrDraft.part=v;
+  if((v=g("ncrQty"))!==null) ncrDraft.qty=v;
+  if((v=g("ncrDd"))!==null) ncrDraft.dd=v;
+  const sh=$("ncrShelf"); if(sh) ncrDraft.shelf=sh.checked;
+  document.querySelectorAll("#ncrBody [data-ncap]").forEach(i=>{ const ph=ncrDraft.photos.find(x=>x.key===i.dataset.ncap); if(ph) ph.cap=i.value; });
+}
+function ncrRow(f){
+  return `<button type="button" class="fir-def" data-nsel="${esc(f.n)}">${f.s==="Draft"?`<span class="pr">${esc(t("ncr_draft"))}</span>`:""}<b>${esc(f.r||f.n)}${f.u?" · "+esc(f.u):""}</b>
+    <span class="m">${esc([f.p, f.x, f.r?f.n:"", f.d?ddmmyyyy(f.d):""].filter(Boolean).join(" · "))}</span></button>`;
+}
+function ncrListHtml(){
+  const q=ncrNorm(ncrDraft.q), all=ncrList();
+  const hits=(q ? all.filter(f=>[f.n,f.r,f.u,f.p,f.x].some(v=>ncrNorm(v).indexOf(q)>=0)) : all).slice(0,40);
+  return `<div class="hint" style="margin:0">${esc(t("ncr_list",{n:all.length}))}</div><div class="fir-defs">${hits.map(ncrRow).join("")}</div>`
+    + (hits.length ? "" : `<div class="hint warn" style="margin:0">${esc(t("ncr_none"))}</div>`);
+}
+function ncrDdOptions(){
+  const u=String(ncrDraft.unit||"").trim().toUpperCase(), cur=ncrDraft.dd||"";
+  const defs=u ? firDefects().filter(f=>String(f.u||"").toUpperCase()===u) : [];
+  const wos=(u && SCHED && Array.isArray(SCHED.rtwOpen)) ? SCHED.rtwOpen.filter(r=>String(r.equip||"").toUpperCase()===u && r.pmStatus!=="complete") : [];
+  const opts=[`<option value="">${esc(t("ncr_dd_none"))}</option>`];
+  const seen=new Set();
+  for(const f of defs){ const v=f.d+"|"; seen.add(v); opts.push(`<option value="${esc(v)}"${v===cur?" selected":""}>${esc([f.d,f.p,f.x].filter(Boolean).join(" · "))}</option>`); }
+  for(const r of wos){ const dd=(String(r.request||"").match(/DD-?\d{5,}/i)||[""])[0].toUpperCase(); const v=(dd||"")+"|"+(r.wo||""); if(seen.has(v)) continue; seen.add(v);
+    opts.push(`<option value="${esc(v)}"${v===cur?" selected":""}>${esc([r.wo, dd, r.desc||r.type].filter(Boolean).join(" · "))}</option>`); }
+  if(cur && !seen.has(cur)) opts.push(`<option value="${esc(cur)}" selected>${esc(cur.split("|").filter(Boolean).join(" · "))}</option>`);
+  return opts.join("");
+}
+function ncrRender(){
+  if(!ncrDraft) return;
+  ncrPool.free();
+  const d=ncrDraft, nOpen=ncrList().length;
+  let h=`<div class="fir-card ncr-card"><h4>${esc(t("ncr_which_t"))}</h4>`;
+  if(!ncrEditing) h+=`<div class="ncr-seg"><button type="button" class="btn${d.mode==="new"?" on":""}" data-nmode="new">${esc(t("ncr_new"))}</button>
+      <button type="button" class="btn${d.mode==="open"?" on":""}" data-nmode="open">${esc(t("ncr_open"))} · ${nOpen}</button></div>`;
+  if(d.mode==="open"){
+    if(d.ncr){ const f=d.ncr;
+      h+=`<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;"><b style="font-size:16px;">${esc(f.r||f.n)}${f.u?" · "+esc(f.u):""}</b>
+        ${ncrEditing?"":`<button type="button" class="btn" id="ncrChange" style="min-height:var(--tap);flex:0 0 auto;width:auto;padding:0 16px">${esc(t("ncr_change"))}</button>`}</div>
+        <div class="hint" style="margin:0">${esc([f.p,f.x,f.r?f.n:""].filter(Boolean).join(" · "))}</div>`;
+    } else h+=`<input id="ncrQ" type="search" autocapitalize="characters" placeholder="${esc(t("ncr_q"))}" value="${esc(d.q||"")}"><div id="ncrListBox">${ncrListHtml()}</div>`;
+  }
+  h+=`</div>`;
+  if(d.mode!=="open"){
+    h+=`<div class="fir-card ncr-card"><h4>${esc(t("ncr_part_t"))}</h4>
+      <div class="ncr-row"><input id="ncrPart" type="text" autocapitalize="characters" autocomplete="off" placeholder="${esc(t("ncr_part_ph"))}" value="${esc(d.part||"")}">
+        <button type="button" class="btn" id="ncrScan">▦ ${esc(t("ncr_scan"))}</button></div>
+      <h4>${esc(t("ncr_qty_t"))}</h4><input id="ncrQty" type="text" inputmode="decimal" value="${esc(d.qty||"")}"></div>
+      <div class="fir-card ncr-card"><h4>${esc(t("ncr_unit_t"))}</h4>
+      <input id="ncrUnit" type="text" autocapitalize="characters" list="ncrUnitList" placeholder="${esc(t("ncr_unit_ph"))}" value="${esc(d.unit||"")}"${d.shelf?" disabled":""}>
+      <datalist id="ncrUnitList">${ASSETS.slice(0,1500).map(a=>`<option value="${esc(a.n||a.name||"")}">`).join("")}</datalist>
+      <label class="chk"><input type="checkbox" id="ncrShelf"${d.shelf?" checked":""}> ${esc(t("ncr_shelf"))}</label>
+      ${d.shelf?"":`<h4>${esc(t("ncr_dd_t"))}</h4><select id="ncrDd">${ncrDdOptions()}</select>`}</div>`;
+  }
+  const tiles=d.photos.map(ph=>`<div class="fir-ph"><img src="${ncrPool.url(ph.att)}" alt="${esc(ph.key)}">
+      <button type="button" class="x" data-ndel="${esc(ph.key)}" aria-label="${esc(t("media_del"))}">✕</button>
+      <input type="text" data-ncap="${esc(ph.key)}" placeholder="${esc(t("fir_cap_ph"))}" value="${esc(ph.cap||"")}"></div>`).join("");
+  const full=d.photos.length>=NCR_MAX;
+  h+=`<div class="fir-card"><h4>${esc(t("ncr_photos_t"))} · ${d.photos.length}/${NCR_MAX}</h4>
+      <div class="hint" style="margin:0">${esc(t("ncr_photos_s",{n:NCR_MAX}))}</div>
+      ${tiles?`<div class="fir-grid">${tiles}</div>`:""}
+      <div class="fir-btns"><button type="button" class="btn" id="ncrTake" ${full?"disabled":""}>📷 ${esc(t("fir_take"))}</button>
+        <button type="button" class="btn" id="ncrGal" ${full?"disabled":""}>🖼 ${esc(t("fir_gallery"))}</button></div></div>
+    <div class="fir-card"><h4>${esc(t("ncr_note_t"))}</h4>
+      <textarea id="ncrNote" rows="3" placeholder="${esc(t("ncr_note_ph"))}">${esc(d.note||"")}</textarea></div>
+    <div class="fir-card"><h4>${esc(t("fir_by"))}</h4>
+      <input id="ncrBy" type="text" placeholder="${esc(t("fir_by_ph"))}" value="${esc(d.by||"")}"></div>`;
+  $("ncrBody").innerHTML=h;
+  ncrFooter();
+}
+function ncrMissing(){
+  const d=ncrDraft; if(!d) return "x";
+  if(d.mode==="open" && !d.ncr) return t("ncr_need_ncr");
+  if(d.mode==="new"){
+    if(!String(d.part||"").trim()) return t("ncr_need_part");
+    if(!d.shelf && !String(d.unit||"").trim()) return t("ncr_need_unit");
+  }
+  if(!d.photos.length && !String(d.note||"").trim()) return t("ncr_need_ph");
+  if(String(d.by||"").trim().length<3) return t("ncr_need_by");
+  return "";
+}
+function ncrFooter(){
+  if(!ncrDraft) return;
+  const miss=ncrMissing();
+  $("ncrHint").textContent = miss || t("ncr_ready",{n:ncrDraft.photos.length});
+  $("ncrSaveBtn").disabled = !!miss || ncrSaving;
+}
+function ncrNextKey(){
+  let n=0; for(const ph of ncrDraft.photos){ const v=parseInt(String(ph.key).slice(1))||0; if(v>n) n=v; }
+  if(ncrEditing) for(const k of Object.keys(ncrEditing.positions||{})){ const v=parseInt(String(k).slice(1))||0; if(v>n) n=v; }
+  return "N"+(n+1);
+}
+async function ncrAddFiles(files, cap){
+  if(!ncrDraft || !files.length) return;
+  ncrHarvest();
+  const secured=new Map();
+  await Promise.all(files.map(async f=>{ try{ secured.set(f, await ownBytes(f)); }catch(e){} }));
+  let skipped=0, odd="";
+  for(const f of files){
+    if(!ncrDraft) return;
+    if(ncrDraft.photos.length>=NCR_MAX){ skipped++; continue; }
+    const got=await intakeNoted(secured.get(f)||f);
+    if(!ncrDraft) return;
+    ncrDraft.photos.push({ key:ncrNextKey(), att:got.att, cap:cap||"" });
+    if(got.why && !odd) odd=got.why;
+  }
+  ncrRender();
+  if(skipped) dlg([t("gal_full_t"), t("gal_full_b",{n:skipped, p:NCR_MAX})]);
+  else if(odd) dlg([t("gal_odd_t"), t(intakeWhyKey(odd),{n:1, names:""})]);
+}
+/* The part label: one photograph, read for a bar / QR / Data Matrix code where the phone can (BarcodeDetector).
+   The photograph is kept as evidence either way; a code found fills the part number. */
+async function ncrReadCode(file){
+  if(!("BarcodeDetector" in window)) return { na:true };
+  try{
+    const bmp=await createImageBitmap(file);
+    const det=new BarcodeDetector();
+    const got=await det.detect(bmp);
+    try{ bmp.close(); }catch(e){}
+    const v=(got||[]).map(x=>String(x.rawValue||"").trim()).find(Boolean);
+    return { code:v||"" };
+  }catch(e){ return { code:"" }; }
+}
+async function ncrScan(){
+  if(!ncrDraft || ncrDraft.photos.length>=NCR_MAX) return;
+  ncrHarvest();
+  const f = await (window.CMNative ? CMNative.photo() : oneFileFrom("camera"));
+  if(!f) return;
+  const r=await ncrReadCode(f);
+  if(r.code){ ncrDraft.part=r.code.slice(0,80); const pi=$("ncrPart"); if(pi) pi.value=ncrDraft.part; }
+  await ncrAddFiles([f], t("ncr_scan_cap"));
+  if(r.na) dlg([t("ncr_scan"), t("ncr_scan_na")]);
+  else if(!r.code) dlg([t("ncr_scan"), t("ncr_scan_none")]);
+}
+async function ncrSave(){
+  if(ncrSaving || !ncrDraft) return;
+  ncrHarvest();
+  const miss=ncrMissing(); if(miss){ ncrFooter(); return; }
+  ncrSaving=true; ncrFooter();
+  try{
+    const d=ncrDraft, open=d.mode==="open"&&d.ncr;
+    const equip=ncrEquip(d), date=ncrEditing ? ncrEditing.date : todayISO();
+    if(!ncrEditing){
+      let dup=null; try{ dup=(await dbAll()).find(r=>r&&r.type==="NCR"&&r.equip===equip&&r.date===date); }catch(e){}
+      if(dup){ dlg([t("ncr_dup_t"), t("ncr_dup_b",{x:equip})]); return; }
+    }
+    const by=String(d.by||"").trim(); lsSet("cm_ncr_by", by);
+    const id=ncrEditing ? ncrEditing.id : `NCR__${equip}__${date}__${DEVICE}__${Date.now()}`;
+    const created=ncrEditing ? (ncrEditing.created||new Date().toISOString()) : new Date().toISOString();
+    const unit=open ? String(d.ncr.u||"") : (d.shelf ? "" : String(d.unit||"").trim().toUpperCase());
+    const ddwo=String(d.dd||"").split("|");
+    if(!gps) await getGps(true);
+    const rec={ id, cls:(ncrEditing&&ncrEditing.cls)||assetClassOf(unit)||"", type:"NCR", equip, date, smu:"", by,
+      sup:"", sign:null, gps:gps||null, dev:DEVICE, positions:{}, created, up:0, upTo:{},
+      rev:(ncrEditing?(ncrEditing.rev||0)+1:1), phv:2,
+      holder:(ncrEditing ? (ncrEditing.holder||"") : ((holderGet()||{}).name||"")),
+      holderBadge:(ncrEditing ? (ncrEditing.holderBadge||"") : ((holderGet()||{}).badge||"")),
+      ncrSite:open ? d.ncr.n : "", ncrRef:open ? (d.ncr.r||"") : "", ncrUnit:unit,
+      ncrPart:open ? String(d.ncr.p||"") : String(d.part||"").trim(),
+      ncrDefect:open ? "" : (ddwo[0]||""), ncrWo:open ? "" : (ddwo[1]||""),
+      ncrQty:open ? "" : String(d.qty||"").trim(), ncrNote:String(d.note||"").trim() };
+    for(const ph of d.photos){
+      const pos={ photos:[ph.att] };
+      if(String(ph.cap||"").trim()) pos.comment=String(ph.cap).trim();
+      const old=ncrEditing && ncrEditing.positions && ncrEditing.positions[ph.key];
+      if(old && old.att) pos.att=old.att;
+      rec.positions[ph.key]=pos;
+    }
+    /* The identical tail every Save runs (see firSave / rtwSave). */
+    await reArmForSave(rec);
+    await holdAwake(SAVE_GUARD_MS);
+    showSaveGuard(SAVE_GUARD_MS);
+    try{ await attSync(rec); }catch(e){}
+    try{ await dbPut(rec); }
+    catch(e){
+      const why=String((e&&e.message)||e||"");
+      const pair=t("m_save_failed"); dlg([pair[0], pair[1].split("{why}").join(why)]);
+      slog("save-write-fail",{u:rec.equip||"?", id:rec.id, why:why.slice(0,200),
+        phase:(e&&e.phase)||"", hadReqErr:!!(e&&e.hadReqErr), vis:visInfo()});
+      sendTrace("save-write-fail");
+      return;
+    }
+    const verifyBad = await verifySavedRec(id).catch(()=>[]);
+    ncrClose();
+    renderPending(); syncThenArm();
+    showSaved(rec);
+    setTimeout(applyUpdateIfIdle, 400);
+    if(persistState===null) askPersist();
+    if(verifyBad.length){
+      const names=[...new Set(verifyBad)].join(", ");
+      slog("verify-fail",{u:rec.equip||"?", id:rec.id, n:verifyBad.length, names:names.slice(0,300), why:(verifyBad.whys||[]).join(", ").slice(0,300)});
+      sendTrace("verify-fail");
+      dlg([t("verify_fail_t"), t("verify_fail_b",{x:equip, n:verifyBad.length, names})]);
+    }else{
+      const m=t("m_saved"); dlg([m[0], m[1].replace("{x}",equip)]);
+    }
+  } finally { ncrSaving=false; ncrFooter(); }
+}
+document.addEventListener("DOMContentLoaded", function(){
+  const body=$("ncrBody"); if(!body) return;
+  body.addEventListener("click", async (e)=>{
+    if(!ncrDraft) return;
+    const md=e.target.closest("[data-nmode]");
+    if(md){ ncrHarvest(); ncrDraft.mode=md.dataset.nmode; ncrRender(); return; }
+    const sel=e.target.closest("[data-nsel]");
+    if(sel){ ncrHarvest(); const f=ncrList().find(x=>x.n===sel.dataset.nsel); if(f) ncrDraft.ncr=f; ncrRender(); return; }
+    if(e.target.closest("#ncrChange")){ ncrHarvest(); ncrDraft.ncr=null; ncrRender(); return; }
+    const del=e.target.closest("[data-ndel]");
+    if(del){ ncrHarvest(); ncrDraft.photos=ncrDraft.photos.filter(p=>p.key!==del.dataset.ndel); ncrRender(); return; }
+    if(e.target.closest("#ncrScan")){ await ncrScan(); return; }
+    if(e.target.closest("#ncrTake")){
+      if(ncrDraft.photos.length>=NCR_MAX) return;
+      const f = await (window.CMNative ? CMNative.photo() : oneFileFrom("camera"));
+      if(f) await ncrAddFiles([f]);
+      return;
+    }
+    if(e.target.closest("#ncrGal")){ ncrHarvest(); $("ncrGalInput").click(); return; }
+  });
+  body.addEventListener("input", (e)=>{
+    if(!ncrDraft) return;
+    if(e.target.id==="ncrQ"){ ncrDraft.q=e.target.value; const l=$("ncrListBox"); if(l) l.innerHTML=ncrListHtml(); return; }
+    ncrHarvest(); ncrFooter();
+  });
+  body.addEventListener("change", (e)=>{
+    if(!ncrDraft) return;
+    if(e.target.id==="ncrShelf" || e.target.id==="ncrUnit"){ ncrHarvest(); if(e.target.id==="ncrUnit") ncrDraft.unit=String(ncrDraft.unit||"").trim().toUpperCase(); ncrDraft.dd=""; ncrRender(); return; }
+    ncrHarvest(); ncrFooter();
+  });
+});
+$("ncrGalInput").onchange=async (e)=>{ const files=[...(e.target.files||[])]; e.target.value=""; await ncrAddFiles(files); };
+$("ncrSaveBtn").onclick=()=>ncrSave();
+$("ncrBack").onclick=()=>ncrClose();
+
 
 function renderDue(){
   {
@@ -14598,11 +14951,11 @@ async function renderPending(){
       let use=rec;
       try{ const cur=await dbGet(rec.id); if(cur) use=cur; }catch(e){ bad("edit-reread",e); }
       try{ await reArmForSave(use); }catch(e){ bad("edit-detach",e); }
-      return use.type==="RTW" ? rtwOpenForEdit(use) : use.type==="FIR" ? firOpenForEdit(use) : editRecord(use);
+      return use.type==="RTW" ? rtwOpenForEdit(use) : use.type==="FIR" ? firOpenForEdit(use) : use.type==="NCR" ? ncrOpenForEdit(use) : editRecord(use);
     };
     row.querySelector(".rpt1").onclick=guard(async(ev)=>{ev.stopPropagation();await reportOne(rec);});
     /* CM_FIR_V1: the FIR document is made on the office FIR page, not on the phone. */
-    if(rec.type==="FIR") row.querySelector(".rpt1").style.display="none";
+    if(rec.type==="FIR"||rec.type==="NCR") row.querySelector(".rpt1").style.display="none";   /* CM_NCR_V1: the NCR report is made in the office register too */
     row.querySelector(".edit").onclick=(ev)=>{ev.stopPropagation();openEdit();};
     row.querySelector(".meta").onclick=openEdit; row.querySelector(".thumb").onclick=openEdit;
     /* THE "?" ON A SAVED ROUND IS THE FILE-BACKED-FILE DEFECT, HOURS EARLY.
@@ -15879,7 +16232,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="615";
+const BUILD="616";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -18670,6 +19023,9 @@ function recToExport0(rec){
     rtwWo:rec.rtwWo||"", rtwResult:rec.rtwResult||"", rtwComment:rec.rtwComment||"",
     /* CM_FIR_V1: the 1C defect a FIR round is for, and the field note. The office FIR page reads these. */
     firDefect:rec.firDefect||"", firNote:rec.firNote||"", firSystem:rec.firSystem||"", firPriority:rec.firPriority||"",
+    /* CM_NCR_V1: what the NCR importer on PECHANKA reads (askpi-site ncr_kit ncr_field.py) */
+    ncrSite:rec.ncrSite||"", ncrRef:rec.ncrRef||"", ncrPart:rec.ncrPart||"", ncrUnit:rec.ncrUnit||"",
+    ncrDefect:rec.ncrDefect||"", ncrWo:rec.ncrWo||"", ncrQty:rec.ncrQty||"", ncrNote:rec.ncrNote||"",
     /* What 1C actually scheduled this release against — the maintenance
        type, the hour tier and the plan date — so the header can say what
        was due, not just which work order number it closed. A defect WO

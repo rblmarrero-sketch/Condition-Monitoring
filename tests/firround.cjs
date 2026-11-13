@@ -49,7 +49,7 @@ const jpg = (p, shade) => p.evaluate((sh) => {
 
   console.log('1. FIR is in the inspection type list and opens its own sheet');
   const before = await p.$eval('#typeSel', s => s.value);
-  ok('the list carries FIR as its last option', await p.$eval('#typeSel', s => s.options[s.options.length - 1].value === 'FIR' && /Failure investigation/.test(s.options[s.options.length - 1].textContent)));
+  ok('the list carries FIR as its second-to-last option (NCR is last)', await p.$eval('#typeSel', s => s.options[s.options.length - 2].value === 'FIR' && /Failure investigation/.test(s.options[s.options.length - 2].textContent)));
   await p.selectOption('#typeSel', 'FIR');
   await p.waitForTimeout(200);
   ok('choosing FIR opens the FIR sheet', await p.isVisible('#firOv'));
@@ -151,7 +151,7 @@ const jpg = (p, shade) => p.evaluate((sh) => {
   await p.waitForTimeout(200);
   await p.evaluate(() => firOpen());
   ok('the sheet speaks Russian', /Дефект 1С/.test(await p.textContent('#firBody')) && /Расследование отказа/.test(await p.textContent('#firOv')));
-  ok('the type list names it in Russian', await p.$eval('#typeSel', s => /Расследование отказа/.test(s.options[s.options.length - 1].textContent)));
+  ok('the type list names it in Russian', await p.$eval('#typeSel', s => /Расследование отказа/.test(s.options[s.options.length - 2].textContent)));
 
   await b.close(); srv.close();
   console.log(fails.length ? '\nFAIL ' + fails.length + '\n  ' + fails.join('\n  ') : '\nALL PASS');
