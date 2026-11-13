@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-13T03:17:43+00:00",
+  "generated": "2026-11-13T03:32:42+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -6652,6 +6652,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022432"
     },
     {
+      "asset": "TK143",
+      "defect": "DD-00016753",
+      "raised": "2026-11-12",
+      "system": "TK143.ELS.WH (Wiring Harness / Жгут проводов)",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "не регулируется опускание кузова",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-022461"
+    },
+    {
       "asset": "TK084",
       "defect": "DD-00016762",
       "raised": "2026-11-12",
@@ -6780,19 +6793,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022453"
-    },
-    {
-      "asset": "TK143",
-      "defect": "DD-00016753",
-      "raised": "2026-11-12",
-      "system": "TK143.ELS.WH (Wiring Harness / Жгут проводов)",
-      "defectType": "4.02 Open circuit / Разрыв цепи",
-      "descr": "не регулируется опускание кузова",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": "WO-022461"
     },
     {
       "asset": "GR003",
@@ -7133,6 +7133,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022356"
     },
     {
+      "asset": "TK104",
+      "defect": "DD-00016688",
+      "raised": "2026-11-11",
+      "system": "TK104.DRS.TRA (Transmission / Трансмиссия)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь масла трансмиссии",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-022271"
+    },
+    {
       "asset": "LV087",
       "defect": "DD-00016716",
       "raised": "2026-11-11",
@@ -7391,19 +7404,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022302"
-    },
-    {
-      "asset": "TK104",
-      "defect": "DD-00016688",
-      "raised": "2026-11-11",
-      "system": "TK104.DRS.TRA (Transmission / Трансмиссия)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь масла трансмиссии",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": "WO-022271"
     },
     {
       "asset": "TK149",
@@ -10942,6 +10942,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022374"
     },
     {
+      "asset": "TK033",
+      "defect": "DD-00016412",
+      "raised": "2026-11-06",
+      "system": "TK033.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
+      "descr": "Замена ДВС на оборотный",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Ilshat Sabitov",
+      "regBy": "Сабитов Ильшат Рашидович",
+      "wo": "WO-021845"
+    },
+    {
       "asset": "GE108",
       "defect": "DD-00016424",
       "raised": "2026-11-06",
@@ -11005,19 +11018,6 @@ window.CM_WO_DATA = {
       "by": "Rinat Musaferov",
       "regBy": "Мусаферов Ринат Искакович",
       "wo": "WO-021850"
-    },
-    {
-      "asset": "TK033",
-      "defect": "DD-00016412",
-      "raised": "2026-11-06",
-      "system": "TK033.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
-      "descr": "Замена ДВС на оборотный",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Ilshat Sabitov",
-      "regBy": "Сабитов Ильшат Рашидович",
-      "wo": "WO-021845"
     },
     {
       "asset": "SN001",
@@ -82872,15 +82872,15 @@ window.CM_WO_DATA = {
       "cmLabel": "4000h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CLSD",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-04",
       "planStartDt": "2026-11-04T00:00:00",
       "planEnd": "2026-11-04",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-05",
+      "actualStartDt": "2026-11-05T17:00:00",
+      "actualEnd": "2026-11-06"
     },
     {
       "equip": "CD004",
@@ -95175,9 +95175,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-11",
-      "planStartDt": "2026-11-11T00:00:00",
-      "planEnd": "2026-11-12",
+      "planStart": "2026-11-12",
+      "planStartDt": "2026-11-12T00:00:00",
+      "planEnd": "2026-11-13",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -116037,15 +116037,15 @@ window.CM_WO_DATA = {
       "cmLabel": "500h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-13",
       "planStartDt": "2026-11-13T00:00:00",
-      "planEnd": "2026-11-14",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "planEnd": "2026-11-13",
+      "actualStart": "2026-11-13",
+      "actualStartDt": "2026-11-13T19:00:00",
+      "actualEnd": "2026-11-13"
     },
     {
       "equip": "EX022",
@@ -119461,15 +119461,15 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-09",
       "planStartDt": "2026-11-09T00:00:00",
       "planEnd": "2026-11-09",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-09",
+      "actualStartDt": "2026-11-09T07:00:00",
+      "actualEnd": "2026-11-09"
     },
     {
       "equip": "GE020",

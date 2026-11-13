@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-13T03:17:43+00:00",
+  "generated": "2026-11-13T03:32:42+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -45,7 +45,7 @@
           "INSP",
           "UC"
         ],
-        "plan": "2026-11-11",
+        "plan": "2026-11-12",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -4055,12 +4055,12 @@
       "type": "500 Hours service Planned",
       "hours": 500,
       "plan": "2026-11-13",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-13"
     },
     {
       "wo": "WO-021660",
@@ -4187,6 +4187,24 @@
       "cause": "",
       "pmStatus": "complete",
       "completed": "2026-11-10"
+    },
+    {
+      "wo": "WO-021307",
+      "equip": "DZ004",
+      "cls": "DOZ",
+      "comp": "",
+      "desc": "Filter Cut / General Inspection / Undercarriage",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-12",
+      "type": "4000 Hours service Planned",
+      "hours": 4000,
+      "plan": "2026-11-12",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
     },
     {
       "wo": "WO-021574",
@@ -4343,24 +4361,6 @@
       "type": "3000 Hours service Planned",
       "hours": 3000,
       "plan": "2026-11-12",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
-      "wo": "WO-021307",
-      "equip": "DZ004",
-      "cls": "DOZ",
-      "comp": "",
-      "desc": "Filter Cut / General Inspection / Undercarriage",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-11",
-      "type": "4000 Hours service Planned",
-      "hours": 4000,
-      "plan": "2026-11-11",
       "status": "Elimination scheduled",
       "request": "",
       "defType": "",
@@ -4667,12 +4667,12 @@
       "type": "250 Hours service Planned",
       "hours": 250,
       "plan": "2026-11-09",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-09"
     },
     {
       "wo": "WO-021658",
@@ -5549,12 +5549,12 @@
       "type": "4000 Hours service Planned",
       "hours": 4000,
       "plan": "2026-11-04",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-06"
     },
     {
       "wo": "WO-021095",
@@ -11581,6 +11581,14 @@
       "x": "Отогрев,долив техжидкостей, запуск ДВС"
     },
     {
+      "d": "DD-00016753",
+      "u": "TK143",
+      "s": "TK143.ELS.WH (Wiring Harness / Жгут проводов)",
+      "p": "P2",
+      "r": "2026-11-12",
+      "x": "не регулируется опускание кузова"
+    },
+    {
       "d": "DD-00016762",
       "u": "TK084",
       "s": "TK084.CH.BY (Dump Body / Самосвальный кузов)",
@@ -11651,14 +11659,6 @@
       "p": "P2",
       "r": "2026-11-12",
       "x": "EKT Замена подшипников 4-й секции стрелы телескопа, проверка работоспособности к"
-    },
-    {
-      "d": "DD-00016753",
-      "u": "TK143",
-      "s": "TK143.ELS.WH (Wiring Harness / Жгут проводов)",
-      "p": "P2",
-      "r": "2026-11-12",
-      "x": "не регулируется опускание кузова"
     },
     {
       "d": "DD-00016670",
@@ -11861,6 +11861,14 @@
       "x": "Ремонт подъема кузова, фен в кабине"
     },
     {
+      "d": "DD-00016688",
+      "u": "TK104",
+      "s": "TK104.DRS.TRA (Transmission / Трансмиссия)",
+      "p": "P2",
+      "r": "2026-11-11",
+      "x": "Течь масла трансмиссии"
+    },
+    {
       "d": "DD-00016692",
       "u": "EX022",
       "s": "EX022.DRS.ENG (Engine / Двигатель)",
@@ -11875,14 +11883,6 @@
       "p": "P2",
       "r": "2026-11-11",
       "x": "Ремонт карданного вала средний - задний мост"
-    },
-    {
-      "d": "DD-00016688",
-      "u": "TK104",
-      "s": "TK104.DRS.TRA (Transmission / Трансмиссия)",
-      "p": "P2",
-      "r": "2026-11-11",
-      "x": "Течь масла трансмиссии"
     },
     {
       "d": "DD-00016673",
@@ -31645,6 +31645,14 @@
       "x": "повреждения ленты питателя"
     },
     {
+      "d": "DD-00016412",
+      "u": "TK033",
+      "s": "TK033.DRS.ENG (Engine / Двигатель)",
+      "p": "P4",
+      "r": "2026-11-06",
+      "x": "Замена ДВС на оборотный"
+    },
+    {
       "d": "DD-00016424",
       "u": "GE108",
       "s": "GENERATOR, RESURS-D1000, GE108 ENGINE",
@@ -31683,14 +31691,6 @@
       "p": "P4",
       "r": "2026-11-06",
       "x": "Ремонт стыка конвейерной ленты главного конвейера"
-    },
-    {
-      "d": "DD-00016412",
-      "u": "TK033",
-      "s": "TK033.DRS.ENG (Engine / Двигатель)",
-      "p": "P4",
-      "r": "2026-11-06",
-      "x": "Замена ДВС на оборотный"
     },
     {
       "d": "DD-00016410",
