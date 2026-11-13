@@ -198,7 +198,7 @@ const textOf = (p, key, lang) => p.evaluate(({ key, lang }) => {
   ok(!/No condition rating recorded/.test(ucw),
      "  the DECISION cell is not blank just because nobody picked a grade");
   ok(/4 – Severe/.test(ucw), "  80% worn (20% remaining) computes to Severe, GRADE.fromWorn's own answer");
-  ok(/Repair soon; control operation/.test(ucw), "  and the decision text that goes with it");
+  ok(/Plan the replacement into the next shutdown/.test(ucw), "  and the decision text that goes with it");
   ok(!/No action required/.test(ucw),
      "  the Maintenance action strip agrees with the rating instead of contradicting it");
 

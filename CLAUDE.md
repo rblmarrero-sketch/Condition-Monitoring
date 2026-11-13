@@ -6704,3 +6704,9 @@ the site. `edErr` on both pages says Google's refusal in the page's language wit
 is what a desk on the Firebase or GitHub copy sees, where corrections cannot be saved by design. If the refusal still appears on
 maintenance.vegadevelopment.com after this build, the forwarder is not adding the key (PECHANKA, not this repository).
 `tests/deskroute.cjs` (both pages; fails on build 617). No backend change.
+
+**A WEAR ROUND THAT IS SEVERE BY ITS MEASUREMENTS SAYS "PLAN INTO THE NEXT SHUTDOWN" (build 619, daily audit 13.11.2026).** DZ004's
+undercarriage sheet of 12.11 (grouser 81 % worn, grade 4 under the scale of build 614) printed the general decision for a 4,
+"Repair soon; control operation", against the site's decision of 12.11 that above 80 % worn is planned into the next shutdown.
+`ratingBar` (report-core.js) prints `dec_4w` when the round is UC, GET or TB, its rating is 4 and no point was graded 4 or 5 by
+hand; an inspected Severe finding keeps `dec_4`. `tests/sweep614.cjs`. Shared engine; no backend change.
