@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-13T12:12:48+00:00",
+  "generated": "2026-11-13T12:42:31+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -6002,6 +6002,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022524"
     },
     {
+      "asset": "CR003",
+      "defect": "DD-00016842",
+      "raised": "2026-11-13",
+      "system": "CR003.HS (Hydraulic System / Гидравлическая система)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "утечка с гидравлического фильтра",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Murashko",
+      "regBy": "Мурашко Сергей Борисович",
+      "wo": "WO-022525"
+    },
+    {
       "asset": "TK104",
       "defect": "DD-00016795",
       "raised": "2026-11-13",
@@ -6260,19 +6273,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022506"
-    },
-    {
-      "asset": "CR003",
-      "defect": "DD-00016842",
-      "raised": "2026-11-13",
-      "system": "CR003.HS (Hydraulic System / Гидравлическая система)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "утечка с гидравлического фильтра",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Murashko",
-      "regBy": "Мурашко Сергей Борисович",
-      "wo": "WO-022525"
     },
     {
       "asset": "CR005",
