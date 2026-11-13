@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-13T10:07:54+00:00",
+  "generated": "2026-11-13T10:22:36+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -6197,6 +6197,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022501"
     },
     {
+      "asset": "DZ007",
+      "defect": "DD-00016833",
+      "raised": "2026-11-13",
+      "system": "DZ007.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "Замена масла в ДВС",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022517"
+    },
+    {
       "asset": "EX020",
       "defect": "DD-00016808",
       "raised": "2026-11-13",
@@ -6626,6 +6639,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022468"
     },
     {
+      "asset": "LS048",
+      "defect": "DD-00016778",
+      "raised": "2026-11-12",
+      "system": "LS048.DRS.PG (Power Generator / Генератор)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Затруднённый запуск.",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022473"
+    },
+    {
       "asset": "TK084",
       "defect": "DD-00016762",
       "raised": "2026-11-12",
@@ -6910,19 +6936,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": null
-    },
-    {
-      "asset": "LS048",
-      "defect": "DD-00016778",
-      "raised": "2026-11-12",
-      "system": "LS048.DRS.PG (Power Generator / Генератор)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Затруднённый запуск.",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-022473"
     },
     {
       "asset": "TK014",
@@ -58952,19 +58965,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "H07",
-      "defect": "EB-00000079",
-      "raised": "2026-08-13",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
-      "wo": null
-    },
-    {
-      "asset": "H07",
       "defect": "EB-00000078",
       "raised": "2026-08-13",
       "system": null,
@@ -58974,6 +58974,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Sergey Gulin",
+      "wo": null
+    },
+    {
+      "asset": "H07",
+      "defect": "EB-00000079",
+      "raised": "2026-08-13",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
