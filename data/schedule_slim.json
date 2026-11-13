@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-13T20:48:01+00:00",
+  "generated": "2026-11-13T21:02:52+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -359,6 +359,19 @@
           "MP"
         ],
         "plan": "2026-11-23",
+        "priority": "P3 Planned (PM)"
+      }
+    ],
+    "TK084": [
+      {
+        "wo": "WO-022303",
+        "hours": 1000,
+        "types": [
+          "FC",
+          "INSP",
+          "MP"
+        ],
+        "plan": "2026-11-16",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -3494,6 +3507,42 @@
       "cause": "",
       "pmStatus": "complete",
       "completed": "2026-11-08"
+    },
+    {
+      "wo": "WO-022304",
+      "equip": "TK060",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "500h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-16",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-11-16",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-022303",
+      "equip": "TK084",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Filter Cut / General Inspection / Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-16",
+      "type": "1000 Hours service Planned",
+      "hours": 1000,
+      "plan": "2026-11-16",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
     },
     {
       "wo": "WO-022347",
@@ -11242,6 +11291,14 @@
       "p": "P2",
       "r": "2026-11-14",
       "x": "Разбито зеркало"
+    },
+    {
+      "d": "DD-00016860",
+      "u": "BS008",
+      "s": "BS008.ELS.WH (Wiring Harness / Жгут проводов)",
+      "p": "P2",
+      "r": "2026-11-14",
+      "x": "Check на панели приборов, ремонт автономного отопителя"
     },
     {
       "d": "DD-00016850",
