@@ -44,6 +44,10 @@ const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
         items: [{ key: '4E', label: 'LH final drive', grade: 1 }, { key: '4F', label: 'RH final drive', grade: 1 }] },
       { equip: 'DZ016', date: '2026-11-07', type: 'UC', cls: 'DOZ', by: 'Zhomart Khasenov', smu: '15941',
         items: [{ key: 'ROLLER.R1', mm: 236 }, { key: 'ROLLER.L1', mm: 254 }] },
+      { equip: 'DZ004', date: '2026-11-12', type: 'UC', cls: 'DOZ', by: 'Zhomart Khasenov', smu: '28062',
+        items: [{ key: 'GROUSER.R', mm: 41 }, { key: 'GROUSER.L', mm: 45 }] },
+      { equip: 'TK150', date: '2026-11-09', type: 'INSP', cls: 'HT', by: 'Kazhybekov Bekzhan', smu: '9000',
+        items: [{ key: 'DRS.COO', label: 'Cooling', grade: 4, defect: 'Leak', action: 'Plan repair', resp: 'A', target: '2026-11-14' }] },
     ]);
     const ov = document.getElementById('dataOv'); if (ov) ov.classList.add('hidden');
   });
@@ -53,7 +57,7 @@ const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
     const d = document.createElement('div'); d.innerHTML = secs.map(s => s.html).join('<br>');
     return d.textContent.replace(/\s+/g, ' ');
   }, { key, lang, bi });
-  const DATES = { 'TK148|FIR': '2026-11-11', 'TK148|INSP': '2026-11-10', 'TK157|MP': '2026-11-06', 'DZ016|UC': '2026-11-07' };
+  const DATES = { 'DZ004|UC': '2026-11-12', 'TK150|INSP': '2026-11-09', 'TK148|FIR': '2026-11-11', 'TK148|INSP': '2026-11-10', 'TK157|MP': '2026-11-06', 'DZ016|UC': '2026-11-07' };
   const keyOf = (u, ty) => 'one:' + u + '|' + DATES[u + '|' + ty] + '|' + ty;
 
   const fir = await text(await keyOf('TK148', 'FIR'), 'en', false);
@@ -66,6 +70,12 @@ const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
 
   const mp = await text(await keyOf('TK157', 'MP'), 'en', false);
   ok('a clean round still says in one sentence that nothing is required', /Maintenance action/.test(mp) && /No action required/.test(mp));
+
+  const w4 = await text(keyOf('DZ004', 'UC'), 'en', false), w4r = await text(keyOf('DZ004', 'UC'), 'ru', false);
+  ok('a wear round that is Severe by its measurements says: plan into the next shutdown', /4 – Severe/.test(w4) && /next shutdown/.test(w4) && !/Repair soon/.test(w4), (w4.match(/DECISION.{0,70}/) || [''])[0]);
+  ok('and in Russian', /ближайший останов/.test(w4r) && !/Скорый ремонт/.test(w4r), (w4r.match(/РЕШЕНИЕ.{0,70}/) || [''])[0]);
+  const i4 = await text(keyOf('TK150', 'INSP'), 'en', false);
+  ok('an inspected Severe finding keeps "Repair soon"', /Repair soon/.test(i4) && !/next shutdown/.test(i4));
 
   const uc = await text(await keyOf('DZ016', 'UC'), 'en', false);
   ok('the undercarriage decision is printed once on its page', (uc.match(/DECISION|Decision/g) || []).length === 1, String((uc.match(/DECISION|Decision/g) || []).length));

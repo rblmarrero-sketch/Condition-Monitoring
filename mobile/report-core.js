@@ -1121,6 +1121,7 @@
       dec_2:"Monitor at the next planned inspection",
       dec_3:"Plan corrective work",
       dec_4:"Repair soon; control operation",
+      dec_4w:"Plan the replacement into the next shutdown",
       dec_5:"Maintenance decision required",
       dec_0:"No condition rating recorded",
       ap_role:"ROLE", ap_name:"NAME", ap_status:"STATUS", ap_date:"DATE / SIGNATURE",
@@ -1324,6 +1325,7 @@
       dec_2:"Проверить на следующем плановом осмотре",
       dec_3:"Запланировать корректирующие работы",
       dec_4:"Скорый ремонт; ограничить эксплуатацию",
+      dec_4w:"Запланировать замену на ближайший останов",
       dec_5:"Требуется решение по обслуживанию",
       dec_0:"Оценка состояния не записана",
       ap_role:"РОЛЬ", ap_name:"ИМЯ", ap_status:"СТАТУС", ap_date:"ДАТА / ПОДПИСЬ",
@@ -2545,7 +2547,13 @@
     /* One line: "3 – Degraded / Ухудшенное". The translation used to stack
        under the level as a second line and the strip read as broken. */
     var level = n ? T.both(n + " – " + gw("g_" + n), gwA("g_" + n), "alti") : T.I("rr_none");
-    var dec = T.I("dec_" + (n || 0));
+    /* Site decision 12.11.2026: a measured point above 80 % worn is Severe and
+       is planned into the next shutdown. When a wear round is a 4 only by its
+       measurements (no point the inspector graded 4 or 5 by hand), the decision
+       says that, not the general "repair soon; control operation". */
+    var wear4 = n === 4 && /^(UC|GET|TB)$/.test(String(rec.type || "")) && GR
+      && !(rec.items || []).some(function (it) { var g = it && GR.num ? GR.num(it.grade) : 0; return g >= 4; });
+    var dec = T.I(wear4 ? "dec_4w" : "dec_" + (n || 0));
     /* THE SCALE IS COLOUR-CODED, AND THE COLOUR IS NOT THE ONLY THING SAYING
        IT. Five numbers and five words in one grey line asked the reader to
        carry the mapping in their head while looking at a coloured chip three
