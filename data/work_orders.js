@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-13T14:17:50+00:00",
+  "generated": "2026-11-13T14:37:39+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -5716,17 +5716,30 @@ window.CM_WO_DATA = {
   ],
   "otherDefects": [
     {
+      "asset": "LD006",
+      "defect": "DD-00016844",
+      "raised": "2026-11-14",
+      "system": "Bucket / Ковш",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Износ режущей кромки",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": null
+    },
+    {
       "asset": "DZ022",
       "defect": "DD-00016843",
       "raised": "2026-11-14",
       "system": "DZ022.OC.GL (Glass / Стекла)",
       "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
       "descr": "Разбито зеркало",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "priority": "P2 Urgent",
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
-      "wo": null
+      "wo": "WO-022527"
     },
     {
       "asset": "EX015",
