@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-13T05:39:03+00:00",
+  "generated": "2026-11-13T05:53:05+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -442,13 +442,13 @@ window.CM_WO_DATA = {
     "regBy": "Contact person initiator WR"
   },
   "cmDateFrom": {
-    "raised": 199,
+    "raised": 200,
     "detected": 0,
     "planStart": 0
   },
   "cmCauseFrom": {
     "wo": 110,
-    "wr": 89,
+    "wr": 90,
     "cert": 0,
     "none": 0
   },
@@ -461,6 +461,32 @@ window.CM_WO_DATA = {
     "Bekzhan"
   ],
   "cmWorkOrders": [
+    {
+      "date": "2026-11-13",
+      "dateFrom": "raised",
+      "raised": "2026-11-13",
+      "detected": "2026-11-13",
+      "planStart": null,
+      "closed": null,
+      "asset": "TK159",
+      "defect": "DD-00016817",
+      "requestNo": "DD-00016817",
+      "eqType": "TRUCK, DUMP",
+      "system": "TK159.DRS.ENG (Engine / Двигатель)",
+      "priority": "P4 Planned (Repair)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Поврежден прокладки",
+      "causeFrom": "wr",
+      "descr": "Течь ОЖ с теплообменника ДВС",
+      "status": "Registered",
+      "by": "Slam",
+      "byFull": "Slam Taganov",
+      "regBy": "Таганов Слам Джумамуратович",
+      "raisedBy": "ГДК Баимская",
+      "woNumber": null,
+      "maintType": null,
+      "planned": false
+    },
     {
       "date": "2026-11-12",
       "dateFrom": "raised",
@@ -5922,6 +5948,19 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-022496"
+    },
+    {
+      "asset": "TK047",
+      "defect": "DD-00016816",
+      "raised": "2026-11-13",
+      "system": "TK047.DRS.ENG (Engine / Двигатель)",
+      "defectType": "4.15 Alternator / charging fault / Неисправность генератора / зарядки",
+      "descr": "Замена генератора",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022506"
     },
     {
       "asset": "CR005",
@@ -13165,6 +13204,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021600"
     },
     {
+      "asset": "LD003",
+      "defect": "DD-00016228",
+      "raised": "2026-11-03",
+      "system": "Bucket / Ковш",
+      "defectType": "6.03 Structural crack / Трещина конструкции",
+      "descr": "Износ адаптеров, футеровки, угловых защит",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-021551"
+    },
+    {
       "asset": "TC001",
       "defect": "DD-00016221",
       "raised": "2026-11-03",
@@ -13280,19 +13332,6 @@ window.CM_WO_DATA = {
       "by": "Evgeniy Frolin",
       "regBy": "Фролин Евгений Владимирович",
       "wo": "WO-021549"
-    },
-    {
-      "asset": "LD003",
-      "defect": "DD-00016228",
-      "raised": "2026-11-03",
-      "system": "Bucket / Ковш",
-      "defectType": "6.03 Structural crack / Трещина конструкции",
-      "descr": "Износ адаптеров, футеровки, угловых защит",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Roman Besedovskiy",
-      "regBy": "Беседовский Роман Иванович",
-      "wo": "WO-021551"
     },
     {
       "asset": "EX008",
@@ -25853,19 +25892,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "EX005",
-      "defect": "DD-00015211",
-      "raised": "2026-10-20",
-      "system": "EX005.CH.BOO (Boom / Стрела)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Зашимить палец стрела-рукоять",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
       "asset": "GR011",
       "defect": "DD-00015206",
       "raised": "2026-10-20",
@@ -25877,6 +25903,19 @@ window.CM_WO_DATA = {
       "by": "Roman Besedovskiy",
       "regBy": "Беседовский Роман Иванович",
       "wo": null
+    },
+    {
+      "asset": "EX005",
+      "defect": "DD-00015211",
+      "raised": "2026-10-20",
+      "system": "EX005.CH.BOO (Boom / Стрела)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Зашимить палец стрела-рукоять",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022375"
     },
     {
       "asset": "CN013",
@@ -57820,19 +57859,6 @@ window.CM_WO_DATA = {
       "wo": "WO-015456"
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
-      "wo": null
-    },
-    {
       "asset": "TK046",
       "defect": "DD-00011270",
       "raised": "2026-08-21",
@@ -57921,6 +57947,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
