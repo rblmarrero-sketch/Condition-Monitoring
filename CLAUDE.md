@@ -5447,6 +5447,23 @@ column-filter row white, both solid. Off the site nothing changes. `tests/cmheld
 not under them, not scrolled away, not lower, and solid) on every tab of both pages, and proves it can see by planting a see-through
 heading; on build 614 every long table on both pages fails it (grey heading, scrolled away or under the bar).
 
+**NCR FROM THE PHONE (build 616, CM_NCR_V1, Rickie 13.11.2026 "lets build").** The inspection type list ends with
+"NCR · Non-conformance (NCR)", after FIR. Like FIR it is not a round (`TYPE_META.NCR.ncr`): choosing it opens `#ncrOv`
+and the list goes back. Two ways in: an NCR already in PECHANKA's NCR register (`SCHED.ncrList`, written into
+`data/schedule_slim.json` by `build_ncr_list()` from ncr_kit's `/opt/askpi-auto/ncr/data/phone.json`, env `NCR_PHONE`;
+Draft and Open NCRs only, keys n r u m p x s d dd, no PO, contractor or prices; off PECHANKA the list is empty and the
+sheet opens on New NCR), or New NCR: the part number (typed, or "Scan label": one photograph read with
+`BarcodeDetector` where the phone has it; the label photo is kept either way), the unit or "no unit (part from the
+store)", the 1C defect or open work order of that unit (`firDefects` + `rtwOpen`, completed ones left out), the
+defective quantity. Then up to `NCR_MAX` (12) photographs with a caption each (the register prints the first 6), a
+note and a name. Anyone can start one. Saved through the same Save tail as FIR as type NCR (`ncrSite`, `ncrRef`,
+`ncrPart`, `ncrUnit`, `ncrDefect`, `ncrWo`, `ncrQty`, `ncrNote` in the record and sidecar); positions `N1`, `N2` ...
+given once. Filed under the unit, or `STORE-<part number>` with no unit; one NCR per filing name per day per phone.
+PECHANKA's `ncr_field.py` (ncr_kit, every 5 min) puts the photographs into that NCR or starts a Draft NCR; the NCR
+document is made there, so the phone's report button is hidden. NCR is kept off every programme, due and grade count
+like FIR; both dashboards name it (`type_NCR`) and report-core has a short NCR sheet. `tests/ncrround.cjs`,
+`tests/ncrlist.py`.
+
 ---
 
 ## Secrets

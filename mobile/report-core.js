@@ -1149,6 +1149,7 @@
       uc_controlling:"Controlling point", uc_decision:"Decision",
       fir_defect:"1C defect", fir_system:"System / component", fir_prio:"Priority", fir_by:"Recorded by",
       fir_note:"Note", fir_photos:"Photographs",
+      ncr_site:"NCR", ncr_part:"Part number", ncr_unit:"Unit", ncr_qty:"Defective quantity", ncr_wo:"Work order",
       c_particle:"Particle finding", c_svchours:"Service hours", c_debris:"Debris / defect",
       c_detection:"Detection", c_opstate:"Operating state", c_measured:"Measured",
       c_ambient:"Ambient", c_method:"Method", c_comparison:"Comparison",
@@ -1349,6 +1350,7 @@
       uc_controlling:"Определяющая точка", uc_decision:"Решение",
       fir_defect:"Дефект 1С", fir_system:"Система / узел", fir_prio:"Приоритет", fir_by:"Записал",
       fir_note:"Примечание", fir_photos:"Фотографии",
+      ncr_site:"NCR", ncr_part:"Номер детали", ncr_unit:"Единица техники", ncr_qty:"Кол-во дефектных", ncr_wo:"Заказ-наряд",
       c_particle:"Частицы", c_svchours:"Наработка", c_debris:"Загрязнение / дефект",
       c_detection:"Метод выявления", c_opstate:"Режим работы", c_measured:"Замер",
       c_ambient:"Окр. среда", c_method:"Метод", c_comparison:"Сравнение",
@@ -3707,6 +3709,25 @@
               + '</i><b>' + esc(rec.firNote) + '</b></span></div>' : "")
           + (firPh.length ? '<div class="subhd" style="margin-top:12px;">' + T.I("fir_photos") + '</div>'
               + '<div class="board gal b1">' + firPh.map(function (it) { return cell(ctx, T, it, {}, true); }).join("") + '</div>' : "")
+          + generalBlock(T, rec)
+          + '</div>' });
+        evidenceSections(T, rec).forEach(function (x) { secs.push(x); });
+        return;
+      }
+      /* NCR (CM_NCR_V1) - the photographs taken on the phone for a non-conformance report. The NCR document
+         itself is made in PECHANKA's NCR register (/ncr/); this sheet is the record of what the phone sent. */
+      if (rec.type === "NCR") {
+        var ncell = function (k, v) { return v ? '<div class="sc"><div class="sk">' + T.I(k) + '</div><div class="sv">' + esc(v) + '</div></div>' : ""; };
+        var ncrPh = (rec.items || []).filter(function (it) { return it && it.photos && it.photos.length; });
+        secs.push({ nb: n > 0, html: '<div class="sec">' + head + mstrip
+          + '<div class="sstrip" style="margin-top:10px;">'
+          + ncell("ncr_site", rec.ncrRef ? rec.ncrRef + " · " + rec.ncrSite : rec.ncrSite)
+          + ncell("ncr_part", rec.ncrPart) + ncell("ncr_unit", rec.ncrUnit) + ncell("ncr_qty", rec.ncrQty)
+          + ncell("fir_defect", rec.ncrDefect) + ncell("ncr_wo", rec.ncrWo) + ncell("fir_by", rec.by) + '</div>'
+          + (rec.ncrNote ? '<div class="mact"><span class="f" style="flex-basis:100%"><i>' + T.I("fir_note")
+              + '</i><b>' + esc(rec.ncrNote) + '</b></span></div>' : "")
+          + (ncrPh.length ? '<div class="subhd" style="margin-top:12px;">' + T.I("fir_photos") + '</div>'
+              + '<div class="board gal b1">' + ncrPh.map(function (it) { return cell(ctx, T, it, {}, true); }).join("") + '</div>' : "")
           + generalBlock(T, rec)
           + '</div>' });
         evidenceSections(T, rec).forEach(function (x) { secs.push(x); });

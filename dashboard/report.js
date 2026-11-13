@@ -335,6 +335,8 @@
          real value rendered as nothing" this project keeps finding. */
       /* A FIR's own facts (CM_FIR_V1): the 1C defect it investigates. */
       firDefect: rec.firDefect || "", firSystem: rec.firSystem || "", firPriority: rec.firPriority || "", firNote: rec.firNote || "",
+      ncrSite: rec.ncrSite || "", ncrRef: rec.ncrRef || "", ncrPart: rec.ncrPart || "", ncrUnit: rec.ncrUnit || "",
+      ncrDefect: rec.ncrDefect || "", ncrWo: rec.ncrWo || "", ncrQty: rec.ncrQty || "", ncrNote: rec.ncrNote || "",
       rtwWoType: rec.rtwWoType || "", rtwSchedHours: (rec.rtwSchedHours != null ? rec.rtwSchedHours : null),
       rtwSchedDate: rec.rtwSchedDate || "", rtwWoPriority: rec.rtwWoPriority || "", rtwTime: rec.rtwTime || "",
       /* The same 1C schedule facts, generalised to every round type (see the
