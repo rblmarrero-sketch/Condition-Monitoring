@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-13T11:12:35+00:00",
+  "generated": "2026-11-13T11:27:41+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -5846,6 +5846,45 @@ window.CM_WO_DATA = {
       "wo": "WO-022489"
     },
     {
+      "asset": "TK044",
+      "defect": "DD-00016788",
+      "raised": "2026-11-13",
+      "system": "TK044.CH.BY (Dump Body / Самосвальный кузов)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "регулировка фиксаторов кузовной платформы",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022483"
+    },
+    {
+      "asset": "TK035",
+      "defect": "DD-00016805",
+      "raised": "2026-11-13",
+      "system": "TK035.BS.BPC (Brake Packs / Тормозные пакеты)",
+      "defectType": "1.20 Slow response / sluggish operation / Медленная реакция / вялая работа",
+      "descr": "Не тормозит левая сторона",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022495"
+    },
+    {
+      "asset": "TK047",
+      "defect": "DD-00016787",
+      "raised": "2026-11-13",
+      "system": "TK047.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.20 Slow response / sluggish operation / Медленная реакция / вялая работа",
+      "descr": "ДВС потеря мощности",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022481"
+    },
+    {
       "asset": "DZ012",
       "defect": "DD-00016810",
       "raised": "2026-11-13",
@@ -5922,6 +5961,32 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022521"
+    },
+    {
+      "asset": "LD008",
+      "defect": "DD-00016838",
+      "raised": "2026-11-13",
+      "system": "LD008.OC.HE (Heating / Отопление)",
+      "defectType": "3.01 Control failure / Ошибка управления",
+      "descr": "Не исправен отопитель",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022522"
+    },
+    {
+      "asset": "EX010",
+      "defect": "DD-00016839",
+      "raised": "2026-11-13",
+      "system": "EX010.CH.AL (Central Lubrication System / Централизованная система смазки)",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "Необходима смазка",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022523"
     },
     {
       "asset": "TK104",
@@ -6028,6 +6093,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "DZ021",
+      "defect": "DD-00016840",
+      "raised": "2026-11-13",
+      "system": "DZ021.CH.RP (Ripper/Рыхлитель)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Износ коронки",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": null
+    },
+    {
       "asset": "EX019",
       "defect": "DD-00016832",
       "raised": "2026-11-13",
@@ -6130,32 +6208,6 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-022504"
-    },
-    {
-      "asset": "TK044",
-      "defect": "DD-00016788",
-      "raised": "2026-11-13",
-      "system": "TK044.CH.BY (Dump Body / Самосвальный кузов)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "регулировка фиксаторов кузовной платформы",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022483"
-    },
-    {
-      "asset": "TK047",
-      "defect": "DD-00016787",
-      "raised": "2026-11-13",
-      "system": "TK047.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.20 Slow response / sluggish operation / Медленная реакция / вялая работа",
-      "descr": "ДВС потеря мощности",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022481"
     },
     {
       "asset": "TK103",
@@ -6299,19 +6351,6 @@ window.CM_WO_DATA = {
       "by": "Aleksey Dobrikov",
       "regBy": "Добриков Алексей Владимирович",
       "wo": "WO-022511"
-    },
-    {
-      "asset": "TK035",
-      "defect": "DD-00016805",
-      "raised": "2026-11-13",
-      "system": "TK035.BS.BPC (Brake Packs / Тормозные пакеты)",
-      "defectType": "1.20 Slow response / sluggish operation / Медленная реакция / вялая работа",
-      "descr": "Не тормозит левая сторона",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022495"
     },
     {
       "asset": "LD005",
@@ -6704,6 +6743,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022476"
     },
     {
+      "asset": "EX019",
+      "defect": "DD-00016782",
+      "raised": "2026-11-12",
+      "system": "EX019.CH.RB(Hydraulic Rock Breaker / Гидромолот)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Заправка гидромолота азотом",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022477"
+    },
+    {
       "asset": "LS048",
       "defect": "DD-00016778",
       "raised": "2026-11-12",
@@ -6754,6 +6806,45 @@ window.CM_WO_DATA = {
       "by": "Aleksey Dobrikov",
       "regBy": "Добриков Алексей Владимирович",
       "wo": "WO-022471"
+    },
+    {
+      "asset": "TK004",
+      "defect": "DD-00016785",
+      "raised": "2026-11-12",
+      "system": "TK004.BS.PU (Pneumatic Control / Пневмоуправление)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Устранение утечек пневмосистемы",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022479"
+    },
+    {
+      "asset": "LS038",
+      "defect": "DD-00016763",
+      "raised": "2026-11-12",
+      "system": "LS038.ELS.MW (Machine Wiring / Электропроводка машины)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Ремонт - заводится и сразу глохнет",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022466"
+    },
+    {
+      "asset": "BL001",
+      "defect": "DD-00016747",
+      "raised": "2026-11-12",
+      "system": "BL001.HS.PD (Hydraulic Motors / Гидромоторы)",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "Отсутствует ход",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022457"
     },
     {
       "asset": "LS057",
@@ -7029,19 +7120,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022470"
     },
     {
-      "asset": "LS038",
-      "defect": "DD-00016763",
-      "raised": "2026-11-12",
-      "system": "LS038.ELS.MW (Machine Wiring / Электропроводка машины)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Ремонт - заводится и сразу глохнет",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022466"
-    },
-    {
       "asset": "GE065",
       "defect": "DD-00016725",
       "raised": "2026-11-12",
@@ -7053,45 +7131,6 @@ window.CM_WO_DATA = {
       "by": "Aleksey Dobrikov",
       "regBy": "Добриков Алексей Владимирович",
       "wo": "WO-022432"
-    },
-    {
-      "asset": "TK004",
-      "defect": "DD-00016785",
-      "raised": "2026-11-12",
-      "system": "TK004.BS.PU (Pneumatic Control / Пневмоуправление)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Устранение утечек пневмосистемы",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022479"
-    },
-    {
-      "asset": "EX019",
-      "defect": "DD-00016782",
-      "raised": "2026-11-12",
-      "system": "EX019.CH.RB(Hydraulic Rock Breaker / Гидромолот)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Заправка гидромолота азотом",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022477"
-    },
-    {
-      "asset": "BL001",
-      "defect": "DD-00016747",
-      "raised": "2026-11-12",
-      "system": "BL001.HS.PD (Hydraulic Motors / Гидромоторы)",
-      "defectType": "4.02 Open circuit / Разрыв цепи",
-      "descr": "Отсутствует ход",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022457"
     },
     {
       "asset": "TK016",
@@ -9096,6 +9135,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022160"
     },
     {
+      "asset": "TK041",
+      "defect": "DD-00016582",
+      "raised": "2026-11-09",
+      "system": "TK041.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка выхлопных газов с выхлопной системы",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-022158"
+    },
+    {
       "asset": "GE109",
       "defect": "DD-00016586",
       "raised": "2026-11-09",
@@ -9341,19 +9393,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Murashko",
       "regBy": "Мурашко Сергей Борисович",
       "wo": "WO-022165"
-    },
-    {
-      "asset": "TK041",
-      "defect": "DD-00016582",
-      "raised": "2026-11-09",
-      "system": "TK041.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка выхлопных газов с выхлопной системы",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Roman Besedovskiy",
-      "regBy": "Беседовский Роман Иванович",
-      "wo": "WO-022158"
     },
     {
       "asset": "CR006",
@@ -23136,6 +23175,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021698"
     },
     {
+      "asset": "TK023",
+      "defect": "DD-00015506",
+      "raised": "2026-10-23",
+      "system": "TK023.BS.RCH (Brake Chambers / Тормозные камеры)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Не тормозит среднее правое колесо.",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022462"
+    },
+    {
       "asset": "TK091",
       "defect": "DD-00015440",
       "raised": "2026-10-23",
@@ -23290,19 +23342,6 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-020948"
-    },
-    {
-      "asset": "TK023",
-      "defect": "DD-00015506",
-      "raised": "2026-10-23",
-      "system": "TK023.BS.RCH (Brake Chambers / Тормозные камеры)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Не тормозит среднее правое колесо.",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022462"
     },
     {
       "asset": "CR006",
@@ -59004,19 +59043,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "H07",
-      "defect": "EB-00000079",
-      "raised": "2026-08-13",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
-      "wo": null
-    },
-    {
-      "asset": "H07",
       "defect": "EB-00000078",
       "raised": "2026-08-13",
       "system": null,
@@ -59026,6 +59052,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Sergey Gulin",
+      "wo": null
+    },
+    {
+      "asset": "H07",
+      "defect": "EB-00000079",
+      "raised": "2026-08-13",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
@@ -60447,6 +60486,19 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "LV011",
+      "defect": "DD-00009705",
+      "raised": "2026-07-27",
+      "system": "LV011.OC.AC (Air Conditioning / Кондиционирование)",
+      "defectType": "1.25 Reduced capacity / output / Снижение производительности / выхода",
+      "descr": "Требуется замена кондиционера",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": null
+    },
+    {
+      "asset": "LV011",
       "defect": "DD-00009702",
       "raised": "2026-07-27",
       "system": "LV011.BS (Braking System / Тормозная система)",
@@ -60465,19 +60517,6 @@ window.CM_WO_DATA = {
       "system": "LV011.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Требуется замена всех патрубков системы охлаждения",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": null
-    },
-    {
-      "asset": "LV011",
-      "defect": "DD-00009705",
-      "raised": "2026-07-27",
-      "system": "LV011.OC.AC (Air Conditioning / Кондиционирование)",
-      "defectType": "1.25 Reduced capacity / output / Снижение производительности / выхода",
-      "descr": "Требуется замена кондиционера",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
