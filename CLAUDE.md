@@ -6719,3 +6719,12 @@ undercarriage sheet of 12.11 (grouser 81 % worn, grade 4 under the scale of buil
 "Repair soon; control operation", against the site's decision of 12.11 that above 80 % worn is planned into the next shutdown.
 `ratingBar` (report-core.js) prints `dec_4w` when the round is UC, GET or TB, its rating is 4 and no point was graded 4 or 5 by
 hand; an inspected Severe finding keeps `dec_4`. `tests/sweep614.cjs`. Shared engine; no backend change.
+
+**AN EXISTING DEFECT SHOWS 1C'S DESCRIPTION, AND THE ONES THAT MATCH THE COMMENT COME FIRST (build 621, CM_EXMATCH_V1, Rickie 13.11.2026
+"what if its different defects ... build it").** Day summary → Existing defect listed every open defect of someone else on the same
+unit and system, whatever it was about: on EX016 a "wash the radiator" defect stood against a rubbing coolant pipe. `existOf`
+(`dashboard/day-summary.js`, both office pages and the e-mail copy) now prints 1C's description under each number, ranks the
+candidates by the words their description shares with the inspector's comment (`exStems`: words of 4+ letters cut to 5, filler
+words out) and marks them "similar description" or "same system — check". Nothing is hidden. 1C's defect type only breaks a tie:
+the same seat was filed as 1.06, 1.08 and 1.10, and the 1C list carries no cause. A number typed in the comment stays "from the
+comment" and gets the description too. Still at most `EX_MAX` (3), now the best three. `tests/exmatch.cjs`.
