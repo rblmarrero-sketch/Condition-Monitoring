@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-13T17:47:46+00:00",
+  "generated": "2026-11-13T18:02:43+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -13074,6 +13074,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "TK115",
+      "defect": "DD-00016283",
+      "raised": "2026-11-04",
+      "system": "TK115.DRS.FD (Final Drives / Конечные передачи)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Требуется дефектовка. Посторонний шум + струшка в масле",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-021694"
+    },
+    {
       "asset": "CR004",
       "defect": "DD-00016309",
       "raised": "2026-11-04",
@@ -13215,19 +13228,6 @@ window.CM_WO_DATA = {
       "by": "Evgeniy Frolin",
       "regBy": "Фролин Евгений Владимирович",
       "wo": "WO-021697"
-    },
-    {
-      "asset": "TK115",
-      "defect": "DD-00016283",
-      "raised": "2026-11-04",
-      "system": "TK115.DRS.FD (Final Drives / Конечные передачи)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Требуется дефектовка. Посторонний шум + струшка в масле",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Roman Besedovskiy",
-      "regBy": "Беседовский Роман Иванович",
-      "wo": "WO-021694"
     },
     {
       "asset": "TK151",
