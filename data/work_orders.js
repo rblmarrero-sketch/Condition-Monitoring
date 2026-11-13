@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-13T16:14:21+00:00",
+  "generated": "2026-11-13T16:31:35+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -5781,6 +5781,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022537"
     },
     {
+      "asset": "TK005",
+      "defect": "DD-00016855",
+      "raised": "2026-11-14",
+      "system": "TK005.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "Не работает задний правый указатель поворота, передний левый ПТФ.",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022539"
+    },
+    {
       "asset": "TK021",
       "defect": "DD-00016845",
       "raised": "2026-11-14",
@@ -5844,6 +5857,19 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-022534"
+    },
+    {
+      "asset": "TK001",
+      "defect": "DD-00016856",
+      "raised": "2026-11-14",
+      "system": "TK001.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "Неисправность габаритного освещения",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022540"
     },
     {
       "asset": "BS009",
@@ -6197,6 +6223,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022517"
     },
     {
+      "asset": "LD005",
+      "defect": "DD-00016831",
+      "raised": "2026-11-13",
+      "system": "Bucket / Ковш",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Износ коронок",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022516"
+    },
+    {
       "asset": "TK104",
       "defect": "DD-00016795",
       "raised": "2026-11-13",
@@ -6533,19 +6572,6 @@ window.CM_WO_DATA = {
       "by": "Aleksey Dobrikov",
       "regBy": "Добриков Алексей Владимирович",
       "wo": "WO-022511"
-    },
-    {
-      "asset": "LD005",
-      "defect": "DD-00016831",
-      "raised": "2026-11-13",
-      "system": "Bucket / Ковш",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "Износ коронок",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": "WO-022516"
     },
     {
       "asset": "CR003",
