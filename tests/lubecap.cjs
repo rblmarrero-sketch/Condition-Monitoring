@@ -169,6 +169,7 @@ const eq = (g, w, what) => ok(JSON.stringify(g) === JSON.stringify(w),
   const reg = await p.evaluate(async () => {
     const s = document.getElementById("typeSel");
     if (![...s.options].some(o => o.value === "TEMP")) return null;
+    /* a new round: with one in hand the app asks first (build 614) */ draft = { positions: {} }; 
     s.value = "TEMP"; s.dispatchEvent(new Event("change"));
     await new Promise(r => setTimeout(r, 250));
     const u = (window.ASSETS || []).find(a => a.cls === "HT");
@@ -189,6 +190,7 @@ const eq = (g, w, what) => ok(JSON.stringify(g) === JSON.stringify(w),
   /* Back to where the rest of the file expects to be. */
   await p.evaluate(async o => {
     const s = document.getElementById("typeSel");
+    /* a new round: with one in hand the app asks first (build 614) */ draft = { positions: {} }; 
     s.value = "LUBE"; s.dispatchEvent(new Event("change"));
     await new Promise(r => setTimeout(r, 250));
     selectEquip(o);

@@ -26,6 +26,7 @@ async function app(b) {
   return { ctx, p };
 }
 const setType = (p, ty) => p.evaluate(t => {
+  /* a new round: with one in hand the app now asks before it is discarded (build 614) */ draft = { positions: {} }; 
   const s = document.getElementById('typeSel'); s.value = t; s.dispatchEvent(new Event('change'));
 }, ty);
 const vis = (p, sel) => p.evaluate(s => {

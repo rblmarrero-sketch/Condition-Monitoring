@@ -66,6 +66,7 @@ const ok = (n, c, d) => { if (!c) { fail++; console.log('  FAIL  ' + n + (d !== 
     const s = document.getElementById('typeSel');
     const ty = [...s.options].map(o => o.value).filter(v => /GET/i.test(v))[0];
     if (!ty) return { skip: true };
+    /* a new round: with one in hand the app asks first (build 614) */ draft = { positions: {} }; 
     s.value = ty; s.dispatchEvent(new Event('change'));
     await new Promise(r => setTimeout(r, 300));
     const u = (window.ASSETS || []).find(a => a.cls === 'EXC');

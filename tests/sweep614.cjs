@@ -136,6 +136,48 @@ const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
   });
   ok('the signature of a round being edited is kept until it is cleared', sign.kept && sign.cleared, JSON.stringify(sign));
 
+  console.log('the three left open by the sweep');
+  await m.evaluate(() => { const s = document.getElementById('typeSel'); s.value = 'MP'; s.dispatchEvent(new Event('change')); selectEquip('TK151'); });
+  await m.waitForTimeout(200);
+  const mph = await m.evaluate(async () => {
+    window.chooseSource = async () => 'live';
+    let n = 0; CMNative.photo = async () => new File([new Uint8Array([0xff, 0xd8, 0xff, 0xe0, ++n, n, n, n, 0xff, 0xd9])], 'c.jpg', { type: 'image/jpeg' });
+    await takeMachinePhoto('OVERVIEW'); await takeMachinePhoto('OVERVIEW');
+    const ov = genPhotos(draft, 'OVERVIEW'); const b4 = ov[0] ? new Uint8Array(await ov[0].arrayBuffer())[4] : 0;
+    await takeMachinePhoto('EXTRA'); await takeMachinePhoto('EXTRA');
+    const d = document.querySelector('dialog[open]'); if (d && d.close) d.close();
+    return { ov: ov.length, b4, extra: genPhotos(draft, 'EXTRA').length,
+      thumbs: document.querySelectorAll('#mpRows .mprow[data-cat="EXTRA"] img').length,
+      add: (document.querySelector('#mpRows [data-take="EXTRA"]') || {}).textContent || '' };
+  });
+  ok('Retake on a machine photograph replaces it', mph.ov === 1 && mph.b4 === 2, JSON.stringify(mph));
+  ok('"Additional" keeps every photograph, shows each and offers another', mph.extra === 2 && mph.thumbs === 2 && /Add another/.test(mph.add), JSON.stringify(mph));
+
+  const leave = await m.evaluate(async () => {
+    const s = document.getElementById('typeSel'); const n0 = Object.keys(draft.positions).length;
+    s.value = 'FC'; s.dispatchEvent(new Event('change'));
+    await new Promise(r => setTimeout(r, 150));
+    const asked = !!document.querySelector('#dlg[open]'), stayed = type === 'MP' && s.value === 'MP';
+    document.getElementById('dlgCancel').click(); await new Promise(r => setTimeout(r, 150));
+    const kept = Object.keys(draft.positions).length === n0 && type === 'MP';
+    s.value = 'FC'; s.dispatchEvent(new Event('change')); await new Promise(r => setTimeout(r, 150));
+    document.getElementById('dlgOk').click(); await new Promise(r => setTimeout(r, 200));
+    return { asked, stayed, kept, after: type, left: Object.keys(draft.positions).length };
+  });
+  ok('changing the round type with a round in hand asks first', leave.asked && leave.stayed, JSON.stringify(leave));
+  ok('"Keep working" keeps it; "Discard and continue" starts the other round', leave.kept && leave.after === 'FC' && leave.left === 0, JSON.stringify(leave));
+
+  const rtw = await m.evaluate(async () => {
+    const no = RTW_ITEMS[0].no, att = { a1: { seq: 3, category: 'COMPONENT' } };
+    const rec = { id: 'RTW__TK900__2026-11-12__T__1', type: 'RTW', equip: 'TK900', date: '2026-11-12', rev: 1,
+      positions: { [no]: { mark: 'pass', comment: '', photos: [], att } } };
+    await rtwOpenForEdit(rec);
+    const same = rtwDraft.items[no].att === att;
+    document.getElementById('rtwOv').classList.add('hidden'); rtwEditing = null;
+    return { same };
+  });
+  ok('an RTW edit carries its attachment manifest in', rtw.same, JSON.stringify(rtw));
+
   ok('no page errors throughout', errs.length === 0, errs.slice(0, 3).join(' | '));
   await b.close();
   console.log(fails.length ? `\n${fails.length} FAILED: ` + fails.join(' | ') : '\nall passed');
