@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-13T06:07:53+00:00",
+  "generated": "2026-11-13T06:22:49+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -442,13 +442,13 @@ window.CM_WO_DATA = {
     "regBy": "Contact person initiator WR"
   },
   "cmDateFrom": {
-    "raised": 200,
+    "raised": 202,
     "detected": 0,
     "planStart": 0
   },
   "cmCauseFrom": {
     "wo": 110,
-    "wr": 90,
+    "wr": 92,
     "cert": 0,
     "none": 0
   },
@@ -461,6 +461,58 @@ window.CM_WO_DATA = {
     "Bekzhan"
   ],
   "cmWorkOrders": [
+    {
+      "date": "2026-11-13",
+      "dateFrom": "raised",
+      "raised": "2026-11-13",
+      "detected": "2026-11-13",
+      "planStart": null,
+      "closed": null,
+      "asset": "TK159",
+      "defect": "DD-00016820",
+      "requestNo": "DD-00016820",
+      "eqType": "TRUCK, DUMP",
+      "system": "TK159.CH (Structure & Chassis / Рама и конструкция)",
+      "priority": "P4 Planned (Repair)",
+      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "cause": "Крепеж ослаблен",
+      "causeFrom": "wr",
+      "descr": "Ослабление креплении КПП",
+      "status": "Registered",
+      "by": "Slam",
+      "byFull": "Slam Taganov",
+      "regBy": "Таганов Слам Джумамуратович",
+      "raisedBy": "ГДК Баимская",
+      "woNumber": null,
+      "maintType": null,
+      "planned": false
+    },
+    {
+      "date": "2026-11-13",
+      "dateFrom": "raised",
+      "raised": "2026-11-13",
+      "detected": "2026-11-13",
+      "planStart": null,
+      "closed": null,
+      "asset": "TK159",
+      "defect": "DD-00016819",
+      "requestNo": "DD-00016819",
+      "eqType": "TRUCK, DUMP",
+      "system": "TK159.DRS.TRA (Transmission / Трансмиссия)",
+      "priority": "P4 Planned (Repair)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Поврежден шланга/линии",
+      "causeFrom": "wr",
+      "descr": "Обильное запотевание РВД",
+      "status": "Registered",
+      "by": "Slam",
+      "byFull": "Slam Taganov",
+      "regBy": "Таганов Слам Джумамуратович",
+      "raisedBy": "ГДК Баимская",
+      "woNumber": null,
+      "maintType": null,
+      "planned": false
+    },
     {
       "date": "2026-11-13",
       "dateFrom": "raised",
@@ -5804,6 +5856,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
+      "wo": null
+    },
+    {
+      "asset": "CR005",
+      "defect": "DD-00016818",
+      "raised": "2026-11-13",
+      "system": "CR005.CRS.JAW (Jaw Crusher / Щековая дробилка)",
+      "defectType": "7.05 Jaw crusher jaw die wear / Износ щеки щековой дробилки",
+      "descr": "критический износ неподвижной плиты",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
       "wo": null
     },
     {
@@ -28739,6 +28804,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "LS048",
+      "defect": "DD-00014963",
+      "raised": "2026-10-17",
+      "system": "LS048.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "Замена ФОВ",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
       "asset": "EX002",
       "defect": "DD-00014967",
       "raised": "2026-10-17",
@@ -28771,19 +28849,6 @@ window.CM_WO_DATA = {
       "system": "EX006.HS.MP (Hydraulic Pumps / Гидронасосы)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "каплевидная утечка по гидронасосу",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "LS048",
-      "defect": "DD-00014963",
-      "raised": "2026-10-17",
-      "system": "LS048.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
-      "descr": "Замена ФОВ",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -57950,19 +58015,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
-      "wo": null
-    },
-    {
       "asset": "DZ022",
       "defect": "DD-00011314",
       "raised": "2026-08-21",
@@ -57973,6 +58025,19 @@ window.CM_WO_DATA = {
       "priority": "P2 Urgent",
       "by": "Andrey Shipelov",
       "regBy": "Шипелов Андрей Анатольевич",
+      "wo": null
+    },
+    {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
@@ -59367,8 +59432,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000076",
+      "asset": "H07",
+      "defect": "EB-00000075",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -59380,8 +59445,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H07",
-      "defect": "EB-00000075",
+      "asset": "H04",
+      "defect": "EB-00000076",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
