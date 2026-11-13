@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-13T09:37:42+00:00",
+  "generated": "2026-11-13T09:54:44+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -6002,19 +6002,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022487"
     },
     {
-      "asset": "EX005",
-      "defect": "DD-00016827",
-      "raised": "2026-11-13",
-      "system": "EX005.CH.AL (Central Lubrication System / Централизованная система смазки)",
-      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
-      "descr": "Ремонт Линкольн",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022511"
-    },
-    {
       "asset": "EX008",
       "defect": "DD-00016826",
       "raised": "2026-11-13",
@@ -6221,6 +6208,32 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022498"
+    },
+    {
+      "asset": "LS043",
+      "defect": "DD-00016834",
+      "raised": "2026-11-13",
+      "system": "LS043.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "нестабильная работа ДВС",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022518"
+    },
+    {
+      "asset": "EX005",
+      "defect": "DD-00016827",
+      "raised": "2026-11-13",
+      "system": "EX005.CH.AL (Central Lubrication System / Централизованная система смазки)",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "Ремонт Линкольн",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022511"
     },
     {
       "asset": "TK035",
