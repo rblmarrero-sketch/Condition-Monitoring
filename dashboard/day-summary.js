@@ -158,7 +158,7 @@
   var M = {
     en: { title: 'Condition Monitoring — Daily Report', hello: 'Good day, colleagues. Below are the condition monitoring results; the report of each round is attached.',
       rounds: 'rounds', units: 'units', act: 'ACTION REQUIRED', find: 'Findings', worst: 'worst first', clean: 'Inspected — no findings',
-      t_sev: 'Severity', t_date: 'Date', t_unit: 'Unit · round', t_comp: 'Component', t_def: 'Defect · description', t_no: 'Defect no. · priority', t_ex: 'Existing defect', ex_cited: 'from the comment',
+      t_sev: 'Severity', t_date: 'Date', t_unit: 'Unit · round', t_comp: 'Component', t_def: 'Defect · description', t_no: 'Defect no. · priority', t_ex: 'Existing defect', ex_cited: 'from the comment', ex_sim: 'similar description', ex_chk: 'same system — check',
       nodef: 'Not raised in 1C', rep: 'Repeat', rep_cm: '{g} on {d}', rep_1c: 'earlier defect {n} ({s})', pts: '{n} points', meas: '{n} points measured', worstK: 'worst: {p}',
       others: 'other points normal', online: 'View more details online', online_t: 'Photos, full readings and each unit’s history are on the CM dashboard. Click a unit number to open its Equipment History.',
       open: 'Open the CM dashboard', net: 'Company network or VPN', by: 'Inspected by', att: 'The report of each round is attached.',
@@ -169,7 +169,7 @@
       ok_GET: 'Ground engaging tools within wear limits.', ok_TEMP: 'Temperatures within limits.', ok_LUBE: 'Lubrication audit: no deviations.', ok_: 'No defects found.' },
     ru: { title: 'Мониторинг состояния — ежедневный отчёт', hello: 'Добрый день, коллеги. Ниже результаты мониторинга состояния; отчёт по каждому обходу приложен.',
       rounds: 'обходов', units: 'единиц', act: 'ТРЕБУЮТСЯ ДЕЙСТВИЯ', find: 'Замечания', worst: 'по степени критичности', clean: 'Осмотрено — без замечаний',
-      t_sev: 'Критичность', t_date: 'Дата', t_unit: 'Единица · обход', t_comp: 'Узел', t_def: 'Дефект · описание', t_no: '№ дефекта · приоритет', t_ex: 'Существующий дефект', ex_cited: 'из комментария',
+      t_sev: 'Критичность', t_date: 'Дата', t_unit: 'Единица · обход', t_comp: 'Узел', t_def: 'Дефект · описание', t_no: '№ дефекта · приоритет', t_ex: 'Существующий дефект', ex_cited: 'из комментария', ex_sim: 'похожее описание', ex_chk: 'та же система — проверьте',
       nodef: 'Нет в 1С', rep: 'Повтор', rep_cm: '{g} от {d}', rep_1c: 'ранее дефект {n} ({s})', pts: 'точек: {n}', meas: 'замерено точек: {n}', worstK: 'худшие: {p}',
       others: 'остальные точки в норме', online: 'Подробности онлайн', online_t: 'Фото, все замеры и история каждой единицы — на панели мониторинга состояния. Нажмите номер единицы, чтобы открыть её историю.',
       open: 'Открыть панель МС', net: 'Сеть компании или VPN', by: 'Осмотр провели', att: 'Отчёт по каждому обходу приложен.',
@@ -243,17 +243,32 @@
       out.push({ n: d ? d.defect : t.replace(/\s+/g, '').toUpperCase(), s: d ? (d.status || '') : '', resp: d ? (d.byFull || d.by || '') : '', by: d ? (d.regBy || '') : '', on: d ? String(d.raised || d.date || '').slice(0, 10) : '', cited: 1 });
     });
     var u = String(x.unit || '').toUpperCase(), sysKey = x.wear ? String(x.comp || '').split(' ')[0] : x.key;
+    /* CM_EXMATCH_V1 (Rickie 13.11.2026 "what if its different defects ... build it"): every open defect of someone
+       else on the same unit and system is a candidate; the ones whose 1C description shares words with the
+       inspector's comment come first and are marked "similar description", the rest "same system — check".
+       Nothing is hidden. 1C's defect type only breaks a tie: the same seat was filed in 1C as 1.06, 1.08 and 1.10. */
+    var mine = exStems(String(x.cmt || '') + ' ' + String(x.desc || '')), myType = exTypeNo(x.type), cand = [];
     other.forEach(function (d) {
-      if (out.length >= EX_MAX || !d || !d.defect) return;
+      if (!d || !d.defect) return;
       var k = exKey(d.defect), on = String(d.raised || '').slice(0, 10);
       if (seen[k] || String(d.asset || '').toUpperCase() !== u || !on || on > x.date || !exOpen(d) || !sysHas(d, sysKey)) return;
-      seen[k] = 1; out.push({ n: d.defect, s: d.status || '', resp: d.by || '', by: d.regBy || '', on: on });
+      seen[k] = 1; var theirs = exStems(d.descr), hit = 0;
+      Object.keys(theirs).forEach(function (w) { if (mine[w]) hit++; });
+      cand.push({ n: d.defect, s: d.status || '', resp: d.by || '', by: d.regBy || '', on: on, descr: String(d.descr || '').trim(), like: hit > 0 ? 'sim' : 'chk',
+        sc: hit + (myType && myType === exTypeNo(d.defectType) ? 0.5 : 0) });
     });
-    return out.slice(0, EX_MAX);
+    cand.sort(function (a, b) { return b.sc - a.sc || String(b.on).localeCompare(String(a.on)); });
+    out.forEach(function (o) { var d = by[exKey(o.n)]; if (d && d.descr) o.descr = String(d.descr).trim(); });
+    return out.concat(cand).slice(0, EX_MAX);
   }
+  /* words of 4+ letters, cut to 5: "сиденья", "сидение" and "сиденье" are one word; filler words are left out */
+  var EX_STOP = { 'требу': 1, 'необх': 1, 'замен': 1, 'ремон': 1, 'неисп': 1, 'работ': 1, 'needs': 1, 'requi': 1, 'repla': 1, 'repai': 1, 'check': 1, 'прове': 1, 'котор': 1, 'после': 1 };
+  function exStems(t) { var o = {}; (String(t || '').toLowerCase().replace(/ё/g, 'е').match(/[a-zа-я]{4,}/g) || []).forEach(function (w) { w = w.slice(0, 5); if (!EX_STOP[w]) o[w] = 1; }); return o; }
+  function exTypeNo(t) { var m2 = /^\s*(\d+\.\d+)/.exec(String(t || '')); return m2 ? m2[1] : ''; }
+  function exShort(t) { t = String(t || '').replace(/\s+/g, ' ').trim(); return t.length > 70 ? t.slice(0, 68).replace(/\s+\S*$/, '') + '…' : t; }
   /* CM_EXSHORT_V1 (Rickie 08.11 19:56): number · status · date · responsible, no labels; the contact person is left out */
   function exParts(d) { return [d.s, d.on ? dm(d.on) : '', d.resp].filter(Boolean); }
-  function exText(ex) { return ex.map(function (d) { var a = exParts(d); return d.n + (a.length ? ' · ' + a.join(' · ') : ''); }).join('; '); }
+  function exText(ex) { return ex.map(function (d) { var a = exParts(d); return d.n + (a.length ? ' · ' + a.join(' · ') : '') + (d.descr ? ' · «' + exShort(d.descr) + '»' : '') + (d.like ? ' (' + langs().map(function (l) { return m(l, 'ex_' + d.like); }).join(' · ') + ')' : ''); }).join('; '); }
   function repBi(rp) { var L2 = langs(); return '↻ ' + L2.map(function (l) { return m(l, 'rep'); }).join(' · ') + ': ' + repText(rp, L2[0]) + (L2.length > 1 && repText(rp, 'en') !== repText(rp, 'ru') ? ' · ' + repText(rp, 'ru') : ''); }
   /* split the rows into findings (anything graded 2 or worse, or carrying a defect) and the clean lines */
   function shape(rows, list) {
@@ -328,7 +343,9 @@
           var no = x.nodef ? '<span style="color:#a33d00;font-weight:700">' + bi('nodef', null, true, '#a33d00') + '</span>' : (x.no ? '<b>' + e(x.no) + '</b>' + (x.prio ? '<br>' + e(x.prio) : '') : (x.prio ? e(x.prio) : '—'));
           /* CM_EXSHORT_V1: DD-… · status · date · responsible in 1C, one line, no labels */
           var ex = (x.ex || []).map(function (d) { var a = exParts(d); return '<b>' + e(d.n) + '</b>' + (a.length ? '<span style="color:#3d474f"> · ' + e(a.join(' · ')) + '</span>' : '') +
-            (d.cited ? '<br><span style="color:#5b6670;font-size:12px">' + e(L2.map(function (l) { return m(l, 'ex_cited'); }).join(' · ')) + '</span>' : ''); }).join('<br><br>') || '—';
+            (d.descr ? '<br><span style="color:#16212a;font-size:12px">' + e(exShort(d.descr)) + '</span>' : '') +
+            (d.cited ? '<br><span style="color:#5b6670;font-size:12px">' + e(L2.map(function (l) { return m(l, 'ex_cited'); }).join(' · ')) + '</span>' : '') +
+            (d.like ? '<br><span style="color:' + (d.like === 'sim' ? '#1d6b3a;font-weight:700' : '#5b6670') + ';font-size:12px">' + e(L2.map(function (l) { return m(l, 'ex_' + d.like); }).join(' · ')) + '</span>' : ''); }).join('<br><br>') || '—';
           return '<tr><td ' + TD + '><span style="background:' + p[0] + ';color:' + p[1] + ';' + F + 'font-size:12px;font-weight:700;padding:3px 8px;white-space:nowrap">' + x.g + ' ' + e(gName(x.g, L2[0])) + '</span>' +
             (L2.length > 1 ? '<div style="' + F + 'font-size:11px;color:#5b6670;margin-top:3px">' + e(gName(x.g, 'ru')) + '</div>' : '') + '</td>' +
             '<td ' + TD + '>' + e(dm(x.date)) + '</td><td ' + TD + '>' + link(x.unit) + ' · ' + e(typeBi(x.type0)) + '</td><td ' + TD + '>' + comp + '</td><td ' + TD + '>' + (def || '—') + '</td><td ' + TD + '>' + no + '</td><td ' + TD + '>' + ex + '</td></tr>';
