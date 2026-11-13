@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-13T21:18:22+00:00",
+  "generated": "2026-11-13T21:32:52+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -5870,6 +5870,19 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022527"
+    },
+    {
+      "asset": "TK043",
+      "defect": "DD-00016861",
+      "raised": "2026-11-14",
+      "system": "TK043.BS.RCH (Brake Chambers / Тормозные камеры)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "уходит воздух  в обоих контурах (Замена заднего энергоаккумулятора)",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022545"
     },
     {
       "asset": "BS008",
@@ -86696,7 +86709,7 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "CRTD",
+      "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
       "planStart": "2026-11-17",
@@ -118432,7 +118445,7 @@ window.CM_WO_DATA = {
       "cmLabel": "500h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "CRTD",
+      "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
       "planStart": "2026-11-17",
@@ -156651,6 +156664,27 @@ window.CM_WO_DATA = {
       "actualStart": "2026-09-21",
       "actualStartDt": "2026-09-21T07:00:00",
       "actualEnd": "2026-09-21"
+    },
+    {
+      "equip": "TK044",
+      "cls": "HT",
+      "woNumber": "WO-022310",
+      "maintType": "500 Hours service Planned",
+      "hours": 500,
+      "cmLabel": "Magnetic Plug",
+      "cmTypes": [
+        "MP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-17",
+      "planStartDt": "2026-11-17T00:00:00",
+      "planEnd": "2026-11-17",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
     },
     {
       "equip": "TK046",

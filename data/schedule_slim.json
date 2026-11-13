@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-13T21:18:22+00:00",
+  "generated": "2026-11-13T21:32:52+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -359,6 +359,17 @@
           "MP"
         ],
         "plan": "2026-11-23",
+        "priority": "P3 Planned (PM)"
+      }
+    ],
+    "TK044": [
+      {
+        "wo": "WO-022310",
+        "hours": 500,
+        "types": [
+          "MP"
+        ],
+        "plan": "2026-11-17",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -3248,6 +3259,24 @@
       "raised": "2026-11-17",
       "type": "250 Hours service Planned",
       "hours": 250,
+      "plan": "2026-11-17",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-022310",
+      "equip": "TK044",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-17",
+      "type": "500 Hours service Planned",
+      "hours": 500,
       "plan": "2026-11-17",
       "status": "Elimination scheduled",
       "request": "",
@@ -11291,6 +11320,14 @@
       "p": "P2",
       "r": "2026-11-14",
       "x": "Разбито зеркало"
+    },
+    {
+      "d": "DD-00016861",
+      "u": "TK043",
+      "s": "TK043.BS.RCH (Brake Chambers / Тормозные камеры)",
+      "p": "P2",
+      "r": "2026-11-14",
+      "x": "уходит воздух  в обоих контурах (Замена заднего энергоаккумулятора)"
     },
     {
       "d": "DD-00016860",
