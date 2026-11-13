@@ -22563,5 +22563,41 @@ html.cmStd #cwKpis .cwpbtn::after{content:attr(data-tap);order:3;font-size:13px;
   if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",all); else all();
 })();
 </script>
+<style id="cmTblCss">/* CM_TBL_V1 (13.11.2026, Rickie 13:44 "fast track the Table standardization", 13:49 order; 13:40 "ensure that this bug is not
+   happening in other tables. keep it as a check and rule"): under /cm/ (the site) a table's headings are the site table standard's navy,
+   and a table scrolled past keeps its heading directly under the bars pinned at the top (site menu, the filter bar), solid, never under
+   them and never scrolled away (KB UI_STANDARD section 22, the held-header rule). Off the site nothing changes. */
+html.cmStd main table.grid thead tr:not(:has(th.cwfh)) th{background:#2B4C7E!important;color:#fff!important;border-color:#3d5f93!important;opacity:1!important}
+html.cmStd main table.grid thead tr:not(:has(th.cwfh)) th *:not(input):not(select):not(button){color:inherit!important}
+html.cmStd main table.grid thead tr:not(:has(th.cwfh)) th[data-sort]:hover,html.cmStd main table.grid thead tr:not(:has(th.cwfh)) th.sortable:hover{background:#355b92!important}
+html.cmStd main table.grid thead th.cwfh{background:var(--surface,#fff)!important;opacity:1!important}
+html.cmStd main table.grid.cmHeld thead th{z-index:4;box-shadow:0 2px 4px rgba(16,24,32,.12)}
+html.cmStd main table.grid.cmHeld thead tr:not(:has(th.cwfh)) th{position:relative}
+</style>
+<script id="cmTblJs">/* CM_TBL_V1: the held heading. A table whose heading can stick (no scrolling box around it) gets its sticky top at the bottom of the
+   pinned bars; a table inside a scrolling box (where sticky cannot work) has its heading moved down by the distance it was scrolled
+   past, the template's held-heading method (site_std v2.7). Only on the site (html.cmStd), only on screens wide enough for tables
+   (a card table has no heading). */
+(function(){ try{
+  var de=document.documentElement;
+  function isPin(e){ for(var n=0;e&&e!==document.body&&e!==de&&n<12;e=e.parentElement,n++){ if(/^(TD|TH|TR|THEAD|TBODY|TABLE)$/.test(e.tagName)) return null; var p=getComputedStyle(e).position; if(p==="fixed"||p==="sticky") return e; } return null; }
+  function pinB(){ var y=1,best=0,x=Math.round(innerWidth/2),seen=[]; for(var k=0;k<4;k++){ var hit=null,hs=document.elementsFromPoint?document.elementsFromPoint(x,y):[];
+      for(var i=0;i<hs.length;i++){ if(hs[i].closest&&hs[i].closest(".std-sfpop,.std-pkpop,.std-pop,table")) continue; var e=isPin(hs[i]); if(e&&seen.indexOf(e)<0){hit=e;break;} }
+      if(!hit) break; seen.push(hit); var r=hit.getBoundingClientRect(); if(r.top>y+1||r.bottom<=y||r.height>innerHeight*0.5) break; best=Math.max(best,r.bottom); y=Math.ceil(r.bottom)+1; }
+    return best; }
+  function boxed(tb){ for(var e=tb.parentElement;e&&e!==document.body;e=e.parentElement){ var c=getComputedStyle(e); if(c.overflowX!=="visible"||c.overflowY!=="visible") return true; } return false; }
+  var raf=0;
+  function run(){ raf=0; if(!de.classList.contains("cmStd")) return; var top=pinB();
+    [].forEach.call(document.querySelectorAll("main table.grid"),function(tb){ var th=tb.tHead; if(!th||!tb.offsetParent||tb.classList.contains("ascards")) { if(tb.classList.contains("cmHeld")) clear(tb); return; }
+      if(boxed(tb)){ var r=tb.getBoundingClientRect(), h=th.getBoundingClientRect().height, d=Math.max(0,Math.min(top-r.top,r.height-h-2)), v=d>0?"translateY("+Math.round(d)+"px)":"";
+        [].forEach.call(th.rows,function(row){ [].forEach.call(row.cells,function(c){ if(c.style.transform!==v) c.style.transform=v; }); }); tb.classList.toggle("cmHeld",d>0); }
+      else { var t=top; [].forEach.call(th.rows,function(row){ var v=t+"px"; [].forEach.call(row.cells,function(c){ if(getComputedStyle(c).position==="sticky"&&c.style.top!==v) c.style.top=v; }); t+=Math.round(row.getBoundingClientRect().height); }); } }); }
+  function clear(tb){ tb.classList.remove("cmHeld"); [].forEach.call(tb.tHead.rows,function(row){ [].forEach.call(row.cells,function(c){ c.style.transform=""; }); }); }
+  function q(){ if(!raf) raf=requestAnimationFrame(run); }
+  addEventListener("scroll",q,{passive:true}); addEventListener("resize",q);
+  var m=document.querySelector("main"); if(m&&window.MutationObserver) new MutationObserver(q).observe(m,{childList:true,subtree:true});
+  window.__cmTblHold=run; q();
+}catch(e){ if(window.bad) bad("cmtbl",e); }})();
+</script>
 </body>
 </html>
