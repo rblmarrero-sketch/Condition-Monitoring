@@ -5456,6 +5456,15 @@ table is `cmHeld`. site_std v2.7.2 (askpi-site) makes the same change in the tem
 down with a margin (no scroll, no new element) and requires the heading to stay at the bars; on build 616 the heading sits 300 px
 below them. `tests/site_std_copy/held_audit.js` is v2.7.2: a heading painted with an opaque gradient counts as solid.
 
+**THE PINNED BARS ARE FOUND THE WAY THE HELD-HEADING CHECK FINDS THEM (build 620, live audit 13.11.2026 19:24).** `#cmTblJs`'s
+`pinB()` asked only what lies under the middle of the window, one element at a time, and stopped at the first one that did not fit:
+on a 2560 screen the Overview's compliance heading sat 14 px under the bar, and a pinned panel across the middle hid the bar altogether
+(heading at 0). It now takes every fixed / sticky element outside a table that is wide (over 30 % of the window), not tall (under half)
+and chained from the top of the window, the template's v2.7.4 rule and the audit's own; the list is kept until the page adds or removes
+elements (at most 2 s). The day summary's findings table on Reports (`table[data-ds=find]`) is held like `main table.grid`.
+`tests/cmheld.cjs` runs at 1440 and 2560 and plants both cases; on build 619 the panel puts the heading at 0 against a 63 px bar and the
+findings table's heading scrolls away (-398). `tests/site_std_copy/held_audit.js` carries v2.7.4's card-layout rule.
+
 **NCR FROM THE PHONE (build 616, CM_NCR_V1, Rickie 13.11.2026 "lets build").** The inspection type list ends with
 "NCR · Non-conformance (NCR)", after FIR. Like FIR it is not a round (`TYPE_META.NCR.ncr`): choosing it opens `#ncrOv`
 and the list goes back. Two ways in: an NCR already in PECHANKA's NCR register (`SCHED.ncrList`, written into
