@@ -11,6 +11,10 @@ window.__stdOwnBox = function (t) { for (var e = t.parentElement; e && e !== doc
 window.__stdSolidImg = function (bi) { if (!bi || !/gradient\(/.test(bi) || /transparent/.test(bi)) return false;
   var cs = bi.match(/rgba?\([^)]*\)/g); if (!cs || !cs.length) return false;
   return cs.every(function (x) { var n = x.match(/[\d.]+/g); return n && (n.length < 4 || +n[3] >= 0.99); }); };
+/* v2.7.2: a table drawn as cards (its rows and heading no longer laid out as a table - DQ report's dq-stack, CM's ascards, the
+   template's phone cards) has no columns to hold a heading over: every card names its own fields. Not judged. */
+window.__stdCards = function (t) { var d = getComputedStyle(t.tHead).display, r = t.tBodies[0] && t.tBodies[0].rows[0];
+  return d !== 'table-header-group' || !!(r && getComputedStyle(r).display !== 'table-row'); };
 window.__stdHeldAudit = function () {
   var bad = [];
   function inTable(e) { return !!(e.closest && e.closest('table,.std-sfpop,.std-pkpop,.std-tip')); }
@@ -21,7 +25,7 @@ window.__stdHeldAudit = function () {
   var y = 0; pins.forEach(function (r) { if (r.top <= y + 2) y = Math.max(y, r.bottom); });
   /* every table the page has scrolled past (its top above the pinned bars, its body still below them), whatever holds its heading:
      the template (table.std-held), a sticky heading, or the page's own script - and one whose heading simply scrolled away */
-  var held = [].slice.call(document.querySelectorAll('table')).filter(function (t) { if (!t.offsetParent || !t.tHead || !t.tHead.rows.length || t.closest('.std-sfpop,.std-pkpop,[hidden]') || __stdOwnBox(t)) return false;
+  var held = [].slice.call(document.querySelectorAll('table')).filter(function (t) { if (!t.offsetParent || !t.tHead || !t.tHead.rows.length || t.closest('.std-sfpop,.std-pkpop,[hidden]') || __stdOwnBox(t) || __stdCards(t)) return false;
     var r = t.getBoundingClientRect(); return r.top < y - 2 && r.bottom > y + 60 && t.tHead.getBoundingClientRect().height > 0; });
   held.forEach(function (t, i) { var name = t.id || t.getAttribute('data-std-id') || ('table ' + (i + 1));
     var cells = [].slice.call(t.tHead.rows[0].cells).filter(function (c) { return c.offsetWidth; }); if (!cells.length) return;
