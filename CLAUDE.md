@@ -6691,3 +6691,16 @@ a 520 px description goes first to the cut columns; equipment type, priority and
 of an ellipsis; a resize of 60 px or more redraws the table; the stage chips sit on the Export CSV row. The site template does the
 same for every page from SITE_STD_V1 v1.9 (askpi-site). `tests/cmfluid.cjs` measures it at 1280 / 1536 / 1920 / 2560, EN and RU,
 Overview and Defects raised, and fails 72 assertions on build 590.
+
+**AN OFFICE PAGE SAVES THROUGH THE OFFICE SITE, WHATEVER ADDRESS ITS BROWSER ONCE SAVED (build 618, CM_DESKROUTE_V1, Rickie 13.11.2026
+"When editing comments its giving error").** The edit panel said "Не сохранено — office changes go through
+maintenance.vegadevelopment.com". That sentence is Google's (`DESK_REFUSED_`, PROJECT_FACTS F16): an office change (edit, void,
+resolve, rewrite, delete) is accepted only with the desk key PECHANKA's `/cm-api` adds. `CMDrive`'s `cfg()` lets an address saved
+in the browser (`cm_drive_url`) outrank the page's own default, so a browser that still held a Google `/exec` address posted
+straight to Google from the office page. `deskRoute()` in `dashboard/drive.js`: when the page's own default is same-origin (the
+site's forwarder) and the saved address is on script.google.com, the saved address, its secret and its cursor are dropped, once.
+Anywhere else nothing changes, and a saved address that is not Google is kept. `CMDrive.viaSite()` says whether writes go through
+the site. `edErr` on both pages says Google's refusal in the page's language with where to make the change (`ed_deskonly`): that
+is what a desk on the Firebase or GitHub copy sees, where corrections cannot be saved by design. If the refusal still appears on
+maintenance.vegadevelopment.com after this build, the forwarder is not adding the key (PECHANKA, not this repository).
+`tests/deskroute.cjs` (both pages; fails on build 617). No backend change.

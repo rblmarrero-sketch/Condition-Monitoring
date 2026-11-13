@@ -4111,23 +4111,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=617"></script>
+<script src="../data/magnetic_plug.js?v=618"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=617"></script>
-<script src="../mobile/hme.js?v=617"></script>
-<script src="../mobile/mp-fc.js?v=617"></script>
-<script src="../mobile/rtw.js?v=617"></script>
-<script src="../mobile/hme-cascade.js?v=617"></script>
-<script src="../mobile/temp-limits.js?v=617"></script>
+<script src="../data/work_orders.js?v=618"></script>
+<script src="../mobile/hme.js?v=618"></script>
+<script src="../mobile/mp-fc.js?v=618"></script>
+<script src="../mobile/rtw.js?v=618"></script>
+<script src="../mobile/hme-cascade.js?v=618"></script>
+<script src="../mobile/temp-limits.js?v=618"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=617"></script>
-<script src="../mobile/normalize.js?v=617"></script>
-<script src="../mobile/terms.js?v=617"></script>
+<script src="../mobile/assets.js?v=618"></script>
+<script src="../mobile/normalize.js?v=618"></script>
+<script src="../mobile/terms.js?v=618"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -4146,21 +4146,21 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=617"></script>
-<script src="../mobile/edits.js?v=617"></script>
-<script src="../mobile/due.js?v=617"></script>
-<script src="../mobile/wear.js?v=617"></script>
-<script src="../mobile/wear-map.js?v=617"></script>
-<script src="../mobile/lube.js?v=617"></script>
-<script src="../mobile/lube-overrides.js?v=617"></script>
-<script src="../mobile/lube2027.js?v=617"></script>
-<script src="../mobile/lube-tds.js?v=617"></script>
-<script src="lube-master.js?v=617"></script>
-<script src="wear-limits.js?v=617"></script>
+<script src="../mobile/grade.js?v=618"></script>
+<script src="../mobile/edits.js?v=618"></script>
+<script src="../mobile/due.js?v=618"></script>
+<script src="../mobile/wear.js?v=618"></script>
+<script src="../mobile/wear-map.js?v=618"></script>
+<script src="../mobile/lube.js?v=618"></script>
+<script src="../mobile/lube-overrides.js?v=618"></script>
+<script src="../mobile/lube2027.js?v=618"></script>
+<script src="../mobile/lube-tds.js?v=618"></script>
+<script src="lube-master.js?v=618"></script>
+<script src="wear-limits.js?v=618"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=617"></script>
-<script src="../mobile/machine-photos.js?v=617"></script>
+<script src="../mobile/upload-defaults.js?v=618"></script>
+<script src="../mobile/machine-photos.js?v=618"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -4169,17 +4169,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=617"></script>
-<script src="../mobile/get.js?v=617"></script>
-<script src="../mobile/points.js?v=617"></script>
-<script src="../mobile/uc-points.js?v=617"></script>
-<script src="../mobile/inspect-guide.js?v=617"></script>
-<script src="../mobile/get-figs.js?v=617"></script>
-<script src="../mobile/body-points.js?v=617"></script>
-<script src="../mobile/body-map.js?v=617"></script>
-<script src="../mobile/jspdf.umd.min.js?v=617"></script>
-<script src="../mobile/html2canvas.min.js?v=617"></script>
-<script src="../mobile/report-core.js?v=617"></script>
+<script src="../mobile/machine-fig.js?v=618"></script>
+<script src="../mobile/get.js?v=618"></script>
+<script src="../mobile/points.js?v=618"></script>
+<script src="../mobile/uc-points.js?v=618"></script>
+<script src="../mobile/inspect-guide.js?v=618"></script>
+<script src="../mobile/get-figs.js?v=618"></script>
+<script src="../mobile/body-points.js?v=618"></script>
+<script src="../mobile/body-map.js?v=618"></script>
+<script src="../mobile/jspdf.umd.min.js?v=618"></script>
+<script src="../mobile/html2canvas.min.js?v=618"></script>
+<script src="../mobile/report-core.js?v=618"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -4951,6 +4951,7 @@ const I18N={
   ed_needconfirm:"Type “{x}” to confirm.",
   ed_sending:"✅ Saved — sending to Drive…", ed_saved:"✅ Saved.",
   ed_undone:"❌ Not saved — {e} The change has been undone.",
+  ed_deskonly:"corrections are saved only from the office site: open maintenance.vegadevelopment.com/cm/dashboard-next/ (company network or VPN) and make the change there.",
   ed_conflict_by:"{by} changed this record at {at}, after this page last read it. Their version is now shown — re-apply your change on top of it.",
   ed_deleting:"Deleting…", ed_deleted:"✅ {n} file(s) moved to Drive's trash — recoverable there for 30 days.",
   ed_del_local:"✅ Removed from this dashboard. No Google Drive is set up here, so this round existed only in this browser and there was nothing else to delete.",
@@ -5875,6 +5876,7 @@ const I18N={
   ed_needconfirm:"Введите «{x}» для подтверждения.",
   ed_sending:"✅ Сохранено — отправляем на Диск…", ed_saved:"✅ Сохранено.",
   ed_undone:"❌ Не сохранено — {e} Изменение отменено.",
+  ed_deskonly:"исправления сохраняются только с офисного сайта: откройте maintenance.vegadevelopment.com/cm/dashboard-next/ (сеть компании или VPN) и внесите изменение там.",
   ed_conflict_by:"{by} изменил(а) эту запись в {at}, после того как страница её прочитала. Теперь показана их версия — внесите своё изменение поверх неё.",
   ed_deleting:"Удаляем…", ed_deleted:"✅ Файлов в корзину Диска: {n} — восстановимо 30 дней.",
   ed_del_local:"✅ Удалено из этой панели. Google Диск здесь не подключён, поэтому осмотр существовал только в этом браузере — удалять больше нечего.",
@@ -12069,7 +12071,11 @@ function edErr(err){
     const at=c.at?String(c.at).replace("T"," ").slice(0,16)+" UTC":"—";
     return t("ed_conflict_by",{by:c.by||"—",at});
   }
-  return (err&&err.message)||String(err);
+  const m=(err&&err.message)||String(err);
+  /* CM_DESKROUTE_V1: Google's refusal of an office change that did not come
+     through the office site, said in the page's language with where to go. */
+  if(/office changes go through/i.test(m)) return t("ed_deskonly");
+  return m;
 }
 function edPost(extra){
   const msg=$("edMsg");
@@ -19113,11 +19119,11 @@ document.querySelector(".lang").addEventListener("click",e=>{
   setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 })();
 </script>
-<script src="drive.js?v=617"></script>
-<script src="sync-adapter.js?v=617"></script>
-<script src="report.js?v=617"></script>
-<script src="reliability.js?v=617"></script>
-<script src="day-summary.js?v=617"></script>
+<script src="drive.js?v=618"></script>
+<script src="sync-adapter.js?v=618"></script>
+<script src="report.js?v=618"></script>
+<script src="reliability.js?v=618"></script>
+<script src="day-summary.js?v=618"></script>
 <script>
 /* THE CLOSED FILTER SAYS WHAT IS CHOSEN. A dropdown narrower than its option
    text ellipsises ("All t…", audit of 2026-10-01). Between 1331 and 1500 px

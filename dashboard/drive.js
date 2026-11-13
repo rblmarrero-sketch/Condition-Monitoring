@@ -262,6 +262,25 @@
       throw e;
     }
   }
+  /* CM_DESKROUTE_V1 (13.11.2026). On the office site the page's own default is
+     the site's forwarder (same origin), and it is the ONLY route by which a
+     correction, a void or a delete is accepted: Google refuses an office change
+     that arrives any other way. A browser that still held a Google /exec address
+     saved before the office moved (typed into Data sources, or written by the
+     changeover) went on posting straight to Google from the office page, and
+     every correction came back "office changes go through ...". Such a saved
+     address gives way to the page's own, once, and the cursor (which counts on
+     the other clock) is dropped. Anywhere else nothing changes. */
+  const sameOrigin = u => { try { return new URL(String(u), location.href).origin === location.origin; } catch (e) { return false; } };
+  const isGoogleExec = u => { try { return /(^|\.)script\.google\.com$/.test(new URL(String(u), location.href).hostname); } catch (e) { return false; } };
+  (function deskRoute() {
+    try {
+      const saved = localStorage.getItem(LS_URL), b = builtIn();
+      if (!saved || !b || !b.url) return;
+      if (!sameOrigin(b.url) || !isGoogleExec(saved)) return;
+      localStorage.removeItem(LS_URL); localStorage.removeItem(LS_SEC); localStorage.removeItem(LS_CUR);
+    } catch (e) {}
+  })();
   const cfg = () => {
     const saved = localStorage.getItem(LS_URL);
     if (saved !== null) return { url: saved.trim(), sec: localStorage.getItem(LS_SEC) || "" };
@@ -1089,7 +1108,8 @@
   }
 
   window.CMDrive = {
-    load, ensurePhotos, fetchByName, configured, ping, saveEdit, remove, deleteFile, resolve, putMedia,
+    load, ensurePhotos, fetchByName, configured, ping, viaSite: () => sameOrigin(cfg().url),
+    saveEdit, remove, deleteFile, resolve, putMedia,
     /* The last fetch's outcome — read by the report message so "fetched" and
        "on the page" are never allowed to disagree in silence. */
     lastFetch: () => lastFetch,
