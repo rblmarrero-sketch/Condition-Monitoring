@@ -28,9 +28,16 @@ ensure(){ local miss=0
     for _ in $(seq 1 60); do up $p && break; sleep 0.25; done
   done
   return 0; }
-pkill -f 'ed-srv.cjs|mock.cjs|stab-srv.cjs|hang.cjs|up-srv.cjs' 2>/dev/null
-sleep 0.5
-ensure; sleep 1
+# Three switches for tests/runfast.sh, which runs this file in several lanes at once:
+#   RUNALL_LIST=1      print the suite names and stop;
+#   RUNALL_ONLY=file   run only the suites named in that file (one a line);
+#   RUNALL_LANE=1      leave other lanes' helper servers alone (pkill sees every lane) and stop our own at the end.
+want(){ [ -z "$RUNALL_ONLY" ] || grep -qxF "$1" "$RUNALL_ONLY"; }
+if [ -z "$RUNALL_LIST" ]; then
+  [ -n "$RUNALL_LANE" ] || pkill -f 'ed-srv.cjs|mock.cjs|stab-srv.cjs|hang.cjs|up-srv.cjs' 2>/dev/null
+  sleep 0.5
+  ensure; sleep 1
+fi
 BAD=0
 # 15, not 13: teamphoto.cjs is exactly 13 characters and ran into the status
 # word, which made the five-pass tally read it as a suite called
@@ -57,9 +64,12 @@ for t in bump.cjs noprodhit.cjs prodguard.cjs pwguard.cjs idxcap.cjs fboverlay.c
          cf.cjs cfd.cjs cfp.cjs f4.cjs s3.cjs s1.cjs edit.cjs ed2.cjs gs.cjs gsdupdir.cjs gsindex.cjs uicontrast.cjs phonetap.cjs phonepolish.cjs puckhit.cjs upkeepreg.cjs defercancel.cjs dashlayout.cjs cards.cjs sitestd.cjs cmtpl.cjs sitefb.cjs cmfluid.cjs cmwomlook.cjs cmheld.cjs histpull.cjs gassafety.cjs drv.cjs \
          dash.cjs fold2.cjs stab.cjs team.cjs wedge.cjs audit.cjs offline.cjs \
          pick.cjs lang.cjs rtw.cjs rtwopen.cjs firdefects.cjs firround.cjs ncrround.cjs ncrlist.cjs unitrange.cjs relingest.cjs reliability.cjs srcpill.cjs installprog.cjs truncate.cjs favicon.cjs holder.cjs resumewords.cjs; do
+  want "$t" || continue
+  if [ -n "$RUNALL_LIST" ]; then echo "$t"; continue; fi
   if [ -f "$t" ]; then run "$t"; else MISSING="$MISSING $t"; fi
 done
-pkill -f 'ed-srv.cjs|mock.cjs|stab-srv.cjs|hang.cjs|up-srv.cjs' 2>/dev/null
+if [ -n "$RUNALL_LANE" ]; then kill $(jobs -p) 2>/dev/null
+elif [ -z "$RUNALL_LIST" ]; then pkill -f 'ed-srv.cjs|mock.cjs|stab-srv.cjs|hang.cjs|up-srv.cjs' 2>/dev/null; fi
 
 # dashboard-next/index.html's own parity suite. Until docs/dashboard-next-
 # parity.md said so in so many words, NONE of these ran here -- the ~150
@@ -76,6 +86,8 @@ pkill -f 'ed-srv.cjs|mock.cjs|stab-srv.cjs|hang.cjs|up-srv.cjs' 2>/dev/null
 # suite, here or above, so neither needs special-casing; they simply take as
 # long as they take, same as e.g. bigday.cjs already does above.
 for t in actions-next.cjs assignphotos-next.cjs conflict-next.cjs data-window-next.cjs datasources-next.cjs defects-next.cjs defer-next.cjs detail-next.cjs disposition-next.cjs due-next.cjs editround-next.cjs equipment-panel-next.cjs failure-next.cjs followup-next.cjs history-next.cjs lube-next.cjs missingphotos-next.cjs nav-shell-next.cjs overview-next.cjs period-filter-next.cjs photoeditor-next.cjs plan-next.cjs reports-next.cjs sync-next.cjs tablekit-next.cjs tablekit-scale-next.cjs wear-next.cjs; do
+  want "$t" || continue
+  if [ -n "$RUNALL_LIST" ]; then echo "$t"; continue; fi
   if [ -f "$t" ]; then run "$t"; else MISSING="$MISSING $t"; fi
 done
 [ -n "$SILENT" ] && echo "SILENT (asserted nothing):$SILENT"
