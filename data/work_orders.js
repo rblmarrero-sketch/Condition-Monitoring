@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-14T14:42:36+00:00",
+  "generated": "2026-11-14T15:02:46+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -6041,6 +6041,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022539"
     },
     {
+      "asset": "EX011",
+      "defect": "DD-00016893",
+      "raised": "2026-11-14",
+      "system": "EX011.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Порыв РВД",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022554"
+    },
+    {
       "asset": "LV086",
       "defect": "DD-00016878",
       "raised": "2026-11-14",
@@ -6585,19 +6598,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022551"
-    },
-    {
-      "asset": "EX011",
-      "defect": "DD-00016893",
-      "raised": "2026-11-14",
-      "system": "EX011.HS.DL (Hydraulic Lines / Гидролинии)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Порыв РВД",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": "WO-022554"
     },
     {
       "asset": "EX019",
