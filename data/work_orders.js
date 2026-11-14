@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-14T23:12:58+00:00",
+  "generated": "2026-11-14T23:27:42+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -356,7 +356,7 @@ window.CM_WO_DATA = {
     "WE010",
     "WE011"
   ],
-  "duplicateRowsCollapsed": 480,
+  "duplicateRowsCollapsed": 481,
   "roundsDedupedWithinVisit": 2,
   "columns": [
     "Asset description",
@@ -2780,7 +2780,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-10-09",
       "detected": "2026-10-09",
-      "planStart": "2026-11-13",
+      "planStart": "2026-11-17",
       "closed": null,
       "asset": "CN013",
       "defect": "DD-00014452",
@@ -3274,7 +3274,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-10-02",
       "detected": "2026-10-02",
-      "planStart": "2026-11-13",
+      "planStart": "2026-11-17",
       "closed": null,
       "asset": "CN008",
       "defect": "DD-00013865",
@@ -3300,7 +3300,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-10-02",
       "detected": "2026-10-02",
-      "planStart": "2026-11-13",
+      "planStart": "2026-12-14",
       "closed": null,
       "asset": "CN008",
       "defect": "DD-00013864",
@@ -3378,7 +3378,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-10-02",
       "detected": "2026-10-02",
-      "planStart": "2026-11-13",
+      "planStart": "2026-11-17",
       "closed": null,
       "asset": "CN008",
       "defect": "DD-00013855",
@@ -8823,19 +8823,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK015",
-      "defect": "DD-00016715",
-      "raised": "2026-11-11",
-      "system": "TK015.CH (Structure & Chassis / Рама и конструкция)",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "Восстановление",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": null
-    },
-    {
       "asset": "TK006",
       "defect": "DD-00016696",
       "raised": "2026-11-11",
@@ -9003,6 +8990,19 @@ window.CM_WO_DATA = {
       "by": "Vladimir Ladik",
       "regBy": "Ладик Владимир Владимирович",
       "wo": "WO-022429"
+    },
+    {
+      "asset": "TK015",
+      "defect": "DD-00016715",
+      "raised": "2026-11-11",
+      "system": "TK015.CH (Structure & Chassis / Рама и конструкция)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Восстановление",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": "WO-022407"
     },
     {
       "asset": "TK111",
@@ -10474,32 +10474,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "LS038",
-      "defect": "DD-00016590",
-      "raised": "2026-11-09",
-      "system": "LS038.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "замена ремня генератора",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "LS038",
-      "defect": "DD-00016589",
-      "raised": "2026-11-09",
-      "system": "LS038.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "замена топливопроводов низкого давления,",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
       "asset": "LV066",
       "defect": "DD-00016593",
       "raised": "2026-11-09",
@@ -10524,6 +10498,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": null
+    },
+    {
+      "asset": "LS038",
+      "defect": "DD-00016590",
+      "raised": "2026-11-09",
+      "system": "LS038.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "замена ремня генератора",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022405"
     },
     {
       "asset": "GE049",
@@ -10615,6 +10602,19 @@ window.CM_WO_DATA = {
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": "WO-022404"
+    },
+    {
+      "asset": "LS038",
+      "defect": "DD-00016589",
+      "raised": "2026-11-09",
+      "system": "LS038.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "замена топливопроводов низкого давления,",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022406"
     },
     {
       "asset": "CR003",
@@ -49864,19 +49864,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "GE101",
-      "defect": "DD-00013342",
-      "raised": "2026-09-25",
-      "system": "GE101.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Замена шлангов ОЖ",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": null
-    },
-    {
       "asset": "DR009",
       "defect": "DD-00013338",
       "raised": "2026-09-25",
@@ -49888,6 +49875,19 @@ window.CM_WO_DATA = {
       "by": "Pavel Kostin",
       "regBy": "Костин Павел Александрович",
       "wo": null
+    },
+    {
+      "asset": "GE101",
+      "defect": "DD-00013342",
+      "raised": "2026-09-25",
+      "system": "GE101.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Замена шлангов ОЖ",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": "WO-022403"
     },
     {
       "asset": "TK041",
