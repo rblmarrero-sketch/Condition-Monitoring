@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-14T00:47:36+00:00",
+  "generated": "2026-11-14T01:02:41+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -382,6 +382,17 @@
           "INSP",
           "MP",
           "TB"
+        ],
+        "plan": "2026-11-20",
+        "priority": "P3 Planned (PM)"
+      }
+    ],
+    "TK043": [
+      {
+        "wo": "WO-022307",
+        "hours": 500,
+        "types": [
+          "MP"
         ],
         "plan": "2026-11-20",
         "priority": "P3 Planned (PM)"
@@ -2744,6 +2755,24 @@
       "raised": "2026-11-20",
       "type": "4000 Hours service Planned",
       "hours": 4000,
+      "plan": "2026-11-20",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-022307",
+      "equip": "TK043",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-20",
+      "type": "500 Hours service Planned",
+      "hours": 500,
       "plan": "2026-11-20",
       "status": "Elimination scheduled",
       "request": "",
@@ -30765,7 +30794,7 @@
     {
       "d": "DD-00016867",
       "u": "TK032",
-      "s": "TK032 65201 KAMAZ",
+      "s": "TK032.CH.SU (Suspension / Подвеска)",
       "p": "P4",
       "r": "2026-11-14",
       "x": "Диагностика передней подвески, р/у, замена амотризаторов"

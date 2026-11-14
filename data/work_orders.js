@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-14T00:47:36+00:00",
+  "generated": "2026-11-14T01:02:41+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -5810,7 +5810,7 @@ window.CM_WO_DATA = {
       "asset": "TK032",
       "defect": "DD-00016867",
       "raised": "2026-11-14",
-      "system": "TK032 65201 KAMAZ",
+      "system": "TK032.CH.SU (Suspension / Подвеска)",
       "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
       "descr": "Диагностика передней подвески, р/у, замена амотризаторов",
       "status": "Registered",
@@ -5989,6 +5989,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022527"
     },
     {
+      "asset": "LV064",
+      "defect": "DD-00016871",
+      "raised": "2026-11-14",
+      "system": "LV064.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Замена мотора отопителя",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022548"
+    },
+    {
       "asset": "TK043",
       "defect": "DD-00016861",
       "raised": "2026-11-14",
@@ -6039,19 +6052,6 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-022540"
-    },
-    {
-      "asset": "LV064",
-      "defect": "DD-00016871",
-      "raised": "2026-11-14",
-      "system": "LV064.OC.HE (Heating / Отопление)",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Замена мотора отопителя",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022548"
     },
     {
       "asset": "EX019",
@@ -145730,7 +145730,7 @@ window.CM_WO_DATA = {
       "cmLabel": "1000h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "CRTD",
+      "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
       "planStart": "2026-11-21",
@@ -156404,6 +156404,27 @@ window.CM_WO_DATA = {
       "actualStart": "2026-10-28",
       "actualStartDt": "2026-10-28T07:00:00",
       "actualEnd": "2026-10-28"
+    },
+    {
+      "equip": "TK043",
+      "cls": "HT",
+      "woNumber": "WO-022307",
+      "maintType": "500 Hours service Planned",
+      "hours": 500,
+      "cmLabel": "Magnetic Plug",
+      "cmTypes": [
+        "MP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-20",
+      "planStartDt": "2026-11-20T00:00:00",
+      "planEnd": "2026-11-20",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
     },
     {
       "equip": "TK044",
