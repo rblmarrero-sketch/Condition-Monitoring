@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-14T22:43:20+00:00",
+  "generated": "2026-11-14T22:57:45+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -10409,19 +10409,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "GE049",
-      "defect": "DD-00016579",
-      "raised": "2026-11-09",
-      "system": "GE049.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Замена насоса ОЖ",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
       "asset": "TK104",
       "defect": "DD-00016553",
       "raised": "2026-11-09",
@@ -10537,6 +10524,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": null
+    },
+    {
+      "asset": "GE049",
+      "defect": "DD-00016579",
+      "raised": "2026-11-09",
+      "system": "GE049.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Замена насоса ОЖ",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022398"
     },
     {
       "asset": "DZ014",
@@ -28375,19 +28375,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK089",
-      "defect": "DD-00015144",
-      "raised": "2026-10-19",
-      "system": "TK089.DRS.AXL (Axles / Мосты)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Требуется замена шпильки передняя правая ось",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
       "asset": "TK091",
       "defect": "DD-00015141",
       "raised": "2026-10-19",
@@ -28646,6 +28633,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": null
+    },
+    {
+      "asset": "TK089",
+      "defect": "DD-00015144",
+      "raised": "2026-10-19",
+      "system": "TK089.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Требуется замена шпильки передняя правая ось",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022396"
     },
     {
       "asset": "CR008",
@@ -121042,7 +121042,7 @@ window.CM_WO_DATA = {
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CRTD",
-      "cmmsStatus": "Elimination scheduled",
+      "cmmsStatus": "Registered",
       "open": true,
       "planStart": "2026-11-17",
       "planStartDt": "2026-11-17T00:00:00",
