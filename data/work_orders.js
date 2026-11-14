@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-14T15:47:55+00:00",
+  "generated": "2026-11-14T16:02:41+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -5878,7 +5878,7 @@ window.CM_WO_DATA = {
       "system": "TK152.DRS.COO (Cooling System / Система охлаждения)",
       "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
       "descr": "Протянуть хомут",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
@@ -5891,11 +5891,76 @@ window.CM_WO_DATA = {
       "system": "Bucket / Ковш",
       "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
       "descr": "Демонтаж ножей с помощью сварочных работ",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Aleksey Kiselev",
       "regBy": "Киселев Алексей Александрович",
       "wo": "WO-022570"
+    },
+    {
+      "asset": "GR005",
+      "defect": "DD-00016905",
+      "raised": "2026-11-15",
+      "system": "GR005.DRS.FUE.FIL (Fuel Filters / Топливные фильтры)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Замена фильтров",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022566"
+    },
+    {
+      "asset": "GR003",
+      "defect": "DD-00016912",
+      "raised": "2026-11-15",
+      "system": "GR003.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "Не горит фара",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022573"
+    },
+    {
+      "asset": "TK108",
+      "defect": "DD-00016914",
+      "raised": "2026-11-15",
+      "system": "TK108.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "Не горит задний габарит",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": null
+    },
+    {
+      "asset": "TR001",
+      "defect": "DD-00016913",
+      "raised": "2026-11-15",
+      "system": "TR001.ELS.WH (Wiring Harness / Жгут проводов)",
+      "defectType": "4.01 Short circuiting / Короткое замыкание",
+      "descr": "Неисправность сигнального освещения - поворотов и заднего хода.",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022574"
+    },
+    {
+      "asset": "SN004",
+      "defect": "DD-00016911",
+      "raised": "2026-11-15",
+      "system": "SN004.DRS.FUE (Fuel System / Топливная система)",
+      "defectType": "1.19 No movement / no drive / Нет движения / нет привода",
+      "descr": "не работает насос подкачки",
+      "status": "Elimination scheduled",
+      "priority": "P1 Breakdown",
+      "by": "Sergey Murashko",
+      "regBy": "Мурашко Сергей Борисович",
+      "wo": "WO-022572"
     },
     {
       "asset": "TK143",
@@ -5909,19 +5974,6 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022567"
-    },
-    {
-      "asset": "GR005",
-      "defect": "DD-00016905",
-      "raised": "2026-11-15",
-      "system": "GR005.DRS.FUE.FIL (Fuel Filters / Топливные фильтры)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Замена фильтров",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": "WO-022566"
     },
     {
       "asset": "EX023",
@@ -6104,6 +6156,19 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022554"
+    },
+    {
+      "asset": "LV073",
+      "defect": "DD-00016896",
+      "raised": "2026-11-14",
+      "system": "LV073.OC.DO (Doors / Двери)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Замена левого зеркала заднего вида, лампы заднего фонаря",
+      "status": "In progress",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022558"
     },
     {
       "asset": "LV086",
@@ -6442,19 +6507,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022555"
-    },
-    {
-      "asset": "LV073",
-      "defect": "DD-00016896",
-      "raised": "2026-11-14",
-      "system": "LV073.OC.DO (Doors / Двери)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Замена левого зеркала заднего вида, лампы заднего фонаря",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022558"
     },
     {
       "asset": "BS010",
@@ -58717,19 +58769,6 @@ window.CM_WO_DATA = {
       "wo": "WO-021736"
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
-      "wo": null
-    },
-    {
       "asset": "TK046",
       "defect": "DD-00011270",
       "raised": "2026-08-21",
@@ -58831,6 +58870,19 @@ window.CM_WO_DATA = {
       "priority": "P2 Urgent",
       "by": "Andrey Shipelov",
       "regBy": "Шипелов Андрей Анатольевич",
+      "wo": null
+    },
+    {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
