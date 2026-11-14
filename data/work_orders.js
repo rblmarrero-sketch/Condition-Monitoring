@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-14T13:39:48+00:00",
+  "generated": "2026-11-14T13:57:44+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -5846,6 +5846,19 @@ window.CM_WO_DATA = {
   ],
   "otherDefects": [
     {
+      "asset": "GR005",
+      "defect": "DD-00016905",
+      "raised": "2026-11-15",
+      "system": "GR005.DRS.FUE.FIL (Fuel Filters / Топливные фильтры)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Замена фильтров",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": null
+    },
+    {
       "asset": "EX023",
       "defect": "DD-00016849",
       "raised": "2026-11-14",
@@ -6990,6 +7003,71 @@ window.CM_WO_DATA = {
       "wo": "WO-022497"
     },
     {
+      "asset": "LS043",
+      "defect": "DD-00016834",
+      "raised": "2026-11-13",
+      "system": "LS043.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "нестабильная работа ДВС",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022518"
+    },
+    {
+      "asset": "TK096",
+      "defect": "DD-00016830",
+      "raised": "2026-11-13",
+      "system": "TK096.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Устранение утечек антифриза системы охлаждения ДВС",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022514"
+    },
+    {
+      "asset": "EX008",
+      "defect": "DD-00016826",
+      "raised": "2026-11-13",
+      "system": "EX008.CH.BOO (Boom / Стрела)",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "Замена тавотниц, долив масла ДВС",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022510"
+    },
+    {
+      "asset": "TK084",
+      "defect": "DD-00016828",
+      "raised": "2026-11-13",
+      "system": "TK084.CH.BED (Bed / Кузов)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Отказ в работе механизма подъема кузовной платформы",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022512"
+    },
+    {
+      "asset": "TK171",
+      "defect": "DD-00016825",
+      "raised": "2026-11-13",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK171 PNEUMATIC",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Отказ тормозной системы переднегомоста, течь РВД гидромотора",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022509"
+    },
+    {
       "asset": "TK104",
       "defect": "DD-00016795",
       "raised": "2026-11-13",
@@ -7120,32 +7198,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022487"
     },
     {
-      "asset": "TK084",
-      "defect": "DD-00016828",
-      "raised": "2026-11-13",
-      "system": "TK084.CH.BED (Bed / Кузов)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Отказ в работе механизма подъема кузовной платформы",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022512"
-    },
-    {
-      "asset": "EX008",
-      "defect": "DD-00016826",
-      "raised": "2026-11-13",
-      "system": "EX008.CH.BOO (Boom / Стрела)",
-      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
-      "descr": "Замена тавотниц, долив масла ДВС",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022510"
-    },
-    {
       "asset": "EX016",
       "defect": "DD-00016829",
       "raised": "2026-11-13",
@@ -7157,19 +7209,6 @@ window.CM_WO_DATA = {
       "by": "Aleksey Dobrikov",
       "regBy": "Добриков Алексей Владимирович",
       "wo": "WO-022513"
-    },
-    {
-      "asset": "TK171",
-      "defect": "DD-00016825",
-      "raised": "2026-11-13",
-      "system": "TRUCK, WATER URAL 4672M1-20, TK171 PNEUMATIC",
-      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
-      "descr": "Отказ тормозной системы переднегомоста, течь РВД гидромотора",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022509"
     },
     {
       "asset": "GR001",
@@ -7211,19 +7250,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022506"
     },
     {
-      "asset": "TK096",
-      "defect": "DD-00016830",
-      "raised": "2026-11-13",
-      "system": "TK096.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Устранение утечек антифриза системы охлаждения ДВС",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022514"
-    },
-    {
       "asset": "TK012",
       "defect": "DD-00016809",
       "raised": "2026-11-13",
@@ -7235,19 +7261,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022499"
-    },
-    {
-      "asset": "LS043",
-      "defect": "DD-00016834",
-      "raised": "2026-11-13",
-      "system": "LS043.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "нестабильная работа ДВС",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022518"
     },
     {
       "asset": "EX005",
@@ -7744,6 +7757,32 @@ window.CM_WO_DATA = {
       "wo": "WO-022457"
     },
     {
+      "asset": "GE065",
+      "defect": "DD-00016725",
+      "raised": "2026-11-12",
+      "system": "GE065.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Отогрев,долив техжидкостей, запуск ДВС",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022432"
+    },
+    {
+      "asset": "TK014",
+      "defect": "DD-00016774",
+      "raised": "2026-11-12",
+      "system": "TK014.DRS.TRA (Transmission / Трансмиссия)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Диагностика КПП, сцепления",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022470"
+    },
+    {
       "asset": "LS057",
       "defect": "DD-00016758",
       "raised": "2026-11-12",
@@ -8002,32 +8041,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": null
-    },
-    {
-      "asset": "TK014",
-      "defect": "DD-00016774",
-      "raised": "2026-11-12",
-      "system": "TK014.DRS.TRA (Transmission / Трансмиссия)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Диагностика КПП, сцепления",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022470"
-    },
-    {
-      "asset": "GE065",
-      "defect": "DD-00016725",
-      "raised": "2026-11-12",
-      "system": "GE065.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Отогрев,долив техжидкостей, запуск ДВС",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022432"
     },
     {
       "asset": "TK016",
@@ -49566,11 +49579,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "LV130",
-      "defect": "DD-00013348",
+      "defect": "DD-00013349",
       "raised": "2026-09-25",
-      "system": "LV130.ELS (Electrical System / Электросистема)",
-      "defectType": "4.02 Open circuit / Разрыв цепи",
-      "descr": "Не работает сигнал заднего хода, не включается камера заднего хода",
+      "system": "LV130.DRS.ENG (Engine / Двигатель)",
+      "defectType": "3.13 Warning light / alarm active / Сигнальная лампа / аварийная сигнализация активна",
+      "descr": "Горит лампа \"Проверьте двигатель\"",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -49579,11 +49592,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "LV130",
-      "defect": "DD-00013349",
+      "defect": "DD-00013348",
       "raised": "2026-09-25",
-      "system": "LV130.DRS.ENG (Engine / Двигатель)",
-      "defectType": "3.13 Warning light / alarm active / Сигнальная лампа / аварийная сигнализация активна",
-      "descr": "Горит лампа \"Проверьте двигатель\"",
+      "system": "LV130.ELS (Electrical System / Электросистема)",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "Не работает сигнал заднего хода, не включается камера заднего хода",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
