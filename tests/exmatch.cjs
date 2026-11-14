@@ -47,6 +47,26 @@ async function run(b, path) {
   ok(/похожее описание/.test(ex) && /та же система — проверьте/.test(ex), 'the marks are in both languages (the e-mail is EN + RU)', ex);
   ok(cs && /DD-00004804/.test(cs[6]) && /Требуется мойка радиатора/.test(cs[6]) && /same system — check/.test(cs[6]) && !/similar description/.test(cs[6]), 'a different defect on the same system (wash the radiator vs a rubbing pipe) is marked "check", with its description', cs && cs[6]);
   ok(coo && /DD-00016817/.test(coo[6]) && /from the comment/.test(coo[6]) && /Течь ОЖ с теплообменника/.test(coo[6]) && !/similar description|same system/.test(coo[6]), 'a number typed in the comment stays "from the comment", now with 1C\'s description', coo && coo[6]);
+  /* CM_EXHIDE_V1: a defect that is not related can be removed from a finding, and put back */
+  const ex6 = async re => p.evaluate(src => { const ft = document.querySelector('#dsPrev table[data-ds="find"]'); const tr = [...ft.querySelectorAll('tr')].find(t => new RegExp(src).test(t.cells[3] ? t.cells[3].innerText : '')); return tr ? tr.cells[6].innerText.replace(/\s+/g, ' ').trim() : ''; }, re);
+  const nBtn = await p.evaluate(() => document.querySelectorAll('#dsPrev [data-exrm]').length);
+  ok(nBtn === 5, 'every existing defect in the preview has a remove button', nBtn);
+  ok(await p.evaluate(() => !/data-exrm|dsExRm/.test(CMDaySum.mailHtml(CMDaySum._rows(), CMDaySum._list()))), 'the copied e-mail carries no remove button');
+  await p.click('#dsPrev [data-exrm$="DD-15900"]'); await p.waitForTimeout(250);
+  let s2 = await ex6('OC\\.SE');
+  ok(!/DD-00015900/.test(s2) && /DD-00015021/.test(s2) && /DD-00002517/.test(s2), 'the removed defect is gone from its finding, the others stay', s2);
+  ok(await p.evaluate(() => /1 existing defect/.test((document.getElementById('dsExGone') || {}).innerText || '')), 'the page says one was removed and offers Restore');
+  await p.click('#dsPrev [data-exrm$="DD-4804"]'); await p.waitForTimeout(250);
+  const csRow = await p.evaluate(() => { const ft = document.querySelector('#dsPrev table[data-ds="find"]'); const tr = [...ft.querySelectorAll('tr')].find(t => /DRS\.CS/.test(t.cells[3] ? t.cells[3].innerText : '')); return [tr.cells[5].innerText.trim(), tr.cells[6].innerText.trim()]; });
+  ok(/Not raised in 1C/.test(csRow[0]) && csRow[1] === '—', 'a finding whose only existing defect was removed says "Not raised in 1C" again', csRow.join(' / '));
+  await p.reload({ waitUntil: 'load' }); await p.waitForTimeout(1600);
+  await p.evaluate(BUNDLED + '()'); await p.evaluate(SEED); await p.waitForTimeout(200);
+  await p.evaluate(() => showTab('reports')); await p.waitForTimeout(400); await p.evaluate(() => CMDaySum.draw()); await p.waitForTimeout(300);
+  s2 = await ex6('OC\\.SE');
+  ok(!/DD-00015900/.test(s2) && /DD-00015021/.test(s2), 'the removal is remembered after a reload', s2);
+  await p.click('#dsExBack'); await p.waitForTimeout(250);
+  s2 = await ex6('OC\\.SE'); const cs2 = await ex6('DRS\\.CS');
+  ok(/DD-00015900/.test(s2) && /DD-00004804/.test(cs2) && await p.evaluate(() => !document.getElementById('dsExGone')), 'Restore puts them all back', s2 + ' / ' + cs2);
   ok(errs.length === 0, 'no page errors', errs.join(' | '));
   await p.close();
 }
