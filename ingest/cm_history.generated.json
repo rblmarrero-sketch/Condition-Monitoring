@@ -1,7 +1,7 @@
 {
-  "generated": "2026-11-14T03:17:25.733Z",
+  "generated": "2026-11-14T03:37:04.885Z",
   "source": "https://script.google.com/macros/s/AKfycbwWJ1vb-OjP0VQPcrnoEB8PkuFyhk86mecIrkcomSVFqE5ddJynSwSheuskNGMcwLGf/exec?action=index&slim=1",
-  "pairsSeen": 431,
+  "pairsSeen": 432,
   "hist": {
     "FC|TK028": {
       "d": "2026-08-01"
@@ -730,6 +730,9 @@
       "d": "2026-11-12"
     },
     "FC|DZ019": {
+      "d": "2026-11-14"
+    },
+    "NCR|BL001": {
       "d": "2026-11-14"
     }
   }
