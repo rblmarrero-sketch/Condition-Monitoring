@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-14T06:12:53+00:00",
+  "generated": "2026-11-14T06:28:11+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -6184,6 +6184,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "TK031",
+      "defect": "DD-00016892",
+      "raised": "2026-11-14",
+      "system": "TK031.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Установка патрубка интеркулера, кепление бампера",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022553"
+    },
+    {
       "asset": "TK034",
       "defect": "DD-00016882",
       "raised": "2026-11-14",
@@ -6377,19 +6390,6 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-022540"
-    },
-    {
-      "asset": "TK031",
-      "defect": "DD-00016892",
-      "raised": "2026-11-14",
-      "system": "TK031.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Установка патрубка интеркулера, кепление бампера",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022553"
     },
     {
       "asset": "EX019",
@@ -6769,19 +6769,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022501"
     },
     {
-      "asset": "LD005",
-      "defect": "DD-00016831",
-      "raised": "2026-11-13",
-      "system": "Bucket / Ковш",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "Износ коронок",
-      "status": "Completed",
-      "priority": "P2 Urgent",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": "WO-022516"
-    },
-    {
       "asset": "EX016",
       "defect": "DD-00016815",
       "raised": "2026-11-13",
@@ -6819,6 +6806,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022498"
+    },
+    {
+      "asset": "LD005",
+      "defect": "DD-00016831",
+      "raised": "2026-11-13",
+      "system": "Bucket / Ковш",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Износ коронок",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022516"
     },
     {
       "asset": "CR005",
