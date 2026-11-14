@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-14T17:07:45+00:00",
+  "generated": "2026-11-14T17:22:43+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -5963,17 +5963,30 @@ window.CM_WO_DATA = {
       "wo": "WO-022578"
     },
     {
+      "asset": "TK023",
+      "defect": "DD-00016924",
+      "raised": "2026-11-15",
+      "system": "TK023.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
+      "defectType": "4.06 Loose connection / high resistance / Плохой контакт / высокое сопротивление",
+      "descr": "Неисправность габаритного освещения.",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022585"
+    },
+    {
       "asset": "TK092",
       "defect": "DD-00016923",
       "raised": "2026-11-15",
       "system": "TK092.OC.HE (Heating / Отопление)",
       "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
       "descr": "Неисправность отопителя в кабине.",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "priority": "P2 Urgent",
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
-      "wo": null
+      "wo": "WO-022584"
     },
     {
       "asset": "BS009",
@@ -6301,6 +6314,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022528"
     },
     {
+      "asset": "DZ020",
+      "defect": "DD-00016898",
+      "raised": "2026-11-14",
+      "system": "DZ020.CH.UC (Undercarriage / Ходовая часть)",
+      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
+      "descr": "Износ грунтозацепов",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Kiselev",
+      "regBy": "Киселев Алексей Александрович",
+      "wo": "WO-022560"
+    },
+    {
       "asset": "LV086",
       "defect": "DD-00016878",
       "raised": "2026-11-14",
@@ -6611,19 +6637,6 @@ window.CM_WO_DATA = {
       "by": "Aleksey Dobrikov",
       "regBy": "Добриков Алексей Владимирович",
       "wo": "WO-022562"
-    },
-    {
-      "asset": "DZ020",
-      "defect": "DD-00016898",
-      "raised": "2026-11-14",
-      "system": "DZ020.CH.UC (Undercarriage / Ходовая часть)",
-      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
-      "descr": "Износ грунтозацепов",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Kiselev",
-      "regBy": "Киселев Алексей Александрович",
-      "wo": "WO-022560"
     },
     {
       "asset": "LS025",
