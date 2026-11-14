@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-14T01:18:08+00:00",
+  "generated": "2026-11-14T01:32:54+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -406,6 +406,17 @@
           "MP"
         ],
         "plan": "2026-11-17",
+        "priority": "P3 Planned (PM)"
+      }
+    ],
+    "TK047": [
+      {
+        "wo": "WO-022306",
+        "hours": 500,
+        "types": [
+          "MP"
+        ],
+        "plan": "2026-11-22",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -2386,6 +2397,24 @@
       "completed": ""
     },
     {
+      "wo": "WO-022306",
+      "equip": "TK047",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-22",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-11-22",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-021931",
       "equip": "TK104",
       "cls": "AT",
@@ -2449,6 +2478,24 @@
       "raised": "2026-11-22",
       "type": "250 Hours service Planned",
       "hours": 250,
+      "plan": "2026-11-22",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-022318",
+      "equip": "TK165",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "4000h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-22",
+      "type": "4000 Hours service Planned",
+      "hours": 4000,
       "plan": "2026-11-22",
       "status": "Elimination scheduled",
       "request": "",
@@ -3583,6 +3630,24 @@
       "raised": "2026-11-16",
       "type": "500 Hours service Planned",
       "hours": 500,
+      "plan": "2026-11-16",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-022364",
+      "equip": "GE100",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-16",
+      "type": "250 Hours service Planned",
+      "hours": 250,
       "plan": "2026-11-16",
       "status": "Elimination scheduled",
       "request": "",
@@ -36317,7 +36382,7 @@
       "s": "GE058.ELS.PH (Preheater / Предпусковой подогреватель)",
       "p": "P4",
       "r": "2026-10-17",
-      "x": "замена ПЖД 220В"
+      "x": "Неисправен автономный подогреватель ДВС 220В"
     },
     {
       "d": "DD-00014964",
