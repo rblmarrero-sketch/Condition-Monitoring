@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-14T09:42:39+00:00",
+  "generated": "2026-11-14T09:57:38+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -5937,6 +5937,45 @@ window.CM_WO_DATA = {
       "wo": "WO-022542"
     },
     {
+      "asset": "TK021",
+      "defect": "DD-00016845",
+      "raised": "2026-11-14",
+      "system": "TK021.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Не работает автономный отопитель в кунге.",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022529"
+    },
+    {
+      "asset": "BS019",
+      "defect": "DD-00016846",
+      "raised": "2026-11-14",
+      "system": "BS019.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Неисправность автономных отопителей в пассажирском салоне.",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022530"
+    },
+    {
+      "asset": "BS009",
+      "defect": "DD-00016847",
+      "raised": "2026-11-14",
+      "system": "BS009.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Неисправность автономного отопителя в пассажирском салоне.",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022531"
+    },
+    {
       "asset": "LV086",
       "defect": "DD-00016878",
       "raised": "2026-11-14",
@@ -6171,6 +6210,58 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "DZ020",
+      "defect": "DD-00016898",
+      "raised": "2026-11-14",
+      "system": "DZ020.CH.UC (Undercarriage / Ходовая часть)",
+      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
+      "descr": "Износ грунтозацепов",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Kiselev",
+      "regBy": "Киселев Алексей Александрович",
+      "wo": "WO-022560"
+    },
+    {
+      "asset": "LV011",
+      "defect": "DD-00016897",
+      "raised": "2026-11-14",
+      "system": "LV011.DRS.TRA (Transmission / Трансмиссия)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Излом полуоси заднего моста",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022559"
+    },
+    {
+      "asset": "LV073",
+      "defect": "DD-00016896",
+      "raised": "2026-11-14",
+      "system": "LV073.OC.DO (Doors / Двери)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Замена левого зеркала заднего вида, лампы заднего фонаря",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022558"
+    },
+    {
+      "asset": "BS010",
+      "defect": "DD-00016895",
+      "raised": "2026-11-14",
+      "system": "BS010.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь уплотнения масляного фильтра",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022557"
+    },
+    {
       "asset": "TK091",
       "defect": "DD-00016894",
       "raised": "2026-11-14",
@@ -6234,19 +6325,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022549"
-    },
-    {
-      "asset": "TK021",
-      "defect": "DD-00016845",
-      "raised": "2026-11-14",
-      "system": "TK021.OC.HE (Heating / Отопление)",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Не работает автономный отопитель в кунге.",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-022529"
     },
     {
       "asset": "TK005",
@@ -6429,32 +6507,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022543"
-    },
-    {
-      "asset": "BS009",
-      "defect": "DD-00016847",
-      "raised": "2026-11-14",
-      "system": "BS009.OC.HE (Heating / Отопление)",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Неисправность автономного отопителя в пассажирском салоне.",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-022531"
-    },
-    {
-      "asset": "BS019",
-      "defect": "DD-00016846",
-      "raised": "2026-11-14",
-      "system": "BS019.OC.HE (Heating / Отопление)",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Неисправность автономных отопителей в пассажирском салоне.",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-022530"
     },
     {
       "asset": "EX015",
