@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-14T11:17:37+00:00",
+  "generated": "2026-11-14T11:25:55+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -6158,19 +6158,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK106",
-      "defect": "DD-00016903",
-      "raised": "2026-11-14",
-      "system": "TK106.DRS.AXL (Axles / Мосты)",
-      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
-      "descr": "Обрыв крестовины",
-      "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": null
-    },
-    {
       "asset": "TK120",
       "defect": "DD-00016879",
       "raised": "2026-11-14",
@@ -6273,6 +6260,32 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": null
+    },
+    {
+      "asset": "TK106",
+      "defect": "DD-00016903",
+      "raised": "2026-11-14",
+      "system": "TK106.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "descr": "Обрыв крестовины",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022565"
+    },
+    {
+      "asset": "HX031",
+      "defect": "DD-00016904",
+      "raised": "2026-11-14",
+      "system": "HX031.DRS.FS (Fuel System / Топливная система)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь корпуса топливного фильтра, чистка сетки",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022564"
     },
     {
       "asset": "EX001",
@@ -7133,19 +7146,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022510"
     },
     {
-      "asset": "TK171",
-      "defect": "DD-00016825",
-      "raised": "2026-11-13",
-      "system": "TRUCK, WATER URAL 4672M1-20, TK171 PNEUMATIC",
-      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
-      "descr": "Отказ тормозной системы переднегомоста, течь РВД гидромотора",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022509"
-    },
-    {
       "asset": "EX016",
       "defect": "DD-00016829",
       "raised": "2026-11-13",
@@ -7157,6 +7157,19 @@ window.CM_WO_DATA = {
       "by": "Aleksey Dobrikov",
       "regBy": "Добриков Алексей Владимирович",
       "wo": "WO-022513"
+    },
+    {
+      "asset": "TK171",
+      "defect": "DD-00016825",
+      "raised": "2026-11-13",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK171 PNEUMATIC",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Отказ тормозной системы переднегомоста, течь РВД гидромотора",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022509"
     },
     {
       "asset": "GR001",
@@ -13724,6 +13737,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "GR004",
+      "defect": "DD-00016288",
+      "raised": "2026-11-04",
+      "system": "GR004.CH.FR (Frame / Рама)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Чрезмерный люфт в соединениях рамы отвала и в направляющих отвала",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Evgeniy Frolin",
+      "regBy": "Фролин Евгений Владимирович",
+      "wo": "WO-021708"
+    },
+    {
       "asset": "TK115",
       "defect": "DD-00016283",
       "raised": "2026-11-04",
@@ -13852,19 +13878,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-021722"
-    },
-    {
-      "asset": "GR004",
-      "defect": "DD-00016288",
-      "raised": "2026-11-04",
-      "system": "GR004.CH.FR (Frame / Рама)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Чрезмерный люфт в соединениях рамы отвала и в направляющих отвала",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Evgeniy Frolin",
-      "regBy": "Фролин Евгений Владимирович",
-      "wo": "WO-021708"
     },
     {
       "asset": "DZ017",
@@ -61032,11 +61045,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "CR001",
-      "defect": "DD-00009555",
+      "defect": "DD-00009554",
       "raised": "2026-07-24",
       "system": "CR001.DRS.AIR (Air Intake System / Система впуска воздуха)",
-      "defectType": "1.10 Rupture / Burst / Разрыв",
-      "descr": "Разрыв патрубка интеркуллера ДВС №7Y-1182",
+      "defectType": "3.02 No (faulty) signal/ indication/alarm / Отсутвие сигнала, индикации",
+      "descr": null,
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Rinat Musaferov",
@@ -61045,11 +61058,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "CR001",
-      "defect": "DD-00009554",
+      "defect": "DD-00009555",
       "raised": "2026-07-24",
       "system": "CR001.DRS.AIR (Air Intake System / Система впуска воздуха)",
-      "defectType": "3.02 No (faulty) signal/ indication/alarm / Отсутвие сигнала, индикации",
-      "descr": null,
+      "defectType": "1.10 Rupture / Burst / Разрыв",
+      "descr": "Разрыв патрубка интеркуллера ДВС №7Y-1182",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Rinat Musaferov",
