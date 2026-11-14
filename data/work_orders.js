@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-14T04:37:50+00:00",
+  "generated": "2026-11-14T04:52:43+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -6574,6 +6574,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022517"
     },
     {
+      "asset": "TK029",
+      "defect": "DD-00016811",
+      "raised": "2026-11-13",
+      "system": "TK029.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Не работает дополнительный отопитель салона",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022501"
+    },
+    {
       "asset": "LD005",
       "defect": "DD-00016831",
       "raised": "2026-11-13",
@@ -6611,6 +6624,32 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022508"
+    },
+    {
+      "asset": "EX020",
+      "defect": "DD-00016808",
+      "raised": "2026-11-13",
+      "system": "EX020.ELS.AS (Alarm System / Система сигнализации)",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "Ремонт звукового сигнала",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022498"
+    },
+    {
+      "asset": "CR005",
+      "defect": "DD-00016807",
+      "raised": "2026-11-13",
+      "system": "CR005.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Не запускается ДВС",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022497"
     },
     {
       "asset": "TK104",
@@ -6834,19 +6873,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022506"
     },
     {
-      "asset": "CR005",
-      "defect": "DD-00016807",
-      "raised": "2026-11-13",
-      "system": "CR005.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Не запускается ДВС",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022497"
-    },
-    {
       "asset": "TK096",
       "defect": "DD-00016830",
       "raised": "2026-11-13",
@@ -6871,32 +6897,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022499"
-    },
-    {
-      "asset": "TK029",
-      "defect": "DD-00016811",
-      "raised": "2026-11-13",
-      "system": "TK029.OC.HE (Heating / Отопление)",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Не работает дополнительный отопитель салона",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022501"
-    },
-    {
-      "asset": "EX020",
-      "defect": "DD-00016808",
-      "raised": "2026-11-13",
-      "system": "EX020.ELS.AS (Alarm System / Система сигнализации)",
-      "defectType": "4.02 Open circuit / Разрыв цепи",
-      "descr": "Ремонт звукового сигнала",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022498"
     },
     {
       "asset": "LS043",
@@ -8082,6 +8082,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022271"
     },
     {
+      "asset": "TK089",
+      "defect": "DD-00016689",
+      "raised": "2026-11-11",
+      "system": "TK089.DRS.TRA (Transmission / Трансмиссия)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Ремонт карданного вала средний - задний мост",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022302"
+    },
+    {
       "asset": "LV087",
       "defect": "DD-00016716",
       "raised": "2026-11-11",
@@ -8327,19 +8340,6 @@ window.CM_WO_DATA = {
       "by": "Rinat Musaferov",
       "regBy": "Мусаферов Ринат Искакович",
       "wo": "WO-022362"
-    },
-    {
-      "asset": "TK089",
-      "defect": "DD-00016689",
-      "raised": "2026-11-11",
-      "system": "TK089.DRS.TRA (Transmission / Трансмиссия)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Ремонт карданного вала средний - задний мост",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022302"
     },
     {
       "asset": "TK149",
@@ -9928,6 +9928,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "DZ014",
+      "defect": "DD-00016572",
+      "raised": "2026-11-09",
+      "system": "DZ014.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка масла гидравлического",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-022109"
+    },
+    {
       "asset": "CR008",
       "defect": "DD-00016576",
       "raised": "2026-11-09",
@@ -9965,19 +9978,6 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-022192"
-    },
-    {
-      "asset": "DZ014",
-      "defect": "DD-00016572",
-      "raised": "2026-11-09",
-      "system": "DZ014.HS.DL (Hydraulic Lines / Гидролинии)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка масла гидравлического",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": "WO-022109"
     },
     {
       "asset": "CR002",
