@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-14T14:12:41+00:00",
+  "generated": "2026-11-14T14:27:43+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -5846,17 +5846,30 @@ window.CM_WO_DATA = {
   ],
   "otherDefects": [
     {
+      "asset": "TK143",
+      "defect": "DD-00016906",
+      "raised": "2026-11-15",
+      "system": "TK143.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "descr": "Обрыв крестовины привода",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022567"
+    },
+    {
       "asset": "GR005",
       "defect": "DD-00016905",
       "raised": "2026-11-15",
       "system": "GR005.DRS.FUE.FIL (Fuel Filters / Топливные фильтры)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Замена фильтров",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "priority": "P2 Urgent",
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
-      "wo": null
+      "wo": "WO-022566"
     },
     {
       "asset": "EX023",
@@ -7068,6 +7081,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022509"
     },
     {
+      "asset": "TK039",
+      "defect": "DD-00016793",
+      "raised": "2026-11-13",
+      "system": "TK039.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Попадание выхлопных газов в кабину оператора",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022487"
+    },
+    {
       "asset": "TK104",
       "defect": "DD-00016795",
       "raised": "2026-11-13",
@@ -7183,19 +7209,6 @@ window.CM_WO_DATA = {
       "by": "Aleksey Dobrikov",
       "regBy": "Добриков Алексей Владимирович",
       "wo": "WO-022515"
-    },
-    {
-      "asset": "TK039",
-      "defect": "DD-00016793",
-      "raised": "2026-11-13",
-      "system": "TK039.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Попадание выхлопных газов в кабину оператора",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022487"
     },
     {
       "asset": "EX016",
