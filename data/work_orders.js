@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-14T21:42:47+00:00",
+  "generated": "2026-11-14T21:57:47+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -5963,6 +5963,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022578"
     },
     {
+      "asset": "TK096",
+      "defect": "DD-00016925",
+      "raised": "2026-11-15",
+      "system": "TK096.OC.HE (Heating / Отопление)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Ремонт фена в отсеке водяного насоса",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022586"
+    },
+    {
       "asset": "TK023",
       "defect": "DD-00016924",
       "raised": "2026-11-15",
@@ -8966,19 +8979,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022256"
     },
     {
-      "asset": "TK111",
-      "defect": "DD-00016673",
-      "raised": "2026-11-11",
-      "system": "TK111.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
-      "descr": "Посторонний шум",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": "WO-022245"
-    },
-    {
       "asset": "GR012",
       "defect": "DD-00016723",
       "raised": "2026-11-11",
@@ -9003,6 +9003,19 @@ window.CM_WO_DATA = {
       "by": "Vladimir Ladik",
       "regBy": "Ладик Владимир Владимирович",
       "wo": "WO-022429"
+    },
+    {
+      "asset": "TK111",
+      "defect": "DD-00016673",
+      "raised": "2026-11-11",
+      "system": "TK111.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "descr": "Посторонний шум",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022245"
     },
     {
       "asset": "CD004",
@@ -9551,19 +9564,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK084",
-      "defect": "DD-00016649",
-      "raised": "2026-11-10",
-      "system": "Radiator / Радиатор",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "диагностика и устранение утечек антифриза, с заменой радиатора ОЖ.",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
       "asset": "TK089",
       "defect": "DD-00016611",
       "raised": "2026-11-10",
@@ -9718,6 +9718,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": null
+    },
+    {
+      "asset": "TK084",
+      "defect": "DD-00016649",
+      "raised": "2026-11-10",
+      "system": "Radiator / Радиатор",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "диагностика и устранение утечек антифриза, с заменой радиатора ОЖ.",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022388"
     },
     {
       "asset": "DR008",
@@ -58835,6 +58848,19 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "TK133",
+      "defect": "DD-00011370",
+      "raised": "2026-08-22",
+      "system": "TK133.CH.SU (Suspension / Подвеска)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Не смазываются никак втулки балансиров",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-021736"
+    },
+    {
+      "asset": "TK133",
       "defect": "DD-00011368",
       "raised": "2026-08-22",
       "system": "TK133.OC.AC (Air Conditioning / Кондиционирование)",
@@ -58871,19 +58897,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-021734"
-    },
-    {
-      "asset": "TK133",
-      "defect": "DD-00011370",
-      "raised": "2026-08-22",
-      "system": "TK133.CH.SU (Suspension / Подвеска)",
-      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
-      "descr": "Не смазываются никак втулки балансиров",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-021736"
     },
     {
       "asset": "LV079",
