@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-14T16:37:44+00:00",
+  "generated": "2026-11-14T16:52:55+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -5963,6 +5963,58 @@ window.CM_WO_DATA = {
       "wo": "WO-022578"
     },
     {
+      "asset": "TK092",
+      "defect": "DD-00016923",
+      "raised": "2026-11-15",
+      "system": "TK092.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Неисправность отопителя в кабине.",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": null
+    },
+    {
+      "asset": "BS009",
+      "defect": "DD-00016922",
+      "raised": "2026-11-15",
+      "system": "BS009.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "Неисправность задней световой индикации.",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022583"
+    },
+    {
+      "asset": "BS010",
+      "defect": "DD-00016921",
+      "raised": "2026-11-15",
+      "system": "BS010.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "Нет задних габаритных огней.",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022582"
+    },
+    {
+      "asset": "TK029",
+      "defect": "DD-00016919",
+      "raised": "2026-11-15",
+      "system": "TK029.ELS.LIG (Head Lighting System / Система головного освещения)",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "Неисправность ближнего света фар.",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022580"
+    },
+    {
       "asset": "TK032",
       "defect": "DD-00016918",
       "raised": "2026-11-15",
@@ -6026,6 +6078,19 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022567"
+    },
+    {
+      "asset": "TK034",
+      "defect": "DD-00016920",
+      "raised": "2026-11-15",
+      "system": "TK034.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Не работает автономный отопитель в кабине.",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022581"
     },
     {
       "asset": "EX023",
@@ -6221,6 +6286,19 @@ window.CM_WO_DATA = {
       "by": "Aleksey Dobrikov",
       "regBy": "Добриков Алексей Владимирович",
       "wo": "WO-022558"
+    },
+    {
+      "asset": "LD006",
+      "defect": "DD-00016844",
+      "raised": "2026-11-14",
+      "system": "Bucket / Ковш",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Износ режущей кромки",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022528"
     },
     {
       "asset": "LV086",
@@ -6650,19 +6728,6 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-022546"
-    },
-    {
-      "asset": "LD006",
-      "defect": "DD-00016844",
-      "raised": "2026-11-14",
-      "system": "Bucket / Ковш",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "Износ режущей кромки",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": "WO-022528"
     },
     {
       "asset": "TK029",
@@ -58821,6 +58886,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021736"
     },
     {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
+      "wo": null
+    },
+    {
       "asset": "TK046",
       "defect": "DD-00011270",
       "raised": "2026-08-21",
@@ -58922,19 +59000,6 @@ window.CM_WO_DATA = {
       "priority": "P2 Urgent",
       "by": "Andrey Shipelov",
       "regBy": "Шипелов Андрей Анатольевич",
-      "wo": null
-    },
-    {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
@@ -59693,19 +59758,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "H07",
-      "defect": "EB-00000079",
-      "raised": "2026-08-13",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
-      "wo": null
-    },
-    {
-      "asset": "H07",
       "defect": "EB-00000078",
       "raised": "2026-08-13",
       "system": null,
@@ -59715,6 +59767,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Sergey Gulin",
+      "wo": null
+    },
+    {
+      "asset": "H07",
+      "defect": "EB-00000079",
+      "raised": "2026-08-13",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
@@ -60329,8 +60394,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000076",
+      "asset": "H07",
+      "defect": "EB-00000075",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -60342,8 +60407,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H07",
-      "defect": "EB-00000075",
+      "asset": "H04",
+      "defect": "EB-00000076",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
