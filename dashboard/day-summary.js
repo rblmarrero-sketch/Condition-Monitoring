@@ -22,6 +22,7 @@
       none: 'No rounds on this day.', pick: 'Tick at least one round.',
       copy: 'Copy for e-mail', csv: 'Export CSV', copied: 'Copied. Paste it into the e-mail body.',
       copyfail: 'Could not copy. Select the table and press Ctrl+C.',
+      ex_rm: 'Not related — remove from this finding', ex_gone: '{n} existing defect(s) removed from this report as not related.', ex_back: 'Restore',
       c_date: 'Date inspected', c_unit: 'Unit', c_comp: 'Component', c_type: 'Type of defect',
       c_desc: 'Description', c_no: 'Defect no.', c_ex: 'Existing defect', nodef: 'Not raised in 1C', c_prio: 'Priority', c_sev: 'Severity',
       normal_n: '{n} other points', meas: '{n} points measured', worst: 'Worst: {p}', intro: 'Condition monitoring, {d}: {r} round(s), {u} unit(s), {f} finding(s).',
@@ -35,6 +36,7 @@
       none: 'В этот день обходов нет.', pick: 'Отметьте хотя бы один обход.',
       copy: 'Копировать для письма', csv: 'Экспорт CSV', copied: 'Скопировано. Вставьте в текст письма.',
       copyfail: 'Не удалось скопировать. Выделите таблицу и нажмите Ctrl+C.',
+      ex_rm: 'Не относится — убрать из этой находки', ex_gone: 'Убрано из отчёта как не относящиеся: {n}.', ex_back: 'Вернуть',
       c_date: 'Дата осмотра', c_unit: 'Единица', c_comp: 'Узел', c_type: 'Тип дефекта',
       c_desc: 'Описание', c_no: '№ дефекта', c_ex: 'Существующий дефект', nodef: 'Нет в 1С', c_prio: 'Приоритет', c_sev: 'Критичность',
       normal_n: 'Остальные точки: {n}', meas: 'Замерено точек: {n}', worst: 'Худшие: {p}', intro: 'Мониторинг состояния, {d}: обходов {r}, единиц {u}, дефектов {f}.',
@@ -231,6 +233,14 @@
      and system, raised on or before the inspection and still open (CM_WO_DATA.otherDefects, from the ingester).
      A finding with an existing defect is no longer flagged "Not raised in 1C". */
   var EX_MAX = 3;
+  /* CM_EXHIDE_V1 (Rickie 14.11.2026 "the option to remove it, if one defect is not related at all"): an existing
+     defect can be taken off a finding with the x beside it in the preview. Kept in this browser (cm_daysum_exhide),
+     per finding and defect number; the next candidate takes its place, and "Restore" under the table puts them back.
+     The x is in the preview only, never in the copied e-mail. */
+  var EXH = (function () { try { return JSON.parse(lsGet('cm_daysum_exhide') || '{}') || {}; } catch (x) { return {}; } })();
+  function exId(x) { return [String(x.unit || '').toUpperCase(), x.date, x.type0 || '', x.key || x.comp || ''].join('|'); }
+  function exHid(x, n) { return !!EXH[exId(x) + '|' + exKey(n)]; }
+  function exSave() { lsSet('cm_daysum_exhide', JSON.stringify(EXH)); }
   function exOpen(d) { return !/complet|выполн|closed|закры/i.test(String(d.status || '')); }
   function exKey(n) { var m2 = /^([A-Za-zА-Яа-я]{2,})\s*-?\s*0*(\d+)$/.exec(String(n || '').trim()); return m2 ? m2[1].toUpperCase().replace('ДД', 'DD') + '-' + m2[2] : ''; }
   function existOf(x) {
@@ -259,7 +269,9 @@
     });
     cand.sort(function (a, b) { return b.sc - a.sc || String(b.on).localeCompare(String(a.on)); });
     out.forEach(function (o) { var d = by[exKey(o.n)]; if (d && d.descr) o.descr = String(d.descr).trim(); });
-    return out.concat(cand).slice(0, EX_MAX);
+    var full = out.concat(cand), kept = full.filter(function (d) { return !exHid(x, d.n); });
+    x.exGone = full.filter(function (d) { return exHid(x, d.n); }).map(function (d) { return exId(x) + '|' + exKey(d.n); });
+    return kept.slice(0, EX_MAX);
   }
   /* words of 4+ letters, cut to 5: "сиденья", "сидение" and "сиденье" are one word; filler words are left out */
   var EX_STOP = { 'требу': 1, 'необх': 1, 'замен': 1, 'ремон': 1, 'неисп': 1, 'работ': 1, 'needs': 1, 'requi': 1, 'repla': 1, 'repai': 1, 'check': 1, 'прове': 1, 'котор': 1, 'после': 1 };
@@ -293,7 +305,7 @@
     }).join(' · ');
   }
   var F = 'font-family:Arial,Helvetica,sans-serif;';
-  function mailHtml(rows, list) {
+  function mailHtml(rows, list, prev) {
     var sh = shape(rows, list), L2 = langs(), units = {}, people = {};
     list.forEach(function (r) { units[r.equip] = 1; if (r.by) people[r.by] = 1; });
     var h = '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;max-width:980px">';
@@ -342,7 +354,9 @@
             (x.rep ? '<br><span style="color:#a33d00;font-weight:700">' + e(repBi(x.rep)) + '</span>' : '');
           var no = x.nodef ? '<span style="color:#a33d00;font-weight:700">' + bi('nodef', null, true, '#a33d00') + '</span>' : (x.no ? '<b>' + e(x.no) + '</b>' + (x.prio ? '<br>' + e(x.prio) : '') : (x.prio ? e(x.prio) : '—'));
           /* CM_EXSHORT_V1: DD-… · status · date · responsible in 1C, one line, no labels */
-          var ex = (x.ex || []).map(function (d) { var a = exParts(d); return '<b>' + e(d.n) + '</b>' + (a.length ? '<span style="color:#3d474f"> · ' + e(a.join(' · ')) + '</span>' : '') +
+          var ex = (x.ex || []).map(function (d) { var a = exParts(d); return '<b>' + e(d.n) + '</b>' +
+             (a.length ? '<span style="color:#3d474f"> · ' + e(a.join(' · ')) + '</span>' : '') +
+            (prev ? '<button type="button" class="dsExRm" style="margin-left:6px" data-exrm="' + e(exId(x) + '|' + exKey(d.n)) + '" title="' + e(w('ex_rm')) + '" aria-label="' + e(w('ex_rm') + ': ' + d.n) + '"></button>' : '') +
             (d.descr ? '<br><span style="color:#16212a;font-size:12px">' + e(exShort(d.descr)) + '</span>' : '') +
             (d.cited ? '<br><span style="color:#5b6670;font-size:12px">' + e(L2.map(function (l) { return m(l, 'ex_cited'); }).join(' · ')) + '</span>' : '') +
             (d.like ? '<br><span style="color:' + (d.like === 'sim' ? '#1d6b3a;font-weight:700' : '#5b6670') + ';font-size:12px">' + e(L2.map(function (l) { return m(l, 'ex_' + d.like); }).join(' · ')) + '</span>' : ''); }).join('<br><br>') || '—';
@@ -411,6 +425,7 @@
     var dayList = inSpan.filter(function (r) { return !S.who || r.by === S.who; })
       .sort(function (a, b) { return String(b.date).localeCompare(String(a.date)) || String(a.equip).localeCompare(String(b.equip)) || String(a.type).localeCompare(String(b.type)); });
     var list = chosen(dayList), rows = rowsFor(list);
+    S._rows = rows; S._list = list;
     var opts = function (v) { var ds = days.slice(0, 120); if (v && ds.indexOf(v) < 0) ds = [v].concat(ds).sort().reverse();
       return ds.map(function (d) { return '<option value="' + e(d) + '"' + (d === v ? ' selected' : '') + '>' + e(dmy(d)) + '</option>'; }).join(''); };
     var seg = function (id, items, on) { return '<span class="seg dsSeg" id="' + id + '">' + items.map(function (it) { return '<button type="button" data-v="' + it[0] + '" aria-pressed="' + (it[0] === on) + '"' + (it[0] === on ? ' class="on"' : '') + '>' + e(it[1]) + '</button>'; }).join('') + '</span>'; };
@@ -434,7 +449,10 @@
       }).join('') + '</div></div>';
     if (!list.length) { box.innerHTML = h + '<div class="empty">' + e(w('pick')) + '</div>'; wire(box, dayList, rows, list); return; }
     h += '<div class="dsSubjLine"><b>' + e(q2('subjL')) + ':</b> <span id="dsSubjTxt">' + e(subject(shape(rows, list))) + '</span></div>';
-    h += '<div class="tblwrap dsPrev" id="dsPrev">' + mailHtml(rows, list) + '</div><p class="sub" id="dsMsg" role="status"></p>';
+    h += '<div class="tblwrap dsPrev" id="dsPrev">' + mailHtml(rows, list, true) + '</div>' +
+      (function () { var gone = []; rows.forEach(function (x) { (x.exGone || []).forEach(function (k) { gone.push(k); }); });
+        return gone.length ? '<p class="sub dsExGone" id="dsExGone">' + e(w('ex_gone', { n: gone.length })) + ' <button type="button" class="minibtn" id="dsExBack" data-keys="' + e(gone.join('\n')) + '">' + e(w('ex_back')) + '</button></p>' : ''; })() +
+      '<p class="sub" id="dsMsg" role="status"></p>';
     box.innerHTML = h; wire(box, dayList, rows, list);
   }
   function wire(box, dayList, rows, list) {
@@ -447,6 +465,8 @@
     if (q('dsWho')) q('dsWho').onchange = function () { S.who = this.value; draw(); };
     box.querySelectorAll('[data-dsk]').forEach(function (c) { c.onchange = function () { S.off[c.dataset.dsk] = !c.checked; draw(); }; });
     box.querySelectorAll('[data-dsall]').forEach(function (b) { b.onclick = function () { dayList.forEach(function (r) { S.off[rk(r)] = b.dataset.dsall === '0'; }); draw(); }; });
+    box.querySelectorAll('[data-exrm]').forEach(function (b) { b.onclick = function () { EXH[b.dataset.exrm] = 1; exSave(); draw(); }; });
+    if (q('dsExBack')) q('dsExBack').onclick = function () { this.dataset.keys.split('\n').forEach(function (k) { delete EXH[k]; }); exSave(); draw(); };
     var msgOf = function (k) { var msg = q('dsMsg'); return function (ok) { if (msg) msg.textContent = ok ? k : w('copyfail'); }; };
     if (q('dsCopy')) q('dsCopy').onclick = function () { clip(mailHtml(rows, list), mailText(rows, list), msgOf(w('copied'))); };
     if (q('dsSubj')) q('dsSubj').onclick = function () { clip(null, subject(shape(rows, list)), msgOf(q2('subjok'))); };
@@ -486,11 +506,14 @@
       '@media (max-width:899px){#daySum .dsEvery{min-height:44px}#daySum .dsPrev a{display:inline-block;min-height:32px;line-height:32px}}' +
       '#daySum .dsRounds{margin:6px 0 10px}#daySum .dsChips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}' +
       '#daySum .dsChip{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--line,#d5dbe0);border-radius:7px;padding:4px 8px;font-size:13px;cursor:pointer}' +
+      '#daySum .dsExRm{border:1px solid var(--line,#d5dbe0);background:#fff;color:#5b6670;border-radius:6px;width:22px;height:22px;line-height:18px;padding:0;font-size:14px;cursor:pointer;vertical-align:middle}' +
+      '#daySum .dsExRm::before{content:"\\00d7"}' +
+      '#daySum .dsExRm:hover,#daySum .dsExRm:focus-visible{color:#a33d00;border-color:#a33d00}@media (max-width:899px){#daySum .dsExRm{width:44px;height:44px}}' +
       '#daySum .dsSubjLine{font-size:13px;margin:6px 0;overflow-wrap:anywhere}' +
       '#daySum .dsPrev{background:#fff;color:#1b232a;padding:14px;border:1px solid var(--line,#d5dbe0);border-radius:8px;overflow:auto}';
     document.head.appendChild(st);
     return true;
   }
   window.daySumShow = function () { if (ensure()) draw(); };
-  window.CMDaySum = { rowsFor: rowsFor, mailHtml: mailHtml, mailText: mailText, shape: shape, subject: subject, repeatOf: repeatOf, state: S, draw: function () { window.daySumShow(); } };
+  window.CMDaySum = { rowsFor: rowsFor, mailHtml: mailHtml, mailText: mailText, shape: shape, subject: subject, repeatOf: repeatOf, state: S, _rows: function () { return S._rows; }, _list: function () { return S._list; }, draw: function () { window.daySumShow(); } };
 })();

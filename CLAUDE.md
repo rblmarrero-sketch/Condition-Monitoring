@@ -6728,3 +6728,11 @@ candidates by the words their description shares with the inspector's comment (`
 words out) and marks them "similar description" or "same system — check". Nothing is hidden. 1C's defect type only breaks a tie:
 the same seat was filed as 1.06, 1.08 and 1.10, and the 1C list carries no cause. A number typed in the comment stays "from the
 comment" and gets the description too. Still at most `EX_MAX` (3), now the best three. `tests/exmatch.cjs`.
+
+**AN EXISTING DEFECT THAT IS NOT RELATED CAN BE REMOVED FROM A FINDING (build 622, CM_EXHIDE_V1, Rickie 14.11.2026 "the option to
+remove it, if one defect is not related at all").** Day summary preview: each defect in the Existing defect column has a ×
+(`data-exrm`). Pressing it takes that defect off that finding (`EXH`, kept in this browser as `cm_daysum_exhide`, keyed
+unit|date|round|point|defect number); the next candidate takes its place, and a finding left with none says "Not raised in 1C"
+again. A line under the table says how many were removed and offers Restore. The × is in the preview only: `mailHtml(rows, list,
+prev)` draws it only with `prev`, so the copied e-mail and the CSV carry the remaining defects and no button. One browser only:
+another desk still sees the defect. `tests/exmatch.cjs`.
