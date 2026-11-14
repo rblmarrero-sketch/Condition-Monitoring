@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-14T15:19:46+00:00",
+  "generated": "2026-11-14T15:32:57+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -5846,6 +5846,58 @@ window.CM_WO_DATA = {
   ],
   "otherDefects": [
     {
+      "asset": "DZ004",
+      "defect": "DD-00016907",
+      "raised": "2026-11-15",
+      "system": "DZ004.CH (Structure & Chassis / Рама и конструкция)",
+      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "descr": "Протянуть болты капота",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022568"
+    },
+    {
+      "asset": "DZ018",
+      "defect": "DD-00016908",
+      "raised": "2026-11-15",
+      "system": "DZ018.CH.BL (Blade / Отвал)",
+      "defectType": "3.01 Control failure / Ошибка управления",
+      "descr": "Осмотр рабочего оборудования",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022569"
+    },
+    {
+      "asset": "TK152",
+      "defect": "DD-00016910",
+      "raised": "2026-11-15",
+      "system": "TK152.DRS.COO (Cooling System / Система охлаждения)",
+      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "descr": "Протянуть хомут",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022571"
+    },
+    {
+      "asset": "LD006",
+      "defect": "DD-00016909",
+      "raised": "2026-11-15",
+      "system": "Bucket / Ковш",
+      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
+      "descr": "Демонтаж ножей с помощью сварочных работ",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Kiselev",
+      "regBy": "Киселев Алексей Александрович",
+      "wo": "WO-022570"
+    },
+    {
       "asset": "TK143",
       "defect": "DD-00016906",
       "raised": "2026-11-15",
@@ -6379,6 +6431,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022560"
     },
     {
+      "asset": "LS025",
+      "defect": "DD-00016880",
+      "raised": "2026-11-14",
+      "system": "LS025.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Отогрев, запуск ДВС.",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022555"
+    },
+    {
       "asset": "LV073",
       "defect": "DD-00016896",
       "raised": "2026-11-14",
@@ -6429,19 +6494,6 @@ window.CM_WO_DATA = {
       "by": "Aleksey Dobrikov",
       "regBy": "Добриков Алексей Владимирович",
       "wo": "WO-022559"
-    },
-    {
-      "asset": "LS025",
-      "defect": "DD-00016880",
-      "raised": "2026-11-14",
-      "system": "LS025.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Отогрев, запуск ДВС.",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022555"
     },
     {
       "asset": "TK031",
@@ -49592,11 +49644,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "LV130",
-      "defect": "DD-00013349",
+      "defect": "DD-00013348",
       "raised": "2026-09-25",
-      "system": "LV130.DRS.ENG (Engine / Двигатель)",
-      "defectType": "3.13 Warning light / alarm active / Сигнальная лампа / аварийная сигнализация активна",
-      "descr": "Горит лампа \"Проверьте двигатель\"",
+      "system": "LV130.ELS (Electrical System / Электросистема)",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "Не работает сигнал заднего хода, не включается камера заднего хода",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -49605,11 +49657,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "LV130",
-      "defect": "DD-00013348",
+      "defect": "DD-00013349",
       "raised": "2026-09-25",
-      "system": "LV130.ELS (Electrical System / Электросистема)",
-      "defectType": "4.02 Open circuit / Разрыв цепи",
-      "descr": "Не работает сигнал заднего хода, не включается камера заднего хода",
+      "system": "LV130.DRS.ENG (Engine / Двигатель)",
+      "defectType": "3.13 Warning light / alarm active / Сигнальная лампа / аварийная сигнализация активна",
+      "descr": "Горит лампа \"Проверьте двигатель\"",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -58614,19 +58666,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "TK133",
-      "defect": "DD-00011370",
-      "raised": "2026-08-22",
-      "system": "TK133.CH.SU (Suspension / Подвеска)",
-      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
-      "descr": "Не смазываются никак втулки балансиров",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-021736"
-    },
-    {
-      "asset": "TK133",
       "defect": "DD-00011372",
       "raised": "2026-08-22",
       "system": "TK133.ELS.AS (Alarm System / Система сигнализации)",
@@ -58663,6 +58702,19 @@ window.CM_WO_DATA = {
       "by": "Ivan Popov",
       "regBy": "Попов Иван Сергеевич",
       "wo": "WO-015456"
+    },
+    {
+      "asset": "TK133",
+      "defect": "DD-00011370",
+      "raised": "2026-08-22",
+      "system": "TK133.CH.SU (Suspension / Подвеска)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Не смазываются никак втулки балансиров",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-021736"
     },
     {
       "asset": "H04",
@@ -61071,11 +61123,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "CR001",
-      "defect": "DD-00009554",
+      "defect": "DD-00009555",
       "raised": "2026-07-24",
       "system": "CR001.DRS.AIR (Air Intake System / Система впуска воздуха)",
-      "defectType": "3.02 No (faulty) signal/ indication/alarm / Отсутвие сигнала, индикации",
-      "descr": null,
+      "defectType": "1.10 Rupture / Burst / Разрыв",
+      "descr": "Разрыв патрубка интеркуллера ДВС №7Y-1182",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Rinat Musaferov",
@@ -61084,11 +61136,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "CR001",
-      "defect": "DD-00009555",
+      "defect": "DD-00009554",
       "raised": "2026-07-24",
       "system": "CR001.DRS.AIR (Air Intake System / Система впуска воздуха)",
-      "defectType": "1.10 Rupture / Burst / Разрыв",
-      "descr": "Разрыв патрубка интеркуллера ДВС №7Y-1182",
+      "defectType": "3.02 No (faulty) signal/ indication/alarm / Отсутвие сигнала, индикации",
+      "descr": null,
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Rinat Musaferov",
