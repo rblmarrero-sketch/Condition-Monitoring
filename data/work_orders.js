@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-14T20:12:58+00:00",
+  "generated": "2026-11-14T20:32:55+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -22278,19 +22278,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK084",
-      "defect": "DD-00015608",
-      "raised": "2026-10-25",
-      "system": "TK084.DRS.AXL (Axles / Мосты)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Замена редуктора третьего моста",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
       "asset": "GE038",
       "defect": "DD-00015614",
       "raised": "2026-10-25",
@@ -22367,6 +22354,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": null
+    },
+    {
+      "asset": "TK084",
+      "defect": "DD-00015608",
+      "raised": "2026-10-25",
+      "system": "TK084.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Замена редуктора третьего моста",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022387"
     },
     {
       "asset": "CR004",
@@ -58873,19 +58873,6 @@ window.CM_WO_DATA = {
       "wo": "WO-021734"
     },
     {
-      "asset": "LV079",
-      "defect": "DD-00011354",
-      "raised": "2026-08-22",
-      "system": "LV079.ELS.WH (Wiring Harness / Жгут проводов)",
-      "defectType": "4.01 Short circuiting / Короткое замыкание",
-      "descr": "Проверка и ремонт при необходимости подключения светодиодной балки дополнительного освещения",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Ivan Popov",
-      "regBy": "Попов Иван Сергеевич",
-      "wo": "WO-015456"
-    },
-    {
       "asset": "TK133",
       "defect": "DD-00011370",
       "raised": "2026-08-22",
@@ -58897,6 +58884,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-021736"
+    },
+    {
+      "asset": "LV079",
+      "defect": "DD-00011354",
+      "raised": "2026-08-22",
+      "system": "LV079.ELS.WH (Wiring Harness / Жгут проводов)",
+      "defectType": "4.01 Short circuiting / Короткое замыкание",
+      "descr": "Проверка и ремонт при необходимости подключения светодиодной балки дополнительного освещения",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Ivan Popov",
+      "regBy": "Попов Иван Сергеевич",
+      "wo": "WO-015456"
     },
     {
       "asset": "H04",
