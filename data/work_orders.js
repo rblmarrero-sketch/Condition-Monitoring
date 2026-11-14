@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-14T10:47:47+00:00",
+  "generated": "2026-11-14T11:03:02+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -6041,6 +6041,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "GR015",
+      "defect": "DD-00016902",
+      "raised": "2026-11-14",
+      "system": "GR015.OC.HE (Heating / Отопление)",
+      "defectType": "3.01 Control failure / Ошибка управления",
+      "descr": "Не работает автономный отопитель",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": null
+    },
+    {
       "asset": "GE058",
       "defect": "DD-00016872",
       "raised": "2026-11-14",
@@ -6142,6 +6155,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "TK106",
+      "defect": "DD-00016903",
+      "raised": "2026-11-14",
+      "system": "TK106.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "descr": "Обрыв крестовины",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
       "wo": null
     },
     {
@@ -6249,17 +6275,17 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "EX004",
-      "defect": "DD-00016900",
+      "asset": "EX001",
+      "defect": "DD-00016901",
       "raised": "2026-11-14",
-      "system": "EX004.CH.AL (Central Lubrication System / Централизованная система смазки)",
+      "system": "EX001.CH.AL (Central Lubrication System / Централизованная система смазки)",
       "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
-      "descr": "Заправка смазкой ЦСС",
+      "descr": "Доставка смазки",
       "status": "Elimination scheduled",
       "priority": "P2 Urgent",
       "by": "Aleksey Dobrikov",
       "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022562"
+      "wo": "WO-022563"
     },
     {
       "asset": "LV050",
@@ -6273,6 +6299,19 @@ window.CM_WO_DATA = {
       "by": "Aleksey Dobrikov",
       "regBy": "Добриков Алексей Владимирович",
       "wo": "WO-022561"
+    },
+    {
+      "asset": "EX004",
+      "defect": "DD-00016900",
+      "raised": "2026-11-14",
+      "system": "EX004.CH.AL (Central Lubrication System / Централизованная система смазки)",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "Заправка смазкой ЦСС",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022562"
     },
     {
       "asset": "DZ020",
@@ -60095,8 +60134,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000076",
+      "asset": "H07",
+      "defect": "EB-00000075",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -60108,8 +60147,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H07",
-      "defect": "EB-00000075",
+      "asset": "H04",
+      "defect": "EB-00000076",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
