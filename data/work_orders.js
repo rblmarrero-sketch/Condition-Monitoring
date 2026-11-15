@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-15T08:32:52+00:00",
+  "generated": "2026-11-15T08:53:00+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -6015,6 +6015,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "TK122",
+      "defect": "DD-00016948",
+      "raised": "2026-11-15",
+      "system": "TK122.DRS.COO (Cooling System / Система охлаждения)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Устранение утечки",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": null
+    },
+    {
       "asset": "TK124",
       "defect": "DD-00016931",
       "raised": "2026-11-15",
@@ -6067,6 +6080,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "DZ016",
+      "defect": "DD-00016950",
+      "raised": "2026-11-15",
+      "system": "DZ016.HS.CYL (Cylinders / Гидроцилиндры)",
+      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "descr": "Люфт Г/Ц подъема отвала",
+      "status": null,
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": null
+    },
+    {
       "asset": "LV048",
       "defect": "DD-00016930",
       "raised": "2026-11-15",
@@ -6104,6 +6130,58 @@ window.CM_WO_DATA = {
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": null
+    },
+    {
+      "asset": "BS002",
+      "defect": "DD-00016952",
+      "raised": "2026-11-15",
+      "system": "BS002.ELS (Electrical System / Электросистема)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Затруднённый запуск.",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022611"
+    },
+    {
+      "asset": "TK088",
+      "defect": "DD-00016951",
+      "raised": "2026-11-15",
+      "system": "TK088.ELS.BAT (Batteries / Аккумуляторные батареи)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Затруднённый запуск двигателя",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022610"
+    },
+    {
+      "asset": "TK130",
+      "defect": "DD-00016949",
+      "raised": "2026-11-15",
+      "system": "EMERGENCY EQUIPMENT, FIRE-TRUCK IVECO CURSOR, TK130 WATER PUMP OldNumber (ET003)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Разрыв напорного трубопровода лафетного ствола-разморожен",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022608"
+    },
+    {
+      "asset": "TK085",
+      "defect": "DD-00016947",
+      "raised": "2026-11-15",
+      "system": "TK085.ELS.BAT (Batteries / Аккумуляторные батареи)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Затруднённый запуск.",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022607"
     },
     {
       "asset": "GE009",
