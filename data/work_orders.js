@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-15T10:45:11+00:00",
+  "generated": "2026-11-15T10:52:48+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -6054,19 +6054,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "BS009",
-      "defect": "DD-00016954",
-      "raised": "2026-11-15",
-      "system": "BS009.CH.UC (Undercarriage / Ходовая часть)",
-      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
-      "descr": "Заклинивание колеса",
-      "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": null
-    },
-    {
       "asset": "CR004",
       "defect": "DD-00016946",
       "raised": "2026-11-15",
@@ -6221,6 +6208,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022605"
+    },
+    {
+      "asset": "BS009",
+      "defect": "DD-00016954",
+      "raised": "2026-11-15",
+      "system": "BS009.CH.UC (Undercarriage / Ходовая часть)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Заклинивание колеса",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022613"
     },
     {
       "asset": "LD006",
