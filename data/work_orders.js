@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-15T22:46:03+00:00",
+  "generated": "2026-11-15T22:57:54+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -2702,8 +2702,8 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-10-09",
       "detected": "2026-10-09",
-      "planStart": "2026-11-17",
-      "closed": null,
+      "planStart": "2026-11-13",
+      "closed": "2026-11-13",
       "asset": "CN013",
       "defect": "DD-00014452",
       "requestNo": "DD-00014452",
@@ -2714,7 +2714,7 @@ window.CM_WO_DATA = {
       "cause": "Усталостная трещина",
       "causeFrom": "wo",
       "descr": "Патрубок воздуховода системы впуска ДВС имеет трещины.",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "by": "Zhomart",
       "byFull": "Zhomart Khasenov",
       "regBy": "Хасенов Жомарт",
@@ -6392,6 +6392,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "TK097",
+      "defect": "DD-00016938",
+      "raised": "2026-11-15",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK097 ENGINE OldNumber (UT097)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Запуск ДВС",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022599"
+    },
+    {
       "asset": "EX003",
       "defect": "DD-00016955",
       "raised": "2026-11-15",
@@ -6572,19 +6585,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022586"
-    },
-    {
-      "asset": "TK097",
-      "defect": "DD-00016938",
-      "raised": "2026-11-15",
-      "system": "TRUCK, WATER URAL 4672M1-20, TK097 ENGINE OldNumber (UT097)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Запуск ДВС",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022599"
     },
     {
       "asset": "EX006",
@@ -112543,15 +112543,15 @@ window.CM_WO_DATA = {
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-12",
       "planStartDt": "2026-11-12T00:00:00",
-      "planEnd": "2026-11-14",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "planEnd": "2026-11-12",
+      "actualStart": "2026-11-12",
+      "actualStartDt": "2026-11-12T07:00:00",
+      "actualEnd": "2026-11-13"
     },
     {
       "equip": "EX012",
@@ -128549,15 +128549,15 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-12",
       "planStartDt": "2026-11-12T00:00:00",
       "planEnd": "2026-11-12",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-12",
+      "actualStartDt": "2026-11-12T16:00:00",
+      "actualEnd": "2026-11-12"
     },
     {
       "equip": "GE099",
@@ -135168,15 +135168,15 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-12",
       "planStartDt": "2026-11-12T00:00:00",
-      "planEnd": "2026-11-13",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "planEnd": "2026-11-12",
+      "actualStart": "2026-11-12",
+      "actualStartDt": "2026-11-12T19:00:00",
+      "actualEnd": "2026-11-13"
     },
     {
       "equip": "GR014",
@@ -194295,15 +194295,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-12",
       "planStartDt": "2026-11-12T00:00:00",
       "planEnd": "2026-11-13",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-12",
+      "actualStartDt": "2026-11-12T20:00:00",
+      "actualEnd": "2026-11-13"
     },
     {
       "equip": "TK161",
