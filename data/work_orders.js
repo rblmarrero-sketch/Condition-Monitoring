@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-15T05:43:01+00:00",
+  "generated": "2026-11-15T05:58:05+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -6067,17 +6067,17 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "CR002",
-      "defect": "DD-00016936",
+      "asset": "LD006",
+      "defect": "DD-00016941",
       "raised": "2026-11-15",
-      "system": "CR002.HS.CV (Control Valves / Гидрораспределители)",
+      "system": "LD006.HS.DL (Hydraulic Lines / Гидролинии)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Заклинил гидрораспределитель",
+      "descr": "порыв РВД на центральный цилиндр стрелы",
       "status": "Elimination scheduled",
       "priority": "P2 Urgent",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": "WO-022595"
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-022602"
     },
     {
       "asset": "EX007",
@@ -6091,6 +6091,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022600"
+    },
+    {
+      "asset": "CR002",
+      "defect": "DD-00016936",
+      "raised": "2026-11-15",
+      "system": "CR002.HS.CV (Control Valves / Гидрораспределители)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Заклинил гидрораспределитель",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-022595"
     },
     {
       "asset": "GR002",
@@ -6247,6 +6260,19 @@ window.CM_WO_DATA = {
       "by": "Aleksey Dobrikov",
       "regBy": "Добриков Алексей Владимирович",
       "wo": "WO-022576"
+    },
+    {
+      "asset": "EX006",
+      "defect": "DD-00016940",
+      "raised": "2026-11-15",
+      "system": "EX006.CH.BUC (Bucket / Ковш)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Замена коронки",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022601"
     },
     {
       "asset": "TK003",
@@ -6509,6 +6535,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022528"
     },
     {
+      "asset": "TK029",
+      "defect": "DD-00016854",
+      "raised": "2026-11-14",
+      "system": "TK029.DRS.FUE.INJ Injectors / Форсунки",
+      "defectType": "3.13 Warning light / alarm active / Сигнальная лампа / аварийная сигнализация активна",
+      "descr": "Индикация неисправности двигателя \"check engine\"",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022538"
+    },
+    {
       "asset": "DZ020",
       "defect": "DD-00016898",
       "raised": "2026-11-14",
@@ -6520,6 +6559,32 @@ window.CM_WO_DATA = {
       "by": "Aleksey Kiselev",
       "regBy": "Киселев Алексей Александрович",
       "wo": "WO-022560"
+    },
+    {
+      "asset": "BS008",
+      "defect": "DD-00016860",
+      "raised": "2026-11-14",
+      "system": "BS008.ELS.WH (Wiring Harness / Жгут проводов)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Check на панели приборов, ремонт автономного отопителя",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022544"
+    },
+    {
+      "asset": "CN008",
+      "defect": "DD-00016881",
+      "raised": "2026-11-14",
+      "system": "CN008.CH.STR (Superstructure / Надстройка)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Утепление гидролиний, моторного отсека, проверка АКБ, электрооборудования",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022549"
     },
     {
       "asset": "LV086",
@@ -6912,19 +6977,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022550"
     },
     {
-      "asset": "CN008",
-      "defect": "DD-00016881",
-      "raised": "2026-11-14",
-      "system": "CN008.CH.STR (Superstructure / Надстройка)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Утепление гидролиний, моторного отсека, проверка АКБ, электрооборудования",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022549"
-    },
-    {
       "asset": "EX011",
       "defect": "DD-00016862",
       "raised": "2026-11-14",
@@ -6936,19 +6988,6 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-022546"
-    },
-    {
-      "asset": "TK029",
-      "defect": "DD-00016854",
-      "raised": "2026-11-14",
-      "system": "TK029.DRS.FUE.INJ Injectors / Форсунки",
-      "defectType": "3.13 Warning light / alarm active / Сигнальная лампа / аварийная сигнализация активна",
-      "descr": "Индикация неисправности двигателя \"check engine\"",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-022538"
     },
     {
       "asset": "DZ022",
@@ -6988,19 +7027,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022545"
-    },
-    {
-      "asset": "BS008",
-      "defect": "DD-00016860",
-      "raised": "2026-11-14",
-      "system": "BS008.ELS.WH (Wiring Harness / Жгут проводов)",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Check на панели приборов, ремонт автономного отопителя",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022544"
     },
     {
       "asset": "EX005",
@@ -57989,6 +58015,32 @@ window.CM_WO_DATA = {
       "wo": "WO-016114"
     },
     {
+      "asset": "DZ008",
+      "defect": "DD-00011828",
+      "raised": "2026-08-31",
+      "system": "DZ008.CH.TEN (Track Tension System / Натяжение гусениц)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Диагностика/ремонт натяжителя гусеницы",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": "WO-017107"
+    },
+    {
+      "asset": "DZ008",
+      "defect": "DD-00011831",
+      "raised": "2026-08-31",
+      "system": "DZ008.ELS (Electrical System / Электросистема)",
+      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
+      "descr": "Диагностика/ремонт натяжителя гусеницы",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": "WO-017106"
+    },
+    {
       "asset": "GR015",
       "defect": "DD-00007518",
       "raised": "2026-08-31",
@@ -58026,32 +58078,6 @@ window.CM_WO_DATA = {
       "by": "Pavel Kostin",
       "regBy": "Костин Павел Александрович",
       "wo": null
-    },
-    {
-      "asset": "DZ008",
-      "defect": "DD-00011828",
-      "raised": "2026-08-31",
-      "system": "DZ008.CH.TEN (Track Tension System / Натяжение гусениц)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Диагностика/ремонт натяжителя гусеницы",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Pavel Kostin",
-      "regBy": "Костин Павел Александрович",
-      "wo": "WO-017107"
-    },
-    {
-      "asset": "DZ008",
-      "defect": "DD-00011831",
-      "raised": "2026-08-31",
-      "system": "DZ008.ELS (Electrical System / Электросистема)",
-      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
-      "descr": "Диагностика/ремонт натяжителя гусеницы",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Pavel Kostin",
-      "regBy": "Костин Павел Александрович",
-      "wo": "WO-017106"
     },
     {
       "asset": "SN002.HS.DL",
@@ -59016,6 +59042,32 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "DZ008",
+      "defect": "DD-00010972",
+      "raised": "2026-08-16",
+      "system": "DZ008.CH.BL (Blade / Отвал)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Чрезмерный люфт в шарнирах соединения брус - отвал",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Evgeniy Frolin",
+      "regBy": "Фролин Евгений Владимирович",
+      "wo": "WO-017108"
+    },
+    {
+      "asset": "DZ008",
+      "defect": "DD-00010973",
+      "raised": "2026-08-16",
+      "system": "DZ008.CH.UC (Undercarriage / Ходовая часть)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Предельный износ отбойников кареток опорных роликов",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Evgeniy Frolin",
+      "regBy": "Фролин Евгений Владимирович",
+      "wo": "WO-017110"
+    },
+    {
       "asset": "DZ018",
       "defect": "DD-00010963",
       "raised": "2026-08-16",
@@ -59053,32 +59105,6 @@ window.CM_WO_DATA = {
       "by": "Evgeniy Frolin",
       "regBy": "Фролин Евгений Владимирович",
       "wo": null
-    },
-    {
-      "asset": "DZ008",
-      "defect": "DD-00010972",
-      "raised": "2026-08-16",
-      "system": "DZ008.CH.BL (Blade / Отвал)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Чрезмерный люфт в шарнирах соединения брус - отвал",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Evgeniy Frolin",
-      "regBy": "Фролин Евгений Владимирович",
-      "wo": "WO-017108"
-    },
-    {
-      "asset": "DZ008",
-      "defect": "DD-00010973",
-      "raised": "2026-08-16",
-      "system": "DZ008.CH.UC (Undercarriage / Ходовая часть)",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "Предельный износ отбойников кареток опорных роликов",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Evgeniy Frolin",
-      "regBy": "Фролин Евгений Владимирович",
-      "wo": "WO-017110"
     },
     {
       "asset": "TK158",
