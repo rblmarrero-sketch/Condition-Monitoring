@@ -155,9 +155,9 @@ const AUDIT = (phone) => {
     const r = await q.evaluate(() => ({ w: document.documentElement.scrollWidth - document.documentElement.clientWidth,
       rows: document.querySelectorAll('section:not(.hidden) tbody tr').length }));
     if (r.w > 1) wide.push(t + ' +' + r.w);
-    if (r.rows > 60) wide.push(t + ' draws ' + r.rows + ' rows');
+    /* rows: tables open with all rows since build 626 (Rickie 15.11 "all tables default show all"); 25 is one press away */
   }
-  ok('with 1,000 inspections a phone still scrolls only up and down, and draws a page at a time', wide.length === 0, wide.join(' | ') || 'clean');
+  ok('with 1,000 inspections a phone still scrolls only up and down (tables show all, by decision)', wide.length === 0, wide.join(' | ') || 'clean');
   ok('no errors at scale', qerrs.length === 0, qerrs.slice(0, 2).join(' | ') || 'none');
   ok('no application errors', errs.length === 0, errs.slice(0, 2).join(' | ') || 'none');
   await b.close();

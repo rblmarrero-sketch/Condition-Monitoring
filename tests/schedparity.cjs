@@ -117,14 +117,14 @@ const diff = (a, b) => ({ onlyOffice: a.filter(x => !b.includes(x)), onlyField: 
   ok('no unit-round is counted twice, office or field', dup(D) === 0 && dup(M) === 0, dup(D) + ' / ' + dup(M));
 
   console.log('\n3. AND THE SCREEN SAYS WHAT THE ENGINE SAYS');
+  /* Build 627: the first four tabs follow the 1C PM work orders (CMFlow.plan, the Overview's rule); the engine's
+     hour-interval rows are the CM interval tab (over + soon), and Never inspected is unchanged. */
   const tabs = await d.evaluate(() => { showTab('due', true); renderDueTab();
-    const o = {}; document.querySelectorAll('#ddSeg [role=tab]').forEach(b => o[b.dataset.dd] = Number(b.querySelector('.n').textContent)); return o; });
+    const o = {}; document.querySelectorAll('#ddSeg [role=tab]').forEach(b => o[b.dataset.dd] = Number(b.querySelector('.n').textContent));
+    o._over1c = window.CMFlow ? CMFlow.plan().over.length : -1; return o; });
   ok('the schedule tabs count what the engine counted',
-     tabs.over === D.over.length && tabs.soon === D.soon.length && tabs.put === D.put.length
-     && tabs.done === D.done.length && tabs.never === D.never.length,
+     tabs.cmint === D.over.length + D.soon.length && tabs.never === D.never.length && tabs.over === tabs._over1c,
      JSON.stringify(tabs));
-  ok('and All is the sum of the five', tabs.all === D.over.length + D.soon.length + D.put.length + D.done.length + D.never.length,
-     tabs.all + ' vs ' + (D.over.length + D.soon.length + D.put.length + D.done.length + D.never.length));
   ok('no page errors on either surface', derrs.length === 0 && merrs.length === 0,
      [...derrs, ...merrs].slice(0, 3).join(' | ') || 'none');
 

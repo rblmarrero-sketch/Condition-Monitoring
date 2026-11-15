@@ -67,7 +67,7 @@ const T = require(path.join(__dirname, '..', 'mobile', 'terms.js'));
     const R = await p.evaluate(() => { showTab('due', true); const heads = [...document.querySelectorAll('#ddList th')].map(x => x.textContent.trim());
       showTab('actions', true); actView = 'table'; renderActions(); const none = (document.querySelector('#actionTbl .who.none span') || {}).textContent;
       return { heads, none, tabs: [...document.querySelectorAll('#ddSeg button')].map(x => x.textContent.replace(/\d+$/, '').trim()) }; });
-    ok('Russian on screen: the schedule tabs and heads are the dictionary\'s words', R.tabs.includes(T.ru.overdue) && R.tabs.includes(T.ru.deferred) && R.heads.includes(T.ru.hours_per_day) && R.heads.includes(T.ru.defer_reason), R.tabs.join(',') + ' · ' + R.heads.join(','));
+    ok('Russian on screen: the schedule tabs and heads are the dictionary\'s words', R.tabs.some(x => x.indexOf(T.ru.overdue) === 0) && R.tabs.includes(T.ru.deferred) && R.heads.includes(T.ru.hours_per_day) && R.heads.includes(T.ru.defer_reason), R.tabs.join(',') + ' · ' + R.heads.join(','));
     ok('  and an unassigned action says "' + T.ru.owner_unassigned + '"', R.none === T.ru.owner_unassigned, R.none);
     ok('  no page errors', errs.length === 0, errs.slice(0, 2).join(' | ') || 'none');
     await p.close();

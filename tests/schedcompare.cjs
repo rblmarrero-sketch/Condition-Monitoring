@@ -133,11 +133,9 @@ const ago = n => DUE.shift(TODAY, -n);
 
     await p.selectOption('#ddScope', 'cmp');
     await p.waitForTimeout(300);
-    const seg = await p.evaluate(() => {
-      const b2 = document.querySelector('#ddSeg [data-dd="cmp"]');
-      return b2 ? b2.textContent.trim() : null;
-    });
-    ok('the Compare tab is on the segmented control', seg === 'Compare1', seg);
+    /* Build 627: Compare is a view the address opens (#due?dd=cmp), not a tab; the tabs follow the 1C plan. */
+    const seg = await p.evaluate(() => ({ tab: !!document.querySelector('#ddSeg [data-dd="cmp"]'), scope: document.getElementById('ddScope').value }));
+    ok('the Compare view still opens from its address', seg.scope === 'cmp' && !seg.tab, JSON.stringify(seg));
     const rowTxt = (await p.evaluate(() => (document.querySelector('#ddList tbody tr') || {}).textContent || '')).replace(/\s+/g, ' ').trim();
     ok('the row names 1C\'s own plan and the work order', /1C plans/.test(rowTxt) && /WO-1/.test(rowTxt), rowTxt);
     ok('and says the dates agree', /same date/.test(rowTxt), rowTxt);

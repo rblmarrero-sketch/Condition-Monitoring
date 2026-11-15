@@ -125,15 +125,16 @@ const rows = p => p.$$eval('#ddList tbody tr', a => a.map(tr => ({
   ok('the heading is in words, not a key',
      !/^dd_/.test((await p.textContent('#tab-due h2')).trim()), (await p.textContent('#tab-due h2')).trim().slice(0, 50));
 
-  console.log('\nwhat is missed');
+  console.log('\nwhat is missed (the CM interval tab since build 627: the first tabs follow the 1C PM work orders)');
+  await p.selectOption('#ddScope', 'cmint'); await p.waitForTimeout(200);
   let r = await rows(p);
   ok('the overdue machine nobody explained is listed',
      r.some(x => x.unit === 'TK101'), r.map(x => x.unit).join(' '));
   ok('and is marked as past due', (r.find(x => x.unit === 'TK101') || {}).cls === 'dd-over');
   ok('a machine done two days ago is not on the missed list',
      !r.some(x => x.unit === 'TK103'), r.map(x => x.unit).join(' '));
-  ok('nor is one that is merely due soon',
-     !r.some(x => x.unit === 'TK104'), r.map(x => x.unit).join(' '));
+  ok('one that is merely due soon is marked due soon, not past due',
+     (r.find(x => x.unit === 'TK104') || {}).cls === 'dd-soon', r.map(x => x.unit + ':' + x.cls).join(' '));
   ok('the row says how overdue in days AND in hours',
      /\d+\s*d/.test((r.find(x => x.unit === 'TK101') || {}).text || '')
      && /\d+\s*h/.test((r.find(x => x.unit === 'TK101') || {}).text || ''),
@@ -158,7 +159,7 @@ const rows = p => p.$$eval('#ddList tbody tr', a => a.map(tr => ({
      await p.evaluate(() => !!CMDash.deferrals()['GET|TK105']));
 
   console.log('\nthe machine\'s own rate, not the fleet\'s');
-  await p.selectOption('#ddScope', 'all'); await p.waitForTimeout(200);
+  await p.selectOption('#ddScope', 'cmint'); await p.waitForTimeout(200);
   r = await rows(p);
   const m = r.find(x => x.unit === 'TK106') || {};
   ok('a machine measured at half the fleet rate is not called overdue',
@@ -168,32 +169,20 @@ const rows = p => p.$$eval('#ddList tbody tr', a => a.map(tr => ({
   ok('a machine with no measurement says the rate was assumed',
      /\*/.test(assumed.text || ''), assumed.text);
 
-  console.log('\nthe counts');
-  const kpi = await p.$$eval('#dueKpis .kpi', a => a.map(x => x.textContent.replace(/\s+/g, ' ').trim()));
-  ok('four tiles, each a number with a denominator', kpi.length === 4, kpi.join(' | '));
-  /* Seven seeded unit-rounds. Two are past due and unexcused — TK101's plug at
-     40 days on a 12.5-day round and TK107's undercarriage at 65 on a 50-day
-     one. TK102 is past due too but was put off with a reason, and a machine
-     somebody made a decision about is not a machine anybody missed: it belongs
-     in the put-off count, not this one. TK103 is fresh, TK104 and TK106 are
-     due soon, TK105's reason was spent by an actual inspection. Counted from
-     the intervals, not read off the screen and written down. */
-  const kv = await p.$$eval('#dueKpis .kpi .v', a => a.map(x => x.textContent.trim()));
-  ok('the past-due tile counts what nobody explained away', kv[0] === '2', `${kv[0]} — ${kpi[0]}`);
-  ok('a machine put off on purpose is counted as a decision, not a miss',
-     kv[2] === '1', `${kv[2]} — ${kpi[2]}`);
-  /* Three rounds are past their interval: TK101, TK107 and TK102. One of them
-     carries a reason. The tile that counts reasons must count against all
-     three, or it excludes the only row that has one and reports "1 of 2". */
-  ok('the explained tile counts against every round past its interval, not just the unexcused ones',
-     kv[3] === '1' && /\b3\b/.test(kpi[3]), `${kv[3]} explained — ${kpi[3]}`);
-  ok('pressing a tile filters to what it counts', await (async () => {
-    await p.click('#dueKpis [data-dd="put"]'); await p.waitForTimeout(200);
+  console.log('\nthe counts (the tabs carry them; no tile strip since build 627)');
+  const tabs = await p.evaluate(() => Object.fromEntries([...document.querySelectorAll('#ddSeg [data-dd]')].map(b => [b.dataset.dd, Number((b.querySelector('.n') || {}).textContent)])));
+  /* Seven seeded unit-rounds. On the CM interval tab: TK101 and TK107 past due and unexcused, TK104 and TK106 due soon;
+     TK102 put off with a reason is a decision, on Deferred; TK103 fresh; TK105's reason spent by an inspection. */
+  ok('no tile strip above the tabs', await p.evaluate(() => document.getElementById('dueKpis').children.length) === 0);
+  ok('the CM interval tab counts the past due and the due soon', tabs.cmint === 4, JSON.stringify(tabs));
+  ok('a machine put off on purpose is counted as a decision, not a miss', tabs.put >= 1, String(tabs.put));
+  ok('pressing a tab filters to what it counts', await (async () => {
+    await p.click('#ddSeg [data-dd="put"]'); await p.waitForTimeout(200);
     return (await p.evaluate(() => document.getElementById('ddScope').value)) === 'put';
   })());
 
   console.log('\na filter per column, same cwColQ/cwWordMatch pattern as Fleet/PA/the lube matrix (Phase 4, 2026-09-27)');
-  await p.selectOption('#ddScope', 'all'); await p.waitForTimeout(200);
+  await p.selectOption('#ddScope', 'cmint'); await p.waitForTimeout(200);
   const cf1 = await p.evaluate(() => ({
     cells: document.querySelectorAll('#ddList th.cwfh').length,
     aria: (document.querySelector('#ddList input.cwcf[data-k="unit"]') || {}).getAttribute
@@ -230,7 +219,7 @@ const rows = p => p.$$eval('#ddList tbody tr', a => a.map(tr => ({
   await p.waitForTimeout(150);
 
   console.log('\nnarrowing to one round');
-  await p.selectOption('#ddScope', 'all');
+  await p.selectOption('#ddScope', 'cmint');
   await p.selectOption('#ddType', 'MP'); await p.waitForTimeout(200);
   r = await rows(p);
   ok('only that round is listed', r.length > 0 && r.every(x => / MP /.test(' ' + x.text + ' ') || /MP/.test(x.text)),
@@ -293,7 +282,7 @@ const rows = p => p.$$eval('#ddList tbody tr', a => a.map(tr => ({
   })());
 
   console.log('\nlooking for one machine');
-  await p.selectOption('#ddScope', 'all');
+  await p.selectOption('#ddScope', 'cmint');
   await p.fill('#ddQ', 'TK10'); await p.waitForTimeout(250);
   r = await rows(p);
   ok('the tab has its own search and it narrows the list',

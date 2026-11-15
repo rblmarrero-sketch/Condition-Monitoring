@@ -110,7 +110,7 @@ const SEED = () => {
   ok('any other cell still opens the drawer', E9);
   await p.evaluate(() => closeFollow());
 
-  console.log('\n4. THE SCHEDULE — SIX VIEWS THAT ADD UP');
+  console.log('\n4. THE SCHEDULE — 1C FIRST, THE CM INTERVAL BESIDE IT');
   const D = await p.evaluate(() => { showTab('due', true); renderDueTab();
     const tabs = [...document.querySelectorAll('#ddSeg [role="tab"]')].map(b => ({ k: b.dataset.dd, n: +b.querySelector('.n').textContent, l: b.textContent.replace(/\d+$/, '').trim() }));
     const by = {}; tabs.forEach(t => by[t.k] = t);
@@ -120,19 +120,15 @@ const SEED = () => {
     const count = ((document.querySelector('#ddList .pager') || {}).textContent || '').match(/(\d[\d,]*)\s*matching/);
     const opts = [...document.querySelectorAll('#ddScope option')].map(o => o.value);
     return { keys: tabs.map(t => t.k).join(','), labels: tabs.map(t => t.l).join(' | '), by, cells, never: count ? +count[1].replace(/,/g, '') : -1, opts: opts.join(','),
-             sum: by.over.n + by.soon.n + by.never.n + by.put.n + by.done.n, all: by.all.n }; });
-  /* Seven since build 354, eight since Compare: 1C plan and Compare both sit
-     between Never inspected and Deferred, and both stay OUT of the sum below
-     — one is somebody else's schedule, the other is a question about
-     agreement, not coverage. The five that are statements about CM's own
-     programme are still the five that add up to All. */
-  ok('Overdue · Due soon · Never inspected · 1C plan · Compare · Deferred · Completed · All', D.keys === 'over,soon,never,plan,cmp,put,done,all', D.keys);
-  ok('  in the dictionary\'s words', D.labels === [TERMS.en.overdue, TERMS.en.due_soon, TERMS.en.never_inspected, '1C plan', 'Compare', TERMS.en.deferred, TERMS.en.completed, 'All'].join(' | '), D.labels);
-  ok('  the five add up to All', D.sum === D.all && D.all > 0, D.sum + ' = ' + D.all);
-  ok('  Overdue 1 (TK108\'s plug) · Completed 8 (walked within their interval)', D.by.over.n === 1 && D.by.done.n === 8, JSON.stringify({ over: D.by.over.n, done: D.by.done.n }));
+             cmint: by.cmint ? by.cmint.n : -1, st: (o => { dueTabRows().forEach(r => { o[r.st] = (o[r.st] || 0) + 1; }); return o; })({}) }; });
+  /* Build 627 (CM_SCHED1C_V1): the first four views follow the 1C PM work orders; the hour-interval rows are the
+     CM interval view; All is an address, not a tab. */
+  ok('Overdue in 1C · Due in 7 days · Planned later · Done this week · Deferred · Never inspected · CM interval', D.keys === 'over,soon,later,done,put,never,cmint', D.keys);
+  ok('  in the dictionary\'s words', D.labels === ['Overdue in 1C', 'Due in 7 days', 'Planned later', 'Done this week', TERMS.en.deferred, TERMS.en.never_inspected, 'CM interval'].join(' | '), D.labels);
+  ok('  CM interval holds the hour-based past due and due soon: TK108\'s plug is one of them', D.cmint === (D.st.over || 0) + (D.st.soon || 0) && (D.st.over || 0) === 1, JSON.stringify({ cmint: D.cmint, st: D.st }));
   ok('  never inspected: every machine on a round with nothing recorded, one row per round', D.never > 100 && D.by.never.n === D.never, D.never + ' rows');
   ok('  a never-inspected row says so, has no last date and no clock, and still offers Start and Defer', D.cells.length === 7 && D.cells[2] === TERMS.en.never_inspected && D.cells[3] === '—' && /Start/.test(D.cells[6]) && /Defer/.test(D.cells[6]), D.cells.join(' | '));
-  ok('  the address can name every view', D.opts === 'over,soon,due,never,plan,cmp,put,done,all', D.opts);
+  ok('  the address can name every view', D.opts === 'over,soon,due,never,plan,cmp,put,done,later,cmint,all', D.opts);
   const csv = await p.evaluate(() => { let n = 0; const U = URL.createObjectURL; URL.createObjectURL = () => { n++; return 'blob:x'; };
     const C = HTMLAnchorElement.prototype.click; HTMLAnchorElement.prototype.click = function () {};
     try { dueCsv(); } catch (e) { return 'threw ' + e.message; } finally { URL.createObjectURL = U; HTMLAnchorElement.prototype.click = C; }

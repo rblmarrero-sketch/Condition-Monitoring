@@ -115,7 +115,7 @@ const tileMap = async p => p.$$eval('#dueKpis .kpi, #dueKpis .tile', els => {
       baseline.tiles[label] !== undefined && next.tiles[label] === baseline.tiles[label],
       `next=${next.tiles[label]} dashboard=${baseline.tiles[label]}`);
   }
-  ok('KPI parity: dashboard-next renders exactly 4 tiles (Due.dc.html)', Object.keys(next.tiles).length === 4, JSON.stringify(next.tiles));
+  ok('no tile strip above the tabs on either page (build 627: the tabs carry the counts)', Object.keys(next.tiles).length === 0 && Object.keys(baseline.tiles).length === 0, JSON.stringify(next.tiles));
   ok('KPI parity: default (Overdue) table row count matches', next.rows === baseline.rows, `next=${next.rows} dashboard=${baseline.rows}`);
 
   /* ── the nine-way Show segmented control renders with counts ──────────── */
@@ -124,7 +124,7 @@ const tileMap = async p => p.$$eval('#dueKpis .kpi, #dueKpis .tile', els => {
      Completed, All -- eight views as tabs ("Overdue & due soon" stays a
      valid #ddScope value for an address that names it, but is not itself a
      tab -- see the comment above the <select> markup in index.html). */
-  ok('Show segmented control has all eight views', seg.length === 8, JSON.stringify(seg));
+  ok('Show segmented control has all seven views (1C: overdue, 7 days, later, done; deferred, never, CM interval)', seg.length === 7, JSON.stringify(seg));
 
   /* ── Round filter and Search box are present ───────────────────────────── */
   const controls = await n.evaluate(() => ({

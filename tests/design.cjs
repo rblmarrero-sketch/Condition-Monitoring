@@ -43,7 +43,7 @@ const SRC = { dash: fs.readFileSync(path.join(__dirname, '..', 'dashboard', 'ind
       const rows = [...document.querySelectorAll('#actionTbl tbody tr.hrow')].slice(0, 10).map(tr => Math.round(tr.getBoundingClientRect().height));
       showTab('due', true);
       const due = [...document.querySelectorAll('#ddList tbody tr')].slice(0, 10).map(tr => Math.round(tr.getBoundingClientRect().height));
-      const kpi = document.querySelector('#dueKpis .kpi, #dueKpis .tile, #kpis .kpi, #kpis .tile'); const cs = kpi && getComputedStyle(kpi);
+      const kpi = document.querySelector('#dueKpis .kpi, #dueKpis .tile, #kpis .kpi, #kpis .tile, #kpis .cfsec'); const cs = kpi && getComputedStyle(kpi);
       const card = document.querySelector('.section'); const cc = card && getComputedStyle(card);
       const focusable = [...document.querySelectorAll('button, a[href], input, select')].filter(e => e.checkVisibility && e.checkVisibility());
       const noFocusRing = focusable.filter(e => { const s = getComputedStyle(e, ':focus-visible'); return false; });

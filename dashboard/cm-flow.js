@@ -43,16 +43,43 @@
     });
   }
   function walked(r) { return r.status === 'ontime' || r.status === 'early' || r.status === 'late'; }
+  /* CM_SCHED1C_V1 (build 627): a deferral made on the phone or at a desk (the deferrals map, keyed round|unit)
+     takes a 1C order off Overdue / Due when it covers EVERY round of the order: made after the last round walked,
+     its date (if any) still ahead, and the order planned before the machine's next PM the deferral names (pm). */
+  function deferOn(r, ty) {
+    var m = (typeof deferrals !== 'undefined' && deferrals) || {}, u = String(r.w.equip || '').toUpperCase(), d = m[ty + '|' + u];
+    if (!d) return null;
+    var t0 = today(), at = String(d.at || '').slice(0, 10), last = r.last ? String(r.last.date || '') : '';
+    if (last && at && last >= at) return null;
+    if (d.until && String(d.until) < t0) return null;
+    if (d.pm && String(r.w.planStart) >= String(d.pm)) return null;
+    return d;
+  }
+  function deferred(r) { var ts = r.info.types || []; return ts.length && ts.every(function (ty) { return !!deferOn(r, ty); }); }
   function plan() {
-    var t0 = today(), wk = addD(t0, WEEK), mon = monday(t0), out = { later: [], week: [], over: [], done: [] };
+    var t0 = today(), wk = addD(t0, WEEK), mon = monday(t0), out = { later: [], week: [], over: [], done: [], put: [] };
     planRows().forEach(function (r) {
       var p = String(r.w.planStart), open = r.w.open !== false;
       if (r.last && String(r.last.date) >= mon && String(r.last.date) <= t0 && p <= wk && walked(r)) { out.done.push(r); return; }
       if (!open || walked(r)) return;
+      if (deferred(r)) { out.put.push(r); return; }
       if (p < t0) out.over.push(r); else if (p <= wk) out.week.push(r); else out.later.push(r);
     });
     return out;
   }
+  /* One Inspection Schedule row per 1C order, the shape that tab's 1C rows already read (st "plan"). */
+  function dueRow(r) {
+    var t0 = today(), u = String(r.w.equip || '').toUpperCase(), tys = (r.info.types || []).slice(), p = String(r.w.planStart);
+    var a = (window.ASSETS || []).find(function (x) { return x && String(x.n).toUpperCase() === u; });
+    var d = tys.map(function (ty) { return deferOn(r, ty); }).filter(Boolean)[0] || null;
+    return { c1: 1, st: 'plan', unit: u, ty: tys[0], tys: tys, plan: p, wo: r.w.woNumber || '', label: r.info.label || '',
+             prio: r.w.priority || '', cat: (a && (a.cat || a.cls)) || '', late: p < t0, lateDays: p < t0 && typeof DUE !== 'undefined' ? Math.abs(DUE.dayDiff(t0, p)) : 0,
+             last: r.last || null, d: d, status: r.status };
+  }
+  /* The 1C defect's responsible person, as the owner of a finding nobody named (build 627). Reads the link
+     map only; never builds it, because building it asks actionState, which asks this. */
+  function owner1C(r, i) { var m = linkCache.m; if (!m || !i) return ''; var d = m.get(fkey(r, i)); return (d && d.by) ? String(d.by) : ''; }
+  function warm() { try { links(finds(typeof RECS !== 'undefined' ? RECS : [])); } catch (e) {} }
   /* decision 2: compliance against the 1C plan date */
   function comp(days) {
     var t0 = today(), from = addD(t0, -(days || COMP_DAYS)), due = 0, onTime = 0;
@@ -178,6 +205,6 @@
       + '</tbody></table></div>';
   }
 
-  window.CMFlow = { compare: compare, plan: plan, comp: comp, flow: flow, stage: stage, isFind: function (r, i) { return sevOf(r, i) >= 3; }, defectOf: defectOf, render: render, cond: cond,
+  window.CMFlow = { compare: compare, plan: plan, dueRow: dueRow, owner1C: owner1C, warm: warm, deferOn: deferOn, comp: comp, flow: flow, stage: stage, isFind: function (r, i) { return sevOf(r, i) >= 3; }, defectOf: defectOf, render: render, cond: cond,
                     LINK_DAYS: LINK_DAYS, COMP_DAYS: COMP_DAYS, L: L };
 })();

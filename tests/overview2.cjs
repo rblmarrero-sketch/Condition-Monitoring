@@ -226,7 +226,8 @@ const reset = q => fetch(BASE + '/__reset?' + q).then(r => r.text());
                strip: Math.round(document.getElementById('kpis').getBoundingClientRect().height) };
     });
     ok(L + ': the attention table fits the screen', fit.table <= fit.box + 1, fit.table + ' in ' + fit.box);
-    ok(L + ': and the three rows stay compact', fit.strip <= 420, fit.strip + 'px');
+    /* 440: the flow rows' doors and grade keys are 32 px targets since build 627 (phase6), 3 px over the first 420 */
+    ok(L + ': and the three rows stay compact', fit.strip <= 440, fit.strip + 'px');
   }
   await p.click('.lang button[data-lang="en"]'); await p.waitForTimeout(300);
   const esc2 = await p.evaluate(async () => {
@@ -300,7 +301,7 @@ const reset = q => fetch(BASE + '/__reset?' + q).then(r => r.text());
      shrunk to the point of being unusable. */
   note('page height', big.tall + ' screens (every machine listed, Rickie 15.11 "all tables default show all")');
   ok('and never scrolls sideways', !big.wide);
-  ok('the three rows stay compact', big.stripH <= 420, big.stripH + 'px');
+  ok('the three rows stay compact', big.stripH <= 440, big.stripH + 'px');
 
   ok('no application errors', errs.length === 0, errs.slice(0, 2).join(' | ') || 'none');
   await b.close();

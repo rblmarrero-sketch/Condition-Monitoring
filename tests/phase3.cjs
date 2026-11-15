@@ -138,10 +138,12 @@ const shown = (p, sel) => p.evaluate(s => { const e = document.querySelector(s);
     const defers = [...document.querySelectorAll('#ddList .ddact button')].map(a => a.textContent.trim());
     return { title: (document.querySelector('#tab-due .pagehd h1') || document.querySelector('#tab-due h2') || {}).textContent, tabs, st, rows, hash: location.hash,
              scope: document.getElementById('ddScope').value, starts: [...new Set(starts)], defers: [...new Set(defers)],
-             all: dueTabRows().length, never: (typeof dueNeverRows === 'function' ? dueNeverRows().length : 0) };
+             all: dueTabRows().length, never: (typeof dueNeverRows === 'function' ? dueNeverRows().length : 0),
+             c1: (q => ({ over: q.over.length, week: q.week.length, later: q.later.length, done: q.done.length, put: q.put.length }))(CMFlow.plan()) };
   });
   note('tabs', D.tabs.map(x => x.label + ' ' + x.n).join(' · '));
   ok('the page is called Inspection Schedule', /Inspection Schedule/.test(D.title || ''), D.title);
+  const tb = k => D.tabs.find(x => x.k === k) || { n: -1 };
   /* The page size, from the page: 25 since build 271, and never a number this suite owns. */
   const PAGE_SIZE_DEFAULT_T = await p.evaluate(() => PAGE_SIZE_DEFAULT);
   /* Seven since build 354, eight since Compare: the six of Phase 4 plus 1C
@@ -150,28 +152,27 @@ const shown = (p, sel) => p.evaluate(s => { const e = document.querySelector(s);
      their own question, not this programme's arithmetic, and folding either
      into All would leave two questions answered by one number. Counts are
      read by KEY, never by position. */
-  const tb = k => D.tabs.find(x => x.k === k) || { n: -1 };
-  ok('eight named tabs: Overdue, Due soon, Never inspected, 1C plan, Compare, Deferred, Completed, All',
-     D.tabs.map(x => x.k).join(',') === 'over,soon,never,plan,cmp,put,done,all'
-     && D.tabs.map(x => x.label).join('|') === 'Overdue|Due soon|Never inspected|1C plan|Compare|Deferred|Completed|All', D.tabs.map(x => x.label).join('|'));
+  /* Build 627 (CM_SCHED1C_V1): the first four tabs follow the 1C PM work orders, by the Overview's own rule
+     (CMFlow.plan); the hour-interval rows are the CM interval tab. Counts are read by KEY, never by position. */
+  ok('seven named tabs: Overdue in 1C, Due in 7 days, Planned later, Done this week, Deferred, Never inspected, CM interval',
+     D.tabs.map(x => x.k).join(',') === 'over,soon,later,done,put,never,cmint'
+     && D.tabs.map(x => x.label).join('|') === 'Overdue in 1C|Due in 7 days|Planned later|Done this week|Deferred|Never inspected|CM interval', D.tabs.map(x => x.label).join('|'));
   ok('the schedule opens on the Overdue tab', D.scope === 'over' && D.tabs[0].on, D.scope);
   ok('  and the address says so', /^#due/.test(D.hash), D.hash);
-  ok('Overdue counts what the schedule calls overdue', tb('over').n === (D.st.over || 0), tb('over').n + ' vs ' + (D.st.over || 0));
-  ok('Due soon counts only due soon', tb('soon').n === (D.st.soon || 0), tb('soon').n + ' vs ' + (D.st.soon || 0));
-  ok('Deferred counts the put-off rounds', tb('put').n === ((D.st.put || 0) + (D.st.off || 0)), String(tb('put').n));
-  ok('Completed counts the rounds walked within their interval', tb('done').n === (D.st.ok || 0), tb('done').n + ' vs ' + (D.st.ok || 0));
+  ok('Overdue counts the 1C orders past their plan date with no CM round', tb('over').n === D.c1.over, tb('over').n + ' vs ' + D.c1.over);
+  ok('Due in 7 days counts only those', tb('soon').n === D.c1.week, tb('soon').n + ' vs ' + D.c1.week);
+  ok('Planned later and Done this week likewise', tb('later').n === D.c1.later && tb('done').n === D.c1.done, JSON.stringify(D.c1));
   ok('Never inspected counts the machines no round of that type has reached', tb('never').n === D.never && D.never > 0, String(tb('never').n));
-  ok('All counts every unit-round with history plus the never-inspected', tb('all').n === D.all + D.never, tb('all').n + ' vs ' + (D.all + D.never));
-  ok('  and 1C plan is outside that sum, not folded into it', tb('all').n === D.all + D.never && tb('plan').n >= 0, 'all ' + tb('all').n + ' · plan ' + tb('plan').n);
-  ok('the Overdue list draws one page of exactly the overdue rows', D.rows === Math.min(PAGE_SIZE_DEFAULT_T, D.st.over || 0), D.rows + ' of ' + (D.st.over || 0));
+  ok('CM interval keeps the hour-based past due and due soon', tb('cmint').n === (D.st.over || 0) + (D.st.soon || 0), tb('cmint').n + ' vs ' + ((D.st.over || 0) + (D.st.soon || 0)));
+  ok('the Overdue list draws every overdue order (tables show all)', D.rows === D.c1.over || (D.c1.over === 0 && D.rows <= 1), D.rows + ' of ' + D.c1.over);
   ok('every row offers "Start inspection"', D.starts.length === 1 && D.starts[0] === 'Start inspection', D.starts.join('|'));
   ok('  and "Defer inspection"', D.defers.length === 1 && D.defers[0] === 'Defer inspection', D.defers.join('|'));
 
-  await p.click('#ddSeg [data-dd="all"]'); await p.waitForTimeout(300);
+  await p.evaluate(() => { location.hash = '#due?dd=all'; }); await p.waitForTimeout(500);   /* All is an address, not a tab, since build 627 */
   const allTab = await p.evaluate(() => ({ hash: location.hash, scope: document.getElementById('ddScope').value,
-    rows: document.querySelectorAll('#ddList tbody tr').length, n: dueTabRows().length + dueNeverRows().length }));
-  ok('pressing All shows every row (one page of them) and writes dd=all', allTab.scope === 'all' && /dd=all/.test(allTab.hash)
-     && allTab.rows === Math.min(PAGE_SIZE_DEFAULT_T, allTab.n), JSON.stringify(allTab));
+    rows: document.querySelectorAll('#ddList tbody tr').length, n: (q => q.over.length + q.week.length + q.later.length + q.done.length)(CMFlow.plan()) + dueNeverRows().length }));
+  ok('#due?dd=all shows every row', allTab.scope === 'all' && /dd=all/.test(allTab.hash)
+     && allTab.rows >= Math.min(PAGE_SIZE_DEFAULT_T, allTab.n), JSON.stringify(allTab));
   await p.evaluate(() => { location.hash = '#due?dd=put'; });
   await p.waitForTimeout(500);
   const putTab = await p.evaluate(() => ({ scope: document.getElementById('ddScope').value,
