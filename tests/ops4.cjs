@@ -64,10 +64,10 @@ const SEED = () => {
     return { heads: heads.join(','),
       wo: cell('TK106', 'wo'), needWo: cell('TK105', 'wo'), noOwner: cell('TK104', 'owner'), noDue: cell('TK104', 'due'), st104: cell('TK104', 'status'),
       prio: row('TK102').querySelector('td:nth-child(2)').textContent.replace(/\s+/g, ' ').trim(),
-      req: row('TK106').querySelectorAll('td')[5].textContent.trim(),
+      req: row('TK106').querySelectorAll('td')[6].textContent.trim(),   /* build 628: 1C defect column before it */
       resident: [...document.querySelectorAll('#actionTbl tbody tr')].reduce((s, tr) => s + tr.querySelectorAll('input:not(.asel), select, textarea').length, 0),
       plan: /Planning required|triage/i.test(document.getElementById('actionTbl').textContent) }; });
-  ok('Priority · Unit · Component · Finding · Required action · Owner · Due · Status · Work order', A.heads === 'Priority,Unit,Component,Finding,Required action,Owner,Due,Status,Work order', A.heads);
+  ok('Priority · Unit · Component · Finding · 1C defect · Required action · Owner · Due · Status · Work order', A.heads === 'Priority,Unit,Component,Finding,1C defect,Required action,Owner,Due,Status,Work order', A.heads);
   ok('  the work order shows, and a job in progress without one says "' + TERMS.en.need_wo + '"', A.wo === 'WO-6' && A.needWo === TERMS.en.need_wo, A.wo + ' · ' + A.needWo);
   ok('  an unassigned row says "' + TERMS.en.owner_unassigned + '" and "' + TERMS.en.need_due + '"', A.noOwner === TERMS.en.owner_unassigned && A.noDue === TERMS.en.need_due, A.noOwner + ' · ' + A.noDue);
   ok('  the status cell names the rest (priority), never "planning required"', /Priority required/.test(A.st104) && !A.plan, A.st104);

@@ -64,7 +64,7 @@ const srv = http.createServer((q, r) => {
     /* Not raised -> Maintenance Actions, exactly that many rows, all of them on the page */
     await p.click('#kpiNodef'); await p.waitForTimeout(500);
     const a = await p.evaluate(() => ({ tab: CUR_TAB, f: aFilterState, n: document.querySelectorAll('#actionTbl tbody tr[data-k], #actionTbl tbody tr.arow, #actionTbl tbody tr').length,
-      next: !!document.querySelector('[data-pg^="actions"][data-pg$=":next"]'), chip: (document.querySelector('#aSeg [data-af="all"].on') || {}).textContent || '' }));
+      next: !!document.querySelector('[data-pg^="actions"][data-pg$=":next"]'), chip: (document.querySelector('#aSeg [data-af="f_none"].on') || {}).textContent || '' }));   /* build 628: "Not raised in 1C" is its own tab */
     ok('"Not raised in 1C" opens Maintenance Actions on that filter, with a way back', a.tab === 'actions' && a.f === 'f_none' && /Not raised/.test(a.chip), JSON.stringify(a));
     const nRows = await p.evaluate(() => actionRows().filter(({ r, i }) => CMFlow.isFind(r, i) && CMFlow.stage(r, i) === 'none').length);
     ok('  its list has exactly the step\'s count', nRows === v.find[1], `${nRows} vs ${v.find[1]}`);

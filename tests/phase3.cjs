@@ -79,7 +79,7 @@ const shown = (p, sel) => p.evaluate(s => { const e = document.querySelector(s);
   ok('  and the pager states the whole outstanding set', A.stated === A.predicate, A.stated + ' vs ' + A.predicate);
   ok('the default order is Critical, then overdue, then oldest', A.ordered);
   ok('the rows are read-outs — no owner, date or status control in every row', A.fields === 0 && A.owner && A.status, A.fields + ' field(s)');
-  ok('  25, 50, 100 or All, All chosen', A.sizes === '25,50,100,All', A.sizes);
+  ok('  25, 50, 100, 500 or All, All chosen', A.sizes === '25,50,100,500,All', A.sizes);
   ok('CSV export is offered', A.csv);
   ok('the address names the page', /^#actions/.test(A.hash), A.hash);
 
