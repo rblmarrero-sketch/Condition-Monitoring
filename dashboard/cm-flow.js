@@ -181,6 +181,38 @@
   }
 
 
+  /* CM_ACTFLOW_V1 (build 628, Rickie 15.11 "go" on the mock-up): Maintenance Actions opens with the Overview's findings row
+     (its own ids, so both can be in the page), the step that is the register's filter marked, and under it the two problems
+     a planner chases - past the due date and no owner (named in CM or on the 1C defect). */
+  function renderFind(el, recs, opt) {
+    if (!el) return null;
+    opt = opt || {};
+    var fl = flow(recs), f = String(opt.filt || '');
+    var C = { NAVY: 'var(--accent)', AMB: 'var(--warning)', GRN: 'var(--good)', GRY: '#8a96a3' };
+    var rb = function (id, go, n, c, t, s, v, hot) {
+      return '<button type="button" class="rb' + (hot && v ? ' hot' : '') + (f === go ? ' on' : '') + '" id="' + id + '" data-af="' + go + '" aria-pressed="' + (f === go) + '" style="--c:' + c + '">'
+        + '<span class="rn">' + n + '</span><span class="rt">' + E(t) + '<small>' + E(s) + '</small></span><b class="v">' + v + '</b></button>'; };
+    var pb = function (af, col, txt) { return '<button type="button" data-af="' + af + '" class="' + (f === af ? 'on' : '') + '" aria-pressed="' + (f === af) + '"><i style="background:' + col + '"></i>' + E(txt) + '</button>'; };
+    el.className = 'cmflow';
+    el.innerHTML = '<div class="cfsec" id="actFlowFind"><div class="cft"><span>' + E(L('Findings → 1C defects', 'Замечания → дефекты 1С')) + '</span><small>'
+        + E(L('findings graded 3–5 and the 1C defect raised for them', 'замечания с оценкой 3–5 и дефекты 1С по ним')) + '</small>'
+        + '<button type="button" class="cfgo" data-kgo="cmwo">' + E(L('Defects raised →', 'Дефекты →')) + '</button></div>'
+        + '<div class="cfrib c5">'
+        + rb('actFind', 'f_all', 1, C.NAVY, L('Findings', 'Замечания'), L('graded 3–5', 'оценка 3–5'), fl.all.length)
+        + rb('actNodef', 'f_none', 2, C.AMB, L('Not raised in 1C', 'Не оформлено в 1С'), L('no defect yet', 'дефекта ещё нет'), fl.none.length, 1)
+        + rb('actDreg', 'f_reg', 3, C.GRY, L('Registered', 'Зарегистрирован'), L('defect in 1C, no work order', 'дефект в 1С, без заказ-наряда'), fl.reg.length)
+        + rb('actDprog', 'f_prog', 4, C.NAVY, L('In progress', 'В работе'), L('work order raised', 'заказ-наряд создан'), fl.prog.length)
+        + rb('actDdone', 'f_done', 5, C.GRN, L('Completed', 'Выполнено'), L('completed in 1C', 'выполнено в 1С'), fl.done.length)
+        + '</div>'
+        + '<div class="cfkey cfprob">'
+        + pb('over', 'var(--crit-ink)', (opt.over || 0) + ' ' + L('past the due date', 'просрочено по сроку'))
+        + pb('noown', 'var(--warning)', (opt.noown || 0) + ' ' + L('with no owner (in CM or in 1C)', 'без ответственного (в МС и в 1С)'))
+        + '</div></div>';
+    return { all: fl.all.length, none: fl.none.length, reg: fl.reg.length, prog: fl.prog.length, done: fl.done.length };
+  }
+  /* "In 1C" on the register's tabs: a defect registered or a work order in progress */
+  function inOneC(r, i) { var s = stage(r, i); return s === 'reg' || s === 'prog'; }
+
   /* Old rule beside new rule, on Data & Sync, for the first week (Rickie 15.11: check the numbers on the real site). */
   var CMP_UNTIL = '2026-11-23';
   function compare() {
@@ -205,6 +237,6 @@
       + '</tbody></table></div>';
   }
 
-  window.CMFlow = { compare: compare, plan: plan, dueRow: dueRow, owner1C: owner1C, warm: warm, deferOn: deferOn, comp: comp, flow: flow, stage: stage, isFind: function (r, i) { return sevOf(r, i) >= 3; }, defectOf: defectOf, render: render, cond: cond,
+  window.CMFlow = { renderFind: renderFind, inOneC: inOneC, compare: compare, plan: plan, dueRow: dueRow, owner1C: owner1C, warm: warm, deferOn: deferOn, comp: comp, flow: flow, stage: stage, isFind: function (r, i) { return sevOf(r, i) >= 3; }, defectOf: defectOf, render: render, cond: cond,
                     LINK_DAYS: LINK_DAYS, COMP_DAYS: COMP_DAYS, L: L };
 })();

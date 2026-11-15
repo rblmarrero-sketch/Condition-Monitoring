@@ -2181,6 +2181,7 @@
   #actionTbl table.acttbl th.ac-due{width:156px;}
   #actionTbl table.acttbl th.ac-st{width:180px;}
   #actionTbl table.acttbl th.ac-wo{width:100px;}
+  #actionTbl table.acttbl th.ac-def{width:200px;}   /* CM_ACTFLOW_V1: "DD-031200 · In progress" whole */
   #actionTbl table.acttbl thead th.sortable{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   #actionTbl table.acttbl tbody td{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:middle;}
   #actionTbl table.acttbl tbody tr.hrow{height:40px;}
@@ -2665,45 +2666,49 @@
   .seg.cmViews{display:inline-flex;margin:0 0 var(--s3,12px);}
 </style>
 <style id="cmOvFlowCss">/* CM_FLOW_V1 (build 626): the Overview's three flow rows - dashboard/cm-flow.js */
-#kpis.cmflow{display:block!important;margin:0 0 20px;grid-template-columns:none!important}
-#kpis.cmflow .cfsec{background:var(--surface);border:1px solid var(--border);border-radius:var(--r,10px);padding:14px 16px 16px;margin:0 0 14px}
-#kpis.cmflow .cfsec:last-child{margin-bottom:0}
-#kpis.cmflow .cft{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 10px;margin:0 0 10px}
-#kpis.cmflow .cft>span{font-size:14px;font-weight:600;color:var(--ink)}
-#kpis.cmflow .cft small{font-size:12.5px;color:var(--muted)}
-#kpis.cmflow .cfgo{all:unset;cursor:pointer;margin-left:auto;font-size:13px;font-weight:600;color:var(--accent)}
-#kpis.cmflow .cfgo:hover,#kpis.cmflow .cfgo:focus-visible{text-decoration:underline}
-#kpis.cmflow .cfrib{display:grid;gap:8px}
-#kpis.cmflow .cfrib.c4{grid-template-columns:repeat(4,minmax(0,1fr))}
-#kpis.cmflow .cfrib.c5{grid-template-columns:repeat(5,minmax(0,1fr))}
-#kpis.cmflow .rb{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:9px;min-width:0;min-height:56px;
+:is(#kpis,#actFlow).cmflow{display:block!important;margin:0 0 20px;grid-template-columns:none!important}
+:is(#kpis,#actFlow).cmflow .cfsec{background:var(--surface);border:1px solid var(--border);border-radius:var(--r,10px);padding:14px 16px 16px;margin:0 0 14px}
+:is(#kpis,#actFlow).cmflow .cfsec:last-child{margin-bottom:0}
+:is(#kpis,#actFlow).cmflow .cft{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 10px;margin:0 0 10px}
+:is(#kpis,#actFlow).cmflow .cft>span{font-size:14px;font-weight:600;color:var(--ink)}
+:is(#kpis,#actFlow).cmflow .cft small{font-size:12.5px;color:var(--muted)}
+:is(#kpis,#actFlow).cmflow .cfgo{all:unset;cursor:pointer;margin-left:auto;font-size:13px;font-weight:600;color:var(--accent)}
+:is(#kpis,#actFlow).cmflow .cfgo:hover,:is(#kpis,#actFlow).cmflow .cfgo:focus-visible{text-decoration:underline}
+:is(#kpis,#actFlow).cmflow .cfrib{display:grid;gap:8px}
+:is(#kpis,#actFlow).cmflow .cfrib.c4{grid-template-columns:repeat(4,minmax(0,1fr))}
+:is(#kpis,#actFlow).cmflow .cfrib.c5{grid-template-columns:repeat(5,minmax(0,1fr))}
+:is(#kpis,#actFlow).cmflow .rb{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:9px;min-width:0;min-height:56px;
   border:1px solid var(--border);border-top:3px solid var(--c);border-radius:10px;padding:8px 11px;background:var(--surface);position:relative}
-#kpis.cmflow .rb:hover{background:var(--surface-2)}
-#kpis.cmflow .rb:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-#kpis.cmflow .rb:not(:last-child)::after{content:"";position:absolute;right:-9px;top:50%;width:9px;height:2px;background:var(--border)}
-#kpis.cmflow .rb.hot{background:color-mix(in srgb,var(--c) 8%,var(--surface))}
-#kpis.cmflow .rn{flex:0 0 22px;height:22px;border-radius:50%;background:var(--c);color:#fff;font-size:12px;font-weight:700;line-height:22px;text-align:center}
-#kpis.cmflow .rt{flex:1 1 auto;min-width:0;font-size:13px;font-weight:600;line-height:1.2;color:var(--ink)}
-#kpis.cmflow .rt small{display:block;font-size:11.5px;font-weight:400;color:var(--muted);margin-top:2px}
-#kpis.cmflow .rb b{font-size:20px;font-weight:600;line-height:1;font-variant-numeric:tabular-nums;color:var(--ink)}
-#kpis.cmflow .rb.hot b{color:var(--c)}
-#kpis.cmflow .cfcond{display:flex;align-items:center;gap:10px 16px;flex-wrap:wrap}
-#kpis.cmflow .cfbar{flex:1 1 300px;height:12px;min-height:12px;padding:0;margin:0;border:0;box-sizing:border-box;border-radius:99px;overflow:hidden;display:flex;align-items:stretch;background:var(--surface-2)}
-#kpis.cmflow .cfbar i{display:block;align-self:stretch;height:auto;min-height:12px;margin:0;padding:0;border:0}
-#kpis.cmflow .cfkey{display:flex;flex-wrap:wrap;gap:0 4px}
-#kpis.cmflow .cfkey button{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:0 8px;border-radius:8px;font-size:13px;color:var(--ink);white-space:nowrap}
-#kpis.cmflow .cfkey button:hover{background:var(--surface-2)}
-#kpis.cmflow .cfkey button.on{background:var(--surface-2);box-shadow:inset 0 0 0 1px var(--border)}
-#kpis.cmflow .cfkey button[disabled]{cursor:default;color:var(--muted)}
-#kpis.cmflow .cfkey i{width:10px;height:10px;border-radius:50%}
-#kpis.cmflow .cfkey b{font-variant-numeric:tabular-nums}
-@media (max-width:1100px){#kpis.cmflow .cfrib.c5{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media (max-width:820px){#kpis.cmflow .cfrib.c4,#kpis.cmflow .cfrib.c5{grid-template-columns:1fr 1fr}#kpis.cmflow .rb::after{display:none}}
-@media (max-width:420px){#kpis.cmflow .cfrib.c4,#kpis.cmflow .cfrib.c5{grid-template-columns:1fr}}
+:is(#kpis,#actFlow).cmflow .rb:hover{background:var(--surface-2)}
+:is(#kpis,#actFlow).cmflow .rb:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+:is(#kpis,#actFlow).cmflow .rb:not(:last-child)::after{content:"";position:absolute;right:-9px;top:50%;width:9px;height:2px;background:var(--border)}
+:is(#kpis,#actFlow).cmflow .rb.hot{background:color-mix(in srgb,var(--c) 8%,var(--surface))}
+:is(#kpis,#actFlow).cmflow .rn{flex:0 0 22px;height:22px;border-radius:50%;background:var(--c);color:#fff;font-size:12px;font-weight:700;line-height:22px;text-align:center}
+:is(#kpis,#actFlow).cmflow .rt{flex:1 1 auto;min-width:0;font-size:13px;font-weight:600;line-height:1.2;color:var(--ink)}
+:is(#kpis,#actFlow).cmflow .rt small{display:block;font-size:11.5px;font-weight:400;color:var(--muted);margin-top:2px}
+:is(#kpis,#actFlow).cmflow .rb b{font-size:20px;font-weight:600;line-height:1;font-variant-numeric:tabular-nums;color:var(--ink)}
+:is(#kpis,#actFlow).cmflow .rb.hot b{color:var(--c)}
+:is(#kpis,#actFlow).cmflow .cfcond{display:flex;align-items:center;gap:10px 16px;flex-wrap:wrap}
+:is(#kpis,#actFlow).cmflow .cfbar{flex:1 1 300px;height:12px;min-height:12px;padding:0;margin:0;border:0;box-sizing:border-box;border-radius:99px;overflow:hidden;display:flex;align-items:stretch;background:var(--surface-2)}
+:is(#kpis,#actFlow).cmflow .cfbar i{display:block;align-self:stretch;height:auto;min-height:12px;margin:0;padding:0;border:0}
+:is(#kpis,#actFlow).cmflow .cfkey{display:flex;flex-wrap:wrap;gap:0 4px}
+:is(#kpis,#actFlow).cmflow .cfkey button{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:0 8px;border-radius:8px;font-size:13px;color:var(--ink);white-space:nowrap}
+:is(#kpis,#actFlow).cmflow .cfkey button:hover{background:var(--surface-2)}
+:is(#kpis,#actFlow).cmflow .cfkey button.on{background:var(--surface-2);box-shadow:inset 0 0 0 1px var(--border)}
+:is(#kpis,#actFlow).cmflow .cfkey button[disabled]{cursor:default;color:var(--muted)}
+:is(#kpis,#actFlow).cmflow .cfkey i{width:10px;height:10px;border-radius:50%}
+:is(#kpis,#actFlow).cmflow .cfkey b{font-variant-numeric:tabular-nums}
+@media (max-width:1100px){:is(#kpis,#actFlow).cmflow .cfrib.c5{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:820px){:is(#kpis,#actFlow).cmflow .cfrib.c4,:is(#kpis,#actFlow).cmflow .cfrib.c5{grid-template-columns:1fr 1fr}:is(#kpis,#actFlow).cmflow .rb::after{display:none}}
+@media (max-width:420px){:is(#kpis,#actFlow).cmflow .cfrib.c4,:is(#kpis,#actFlow).cmflow .cfrib.c5{grid-template-columns:1fr}}
 
-#kpis.cmflow .cfgo,#kpis.cmflow .cfkey button{min-height:32px;display:inline-flex;align-items:center}
-#kpis.cmflow .cfgo{margin-block:-7px}   /* a 32 px target that does not make the header taller */
-#kpis.cmflow button:focus-visible,#kpis.cmflow .cfgo:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+:is(#kpis,#actFlow).cmflow .cfgo,:is(#kpis,#actFlow).cmflow .cfkey button{min-height:32px;display:inline-flex;align-items:center}
+:is(#kpis,#actFlow).cmflow .cfgo{margin-block:-7px}
+#actFlow.cmflow .rb.on{box-shadow:inset 0 0 0 2px var(--c)}
+#actFlow.cmflow .cfprob{margin-top:10px}
+#actFlow.cmflow .cfprob i{width:10px;height:10px;border-radius:50%}
+#actFlow.cmflow .cfprob button.on{background:var(--surface-2);box-shadow:inset 0 0 0 1px var(--border)}   /* CM_ACTFLOW_V1 */   /* a 32 px target that does not make the header taller */
+:is(#kpis,#actFlow).cmflow button:focus-visible,:is(#kpis,#actFlow).cmflow .cfgo:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 </style>
 </head>
 <body>
@@ -3389,7 +3394,7 @@
       <div class="pgt"><h1 data-i18n="s_act">Maintenance Actions</h1>
         <span class="pgsub" data-i18n="a_purpose">Every finding that needs work: who owns it, by when, and what is still missing.</span></div>
     </div>
-    <div class="kpis" id="actKpis"></div>
+    <div id="actFlow" class="cmflow"></div><div class="kpis" id="actKpis" hidden></div>
     <div class="section">
       <div class="secthd"><h2 data-i18n="a_h2">Action register</h2>
         <span class="spacer"></span>
@@ -4151,23 +4156,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=627"></script>
+<script src="../data/magnetic_plug.js?v=628"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=627"></script>
-<script src="../mobile/hme.js?v=627"></script>
-<script src="../mobile/mp-fc.js?v=627"></script>
-<script src="../mobile/rtw.js?v=627"></script>
-<script src="../mobile/hme-cascade.js?v=627"></script>
-<script src="../mobile/temp-limits.js?v=627"></script>
+<script src="../data/work_orders.js?v=628"></script>
+<script src="../mobile/hme.js?v=628"></script>
+<script src="../mobile/mp-fc.js?v=628"></script>
+<script src="../mobile/rtw.js?v=628"></script>
+<script src="../mobile/hme-cascade.js?v=628"></script>
+<script src="../mobile/temp-limits.js?v=628"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=627"></script>
-<script src="../mobile/normalize.js?v=627"></script>
-<script src="../mobile/terms.js?v=627"></script>
+<script src="../mobile/assets.js?v=628"></script>
+<script src="../mobile/normalize.js?v=628"></script>
+<script src="../mobile/terms.js?v=628"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -4186,22 +4191,22 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=627"></script>
-<script src="../mobile/edits.js?v=627"></script>
-<script src="../mobile/due.js?v=627"></script>
-<script src="cm-flow.js?v=627"></script>
-<script src="../mobile/wear.js?v=627"></script>
-<script src="../mobile/wear-map.js?v=627"></script>
-<script src="../mobile/lube.js?v=627"></script>
-<script src="../mobile/lube-overrides.js?v=627"></script>
-<script src="../mobile/lube2027.js?v=627"></script>
-<script src="../mobile/lube-tds.js?v=627"></script>
-<script src="lube-master.js?v=627"></script>
-<script src="wear-limits.js?v=627"></script>
+<script src="../mobile/grade.js?v=628"></script>
+<script src="../mobile/edits.js?v=628"></script>
+<script src="../mobile/due.js?v=628"></script>
+<script src="cm-flow.js?v=628"></script>
+<script src="../mobile/wear.js?v=628"></script>
+<script src="../mobile/wear-map.js?v=628"></script>
+<script src="../mobile/lube.js?v=628"></script>
+<script src="../mobile/lube-overrides.js?v=628"></script>
+<script src="../mobile/lube2027.js?v=628"></script>
+<script src="../mobile/lube-tds.js?v=628"></script>
+<script src="lube-master.js?v=628"></script>
+<script src="wear-limits.js?v=628"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=627"></script>
-<script src="../mobile/machine-photos.js?v=627"></script>
+<script src="../mobile/upload-defaults.js?v=628"></script>
+<script src="../mobile/machine-photos.js?v=628"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -4210,17 +4215,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=627"></script>
-<script src="../mobile/get.js?v=627"></script>
-<script src="../mobile/points.js?v=627"></script>
-<script src="../mobile/uc-points.js?v=627"></script>
-<script src="../mobile/inspect-guide.js?v=627"></script>
-<script src="../mobile/get-figs.js?v=627"></script>
-<script src="../mobile/body-points.js?v=627"></script>
-<script src="../mobile/body-map.js?v=627"></script>
-<script src="../mobile/jspdf.umd.min.js?v=627"></script>
-<script src="../mobile/html2canvas.min.js?v=627"></script>
-<script src="../mobile/report-core.js?v=627"></script>
+<script src="../mobile/machine-fig.js?v=628"></script>
+<script src="../mobile/get.js?v=628"></script>
+<script src="../mobile/points.js?v=628"></script>
+<script src="../mobile/uc-points.js?v=628"></script>
+<script src="../mobile/inspect-guide.js?v=628"></script>
+<script src="../mobile/get-figs.js?v=628"></script>
+<script src="../mobile/body-points.js?v=628"></script>
+<script src="../mobile/body-map.js?v=628"></script>
+<script src="../mobile/jspdf.umd.min.js?v=628"></script>
+<script src="../mobile/html2canvas.min.js?v=628"></script>
+<script src="../mobile/report-core.js?v=628"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -8059,6 +8064,7 @@ function actColVal(x,k){
     case "unit": return x.r.equip||"";
     case "comp": return ptLabel(x.r,x.i)||x.i.key||"";
     case "act": return x.i.defect||"";
+    case "def": return actDefText(x.r,x.i);
     case "req": return x.i.actionLabel||(x.i.action?actionName(x.i.action):"");
     case "owner": return ownerOf(x.r,x.i);
     case "due": return x.i.due||"";
@@ -8180,7 +8186,11 @@ function renderSelBar(){
    rows; 25 / 50 / 100 stay as choices for a long list. */
 const PAGE_ALL=1e9;
 const PAGE_SIZE_DEFAULT=PAGE_ALL;
-const PAGE_SIZES=[25,50,100,PAGE_ALL];
+/* CM_SHOWALL_CAP_V1 (build 628): "all tables default show all" (Rickie 15.11) holds up to SHOW_ALL_MAX rows; a longer
+   list opens at SHOW_ALL_MAX with "All" one press away. At a year's volume (4,200 rounds) every row of every table at once
+   is what crashes the office page; today's lists are far below the cap and still open whole. */
+const SHOW_ALL_MAX=500;
+const PAGE_SIZES=[25,50,100,SHOW_ALL_MAX,PAGE_ALL];
 const PAGE_SIZE=PAGE_SIZE_DEFAULT;
 /* A MEASUREMENT TABLE IS DENSER THAN A LIST OF ROUNDS.
 
@@ -8206,7 +8216,7 @@ function paged(key, rows, render, size){
   const n=rows.length;
   const base=size||PAGE_SIZE_DEFAULT;
   const st=pageAt.get(key)||{ i:0, size:0 };
-  const PAGE_SIZE=PAGE_SIZES.indexOf(st.size)>=0 ? st.size : base;
+  const PAGE_SIZE=PAGE_SIZES.indexOf(st.size)>=0 ? st.size : (base===PAGE_ALL && n>SHOW_ALL_MAX ? SHOW_ALL_MAX : base);   /* CM_SHOWALL_CAP_V1: a chosen size is kept, All included */
   if(!pagedWired.has(key)) pagedWired.set(key, render);
   /* The size choice is offered only where it changes something: a list that
      fits the smallest page has nothing to choose. */
@@ -8252,14 +8262,27 @@ document.addEventListener("click", e=>{
    machine is not in the list: a row that does not say which machine it is
    about is a row nobody can act on. */
 const ACOLS_K="cm_dash_actcols";
-const ACOL_ALL=["sev","comp","act","req","owner","due","st","wo"];
+const ACOL_ALL=["sev","comp","act","def","req","owner","due","st","wo"];
 let actCols=(()=>{ try{ const v=JSON.parse(localStorage.getItem(ACOLS_K)||"null");
   return Array.isArray(v) ? ACOL_ALL.filter(k=>v.indexOf(k)>=0) : ACOL_ALL.slice(); }
   catch(e){ return ACOL_ALL.slice(); } })();
+/* CM_ACTFLOW_V1: the 1C defect column is new - shown once to a desk that saved its own column choice before it existed */
+(()=>{ let seen=false; try{ seen=localStorage.getItem("cm_dash_actcols_def")==="1"; }catch(e){}
+  if(!seen && actCols.indexOf("def")<0) actCols=ACOL_ALL.filter(k=>k==="def"||actCols.indexOf(k)>=0);
+  try{ localStorage.setItem("cm_dash_actcols_def","1"); }catch(e){} })();
+/* the 1C defect raised for a finding (CMFlow's link): number, its stage, the work order */
+function actDef(r,i){ if(!window.CMFlow||!CMFlow.isFind(r,i)) return null; const d=CMFlow.defectOf(r,i); return {d, s:CMFlow.stage(r,i)}; }
+function actDefText(r,i){ const x=actDef(r,i); if(!x) return ""; if(!x.d) return CMFlow.L("Not raised in 1C","Не оформлено в 1С");
+  const st={reg:["Registered","Зарегистрирован"],prog:["In progress","В работе"],done:["Completed","Выполнено"]}[x.s]||["",""];
+  return x.d.defect+" · "+CMFlow.L(st[0],st[1])+(x.d.woNumber?" · "+x.d.woNumber:""); }
+function actDefCell(r,i){ const x=actDef(r,i); if(!x) return '<span class="muted">—</span>';
+  if(!x.d) return `<span class="need" style="color:var(--crit-ink)">${esc(CMFlow.L("Not raised in 1C","Не оформлено в 1С"))}</span>`;
+  const st={reg:["var(--warn-ink,var(--warning))","Registered","Зарегистрирован"],prog:["var(--accent)","In progress","В работе"],done:["var(--good-ink)","Completed","Выполнено"]}[x.s]||["","",""];
+  return `<b class="mono">${esc(x.d.defect)}</b> <span style="color:${st[0]};font-weight:600">· ${esc(CMFlow.L(st[1],st[2]))}</span>`; }   /* the work order rides on the title */
 const acolOn=k=>k==="unit"||k==="queue"||actCols.indexOf(k)>=0;
 function renderActCols(){
   const box=$("actColsBody"), n=$("actColsN"); if(!box) return;
-  const name={ sev:t("th_priority"), comp:t("a_th_comp"), act:t("a_th_find"), req:t("th_reqact"),
+  const name={ sev:t("th_priority"), comp:t("a_th_comp"), act:t("a_th_find"), def:(lang==="ru"?"Дефект 1С":"1C defect"), req:t("th_reqact"),
                owner:t("a_th_owner"), due:t("a_th_due"), st:t("a_th_status"), wo:t("a_th_wo") };
   box.innerHTML=`<label class="fixed"><input type="checkbox" checked disabled>${esc(t("th_unit"))}</label>`
     + ACOL_ALL.map(k=>`<label><input type="checkbox" data-acol="${k}"${acolOn(k)?" checked":""}>${esc(name[k])}</label>`).join("");
@@ -8321,6 +8344,15 @@ function renderActions(){
         <span class="v">${oldest?esc(oldest+" d"):"—"}</span>
         <span class="s">${esc(t("a_k_oldest_s"))}</span></div>`
     + card("done", t("a_k_done"), done+disposed, t("a_k_done_s"), "good");
+  /* CM_ACTFLOW_V1 (build 628, Rickie 15.11 "go"): the six cards, the progress bar and the state ribbon give way to the
+     Overview's findings row (CMFlow.renderFind); every step and both problem lines are this register's filters. */
+  $("actKpis").innerHTML=""; $("actKpis").hidden=true; $("actKpis").style.display="none";
+  if(window.CMFlow && CMFlow.renderFind){
+    const noOwn=rows.filter(({r,i})=>!ownerOf(r,i)).length;
+    CMFlow.renderFind($("actFlow"), filtered(), {filt, over:overdue, noown:noOwn});
+    $("actFlow").querySelectorAll("[data-af]").forEach(b=>b.onclick=()=>setAFilt(b.dataset.af===filt ? "open" : b.dataset.af));
+    $("actFlow").querySelectorAll("[data-kgo]").forEach(b=>b.onclick=()=>showTab("cmwo"));
+  }
   $("actKpis").querySelectorAll("[data-af]").forEach(b=>b.onclick=()=>{
     /* Pressing the card you are already in takes the filter off, which is the
        behaviour anybody expects from a thing that looks pressed. */
@@ -8329,7 +8361,7 @@ function renderActions(){
   /* Progress by state, not one green nub: "planned" and "not looked at" are
      different kinds of not-done and a single bar hides which you have. */
   const order=[["open","segkey_open"],["PLAN","a_st_PLAN"],["WIP","a_st_WIP"],["DONE","a_st_DONE"]];
-  $("actBar").innerHTML = rows.length
+  $("actBar").innerHTML = false && rows.length   /* CM_ACTFLOW_V1: the state ribbon is the findings row now */
     ? `<div class="segbar">`+order.map(([k])=>byState[k]
         ? `<i class="s-${k}" style="flex:${byState[k]}"></i>` : "").join("")+`</div>
        <div class="segkey">`+order.filter(([k])=>byState[k]).map(([k,lab])=>
@@ -8346,16 +8378,25 @@ function renderActions(){
   const crit=rows.filter(({r,i})=>sevOf(r,i)===5 && actionRequired(r,i)).length;
   const counts={ open:required, triage, crit, over:overdue, week,
                  noown:rows.length-owned, mine:owned, all:rows.length };
-  $("aSeg").innerHTML=[["open","a_f_open"],["triage","a_f_triage"],["crit","a_f_crit"],
+  /* CM_ACTFLOW_V1: five tabs - Open, the three 1C steps a finding moves through, Critical; every other filter still opens
+     from the row above or the address and shows as a chip with a way back */
+  if(window.CMFlow && CMFlow.inOneC){ const fs=rows.filter(({r,i})=>CMFlow.isFind(r,i));
+    counts.f_none=fs.filter(({r,i})=>CMFlow.stage(r,i)==="none").length; counts.f_in=fs.filter(({r,i})=>CMFlow.inOneC(r,i)).length;
+    counts.f_done=fs.filter(({r,i})=>CMFlow.stage(r,i)==="done").length; }
+  const A_TABS=window.CMFlow&&CMFlow.inOneC ? [["open","a_f_open"],["f_none","@Not raised in 1C|Не оформлено в 1С"],["f_in","@In 1C|В 1С"],["f_done","@Completed in 1C|Выполнено в 1С"],["crit","a_f_crit"]]
+    : [["open","a_f_open"],["triage","a_f_triage"],["crit","a_f_crit"],
                        ["over","a_f_over"],["week","a_f_week"],["noown","a_f_noown"],
-                       ["mine","a_f_owned"],["all","a_f_all"]]
+                       ["mine","a_f_owned"],["all","a_f_all"]];
+  $("aSeg").innerHTML=A_TABS
     .map(([k,lab])=>`<button type="button" data-af="${k}"${filt===k?' class="on"':''}>${
-      esc(t(lab))}<span class="n">${counts[k]}</span></button>`).join("");
+      esc(lab[0]==="@"?CMFlow.L(...lab.slice(1).split("|")):t(lab))}<span class="n">${counts[k]}</span></button>`).join("");
   /* CM_FLOW_V1: a filter chosen on the Overview's flow row is said here, with a way back to everything. */
-  if(/^f_/.test(filt) && window.CMFlow){
+  if(window.CMFlow && !A_TABS.some(([k])=>k===filt)){   /* CM_ACTFLOW_V1: a filter that is not a tab is said, with a way back */
     const FL={f_all:["Findings graded 3–5","Замечания с оценкой 3–5"],f_none:["Not raised in 1C","Не оформлено в 1С"],
               f_reg:["1C defect registered","Дефект 1С зарегистрирован"],f_prog:["1C work order in progress","Заказ-наряд 1С в работе"],f_done:["Completed in 1C","Выполнено в 1С"]};
-    $("aSeg").insertAdjacentHTML("beforeend",`<button type="button" data-af="all" class="on" title="${esc(CMFlow.L("Show everything","Показать всё"))}">${esc(CMFlow.L(FL[filt][0],FL[filt][1]))} ×</button>`);
+    const AF={over:"a_f_over",noown:"a_f_noown",triage:"a_f_triage",week:"a_f_week",mine:"a_f_owned",all:"a_f_all",done:"a_k_done"};
+    const lab=FL[filt]?CMFlow.L(FL[filt][0],FL[filt][1]):AF[filt]?t(AF[filt]):filt;
+    $("aSeg").insertAdjacentHTML("beforeend",`<button type="button" data-af="open" class="on" title="${esc(CMFlow.L("Back to the open findings","Вернуться к открытым"))}">${esc(lab)}${counts[filt]!=null?`<span class="n">${counts[filt]}</span>`:""} ×</button>`);
   }
   $("aSeg").querySelectorAll("[data-af]").forEach(b=>b.onclick=()=>setAFilt(b.dataset.af));
   document.querySelectorAll("#actView button[data-av]").forEach(b=>{
@@ -8379,6 +8420,7 @@ function renderActions(){
               /* CM_FLOW_V1: the Overview's "Findings -> 1C defects" steps (dashboard/cm-flow.js) */
               : filt==="f_all" ? rows.filter(({r,i})=>CMFlow.isFind(r,i))
               : /^f_(none|reg|prog|done)$/.test(filt) ? rows.filter(({r,i})=>CMFlow.isFind(r,i) && CMFlow.stage(r,i)===filt.slice(2))
+              : filt==="f_in" ? rows.filter(({r,i})=>CMFlow.isFind(r,i) && CMFlow.inOneC(r,i))   /* CM_ACTFLOW_V1 */
               /* "Open" means outstanding, which includes what is not yet
                  properly described. Triage work is not done work. */
               : rows.filter(({r,i})=>actionRequired(r,i));
@@ -8396,7 +8438,7 @@ function renderActions(){
      name on it. Both shapes, and the sortable one opens. */
   if(actView==="table"){
     const val=(x,k)=>({ queue:0, sev:sevRank(sevOf(x.r,x.i)), unit:x.r.equip, comp:x.i.label||x.i.key,
-      date:x.r.date||"", act:(x.i.defect||""), req:(x.i.actionLabel||(x.i.action?actionName(x.i.action):"")||"￿"),
+      date:x.r.date||"", act:(x.i.defect||""), def:(actDefText(x.r,x.i)||"￿"), req:(x.i.actionLabel||(x.i.action?actionName(x.i.action):"")||"￿"),
       owner:ownerOf(x.r,x.i)||"￿", wo:x.i.wo||"￿",
       due:x.i.due||"9999-99-99", age:(fAgeDays(x.r,x.i)||0), st:stName(x.i.status) }[k]);
     /* Priority · Equipment · Component · Finding · Required action · Owner ·
@@ -8404,7 +8446,7 @@ function renderActions(){
        cell's title and in the drawer; the work order has a column because it
        is the one thing the planning meeting asks for that nothing showed. */
     const cols=[[actSort.k==="queue"?"queue":"sev",t("th_priority")],["unit",t("th_unit")],["comp",t("a_th_comp")],
-                ["act",t("a_th_find")],["req",t("th_reqact")],["owner",t("a_th_owner")],
+                ["act",t("a_th_find")],["def",(lang==="ru"?"Дефект 1С":"1C defect")],["req",t("th_reqact")],["owner",t("a_th_owner")],
                 ["due",t("a_th_due")],["st",t("a_th_status")],["wo",t("a_th_wo")],["",""]]
       .filter(([k])=>!k || acolOn(k));
     /* A sort on a column that has just been hidden is a sort nobody can see;
@@ -8457,7 +8499,7 @@ function renderActions(){
        between the columns of words; the table may not shrink below the room
        those need, so on a narrow screen it scrolls inside its own box rather
        than squeezing a finding to three letters. */
-    const AC_W={queue:128, sev:128, age:62, unit:70, owner:136, due:156, st:180, wo:100};
+    const AC_W={queue:128, sev:128, age:62, unit:70, def:200, owner:136, due:156, st:180, wo:100};
     const acMin=34+22+cols.reduce((s,[k])=>s+(!k?0:(AC_W[k]||96)),0);
     $("actionTbl").innerHTML=`<div class="tblwrap scrollbox" style="--sb:520px"><table class="grid seltbl acttbl" style="min-width:${acMin}px">
       <thead><tr><th class="selcol"><label><input type="checkbox" id="aAll"${allOn?" checked":""}
@@ -8494,6 +8536,7 @@ function renderActions(){
                  thing a planner is scanning for; the required action is what
                  somebody committed to do about it, in its own column. -->
             ${!acolOn("act")?"":`<td title="${esc(i.defect||"")}"><span class="trunc">${i.defect?esc(i.defect):'<span class="muted">—</span>'}</span></td>`}
+            ${!acolOn("def")?"":`<td class="nw" title="${esc(actDefText(r,i))}"><span class="trunc">${actDefCell(r,i)}</span></td>`}
             ${!acolOn("req")?"":`<td title="${esc(i.actionLabel||(i.action?actionName(i.action):""))}"><span class="trunc">${
               i.actionLabel||i.action ? esc(i.actionLabel||actionName(i.action))
                 : `<span class="need">${esc(TERMS.t(lang,"need_action"))}</span>`}</span></td>`}
@@ -14023,7 +14066,7 @@ function urlRead(from){
     }
     /* A list name the address does not carry, or names wrongly, is the
        default — never a value that would hide everything. */
-    const AF=["open","triage","crit","over","week","noown","mine","all","done","f_all","f_none","f_reg","f_prog","f_done"];
+    const AF=["open","triage","crit","over","week","noown","mine","all","done","f_all","f_none","f_reg","f_prog","f_done","f_in"];
     const af=q.get("af"); if(typeof aFilterState==="string") aFilterState = AF.includes(af) ? af : "open";
     const dd=q.get("dd"), ds=$("ddScope");
     if(ds) ds.value = (dd && [...ds.options].some(o=>o.value===dd)) ? dd : "over";
@@ -19209,11 +19252,11 @@ document.querySelector(".lang").addEventListener("click",e=>{
   setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 })();
 </script>
-<script src="drive.js?v=627"></script>
-<script src="sync-adapter.js?v=627"></script>
-<script src="report.js?v=627"></script>
-<script src="reliability.js?v=627"></script>
-<script src="day-summary.js?v=627"></script>
+<script src="drive.js?v=628"></script>
+<script src="sync-adapter.js?v=628"></script>
+<script src="report.js?v=628"></script>
+<script src="reliability.js?v=628"></script>
+<script src="day-summary.js?v=628"></script>
 <script>
 /* THE CLOSED FILTER SAYS WHAT IS CHOSEN. A dropdown narrower than its option
    text ellipsises ("All t…", audit of 2026-10-01). Between 1331 and 1500 px
@@ -19757,7 +19800,7 @@ html.cmStd{--cmw-rail:#f5f5f3;--cmw-chip:#e9ebee;}
 @media (prefers-color-scheme:dark){html.cmStd:not([data-theme="light"]){--cmw-rail:var(--surface);--cmw-chip:var(--surface-2);}}
 html.cmStd[data-theme="dark"]{--cmw-rail:var(--surface);--cmw-chip:var(--surface-2);}
 
-html.cmStd #kpis.cmflow .cfsec{border-radius:12px}   /* CM_FLOW_V1: the site standard's card corner */
+html.cmStd :is(#kpis,#actFlow).cmflow .cfsec{border-radius:12px}   /* CM_FLOW_V1: the site standard's card corner */
 </style>
 <script id="cmWomLookJs">
 /* CM_WOMLOOK_V1 - the few moves the layout above needs (under /cm/ only; the page works the same without them). */

@@ -5532,6 +5532,21 @@ still ahead, the order planned before the deferral's `pm`); the Overview's numbe
 register shows it with "· 1C", and it counts as an owner in triage and the "no owner" filter. Never write it into
 the record. `tests/sched1c.cjs`.
 
+
+**TABLES SHOW ALL UP TO 500 ROWS; MAINTENANCE ACTIONS OPENS WITH THE FINDINGS → 1C DEFECTS ROW (build 628, CM_SHOWALL_CAP_V1 +
+CM_ACTFLOW_V1, Rickie 15.11 "go").** `paged()` opens a table whole up to `SHOW_ALL_MAX` (500) and a longer one at 500 with "All"
+one press away (500 is one of `PAGE_SIZES`); a size somebody chose is kept. At a year's volume every row of every table at
+once is what crashes the office page (`tests/tablekit-scale-next.cjs` crashed on build 625 too). Maintenance Actions, both
+pages: the six cards, the closed-out bar (dashboard-next) and the state ribbon give way to `CMFlow.renderFind` in `#actFlow`
+(the Overview's findings row with its own ids `actFind`/`actNodef`/`actDreg`/`actDprog`/`actDdone`, each a filter
+`f_*`, plus "past the due date" `over` and "no owner (in CM or in 1C)" `noown`); the tabs are Open · Not raised in 1C
+(`f_none`) · In 1C (`f_in` = registered or in progress, `CMFlow.inOneC`) · Completed in 1C (`f_done`) · Critical; any other
+filter (from the row or the address) shows as a chip back to Open. A "1C defect" column (`def`, `actDef`/`actDefText`/`actDefCell`)
+shows the linked DD number and its stage, "Not raised in 1C" in red, the work order on the title; it is turned on once for a desk
+that saved a column choice before it existed (`cm_dash_actcols_def`). dashboard-next's bulk bar now appears only when rows are
+ticked, as dashboard/'s always did - a change to a recorded design difference, asked for on the mock-up. `#actKpis` stays in the
+page, empty and hidden.
+
 ---
 
 ## Secrets
