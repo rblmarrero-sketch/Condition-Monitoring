@@ -106,8 +106,9 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
   await p.setViewportSize({ width: 1366, height: 800 });
   await p.waitForTimeout(300);
   const narrow = await p.evaluate(() => { const th = document.querySelector('#fleetTbl thead th[data-sort="date"]'); const tw = document.getElementById("fleetTbl"); const box = tw.parentNode;
-    return { hidden: th.getBoundingClientRect().width === 0, fits: tw.scrollWidth <= box.clientWidth + 1 }; });
-  ok(narrow.hidden && narrow.fits, "on a 1366 screen the column steps aside and the table still fits", JSON.stringify(narrow));
+    return { shown: th.getBoundingClientRect().width > 0, fits: tw.scrollWidth <= box.clientWidth + 1, slides: getComputedStyle(box).overflowX === 'auto', frozen: !!tw.querySelector('.cmfz') }; });
+  /* build 630 (CM_TBLSTD_V1, "put all columns by default"): the column stays; a table that does not fit slides with the unit frozen */
+  ok(narrow.shown && (narrow.fits || (narrow.slides && narrow.frozen)), "on a 1366 screen every column stays, and the table fits or slides with the unit frozen", JSON.stringify(narrow));
 
   ok(errs.length === 0, "no page errors", errs.join(" | ") || "none");
   console.log(fail ? `\nFAILED ${fail}` : "\nall passed");
