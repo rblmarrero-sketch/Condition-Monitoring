@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-15T13:47:45+00:00",
+  "generated": "2026-11-15T14:02:41+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -6002,6 +6002,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022615"
     },
     {
+      "asset": "TR001",
+      "defect": "DD-00016913",
+      "raised": "2026-11-15",
+      "system": "TR001.ELS.WH (Wiring Harness / Жгут проводов)",
+      "defectType": "4.01 Short circuiting / Короткое замыкание",
+      "descr": "Неисправность сигнального освещения - поворотов и заднего хода.",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022574"
+    },
+    {
       "asset": "TK148",
       "defect": "DD-00016956",
       "raised": "2026-11-15",
@@ -6468,19 +6481,6 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-022579"
-    },
-    {
-      "asset": "TR001",
-      "defect": "DD-00016913",
-      "raised": "2026-11-15",
-      "system": "TR001.ELS.WH (Wiring Harness / Жгут проводов)",
-      "defectType": "4.01 Short circuiting / Короткое замыкание",
-      "descr": "Неисправность сигнального освещения - поворотов и заднего хода.",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-022574"
     },
     {
       "asset": "TK143",
