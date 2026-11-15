@@ -128,6 +128,8 @@
     { k: "pmnight",   en: "PM done on night shift",          ru: "ТО выполнено в ночную смену" },
     { k: "pmearly",   en: "PM done earlier than scheduled",  ru: "ТО выполнено раньше графика" },
     { k: "pmlate",    en: "PM done later than scheduled",    ru: "ТО выполнено позже графика" },
+    /* Asked for 15.11.2026. */
+    { k: "noscope",   en: "Not in the scope of condition monitoring", ru: "Не входит в объём мониторинга состояния" },
   ];
   T.WHY = WHY;
   /* The label for a key, in a language. Empty for a reason nobody chose from
