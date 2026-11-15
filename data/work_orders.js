@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-15T06:42:44+00:00",
+  "generated": "2026-11-15T06:58:15+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -6041,6 +6041,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "CR007",
+      "defect": "DD-00016944",
+      "raised": "2026-11-15",
+      "system": "CR007.CONV.MDC (Main Discharge Conveyor / Главный разгрузочный конвейер)",
+      "defectType": "8.06 Roller / idler failure / Отказ ролика / роликоопоры",
+      "descr": "поломка дефлекторных роликов 4шт с кронштейнами",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": null
+    },
+    {
       "asset": "LV048",
       "defect": "DD-00016930",
       "raised": "2026-11-15",
@@ -6065,6 +6078,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": null
+    },
+    {
+      "asset": "GE009",
+      "defect": "DD-00016942",
+      "raised": "2026-11-15",
+      "system": "GE009.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Отгрев, запуск",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022605"
     },
     {
       "asset": "LD006",
@@ -6325,6 +6351,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022599"
+    },
+    {
+      "asset": "WE004",
+      "defect": "DD-00016943",
+      "raised": "2026-11-15",
+      "system": "WE004.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Отгрев, запуск",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022606"
     },
     {
       "asset": "EX023",
