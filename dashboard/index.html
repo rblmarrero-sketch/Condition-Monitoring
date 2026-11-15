@@ -2057,6 +2057,7 @@
   /* the owner's initials are the one thing in a row taller than a line of
      text; at a line's height every row is the same height */
   #fleetTbl .xf.who{padding-top:0;padding-bottom:0;margin-top:-3px;margin-bottom:-3px;}
+  #fleetTbl .xf.who{min-height:0 !important;}   /* build 631: the 32 px desk control floor must not make an owned row taller than the rest (every 3+ finding has an owner since 630) */
   #fleetTbl .xf.who i{width:20px;height:20px;}
     .covcell{min-width:180px;}
   .covrow{display:flex;align-items:center;gap:9px;}
