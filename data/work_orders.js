@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-15T04:42:55+00:00",
+  "generated": "2026-11-15T04:58:22+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -447,8 +447,8 @@ window.CM_WO_DATA = {
     "planStart": 0
   },
   "cmCauseFrom": {
-    "wo": 110,
-    "wr": 97,
+    "wo": 111,
+    "wr": 96,
     "cert": 0,
     "none": 0
   },
@@ -804,7 +804,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-11-08",
       "detected": "2026-11-08",
-      "planStart": null,
+      "planStart": "2026-12-05",
       "closed": null,
       "asset": "DZ004",
       "defect": "DD-00016521",
@@ -814,15 +814,15 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "defectType": "1.21 Erratic / unstable operation / Нестабильная работа / рывки",
       "cause": "Прерывистый сигнал",
-      "causeFrom": "wr",
+      "causeFrom": "wo",
       "descr": "Некорректная работа задних фонарей (слабое освещение)",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "by": "Bekzhan",
       "byFull": "Bekzhan Kazhybekov",
       "regBy": "Кажыбеков Бекжан",
       "raisedBy": "ГДК Баимская",
-      "woNumber": null,
-      "maintType": null,
+      "woNumber": "WO-022597",
+      "maintType": "P4 Planned Repair",
       "planned": false
     },
     {
@@ -6080,6 +6080,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022587"
     },
     {
+      "asset": "CR002",
+      "defect": "DD-00016936",
+      "raised": "2026-11-15",
+      "system": "CR002.HS.CV (Control Valves / Гидрораспределители)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Заклинил гидрораспределитель",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-022595"
+    },
+    {
       "asset": "TK096",
       "defect": "DD-00016925",
       "raised": "2026-11-15",
@@ -6091,6 +6104,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022586"
+    },
+    {
+      "asset": "EX008",
+      "defect": "DD-00016937",
+      "raised": "2026-11-15",
+      "system": "EX008.CH.UC (Undercarriage / Ходовая часть)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Ошиповка гусеничных лент",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022596"
     },
     {
       "asset": "TK023",
@@ -6234,6 +6260,19 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-022581"
+    },
+    {
+      "asset": "TK097",
+      "defect": "DD-00016938",
+      "raised": "2026-11-15",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK097 ENGINE OldNumber (UT097)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Запуск ДВС",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022599"
     },
     {
       "asset": "GE054",
@@ -49969,11 +50008,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "LV130",
-      "defect": "DD-00013348",
+      "defect": "DD-00013349",
       "raised": "2026-09-25",
-      "system": "LV130.ELS (Electrical System / Электросистема)",
-      "defectType": "4.02 Open circuit / Разрыв цепи",
-      "descr": "Не работает сигнал заднего хода, не включается камера заднего хода",
+      "system": "LV130.DRS.ENG (Engine / Двигатель)",
+      "defectType": "3.13 Warning light / alarm active / Сигнальная лампа / аварийная сигнализация активна",
+      "descr": "Горит лампа \"Проверьте двигатель\"",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -49982,11 +50021,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "LV130",
-      "defect": "DD-00013349",
+      "defect": "DD-00013348",
       "raised": "2026-09-25",
-      "system": "LV130.DRS.ENG (Engine / Двигатель)",
-      "defectType": "3.13 Warning light / alarm active / Сигнальная лампа / аварийная сигнализация активна",
-      "descr": "Горит лампа \"Проверьте двигатель\"",
+      "system": "LV130.ELS (Electrical System / Электросистема)",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "Не работает сигнал заднего хода, не включается камера заднего хода",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -58211,19 +58250,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "DZ004",
-      "defect": "DD-00011543",
-      "raised": "2026-08-25",
-      "system": "DZ004.DRS.COO (Cooling System / Система охлаждения)",
-      "defectType": "1.02 Overheating / high temperature Перегрев / высокая температура",
-      "descr": "Перегревается трансмиссионное масло и масло гидросистемы при работе",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Evgeniy Frolin",
-      "regBy": "Фролин Евгений Владимирович",
-      "wo": null
-    },
-    {
-      "asset": "DZ004",
       "defect": "DD-00011542",
       "raised": "2026-08-25",
       "system": "DZ004.HS.CYL (Cylinders / Гидроцилиндры)",
@@ -58247,6 +58273,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": null
+    },
+    {
+      "asset": "DZ004",
+      "defect": "DD-00011543",
+      "raised": "2026-08-25",
+      "system": "DZ004.DRS.COO (Cooling System / Система охлаждения)",
+      "defectType": "1.02 Overheating / high temperature Перегрев / высокая температура",
+      "descr": "Перегревается трансмиссионное масло и масло гидросистемы при работе",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Evgeniy Frolin",
+      "regBy": "Фролин Евгений Владимирович",
+      "wo": "WO-022598"
     },
     {
       "asset": "LD001",
@@ -95883,9 +95922,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-25",
-      "planStartDt": "2026-11-25T00:00:00",
-      "planEnd": "2026-11-25",
+      "planStart": "2026-11-24",
+      "planStartDt": "2026-11-24T00:00:00",
+      "planEnd": "2026-11-24",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null

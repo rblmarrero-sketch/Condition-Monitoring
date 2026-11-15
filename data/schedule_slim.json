@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-15T04:42:55+00:00",
+  "generated": "2026-11-15T04:58:22+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -1875,24 +1875,6 @@
       "completed": ""
     },
     {
-      "wo": "WO-021974",
-      "equip": "DZ004",
-      "cls": "DOZ",
-      "comp": "",
-      "desc": "250h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-25",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-11-25",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
       "wo": "WO-021977",
       "equip": "DZ005",
       "cls": "DOZ",
@@ -2029,6 +2011,24 @@
       "type": "250 Hours service Planned",
       "hours": 250,
       "plan": "2026-11-25",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-021974",
+      "equip": "DZ004",
+      "cls": "DOZ",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-24",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-11-24",
       "status": "Elimination scheduled",
       "request": "",
       "defType": "",
@@ -5219,6 +5219,24 @@
       "request": "",
       "defType": "",
       "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-022597",
+      "equip": "DZ004",
+      "cls": "",
+      "comp": "DZ004.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
+      "desc": "Некорректная работа задних фонарей (слабое освещение)",
+      "priority": "P4 Planned (Repair)",
+      "raised": "2026-11-08",
+      "type": "1.21 Erratic / unstable operation / Нестабильная работа / рывки",
+      "hours": null,
+      "plan": "2026-12-05",
+      "status": "Elimination scheduled",
+      "request": "DD-00016521",
+      "defType": "1.21 Erratic / unstable operation / Нестабильная работа / рывки",
+      "cause": "Прерывистый сигнал",
       "pmStatus": "open",
       "completed": ""
     },
@@ -11271,12 +11289,28 @@
       "x": "Износ ножей отвала"
     },
     {
+      "d": "DD-00016936",
+      "u": "CR002",
+      "s": "CR002.HS.CV (Control Valves / Гидрораспределители)",
+      "p": "P2",
+      "r": "2026-11-15",
+      "x": "Заклинил гидрораспределитель"
+    },
+    {
       "d": "DD-00016925",
       "u": "TK096",
       "s": "TK096.OC.HE (Heating / Отопление)",
       "p": "P2",
       "r": "2026-11-15",
       "x": "Ремонт фена в отсеке водяного насоса"
+    },
+    {
+      "d": "DD-00016937",
+      "u": "EX008",
+      "s": "EX008.CH.UC (Undercarriage / Ходовая часть)",
+      "p": "P2",
+      "r": "2026-11-15",
+      "x": "Ошиповка гусеничных лент"
     },
     {
       "d": "DD-00016924",
@@ -11365,6 +11399,14 @@
       "p": "P2",
       "r": "2026-11-15",
       "x": "Не работает автономный отопитель в кабине."
+    },
+    {
+      "d": "DD-00016938",
+      "u": "TK097",
+      "s": "TRUCK, WATER URAL 4672M1-20, TK097 ENGINE OldNumber (UT097)",
+      "p": "P2",
+      "r": "2026-11-15",
+      "x": "Запуск ДВС"
     },
     {
       "d": "DD-00016932",
@@ -42423,20 +42465,20 @@
       "x": "не работает СГУ"
     },
     {
-      "d": "DD-00013348",
-      "u": "LV130",
-      "s": "LV130.ELS (Electrical System / Электросистема)",
-      "p": "P4",
-      "r": "2026-09-25",
-      "x": "Не работает сигнал заднего хода, не включается камера заднего хода"
-    },
-    {
       "d": "DD-00013349",
       "u": "LV130",
       "s": "LV130.DRS.ENG (Engine / Двигатель)",
       "p": "P4",
       "r": "2026-09-25",
       "x": "Горит лампа \"Проверьте двигатель\""
+    },
+    {
+      "d": "DD-00013348",
+      "u": "LV130",
+      "s": "LV130.ELS (Electrical System / Электросистема)",
+      "p": "P4",
+      "r": "2026-09-25",
+      "x": "Не работает сигнал заднего хода, не включается камера заднего хода"
     },
     {
       "d": "DD-00013338",
