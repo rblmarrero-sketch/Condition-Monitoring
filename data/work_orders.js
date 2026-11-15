@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-15T15:17:39+00:00",
+  "generated": "2026-11-15T15:32:38+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -5845,6 +5845,45 @@ window.CM_WO_DATA = {
     }
   ],
   "otherDefects": [
+    {
+      "asset": "GR009",
+      "defect": "DD-00016961",
+      "raised": "2026-11-16",
+      "system": "GR009.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "Низкий уровень масла",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022617"
+    },
+    {
+      "asset": "DZ004",
+      "defect": "DD-00016962",
+      "raised": "2026-11-16",
+      "system": "DZ004.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "Не горит фара на рыхлители",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022618"
+    },
+    {
+      "asset": "EX022",
+      "defect": "DD-00016963",
+      "raised": "2026-11-16",
+      "system": "EX022.ELS.AS (Alarm System / Система сигнализации)",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "Не работает проблесковый маяк",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022619"
+    },
     {
       "asset": "EX001",
       "defect": "DD-00016960",
@@ -37020,19 +37059,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "PU008",
-      "defect": "DD-00014445",
-      "raised": "2026-10-09",
-      "system": "PU008.DRS.PD (Pump Drive / Привод насоса)",
-      "defectType": "1.19 No movement / no drive / Нет движения / нет привода",
-      "descr": "Сломан Вал привода насоса",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Temir Marochko",
-      "regBy": "Марочко Темир",
-      "wo": null
-    },
-    {
       "asset": "LV069",
       "defect": "DD-00014408",
       "raised": "2026-10-09",
@@ -37056,6 +37082,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Shcherbina",
       "regBy": "Щербина Андрей Николаевич",
+      "wo": null
+    },
+    {
+      "asset": "PU008",
+      "defect": "DD-00014445",
+      "raised": "2026-10-09",
+      "system": "PU008.DRS.PD (Pump Drive / Привод насоса)",
+      "defectType": "1.19 No movement / no drive / Нет движения / нет привода",
+      "descr": "Сломан Вал привода насоса",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Temir Marochko",
+      "regBy": "Марочко Темир",
       "wo": null
     },
     {
@@ -50294,11 +50333,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "LV130",
-      "defect": "DD-00013349",
+      "defect": "DD-00013348",
       "raised": "2026-09-25",
-      "system": "LV130.DRS.ENG (Engine / Двигатель)",
-      "defectType": "3.13 Warning light / alarm active / Сигнальная лампа / аварийная сигнализация активна",
-      "descr": "Горит лампа \"Проверьте двигатель\"",
+      "system": "LV130.ELS (Electrical System / Электросистема)",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "Не работает сигнал заднего хода, не включается камера заднего хода",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -50307,11 +50346,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "LV130",
-      "defect": "DD-00013348",
+      "defect": "DD-00013349",
       "raised": "2026-09-25",
-      "system": "LV130.ELS (Electrical System / Электросистема)",
-      "defectType": "4.02 Open circuit / Разрыв цепи",
-      "descr": "Не работает сигнал заднего хода, не включается камера заднего хода",
+      "system": "LV130.DRS.ENG (Engine / Двигатель)",
+      "defectType": "3.13 Warning light / alarm active / Сигнальная лампа / аварийная сигнализация активна",
+      "descr": "Горит лампа \"Проверьте двигатель\"",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
