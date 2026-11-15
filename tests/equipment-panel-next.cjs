@@ -119,6 +119,8 @@ async function boot(b, port, lang) {
   {
     const { p, errs } = await boot(b, port);
     let navs = 0; p.on('framenavigated', () => navs++);
+    /* build 626: the table opens with every machine; put it back to ten to test the button itself */
+    await p.evaluate(() => { fleetAll = false; renderFleet(); });
     const before = await p.$$eval('#fleetTbl tbody tr[data-u]', rs => rs.length);
     await arm(p);
     navs = 0; // ignore the boot-time navigation(s); count only from here
@@ -220,7 +222,7 @@ async function boot(b, port, lang) {
       await summary.click();
       const openRight = await p.$eval('#ovDefs', el => el.open);
       ok('Definitions popover: opens on its own click', openRight);
-      await p.click('#fleetAllBtn').catch(() => {});
+      await p.click('#fleetShown').catch(() => {});
       const closedAfterOutside = await p.$eval('#ovDefs', el => !el.open);
       ok('Definitions popover: still closes on an outside click (unaffected by this fix)', closedAfterOutside);
     }
@@ -232,7 +234,7 @@ async function boot(b, port, lang) {
   for (const lang of ['en', 'ru']) {
     const { p } = await boot(b, port, lang);
     await arm(p);
-    await p.click('#fleetAllBtn');
+    await p.click('#fleetAllBtn', { timeout: 1500 }).catch(() => {});
     await p.click('#fleetTbl tbody tr[data-u]');
     await p.waitForTimeout(WAIT_MS);
     const stillOpen = await p.$eval('#drw', el => !el.classList.contains('hidden')).catch(() => false);

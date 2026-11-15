@@ -42,7 +42,7 @@ const srv = http.createServer((q, r) => {
         return { bandL: Math.round(band.left), bandW: Math.round(band.width), navTop: Math.round(nav.top), bandB: Math.round(band.bottom), fbTop: Math.round(fb.top), fbH: Math.round(fb.height),
           hdr: vis(document.querySelector('header.app')), gqInBar: !!document.querySelector('#cmFb #gq'), verInFoot: !!document.querySelector('#stdFoot #dashVer'),
           t1: vis(t1) ? t1.textContent.trim() : '', kpCut: kp, cnt: cnt && vis(cnt) ? cnt.textContent.trim() : '', n: n ? n.textContent.trim() : '',
-          kpR: getComputedStyle(document.querySelector('#kpis .kpi')).borderTopLeftRadius, sw: document.documentElement.scrollWidth, vw: innerWidth };
+          kpR: getComputedStyle(document.querySelector('#kpis .kpi, #kpis .cfsec')).borderTopLeftRadius, sw: document.documentElement.scrollWidth, vw: innerWidth };
       });
       ok(`${W}: the band runs the full width`, m.bandL === 0 && m.bandW === m.vw, `${m.bandL} / ${m.bandW}`);
       ok(`${W}: the side menu starts under the band`, Math.abs(m.navTop - m.bandB) <= 1, `${m.navTop} vs ${m.bandB}`);

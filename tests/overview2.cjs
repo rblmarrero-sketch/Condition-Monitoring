@@ -41,23 +41,21 @@ const reset = q => fetch(BASE + '/__reset?' + q).then(r => r.text());
   await p.waitForFunction(() => typeof RECS !== 'undefined' && RECS.length > 5, null, { timeout: 60000 });
   await p.waitForTimeout(2000);
 
-  console.log('\n1. SIX HEADLINES, EACH A BUTTON, AND THE STRIP FITS');
+  console.log('\n1. THREE FLOW ROWS (CM_FLOW_V1, build 626), EVERY STEP A BUTTON');
   const strip = await p.evaluate(() => {
     const k = document.getElementById('kpis');
-    const kids = [...k.children];
-    return { ids: kids.map(x => x.id), buttons: kids.filter(x => x.tagName === 'BUTTON').length,
-             h: Math.round(k.getBoundingClientRect().height),
-             rows: new Set(kids.map(x => Math.round(x.getBoundingClientRect().top))).size,
+    const steps = [...k.querySelectorAll('.rb')];
+    return { rows: k.querySelectorAll('.cfsec').length, steps: steps.map(x => x.id), buttons: steps.filter(x => x.tagName === 'BUTTON').length,
+             tiles: k.querySelectorAll('.kpi').length,
              defs: document.querySelectorAll('#tab-overview details.method').length,
              hasDefs: !!document.getElementById('ovDefs'),
              defsOpen: !!(document.getElementById('ovDefs') || {}).open };
   });
-  note('tiles', strip.ids.join(' · '));
-  ['kpiCrit', 'kpiDeg', 'kpiOver', 'kpiAct', 'kpiNoown', 'kpiReview'].forEach(id =>
-    ok('the strip has ' + id, strip.ids.includes(id)));
-  ok('all seven are buttons', strip.buttons === 7, String(strip.buttons));
-  ok('the strip is one row at 1366', strip.rows === 1, strip.rows + ' row(s)');
-  ok('and fits 120px', strip.h <= 120, strip.h + 'px');
+  note('steps', strip.steps.join(' · '));
+  ok('three rows, no KPI tiles', strip.rows === 3 && strip.tiles === 0, strip.rows + ' / ' + strip.tiles);
+  ['kpiPlan', 'kpiWeek', 'kpiOver', 'kpiDone', 'kpiFind', 'kpiNodef', 'kpiDreg', 'kpiDprog', 'kpiDdone'].forEach(id =>
+    ok('the flow has ' + id, strip.steps.includes(id)));
+  ok('all nine steps are buttons', strip.buttons === 9, String(strip.buttons));
   ok('no card on the page carries its own "How this is counted"', strip.defs === 0, String(strip.defs));
   ok('  one page-level Definitions control does instead', strip.hasDefs && !strip.defsOpen);
 
@@ -79,12 +77,12 @@ const reset = q => fetch(BASE + '/__reset?' + q).then(r => r.text());
     Object.values(latest).forEach(r => { const w = worstOf(r); if (w === 5) crit++; else if (w === 3) deg++; });
     const act = f.filter(x => actionRequired(x.r, x.i)).length;
     const noown = f.filter(x => actionRequired(x.r, x.i) && !x.i.owner).length;
-    const over = dueTabRows().filter(r => r.st === 'over').length;
+    const over = CMFlow.plan().over.length;
     const review = sevConflicts().length;
     const navAct = Number($('nbAct').textContent || 0), navDue = Number($('nbDue').textContent || 0);
-    return { shown: { crit: v('kpiCrit'), deg: v('kpiDeg'), over: v('kpiOver'), act: v('kpiAct'),
-                      noown: v('kpiNoown'), review: v('kpiReview') },
-             truth: { crit, deg, over, act, noown, review }, navAct, navDue,
+    const fl = CMFlow.flow(recs);
+    return { shown: { crit: v('kpiCrit'), deg: v('kpiDeg'), over: v('kpiOver'), find: v('kpiFind'), nodef: v('kpiNodef') },
+             truth: { crit, deg, over, find: fl.all.length, nodef: fl.none.length }, navAct, navDue, act, review,
              units: Object.keys(latest).length };
   });
   console.log('   shown ' + JSON.stringify(tally.shown));
@@ -94,12 +92,12 @@ const reset = q => fetch(BASE + '/__reset?' + q).then(r => r.text());
        tally.shown[k] + ' vs ' + tally.truth[k]));
   ok('critical + degraded machines never exceed the machines in view',
      tally.shown.crit + tally.shown.deg <= tally.units, (tally.shown.crit + tally.shown.deg) + ' of ' + tally.units);
-  ok('open actions agree with the navigation badge', tally.shown.act === tally.navAct,
-     tally.shown.act + ' vs ' + tally.navAct);
+  ok('open actions agree with the navigation badge', tally.act === tally.navAct,
+     tally.act + ' vs ' + tally.navAct);
   ok('overdue inspections agree with the navigation badge', tally.shown.over === tally.navDue,
      tally.shown.over + ' vs ' + tally.navDue);
-  ok('there is something to review in this fixture, so the routing below is real', tally.truth.review > 0,
-     String(tally.truth.review));
+  ok('there is something to review in this fixture, so the routing below is real', tally.review > 0,
+     String(tally.review));
 
   console.log('\n3. EACH HEADLINE OPENS THE RIGHT PAGE, ALREADY FILTERED, AND THE ADDRESS FOLLOWS');
   const press = async id => {
@@ -134,18 +132,16 @@ const reset = q => fetch(BASE + '/__reset?' + q).then(r => r.text());
   ok('  and every row shown is Degraded', r.fleetRows > 0 && r.fleetSevs.every(s => /degraded/i.test(s)),
      r.fleetRows + ' rows: ' + r.fleetSevs.slice(0, 3).join(' | '));
   r = await press('kpiOver');
-  ok('Overdue inspections opens the Inspection Schedule on the overdue list', r.tab === 'due' && r.dd === 'over',
-     r.tab + ' · scope=' + r.dd);
-  ok('  the address names the page', /^#due/.test(r.hash), r.hash);
-  r = await press('kpiAct');
-  ok('Open maintenance actions opens Maintenance Actions on the open list', r.tab === 'actions' && r.af === 'open',
-     r.tab + ' · filter=' + r.af);
-  ok('  and the register holds exactly what the headline counted', r.actRows === tally.shown.act,
-     r.actRows + ' vs ' + tally.shown.act);
-  r = await press('kpiNoown');
-  ok('Unassigned actions opens Maintenance Actions filtered to unassigned', r.tab === 'actions' && r.af === 'noown',
-     r.tab + ' · filter=' + r.af);
-  r = await press('kpiReview');
+  ok('Overdue opens Plan vs Actual on overdue 1C orders', r.tab === 'planact', r.tab + ' · ' + r.hash);
+  ok('  the address names the page', /^#planact/.test(r.hash), r.hash);
+  r = await press('kpiFind');
+  ok('Findings opens Maintenance Actions on that step', r.tab === 'actions' && r.af === 'f_all', r.tab + ' · filter=' + r.af);
+  ok('  and the register holds exactly what the step counted', r.actRows === tally.shown.find, r.actRows + ' vs ' + tally.shown.find);
+  r = await press('kpiNodef');
+  ok('Not raised in 1C opens Maintenance Actions on that step', r.tab === 'actions' && r.af === 'f_none', r.tab + ' · filter=' + r.af);
+  ok('  and the register holds exactly what the step counted', r.actRows === tally.shown.nodef, r.actRows + ' vs ' + tally.shown.nodef);
+  await p.evaluate(() => { showTab('overview'); clearFilters(); }); await p.waitForTimeout(250);
+  r = await p.evaluate(async () => { document.getElementById('kpiReview').click(); await new Promise(r => setTimeout(r, 450)); return { tab: CUR_TAB, hash: location.hash }; });
   ok('Grade review opens Data & Sync', r.tab === 'sync' && /^#sync/.test(r.hash), r.tab + ' ' + r.hash);
   const flashed = await p.evaluate(() => {
     const box = document.getElementById('sySevBox');
@@ -173,13 +169,14 @@ const reset = q => fetch(BASE + '/__reset?' + q).then(r => r.text());
              comp: (comp ? comp.innerText : '').replace(/\s+/g, ' ').trim(),
              compBtn: !!(comp && comp.querySelector('button')),
              cols, rows: rows.length, machines,
+             flowY: (e => e ? Math.round(e.getBoundingClientRect().top) : null)(document.querySelector('#kpis .cfsec')),
              firstRowY: rows[0] ? Math.round(rows[0].getBoundingClientRect().top) : null,
              /* The grade rides in the Priority column since Phase 4 (rank, then plain text). */
              sample: rows.slice(0, 3).map(tr => ({ u: cell(tr, 'equip').trim(), g: ((tr.querySelector('.sevtxt') || {}).textContent || '').trim(),
                act: cell(tr, 'act').replace(/\s+/g, ' ').trim().slice(0, 60),
                st: ((tr.children[cols.indexOf('act')] || {}).querySelector
                     ? ((tr.children[cols.indexOf('act')].querySelector('.fstat') || {}).textContent || cell(tr, 'act')) : '').trim() })),
-             shown: (document.getElementById('fleetShown') || {}).textContent || '' };
+             shown: ((document.getElementById('fleetShown') || {}).textContent || '') + ' ' + ((document.querySelector('#fleetTbl') || {}).parentNode && (document.querySelector('#fleetTbl').parentNode.querySelector(':scope > .pager') || {}).textContent || '') };
   });
   ok('compliance and trend sit on one row', lay.covY !== null && lay.trendY !== null && Math.abs(lay.covY - lay.trendY) < 60,
      lay.covY + ' vs ' + lay.trendY);
@@ -187,9 +184,10 @@ const reset = q => fetch(BASE + '/__reset?' + q).then(r => r.text());
      /\d+\s*of\s*\d+/.test(lay.comp) && lay.compBtn, lay.comp.slice(0, 60));
   ['equip', 'prio', 'defect', 'act', 'owner', 'adue', 'due'].forEach(k =>
     ok('the table has a ' + k + ' column', lay.cols.includes(k), lay.cols.join(',')));
-  ok('the table shows at most ten machines on Overview', lay.rows > 0 && lay.rows <= 10, lay.rows + ' of ' + lay.machines);
+  ok('the table shows every machine (tables default to all, Rickie 15.11)', lay.rows === lay.machines, lay.rows + ' of ' + lay.machines);
   ok('  and says how many there are in all', new RegExp('\\b' + lay.machines + '\\b').test(lay.shown), lay.shown);
-  ok('  its first row is above the fold', lay.firstRowY !== null && lay.firstRowY < 768, String(lay.firstRowY));
+  /* CM_FLOW_V1: the three flow rows are what answers before the scroll; the table follows them. */
+  ok('  the flow rows are above the fold and the table follows them', lay.flowY !== null && lay.flowY < 768 && lay.firstRowY !== null && lay.firstRowY > lay.flowY, lay.flowY + ' / ' + lay.firstRowY);
   note('rows', JSON.stringify(lay.sample));
   ok('the grade column names the severity, not a code', lay.sample.every(s => /critical|degraded|incipient|normal|no failure/i.test(s.g)),
      lay.sample.map(s => s.g).join(' | '));
@@ -213,13 +211,13 @@ const reset = q => fetch(BASE + '/__reset?' + q).then(r => r.text());
       const dts = [...box.querySelectorAll('dt')].map(x => x.textContent.trim());
       const dds = [...box.querySelectorAll('dd')].map(x => x.textContent.trim());
       const raw = dds.filter(x => /^[a-z_0-9]+$/.test(x));       // an untranslated key
-      const heads = [...document.querySelectorAll('#kpis .k')].map(x => x.textContent.trim());
+      const heads = [...document.querySelectorAll('#kpis .cft > span')].map(x => x.textContent.trim());
       const r = box.querySelector('.defsbody').getBoundingClientRect();
       box.open = false;
       return { dts, raw, heads, onScreen: r.right <= innerWidth + 1 && r.left >= 0 };
     });
-    ok(L + ': every headline has a definition', d.heads.slice(0, 6).every(h => d.dts.some(t => t.toLowerCase() === h.toLowerCase())),
-       d.heads.slice(0, 6).filter(h => !d.dts.some(t => t.toLowerCase() === h.toLowerCase())).join(' | ') || 'all six');
+    ok(L + ': every flow row has a definition', d.heads.length === 3 && d.heads.every(h => d.dts.some(t => t.toLowerCase() === h.toLowerCase())),
+       d.heads.filter(h => !d.dts.some(t => t.toLowerCase() === h.toLowerCase())).join(' | ') || 'all three');
     ok(L + ': and none of them is a raw key', d.raw.length === 0, d.raw.join(','));
     ok(L + ': the popover stays on screen', d.onScreen);
     const fit = await p.evaluate(() => {
@@ -228,7 +226,7 @@ const reset = q => fetch(BASE + '/__reset?' + q).then(r => r.text());
                strip: Math.round(document.getElementById('kpis').getBoundingClientRect().height) };
     });
     ok(L + ': the attention table fits the screen', fit.table <= fit.box + 1, fit.table + ' in ' + fit.box);
-    ok(L + ': and the strip still fits 120px', fit.strip <= 120, fit.strip + 'px');
+    ok(L + ': and the three rows stay compact', fit.strip <= 420, fit.strip + 'px');
   }
   await p.click('.lang button[data-lang="en"]'); await p.waitForTimeout(300);
   const esc2 = await p.evaluate(async () => {
@@ -287,7 +285,7 @@ const reset = q => fetch(BASE + '/__reset?' + q).then(r => r.text());
     stripH: Math.round(document.getElementById('kpis').getBoundingClientRect().height) }));
   console.log('   ' + JSON.stringify(big));
   ok('600 inspections loaded', big.recs >= 600, String(big.recs));
-  ok('the attention table still draws ten', big.fleetRows <= 10, String(big.fleetRows));
+  ok('the attention table draws every machine (tables default to all)', big.fleetRows > 10, String(big.fleetRows));
   ok('coverage draws a handful of rounds', big.covRows <= 8, String(big.covRows));
   ok('the trend draws at most twelve months', big.months <= 12, String(big.months));
   /* Two screens on the live folder (checked at deployment); a fleet-sized
@@ -300,9 +298,9 @@ const reset = q => fetch(BASE + '/__reset?' + q).then(r => r.text());
      still stops at ten rows, which is what this assertion actually guards
      against), so the budget moves to admit it rather than the row being
      shrunk to the point of being unusable. */
-  ok('the page stays near two screens at 1366 with 600 inspections loaded', big.tall <= 2.4, big.tall + ' screens');
+  note('page height', big.tall + ' screens (every machine listed, Rickie 15.11 "all tables default show all")');
   ok('and never scrolls sideways', !big.wide);
-  ok('the strip still fits', big.stripH <= 120, big.stripH + 'px');
+  ok('the three rows stay compact', big.stripH <= 420, big.stripH + 'px');
 
   ok('no application errors', errs.length === 0, errs.slice(0, 2).join(' | ') || 'none');
   await b.close();

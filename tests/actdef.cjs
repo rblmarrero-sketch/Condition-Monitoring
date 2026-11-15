@@ -68,7 +68,7 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
     return {
       predicate: required,
       nav: Number($("nbAct").textContent || 0),
-      kpi: Number(document.querySelector("#kpiAct .v").textContent || 0),
+      kpi: Number(document.querySelector("#actKpis [data-af=\"open\"] .v").textContent || 0),
       segOpen: Number(document.querySelector('#aSeg [data-af="open"] .n').textContent || 0),
       rows: document.querySelectorAll("#actionTbl tbody tr").length,
       /* THE PAGER'S OWN TOTAL, which is what the register now claims to hold.
@@ -111,7 +111,7 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
     const f = findings(filtered());
     return { predicate: f.filter(x => actionRequired(x.r, x.i)).length,
              nav: Number($("nbAct").textContent || 0),
-             kpi: Number(document.querySelector("#kpiAct .v").textContent || 0),
+             kpi: Number(document.querySelector("#actKpis [data-af=\"open\"] .v").textContent || 0),
              rows };
   });
   ok(filtered2.nav === filtered2.predicate && filtered2.kpi === filtered2.predicate,

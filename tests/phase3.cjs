@@ -75,11 +75,11 @@ const shown = (p, sel) => p.evaluate(s => { const e = document.querySelector(s);
              csv: !!document.getElementById('csvBtn'), hash: location.hash };
   });
   ok('the page is called Maintenance Actions', /Maintenance Actions/.test(A.title || ''), A.title);
-  ok('one page is at most 25 actions', A.rows > 0 && A.rows <= 25, A.rows + ' rows');
+  ok('the register opens with every outstanding action (tables default to all, Rickie 15.11)', A.rows > 0 && A.rows === A.predicate, A.rows + ' rows');
   ok('  and the pager states the whole outstanding set', A.stated === A.predicate, A.stated + ' vs ' + A.predicate);
   ok('the default order is Critical, then overdue, then oldest', A.ordered);
   ok('the rows are read-outs — no owner, date or status control in every row', A.fields === 0 && A.owner && A.status, A.fields + ' field(s)');
-  ok('  25, 50 or 100 rows a page, and no "show all"', A.sizes === '25,50,100' && !A.showAll, A.sizes);
+  ok('  25, 50, 100 or All, All chosen', A.sizes === '25,50,100,All', A.sizes);
   ok('CSV export is offered', A.csv);
   ok('the address names the page', /^#actions/.test(A.hash), A.hash);
 
@@ -117,7 +117,7 @@ const shown = (p, sel) => p.evaluate(s => { const e = document.querySelector(s);
     predicate: findings(filtered()).filter(x => actionState(x.r, x.i).k === 'triage').length }));
   ok('arriving on #actions?af=triage selects that filter', afRead.af === 'triage' && afRead.on === 'triage', JSON.stringify(afRead));
   ok('  and the register shows exactly the planning-required findings (one page of them)',
-     afRead.rows === Math.min(25, afRead.predicate), afRead.rows + ' of ' + afRead.predicate);
+     afRead.rows === afRead.predicate, afRead.rows + ' of ' + afRead.predicate);
   await p.evaluate(() => { location.hash = '#actions?af=bogus'; });
   await p.waitForTimeout(400);
   ok('a filter the address names wrongly falls back to Open, not to nothing',
@@ -127,7 +127,8 @@ const shown = (p, sel) => p.evaluate(s => { const e = document.querySelector(s);
   console.log('\n2. INSPECTION SCHEDULE');
   await p.evaluate(() => { showTab('overview', true); clearFilters(); });
   await p.waitForTimeout(300);
-  await p.click('#kpiOver'); await p.waitForTimeout(500);
+  /* CM_FLOW_V1: the Overview's Overdue now opens Plan vs Actual (1C plan date); the schedule is opened directly. */
+  await p.evaluate(() => { showTab('due', true); dueGo('over'); }); await p.waitForTimeout(500);
   const D = await p.evaluate(() => {
     const tabs = [...document.querySelectorAll('#ddSeg [role="tab"]')].map(b => ({ k: b.dataset.dd,
       label: b.childNodes[0].textContent.trim(), n: Number(b.querySelector('.n').textContent), on: b.getAttribute('aria-selected') === 'true' }));
@@ -153,7 +154,7 @@ const shown = (p, sel) => p.evaluate(s => { const e = document.querySelector(s);
   ok('eight named tabs: Overdue, Due soon, Never inspected, 1C plan, Compare, Deferred, Completed, All',
      D.tabs.map(x => x.k).join(',') === 'over,soon,never,plan,cmp,put,done,all'
      && D.tabs.map(x => x.label).join('|') === 'Overdue|Due soon|Never inspected|1C plan|Compare|Deferred|Completed|All', D.tabs.map(x => x.label).join('|'));
-  ok('the Overview door lands on the Overdue tab', D.scope === 'over' && D.tabs[0].on, D.scope);
+  ok('the schedule opens on the Overdue tab', D.scope === 'over' && D.tabs[0].on, D.scope);
   ok('  and the address says so', /^#due/.test(D.hash), D.hash);
   ok('Overdue counts what the schedule calls overdue', tb('over').n === (D.st.over || 0), tb('over').n + ' vs ' + (D.st.over || 0));
   ok('Due soon counts only due soon', tb('soon').n === (D.st.soon || 0), tb('soon').n + ' vs ' + (D.st.soon || 0));

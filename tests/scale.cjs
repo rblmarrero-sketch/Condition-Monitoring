@@ -84,25 +84,29 @@ const PAGE = 50;
   {
     const rows = await count('actions', 'table.seltbl tbody tr');
     const txt = await pagerText('actions');
-    ok(rows > 0 && rows <= PAGE, 'the action register draws at most one page', rows + ' row(s)');
+    /* CM_FLOW_V1 (build 626, Rickie 15.11 "all tables default show all"): every row, the count still said */
+    ok(rows >= 1000, 'the action register draws every row (tables default to all)', rows + ' row(s)');
     ok(/1[,.]?000\s*matching/.test(txt), 'and says how many there are altogether', txt);
   }
   await tab('due');
   {
     const rows = await count('due', '#ddList tbody tr');
     const txt = await pagerText('due');
-    ok(rows > 0 && rows <= PAGE, 'the due list draws at most one page', rows + ' row(s)');
+    ok(rows > PAGE, 'the due list draws every row (tables default to all)', rows + ' row(s)');
     ok(/\d\s*matching/.test(txt), 'and says how many are behind it', txt);
   }
   await tab('overview');
   {
     const rows = await count('overview', '#fleetTbl tbody tr');
-    ok(rows > 0 && rows <= PAGE, 'the fleet table draws at most one page', rows + ' row(s)');
+    ok(rows > PAGE, 'the fleet table draws every machine (tables default to all)', rows + ' row(s)');
   }
 
   console.log('\n2. AND THE REST OF IT IS ONE PRESS AWAY');
   await tab('actions');
   {
+    /* build 626: the register opens with all its rows; 25 a page is a choice, and paging still works */
+    await p.evaluate(() => document.querySelector('#tab-actions [data-pg$=":size:25"]').click());
+    await p.waitForTimeout(600);
     const before = await pagerText('actions');
     await p.evaluate(() => document.querySelector('#tab-actions [data-pg$=":next"]').click());
     await p.waitForTimeout(400);
@@ -124,8 +128,8 @@ const PAGE = 50;
   {
     /* No "show all": a thousand findings is never drawn at once. The reader
        may ask for a hundred a page, and the whole list is still stated. */
-    const all = await p.evaluate(() => !!document.querySelector('#tab-actions [data-pg$=":all"]'));
-    ok(!all, 'there is no "show all" on a list this size');
+    const all = await p.evaluate(() => !!document.querySelector('#tab-actions [data-pg$=":size:' + PAGE_ALL + '"]'));
+    ok(all, '"All" is one of the page sizes (tables default to all, build 626)');
     await p.evaluate(() => document.querySelector('#tab-actions [data-pg$=":size:100"]').click());
     await p.waitForTimeout(900);
     const rows = await count('actions', 'table.seltbl tbody tr');

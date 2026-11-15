@@ -5492,6 +5492,31 @@ reloads at most once per newer build per 15 minutes (`cm_dash_reload` in session
 "vN → vM" and the page stays. The `?b=` the reload adds is removed from the address at boot. `tests/dashupd.cjs` §1a
 serves a page that stays old against a newer sw.js; on build 624 it reloads three more times in 15 s.
 
+
+**THE OVERVIEW IS THREE FLOW ROWS, AND EVERY TABLE OPENS WITH ALL ITS ROWS (build 626, CM_FLOW_V1, Rickie 15.11.2026
+"the KPI cards are overwhelming ... look like WO manager, clean with flow"; decisions 16:55: 1 overdue = 1C PM work order,
+2 compliance against the 1C plan date, 3 findings linked to the 1C defect raised; 17:03 "build it, all tables default show
+all").** `dashboard/cm-flow.js` (`CMFlow`, loaded by both office pages) draws `#kpis` as three rows in the Work Order
+Manager's ribbon style - numbered steps, one count each, a press opens the list behind it:
+- **Fleet condition**: machines by the worst grade of their latest round (one bar + a key; a grade filters the attention
+  table, `setDrill`). Replaces the Critical / Severe / Degraded tiles and dashboard-next's Severity mix panel (hidden).
+- **CM rounds - 1C PM work orders**: planned later than 7 days · due in 7 days · **Overdue** (plan date passed, no CM round
+  within `PA_WINDOW_DAYS`/`PA_ON_TIME_DAYS` of it, order still open) · done this week. Read off `paRows()` - Plan vs
+  Actual's own scoring - so the two can never disagree; held-off rounds and orders with no CM round are out. The steps
+  open Plan vs Actual (`kpiGo('pa_over'|'pa_week'|'pa_later'|'pa_done')`). The menu badge `#nbDue` is this Overdue.
+- **Findings -> 1C defects**: findings graded 3-5 that the register lists (actionState not "none"), by the 1C defect
+  raised for them (`CMFlow.defectOf`: same machine, raised on the inspection day or up to 14 days after, same system
+  code, else a lone defect in the window; each defect used once). Not raised in 1C · Registered · In progress · Completed
+  (`cwStage`) - a partition of the first step. The steps open Maintenance Actions on `af=f_all|f_none|f_reg|f_prog|f_done`.
+`complianceNow()` is `CMFlow.comp()` (1C orders of the last 30 days whose CM round was walked within `PA_ON_TIME_DAYS`
+of the plan date); the interval rule is `complianceCM()`. Data & Sync shows old rule beside new rule (`#cfCompare`) until
+23.11.2026. "Grade review required" stays: dashboard-next's `#sevReviewLink`, dashboard/'s line under the rows. Stable ids:
+`kpiCrit/kpiSev/kpiDeg/kpiInc/kpiNorm` (key), `kpiPlan/kpiWeek/kpiOver/kpiDone`, `kpiFind/kpiNodef/kpiDreg/kpiDprog/kpiDdone`.
+**Tables**: `PAGE_SIZE_DEFAULT`, `PAGE_SIZE_ACT`, `PAGE_SIZE_WEAR` and the lube exception lists are `PAGE_ALL`; the pager
+offers 25 / 50 / 100 / All; the Overview attention table lists every machine (`fleetAll` true). Suites that asserted
+"one page of 25" or "at most N screens" now assert every row. `tests/cmflow.cjs` plants a 1C file (dates relative to
+today) and checks every count, both doors, compliance, the badge, the card and Russian on both pages.
+
 ---
 
 ## Secrets

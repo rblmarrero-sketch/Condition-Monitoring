@@ -62,6 +62,8 @@ const fleetRead = () => {
     shown: (document.getElementById('fleetShown') || {}).textContent || '',
     allBtnInShown: !!document.querySelector('#fleetShown #fleetAllBtn'),
     strip: !!wrap.querySelector(':scope > .pager'),
+    pager: ((wrap.querySelector(':scope > .pager') || {}).textContent || ''),
+    rowsN: t.querySelectorAll('tbody tr').length,
   };
 };
 const covRead = () => {
@@ -125,8 +127,9 @@ const covRead = () => {
       if (!nx) ok(`${tag}: Inspected and Findings are off at 1366`, !f.keys.includes('date') && !f.keys.includes('find'), f.keys.join(','));
 
       console.log(`\n${tag} @1366: 3. ONE COUNT LINE`);
-      ok(`${tag}: the count is said once, with "View all" on its line`, f.allBtnInShown && !f.strip, f.shown.replace(/\s+/g, ' ').trim());
-      ok(`${tag}: and it names how many machines there are`, /\b\d+\b.*\b\d+\b/.test(f.shown));
+      /* CM_FLOW_V1 (build 626, "all tables default show all"): every machine is listed; the count is the pager's, once */
+      ok(`${tag}: the count is said once (every machine listed)`, !f.allBtnInShown && !f.shown.trim() && (f.strip ? /\d/.test(f.pager) : f.rowsN > 0), (f.shown + ' | ' + f.pager).replace(/\s+/g, ' ').trim());
+      ok(`${tag}: and it names how many machines there are`, f.strip ? /\b\d+\b/.test(f.pager) : f.rowsN > 0);
 
       console.log(`\n${tag}: 4. COMPLIANCE`);
       const c = await p.evaluate(covRead);
