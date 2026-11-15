@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-15T03:12:49+00:00",
+  "generated": "2026-11-15T03:27:51+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -4893,7 +4893,7 @@ window.CM_WO_DATA = {
       "requestNo": "DD-00012416",
       "eqType": "DRILL, BLASTING",
       "system": "DR009.OC.GL (Glass / Стекла)",
-      "priority": "P2 Urgent",
+      "priority": "P4 Planned (Repair)",
       "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "cause": "Разрушение от удара",
       "causeFrom": "wr",
@@ -5974,6 +5974,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Murashko",
       "regBy": "Мурашко Сергей Борисович",
       "wo": "WO-022572"
+    },
+    {
+      "asset": "DZ020",
+      "defect": "DD-00016935",
+      "raised": "2026-11-15",
+      "system": "DZ020.CH.BL (Blade / Отвал)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Отломилась подножка на брусе отвала для подъема в кабину",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": null
     },
     {
       "asset": "TK092",
@@ -7523,19 +7536,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "CR005",
-      "defect": "DD-00016818",
-      "raised": "2026-11-13",
-      "system": "CR005.CRS.JAW (Jaw Crusher / Щековая дробилка)",
-      "defectType": "7.05 Jaw crusher jaw die wear / Износ щеки щековой дробилки",
-      "descr": "критический износ неподвижной плиты",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": null
-    },
-    {
       "asset": "DZ008",
       "defect": "DD-00016792",
       "raised": "2026-11-13",
@@ -7560,6 +7560,19 @@ window.CM_WO_DATA = {
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": null
+    },
+    {
+      "asset": "CR005",
+      "defect": "DD-00016818",
+      "raised": "2026-11-13",
+      "system": "CR005.CRS.JAW (Jaw Crusher / Щековая дробилка)",
+      "defectType": "7.05 Jaw crusher jaw die wear / Износ щеки щековой дробилки",
+      "descr": "критический износ неподвижной плиты",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-022591"
     },
     {
       "asset": "EX019",
@@ -38125,19 +38138,6 @@ window.CM_WO_DATA = {
       "wo": "WO-021477"
     },
     {
-      "asset": "HX007",
-      "defect": "DD-00014283",
-      "raised": "2026-10-08",
-      "system": "HX007.DRS.FS (Fuel System / Топливная система)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Нет запуска",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Shcherbina",
-      "regBy": "Щербина Андрей Николаевич",
-      "wo": null
-    },
-    {
       "asset": "DZ020",
       "defect": "DD-00014378",
       "raised": "2026-10-08",
@@ -38148,6 +38148,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Valentin Trapilo",
       "regBy": "Трапило Валентин Святославович",
+      "wo": null
+    },
+    {
+      "asset": "HX007",
+      "defect": "DD-00014283",
+      "raised": "2026-10-08",
+      "system": "HX007.DRS.FS (Fuel System / Топливная система)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Нет запуска",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Shcherbina",
+      "regBy": "Щербина Андрей Николаевич",
       "wo": null
     },
     {
