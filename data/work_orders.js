@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-15T21:07:39+00:00",
+  "generated": "2026-11-15T21:27:35+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -5805,6 +5805,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Murashko",
       "regBy": "Мурашко Сергей Борисович",
       "wo": "WO-022627"
+    },
+    {
+      "asset": "BS001",
+      "defect": "DD-00016972",
+      "raised": "2026-11-16",
+      "system": "BS001.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Не работает отпитель кабины водителя",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022629"
     },
     {
       "asset": "TK097",
@@ -28687,6 +28700,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021267"
     },
     {
+      "asset": "LV071",
+      "defect": "DD-00015107",
+      "raised": "2026-10-19",
+      "system": "LV071.ELS.AS (Alarm System / Система сигнализации)",
+      "defectType": "4.01 Short circuiting / Короткое замыкание",
+      "descr": "Не исправен датчик уровня топлива",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-021727"
+    },
+    {
       "asset": "TK153",
       "defect": "DD-00015114",
       "raised": "2026-10-19",
@@ -29036,19 +29062,6 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-020947"
-    },
-    {
-      "asset": "LV071",
-      "defect": "DD-00015107",
-      "raised": "2026-10-19",
-      "system": "LV071.ELS.AS (Alarm System / Система сигнализации)",
-      "defectType": "4.01 Short circuiting / Короткое замыкание",
-      "descr": "Не исправен датчик уровня топлива",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-021727"
     },
     {
       "asset": "TK152",
@@ -30689,6 +30702,19 @@ window.CM_WO_DATA = {
       "wo": "WO-020324"
     },
     {
+      "asset": "DZ020",
+      "defect": "DD-00014908",
+      "raised": "2026-10-16",
+      "system": "DZ020 SD34-B3 SHANTUI",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Требуется замена гусеничных лент RH,LH",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Vladimir Melnikov",
+      "regBy": "Мельников Владимир Викторович",
+      "wo": "WO-020073"
+    },
+    {
       "asset": "DZ005",
       "defect": "DD-00014856",
       "raised": "2026-10-16",
@@ -31636,19 +31662,6 @@ window.CM_WO_DATA = {
       "by": "Roman Kochetov",
       "regBy": "Кочетов Роман Иванович",
       "wo": "WO-022206"
-    },
-    {
-      "asset": "DZ020",
-      "defect": "DD-00014908",
-      "raised": "2026-10-16",
-      "system": "DZ020 SD34-B3 SHANTUI",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "Требуется замена гусеничных лент RH,LH",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Vladimir Melnikov",
-      "regBy": "Мельников Владимир Викторович",
-      "wo": "WO-020073"
     },
     {
       "asset": "TK092",
@@ -38346,6 +38359,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021477"
     },
     {
+      "asset": "CN008",
+      "defect": "DD-00014390",
+      "raised": "2026-10-08",
+      "system": "CN008.ELS.TC (Transmission Control / Управление трансмиссией)",
+      "defectType": "1.05 Misalignment / incorrect adjustment / Несоосность / неправильная регулировка",
+      "descr": "Синхронизация осей",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Temir Marochko",
+      "regBy": "Марочко Темир",
+      "wo": "WO-020769"
+    },
+    {
       "asset": "DZ020",
       "defect": "DD-00014378",
       "raised": "2026-10-08",
@@ -38487,19 +38513,6 @@ window.CM_WO_DATA = {
       "by": "Andrey Taran",
       "regBy": "Таран Андрей Андреевич",
       "wo": "WO-019225"
-    },
-    {
-      "asset": "CN008",
-      "defect": "DD-00014390",
-      "raised": "2026-10-08",
-      "system": "CN008.ELS.TC (Transmission Control / Управление трансмиссией)",
-      "defectType": "1.05 Misalignment / incorrect adjustment / Несоосность / неправильная регулировка",
-      "descr": "Синхронизация осей",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Temir Marochko",
-      "regBy": "Марочко Темир",
-      "wo": "WO-020769"
     },
     {
       "asset": "DZ020",
@@ -42181,6 +42194,19 @@ window.CM_WO_DATA = {
       "wo": "WO-019018"
     },
     {
+      "asset": "DZ019",
+      "defect": "DD-00013958",
+      "raised": "2026-10-03",
+      "system": "DZ019.OC.HE (Heating / Отопление)",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "Не работает автономный отопитель кабины",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Evgeniy Frolin",
+      "regBy": "Фролин Евгений Владимирович",
+      "wo": null
+    },
+    {
       "asset": "GR016",
       "defect": "DD-00013928",
       "raised": "2026-10-03",
@@ -42785,19 +42811,6 @@ window.CM_WO_DATA = {
       "system": "DZ019.HS.CV (Control Valves / Гидрораспределители)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Течь масла в районе клапанов гидрораспределителя",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Evgeniy Frolin",
-      "regBy": "Фролин Евгений Владимирович",
-      "wo": null
-    },
-    {
-      "asset": "DZ019",
-      "defect": "DD-00013958",
-      "raised": "2026-10-03",
-      "system": "DZ019.OC.HE (Heating / Отопление)",
-      "defectType": "4.02 Open circuit / Разрыв цепи",
-      "descr": "Не работает автономный отопитель кабины",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Evgeniy Frolin",
