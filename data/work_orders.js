@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-15T23:17:37+00:00",
+  "generated": "2026-11-15T23:32:41+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -447,8 +447,8 @@ window.CM_WO_DATA = {
     "planStart": 0
   },
   "cmCauseFrom": {
-    "wo": 111,
-    "wr": 91,
+    "wo": 114,
+    "wr": 88,
     "cert": 0,
     "none": 0
   },
@@ -544,7 +544,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-11-14",
       "detected": "2026-11-14",
-      "planStart": null,
+      "planStart": "2026-11-23",
       "closed": null,
       "asset": "EX012",
       "defect": "DD-00016886",
@@ -554,15 +554,15 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "defectType": "2.01 Wear / Износ",
       "cause": "Абразивный износ",
-      "causeFrom": "wr",
+      "causeFrom": "wo",
       "descr": "Повышенный люфт ковша",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "by": "Slam",
       "byFull": "Slam Taganov",
       "regBy": "Таганов Слам Джумамуратович",
       "raisedBy": "ГДК Баимская",
-      "woNumber": null,
-      "maintType": null,
+      "woNumber": "WO-022637",
+      "maintType": "P4 Planned Repair",
       "planned": false
     },
     {
@@ -700,7 +700,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-11-10",
       "detected": "2026-11-10",
-      "planStart": null,
+      "planStart": "2026-11-23",
       "closed": null,
       "asset": "EX012",
       "defect": "DD-00016647",
@@ -710,15 +710,15 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
       "cause": "Отсутствует крепеж",
-      "causeFrom": "wr",
+      "causeFrom": "wo",
       "descr": "Неправильный монтаж креплении огнетушителя, отсутствует огнетушитель.",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "by": "Bekzhan",
       "byFull": "Bekzhan Kazhybekov",
       "regBy": "Кажыбеков Бекжан",
       "raisedBy": "ГДК Баимская",
-      "woNumber": null,
-      "maintType": null,
+      "woNumber": "WO-022636",
+      "maintType": "P4 Planned Repair",
       "planned": false
     },
     {
@@ -726,7 +726,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-11-10",
       "detected": "2026-11-10",
-      "planStart": null,
+      "planStart": "2026-11-23",
       "closed": null,
       "asset": "EX012",
       "defect": "DD-00016645",
@@ -736,15 +736,15 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
       "cause": "Перенапряжение",
-      "causeFrom": "wr",
+      "causeFrom": "wo",
       "descr": "Некорректная работа передних фар ( слабое освещение).",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "by": "Bekzhan",
       "byFull": "Bekzhan Kazhybekov",
       "regBy": "Кажыбеков Бекжан",
       "raisedBy": "ГДК Баимская",
-      "woNumber": null,
-      "maintType": null,
+      "woNumber": "WO-022635",
+      "maintType": "P4 Planned Repair",
       "planned": false
     },
     {
@@ -3275,7 +3275,7 @@ window.CM_WO_DATA = {
       "raised": "2026-10-02",
       "detected": "2026-10-02",
       "planStart": "2026-11-13",
-      "closed": null,
+      "closed": "2026-11-13",
       "asset": "CN008",
       "defect": "DD-00013857",
       "requestNo": "DD-00013857",
@@ -3286,7 +3286,7 @@ window.CM_WO_DATA = {
       "cause": "Усталостная трещина",
       "causeFrom": "wo",
       "descr": "Патрубок воздуховода системы впуска ДВС имеет трещины, следы старения и перегиба.",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "by": "Irek",
       "byFull": "Irek Rayanov",
       "regBy": "Раянов Ирек Ямильевич",
@@ -5807,6 +5807,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022627"
     },
     {
+      "asset": "CN002",
+      "defect": "DD-00016976",
+      "raised": "2026-11-16",
+      "system": "CN002.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Устранение утечек масла с ДВС",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022634"
+    },
+    {
       "asset": "GE054",
       "defect": "DD-00016975",
       "raised": "2026-11-16",
@@ -6392,6 +6405,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "DZ016",
+      "defect": "DD-00016950",
+      "raised": "2026-11-15",
+      "system": "DZ016.HS.CYL (Cylinders / Гидроцилиндры)",
+      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "descr": "Люфт Г/Ц подъема отвала",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022609"
+    },
+    {
       "asset": "TK097",
       "defect": "DD-00016938",
       "raised": "2026-11-15",
@@ -6468,19 +6494,6 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-022612"
-    },
-    {
-      "asset": "DZ016",
-      "defect": "DD-00016950",
-      "raised": "2026-11-15",
-      "system": "DZ016.HS.CYL (Cylinders / Гидроцилиндры)",
-      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
-      "descr": "Люфт Г/Ц подъема отвала",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": "WO-022609"
     },
     {
       "asset": "TK088",
@@ -14400,6 +14413,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021719"
     },
     {
+      "asset": "LV042",
+      "defect": "DD-00016289",
+      "raised": "2026-11-04",
+      "system": "LV042.OC.HE (Heating / Отопление)",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "Демонтаж электрического ПЖД",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-021722"
+    },
+    {
       "asset": "SR001",
       "defect": "DD-00016298",
       "raised": "2026-11-04",
@@ -14658,19 +14684,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-021745"
-    },
-    {
-      "asset": "LV042",
-      "defect": "DD-00016289",
-      "raised": "2026-11-04",
-      "system": "LV042.OC.HE (Heating / Отопление)",
-      "defectType": "4.02 Open circuit / Разрыв цепи",
-      "descr": "Демонтаж электрического ПЖД",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-021722"
     },
     {
       "asset": "DZ017",
@@ -27855,6 +27868,19 @@ window.CM_WO_DATA = {
       "wo": "WO-020321"
     },
     {
+      "asset": "EX012",
+      "defect": "DD-00015130",
+      "raised": "2026-10-19",
+      "system": "EX012.CH.BUC (Bucket / Ковш)",
+      "defectType": "2.06 Abrasive wear / Абразивный износ",
+      "descr": "Требуется уплотнить ковш убрать осевой люфт",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": null
+    },
+    {
       "asset": "TK119",
       "defect": "DD-00015089",
       "raised": "2026-10-19",
@@ -28892,19 +28918,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Evgeniy Frolin",
       "regBy": "Фролин Евгений Владимирович",
-      "wo": null
-    },
-    {
-      "asset": "EX012",
-      "defect": "DD-00015130",
-      "raised": "2026-10-19",
-      "system": "EX012.CH.BUC (Bucket / Ковш)",
-      "defectType": "2.06 Abrasive wear / Абразивный износ",
-      "descr": "Требуется уплотнить ковш убрать осевой люфт",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
       "wo": null
     },
     {
@@ -85282,15 +85295,15 @@ window.CM_WO_DATA = {
       "cmLabel": "2000h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-12",
       "planStartDt": "2026-11-12T00:00:00",
       "planEnd": "2026-11-12",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-12",
+      "actualStartDt": "2026-11-12T12:00:00",
+      "actualEnd": "2026-11-13"
     },
     {
       "equip": "CD010",
@@ -113873,7 +113886,7 @@ window.CM_WO_DATA = {
       "open": true,
       "planStart": "2026-11-14",
       "planStartDt": "2026-11-14T00:00:00",
-      "planEnd": "2026-11-15",
+      "planEnd": "2026-11-14",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -134991,15 +135004,15 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-13",
       "planStartDt": "2026-11-13T00:00:00",
-      "planEnd": "2026-11-14",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "planEnd": "2026-11-13",
+      "actualStart": "2026-11-13",
+      "actualStartDt": "2026-11-13T21:10:00",
+      "actualEnd": "2026-11-13"
     },
     {
       "equip": "GR013",

@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-15T23:17:37+00:00",
+  "generated": "2026-11-15T23:32:41+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -4179,6 +4179,24 @@
       "completed": "2026-11-14"
     },
     {
+      "wo": "WO-022637",
+      "equip": "EX012",
+      "cls": "",
+      "comp": "EX012.CH.BUC (Bucket / Ковш)",
+      "desc": "Повышенный люфт ковша",
+      "priority": "P4 Planned (Repair)",
+      "raised": "2026-11-14",
+      "type": "2.01 Wear / Износ",
+      "hours": null,
+      "plan": "2026-11-23",
+      "status": "Elimination scheduled",
+      "request": "DD-00016886",
+      "defType": "2.01 Wear / Износ",
+      "cause": "Абразивный износ",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-021659",
       "equip": "CN020",
       "cls": "CRN",
@@ -4261,12 +4279,12 @@
       "type": "250 Hours service Planned",
       "hours": 250,
       "plan": "2026-11-13",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-13"
     },
     {
       "wo": "WO-021360",
@@ -4333,12 +4351,12 @@
       "type": "2000 Hours service Planned",
       "hours": 2000,
       "plan": "2026-11-12",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-13"
     },
     {
       "wo": "WO-007947",
@@ -4789,6 +4807,42 @@
       "cause": "",
       "pmStatus": "complete",
       "completed": "2026-11-12"
+    },
+    {
+      "wo": "WO-022636",
+      "equip": "EX012",
+      "cls": "",
+      "comp": "EX012.OC.FS (Fire Suppression / Система пожаротушения)",
+      "desc": "Неправильный монтаж креплении огнетушителя, отсутствует огнетушитель.",
+      "priority": "P4 Planned (Repair)",
+      "raised": "2026-11-10",
+      "type": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "hours": null,
+      "plan": "2026-11-23",
+      "status": "Elimination scheduled",
+      "request": "DD-00016647",
+      "defType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "cause": "Отсутствует крепеж",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-022635",
+      "equip": "EX012",
+      "cls": "",
+      "comp": "EX012.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
+      "desc": "Некорректная работа передних фар ( слабое освещение).",
+      "priority": "P4 Planned (Repair)",
+      "raised": "2026-11-10",
+      "type": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "hours": null,
+      "plan": "2026-11-23",
+      "status": "Elimination scheduled",
+      "request": "DD-00016645",
+      "defType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "cause": "Перенапряжение",
+      "pmStatus": "open",
+      "completed": ""
     },
     {
       "wo": "WO-021676",
@@ -10057,12 +10111,12 @@
       "type": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "hours": null,
       "plan": "2026-11-13",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "DD-00013857",
       "defType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "cause": "Усталостная трещина",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-13"
     },
     {
       "wo": "WO-020773",
@@ -11131,6 +11185,14 @@
       "x": "износ плиты дробления"
     },
     {
+      "d": "DD-00016976",
+      "u": "CN002",
+      "s": "CN002.DRS.ENG (Engine / Двигатель)",
+      "p": "P2",
+      "r": "2026-11-16",
+      "x": "Устранение утечек масла с ДВС"
+    },
+    {
       "d": "DD-00016975",
       "u": "GE054",
       "s": "GE054.DRS.ENG (Engine / Двигатель)",
@@ -11371,6 +11433,14 @@
       "x": "Обрыв крестовины привода"
     },
     {
+      "d": "DD-00016950",
+      "u": "DZ016",
+      "s": "DZ016.HS.CYL (Cylinders / Гидроцилиндры)",
+      "p": "P2",
+      "r": "2026-11-15",
+      "x": "Люфт Г/Ц подъема отвала"
+    },
+    {
       "d": "DD-00016938",
       "u": "TK097",
       "s": "TRUCK, WATER URAL 4672M1-20, TK097 ENGINE OldNumber (UT097)",
@@ -11417,14 +11487,6 @@
       "p": "P2",
       "r": "2026-11-15",
       "x": "Неисправность ламп наружного и сигнального освещения."
-    },
-    {
-      "d": "DD-00016950",
-      "u": "DZ016",
-      "s": "DZ016.HS.CYL (Cylinders / Гидроцилиндры)",
-      "p": "P2",
-      "r": "2026-11-15",
-      "x": "Люфт Г/Ц подъема отвала"
     },
     {
       "d": "DD-00016951",
@@ -32667,6 +32729,14 @@
       "x": "Ремонт замка капота"
     },
     {
+      "d": "DD-00016289",
+      "u": "LV042",
+      "s": "LV042.OC.HE (Heating / Отопление)",
+      "p": "P4",
+      "r": "2026-11-04",
+      "x": "Демонтаж электрического ПЖД"
+    },
+    {
       "d": "DD-00016295",
       "u": "CD010",
       "s": "CD010.DRS.ENG (Engine / Двигатель)",
@@ -32809,14 +32879,6 @@
       "p": "P4",
       "r": "2026-11-04",
       "x": "Замена шин"
-    },
-    {
-      "d": "DD-00016289",
-      "u": "LV042",
-      "s": "LV042.OC.HE (Heating / Отопление)",
-      "p": "P4",
-      "r": "2026-11-04",
-      "x": "Демонтаж электрического ПЖД"
     },
     {
       "d": "DD-00016285",
@@ -35947,6 +36009,14 @@
       "x": "Замена масла при ТО по WO-020048"
     },
     {
+      "d": "DD-00015130",
+      "u": "EX012",
+      "s": "EX012.CH.BUC (Bucket / Ковш)",
+      "p": "P4",
+      "r": "2026-10-19",
+      "x": "Требуется уплотнить ковш убрать осевой люфт"
+    },
+    {
       "d": "DD-00015115",
       "u": "TK153",
       "s": "TK153.DRS.AXL.RAX Rear Axle Group / Задний мост",
@@ -36089,14 +36159,6 @@
       "p": "P4",
       "r": "2026-10-19",
       "x": "Люфт внешней крестовины приводного вала передней оси"
-    },
-    {
-      "d": "DD-00015130",
-      "u": "EX012",
-      "s": "EX012.CH.BUC (Bucket / Ковш)",
-      "p": "P4",
-      "r": "2026-10-19",
-      "x": "Требуется уплотнить ковш убрать осевой люфт"
     },
     {
       "d": "DD-00015137",
