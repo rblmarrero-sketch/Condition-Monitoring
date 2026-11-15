@@ -5625,7 +5625,7 @@ for its 1C defect, the CM-field rule being `actionStateOld` (`actdef`); history 
 register count is the page's own after carry / clear (`scale`); five rows on the old/new card (`cmflow`); a toolbar between
 two cards is not a gap (`dashlayout`); Data & Sync may be 2.2 screens until the compare card goes on 23.11 (`phase5`).
 
-**EVERY CM LIST TABLE IS ON THE SITE'S OWN TABLE COMPONENT UNDER /cm/ (build 634, CM_SITETBL_V1, Rickie 16.11.2026 06:31 "the table
+**EVERY CM LIST TABLE IS ON THE SITE'S OWN TABLE COMPONENT UNDER /cm/ (builds 634-635, CM_SITETBL_V1, Rickie 16.11.2026 06:31 "the table
 in cm are not standard UI still. and i want the all pages to match"; mock-up "Go, all tables", "32 px like the site").** The CM
 pages had their own look-alike kit (text box per column, 44 px on dashboard-next, their own Columns, freeze and slider); every
 other site page uses `SiteStd.table` (site_std v2.11+, KB UI_STANDARD §22-24). `#cmSiteTblJs` (end of both pages, identical) hands
