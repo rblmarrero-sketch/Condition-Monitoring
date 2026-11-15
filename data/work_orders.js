@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-15T06:27:41+00:00",
+  "generated": "2026-11-15T06:42:44+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -6587,6 +6587,71 @@ window.CM_WO_DATA = {
       "wo": "WO-022549"
     },
     {
+      "asset": "EX005",
+      "defect": "DD-00016891",
+      "raised": "2026-11-14",
+      "system": "EX005.CH.BUC (Bucket / Ковш)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Замена коронки",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022552"
+    },
+    {
+      "asset": "EX019",
+      "defect": "DD-00016859",
+      "raised": "2026-11-14",
+      "system": "EX019.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Замена мотора отопителя",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022543"
+    },
+    {
+      "asset": "TK034",
+      "defect": "DD-00016882",
+      "raised": "2026-11-14",
+      "system": "TK034.DRS.COO.FAN Cooling Fan & Drive / Вентилятор и привод вентилятора",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Откручен вентилятор",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022550"
+    },
+    {
+      "asset": "TK031",
+      "defect": "DD-00016892",
+      "raised": "2026-11-14",
+      "system": "TK031.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Установка патрубка интеркулера, кепление бампера",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022553"
+    },
+    {
+      "asset": "TK047",
+      "defect": "DD-00016885",
+      "raised": "2026-11-14",
+      "system": "TK047.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Обрыв приводного ремня",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022551"
+    },
+    {
       "asset": "LV086",
       "defect": "DD-00016878",
       "raised": "2026-11-14",
@@ -6951,32 +7016,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022559"
     },
     {
-      "asset": "TK031",
-      "defect": "DD-00016892",
-      "raised": "2026-11-14",
-      "system": "TK031.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Установка патрубка интеркулера, кепление бампера",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022553"
-    },
-    {
-      "asset": "TK034",
-      "defect": "DD-00016882",
-      "raised": "2026-11-14",
-      "system": "TK034.DRS.COO.FAN Cooling Fan & Drive / Вентилятор и привод вентилятора",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Откручен вентилятор",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022550"
-    },
-    {
       "asset": "EX011",
       "defect": "DD-00016862",
       "raised": "2026-11-14",
@@ -7027,45 +7066,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022545"
-    },
-    {
-      "asset": "EX005",
-      "defect": "DD-00016891",
-      "raised": "2026-11-14",
-      "system": "EX005.CH.BUC (Bucket / Ковш)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Замена коронки",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022552"
-    },
-    {
-      "asset": "TK047",
-      "defect": "DD-00016885",
-      "raised": "2026-11-14",
-      "system": "TK047.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Обрыв приводного ремня",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022551"
-    },
-    {
-      "asset": "EX019",
-      "defect": "DD-00016859",
-      "raised": "2026-11-14",
-      "system": "EX019.OC.HE (Heating / Отопление)",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Замена мотора отопителя",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022543"
     },
     {
       "asset": "EX015",
@@ -15115,6 +15115,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021471"
     },
     {
+      "asset": "DZ014",
+      "defect": "DD-00016196",
+      "raised": "2026-11-02",
+      "system": "DZ014.OC (Operator Cab / Кабина оператора)",
+      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "descr": "Устранить не технологические отверстия кабины оператора",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": null
+    },
+    {
       "asset": "EX005",
       "defect": "DD-00016215",
       "raised": "2026-11-02",
@@ -15684,19 +15697,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "DZ014",
-      "defect": "DD-00016196",
-      "raised": "2026-11-02",
-      "system": "DZ014.OC (Operator Cab / Кабина оператора)",
-      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
-      "descr": "Устранить не технологические отверстия кабины оператора",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
       "wo": null
     },
     {
@@ -28895,6 +28895,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021727"
     },
     {
+      "asset": "DZ016",
+      "defect": "DD-00015025",
+      "raised": "2026-10-18",
+      "system": "DZ016.DRS.ENG (Engine / Двигатель)",
+      "defectType": "4.09 Relay / contactor failure / Отказ реле / контактора",
+      "descr": "Не работает датчик темпиратуры ДВС",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Roman Kochetov",
+      "regBy": "Кочетов Роман Иванович",
+      "wo": "WO-020904"
+    },
+    {
       "asset": "TK152",
       "defect": "DD-00015020",
       "raised": "2026-10-18",
@@ -29725,19 +29738,6 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-022204"
-    },
-    {
-      "asset": "DZ016",
-      "defect": "DD-00015025",
-      "raised": "2026-10-18",
-      "system": "DZ016.DRS.ENG (Engine / Двигатель)",
-      "defectType": "4.09 Relay / contactor failure / Отказ реле / контактора",
-      "descr": "Не работает датчик темпиратуры ДВС",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Roman Kochetov",
-      "regBy": "Кочетов Роман Иванович",
-      "wo": "WO-020904"
     },
     {
       "asset": "TK152",
@@ -38398,6 +38398,32 @@ window.CM_WO_DATA = {
       "wo": "WO-019211"
     },
     {
+      "asset": "DZ014",
+      "defect": "DD-00014252",
+      "raised": "2026-10-07",
+      "system": "DZ014.DRS.FUE.TNK (Fuel Tank / Топливный бак)",
+      "defectType": "3.06 Sensor failure / Отказ датчика",
+      "descr": "Не работает датчик уровня топлива",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Valentin Trapilo",
+      "regBy": "Трапило Валентин Святославович",
+      "wo": null
+    },
+    {
+      "asset": "DZ014",
+      "defect": "DD-00014253",
+      "raised": "2026-10-07",
+      "system": "DZ014.CH.RP (Ripper/Рыхлитель)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Требуется замена защиты стойки рыхлителя",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Valentin Trapilo",
+      "regBy": "Трапило Валентин Святославович",
+      "wo": null
+    },
+    {
       "asset": "EX002",
       "defect": "DD-00014271",
       "raised": "2026-10-07",
@@ -39071,32 +39097,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Yuriy Novikov",
       "regBy": "Новиков Юрий Александрович",
-      "wo": null
-    },
-    {
-      "asset": "DZ014",
-      "defect": "DD-00014252",
-      "raised": "2026-10-07",
-      "system": "DZ014.DRS.FUE.TNK (Fuel Tank / Топливный бак)",
-      "defectType": "3.06 Sensor failure / Отказ датчика",
-      "descr": "Не работает датчик уровня топлива",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Valentin Trapilo",
-      "regBy": "Трапило Валентин Святославович",
-      "wo": null
-    },
-    {
-      "asset": "DZ014",
-      "defect": "DD-00014253",
-      "raised": "2026-10-07",
-      "system": "DZ014.CH.RP (Ripper/Рыхлитель)",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "Требуется замена защиты стойки рыхлителя",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Valentin Trapilo",
-      "regBy": "Трапило Валентин Святославович",
       "wo": null
     },
     {
