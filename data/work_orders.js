@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-15T02:42:46+00:00",
+  "generated": "2026-11-15T02:57:44+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -6015,6 +6015,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "TK125",
+      "defect": "DD-00016934",
+      "raised": "2026-11-15",
+      "system": "TK125.OC.DO (Doors / Двери)",
+      "defectType": "2.06 Abrasive wear / Абразивный износ",
+      "descr": "Износ  щеток стеклоочистителей",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": null
+    },
+    {
       "asset": "LV048",
       "defect": "DD-00016930",
       "raised": "2026-11-15",
@@ -6182,6 +6195,19 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022567"
+    },
+    {
+      "asset": "TK003",
+      "defect": "DD-00016933",
+      "raised": "2026-11-15",
+      "system": "TK003.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь масла со щупа",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022590"
     },
     {
       "asset": "TK034",
