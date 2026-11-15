@@ -40,19 +40,24 @@ const R = f => fs.readFileSync(path.join(__dirname, "..", f), "utf8");
   console.log("1. ONE TABLE, AND IT IS THE ONE THE SITE GAVE");
   const TERMS = require("../mobile/terms.js");
   ok("terms.js carries the reasons", Array.isArray(TERMS.WHY), (TERMS.WHY || []).length + " reason(s)");
-  ok("  all thirteen of them", (TERMS.WHY || []).length === 13, (TERMS.WHY || []).length);
+  ok("  all fourteen of them", (TERMS.WHY || []).length === 14, (TERMS.WHY || []).length);
   /* Named, not counted: a list that quietly loses one is a list that stops
      matching the paper the site works from. */
   const want = ["sched", "dup", "operator", "notgiven", "repair",
                 "clean", "access", "unsafe", "transport", "tools",
                 /* 10.11.2026: when the PM was not on the planned day */
-                "pmnight", "pmearly", "pmlate"];
+                "pmnight", "pmearly", "pmlate",
+                /* 15.11.2026 */
+                "noscope"];
   ok("  in the order they were given", TERMS.WHY.map(w => w.k).join(",") === want.join(","),
      TERMS.WHY.map(w => w.k).join(","));
   ok("  every one has both languages",
      TERMS.WHY.every(w => w.en && w.ru && w.en !== w.ru),
      TERMS.WHY.filter(w => !w.en || !w.ru || w.en === w.ru).map(w => w.k).join(",") || "all two-language");
-  ok("  and the keys are unique", new Set(TERMS.WHY.map(w => w.k)).size === 13);
+  ok("  and the keys are unique", new Set(TERMS.WHY.map(w => w.k)).size === 14);
+  ok("  not in the CM scope reads in both languages",
+     TERMS.whyLabel("noscope", "en") === "Not in the scope of condition monitoring"
+     && TERMS.whyLabel("noscope", "ru") === "Не входит в объём мониторинга состояния");
   ok("  the PM-timing reasons read in both languages",
      TERMS.whyLabel("pmnight", "en") === "PM done on night shift" && TERMS.whyLabel("pmearly", "ru") === "ТО выполнено раньше графика"
      && TERMS.whyLabel("pmlate", "en") === "PM done later than scheduled");

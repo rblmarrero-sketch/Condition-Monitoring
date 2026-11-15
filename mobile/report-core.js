@@ -1146,7 +1146,7 @@
       tb_temp_note:"No ambient temperature, operating state or load, method, or valid comparison was recorded, so the reading below stands alone and carries no confirmed defect conclusion.",
       tb_uc_sum:"Condition summary", tb_get:"Point register",
       tb_tb_ctrl:"Controlling readings",
-      uc_atlimit:"At / past limit", uc_above80:"Above 80%", uc_notmeas:"Not measured",
+      uc_atlimit:"At / past limit", uc_above80:"Above 60%", uc_notmeas:"Not measured",
       uc_controlling:"Controlling point", uc_decision:"Decision",
       fir_defect:"1C defect", fir_system:"System / component", fir_prio:"Priority", fir_by:"Recorded by",
       fir_note:"Note", fir_photos:"Photographs",
@@ -1208,7 +1208,7 @@
       legend:"How to read this report",
       lg_grade:"Condition grade", lg_sev:"Severity (ISO 14224)",
       lg_wear:"Wear measurement", lg_iso:"Coding",
-      lg_wear_d:"Wear is how far a part has travelled from its new dimension towards the condemn limit, as a percentage. 100% means the part is at the limit and should come off. Above 80% it should be planned into the next shutdown. Each figure is judged against the reference for that machine’s model, or against the machine’s own baseline where one was taken while the undercarriage was new.",
+      lg_wear_d:"Wear is how far a part has travelled from its new dimension towards the condemn limit, as a percentage. 100% means the part is at the limit and should come off. Above 60% it is Severe and should be planned into the next shutdown. Each figure is judged against the reference for that machine’s model, or against the machine’s own baseline where one was taken while the undercarriage was new.",
       lg_iso_d:"Failure modes, causes and severity are coded to ISO 14224:2016, so findings can be counted, trended and compared across the fleet rather than read one report at a time.",
       band_ok:"Serviceable", band_watch:"Watch", band_act:"At or past condemn",
       g_1:"Normal — good condition, continue operation",
@@ -1348,7 +1348,7 @@
       tb_temp_note:"Не записаны ни температура окружающей среды, ни режим или нагрузка, ни метод, ни корректное сравнение — приведённое ниже показание приводится само по себе и не подтверждает вывод о дефекте.",
       tb_uc_sum:"Сводка состояния", tb_get:"Реестр точек",
       tb_tb_ctrl:"Определяющие замеры",
-      uc_atlimit:"На пределе / за пределом", uc_above80:"Свыше 80%", uc_notmeas:"Не измерено",
+      uc_atlimit:"На пределе / за пределом", uc_above80:"Свыше 60%", uc_notmeas:"Не измерено",
       uc_controlling:"Определяющая точка", uc_decision:"Решение",
       fir_defect:"Дефект 1С", fir_system:"Система / узел", fir_prio:"Приоритет", fir_by:"Записал",
       fir_note:"Примечание", fir_photos:"Фотографии",
@@ -1408,7 +1408,7 @@
       legend:"Как читать этот отчёт",
       lg_grade:"Оценка состояния", lg_sev:"Категория (ИСО 14224)",
       lg_wear:"Измерение износа", lg_iso:"Кодирование",
-      lg_wear_d:"Износ — это доля пути от нового размера до предельного, в процентах. 100% означает, что деталь достигла предела и подлежит замене. Свыше 80% работу следует включить в ближайший ремонт. Каждая цифра сравнивается с эталоном для модели машины или с её собственной базой, если она была снята на новой ходовой.",
+      lg_wear_d:"Износ — это доля пути от нового размера до предельного, в процентах. 100% означает, что деталь достигла предела и подлежит замене. Свыше 60% это «Серьёзное» состояние, работу следует включить в ближайший ремонт. Каждая цифра сравнивается с эталоном для модели машины или с её собственной базой, если она была снята на новой ходовой.",
       lg_iso_d:"Виды отказов, причины и категории кодируются по ИСО 14224:2016, чтобы замечания можно было считать и сравнивать по всему парку, а не читать по одному отчёту.",
       /* Word for word what the Wear & life screen calls this band. It read
          "Достиг предела износа" here and "На пределе или за ним" there — one
@@ -2547,7 +2547,7 @@
     /* One line: "3 – Degraded / Ухудшенное". The translation used to stack
        under the level as a second line and the strip read as broken. */
     var level = n ? T.both(n + " – " + gw("g_" + n), gwA("g_" + n), "alti") : T.I("rr_none");
-    /* Site decision 12.11.2026: a measured point above 80 % worn is Severe and
+    /* Site decision 12.11.2026, confirmed 15.11: a measured point above 60 % worn is Severe and
        is planned into the next shutdown. When a wear round is a 4 only by its
        measurements (no point the inspector graded 4 or 5 by hand), the decision
        says that, not the general "repair soon; control operation". */
@@ -3513,7 +3513,7 @@
       var w = it.w;
       if (w.mm == null) { notmeas++; return; }
       if (w.pct != null && Number(w.pct) >= 100) atlimit++;
-      else if (w.pct != null && Number(w.pct) >= 80) above80++;
+      else if (w.pct != null && Number(w.pct) >= 60) above80++;   /* Severe from 60 % worn (GRADE.fromRemaining, confirmed 15.11.2026) */
       if (w.pct != null && (!ctrl || Number(w.pct) > Number(ctrl.w.pct))) ctrl = it;
     });
     var n = roundRating(rec);
