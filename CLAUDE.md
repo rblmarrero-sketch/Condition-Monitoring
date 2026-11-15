@@ -5596,6 +5596,18 @@ CM_MISS_V1, Rickie 15.11 20:56-21:10).** Both office pages.
   round (the deferral's `whyKey` through `TERMS.whyText`, else the words typed, else "No reason recorded" in red), with
   counts, share and the machines.
 
+**THE PAGE'S 3-5 FINDINGS ARE WORKED OUT ONCE A TASK, NOT ONCE A ROW (build 631, CM_FIND1C_V2).** Found by the full sweep on
+630: `tests/bigday.cjs` (1,000 inspections) timed out and `scale` / `scaleload` failed. `CMFlow.defectOf()` asked `base(RECS)` -
+every finding of every record, each one graded through `sevOf` - for EVERY row it was asked about (`ownerOf`, `actionState`,
+the KPI strip), so a 1,000-round folder did ~10^7 grade reads: the office page took 166 s to load and then froze in
+`renderAll`. `baseAll()` keeps the answer for the rest of the task (keyed on `RECS` and its length, cleared by `setTimeout 0`,
+as `latest()` already was, and by `CMFlow.fresh()`); `defectOf`, `flow`, `warm` and `find1C` read it. Measured on the bigday
+fixture: load 166 s -> 8 s, renderAll -> 2.4 s. Also: the fleet table's owner button (`#fleetTbl .xf.who`) no longer takes
+the 32 px desk-control floor, so a row with an owner (every 3-5 finding has one since 630) is the same height as the rest;
+`tests/schedparity.cjs` counts the CM interval scope by its address (`ddScope=cmint`, no tab since 629); `tests/overview2.cjs`
+and `tests/ovtables.cjs` assert the build-630 rule (all columns at 1366, a table that does not fit slides in its box with the
+machine frozen) instead of "never scrolls sideways" / "Inspected and Findings off at 1366".
+
 ---
 
 ## Secrets
