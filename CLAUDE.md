@@ -5482,6 +5482,16 @@ document is made there, so the phone's report button is hidden. NCR is kept off 
 like FIR; both dashboards name it (`type_NCR`) and report-core has a short NCR sheet. `tests/ncrround.cjs`,
 `tests/ncrlist.py`.
 
+
+**AN OFFICE PAGE RELOADS ONCE FOR A NEWER BUILD, NOT FOR EVER (build 625, CM_RELOADLOOP_V1, Rickie 15.11.2026
+"keeps reloading and putting 12345 in the search").** Both office pages fetch `../mobile/sw.js` and reload when its
+BUILD is newer than their own `?v=` tag. The office copy of a dashboard and `mobile/sw.js` are copied apart, and a
+build is often bumped twice in an hour, so the reload could bring back the same older page, which saw the same newer
+sw.js four seconds later and reloaded again, for ever, carrying the address (`#overview?q=12345`) with it. A tab now
+reloads at most once per newer build per 15 minutes (`cm_dash_reload` in sessionStorage); after that the badge says
+"vN → vM" and the page stays. The `?b=` the reload adds is removed from the address at boot. `tests/dashupd.cjs` §1a
+serves a page that stays old against a newer sw.js; on build 624 it reloads three more times in 15 s.
+
 ---
 
 ## Secrets
