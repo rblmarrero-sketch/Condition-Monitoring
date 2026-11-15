@@ -4111,23 +4111,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=624"></script>
+<script src="../data/magnetic_plug.js?v=625"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=624"></script>
-<script src="../mobile/hme.js?v=624"></script>
-<script src="../mobile/mp-fc.js?v=624"></script>
-<script src="../mobile/rtw.js?v=624"></script>
-<script src="../mobile/hme-cascade.js?v=624"></script>
-<script src="../mobile/temp-limits.js?v=624"></script>
+<script src="../data/work_orders.js?v=625"></script>
+<script src="../mobile/hme.js?v=625"></script>
+<script src="../mobile/mp-fc.js?v=625"></script>
+<script src="../mobile/rtw.js?v=625"></script>
+<script src="../mobile/hme-cascade.js?v=625"></script>
+<script src="../mobile/temp-limits.js?v=625"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=624"></script>
-<script src="../mobile/normalize.js?v=624"></script>
-<script src="../mobile/terms.js?v=624"></script>
+<script src="../mobile/assets.js?v=625"></script>
+<script src="../mobile/normalize.js?v=625"></script>
+<script src="../mobile/terms.js?v=625"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -4146,21 +4146,21 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=624"></script>
-<script src="../mobile/edits.js?v=624"></script>
-<script src="../mobile/due.js?v=624"></script>
-<script src="../mobile/wear.js?v=624"></script>
-<script src="../mobile/wear-map.js?v=624"></script>
-<script src="../mobile/lube.js?v=624"></script>
-<script src="../mobile/lube-overrides.js?v=624"></script>
-<script src="../mobile/lube2027.js?v=624"></script>
-<script src="../mobile/lube-tds.js?v=624"></script>
-<script src="lube-master.js?v=624"></script>
-<script src="wear-limits.js?v=624"></script>
+<script src="../mobile/grade.js?v=625"></script>
+<script src="../mobile/edits.js?v=625"></script>
+<script src="../mobile/due.js?v=625"></script>
+<script src="../mobile/wear.js?v=625"></script>
+<script src="../mobile/wear-map.js?v=625"></script>
+<script src="../mobile/lube.js?v=625"></script>
+<script src="../mobile/lube-overrides.js?v=625"></script>
+<script src="../mobile/lube2027.js?v=625"></script>
+<script src="../mobile/lube-tds.js?v=625"></script>
+<script src="lube-master.js?v=625"></script>
+<script src="wear-limits.js?v=625"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=624"></script>
-<script src="../mobile/machine-photos.js?v=624"></script>
+<script src="../mobile/upload-defaults.js?v=625"></script>
+<script src="../mobile/machine-photos.js?v=625"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -4169,17 +4169,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=624"></script>
-<script src="../mobile/get.js?v=624"></script>
-<script src="../mobile/points.js?v=624"></script>
-<script src="../mobile/uc-points.js?v=624"></script>
-<script src="../mobile/inspect-guide.js?v=624"></script>
-<script src="../mobile/get-figs.js?v=624"></script>
-<script src="../mobile/body-points.js?v=624"></script>
-<script src="../mobile/body-map.js?v=624"></script>
-<script src="../mobile/jspdf.umd.min.js?v=624"></script>
-<script src="../mobile/html2canvas.min.js?v=624"></script>
-<script src="../mobile/report-core.js?v=624"></script>
+<script src="../mobile/machine-fig.js?v=625"></script>
+<script src="../mobile/get.js?v=625"></script>
+<script src="../mobile/points.js?v=625"></script>
+<script src="../mobile/uc-points.js?v=625"></script>
+<script src="../mobile/inspect-guide.js?v=625"></script>
+<script src="../mobile/get-figs.js?v=625"></script>
+<script src="../mobile/body-points.js?v=625"></script>
+<script src="../mobile/body-map.js?v=625"></script>
+<script src="../mobile/jspdf.umd.min.js?v=625"></script>
+<script src="../mobile/html2canvas.min.js?v=625"></script>
+<script src="../mobile/report-core.js?v=625"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -18942,6 +18942,10 @@ document.querySelector(".lang").addEventListener("click",e=>{
      Find it silently, apply it only when the reader is not in the middle of
      something, and never take a half-finished correction away from them. */
   const BUILT=tag;
+  /* CM_RELOADLOOP_V1: the ?b= a build reload added is not kept in the address
+     (a copied link would carry it, and it said nothing to a reader). */
+  try{ const q=new URLSearchParams(location.search); if(q.has("b")){ q.delete("b"); const r=q.toString();
+    history.replaceState(history.state,"",location.pathname+(r?"?"+r:"")+location.hash); } }catch(e){}
   let dashWaiting=null;
   /* A TABLE THE READER IS ACTIVELY FILTERING OR SORTING IS THE SAME LOSS A
      FIFTH TIME, AND IT HAS NO DIALOG TO CATCH IT. Every overlay this
@@ -19044,6 +19048,18 @@ document.querySelector(".lang").addEventListener("click",e=>{
   };
   const applyIfIdle=()=>{
     if(!dashWaiting || busy()) return;
+    /* CM_RELOADLOOP_V1 (build 625, Rickie 15.11 "keeps reloading"). ONE reload per
+       newer build per tab, then wait. When the office copy of this page is older
+       than ../mobile/sw.js (the two are copied apart, and a build is often bumped
+       twice in an hour), the reload brings back the SAME old page, which sees the
+       same newer sw.js four seconds later and reloads again - for ever, carrying
+       whatever the address held (a search) with it. If this tab already reloaded
+       for this build, the page stays and says "vN -> vM"; it tries again after
+       RELOAD_GAP, when the copy has caught up. */
+    const RELOAD_GAP=15*60000;
+    let tr=null; try{ tr=JSON.parse(sessionStorage.getItem("cm_dash_reload")||"null"); }catch(e){}
+    if(tr && tr.b===dashWaiting && Date.now()-tr.at<RELOAD_GAP) return;
+    try{ sessionStorage.setItem("cm_dash_reload",JSON.stringify({b:dashWaiting,at:Date.now()})); }catch(e){}
     /* replace(), not reload(): a reload can re-serve the cached document, and
        the whole point is to stop running the old one. */
     location.replace(location.pathname + "?b=" + dashWaiting + location.hash);
@@ -19121,11 +19137,11 @@ document.querySelector(".lang").addEventListener("click",e=>{
   setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 })();
 </script>
-<script src="drive.js?v=624"></script>
-<script src="sync-adapter.js?v=624"></script>
-<script src="report.js?v=624"></script>
-<script src="reliability.js?v=624"></script>
-<script src="day-summary.js?v=624"></script>
+<script src="drive.js?v=625"></script>
+<script src="sync-adapter.js?v=625"></script>
+<script src="report.js?v=625"></script>
+<script src="reliability.js?v=625"></script>
+<script src="day-summary.js?v=625"></script>
 <script>
 /* THE CLOSED FILTER SAYS WHAT IS CHOSEN. A dropdown narrower than its option
    text ellipsises ("All t…", audit of 2026-10-01). Between 1331 and 1500 px

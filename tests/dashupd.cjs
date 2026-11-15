@@ -54,7 +54,19 @@ const srv = http.createServer((req, res) => {
   await p.waitForTimeout(6000);
   const url = p.url();
   ok('it reloaded itself with nothing tapped', navs > start, (navs - start) + ' navigation(s)');
-  ok('  onto the new build', url.indexOf('b=' + SERVED) >= 0, url.slice(-40));
+  const tried = await p.evaluate(() => { try { return JSON.parse(sessionStorage.getItem('cm_dash_reload') || 'null'); } catch (e) { return null; } });
+  ok('  onto the new build', !!tried && tried.b === SERVED, JSON.stringify(tried));
+  ok('  and the address does not keep ?b=', url.indexOf('b=') < 0, url.slice(-40));
+
+  console.log('\n1a. A COPY STILL OLDER THAN sw.js IS NOT RELOADED AGAIN AND AGAIN (CM_RELOADLOOP_V1)');
+  /* This server serves the same page after the reload, so the page is still on
+     the old build and still sees the newer sw.js - the office copy lagging
+     the phone files. Before build 625 that reloaded every few seconds for ever. */
+  const n1 = navs;
+  for (let i = 0; i < 3; i++) { await p.evaluate(() => { document.dispatchEvent(new Event('visibilitychange')); }); await p.waitForTimeout(5000); }
+  ok('no second reload for the same build', navs === n1, (navs - n1) + ' more navigation(s)');
+  const badge1 = await p.evaluate(() => (document.getElementById('dashVer') || {}).textContent || '');
+  ok('  the badge says a new version is waiting', badge1.indexOf(SERVED) >= 0, badge1);
 
   console.log('\n1b. AN OLDER BUILD IS NOT AN UPDATE');
   /* The check compared for INEQUALITY, so a build number lower than the
@@ -102,7 +114,8 @@ const srv = http.createServer((req, res) => {
   });
   await p.waitForTimeout(3000);
   ok('closing it let the update through', navs > n2, (navs - n2) + ' navigation(s)');
-  ok('  onto the newer build', p.url().indexOf('b=' + SERVED) >= 0, p.url().slice(-40));
+  const tried2 = await p.evaluate(() => { try { return JSON.parse(sessionStorage.getItem('cm_dash_reload') || 'null'); } catch (e) { return null; } });
+  ok('  onto the newer build', !!tried2 && tried2.b === SERVED, JSON.stringify(tried2));
 
   ok('no page errors', errs.length === 0, errs.join(' | ') || 'none');
   await b.close(); srv.close();
