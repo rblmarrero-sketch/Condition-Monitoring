@@ -8244,7 +8244,7 @@ function paged(key, rows, render, size){
   const n=rows.length;
   const base=size||PAGE_SIZE_DEFAULT;
   const st=pageAt.get(key)||{ i:0, size:0 };
-  const PAGE_SIZE=PAGE_SIZES.indexOf(st.size)>=0 ? st.size : (base===PAGE_ALL && n>SHOW_ALL_MAX ? SHOW_ALL_MAX : base);   /* CM_SHOWALL_CAP_V1: a chosen size is kept, All included */
+  const PAGE_SIZE=(window.cmSiteTblOn&&(window.cmSiteTblKeys||[]).indexOf(key)>=0) ? PAGE_ALL : PAGE_SIZES.indexOf(st.size)>=0 ? st.size : (base===PAGE_ALL && n>SHOW_ALL_MAX ? SHOW_ALL_MAX : base);   /* CM_SITETBL_V1: a list on the site table component shows every line, so its filter counts the whole list */   /* CM_SHOWALL_CAP_V1: a chosen size is kept, All included */
   if(!pagedWired.has(key)) pagedWired.set(key, render);
   /* The size choice is offered only where it changes something: a list that
      fits the smallest page has nothing to choose. */
@@ -19507,7 +19507,7 @@ document.querySelector(".lang").addEventListener("click",e=>{
       thm.addEventListener("pointerdown",function(e){ if(!cur) return; e.preventDefault(); thm.setPointerCapture(e.pointerId); var x0=e.clientX, s0=cur.scrollLeft, r=trk.getBoundingClientRect();
         var mv=function(ev){ cur.scrollLeft=s0+(ev.clientX-x0)/r.width*cur.scrollWidth; }; var up=function(){ thm.removeEventListener("pointermove",mv); thm.removeEventListener("pointerup",up); };
         thm.addEventListener("pointermove",mv); thm.addEventListener("pointerup",up); }); }
-    var boxes=[].slice.call(document.querySelectorAll("main .cmslidebox")).filter(function(b){ return b.offsetParent&&!b.closest("details:not([open])")&&b.scrollWidth>b.clientWidth+1;   /* build 633: not under a folded Details */ });
+    var boxes=[].slice.call(document.querySelectorAll("main .cmslidebox")).filter(function(b){ return !b.querySelector("table.cmSiteTbl")&&b.offsetParent&&!b.closest("details:not([open])")&&b.scrollWidth>b.clientWidth+1;   /* build 633: not under a folded Details */ });
     cur=null; var vh=innerHeight;
     for(var i=0;i<boxes.length;i++){ var r=boxes[i].getBoundingClientRect(); if(r.top<vh-60&&r.bottom>vh){ cur=boxes[i]; break; } }
     if(!cur||innerWidth<=900){ hs.classList.remove("on"); return; }
@@ -19517,6 +19517,7 @@ document.querySelector(".lang").addEventListener("click",e=>{
   }
   function run(){
     document.querySelectorAll("main table.grid").forEach(function(t){ if(!t.offsetParent) return;
+      if(t.classList.contains("cmSiteTbl")){ var k0=keyOf(t), b0=document.querySelector('.cmcolbar[data-for="'+k0+'"]'); if(b0) b0.remove(); eachCell(t,function(td){ if(td.classList.contains("cmcolh")){ td.classList.remove("cmcolh"); td.style.display=""; } }); unfreeze(t); t.classList.remove("cmfrz"); return; }   /* CM_SITETBL_V1: the site table component has this table */
       try{
         var labs=labels(t), rows=t.tBodies[0]?t.tBodies[0].rows.length:0;
         var sec=t.closest(".section"), own=t.matches(OWN)&&!!(sec&&[].slice.call(sec.querySelectorAll("button,summary")).some(function(x){ return !x.closest(".cmcolbar")&&/^\s*(columns|столбцы)/i.test(x.textContent); }));
@@ -20046,7 +20047,7 @@ html.cmStd main table.grid.cmHeld thead tr:not(:has(th.cwfh)) th{position:relati
   function boxed(tb){ for(var e=tb.parentElement;e&&e!==document.body;e=e.parentElement){ var c=getComputedStyle(e); if(c.overflowX!=="visible"||c.overflowY!=="visible") return true; } return false; }
   var raf=0;
   function run(){ raf=0; if(!de.classList.contains("cmStd")) return; var top=pinB();
-    [].forEach.call(document.querySelectorAll("main table.grid, main table[data-ds=find]"),function(tb){ var th=tb.tHead; if(!th||!tb.offsetParent||tb.classList.contains("ascards")) { if(tb.classList.contains("cmHeld")) clear(tb); return; }
+    [].forEach.call(document.querySelectorAll("main table.grid, main table[data-ds=find]"),function(tb){ var th=tb.tHead; if(!th||!tb.offsetParent||tb.classList.contains("ascards")||tb.classList.contains("std-hold")) { if(tb.classList.contains("cmHeld")) clear(tb); return; }
       if(boxed(tb)){ var r=tb.getBoundingClientRect(), h=th.getBoundingClientRect().height, d=Math.max(0,Math.min(top-r.top,r.height-h-2)), v=d>0?"translateY("+Math.round(d)+"px)":"";
         [].forEach.call(th.rows,function(row){ [].forEach.call(row.cells,function(c){ if(c.style.transform!==v) c.style.transform=v; }); }); tb.classList.toggle("cmHeld",d>0); }
       else { var t=top; [].forEach.call(th.rows,function(row){ var v=t+"px"; [].forEach.call(row.cells,function(c){ if(getComputedStyle(c).position==="sticky"&&c.style.top!==v) c.style.top=v; }); t+=Math.round(row.getBoundingClientRect().height); }); } }); }
@@ -20059,6 +20060,99 @@ html.cmStd main table.grid.cmHeld thead tr:not(:has(th.cwfh)) th{position:relati
   var m=document.querySelector("main"); if(m&&window.MutationObserver) new MutationObserver(q).observe(m,{childList:true,subtree:true});
   window.__cmTblHold=run; q();
 }catch(e){ if(window.bad) bad("cmtbl",e); }})();
+</script>
+<style id="cmSiteTblCss">/* CM_SITETBL_V1 - see #cmSiteTblJs. The page's own column pickers give way to the template's ⚙ Columns; only the sorted heading shows its arrow (as on every site table); the template's tool row sits on the table's toolbar. */
+html.cmSiteTbls #actCols,html.cmSiteTbls #tab-overview details.colsmenu{display:none !important}
+html.cmSiteTbls table.cmSiteTbl th.sortable:not(.on) > .arrow{display:none}
+html.cmSiteTbls table.cmSiteTbl thead tr:has(> th.cwfh){display:none}
+html.cmSiteTbls .cmstTools{display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 8px 0 0;vertical-align:middle}
+html.cmSiteTbls .cmstTools:empty{display:none}
+</style>
+<script id="cmSiteTblJs">/* CM_SITETBL_V1 (build 634, Rickie 16.11.2026 06:31 "the table in cm are not standard UI still. and i want the all pages to match"):
+   under /cm/ every list table of both office pages is handed to the site's own table component (SiteStd.table, site_std v2.11+,
+   KB UI_STANDARD §22-24), the one every other site page uses, instead of this page's look-alike kit:
+     heading row + the template's filter row (tick list for a short list of values, text box otherwise, multi-select),
+     "N of M lines" + Clear filters, drag a heading edge for width, ⚙ Columns (show / hide, arrange, row height, freeze up to),
+     frozen identifier column + the held slider when the table slides, status colour on the row (lists with a status).
+   The page keeps its own sort (sf:{sort:false}); its own filter row, Columns pickers, freeze and slider stand down for these
+   tables, and their lists show every line (a filter over part of a list would count the wrong M).
+   Off the site (Firebase, GitHub Pages, every test server without /site/std.js) nothing here runs and the page is as before. */
+(function () {
+  "use strict";
+  var KEY = /^(unit|единица|машина|техника|оборудование)\b/i;
+  /* key = the identifying column (frozen, pinned); hid = the page's own default-hidden columns (by th data-sort key) become the
+     template's default hidden ones, which a person can tick back in ⚙ Columns */
+  var CFG = [
+    { sel: "#fleetTbl", id: "cm_fleet", key: KEY, pg: "fleet", hid: ["cls", "find", "act", "open", "due"] },
+    { sel: "table.acttbl", id: "cm_act", key: KEY, pg: "actions",
+      st: { lab: /^(status|статус)/i, re: [[/closed|done|completed|закрыт|выполн/i, "done"], [/no action|not needed|void|не требуется|аннул/i, "void"], [/./, "open"]] } },
+    { sel: "table.ddtbl", id: "cm_due", key: KEY, pg: "due" },
+    { sel: "table.patbl", id: "cm_pa", key: KEY, pg: "planact",
+      st: { lab: /^(status|статус)/i, re: [[/no cm round|нет обхода|missed|пропущ/i, "late"], [/on time|done|в срок|выполн/i, "done"]] } },
+    { sel: "table.cwtbl", id: "cm_cw", key: /^(defect no|№|номер)/i, pg: "cmwo",
+      st: { lab: /^(status|статус)/i, re: [[/complet|closed|закрыт|выполн/i, "done"], [/cancel|void|отмен|аннул/i, "void"], [/./, "open"]] } },
+    { sel: "table.histtbl", id: "cm_hist", key: /^(point|точка)/i },
+    { sel: "#failAffTbl", id: "cm_fail", key: KEY, pg: "failaff" }
+  ];
+  function on() { return document.documentElement.classList.contains("cmStd") && window.SiteStd && typeof SiteStd.table === "function" && parseFloat(SiteStd.rev || "0") >= 2.11; }
+  function lab(c) { return (c.textContent || "").replace(/[⇕▲▼↕↑↓📌]/g, "").replace(/\s+/g, " ").trim(); }
+  function headRow(t) { var rs = [].filter.call(t.tHead ? t.tHead.rows : [], function (r) { return !r.classList.contains("std-flt") && !r.querySelector("th.cwfh"); }); return rs[rs.length - 1] || null; }
+  function idx(c, i) { return c.hasAttribute("data-std-c") ? +c.getAttribute("data-std-c") : i; }
+  function colOf(hr, re) { if (!hr || !re) return -1; for (var i = 0; i < hr.cells.length; i++) if (re.test(lab(hr.cells[i]))) return idx(hr.cells[i], i); return -1; }
+  /* the template's tool row (⚙ Columns, "N of M lines", Clear filters) sits on the table's own toolbar, before Export CSV, not on a row of its own */
+  function toolsFor(t, id) {
+    var h = document.getElementById("cmst_" + id); if (h && h.isConnected) return "#cmst_" + id;
+    var sec = t.closest(".section") || t.closest("section"), csv = null, box = t.closest(".tblwrap") || t;
+    if (sec) [].slice.call(sec.querySelectorAll("button,a")).some(function (x) { if (/csv/i.test(x.textContent) && !t.contains(x) && (x.compareDocumentPosition(t) & Node.DOCUMENT_POSITION_FOLLOWING)) { csv = x; return true; } return false; });
+    h = document.createElement("span"); h.id = "cmst_" + id; h.className = "cmstTools";
+    if (csv) csv.parentNode.insertBefore(h, csv); else box.parentNode.insertBefore(h, box);
+    return "#cmst_" + id;
+  }
+  var pageCols = false;
+  function ownCols() {   /* the page's own column pickers give way to ⚙ Columns: every column is drawn, the template hides */
+    if (pageCols) return; pageCols = true;
+    try { if (typeof actCols !== "undefined" && typeof ACOL_ALL !== "undefined") actCols = ACOL_ALL.slice(); } catch (e) {}
+    try { if (typeof fleetHidden !== "undefined") fleetHidden = new Set(); } catch (e) {}
+    try { if (typeof renderActions === "function") renderActions(); } catch (e) {}
+    try { if (typeof renderFleet === "function") renderFleet(); } catch (e) {}
+  }
+  function one(c) {
+    var t = document.querySelector(c.sel); if (!t || !t.tHead) return;
+    /* the page's own filter row gives way to the template's (the template reads the LAST heading row as the heading) */
+    [].slice.call(t.tHead.rows).forEach(function (r) { if (r.querySelector("th.cwfh")) r.remove(); });
+    var hr = headRow(t); if (!hr) return;
+    /* the page sorts its own headings: say which one to a screen reader, as the template does for its own */
+    [].forEach.call(hr.cells, function (th) { var a = th.querySelector(".arrow"), want = th.classList.contains("on") && a ? (/▼|↓/.test(a.textContent) ? "descending" : "ascending") : null;
+      if (want) { if (th.getAttribute("aria-sort") !== want) th.setAttribute("aria-sort", want); } else if (th.classList.contains("sortable") && th.getAttribute("aria-sort") !== "none") th.setAttribute("aria-sort", "none"); });
+    var k = colOf(hr, c.key); if (k < 0) k = 0;
+    var cfg = t._cmCfg;
+    if (!cfg) {
+      var none = []; [].forEach.call(hr.cells, function (th, i) { if (!lab(th) || th.classList.contains("selcol")) none.push(idx(th, i)); });   /* a column of buttons or tick boxes has nothing to filter */
+      cfg = { sel: c.sel, id: c.id, sf: { sort: false, none: none }, ord: true, pin: [], freeze: k, slider: true, expand: false, tools: toolsFor(t, c.id), def: { h: [] } };
+      for (var i = 0; i <= k; i++) cfg.pin.push(i);
+      if (c.hid) [].forEach.call(hr.cells, function (th, i) { if (c.hid.indexOf(th.getAttribute("data-sort")) >= 0) cfg.def.h.push(idx(th, i)); });
+      if (c.st) { var s = colOf(hr, c.st.lab); if (s >= 0) cfg.status = { col: s, re: c.st.re }; }
+      t._cmCfg = cfg; t.classList.add("cmSiteTbl");
+    }
+    SiteStd.table(cfg);
+  }
+  var q = 0;
+  function run() { q = 0; if (!on()) return;
+    if (!window.cmSiteTblOn) { window.cmSiteTblOn = true; document.documentElement.classList.add("cmSiteTbls"); ownCols(); }
+    CFG.forEach(function (c) { try { one(c); } catch (e) { window.cmSiteTblErr = String(e && e.message || e); } }); }
+  window.cmSiteTbl = run;
+  window.cmSiteTblKeys = CFG.map(function (c) { return c.pg; }).filter(Boolean);
+  function soon() { if (!q) q = setTimeout(run, 40); }
+  var main = document.querySelector("main");
+  if (main && window.MutationObserver) new MutationObserver(function (recs) {
+    for (var i = 0; i < recs.length; i++) { var r = recs[i], n = r.target;
+      if (n.nodeType === 1 && n.closest && n.closest("thead") && !(n.closest("tr.std-flt"))) { if ([].some.call(r.addedNodes, function (x) { return x.nodeType === 1 && x.querySelector && x.querySelector("th.cwfh"); })) { soon(); return; } continue; }
+      if (n.nodeType === 1 && n.closest && n.closest("table.cmSiteTbl")) { if ([].some.call(r.addedNodes, function (x) { return x.nodeType === 1 && (x.tagName === "THEAD" || (x.querySelector && x.querySelector("th.cwfh"))); })) { soon(); return; } continue; }
+      if ([].some.call(r.addedNodes, function (x) { return x.nodeType === 1 && (x.tagName === "TABLE" || x.tagName === "THEAD" || (x.querySelector && x.querySelector("table,th.cwfh"))); })) { soon(); return; }
+    }
+  }).observe(main, { childList: true, subtree: true });
+  var tries = 0; (function wait() { if (on()) return run(); if (++tries < 40) setTimeout(wait, 250); })();
+})();
 </script>
 </body>
 </html>
