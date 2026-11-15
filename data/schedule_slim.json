@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-15T05:12:54+00:00",
+  "generated": "2026-11-15T05:27:55+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -58,7 +58,7 @@
           "INSP",
           "UC"
         ],
-        "plan": "2026-11-28",
+        "plan": "2026-11-26",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -1245,6 +1245,24 @@
       "completed": ""
     },
     {
+      "wo": "WO-021977",
+      "equip": "DZ005",
+      "cls": "DOZ",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-29",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-11-29",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-021982",
       "equip": "DZ008",
       "cls": "DOZ",
@@ -1416,24 +1434,6 @@
       "raised": "2026-11-28",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-11-28",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
-      "wo": "WO-021979",
-      "equip": "DZ006",
-      "cls": "DOZ",
-      "comp": "",
-      "desc": "Filter Cut / General Inspection / Undercarriage",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-28",
-      "type": "2000 Hours service Planned",
-      "hours": 2000,
       "plan": "2026-11-28",
       "status": "Elimination scheduled",
       "request": "",
@@ -1713,6 +1713,24 @@
       "completed": ""
     },
     {
+      "wo": "WO-021979",
+      "equip": "DZ006",
+      "cls": "DOZ",
+      "comp": "",
+      "desc": "Filter Cut / General Inspection / Undercarriage",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-26",
+      "type": "2000 Hours service Planned",
+      "hours": 2000,
+      "plan": "2026-11-26",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-021985",
       "equip": "DZ011",
       "cls": "DOZ",
@@ -1867,24 +1885,6 @@
       "type": "3000 Hours service Planned",
       "hours": 3000,
       "plan": "2026-11-26",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
-      "wo": "WO-021977",
-      "equip": "DZ005",
-      "cls": "DOZ",
-      "comp": "",
-      "desc": "250h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-25",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-11-25",
       "status": "Elimination scheduled",
       "request": "",
       "defType": "",
@@ -11281,20 +11281,28 @@
       "x": "не работает насос подкачки"
     },
     {
-      "d": "DD-00016926",
-      "u": "GR002",
-      "s": "GR002.CH.BL (Blade / Отвал)",
-      "p": "P2",
-      "r": "2026-11-15",
-      "x": "Износ ножей отвала"
-    },
-    {
       "d": "DD-00016936",
       "u": "CR002",
       "s": "CR002.HS.CV (Control Valves / Гидрораспределители)",
       "p": "P2",
       "r": "2026-11-15",
       "x": "Заклинил гидрораспределитель"
+    },
+    {
+      "d": "DD-00016939",
+      "u": "EX007",
+      "s": "EX007.DRS.ENG (Engine / Двигатель)",
+      "p": "P2",
+      "r": "2026-11-15",
+      "x": "Доливка масла, смазки"
+    },
+    {
+      "d": "DD-00016926",
+      "u": "GR002",
+      "s": "GR002.CH.BL (Blade / Отвал)",
+      "p": "P2",
+      "r": "2026-11-15",
+      "x": "Износ ножей отвала"
     },
     {
       "d": "DD-00016925",
@@ -11369,20 +11377,20 @@
       "x": "Неисправность сигнального освещения - поворотов и заднего хода."
     },
     {
-      "d": "DD-00016915",
-      "u": "BS014",
-      "s": "BS014.OC.HE (Heating / Отопление)",
-      "p": "P2",
-      "r": "2026-11-15",
-      "x": "Отопитель салона дует холодным"
-    },
-    {
       "d": "DD-00016906",
       "u": "TK143",
       "s": "TK143.DRS.AXL (Axles / Мосты)",
       "p": "P2",
       "r": "2026-11-15",
       "x": "Обрыв крестовины привода"
+    },
+    {
+      "d": "DD-00016915",
+      "u": "BS014",
+      "s": "BS014.OC.HE (Heating / Отопление)",
+      "p": "P2",
+      "r": "2026-11-15",
+      "x": "Отопитель салона дует холодным"
     },
     {
       "d": "DD-00016933",
@@ -11401,20 +11409,20 @@
       "x": "Не работает автономный отопитель в кабине."
     },
     {
+      "d": "DD-00016932",
+      "u": "GE054",
+      "s": "GE054.ELS.WH (Wiring Harness / Жгут проводов)",
+      "p": "P2",
+      "r": "2026-11-15",
+      "x": "Замена аккумулятора"
+    },
+    {
       "d": "DD-00016938",
       "u": "TK097",
       "s": "TRUCK, WATER URAL 4672M1-20, TK097 ENGINE OldNumber (UT097)",
       "p": "P2",
       "r": "2026-11-15",
       "x": "Запуск ДВС"
-    },
-    {
-      "d": "DD-00016932",
-      "u": "GE054",
-      "s": "GE054 ED320-T400-2RN",
-      "p": "P2",
-      "r": "2026-11-15",
-      "x": "Замена аккумулятора"
     },
     {
       "d": "DD-00016849",
@@ -41625,6 +41633,14 @@
       "x": "Отсутсвует ремень кондиционера"
     },
     {
+      "d": "DD-00013458",
+      "u": "DZ007",
+      "s": "DZ007.OC.FS (Fire Suppression / Система пожаротушения)",
+      "p": "P4",
+      "r": "2026-09-26",
+      "x": "Требуется установка кронштейнов для огнетушителя"
+    },
+    {
       "d": "DD-00013469",
       "u": "LV041",
       "s": "LV041.OC.GL (Glass / Стекла)",
@@ -41735,14 +41751,6 @@
       "p": "P4",
       "r": "2026-09-26",
       "x": "Отсутсвует левое зеркало заднего вида"
-    },
-    {
-      "d": "DD-00013458",
-      "u": "DZ007",
-      "s": "DZ007.OC.FS (Fire Suppression / Система пожаротушения)",
-      "p": "P4",
-      "r": "2026-09-26",
-      "x": "Требуется установка кронштейнов для огнетушителя"
     },
     {
       "d": "DD-00013333",

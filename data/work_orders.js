@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-15T05:12:54+00:00",
+  "generated": "2026-11-15T05:27:55+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -6067,19 +6067,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "GR002",
-      "defect": "DD-00016926",
-      "raised": "2026-11-15",
-      "system": "GR002.CH.BL (Blade / Отвал)",
-      "defectType": "2.06 Abrasive wear / Абразивный износ",
-      "descr": "Износ ножей отвала",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": "WO-022587"
-    },
-    {
       "asset": "CR002",
       "defect": "DD-00016936",
       "raised": "2026-11-15",
@@ -6091,6 +6078,32 @@ window.CM_WO_DATA = {
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": "WO-022595"
+    },
+    {
+      "asset": "EX007",
+      "defect": "DD-00016939",
+      "raised": "2026-11-15",
+      "system": "EX007.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Доливка масла, смазки",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022600"
+    },
+    {
+      "asset": "GR002",
+      "defect": "DD-00016926",
+      "raised": "2026-11-15",
+      "system": "GR002.CH.BL (Blade / Отвал)",
+      "defectType": "2.06 Abrasive wear / Абразивный износ",
+      "descr": "Износ ножей отвала",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-022587"
     },
     {
       "asset": "TK096",
@@ -6210,19 +6223,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022574"
     },
     {
-      "asset": "BS014",
-      "defect": "DD-00016915",
-      "raised": "2026-11-15",
-      "system": "BS014.OC.HE (Heating / Отопление)",
-      "defectType": "1.20 Slow response / sluggish operation / Медленная реакция / вялая работа",
-      "descr": "Отопитель салона дует холодным",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022576"
-    },
-    {
       "asset": "TK143",
       "defect": "DD-00016906",
       "raised": "2026-11-15",
@@ -6234,6 +6234,19 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022567"
+    },
+    {
+      "asset": "BS014",
+      "defect": "DD-00016915",
+      "raised": "2026-11-15",
+      "system": "BS014.OC.HE (Heating / Отопление)",
+      "defectType": "1.20 Slow response / sluggish operation / Медленная реакция / вялая работа",
+      "descr": "Отопитель салона дует холодным",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022576"
     },
     {
       "asset": "TK003",
@@ -6262,6 +6275,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022581"
     },
     {
+      "asset": "GE054",
+      "defect": "DD-00016932",
+      "raised": "2026-11-15",
+      "system": "GE054.ELS.WH (Wiring Harness / Жгут проводов)",
+      "defectType": "4.01 Short circuiting / Короткое замыкание",
+      "descr": "Замена аккумулятора",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022588"
+    },
+    {
       "asset": "TK097",
       "defect": "DD-00016938",
       "raised": "2026-11-15",
@@ -6273,19 +6299,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022599"
-    },
-    {
-      "asset": "GE054",
-      "defect": "DD-00016932",
-      "raised": "2026-11-15",
-      "system": "GE054 ED320-T400-2RN",
-      "defectType": "4.01 Short circuiting / Короткое замыкание",
-      "descr": "Замена аккумулятора",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022588"
     },
     {
       "asset": "EX023",
@@ -47680,6 +47693,19 @@ window.CM_WO_DATA = {
       "wo": "WO-018350"
     },
     {
+      "asset": "DZ007",
+      "defect": "DD-00013458",
+      "raised": "2026-09-26",
+      "system": "DZ007.OC.FS (Fire Suppression / Система пожаротушения)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Требуется установка кронштейнов для огнетушителя",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": "WO-018291"
+    },
+    {
       "asset": "TK037",
       "defect": "DD-00013477",
       "raised": "2026-09-26",
@@ -48445,19 +48471,6 @@ window.CM_WO_DATA = {
       "by": "Pavel Kostin",
       "regBy": "Костин Павел Александрович",
       "wo": "WO-018306"
-    },
-    {
-      "asset": "DZ007",
-      "defect": "DD-00013458",
-      "raised": "2026-09-26",
-      "system": "DZ007.OC.FS (Fire Suppression / Система пожаротушения)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Требуется установка кронштейнов для огнетушителя",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Pavel Kostin",
-      "regBy": "Костин Павел Александрович",
-      "wo": "WO-018291"
     },
     {
       "asset": "LD003",
@@ -96970,9 +96983,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-25",
-      "planStartDt": "2026-11-25T00:00:00",
-      "planEnd": "2026-11-25",
+      "planStart": "2026-11-29",
+      "planStartDt": "2026-11-29T00:00:00",
+      "planEnd": "2026-11-29",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -98033,9 +98046,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-28",
-      "planStartDt": "2026-11-28T00:00:00",
-      "planEnd": "2026-11-29",
+      "planStart": "2026-11-26",
+      "planStartDt": "2026-11-26T00:00:00",
+      "planEnd": "2026-11-27",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
