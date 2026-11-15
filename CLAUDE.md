@@ -5625,6 +5625,23 @@ for its 1C defect, the CM-field rule being `actionStateOld` (`actdef`); history 
 register count is the page's own after carry / clear (`scale`); five rows on the old/new card (`cmflow`); a toolbar between
 two cards is not a gap (`dashlayout`); Data & Sync may be 2.2 screens until the compare card goes on 23.11 (`phase5`).
 
+**EVERY CM LIST TABLE IS ON THE SITE'S OWN TABLE COMPONENT UNDER /cm/ (build 634, CM_SITETBL_V1, Rickie 16.11.2026 06:31 "the table
+in cm are not standard UI still. and i want the all pages to match"; mock-up "Go, all tables", "32 px like the site").** The CM
+pages had their own look-alike kit (text box per column, 44 px on dashboard-next, their own Columns, freeze and slider); every
+other site page uses `SiteStd.table` (site_std v2.11+, KB UI_STANDARD §22-24). `#cmSiteTblJs` (end of both pages, identical) hands
+seven tables to it when `/site/std.js` is there: `#fleetTbl`, `table.acttbl`, `table.ddtbl`, `table.patbl`, `table.cwtbl`,
+`table.histtbl`, `#failAffTbl` (`CFG` in the block). Each gets the template's filter row (tick list for a short list of values,
+32 px), "N of M lines" + Clear filters, drag widths, ⚙ Columns (show / hide, arrange, row height, freeze), the frozen identifier
+column and held slider, and the status colour on the row (Actions, Plan vs Actual, Defects raised). The page keeps its own sort
+(`sf:{sort:false}`); the block marks the sorted heading `aria-sort` and only that heading shows its arrow. What stands down for
+these tables (class `cmSiteTbl`): the page's own filter row (`th.cwfh`, removed after every redraw), its Columns pickers
+(`#actCols`, the fleet `.colsmenu`; every column is drawn and the fleet's default-hidden ones become the template's `def.h`),
+`cmTblStd`'s Columns bar, freeze and slider, `cmHeld` (the template holds them, `std-hold`). Their lists draw every line
+(`paged()` gives `PAGE_ALL` to `cmSiteTblKeys`), so a filter counts the whole list. One config per table for the page's life
+(`CFGS`): a redraw or a replaced table keeps its filters, widths and order. Off the site nothing runs. `tests/site_std_copy` is
+the live template now (v2.14, from askpi-site main). `tests/sitetbl.cjs` checks both pages, every table, EN and RU, and that off
+the site the page keeps its own row.
+
 ---
 
 ## Secrets

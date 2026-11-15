@@ -61,6 +61,7 @@ table.std-tbl tr.std-cut>td:last-child{box-shadow:inset -3px 0 0 #9fb0bf}
  .std-t,.std-seg button,.std-btn,.std-chip{min-height:44px}.std-seg{min-height:44px}.std-seg button{min-width:48px}
  .std-ii{width:44px;height:44px;margin:-13px -12px -13px -8px}
  .std-band h1.std-h1{font-size:21px}.std-band .std-in{padding:10px 16px 12px}.std-nav .std-in{padding:8px 16px}
+ .std-band{overflow-x:clip}   /* v2.13: the side strip bleeds 16 px into the gutter; a page with a narrower gutter (CM office pages, 12 px) slid 4 px sideways (table scan 14.11) */
  .std-side{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;width:calc(100% + 32px);margin:0 -16px;padding:0 16px}.std-side::-webkit-scrollbar{display:none}.std-side .std-seg{order:-1;flex:none}
  .std-colpop label{min-height:44px}}
 @media print{.std-nav,.std-tools,.std-ii{display:none!important}.std-band{background:#fff!important;color:#000}.std-band h1.std-h1{color:#000;-webkit-text-fill-color:#000}.std-band::before{display:none}}
@@ -68,7 +69,7 @@ table.std-tbl tr.std-cut>td:last-child{box-shadow:inset -3px 0 0 #9fb0bf}
 /* a page that pins its own bar at the top keeps it there; the menu then scrolls with the page */
 .std-nav.std-nav-free{position:relative}
 table.std-hold thead th{position:relative;z-index:3;will-change:transform}
-table.std-held thead th{box-shadow:0 2px 4px rgba(16,24,32,.12)}
+table.std-held thead th{box-shadow:0 2px 4px rgba(16,24,32,.12);opacity:1!important}   /* v2.7: a held heading is never see-through */
 @media print{.std-nav{position:static}table.std-hold thead th{transform:none!important;box-shadow:none}}
 /* v1.2: sub-tabs - the pages under one menu button, on a thin second row */
 .std-sub{position:sticky;top:var(--std-navh,0px);z-index:59;border-bottom:1px solid var(--std-line);background:var(--std-bg)}.std-sub[hidden]{display:none}.std-sub.std-nav-free{position:relative;top:auto}
@@ -126,3 +127,72 @@ html:not([data-std]) body{visibility:hidden;animation:stdReveal 0s linear 2.5s f
 .std-subpop a:hover,.std-subpop a:focus-visible{background:var(--std-soft,#f1f4f7);outline:none}.std-subpop a.on{color:var(--std-navy);font-weight:600;background:#e8eef5}
 @media (max-width:600px){.std-subpop a{min-height:44px}}
 @media print{.std-subpop{display:none}}
+/* v1.9 (Rickie 05.11.2026 12:20 "adjust to any monitor or laptop"): ONE page column. The menu row, the title band, the sub-menu and the
+   footer use the same column as the page's content: the screen width minus a gutter (24 px; 20 px under 1280; 16 px on a phone), with no
+   cap, like the pages' own content (Assets Down, Work Order Manager, Action Tracker fill the screen). Before: 1440 px centred, so on a 1920 / 2560 screen the title sat 240-560 px right of the cards. A
+   document page keeps a reading column (Weekly report: 1440 px of content). */
+:root{--std-col:none;--std-gut:24px}
+@media (max-width:1279px){:root{--std-gut:20px}}
+@media (max-width:600px){:root{--std-gut:16px}}
+html[data-std-sub="wr"]{--std-col:1440px}
+.std-nav>.std-in,.std-band>.std-in,.std-sub>.std-in{max-width:var(--std-col);padding-left:var(--std-gut);padding-right:var(--std-gut)}
+.std-foot-site{max-width:var(--std-col);padding-left:var(--std-gut);padding-right:var(--std-gut)}
+/* v2.0 SITE_TBL_V1 - the table standard (KB UI_STANDARD §22): navy headings that sort, a filter row under them, both stay under the menu */
+table.std-sf thead th{position:sticky;z-index:3}table.std-sf.std-hold thead th{position:relative}
+table.std-sfnv thead tr:not(.std-flt) th{background:#2B4C7E;color:#fff;border-color:#3d5f93}
+table.std-sf thead th.std-sk{cursor:pointer;user-select:none}table.std-sfnv thead th.std-sk:hover{background:#355b92}table.std-sf thead th.std-sk:focus-visible{outline:2px solid #e8a33d;outline-offset:-2px}
+table.std-sf th .std-so{font-size:11px;margin-left:4px}
+table.std-sf thead tr.std-flt th{background:#eef2f6;padding:4px;border-bottom:1px solid #d5dae0;text-transform:none;letter-spacing:0;font-weight:400}
+table.std-sf .std-sfx,table.std-sf .std-sfb{box-sizing:border-box;width:100%;min-height:32px;border:1px solid #c9d1d9;border-radius:6px;background:#fff;color:#16212a;font:400 12px/1.2 "IBM Plex Sans",system-ui,sans-serif;padding:4px 8px;text-align:left}
+table.std-sf .std-sfb{display:flex;align-items:center;gap:4px;cursor:pointer}table.std-sf .std-sfb span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}table.std-sf .std-sfb i{font-style:normal;color:#5b6670}
+table.std-sf .std-sfx::placeholder{color:#5b6670}
+table.std-sf .std-sfx.on,table.std-sf .std-sfb.on{background:#fff4d6;border-color:#d99a00;font-weight:600}
+table.std-sf tr.std-sfh{display:none!important}
+.std-sfn{display:inline-flex;align-items:center;gap:8px;margin-right:auto;font-size:13px;color:#16212a}.std-sfn:empty{display:none}.std-sfn b{font-variant-numeric:tabular-nums}
+.std-sfpop .std-pki em{margin-left:auto;padding-left:12px;font-style:normal;color:#5b6670;font-variant-numeric:tabular-nums}
+@media (prefers-color-scheme:dark){html:not([data-theme=light]) table.std-sf thead tr.std-flt th{background:#1d2833;border-color:#2c3a47}html:not([data-theme=light]) table.std-sf .std-sfx,html:not([data-theme=light]) table.std-sf .std-sfb{background:#17202a;color:#e6edf3;border-color:#2c3a47}html:not([data-theme=light]) table.std-sf .std-sfx.on,html:not([data-theme=light]) table.std-sf .std-sfb.on{background:#4a3a10;color:#fff;border-color:#d99a00}html:not([data-theme=light]) .std-sfn{color:#e6edf3}}
+html[data-theme=dark] table.std-sf thead tr.std-flt th{background:#1d2833;border-color:#2c3a47}html[data-theme=dark] table.std-sf .std-sfx,html[data-theme=dark] table.std-sf .std-sfb{background:#17202a;color:#e6edf3;border-color:#2c3a47}html[data-theme=dark] table.std-sf .std-sfx.on,html[data-theme=dark] table.std-sf .std-sfb.on{background:#4a3a10;color:#fff;border-color:#d99a00}html[data-theme=dark] .std-sfn{color:#e6edf3}
+@media print{table.std-sf thead tr.std-flt,.std-sfn{display:none!important}}
+@media (max-width:600px){table.std-sf .std-sfx,table.std-sf .std-sfb{min-height:44px;padding:4px 6px}}
+/* v2.4 SITE_TBL_V1: column widths by dragging a heading edge */
+table.std-rzt thead th .std-rz{position:absolute;top:0;right:0;bottom:0;width:8px;cursor:col-resize;z-index:5;touch-action:none}
+table.std-rzt thead th .std-rz::after{content:"";position:absolute;top:22%;bottom:22%;right:0;width:1px;background:currentColor;opacity:.28}
+table.std-rzt thead th:hover .std-rz::after,html.std-rzing .std-rz::after{opacity:.75}
+html.std-rzing,html.std-rzing *{cursor:col-resize!important;user-select:none!important}
+table.std-rzf td,table.std-rzf th{overflow:hidden;overflow-wrap:break-word}table.std-rzf>thead>tr>th,table.std-rzf>colgroup>col{box-sizing:border-box}
+@media (max-width:640px){table.std-rzt thead th .std-rz{display:none}}
+@media print{table.std-rzt .std-rz{display:none}}
+/* v2.9 COL_ORDER_V1: the Columns menu arranges the columns (a table with ord:true) */
+.std-colpop .std-co{list-style:none;margin:0 0 4px;padding:0}.std-colpop .std-co li{display:flex;align-items:center;gap:6px;border-bottom:1px solid var(--std-line,#eef1f4)}
+.std-colpop .std-co li[draggable]{cursor:grab}.std-colpop .std-co li.std-drag{opacity:.45}.std-colpop .std-co li.std-over{box-shadow:inset 0 2px 0 var(--std-acc,#2B4C7E)}
+.std-colpop .std-co label{flex:1;min-width:0}.std-colpop .std-grip{flex:none;width:18px;text-align:center;color:var(--std-mut,#5b6670)}
+.std-colpop .std-co .std-mv{flex:none;min-width:30px;min-height:30px;padding:0;font-size:14px}
+@media (max-width:760px){.std-colpop .std-co .std-mv{min-width:44px;min-height:44px}}
+.std-colpop:has(.std-co){width:330px}
+/* v2.11 TBL_WIDE_V1 (KB UI_STANDARD §23): frozen columns, the slider held in reach, status colour on the row */
+table.std-fzon td.std-fz,table.std-fzon th.std-fz{position:sticky;z-index:2}
+table.std-fzon thead th.std-fz,table.std-fzon.std-hold thead th.std-fz,table.std-fzon.std-sf thead th.std-fz,table.std-fzon.std-sf.std-hold thead th.std-fz{position:sticky;z-index:5}
+table.std-fzon th.std-fzl,table.std-fzon td.std-fzl{border-right:2px solid #2B4C7E!important;box-shadow:3px 0 4px -2px #16304f40}
+table.std-fzon thead th:not(.std-fz){position:relative}
+table.std-fzon thead th .std-pin{position:absolute;left:0;top:0;width:32px;height:32px;padding:0 0 12px 0;margin:0;border:0;background:none;color:#fff;font-family:inherit;font-size:12px;line-height:1;text-align:left;text-indent:3px;cursor:pointer;opacity:0;filter:grayscale(1) brightness(3)}
+table.std-fzon thead th:hover .std-pin,table.std-fzon thead th .std-pin:focus-visible{opacity:.8}table.std-fzon thead th .std-pin.on{opacity:1;filter:none}
+@media (max-width:700px){table.std-fzon thead th .std-pin{display:none}}
+.std-colpop select.std-fzs{width:100%;min-height:32px;font:inherit;font-size:12.5px;border:1px solid var(--std-line,#dde2e6);border-radius:8px;padding:2px 6px;background:var(--std-bg,#fff);color:var(--std-ink,#1d2a33)}
+.std-hs{position:fixed;bottom:0;z-index:900;height:32px;display:flex;align-items:center;gap:4px;padding:0 4px;box-sizing:border-box;background:#e6ebf1;border:1px solid #b9c4d0;border-bottom:0;border-radius:8px 8px 0 0;box-shadow:0 -2px 8px #0000002e}
+.std-hs[hidden]{display:none}
+.std-hs button{flex:none;width:32px;height:28px;border:0;border-radius:6px;background:#2B4C7E;color:#fff;font-family:inherit;font-size:12px;line-height:1;cursor:pointer;padding:0}.std-hs button:hover{background:#16304F}
+.std-hstr{flex:1;height:14px;position:relative;background:#cfd8e3;border-radius:7px;cursor:pointer;touch-action:none}
+.std-hstb{position:absolute;top:0;bottom:0;min-width:36px;background:#2B4C7E;border-radius:7px;cursor:grab}.std-hstb:hover,.std-hs.std-drag .std-hstb{background:#16304F}.std-hs.std-drag .std-hstb{cursor:grabbing}
+@media (max-width:700px){.std-hs{height:44px}.std-hs button{width:44px;height:40px}}
+table.std-stt tbody tr.std-st-done>td{background-color:#edf8f0}table.std-stt tbody tr.std-st-done:hover>td{background-color:#dff1e5}
+table.std-stt tbody tr.std-st-void>td{background-color:#eeeff1;color:#5f6870}table.std-stt tbody tr.std-st-void:hover>td{background-color:#e3e5e8}
+table.std-stt tbody tr.std-st-draft>td{background-color:#f3f6fb}table.std-stt tbody tr.std-st-draft:hover>td{background-color:#e8eef7}
+table.std-stt tbody tr.std-st-late>td{background-color:#fde2e1}table.std-stt tbody tr.std-st-late:hover>td{background-color:#f9d2d0}
+table.std-stt tbody tr.std-st-done>td:first-child{box-shadow:inset 5px 0 0 #2e9e5b}table.std-stt tbody tr.std-st-open>td:first-child{box-shadow:inset 5px 0 0 #f0a51c}
+table.std-stt tbody tr.std-st-void>td:first-child{box-shadow:inset 5px 0 0 #9aa3ab;text-decoration:line-through}table.std-stt tbody tr.std-st-draft>td:first-child{box-shadow:inset 5px 0 0 #5b7fb5}
+table.std-stt tbody tr.std-st-late>td:first-child{box-shadow:inset 5px 0 0 #b42318}
+table.std-stt.std-stfill tbody tr.std-st-done>td:first-child{background-color:#2e9e5b;color:#fff;font-weight:700}table.std-stt.std-stfill tbody tr.std-st-open>td:first-child{background-color:#f0a51c;color:#3d2a00;font-weight:700}
+table.std-stt.std-stfill tbody tr.std-st-void>td:first-child{background-color:#9aa3ab;color:#fff;font-weight:700}table.std-stt.std-stfill tbody tr.std-st-draft>td:first-child{background-color:#5b7fb5;color:#fff;font-weight:700}
+table.std-stt.std-stfill tbody tr.std-st-late>td:first-child{background-color:#b42318;color:#fff;font-weight:700}
+.std-dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;vertical-align:-1px}.std-dot.done{background:#2e9e5b}.std-dot.open{background:#f0a51c}.std-dot.void{background:#9aa3ab}.std-dot.draft{background:#5b7fb5}.std-dot.late{background:#b42318}
+@media print{.std-hs,table.std-fzon thead th .std-pin{display:none}table.std-fzon td.std-fz,table.std-fzon th.std-fz{position:static}}
