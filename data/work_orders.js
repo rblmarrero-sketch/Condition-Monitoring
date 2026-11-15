@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-15T17:07:46+00:00",
+  "generated": "2026-11-15T17:22:36+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -5924,17 +5924,17 @@ window.CM_WO_DATA = {
       "wo": "WO-022622"
     },
     {
-      "asset": "TK010",
-      "defect": "DD-00016969",
+      "asset": "TK097",
+      "defect": "DD-00016970",
       "raised": "2026-11-16",
-      "system": "TK010.OC.HE (Heating / Отопление)",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Не работает ПЖД.",
-      "status": "Registered",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK097 FRAME OldNumber (UT097)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Излом резьбового соединения балки рамы",
+      "status": "Elimination scheduled",
       "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": null
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022626"
     },
     {
       "asset": "TK167",
@@ -5961,6 +5961,19 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-022623"
+    },
+    {
+      "asset": "TK010",
+      "defect": "DD-00016969",
+      "raised": "2026-11-16",
+      "system": "TK010.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Не работает ПЖД.",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022625"
     },
     {
       "asset": "EX001",
@@ -13009,6 +13022,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "CR006",
+      "defect": "DD-00016421",
+      "raised": "2026-11-06",
+      "system": "CR006.CH.CV (Conveyor / Конвейер)",
+      "defectType": "1.10 Rupture / Burst / Разрыв",
+      "descr": "Ремонт стыка конвейерной ленты главного конвейера",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Rinat Musaferov",
+      "regBy": "Мусаферов Ринат Искакович",
+      "wo": "WO-021850"
+    },
+    {
       "asset": "TK089",
       "defect": "DD-00016437",
       "raised": "2026-11-06",
@@ -13124,19 +13150,6 @@ window.CM_WO_DATA = {
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": "WO-022381"
-    },
-    {
-      "asset": "CR006",
-      "defect": "DD-00016421",
-      "raised": "2026-11-06",
-      "system": "CR006.CH.CV (Conveyor / Конвейер)",
-      "defectType": "1.10 Rupture / Burst / Разрыв",
-      "descr": "Ремонт стыка конвейерной ленты главного конвейера",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Rinat Musaferov",
-      "regBy": "Мусаферов Ринат Искакович",
-      "wo": "WO-021850"
     },
     {
       "asset": "SN001",
@@ -18755,6 +18768,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021487"
     },
     {
+      "asset": "CR008",
+      "defect": "DD-00015977",
+      "raised": "2026-10-30",
+      "system": "CR008.LS (Lubrication System / Система смазки)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "каплевидная утечка смазки конуса по фитингу",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-021262"
+    },
+    {
       "asset": "DZ018",
       "defect": "DD-00015945",
       "raised": "2026-10-30",
@@ -19039,19 +19065,6 @@ window.CM_WO_DATA = {
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": "WO-021271"
-    },
-    {
-      "asset": "CR008",
-      "defect": "DD-00015977",
-      "raised": "2026-10-30",
-      "system": "CR008.LS (Lubrication System / Система смазки)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "каплевидная утечка смазки конуса по фитингу",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": "WO-021262"
     },
     {
       "asset": "TK123",
@@ -41583,12 +41596,12 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "LV158",
-      "defect": "DD-00014121",
+      "asset": "TK162",
+      "defect": "DD-00014083",
       "raised": "2026-10-05",
-      "system": "LV158.CH.SU (Suspension / Подвеска)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Требуется замена нижних и верхних шаровых опор, замена втулок и стоек стабилизатора",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK162 TRANSMISSION OldNumber (UT162)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка масла с РК",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -41596,12 +41609,12 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK162",
-      "defect": "DD-00014083",
+      "asset": "LV158",
+      "defect": "DD-00014121",
       "raised": "2026-10-05",
-      "system": "TRUCK, WATER URAL 4672M1-20, TK162 TRANSMISSION OldNumber (UT162)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка масла с РК",
+      "system": "LV158.CH.SU (Suspension / Подвеска)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Требуется замена нижних и верхних шаровых опор, замена втулок и стоек стабилизатора",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
