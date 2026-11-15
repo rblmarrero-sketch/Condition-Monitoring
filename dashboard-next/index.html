@@ -5202,23 +5202,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=635"></script>
+<script src="../data/magnetic_plug.js?v=636"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=635"></script>
-<script src="../mobile/hme.js?v=635"></script>
-<script src="../mobile/mp-fc.js?v=635"></script>
-<script src="../mobile/rtw.js?v=635"></script>
-<script src="../mobile/hme-cascade.js?v=635"></script>
-<script src="../mobile/temp-limits.js?v=635"></script>
+<script src="../data/work_orders.js?v=636"></script>
+<script src="../mobile/hme.js?v=636"></script>
+<script src="../mobile/mp-fc.js?v=636"></script>
+<script src="../mobile/rtw.js?v=636"></script>
+<script src="../mobile/hme-cascade.js?v=636"></script>
+<script src="../mobile/temp-limits.js?v=636"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=635"></script>
-<script src="../mobile/normalize.js?v=635"></script>
-<script src="../mobile/terms.js?v=635"></script>
+<script src="../mobile/assets.js?v=636"></script>
+<script src="../mobile/normalize.js?v=636"></script>
+<script src="../mobile/terms.js?v=636"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -5237,22 +5237,22 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=635"></script>
-<script src="../mobile/edits.js?v=635"></script>
-<script src="../mobile/due.js?v=635"></script>
-<script src="../dashboard/cm-flow.js?v=635"></script>
-<script src="../mobile/wear.js?v=635"></script>
-<script src="../mobile/wear-map.js?v=635"></script>
-<script src="../mobile/lube.js?v=635"></script>
-<script src="../mobile/lube-overrides.js?v=635"></script>
-<script src="../mobile/lube2027.js?v=635"></script>
-<script src="../mobile/lube-tds.js?v=635"></script>
-<script src="../dashboard/lube-master.js?v=635"></script>
-<script src="../dashboard/wear-limits.js?v=635"></script>
+<script src="../mobile/grade.js?v=636"></script>
+<script src="../mobile/edits.js?v=636"></script>
+<script src="../mobile/due.js?v=636"></script>
+<script src="../dashboard/cm-flow.js?v=636"></script>
+<script src="../mobile/wear.js?v=636"></script>
+<script src="../mobile/wear-map.js?v=636"></script>
+<script src="../mobile/lube.js?v=636"></script>
+<script src="../mobile/lube-overrides.js?v=636"></script>
+<script src="../mobile/lube2027.js?v=636"></script>
+<script src="../mobile/lube-tds.js?v=636"></script>
+<script src="../dashboard/lube-master.js?v=636"></script>
+<script src="../dashboard/wear-limits.js?v=636"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=635"></script>
-<script src="../mobile/machine-photos.js?v=635"></script>
+<script src="../mobile/upload-defaults.js?v=636"></script>
+<script src="../mobile/machine-photos.js?v=636"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -5261,17 +5261,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=635"></script>
-<script src="../mobile/get.js?v=635"></script>
-<script src="../mobile/points.js?v=635"></script>
-<script src="../mobile/uc-points.js?v=635"></script>
-<script src="../mobile/inspect-guide.js?v=635"></script>
-<script src="../mobile/get-figs.js?v=635"></script>
-<script src="../mobile/body-points.js?v=635"></script>
-<script src="../mobile/body-map.js?v=635"></script>
-<script src="../mobile/jspdf.umd.min.js?v=635"></script>
-<script src="../mobile/html2canvas.min.js?v=635"></script>
-<script src="../mobile/report-core.js?v=635"></script>
+<script src="../mobile/machine-fig.js?v=636"></script>
+<script src="../mobile/get.js?v=636"></script>
+<script src="../mobile/points.js?v=636"></script>
+<script src="../mobile/uc-points.js?v=636"></script>
+<script src="../mobile/inspect-guide.js?v=636"></script>
+<script src="../mobile/get-figs.js?v=636"></script>
+<script src="../mobile/body-points.js?v=636"></script>
+<script src="../mobile/body-map.js?v=636"></script>
+<script src="../mobile/jspdf.umd.min.js?v=636"></script>
+<script src="../mobile/html2canvas.min.js?v=636"></script>
+<script src="../mobile/report-core.js?v=636"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -22053,11 +22053,11 @@ document.querySelector(".lang").addEventListener("click",e=>{
   setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 })();
 </script>
-<script src="../dashboard/drive.js?v=635"></script>
-<script src="../dashboard/sync-adapter.js?v=635"></script>
-<script src="../dashboard/report.js?v=635"></script>
-<script src="../dashboard/reliability.js?v=635"></script>
-<script src="../dashboard/day-summary.js?v=635"></script>
+<script src="../dashboard/drive.js?v=636"></script>
+<script src="../dashboard/sync-adapter.js?v=636"></script>
+<script src="../dashboard/report.js?v=636"></script>
+<script src="../dashboard/reliability.js?v=636"></script>
+<script src="../dashboard/day-summary.js?v=636"></script>
 <script>
 /* THE CLOSED FILTER SAYS WHAT IS CHOSEN. A dropdown narrower than its option
    text ellipsises ("All t…", audit of 2026-10-01). Between 1331 and 1500 px
@@ -22260,6 +22260,43 @@ document.querySelector(".lang").addEventListener("click",e=>{
       var l=on?offs[c]+"px":""; if(td.style.left!==l) td.style.left=l; var e=on&&c===n-1; if(td.classList.contains("cmfzE")!==e) td.classList.toggle("cmfzE",e); });
   }
   function unfreeze(t){ t.querySelectorAll(".cmfz").forEach(function(td){ td.classList.remove("cmfz","cmfzE"); td.style.left=""; }); }
+  /* CM_TBLROOM_V1 (Rickie 16.11.2026 "still seeing old ... no freeze, horizontal"): every table drew its own columns to fit
+     the box exactly and cut the text with an ellipsis, so nothing was ever wider than its box and the standard never slid or
+     froze anything. On a desk a long table first gets columns wide enough for their own text (one line up to ROOM_CAP, the
+     heading's longest word), never narrower than they were drawn; if that is wider than the box it slides, with the row's
+     name frozen. Equipment History's visit tables share one set of columns on purpose and keep it. tests/tblroom.cjs */
+  var ROOM_CAP=340, ROOM_SKIP="#covTbl,table.pawk,#paWeek table,table.scorecard,table.histtbl,table[class*=lmx-]", cvs=null;
+  function textW(s,font){ if(!cvs) cvs=document.createElement("canvas"); var x=cvs.getContext("2d"); x.font=font; return x.measureText(s).width; }
+  function room(t,labs){
+    if(innerWidth<=900||t.classList.contains("ascards")||t.matches(ROOM_SKIP)||labs.filter(Boolean).length<5) return;
+    var body=t.tBodies[0]; if(!body||body.rows.length<3) return;
+    var h=headRow(t); if(!h) return;
+    var cols=[].slice.call(t.querySelectorAll(":scope>colgroup>col")), n=labs.length, need=[], cur=[];
+    /* what each column is drawn at now, read off the heading */
+    var c0=0; [].slice.call(h.cells).forEach(function(th){ var w=th.getBoundingClientRect().width/(th.colSpan||1); for(var i=0;i<(th.colSpan||1);i++) cur[c0+i]=w; c0+=th.colSpan||1; });
+    for(var i=0;i<n;i++) need[i]=cur[i]||0;
+    /* the heading: its longest word must fit (it may take two lines) */
+    c0=0; [].slice.call(h.cells).forEach(function(th){ if((th.colSpan||1)===1&&!th.classList.contains("cmcolh")){ var cs=getComputedStyle(th), pad=parseFloat(cs.paddingLeft)+parseFloat(cs.paddingRight)+20,
+        txt=LAB(th), up=cs.textTransform==="uppercase"?txt.toUpperCase():txt, words=up.split(/\s+/), lw=0;
+        words.forEach(function(w){ lw=Math.max(lw,textW(w,cs.font)); }); var full=textW(up,cs.font);
+        need[c0]=Math.max(need[c0],Math.min(ROOM_CAP,Math.max(lw,full/2))+pad); } c0+=th.colSpan||1; });
+    /* the cells: one line of their own text, up to ROOM_CAP */
+    var fonts={}, rows=[].slice.call(body.rows,0,300);
+    rows.forEach(function(tr){ if(tr.cells.length===1&&tr.cells[0].colSpan>1) return; var c=0;
+      [].slice.call(tr.cells).forEach(function(td){ var sp=td.colSpan||1;
+        if(sp===1&&!td.classList.contains("cmcolh")&&!td.querySelector("button,input,select,textarea")){
+          var s=(td.textContent||"").replace(/\s+/g," ").trim();
+          if(s){ var f=fonts[c]; if(!f){ var el=td.querySelector("b,strong,.mono,code,span")||td, cs=getComputedStyle(el), ct=getComputedStyle(td);
+              f=fonts[c]={font:cs.font,pad:parseFloat(ct.paddingLeft)+parseFloat(ct.paddingRight)+6}; }
+            need[c]=Math.max(need[c],Math.min(ROOM_CAP,textW(s,f.font))+f.pad); } }
+        c+=sp; }); });
+    var sum=0; for(i=0;i<n;i++){ var hid=cols[i]&&cols[i].style.display==="none"; if(!hid) sum+=Math.ceil(need[i]); }
+    var bx=t.closest(".tblwrap")||t.parentElement, avail=bx?bx.clientWidth:0;
+    if(!avail||sum<=avail+1){ if(t.dataset.cmroom){ t.style.width=""; t.style.minWidth=""; delete t.dataset.cmroom; } return; }
+    if(cols.length>=n) cols.forEach(function(col,i){ if(i<n){ var w=Math.ceil(need[i])+"px"; if(col.style.width!==w) col.style.width=w; } });
+    else { c0=0; [].slice.call(h.cells).forEach(function(th){ if((th.colSpan||1)===1){ var w=Math.ceil(need[c0])+"px"; if(th.style.width!==w){ th.style.width=w; th.style.minWidth=w; } } c0+=th.colSpan||1; }); }
+    t.style.tableLayout="fixed"; t.style.width=sum+"px"; t.style.minWidth=sum+"px"; t.style.maxWidth="none"; t.dataset.cmroom="1";
+  }
   /* the held slider */
   var hs=null, cur=null;
   function slider(){
@@ -22287,6 +22324,7 @@ document.querySelector(".lang").addEventListener("click",e=>{
         var labs=labels(t), rows=t.tBodies[0]?t.tBodies[0].rows.length:0;
         var sec=t.closest(".section"), own=t.matches(OWN)&&!!(sec&&[].slice.call(sec.querySelectorAll("button,summary")).some(function(x){ return !x.closest(".cmcolbar")&&/^\s*(columns|столбцы)/i.test(x.textContent); }));
         if(!own&&!t.matches("#covTbl,table.pawk,#paWeek table,table.scorecard")&&labs.filter(Boolean).length>=5&&rows>=3&&!t.classList.contains("ascards")) menu(t,keyOf(t),labs);
+        try{ room(t,labs); }catch(e){ window.cmTblRoomErr=String(e); }
         var bx=t.closest(".tblwrap")||t.parentElement, wide=!t.classList.contains("ascards")&&bx&&bx.scrollWidth>bx.clientWidth+1;
         if(bx) bx.classList.toggle("cmslidebox", !!(wide||t.classList.contains("cmslide")));
         if(wide||t.classList.contains("cmslide")){ t.classList.add("cmfrz"); freeze(t); } else { t.classList.remove("cmfrz"); unfreeze(t); }

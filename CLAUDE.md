@@ -6893,3 +6893,14 @@ DRGZCS takes build 635, EX019's first round comes back on the server, provided t
 Also: Severe on a measured round starts at 60 % worn (`GRADE.fromRemaining`, confirmed 15.11), so the UC/TB summary row counts
 "Above 60%" (`uc_above80`, the key keeps its name) and the wear legend says 60 %.
 Defer reasons: "Not in the scope of condition monitoring" (`noscope`, build 634).
+
+**A LONG TABLE GETS ROOM FOR ITS TEXT, THEN SLIDES (build 636, CM_TBLROOM_V1, Rickie 16.11.2026 "still seeing old ... columns
+still old, no freeze, horizontal").** The table standard of build 630 slid and froze a table only when it was wider than its box,
+and every table drew its own columns (`cwWidths`, `AC_W`, `PA_W`, `DD_W` …) to fit the box exactly, cutting its text with an
+ellipsis, so on the office it never slid or froze anything (measured under /cm/ at 1440: Defects raised 1118 in 1118, 26 cells cut).
+`room()` in `#cmTblStdJs` (both pages, identical) runs before the slide test on every redraw: on a desk, a table with 5+ named
+columns and 3+ rows gets each column as wide as its own text on one line (up to `ROOM_CAP`, 340 px, so a description still wraps
+or clamps) and its heading's longest word, never narrower than it was drawn; when the sum is wider than the box the table takes
+that width (`data-cmroom`), slides, and freezes through the unit / asset column, with the held slider. A table whose text fits is
+left as drawn. Not widened: `table.histtbl` (Equipment History's visit tables share one set of columns), the Overview compliance
+bars, the fortnight grid, the scorecard and the Lube master tables. A phone keeps its cards. `tests/tblroom.cjs`.
