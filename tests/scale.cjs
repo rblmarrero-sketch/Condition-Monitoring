@@ -89,6 +89,8 @@ const PAGE = 50;
     ok(/1[,.]?000\s*matching/.test(txt), 'and says how many there are altogether', txt);
   }
   await tab('due');
+  /* build 627: the schedule opens on the 1C orders; the thousand hour-interval rows are the CM interval tab */
+  await p.evaluate(() => dueGo('cmint')); await p.waitForTimeout(400);
   {
     const rows = await count('due', '#ddList tbody tr');
     const txt = await pagerText('due');
