@@ -3380,7 +3380,7 @@
         <button class="btn" id="wearCsv" data-i18n="w_csv">⬇ Export CSV</button>
       </div>
       <select id="wBand" class="hidden">
-        <option value="due"></option><option value="act"></option><option value="cmint" data-i18n="dd_cmint">CM interval</option>
+        <option value="due"></option><option value="act"></option>
           <option value="all"></option>
         <option value="watch"></option><option value="soon"></option><option value="life"></option>
         <option value="plan"></option><option value="second"></option>
@@ -3535,6 +3535,7 @@
           <option value="put" data-i18n="dd_put">Deferred</option>
           <option value="done" data-i18n="dd_done">Completed</option>
           <option value="later" data-i18n="dd_1c_later">Planned later</option>
+          <option value="cmint" data-i18n="dd_cmint">CM interval</option>
           <option value="all" data-i18n="dd_all">All</option>
         </select></label>
         <span class="ddbreak" aria-hidden="true"></span>
@@ -7691,9 +7692,8 @@ function renderFailure(){
   pareto($("paretoIso"),    i.rows, ()=>"var(--accent)", null,
     f.length ? src+t("e_iso_tail") : src, i.total);
   { /* CM_TABS2_V1: no coded mechanism = one line, not an empty chart (and, where there is one, an empty table) */
-    const pi=$("paretoIso"), mt=$("isoMechTbl"), mw=mt&&mt.closest(".tblwrap"), mh=mw&&mw.previousElementSibling;
-    if(!i.rows.length && pi){ pi.innerHTML=`<div class="cmone">${esc(t("iso_none1",{n:fmtN(f.length)}))}</div>`; }
-    if(mw) mw.hidden=!i.rows.length; if(mh&&mh.getAttribute("data-i18n")==="fa_mech_title") mh.hidden=!i.rows.length; }
+    const pi=$("paretoIso");
+    if(!i.rows.length && pi){ pi.innerHTML=`<div class="cmone">${esc(t("iso_none1",{n:fmtN(f.length)}))}</div>`; } }
   try{ if(window.CMFlow&&CMFlow.renderFail) CMFlow.renderFail($("failFlow"), f, filtered()); }catch(e){ bad("cm-tabs2-fail",e); }   /* CM_TABS2_V1 */
   renderPF();
   renderFailAffected(f);
