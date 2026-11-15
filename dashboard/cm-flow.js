@@ -79,7 +79,7 @@
   /* The 1C defect's responsible person, as the owner of a finding nobody named (build 627). Reads the link
      map only; never builds it, because building it asks actionState, which asks this. */
   function owner1C(r, i) { if (!i) return ''; var d = defectOf(r, i); return (d && d.by) ? String(d.by) : ''; }
-  function warm() { try { links(base(typeof RECS !== 'undefined' ? RECS : [])); } catch (e) {} }
+  function warm() { try { links(baseAll()); } catch (e) {} }
   /* ---- CM_FIND1C_V1 (build 630, Rickie 15.11 21:02 "when they found something they create a defect ... 1000+
      findings without actions is bad monitoring. Owner of that is always maintenance"; 21:03 "go").
      A finding graded 3-5 follows its point and its 1C defect:
@@ -112,7 +112,7 @@
   /* a point that now reads 1-2 while the 1C defect raised for an earlier 3-5 is still open: close it in 1C */
   function staleDefects() {
     var out = [], L1 = latest();
-    base(typeof RECS !== 'undefined' ? RECS : []).forEach(function (x) {
+    baseAll().forEach(function (x) {
       var k = String(x.r.equip || '').toUpperCase() + '|' + String(x.i.key || x.i.label || ''), n = L1[k];
       if (!n || !(n.d > String(x.r.date || '')) || n.s > 2) return;
       var d = defectOf(x.r, x.i); if (d && stageOf(d) !== 'done') out.push({ unit: x.r.equip, point: x.i.label || x.i.key, defect: d.defect, at: n.d });
@@ -163,10 +163,19 @@
     return base(recs).filter(function (x) { if (typeof actionState !== 'function') return true;
       var s = actionState(x.r, x.i); return s.k !== 'none' && s.why !== 'cleared'; });
   }
-  function defectOf(r, i) { return links(base(typeof RECS !== 'undefined' ? RECS : [])).get(fkey(r, i)) || null; }
+  /* CM_FIND1C_V2 (build 631): the 3-5 findings of the whole page, worked out once a task, not once a row. defectOf() asked
+     base(RECS) - every finding of every record - for each row it was asked about, so a page of 1,000 rounds did ~10^7 grade
+     reads and the office froze (tests/bigday.cjs timed out on build 630). Cleared by the next task, as latest() is. */
+  var baseAllCache = null;
+  function baseAll() {
+    var R = typeof RECS !== 'undefined' ? RECS : [];
+    if (baseAllCache && baseAllCache.r === R && baseAllCache.n === R.length) return baseAllCache.v;
+    var v = base(R); baseAllCache = { r: R, n: R.length, v: v }; setTimeout(function () { baseAllCache = null; }, 0); return v;
+  }
+  function defectOf(r, i) { return links(baseAll()).get(fkey(r, i)) || null; }
   function stage(r, i) { return stageOf(defectOf(r, i)); }
   function flow(recs) {
-    var all = finds(recs), lk = links(base(typeof RECS !== 'undefined' ? RECS : [])), out = { all: all, none: [], reg: [], prog: [], done: [] };
+    var all = finds(recs), lk = links(baseAll()), out = { all: all, none: [], reg: [], prog: [], done: [] };
     all.forEach(function (x) { out[stageOf(lk.get(fkey(x.r, x.i)))].push(x); });
     return out;
   }
@@ -460,6 +469,6 @@
     return s;
   }
 
-  window.CMFlow = { fresh: function () { latestCache = null; linkCache = { k: '', m: null }; }, missStats: missStats, renderMiss: renderMiss, find1C: find1C, staleDefects: staleDefects, base: base, renderFail: renderFail, renderMachine: renderMachine, syncChecks: syncChecks, dmy: dmy, renderFind: renderFind, inOneC: inOneC, compare: compare, plan: plan, dueRow: dueRow, owner1C: owner1C, warm: warm, deferOn: deferOn, comp: comp, flow: flow, stage: stage, isFind: function (r, i) { return sevOf(r, i) >= 3; }, defectOf: defectOf, render: render, cond: cond,
+  window.CMFlow = { fresh: function () { latestCache = null; baseAllCache = null; linkCache = { k: '', m: null }; }, missStats: missStats, renderMiss: renderMiss, find1C: find1C, staleDefects: staleDefects, base: base, renderFail: renderFail, renderMachine: renderMachine, syncChecks: syncChecks, dmy: dmy, renderFind: renderFind, inOneC: inOneC, compare: compare, plan: plan, dueRow: dueRow, owner1C: owner1C, warm: warm, deferOn: deferOn, comp: comp, flow: flow, stage: stage, isFind: function (r, i) { return sevOf(r, i) >= 3; }, defectOf: defectOf, render: render, cond: cond,
                     LINK_DAYS: LINK_DAYS, COMP_DAYS: COMP_DAYS, L: L };
 })();
