@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-15T16:08:58+00:00",
+  "generated": "2026-11-15T16:22:52+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -5898,6 +5898,45 @@ window.CM_WO_DATA = {
       "wo": "WO-022620"
     },
     {
+      "asset": "GR013",
+      "defect": "DD-00016965",
+      "raised": "2026-11-16",
+      "system": "GR013.OC.HE (Heating / Отопление)",
+      "defectType": "3.01 Control failure / Ошибка управления",
+      "descr": "Не работает фен",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022621"
+    },
+    {
+      "asset": "GR016",
+      "defect": "DD-00016966",
+      "raised": "2026-11-16",
+      "system": "GR016.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "Низкий уровень масла",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022622"
+    },
+    {
+      "asset": "TK004",
+      "defect": "DD-00016967",
+      "raised": "2026-11-16",
+      "system": "TK004.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "Неисправност задних фонарней. Индикация неисправности на панели приборов.",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": null
+    },
+    {
       "asset": "EX001",
       "defect": "DD-00016960",
       "raised": "2026-11-16",
@@ -7302,19 +7341,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022565"
     },
     {
-      "asset": "LS025",
-      "defect": "DD-00016880",
-      "raised": "2026-11-14",
-      "system": "LS025.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Отогрев, запуск ДВС.",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022555"
-    },
-    {
       "asset": "TK091",
       "defect": "DD-00016894",
       "raised": "2026-11-14",
@@ -7326,6 +7352,19 @@ window.CM_WO_DATA = {
       "by": "Aleksey Kiselev",
       "regBy": "Киселев Алексей Александрович",
       "wo": "WO-022556"
+    },
+    {
+      "asset": "LS025",
+      "defect": "DD-00016880",
+      "raised": "2026-11-14",
+      "system": "LS025.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Отогрев, запуск ДВС.",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022555"
     },
     {
       "asset": "EX011",
@@ -50346,11 +50385,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "LV130",
-      "defect": "DD-00013348",
+      "defect": "DD-00013349",
       "raised": "2026-09-25",
-      "system": "LV130.ELS (Electrical System / Электросистема)",
-      "defectType": "4.02 Open circuit / Разрыв цепи",
-      "descr": "Не работает сигнал заднего хода, не включается камера заднего хода",
+      "system": "LV130.DRS.ENG (Engine / Двигатель)",
+      "defectType": "3.13 Warning light / alarm active / Сигнальная лампа / аварийная сигнализация активна",
+      "descr": "Горит лампа \"Проверьте двигатель\"",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -50359,11 +50398,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "LV130",
-      "defect": "DD-00013349",
+      "defect": "DD-00013348",
       "raised": "2026-09-25",
-      "system": "LV130.DRS.ENG (Engine / Двигатель)",
-      "defectType": "3.13 Warning light / alarm active / Сигнальная лампа / аварийная сигнализация активна",
-      "descr": "Горит лампа \"Проверьте двигатель\"",
+      "system": "LV130.ELS (Electrical System / Электросистема)",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "Не работает сигнал заднего хода, не включается камера заднего хода",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -60109,19 +60148,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "TK010",
-      "defect": "DD-00010485",
-      "raised": "2026-08-09",
-      "system": "TK010.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь радиатора",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": null
-    },
-    {
-      "asset": "TK010",
       "defect": "DD-00010489",
       "raised": "2026-08-09",
       "system": "TK010.CH.HS (Hydraulic System / Гидравлическая система)",
@@ -60140,6 +60166,19 @@ window.CM_WO_DATA = {
       "system": "TK010.CH.SU (Suspension / Подвеска)",
       "defectType": "2.01 Wear / Износ",
       "descr": "Износ передних амортизаторов",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": null
+    },
+    {
+      "asset": "TK010",
+      "defect": "DD-00010485",
+      "raised": "2026-08-09",
+      "system": "TK010.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь радиатора",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
