@@ -250,13 +250,13 @@
       + '.kpis.cmcards .kpi{min-width:0}.kpis.cmcards .kpi .k{display:inline-flex;align-items:center;gap:4px}'
       + '.kpis.cmcards .kpi .s{white-space:normal}.kpis.cmcards .kpi.hot .v{color:var(--crit-ink)}.kpis.cmcards .kpi.warnv .v{color:var(--g2-ink,#8a4b00)}'
       + '.kpis.cmcards .kpi[role=button]{cursor:pointer}.kpis.cmcards .kpi[role=button]:hover{border-color:var(--accent)}'
-      + '.cmone{color:var(--muted);font-size:14px;padding:6px 0 2px}'
+      + '.cmone{color:var(--muted);font-size:14px;padding:6px 0 2px}.cmTip.cmt2{margin-left:4px;vertical-align:middle}'
       + '.cmchk{margin:0 0 16px}.cmchk .cl{display:flex;gap:10px;align-items:baseline;padding:10px 0;border-top:1px solid var(--border);font-size:14px}'
       + '.cmchk .cl:first-of-type{border-top:0}.cmchk .cl b{min-width:18px;color:var(--good-ink)}.cmchk .cl.bad b{color:var(--crit-ink)}'
       + '.cmchk .cl .x{color:var(--muted)}.cmchk .cl a{margin-left:auto;font-weight:600}';
     document.head.appendChild(st);
   }
-  function tip(txt) { return '<button type="button" class="cmTip cmp2tip cmt2" aria-expanded="false" aria-label="' + E(txt) + '"><i aria-hidden="true">i</i><span class="tipbox" role="tooltip">' + E(txt) + '</span></button>'; }
+  function tip(txt) { return '<button type="button" class="cmTip cmt2" aria-expanded="false" aria-label="' + E(txt) + '"><i aria-hidden="true">i</i><span class="tipbox" role="tooltip">' + E(txt) + '</span></button>'; }
   function wireTips(el) {
     el.querySelectorAll('.cmt2').forEach(function (b) {
       var set = function (o) { b.classList.toggle('open', o); b.setAttribute('aria-expanded', String(o)); };

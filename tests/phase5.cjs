@@ -70,7 +70,8 @@ const reset = q => fetch(BASE + '/__reset?' + q).then(r => r.text());
       tile: Number((document.querySelector('#syncKpis [data-kpi="syGrade"] .v') || {}).textContent) };
   });
   ok('the review list, the correction list and the evidence list come before the diagnostics',
-     S.order.sev < S.order.quar && S.order.quar < S.order.gaps && S.order.gaps < S.order.admin, JSON.stringify(S.order));
+     /* build 629: a list with nothing in it is put away (the Checks card says so), so only the lists shown are ordered */
+     (o => { const v = ['sev', 'quar', 'gaps', 'admin'].map(k => o[k]).filter(y => y); return v.length >= 2 && v.every((y, i) => !i || y > v[i - 1]); })(S.order), JSON.stringify(S.order));
   ok('Admin diagnostics is collapsed by default', S.adminOpen === false && !S.diagShown);
   ok('the page is under two screens with it collapsed', S.tall <= 2, S.tall + ' screens');
   ok('the review list has the two findings, the ungraded rounds, and the tile agrees', S.sev.length === 2 + S.ungraded && S.tile === S.review && S.review === 2 + S.ungraded,

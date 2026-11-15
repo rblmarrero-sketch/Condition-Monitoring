@@ -275,15 +275,15 @@ const LIST = `(function(){
                       return e ? Math.round(e.getBoundingClientRect().top + scrollY) : null; };
     const box = document.getElementById('sySevBox');
     return { sev: y('sySevBox'), diag: y('syDiag'), recon: y('syRecon'),
-             kpis: y('syncKpis'), width: box ? Math.round(box.getBoundingClientRect().width) : 0,
+             kpis: y('syncKpis'), checks: (e => e ? Math.round(e.getBoundingClientRect().bottom + scrollY) : null)(document.getElementById('syChecks')), width: box ? Math.round(box.getBoundingClientRect().width) : 0,
              page: document.documentElement.scrollWidth };
   });
   ok('the list sits above the admin diagnostics', place.sev < place.diag,
      `list at ${place.sev}, diagnostics at ${place.diag}`);
   ok('  and above the reconciliation ladder', place.sev < place.recon,
      `list at ${place.sev}, ladder at ${place.recon}`);
-  ok('  directly under the tiles rather than a page down',
-     place.sev - place.kpis < 320, `${place.sev - place.kpis}px below the tiles`);
+  ok('  directly under the tiles (and the Checks card, build 629) rather than a page down',
+     place.sev - (place.checks || place.kpis) < 320, `${place.sev - (place.checks || place.kpis)}px below the tiles and checks`);
   ok('  and full width, not a half-width column with blank beside it',
      place.width > place.page * 0.7, `${place.width} of ${place.page}`);
 

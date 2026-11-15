@@ -44,7 +44,7 @@ const INPAGE = () => {
   console.log('\n── the filter row exists, one input per visible column, none over the tick or chevron columns');
   const shape = await p.evaluate(() => READ());
   ok('a second header row sits under the sortable one, same column count', shape.filterRow === shape.headCols, shape.filterRow + ' vs ' + shape.headCols);
-  ok('every data column has its own filter input', shape.filterInputs.join(',') === 'queue,unit,comp,act,req,owner,due,st,wo', shape.filterInputs.join(','));
+  ok('every data column has its own filter input', shape.filterInputs.join(',') === 'queue,unit,comp,act,def,req,owner,due,st,wo', shape.filterInputs.join(','));
   ok('three rows to start', shape.units.length === 3, String(shape.units.length));
 
   console.log('\n── a column filter narrows to only that column, never another');

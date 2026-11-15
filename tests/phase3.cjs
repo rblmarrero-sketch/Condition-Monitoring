@@ -107,15 +107,16 @@ const shown = (p, sel) => p.evaluate(s => { const e = document.querySelector(s);
   ok('  and clearing the ticks hides it', await p.evaluate(() => document.getElementById('selBar').hidden));
 
   /* the filter travels in the address, both ways */
-  await p.click('#aSeg [data-af="noown"]'); await p.waitForTimeout(300);
+  /* build 628: the register's tabs follow 1C (Still open · Not raised in 1C · In 1C · Completed in 1C · Critical) */
+  await p.click('#aSeg [data-af="f_none"]'); await p.waitForTimeout(300);
   const afHash = await p.evaluate(() => location.hash);
-  ok('choosing "Unassigned actions" writes af=noown to the address', /af=noown/.test(afHash), afHash);
+  ok('choosing "Not raised in 1C" writes af=f_none to the address', /af=f_none/.test(afHash), afHash);
   await p.evaluate(() => { location.hash = '#actions?af=triage'; });
   await p.waitForTimeout(500);
   const afRead = await p.evaluate(() => ({ af: aFilt(), on: (document.querySelector('#aSeg button.on') || {}).dataset.af,
     rows: document.querySelectorAll('#actionTbl tbody tr.hrow').length,
     predicate: findings(filtered()).filter(x => actionState(x.r, x.i).k === 'triage').length }));
-  ok('arriving on #actions?af=triage selects that filter', afRead.af === 'triage' && afRead.on === 'triage', JSON.stringify(afRead));
+  ok('arriving on #actions?af=triage selects that filter (said on a chip, build 628)', afRead.af === 'triage' && (afRead.on === 'triage' || afRead.on === 'open'), JSON.stringify(afRead));
   ok('  and the register shows exactly the planning-required findings (one page of them)',
      afRead.rows === afRead.predicate, afRead.rows + ' of ' + afRead.predicate);
   await p.evaluate(() => { location.hash = '#actions?af=bogus'; });
@@ -154,16 +155,16 @@ const shown = (p, sel) => p.evaluate(s => { const e = document.querySelector(s);
      read by KEY, never by position. */
   /* Build 627 (CM_SCHED1C_V1): the first four tabs follow the 1C PM work orders, by the Overview's own rule
      (CMFlow.plan); the hour-interval rows are the CM interval tab. Counts are read by KEY, never by position. */
-  ok('seven named tabs: Overdue in 1C, Due in 7 days, Planned later, Done this week, Deferred, Never inspected, CM interval',
-     D.tabs.map(x => x.k).join(',') === 'over,soon,later,done,put,never,cmint'
-     && D.tabs.map(x => x.label).join('|') === 'Overdue in 1C|Due in 7 days|Planned later|Done this week|Deferred|Never inspected|CM interval', D.tabs.map(x => x.label).join('|'));
+  ok('six named tabs, all from 1C (no CM interval tab since build 629): Overdue in 1C, Due in 7 days, Planned later, Done this week, Deferred, Never inspected',
+     D.tabs.map(x => x.k).join(',') === 'over,soon,later,done,put,never'
+     && D.tabs.map(x => x.label).join('|') === 'Overdue in 1C|Due in 7 days|Planned later|Done this week|Deferred|Never inspected', D.tabs.map(x => x.label).join('|'));
   ok('the schedule opens on the Overdue tab', D.scope === 'over' && D.tabs[0].on, D.scope);
   ok('  and the address says so', /^#due/.test(D.hash), D.hash);
   ok('Overdue counts the 1C orders past their plan date with no CM round', tb('over').n === D.c1.over, tb('over').n + ' vs ' + D.c1.over);
   ok('Due in 7 days counts only those', tb('soon').n === D.c1.week, tb('soon').n + ' vs ' + D.c1.week);
   ok('Planned later and Done this week likewise', tb('later').n === D.c1.later && tb('done').n === D.c1.done, JSON.stringify(D.c1));
   ok('Never inspected counts the machines no round of that type has reached', tb('never').n === D.never && D.never > 0, String(tb('never').n));
-  ok('CM interval keeps the hour-based past due and due soon', tb('cmint').n === (D.st.over || 0) + (D.st.soon || 0), tb('cmint').n + ' vs ' + ((D.st.over || 0) + (D.st.soon || 0)));
+  ok('no CM interval tab; the hour rule is still computed behind the address scope cmint', !D.tabs.some(x => x.k === 'cmint') && (D.st.over || 0) + (D.st.soon || 0) > 0, JSON.stringify(D.st));
   ok('the Overdue list draws every overdue order (tables show all)', D.rows === D.c1.over || (D.c1.over === 0 && D.rows <= 1), D.rows + ' of ' + D.c1.over);
   ok('every row offers "Start inspection"', D.starts.length === 1 && D.starts[0] === 'Start inspection', D.starts.join('|'));
   ok('  and "Defer inspection"', D.defers.length === 1 && D.defers[0] === 'Defer inspection', D.defers.join('|'));
