@@ -4034,7 +4034,7 @@ setTimeout(done,20000);})();</script>
          factor on the input did nothing and a 26-character query still scrolled
          inside a 200px box. The label is visually hidden either way. -->
     <label class="vh" for="fQ" data-i18n="f_search">Search</label>
-    <input id="fQ" type="search" data-i18n-ph="f_qph" placeholder="Unit, defect, action, inspector…">
+    <input id="fQ" type="search" autocomplete="off" data-i18n-ph="f_qph" placeholder="Unit, defect, action, inspector…">
   </div>
   <div class="chips" id="chips"></div>
 
@@ -8476,7 +8476,10 @@ function dqMissing(rec,i){
 function renderChips(){
   const c=[];
   const CT=(function(){ try{ return CUR_TAB; }catch(e){ return ""; } })(), UT=!!UNIT_TABS[CT], NOAPPLY=UT?[t("c_period"),t("c_status"),t("c_dq"),t("c_owner"),t("c_month"),t("c_sev"),t("c_defect"),t("c_cause")].concat(CT==="cmwo"?[t("c_type")]:[]):[];
-  const add=(label,val,onX)=>{ if(NOAPPLY.indexOf(label)<0) c.push({label,val,onX}); };   /* CM_FLOW_V1: a chip only for what this list applies */
+  /* CM_ONECHIP_V1 (build 634, Rickie 16.11 09:26 "showing the search again"): under /cm/ the site filter bar shows its own chips for
+     type, class, period, status, grade, data quality and search, so this row keeps only what the bar cannot say (a drill: unit, owner, month, defect, cause) */
+  const SITEBAR=!!document.getElementById("cmFb"), BARSAYS=[t("c_type"),t("c_class"),t("c_period"),t("c_status"),t("c_search"),t("c_dq"),t("c_sev")];
+  let nAll=0; const add=(label,val,onX)=>{ if(NOAPPLY.indexOf(label)>=0) return; nAll++; if(!(SITEBAR&&BARSAYS.indexOf(label)>=0)) c.push({label,val,onX}); };   /* CM_FLOW_V1: a chip only for what this list applies */
   if($("fType").value)  add(t("c_type"), TYPE_LABEL[$("fType").value]||$("fType").value, ()=>{ $("fType").value=""; renderAll(); });
   if($("fClass").value) add(t("c_class"), $("fClass").value, ()=>{ $("fClass").value=""; renderAll(); });
   if(periodActive()) add(t("c_period"), periodLabel(), ()=>{
@@ -8502,11 +8505,11 @@ function renderChips(){
      entry, so Back returns to the previous page WITH the filters it had. */
   if(typeof urlWrite==="function") urlWrite(false);
   moreSync();
-  document.body.classList.toggle("filtered", c.length>0);
+  document.body.classList.toggle("filtered", nAll>0);
   const rb=$("fReset");
   if(rb){
-    rb.disabled=!c.length;
-    rb.textContent = c.length ? t("f_reset_n",{n:c.length}) : t("f_reset");
+    rb.disabled=!nAll;
+    rb.textContent = nAll ? t("f_reset_n",{n:nAll}) : t("f_reset");
   }
   if(!c.length){ box.innerHTML=""; return; }
   box.innerHTML=c.map((x,i)=>`<span class="chip"><span class="muted">${esc(x.label)}</span> <b>${esc(x.val)}</b><button data-x="${i}" title="${esc(t("remove"))}" aria-label="${esc(t("remove"))}">×</button></span>`).join("")

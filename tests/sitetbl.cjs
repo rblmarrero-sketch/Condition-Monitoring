@@ -96,6 +96,14 @@ const TABLES = [['overview', '#fleetTbl', 0], ['actions', 'table.acttbl', 1], ['
       SiteStd.order('cm_act', null); return { moved: n.join(','), ed, dr }; });
     ok(`${file} actions: with a column moved a cell still edits in place`, mv.ed === true, JSON.stringify(mv));
     ok(`${file} actions: with a column moved a row still opens its drawer`, mv.dr === true);
+    /* CM_ONECHIP_V1 (Rickie 16.11 09:26 "showing the search again"): a search is said once, by the site bar; clearing it there clears it */
+    await p.evaluate(() => showTab('overview', true)); await p.waitForTimeout(800);
+    const ch = await p.evaluate(async () => { const q = document.getElementById('fQ'); q.value = '12345'; q.dispatchEvent(new Event('input', { bubbles: true })); await new Promise(r => setTimeout(r, 900));
+      const bar = (document.getElementById('cmFbC') || {}).textContent || '', page = document.getElementById('chips').textContent;
+      const x = document.querySelector('#cmFbC button'); if (x) x.click(); await new Promise(r => setTimeout(r, 900));
+      return { bar: /12345/.test(bar), page: /12345/.test(page), after: document.getElementById('fQ').value, hash: location.hash, ac: q.getAttribute('autocomplete') }; });
+    ok(`${file}: a search shows one chip, in the site bar, not again under the title`, ch.bar && !ch.page, JSON.stringify(ch));
+    ok(`${file}: clearing it in the bar clears the box and the address`, ch.after === '' && !/q=/.test(ch.hash) && ch.ac === 'off', JSON.stringify(ch));
     ok(`${file}: no page errors`, !p.errs.length, p.errs.slice(0, 3).join(' | '));
     await p.context().close();
     /* Russian */

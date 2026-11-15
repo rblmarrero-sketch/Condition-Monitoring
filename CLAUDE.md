@@ -5652,6 +5652,13 @@ hide the body behind one "Loading…" / "Загрузка…" line: under /cm/ u
 8 s after that, 20 s in all, so a page whose template never arrives is still shown. `tests/cmboot.cjs` samples every frame, fast
 and on a throttled link, and fails 10 on build 633.
 
+**A FILTER IS SAID ONCE: THE SITE BAR'S CHIPS (build 634, CM_ONECHIP_V1, Rickie 16.11.2026 09:26 "also showing the search again").**
+Under /cm/ the site filter bar (`#cmFbC`) and the page's own chip row (`#chips`, under the tab title) both listed the search, type,
+class, period, status, grade and data quality. `renderChips` keeps only the drill chips (unit, owner, month, defect, cause) when
+`#cmFb` exists; the reset count (`nAll`) still counts every filter, so the bar's Clear filters (which presses `#fReset`) works.
+A search stays in the address (`#overview?q=…`) by design: a link shows the same view; × removes it. `#fQ` is
+`autocomplete="off"` so the browser does not put an old search back on its own. `tests/sitetbl.cjs` checks both.
+
 ---
 
 ## Secrets
