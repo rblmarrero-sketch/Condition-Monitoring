@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-15T20:37:38+00:00",
+  "generated": "2026-11-15T20:52:43+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -230,18 +230,6 @@
           "INSP"
         ],
         "plan": "2026-11-15",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "GR004": [
-      {
-        "wo": "WO-021560",
-        "hours": 1000,
-        "types": [
-          "FC",
-          "INSP"
-        ],
-        "plan": "2026-11-14",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -859,15 +847,6 @@
     ],
     "TK147": [
       {
-        "wo": "WO-021276",
-        "hours": 250,
-        "types": [
-          "MP"
-        ],
-        "plan": "2026-11-14",
-        "priority": "P3 Planned (PM)"
-      },
-      {
         "wo": "WO-022141",
         "hours": 3000,
         "types": [
@@ -925,15 +904,6 @@
       }
     ],
     "TK150": [
-      {
-        "wo": "WO-021562",
-        "hours": 250,
-        "types": [
-          "MP"
-        ],
-        "plan": "2026-11-14",
-        "priority": "P3 Planned (PM)"
-      },
       {
         "wo": "WO-022143",
         "hours": 3000,
@@ -3891,24 +3861,6 @@
       "completed": ""
     },
     {
-      "wo": "WO-021358",
-      "equip": "EX025",
-      "cls": "EXC",
-      "comp": "",
-      "desc": "500h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-15",
-      "type": "500 Hours service Planned",
-      "hours": 500,
-      "plan": "2026-11-15",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
       "wo": "WO-021674",
       "equip": "GE109",
       "cls": "GEN",
@@ -4071,6 +4023,24 @@
       "completed": ""
     },
     {
+      "wo": "WO-021358",
+      "equip": "EX025",
+      "cls": "EXC",
+      "comp": "",
+      "desc": "500h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-14",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-11-14",
+      "status": "Completed",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "complete",
+      "completed": "2026-11-15"
+    },
+    {
       "wo": "WO-021663",
       "equip": "GE020",
       "cls": "GEN",
@@ -4117,12 +4087,12 @@
       "type": "1000 Hours service Planned",
       "hours": 1000,
       "plan": "2026-11-14",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-14"
     },
     {
       "wo": "WO-021359",
@@ -4145,6 +4115,24 @@
     {
       "wo": "WO-021296",
       "equip": "TK118",
+      "cls": "AT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-14",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-11-14",
+      "status": "Completed",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "complete",
+      "completed": "2026-11-14"
+    },
+    {
+      "wo": "WO-021302",
+      "equip": "TK127",
       "cls": "AT",
       "comp": "",
       "desc": "Magnetic Plug",
@@ -4189,12 +4177,12 @@
       "type": "250 Hours service Planned",
       "hours": 250,
       "plan": "2026-11-14",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-14"
     },
     {
       "wo": "WO-021562",
@@ -4207,12 +4195,12 @@
       "type": "250 Hours service Planned",
       "hours": 250,
       "plan": "2026-11-14",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-14"
     },
     {
       "wo": "WO-021659",
@@ -4243,12 +4231,12 @@
       "type": "500 Hours service Planned",
       "hours": 500,
       "plan": "2026-11-13",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-13"
     },
     {
       "wo": "WO-021565",
@@ -32983,6 +32971,14 @@
       "x": "Износ ковша"
     },
     {
+      "d": "DD-00016179",
+      "u": "BS019",
+      "s": "BS019.DRS.ENG (Engine / Двигатель)",
+      "p": "P4",
+      "r": "2026-11-02",
+      "x": "Попадание масла в интеркулер, монтаж сливного дренажа в интеркулер"
+    },
+    {
       "d": "DD-00016185",
       "u": "TK038",
       "s": "TK038.BS.RV (Retarder Valve / Клапан ретардера)",
@@ -33149,14 +33145,6 @@
       "p": "P4",
       "r": "2026-11-02",
       "x": "Заменить РВД на подъем кузова"
-    },
-    {
-      "d": "DD-00016179",
-      "u": "BS019",
-      "s": "BS019.DRS.ENG (Engine / Двигатель)",
-      "p": "P4",
-      "r": "2026-11-02",
-      "x": "Попадание масла в интеркулер, монтаж сливного дренажа в интеркулер"
     },
     {
       "d": "DD-00016184",
@@ -34039,6 +34027,14 @@
       "x": "Требуется замена ковша на оборотный"
     },
     {
+      "d": "DD-00015813",
+      "u": "GE111",
+      "s": "GE111.DRS.ENG (Engine / Двигатель)",
+      "p": "P4",
+      "r": "2026-10-28",
+      "x": "замена крышки горловины радиатора ОЖ."
+    },
+    {
       "d": "DD-00015822",
       "u": "EX021",
       "s": "EX021.CH.AL (Central Lubrication System / Централизованная система смазки)",
@@ -34141,14 +34137,6 @@
       "p": "P4",
       "r": "2026-10-28",
       "x": "Требуется регулировка стояночного тормоза"
-    },
-    {
-      "d": "DD-00015813",
-      "u": "GE111",
-      "s": "GE111.DRS.ENG (Engine / Двигатель)",
-      "p": "P4",
-      "r": "2026-10-28",
-      "x": "замена крышки горловины радиатора ОЖ."
     },
     {
       "d": "DD-00015781",
@@ -39199,6 +39187,14 @@
       "x": "Не запускается ПЖД ДВС"
     },
     {
+      "d": "DD-00014085",
+      "u": "BS019",
+      "s": "BS019.DRS.AXL (Axles / Мосты)",
+      "p": "P4",
+      "r": "2026-10-05",
+      "x": "Требуется замена сальника хвостовика переднего моста"
+    },
+    {
       "d": "DD-00014100",
       "u": "LV094",
       "s": "LV094.CH.SU (Suspension / Подвеска)",
@@ -39445,14 +39441,6 @@
       "p": "P4",
       "r": "2026-10-05",
       "x": "Требуется замена нижних и верхних шаровых опор, замена втулок и стоек стабилизат"
-    },
-    {
-      "d": "DD-00014085",
-      "u": "BS019",
-      "s": "BS019.DRS.AXL (Axles / Мосты)",
-      "p": "P4",
-      "r": "2026-10-05",
-      "x": "Требуется замена сальника хвостовика переднего моста"
     },
     {
       "d": "DD-00014130",

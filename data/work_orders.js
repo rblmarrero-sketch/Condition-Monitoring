@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-15T20:37:38+00:00",
+  "generated": "2026-11-15T20:52:43+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -7276,19 +7276,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022565"
     },
     {
-      "asset": "TK091",
-      "defect": "DD-00016894",
-      "raised": "2026-11-14",
-      "system": "TK091.CH.BED (Bed / Кузов)",
-      "defectType": "6.03 Structural crack / Трещина конструкции",
-      "descr": "Лопнуло крепление борта",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Kiselev",
-      "regBy": "Киселев Алексей Александрович",
-      "wo": "WO-022556"
-    },
-    {
       "asset": "LS025",
       "defect": "DD-00016880",
       "raised": "2026-11-14",
@@ -7300,6 +7287,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022555"
+    },
+    {
+      "asset": "TK091",
+      "defect": "DD-00016894",
+      "raised": "2026-11-14",
+      "system": "TK091.CH.BED (Bed / Кузов)",
+      "defectType": "6.03 Structural crack / Трещина конструкции",
+      "descr": "Лопнуло крепление борта",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Kiselev",
+      "regBy": "Киселев Алексей Александрович",
+      "wo": "WO-022556"
     },
     {
       "asset": "EX011",
@@ -15778,6 +15778,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021476"
     },
     {
+      "asset": "BS019",
+      "defect": "DD-00016179",
+      "raised": "2026-11-02",
+      "system": "BS019.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "Попадание масла в интеркулер, монтаж сливного дренажа в интеркулер",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-021731"
+    },
+    {
       "asset": "TK038",
       "defect": "DD-00016185",
       "raised": "2026-11-02",
@@ -16075,19 +16088,6 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022196"
-    },
-    {
-      "asset": "BS019",
-      "defect": "DD-00016179",
-      "raised": "2026-11-02",
-      "system": "BS019.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
-      "descr": "Попадание масла в интеркулер, монтаж сливного дренажа в интеркулер",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-021731"
     },
     {
       "asset": "TK047",
@@ -20107,6 +20107,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021139"
     },
     {
+      "asset": "GE111",
+      "defect": "DD-00015813",
+      "raised": "2026-10-28",
+      "system": "GE111.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "замена крышки горловины радиатора ОЖ.",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-021738"
+    },
+    {
       "asset": "EX021",
       "defect": "DD-00015822",
       "raised": "2026-10-28",
@@ -20274,19 +20287,6 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-021552"
-    },
-    {
-      "asset": "GE111",
-      "defect": "DD-00015813",
-      "raised": "2026-10-28",
-      "system": "GE111.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "замена крышки горловины радиатора ОЖ.",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-021738"
     },
     {
       "asset": "EX009",
@@ -40946,6 +40946,19 @@ window.CM_WO_DATA = {
       "wo": "WO-020077"
     },
     {
+      "asset": "BS019",
+      "defect": "DD-00014085",
+      "raised": "2026-10-05",
+      "system": "BS019.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Требуется замена сальника хвостовика переднего моста",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": "WO-021732"
+    },
+    {
       "asset": "LV094",
       "defect": "DD-00014100",
       "raised": "2026-10-05",
@@ -41347,19 +41360,6 @@ window.CM_WO_DATA = {
       "by": "Andrey Taran",
       "regBy": "Таран Андрей Андреевич",
       "wo": null
-    },
-    {
-      "asset": "BS019",
-      "defect": "DD-00014085",
-      "raised": "2026-10-05",
-      "system": "BS019.DRS.AXL (Axles / Мосты)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Требуется замена сальника хвостовика переднего моста",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": "WO-021732"
     },
     {
       "asset": "EX012",
@@ -101057,15 +101057,15 @@ window.CM_WO_DATA = {
       "cmLabel": "500h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-13",
       "planStartDt": "2026-11-13T00:00:00",
-      "planEnd": "2026-11-14",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "planEnd": "2026-11-13",
+      "actualStart": "2026-11-13",
+      "actualStartDt": "2026-11-13T07:40:00",
+      "actualEnd": "2026-11-13"
     },
     {
       "equip": "DZ009",
@@ -117471,15 +117471,15 @@ window.CM_WO_DATA = {
       "cmLabel": "500h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
-      "planStart": "2026-11-15",
-      "planStartDt": "2026-11-15T00:00:00",
-      "planEnd": "2026-11-16",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
+      "planStart": "2026-11-14",
+      "planStartDt": "2026-11-14T19:45:00",
+      "planEnd": "2026-11-15",
+      "actualStart": "2026-11-14",
+      "actualStartDt": "2026-11-14T19:45:00",
+      "actualEnd": "2026-11-15"
     },
     {
       "equip": "EX025",
@@ -131712,15 +131712,15 @@ window.CM_WO_DATA = {
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-14",
       "planStartDt": "2026-11-14T00:00:00",
-      "planEnd": "2026-11-15",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "planEnd": "2026-11-14",
+      "actualStart": "2026-11-14",
+      "actualStartDt": "2026-11-14T00:00:00",
+      "actualEnd": "2026-11-14"
     },
     {
       "equip": "GR005",
@@ -188005,8 +188005,8 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
       "open": false,
       "planStart": "2026-11-14",
       "planStartDt": "2026-11-14T00:00:00",
@@ -190844,15 +190844,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-14",
       "planStartDt": "2026-11-14T00:00:00",
       "planEnd": "2026-11-14",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-14",
+      "actualStartDt": "2026-11-14T07:00:00",
+      "actualEnd": "2026-11-14"
     },
     {
       "equip": "TK147",
@@ -191607,15 +191607,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-14",
       "planStartDt": "2026-11-14T00:00:00",
-      "planEnd": "2026-11-15",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "planEnd": "2026-11-14",
+      "actualStart": "2026-11-14",
+      "actualStartDt": "2026-11-14T08:10:00",
+      "actualEnd": "2026-11-14"
     },
     {
       "equip": "TK150",
