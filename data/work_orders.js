@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-15T07:12:48+00:00",
+  "generated": "2026-11-15T07:27:55+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -6041,6 +6041,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "CR004",
+      "defect": "DD-00016946",
+      "raised": "2026-11-15",
+      "system": "CR004.ELS.PH (Preheater / Предпусковой подогреватель)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "не корректная работа ППЖД на подогреве смазки конуса",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": null
+    },
+    {
       "asset": "CR007",
       "defect": "DD-00016944",
       "raised": "2026-11-15",
@@ -6077,6 +6090,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "SN003",
+      "defect": "DD-00016945",
+      "raised": "2026-11-15",
+      "system": "SN003.SCN.BRG (Bearings / Подшипники)",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "не прокачивается смазка через тавотницы",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
       "wo": null
     },
     {
@@ -50086,11 +50112,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "LV130",
-      "defect": "DD-00013349",
+      "defect": "DD-00013348",
       "raised": "2026-09-25",
-      "system": "LV130.DRS.ENG (Engine / Двигатель)",
-      "defectType": "3.13 Warning light / alarm active / Сигнальная лампа / аварийная сигнализация активна",
-      "descr": "Горит лампа \"Проверьте двигатель\"",
+      "system": "LV130.ELS (Electrical System / Электросистема)",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "Не работает сигнал заднего хода, не включается камера заднего хода",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -50099,11 +50125,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "LV130",
-      "defect": "DD-00013348",
+      "defect": "DD-00013349",
       "raised": "2026-09-25",
-      "system": "LV130.ELS (Electrical System / Электросистема)",
-      "defectType": "4.02 Open circuit / Разрыв цепи",
-      "descr": "Не работает сигнал заднего хода, не включается камера заднего хода",
+      "system": "LV130.DRS.ENG (Engine / Двигатель)",
+      "defectType": "3.13 Warning light / alarm active / Сигнальная лампа / аварийная сигнализация активна",
+      "descr": "Горит лампа \"Проверьте двигатель\"",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -58613,19 +58639,6 @@ window.CM_WO_DATA = {
       "wo": "WO-015456"
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
-      "wo": null
-    },
-    {
       "asset": "TK046",
       "defect": "DD-00011270",
       "raised": "2026-08-21",
@@ -58714,6 +58727,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
