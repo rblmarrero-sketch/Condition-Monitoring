@@ -78,8 +78,47 @@
   }
   /* The 1C defect's responsible person, as the owner of a finding nobody named (build 627). Reads the link
      map only; never builds it, because building it asks actionState, which asks this. */
-  function owner1C(r, i) { var m = linkCache.m; if (!m || !i) return ''; var d = m.get(fkey(r, i)); return (d && d.by) ? String(d.by) : ''; }
-  function warm() { try { links(finds(typeof RECS !== 'undefined' ? RECS : [])); } catch (e) {} }
+  function owner1C(r, i) { if (!i) return ''; var d = defectOf(r, i); return (d && d.by) ? String(d.by) : ''; }
+  function warm() { try { links(baseAll()); } catch (e) {} }
+  /* ---- CM_FIND1C_V1 (build 630, Rickie 15.11 21:02 "when they found something they create a defect ... 1000+
+     findings without actions is bad monitoring. Owner of that is always maintenance"; 21:03 "go").
+     A finding graded 3-5 follows its point and its 1C defect:
+       - a newer reading of the same machine and point: 1-2 = the finding is CLEARED at that inspection (closed);
+         3-5 = the newer reading carries it (this one is folded into it, not a second job);
+       - the 1C defect matched to it (links, the Day summary e-mail's rule): Completed = closed; Registered or
+         In progress = open; none = open, the one thing missing is the 1C defect;
+       - owner: the 1C defect's responsible person, else "Maintenance".
+     A manual office decision (No action needed / Done / Verified) still wins: actionState checks it first. ---- */
+  var latestCache = null;
+  function latest() {
+    if (latestCache) return latestCache;
+    var m = {}, recs = typeof RECS !== 'undefined' ? RECS : [];
+    recs.forEach(function (r) { if (!r || r._void) return; (r.items || []).forEach(function (i) {
+      if (!i || i.general || i.key === 'MACHINE') return; var s = sevOf(r, i); if (!s) return;
+      var k = String(r.equip || '').toUpperCase() + '|' + String(i.key || i.label || '');
+      var d = String(r.date || ''); if (!m[k] || d > m[k].d) m[k] = { d: d, s: s, r: r }; }); });
+    latestCache = m; setTimeout(function () { latestCache = null; }, 0);
+    return m;
+  }
+  function find1C(r, i, o) {
+    if (!o || !(o.sev >= 3)) return null;
+    var k = String(r.equip || '').toUpperCase() + '|' + String(i.key || i.label || ''), n = latest()[k];
+    if (n && n.d > String(r.date || '')) return n.s <= 2 ? { k: 'closed', miss: [], sev: o.sev, why: 'cleared', at: n.d } : { k: 'none', miss: [], sev: o.sev, why: 'later', at: n.d };
+    var st = stageOf(defectOf(r, i));
+    if (st === 'done') return { k: 'closed', miss: [], sev: o.sev, why: '1c' };
+    if (st === 'reg' || st === 'prog') return { k: 'open', miss: [], sev: o.sev, why: '1c' };
+    return { k: 'triage', miss: ['c1'], sev: o.sev, why: 'no1c' };
+  }
+  /* a point that now reads 1-2 while the 1C defect raised for an earlier 3-5 is still open: close it in 1C */
+  function staleDefects() {
+    var out = [], L1 = latest();
+    baseAll().forEach(function (x) {
+      var k = String(x.r.equip || '').toUpperCase() + '|' + String(x.i.key || x.i.label || ''), n = L1[k];
+      if (!n || !(n.d > String(x.r.date || '')) || n.s > 2) return;
+      var d = defectOf(x.r, x.i); if (d && stageOf(d) !== 'done') out.push({ unit: x.r.equip, point: x.i.label || x.i.key, defect: d.defect, at: n.d });
+    });
+    return out;
+  }
   /* decision 2: compliance against the 1C plan date */
   function comp(days) {
     var t0 = today(), from = addD(t0, -(days || COMP_DAYS)), due = 0, onTime = 0;
@@ -113,16 +152,30 @@
   }
   function stageOf(d) { return d ? (typeof cwStage === 'function' ? cwStage(d) : 'reg') : 'none'; }
   /* the population: findings graded 3-5 in the records the page shows */
-  function finds(recs) {
+  /* the findings graded 3-5, before any rule about their state: what a 1C defect is matched against */
+  function base(recs) {
     if (typeof findings !== 'function' || typeof sevOf !== 'function') return [];
-    /* the same rows the Maintenance Actions register lists (actionRows: actionState not "none"), graded 3-5,
-       so a step's count and the register filtered to that step are one number */
-    return findings(recs).filter(function (x) { return sevOf(x.r, x.i) >= 3 && (typeof actionState !== 'function' || actionState(x.r, x.i).k !== 'none'); });
+    return findings(recs).filter(function (x) { return sevOf(x.r, x.i) >= 3; });
   }
-  function defectOf(r, i) { var all = finds(typeof RECS !== 'undefined' ? RECS : []); return links(all).get(fkey(r, i)) || null; }
+  /* the population: findings graded 3-5 that are still a finding (CM_FIND1C_V1: not folded into a newer reading of the
+     same point, not cleared by one), the same rows the Maintenance Actions register lists */
+  function finds(recs) {
+    return base(recs).filter(function (x) { if (typeof actionState !== 'function') return true;
+      var s = actionState(x.r, x.i); return s.k !== 'none' && s.why !== 'cleared'; });
+  }
+  /* CM_FIND1C_V2 (build 631): the 3-5 findings of the whole page, worked out once a task, not once a row. defectOf() asked
+     base(RECS) - every finding of every record - for each row it was asked about, so a page of 1,000 rounds did ~10^7 grade
+     reads and the office froze (tests/bigday.cjs timed out on build 630). Cleared by the next task, as latest() is. */
+  var baseAllCache = null;
+  function baseAll() {
+    var R = typeof RECS !== 'undefined' ? RECS : [];
+    if (baseAllCache && baseAllCache.r === R && baseAllCache.n === R.length) return baseAllCache.v;
+    var v = base(R); baseAllCache = { r: R, n: R.length, v: v }; setTimeout(function () { baseAllCache = null; }, 0); return v;
+  }
+  function defectOf(r, i) { return links(baseAll()).get(fkey(r, i)) || null; }
   function stage(r, i) { return stageOf(defectOf(r, i)); }
   function flow(recs) {
-    var all = finds(recs), lk = links(finds(typeof RECS !== 'undefined' ? RECS : [])), out = { all: all, none: [], reg: [], prog: [], done: [] };
+    var all = finds(recs), lk = links(baseAll()), out = { all: all, none: [], reg: [], prog: [], done: [] };
     all.forEach(function (x) { out[stageOf(lk.get(fkey(x.r, x.i)))].push(x); });
     return out;
   }
@@ -181,6 +234,38 @@
   }
 
 
+  /* CM_ACTFLOW_V1 (build 628, Rickie 15.11 "go" on the mock-up): Maintenance Actions opens with the Overview's findings row
+     (its own ids, so both can be in the page), the step that is the register's filter marked, and under it the two problems
+     a planner chases - past the due date and no owner (named in CM or on the 1C defect). */
+  function renderFind(el, recs, opt) {
+    if (!el) return null;
+    opt = opt || {};
+    var fl = flow(recs), f = String(opt.filt || '');
+    var C = { NAVY: 'var(--accent)', AMB: 'var(--warning)', GRN: 'var(--good)', GRY: '#8a96a3' };
+    var rb = function (id, go, n, c, t, s, v, hot) {
+      return '<button type="button" class="rb' + (hot && v ? ' hot' : '') + (f === go ? ' on' : '') + '" id="' + id + '" data-af="' + go + '" aria-pressed="' + (f === go) + '" style="--c:' + c + '">'
+        + '<span class="rn">' + n + '</span><span class="rt">' + E(t) + '<small>' + E(s) + '</small></span><b class="v">' + v + '</b></button>'; };
+    var pb = function (af, col, txt) { return '<button type="button" data-af="' + af + '" class="' + (f === af ? 'on' : '') + '" aria-pressed="' + (f === af) + '"><i style="background:' + col + '"></i>' + E(txt) + '</button>'; };
+    el.className = 'cmflow';
+    el.innerHTML = '<div class="cfsec" id="actFlowFind"><div class="cft"><span>' + E(L('Findings → 1C defects', 'Замечания → дефекты 1С')) + '</span><small>'
+        + E(L('findings graded 3–5 and the 1C defect raised for them', 'замечания с оценкой 3–5 и дефекты 1С по ним')) + '</small>'
+        + '<button type="button" class="cfgo" data-kgo="cmwo">' + E(L('Defects raised →', 'Дефекты →')) + '</button></div>'
+        + '<div class="cfrib c5">'
+        + rb('actFind', 'f_all', 1, C.NAVY, L('Findings', 'Замечания'), L('graded 3–5', 'оценка 3–5'), fl.all.length)
+        + rb('actNodef', 'f_none', 2, C.AMB, L('Not raised in 1C', 'Не оформлено в 1С'), L('no defect yet', 'дефекта ещё нет'), fl.none.length, 1)
+        + rb('actDreg', 'f_reg', 3, C.GRY, L('Registered', 'Зарегистрирован'), L('defect in 1C, no work order', 'дефект в 1С, без заказ-наряда'), fl.reg.length)
+        + rb('actDprog', 'f_prog', 4, C.NAVY, L('In progress', 'В работе'), L('work order raised', 'заказ-наряд создан'), fl.prog.length)
+        + rb('actDdone', 'f_done', 5, C.GRN, L('Completed', 'Выполнено'), L('completed in 1C', 'выполнено в 1С'), fl.done.length)
+        + '</div>'
+        + '<div class="cfkey cfprob">'
+        + pb('over', 'var(--crit-ink)', (opt.over || 0) + ' ' + L('past the due date', 'просрочено по сроку'))
+        + pb('noown', 'var(--warning)', (opt.noown || 0) + ' ' + L('with no owner (in CM or in 1C)', 'без ответственного (в МС и в 1С)'))
+        + '</div></div>';
+    return { all: fl.all.length, none: fl.none.length, reg: fl.reg.length, prog: fl.prog.length, done: fl.done.length };
+  }
+  /* "In 1C" on the register's tabs: a defect registered or a work order in progress */
+  function inOneC(r, i) { var s = stage(r, i); return s === 'reg' || s === 'prog'; }
+
   /* Old rule beside new rule, on Data & Sync, for the first week (Rickie 15.11: check the numbers on the real site). */
   var CMP_UNTIL = '2026-11-23';
   function compare() {
@@ -192,19 +277,198 @@
     var oldOver = '–', oldComp = '–', oldNoown = '–', recs = typeof filtered === 'function' ? filtered() : [];
     try { oldOver = dueTabRows().filter(function (r) { return r.st === 'over'; }).length; } catch (e) {}
     try { var c = complianceCM(); oldComp = c.pct == null ? '–' : c.pct + '% (' + c.onTime + ' / ' + c.due + ')'; } catch (e) {}
-    try { oldNoown = findings(recs).filter(function (x) { return actionRequired(x.r, x.i) && !x.i.owner; }).length; } catch (e) {}
+    try { oldNoown = findings(recs).filter(function (x) { var o = actionStateOld(x.r, x.i); return (o.k === 'open' || o.k === 'triage') && !x.i.owner && !x.i.resp; }).length; } catch (e) {}
+    var oldOpen = '–', newOpen = '–', cleared = '–';
+    try { var fr = findings(recs);
+      oldOpen = fr.filter(function (x) { var o = actionStateOld(x.r, x.i); return o.k === 'open' || o.k === 'triage'; }).length;
+      newOpen = fr.filter(function (x) { return actionRequired(x.r, x.i); }).length;
+      cleared = fr.filter(function (x) { var a = actionState(x.r, x.i); return a.why === 'cleared' || a.why === 'later'; }).length; } catch (e) {}
     var p = plan(), c2 = comp(), f = flow(recs);
     var row = function (k, a, b, n) { return '<tr><td>' + E(k) + '</td><td class="num">' + E(a) + '</td><td class="num"><b>' + E(b) + '</b></td><td class="muted">' + E(n) + '</td></tr>'; };
-    box.innerHTML = '<h2>' + E(L('Overview numbers: old rule and new rule', 'Числа обзора: старое и новое правило')) + '</h2>'
+    box.innerHTML = '<h2>' + E(L('Overview and findings: old rule and new rule', 'Обзор и замечания: старое и новое правило')) + '</h2>'
       + '<p class="hint">' + E(L('From build 626 the Overview counts against 1C PM work orders. Shown here until ', 'С версии 626 обзор считает по заказ-нарядам ТО 1С. Показывается до ') + CMP_UNTIL.split('-').reverse().join('.')) + '</p>'
       + '<div class="tblwrap"><table class="grid"><thead><tr><th>' + E(L('Number', 'Показатель')) + '</th><th class="num">' + E(L('Old rule', 'Старое правило')) + '</th><th class="num">'
       + E(L('New rule', 'Новое правило')) + '</th><th>' + E(L('New rule says', 'Новое правило')) + '</th></tr></thead><tbody>'
       + row(L('Overdue', 'Просрочено'), oldOver, p.over.length, L('1C plan date passed, no CM round, order open (old: CM interval in hours)', 'плановая дата 1С прошла, обхода МС нет, заказ-наряд открыт (старое: интервал МС в часах)'))
       + row(L('Inspection compliance', 'Соблюдение сроков'), oldComp, c2.pct == null ? '–' : c2.pct + '% (' + c2.onTime + ' / ' + c2.due + ')', L('CM round within 10 days of the 1C plan date, orders of the last 30 days', 'обход МС в пределах 10 дней от плановой даты 1С, заказ-наряды за 30 дней'))
       + row(L('Unassigned actions → Not raised in 1C', 'Без ответственного → Не оформлено в 1С'), oldNoown, f.none.length, L('findings graded 3–5 with no 1C defect raised for them', 'замечания с оценкой 3–5 без дефекта в 1С'))
+      + row(L('Findings needing action (from build 630)', 'Замечания, требующие действий (с версии 630)'), oldOpen, newOpen, L('one finding per machine and point from its newest reading; status from the 1C defect; owner Maintenance when 1C names nobody', 'одно замечание на единицу и точку по последнему замеру; статус по дефекту 1С; ответственный — служба ТО, если в 1С никто не указан'))
+      + row(L('Cleared or carried by a newer reading', 'Сняты или перенесены новым замером'), '–', cleared, L('a later inspection read the same point again: 1–2 clears it, 3–5 carries it as one finding', 'тот же узел осмотрен позже: 1–2 снимает замечание, 3–5 переносит его как одно'))
       + '</tbody></table></div>';
   }
 
-  window.CMFlow = { compare: compare, plan: plan, dueRow: dueRow, owner1C: owner1C, warm: warm, deferOn: deferOn, comp: comp, flow: flow, stage: stage, isFind: function (r, i) { return sevOf(r, i) >= 3; }, defectOf: defectOf, render: render, cond: cond,
+
+  /* ---- CM_TABS2_V1 (build 629, Rickie 15.11 "go" on the mock-ups): card rows for Failure Analysis and Equipment
+     History, one Checks card on Data & Sync. Same card shape as the rest of the office page (.kpi in a .kpis row),
+     the explanation of each card in its (i). ---- */
+  function css() {
+    if (document.getElementById('cmTabs2Css')) return;
+    var st = document.createElement('style'); st.id = 'cmTabs2Css';
+    st.textContent = '.kpis.cmcards{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin:0 0 16px}'
+      + '@media (max-width:1100px){.kpis.cmcards{grid-template-columns:repeat(3,minmax(0,1fr))}}'
+      + '@media (max-width:640px){.kpis.cmcards{grid-template-columns:repeat(2,minmax(0,1fr))}}'
+      + '.kpis.cmcards .kpi{min-width:0}.kpis.cmcards .kpi .k{display:inline-flex;align-items:center;gap:4px}'
+      + '.kpis.cmcards .kpi .s{white-space:normal}.kpis.cmcards .kpi.hot .v{color:var(--crit-ink)}.kpis.cmcards .kpi.warnv .v{color:var(--g2-ink,#8a4b00)}'
+      + '.kpis.cmcards .kpi[role=button]{cursor:pointer}.kpis.cmcards .kpi[role=button]:hover{border-color:var(--accent)}'
+      + '.cmone{color:var(--muted);font-size:14px;padding:6px 0 2px}.cmTip.cmt2{margin-left:4px;vertical-align:middle}'
+      + '.cmchk{margin:0 0 16px}.cmchk .cl{display:flex;gap:10px;align-items:baseline;padding:10px 0;border-top:1px solid var(--border);font-size:14px}'
+      + '.cmchk .cl:first-of-type{border-top:0}.cmchk .cl b{min-width:18px;color:var(--good-ink)}.cmchk .cl.bad b{color:var(--crit-ink)}'
+      + '.cmchk .cl .x{color:var(--muted)}.cmchk .cl a{margin-left:auto;font-weight:600}'
+      + '.cmmiss{margin:0 0 16px}.cmmiss .cmbar{display:block;height:10px;border-radius:5px;background:#2B4C7E;min-width:2px}.cmmiss tr.cmnone td:first-child{color:var(--crit-ink);font-weight:600}.cmmiss tr.cmnone .cmbar{background:var(--crit-ink)}';
+    document.head.appendChild(st);
+  }
+  function tip(txt) { return '<button type="button" class="cmTip cmt2" aria-expanded="false" aria-label="' + E(txt) + '"><i aria-hidden="true">i</i><span class="tipbox" role="tooltip">' + E(txt) + '</span></button>'; }
+  function wireTips(el) {
+    el.querySelectorAll('.cmt2').forEach(function (b) {
+      var set = function (o) { b.classList.toggle('open', o); b.setAttribute('aria-expanded', String(o)); };
+      b.onmouseenter = function () { set(true); }; b.onmouseleave = function () { if (document.activeElement !== b) set(false); };
+      b.onfocus = function () { set(true); }; b.onblur = function () { set(false); };
+      b.onclick = function (e) { e.stopPropagation(); set(!b.classList.contains('open')); };
+    });
+  }
+  function card(k, v, s, info, cls, go) {
+    return '<div class="kpi ' + (cls || '') + '"' + (go ? ' role="button" tabindex="0" data-cgo="' + E(go) + '"' : '') + '><span class="hd"><span class="k">' + E(k) + tip(info) + '</span></span>'
+      + '<span class="v">' + E(v) + '</span><span class="s">' + E(s) + '</span></div>';
+  }
+  function dmy(d) { var p = String(d || '').slice(0, 10).split('-'); return p.length === 3 ? p[2] + '.' + p[1] + '.' + p[0] : String(d || ''); }
+  function num(n) { return Number(n || 0).toLocaleString('en-US'); }
+  function wireGo(el, go) {
+    el.querySelectorAll('[data-cgo]').forEach(function (c) {
+      var f = function () { go(c.getAttribute('data-cgo')); };
+      c.onclick = f; c.onkeydown = function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); f(); } };
+    });
+  }
+  /* Failure Analysis: the findings graded 3-5 in view, the machines, repeat points, the top failure mode, not raised in 1C */
+  function renderFail(el, f, recs) {
+    if (!el) return null; css();
+    var g3 = f.filter(function (x) { return (sevOf(x.r, x.i) || 0) >= 3; });
+    var units = {}, pts = {}, top = {}, coded = 0;
+    g3.forEach(function (x) { units[x.r.equip] = 1; var k = x.r.equip + '|' + (x.i.key || x.i.label || ''); pts[k] = pts[k] || {}; pts[k][x.r.date + '|' + x.r.type] = 1; });
+    f.forEach(function (x) { var k = typeof defectKeyOf === 'function' ? defectKeyOf(x.i) : (x.i.defect || ''); if (!k) return; coded++; top[k] = (top[k] || 0) + 1; });
+    var rep = Object.keys(pts).filter(function (k) { return Object.keys(pts[k]).length > 1; }).length;
+    var tk = Object.keys(top).sort(function (a, b) { return top[b] - top[a]; })[0];
+    var share = tk ? Math.round(top[tk] / coded * 100) : null;
+    var tl = tk ? (typeof defectKeyLabel === 'function' ? (defectKeyLabel(tk) || tk) : tk) : '';
+    var fl = flow(recs);
+    el.className = 'kpis cmcards'; el.id = el.id || 'failFlow';
+    el.innerHTML = card(L('Findings 3–5', 'Замечания 3–5'), num(g3.length), L('of ', 'из ') + num(f.length) + L(' findings', ' замечаний'),
+        L('Findings graded Degraded, Severe or Critical in the view the filter bar sets.', 'Замечания с оценкой «Ухудшенное», «Серьёзное» или «Критическое» в выборке фильтра.'))
+      + card(L('Machines', 'Единицы'), num(Object.keys(units).length), L('with a finding graded 3–5', 'с замечанием 3–5'),
+        L('Machines carrying at least one finding graded 3–5.', 'Единицы, у которых есть хотя бы одно замечание с оценкой 3–5.'))
+      + card(L('Repeat points', 'Повторы'), num(rep), L('same point graded 3+ twice', 'та же точка 3+ дважды'),
+        L('The same point on the same machine graded 3 or worse on two or more rounds: a fix that did not hold.', 'Одна и та же точка единицы с оценкой 3 и хуже в двух и более обходах: устранение не помогло.'), rep ? 'warnv' : '')
+      + card(L('Top failure mode', 'Главный вид отказа'), share == null ? '–' : share + '%', tl || L('no coded defect', 'нет кода дефекта'),
+        L('Share of coded findings that carry the most frequent defect type (the first bar of the Pareto).', 'Доля замечаний с самым частым видом дефекта (первая строка Парето).'))
+      + card(L('Not raised in 1C', 'Не оформлено в 1С'), num(fl.none.length), L('of ', 'из ') + num(fl.all.length) + L(' findings graded 3–5', ' замечаний 3–5'),
+        L('Findings graded 3–5 with no 1C defect raised for them. Press to open them in Maintenance Actions.', 'Замечания 3–5, по которым дефект в 1С не оформлен. Нажмите, чтобы открыть их в «Действиях по ТО».'), fl.none.length ? 'hot' : '', 'f_none');
+    wireTips(el);
+    wireGo(el, function (go) { try { if (typeof setAFilt === 'function') setAFilt(go); showTab('actions'); } catch (e) {} });
+    return { g3: g3.length, units: Object.keys(units).length, rep: rep, share: share, none: fl.none.length };
+  }
+  /* Equipment History: one row of cards about the chosen machine */
+  function renderMachine(el, unit, recs) {
+    if (!el) return null; css(); el.className = 'kpis cmcards'; el.id = el.id || 'eqCards';
+    if (!unit) { el.innerHTML = ''; el.hidden = true; return null; }
+    el.hidden = false;
+    var U = String(unit).toUpperCase(), a = (typeof ASSET_BY !== 'undefined' && ASSET_BY[U]) || ((window.ASSETS || []).find(function (x) { return x && String(x.n).toUpperCase() === U; })) || {};
+    var live = (recs || []).filter(function (r) { return !r._void; }).sort(function (x, y) { return String(y.date || '').localeCompare(String(x.date || '')); });
+    var last = live[0] || null;
+    var open = [];
+    try { open = finds(live).filter(function (x) { return typeof actionState !== 'function' || ['closed', 'noaction'].indexOf(actionState(x.r, x.i).k) < 0; }); } catch (e) {}
+    var worst = open.reduce(function (m, x) { return Math.max(m, sevOf(x.r, x.i) || 0); }, 0);
+    var wn = {}; open.forEach(function (x) { var s = sevOf(x.r, x.i); wn[s] = (wn[s] || 0) + 1; });
+    var ds = defects().filter(function (d) { return String(d.asset || '').toUpperCase() === U && (typeof cwStage !== 'function' || cwStage(d) !== 'done'); });
+    var t0 = today(), next = null;
+    try { (typeof paRows === 'function' ? paRows() : []).forEach(function (r) {
+      if (!r.w || String(r.w.equip || '').toUpperCase() !== U || r.w.open === false || !r.w.planStart) return;
+      if (!next || String(r.w.planStart) < String(next.w.planStart)) next = r; }); } catch (e) {}
+    var model = [a.mk || a.model || '', a.cat || a.desc || ''].filter(Boolean).join(' · ') || (a.cls ? L('class ', 'класс ') + a.cls : '');
+    var sevName = function (s) { return ((typeof SEV !== 'undefined' && SEV[s]) ? String(SEV[s].l) : String(s)).replace(/^\d+\s*[–-]\s*/, ''); };
+    el.innerHTML = card(L('Machine', 'Единица'), U, model || '–', L('The machine chosen above, as the register names it.', 'Единица, выбранная выше, по реестру.'))
+      + card(L('Last inspected', 'Последний осмотр'), last ? dmy(last.date) : '–', last ? [(typeof TYPE_LABEL !== 'undefined' && TYPE_LABEL[last.type]) || last.type, last.smu ? 'SMU ' + num(last.smu) + ' h' : ''].filter(Boolean).join(' · ') : L('no round recorded', 'обходов нет'),
+        L('The newest CM round on this machine.', 'Самый новый обход МС на этой единице.'))
+      + card(L('Open findings', 'Открытые замечания'), num(open.length), open.length ? Object.keys(wn).sort(function (x, y) { return y - x; }).map(function (s) { return wn[s] + ' ' + sevName(+s); }).join(' · ') : L('nothing graded 3–5 open', 'нет открытых 3–5'),
+        L('Findings graded 3–5 on this machine whose action is not closed.', 'Замечания 3–5 на этой единице, действие по которым не закрыто.'), worst >= 5 ? 'hot' : (worst >= 3 ? 'warnv' : ''))
+      + card(L('1C defects open', 'Дефекты 1С открыты'), num(ds.length), ds.length ? ds.slice(0, 2).map(function (d) { return d.defect; }).join(' · ') + (ds.length > 2 ? ' …' : '') : L('none open in 1C', 'в 1С нет открытых'),
+        L('Defects raised in 1C for this machine that are not completed (Defects raised).', 'Дефекты 1С по этой единице, которые не выполнены (вкладка «Дефекты»).'), '', ds.length ? 'cmwo' : '')
+      + card(L('Next 1C PM', 'Следующее ТО 1С'), next ? dmy(next.w.planStart) : '–', next ? [next.w.woNumber || '', next.info && next.info.label || ''].filter(Boolean).join(' · ') : L('no open PM work order', 'нет открытого наряда ТО'),
+        L('The earliest open 1C PM work order for this machine (Plan vs Actual).', 'Ближайший открытый наряд ТО 1С по этой единице (План / факт).'), next && String(next.w.planStart) < t0 ? 'hot' : '');
+    wireTips(el);
+    wireGo(el, function (go) { try { var q = document.getElementById('fQ'); if (q) { q.value = U; q.dispatchEvent(new Event('input', { bubbles: true })); } showTab(go); } catch (e) {} });
+    return { open: open.length, defects: ds.length, last: last ? last.date : '', next: next ? next.w.planStart : '' };
+  }
+  /* Data & Sync: one Checks card; a list section shows only while it has something in it */
+  function syncChecks(c) {
+    var tab = document.getElementById('tab-sync'); if (!tab) return; css();
+    var box = document.getElementById('syChecks');
+    var kp = document.getElementById('syncKpis');
+    if (!box) { box = document.createElement('div'); box.className = 'section cmchk'; box.id = 'syChecks'; if (kp && kp.parentNode) kp.parentNode.insertBefore(box, kp.nextSibling); else tab.appendChild(box); }
+    var sec = function (id) { var e = document.getElementById(id); return e ? (e.closest('.section') || e) : null; };
+    var rows = [
+      { n: c.sev, s: sec('sySevBox'), ok: L('Grades: every condition follows its grade or reading', 'Оценки: каждое состояние следует из оценки или замера'), bad: L('grade review required', 'нужна проверка оценки'), x: L(' to review', ' к проверке') },
+      { n: c.quar, s: sec('syQuarTbl'), ok: L('Records: every inspection names its unit, date, round and points', 'Записи: у каждого осмотра есть единица, дата, обход и точки'), bad: L('inspections requiring correction', 'осмотров требуют исправления'), x: L(' to correct', ' к исправлению') },
+      { n: c.gaps, s: sec('syGapTbl'), ok: L('Attachments: every photograph and video is on the server', 'Вложения: все фото и видео на сервере'), bad: L('records waiting on evidence', 'записей ждут вложений'), x: L(' waiting', ' ожидают'),
+        na: L('Attachments: no server attached, nothing to compare against', 'Вложения: сервер не подключён, сравнивать не с чем') }
+    ];
+    box.innerHTML = '<div class="secthd"><h2>' + E(L('Checks', 'Проверки')) + tip(L('Each check reads the records this page holds. A list opens below only when a check finds something.', 'Каждая проверка читает записи этой панели. Список ниже открывается, только когда проверка что-то нашла.')) + '</h2></div>'
+      + rows.map(function (r, ix) {
+        if (r.n == null) return '<div class="cl"><b>–</b>' + E(r.na || '') + '</div>';
+        if (!r.n) return '<div class="cl"><b>✓</b>' + E(r.ok) + '<span class="x">· 0' + E(r.x) + '</span></div>';
+        return '<div class="cl bad"><b>!</b>' + E(r.n + ' ' + r.bad) + '<a href="#" data-chk="' + ix + '">' + E(L('Open the list ↓', 'Открыть список ↓')) + '</a></div>';
+      }).join('')
+      + (function () { var sd = []; try { sd = staleDefects(); } catch (e) {}   /* CM_FIND1C_V1 */
+        if (!sd.length) return '<div class="cl" id="syStale1C"><b>✓</b>' + E(L('1C: no defect left open on a point that now reads normal', '1С: нет открытых дефектов на точках, которые теперь в норме')) + '</div>';
+        var list = sd.slice(0, 12).map(function (x) { return x.defect + ' · ' + x.unit + ' ' + x.point + ' (' + dmy(x.at) + ')'; }).join('\n') + (sd.length > 12 ? '\n…' : '');
+        return '<div class="cl bad" id="syStale1C" title="' + E(list) + '"><b>!</b>' + E(sd.length + ' ' + L('1C defects still open on a point that now reads 1–2: close them in 1C', 'дефектов 1С открыты, а точка теперь 1–2: закройте их в 1С')) + '</div>'; })();
+    rows.forEach(function (r) { if (r.s) r.s.hidden = !(r.n > 0); });   /* a section shows only while its check finds something */
+    box.querySelectorAll('[data-chk]').forEach(function (a) { a.onclick = function (e) { e.preventDefault(); var s = rows[+a.getAttribute('data-chk')].s; if (s) s.scrollIntoView({ behavior: 'smooth', block: 'start' }); }; });
+    wireTips(box);
+  }
+
+  /* ---- CM_MISS_V1 (build 631, Rickie 15.11 21:10 "we need also reason why the scheduled was not performed, statistics").
+     Plan vs Actual: of the 1C PM orders whose plan date fell in the last N days (COMP_DAYS), the ones without a CM round
+     (no round within the Plan vs Actual window), by the reason recorded for them: the deferral made on the phone or at a
+     desk for that machine and round (TERMS.WHY keys, else the words typed), and "No reason recorded" for the rest. Rounds
+     walked late are counted beside them, not as a reason. ---- */
+  function missStats(days) {
+    var t0 = today(), from = addD(t0, -(days || COMP_DAYS)), m = (typeof deferrals !== 'undefined' && deferrals) || {};
+    var out = { due: 0, done: 0, late: 0, miss: 0, by: {} };
+    planRows().forEach(function (r) {
+      var p = String(r.w.planStart); if (p < from || p > t0) return;
+      out.due++;
+      if (r.status === 'ontime' || r.status === 'early') { out.done++; return; }
+      if (r.status === 'late') { out.late++; return; }
+      out.miss++;
+      var u = String(r.w.equip || '').toUpperCase(), d = null;
+      (r.info.types || []).some(function (ty) { var x = m[ty + '|' + u]; if (x && !x.cleared && String(x.at || '').slice(0, 10) >= addD(p, -COMP_DAYS)) { d = x; return true; } return false; });
+      var k = d ? (d.whyKey || ('txt:' + String(d.why || '').trim().toLowerCase())) : 'none';
+      if (k === 'txt:') k = 'none';
+      var e = out.by[k] || (out.by[k] = { n: 0, units: [], label: d ? ((window.TERMS && TERMS.whyText) ? TERMS.whyText(d.whyKey, d.why, typeof lang !== 'undefined' ? lang : 'en') : (d.why || '')) : '' });
+      e.n++; if (e.units.indexOf(u) < 0) e.units.push(u);
+    });
+    return out;
+  }
+  function renderMiss(el, days) {
+    if (!el) return null; css();
+    var s = missStats(days), D = days || COMP_DAYS, keys = Object.keys(s.by).sort(function (a, b) { return (b === 'none') - (a === 'none') || s.by[b].n - s.by[a].n; });
+    var pct = function (n) { return s.miss ? Math.round(n / s.miss * 100) : 0; };
+    el.className = 'section cmmiss';
+    el.innerHTML = '<div class="secthd"><h2>' + E(L('Why scheduled rounds were not done', 'Почему плановые обходы не выполнены')) + tip(L('1C PM work orders whose plan date fell in the last ' + D + ' days with no CM round near it, by the reason recorded for the machine and round (Defer on the phone or here). Rounds done late are counted beside them.', 'Заказ-наряды ТО 1С с плановой датой за последние ' + D + ' дней без обхода МС рядом с ней, по причине, записанной для единицы и обхода (отложить на телефоне или здесь). Обходы, выполненные с опозданием, считаются отдельно.')) + '</h2>'
+      + '<span class="spacer"></span><span class="hint">' + E(L('last ', 'за ') + D + L(' days', ' дней')) + '</span></div>'
+      + '<div class="kpis cmcards" style="grid-template-columns:repeat(4,minmax(0,1fr))">'
+      + card(L('Planned in 1C', 'Запланировано в 1С'), num(s.due), L('orders with a CM round', 'наряды с обходом МС'), L('1C PM work orders that resolve to a CM round, plan date in the period.', 'Наряды ТО 1С, которым соответствует обход МС, с плановой датой в периоде.'))
+      + card(L('Done on time', 'Выполнено в срок'), num(s.done), s.due ? Math.round(s.done / s.due * 100) + '%' : '–', L('A CM round within the on-time window of the plan date.', 'Обход МС в пределах окна от плановой даты.'))
+      + card(L('Done late', 'Выполнено с опозданием'), num(s.late), s.due ? Math.round(s.late / s.due * 100) + '%' : '–', L('A CM round after the on-time window.', 'Обход МС позже окна.'), s.late ? 'warnv' : '')
+      + card(L('Not done', 'Не выполнено'), num(s.miss), s.due ? Math.round(s.miss / s.due * 100) + '%' : '–', L('No CM round near the plan date.', 'Обхода МС рядом с плановой датой нет.'), s.miss ? 'hot' : '')
+      + '</div>'
+      + (s.miss ? '<div class="tblwrap"><table class="grid cmmisst"><thead><tr><th>' + E(L('Reason', 'Причина')) + '</th><th class="num">' + E(L('Orders', 'Наряды')) + '</th><th class="num">%</th><th style="width:34%"></th><th>' + E(L('Machines', 'Единицы')) + '</th></tr></thead><tbody>'
+        + keys.map(function (k) { var e = s.by[k], lab = k === 'none' ? L('No reason recorded', 'Причина не указана') : (e.label || k);
+          return '<tr' + (k === 'none' ? ' class="cmnone"' : '') + '><td>' + E(lab) + '</td><td class="num"><b>' + e.n + '</b></td><td class="num">' + pct(e.n) + '%</td><td><span class="cmbar" style="width:' + pct(e.n) + '%"></span></td><td class="muted" title="' + E(e.units.join(', ')) + '">' + E(e.units.slice(0, 8).join(', ') + (e.units.length > 8 ? ' …' : '')) + '</td></tr>'; }).join('')
+        + '</tbody></table></div>' : '<div class="cmone">' + E(L('Every planned round of the period was done.', 'Все плановые обходы периода выполнены.')) + '</div>');
+    wireTips(el);
+    return s;
+  }
+
+  window.CMFlow = { fresh: function () { latestCache = null; baseAllCache = null; linkCache = { k: '', m: null }; }, missStats: missStats, renderMiss: renderMiss, find1C: find1C, staleDefects: staleDefects, base: base, renderFail: renderFail, renderMachine: renderMachine, syncChecks: syncChecks, dmy: dmy, renderFind: renderFind, inOneC: inOneC, compare: compare, plan: plan, dueRow: dueRow, owner1C: owner1C, warm: warm, deferOn: deferOn, comp: comp, flow: flow, stage: stage, isFind: function (r, i) { return sevOf(r, i) >= 3; }, defectOf: defectOf, render: render, cond: cond,
                     LINK_DAYS: LINK_DAYS, COMP_DAYS: COMP_DAYS, L: L };
 })();

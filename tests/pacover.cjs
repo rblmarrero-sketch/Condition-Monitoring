@@ -103,6 +103,7 @@ const srv = http.createServer((req, res) => {
       tableRows: document.querySelectorAll('#paList table.grid tbody tr').length,
       totalRows: rows.length,
       pagerText: (document.querySelector('#paList .pager .muted') || {}).textContent || '',
+      cap: SHOW_ALL_MAX,
     };
   });
   ok('the coverage line reads the same with the toggle off — it is not a function of what is shown',
@@ -113,8 +114,9 @@ const srv = http.createServer((req, res) => {
      unscoped total (2,641, open and completed work orders together). */
   ok('the pager now counts more of 1C\'s plan, not just the covered ones',
      matchN(after.pagerText) > matchN(before.pagerText), `${matchN(before.pagerText)} -> ${matchN(after.pagerText)}`);
-  ok('  and every one of them is on screen',
-     after.tableRows === matchN(after.pagerText), `${after.tableRows} of ${matchN(after.pagerText)}`);
+  /* CM_SHOWALL_CAP_V1 (build 628): "show all" holds up to SHOW_ALL_MAX rows; a longer list opens at the cap with All one press away */
+  ok('  and every one of them is on screen (up to the show-all cap)',
+     after.tableRows === Math.min(matchN(after.pagerText), after.cap), `${after.tableRows} of ${matchN(after.pagerText)} (cap ${after.cap})`);
 
   console.log('\n4. EVERY ROW CARRIES ITS OWN COVERAGE MARK, EVEN WITH EVERYTHING SHOWN');
   const dots = await p1.evaluate(() => {

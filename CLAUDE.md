@@ -5532,6 +5532,99 @@ still ahead, the order planned before the deferral's `pm`); the Overview's numbe
 register shows it with "· 1C", and it counts as an owner in triage and the "no owner" filter. Never write it into
 the record. `tests/sched1c.cjs`.
 
+
+**TABLES SHOW ALL UP TO 500 ROWS; MAINTENANCE ACTIONS OPENS WITH THE FINDINGS → 1C DEFECTS ROW (build 628, CM_SHOWALL_CAP_V1 +
+CM_ACTFLOW_V1, Rickie 15.11 "go").** `paged()` opens a table whole up to `SHOW_ALL_MAX` (500) and a longer one at 500 with "All"
+one press away (500 is one of `PAGE_SIZES`); a size somebody chose is kept. At a year's volume every row of every table at
+once is what crashes the office page (`tests/tablekit-scale-next.cjs` crashed on build 625 too). Maintenance Actions, both
+pages: the six cards, the closed-out bar (dashboard-next) and the state ribbon give way to `CMFlow.renderFind` in `#actFlow`
+(the Overview's findings row with its own ids `actFind`/`actNodef`/`actDreg`/`actDprog`/`actDdone`, each a filter
+`f_*`, plus "past the due date" `over` and "no owner (in CM or in 1C)" `noown`); the tabs are Open · Not raised in 1C
+(`f_none`) · In 1C (`f_in` = registered or in progress, `CMFlow.inOneC`) · Completed in 1C (`f_done`) · Critical; any other
+filter (from the row or the address) shows as a chip back to Open. A "1C defect" column (`def`, `actDef`/`actDefText`/`actDefCell`)
+shows the linked DD number and its stage, "Not raised in 1C" in red, the work order on the title; it is turned on once for a desk
+that saved a column choice before it existed (`cm_dash_actcols_def`). dashboard-next's bulk bar now appears only when rows are
+ticked, as dashboard/'s always did - a change to a recorded design difference, asked for on the mock-up. `#actKpis` stays in the
+page, empty and hidden.
+
+**FAILURE ANALYSIS, EQUIPMENT HISTORY AND DATA & SYNC IN THE STANDARD SHAPE; NO CM INTERVAL TAB (build 629, CM_TABS2_V1,
+Rickie 15.11 "go" on the mock-ups, 20:59 "remove the CM interval, we are basing all in 1C").** Both office pages.
+`dashboard/cm-flow.js` draws three things in the page's own `.kpi` card shape (label + (i), number, one line):
+- Failure Analysis `#failFlow`: Findings 3–5 · Machines · Repeat points (the same unit and point graded 3+ on two or more
+  rounds) · Top failure mode (share of coded findings) · Not raised in 1C (press = Maintenance Actions on that tab).
+  The card notes (Pareto, causes, ISO) go into the heading's (i) (`data-fold`, CM_PLAIN2_V1 folds them whatever their
+  length). An empty P–F chart and an empty ISO 14224 chart are one line each (`pf_none1`, `iso_none1`); dashboard-next's
+  Affected equipment lists the worst grade first until a heading is pressed.
+- Equipment History `#eqCards`: Machine · Last inspected · Open findings (graded 3–5, action not closed) · 1C defects open
+  (press = Defects raised, search set to the unit) · Next 1C PM (earliest open PM order, red when its plan date passed).
+  History dates read dd.mm.yyyy; the ISO date stays on the element as `data-d` (tests read it).
+- Data & Sync `#syChecks`: one Checks card (grades, records, attachments). A list section shows only while its check
+  finds something; "Open the list ↓" scrolls to it. The four tiles lost the tag that repeated their line.
+The Inspection Schedule has no "CM interval" tab: every view is the 1C PM work orders; Deferred still counts a deferral
+made on an hour-interval round. The hour rule (`dueTabRows`) is still computed and the address scope `cmint` still
+opens it, for the phone and for the checks that read it. CM_PLAIN2_V1 also puts a heading's (i) back when the language
+switch rewrites the heading (`data-i18n` sets textContent, which took the button with it).
+
+**FINDINGS FOLLOW 1C, ONE TABLE STANDARD, AND WHY PLANNED ROUNDS WERE NOT DONE (build 630, CM_FIND1C_V1 + CM_TBLSTD_V1 +
+CM_MISS_V1, Rickie 15.11 20:56-21:10).** Both office pages.
+- **Findings follow their point and their 1C defect** (21:02 "when they found something they create a defect ... 1000+
+  findings without actions is bad monitoring. Owner of that is always maintenance"; 21:03 "go"). `actionState` is now a
+  wrapper: an office decision on the finding (No action needed / Done / Verified) still wins; otherwise `CMFlow.find1C`
+  decides for a finding graded 3-5: a NEWER reading of the same machine and point graded 1-2 closes it ("cleared",
+  why:"cleared"), graded 3-5 carries it (this one is k:"none", why:"later" - one finding per point); then the 1C defect
+  matched to it (the links rule): Completed = closed, Registered / In progress = open, none = triage with the one missing
+  item `c1` ("1C defect required"). CM asks for no priority or due date once 1C decides (the Due cell shows "—").
+  `ownerOf`: the finding's own owner, else the 1C defect's responsible person, else "Maintenance" (`own_maint`) for any
+  finding graded 3-5 or carrying an action. The rule before is `actionStateOld`, kept for the old-rule / new-rule card on
+  Data & Sync (two new rows: findings needing action, cleared or carried). The Checks card has a fifth line: 1C defects
+  still open on a point that now reads 1-2 (`CMFlow.staleDefects`). `finds()` no longer calls actionState to match 1C
+  defects (`base()`), so the link map cannot recurse.
+- **The table standard** (20:56 "Freeze pane, columns, horizontal bar, put all columns by default"; KB UI_STANDARD §22-23):
+  `#cmTblStdCss` / `#cmTblStdJs` run after `cmCardify` on every redraw. On a desk a table no longer becomes cards: it may
+  shrink a little (to 85 %, was 60 %), a words column is never squeezed under 140 px, and what still does not fit
+  SLIDES in its own box (`table.cmslide`, box `.cmslidebox`). Any table whose box slides gets frozen columns (`cmfrz`,
+  `.cmfz` sticky, navy edge `.cmfzE`): the tick column and through the unit / asset column when it is among the first
+  four, never more than 55 % of the box; and the held slider `.cmhs` (◀ track ▶) at the bottom of the window while the
+  box's own bar is out of view. Every long table (5+ named columns, 3+ rows) that has no Columns control of its own gets
+  ⚙ Columns (`.cmcolbar`, on the table's own toolbar next to Export CSV when it has one), all on by default, kept per
+  browser (`cm_tblcols_<tab>_<table>`). Every column by default: Maintenance Actions shows all ten once
+  (`cm_dash_actcols_all`), the fleet table hides Inspected / Findings only on a phone (`.hide-m` and FLEET_MQ at 900 px,
+  was 1500). A phone keeps its cards.
+- **Why scheduled rounds were not done** (21:10 "we need also reason why the scheduled was not performed, statistics"):
+  Plan vs Actual `#paMiss` (`CMFlow.renderMiss`): of the 1C PM orders with a CM round whose plan date fell in the last 30
+  days - planned · done on time · done late · not done, and the not-done ones by the reason recorded for that machine and
+  round (the deferral's `whyKey` through `TERMS.whyText`, else the words typed, else "No reason recorded" in red), with
+  counts, share and the machines.
+
+**THE PAGE'S 3-5 FINDINGS ARE WORKED OUT ONCE A TASK, NOT ONCE A ROW (build 631, CM_FIND1C_V2).** Found by the full sweep on
+630: `tests/bigday.cjs` (1,000 inspections) timed out and `scale` / `scaleload` failed. `CMFlow.defectOf()` asked `base(RECS)` -
+every finding of every record, each one graded through `sevOf` - for EVERY row it was asked about (`ownerOf`, `actionState`,
+the KPI strip), so a 1,000-round folder did ~10^7 grade reads: the office page took 166 s to load and then froze in
+`renderAll`. `baseAll()` keeps the answer for the rest of the task (keyed on `RECS` and its length, cleared by `setTimeout 0`,
+as `latest()` already was, and by `CMFlow.fresh()`); `defectOf`, `flow`, `warm` and `find1C` read it. Measured on the bigday
+fixture: load 166 s -> 8 s, renderAll -> 2.4 s. Also: the fleet table's owner button (`#fleetTbl .xf.who`) no longer takes
+the 32 px desk-control floor, so a row with an owner (every 3-5 finding has one since 630) is the same height as the rest;
+`tests/schedparity.cjs` counts the CM interval scope by its address (`ddScope=cmint`, no tab since 629); `tests/overview2.cjs`
+and `tests/ovtables.cjs` assert the build-630 rule (all columns at 1366, a table that does not fit slides in its box with the
+machine frozen) instead of "never scrolls sideways" / "Inspected and Findings off at 1366".
+
+**THE SWEEP OF 16.11 ON 628-631 (build 632).** A full sweep of the unreleased builds 628-631 left 27 suites red. Re-run alone,
+and against the live branch for comparison, five were already red on the live branch (`cmraised` before noon site, `batch`,
+`data-window-next`, `failure-next`, `tablekit-scale-next`) and left as found. Four were real defects, fixed:
+- the owner button keeps the 32 px desk floor (`phase6`); it reaches into the cell padding (`margin:-8px`, `vertical-align:
+  middle`), and on dashboard-next its cell takes the 8 px row padding the button exemption left it without (13 px made owned
+  rows 43 px against 33);
+- the held slider's arrows say what they do in the page's language (`lint`);
+- Lube master's typed values survive a redraw again: `keepEdits`' `boxKey` read the table's class names, and the table
+  standard adds `cmslide` / `cmfrz` after drawing, so a typed box never matched its redrawn self (`lubehead`);
+- a scorecard (`table.scorecard`, the Lubrication programme coverage) gets no Columns bar (`layout`).
+The rest checked rules builds 628-630 changed on request, and now check the new ones: the frozen slide box is not a sideways
+scroller (`cards` and five dashboard-next suites); Maintenance Actions compares the findings -> 1C row, not six tiles
+(`actions-next`); six schedule views, no CM interval (`sched1c`, `due-next`); a 3-5 finding has an owner (`follow`) and waits
+for its 1C defect, the CM-field rule being `actionStateOld` (`actdef`); history dates are dd.mm.yyyy (`edgrade`); the
+register count is the page's own after carry / clear (`scale`); five rows on the old/new card (`cmflow`); a toolbar between
+two cards is not a gap (`dashlayout`); Data & Sync may be 2.2 screens until the compare card goes on 23.11 (`phase5`).
+
 ---
 
 ## Secrets

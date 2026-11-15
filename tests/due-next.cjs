@@ -124,7 +124,8 @@ const tileMap = async p => p.$$eval('#dueKpis .kpi, #dueKpis .tile', els => {
      Completed, All -- eight views as tabs ("Overdue & due soon" stays a
      valid #ddScope value for an address that names it, but is not itself a
      tab -- see the comment above the <select> markup in index.html). */
-  ok('Show segmented control has all seven views (1C: overdue, 7 days, later, done; deferred, never, CM interval)', seg.length === 7, JSON.stringify(seg));
+  /* build 629 (Rickie 15.11 20:59 "remove the CM interval, we are basing all in 1C"): six views, no CM interval tab */
+  ok('Show segmented control has the six views (1C: overdue, 7 days, later, done; deferred, never) and no CM interval', seg.length === 6 && !seg.some(x => /CM interval|Интервал МС/.test(x)), JSON.stringify(seg));
 
   /* ── Round filter and Search box are present ───────────────────────────── */
   const controls = await n.evaluate(() => ({

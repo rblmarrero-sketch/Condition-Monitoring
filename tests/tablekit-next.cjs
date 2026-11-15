@@ -121,7 +121,7 @@ const TABLES = [['failure', 'failAffTbl'], ['wear', 'wearTbl'], ['overview', 'co
       ok(`${id}: second click reverses`, JSON.stringify(d) !== JSON.stringify(a) || a.length < 2);
     }
 
-    const hs = await p.evaluate(() => [...document.querySelectorAll('main *')].filter(e => e.scrollWidth > e.clientWidth + 2 && /(auto|scroll)/.test(getComputedStyle(e).overflowX) && e.offsetParent).length);
+    const hs = await p.evaluate(() => [...document.querySelectorAll('main *')].filter(e => e.scrollWidth > e.clientWidth + 2 && /(auto|scroll)/.test(getComputedStyle(e).overflowX) && e.offsetParent && !(e.classList.contains('cmslidebox') && e.querySelector('table.cmfrz'))).length);   /* build 630: the frozen slide box is the standard */
     ok(`${id}: nothing scrolls sideways at 1366`, hs === 0, hs + ' scrollers');
   }
 

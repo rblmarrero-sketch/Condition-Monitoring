@@ -1821,7 +1821,7 @@
     background:var(--accent);color:var(--accent-ink,#fff);font-size:12px;font-weight:700;}
   body.filtered main > .controls:not(.more){border-left:3px solid var(--accent);}
   .resetb[disabled]{opacity:.4;cursor:default;}
-  @media (max-width:1500px){ .hide-m{display:none !important;} }
+  @media (max-width:900px){ .hide-m{display:none !important;} }   /* CM_TBLSTD_V1: every column on a desk */
   .chip{display:inline-flex;align-items:center;gap:7px;background:color-mix(in srgb,var(--accent) 14%,var(--surface));
     border:1px solid color-mix(in srgb,var(--accent) 40%,var(--border));color:var(--ink);
     border-radius:999px;padding:4px 6px 4px 11px;font-size:12.5px;}
@@ -2605,6 +2605,8 @@
   /* the owner's initials are the one thing in a row taller than a line of
      text; at a line's height every row is the same height */
   #fleetTbl .xf.who{padding-top:0;padding-bottom:0;margin-top:-3px;margin-bottom:-3px;}
+  #fleetTbl .xf.who{margin-top:-8px !important;margin-bottom:-8px !important;vertical-align:middle;}   /* build 631: the button keeps the 32 px desk floor and reaches into the cell's padding, so an owned row is as tall as the rest (every 3+ finding has an owner since 630) */
+  html #fleetTbl td:has(> .xf.who){padding-top:8px;padding-bottom:8px;}   /* build 631: the 8 px row rule leaves out cells with a button; the owner cell kept 13 px and made owned rows 11 px taller */
   #fleetTbl .xf.who i{width:20px;height:20px;}
     .covcell{min-width:180px;}
   .covrow{display:flex;align-items:center;gap:9px;}
@@ -2730,6 +2732,7 @@
   #actionTbl table.acttbl th.ac-due{width:156px;}
   #actionTbl table.acttbl th.ac-st{width:180px;}
   #actionTbl table.acttbl th.ac-wo{width:100px;}
+  #actionTbl table.acttbl th.ac-def{width:200px;}   /* CM_ACTFLOW_V1: "DD-031200 · In progress" whole */
   #actionTbl table.acttbl thead th.sortable{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   #actionTbl table.acttbl tbody td{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:middle;}
   #actionTbl table.acttbl tbody tr.hrow{height:40px;}
@@ -3325,45 +3328,49 @@
   .seg.cmViews{display:inline-flex;margin:0 0 var(--s3,12px);}
 </style>
 <style id="cmOvFlowCss">/* CM_FLOW_V1 (build 626): the Overview's three flow rows - dashboard/cm-flow.js */
-#kpis.cmflow{display:block!important;margin:0 0 20px;grid-template-columns:none!important}
-#kpis.cmflow .cfsec{background:var(--surface);border:1px solid var(--border);border-radius:var(--r,10px);padding:14px 16px 16px;margin:0 0 14px}
-#kpis.cmflow .cfsec:last-child{margin-bottom:0}
-#kpis.cmflow .cft{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 10px;margin:0 0 10px}
-#kpis.cmflow .cft>span{font-size:14px;font-weight:600;color:var(--ink)}
-#kpis.cmflow .cft small{font-size:12.5px;color:var(--muted)}
-#kpis.cmflow .cfgo{all:unset;cursor:pointer;margin-left:auto;font-size:13px;font-weight:600;color:var(--accent)}
-#kpis.cmflow .cfgo:hover,#kpis.cmflow .cfgo:focus-visible{text-decoration:underline}
-#kpis.cmflow .cfrib{display:grid;gap:8px}
-#kpis.cmflow .cfrib.c4{grid-template-columns:repeat(4,minmax(0,1fr))}
-#kpis.cmflow .cfrib.c5{grid-template-columns:repeat(5,minmax(0,1fr))}
-#kpis.cmflow .rb{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:9px;min-width:0;min-height:56px;
+:is(#kpis,#actFlow).cmflow{display:block!important;margin:0 0 20px;grid-template-columns:none!important}
+:is(#kpis,#actFlow).cmflow .cfsec{background:var(--surface);border:1px solid var(--border);border-radius:var(--r,10px);padding:14px 16px 16px;margin:0 0 14px}
+:is(#kpis,#actFlow).cmflow .cfsec:last-child{margin-bottom:0}
+:is(#kpis,#actFlow).cmflow .cft{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 10px;margin:0 0 10px}
+:is(#kpis,#actFlow).cmflow .cft>span{font-size:14px;font-weight:600;color:var(--ink)}
+:is(#kpis,#actFlow).cmflow .cft small{font-size:12.5px;color:var(--muted)}
+:is(#kpis,#actFlow).cmflow .cfgo{all:unset;cursor:pointer;margin-left:auto;font-size:13px;font-weight:600;color:var(--accent)}
+:is(#kpis,#actFlow).cmflow .cfgo:hover,:is(#kpis,#actFlow).cmflow .cfgo:focus-visible{text-decoration:underline}
+:is(#kpis,#actFlow).cmflow .cfrib{display:grid;gap:8px}
+:is(#kpis,#actFlow).cmflow .cfrib.c4{grid-template-columns:repeat(4,minmax(0,1fr))}
+:is(#kpis,#actFlow).cmflow .cfrib.c5{grid-template-columns:repeat(5,minmax(0,1fr))}
+:is(#kpis,#actFlow).cmflow .rb{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:9px;min-width:0;min-height:56px;
   border:1px solid var(--border);border-top:3px solid var(--c);border-radius:10px;padding:8px 11px;background:var(--surface);position:relative}
-#kpis.cmflow .rb:hover{background:var(--surface-2)}
-#kpis.cmflow .rb:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-#kpis.cmflow .rb:not(:last-child)::after{content:"";position:absolute;right:-9px;top:50%;width:9px;height:2px;background:var(--border)}
-#kpis.cmflow .rb.hot{background:color-mix(in srgb,var(--c) 8%,var(--surface))}
-#kpis.cmflow .rn{flex:0 0 22px;height:22px;border-radius:50%;background:var(--c);color:#fff;font-size:12px;font-weight:700;line-height:22px;text-align:center}
-#kpis.cmflow .rt{flex:1 1 auto;min-width:0;font-size:13px;font-weight:600;line-height:1.2;color:var(--ink)}
-#kpis.cmflow .rt small{display:block;font-size:11.5px;font-weight:400;color:var(--muted);margin-top:2px}
-#kpis.cmflow .rb b{font-size:20px;font-weight:600;line-height:1;font-variant-numeric:tabular-nums;color:var(--ink)}
-#kpis.cmflow .rb.hot b{color:var(--c)}
-#kpis.cmflow .cfcond{display:flex;align-items:center;gap:10px 16px;flex-wrap:wrap}
-#kpis.cmflow .cfbar{flex:1 1 300px;height:12px;min-height:12px;padding:0;margin:0;border:0;box-sizing:border-box;border-radius:99px;overflow:hidden;display:flex;align-items:stretch;background:var(--surface-2)}
-#kpis.cmflow .cfbar i{display:block;align-self:stretch;height:auto;min-height:12px;margin:0;padding:0;border:0}
-#kpis.cmflow .cfkey{display:flex;flex-wrap:wrap;gap:0 4px}
-#kpis.cmflow .cfkey button{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:0 8px;border-radius:8px;font-size:13px;color:var(--ink);white-space:nowrap}
-#kpis.cmflow .cfkey button:hover{background:var(--surface-2)}
-#kpis.cmflow .cfkey button.on{background:var(--surface-2);box-shadow:inset 0 0 0 1px var(--border)}
-#kpis.cmflow .cfkey button[disabled]{cursor:default;color:var(--muted)}
-#kpis.cmflow .cfkey i{width:10px;height:10px;border-radius:50%}
-#kpis.cmflow .cfkey b{font-variant-numeric:tabular-nums}
-@media (max-width:1100px){#kpis.cmflow .cfrib.c5{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media (max-width:820px){#kpis.cmflow .cfrib.c4,#kpis.cmflow .cfrib.c5{grid-template-columns:1fr 1fr}#kpis.cmflow .rb::after{display:none}}
-@media (max-width:420px){#kpis.cmflow .cfrib.c4,#kpis.cmflow .cfrib.c5{grid-template-columns:1fr}}
+:is(#kpis,#actFlow).cmflow .rb:hover{background:var(--surface-2)}
+:is(#kpis,#actFlow).cmflow .rb:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+:is(#kpis,#actFlow).cmflow .rb:not(:last-child)::after{content:"";position:absolute;right:-9px;top:50%;width:9px;height:2px;background:var(--border)}
+:is(#kpis,#actFlow).cmflow .rb.hot{background:color-mix(in srgb,var(--c) 8%,var(--surface))}
+:is(#kpis,#actFlow).cmflow .rn{flex:0 0 22px;height:22px;border-radius:50%;background:var(--c);color:#fff;font-size:12px;font-weight:700;line-height:22px;text-align:center}
+:is(#kpis,#actFlow).cmflow .rt{flex:1 1 auto;min-width:0;font-size:13px;font-weight:600;line-height:1.2;color:var(--ink)}
+:is(#kpis,#actFlow).cmflow .rt small{display:block;font-size:11.5px;font-weight:400;color:var(--muted);margin-top:2px}
+:is(#kpis,#actFlow).cmflow .rb b{font-size:20px;font-weight:600;line-height:1;font-variant-numeric:tabular-nums;color:var(--ink)}
+:is(#kpis,#actFlow).cmflow .rb.hot b{color:var(--c)}
+:is(#kpis,#actFlow).cmflow .cfcond{display:flex;align-items:center;gap:10px 16px;flex-wrap:wrap}
+:is(#kpis,#actFlow).cmflow .cfbar{flex:1 1 300px;height:12px;min-height:12px;padding:0;margin:0;border:0;box-sizing:border-box;border-radius:99px;overflow:hidden;display:flex;align-items:stretch;background:var(--surface-2)}
+:is(#kpis,#actFlow).cmflow .cfbar i{display:block;align-self:stretch;height:auto;min-height:12px;margin:0;padding:0;border:0}
+:is(#kpis,#actFlow).cmflow .cfkey{display:flex;flex-wrap:wrap;gap:0 4px}
+:is(#kpis,#actFlow).cmflow .cfkey button{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:0 8px;border-radius:8px;font-size:13px;color:var(--ink);white-space:nowrap}
+:is(#kpis,#actFlow).cmflow .cfkey button:hover{background:var(--surface-2)}
+:is(#kpis,#actFlow).cmflow .cfkey button.on{background:var(--surface-2);box-shadow:inset 0 0 0 1px var(--border)}
+:is(#kpis,#actFlow).cmflow .cfkey button[disabled]{cursor:default;color:var(--muted)}
+:is(#kpis,#actFlow).cmflow .cfkey i{width:10px;height:10px;border-radius:50%}
+:is(#kpis,#actFlow).cmflow .cfkey b{font-variant-numeric:tabular-nums}
+@media (max-width:1100px){:is(#kpis,#actFlow).cmflow .cfrib.c5{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:820px){:is(#kpis,#actFlow).cmflow .cfrib.c4,:is(#kpis,#actFlow).cmflow .cfrib.c5{grid-template-columns:1fr 1fr}:is(#kpis,#actFlow).cmflow .rb::after{display:none}}
+@media (max-width:420px){:is(#kpis,#actFlow).cmflow .cfrib.c4,:is(#kpis,#actFlow).cmflow .cfrib.c5{grid-template-columns:1fr}}
 
-#kpis.cmflow .cfgo,#kpis.cmflow .cfkey button{min-height:32px;display:inline-flex;align-items:center}
-#kpis.cmflow .cfgo{margin-block:-7px}   /* a 32 px target that does not make the header taller */
-#kpis.cmflow button:focus-visible,#kpis.cmflow .cfgo:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+:is(#kpis,#actFlow).cmflow .cfgo,:is(#kpis,#actFlow).cmflow .cfkey button{min-height:32px;display:inline-flex;align-items:center}
+:is(#kpis,#actFlow).cmflow .cfgo{margin-block:-7px}
+#actFlow.cmflow .rb.on{box-shadow:inset 0 0 0 2px var(--c)}
+#actFlow.cmflow .cfprob{margin-top:10px}
+#actFlow.cmflow .cfprob i{width:10px;height:10px;border-radius:50%}
+#actFlow.cmflow .cfprob button.on{background:var(--surface-2);box-shadow:inset 0 0 0 1px var(--border)}   /* CM_ACTFLOW_V1 */   /* a 32 px target that does not make the header taller */
+:is(#kpis,#actFlow).cmflow button:focus-visible,:is(#kpis,#actFlow).cmflow .cfgo:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 </style>
 </head>
 <body>
@@ -4185,15 +4192,16 @@
          duplicate row is removed rather than re-labelled, and nothing about
          the shared bar or this tab's charts/table changed — they already
          read fType/fClass/fRange/fCount/fReset directly. -->
+    <div id="failFlow" class="kpis cmcards"></div>
     <div class="grid12">
     <div class="section g7">
       <h2 data-i18n="s_pareto">Top failure modes (Pareto)</h2>
-      <div class="sub" data-i18n="s_pareto_sub">Coded defect types ranked by frequency — this is your defect-elimination shortlist.</div>
+      <div class="sub" data-fold data-i18n="s_pareto_sub">Coded defect types ranked by frequency — this is your defect-elimination shortlist.</div>
       <div class="pareto" id="paretoDefect"></div>
     </div>
     <div class="section g5">
       <h2 data-i18n="s_cause">Direct causes</h2>
-      <div class="sub" data-i18n="s_cause_sub">Why those defects occurred, as recorded at inspection.</div>
+      <div class="sub" data-fold data-i18n="s_cause_sub">Why those defects occurred, as recorded at inspection.</div>
       <div class="pareto" id="paretoCause"></div>
     </div>
     <!-- The Pareto says what fails. This says how long you have once it starts
@@ -4211,7 +4219,7 @@
     </div>
     <div class="section g5">
       <h2 data-i18n="s_iso">ISO 14224 failure mechanism</h2>
-      <div class="sub" data-i18n="s_iso_sub">Table B.2 mechanism classes — comparable across sites and benchmarks.</div>
+      <div class="sub" data-fold data-i18n="s_iso_sub">Table B.2 mechanism classes — comparable across sites and benchmarks.</div>
       <div class="pareto" id="paretoIso"></div>
       <!-- The mockup's own "Mechanism classes (ISO 14224 Table B.2)" table
            (Mechanism class / Failures / Share / Comparable with) was replaced
@@ -4265,7 +4273,8 @@
         <button class="btn" id="wearCsv" data-i18n="w_csv">⬇ Export CSV</button>
       </div>
       <select id="wBand" class="hidden">
-        <option value="due"></option><option value="act"></option><option value="all"></option>
+        <option value="due"></option><option value="act"></option>
+          <option value="all"></option>
         <option value="watch"></option><option value="soon"></option><option value="life"></option>
         <option value="plan"></option><option value="second"></option>
       </select>
@@ -4280,7 +4289,7 @@
       <div class="pgt"><h1 data-i18n="s_act">Maintenance Actions</h1>
         <span class="pgsub" data-i18n="a_purpose">Every finding that needs work: who owns it, by when, and what is still missing.</span></div>
     </div>
-    <div class="kpis" id="actKpis"></div>
+    <div id="actFlow" class="cmflow"></div><div class="kpis" id="actKpis" hidden></div>
     <!-- THE CLOSED-OUT PROGRESS BAR (Actions.dc.html). A dedicated panel, not
          the trailing muted sentence the state-breakdown bar below already
          carries — that bar (#actBar) answers a different question (open vs
@@ -4369,6 +4378,7 @@
           <span class="hint" id="equipShown"></span>
         </span></div>
     </div>
+    <div id="eqCards" class="kpis cmcards" hidden></div>   <!-- CM_TABS2_V1: the chosen machine in five cards -->
     <div class="section">
       <!-- The report belongs where the inspection is. Reaching it used to mean
            leaving this screen for the Reports tab and picking, from a list of
@@ -4545,6 +4555,7 @@
         <span class="pgsub" id="paAsOf"></span></div>
     </div>
     <div class="kpis" id="paKpis"></div>
+    <div id="paMiss"></div>   <!-- CM_MISS_V1: why scheduled rounds were not done -->
     <!-- CONTROLS ABOVE THE GRID, PER Plan.dc.html: the 1C-plan-date/Round
          filters, the Open/Completed/All work-order toggle, the
          CM-coverage checkbox and the table search all sit in one row
@@ -4798,7 +4809,7 @@
          about what the file currently says. -->
     <div class="section" id="syWoFeedBox" style="margin-bottom:var(--s4)">
       <div class="secthd"><h2 data-i18n="sy_wo_h">1C work-order feed</h2></div>
-      <div class="pgsub" data-i18n="sy_wo_sub">Inspections are planned against 1C work orders. 1C exports WO.xlsx, the pipeline turns it into the work-order file this dashboard reads (about hourly, and again as soon as the export changes), and the dashboard re-reads that file every 10 minutes and whenever this tab comes back into view. Phones read their own slice of it on the same timer.</div>
+      <div class="sub" data-fold data-i18n="sy_wo_sub">Inspections are planned against 1C work orders. 1C exports WO.xlsx, the pipeline turns it into the work-order file this dashboard reads (about hourly, and again as soon as the export changes), and the dashboard re-reads that file every 10 minutes and whenever this tab comes back into view. Phones read their own slice of it on the same timer.</div>
       <div id="syWoFeed"></div>
     </div>
     <details class="method admin" id="syAdmin">
@@ -5191,23 +5202,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=627"></script>
+<script src="../data/magnetic_plug.js?v=632"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=627"></script>
-<script src="../mobile/hme.js?v=627"></script>
-<script src="../mobile/mp-fc.js?v=627"></script>
-<script src="../mobile/rtw.js?v=627"></script>
-<script src="../mobile/hme-cascade.js?v=627"></script>
-<script src="../mobile/temp-limits.js?v=627"></script>
+<script src="../data/work_orders.js?v=632"></script>
+<script src="../mobile/hme.js?v=632"></script>
+<script src="../mobile/mp-fc.js?v=632"></script>
+<script src="../mobile/rtw.js?v=632"></script>
+<script src="../mobile/hme-cascade.js?v=632"></script>
+<script src="../mobile/temp-limits.js?v=632"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=627"></script>
-<script src="../mobile/normalize.js?v=627"></script>
-<script src="../mobile/terms.js?v=627"></script>
+<script src="../mobile/assets.js?v=632"></script>
+<script src="../mobile/normalize.js?v=632"></script>
+<script src="../mobile/terms.js?v=632"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -5226,22 +5237,22 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=627"></script>
-<script src="../mobile/edits.js?v=627"></script>
-<script src="../mobile/due.js?v=627"></script>
-<script src="../dashboard/cm-flow.js?v=627"></script>
-<script src="../mobile/wear.js?v=627"></script>
-<script src="../mobile/wear-map.js?v=627"></script>
-<script src="../mobile/lube.js?v=627"></script>
-<script src="../mobile/lube-overrides.js?v=627"></script>
-<script src="../mobile/lube2027.js?v=627"></script>
-<script src="../mobile/lube-tds.js?v=627"></script>
-<script src="../dashboard/lube-master.js?v=627"></script>
-<script src="../dashboard/wear-limits.js?v=627"></script>
+<script src="../mobile/grade.js?v=632"></script>
+<script src="../mobile/edits.js?v=632"></script>
+<script src="../mobile/due.js?v=632"></script>
+<script src="../dashboard/cm-flow.js?v=632"></script>
+<script src="../mobile/wear.js?v=632"></script>
+<script src="../mobile/wear-map.js?v=632"></script>
+<script src="../mobile/lube.js?v=632"></script>
+<script src="../mobile/lube-overrides.js?v=632"></script>
+<script src="../mobile/lube2027.js?v=632"></script>
+<script src="../mobile/lube-tds.js?v=632"></script>
+<script src="../dashboard/lube-master.js?v=632"></script>
+<script src="../dashboard/wear-limits.js?v=632"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=627"></script>
-<script src="../mobile/machine-photos.js?v=627"></script>
+<script src="../mobile/upload-defaults.js?v=632"></script>
+<script src="../mobile/machine-photos.js?v=632"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -5250,17 +5261,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=627"></script>
-<script src="../mobile/get.js?v=627"></script>
-<script src="../mobile/points.js?v=627"></script>
-<script src="../mobile/uc-points.js?v=627"></script>
-<script src="../mobile/inspect-guide.js?v=627"></script>
-<script src="../mobile/get-figs.js?v=627"></script>
-<script src="../mobile/body-points.js?v=627"></script>
-<script src="../mobile/body-map.js?v=627"></script>
-<script src="../mobile/jspdf.umd.min.js?v=627"></script>
-<script src="../mobile/html2canvas.min.js?v=627"></script>
-<script src="../mobile/report-core.js?v=627"></script>
+<script src="../mobile/machine-fig.js?v=632"></script>
+<script src="../mobile/get.js?v=632"></script>
+<script src="../mobile/points.js?v=632"></script>
+<script src="../mobile/uc-points.js?v=632"></script>
+<script src="../mobile/inspect-guide.js?v=632"></script>
+<script src="../mobile/get-figs.js?v=632"></script>
+<script src="../mobile/body-points.js?v=632"></script>
+<script src="../mobile/body-map.js?v=632"></script>
+<script src="../mobile/jspdf.umd.min.js?v=632"></script>
+<script src="../mobile/html2canvas.min.js?v=632"></script>
+<script src="../mobile/report-core.js?v=632"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -5392,6 +5403,8 @@ const I18N={
   pf_note_no:"{u} \u00b7 {p}: not enough movement between readings to measure a P\u2013F interval yet.",
   pf_none:"No P\u2013F interval to draw yet",
   pf_none_s:"It needs a position measured at least twice, with a condemn figure. Undercarriage, GET and tray rounds produce these.",
+  pf_none1:"Nothing to draw yet — a position must be measured twice (undercarriage, GET, tray).",
+  iso_none1:"No ISO 14224 mechanism coded on these {n} findings.",
   tab_wear:"Wear \u0026 Remaining Life",
   w_title:"Wear and remaining life",
   w_sub:"Every measured position, soonest to run out first. Life is projected from this position's own history — two readings at least, and it says so plainly when it will not guess.",
@@ -5857,6 +5870,7 @@ const I18N={
   as_noaction:"No action required", as_none:"\u2014",
   as_triage_t:"Cannot be planned yet \u2014 missing: {f}",
   as_m_action:"recommended action", as_m_prio:"priority", as_m_owner:"responsible",
+  as_m_c1:"1C defect", need_c1:"1C defect required", own_maint:"Maintenance",
   as_m_due:"due date", as_m_disp:"authorised reason and approver",
   a_k_triage:"Actions requiring planning", a_k_triage_s:"missing an action, an owner or a due date",
   a_f_triage:"Planning required", a_f_crit:"Critical", a_f_week:"Due this week", a_f_noown:"Unassigned actions",
@@ -6439,6 +6453,8 @@ const I18N={
   pf_note_no:"{u} \u00b7 {p}: \u0434\u0432\u0438\u0436\u0435\u043d\u0438\u044f \u043c\u0435\u0436\u0434\u0443 \u0437\u0430\u043c\u0435\u0440\u0430\u043c\u0438 \u043f\u043e\u043a\u0430 \u043d\u0435\u0434\u043e\u0441\u0442\u0430\u0442\u043e\u0447\u043d\u043e.",
   pf_none:"\u0418\u043d\u0442\u0435\u0440\u0432\u0430\u043b P\u2013F \u043f\u043e\u043a\u0430 \u043d\u0435 \u043f\u043e\u0441\u0442\u0440\u043e\u0438\u0442\u044c",
   pf_none_s:"\u041d\u0443\u0436\u043d\u0430 \u0442\u043e\u0447\u043a\u0430 \u0441 \u0434\u0432\u0443\u043c\u044f \u0437\u0430\u043c\u0435\u0440\u0430\u043c\u0438 \u0438 \u043f\u0440\u0435\u0434\u0435\u043b\u043e\u043c.",
+  pf_none1:"Строить пока нечего — нужна точка, измеренная дважды (ходовая, GET, кузов).",
+  iso_none1:"У этих {n} замечаний нет кода механизма ISO 14224.",
   tab_wear:"\u0418\u0437\u043d\u043e\u0441 \u0438 \u043e\u0441\u0442\u0430\u0442\u043e\u0447\u043d\u044b\u0439 \u0440\u0435\u0441\u0443\u0440\u0441",
   w_title:"\u0418\u0437\u043d\u043e\u0441 \u0438 \u043e\u0441\u0442\u0430\u0442\u043e\u0447\u043d\u044b\u0439 \u0440\u0435\u0441\u0443\u0440\u0441",
   w_sub:"\u0412\u0441\u0435 \u0437\u0430\u043c\u0435\u0440\u0435\u043d\u043d\u044b\u0435 \u0442\u043e\u0447\u043a\u0438; \u0441\u043d\u0430\u0447\u0430\u043b\u0430 \u0442\u0435, \u0447\u0442\u043e \u0432\u044b\u0439\u0434\u0443\u0442 \u0440\u0430\u043d\u044c\u0448\u0435. \u0420\u0435\u0441\u0443\u0440\u0441 \u0441\u0447\u0438\u0442\u0430\u0435\u0442\u0441\u044f \u043f\u043e \u0438\u0441\u0442\u043e\u0440\u0438\u0438 \u0441\u0430\u043c\u043e\u0439 \u0442\u043e\u0447\u043a\u0438 \u2014 \u043d\u0443\u0436\u043d\u043e \u043d\u0435 \u043c\u0435\u043d\u0435\u0435 \u0434\u0432\u0443\u0445 \u0437\u0430\u043c\u0435\u0440\u043e\u0432.",
@@ -6876,6 +6892,7 @@ const I18N={
   as_noaction:"Действий не требуется", as_none:"\u2014",
   as_triage_t:"Пока нельзя запланировать \u2014 не хватает: {f}",
   as_m_action:"рекомендуемое действие", as_m_prio:"приоритет", as_m_owner:"ответственный",
+  as_m_c1:"дефект 1С", need_c1:"Нужен дефект 1С", own_maint:"Служба ТО",
   as_m_due:"срок", as_m_disp:"обоснование и утверждающий",
   a_k_triage:"Действия, требующие планирования", a_k_triage_s:"нет действия, ответственного или срока",
   a_f_triage:"Требуется планирование", a_f_crit:"Критичные", a_f_week:"Срок на неделе", a_f_noown:"Без ответственного",
@@ -8794,7 +8811,7 @@ function nextDueBy(){
    land one column to the left; crossing that width redraws the table. */
 const FLEET_W={equip:76,prio:128,cls:64,defect:0,date:150,find:64,act:0,open:64,owner:170,adue:108,due:108,sync:104};
 const FLEET_W_RU={prio:152,cls:88,find:84,open:90,sync:150};
-const FLEET_MQ = window.matchMedia ? window.matchMedia("(max-width:1500px)") : null;
+const FLEET_MQ = window.matchMedia ? window.matchMedia("(max-width:900px)") : null;   /* CM_TBLSTD_V1 */
 function fleetColgroup(cs){
   const narrow = FLEET_MQ && FLEET_MQ.matches;
   return `<colgroup>${cs.filter(([,,cl])=>!(narrow && /\bhide-m\b/.test(cl||""))).map(([k])=>{
@@ -8817,7 +8834,7 @@ function renderFleet(){
   const clsOf=r=>r.cls||"";
   /* The office's owner first; the person the inspector named at the machine
      where the office has not yet assigned one. */
-  const ownersOf=u=>[...new Set((itemsU[u]||[]).map(x=>x.i.owner||x.i.resp).filter(Boolean))];
+  const ownersOf=u=>[...new Set((itemsU[u]||[]).map(x=>x.r&&typeof ownerOf==="function"?ownerOf(x.r,x.i):(x.i.owner||x.i.resp)).filter(Boolean))];   /* CM_FIND1C_V1: 1C person, else Maintenance */
   /* THE JOB THE MACHINE IS WAITING ON. Of its open work, the worst finding
      first and the most overdue among equals \u2014 the one a planner would name if
      asked "what does TK149 need". Its action, its state and its date are the
@@ -9139,6 +9156,10 @@ function renderFailure(){
     f.length ? src+t("e_cause_tail") : src, c.total);
   pareto($("paretoIso"),    i.rows, ()=>"var(--accent)", null,
     f.length ? src+t("e_iso_tail") : src, i.total);
+  { /* CM_TABS2_V1: no coded mechanism = one line, not an empty chart (and, where there is one, an empty table) */
+    const pi=$("paretoIso"), mt=$("isoMechTbl"), mw=mt&&mt.closest(".tblwrap"), mh=mw&&mw.previousElementSibling;
+    if(!i.rows.length && pi){ pi.innerHTML=`<div class="cmone">${esc(t("iso_none1",{n:fmtN(f.length)}))}</div>`; }
+    if(mw) mw.hidden=!i.rows.length; if(mh&&mh.getAttribute("data-i18n")==="fa_mech_title") mh.hidden=!i.rows.length; }
   renderIsoMechTbl(i);
   /* NOTE ON THIS PANEL: the mockup (Failure.dc.html) has no P–F interval
      chart at all — this dashboard added it in a later, maintainer-requested
@@ -9151,6 +9172,7 @@ function renderFailure(){
      warning an inspection round buys), so it is kept rather than deleted to
      match the static mockup literally. Flagging this in the audit report
      regardless, since the mockup itself carries no evidence either way. */
+  try{ if(window.CMFlow&&CMFlow.renderFail) CMFlow.renderFail($("failFlow"), f, filtered()); }catch(e){ bad("cm-tabs2-fail",e); }   /* CM_TABS2_V1 */
   renderPF();
   renderFailAffected(f);
 }
@@ -9221,6 +9243,7 @@ function renderFailAffected(f){
     {k:"defect",label:t("th_defect"),val:defOf},
     {k:"grade",label:t("th_grade"),val:x=>sevRank(sevOf(x.r,x.i)),txt:x=>{ const s=sevOf(x.r,x.i); return s?SEV[s].l:""; }},
     {k:"cause",label:t("th_cause"),val:causeOf}];
+  f=f.slice().sort((a,b)=>(sevOf(b.r,b.i)||0)-(sevOf(a.r,a.i)||0));   /* CM_TABS2_V1: worst first until a heading is pressed */
   const rows=tkApply("failaff",FA,f);
   const redrawFA=()=>renderFailAffected(findings(filtered()));
   const pg=paged("failaff", rows, redrawFA, PAGE_SIZE_ACT);
@@ -9263,10 +9286,11 @@ function renderPF(){
   const cands=pfCandidates(), sel=$("pfSel");
   if(!sel) return;
   if(!cands.length){
-    sel.innerHTML=""; $("pfChart").innerHTML=
-      `<div class="empty"><b>${esc(t("pf_none"))}</b><span>${esc(t("pf_none_s"))}</span></div>`;
+    sel.innerHTML=""; { const rw=sel.closest(".row"); if(rw) rw.style.display="none"; }   /* CM_TABS2_V1: an empty chart is one line */
+    $("pfChart").innerHTML=`<div class="cmone" title="${esc(t("pf_none_s"))}">${esc(t("pf_none1"))}</div>`;
     $("pfNote").textContent=""; return;
   }
+  { const rw=sel.closest(".row"); if(rw) rw.style.display=""; }
   const keep = cands.some(c=>c.key===pfKey) ? pfKey : cands[0].key;
   pfKey=keep;
   sel.innerHTML=cands.map(c=>`<option value="${esc(c.key)}"${c.key===keep?" selected":""}>${
@@ -9439,13 +9463,24 @@ const TRIAGE_REQ={ 5:["action","prio","owner","due"], 4:["action","prio","owner"
                    3:["action","prio","owner","due"], other:["action","owner","due"] };
 /* THE OWNER OF A FINDING (build 627, Rickie 15.11: "actions should be linked to defects raised"): the one
    named on the record, else the Responsible person of the 1C defect raised for it (CMFlow.owner1C). */
-function ownerOf(r,i){ return (i&&(i.owner||i.resp)) || (window.CMFlow&&CMFlow.owner1C ? CMFlow.owner1C(r,i) : "") || ""; }
-function owner1COnly(r,i){ return !!(i && !i.owner && !i.resp && ownerOf(r,i)); }
+/* CM_FIND1C_V1 (build 630): a finding graded 3-5 is always owned - by the 1C defect's responsible person, else Maintenance */
+function owner1CName(r,i){ return (i && window.CMFlow && CMFlow.owner1C) ? CMFlow.owner1C(r,i) : ""; }
+function ownerOf(r,i){ return (i&&(i.owner||i.resp)) || owner1CName(r,i) || (i && typeof sevOf==="function" && (sevOf(r,i)>=3 || (i.action && i.action!=="MON")) ? t("own_maint") : ""); }
+function owner1COnly(r,i){ return !!(i && !i.owner && !i.resp && owner1CName(r,i)); }
 function ownerCellHTML(r,i,ini){ const o=ownerOf(r,i);
   if(!o) return `<span class="who none"><i>+</i><span>${esc(TERMS.t(lang,"owner_unassigned"))}</span></span>`;
   const from=owner1COnly(r,i);
   return `<span class="who${from?" from1c":""}"${from?` title="${esc(o+" — "+t("a_own_1c"))}"`:""}><i>${esc(ini(o))}</i><span>${esc(o)}${from?` <span class="muted">· 1C</span>`:""}</span></span>`; }
+/* CM_FIND1C_V1 (build 630): the finding follows its point's newest reading and its 1C defect (CMFlow.find1C);
+   an office decision recorded on the finding (No action needed, Done, Verified) still wins. actionStateOld is the
+   rule before build 630, kept for the old-rule / new-rule card on Data & Sync. */
 function actionState(r,i){
+  const o=actionStateOld(r,i);
+  if(o.k==="none"||!i||!window.CMFlow||!CMFlow.find1C) return o;
+  const st=String(i.status||""); if(st==="NOACT"||st==="DONE"||st==="VERIFIED") return o;
+  return CMFlow.find1C(r,i,o)||o;
+}
+function actionStateOld(r,i){
   if(!i) return {k:"none", miss:[]};
   const sv=sevOf(r,i);
   const exception = sv>=3;                      // 3 Degraded, 4 Severe, 5 Critical
@@ -9477,7 +9512,7 @@ function actionRequired(r,i){ const s=actionState(r,i); return s.k==="open"||s.k
 const ACT_STATE_LABEL={ open:"as_open", triage:"as_triage", closed:"as_closed",
                         noaction:"as_noaction", none:"as_none" };
 const ACT_MISS_LABEL={ action:"as_m_action", prio:"as_m_prio", owner:"as_m_owner",
-                       due:"as_m_due", disp:"as_m_disp" };
+                       due:"as_m_due", disp:"as_m_disp", c1:"as_m_c1" };
 function actionMissText(miss){
   return (miss||[]).map(m=>t(ACT_MISS_LABEL[m]||m)).join(", ");
 }
@@ -9487,15 +9522,16 @@ function actionMissText(miss){
    required, Work order required, Reason required — from the shared dictionary,
    so the phone, the register and the report say it in the same words. `max`
    folds the rest into "+n" where a cell has no room for four. */
-const NEED_KEY={ action:"need_action", owner:"need_owner", due:"need_due", prio:"need_prio", wo:"need_wo", disp:"need_reason" };
+const NEED_KEY={ action:"need_action", owner:"need_owner", due:"need_due", prio:"need_prio", wo:"need_wo", disp:"need_reason", c1:"need_c1" };
 function needChips(miss, max, quiet){
   const xs=(miss||[]).map(m=>NEED_KEY[m]).filter(Boolean);
   if(!xs.length) return "";
-  const all=xs.map(x=>TERMS.t(lang,x)).join(", ");
+  const tw=x=>x==="need_c1"?t("need_c1"):TERMS.t(lang,x);   /* CM_FIND1C_V1: the 1C defect is the page's own word */
+  const all=xs.map(tw).join(", ");
   const shown=max?xs.slice(0,max):xs, rest=xs.length-shown.length;
   /* `quiet`: one chip and no "+n" — for a cell that already carries a status
      word and has one line to spare; the title names the rest. */
-  return shown.map(k=>`<span class="need${quiet?" q":""}" title="${esc(all)}">${esc(TERMS.t(lang,k))}</span>`).join("")
+  return shown.map(k=>`<span class="need${quiet?" q":""}" title="${esc(all)}">${esc(tw(k))}</span>`).join("")
        + (rest&&!quiet?`<span class="need more" title="${esc(all)}">+${rest}</span>`:"");
 }
 /* A work order is asked for once the job is planned or under way: a finding
@@ -9597,6 +9633,7 @@ function actColVal(x,k){
     case "unit": return x.r.equip||"";
     case "comp": return ptLabel(x.r,x.i)||x.i.key||"";
     case "act": return x.i.defect||"";
+    case "def": return actDefText(x.r,x.i);
     case "req": return x.i.actionLabel||(x.i.action?actionName(x.i.action):"");
     case "owner": return ownerOf(x.r,x.i);
     case "due": return x.i.due||"";
@@ -9685,6 +9722,7 @@ function renderSelBar(){
      zero), not hidden until something is ticked. Apply/Clear are disabled
      rather than removed — pressing nothing on nothing is a no-op, not an
      error, and the row never jumps the layout by appearing and vanishing. */
+  if(!n){ bar.hidden=true; bar.innerHTML=""; return; }   /* CM_ACTFLOW_V1 (Rickie 15.11 "go"): the bulk bar comes when rows are ticked */
   bar.hidden=false;
   const dis=n?"":" disabled";
   const owners=ownerList();
@@ -9751,7 +9789,11 @@ function renderSelBar(){
    rows; 25 / 50 / 100 stay as choices for a long list. */
 const PAGE_ALL=1e9;
 const PAGE_SIZE_DEFAULT=PAGE_ALL;
-const PAGE_SIZES=[25,50,100,PAGE_ALL];
+/* CM_SHOWALL_CAP_V1 (build 628): "all tables default show all" (Rickie 15.11) holds up to SHOW_ALL_MAX rows; a longer
+   list opens at SHOW_ALL_MAX with "All" one press away. At a year's volume (4,200 rounds) every row of every table at once
+   is what crashes the office page; today's lists are far below the cap and still open whole. */
+const SHOW_ALL_MAX=500;
+const PAGE_SIZES=[25,50,100,SHOW_ALL_MAX,PAGE_ALL];
 const PAGE_SIZE=PAGE_SIZE_DEFAULT;
 /* A MEASUREMENT TABLE IS DENSER THAN A LIST OF ROUNDS.
 
@@ -9884,7 +9926,7 @@ function paged(key, rows, render, size){
   const n=rows.length;
   const base=size||PAGE_SIZE_DEFAULT;
   const st=pageAt.get(key)||{ i:0, size:0 };
-  const PAGE_SIZE=PAGE_SIZES.indexOf(st.size)>=0 ? st.size : base;
+  const PAGE_SIZE=PAGE_SIZES.indexOf(st.size)>=0 ? st.size : (base===PAGE_ALL && n>SHOW_ALL_MAX ? SHOW_ALL_MAX : base);   /* CM_SHOWALL_CAP_V1: a chosen size is kept, All included */
   if(!pagedWired.has(key)) pagedWired.set(key, render);
   /* The size choice is offered only where it changes something: a list that
      fits the smallest page has nothing to choose. */
@@ -9936,18 +9978,35 @@ const ACOLS_K="cm_dash_actcols";
    1C work order) that the mockup's own column set does not show, so the
    redesign narrows the DEFAULT view to match the mockup instead of removing
    the capability outright. */
-const ACOL_ALL=["age","sev","comp","act","req","owner","due","st","wo"];
+const ACOL_ALL=["age","sev","comp","act","def","req","owner","due","st","wo"];
 /* Actions.dc.html's own default set: Age, Unit (always on), Component,
    Finding, Grade, Owner, Due, Status — Required action and Work order start
    off, reachable from Columns. */
-const ACOL_DEFAULT=["age","sev","comp","act","owner","due","st"];
+const ACOL_DEFAULT=ACOL_ALL.slice();   /* CM_TBLSTD_V1 (build 631): every column by default */
 let actCols=(()=>{ try{ const v=JSON.parse(localStorage.getItem(ACOLS_K)||"null");
   return Array.isArray(v) ? ACOL_ALL.filter(k=>v.indexOf(k)>=0) : ACOL_DEFAULT.slice(); }
   catch(e){ return ACOL_DEFAULT.slice(); } })();
+/* CM_ACTFLOW_V1: the 1C defect column is new - shown once to a desk that saved its own column choice before it existed */
+(()=>{ let seen=false; try{ seen=localStorage.getItem("cm_dash_actcols_def")==="1"; }catch(e){}
+  if(!seen && actCols.indexOf("def")<0) actCols=ACOL_ALL.filter(k=>k==="def"||actCols.indexOf(k)>=0);
+  try{ localStorage.setItem("cm_dash_actcols_def","1"); }catch(e){} })();
+/* CM_TBLSTD_V1 (build 631, "put all columns by default"): every column once, whatever a desk saved before; Columns still hides one */
+(()=>{ let seen=false; try{ seen=localStorage.getItem("cm_dash_actcols_all")==="1"; }catch(e){}
+  if(!seen) actCols=ACOL_ALL.slice();
+  try{ localStorage.setItem("cm_dash_actcols_all","1"); }catch(e){} })();
+/* the 1C defect raised for a finding (CMFlow's link): number, its stage, the work order */
+function actDef(r,i){ if(!window.CMFlow||!CMFlow.isFind(r,i)) return null; const d=CMFlow.defectOf(r,i); return {d, s:CMFlow.stage(r,i)}; }
+function actDefText(r,i){ const x=actDef(r,i); if(!x) return ""; if(!x.d) return CMFlow.L("Not raised in 1C","Не оформлено в 1С");
+  const st={reg:["Registered","Зарегистрирован"],prog:["In progress","В работе"],done:["Completed","Выполнено"]}[x.s]||["",""];
+  return x.d.defect+" · "+CMFlow.L(st[0],st[1])+(x.d.woNumber?" · "+x.d.woNumber:""); }
+function actDefCell(r,i){ const x=actDef(r,i); if(!x) return '<span class="muted">—</span>';
+  if(!x.d) return `<span class="need" style="color:var(--crit-ink)">${esc(CMFlow.L("Not raised in 1C","Не оформлено в 1С"))}</span>`;
+  const st={reg:["var(--warn-ink,var(--warning))","Registered","Зарегистрирован"],prog:["var(--accent)","In progress","В работе"],done:["var(--good-ink)","Completed","Выполнено"]}[x.s]||["","",""];
+  return `<b class="mono">${esc(x.d.defect)}</b> <span style="color:${st[0]};font-weight:600">· ${esc(CMFlow.L(st[1],st[2]))}</span>`; }   /* the work order rides on the title */
 const acolOn=k=>k==="unit"||k==="queue"||actCols.indexOf(k)>=0;
 function renderActCols(){
   const box=$("actColsBody"), n=$("actColsN"); if(!box) return;
-  const name={ age:t("a_th_age"), sev:t("th_grade"), comp:t("a_th_comp"), act:t("a_th_find"), req:t("th_reqact"),
+  const name={ age:t("a_th_age"), sev:t("th_grade"), comp:t("a_th_comp"), act:t("a_th_find"), def:(lang==="ru"?"Дефект 1С":"1C defect"), req:t("th_reqact"),
                owner:t("a_th_owner"), due:t("a_th_due"), st:t("a_th_status"), wo:t("a_th_wo") };
   box.innerHTML=`<label class="fixed"><input type="checkbox" checked disabled>${esc(t("th_unit"))}</label>`
     + ACOL_ALL.map(k=>`<label><input type="checkbox" data-acol="${k}"${acolOn(k)?" checked":""}>${esc(name[k])}</label>`).join("");
@@ -10019,6 +10078,15 @@ function renderActions(){
         <span class="v">${oldest?esc(oldest+" d"):"—"}</span>
         <span class="s">${esc(t("a_k_oldest_s"))}</span></div>`
     + card("done", t("a_k_done"), done+disposed, t("a_k_done_s"), "good", t("a_g_done"));
+  /* CM_ACTFLOW_V1 (build 628, Rickie 15.11 "go"): the six cards, the progress bar and the state ribbon give way to the
+     Overview's findings row (CMFlow.renderFind); every step and both problem lines are this register's filters. */
+  $("actKpis").innerHTML=""; $("actKpis").hidden=true; $("actKpis").style.display="none";
+  if(window.CMFlow && CMFlow.renderFind){
+    const noOwn=rows.filter(({r,i})=>!ownerOf(r,i)).length;
+    CMFlow.renderFind($("actFlow"), filtered(), {filt, over:overdue, noown:noOwn});
+    $("actFlow").querySelectorAll("[data-af]").forEach(b=>b.onclick=()=>setAFilt(b.dataset.af===filt ? "open" : b.dataset.af));
+    $("actFlow").querySelectorAll("[data-kgo]").forEach(b=>b.onclick=()=>showTab("cmwo"));
+  }
   $("actKpis").querySelectorAll("[data-af]").forEach(b=>b.onclick=()=>{
     /* Pressing the card you are already in takes the filter off, which is the
        behaviour anybody expects from a thing that looks pressed. */
@@ -10030,6 +10098,7 @@ function renderActions(){
      numbers for the same fact. */
   (()=>{
     const closed=done+disposed, pct=rows.length?Math.round(closed/rows.length*100):0;
+    if($("actProgressPanel")) $("actProgressPanel").style.display="none";   /* CM_ACTFLOW_V1: the findings row says it */
     if($("actProgressText")) $("actProgressText").textContent=
       t("a_progress",{d:closed, n:rows.length, p:pct});
     if($("actProgressFill")) $("actProgressFill").style.width=pct+"%";
@@ -10038,7 +10107,7 @@ function renderActions(){
   /* Progress by state, not one green nub: "planned" and "not looked at" are
      different kinds of not-done and a single bar hides which you have. */
   const order=[["open","segkey_open"],["PLAN","a_st_PLAN"],["WIP","a_st_WIP"],["DONE","a_st_DONE"]];
-  $("actBar").innerHTML = rows.length
+  $("actBar").innerHTML = false && rows.length   /* CM_ACTFLOW_V1: the state ribbon is the findings row now */
     ? `<div class="segbar">`+order.map(([k])=>byState[k]
         ? `<i class="s-${k}" style="flex:${byState[k]}"></i>` : "").join("")+`</div>
        <div class="segkey">`+order.filter(([k])=>byState[k]).map(([k,lab])=>
@@ -10065,16 +10134,25 @@ function renderActions(){
      depended on it — only the chip itself is retired from this row, per
      the redesign brief's own instruction to match the chip SET without
      silently discarding a working filter. */
-  $("aSeg").innerHTML=[["triage","a_f_triage"],["open","a_f_open"],["over","a_f_over"],
+  /* CM_ACTFLOW_V1: five tabs - Open, the three 1C steps a finding moves through, Critical; every other filter still opens
+     from the row above or the address and shows as a chip with a way back */
+  if(window.CMFlow && CMFlow.inOneC){ const fs=rows.filter(({r,i})=>CMFlow.isFind(r,i));
+    counts.f_none=fs.filter(({r,i})=>CMFlow.stage(r,i)==="none").length; counts.f_in=fs.filter(({r,i})=>CMFlow.inOneC(r,i)).length;
+    counts.f_done=fs.filter(({r,i})=>CMFlow.stage(r,i)==="done").length; }
+  const A_TABS=window.CMFlow&&CMFlow.inOneC ? [["open","a_f_open"],["f_none","@Not raised in 1C|Не оформлено в 1С"],["f_in","@In 1C|В 1С"],["f_done","@Completed in 1C|Выполнено в 1С"],["crit","a_f_crit"]]
+    : [["triage","a_f_triage"],["open","a_f_open"],["over","a_f_over"],
                        ["crit","a_f_crit"],["week","a_f_week"],["noown","a_f_noown"],
-                       ["all","a_f_all"]]
+                       ["all","a_f_all"]];
+  $("aSeg").innerHTML=A_TABS
     .map(([k,lab])=>`<button type="button" data-af="${k}"${filt===k?' class="on"':''}>${
-      esc(t(lab))}<span class="n">${counts[k]}</span></button>`).join("");
+      esc(lab[0]==="@"?CMFlow.L(...lab.slice(1).split("|")):t(lab))}<span class="n">${counts[k]}</span></button>`).join("");
   /* CM_FLOW_V1: a filter chosen on the Overview's flow row is said here, with a way back to everything. */
-  if(/^f_/.test(filt) && window.CMFlow){
+  if(window.CMFlow && !A_TABS.some(([k])=>k===filt)){   /* CM_ACTFLOW_V1: a filter that is not a tab is said, with a way back */
     const FL={f_all:["Findings graded 3–5","Замечания с оценкой 3–5"],f_none:["Not raised in 1C","Не оформлено в 1С"],
               f_reg:["1C defect registered","Дефект 1С зарегистрирован"],f_prog:["1C work order in progress","Заказ-наряд 1С в работе"],f_done:["Completed in 1C","Выполнено в 1С"]};
-    $("aSeg").insertAdjacentHTML("beforeend",`<button type="button" data-af="all" class="on" title="${esc(CMFlow.L("Show everything","Показать всё"))}">${esc(CMFlow.L(FL[filt][0],FL[filt][1]))} ×</button>`);
+    const AF={over:"a_f_over",noown:"a_f_noown",triage:"a_f_triage",week:"a_f_week",mine:"a_f_owned",all:"a_f_all",done:"a_k_done"};
+    const lab=FL[filt]?CMFlow.L(FL[filt][0],FL[filt][1]):AF[filt]?t(AF[filt]):filt;
+    $("aSeg").insertAdjacentHTML("beforeend",`<button type="button" data-af="open" class="on" title="${esc(CMFlow.L("Back to the open findings","Вернуться к открытым"))}">${esc(lab)}${counts[filt]!=null?`<span class="n">${counts[filt]}</span>`:""} ×</button>`);
   }
   $("aSeg").querySelectorAll("[data-af]").forEach(b=>b.onclick=()=>setAFilt(b.dataset.af));
   document.querySelectorAll("#actView button[data-av]").forEach(b=>{
@@ -10103,6 +10181,7 @@ function renderActions(){
               /* CM_FLOW_V1: the Overview's "Findings -> 1C defects" steps (dashboard/cm-flow.js) */
               : filt==="f_all" ? rows.filter(({r,i})=>CMFlow.isFind(r,i))
               : /^f_(none|reg|prog|done)$/.test(filt) ? rows.filter(({r,i})=>CMFlow.isFind(r,i) && CMFlow.stage(r,i)===filt.slice(2))
+              : filt==="f_in" ? rows.filter(({r,i})=>CMFlow.isFind(r,i) && CMFlow.inOneC(r,i))   /* CM_ACTFLOW_V1 */
               /* "Open" means outstanding, which includes what is not yet
                  properly described. Triage work is not done work. */
               : rows.filter(({r,i})=>actionRequired(r,i));
@@ -10131,7 +10210,7 @@ function renderActions(){
      name on it. Both shapes, and the sortable one opens. */
   if(actView==="table"){
     const val=(x,k)=>({ queue:0, sev:sevRank(sevOf(x.r,x.i)), unit:x.r.equip, comp:x.i.label||x.i.key,
-      date:x.r.date||"", act:(x.i.defect||""), req:(x.i.actionLabel||(x.i.action?actionName(x.i.action):"")||"￿"),
+      date:x.r.date||"", act:(x.i.defect||""), def:(actDefText(x.r,x.i)||"￿"), req:(x.i.actionLabel||(x.i.action?actionName(x.i.action):"")||"￿"),
       owner:ownerOf(x.r,x.i)||"￿", wo:x.i.wo||"￿",
       due:x.i.due||"9999-99-99", age:(fAgeDays(x.r,x.i)||0), st:stName(x.i.status) }[k]);
     /* Age · Equipment · Component · Finding · Grade · Owner · Due · Status —
@@ -10146,7 +10225,7 @@ function renderActions(){
        Columns — but are OFF by default now, so the table matches the
        mockup's column set on first load. */
     const cols=[["age",t("a_th_age")],["unit",t("th_unit")],["comp",t("a_th_comp")],
-                ["act",t("a_th_find")],[actSort.k==="queue"?"queue":"sev",t("th_grade")],
+                ["act",t("a_th_find")],["def",(lang==="ru"?"Дефект 1С":"1C defect")],[actSort.k==="queue"?"queue":"sev",t("th_grade")],
                 ["owner",t("a_th_owner")],["due",t("a_th_due")],["st",t("a_th_status")],
                 ["req",t("th_reqact")],["wo",t("a_th_wo")],["",""]]
       .filter(([k])=>!k || acolOn(k));
@@ -10200,8 +10279,8 @@ function renderActions(){
        between the columns of words; the table may not shrink below the room
        those need, so on a narrow screen it scrolls inside its own box rather
        than squeezing a finding to three letters. */
-    const AC_W={queue:128, sev:128, age:62, unit:70, owner:136, due:156, st:180, wo:100};
-    const acMin=34+22+cols.reduce((s,[k])=>s+(!k?0:(AC_W[k]||96)),0);
+    const AC_W={queue:128, sev:128, age:62, unit:70, def:200, owner:136, due:156, st:180, wo:100};
+    const acMin=34+22+cols.reduce((s,[k])=>s+(!k?0:(AC_W[k]||180)),0);
     $("actionTbl").innerHTML=`<div class="tblwrap scrollbox" style="--sb:520px"><table class="grid seltbl acttbl" style="min-width:${acMin}px">
       <thead><tr><th class="selcol"><label><input type="checkbox" id="aAll"${allOn?" checked":""}
           title="${esc(t("a_sel_all"))}" aria-label="${esc(t("a_sel_all"))}"></label></th>${cols.map(([k,l])=> !k ? `<th class="go"></th>` :
@@ -10235,6 +10314,7 @@ function renderActions(){
             <!-- The finding is what the Pareto drill-down filters on and the
                  thing a planner is scanning for. -->
             ${!acolOn("act")?"":`<td title="${esc(i.defect||"")}"><span class="trunc">${i.defect?esc(i.defect):'<span class="muted">—</span>'}</span></td>`}
+            ${!acolOn("def")?"":`<td class="nw" title="${esc(actDefText(r,i))}"><span class="trunc">${actDefCell(r,i)}</span></td>`}
             <!-- Grade: the finding's own 1–5 severity grade, and the
                  stoppage priority beside it once somebody has set one. -->
             ${!acolOn("sev")?"":`<td class="nw" title="${esc((sv?SEV[sv].l:"")+(i.prio?" · "+prioName(i.prio):""))}">${sv?`${gradeTag(sv)}`
@@ -10251,7 +10331,7 @@ function renderActions(){
             ${!acolOn("due")?"":`<td class="ed" data-ed="due" title="${esc(t("a_ed_tip"))}">${i.due
                 ? `<span class="due ${od?"late":(dd!=null&&dd<=7?"soon":"")}"><b>${esc(i.due)}</b>${
                     od?`<i>${esc(t("a_late"))}</i>`:(dd!=null&&dd<=7?`<i>${esc(t("a_in_d",{d:dd}))}</i>`:"")}</span>`
-                : `<span class="need">${esc(TERMS.t(lang,"need_due"))}</span>`}</td>`}
+                : (actionState(r,i).why ? `<span class="muted">—</span>` : `<span class="need">${esc(TERMS.t(lang,"need_due"))}</span>`)}</td>`}
             <!-- The status word and its "still missing" chips used to sit in
                  one nowrap, overflow-hidden cell — real width (137px measured
                  at 1366px) against real content (222px, "Open" plus two
@@ -11697,7 +11777,7 @@ function renderHistList(recs){
     const rows=flt.map(x=>x.html).join("");
     const showHead=firstTbl && rowObjs.length; if(rowObjs.length) firstTbl=false;
     return `<div class="insp${rec._void?" voided":""}"><div class="head">
-      <span class="date">${esc(rec.date||"")}</span>
+      <span class="date" data-d="${esc(rec.date||"")}">${esc(window.CMFlow?CMFlow.dmy(rec.date):(rec.date||""))}</span>
       <span class="tag">${esc(TYPE_LABEL[rec.type]||rec.type)}</span>
       ${rec._void?`<span class="voidflag" title="${esc(rec._reason||"")}">${esc(t("ed_voided"))}${rec._reason?" · "+esc(rec._reason):""}</span>`:""}
       ${!rec._void&&rec._editAt?`<span class="editflag" title="${esc(rec._editAt)} · ${esc(rec._editBy||"—")}">${esc(t("ed_corrected"))}</span>`:""}
@@ -11837,7 +11917,7 @@ function renderHistPosGrid(unit){
     return `<${tag} class="poscard"${st?` data-rk="${esc(st.rk)}" data-ik="${esc(st.ik)}"`:""} style="border-left-color:${COLOR[bandKey]}">
       <span class="pn"${p.d?" data-1c":""}>${esc(p.l)}</span>
       <span class="ps" style="color:${INK[bandKey]}">${esc(LABEL[bandKey])}</span>
-      ${st?`<span class="pd mono">${esc(t("hist_pos_last",{d:st.date}))}</span>`:""}
+      ${st?`<span class="pd mono">${esc(t("hist_pos_last",{d:window.CMFlow?CMFlow.dmy(st.date):st.date}))}</span>`:""}
     </${closeTag}>`;
   }).join("");
   el.querySelectorAll("button[data-rk]").forEach(b=>b.onclick=()=>openPos(b.dataset.rk,b.dataset.ik));
@@ -11845,6 +11925,7 @@ function renderHistPosGrid(unit){
 function renderHistory(){
   fillEquip();                                   // the list follows the filters
   const e=$("equipSel").value; const recs=histRecs(e);
+  try{ if(window.CMFlow&&CMFlow.renderMachine) CMFlow.renderMachine($("eqCards"), e, (typeof RECS!=="undefined"?RECS:[]).filter(r=>r.equip===e)); }catch(err){ bad("cm-tabs2-eq",err); }   /* CM_TABS2_V1 */
   renderHistPosGrid(e);
   const on=anyFilterOn();
   $("histTitle").textContent=t("hist_title",{x:e||""});
@@ -11871,7 +11952,7 @@ function renderHistory(){
     const skippedPos=mpDisplayFold(rec).filter(i=>!histShown(i,rec));
     return `
     <div class="insp${rec._void?" voided":""}"><div class="head">
-      <span class="date">${esc(rec.date||"")}</span>
+      <span class="date" data-d="${esc(rec.date||"")}">${esc(window.CMFlow?CMFlow.dmy(rec.date):(rec.date||""))}</span>
       <span class="tag">${esc(TYPE_LABEL[rec.type]||rec.type)}</span>
       ${rec._void?`<span class="voidflag" title="${esc(rec._reason||"")}">${esc(t("ed_voided"))}${rec._reason?" · "+esc(rec._reason):""}</span>`:""}
       ${!rec._void&&rec._editAt?`<span class="editflag" title="${esc(rec._editAt)} · ${esc(rec._editBy||"—")}">${esc(t("ed_corrected"))}</span>`:""}
@@ -16329,7 +16410,7 @@ function urlRead(from){
     }
     /* A list name the address does not carry, or names wrongly, is the
        default — never a value that would hide everything. */
-    const AF=["open","triage","crit","over","week","noown","mine","all","done","f_all","f_none","f_reg","f_prog","f_done"];
+    const AF=["open","triage","crit","over","week","noown","mine","all","done","f_all","f_none","f_reg","f_prog","f_done","f_in"];
     const af=q.get("af"); if(typeof aFilterState==="string") aFilterState = AF.includes(af) ? af : "open";
     const dd=q.get("dd"), ds=$("ddScope");
     if(ds) ds.value = (dd && [...ds.options].some(o=>o.value===dd)) ? dd : "over";
@@ -19016,7 +19097,7 @@ function renderDueTab(){
   const seg=$("ddSeg");
   if(seg){
     const views=[["over","dd_1c_over",c1Over.length],["soon","dd_1c_week",c1Week.length],["later","dd_1c_later",c1Later.length],
-                 ["done","dd_1c_done",c1Done.length],["put","dd_put",intPut.length+c1Put.length],["never","dd_never",nNever],["cmint","dd_cmint",cmInt.length]];
+                 ["done","dd_1c_done",c1Done.length],["put","dd_put",intPut.length+c1Put.length],["never","dd_never",nNever]];   /* CM_TABS2_V1 (Rickie 15.11 "remove the CM interval, we are basing all in 1C") */
     const viewsOld=[["over","dd_missed",nOver],["soon","dd_soon",nSoon],["never","dd_never",nNever],
                  /* 1C's own plan, beside CM's judgement rather than mixed into
                     it — see duePlanRows for why the other counts must not move. */
@@ -19054,7 +19135,7 @@ function renderDueTab(){
   }
   const show = scope==="all" ? c1Over.concat(c1Week,c1Later,c1Done,never)
              : scope==="over" ? c1Over : scope==="soon" ? c1Week : scope==="later" ? c1Later : scope==="done" ? c1Done
-             : scope==="cmint" ? cmInt
+             : scope==="cmint" ? cmInt   /* no tab since build 629; kept for an old address and the checks that read the hour rule */
              : scope==="plan" ? plan
              : scope==="cmp" ? compared
              : scope==="never" ? never
@@ -19877,6 +19958,7 @@ function asOfInto(el, gen){
   }
 }
 function renderPlanActualTab(){
+  try{ if(window.CMFlow&&CMFlow.renderMiss) CMFlow.renderMiss($("paMiss")); }catch(e){ bad("cm-miss",e); }   /* CM_MISS_V1 */
   const box=$("paList"); if(!box) return;
   if(!(window.CM_WO_DATA && Array.isArray(window.CM_WO_DATA.workOrders) && window.CM_WO_DATA.workOrders.length)){
     if($("paKpis")) $("paKpis").innerHTML="";
@@ -20703,6 +20785,7 @@ function renderSync(){
   if(!$("syncKpis")) return;
   const s=syncScan();
   if(RENDER_LIVE) renderSync.scan=s;
+  try{ if(window.CMFlow&&CMFlow.syncChecks) CMFlow.syncChecks({ sev:sevConflicts().length, quar:(s.quar||[]).length, gaps:s.linked?(s.gaps||[]).length:null }); }catch(e){ bad("cm-tabs2-sync",e); }   /* CM_TABS2_V1 */
   /* data-kpi as well as the id, and it is not decoration.
 
      These tiles are built here, so no literal id="syGrade" exists in the
@@ -20735,10 +20818,10 @@ function renderSync(){
     /* Counted here and not carried from renderSevGaps: two places quoting one
        figure from two moments is how the screens came to disagree. */
       (()=>{ const n=sevConflicts().length;
-        return card("syGrade", t("sy_k_grade"), n, t("sy_k_grade_s"), n?"warn":"good", t("sy_g_grade")); })()
-    + card("syConf", t("sy_k_conf"), s.conflicts, t("sy_k_conf_s"), s.conflicts?"warn":"good", t("sy_g_conf"))
-    + card("syWait", t("sy_k_wait"), vWait, sWait, (s.linked&&s.gaps.length)?"warn":"good", t("sy_g_wait"))
-    + card("syCrit", t("sy_k_crit"), vCrit, sCrit, (s.linked&&s.critWaiting)?"bad":"good", t("sy_g_crit"));
+        return card("syGrade", t("sy_k_grade"), n, t("sy_k_grade_s"), n?"warn":"good"); })()
+    + card("syConf", t("sy_k_conf"), s.conflicts, t("sy_k_conf_s"), s.conflicts?"warn":"good")
+    + card("syWait", t("sy_k_wait"), vWait, sWait, (s.linked&&s.gaps.length)?"warn":"good")
+    + card("syCrit", t("sy_k_crit"), vCrit, sCrit, (s.linked&&s.critWaiting)?"bad":"good");
 
   /* A NUMBER ON A TILE IS A PROMISE THAT THERE IS SOMEWHERE TO GO.
 
@@ -21970,11 +22053,11 @@ document.querySelector(".lang").addEventListener("click",e=>{
   setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 })();
 </script>
-<script src="../dashboard/drive.js?v=627"></script>
-<script src="../dashboard/sync-adapter.js?v=627"></script>
-<script src="../dashboard/report.js?v=627"></script>
-<script src="../dashboard/reliability.js?v=627"></script>
-<script src="../dashboard/day-summary.js?v=627"></script>
+<script src="../dashboard/drive.js?v=632"></script>
+<script src="../dashboard/sync-adapter.js?v=632"></script>
+<script src="../dashboard/report.js?v=632"></script>
+<script src="../dashboard/reliability.js?v=632"></script>
+<script src="../dashboard/day-summary.js?v=632"></script>
 <script>
 /* THE CLOSED FILTER SAYS WHAT IS CHOSEN. A dropdown narrower than its option
    text ellipsises ("All t…", audit of 2026-10-01). Between 1331 and 1500 px
@@ -22043,34 +22126,48 @@ document.querySelector(".lang").addEventListener("click",e=>{
       for(const td of tr.cells){ const l=(td.colSpan>1&&tr.cells.length===1)?"":(labs[c]||"");
         if(td.getAttribute("data-label")!==l) td.setAttribute("data-label",l);
         if(td.classList.contains("nolab")!==!l) td.classList.toggle("nolab",!l); c+=td.colSpan||1; } }
-    t.classList.remove("ascards");
+    t.classList.remove("ascards","cmslide"); box.classList.remove("cmslidebox");   /* CM_TBLSTD_V1 */
     const cols=[...t.querySelectorAll(":scope>colgroup>col")];
     cols.forEach(c=>{ if(c.dataset.w0===undefined) c.dataset.w0=c.style.width||""; if(c.style.width!==c.dataset.w0) c.style.width=c.dataset.w0; });
     if(t.dataset.mw0===undefined) t.dataset.mw0=t.style.minWidth||"";
     t.style.minWidth=t.dataset.mw0;
-    const W=box.clientWidth; if(!W||(t.offsetWidth<=W+1&&box.scrollWidth<=W+2)) return;
+    const W=box.clientWidth;
+    /* CM_TBLSTD_V1: a words column is never squeezed under 140 px to make a table fit - it slides instead */
+    let slideAnyway=false;
+    if(innerWidth>900 && cols.length>=6 && t.offsetWidth<=W+1){ const fx=cols.reduce((a,c)=>a+(parseFloat(c.dataset.w0)||0),0), nw=cols.filter(c=>!parseFloat(c.dataset.w0)).length;
+      if(nw && fx+nw*140>W+1) slideAnyway=true; }
+    if(!W||(!slideAnyway&&t.offsetWidth<=W+1&&box.scrollWidth<=W+2)) return;
     /* On a desk a table a little too wide is fitted first: its fixed columns
        shrink in proportion (every cell is one line with an ellipsis and its
        whole text on hover). Only what still does not fit becomes cards. */
-    if(innerWidth>900){
+    if(innerWidth>900 && !slideAnyway){
       /* a column holding buttons keeps its width (a button is never cut); every words column keeps at least 120px */
       const row1=t.tBodies[0]&&t.tBodies[0].rows[0], ctl=i=>!!((cols[i]&&cols[i].dataset.keep==="1")||(row1&&row1.cells[i]&&row1.cells[i].querySelector("button,input,select,a.minibtn")));   /* CM_WOMLOOK_V1: data-keep columns hold their width too */
       let fixed=0, locked=0, words=0;
       cols.forEach((c,i)=>{ const w=parseFloat(c.dataset.w0); if(!w) words++; else if(ctl(i)) locked+=w; else fixed+=w; });
       const r=fixed?(W-2-words*120-locked)/fixed:0;
-      if(r>=0.6){ cols.forEach((c,i)=>{ const w=parseFloat(c.dataset.w0); if(w&&!ctl(i)) c.style.width=Math.floor(w*Math.min(1,r))+"px"; });
+      if(r>=0.85){ cols.forEach((c,i)=>{ const w=parseFloat(c.dataset.w0); if(w&&!ctl(i)) c.style.width=Math.floor(w*Math.min(1,r))+"px"; });
         t.style.minWidth=Math.floor(W-2)+"px"; if(t.offsetWidth<=W+1&&box.scrollWidth<=W+2) return; }
       else if(!fixed && h){   /* widths set on the header cells: all shrink together, a little */
         const ths=[...h.cells], r2=(W-2)/t.offsetWidth;
-        if(r2>=0.8){ const ws=ths.map(th=>th.offsetWidth); ths.forEach((th,i)=>{ th.style.width=Math.floor(ws[i]*r2)+"px"; });
+        if(r2>=0.9){ const ws=ths.map(th=>th.offsetWidth); ths.forEach((th,i)=>{ th.style.width=Math.floor(ws[i]*r2)+"px"; });
           t.style.minWidth=Math.floor(W-2)+"px"; if(t.offsetWidth<=W+1&&box.scrollWidth<=W+2) return;
           ths.forEach(th=>th.style.width=""); t.style.minWidth=t.dataset.mw0; }
       }
     }
+    /* CM_TBLSTD_V1 (build 631): on a desk what still does not fit slides in its own box, with the identifying column
+       frozen and the held slider (cmTblStd); its columns go back to their own widths. A phone keeps its cards. */
+    if(innerWidth>900){
+      cols.forEach(c=>{ if(c.style.width!==c.dataset.w0) c.style.width=c.dataset.w0; });
+      if(h) for(const th of h.cells) th.style.width="";
+      const sum=cols.reduce((a,c)=>a+(parseFloat(c.dataset.w0)||180),0);
+      t.style.minWidth=cols.length?Math.max(sum,W-2)+"px":t.dataset.mw0;
+      t.classList.add("cmslide"); box.classList.add("cmslidebox"); return;
+    }
     t.classList.add("ascards");
   }
   let q=0;
-  function run(){ q=0; document.querySelectorAll("main table.grid").forEach(t=>{ if(t.offsetParent) try{ one(t); }catch(e){} }); }
+  function run(){ q=0; document.querySelectorAll("main table.grid").forEach(t=>{ if(t.offsetParent) try{ one(t); }catch(e){} }); if(window.cmTblStd) try{ window.cmTblStd(); }catch(e){} }
   function soon(){ if(!q) q=requestAnimationFrame(run); }
   window.cmCardify=run;
   const m=document.querySelector("main");
@@ -22078,6 +22175,130 @@ document.querySelector(".lang").addEventListener("click",e=>{
     /* the page's own scroll bar appearing narrows every box without a redraw */
     if(window.ResizeObserver){ let w0=0; new ResizeObserver(e=>{ const w=e[0].contentRect.width; if(Math.abs(w-w0)>0.5){ w0=w; soon(); } }).observe(m); } }
   addEventListener("resize",soon); document.addEventListener("click",()=>setTimeout(soon,0),true); soon();
+})();
+</script>
+<style id="cmTblStdCss">
+  /* CM_TBLSTD_V1 (build 631, Rickie 15.11 20:56 "i need the ui standard. Freeze pane, columns, horizontal bar, put all
+     columns by default"; KB UI_STANDARD §22-§23). On a desk a table first tries to fit (cmCardify's fit); what still does
+     not fit SLIDES inside its own box (no more cards on a desk): the row-identifying first column (and the tick column
+     before it) stays frozen with a navy edge, and a slider with ◀ ▶ is held at the bottom of the window while the box's own
+     bar is out of view. Every long table gets ⚙ Columns (all on by default, kept per browser). A phone keeps its cards. */
+  .cmslidebox{overflow-x:auto !important;}
+  table.grid.cmslide{width:auto !important;}
+  table.grid.cmfrz .cmfz{position:sticky !important;z-index:3;}
+  table.grid.cmfrz tbody td.cmfz{background:var(--surface) !important;}
+  table.grid.cmfrz thead .cmfz{z-index:6;}
+  table.grid.cmfrz .cmfzE{box-shadow:6px 0 8px -6px rgba(16,33,42,.45);border-right:2px solid #2B4C7E !important;}
+  .cmhs{position:fixed;bottom:0;z-index:70;display:none;align-items:center;gap:6px;padding:6px 8px;box-sizing:border-box;
+    background:var(--surface);border:1px solid var(--border);border-bottom:0;border-radius:10px 10px 0 0;box-shadow:0 -4px 14px rgba(16,33,42,.12);}
+  .cmhs.on{display:flex;}
+  .cmhs button{width:32px;height:32px;min-width:32px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--ink);cursor:pointer;font-size:12px;}
+  .cmhs .trk{flex:1;height:12px;border-radius:6px;background:var(--surface-2);position:relative;cursor:pointer;}
+  .cmhs .thm{position:absolute;top:0;height:12px;border-radius:6px;background:#7a8794;cursor:grab;}
+  .cmcolbar{display:flex;justify-content:flex-end;gap:8px;margin:0 0 6px;position:relative;}
+  .cmcolbar.inl{display:inline-flex;margin:0 8px 0 0;vertical-align:middle;}
+  .cmcolbar .btn{min-height:32px;}
+  .cmcolmenu{position:absolute;right:0;top:calc(100% + 4px);z-index:90;min-width:220px;max-height:60vh;overflow:auto;padding:8px;
+    background:var(--surface);border:1px solid var(--border);border-radius:10px;box-shadow:0 8px 24px rgba(16,33,42,.18);}
+  .cmcolmenu label{display:flex;gap:8px;align-items:center;padding:6px 4px;font-size:13px;cursor:pointer;white-space:nowrap;}
+  .cmcolmenu .ft{display:flex;justify-content:space-between;gap:8px;border-top:1px solid var(--border);margin-top:6px;padding-top:8px;}
+  @media (max-width:900px){ .cmhs{display:none !important;} }
+</style>
+<script id="cmTblStdJs">/* CM_TBLSTD_V1 - see #cmTblStdCss. Runs after cmCardify on every redraw. tests/tblstd.cjs */
+(function cmTblStd(){
+  'use strict';
+  var ru=function(){ return (typeof lang!=="undefined"&&lang==="ru"); };
+  var W=function(en,r){ return ru()?r:en; };
+  var LAB=function(th){ return (th.getAttribute("aria-label")||th.textContent||"").replace(/[↕↑↓▲▼⇅]/g,"").replace(/\s+/g," ").trim(); };
+  var OWN="#actionTbl,table.acttbl,#fleetTbl,#covTbl,table.pawk,#paWeek table,table[class*=lmx-]";
+  function isFilt(r){ return r.classList.contains("cwfh")||r.classList.contains("cmfr")||!!r.querySelector("th.cwfh"); }
+  function headRow(t){ var hs=[].slice.call(t.tHead?t.tHead.rows:[]).filter(function(r){ return !isFilt(r); }); return hs[hs.length-1]||null; }
+  function keyOf(t){ var sec=t.closest('section[id^="tab-"]'), all=sec?[].slice.call(sec.querySelectorAll("table.grid")):[];
+    return (sec?sec.id:"x")+"_"+(t.id||("t"+all.indexOf(t))); }
+  function hidden(k){ try{ var v=JSON.parse(localStorage.getItem("cm_tblcols_"+k)||"[]"); return Array.isArray(v)?v:[]; }catch(e){ return []; } }
+  function save(k,v){ try{ if(v.length) localStorage.setItem("cm_tblcols_"+k,JSON.stringify(v)); else localStorage.removeItem("cm_tblcols_"+k); }catch(e){} }
+  function labels(t){ var h=headRow(t), out=[]; if(!h) return out;
+    [].slice.call(h.cells).forEach(function(th){ var s=LAB(th); for(var i=0;i<(th.colSpan||1);i++) out.push(i?"":s); }); return out; }
+  /* the column a cell sits in, counting colspans; a one-cell row spanning the table is a detail row and is left alone */
+  function eachCell(t,fn){ [].slice.call(t.rows).forEach(function(tr){ if(tr.cells.length===1&&tr.cells[0].colSpan>1) return; var c=0;
+      [].slice.call(tr.cells).forEach(function(td){ fn(td,c,tr); c+=td.colSpan||1; }); }); }
+  function applyCols(t,k,labs){ var hid=hidden(k).filter(function(l){ return labs.indexOf(l)>=0; }), idx={};
+    labs.forEach(function(l,i){ if(l&&hid.indexOf(l)>=0) idx[i]=1; });
+    eachCell(t,function(td,c){ var h=!!idx[c]; if(td.classList.contains("cmcolh")!==h){ td.classList.toggle("cmcolh",h); td.style.display=h?"none":""; } });
+    [].slice.call(t.querySelectorAll(":scope>colgroup>col")).forEach(function(col,i){ var h=!!idx[i]; if((col.style.display==="none")!==h) col.style.display=h?"none":""; });
+    return hid.length; }
+  function menu(t,k,labs){
+    var box=t.closest(".tblwrap")||t, host=box.parentNode; if(!host) return;
+    var bar=document.querySelector('.cmcolbar[data-for="'+k+'"]');
+    var named=labs.filter(Boolean), nh=applyCols(t,k,labs);
+    if(!bar){ var sec=t.closest(".section"), tool=null;
+      if(sec) [].slice.call(sec.querySelectorAll("button,a")).some(function(x){ if(/csv/i.test(x.textContent)&&!t.contains(x)&&x.compareDocumentPosition(t)&Node.DOCUMENT_POSITION_FOLLOWING){ tool=x; return true; } return false; });
+      bar=document.createElement("span"); bar.className="cmcolbar"+(tool?" inl":""); bar.dataset.for=k;
+      bar.innerHTML='<button type="button" class="btn sm cmcolbtn" aria-haspopup="true" aria-expanded="false"></button>';
+      if(tool) tool.parentNode.insertBefore(bar,tool); else { bar.style.display="flex"; host.insertBefore(bar,box); } }
+    var b=bar.querySelector(".cmcolbtn"), txt="⚙ "+W("Columns","Столбцы")+" "+(named.length-nh)+"/"+named.length;
+    if(b.textContent!==txt) b.textContent=txt;
+    b.onclick=function(e){ e.stopPropagation(); var m=bar.querySelector(".cmcolmenu"); if(m){ m.remove(); b.setAttribute("aria-expanded","false"); return; }
+      var hid=hidden(k); m=document.createElement("div"); m.className="cmcolmenu"; m.setAttribute("role","dialog");
+      m.innerHTML=named.map(function(l,i){ return '<label><input type="checkbox" data-c="'+i+'"'+(hid.indexOf(l)<0?" checked":"")+'> '+l.replace(/[&<>"]/g,function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; })+'</label>'; }).join("")
+        +'<div class="ft"><button type="button" class="btn sm" data-all>'+W("All columns","Все столбцы")+'</button></div>';
+      m.addEventListener("click",function(ev){ ev.stopPropagation(); });
+      m.querySelectorAll("input[data-c]").forEach(function(cb){ cb.onchange=function(){ var l=named[+cb.dataset.c], h=hidden(k).filter(function(x){ return x!==l; });
+        if(!cb.checked) h.push(l); if(h.length>=named.length){ cb.checked=true; return; } save(k,h); window.cmTblStd(); }; });
+      m.querySelector("[data-all]").onclick=function(){ save(k,[]); m.querySelectorAll("input[data-c]").forEach(function(cb){ cb.checked=true; }); window.cmTblStd(); };
+      bar.appendChild(m); b.setAttribute("aria-expanded","true"); };
+  }
+  /* frozen columns: the tick column (if any) and the first column that names the row */
+  function freeze(t){
+    var h=headRow(t); if(!h) return; var first=h.cells[0], n=1;
+    if(first&&(first.querySelector("input[type=checkbox]")||LAB(first)==="")) n=2;
+    /* freeze through the column that names the row (unit, asset, machine), when it is among the first four */
+    for(var j=0;j<Math.min(4,h.cells.length);j++){ if(/^(unit|asset|machine|equipment|единица|техника|машина|оборудование)\b/i.test(LAB(h.cells[j]))){ n=Math.max(n,j+1); break; } }
+    var offs=[], x=0; for(var i=0;i<n&&h.cells[i];i++){ offs.push(x); x+=h.cells[i].getBoundingClientRect().width; }
+    if(x>t.parentElement.clientWidth*0.55){ n=1; offs=[0]; }   /* frozen columns never take more than about half the box */
+    eachCell(t,function(td,c){ var on=c<n; if(td.classList.contains("cmfz")!==on) td.classList.toggle("cmfz",on);
+      var l=on?offs[c]+"px":""; if(td.style.left!==l) td.style.left=l; var e=on&&c===n-1; if(td.classList.contains("cmfzE")!==e) td.classList.toggle("cmfzE",e); });
+  }
+  function unfreeze(t){ t.querySelectorAll(".cmfz").forEach(function(td){ td.classList.remove("cmfz","cmfzE"); td.style.left=""; }); }
+  /* the held slider */
+  var hs=null, cur=null;
+  function slider(){
+    if(!hs){ hs=document.createElement("div"); hs.className="cmhs"; hs.setAttribute("aria-hidden","true");
+      var ru=(document.documentElement.lang||"").slice(0,2)==="ru";   /* build 631: the two arrows say what they do (lint, screen readers) */
+      hs.innerHTML='<button type="button" data-d="-1" aria-label="'+(ru?"Прокрутить влево":"Scroll left")+'">◀</button><div class="trk"><div class="thm"></div></div><button type="button" data-d="1" aria-label="'+(ru?"Прокрутить вправо":"Scroll right")+'">▶</button>';
+      document.body.appendChild(hs);
+      hs.querySelectorAll("button").forEach(function(b){ b.onclick=function(){ if(cur) cur.scrollBy({left:+b.dataset.d*Math.max(160,cur.clientWidth*0.6),behavior:"smooth"}); }; });
+      var trk=hs.querySelector(".trk"), thm=hs.querySelector(".thm");
+      trk.addEventListener("click",function(e){ if(e.target===thm||!cur) return; var r=trk.getBoundingClientRect(); cur.scrollLeft=(e.clientX-r.left)/r.width*(cur.scrollWidth-cur.clientWidth); });
+      thm.addEventListener("pointerdown",function(e){ if(!cur) return; e.preventDefault(); thm.setPointerCapture(e.pointerId); var x0=e.clientX, s0=cur.scrollLeft, r=trk.getBoundingClientRect();
+        var mv=function(ev){ cur.scrollLeft=s0+(ev.clientX-x0)/r.width*cur.scrollWidth; }; var up=function(){ thm.removeEventListener("pointermove",mv); thm.removeEventListener("pointerup",up); };
+        thm.addEventListener("pointermove",mv); thm.addEventListener("pointerup",up); }); }
+    var boxes=[].slice.call(document.querySelectorAll("main .cmslidebox")).filter(function(b){ return b.offsetParent&&b.scrollWidth>b.clientWidth+1; });
+    cur=null; var vh=innerHeight;
+    for(var i=0;i<boxes.length;i++){ var r=boxes[i].getBoundingClientRect(); if(r.top<vh-60&&r.bottom>vh){ cur=boxes[i]; break; } }
+    if(!cur||innerWidth<=900){ hs.classList.remove("on"); return; }
+    var rc=cur.getBoundingClientRect(); hs.style.left=Math.max(0,rc.left)+"px"; hs.style.width=Math.min(innerWidth,rc.width)+"px"; hs.classList.add("on");
+    var th=hs.querySelector(".thm"), tw=hs.querySelector(".trk").clientWidth, f=cur.clientWidth/cur.scrollWidth;
+    th.style.width=Math.max(24,tw*f)+"px"; th.style.left=((tw-Math.max(24,tw*f))*(cur.scrollLeft/Math.max(1,cur.scrollWidth-cur.clientWidth)))+"px";
+  }
+  function run(){
+    document.querySelectorAll("main table.grid").forEach(function(t){ if(!t.offsetParent) return;
+      try{
+        var labs=labels(t), rows=t.tBodies[0]?t.tBodies[0].rows.length:0;
+        var sec=t.closest(".section"), own=t.matches(OWN)&&!!(sec&&[].slice.call(sec.querySelectorAll("button,summary")).some(function(x){ return !x.closest(".cmcolbar")&&/^\s*(columns|столбцы)/i.test(x.textContent); }));
+        if(!own&&!t.matches("#covTbl,table.pawk,#paWeek table,table.scorecard")&&labs.filter(Boolean).length>=5&&rows>=3&&!t.classList.contains("ascards")) menu(t,keyOf(t),labs);
+        var bx=t.closest(".tblwrap")||t.parentElement, wide=!t.classList.contains("ascards")&&bx&&bx.scrollWidth>bx.clientWidth+1;
+        if(bx) bx.classList.toggle("cmslidebox", !!(wide||t.classList.contains("cmslide")));
+        if(wide||t.classList.contains("cmslide")){ t.classList.add("cmfrz"); freeze(t); } else { t.classList.remove("cmfrz"); unfreeze(t); }
+      }catch(e){ window.cmTblStdErr=String(e); } });
+    slider();
+  }
+  window.cmTblStd=run;
+  addEventListener("scroll",function(){ slider(); },{passive:true,capture:true});
+  addEventListener("resize",function(){ slider(); });
+  document.addEventListener("click",function(){ document.querySelectorAll(".cmcolmenu").forEach(function(m){ var b=m.parentNode.querySelector(".cmcolbtn"); if(b) b.setAttribute("aria-expanded","false"); m.remove(); }); });
+  document.addEventListener("keydown",function(e){ if(e.key==="Escape") document.querySelectorAll(".cmcolmenu").forEach(function(m){ m.remove(); }); });
+  run();
 })();
 </script>
 <style id="cmTplCss">
@@ -22182,13 +22403,14 @@ document.querySelector(".lang").addEventListener("click",e=>{
   function sync(b){ var t=b._src.map(function(s){ return s.textContent.replace(/\s+/g,' ').trim(); }).filter(Boolean).join(' '); b.querySelector('.tipbox').textContent=t; b.setAttribute('aria-label',t); b.hidden=!t; }
   function fold(root){
     (root||document).querySelectorAll('main .section p.sub, main .section div.sub, main .section .hint, main .section p.lede, main .section .secthd .sub').forEach(function(el){
+      if(el._cmp2&&el._cmp2b&&!el._cmp2b.isConnected) el._cmp2=0;   /* CM_TABS2_V1: the language switch rewrote the heading and took its (i): put it back */
       if(el._cmp2||el.closest(KEEP)||el.closest('table,dialog,.drawer,.drw,#drwBody,#dsPrev,.modal,.sheet,[role=dialog]')) return;
       if(el.matches(KEEP)) return;
-      var txt=el.textContent.replace(/\s+/g,' ').trim(); if(txt.length<90) return;
+      var txt=el.textContent.replace(/\s+/g,' ').trim(); if(txt.length<90 && !el.hasAttribute('data-fold')) return;   /* CM_TABS2_V1: a card note marked data-fold always goes into the (i) */
       if(el.querySelector('a,button,input,select,b,strong,.warn,.bad')) return;
       var h=head(el); if(h&&h.closest(KEEP)) return;
       if(!h){ h=document.createElement('div'); h.className='cmp2spot'; el.parentNode.insertBefore(h,el); } /* no heading in the card: the (i) sits where the note was */
-      var b=tipFor(h); el._cmp2=1; el.classList.add('cmp2fold'); b._src.push(el); sync(b);
+      var b=tipFor(h); el._cmp2=1; el._cmp2b=b; el.classList.add('cmp2fold'); b._src.push(el); sync(b);
       new MutationObserver(function(){ sync(b); }).observe(el,{childList:true,characterData:true,subtree:true});
     }); }
   var pend=0; function later(){ if(pend) return; pend=1; requestAnimationFrame(function(){ pend=0; try{ fold(); }catch(e){ window.cmPlain2Err=String(e); } }); }
@@ -22587,7 +22809,7 @@ html.cmStd{--cmw-rail:#f5f5f3;--cmw-chip:#e9ebee;}
 @media (prefers-color-scheme:dark){html.cmStd:not([data-theme="light"]){--cmw-rail:var(--surface);--cmw-chip:var(--surface-2);}}
 html.cmStd[data-theme="dark"]{--cmw-rail:var(--surface);--cmw-chip:var(--surface-2);}
 
-html.cmStd #kpis.cmflow .cfsec{border-radius:12px}   /* CM_FLOW_V1: the site standard's card corner */
+html.cmStd :is(#kpis,#actFlow).cmflow .cfsec{border-radius:12px}   /* CM_FLOW_V1: the site standard's card corner */
 </style>
 <style id="cmNextLook">
 /* CM_NEXTLOOK_V1 (build 594, Rickie 06.11.2026 10:00 "your mock up is not the same as the actual" -> restyle dashboard-next):

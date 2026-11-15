@@ -121,7 +121,10 @@ const diff = (a, b) => ({ onlyOffice: a.filter(x => !b.includes(x)), onlyField: 
      hour-interval rows are the CM interval tab (over + soon), and Never inspected is unchanged. */
   const tabs = await d.evaluate(() => { showTab('due', true); renderDueTab();
     const o = {}; document.querySelectorAll('#ddSeg [role=tab]').forEach(b => o[b.dataset.dd] = Number(b.querySelector('.n').textContent));
-    o._over1c = window.CMFlow ? CMFlow.plan().over.length : -1; return o; });
+    o._over1c = window.CMFlow ? CMFlow.plan().over.length : -1;
+    /* build 629: CM interval has no tab; it stays reachable by address (scope cmint) - count its rows there */
+    $('ddScope').value = 'cmint'; renderDueTab(); o.cmint = document.querySelectorAll('#ddList tbody tr:not(:has(td.empty))').length;
+    $('ddScope').value = 'over'; renderDueTab(); return o; });
   ok('the schedule tabs count what the engine counted',
      tabs.cmint === D.over.length + D.soon.length && tabs.never === D.never.length && tabs.over === tabs._over1c,
      JSON.stringify(tabs));

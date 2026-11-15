@@ -409,7 +409,9 @@
     if (x.id) return "#" + x.id;
     const row = x.closest("tr"), tb = x.closest("table");
     const rk = row ? (row.dataset.lmxk || row.dataset.lmxid || row.dataset.lmxgr || "r" + [...row.parentNode.children].indexOf(row)) : "";
-    return [tb ? tb.className : "", rk, x.dataset.k || "", x.dataset.f || "", x.dataset.s || "", x.className].join("|");
+    /* build 631: not the classes the table standard adds after drawing (cmslide, cmfrz, ascards ...), or a typed box never matches its redrawn self */
+    const tc = tb ? tb.className.split(/\s+/).filter(c => c && !/^(cm|ascards$)/.test(c)).join(" ") : "";
+    return [tc, rk, x.dataset.k || "", x.dataset.f || "", x.dataset.s || "", x.className].join("|");
   }
   function drawnValue(x) {
     if (x.tagName === "SELECT") { const o = [...x.options].find(o => o.defaultSelected) || x.options[0]; return o ? o.value : ""; }

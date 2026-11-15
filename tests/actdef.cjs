@@ -68,7 +68,7 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
     return {
       predicate: required,
       nav: Number($("nbAct").textContent || 0),
-      kpi: Number(document.querySelector("#actKpis [data-af=\"open\"] .v").textContent || 0),
+      kpi: Number(document.querySelector('#aSeg [data-af="open"] .n').textContent || 0),   /* CM_ACTFLOW_V1: the open count is the Open tab; the tile strip is gone */
       segOpen: Number(document.querySelector('#aSeg [data-af="open"] .n').textContent || 0),
       rows: document.querySelectorAll("#actionTbl tbody tr").length,
       /* THE PAGER'S OWN TOTAL, which is what the register now claims to hold.
@@ -111,7 +111,7 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
     const f = findings(filtered());
     return { predicate: f.filter(x => actionRequired(x.r, x.i)).length,
              nav: Number($("nbAct").textContent || 0),
-             kpi: Number(document.querySelector("#actKpis [data-af=\"open\"] .v").textContent || 0),
+             kpi: Number(document.querySelector('#aSeg [data-af="open"] .n').textContent || 0),   /* CM_ACTFLOW_V1: the open count is the Open tab; the tile strip is gone */
              rows };
   });
   ok(filtered2.nav === filtered2.predicate && filtered2.kpi === filtered2.predicate,
@@ -143,13 +143,13 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
       await patchItems([tgt], patch, null);
       const r2 = RECS.find(z => recKey(z) === tgt.rk);
       const i2 = (r2.items || []).find(z => z.key === tgt.ik);
-      return actionState(r2, i2);
+      return Object.assign(actionStateOld(r2, i2), { now: actionState(r2, i2) });   /* build 630: the CM-field rule is actionStateOld; the live rule waits for the 1C defect */
     };
     const a = await step({ action: "RA-07", actionLabel: "Replace bearing" });
     const bb = await step({ prio: "P2" });
     const c = await step({ owner: "Petrov" });
     const d = await step({ due: "2026-09-30" });
-    return { a: a.k, aMiss: a.miss, b: bb.k, c: c.k, d: d.k, dMiss: d.miss };
+    return { a: a.k, aMiss: a.miss, b: bb.k, c: c.k, d: d.k, dMiss: d.miss, nowK: d.now.k, nowMiss: d.now.miss };
   });
   ok(promote.a === "triage", "an action alone does not make it plannable", promote.a + " missing " + promote.aMiss.join(","));
   ok(promote.b === "triage" && promote.c === "triage",
@@ -157,6 +157,7 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
   ok(promote.d === "open", "only action + priority + owner + due promotes it to open",
      promote.d + (promote.dMiss.length ? " missing " + promote.dMiss.join(",") : ""));
 
+  ok(promote.nowK === "triage" && promote.nowMiss.join(",") === "c1", "and under the live rule (build 630) it still waits for its 1C defect", promote.nowK + " missing " + (promote.nowMiss || []).join(","));
   console.log("\n── \"no action required\" is a decision, and a decision has an author");
   const noact = await p.evaluate(async () => {
     const f = findings(filtered());

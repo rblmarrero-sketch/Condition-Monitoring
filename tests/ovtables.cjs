@@ -59,6 +59,8 @@ const fleetRead = () => {
     colW: [...t.querySelectorAll('colgroup col')].map(c => c.style.width || 'auto'),
     headW: head.map(th => Math.round(th.getBoundingClientRect().width)),
     scroll: wrap.scrollWidth > wrap.clientWidth + 1,
+    /* CM_TBLSTD_V1 (build 630): a table too wide for its box slides inside it with the machine column frozen */
+    slide: t.classList.contains('cmslide') && t.classList.contains('cmfrz') && !!t.querySelector('tbody td.cmfz'),
     shown: (document.getElementById('fleetShown') || {}).textContent || '',
     allBtnInShown: !!document.querySelector('#fleetShown #fleetAllBtn'),
     strip: !!wrap.querySelector(':scope > .pager'),
@@ -119,12 +121,13 @@ const covRead = () => {
       ok(`${tag}: ${f.rows} rows, all one height`, f.rows >= 5 && Math.max(...f.h) - Math.min(...f.h) <= 2, f.h.join(','));
       ok(`${tag}: nothing in a cell takes a second line`, f.multi.length === 0, f.multi.slice(0, 4).join(' | '));
       ok(`${tag}: ${f.cut} cut cells, every one with its text in a tooltip`, f.cutUntitled.length === 0, f.cutUntitled.slice(0, 4).join(' | '));
-      ok(`${tag}: and the table never scrolls sideways`, !f.scroll);
+      ok(`${tag}: and the table fits, or slides inside its own box with the machine frozen`, !f.scroll || f.slide);
 
       console.log(`\n${tag} @1366: 2. ONE FILTER BOX PER VISIBLE COLUMN`);
       ok(`${tag}: ${f.head} headings, ${f.boxes} filter boxes, ${f.cols} <col>`, f.head === f.boxes && f.cols === f.head, `${f.head}/${f.boxes}/${f.cols}`);
       ok(`${tag}: no filter box squeezed under 40px`, f.narrowBoxes === 0, String(f.narrowBoxes));
-      if (!nx) ok(`${tag}: Inspected and Findings are off at 1366`, !f.keys.includes('date') && !f.keys.includes('find'), f.keys.join(','));
+      /* build 630 (Rickie 15.11 "put all columns by default"): Inspected and Findings stay at 1366 */
+      if (!nx) ok(`${tag}: Inspected and Findings are on at 1366 (all columns by default)`, f.keys.includes('date') && f.keys.includes('find'), f.keys.join(','));
 
       console.log(`\n${tag} @1366: 3. ONE COUNT LINE`);
       /* CM_FLOW_V1 (build 626, "all tables default show all"): every machine is listed; the count is the pager's, once */
@@ -154,7 +157,7 @@ const covRead = () => {
         await p.setViewportSize({ width: 1366, height: 900 });
         await p.waitForTimeout(500);
         f = await p.evaluate(fleetRead);
-        ok(`${tag}: back at 1366 the columns and boxes go again`, f.head === f.boxes && f.cols === f.head && !f.keys.includes('date'), `${f.head}/${f.boxes}/${f.cols}`);
+        ok(`${tag}: back at 1366 every column stays, one box and one <col> each`, f.head === f.boxes && f.cols === f.head && f.keys.includes('date'), `${f.head}/${f.boxes}/${f.cols}`);
       }
 
       console.log(`\n${tag}: 5. NO PAGE ERRORS`);

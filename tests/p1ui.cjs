@@ -92,7 +92,7 @@ const key = e => new KeyboardEvent('keydown', { key: e, bubbles: true, cancelabl
   /* CM_FLOW_V1 (build 626, Rickie 15.11 "all tables default show all") */
   ok('every row by default', T.rows === T.total, T.rows + ' rows');
   ok('"N matching · showing 1–N"', new RegExp('^' + T.total.toLocaleString('en-US') + ' matching · showing 1–' + T.total.toLocaleString('en-US')).test(T.shown), T.shown);
-  ok('25 / 50 / 100 / All offered, All chosen', T.sizes.join(',') === '25,50,100,All' && T.all === 0, T.sizes.join(',') + ' · ' + T.all + ' show-all');
+  ok('25 / 50 / 100 / 500 / All offered, All chosen', T.sizes.join(',') === '25,50,100,500,All' && T.all === 0, T.sizes.join(',') + ' · ' + T.all + ' show-all');
   await p.evaluate(() => document.querySelector('#actionTbl [data-pg$=":size:100"]').click()); await p.waitForTimeout(300);
   const T2 = await p.evaluate(() => ({ rows: document.querySelectorAll('#actionTbl tbody tr.hrow').length, shown: (document.querySelector('#actionTbl .pager .muted') || {textContent: ''}).textContent.trim(),
     on: (document.querySelector('#actionTbl .pgsz .on') || {}).textContent }));
@@ -111,7 +111,7 @@ const key = e => new KeyboardEvent('keydown', { key: e, bubbles: true, cancelabl
     try { localStorage.setItem('cm_dash_who', 'R. Marrero'); } catch (e) {} });
   const R = await p.evaluate(() => ({ fields: document.querySelectorAll('#actionTbl tbody input:not(.asel), #actionTbl tbody select, #actionTbl tbody textarea').length,
     who: document.querySelectorAll('#actionTbl tbody .who').length, st: document.querySelectorAll('#actionTbl tbody .st').length,
-    unassigned: (document.querySelector('#actionTbl tbody .who.none span') || {}).textContent }));
+    unassigned: (document.querySelector('#actionTbl tbody .who.none span') || {}).textContent || (d => { d.innerHTML = ownerCellHTML({}, { grade: 1 }, x => x); return d.textContent; })(document.createElement('div')) }));   /* build 630: a finding graded 3-5 is always owned (Maintenance), so the words are read off a row with no finding */
   ok('no form control in any row; owner and status are read-outs', R.fields === 0 && R.who === 25 && R.st === 25, R.fields + ' field(s)');
   ok('  an unassigned action says so in words', !!R.unassigned && R.unassigned.length > 2, R.unassigned);
   /* The unit cell: owner, due, status and work order edit in place on a click. */
@@ -206,7 +206,7 @@ const key = e => new KeyboardEvent('keydown', { key: e, bubbles: true, cancelabl
   const defsEn = await p.evaluate(() => document.querySelectorAll('details.defs > summary').length);
   await p.click('.lang button[data-lang="ru"]'); await p.waitForTimeout(500);
   const Ru = await p.evaluate(() => { showTab('due', true); const heads = [...document.querySelectorAll('#ddList th')].map(x => x.textContent.trim());
-    showTab('actions', true); const k = [...document.querySelectorAll('#actKpis .kpi .k')].map(x => x.textContent.trim());
+    showTab('actions', true); const k = [...document.querySelectorAll('#actKpis .kpi .k, #actFlow .cfprob button')].map(x => x.textContent.trim());   /* build 628: the no-owner count is on the flow's problem line */
     return { heads, k, defs: [...document.querySelectorAll('details.defs > summary')].map(s => s.textContent.trim()), eq: $('equipQ').placeholder, shown: (document.querySelector('#actionTbl .pager .muted') || {textContent: ''}).textContent.trim() }; });
   ok('Russian headings: ' + TERMS.ru.hours_per_day + ' · ' + TERMS.ru.defer_reason, Ru.heads.includes(TERMS.ru.hours_per_day) && Ru.heads.includes(TERMS.ru.defer_reason), Ru.heads.join(' | '));
   ok('  cards: Работы без ответственного', Ru.k.some(x => /без ответственного/i.test(x)), Ru.k.join(' | '));

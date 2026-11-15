@@ -213,7 +213,7 @@ const shown = (p, sel) => p.evaluate(s => { const e = document.querySelector(s);
   await p.click('#histView [data-hv="list"]'); await p.waitForTimeout(300);
   const L = await p.evaluate(() => ({ rows: document.querySelectorAll('#history table.grid tbody tr.hrow').length,
     blocks: document.querySelectorAll('#history .insp').length,
-    heads: [...document.querySelectorAll('#history .insp .head .date')].map(x => x.textContent.trim()) }));
+    heads: [...document.querySelectorAll('#history .insp .head .date')].map(x => x.dataset.d || x.textContent.trim()) }));
   ok('the timeline is a table, one block per visit, newest first', L.rows > 0 && L.blocks > 0
      && L.heads.every((d, n) => n === 0 || d <= L.heads[n - 1]), L.blocks + ' visits, ' + L.rows + ' rows');
   await p.click('#history table.grid tbody tr.hrow'); await p.waitForTimeout(300);

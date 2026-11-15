@@ -85,7 +85,7 @@ process.on('exit', bye); process.on('SIGINT', () => { bye(); process.exit(1); })
   await p.waitForTimeout(900);
   const card = await p.evaluate(() => {
     const hit = [...document.querySelectorAll('#history *')]
-      .filter(e => /2026-03-09/.test(e.textContent || '') && e.children.length < 12);
+      .filter(e => (/2026-03-09|09\.03\.2026/.test(e.textContent || '') || e.getAttribute('data-d') === '2026-03-09') && e.children.length < 12);   /* build 629: history dates read dd.mm.yyyy, the ISO date is data-d */
     const host = hit.length ? hit[hit.length - 1].closest('.rec, .card, section, article, div') : null;
     return { found: !!hit.length, txt: (host ? host.textContent : '').replace(/\s+/g, ' ').trim().slice(0, 220) };
   });

@@ -197,10 +197,12 @@ const reset = q => fetch(BASE + '/__reset?' + q).then(r => r.text());
      lay.sample.map(s => s.st).join(' | '));
   const wide = await p.evaluate(() => {
     const w = document.querySelector('#fleetTbl').closest('.tblwrap');
-    return { table: document.querySelector('#fleetTbl').scrollWidth, box: w ? w.clientWidth : 0 };
+    const t = document.querySelector('#fleetTbl');
+    return { table: t.scrollWidth, box: w ? w.clientWidth : 0, slide: t.classList.contains('cmslide') && t.classList.contains('cmfrz') && !!t.querySelector('tbody td.cmfz') };
   });
-  ok('and the whole table fits the screen at 1366, with no sideways scroll inside it',
-     wide.table <= wide.box + 1, wide.table + ' in ' + wide.box);
+  /* build 630 (CM_TBLSTD_V1, all columns by default): a table wider than its box slides inside it with the machine column frozen */
+  ok('and the whole table is there at 1366: it fits, or slides inside its own box with the machine frozen',
+     wide.table <= wide.box + 1 || wide.slide, wide.table + ' in ' + wide.box + (wide.slide ? ', sliding, frozen' : ''));
 
   console.log('\n6. THE DEFINITIONS CONTROL EXPLAINS EVERY HEADLINE, IN BOTH LANGUAGES');
   for (const L of ['en', 'ru']) {
@@ -222,10 +224,10 @@ const reset = q => fetch(BASE + '/__reset?' + q).then(r => r.text());
     ok(L + ': the popover stays on screen', d.onScreen);
     const fit = await p.evaluate(() => {
       const tw = document.querySelector('#fleetTbl'), box = tw.closest('.tblwrap');
-      return { table: tw.scrollWidth, box: box.clientWidth,
+      return { table: tw.scrollWidth, box: box.clientWidth, slide: tw.classList.contains('cmslide') && !!tw.querySelector('tbody td.cmfz'),
                strip: Math.round(document.getElementById('kpis').getBoundingClientRect().height) };
     });
-    ok(L + ': the attention table fits the screen', fit.table <= fit.box + 1, fit.table + ' in ' + fit.box);
+    ok(L + ': the attention table fits the screen or slides in its box with the machine frozen', fit.table <= fit.box + 1 || fit.slide, fit.table + ' in ' + fit.box);
     /* 440: the flow rows' doors and grade keys are 32 px targets since build 627 (phase6), 3 px over the first 420 */
     ok(L + ': and the three rows stay compact', fit.strip <= 440, fit.strip + 'px');
   }

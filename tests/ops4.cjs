@@ -64,13 +64,13 @@ const SEED = () => {
     return { heads: heads.join(','),
       wo: cell('TK106', 'wo'), needWo: cell('TK105', 'wo'), noOwner: cell('TK104', 'owner'), noDue: cell('TK104', 'due'), st104: cell('TK104', 'status'),
       prio: row('TK102').querySelector('td:nth-child(2)').textContent.replace(/\s+/g, ' ').trim(),
-      req: row('TK106').querySelectorAll('td')[5].textContent.trim(),
+      req: row('TK106').querySelectorAll('td')[6].textContent.trim(),   /* build 628: 1C defect column before it */
       resident: [...document.querySelectorAll('#actionTbl tbody tr')].reduce((s, tr) => s + tr.querySelectorAll('input:not(.asel), select, textarea').length, 0),
       plan: /Planning required|triage/i.test(document.getElementById('actionTbl').textContent) }; });
-  ok('Priority · Unit · Component · Finding · Required action · Owner · Due · Status · Work order', A.heads === 'Priority,Unit,Component,Finding,Required action,Owner,Due,Status,Work order', A.heads);
+  ok('Priority · Unit · Component · Finding · 1C defect · Required action · Owner · Due · Status · Work order', A.heads === 'Priority,Unit,Component,Finding,1C defect,Required action,Owner,Due,Status,Work order', A.heads);
   ok('  the work order shows, and a job in progress without one says "' + TERMS.en.need_wo + '"', A.wo === 'WO-6' && A.needWo === TERMS.en.need_wo, A.wo + ' · ' + A.needWo);
-  ok('  an unassigned row says "' + TERMS.en.owner_unassigned + '" and "' + TERMS.en.need_due + '"', A.noOwner === TERMS.en.owner_unassigned && A.noDue === TERMS.en.need_due, A.noOwner + ' · ' + A.noDue);
-  ok('  the status cell names the rest (priority), never "planning required"', /Priority required/.test(A.st104) && !A.plan, A.st104);
+  ok('  a finding nobody owns is Maintenance\'s, and CM asks no due date once 1C decides (build 630)', A.noOwner === 'Maintenance' && A.noDue === '—', A.noOwner + ' · ' + A.noDue);
+  ok('  the status cell names what is missing (the 1C defect, build 630), never "planning required"', /1C defect required/.test(A.st104) && !A.plan, A.st104);
   ok('  Priority carries the grade and the stoppage priority', /Critical/.test(A.prio) && /P1/.test(A.prio), A.prio);
   ok('  the required action is its own column', A.req === 'Schedule repair', A.req);
   ok('  and not one form control lives in the rows', A.resident === 0, A.resident + ' controls');
@@ -123,9 +123,9 @@ const SEED = () => {
              cmint: by.cmint ? by.cmint.n : -1, st: (o => { dueTabRows().forEach(r => { o[r.st] = (o[r.st] || 0) + 1; }); return o; })({}) }; });
   /* Build 627 (CM_SCHED1C_V1): the first four views follow the 1C PM work orders; the hour-interval rows are the
      CM interval view; All is an address, not a tab. */
-  ok('Overdue in 1C · Due in 7 days · Planned later · Done this week · Deferred · Never inspected · CM interval', D.keys === 'over,soon,later,done,put,never,cmint', D.keys);
-  ok('  in the dictionary\'s words', D.labels === ['Overdue in 1C', 'Due in 7 days', 'Planned later', 'Done this week', TERMS.en.deferred, TERMS.en.never_inspected, 'CM interval'].join(' | '), D.labels);
-  ok('  CM interval holds the hour-based past due and due soon: TK108\'s plug is one of them', D.cmint === (D.st.over || 0) + (D.st.soon || 0) && (D.st.over || 0) === 1, JSON.stringify({ cmint: D.cmint, st: D.st }));
+  ok('Overdue in 1C · Due in 7 days · Planned later · Done this week · Deferred · Never inspected (no CM interval tab since build 629: all in 1C)', D.keys === 'over,soon,later,done,put,never', D.keys);
+  ok('  in the dictionary\'s words', D.labels === ['Overdue in 1C', 'Due in 7 days', 'Planned later', 'Done this week', TERMS.en.deferred, TERMS.en.never_inspected].join(' | '), D.labels);
+  ok('  the hour rule still answers behind the scenes (address scope cmint): TK108\'s plug is past due by it', D.cmint === -1 && (D.st.over || 0) === 1, JSON.stringify({ cmint: D.cmint, st: D.st }));
   ok('  never inspected: every machine on a round with nothing recorded, one row per round', D.never > 100 && D.by.never.n === D.never, D.never + ' rows');
   ok('  a never-inspected row says so, has no last date and no clock, and still offers Start and Defer', D.cells.length === 7 && D.cells[2] === TERMS.en.never_inspected && D.cells[3] === '—' && /Start/.test(D.cells[6]) && /Defer/.test(D.cells[6]), D.cells.join(' | '));
   ok('  the address can name every view', D.opts === 'over,soon,due,never,plan,cmp,put,done,later,cmint,all', D.opts);

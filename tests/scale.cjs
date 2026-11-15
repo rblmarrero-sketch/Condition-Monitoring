@@ -85,8 +85,16 @@ const PAGE = 50;
     const rows = await count('actions', 'table.seltbl tbody tr');
     const txt = await pagerText('actions');
     /* CM_FLOW_V1 (build 626, Rickie 15.11 "all tables default show all"): every row, the count still said */
-    ok(rows >= 1000, 'the action register draws every row (tables default to all)', rows + ' row(s)');
-    ok(/1[,.]?000\s*matching/.test(txt), 'and says how many there are altogether', txt);
+    /* build 628 (CM_SHOWALL_CAP_V1): all rows up to SHOW_ALL_MAX; a longer list opens at the cap with All one press away */
+    const CAP = await p.evaluate(() => SHOW_ALL_MAX);
+    ok(rows === CAP, 'the action register opens at ' + CAP + ' rows when it holds more (tables show all up to the cap)', rows + ' row(s)');
+    /* build 630: a later reading of the same point clears or carries a finding, so 1,000 rounds are fewer register rows; the count is the page's own */
+    const TOT = +((txt.match(/([\d,.\s]+)\s*matching/) || [])[1] || '0').replace(/\D/g, '');
+    ok(TOT > CAP, 'and says how many there are altogether (more than the cap)', txt);
+    await p.evaluate(() => document.querySelector('#tab-actions [data-pg$=":size:1000000000"]').click()); await p.waitForTimeout(500);
+    const all = await count('actions', 'table.seltbl tbody tr');
+    ok(all === TOT, '"All" draws every row', all + ' row(s) of ' + TOT);
+    await p.evaluate(() => document.querySelector('#tab-actions [data-pg$=":size:' + 500 + '"]').click()); await p.waitForTimeout(300);
   }
   await tab('due');
   /* build 627: the schedule opens on the 1C orders; the thousand hour-interval rows are the CM interval tab */
@@ -136,7 +144,7 @@ const PAGE = 50;
     await p.waitForTimeout(900);
     const rows = await count('actions', 'table.seltbl tbody tr');
     ok(rows === 100, 'a hundred a page draws exactly a hundred', rows + ' row(s)');
-    ok(/1[,.]?000\s*matching/.test(await pagerText('actions')), 'and still states the whole list', await pagerText('actions'));
+    ok(/([\d,.\s]+)\s*matching/.test(await pagerText('actions')) && +((await pagerText('actions')).match(/([\d,.\s]+)\s*matching/)[1].replace(/\D/g, '')) > 100, 'and still states the whole list', await pagerText('actions'));
     await p.evaluate(() => document.querySelector('#tab-actions [data-pg$=":size:25"]').click());
     await p.waitForTimeout(600);
     ok((await count('actions', 'table.seltbl tbody tr')) <= PAGE, 'and back to a short page', 'back to a page');
