@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-15T02:12:38+00:00",
+  "generated": "2026-11-15T02:27:50+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -5976,6 +5976,71 @@ window.CM_WO_DATA = {
       "wo": "WO-022572"
     },
     {
+      "asset": "TK092",
+      "defect": "DD-00016928",
+      "raised": "2026-11-15",
+      "system": "TK092.CH.SU (Suspension / Подвеска)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Требуется замена пальцев и втулок рессор",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "TK092",
+      "defect": "DD-00016927",
+      "raised": "2026-11-15",
+      "system": "TK092.SS.RE (Tie Rod Ends / Наконечники рулевых тяг)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Требуется замена рулевых наконечников",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "TK124",
+      "defect": "DD-00016931",
+      "raised": "2026-11-15",
+      "system": "TK124.DRS.COO.RAD Radiator / Радиатор",
+      "defectType": "1.06 Deformation / bending / buckling Деформация / изгиб / коробление",
+      "descr": "лопнула решетка защиты вентиллятора",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": null
+    },
+    {
+      "asset": "LV048",
+      "defect": "DD-00016930",
+      "raised": "2026-11-15",
+      "system": "LV048.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Замена ШРУС передних",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "LV069",
+      "defect": "DD-00016929",
+      "raised": "2026-11-15",
+      "system": "LV069.CH.SU (Suspension / Подвеска)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "замена переднего левого амортизатора",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
       "asset": "GR002",
       "defect": "DD-00016926",
       "raised": "2026-11-15",
@@ -6130,6 +6195,19 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-022581"
+    },
+    {
+      "asset": "GE054",
+      "defect": "DD-00016932",
+      "raised": "2026-11-15",
+      "system": "GE054 ED320-T400-2RN",
+      "defectType": "4.01 Short circuiting / Короткое замыкание",
+      "descr": "Замена аккумулятора",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022588"
     },
     {
       "asset": "EX023",
@@ -38021,19 +38099,6 @@ window.CM_WO_DATA = {
       "wo": "WO-021477"
     },
     {
-      "asset": "DZ020",
-      "defect": "DD-00014378",
-      "raised": "2026-10-08",
-      "system": "DZ020.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь по прокладке поддона ДВС",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Valentin Trapilo",
-      "regBy": "Трапило Валентин Святославович",
-      "wo": null
-    },
-    {
       "asset": "HX007",
       "defect": "DD-00014283",
       "raised": "2026-10-08",
@@ -38044,6 +38109,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Shcherbina",
       "regBy": "Щербина Андрей Николаевич",
+      "wo": null
+    },
+    {
+      "asset": "DZ020",
+      "defect": "DD-00014378",
+      "raised": "2026-10-08",
+      "system": "DZ020.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь по прокладке поддона ДВС",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Valentin Trapilo",
+      "regBy": "Трапило Валентин Святославович",
       "wo": null
     },
     {
