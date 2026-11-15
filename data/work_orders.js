@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-15T13:17:50+00:00",
+  "generated": "2026-11-15T13:32:42+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -6925,6 +6925,58 @@ window.CM_WO_DATA = {
       "wo": "WO-022561"
     },
     {
+      "asset": "LV011",
+      "defect": "DD-00016897",
+      "raised": "2026-11-14",
+      "system": "LV011.DRS.TRA (Transmission / Трансмиссия)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Излом полуоси заднего моста",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022559"
+    },
+    {
+      "asset": "HX031",
+      "defect": "DD-00016904",
+      "raised": "2026-11-14",
+      "system": "HX031.DRS.FS (Fuel System / Топливная система)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь корпуса топливного фильтра, чистка сетки",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022564"
+    },
+    {
+      "asset": "EX001",
+      "defect": "DD-00016901",
+      "raised": "2026-11-14",
+      "system": "EX001.CH.AL (Central Lubrication System / Централизованная система смазки)",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "Доставка смазки",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022563"
+    },
+    {
+      "asset": "TK043",
+      "defect": "DD-00016861",
+      "raised": "2026-11-14",
+      "system": "TK043.BS.RCH (Brake Chambers / Тормозные камеры)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "уходит воздух  в обоих контурах (Замена заднего энергоаккумулятора)",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022545"
+    },
+    {
       "asset": "LV086",
       "defect": "DD-00016878",
       "raised": "2026-11-14",
@@ -7185,32 +7237,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022565"
     },
     {
-      "asset": "HX031",
-      "defect": "DD-00016904",
-      "raised": "2026-11-14",
-      "system": "HX031.DRS.FS (Fuel System / Топливная система)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь корпуса топливного фильтра, чистка сетки",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022564"
-    },
-    {
-      "asset": "EX001",
-      "defect": "DD-00016901",
-      "raised": "2026-11-14",
-      "system": "EX001.CH.AL (Central Lubrication System / Централизованная система смазки)",
-      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
-      "descr": "Доставка смазки",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022563"
-    },
-    {
       "asset": "LS025",
       "defect": "DD-00016880",
       "raised": "2026-11-14",
@@ -7235,19 +7261,6 @@ window.CM_WO_DATA = {
       "by": "Aleksey Kiselev",
       "regBy": "Киселев Алексей Александрович",
       "wo": "WO-022556"
-    },
-    {
-      "asset": "LV011",
-      "defect": "DD-00016897",
-      "raised": "2026-11-14",
-      "system": "LV011.DRS.TRA (Transmission / Трансмиссия)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Излом полуоси заднего моста",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022559"
     },
     {
       "asset": "EX011",
@@ -7287,19 +7300,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022548"
-    },
-    {
-      "asset": "TK043",
-      "defect": "DD-00016861",
-      "raised": "2026-11-14",
-      "system": "TK043.BS.RCH (Brake Chambers / Тормозные камеры)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "уходит воздух  в обоих контурах (Замена заднего энергоаккумулятора)",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022545"
     },
     {
       "asset": "EX015",
