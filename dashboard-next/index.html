@@ -22946,7 +22946,7 @@ html.cmSiteTbls .cmstTools:empty{display:none}
   /* key = the identifying column (frozen, pinned); hid = the page's own default-hidden columns (by th data-sort key) become the
      template's default hidden ones, which a person can tick back in ⚙ Columns */
   var CFG = [
-    { sel: "#fleetTbl", id: "cm_fleet", key: KEY, pg: "fleet", hid: ["cls", "find", "act", "open", "due"] },
+    { sel: "#fleetTbl", id: "cm_fleet", key: KEY, pg: "fleet" },   /* every column shown by default (Rickie 16.11 07:42 "select everything as standard"); the table slides with Unit frozen */
     { sel: "table.acttbl", id: "cm_act", key: KEY, pg: "actions",
       st: { lab: /^(status|статус)/i, re: [[/closed|done|completed|закрыт|выполн/i, "done"], [/no action|not needed|void|не требуется|аннул/i, "void"], [/./, "open"]] } },
     { sel: "table.ddtbl", id: "cm_due", key: KEY, pg: "due" },

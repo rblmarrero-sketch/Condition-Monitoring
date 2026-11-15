@@ -5635,7 +5635,8 @@ seven tables to it when `/site/std.js` is there: `#fleetTbl`, `table.acttbl`, `t
 column and held slider, and the status colour on the row (Actions, Plan vs Actual, Defects raised). The page keeps its own sort
 (`sf:{sort:false}`); the block marks the sorted heading `aria-sort` and only that heading shows its arrow. What stands down for
 these tables (class `cmSiteTbl`): the page's own filter row (`th.cwfh`, removed after every redraw), its Columns pickers
-(`#actCols`, the fleet `.colsmenu`; every column is drawn and the fleet's default-hidden ones become the template's `def.h`),
+(`#actCols`, the fleet `.colsmenu`; every column is drawn and shown by default, Rickie 16.11 07:42 "select everything as
+standard": the fleet table then slides with Unit frozen and the held slider),
 `cmTblStd`'s Columns bar, freeze and slider, `cmHeld` (the template holds them, `std-hold`). Their lists draw every line
 (`paged()` gives `PAGE_ALL` to `cmSiteTblKeys`), so a filter counts the whole list. One config per table for the page's life
 (`CFGS`): a redraw or a replaced table keeps its filters, widths and order. Off the site nothing runs. `tests/site_std_copy` is

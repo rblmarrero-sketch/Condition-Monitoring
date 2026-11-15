@@ -50,6 +50,16 @@ const TABLES = [['overview', '#fleetTbl', 0], ['actions', 'table.acttbl', 1], ['
       ok(`${fw}: on the site table component with its filter row, the page's own filter row gone`, s.std && s.flt && !s.own, JSON.stringify({ std: s.std, flt: s.flt, own: s.own }));
       ok(`${fw}: one Columns control, the site's`, s.cols === 1 && s.colStd, `${s.cols} visible`);
       ok(`${fw}: filter boxes 32 px on a desk`, s.h.length > 0 && s.h.every(h => h === 32), s.h.join(','));
+      /* Rickie 16.11 07:42 "select everything as standard. and horizontal slider, freeze, as per UI standard" */
+      const w = await p.evaluate(sel => { const t = document.querySelector(sel), box = t.closest('.tblwrap') || t.parentElement, hr = [...t.tHead.rows].filter(r => !r.classList.contains('std-flt')).pop();
+        const hidden = [...hr.cells].filter(c => getComputedStyle(c).display === 'none').map(c => c.textContent.trim());
+        const wide = box.scrollWidth > box.clientWidth + 1; scrollTo(0, scrollY + t.getBoundingClientRect().top - 150); dispatchEvent(new Event('scroll'));
+        return new Promise(r => setTimeout(() => { const own = box.getBoundingClientRect().bottom > innerHeight;
+          const hs = [...document.querySelectorAll('.std-hs')].some(e => { const q = e.getBoundingClientRect(); return q.height > 0 && q.bottom <= innerHeight + 1 && q.top > innerHeight - 80; });
+          r({ hidden, wide, fz: t.querySelectorAll('tbody .std-fz').length, own, hs }); }, 900)); }, sel);
+      ok(`${fw}: every column shown by default`, !w.hidden.length, w.hidden.join(','));
+      if (w.wide) { ok(`${fw}: a table wider than its box keeps its identifying column frozen`, w.fz > 0, `${w.fz} frozen cells`);
+        if (w.own) ok(`${fw}: its slider is held at the bottom of the window`, w.hs); }
       if (hasSt) ok(`${fw}: rows carry the status colour`, s.st > 0, `${s.st} of ${s.rows}`);
       /* filter on the identifying column: the first row's value */
       const f = await p.evaluate(async sel => { const t = document.querySelector(sel), fr = t.querySelector('tr.std-flt'), cfg = t._cmCfg, k = cfg.freeze;
