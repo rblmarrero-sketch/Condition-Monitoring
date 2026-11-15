@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-15T21:27:35+00:00",
+  "generated": "2026-11-15T21:57:36+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -3196,8 +3196,8 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-10-02",
       "detected": "2026-10-02",
-      "planStart": "2026-11-17",
-      "closed": null,
+      "planStart": "2026-11-13",
+      "closed": "2026-11-13",
       "asset": "CN008",
       "defect": "DD-00013865",
       "requestNo": "DD-00013865",
@@ -3208,7 +3208,7 @@ window.CM_WO_DATA = {
       "cause": "Разрушение от удара",
       "causeFrom": "wo",
       "descr": "Механический излом внутренней ручки двери кабины оператора.",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "by": "Irek",
       "byFull": "Irek Rayanov",
       "regBy": "Раянов Ирек Ямильевич",
@@ -5805,6 +5805,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Murashko",
       "regBy": "Мурашко Сергей Борисович",
       "wo": "WO-022627"
+    },
+    {
+      "asset": "TK097",
+      "defect": "DD-00016973",
+      "raised": "2026-11-16",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK097 ENGINE OldNumber (UT097)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Запуск ДВС",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022630"
     },
     {
       "asset": "BS001",
@@ -19665,19 +19678,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "EX009",
-      "defect": "DD-00015866",
-      "raised": "2026-10-29",
-      "system": "EX009.OC.FS (Fire Suppression / Система пожаротушения)",
-      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
-      "descr": "КТХ-5",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Roman Kochetov",
-      "regBy": "Кочетов Роман Иванович",
-      "wo": null
-    },
-    {
       "asset": "EX006",
       "defect": "DD-00015893",
       "raised": "2026-10-29",
@@ -19702,6 +19702,19 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": null
+    },
+    {
+      "asset": "EX009",
+      "defect": "DD-00015866",
+      "raised": "2026-10-29",
+      "system": "EX009.OC.FS (Fire Suppression / Система пожаротушения)",
+      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "descr": "КТХ-5",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Roman Kochetov",
+      "regBy": "Кочетов Роман Иванович",
+      "wo": "WO-022631"
     },
     {
       "asset": "DZ022",
