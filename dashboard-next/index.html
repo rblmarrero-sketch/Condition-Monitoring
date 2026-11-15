@@ -3326,7 +3326,7 @@
 </style>
 <style id="cmOvFlowCss">/* CM_FLOW_V1 (build 626): the Overview's three flow rows - dashboard/cm-flow.js */
 #kpis.cmflow{display:block!important;margin:0 0 20px;grid-template-columns:none!important}
-#kpis.cmflow .cfsec{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px 16px;margin:0 0 14px}
+#kpis.cmflow .cfsec{background:var(--surface);border:1px solid var(--border);border-radius:var(--r,10px);padding:14px 16px 16px;margin:0 0 14px}
 #kpis.cmflow .cfsec:last-child{margin-bottom:0}
 #kpis.cmflow .cft{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 10px;margin:0 0 10px}
 #kpis.cmflow .cft>span{font-size:14px;font-weight:600;color:var(--ink)}
@@ -3350,8 +3350,8 @@
 #kpis.cmflow .cfcond{display:flex;align-items:center;gap:10px 16px;flex-wrap:wrap}
 #kpis.cmflow .cfbar{flex:1 1 300px;height:12px;min-height:12px;padding:0;margin:0;border:0;box-sizing:border-box;border-radius:99px;overflow:hidden;display:flex;align-items:stretch;background:var(--surface-2)}
 #kpis.cmflow .cfbar i{display:block;align-self:stretch;height:auto;min-height:12px;margin:0;padding:0;border:0}
-#kpis.cmflow .cfkey{display:flex;flex-wrap:wrap;gap:4px}
-#kpis.cmflow .cfkey button{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:4px 8px;border-radius:8px;font-size:13px;color:var(--ink);white-space:nowrap}
+#kpis.cmflow .cfkey{display:flex;flex-wrap:wrap;gap:0 4px}
+#kpis.cmflow .cfkey button{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:0 8px;border-radius:8px;font-size:13px;color:var(--ink);white-space:nowrap}
 #kpis.cmflow .cfkey button:hover{background:var(--surface-2)}
 #kpis.cmflow .cfkey button.on{background:var(--surface-2);box-shadow:inset 0 0 0 1px var(--border)}
 #kpis.cmflow .cfkey button[disabled]{cursor:default;color:var(--muted)}
@@ -3360,6 +3360,10 @@
 @media (max-width:1100px){#kpis.cmflow .cfrib.c5{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media (max-width:820px){#kpis.cmflow .cfrib.c4,#kpis.cmflow .cfrib.c5{grid-template-columns:1fr 1fr}#kpis.cmflow .rb::after{display:none}}
 @media (max-width:420px){#kpis.cmflow .cfrib.c4,#kpis.cmflow .cfrib.c5{grid-template-columns:1fr}}
+
+#kpis.cmflow .cfgo,#kpis.cmflow .cfkey button{min-height:32px;display:inline-flex;align-items:center}
+#kpis.cmflow .cfgo{margin-block:-7px}   /* a 32 px target that does not make the header taller */
+#kpis.cmflow button:focus-visible,#kpis.cmflow .cfgo:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 </style>
 </head>
 <body>
@@ -4048,7 +4052,7 @@
             <dt data-i18n="cf_t_plan">CM rounds — 1C PM work orders</dt><dd data-i18n="cf_d_plan">x</dd>
             <dt data-i18n="cf_t_find">Findings → 1C defects</dt><dd data-i18n="cf_d_find">x</dd>
             <dt data-i18n="ov_k_review">Grade review required</dt><dd data-i18n="ov_d_review">Findings whose recorded severity does not match their grade. Review the grade; severity follows it.</dd>
-            <dt data-i18n="cv_title2">Inspection compliance</dt><dd data-i18n="cv_sub">1C PM work orders of the last 30 days whose CM round was walked within 10 days of the plan date; and machines each round applies to, against machines it reached, in the period selected above.</dd>
+            <dt data-i18n="cv_title2">Inspection compliance</dt><dd data-i18n="cv_sub">1C PM work orders of the last 30 days whose CM round was done within 10 days of the plan date; and machines each round applies to, against machines it reached, in the period selected above.</dd>
             <dt data-i18n="tr_title2">Condition trend</dt><dd data-i18n="tr_sub">Findings by month, worst on top. One month is a sample; three is a trend.</dd>
             <dt data-i18n="s_fleet2">Equipment requiring attention</dt><dd data-i18n="s_fleet_sub">Worst finding on each machine's most recent inspection, highest priority first. Click a machine to open its history.</dd>
           </dl>
@@ -4412,7 +4416,7 @@
   <section id="tab-due" class="hidden">
     <div class="pagehd">
       <div class="pgt"><h1 data-i18n="dd_title">Inspection Schedule</h1>
-        <span class="pgsub" data-i18n="dd_purpose">Which rounds are overdue, due soon or never inspected, from the same intervals the phones use.</span></div>
+        <span class="pgsub" data-i18n="dd_purpose">The CM rounds 1C PM work orders ask for: overdue, due in 7 days, planned later, done this week. The CM interval tab keeps the hour-based view.</span></div>
     </div>
     <div class="kpis" id="dueKpis"></div>
     <div class="section">
@@ -4449,6 +4453,8 @@
           <option value="cmp" data-i18n="dd_cmp">Compare</option>
           <option value="put" data-i18n="dd_put">Deferred</option>
           <option value="done" data-i18n="dd_done">Completed</option>
+          <option value="later" data-i18n="dd_1c_later">Planned later</option>
+          <option value="cmint" data-i18n="dd_cmint">CM interval</option>
           <option value="all" data-i18n="dd_all">All</option>
         </select></label>
         <span class="ddbreak" aria-hidden="true"></span>
@@ -5185,23 +5191,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=626"></script>
+<script src="../data/magnetic_plug.js?v=627"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=626"></script>
-<script src="../mobile/hme.js?v=626"></script>
-<script src="../mobile/mp-fc.js?v=626"></script>
-<script src="../mobile/rtw.js?v=626"></script>
-<script src="../mobile/hme-cascade.js?v=626"></script>
-<script src="../mobile/temp-limits.js?v=626"></script>
+<script src="../data/work_orders.js?v=627"></script>
+<script src="../mobile/hme.js?v=627"></script>
+<script src="../mobile/mp-fc.js?v=627"></script>
+<script src="../mobile/rtw.js?v=627"></script>
+<script src="../mobile/hme-cascade.js?v=627"></script>
+<script src="../mobile/temp-limits.js?v=627"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=626"></script>
-<script src="../mobile/normalize.js?v=626"></script>
-<script src="../mobile/terms.js?v=626"></script>
+<script src="../mobile/assets.js?v=627"></script>
+<script src="../mobile/normalize.js?v=627"></script>
+<script src="../mobile/terms.js?v=627"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -5220,22 +5226,22 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=626"></script>
-<script src="../mobile/edits.js?v=626"></script>
-<script src="../mobile/due.js?v=626"></script>
-<script src="../dashboard/cm-flow.js?v=626"></script>
-<script src="../mobile/wear.js?v=626"></script>
-<script src="../mobile/wear-map.js?v=626"></script>
-<script src="../mobile/lube.js?v=626"></script>
-<script src="../mobile/lube-overrides.js?v=626"></script>
-<script src="../mobile/lube2027.js?v=626"></script>
-<script src="../mobile/lube-tds.js?v=626"></script>
-<script src="../dashboard/lube-master.js?v=626"></script>
-<script src="../dashboard/wear-limits.js?v=626"></script>
+<script src="../mobile/grade.js?v=627"></script>
+<script src="../mobile/edits.js?v=627"></script>
+<script src="../mobile/due.js?v=627"></script>
+<script src="../dashboard/cm-flow.js?v=627"></script>
+<script src="../mobile/wear.js?v=627"></script>
+<script src="../mobile/wear-map.js?v=627"></script>
+<script src="../mobile/lube.js?v=627"></script>
+<script src="../mobile/lube-overrides.js?v=627"></script>
+<script src="../mobile/lube2027.js?v=627"></script>
+<script src="../mobile/lube-tds.js?v=627"></script>
+<script src="../dashboard/lube-master.js?v=627"></script>
+<script src="../dashboard/wear-limits.js?v=627"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=626"></script>
-<script src="../mobile/machine-photos.js?v=626"></script>
+<script src="../mobile/upload-defaults.js?v=627"></script>
+<script src="../mobile/machine-photos.js?v=627"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -5244,17 +5250,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=626"></script>
-<script src="../mobile/get.js?v=626"></script>
-<script src="../mobile/points.js?v=626"></script>
-<script src="../mobile/uc-points.js?v=626"></script>
-<script src="../mobile/inspect-guide.js?v=626"></script>
-<script src="../mobile/get-figs.js?v=626"></script>
-<script src="../mobile/body-points.js?v=626"></script>
-<script src="../mobile/body-map.js?v=626"></script>
-<script src="../mobile/jspdf.umd.min.js?v=626"></script>
-<script src="../mobile/html2canvas.min.js?v=626"></script>
-<script src="../mobile/report-core.js?v=626"></script>
+<script src="../mobile/machine-fig.js?v=627"></script>
+<script src="../mobile/get.js?v=627"></script>
+<script src="../mobile/points.js?v=627"></script>
+<script src="../mobile/uc-points.js?v=627"></script>
+<script src="../mobile/inspect-guide.js?v=627"></script>
+<script src="../mobile/get-figs.js?v=627"></script>
+<script src="../mobile/body-points.js?v=627"></script>
+<script src="../mobile/body-map.js?v=627"></script>
+<script src="../mobile/jspdf.umd.min.js?v=627"></script>
+<script src="../mobile/html2canvas.min.js?v=627"></script>
+<script src="../mobile/report-core.js?v=627"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -5870,7 +5876,7 @@ const I18N={
 
   k_insp:"Inspections", k_find:"Findings", k_att:"Needs attention",
   cf_t_cond:"Fleet condition", cf_d_cond:"Machines by the worst finding of their most recent round: 5 critical, 4 severe, 3 degraded, 2 incipient, 1 normal. Press a grade to show only those machines in the table below.",
-  cf_t_plan:"CM rounds — 1C PM work orders", cf_d_plan:"Open 1C PM work orders that include a CM round. The round is due on the work order's plan date. Overdue: the plan date has passed and no CM round was walked within 10 days of it. Done this week: a CM round walked this week for a work order due by next week.",
+  cf_t_plan:"CM rounds — 1C PM work orders", cf_d_plan:"Open 1C PM work orders that include a CM round. The round is due on the work order's plan date. Overdue: the plan date has passed and no CM round was done within 10 days of it. Done this week: a CM round done this week for a work order due by next week.",
   cf_t_find:"Findings → 1C defects", cf_d_find:"Findings graded 3–5 that need an action, by the 1C defect raised for them: same machine, raised on the inspection day or up to 14 days after, same system code. Not raised in 1C: no such defect yet. The other steps follow the defect's status in Defects raised.",
   k_comp:"Compliance", k_comp_s:"{n} of {of} 1C PM orders of the last 30 days had their CM round on time",
   u_rounds:"Inspections", u_open:"Open work", u_recent:"Recent rounds",
@@ -5984,7 +5990,7 @@ const I18N={
   ds_insp:"{n} inspection(s)", ds_indexed:"{n} files indexed", ds_inbrowser:"{n} record(s) in this browser",
   ds_photosn:"{n} photos", ds_voidn:"{n} voided",
   cv_title:"Coverage — was the inspection actually completed",
-  cv_sub:"Compliance is 1C PM work orders of the last 30 days whose CM round was walked within 10 days of the plan date. Coverage is machines each round applies to, against machines it reached, in the period selected above. A finding you never went to look for is not an absence of findings.",
+  cv_sub:"Compliance is 1C PM work orders of the last 30 days whose CM round was done within 10 days of the plan date. Coverage is machines each round applies to, against machines it reached, in the period selected above. A finding you never went to look for is not an absence of findings.",
   cv_th_round:"Round", cv_th_seen:"Reached", cv_th_insp:"Insp.",
   cv_th_never:"Never", cv_th_over:"Overdue", cv_th_who:"By",
   cv_every:"every {d} days", cv_every_h:"every {h} h", cv_every_h_cls:"{h} h {c}", cv_carried:"(carried forward)", cv_others:"(other machines)", cv_scoped:"machines this round fits", cv_p_days:"the last {d} days", cv_p_all:"all time",
@@ -6256,13 +6262,16 @@ const I18N={
   /* The same words the phone's own pill uses (due_plan_p / due_plan_row): one
      list, two screens, and a planner reading over an inspector's shoulder
      should not have to translate between them. */
+  dd_1c_over:TERMS.en.overdue+" in 1C", dd_1c_week:"Due in 7 days", dd_1c_later:"Planned later", dd_1c_done:"Done this week", dd_cmint:"CM interval",
+  dd_1c_late:"{n} d late", dd_1c_in:"in {n} d", dd_1c_today:"today", dd_1c_walked:"done {d}", dd_1c_none:"1C has no CM work order here.",
+  a_own_1c:"from the 1C defect",
   dd_plan:"1C plan", dd_plan_row:"1C asked for this — {p}", dd_plan_late:"planned {d}, not yet inspected",
   dd_plan_none:"Every round 1C has planned in this fortnight has been inspected.",
   dd_plan_nofile:"The 1C plan has not been pulled into this page yet.",
   dd_cmp:"Compare", dd_cmp_row:"1C plans {p} · {wo} · {g}",
   dd_cmp_same:"same date", dd_cmp_later:"1C {n} d later", dd_cmp_earlier:"1C {n} d earlier",
   dd_cmp_none:"No machine has both a CM due date and an open 1C work order for the same round right now.",
-  dd_h2:"Rounds by due date", dd_purpose:"Which rounds are overdue, due soon or never inspected, from the same intervals the phones use.",
+  dd_h2:"Rounds by due date", dd_purpose:"The CM rounds 1C PM work orders ask for: overdue, due in 7 days, planned later, done this week. The CM interval tab keeps the hour-based view.",
   a_h2:"Action register", a_purpose:"Every finding that needs work: who owns it, by when, and what is still missing.",
   w_h2:"Measured positions", w_purpose:"Every measured position with its projected remaining life, so a worn component is replaced before it fails.",
   eq_purpose:"One machine's full record: every inspection, finding, photograph and action, newest first.",
@@ -7272,13 +7281,16 @@ const I18N={
   dd_missed:TERMS.ru.overdue, dd_due:"Просрочено и скоро",
   dd_put:TERMS.ru.deferred, dd_all:"Все",
   dd_never:TERMS.ru.never_inspected, dd_done:TERMS.ru.completed,
+  dd_1c_over:TERMS.ru.overdue+" в 1С", dd_1c_week:"Срок в 7 дней", dd_1c_later:"Запланировано позже", dd_1c_done:"Выполнено за неделю", dd_cmint:"Интервал МС",
+  dd_1c_late:"просрочено {n} дн.", dd_1c_in:"через {n} дн.", dd_1c_today:"сегодня", dd_1c_walked:"обход {d}", dd_1c_none:"В 1С нет заказ-наряда МС для этого.",
+  a_own_1c:"из дефекта 1С",
   dd_plan:"План 1С", dd_plan_row:"Запрошено 1С — {p}", dd_plan_late:"план на {d}, обход не выполнен",
   dd_plan_none:"Все обходы, запланированные 1С на эти две недели, уже выполнены.",
   dd_plan_nofile:"План 1С ещё не загружен на эту страницу.",
   dd_cmp:"Сравнение", dd_cmp_row:"1С планирует {p} · {wo} · {g}",
   dd_cmp_same:"даты совпадают", dd_cmp_later:"1С на {n} дн. позже", dd_cmp_earlier:"1С на {n} дн. раньше",
   dd_cmp_none:"Сейчас нет машины, для которой есть и своя дата CM, и открытый наряд 1С по тому же обходу.",
-  dd_h2:"Обходы по сроку", dd_purpose:"Какие обходы просрочены, скоро или ещё ни разу не проводились — по тем же интервалам, что и на телефонах.",
+  dd_h2:"Обходы по сроку", dd_purpose:"Обходы МС по заказ-нарядам ТО 1С: просрочено, срок в 7 дней, позже, выполнено за неделю. Вкладка «Интервал МС» — прежний расчёт по моточасам.",
   a_h2:"Реестр работ", a_purpose:"Каждая находка, требующая работ: кто отвечает, к какому сроку и чего ещё не хватает.",
   w_h2:"Замеренные точки", w_purpose:"Каждая замеренная точка с прогнозом остаточного ресурса, чтобы заменить изношенный узел до отказа.",
   eq_purpose:"Полная история одной машины: все осмотры, находки, фотографии и действия, начиная с последних.",
@@ -8603,7 +8615,7 @@ function renderKpis(){
   recs.forEach(r=>{ const k=r.equip; if(!latest[k]||(r.date||"")>(latest[k].date||"")) latest[k]=r; });
   let nCrit=0, nSev=0, nDeg=0;
   Object.values(latest).forEach(r=>{ const w=worstOf(r); if(w===5) nCrit++; else if(w===4) nSev++; else if(w===3) nDeg++; });
-  const nNoown=f.filter(x=>actionRequired(x.r,x.i) && !x.i.owner).length;
+  const nNoown=f.filter(x=>actionRequired(x.r,x.i) && !ownerOf(x.r,x.i)).length;
   let nReview=0; try{ nReview=sevConflicts().length; }catch(e){}
 
   /* The denominator of the page, in the header: what is being counted, and
@@ -9425,6 +9437,14 @@ function fOverdue(i){ return !!(i.due && stOpen(i.status) && i.due < todayISO())
 /* What an exception has to carry before it can leave triage. */
 const TRIAGE_REQ={ 5:["action","prio","owner","due"], 4:["action","prio","owner","due"],
                    3:["action","prio","owner","due"], other:["action","owner","due"] };
+/* THE OWNER OF A FINDING (build 627, Rickie 15.11: "actions should be linked to defects raised"): the one
+   named on the record, else the Responsible person of the 1C defect raised for it (CMFlow.owner1C). */
+function ownerOf(r,i){ return (i&&(i.owner||i.resp)) || (window.CMFlow&&CMFlow.owner1C ? CMFlow.owner1C(r,i) : "") || ""; }
+function owner1COnly(r,i){ return !!(i && !i.owner && !i.resp && ownerOf(r,i)); }
+function ownerCellHTML(r,i,ini){ const o=ownerOf(r,i);
+  if(!o) return `<span class="who none"><i>+</i><span>${esc(TERMS.t(lang,"owner_unassigned"))}</span></span>`;
+  const from=owner1COnly(r,i);
+  return `<span class="who${from?" from1c":""}"${from?` title="${esc(o+" — "+t("a_own_1c"))}"`:""}><i>${esc(ini(o))}</i><span>${esc(o)}${from?` <span class="muted">· 1C</span>`:""}</span></span>`; }
 function actionState(r,i){
   if(!i) return {k:"none", miss:[]};
   const sv=sevOf(r,i);
@@ -9443,7 +9463,7 @@ function actionState(r,i){
   const need = exception ? TRIAGE_REQ[sv] : TRIAGE_REQ.other;
   /* The phone's plan counts: a responsible person named at the machine is an
      owner, and a target date set there is a due date. */
-  const has = { action:hasAction, prio:!!i.prio, owner:!!(i.owner||i.resp), due:!!(i.due||i.target) };
+  const has = { action:hasAction, prio:!!i.prio, owner:!!ownerOf(r,i), due:!!(i.due||i.target) };
   const miss = need.filter(f=>!has[f]);
   return miss.length ? {k:"triage", miss, sev:sv} : {k:"open", miss:[], sev:sv};
 }
@@ -9578,7 +9598,7 @@ function actColVal(x,k){
     case "comp": return ptLabel(x.r,x.i)||x.i.key||"";
     case "act": return x.i.defect||"";
     case "req": return x.i.actionLabel||(x.i.action?actionName(x.i.action):"");
-    case "owner": return x.i.owner||"";
+    case "owner": return ownerOf(x.r,x.i);
     case "due": return x.i.due||"";
     case "st": return stName(x.i.status);
     case "wo": return x.i.wo||"";
@@ -9944,6 +9964,7 @@ function renderActCols(){
   });
 }
 function renderActions(){
+  if(window.CMFlow && CMFlow.warm) CMFlow.warm();   /* the 1C links, before any owner is read */
   renderActCols();
   /* Capture which column-filter input holds focus, and where its caret sits,
      before this function rebuilds the table wholesale — the identical
@@ -10070,9 +10091,9 @@ function renderActions(){
 
   const shown = filt==="all" ? rows
               : filt==="over" ? rows.filter(({i})=>fOverdue(i))
-              : filt==="mine" ? rows.filter(({i})=>i.owner)
+              : filt==="mine" ? rows.filter(({r,i})=>ownerOf(r,i))
               : filt==="triage" ? rows.filter(({r,i})=>actionState(r,i).k==="triage")
-              : filt==="noown" ? rows.filter(({i})=>!i.owner)
+              : filt==="noown" ? rows.filter(({r,i})=>!ownerOf(r,i))
               : filt==="crit" ? rows.filter(({r,i})=>sevOf(r,i)===5 && actionRequired(r,i))
               : filt==="week" ? rows.filter(({i})=>{
                   if(!i.due || !stOpen(i.status)) return false;
@@ -10111,7 +10132,7 @@ function renderActions(){
   if(actView==="table"){
     const val=(x,k)=>({ queue:0, sev:sevRank(sevOf(x.r,x.i)), unit:x.r.equip, comp:x.i.label||x.i.key,
       date:x.r.date||"", act:(x.i.defect||""), req:(x.i.actionLabel||(x.i.action?actionName(x.i.action):"")||"￿"),
-      owner:x.i.owner||"￿", wo:x.i.wo||"￿",
+      owner:ownerOf(x.r,x.i)||"￿", wo:x.i.wo||"￿",
       due:x.i.due||"9999-99-99", age:(fAgeDays(x.r,x.i)||0), st:stName(x.i.status) }[k]);
     /* Age · Equipment · Component · Finding · Grade · Owner · Due · Status —
        Actions.dc.html's own set and reading order. "Grade" is the same field
@@ -10226,9 +10247,7 @@ function renderActions(){
                  only; Enter saves through the same audited write the drawer
                  uses, Escape puts the read-out back. The tick column and the
                  bar above it do a week's assignments in one gesture. -->
-            ${!acolOn("owner")?"":`<td class="nw ed" data-ed="owner" title="${esc(t("a_ed_tip"))}">${i.owner
-                ? `<span class="who"><i>${esc(initials0(i.owner))}</i><span>${esc(i.owner)}</span></span>`
-                : `<span class="who none"><i>+</i><span>${esc(TERMS.t(lang,"owner_unassigned"))}</span></span>`}</td>`}
+            ${!acolOn("owner")?"":`<td class="nw ed" data-ed="owner" title="${esc(t("a_ed_tip"))}">${ownerCellHTML(r,i,initials0)}</td>`}
             ${!acolOn("due")?"":`<td class="ed" data-ed="due" title="${esc(t("a_ed_tip"))}">${i.due
                 ? `<span class="due ${od?"late":(dd!=null&&dd<=7?"soon":"")}"><b>${esc(i.due)}</b>${
                     od?`<i>${esc(t("a_late"))}</i>`:(dd!=null&&dd<=7?`<i>${esc(t("a_in_d",{d:dd}))}</i>`:"")}</span>`
@@ -10371,9 +10390,7 @@ function renderActions(){
               i.defect?esc(i.defect):'<span class="muted">—</span>'}${
               i.rca?`<span class="rcam">RCA</span>`:""}</span>
             <span class="t2">${i.actionLabel?esc(i.actionLabel):""}</span></span>
-          <span class="cell hide-s">${i.owner
-              ? `<span class="who"><i>${esc(initials(i.owner))}</i><span>${esc(i.owner)}</span></span>`
-              : `<span class="who none"><i>+</i><span>${esc(TERMS.t(lang,"owner_unassigned"))}</span></span>`}</span>
+          <span class="cell hide-s">${ownerCellHTML(r,i,initials)}</span>
           <span class="cell hide-s">${i.due
               ? `<span class="due ${od?"late":(dd!=null&&dd<=7?"soon":"")}"><b>${esc(i.due.slice(5))}</b><i>${
                   esc(od?t("a_late"):(dd!=null?t("a_in_d",{d:dd}):""))}</i></span>`
@@ -18930,6 +18947,7 @@ function ddColVal(r,k){
     default: return "";
   }
 }
+let ddShown=[];   /* what the schedule list shows now; the CSV exports exactly this (build 627) */
 function renderDueTab(){
   const box=$("ddList"); if(!box) return;
   const focusCap = (() => {
@@ -18951,6 +18969,15 @@ function renderDueTab(){
   const nNever=never.length;
   const plan=duePlanRows(only).filter(r=>!q || r.unit.indexOf(q)>=0).filter(bok);
   const compared=scheduleCompareRows(only).filter(r=>!q || r.unit.indexOf(q)>=0).filter(bok);
+  /* CM_SCHED1C_V1 (build 627, Rickie 15.11: "we are following the schedule in 1C"): the first four tabs are 1C PM
+     work orders by the Overview's own rule (CMFlow.plan), one row per order; the hour-interval rows stay on "CM interval". */
+  const fl=window.CMFlow ? CMFlow.plan() : null;
+  const c1=b=>!fl ? [] : fl[b].map(r=>CMFlow.dueRow(r)).filter(r=>(!only || r.tys.includes(only)) && (!q || r.unit.indexOf(q)>=0) && (!bq || r.unit.indexOf(bq)>=0));
+  const c1Over=c1("over"), c1Week=c1("week"), c1Later=c1("later"), c1Done=c1("done"), c1Put=c1("put");
+  const cmInt=all.filter(r=>r.st==="over"||r.st==="soon");
+  /* one row per deferred round: a 1C order that is deferred hides the same round's interval row */
+  const c1PutK=new Set(c1Put.flatMap(r=>r.tys.map(ty=>ty+"|"+r.unit)));
+  const intPut=all.filter(r=>(r.st==="put"||r.st==="off") && !c1PutK.has(r.ty+"|"+r.unit));
   const nDone=all.filter(r=>r.st==="ok").length;
   const nOver=all.filter(r=>r.st==="over").length;
   const nSoon=all.filter(r=>r.st==="soon").length;
@@ -18974,6 +19001,8 @@ function renderDueTab(){
     + `<div class="kpi ${withWhy>=nLate?"good":"warn"}"><span class="hd"><span class="k">${esc(t("dd_k_why"))}</span><span class="tag">${esc(t("dd_g_why"))}</span></span>
         <span class="v">${withWhy}</span>
         <span class="s">${esc(t("dd_k_why_s",{n:nLate}))}</span></div>`;
+  /* The tabs carry the counts; a second strip of the same numbers above them is what was "overwhelming". */
+  $("dueKpis").innerHTML=""; $("dueKpis").style.display="none";
   $("dueKpis").querySelectorAll("[data-dd]").forEach(b=>b.onclick=()=>{
     if($("ddScope")) $("ddScope").value=b.dataset.dd;
     renderDueTab(); urlWrite(false);
@@ -18986,7 +19015,9 @@ function renderDueTab(){
      other tabs leave out, so the six add up to All. */
   const seg=$("ddSeg");
   if(seg){
-    const views=[["over","dd_missed",nOver],["soon","dd_soon",nSoon],["never","dd_never",nNever],
+    const views=[["over","dd_1c_over",c1Over.length],["soon","dd_1c_week",c1Week.length],["later","dd_1c_later",c1Later.length],
+                 ["done","dd_1c_done",c1Done.length],["put","dd_put",intPut.length+c1Put.length],["never","dd_never",nNever],["cmint","dd_cmint",cmInt.length]];
+    const viewsOld=[["over","dd_missed",nOver],["soon","dd_soon",nSoon],["never","dd_never",nNever],
                  /* 1C's own plan, beside CM's judgement rather than mixed into
                     it — see duePlanRows for why the other counts must not move. */
                  ["plan","dd_plan",plan.length],
@@ -18994,7 +19025,7 @@ function renderDueTab(){
                     scheduleCompareRows' own header for why this is its own
                     tab too, not a filter on the other six. */
                  ["cmp","dd_cmp",compared.length],
-                 ["put","dd_put",nPut+nOff],["done","dd_done",nDone],["all","dd_all",all.length+nNever]];
+                 ["put","dd_put",nPut+nOff],["done","dd_done",nDone],["all","dd_all",all.length+nNever]]; void viewsOld;
     /* SIX TABS OVER ONE PANEL, and every one of them says so. Until now these
        carried role="tab" and nothing else: no aria-controls, so a screen
        reader announced "tab" and could not say what pressing it changed, and
@@ -19021,17 +19052,22 @@ function renderDueTab(){
       };
     });
   }
-  const show = scope==="all" ? all.concat(never)
+  const show = scope==="all" ? c1Over.concat(c1Week,c1Later,c1Done,never)
+             : scope==="over" ? c1Over : scope==="soon" ? c1Week : scope==="later" ? c1Later : scope==="done" ? c1Done
+             : scope==="cmint" ? cmInt
              : scope==="plan" ? plan
              : scope==="cmp" ? compared
              : scope==="never" ? never
              : scope==="done" ? all.filter(r=>r.st==="ok")
-             : scope==="put" ? all.filter(r=>r.st==="put"||r.st==="off")
+             : scope==="put" ? c1Put.concat(intPut)
              : scope==="due" ? all.filter(r=>r.st==="over"||r.st==="soon")
              : scope==="soon" ? all.filter(r=>r.st==="soon")
              : all.filter(r=>r.st==="over");
+  ddShown=show;
   if(!show.length){ box.innerHTML=`<div class="sub">${esc(
-      scope==="cmp" ? t("dd_cmp_none")
+      ["over","soon","later","done"].includes(scope) && !(window.CM_WO_DATA&&(window.CM_WO_DATA.workOrders||[]).length) ? t("dd_plan_nofile")
+      : ["over","soon","later","done"].includes(scope) ? t("dd_1c_none")
+      : scope==="cmp" ? t("dd_cmp_none")
       : scope!=="plan" ? t("dd_none")
       : ((window.CM_WO_DATA&&(window.CM_WO_DATA.workOrders||[]).length) ? t("dd_plan_none") : t("dd_plan_nofile"))
     )}</div>`; return; }
@@ -19050,6 +19086,7 @@ function renderDueTab(){
   const shown = tkApply("due", DDK, shown0);
   /* Fifty at a time, not five hundred: the cap was there to stop the browser
      dying and never to help anybody read. */
+  ddShown=shown;
   const pg=paged("due", shown, renderDueTab);
   const kept=pg.rows;
   const ddColLabel={unit:t("dd_c_unit"), round:t("dd_c_round"), last:t("dd_c_last"),
@@ -19074,6 +19111,23 @@ function renderDueTab(){
          those cells say nothing rather than borrowing CM's numbers. What it
          does carry is the date 1C wants it by, the service it belongs to and
          the work order — and, where the round HAS been walked before, when. */
+      if(r.c1){ const due = r.late ? `<b style="color:var(--crit-ink)">${esc(r.plan)}</b> <span class="muted">· ${esc(t("dd_1c_late",{n:r.lateDays}))}</span>`
+                     : `${esc(r.plan)} <span class="muted">· ${esc(r.plan===todayISO()?t("dd_1c_today"):t("dd_1c_in",{n:Math.abs(DUE.dayDiff(todayISO(),r.plan))}))}</span>`;
+        const dk=r.ty+"|"+r.unit;
+        return `<tr class="dd-plan dd-c1${r.late?" dd-over":""}">
+        <td><b>${esc(r.unit)}</b></td>
+        <td>${r.tys.map(ty=>`${esc(ty)} <span class="muted">${esc(t("type_"+ty)||ty)}</span>`).join(" · ")}</td>
+        <td>${r.last ? esc(r.last.date) : `<span class="need">${esc(TERMS.t(lang,"never_inspected"))}</span>`}</td>
+        <td class="r">${scope==="done"&&r.last ? esc(t("dd_1c_walked",{d:r.last.date})) : due}</td>
+        <td class="r"><span class="muted">—</span></td>
+        <td>${esc(r.label||"—")}${r.wo?` <span class="muted">· ${esc(r.wo)}</span>`:""}${r.prio?` <span class="muted">· ${esc(String(r.prio).split(" ")[0])}</span>`:""}${
+             r.d?` <span class="muted">· ${esc(ddDeferWords(r.d))} — ${esc(deferWhy(r.d))}</span>`:""}</td>
+        <td class="ddact">
+          <a class="minibtn" href="${esc(unitLink(r.unit,r.ty))}" target="_blank" rel="noopener"
+             title="${esc(t("dd_start_t"))}">${esc(t("dd_start"))}</a>
+          ${scope==="done"?"":`<button type="button" class="minibtn" data-defer="${esc(dk)}"
+             title="${esc(t("dd_defer_t"))}">${esc(r.d?t("dd_defer_edit"):t("dd_defer"))}</button>`}
+        </td></tr>`; }
       if(r.st==="plan") return `<tr class="dd-plan">
         <td><b>${esc(r.unit)}</b></td>
         <td>${esc(r.ty)} · <span class="muted">${esc(t("type_"+r.ty)||r.ty)}</span></td>
@@ -19277,29 +19331,14 @@ function dfSave(clear){
      });
 }
 function dueCsv(){
+  /* CM_SCHED1C_V1: the rows the screen shows for this tab, after its own column filters - never a wider list. */
   const rows=[["unit","round","last_done","days_since","due_in_days","due_in_hours",
-               "rate_h_per_day","rate_measured","state","reason","reason_by","put_off_to"]];
-  const only=($("ddType")||{}).value||"";
-  const q=(($("ddQ")||{}).value||"").trim().toUpperCase();
-  const scope=($("ddScope")||{}).value||"over";
-  /* The same rows the screen shows for this scope — never-inspected rows
-     included, with no dates or clock, so the sheet cannot claim a last date
-     for a machine that has none. */
-  const bq=barQ(), bok=r=>barUnitOK(r.unit,r.ty) && (!bq || r.unit.indexOf(bq)>=0);   /* CM_FLOW_V1 */
-  const tabRows=dueTabRows().filter(r=>(!only || r.ty===only) && (!q || r.unit.indexOf(q)>=0)).filter(bok);
-  const never=(scope==="all"||scope==="never") ? dueNeverRows(only).filter(r=>!q || r.unit.indexOf(q)>=0).filter(bok) : [];
-  tabRows
-    .filter(r=> scope==="all" ? true
-              : scope==="never" ? false
-              : scope==="done" ? r.st==="ok"
-              : scope==="put" ? (r.st==="put"||r.st==="off")
-              : scope==="due" ? (r.st==="over"||r.st==="soon")
-              : scope==="soon" ? r.st==="soon"
-              : r.st==="over")
-    .concat(never)
-    .forEach(r=>rows.push([r.unit, r.ty, r.n?r.last.d:"", r.n?r.n.daysSince:"", r.n?r.n.dueInDays:"",
-    r.n?r.n.dueInHours:"", r.n?r.n.rate:"", r.n?(r.n.measured?1:0):"", r.st,
-    (r.d&&r.d.why)||"", (r.d&&r.d.by)||"", (r.d&&r.d.until)||""]));
+               "rate_h_per_day","rate_measured","state","reason","reason_by","put_off_to","plan_date_1c","work_order_1c","service_1c"]];
+  if(!ddShown.length) renderDueTab();
+  ddShown.forEach(r=>{ const n=r.n, d=r.d;
+    rows.push([r.unit, r.tys?r.tys.join(" "):r.ty, n?r.last.d:((r.last&&r.last.date)||""), n?n.daysSince:"", n?n.dueInDays:(r.c1&&r.plan?DUE.dayDiff(todayISO(),r.plan):""),
+      n?n.dueInHours:"", n?n.rate:"", n?(n.measured?1:0):"", r.c1?(r.late?"over_1c":"plan_1c"):r.st,
+      (d&&d.why)||"", (d&&d.by)||"", (d&&d.until)||"", r.plan||"", r.wo||"", r.label||""]); });
   const csv=rows.map(r=>r.map(v=>{ const x=String(v==null?"":v);
     return /[",\n]/.test(x) ? '"'+x.replace(/"/g,'""')+'"' : x; }).join(",")).join("\n");
   const a=document.createElement("a");
@@ -20660,7 +20699,7 @@ function renderSyWoFeed(){
   if(rb) rb.onclick=()=>window.open(WO_REFRESH_URL,"_blank","noopener");
 }
 function renderSync(){
-  try{ if(window.CMFlow) CMFlow.compare(); }catch(e){ if(window.bad) bad("cm-flow-compare",e); }   /* CM_FLOW_V1 */
+  try{ if(window.CMFlow) CMFlow.compare(); }catch(e){ bad("cm-flow-compare",e); }   /* CM_FLOW_V1 */
   if(!$("syncKpis")) return;
   const s=syncScan();
   if(RENDER_LIVE) renderSync.scan=s;
@@ -21931,11 +21970,11 @@ document.querySelector(".lang").addEventListener("click",e=>{
   setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 })();
 </script>
-<script src="../dashboard/drive.js?v=626"></script>
-<script src="../dashboard/sync-adapter.js?v=626"></script>
-<script src="../dashboard/report.js?v=626"></script>
-<script src="../dashboard/reliability.js?v=626"></script>
-<script src="../dashboard/day-summary.js?v=626"></script>
+<script src="../dashboard/drive.js?v=627"></script>
+<script src="../dashboard/sync-adapter.js?v=627"></script>
+<script src="../dashboard/report.js?v=627"></script>
+<script src="../dashboard/reliability.js?v=627"></script>
+<script src="../dashboard/day-summary.js?v=627"></script>
 <script>
 /* THE CLOSED FILTER SAYS WHAT IS CHOSEN. A dropdown narrower than its option
    text ellipsises ("All t…", audit of 2026-10-01). Between 1331 and 1500 px
@@ -22547,6 +22586,8 @@ html.cmStd body.railshut nav.tabs .navgrp{font-size:0;line-height:0;height:1px;m
 html.cmStd{--cmw-rail:#f5f5f3;--cmw-chip:#e9ebee;}
 @media (prefers-color-scheme:dark){html.cmStd:not([data-theme="light"]){--cmw-rail:var(--surface);--cmw-chip:var(--surface-2);}}
 html.cmStd[data-theme="dark"]{--cmw-rail:var(--surface);--cmw-chip:var(--surface-2);}
+
+html.cmStd #kpis.cmflow .cfsec{border-radius:12px}   /* CM_FLOW_V1: the site standard's card corner */
 </style>
 <style id="cmNextLook">
 /* CM_NEXTLOOK_V1 (build 594, Rickie 06.11.2026 10:00 "your mock up is not the same as the actual" -> restyle dashboard-next):

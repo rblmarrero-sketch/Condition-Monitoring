@@ -5517,6 +5517,21 @@ offers 25 / 50 / 100 / All; the Overview attention table lists every machine (`f
 "one page of 25" or "at most N screens" now assert every row. `tests/cmflow.cjs` plants a 1C file (dates relative to
 today) and checks every count, both doors, compliance, the badge, the card and Russian on both pages.
 
+
+**THE INSPECTION SCHEDULE FOLLOWS THE 1C PM WORK ORDERS, AND A FINDING NOBODY NAMED TAKES ITS 1C DEFECT'S
+RESPONSIBLE PERSON (build 627, CM_SCHED1C_V1, Rickie 15.11 "proceed with not done yet").** Both office pages. The
+schedule's tabs are Overdue in 1C · Due in 7 days · Planned later · Done this week (one row per 1C order, by
+`CMFlow.plan()`, the Overview's own rule, so the tab and the Overview are one number), then Deferred, Never inspected
+and **CM interval**, which keeps the old hour-based over / soon rows (`dueTabRows`). The scope keys `over`, `soon`,
+`done`, `put`, `never`, `all` are kept with the new meaning; `later` and `cmint` are new; `plan` and `cmp` still open
+from an address. The tile strip above the tabs is gone (the tabs carry the counts). A deferral takes a 1C order off
+Overdue / Due when it covers every round of the order (`CMFlow.deferOn`: made after the last round walked, its date
+still ahead, the order planned before the deferral's `pm`); the Overview's numbers follow. Maintenance Actions:
+`ownerOf(r,i)` = the record's owner, else the Responsible person (`by`) of the 1C defect linked to the finding
+(`CMFlow.owner1C`, read from the link map only, never building it, because building it calls `actionState`); the
+register shows it with "· 1C", and it counts as an owner in triage and the "no owner" filter. Never write it into
+the record. `tests/sched1c.cjs`.
+
 ---
 
 ## Secrets
