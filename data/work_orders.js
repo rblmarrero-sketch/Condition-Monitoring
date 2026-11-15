@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-15T20:07:44+00:00",
+  "generated": "2026-11-15T20:22:35+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -7003,6 +7003,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022545"
     },
     {
+      "asset": "LV064",
+      "defect": "DD-00016871",
+      "raised": "2026-11-14",
+      "system": "LV064.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Замена мотора отопителя",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022548"
+    },
+    {
       "asset": "LV086",
       "defect": "DD-00016878",
       "raised": "2026-11-14",
@@ -7313,19 +7326,6 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022527"
-    },
-    {
-      "asset": "LV064",
-      "defect": "DD-00016871",
-      "raised": "2026-11-14",
-      "system": "LV064.OC.HE (Heating / Отопление)",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Замена мотора отопителя",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022548"
     },
     {
       "asset": "EX015",
@@ -14322,6 +14322,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021713"
     },
     {
+      "asset": "TK030",
+      "defect": "DD-00016299",
+      "raised": "2026-11-04",
+      "system": "TK030.DRS.CLU (Clutch / Сцепление)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Замена комплекта сцепления.",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-021836"
+    },
+    {
       "asset": "SR001",
       "defect": "DD-00016298",
       "raised": "2026-11-04",
@@ -14463,19 +14476,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": null
-    },
-    {
-      "asset": "TK030",
-      "defect": "DD-00016299",
-      "raised": "2026-11-04",
-      "system": "TK030.DRS.CLU (Clutch / Сцепление)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Замена комплекта сцепления.",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-021836"
     },
     {
       "asset": "GR004",
@@ -23643,19 +23643,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "LV048",
-      "defect": "DD-00015554",
-      "raised": "2026-10-24",
-      "system": "LV048.CH.SU (Suspension / Подвеска)",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "Требуется замена задних амортизаторов",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": "WO-021706"
-    },
-    {
       "asset": "BS002",
       "defect": "DD-00015549",
       "raised": "2026-10-24",
@@ -23667,6 +23654,19 @@ window.CM_WO_DATA = {
       "by": "Andrey Taran",
       "regBy": "Таран Андрей Андреевич",
       "wo": "WO-021743"
+    },
+    {
+      "asset": "LV048",
+      "defect": "DD-00015554",
+      "raised": "2026-10-24",
+      "system": "LV048.CH.SU (Suspension / Подвеска)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Требуется замена задних амортизаторов",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": "WO-021706"
     },
     {
       "asset": "BS002",
@@ -58624,19 +58624,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-021736"
-    },
-    {
-      "asset": "TK133",
-      "defect": "DD-00011372",
-      "raised": "2026-08-22",
-      "system": "TK133.ELS.AS (Alarm System / Система сигнализации)",
-      "defectType": "4.02 Open circuit / Разрыв цепи",
-      "descr": "Не работает указатель уровня топлива",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-021735"
     },
     {
       "asset": "TK133",
@@ -137557,15 +137544,15 @@ window.CM_WO_DATA = {
       "cmLabel": "500h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-14",
       "planStartDt": "2026-11-14T00:00:00",
-      "planEnd": "2026-11-15",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "planEnd": "2026-11-14",
+      "actualStart": "2026-11-14",
+      "actualStartDt": "2026-11-14T19:00:00",
+      "actualEnd": "2026-11-15"
     },
     {
       "equip": "LD004",
@@ -177455,15 +177442,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-14",
       "planStartDt": "2026-11-14T00:00:00",
-      "planEnd": "2026-11-15",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "planEnd": "2026-11-14",
+      "actualStart": "2026-11-14",
+      "actualStartDt": "2026-11-14T02:30:00",
+      "actualEnd": "2026-11-14"
     },
     {
       "equip": "TK118",
@@ -188020,13 +188007,13 @@ window.CM_WO_DATA = {
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "open": false,
       "planStart": "2026-11-14",
       "planStartDt": "2026-11-14T00:00:00",
-      "planEnd": "2026-11-15",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "planEnd": "2026-11-14",
+      "actualStart": "2026-11-14",
+      "actualStartDt": "2026-11-14T01:00:00",
+      "actualEnd": "2026-11-14"
     },
     {
       "equip": "TK127",
