@@ -187,7 +187,7 @@ const textOf = (p, key, lang) => p.evaluate(({ key, lang }) => {
   console.log("\n5. UNDERCARRIAGE — condition summary and the measurement register");
   const uc = await textOf(p, k("DZ900", "2026-08-14", "UC"), "en");
   ok(/Condition summary/.test(uc), "the condition-summary strip");
-  ok(/At \/ past limit/.test(uc) && /Above 80%/.test(uc) && /Not measured/.test(uc), "  its cells");
+  ok(/At \/ past limit/.test(uc) && /Above 60%/.test(uc) && /Not measured/.test(uc), "  its cells");
   ok(/93%/.test(uc), "  the controlling point's percent");
   ok(/52/.test(uc) && /70/.test(uc), "  the register keeps every reading");
   ok(!/L\.SHOE[\s\S]{0,30}1 – Normal/.test(uc), "  an unmeasured point is not called Normal");

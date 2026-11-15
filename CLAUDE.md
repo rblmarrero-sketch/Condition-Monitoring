@@ -6913,3 +6913,17 @@ unit|date|round|point|defect number); the next candidate takes its place, and a 
 again. A line under the table says how many were removed and offers Restore. The × is in the preview only: `mailHtml(rows, list,
 prev)` draws it only with `prev`, so the copied e-mail and the CSV carry the remaining defects and no button. One browser only:
 another desk still sees the defect. `tests/exmatch.cjs`.
+
+**ONE ROUND A MACHINE, A TYPE AND A DAY ON ONE PHONE (build 635, Rickie 15.11.2026 "the do 2 inspection same day.. i only
+saw 1").** EX019, 15.11: phone DRGZCS saved two General Inspections of EX019 that morning. A round's record goes up as
+`<unit>_<date>_<type>.json`, one name per phone, so the second (05:48, HS.DL) replaced the first one's record on the server.
+The first round's eight photographs (HS.MP, OC.SE) stayed in the folder; its findings did not. Now, on the phone: Save of a
+new round looks for a saved round of the same type, machine and day from this phone (`twinOnPhone`; FIR, NCR and RTW keep
+their own rules) and becomes an edit of it. The new points are added (`twinJoin`): a point in both takes the new one, unless
+the new round only passed through it (`twinBlank`: nothing but defaults and the 1C stamp). The inspector is told
+(`m_joined_t`/`m_joined_b`). Rounds already split on a phone are joined once at start (`twinMerge`): the newest keeps its
+id, takes the older ones' other points, goes up again (rev+1, `sent`/`conf` dropped), and the older records are deleted. When
+DRGZCS takes build 635, EX019's first round comes back on the server, provided the phone still holds it. `tests/twinround.cjs`.
+Also: Severe on a measured round starts at 60 % worn (`GRADE.fromRemaining`, confirmed 15.11), so the UC/TB summary row counts
+"Above 60%" (`uc_above80`, the key keeps its name) and the wear legend says 60 %.
+Defer reasons: "Not in the scope of condition monitoring" (`noscope`, build 634).
