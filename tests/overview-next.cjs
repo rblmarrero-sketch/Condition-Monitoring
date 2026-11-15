@@ -64,7 +64,7 @@ const srv = http.createServer((q, r) => {
 });
 const FLEET = JSON.parse(fs.readFileSync(path.join(__dirname, 'fleet-fixture.json'), 'utf8'));
 
-const TILES = ['kpiCrit', 'kpiSev', 'kpiDeg', 'kpiOver', 'kpiAct', 'kpiNoown'];
+const TILES = ['kpiCrit', 'kpiSev', 'kpiDeg', 'kpiOver', 'kpiFind', 'kpiNodef'];   /* CM_FLOW_V1: the flow steps both pages draw */
 const tileVals = async p => {
   const out = {};
   for (const id of TILES) out[id] = await p.$eval('#' + id + ' .v', el => el.textContent.trim()).catch(() => null);
@@ -108,14 +108,14 @@ const tileVals = async p => {
   ok('KPI parity: header inspection count matches', next.insp === baseline.insp, `next=${next.insp} dashboard=${baseline.insp}`);
   ok('KPI parity: attention table row count matches', next.fleetRows === baseline.fleetRows, `next=${next.fleetRows} dashboard=${baseline.fleetRows}`);
 
-  /* ── six tiles render, with a number, a label and a plain-language cue ─── */
+  /* ── every step renders with a number and its words (CM_FLOW_V1) ─── */
   const tileShape = await n.evaluate(ids => ids.map(id => {
     const el = document.getElementById(id);
     if (!el) return null;
-    return { k: el.querySelector('.k').textContent.trim(), v: el.querySelector('.v').textContent.trim(), s: el.querySelector('.s').textContent.trim() };
+    return { k: el.textContent.replace(/\s+/g, ' ').trim(), v: el.querySelector('.v').textContent.trim() };
   }), TILES);
-  ok('all six required tiles render with number + label + cue',
-     tileShape.every(t => t && t.k && t.v !== '' && t.s !== ''), JSON.stringify(tileShape));
+  ok('every flow step renders with a number and its words',
+     tileShape.every(t => t && t.k && t.v !== ''), JSON.stringify(tileShape));
 
   /* ── sev=4 opens with a visible chip on Overview ───────────────────────── */
   await n.evaluate(() => { location.hash = '#overview?sev=4'; });

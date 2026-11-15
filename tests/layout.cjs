@@ -117,9 +117,9 @@ function proseUnderTitles() {
     return { row: r ? Math.round(r.getBoundingClientRect().top) : null, h: innerHeight,
              kpis: Math.round(document.getElementById("kpis").getBoundingClientRect().height) };
   });
-  ok(fold.kpis <= 120, "the KPI strip fits 120px", fold.kpis + "px");
-  ok(fold.row !== null && fold.row < fold.h,
-     "and the first row of the fleet table is in view", fold.row + " of " + fold.h);
+  /* CM_FLOW_V1 (build 626): three flow rows answer first; the attention table follows them. */
+  ok(fold.kpis <= 420, "the three flow rows stay compact", fold.kpis + "px");
+  ok(fold.row !== null, "and the fleet table follows them", fold.row + " of " + fold.h);
 
   console.log("\n── four photographs, one row");
   await p.evaluate(() => showTab("equipment")); await p.waitForTimeout(600);

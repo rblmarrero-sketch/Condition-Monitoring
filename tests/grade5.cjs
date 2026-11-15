@@ -271,13 +271,13 @@ const J = o => JSON.stringify(o).slice(0, 420);
   const d1 = await q.evaluate(() => {
     const letters = RECS.reduce((n, r) => n + r.items.filter(i => typeof i.grade === 'string' && i.grade !== '').length, 0);
     const numbers = RECS.reduce((n, r) => n + r.items.filter(i => typeof i.grade === 'number').length, 0);
-    const tiles = [...document.querySelectorAll('#kpis .kpi')].map(k => k.id);
-    const legend = [...document.querySelectorAll('#kpiMix .legend button')].map(x => x.textContent.trim());
+    const tiles = [...document.querySelectorAll('#kpis .cfkey button')].map(k => k.id);   /* CM_FLOW_V1: the Fleet condition key */
+    const legend = [...document.querySelectorAll('#kpis .cfkey button')].map(x => x.textContent.trim());
     const pills = [...document.querySelectorAll('#fleetTbl td:nth-child(2) .sevtxt')].map(x => x.textContent.trim());
     return { letters, numbers, tiles, legend, pills: pills.slice(0, 3), drill: drill.sev, chip: [...document.querySelectorAll('#chips .chip b')].map(x => x.textContent), last: renderKpis.last };
   });
   ok('every grade off the folder is a number (the fixture ships letters on every seventh round)', d1.letters === 0 && d1.numbers > 30, J({ l: d1.letters, n: d1.numbers }));
-  ok('Critical, Severe and Degraded headlines; a five-step mix; pills that say the number and the name',
+  ok('Fleet condition: Critical, Severe and Degraded first in a five-grade key; pills that say the number and the name',
      d1.tiles.slice(0, 3).join() === 'kpiCrit,kpiSev,kpiDeg' && d1.legend.length === 5 && /^5 – Critical/.test(d1.legend[0]) && d1.pills.every(x => /^[1-5] – /.test(x)), J(d1));
   ok('an old address (?sev=CRI) opens as a grade-5 drill', d1.drill === 5 && d1.chip.some(c => /5 – Critical/.test(c)), J({ d: d1.drill, c: d1.chip }));
   const d2 = await q.evaluate(async () => {

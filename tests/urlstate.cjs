@@ -128,8 +128,8 @@ const reset = q => fetch(BASE + '/__reset?' + q).then(r => r.text());
   }
   Object.entries(tall).forEach(([k, v]) => note(k, v + ' screens'));
   const over = Object.entries(tall).filter(([, v]) => v > 3);
-  ok('every page fits in three screens or fewer', over.length === 0,
-     over.map(([k, v]) => k + ' ' + v).join(', ') || 'all within');
+  /* CM_FLOW_V1 (build 626, Rickie 15.11 "all tables default show all"): a page is as tall as its list now. */
+  note('pages over three screens', over.map(([k, v]) => k + ' ' + v).join(', ') || 'none');
 
   console.log('\n6. AND THE WEAR TABLE DRAWS 25 ROWS, NOT FIFTY');
   const w = await p.evaluate(async () => {
@@ -143,8 +143,7 @@ const reset = q => fetch(BASE + '/__reset?' + q).then(r => r.text());
              pager: !!document.querySelector('[data-pg^="wear"]') };
   });
   console.log('   ' + JSON.stringify(w));
-  ok('the page is 25 rows', w.rows <= 25, w.rows + ' drawn');
-  ok('  with a pager to reach the rest', w.pager || w.total <= 25, 'pager ' + w.pager);
+  ok('every row is drawn (tables default to all)', w.total === null || w.rows === w.total, w.rows + ' drawn');
   ok('  while the total still counts everything', w.total === null || w.total >= w.rows,
      w.rows + ' of ' + w.total);
 

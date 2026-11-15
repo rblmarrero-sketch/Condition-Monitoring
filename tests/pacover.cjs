@@ -90,8 +90,8 @@ const srv = http.createServer((req, res) => {
   ok('  and it is strictly less than the full row count — there is real, unmatched 1C work in the fixture',
      before.covered > 0 && before.covered < before.totalRows, `${before.covered} of ${before.totalRows}`);
   const matchN = t => Number(String(t).match(/([\d,]+)\s*matching/)[1].replace(/,/g, ''));
-  ok('with the toggle on, the pager\'s own total is capped at 25 on screen',
-     before.tableRows === Math.min(25, matchN(before.pagerText)), `${before.tableRows} row(s) of ${matchN(before.pagerText)}`);
+  ok('with the toggle on, every row the pager counts is on screen (tables default to all)',
+     before.tableRows === matchN(before.pagerText), `${before.tableRows} row(s) of ${matchN(before.pagerText)}`);
 
   console.log('\n3. TURNING IT OFF REVEALS THE REST OF 1C\'S PLAN, AND THE PERCENTAGE DOES NOT MOVE');
   const after = await p1.evaluate(() => {
@@ -113,8 +113,8 @@ const srv = http.createServer((req, res) => {
      unscoped total (2,641, open and completed work orders together). */
   ok('the pager now counts more of 1C\'s plan, not just the covered ones',
      matchN(after.pagerText) > matchN(before.pagerText), `${matchN(before.pagerText)} -> ${matchN(after.pagerText)}`);
-  ok('  the visible page is still capped at 25',
-     after.tableRows === Math.min(25, matchN(after.pagerText)), `${after.tableRows} of ${matchN(after.pagerText)}`);
+  ok('  and every one of them is on screen',
+     after.tableRows === matchN(after.pagerText), `${after.tableRows} of ${matchN(after.pagerText)}`);
 
   console.log('\n4. EVERY ROW CARRIES ITS OWN COVERAGE MARK, EVEN WITH EVERYTHING SHOWN');
   const dots = await p1.evaluate(() => {

@@ -55,9 +55,9 @@ const note = (n, d) => console.log('  ....  ' + n + (d !== undefined ? '   ' + d
      W.tiles.map(x => x.k).join(',') === 'act,watch,soon,plan,second', W.tiles.map(x => x.k).join(','));
   W.tiles.forEach(x => ok('  ' + x.k.padEnd(7) + ' equals the page\'s own rule', x.v === W.truth[x.k], x.v + ' vs ' + W.truth[x.k]));
   ok('the header says how many positions are measured', new RegExp('\\b' + W.all + '\\b').test(W.lead), W.lead);
-  ok('one page is at most 25 rows', W.rows > 0 && W.rows <= 25, String(W.rows));
+  ok('the wear register opens with every row (tables default to all)', W.rows > 0, String(W.rows));
   ok('a row is one line', W.rowH > 0 && W.rowH <= 44, W.rowH + 'px');
-  ok('the page is at most three screens at 1366', W.tall <= 3, W.tall + ' screens');
+  note('page height', W.tall + ' screens (every row listed)');
   ok('  and the strip is one row', W.strip <= 120, W.strip + 'px');
 
   for (const k of ['plan', 'second', 'act']) {
@@ -110,8 +110,8 @@ const note = (n, d) => console.log('  ....  ' + n + (d !== undefined ? '   ' + d
   ok('Reset is hidden while nothing is filtered', F.reset === true);
   ok('every bar says what it counts and its cumulative share', F.tips && F.bars > 0, F.bars + ' bars');
   ok('the affected-equipment table lists every machine with a coded finding', F.affTotal === F.units, F.affTotal + ' vs ' + F.units);
-  ok('  at most a page of them', F.affRows <= 25 && F.affRows > 0, String(F.affRows));
-  ok('the page is at most three screens', F.tall <= 3, F.tall + ' screens');
+  ok('  all of them on the page', F.affRows === F.affTotal, String(F.affRows));
+  note('page height', F.tall + ' screens (every machine listed)');
 
   await p.click('#paretoDefect .prow[data-drill]'); await p.waitForTimeout(400);
   const G = await p.evaluate(() => {

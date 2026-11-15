@@ -77,8 +77,9 @@ const reset = q => fetch(BASE + '/__reset?' + q).then(r => r.text());
   });
   tables.forEach(t => note(t.id, t.rows + ' rows'));
   const worst = tables[0] || { rows: 0, id: '-' };
-  ok('the largest table is bounded, not the size of the data',
-     worst.rows <= 200, worst.id + ' renders ' + worst.rows + ' rows of ' + size.recs);
+  /* CM_FLOW_V1 (build 626, Rickie 15.11 "all tables default show all"): tables are no longer bounded by default; the
+     time it costs is held by tests/bigday.cjs. */
+  note('largest table', worst.id + ' renders ' + worst.rows + ' rows of ' + size.recs);
 
   console.log('\n3. NO SELECTOR RENDERS THE WHOLE FLEET AS OPTIONS');
   /* A native <select> holding 1,128 units is unusable with a glove on and slow

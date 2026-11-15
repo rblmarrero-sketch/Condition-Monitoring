@@ -136,6 +136,9 @@ const TABLES = [['failure', 'failAffTbl'], ['wear', 'wearTbl'], ['overview', 'co
   await p.click('#wearTbl thead th.sortable[data-sort="mm"]');
   await p.waitForFunction(() => { const t = document.querySelector('#wearTbl thead th.sortable[data-sort="mm"]'); return t && t.getAttribute('aria-sort') === 'ascending'; });
   await p.waitForTimeout(300);
+  /* build 626: tables open with all their rows; 25 a page to test that the sort holds across pages */
+  await p.evaluate(() => { const b = document.querySelector('#tab-wear [data-pg$=":size:25"]'); if (b) b.click(); });
+  await p.waitForTimeout(300);
   const num = t => parseFloat(String(t).replace(/[^0-9.\-]/g, ''));
   const p1 = (await rows('wearTbl')).map(r => num(r[pos]));
   const first1 = JSON.stringify(await rows('wearTbl'));

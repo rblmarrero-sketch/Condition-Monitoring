@@ -89,9 +89,10 @@ const key = e => new KeyboardEvent('keydown', { key: e, bubbles: true, cancelabl
     all: document.querySelectorAll('[data-pg$=":all"]').length, total: actionRows().filter(x => actionRequired(x.r, x.i)).length }));
   /* The count is the pager's under the table; #actShown stopped repeating it in
      build 559 (audit M5), so read it where it is said. */
-  ok('25 rows by default', T.rows === 25, T.rows + ' rows');
-  ok('"N matching · showing 1–25"', new RegExp('^' + T.total.toLocaleString('en-US') + ' matching · showing 1–25').test(T.shown), T.shown);
-  ok('25 / 50 / 100 offered, no show-all anywhere', T.sizes.join(',') === '25,50,100' && T.all === 0, T.sizes.join(',') + ' · ' + T.all + ' show-all');
+  /* CM_FLOW_V1 (build 626, Rickie 15.11 "all tables default show all") */
+  ok('every row by default', T.rows === T.total, T.rows + ' rows');
+  ok('"N matching · showing 1–N"', new RegExp('^' + T.total.toLocaleString('en-US') + ' matching · showing 1–' + T.total.toLocaleString('en-US')).test(T.shown), T.shown);
+  ok('25 / 50 / 100 / All offered, All chosen', T.sizes.join(',') === '25,50,100,All' && T.all === 0, T.sizes.join(',') + ' · ' + T.all + ' show-all');
   await p.evaluate(() => document.querySelector('#actionTbl [data-pg$=":size:100"]').click()); await p.waitForTimeout(300);
   const T2 = await p.evaluate(() => ({ rows: document.querySelectorAll('#actionTbl tbody tr.hrow').length, shown: (document.querySelector('#actionTbl .pager .muted') || {textContent: ''}).textContent.trim(),
     on: (document.querySelector('#actionTbl .pgsz .on') || {}).textContent }));

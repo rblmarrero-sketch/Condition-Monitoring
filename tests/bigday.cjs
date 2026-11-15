@@ -31,7 +31,8 @@ const reset = q => fetch(BASE + "/__reset?" + q).then(r => r.text());
 /* At a thousand rounds every one of these still has to feel like a click.
    perf.cjs holds 1500/500/1000/800/1000 at four hundred; a folder two and a
    half times larger is allowed twice the room and no more. */
-const OFFICE = { all: 3000, tab: 1000, filter: 2000, history: 1600, report: 2000, sort: 1200, page: 1200 };
+/* tab 2000 since build 626: every table opens with all its rows (Rickie 15.11); measured 1.4 s at 1,000 inspections */
+const OFFICE = { all: 3000, tab: 2000, filter: 2000, history: 1600, report: 2000, sort: 1200, page: 1200 };
 /* The phone is a phone. Boot is measured to USABLE — the register in hand and
    a machine selectable — not to first paint. */
 const PHONE = { boot: 12000, due: 2500, pick: 1500, search: 800, step: 1200, saved: 1500 };
@@ -126,7 +127,8 @@ const OFFICE_RUN = `(async function(){
   ok("opening a machine's history", T.history <= OFFICE.history, T.history + " ms of " + OFFICE.history);
   ok("switching what a report is about", T.report <= OFFICE.report, T.report + " ms of " + OFFICE.report);
   ok("sorting the action register", T.sorted && T.sort <= OFFICE.sort, T.sort + " ms of " + OFFICE.sort);
-  ok("turning its page", T.paged && T.page <= OFFICE.page, T.page + " ms of " + OFFICE.page);
+  if (T.paged) ok("turning its page", T.page <= OFFICE.page, T.page + " ms of " + OFFICE.page);
+  else console.log("  ....  turning its page   not paged: every row is on the page (tables default to all)");
 
   console.log("\n2. AND THE OFFICE IS STILL BOUNDED, NOT MERELY QUICK");
   /* Quick and unbounded is quick until somebody presses "100". */
@@ -138,8 +140,7 @@ const OFFICE_RUN = `(async function(){
     const opts = Math.max(...[...document.querySelectorAll("select")].map(s => s.options.length), 0);
     return { rows, due, opts };
   });
-  ok("no table has rendered more than a page of rows",
-     bound.rows <= 105 && bound.due <= 105, "register " + bound.rows + " · schedule " + bound.due);
+  console.log("  ....  rows drawn   register " + bound.rows + " · schedule " + bound.due + " (tables default to all, build 626)");
   ok("  and no dropdown carries the fleet", bound.opts < 200, bound.opts + " options in the longest");
 
   console.log("\n3. THE PHONE, ON THE SAME FOLDER");
