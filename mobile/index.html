@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=634">
+<link rel="manifest" href="manifest.webmanifest?v=635">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=634">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=634">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=634">
+<link rel="apple-touch-icon" href="icon-192.png?v=635">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=635">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=635">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -3009,16 +3009,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=634"></script>
-<script src="upload-defaults.js?v=634"></script>
-<script src="hme.js?v=634"></script>
-<script src="mp-fc.js?v=634"></script>
-<script src="rtw.js?v=634"></script>
-<script src="hme-cascade.js?v=634"></script>
-<script src="assets.js?v=634"></script>
-<script src="temp-limits.js?v=634"></script>
-<script src="normalize.js?v=634"></script>
-<script src="terms.js?v=634"></script>
+<script src="native.js?v=635"></script>
+<script src="upload-defaults.js?v=635"></script>
+<script src="hme.js?v=635"></script>
+<script src="mp-fc.js?v=635"></script>
+<script src="rtw.js?v=635"></script>
+<script src="hme-cascade.js?v=635"></script>
+<script src="assets.js?v=635"></script>
+<script src="temp-limits.js?v=635"></script>
+<script src="normalize.js?v=635"></script>
+<script src="terms.js?v=635"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -3037,25 +3037,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=634"></script>
-<script src="edits.js?v=634"></script>
-<script src="due.js?v=634"></script>
-<script src="wear.js?v=634"></script>
-<script src="wear-figs.js?v=634"></script>
-<script src="wear-map.js?v=634"></script>
-<script src="machine-photos.js?v=634"></script>
-<script src="machine-fig.js?v=634"></script>
-<script src="get.js?v=634"></script>
-<script src="points.js?v=634"></script>
-<script src="uc-points.js?v=634"></script>
-<script src="inspect-guide.js?v=634"></script>
-<script src="get-figs.js?v=634"></script>
-<script src="body-points.js?v=634"></script>
-<script src="body-map.js?v=634"></script>
-<script src="lube.js?v=634"></script>
-<script src="lube-overrides.js?v=634"></script>
-<script src="lube2027.js?v=634"></script>
-<script src="report-core.js?v=634"></script>
+<script src="grade.js?v=635"></script>
+<script src="edits.js?v=635"></script>
+<script src="due.js?v=635"></script>
+<script src="wear.js?v=635"></script>
+<script src="wear-figs.js?v=635"></script>
+<script src="wear-map.js?v=635"></script>
+<script src="machine-photos.js?v=635"></script>
+<script src="machine-fig.js?v=635"></script>
+<script src="get.js?v=635"></script>
+<script src="points.js?v=635"></script>
+<script src="uc-points.js?v=635"></script>
+<script src="inspect-guide.js?v=635"></script>
+<script src="get-figs.js?v=635"></script>
+<script src="body-points.js?v=635"></script>
+<script src="body-map.js?v=635"></script>
+<script src="lube.js?v=635"></script>
+<script src="lube-overrides.js?v=635"></script>
+<script src="lube2027.js?v=635"></script>
+<script src="report-core.js?v=635"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -3952,6 +3952,8 @@ const I18N = {
     del_t_sent:"Delete from this phone?",
     del_m_sent:"{x} has already been uploaded. Removing it here frees space on the phone; the copy in the system is not touched.",
     m_saved:["Saved ✔","{x} saved on this phone. Capture the next one, then Share/Export when you have internet."],
+    m_joined_t:"Added to today's round ✔",
+    m_joined_b:"A {ty} of {x} was already saved on this phone today. These points were added to it, so the system keeps one round with all of them. A point in both now holds what you just saved.",
     m_nothing_export:["Nothing to export","Capture at least one item first."],
     m_exported:["Exported ✔","A ZIP with correctly-named photos + entries.json was downloaded. Put the photos in your N: drive folder."],
     m_exported_n:["Exported","{r} inspection record(s) saved; {p} photo(s) saved; {k} photo(s) still require recovery. RECOVERY_REPORT.txt inside the ZIP names them."],
@@ -4665,6 +4667,8 @@ const I18N = {
     del_t_sent:"Удалить с этого телефона?",
     del_m_sent:"{x} уже выгружено. Удаление здесь освободит место на телефоне; копия на Диске не затрагивается.",
     m_saved:["Сохранено ✔","{x} сохранён на телефоне. Снимайте следующий, затем «Поделиться»/«Экспорт» при интернете."],
+    m_joined_t:"Добавлено в сегодняшний обход ✔",
+    m_joined_b:"{ty} по {x} уже был сохранён на этом телефоне сегодня. Эти точки добавлены в него, и в системе остаётся один обход со всеми точками. Если точка была в обоих, в ней теперь то, что вы сохранили сейчас.",
     m_nothing_export:["Нечего экспортировать","Сначала снимите хотя бы один пункт."],
     m_exported:["Экспортировано ✔","Скачан ZIP с правильно названными фото + entries.json. Положите фото в папку на N:."],
     m_exported_n:["Экспортировано","Сохранено обходов: {r}; фото: {p}; требуют восстановления: {k}. Список — в RECOVERY_REPORT.txt внутри ZIP."],
@@ -9666,6 +9670,15 @@ $("saveBtn").onclick=async ()=>{
     dlg([t("m_sign_fail_t"), t("m_sign_fail_m")]);
     return;
   }
+  /* ONE ROUND A MACHINE, A TYPE AND A DAY ON ONE PHONE (build 635). The record
+     goes up as <unit>_<date>_<type>.json, so a second round of the same type on
+     the same machine the same day from this phone REPLACED the first one's
+     record on the server (EX019 INSP 15.11: the first round's eight photographs
+     stayed, its findings did not). The new points join the round already saved
+     instead: a point in both takes the new one. */
+  let joinedTo=null;
+  if(!editing){ let dup=null; try{ dup=await twinOnPhone(type, equip, date, ""); }catch(e){}
+    if(dup){ editing=dup; joinedTo=dup; if(!signResult && dup.sign) signResult=dup.sign; } }
   const id = editing ? editing.id : `${type}__${equip}__${date}__${DEVICE}__${Date.now()}`;
   const created = editing ? (editing.created||new Date().toISOString()) : new Date().toISOString();
   if(!gps) await getGps(true);   // best effort — never blocks the save
@@ -9720,6 +9733,9 @@ $("saveBtn").onclick=async ()=>{
          seq is re-issued. */
       att:(p.att&&typeof p.att==="object")?p.att:null,
       photos:(p.photos||[]).slice(), video:p.video||null };
+  if(joinedTo){ twinJoin(rec, joinedTo);
+    if(!rec.smu) rec.smu=joinedTo.smu||""; if(!rec.by) rec.by=joinedTo.by||""; if(!rec.sup) rec.sup=joinedTo.sup||"";
+    slog("round-joined",{u:equip, t:type, d:date, id:rec.id, n:Object.keys(rec.positions).length}); }
   /* The manifest is written BEFORE the record is stored, so an attachment has
      an identity from the moment the round exists — not the first time somebody
      manages to upload it. A phone that never reaches a signal still holds a
@@ -9819,6 +9835,8 @@ $("saveBtn").onclick=async ()=>{
     slog("verify-fail",{u:rec.equip||"?", id:rec.id, n:verifyBad.length, names:names.slice(0,300), why:(verifyBad.whys||[]).join(", ").slice(0,300)});
     sendTrace("verify-fail");
     dlg([t("verify_fail_t"), t("verify_fail_b",{x:equip, n:verifyBad.length, names})]);
+  }else if(joinedTo){
+    dlg([t("m_joined_t"), t("m_joined_b",{x:equip, ty:t("type_"+type)})]);
   }else{
     const m=t("m_saved"); dlg([m[0], m[1].replace("{x}",equip)]);
   }
@@ -16232,7 +16250,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="634";
+const BUILD="635";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -20993,6 +21011,61 @@ loadBaselines().then(n=>{ if(n) { renderUC(); refreshChips(); } });
 /* Offer the unfinished round back. Asked, never assumed: restoring silently
    would put an inspector on a machine they are no longer standing at, and
    discarding silently is the thing this exists to prevent. */
+/* The rounds that go up under one record name: same type, machine and day,
+   filed by this phone. FIR, NCR and RTW have their own rule. */
+const TWIN_SKIP={FIR:1, NCR:1, RTW:1};
+function twinKey(r){ return (r && r.id!==DRAFT_ID && r.type && !TWIN_SKIP[r.type] && r.equip && r.date && r.positions
+  && (!r.dev || r.dev===DEVICE)) ? [r.type, String(r.equip).toUpperCase(), r.date].join("|") : ""; }
+async function twinOnPhone(type, equip, date, exceptId){
+  const k=[type, String(equip).toUpperCase(), date].join("|");
+  return (await dbAll()).filter(r=>twinKey(r)===k && r.id!==exceptId)
+    .sort((a,b)=>String(b.created||"").localeCompare(String(a.created||"")))[0]||null;
+}
+/* Nothing recorded at a point: the fields a saved position always carries
+   (the default detection method, the 1C stamp, empty strings) do not count. */
+function twinBlank(p){ return !p || !((p.mm!=null&&p.mm!=="")||p.reason||p.grade||(p.photos&&p.photos.length)||p.video
+  ||p.particle||p.comp||p.oil||p.comment||p.defect||p.cause||p.tempV||p.prod||p.other||p.samp||p.filt||p.action); }
+/* The other round's points the new one does not have, copied in. */
+function twinJoin(rec, other){
+  for(const [k,p] of Object.entries((other&&other.positions)||{})){
+    /* A point the newer round only passed through (nothing on it but, at most,
+       the 1C work-order stamp loadPos puts on whatever is on screen) does not
+       replace a finding the other round recorded there. */
+    const mine=rec.positions[k];
+    if(mine && (!twinBlank(mine) || twinBlank(p))) continue;
+    rec.positions[k]=Object.assign({}, p, { photos:(p.photos||[]).slice() });
+  }
+  return rec;
+}
+/* Rounds already split on a phone (before build 635) are joined at the next
+   start: the newest keeps its id and takes the older ones' other points, goes up
+   again, and the older records go. What reached the server stays as it is until
+   the joined record replaces it. */
+async function twinMerge(){
+  if(syncing){ setTimeout(()=>twinMerge().catch(e=>bad("twin-merge",e)), 20000); return 0; }
+  const groups={};
+  for(const r of await dbAll()){ const k=twinKey(r); if(k) (groups[k] ||= []).push(r); }
+  let n=0;
+  for(const [k,rs] of Object.entries(groups)){
+    if(rs.length<2) continue;
+    rs.sort((a,b)=>String(b.created||"").localeCompare(String(a.created||"")));
+    const keep=rs[0];
+    for(const o of rs.slice(1)){
+      twinJoin(keep, o);
+      if(!keep.sign && o.sign) keep.sign=o.sign;
+      for(const f of ["smu","by","sup"]) if(!keep[f] && o[f]) keep[f]=o[f];
+    }
+    keep.up=0; keep.upTo={}; delete keep.sent; delete keep.conf; keep.rev=(keep.rev||0)+1;
+    try{ await attSync(keep); }catch(e){}
+    await dbPut(keep);
+    for(const o of rs.slice(1)) await dbDel(o.id);
+    slog("twin-merge",{k, keep:keep.id, gone:rs.slice(1).map(o=>o.id).join(","), n:Object.keys(keep.positions).length});
+    n++;
+  }
+  if(n){ renderPending(); syncThenArm(); }
+  return n;
+}
+setTimeout(()=>twinMerge().catch(e=>bad("twin-merge",e)), 1500);
 async function offerDraft(){
   let d=null;
   try{ d=await dbGet(DRAFT_ID); }catch(e){ return; }
