@@ -111,7 +111,7 @@ const key = e => new KeyboardEvent('keydown', { key: e, bubbles: true, cancelabl
     try { localStorage.setItem('cm_dash_who', 'R. Marrero'); } catch (e) {} });
   const R = await p.evaluate(() => ({ fields: document.querySelectorAll('#actionTbl tbody input:not(.asel), #actionTbl tbody select, #actionTbl tbody textarea').length,
     who: document.querySelectorAll('#actionTbl tbody .who').length, st: document.querySelectorAll('#actionTbl tbody .st').length,
-    unassigned: (document.querySelector('#actionTbl tbody .who.none span') || {}).textContent }));
+    unassigned: (document.querySelector('#actionTbl tbody .who.none span') || {}).textContent || (d => { d.innerHTML = ownerCellHTML({}, { grade: 1 }, x => x); return d.textContent; })(document.createElement('div')) }));   /* build 630: a finding graded 3-5 is always owned (Maintenance), so the words are read off a row with no finding */
   ok('no form control in any row; owner and status are read-outs', R.fields === 0 && R.who === 25 && R.st === 25, R.fields + ' field(s)');
   ok('  an unassigned action says so in words', !!R.unassigned && R.unassigned.length > 2, R.unassigned);
   /* The unit cell: owner, due, status and work order edit in place on a click. */

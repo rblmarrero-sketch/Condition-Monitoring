@@ -69,8 +69,8 @@ const SEED = () => {
       plan: /Planning required|triage/i.test(document.getElementById('actionTbl').textContent) }; });
   ok('Priority · Unit · Component · Finding · 1C defect · Required action · Owner · Due · Status · Work order', A.heads === 'Priority,Unit,Component,Finding,1C defect,Required action,Owner,Due,Status,Work order', A.heads);
   ok('  the work order shows, and a job in progress without one says "' + TERMS.en.need_wo + '"', A.wo === 'WO-6' && A.needWo === TERMS.en.need_wo, A.wo + ' · ' + A.needWo);
-  ok('  an unassigned row says "' + TERMS.en.owner_unassigned + '" and "' + TERMS.en.need_due + '"', A.noOwner === TERMS.en.owner_unassigned && A.noDue === TERMS.en.need_due, A.noOwner + ' · ' + A.noDue);
-  ok('  the status cell names the rest (priority), never "planning required"', /Priority required/.test(A.st104) && !A.plan, A.st104);
+  ok('  a finding nobody owns is Maintenance\'s, and CM asks no due date once 1C decides (build 630)', A.noOwner === 'Maintenance' && A.noDue === '—', A.noOwner + ' · ' + A.noDue);
+  ok('  the status cell names what is missing (the 1C defect, build 630), never "planning required"', /1C defect required/.test(A.st104) && !A.plan, A.st104);
   ok('  Priority carries the grade and the stoppage priority', /Critical/.test(A.prio) && /P1/.test(A.prio), A.prio);
   ok('  the required action is its own column', A.req === 'Schedule repair', A.req);
   ok('  and not one form control lives in the rows', A.resident === 0, A.resident + ' controls');
