@@ -142,8 +142,8 @@ const tileMap = async p => p.$$eval('#paKpis .kpi, #paKpis .tile', els => {
 
   /* ── no sideways scroller on the whole Plan vs Actual tab at 1366px ────── */
   const scrollers = await n.evaluate(() => [...document.querySelectorAll('#tab-planact .tblwrap, #tab-planact table')]
-    .filter(el => el.scrollWidth > el.clientWidth + 2).map(el => el.id || el.className));
-  ok('no sideways scroller on Plan vs Actual at 1366px', scrollers.length === 0, JSON.stringify(scrollers));
+    .filter(el => el.scrollWidth > el.clientWidth + 2 && !(el.classList.contains('cmslidebox') ? !!el.querySelector('table.cmfrz') : (el.tagName === 'TABLE' && el.classList.contains('cmfrz') && el.closest('.cmslidebox'))))   /* build 630: the frozen slide box is the standard (Rickie 15.11) */.map(el => el.id || el.className));
+  ok('no sideways scroller on Plan vs Actual at 1366px, other than the frozen slide box', scrollers.length === 0, JSON.stringify(scrollers));
 
   console.log((errsA.length ? '\ndashboard/ PAGE ERRORS:\n' + errsA.join('\n') : '') + (errsB.length ? '\ndashboard-next/ PAGE ERRORS:\n' + errsB.join('\n') : ''));
   b.close(); srv.close();

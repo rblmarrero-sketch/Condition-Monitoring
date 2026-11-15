@@ -27,7 +27,8 @@ const SCAN = () => {
   for (const t of document.querySelectorAll('main table.grid')) {
     if (!t.offsetParent) continue;
     const box = t.parentElement, id = (t.closest('[id]') || {}).id + ' table.' + [...t.classList].join('.');
-    if (box.scrollWidth > box.clientWidth + 2 && /auto|scroll/.test(getComputedStyle(box).overflowX)) out.bars.push(id + ' ' + box.clientWidth + '/' + box.scrollWidth);
+    /* build 630 (CM_TBLSTD_V1, Rickie 15.11 "Freeze pane, columns, horizontal bar"): a desk table that does not fit slides in its own box (.cmslidebox) with frozen columns (table.cmfrz); only a bare sideways bar fails, and a phone keeps its cards */
+    if (box.scrollWidth > box.clientWidth + 2 && /auto|scroll/.test(getComputedStyle(box).overflowX) && !((t.closest('.cmslidebox')) && t.classList.contains('cmfrz') && innerWidth > 900)) out.bars.push(id + ' ' + box.clientWidth + '/' + box.scrollWidth);
     (t.classList.contains('ascards') ? out.cards : out.tables).push(id);
     if (t.classList.contains('ascards')) {
       const tr = t.tBodies[0] && [...t.tBodies[0].rows].find(r => r.cells.length > 1);
@@ -58,7 +59,7 @@ const SCAN = () => {
       await p.evaluate(t => showTab(t, true), t); await p.waitForTimeout(500);
       const s = await p.evaluate(SCAN); for (const k in all) all[k].push(...s[k].map(x => t + ': ' + x));
     }
-    ok('no table box scrolls sideways', !all.bars.length, all.bars.join(' | '));
+    ok('no table box scrolls sideways unless it is the frozen slide box (build 630)', !all.bars.length, all.bars.join(' | '));
     if (!ph) {
       ok('on a desk every table stays a table', !all.cards.length, all.cards.join(' | '));
       if (W === 1280) ok('the action register at 1280 is a table, fitted', all.tables.some(x => x.startsWith('actions:')), all.tables.filter(x => x.startsWith('actions')).join(' '));

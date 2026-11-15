@@ -75,7 +75,7 @@ const srv = http.createServer((q, r) => {
     ok('"Overdue" opens Plan vs Actual on overdue orders', pa.tab === 'planact' && pa.w === 'over', JSON.stringify(pa));
     await p.evaluate(() => showTab('sync', true)); await p.waitForTimeout(600);
     const cmp = await p.evaluate(() => { const c = document.getElementById('cfCompare'); return c ? c.querySelectorAll('tbody tr').length : 0; });
-    ok('Data & Sync shows the old rule beside the new rule', cmp === 3, cmp);
+    ok('Data & Sync shows the old rule beside the new rule (5 rows since build 630)', cmp === 5, cmp);
     await p.evaluate(() => { lang = 'ru'; showTab('overview', true); renderAll(); }); await p.waitForTimeout(300);
     const ru = await p.evaluate(() => document.getElementById('kpis').textContent);
     ok('Russian labels', /Просрочено/.test(ru) && /Не оформлено в 1С/.test(ru) && !/Overdue|Not raised/.test(ru));

@@ -2605,7 +2605,8 @@
   /* the owner's initials are the one thing in a row taller than a line of
      text; at a line's height every row is the same height */
   #fleetTbl .xf.who{padding-top:0;padding-bottom:0;margin-top:-3px;margin-bottom:-3px;}
-  #fleetTbl .xf.who{min-height:0 !important;}   /* build 631: the 32 px desk control floor must not make an owned row taller than the rest (every 3+ finding has an owner since 630) */
+  #fleetTbl .xf.who{margin-top:-8px !important;margin-bottom:-8px !important;vertical-align:middle;}   /* build 631: the button keeps the 32 px desk floor and reaches into the cell's padding, so an owned row is as tall as the rest (every 3+ finding has an owner since 630) */
+  html #fleetTbl td:has(> .xf.who){padding-top:8px;padding-bottom:8px;}   /* build 631: the 8 px row rule leaves out cells with a button; the owner cell kept 13 px and made owned rows 11 px taller */
   #fleetTbl .xf.who i{width:20px;height:20px;}
     .covcell{min-width:180px;}
   .covrow{display:flex;align-items:center;gap:9px;}
@@ -5201,23 +5202,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=631"></script>
+<script src="../data/magnetic_plug.js?v=632"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=631"></script>
-<script src="../mobile/hme.js?v=631"></script>
-<script src="../mobile/mp-fc.js?v=631"></script>
-<script src="../mobile/rtw.js?v=631"></script>
-<script src="../mobile/hme-cascade.js?v=631"></script>
-<script src="../mobile/temp-limits.js?v=631"></script>
+<script src="../data/work_orders.js?v=632"></script>
+<script src="../mobile/hme.js?v=632"></script>
+<script src="../mobile/mp-fc.js?v=632"></script>
+<script src="../mobile/rtw.js?v=632"></script>
+<script src="../mobile/hme-cascade.js?v=632"></script>
+<script src="../mobile/temp-limits.js?v=632"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=631"></script>
-<script src="../mobile/normalize.js?v=631"></script>
-<script src="../mobile/terms.js?v=631"></script>
+<script src="../mobile/assets.js?v=632"></script>
+<script src="../mobile/normalize.js?v=632"></script>
+<script src="../mobile/terms.js?v=632"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -5236,22 +5237,22 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=631"></script>
-<script src="../mobile/edits.js?v=631"></script>
-<script src="../mobile/due.js?v=631"></script>
-<script src="../dashboard/cm-flow.js?v=631"></script>
-<script src="../mobile/wear.js?v=631"></script>
-<script src="../mobile/wear-map.js?v=631"></script>
-<script src="../mobile/lube.js?v=631"></script>
-<script src="../mobile/lube-overrides.js?v=631"></script>
-<script src="../mobile/lube2027.js?v=631"></script>
-<script src="../mobile/lube-tds.js?v=631"></script>
-<script src="../dashboard/lube-master.js?v=631"></script>
-<script src="../dashboard/wear-limits.js?v=631"></script>
+<script src="../mobile/grade.js?v=632"></script>
+<script src="../mobile/edits.js?v=632"></script>
+<script src="../mobile/due.js?v=632"></script>
+<script src="../dashboard/cm-flow.js?v=632"></script>
+<script src="../mobile/wear.js?v=632"></script>
+<script src="../mobile/wear-map.js?v=632"></script>
+<script src="../mobile/lube.js?v=632"></script>
+<script src="../mobile/lube-overrides.js?v=632"></script>
+<script src="../mobile/lube2027.js?v=632"></script>
+<script src="../mobile/lube-tds.js?v=632"></script>
+<script src="../dashboard/lube-master.js?v=632"></script>
+<script src="../dashboard/wear-limits.js?v=632"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=631"></script>
-<script src="../mobile/machine-photos.js?v=631"></script>
+<script src="../mobile/upload-defaults.js?v=632"></script>
+<script src="../mobile/machine-photos.js?v=632"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -5260,17 +5261,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=631"></script>
-<script src="../mobile/get.js?v=631"></script>
-<script src="../mobile/points.js?v=631"></script>
-<script src="../mobile/uc-points.js?v=631"></script>
-<script src="../mobile/inspect-guide.js?v=631"></script>
-<script src="../mobile/get-figs.js?v=631"></script>
-<script src="../mobile/body-points.js?v=631"></script>
-<script src="../mobile/body-map.js?v=631"></script>
-<script src="../mobile/jspdf.umd.min.js?v=631"></script>
-<script src="../mobile/html2canvas.min.js?v=631"></script>
-<script src="../mobile/report-core.js?v=631"></script>
+<script src="../mobile/machine-fig.js?v=632"></script>
+<script src="../mobile/get.js?v=632"></script>
+<script src="../mobile/points.js?v=632"></script>
+<script src="../mobile/uc-points.js?v=632"></script>
+<script src="../mobile/inspect-guide.js?v=632"></script>
+<script src="../mobile/get-figs.js?v=632"></script>
+<script src="../mobile/body-points.js?v=632"></script>
+<script src="../mobile/body-map.js?v=632"></script>
+<script src="../mobile/jspdf.umd.min.js?v=632"></script>
+<script src="../mobile/html2canvas.min.js?v=632"></script>
+<script src="../mobile/report-core.js?v=632"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -22052,11 +22053,11 @@ document.querySelector(".lang").addEventListener("click",e=>{
   setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 })();
 </script>
-<script src="../dashboard/drive.js?v=631"></script>
-<script src="../dashboard/sync-adapter.js?v=631"></script>
-<script src="../dashboard/report.js?v=631"></script>
-<script src="../dashboard/reliability.js?v=631"></script>
-<script src="../dashboard/day-summary.js?v=631"></script>
+<script src="../dashboard/drive.js?v=632"></script>
+<script src="../dashboard/sync-adapter.js?v=632"></script>
+<script src="../dashboard/report.js?v=632"></script>
+<script src="../dashboard/reliability.js?v=632"></script>
+<script src="../dashboard/day-summary.js?v=632"></script>
 <script>
 /* THE CLOSED FILTER SAYS WHAT IS CHOSEN. A dropdown narrower than its option
    text ellipsises ("All t…", audit of 2026-10-01). Between 1331 and 1500 px
@@ -22263,7 +22264,8 @@ document.querySelector(".lang").addEventListener("click",e=>{
   var hs=null, cur=null;
   function slider(){
     if(!hs){ hs=document.createElement("div"); hs.className="cmhs"; hs.setAttribute("aria-hidden","true");
-      hs.innerHTML='<button type="button" data-d="-1">◀</button><div class="trk"><div class="thm"></div></div><button type="button" data-d="1">▶</button>';
+      var ru=(document.documentElement.lang||"").slice(0,2)==="ru";   /* build 631: the two arrows say what they do (lint, screen readers) */
+      hs.innerHTML='<button type="button" data-d="-1" aria-label="'+(ru?"Прокрутить влево":"Scroll left")+'">◀</button><div class="trk"><div class="thm"></div></div><button type="button" data-d="1" aria-label="'+(ru?"Прокрутить вправо":"Scroll right")+'">▶</button>';
       document.body.appendChild(hs);
       hs.querySelectorAll("button").forEach(function(b){ b.onclick=function(){ if(cur) cur.scrollBy({left:+b.dataset.d*Math.max(160,cur.clientWidth*0.6),behavior:"smooth"}); }; });
       var trk=hs.querySelector(".trk"), thm=hs.querySelector(".thm");
@@ -22284,7 +22286,7 @@ document.querySelector(".lang").addEventListener("click",e=>{
       try{
         var labs=labels(t), rows=t.tBodies[0]?t.tBodies[0].rows.length:0;
         var sec=t.closest(".section"), own=t.matches(OWN)&&!!(sec&&[].slice.call(sec.querySelectorAll("button,summary")).some(function(x){ return !x.closest(".cmcolbar")&&/^\s*(columns|столбцы)/i.test(x.textContent); }));
-        if(!own&&!t.matches("#covTbl,table.pawk,#paWeek table")&&labs.filter(Boolean).length>=5&&rows>=3&&!t.classList.contains("ascards")) menu(t,keyOf(t),labs);
+        if(!own&&!t.matches("#covTbl,table.pawk,#paWeek table,table.scorecard")&&labs.filter(Boolean).length>=5&&rows>=3&&!t.classList.contains("ascards")) menu(t,keyOf(t),labs);
         var bx=t.closest(".tblwrap")||t.parentElement, wide=!t.classList.contains("ascards")&&bx&&bx.scrollWidth>bx.clientWidth+1;
         if(bx) bx.classList.toggle("cmslidebox", !!(wide||t.classList.contains("cmslide")));
         if(wide||t.classList.contains("cmslide")){ t.classList.add("cmfrz"); freeze(t); } else { t.classList.remove("cmfrz"); unfreeze(t); }

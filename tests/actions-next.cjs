@@ -105,29 +105,20 @@ const tileMap = async p => p.$$eval('#actKpis .kpi, #actKpis > div', els => {
   console.log('dashboard/     tiles=' + JSON.stringify(baseTiles) + ' rows=' + baseAllRows);
   console.log('dashboard-next tiles=' + JSON.stringify(nextTiles) + ' rows=' + nextAllRows);
 
-  const sharedLabels = Object.keys(baseTiles);
-  ok('dashboard/ has six tiles on the Maintenance Actions tab', sharedLabels.length === 6, JSON.stringify(sharedLabels));
-  ok('dashboard-next has the same six tile labels (order may differ)',
-     JSON.stringify([...sharedLabels].sort()) === JSON.stringify([...Object.keys(nextTiles)].sort()),
-     JSON.stringify(Object.keys(nextTiles)));
-  sharedLabels.forEach(lab => {
-    ok(`action tile "${lab}" matches live /dashboard/`, nextTiles[lab] === baseTiles[lab],
-       `next=${nextTiles[lab]} dashboard=${baseTiles[lab]}`);
-  });
-
-  /* ── the mockup's own tile order: still open, overdue, unassigned, needs
-     planning, oldest open, closed out (Actions.dc.html) ───────────────────── */
-  const order = await n.$$eval('#actKpis .kpi .k, #actKpis > div .k', els => els.map(e => e.textContent.trim()));
-  ok('tile order matches Actions.dc.html reading order',
-     JSON.stringify(order) === JSON.stringify(['STILL OPEN', 'OVERDUE', 'UNASSIGNED ACTIONS', 'ACTIONS REQUIRING PLANNING', 'OLDEST OPEN (DAYS)', 'CLOSED OUT'])
-     || order.length === 6, JSON.stringify(order));
+  /* build 628 (CM_ACTFLOW_V1, Rickie 15.11 "go"): the six tiles and the closed-out bar gave way to the Overview's
+     findings -> 1C defects row (#actFlow). The row is the comparison now: each step is there on both pages, with one number. */
+  const FLOW = ['actFind', 'actNodef', 'actDreg', 'actDprog', 'actDdone'];
+  const flowOf = pg => pg.evaluate(ids => ids.map(id => { const e = document.getElementById(id); return e ? (e.textContent.match(/\d[\d\s,]*/) || [''])[0].replace(/\D/g, '') : null; }), FLOW);
+  const fb = await flowOf(a), fn = await flowOf(n);
+  ok('the findings -> 1C defects row is on Maintenance Actions on both pages', fb.every(v => v !== null) && fn.every(v => v !== null), JSON.stringify({ dashboard: fb, next: fn }));
+  FLOW.forEach((id, k) => ok(`flow step ${id} matches live /dashboard/`, fn[k] === fb[k], `next=${fn[k]} dashboard=${fb[k]}`));
+  ok('the six tiles are put away (build 628)', !Object.keys(nextTiles).length, JSON.stringify(Object.keys(nextTiles)));
 
   ok('the full action-register row count matches live /dashboard/', nextAllRows === baseAllRows,
      `next=${nextAllRows} dashboard=${baseAllRows}`);
 
   /* ── closed-out progress bar (brief §13 / Actions.dc.html) ──────────────── */
-  const bar = await n.$eval('#actBar .segbar', el => !!el).catch(() => false);
-  ok('the closed-out progress bar renders', bar);
+  /* the closed-out progress bar went with the tiles (build 628) */
 
   /* ── Show / View segmented filters, bulk-apply bar ──────────────────────── */
   const segs = await n.evaluate(() => ({
@@ -147,8 +138,8 @@ const tileMap = async p => p.$$eval('#actKpis .kpi, #actKpis > div', els => {
 
   /* ── no sideways scroller at 1366px ─────────────────────────────────────── */
   const scrollers = await n.evaluate(() => [...document.querySelectorAll('#tab-actions .tblwrap, #tab-actions table')]
-    .filter(el => el.scrollWidth > el.clientWidth + 2).map(el => el.id || el.className));
-  ok('no sideways scroller on Maintenance Actions at 1366px', scrollers.length === 0, JSON.stringify(scrollers));
+    .filter(el => el.scrollWidth > el.clientWidth + 2 && !(el.classList.contains('cmslidebox') ? !!el.querySelector('table.cmfrz') : (el.tagName === 'TABLE' && el.classList.contains('cmfrz') && el.closest('.cmslidebox'))))   /* build 630: the frozen slide box is the standard (Rickie 15.11) */.map(el => el.id || el.className));
+  ok('no sideways scroller on Maintenance Actions at 1366px, other than the frozen slide box', scrollers.length === 0, JSON.stringify(scrollers));
 
   console.log((errsA.length ? '\ndashboard/ PAGE ERRORS:\n' + errsA.join('\n') : '') + (errsB.length ? '\ndashboard-next/ PAGE ERRORS:\n' + errsB.join('\n') : ''));
   b.close(); srv.close();

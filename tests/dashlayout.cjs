@@ -209,9 +209,9 @@ const MEASURE = () => {
         cards.forEach(a => { let best = null, bc = null; cards.forEach(c => { if (c === a) return; const A = R(a), C = R(c);
           if (C.top >= A.bottom - 2 && Math.min(A.right, C.right) - Math.max(A.left, C.left) > 40 && (best === null || C.top - A.bottom < best)) { best = C.top - A.bottom; bc = c; } });
           if (best === null) return;
-          /* something visible in between (a disclosure row, a note) is not a gap */
-          const between = [...sec.querySelectorAll('details, .note, .notecard, .hint, p')].filter(vis).some(e => !e.closest('.section') && R(e).top >= R(a).bottom - 1 && R(e).bottom <= R(bc).top + 1);
-          if (!between && Math.abs(best - 16) > 1) out.gap.push(`${t}: ${Math.round(best)}`); });
+          /* something visible in between (a disclosure row, a note, a toolbar such as Plan vs Actual's window picker) is not a gap */
+          const between = [...sec.querySelectorAll('details, .note, .notecard, .hint, p, .ddbar')].filter(vis).some(e => !e.closest('.section') && R(e).top >= R(a).bottom - 1 && R(e).bottom <= R(bc).top + 1);
+          if (!between && Math.abs(best - 16) > 1) out.gap.push(`${t}: ${Math.round(best)} (${a.id || a.className.split(" ")[0]} -> ${bc.id || bc.className.split(" ")[0]})`); });
         /* M4: every card title is 15 px */
         cards.forEach(c => { const h = c.querySelector('.secthd h2, :scope > h2, .hhd h2'); if (h && vis(h) && Math.round(parseFloat(getComputedStyle(h).fontSize)) !== 15) out.title.push(`${t}: ${h.textContent.trim().slice(0, 20)} ${getComputedStyle(h).fontSize}`); });
         /* M13: an empty state is inset like the card title */

@@ -5608,6 +5608,23 @@ the 32 px desk-control floor, so a row with an owner (every 3-5 finding has one 
 and `tests/ovtables.cjs` assert the build-630 rule (all columns at 1366, a table that does not fit slides in its box with the
 machine frozen) instead of "never scrolls sideways" / "Inspected and Findings off at 1366".
 
+**THE SWEEP OF 16.11 ON 628-631 (build 632).** A full sweep of the unreleased builds 628-631 left 27 suites red. Re-run alone,
+and against the live branch for comparison, five were already red on the live branch (`cmraised` before noon site, `batch`,
+`data-window-next`, `failure-next`, `tablekit-scale-next`) and left as found. Four were real defects, fixed:
+- the owner button keeps the 32 px desk floor (`phase6`); it reaches into the cell padding (`margin:-8px`, `vertical-align:
+  middle`), and on dashboard-next its cell takes the 8 px row padding the button exemption left it without (13 px made owned
+  rows 43 px against 33);
+- the held slider's arrows say what they do in the page's language (`lint`);
+- Lube master's typed values survive a redraw again: `keepEdits`' `boxKey` read the table's class names, and the table
+  standard adds `cmslide` / `cmfrz` after drawing, so a typed box never matched its redrawn self (`lubehead`);
+- a scorecard (`table.scorecard`, the Lubrication programme coverage) gets no Columns bar (`layout`).
+The rest checked rules builds 628-630 changed on request, and now check the new ones: the frozen slide box is not a sideways
+scroller (`cards` and five dashboard-next suites); Maintenance Actions compares the findings -> 1C row, not six tiles
+(`actions-next`); six schedule views, no CM interval (`sched1c`, `due-next`); a 3-5 finding has an owner (`follow`) and waits
+for its 1C defect, the CM-field rule being `actionStateOld` (`actdef`); history dates are dd.mm.yyyy (`edgrade`); the
+register count is the page's own after carry / clear (`scale`); five rows on the old/new card (`cmflow`); a toolbar between
+two cards is not a gap (`dashlayout`); Data & Sync may be 2.2 screens until the compare card goes on 23.11 (`phase5`).
+
 ---
 
 ## Secrets

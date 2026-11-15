@@ -55,7 +55,7 @@ const srv = http.createServer((q, r) => {
     await p.waitForTimeout(400);
     const tabs = await p.evaluate(() => Object.fromEntries([...document.querySelectorAll('#ddSeg [data-dd]')].map(b => [b.dataset.dd, Number((b.querySelector('.n') || {}).textContent)])));
     ok('the schedule tabs follow 1C: Overdue 2 · Due in 7 days 1 · Planned later 1 · Done this week 1', tabs.over === 2 && tabs.soon === 1 && tabs.later === 1 && tabs.done === 1, JSON.stringify(tabs));
-    ok('  and keep Deferred, Never inspected and the CM interval view', 'put' in tabs && 'never' in tabs && 'cmint' in tabs, Object.keys(tabs).join(','));
+    ok('  and keep Deferred and Never inspected, with no CM interval tab (build 629: "we are basing all in 1C")', 'put' in tabs && 'never' in tabs && !('cmint' in tabs), Object.keys(tabs).join(','));
     const ov = await p.evaluate(() => { const g = id => Number(((document.getElementById(id) || {}).querySelector ? document.getElementById(id).querySelector('.v') : null || {}).textContent); return CMFlow.plan().over.length; });
     ok('  the Overdue tab is the Overview\'s Overdue number', ov === tabs.over, ov + ' vs ' + tabs.over);
     const kp = await p.evaluate(() => (document.getElementById('dueKpis') || {}).children.length);
@@ -82,7 +82,7 @@ const srv = http.createServer((q, r) => {
     } else ok('fixture has a finding without an owner', false);
     await p.evaluate(() => { lang = 'ru'; showTab('due', true); renderAll(); }); await p.waitForTimeout(300);
     const ru = await p.evaluate(() => document.getElementById('ddSeg').textContent);
-    ok('Russian tab names', /Просрочено в 1С/.test(ru) && /Интервал МС/.test(ru), ru.slice(0, 120));
+    ok('Russian tab names', /Просрочено в 1С/.test(ru) && /Отложено/.test(ru) && !/Интервал МС/.test(ru), ru.slice(0, 120));
     ok('no page errors', !errs.length, errs.join(' | ')); await ctx.close();
   }
   await b.close(); srv.close();
