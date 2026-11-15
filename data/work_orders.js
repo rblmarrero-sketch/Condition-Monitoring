@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-15T19:37:48+00:00",
+  "generated": "2026-11-15T19:52:35+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -2235,7 +2235,7 @@ window.CM_WO_DATA = {
       "raised": "2026-10-15",
       "detected": "2026-10-15",
       "planStart": "2026-11-13",
-      "closed": null,
+      "closed": "2026-11-13",
       "asset": "DZ009",
       "defect": "DD-00014839",
       "requestNo": "DD-00014839",
@@ -2246,7 +2246,7 @@ window.CM_WO_DATA = {
       "cause": "Отказ предпуск. подогр.",
       "causeFrom": "wo",
       "descr": "Предпусковой подогреватель двигателя не включается.",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "by": "Zhomart",
       "byFull": "Zhomart Khasenov",
       "regBy": "Хасенов Жомарт",
@@ -2261,7 +2261,7 @@ window.CM_WO_DATA = {
       "raised": "2026-10-15",
       "detected": "2026-10-15",
       "planStart": "2026-11-13",
-      "closed": null,
+      "closed": "2026-11-13",
       "asset": "DZ009",
       "defect": "DD-00014838",
       "requestNo": "DD-00014838",
@@ -2272,7 +2272,7 @@ window.CM_WO_DATA = {
       "cause": "Поврежден шланга/линии",
       "causeFrom": "wo",
       "descr": "В моторном отсеке течь охлаждающей жидкости на стыке фланца патрубка, течь действующая.",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "by": "Zhomart",
       "byFull": "Zhomart Khasenov",
       "regBy": "Хасенов Жомарт",
@@ -15206,19 +15206,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK128",
-      "defect": "DD-00016225",
-      "raised": "2026-11-03",
-      "system": "TK128.DRS.PD (Pump Drive / Привод насоса)",
-      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
-      "descr": "Не вращается редуктор промежуточный привода рабочего органа. (Редуктор рабочего органа и цепной вращаются)",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
       "asset": "TK086",
       "defect": "DD-00016219",
       "raised": "2026-11-03",
@@ -15256,6 +15243,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": null
+    },
+    {
+      "asset": "TK128",
+      "defect": "DD-00016225",
+      "raised": "2026-11-03",
+      "system": "TK128.DRS.PD (Pump Drive / Привод насоса)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Не вращается редуктор промежуточный привода рабочего органа. (Редуктор рабочего органа и цепной вращаются)",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022628"
     },
     {
       "asset": "EX025",
@@ -17585,6 +17585,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021380"
     },
     {
+      "asset": "EX025",
+      "defect": "DD-00016022",
+      "raised": "2026-10-31",
+      "system": "EX025.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка масла в районе выдова сапуна и заливной горолвины к блоку",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Roman Kochetov",
+      "regBy": "Кочетов Роман Иванович",
+      "wo": "WO-021546"
+    },
+    {
       "asset": "TK168",
       "defect": "DD-00016050",
       "raised": "2026-10-31",
@@ -17700,19 +17713,6 @@ window.CM_WO_DATA = {
       "by": "Andrey Shipelov",
       "regBy": "Шипелов Андрей Анатольевич",
       "wo": null
-    },
-    {
-      "asset": "EX025",
-      "defect": "DD-00016022",
-      "raised": "2026-10-31",
-      "system": "EX025.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка масла в районе выдова сапуна и заливной горолвины к блоку",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Roman Kochetov",
-      "regBy": "Кочетов Роман Иванович",
-      "wo": "WO-021546"
     },
     {
       "asset": "EX025",
@@ -20822,6 +20822,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021486"
     },
     {
+      "asset": "TK118",
+      "defect": "DD-00015755",
+      "raised": "2026-10-27",
+      "system": "TK118.CH.BY (Dump Body / Самосвальный кузов)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Предельный износ футеровочных пластин кузова",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Evgeniy Frolin",
+      "regBy": "Фролин Евгений Владимирович",
+      "wo": "WO-020867"
+    },
+    {
       "asset": "TK106",
       "defect": "DD-00015745",
       "raised": "2026-10-27",
@@ -20950,19 +20963,6 @@ window.CM_WO_DATA = {
       "by": "Evgeniy Frolin",
       "regBy": "Фролин Евгений Владимирович",
       "wo": "WO-020918"
-    },
-    {
-      "asset": "TK118",
-      "defect": "DD-00015755",
-      "raised": "2026-10-27",
-      "system": "TK118.CH.BY (Dump Body / Самосвальный кузов)",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "Предельный износ футеровочных пластин кузова",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Evgeniy Frolin",
-      "regBy": "Фролин Евгений Владимирович",
-      "wo": "WO-020867"
     },
     {
       "asset": "EX021",
