@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-15T03:42:59+00:00",
+  "generated": "2026-11-15T03:57:50+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -8342,19 +8342,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "DZ001",
-      "defect": "DD-00016760",
-      "raised": "2026-11-12",
-      "system": "DZ001.ELS.AS (Alarm System / Система сигнализации)",
-      "defectType": "4.02 Open circuit / Разрыв цепи",
-      "descr": "Требуется замена сигнала( плохо слышно)",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": null
-    },
-    {
       "asset": "EX005",
       "defect": "DD-00016751",
       "raised": "2026-11-12",
@@ -8431,6 +8418,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": null
+    },
+    {
+      "asset": "DZ001",
+      "defect": "DD-00016760",
+      "raised": "2026-11-12",
+      "system": "DZ001.ELS.AS (Alarm System / Система сигнализации)",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "Требуется замена сигнала( плохо слышно)",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-022593"
     },
     {
       "asset": "TK016",
@@ -14140,6 +14140,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "TK030",
+      "defect": "DD-00016299",
+      "raised": "2026-11-04",
+      "system": "TK030.DRS.CLU (Clutch / Сцепление)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Замена комплекта сцепления.",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-021836"
+    },
+    {
       "asset": "GR004",
       "defect": "DD-00016288",
       "raised": "2026-11-04",
@@ -14216,19 +14229,6 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-022213"
-    },
-    {
-      "asset": "TK030",
-      "defect": "DD-00016299",
-      "raised": "2026-11-04",
-      "system": "TK030.DRS.CLU (Clutch / Сцепление)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Замена комплекта сцепления.",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-021836"
     },
     {
       "asset": "LV012",
@@ -57846,19 +57846,6 @@ window.CM_WO_DATA = {
       "wo": "WO-016352"
     },
     {
-      "asset": "DZ001",
-      "defect": "DD-00011985",
-      "raised": "2026-09-03",
-      "system": "DZ001.CH.CRW (Crawler Chassis / Гусеничное шасси)",
-      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
-      "descr": "Диагностика, осмотр. замена втулок и пальцев балансирной балки",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Pavel Kostin",
-      "regBy": "Костин Павел Александрович",
-      "wo": null
-    },
-    {
       "asset": "DZ003",
       "defect": "DD-00011982",
       "raised": "2026-09-03",
@@ -57870,6 +57857,19 @@ window.CM_WO_DATA = {
       "by": "Pavel Kostin",
       "regBy": "Костин Павел Александрович",
       "wo": null
+    },
+    {
+      "asset": "DZ001",
+      "defect": "DD-00011985",
+      "raised": "2026-09-03",
+      "system": "DZ001.CH.CRW (Crawler Chassis / Гусеничное шасси)",
+      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
+      "descr": "Диагностика, осмотр. замена втулок и пальцев балансирной балки",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": "WO-022594"
     },
     {
       "asset": "TK037",
