@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-15T14:17:35+00:00",
+  "generated": "2026-11-15T14:32:43+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -6002,6 +6002,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022615"
     },
     {
+      "asset": "TK032",
+      "defect": "DD-00016918",
+      "raised": "2026-11-15",
+      "system": "TK032.ELS (Electrical System / Электросистема)",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "Не работает освещение в кабине.",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022579"
+    },
+    {
       "asset": "TR001",
       "defect": "DD-00016913",
       "raised": "2026-11-15",
@@ -6013,6 +6026,45 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-022574"
+    },
+    {
+      "asset": "TK034",
+      "defect": "DD-00016920",
+      "raised": "2026-11-15",
+      "system": "TK034.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Не работает автономный отопитель в кабине.",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022581"
+    },
+    {
+      "asset": "TK029",
+      "defect": "DD-00016919",
+      "raised": "2026-11-15",
+      "system": "TK029.ELS.LIG (Head Lighting System / Система головного освещения)",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "Неисправность ближнего света фар.",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022580"
+    },
+    {
+      "asset": "BS010",
+      "defect": "DD-00016921",
+      "raised": "2026-11-15",
+      "system": "BS010.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "Нет задних габаритных огней.",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022582"
     },
     {
       "asset": "TK148",
@@ -6444,45 +6496,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022583"
     },
     {
-      "asset": "BS010",
-      "defect": "DD-00016921",
-      "raised": "2026-11-15",
-      "system": "BS010.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
-      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
-      "descr": "Нет задних габаритных огней.",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-022582"
-    },
-    {
-      "asset": "TK029",
-      "defect": "DD-00016919",
-      "raised": "2026-11-15",
-      "system": "TK029.ELS.LIG (Head Lighting System / Система головного освещения)",
-      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
-      "descr": "Неисправность ближнего света фар.",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-022580"
-    },
-    {
-      "asset": "TK032",
-      "defect": "DD-00016918",
-      "raised": "2026-11-15",
-      "system": "TK032.ELS (Electrical System / Электросистема)",
-      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
-      "descr": "Не работает освещение в кабине.",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-022579"
-    },
-    {
       "asset": "TK143",
       "defect": "DD-00016906",
       "raised": "2026-11-15",
@@ -6520,19 +6533,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022590"
-    },
-    {
-      "asset": "TK034",
-      "defect": "DD-00016920",
-      "raised": "2026-11-15",
-      "system": "TK034.OC.HE (Heating / Отопление)",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Не работает автономный отопитель в кабине.",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-022581"
     },
     {
       "asset": "GE054",
