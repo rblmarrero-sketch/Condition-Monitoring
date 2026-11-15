@@ -1,4 +1,4 @@
-/* CM_BOOT_V1 (build 634, Rickie 16.11.2026 08:44 "when loaded it has old legacy that's loading before the new one"): both office
+/* CM_BOOT_V1 (build 636, Rickie 16.11.2026 08:44 "when loaded it has old legacy that's loading before the new one"): both office
    pages under /cm/ never show their bare old shell while they load. From the first paint the body is hidden with one "Loading…" line;
    it is shown when the site template has dressed the page (html.cmStd), on a slow link and a slow CPU as well; off the site it is
    shown as soon as the page has been read; a page whose template never arrives is still shown (failsafe). Russian says "Загрузка…".

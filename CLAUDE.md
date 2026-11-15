@@ -5625,7 +5625,7 @@ for its 1C defect, the CM-field rule being `actionStateOld` (`actdef`); history 
 register count is the page's own after carry / clear (`scale`); five rows on the old/new card (`cmflow`); a toolbar between
 two cards is not a gap (`dashlayout`); Data & Sync may be 2.2 screens until the compare card goes on 23.11 (`phase5`).
 
-**EVERY CM LIST TABLE IS ON THE SITE'S OWN TABLE COMPONENT UNDER /cm/ (builds 634-635, CM_SITETBL_V1, Rickie 16.11.2026 06:31 "the table
+**EVERY CM LIST TABLE IS ON THE SITE'S OWN TABLE COMPONENT UNDER /cm/ (build 636, CM_SITETBL_V1, Rickie 16.11.2026 06:31 "the table
 in cm are not standard UI still. and i want the all pages to match"; mock-up "Go, all tables", "32 px like the site").** The CM
 pages had their own look-alike kit (text box per column, 44 px on dashboard-next, their own Columns, freeze and slider); every
 other site page uses `SiteStd.table` (site_std v2.11+, KB UI_STANDARD §22-24). `#cmSiteTblJs` (end of both pages, identical) hands
@@ -5643,7 +5643,7 @@ standard": the fleet table then slides with Unit frozen and the held slider),
 the live template now (v2.14, from askpi-site main). `tests/sitetbl.cjs` checks both pages, every table, EN and RU, and that off
 the site the page keeps its own row.
 
-**THE OFFICE PAGES SHOW "LOADING…" UNTIL THEY ARE DRESSED, NEVER THE BARE OLD SHELL (build 634, CM_BOOT_V1, Rickie 16.11.2026
+**THE OFFICE PAGES SHOW "LOADING…" UNTIL THEY ARE DRESSED, NEVER THE BARE OLD SHELL (build 636, CM_BOOT_V1, Rickie 16.11.2026
 08:44 "when loaded it has old legacy that's loading before the new one").** Each office page is 1.3-1.5 MB and its site look
 (site menu and band, colours, the words of the menu) is applied by layers at its END and by `/site/std.js`, so while it loaded the
 browser painted the bare shell underneath: the dark menu, "Due & missed", "Sync operations", cream cards, "No data yet" (live 633:
@@ -5652,7 +5652,7 @@ hide the body behind one "Loading…" / "Загрузка…" line: under /cm/ u
 8 s after that, 20 s in all, so a page whose template never arrives is still shown. `tests/cmboot.cjs` samples every frame, fast
 and on a throttled link, and fails 10 on build 633.
 
-**A FILTER IS SAID ONCE: THE SITE BAR'S CHIPS (build 634, CM_ONECHIP_V1, Rickie 16.11.2026 09:26 "also showing the search again").**
+**A FILTER IS SAID ONCE: THE SITE BAR'S CHIPS (build 636, CM_ONECHIP_V1, Rickie 16.11.2026 09:26 "also showing the search again").**
 Under /cm/ the site filter bar (`#cmFbC`) and the page's own chip row (`#chips`, under the tab title) both listed the search, type,
 class, period, status, grade and data quality. `renderChips` keeps only the drill chips (unit, owner, month, defect, cause) when
 `#cmFb` exists; the reset count (`nAll`) still counts every filter, so the bar's Clear filters (which presses `#fReset`) works.

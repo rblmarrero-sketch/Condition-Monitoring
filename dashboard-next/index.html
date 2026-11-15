@@ -3,7 +3,7 @@
 <head>
 <link rel="icon" type="image/png" sizes="192x192" href="../mobile/icon-192.png">
 <meta charset="utf-8">
-<style id="cmBootCss">/* CM_BOOT_V1 (build 634, Rickie 16.11.2026 08:44 "when loaded it has old legacy that's loading before the new one"): the page is
+<style id="cmBootCss">/* CM_BOOT_V1 (build 636, Rickie 16.11.2026 08:44 "when loaded it has old legacy that's loading before the new one"): the page is
    1.5 MB and its site look (menu, band, colours, words) is set by layers at its END, so while it loaded the bare old shell showed for
    seconds. Until the look is in place the page shows one quiet "Loading…" instead; under /cm/ that is when the site template has
    dressed it (html.cmStd), elsewhere when the page has been read (DOMContentLoaded). Never longer than 8 s after that, 20 s at most. */
@@ -5217,23 +5217,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=635"></script>
+<script src="../data/magnetic_plug.js?v=636"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=635"></script>
-<script src="../mobile/hme.js?v=635"></script>
-<script src="../mobile/mp-fc.js?v=635"></script>
-<script src="../mobile/rtw.js?v=635"></script>
-<script src="../mobile/hme-cascade.js?v=635"></script>
-<script src="../mobile/temp-limits.js?v=635"></script>
+<script src="../data/work_orders.js?v=636"></script>
+<script src="../mobile/hme.js?v=636"></script>
+<script src="../mobile/mp-fc.js?v=636"></script>
+<script src="../mobile/rtw.js?v=636"></script>
+<script src="../mobile/hme-cascade.js?v=636"></script>
+<script src="../mobile/temp-limits.js?v=636"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=635"></script>
-<script src="../mobile/normalize.js?v=635"></script>
-<script src="../mobile/terms.js?v=635"></script>
+<script src="../mobile/assets.js?v=636"></script>
+<script src="../mobile/normalize.js?v=636"></script>
+<script src="../mobile/terms.js?v=636"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -5252,22 +5252,22 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=635"></script>
-<script src="../mobile/edits.js?v=635"></script>
-<script src="../mobile/due.js?v=635"></script>
-<script src="../dashboard/cm-flow.js?v=635"></script>
-<script src="../mobile/wear.js?v=635"></script>
-<script src="../mobile/wear-map.js?v=635"></script>
-<script src="../mobile/lube.js?v=635"></script>
-<script src="../mobile/lube-overrides.js?v=635"></script>
-<script src="../mobile/lube2027.js?v=635"></script>
-<script src="../mobile/lube-tds.js?v=635"></script>
-<script src="../dashboard/lube-master.js?v=635"></script>
-<script src="../dashboard/wear-limits.js?v=635"></script>
+<script src="../mobile/grade.js?v=636"></script>
+<script src="../mobile/edits.js?v=636"></script>
+<script src="../mobile/due.js?v=636"></script>
+<script src="../dashboard/cm-flow.js?v=636"></script>
+<script src="../mobile/wear.js?v=636"></script>
+<script src="../mobile/wear-map.js?v=636"></script>
+<script src="../mobile/lube.js?v=636"></script>
+<script src="../mobile/lube-overrides.js?v=636"></script>
+<script src="../mobile/lube2027.js?v=636"></script>
+<script src="../mobile/lube-tds.js?v=636"></script>
+<script src="../dashboard/lube-master.js?v=636"></script>
+<script src="../dashboard/wear-limits.js?v=636"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=635"></script>
-<script src="../mobile/machine-photos.js?v=635"></script>
+<script src="../mobile/upload-defaults.js?v=636"></script>
+<script src="../mobile/machine-photos.js?v=636"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -5276,17 +5276,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=635"></script>
-<script src="../mobile/get.js?v=635"></script>
-<script src="../mobile/points.js?v=635"></script>
-<script src="../mobile/uc-points.js?v=635"></script>
-<script src="../mobile/inspect-guide.js?v=635"></script>
-<script src="../mobile/get-figs.js?v=635"></script>
-<script src="../mobile/body-points.js?v=635"></script>
-<script src="../mobile/body-map.js?v=635"></script>
-<script src="../mobile/jspdf.umd.min.js?v=635"></script>
-<script src="../mobile/html2canvas.min.js?v=635"></script>
-<script src="../mobile/report-core.js?v=635"></script>
+<script src="../mobile/machine-fig.js?v=636"></script>
+<script src="../mobile/get.js?v=636"></script>
+<script src="../mobile/points.js?v=636"></script>
+<script src="../mobile/uc-points.js?v=636"></script>
+<script src="../mobile/inspect-guide.js?v=636"></script>
+<script src="../mobile/get-figs.js?v=636"></script>
+<script src="../mobile/body-points.js?v=636"></script>
+<script src="../mobile/body-map.js?v=636"></script>
+<script src="../mobile/jspdf.umd.min.js?v=636"></script>
+<script src="../mobile/html2canvas.min.js?v=636"></script>
+<script src="../mobile/report-core.js?v=636"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -8476,7 +8476,7 @@ function dqMissing(rec,i){
 function renderChips(){
   const c=[];
   const CT=(function(){ try{ return CUR_TAB; }catch(e){ return ""; } })(), UT=!!UNIT_TABS[CT], NOAPPLY=UT?[t("c_period"),t("c_status"),t("c_dq"),t("c_owner"),t("c_month"),t("c_sev"),t("c_defect"),t("c_cause")].concat(CT==="cmwo"?[t("c_type")]:[]):[];
-  /* CM_ONECHIP_V1 (build 634, Rickie 16.11 09:26 "showing the search again"): under /cm/ the site filter bar shows its own chips for
+  /* CM_ONECHIP_V1 (build 636, Rickie 16.11 09:26 "showing the search again"): under /cm/ the site filter bar shows its own chips for
      type, class, period, status, grade, data quality and search, so this row keeps only what the bar cannot say (a drill: unit, owner, month, defect, cause) */
   const SITEBAR=!!document.getElementById("cmFb"), BARSAYS=[t("c_type"),t("c_class"),t("c_period"),t("c_status"),t("c_search"),t("c_dq"),t("c_sev")];
   let nAll=0; const add=(label,val,onX)=>{ if(NOAPPLY.indexOf(label)>=0) return; nAll++; if(!(SITEBAR&&BARSAYS.indexOf(label)>=0)) c.push({label,val,onX}); };   /* CM_FLOW_V1: a chip only for what this list applies */
@@ -22071,11 +22071,11 @@ document.querySelector(".lang").addEventListener("click",e=>{
   setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 })();
 </script>
-<script src="../dashboard/drive.js?v=635"></script>
-<script src="../dashboard/sync-adapter.js?v=635"></script>
-<script src="../dashboard/report.js?v=635"></script>
-<script src="../dashboard/reliability.js?v=635"></script>
-<script src="../dashboard/day-summary.js?v=635"></script>
+<script src="../dashboard/drive.js?v=636"></script>
+<script src="../dashboard/sync-adapter.js?v=636"></script>
+<script src="../dashboard/report.js?v=636"></script>
+<script src="../dashboard/reliability.js?v=636"></script>
+<script src="../dashboard/day-summary.js?v=636"></script>
 <script>
 /* THE CLOSED FILTER SAYS WHAT IS CHOSEN. A dropdown narrower than its option
    text ellipsises ("All t…", audit of 2026-10-01). Between 1331 and 1500 px
@@ -22949,7 +22949,7 @@ html.cmSiteTbls table.cmSiteTbl thead tr:has(> th.cwfh){display:none}
 html.cmSiteTbls .cmstTools{display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 8px 0 0;vertical-align:middle}
 html.cmSiteTbls .cmstTools:empty{display:none}
 </style>
-<script id="cmSiteTblJs">/* CM_SITETBL_V1 (build 634, Rickie 16.11.2026 06:31 "the table in cm are not standard UI still. and i want the all pages to match"):
+<script id="cmSiteTblJs">/* CM_SITETBL_V1 (build 636, Rickie 16.11.2026 06:31 "the table in cm are not standard UI still. and i want the all pages to match"):
    under /cm/ every list table of both office pages is handed to the site's own table component (SiteStd.table, site_std v2.11+,
    KB UI_STANDARD §22-24), the one every other site page uses, instead of this page's look-alike kit:
      heading row + the template's filter row (tick list for a short list of values, text box otherwise, multi-select),

@@ -1,4 +1,4 @@
-/* CM_SITETBL_V1 (build 634, Rickie 16.11.2026 06:31 "the table in cm are not standard UI still. and i want the all pages to match",
+/* CM_SITETBL_V1 (build 636, Rickie 16.11.2026 06:31 "the table in cm are not standard UI still. and i want the all pages to match",
    mock-up "Go, all tables" + "32 px like the site"): under /cm/ every list table of both office pages is on the site's own table
    component (tests/site_std_copy = the live template, site_std v2.14). Asked of the page, per table:
    - the template has it (std-sf), its filter row is the template's (tr.std-flt), the page's own (th.cwfh) is gone;
