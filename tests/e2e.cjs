@@ -70,8 +70,9 @@ const SEED = `(async () => {
     await dash.evaluate(()=>[...document.getElementById('fType').options].find(o=>o.value==='UC').textContent));
 
   const num = await dash.evaluate(()=>{
-    const mix={}; document.querySelectorAll('#kpis .legend button').forEach(b=>{
-      mix[b.dataset.sev]=Number(b.querySelector('b').textContent); });
+    /* Build 626: the Overview's grade row counts MACHINES by their worst grade (CM_FLOW_V1), so the findings by grade
+       are read from the page's own findings and sevOf - the numbers the register and the reports count. */
+    const mix={}; findings(filtered()).forEach(x=>{ const g=sevOf(x.r,x.i); if(g) mix[g]=(mix[g]||0)+1; });
     /* The findings total, read off the severity mix rather than off a tile in
        a fixed slot. This used to be "#kpis .tile" indexed at [1], which is a
        claim about the ORDER of the headline strip — not what this suite is

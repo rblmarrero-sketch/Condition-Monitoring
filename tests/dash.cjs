@@ -110,9 +110,10 @@ const recs = () => {
 
   console.log('\nseverity legend');
   await p.click('nav.tabs button[data-tab="overview"]'); await p.waitForTimeout(300);
-  const legend = await p.$$eval('#kpis .legend button', a => a.map(x => x.textContent.replace(/\s+/g,' ').trim()));
+  /* Build 626 (CM_FLOW_V1): the grade mix is the fleet-condition row's five grade keys */
+  const legend = await p.$$eval('#kpis .cfkey button[data-sev]', a => a.map(x => x.textContent.replace(/\s+/g,' ').trim()));
   ok('the grade mix is a 5-row legend', legend.length === 5, legend.join(' | '));
-  await p.click('#kpis .legend button:not([disabled])'); await p.waitForTimeout(300);
+  await p.click('#kpis .cfkey button[data-sev]:not([disabled])'); await p.waitForTimeout(300);
   ok('clicking a grade band filters', /Grade/.test(await p.textContent('#chips')));
   await p.click('#chipClear'); await p.waitForTimeout(300);
 
