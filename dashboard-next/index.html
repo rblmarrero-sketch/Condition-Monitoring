@@ -3,6 +3,21 @@
 <head>
 <link rel="icon" type="image/png" sizes="192x192" href="../mobile/icon-192.png">
 <meta charset="utf-8">
+<style id="cmBootCss">/* CM_BOOT_V1 (build 634, Rickie 16.11.2026 08:44 "when loaded it has old legacy that's loading before the new one"): the page is
+   1.5 MB and its site look (menu, band, colours, words) is set by layers at its END, so while it loaded the bare old shell showed for
+   seconds. Until the look is in place the page shows one quiet "Loading…" instead; under /cm/ that is when the site template has
+   dressed it (html.cmStd), elsewhere when the page has been read (DOMContentLoaded). Never longer than 8 s after that, 20 s at most. */
+html.cmBoot body{visibility:hidden !important}
+html.cmBoot{background:#eef0f1}
+html.cmBoot::after{content:attr(data-boot);position:fixed;left:0;right:0;top:42%;text-align:center;font:500 15px/1.4 "IBM Plex Sans",system-ui,sans-serif;color:#5b6670;visibility:visible}
+@media (prefers-color-scheme:dark){html.cmBoot{background:#14181c}html.cmBoot::after{color:#a9b3bc}}
+</style>
+<script id="cmBootJs">(function(){var h=document.documentElement,ru=false;try{ru=(localStorage.getItem("askpi_lang")||localStorage.getItem("cm_dash_lang"))==="ru";}catch(e){}
+h.classList.add("cmBoot");h.setAttribute("data-boot",ru?"Загрузка…":"Loading…");
+var done=function(){h.classList.remove("cmBoot");h.removeAttribute("data-boot");},cm=/^\/cm\//.test(location.pathname);
+document.addEventListener("DOMContentLoaded",function(){if(!cm||h.classList.contains("cmStd"))return done();
+var mo=new MutationObserver(function(){if(h.classList.contains("cmStd")){mo.disconnect();setTimeout(done,50);}});mo.observe(h,{attributes:true,attributeFilter:["class"]});setTimeout(done,8000);});
+setTimeout(done,20000);})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Condition Monitoring — Dashboard</title>
 <!--

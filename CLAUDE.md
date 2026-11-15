@@ -5643,6 +5643,15 @@ standard": the fleet table then slides with Unit frozen and the held slider),
 the live template now (v2.14, from askpi-site main). `tests/sitetbl.cjs` checks both pages, every table, EN and RU, and that off
 the site the page keeps its own row.
 
+**THE OFFICE PAGES SHOW "LOADING…" UNTIL THEY ARE DRESSED, NEVER THE BARE OLD SHELL (build 634, CM_BOOT_V1, Rickie 16.11.2026
+08:44 "when loaded it has old legacy that's loading before the new one").** Each office page is 1.3-1.5 MB and its site look
+(site menu and band, colours, the words of the menu) is applied by layers at its END and by `/site/std.js`, so while it loaded the
+browser painted the bare shell underneath: the dark menu, "Due & missed", "Sync operations", cream cards, "No data yet" (live 633:
+7-10 frames on a fast load, ~450 on a slow link). `#cmBootJs` / `#cmBootCss`, first thing after `<meta charset>` on both pages,
+hide the body behind one "Loading…" / "Загрузка…" line: under /cm/ until `html.cmStd`, elsewhere until DOMContentLoaded; at most
+8 s after that, 20 s in all, so a page whose template never arrives is still shown. `tests/cmboot.cjs` samples every frame, fast
+and on a throttled link, and fails 10 on build 633.
+
 ---
 
 ## Secrets
