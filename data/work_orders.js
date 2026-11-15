@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-15T22:12:38+00:00",
+  "generated": "2026-11-15T22:27:48+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -3300,8 +3300,8 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-10-02",
       "detected": "2026-10-02",
-      "planStart": "2026-11-17",
-      "closed": null,
+      "planStart": "2026-11-13",
+      "closed": "2026-11-13",
       "asset": "CN008",
       "defect": "DD-00013855",
       "requestNo": "DD-00013855",
@@ -3312,7 +3312,7 @@ window.CM_WO_DATA = {
       "cause": "Разрушение от удара",
       "causeFrom": "wo",
       "descr": "Пластиковый корпус фильтра предварительной очистки имеет механическое повреждение расколот/разбит.",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "by": "Irek",
       "byFull": "Irek Rayanov",
       "regBy": "Раянов Ирек Ямильевич",
@@ -3457,7 +3457,7 @@ window.CM_WO_DATA = {
       "raised": "2026-09-29",
       "detected": "2026-09-29",
       "planStart": "2026-11-12",
-      "closed": null,
+      "closed": "2026-11-12",
       "asset": "EX012",
       "defect": "DD-00013626",
       "requestNo": "DD-00013626",
@@ -3468,7 +3468,7 @@ window.CM_WO_DATA = {
       "cause": "Износ уплотнения",
       "causeFrom": "wo",
       "descr": "Течь масла из-под верхней резьбовой технологической пробки(заглушки)кронштейна блока фильтров.",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "by": "Irek",
       "byFull": "Irek Rayanov",
       "regBy": "Раянов Ирек Ямильевич",
@@ -5805,6 +5805,32 @@ window.CM_WO_DATA = {
       "by": "Sergey Murashko",
       "regBy": "Мурашко Сергей Борисович",
       "wo": "WO-022627"
+    },
+    {
+      "asset": "GE054",
+      "defect": "DD-00016975",
+      "raised": "2026-11-16",
+      "system": "GE054.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Установка стартера снятого с нового ДВС",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022633"
+    },
+    {
+      "asset": "GE054",
+      "defect": "DD-00016974",
+      "raised": "2026-11-16",
+      "system": "GE054.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Демонтаж стартера с нового ДВС. Консервация",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022632"
     },
     {
       "asset": "TK097",
@@ -14361,6 +14387,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021836"
     },
     {
+      "asset": "LV042",
+      "defect": "DD-00016287",
+      "raised": "2026-11-04",
+      "system": "LV042.CH.STR (Superstructure / Надстройка)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Ремонт замка капота",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-021719"
+    },
+    {
       "asset": "SR001",
       "defect": "DD-00016298",
       "raised": "2026-11-04",
@@ -14658,19 +14697,6 @@ window.CM_WO_DATA = {
       "by": "Roman Besedovskiy",
       "regBy": "Беседовский Роман Иванович",
       "wo": "WO-021692"
-    },
-    {
-      "asset": "LV042",
-      "defect": "DD-00016287",
-      "raised": "2026-11-04",
-      "system": "LV042.CH.STR (Superstructure / Надстройка)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Ремонт замка капота",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-021719"
     },
     {
       "asset": "EX005",
@@ -15180,6 +15206,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021551"
     },
     {
+      "asset": "EX012",
+      "defect": "DD-00016242",
+      "raised": "2026-11-03",
+      "system": "EX012.CH.BUC (Bucket / Ковш)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Износ ковша",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Evgeniy Frolin",
+      "regBy": "Фролин Евгений Владимирович",
+      "wo": "WO-021570"
+    },
+    {
       "asset": "TC001",
       "defect": "DD-00016221",
       "raised": "2026-11-03",
@@ -15360,19 +15399,6 @@ window.CM_WO_DATA = {
       "by": "Roman Besedovskiy",
       "regBy": "Беседовский Роман Иванович",
       "wo": "WO-021690"
-    },
-    {
-      "asset": "EX012",
-      "defect": "DD-00016242",
-      "raised": "2026-11-03",
-      "system": "EX012.CH.BUC (Bucket / Ковш)",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "Износ ковша",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Evgeniy Frolin",
-      "regBy": "Фролин Евгений Владимирович",
-      "wo": "WO-021570"
     },
     {
       "asset": "EX005",
@@ -24761,6 +24787,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022462"
     },
     {
+      "asset": "TK112",
+      "defect": "DD-00015462",
+      "raised": "2026-10-23",
+      "system": "TK112.DRS.FUE (Fuel System / Топливная система)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь масла в районе ТНВД",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Evgeniy Frolin",
+      "regBy": "Фролин Евгений Владимирович",
+      "wo": "WO-021480"
+    },
+    {
       "asset": "TK091",
       "defect": "DD-00015440",
       "raised": "2026-10-23",
@@ -24928,19 +24967,6 @@ window.CM_WO_DATA = {
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": "WO-021849"
-    },
-    {
-      "asset": "TK112",
-      "defect": "DD-00015462",
-      "raised": "2026-10-23",
-      "system": "TK112.DRS.FUE (Fuel System / Топливная система)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь масла в районе ТНВД",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Evgeniy Frolin",
-      "regBy": "Фролин Евгений Владимирович",
-      "wo": "WO-021480"
     },
     {
       "asset": "EX025",
@@ -40985,6 +41011,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021732"
     },
     {
+      "asset": "EX012",
+      "defect": "DD-00014130",
+      "raised": "2026-10-05",
+      "system": "EX012 PC2000-8 BH KOMATSU",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Перетерт РВД",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Vladimir Melnikov",
+      "regBy": "Мельников Владимир Викторович",
+      "wo": "WO-020084"
+    },
+    {
       "asset": "LV094",
       "defect": "DD-00014100",
       "raised": "2026-10-05",
@@ -41386,19 +41425,6 @@ window.CM_WO_DATA = {
       "by": "Andrey Taran",
       "regBy": "Таран Андрей Андреевич",
       "wo": null
-    },
-    {
-      "asset": "EX012",
-      "defect": "DD-00014130",
-      "raised": "2026-10-05",
-      "system": "EX012 PC2000-8 BH KOMATSU",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Перетерт РВД",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Vladimir Melnikov",
-      "regBy": "Мельников Владимир Викторович",
-      "wo": "WO-020084"
     },
     {
       "asset": "GR013",
@@ -42792,6 +42818,19 @@ window.CM_WO_DATA = {
       "wo": "WO-018949"
     },
     {
+      "asset": "EX012",
+      "defect": "DD-00013949",
+      "raised": "2026-10-03",
+      "system": "EX012.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Масляное запотевание на РВД в районе гидравлического распределителя",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Evgeniy Frolin",
+      "regBy": "Фролин Евгений Владимирович",
+      "wo": "WO-019690"
+    },
+    {
       "asset": "TK154",
       "defect": "DD-00013950",
       "raised": "2026-10-03",
@@ -42894,19 +42933,6 @@ window.CM_WO_DATA = {
       "by": "Evgeniy Frolin",
       "regBy": "Фролин Евгений Владимирович",
       "wo": "WO-020877"
-    },
-    {
-      "asset": "EX012",
-      "defect": "DD-00013949",
-      "raised": "2026-10-03",
-      "system": "EX012.HS.DL (Hydraulic Lines / Гидролинии)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Масляное запотевание на РВД в районе гидравлического распределителя",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Evgeniy Frolin",
-      "regBy": "Фролин Евгений Владимирович",
-      "wo": "WO-019690"
     },
     {
       "asset": "TK126",
@@ -43624,6 +43650,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021544"
     },
     {
+      "asset": "EX012",
+      "defect": "DD-00013863",
+      "raised": "2026-10-02",
+      "system": "EX012.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Масляное запотевание на РВД гидроцилиндра стрелы",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Evgeniy Frolin",
+      "regBy": "Фролин Евгений Владимирович",
+      "wo": "WO-021542"
+    },
+    {
       "asset": "DZ008",
       "defect": "DD-00013894",
       "raised": "2026-10-02",
@@ -43700,19 +43739,6 @@ window.CM_WO_DATA = {
       "by": "Evgeniy Frolin",
       "regBy": "Фролин Евгений Владимирович",
       "wo": "WO-021543"
-    },
-    {
-      "asset": "EX012",
-      "defect": "DD-00013863",
-      "raised": "2026-10-02",
-      "system": "EX012.HS.DL (Hydraulic Lines / Гидролинии)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Масляное запотевание на РВД гидроцилиндра стрелы",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Evgeniy Frolin",
-      "regBy": "Фролин Евгений Владимирович",
-      "wo": "WO-021542"
     },
     {
       "asset": "CR003",
@@ -61887,19 +61913,6 @@ window.CM_WO_DATA = {
       "by": "Andrey Taran",
       "regBy": "Таран Андрей Андреевич",
       "wo": null
-    },
-    {
-      "asset": "LV042",
-      "defect": "DD-00008344",
-      "raised": "2026-07-06",
-      "system": "LV042.DRS.TRA (Transmission / Трансмиссия)",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "Требуется замена подвесного подшипника",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": "WO-021733"
     },
     {
       "asset": "LV043",
