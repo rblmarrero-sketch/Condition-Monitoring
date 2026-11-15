@@ -78,8 +78,47 @@
   }
   /* The 1C defect's responsible person, as the owner of a finding nobody named (build 627). Reads the link
      map only; never builds it, because building it asks actionState, which asks this. */
-  function owner1C(r, i) { var m = linkCache.m; if (!m || !i) return ''; var d = m.get(fkey(r, i)); return (d && d.by) ? String(d.by) : ''; }
-  function warm() { try { links(finds(typeof RECS !== 'undefined' ? RECS : [])); } catch (e) {} }
+  function owner1C(r, i) { if (!i) return ''; var d = defectOf(r, i); return (d && d.by) ? String(d.by) : ''; }
+  function warm() { try { links(base(typeof RECS !== 'undefined' ? RECS : [])); } catch (e) {} }
+  /* ---- CM_FIND1C_V1 (build 630, Rickie 15.11 21:02 "when they found something they create a defect ... 1000+
+     findings without actions is bad monitoring. Owner of that is always maintenance"; 21:03 "go").
+     A finding graded 3-5 follows its point and its 1C defect:
+       - a newer reading of the same machine and point: 1-2 = the finding is CLEARED at that inspection (closed);
+         3-5 = the newer reading carries it (this one is folded into it, not a second job);
+       - the 1C defect matched to it (links, the Day summary e-mail's rule): Completed = closed; Registered or
+         In progress = open; none = open, the one thing missing is the 1C defect;
+       - owner: the 1C defect's responsible person, else "Maintenance".
+     A manual office decision (No action needed / Done / Verified) still wins: actionState checks it first. ---- */
+  var latestCache = null;
+  function latest() {
+    if (latestCache) return latestCache;
+    var m = {}, recs = typeof RECS !== 'undefined' ? RECS : [];
+    recs.forEach(function (r) { if (!r || r._void) return; (r.items || []).forEach(function (i) {
+      if (!i || i.general || i.key === 'MACHINE') return; var s = sevOf(r, i); if (!s) return;
+      var k = String(r.equip || '').toUpperCase() + '|' + String(i.key || i.label || '');
+      var d = String(r.date || ''); if (!m[k] || d > m[k].d) m[k] = { d: d, s: s, r: r }; }); });
+    latestCache = m; setTimeout(function () { latestCache = null; }, 0);
+    return m;
+  }
+  function find1C(r, i, o) {
+    if (!o || !(o.sev >= 3)) return null;
+    var k = String(r.equip || '').toUpperCase() + '|' + String(i.key || i.label || ''), n = latest()[k];
+    if (n && n.d > String(r.date || '')) return n.s <= 2 ? { k: 'closed', miss: [], sev: o.sev, why: 'cleared', at: n.d } : { k: 'none', miss: [], sev: o.sev, why: 'later', at: n.d };
+    var st = stageOf(defectOf(r, i));
+    if (st === 'done') return { k: 'closed', miss: [], sev: o.sev, why: '1c' };
+    if (st === 'reg' || st === 'prog') return { k: 'open', miss: [], sev: o.sev, why: '1c' };
+    return { k: 'triage', miss: ['c1'], sev: o.sev, why: 'no1c' };
+  }
+  /* a point that now reads 1-2 while the 1C defect raised for an earlier 3-5 is still open: close it in 1C */
+  function staleDefects() {
+    var out = [], L1 = latest();
+    base(typeof RECS !== 'undefined' ? RECS : []).forEach(function (x) {
+      var k = String(x.r.equip || '').toUpperCase() + '|' + String(x.i.key || x.i.label || ''), n = L1[k];
+      if (!n || !(n.d > String(x.r.date || '')) || n.s > 2) return;
+      var d = defectOf(x.r, x.i); if (d && stageOf(d) !== 'done') out.push({ unit: x.r.equip, point: x.i.label || x.i.key, defect: d.defect, at: n.d });
+    });
+    return out;
+  }
   /* decision 2: compliance against the 1C plan date */
   function comp(days) {
     var t0 = today(), from = addD(t0, -(days || COMP_DAYS)), due = 0, onTime = 0;
@@ -113,16 +152,21 @@
   }
   function stageOf(d) { return d ? (typeof cwStage === 'function' ? cwStage(d) : 'reg') : 'none'; }
   /* the population: findings graded 3-5 in the records the page shows */
-  function finds(recs) {
+  /* the findings graded 3-5, before any rule about their state: what a 1C defect is matched against */
+  function base(recs) {
     if (typeof findings !== 'function' || typeof sevOf !== 'function') return [];
-    /* the same rows the Maintenance Actions register lists (actionRows: actionState not "none"), graded 3-5,
-       so a step's count and the register filtered to that step are one number */
-    return findings(recs).filter(function (x) { return sevOf(x.r, x.i) >= 3 && (typeof actionState !== 'function' || actionState(x.r, x.i).k !== 'none'); });
+    return findings(recs).filter(function (x) { return sevOf(x.r, x.i) >= 3; });
   }
-  function defectOf(r, i) { var all = finds(typeof RECS !== 'undefined' ? RECS : []); return links(all).get(fkey(r, i)) || null; }
+  /* the population: findings graded 3-5 that are still a finding (CM_FIND1C_V1: not folded into a newer reading of the
+     same point, not cleared by one), the same rows the Maintenance Actions register lists */
+  function finds(recs) {
+    return base(recs).filter(function (x) { if (typeof actionState !== 'function') return true;
+      var s = actionState(x.r, x.i); return s.k !== 'none' && s.why !== 'cleared'; });
+  }
+  function defectOf(r, i) { return links(base(typeof RECS !== 'undefined' ? RECS : [])).get(fkey(r, i)) || null; }
   function stage(r, i) { return stageOf(defectOf(r, i)); }
   function flow(recs) {
-    var all = finds(recs), lk = links(finds(typeof RECS !== 'undefined' ? RECS : [])), out = { all: all, none: [], reg: [], prog: [], done: [] };
+    var all = finds(recs), lk = links(base(typeof RECS !== 'undefined' ? RECS : [])), out = { all: all, none: [], reg: [], prog: [], done: [] };
     all.forEach(function (x) { out[stageOf(lk.get(fkey(x.r, x.i)))].push(x); });
     return out;
   }
@@ -224,16 +268,23 @@
     var oldOver = '–', oldComp = '–', oldNoown = '–', recs = typeof filtered === 'function' ? filtered() : [];
     try { oldOver = dueTabRows().filter(function (r) { return r.st === 'over'; }).length; } catch (e) {}
     try { var c = complianceCM(); oldComp = c.pct == null ? '–' : c.pct + '% (' + c.onTime + ' / ' + c.due + ')'; } catch (e) {}
-    try { oldNoown = findings(recs).filter(function (x) { return actionRequired(x.r, x.i) && !x.i.owner; }).length; } catch (e) {}
+    try { oldNoown = findings(recs).filter(function (x) { var o = actionStateOld(x.r, x.i); return (o.k === 'open' || o.k === 'triage') && !x.i.owner && !x.i.resp; }).length; } catch (e) {}
+    var oldOpen = '–', newOpen = '–', cleared = '–';
+    try { var fr = findings(recs);
+      oldOpen = fr.filter(function (x) { var o = actionStateOld(x.r, x.i); return o.k === 'open' || o.k === 'triage'; }).length;
+      newOpen = fr.filter(function (x) { return actionRequired(x.r, x.i); }).length;
+      cleared = fr.filter(function (x) { var a = actionState(x.r, x.i); return a.why === 'cleared' || a.why === 'later'; }).length; } catch (e) {}
     var p = plan(), c2 = comp(), f = flow(recs);
     var row = function (k, a, b, n) { return '<tr><td>' + E(k) + '</td><td class="num">' + E(a) + '</td><td class="num"><b>' + E(b) + '</b></td><td class="muted">' + E(n) + '</td></tr>'; };
-    box.innerHTML = '<h2>' + E(L('Overview numbers: old rule and new rule', 'Числа обзора: старое и новое правило')) + '</h2>'
+    box.innerHTML = '<h2>' + E(L('Overview and findings: old rule and new rule', 'Обзор и замечания: старое и новое правило')) + '</h2>'
       + '<p class="hint">' + E(L('From build 626 the Overview counts against 1C PM work orders. Shown here until ', 'С версии 626 обзор считает по заказ-нарядам ТО 1С. Показывается до ') + CMP_UNTIL.split('-').reverse().join('.')) + '</p>'
       + '<div class="tblwrap"><table class="grid"><thead><tr><th>' + E(L('Number', 'Показатель')) + '</th><th class="num">' + E(L('Old rule', 'Старое правило')) + '</th><th class="num">'
       + E(L('New rule', 'Новое правило')) + '</th><th>' + E(L('New rule says', 'Новое правило')) + '</th></tr></thead><tbody>'
       + row(L('Overdue', 'Просрочено'), oldOver, p.over.length, L('1C plan date passed, no CM round, order open (old: CM interval in hours)', 'плановая дата 1С прошла, обхода МС нет, заказ-наряд открыт (старое: интервал МС в часах)'))
       + row(L('Inspection compliance', 'Соблюдение сроков'), oldComp, c2.pct == null ? '–' : c2.pct + '% (' + c2.onTime + ' / ' + c2.due + ')', L('CM round within 10 days of the 1C plan date, orders of the last 30 days', 'обход МС в пределах 10 дней от плановой даты 1С, заказ-наряды за 30 дней'))
       + row(L('Unassigned actions → Not raised in 1C', 'Без ответственного → Не оформлено в 1С'), oldNoown, f.none.length, L('findings graded 3–5 with no 1C defect raised for them', 'замечания с оценкой 3–5 без дефекта в 1С'))
+      + row(L('Findings needing action (from build 630)', 'Замечания, требующие действий (с версии 630)'), oldOpen, newOpen, L('one finding per machine and point from its newest reading; status from the 1C defect; owner Maintenance when 1C names nobody', 'одно замечание на единицу и точку по последнему замеру; статус по дефекту 1С; ответственный — служба ТО, если в 1С никто не указан'))
+      + row(L('Cleared or carried by a newer reading', 'Сняты или перенесены новым замером'), '–', cleared, L('a later inspection read the same point again: 1–2 clears it, 3–5 carries it as one finding', 'тот же узел осмотрен позже: 1–2 снимает замечание, 3–5 переносит его как одно'))
       + '</tbody></table></div>';
   }
 
@@ -354,12 +405,16 @@
         if (r.n == null) return '<div class="cl"><b>–</b>' + E(r.na || '') + '</div>';
         if (!r.n) return '<div class="cl"><b>✓</b>' + E(r.ok) + '<span class="x">· 0' + E(r.x) + '</span></div>';
         return '<div class="cl bad"><b>!</b>' + E(r.n + ' ' + r.bad) + '<a href="#" data-chk="' + ix + '">' + E(L('Open the list ↓', 'Открыть список ↓')) + '</a></div>';
-      }).join('');
+      }).join('')
+      + (function () { var sd = []; try { sd = staleDefects(); } catch (e) {}   /* CM_FIND1C_V1 */
+        if (!sd.length) return '<div class="cl" id="syStale1C"><b>✓</b>' + E(L('1C: no defect left open on a point that now reads normal', '1С: нет открытых дефектов на точках, которые теперь в норме')) + '</div>';
+        var list = sd.slice(0, 12).map(function (x) { return x.defect + ' · ' + x.unit + ' ' + x.point + ' (' + dmy(x.at) + ')'; }).join('\n') + (sd.length > 12 ? '\n…' : '');
+        return '<div class="cl bad" id="syStale1C" title="' + E(list) + '"><b>!</b>' + E(sd.length + ' ' + L('1C defects still open on a point that now reads 1–2: close them in 1C', 'дефектов 1С открыты, а точка теперь 1–2: закройте их в 1С')) + '</div>'; })();
     rows.forEach(function (r) { if (r.s) r.s.hidden = !(r.n > 0); });   /* a section shows only while its check finds something */
     box.querySelectorAll('[data-chk]').forEach(function (a) { a.onclick = function (e) { e.preventDefault(); var s = rows[+a.getAttribute('data-chk')].s; if (s) s.scrollIntoView({ behavior: 'smooth', block: 'start' }); }; });
     wireTips(box);
   }
 
-  window.CMFlow = { renderFail: renderFail, renderMachine: renderMachine, syncChecks: syncChecks, dmy: dmy, renderFind: renderFind, inOneC: inOneC, compare: compare, plan: plan, dueRow: dueRow, owner1C: owner1C, warm: warm, deferOn: deferOn, comp: comp, flow: flow, stage: stage, isFind: function (r, i) { return sevOf(r, i) >= 3; }, defectOf: defectOf, render: render, cond: cond,
+  window.CMFlow = { find1C: find1C, staleDefects: staleDefects, base: base, renderFail: renderFail, renderMachine: renderMachine, syncChecks: syncChecks, dmy: dmy, renderFind: renderFind, inOneC: inOneC, compare: compare, plan: plan, dueRow: dueRow, owner1C: owner1C, warm: warm, deferOn: deferOn, comp: comp, flow: flow, stage: stage, isFind: function (r, i) { return sevOf(r, i) >= 3; }, defectOf: defectOf, render: render, cond: cond,
                     LINK_DAYS: LINK_DAYS, COMP_DAYS: COMP_DAYS, L: L };
 })();

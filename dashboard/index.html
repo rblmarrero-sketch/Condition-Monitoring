@@ -4788,6 +4788,7 @@ const I18N={
   as_noaction:"No action required", as_none:"\u2014",
   as_triage_t:"Cannot be planned yet \u2014 missing: {f}",
   as_m_action:"recommended action", as_m_prio:"priority", as_m_owner:"responsible",
+  as_m_c1:"1C defect", need_c1:"1C defect required", own_maint:"Maintenance",
   as_m_due:"due date", as_m_disp:"authorised reason and approver",
   a_k_triage:"Actions requiring planning", a_k_triage_s:"missing an action, an owner or a due date",
   a_f_triage:"Planning required", a_f_crit:"Critical", a_f_week:"Due this week", a_f_noown:"Unassigned actions",
@@ -5714,6 +5715,7 @@ const I18N={
   as_noaction:"Действий не требуется", as_none:"\u2014",
   as_triage_t:"Пока нельзя запланировать \u2014 не хватает: {f}",
   as_m_action:"рекомендуемое действие", as_m_prio:"приоритет", as_m_owner:"ответственный",
+  as_m_c1:"дефект 1С", need_c1:"Нужен дефект 1С", own_maint:"Служба ТО",
   as_m_due:"срок", as_m_disp:"обоснование и утверждающий",
   a_k_triage:"Действия, требующие планирования", a_k_triage_s:"нет действия, ответственного или срока",
   a_f_triage:"Требуется планирование", a_f_crit:"Критичные", a_f_week:"Срок на неделе", a_f_noown:"Без ответственного",
@@ -7919,13 +7921,24 @@ const TRIAGE_REQ={ 5:["action","prio","owner","due"], 4:["action","prio","owner"
                    3:["action","prio","owner","due"], other:["action","owner","due"] };
 /* THE OWNER OF A FINDING (build 627, Rickie 15.11: "actions should be linked to defects raised"): the one
    named on the record, else the Responsible person of the 1C defect raised for it (CMFlow.owner1C). */
-function ownerOf(r,i){ return (i&&(i.owner||i.resp)) || (window.CMFlow&&CMFlow.owner1C ? CMFlow.owner1C(r,i) : "") || ""; }
-function owner1COnly(r,i){ return !!(i && !i.owner && !i.resp && ownerOf(r,i)); }
+/* CM_FIND1C_V1 (build 630): a finding graded 3-5 is always owned - by the 1C defect's responsible person, else Maintenance */
+function owner1CName(r,i){ return (i && window.CMFlow && CMFlow.owner1C) ? CMFlow.owner1C(r,i) : ""; }
+function ownerOf(r,i){ return (i&&(i.owner||i.resp)) || owner1CName(r,i) || (i && typeof sevOf==="function" && (sevOf(r,i)>=3 || (i.action && i.action!=="MON")) ? t("own_maint") : ""); }
+function owner1COnly(r,i){ return !!(i && !i.owner && !i.resp && owner1CName(r,i)); }
 function ownerCellHTML(r,i,ini){ const o=ownerOf(r,i);
   if(!o) return `<span class="who none"><i>+</i><span>${esc(TERMS.t(lang,"owner_unassigned"))}</span></span>`;
   const from=owner1COnly(r,i);
   return `<span class="who${from?" from1c":""}"${from?` title="${esc(o+" — "+t("a_own_1c"))}"`:""}><i>${esc(ini(o))}</i><span>${esc(o)}${from?` <span class="muted">· 1C</span>`:""}</span></span>`; }
+/* CM_FIND1C_V1 (build 630): the finding follows its point's newest reading and its 1C defect (CMFlow.find1C);
+   an office decision recorded on the finding (No action needed, Done, Verified) still wins. actionStateOld is the
+   rule before build 630, kept for the old-rule / new-rule card on Data & Sync. */
 function actionState(r,i){
+  const o=actionStateOld(r,i);
+  if(o.k==="none"||!i||!window.CMFlow||!CMFlow.find1C) return o;
+  const st=String(i.status||""); if(st==="NOACT"||st==="DONE"||st==="VERIFIED") return o;
+  return CMFlow.find1C(r,i,o)||o;
+}
+function actionStateOld(r,i){
   if(!i) return {k:"none", miss:[]};
   const sv=sevOf(r,i);
   const exception = sv>=3;                      // 3 Degraded, 4 Severe, 5 Critical
@@ -7957,7 +7970,7 @@ function actionRequired(r,i){ const s=actionState(r,i); return s.k==="open"||s.k
 const ACT_STATE_LABEL={ open:"as_open", triage:"as_triage", closed:"as_closed",
                         noaction:"as_noaction", none:"as_none" };
 const ACT_MISS_LABEL={ action:"as_m_action", prio:"as_m_prio", owner:"as_m_owner",
-                       due:"as_m_due", disp:"as_m_disp" };
+                       due:"as_m_due", disp:"as_m_disp", c1:"as_m_c1" };
 function actionMissText(miss){
   return (miss||[]).map(m=>t(ACT_MISS_LABEL[m]||m)).join(", ");
 }
@@ -7967,15 +7980,16 @@ function actionMissText(miss){
    required, Work order required, Reason required — from the shared dictionary,
    so the phone, the register and the report say it in the same words. `max`
    folds the rest into "+n" where a cell has no room for four. */
-const NEED_KEY={ action:"need_action", owner:"need_owner", due:"need_due", prio:"need_prio", wo:"need_wo", disp:"need_reason" };
+const NEED_KEY={ action:"need_action", owner:"need_owner", due:"need_due", prio:"need_prio", wo:"need_wo", disp:"need_reason", c1:"need_c1" };
 function needChips(miss, max, quiet){
   const xs=(miss||[]).map(m=>NEED_KEY[m]).filter(Boolean);
   if(!xs.length) return "";
-  const all=xs.map(x=>TERMS.t(lang,x)).join(", ");
+  const tw=x=>x==="need_c1"?t("need_c1"):TERMS.t(lang,x);   /* CM_FIND1C_V1: the 1C defect is the page's own word */
+  const all=xs.map(tw).join(", ");
   const shown=max?xs.slice(0,max):xs, rest=xs.length-shown.length;
   /* `quiet`: one chip and no "+n" — for a cell that already carries a status
      word and has one line to spare; the title names the rest. */
-  return shown.map(k=>`<span class="need${quiet?" q":""}" title="${esc(all)}">${esc(TERMS.t(lang,k))}</span>`).join("")
+  return shown.map(k=>`<span class="need${quiet?" q":""}" title="${esc(all)}">${esc(tw(k))}</span>`).join("")
        + (rest&&!quiet?`<span class="need more" title="${esc(all)}">+${rest}</span>`:"");
 }
 /* A work order is asked for once the job is planned or under way: a finding
@@ -8563,7 +8577,7 @@ function renderActions(){
             ${!acolOn("due")?"":`<td class="ed" data-ed="due" title="${esc(t("a_ed_tip"))}">${i.due
                 ? `<span class="due ${od?"late":(dd!=null&&dd<=7?"soon":"")}"><b>${esc(i.due)}</b>${
                     od?`<i>${esc(t("a_late"))}</i>`:(dd!=null&&dd<=7?`<i>${esc(t("a_in_d",{d:dd}))}</i>`:"")}</span>`
-                : `<span class="need">${esc(TERMS.t(lang,"need_due"))}</span>`}</td>`}
+                : (actionState(r,i).why ? `<span class="muted">—</span>` : `<span class="need">${esc(TERMS.t(lang,"need_due"))}</span>`)}</td>`}
             ${!acolOn("st")?"":`<td class="nw ed" data-ed="status" title="${esc(t("a_ed_tip"))}"><span class="st s-${esc(String(i.status||"open"))}">${esc(stName(i.status))}</span>${
               ast.k==="triage" ? needChips(ast.miss.filter(m=>m!=="owner"&&m!=="due"), 1) : ""}</td>`}
             ${!acolOn("wo")?"":`<td class="nw ed mono" data-ed="wo" title="${esc(t("a_ed_tip"))}">${i.wo ? esc(i.wo)
