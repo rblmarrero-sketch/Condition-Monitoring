@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-15T10:17:43+00:00",
+  "generated": "2026-11-15T10:37:49+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -6054,6 +6054,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "BS009",
+      "defect": "DD-00016954",
+      "raised": "2026-11-15",
+      "system": "BS009.CH.UC (Undercarriage / Ходовая часть)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Заклинивание колеса",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": null
+    },
+    {
       "asset": "CR004",
       "defect": "DD-00016946",
       "raised": "2026-11-15",
@@ -6158,6 +6171,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022611"
     },
     {
+      "asset": "TK098",
+      "defect": "DD-00016953",
+      "raised": "2026-11-15",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK098 HEAD LAMPS AND TAIL LIGHTS OldNumber (UT098)",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "Неисправность ламп наружного и сигнального освещения.",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022612"
+    },
+    {
       "asset": "DZ016",
       "defect": "DD-00016950",
       "raised": "2026-11-15",
@@ -6182,19 +6208,6 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-022610"
-    },
-    {
-      "asset": "TK098",
-      "defect": "DD-00016953",
-      "raised": "2026-11-15",
-      "system": "TRUCK, WATER URAL 4672M1-20, TK098 HEAD LAMPS AND TAIL LIGHTS OldNumber (UT098)",
-      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
-      "descr": "Неисправность ламп наружного и сигнального освещения.",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-022612"
     },
     {
       "asset": "GE009",
@@ -10006,19 +10019,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "LV054",
-      "defect": "DD-00016641",
-      "raised": "2026-11-10",
-      "system": "LV054.DRS.AXL (Axles / Мосты)",
-      "defectType": "4.12 Cable / harness damage / Повреждение кабеля / жгута",
-      "descr": "Диагностика\\ремонт актуатора полного привода, проверка\\замена датчиков АБС",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
       "asset": "LV068",
       "defect": "DD-00016643",
       "raised": "2026-11-10",
@@ -10108,6 +10108,19 @@ window.CM_WO_DATA = {
       "by": "Evgeniy Frolin",
       "regBy": "Фролин Евгений Владимирович",
       "wo": "WO-022212"
+    },
+    {
+      "asset": "LV054",
+      "defect": "DD-00016641",
+      "raised": "2026-11-10",
+      "system": "LV054.DRS.AXL (Axles / Мосты)",
+      "defectType": "4.12 Cable / harness damage / Повреждение кабеля / жгута",
+      "descr": "Диагностика\\ремонт актуатора полного привода, проверка\\замена датчиков АБС",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022410"
     },
     {
       "asset": "TK089",
@@ -50203,11 +50216,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "LV130",
-      "defect": "DD-00013348",
+      "defect": "DD-00013349",
       "raised": "2026-09-25",
-      "system": "LV130.ELS (Electrical System / Электросистема)",
-      "defectType": "4.02 Open circuit / Разрыв цепи",
-      "descr": "Не работает сигнал заднего хода, не включается камера заднего хода",
+      "system": "LV130.DRS.ENG (Engine / Двигатель)",
+      "defectType": "3.13 Warning light / alarm active / Сигнальная лампа / аварийная сигнализация активна",
+      "descr": "Горит лампа \"Проверьте двигатель\"",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -50216,11 +50229,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "LV130",
-      "defect": "DD-00013349",
+      "defect": "DD-00013348",
       "raised": "2026-09-25",
-      "system": "LV130.DRS.ENG (Engine / Двигатель)",
-      "defectType": "3.13 Warning light / alarm active / Сигнальная лампа / аварийная сигнализация активна",
-      "descr": "Горит лампа \"Проверьте двигатель\"",
+      "system": "LV130.ELS (Electrical System / Электросистема)",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "Не работает сигнал заднего хода, не включается камера заднего хода",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -58730,6 +58743,19 @@ window.CM_WO_DATA = {
       "wo": "WO-015456"
     },
     {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
+      "wo": null
+    },
+    {
       "asset": "TK046",
       "defect": "DD-00011270",
       "raised": "2026-08-21",
@@ -58818,19 +58844,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
