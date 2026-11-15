@@ -42,16 +42,16 @@ const INPAGE = () => {
   await p.evaluate(INPAGE); await p.evaluate(SEED); await p.waitForTimeout(400);
 
   const all = await p.evaluate(() => READ());
-  ok('the register opens with all nine columns', all.heads.join(',') === 'Priority,Unit,Component,Finding,Required action,Owner,Due,Status,Work order', all.heads.join(','));
-  ok('  and the control says so', all.badge === '9/9', all.badge);
-  ok('  a row has a cell for each, plus the tick box and the chevron', all.cells === 11, String(all.cells));
+  ok('the register opens with all ten columns (1C defect since build 628)', all.heads.join(',') === 'Priority,Unit,Component,Finding,1C defect,Required action,Owner,Due,Status,Work order', all.heads.join(','));
+  ok('  and the control says so', all.badge === '10/10', all.badge);
+  ok('  a row has a cell for each, plus the tick box and the chevron', all.cells === 12, String(all.cells));
 
   const off = await p.evaluate(() => { document.getElementById('actCols').open = true; set('wo', false); set('due', false); return READ(); });
   ok('unticking two columns removes them from the head and from every row',
-     off.heads.join(',') === 'Priority,Unit,Component,Finding,Required action,Owner,Status' && off.cells === 9,
+     off.heads.join(',') === 'Priority,Unit,Component,Finding,1C defect,Required action,Owner,Status' && off.cells === 10,
      off.heads.join(',') + ' · ' + off.cells + ' cells');
   ok('  the choice is written down', /"sev"/.test(off.saved || '') && !/"wo"/.test(off.saved || ''), off.saved);
-  ok('  and counted on the control', off.badge === '7/9', off.badge);
+  ok('  and counted on the control', off.badge === '8/10', off.badge);
 
   /* Sorting by a column that is then hidden must not leave the table sorted by
      something nobody can see. */

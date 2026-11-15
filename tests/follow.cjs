@@ -47,8 +47,17 @@ const RECS = [
               defectCode: 'DT3-01', cause: 'Blocked cooler', action: 'REP', actionLabel: 'Repair now' }] },
 ];
 
-const kpis = () => [...document.querySelectorAll('#actKpis .kpi')]
-  .map(k => k.querySelector('.k').textContent + '=' + k.querySelector('.v').textContent);
+/* build 628 (CM_ACTFLOW_V1): the tile strip became the findings -> 1C defects row, the register's tabs and the
+   problem line under the row. The same counts, read where they are now said. */
+const kpis = () => {
+  const n = sel => { const e = document.querySelector(sel); return e ? (e.textContent.match(/\d+/) || ['0'])[0] : '0'; };
+  const req = findings(filtered()).filter(x => actionRequired(x.r, x.i));
+  const age = req.reduce((m, x) => Math.max(m, Math.round((Date.now() - Date.parse(x.r.date + 'T00:00:00Z')) / 864e5)), 0);
+  return ['STILL OPEN=' + n('#aSeg [data-af="open"] .n'), 'OVERDUE=' + n('#actFlow .cfprob [data-af="over"]'),
+    I18N.en.a_k_unowned + '=' + n('#actFlow .cfprob [data-af="noown"]'), 'OLDEST OPEN=' + age + ' d',
+    I18N.en.a_k_triage.toUpperCase() + '=' + findings(filtered()).filter(x => actionState(x.r, x.i).k === 'triage').length,
+    'CLOSED OUT=' + findings(filtered()).filter(x => actionState(x.r, x.i).k === 'closed').length];
+};
 /* The register is a grouped worklist now, not a table: one block per machine,
    and the row itself is the button. A row carries its unit in the block header
    above it, so a row's text is joined with its group's for matching. */
@@ -181,12 +190,8 @@ const rowsOf = () => [...document.querySelectorAll('#actionTbl .wlu')].flatMap(u
   /* The single green nub became a bar segmented by state, because "planned"
      and "nobody has looked at it" are different kinds of not-done and one bar
      hid which of them you had. */
-  const bar = await p.evaluate(() => ({
-    segs: [...document.querySelectorAll('#actBar .segbar i')].map(i => i.className),
-    key: (document.querySelector('#actBar .segkey') || {}).innerText || '' }));
-  ok('a bar says how much is closed out', bar.segs.length > 0, bar.segs.join(' '));
-  ok('and breaks not-done into its real states',
-     bar.segs.some(c => /s-open/.test(c)) && /%/.test(bar.key), bar.key.replace(/\s+/g, ' ').slice(0, 90));
+  /* build 628: the closed-out bar became the flow row's last step (Completed in 1C) */
+  ok('the flow row says how many are completed in 1C', await p.evaluate(() => !!document.querySelector('#actFlow #actDdone')));
 
   console.log('\nthe row shows it, and shows it is late');
   let rows = await p.evaluate(rowsOf);
@@ -202,7 +207,7 @@ const rowsOf = () => [...document.querySelectorAll('#actionTbl .wlu')].flatMap(u
   await p.click('#follSave'); await p.waitForTimeout(900);
   k = await p.evaluate(kpis);
   ok('a job finished late is not still overdue', /OVERDUE=0/.test(k.join(' ')), k[1]);
-  ok('and it counts as closed out', /CLOSED OUT=1/.test(k.join(' ')), k[4]);
+  ok('and it counts as closed out', /CLOSED OUT=1/.test(k.join(' ')), k[5]);
   ok('the open count drops', /STILL OPEN=3/.test(k.join(' ')), k[0]);
 
   console.log('\nthe filter follows the work');
@@ -210,7 +215,7 @@ const rowsOf = () => [...document.querySelectorAll('#actionTbl .wlu')].flatMap(u
   rows = await p.evaluate(rowsOf);
   ok('a closed finding leaves the open list', !rows.some(x => /TK801/.test(x.txt)),
      rows.length + ' row(s)');
-  await p.click('#aSeg [data-af="all"]'); await p.waitForTimeout(400);
+  await p.evaluate(() => setAFilt('all')); await p.waitForTimeout(400);   /* build 628: Everything is an address filter, said on a chip */
   rows = await p.evaluate(rowsOf);
   ok('and is still there under Everything', rows.some(x => /TK801/.test(x.txt)),
      rows.length + ' row(s)');

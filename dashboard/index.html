@@ -1499,7 +1499,7 @@
     background:var(--accent);color:var(--accent-ink,#fff);font-size:12px;font-weight:700;}
   body.filtered #filterBar{border-left:3px solid var(--accent);}
   .resetb[disabled]{opacity:.4;cursor:default;}
-  @media (max-width:1500px){ .hide-m{display:none !important;} }
+  @media (max-width:900px){ .hide-m{display:none !important;} }   /* CM_TBLSTD_V1: every column on a desk */
   .chip{display:inline-flex;align-items:center;gap:7px;background:color-mix(in srgb,var(--accent) 14%,var(--surface));
     border:1px solid color-mix(in srgb,var(--accent) 40%,var(--border));color:var(--ink);
     border-radius:999px;padding:4px 6px 4px 11px;font-size:12.5px;}
@@ -3626,6 +3626,7 @@
         <span class="pgsub" id="paAsOf"></span></div>
     </div>
     <div class="kpis" id="paKpis"></div>
+    <div id="paMiss"></div>   <!-- CM_MISS_V1: why scheduled rounds were not done -->
     <!-- THE FIRST THING ON THIS TAB, BECAUSE IT WAS THE FIRST QUESTION ASKED:
          "what is my schedule next week, so I can prepare" -- not a filter
          click away, on screen the moment the tab opens. One row per unit
@@ -4159,23 +4160,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=629"></script>
+<script src="../data/magnetic_plug.js?v=630"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=629"></script>
-<script src="../mobile/hme.js?v=629"></script>
-<script src="../mobile/mp-fc.js?v=629"></script>
-<script src="../mobile/rtw.js?v=629"></script>
-<script src="../mobile/hme-cascade.js?v=629"></script>
-<script src="../mobile/temp-limits.js?v=629"></script>
+<script src="../data/work_orders.js?v=630"></script>
+<script src="../mobile/hme.js?v=630"></script>
+<script src="../mobile/mp-fc.js?v=630"></script>
+<script src="../mobile/rtw.js?v=630"></script>
+<script src="../mobile/hme-cascade.js?v=630"></script>
+<script src="../mobile/temp-limits.js?v=630"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=629"></script>
-<script src="../mobile/normalize.js?v=629"></script>
-<script src="../mobile/terms.js?v=629"></script>
+<script src="../mobile/assets.js?v=630"></script>
+<script src="../mobile/normalize.js?v=630"></script>
+<script src="../mobile/terms.js?v=630"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -4194,22 +4195,22 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=629"></script>
-<script src="../mobile/edits.js?v=629"></script>
-<script src="../mobile/due.js?v=629"></script>
-<script src="cm-flow.js?v=629"></script>
-<script src="../mobile/wear.js?v=629"></script>
-<script src="../mobile/wear-map.js?v=629"></script>
-<script src="../mobile/lube.js?v=629"></script>
-<script src="../mobile/lube-overrides.js?v=629"></script>
-<script src="../mobile/lube2027.js?v=629"></script>
-<script src="../mobile/lube-tds.js?v=629"></script>
-<script src="lube-master.js?v=629"></script>
-<script src="wear-limits.js?v=629"></script>
+<script src="../mobile/grade.js?v=630"></script>
+<script src="../mobile/edits.js?v=630"></script>
+<script src="../mobile/due.js?v=630"></script>
+<script src="cm-flow.js?v=630"></script>
+<script src="../mobile/wear.js?v=630"></script>
+<script src="../mobile/wear-map.js?v=630"></script>
+<script src="../mobile/lube.js?v=630"></script>
+<script src="../mobile/lube-overrides.js?v=630"></script>
+<script src="../mobile/lube2027.js?v=630"></script>
+<script src="../mobile/lube-tds.js?v=630"></script>
+<script src="lube-master.js?v=630"></script>
+<script src="wear-limits.js?v=630"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=629"></script>
-<script src="../mobile/machine-photos.js?v=629"></script>
+<script src="../mobile/upload-defaults.js?v=630"></script>
+<script src="../mobile/machine-photos.js?v=630"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -4218,17 +4219,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=629"></script>
-<script src="../mobile/get.js?v=629"></script>
-<script src="../mobile/points.js?v=629"></script>
-<script src="../mobile/uc-points.js?v=629"></script>
-<script src="../mobile/inspect-guide.js?v=629"></script>
-<script src="../mobile/get-figs.js?v=629"></script>
-<script src="../mobile/body-points.js?v=629"></script>
-<script src="../mobile/body-map.js?v=629"></script>
-<script src="../mobile/jspdf.umd.min.js?v=629"></script>
-<script src="../mobile/html2canvas.min.js?v=629"></script>
-<script src="../mobile/report-core.js?v=629"></script>
+<script src="../mobile/machine-fig.js?v=630"></script>
+<script src="../mobile/get.js?v=630"></script>
+<script src="../mobile/points.js?v=630"></script>
+<script src="../mobile/uc-points.js?v=630"></script>
+<script src="../mobile/inspect-guide.js?v=630"></script>
+<script src="../mobile/get-figs.js?v=630"></script>
+<script src="../mobile/body-points.js?v=630"></script>
+<script src="../mobile/body-map.js?v=630"></script>
+<script src="../mobile/jspdf.umd.min.js?v=630"></script>
+<script src="../mobile/html2canvas.min.js?v=630"></script>
+<script src="../mobile/report-core.js?v=630"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -7398,7 +7399,7 @@ function nextDueBy(){
    land one column to the left; crossing that width redraws the table. */
 const FLEET_W={equip:76,prio:128,cls:64,defect:0,date:150,find:64,act:0,open:64,owner:170,adue:108,due:108,sync:104};
 const FLEET_W_RU={prio:152,cls:88,find:84,open:90,sync:150};
-const FLEET_MQ = window.matchMedia ? window.matchMedia("(max-width:1500px)") : null;
+const FLEET_MQ = window.matchMedia ? window.matchMedia("(max-width:900px)") : null;   /* CM_TBLSTD_V1 */
 function fleetColgroup(cs){
   const narrow = FLEET_MQ && FLEET_MQ.matches;
   return `<colgroup>${cs.filter(([,,cl])=>!(narrow && /\bhide-m\b/.test(cl||""))).map(([k])=>{
@@ -7420,7 +7421,7 @@ function renderFleet(){
   const clsOf=r=>r.cls||"";
   /* The office's owner first; the person the inspector named at the machine
      where the office has not yet assigned one. */
-  const ownersOf=u=>[...new Set((itemsU[u]||[]).map(x=>x.i.owner||x.i.resp).filter(Boolean))];
+  const ownersOf=u=>[...new Set((itemsU[u]||[]).map(x=>x.r&&typeof ownerOf==="function"?ownerOf(x.r,x.i):(x.i.owner||x.i.resp)).filter(Boolean))];   /* CM_FIND1C_V1: 1C person, else Maintenance */
   /* THE JOB THE MACHINE IS WAITING ON. Of its open work, the worst finding
      first and the most overdue among equals \u2014 the one a planner would name if
      asked "what does TK149 need". Its action, its state and its date are the
@@ -8296,6 +8297,10 @@ let actCols=(()=>{ try{ const v=JSON.parse(localStorage.getItem(ACOLS_K)||"null"
 (()=>{ let seen=false; try{ seen=localStorage.getItem("cm_dash_actcols_def")==="1"; }catch(e){}
   if(!seen && actCols.indexOf("def")<0) actCols=ACOL_ALL.filter(k=>k==="def"||actCols.indexOf(k)>=0);
   try{ localStorage.setItem("cm_dash_actcols_def","1"); }catch(e){} })();
+/* CM_TBLSTD_V1 (build 631, "put all columns by default"): every column once, whatever a desk saved before; Columns still hides one */
+(()=>{ let seen=false; try{ seen=localStorage.getItem("cm_dash_actcols_all")==="1"; }catch(e){}
+  if(!seen) actCols=ACOL_ALL.slice();
+  try{ localStorage.setItem("cm_dash_actcols_all","1"); }catch(e){} })();
 /* the 1C defect raised for a finding (CMFlow's link): number, its stage, the work order */
 function actDef(r,i){ if(!window.CMFlow||!CMFlow.isFind(r,i)) return null; const d=CMFlow.defectOf(r,i); return {d, s:CMFlow.stage(r,i)}; }
 function actDefText(r,i){ const x=actDef(r,i); if(!x) return ""; if(!x.d) return CMFlow.L("Not raised in 1C","Не оформлено в 1С");
@@ -8526,7 +8531,7 @@ function renderActions(){
        those need, so on a narrow screen it scrolls inside its own box rather
        than squeezing a finding to three letters. */
     const AC_W={queue:128, sev:128, age:62, unit:70, def:200, owner:136, due:156, st:180, wo:100};
-    const acMin=34+22+cols.reduce((s,[k])=>s+(!k?0:(AC_W[k]||96)),0);
+    const acMin=34+22+cols.reduce((s,[k])=>s+(!k?0:(AC_W[k]||180)),0);
     $("actionTbl").innerHTML=`<div class="tblwrap scrollbox" style="--sb:520px"><table class="grid seltbl acttbl" style="min-width:${acMin}px">
       <thead><tr><th class="selcol"><label><input type="checkbox" id="aAll"${allOn?" checked":""}
           title="${esc(t("a_sel_all"))}" aria-label="${esc(t("a_sel_all"))}"></label></th>${cols.map(([k,l])=> !k ? `<th class="go"></th>` :
@@ -17269,6 +17274,7 @@ function asOfInto(el, gen){
   }
 }
 function renderPlanActualTab(){
+  try{ if(window.CMFlow&&CMFlow.renderMiss) CMFlow.renderMiss($("paMiss")); }catch(e){ bad("cm-miss",e); }   /* CM_MISS_V1 */
   const box=$("paList"); if(!box) return;
   if(!(window.CM_WO_DATA && Array.isArray(window.CM_WO_DATA.workOrders) && window.CM_WO_DATA.workOrders.length)){
     if($("paKpis")) $("paKpis").innerHTML="";
@@ -19280,11 +19286,11 @@ document.querySelector(".lang").addEventListener("click",e=>{
   setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 })();
 </script>
-<script src="drive.js?v=629"></script>
-<script src="sync-adapter.js?v=629"></script>
-<script src="report.js?v=629"></script>
-<script src="reliability.js?v=629"></script>
-<script src="day-summary.js?v=629"></script>
+<script src="drive.js?v=630"></script>
+<script src="sync-adapter.js?v=630"></script>
+<script src="report.js?v=630"></script>
+<script src="reliability.js?v=630"></script>
+<script src="day-summary.js?v=630"></script>
 <script>
 /* THE CLOSED FILTER SAYS WHAT IS CHOSEN. A dropdown narrower than its option
    text ellipsises ("All t…", audit of 2026-10-01). Between 1331 and 1500 px
@@ -19353,34 +19359,48 @@ document.querySelector(".lang").addEventListener("click",e=>{
       for(const td of tr.cells){ const l=(td.colSpan>1&&tr.cells.length===1)?"":(labs[c]||"");
         if(td.getAttribute("data-label")!==l) td.setAttribute("data-label",l);
         if(td.classList.contains("nolab")!==!l) td.classList.toggle("nolab",!l); c+=td.colSpan||1; } }
-    t.classList.remove("ascards");
+    t.classList.remove("ascards","cmslide"); box.classList.remove("cmslidebox");   /* CM_TBLSTD_V1 */
     const cols=[...t.querySelectorAll(":scope>colgroup>col")];
     cols.forEach(c=>{ if(c.dataset.w0===undefined) c.dataset.w0=c.style.width||""; if(c.style.width!==c.dataset.w0) c.style.width=c.dataset.w0; });
     if(t.dataset.mw0===undefined) t.dataset.mw0=t.style.minWidth||"";
     t.style.minWidth=t.dataset.mw0;
-    const W=box.clientWidth; if(!W||(t.offsetWidth<=W+1&&box.scrollWidth<=W+2)) return;
+    const W=box.clientWidth;
+    /* CM_TBLSTD_V1: a words column is never squeezed under 140 px to make a table fit - it slides instead */
+    let slideAnyway=false;
+    if(innerWidth>900 && cols.length>=6 && t.offsetWidth<=W+1){ const fx=cols.reduce((a,c)=>a+(parseFloat(c.dataset.w0)||0),0), nw=cols.filter(c=>!parseFloat(c.dataset.w0)).length;
+      if(nw && fx+nw*140>W+1) slideAnyway=true; }
+    if(!W||(!slideAnyway&&t.offsetWidth<=W+1&&box.scrollWidth<=W+2)) return;
     /* On a desk a table a little too wide is fitted first: its fixed columns
        shrink in proportion (every cell is one line with an ellipsis and its
        whole text on hover). Only what still does not fit becomes cards. */
-    if(innerWidth>900){
+    if(innerWidth>900 && !slideAnyway){
       /* a column holding buttons keeps its width (a button is never cut); every words column keeps at least 120px */
       const row1=t.tBodies[0]&&t.tBodies[0].rows[0], ctl=i=>!!((cols[i]&&cols[i].dataset.keep==="1")||(row1&&row1.cells[i]&&row1.cells[i].querySelector("button,input,select,a.minibtn")));   /* CM_WOMLOOK_V1: data-keep columns hold their width too */
       let fixed=0, locked=0, words=0;
       cols.forEach((c,i)=>{ const w=parseFloat(c.dataset.w0); if(!w) words++; else if(ctl(i)) locked+=w; else fixed+=w; });
       const r=fixed?(W-2-words*120-locked)/fixed:0;
-      if(r>=0.6){ cols.forEach((c,i)=>{ const w=parseFloat(c.dataset.w0); if(w&&!ctl(i)) c.style.width=Math.floor(w*Math.min(1,r))+"px"; });
+      if(r>=0.85){ cols.forEach((c,i)=>{ const w=parseFloat(c.dataset.w0); if(w&&!ctl(i)) c.style.width=Math.floor(w*Math.min(1,r))+"px"; });
         t.style.minWidth=Math.floor(W-2)+"px"; if(t.offsetWidth<=W+1&&box.scrollWidth<=W+2) return; }
       else if(!fixed && h){   /* widths set on the header cells: all shrink together, a little */
         const ths=[...h.cells], r2=(W-2)/t.offsetWidth;
-        if(r2>=0.8){ const ws=ths.map(th=>th.offsetWidth); ths.forEach((th,i)=>{ th.style.width=Math.floor(ws[i]*r2)+"px"; });
+        if(r2>=0.9){ const ws=ths.map(th=>th.offsetWidth); ths.forEach((th,i)=>{ th.style.width=Math.floor(ws[i]*r2)+"px"; });
           t.style.minWidth=Math.floor(W-2)+"px"; if(t.offsetWidth<=W+1&&box.scrollWidth<=W+2) return;
           ths.forEach(th=>th.style.width=""); t.style.minWidth=t.dataset.mw0; }
       }
     }
+    /* CM_TBLSTD_V1 (build 631): on a desk what still does not fit slides in its own box, with the identifying column
+       frozen and the held slider (cmTblStd); its columns go back to their own widths. A phone keeps its cards. */
+    if(innerWidth>900){
+      cols.forEach(c=>{ if(c.style.width!==c.dataset.w0) c.style.width=c.dataset.w0; });
+      if(h) for(const th of h.cells) th.style.width="";
+      const sum=cols.reduce((a,c)=>a+(parseFloat(c.dataset.w0)||180),0);
+      t.style.minWidth=cols.length?Math.max(sum,W-2)+"px":t.dataset.mw0;
+      t.classList.add("cmslide"); box.classList.add("cmslidebox"); return;
+    }
     t.classList.add("ascards");
   }
   let q=0;
-  function run(){ q=0; document.querySelectorAll("main table.grid").forEach(t=>{ if(t.offsetParent) try{ one(t); }catch(e){} }); }
+  function run(){ q=0; document.querySelectorAll("main table.grid").forEach(t=>{ if(t.offsetParent) try{ one(t); }catch(e){} }); if(window.cmTblStd) try{ window.cmTblStd(); }catch(e){} }
   function soon(){ if(!q) q=requestAnimationFrame(run); }
   window.cmCardify=run;
   const m=document.querySelector("main");
@@ -19388,6 +19408,129 @@ document.querySelector(".lang").addEventListener("click",e=>{
     /* the page's own scroll bar appearing narrows every box without a redraw */
     if(window.ResizeObserver){ let w0=0; new ResizeObserver(e=>{ const w=e[0].contentRect.width; if(Math.abs(w-w0)>0.5){ w0=w; soon(); } }).observe(m); } }
   addEventListener("resize",soon); document.addEventListener("click",()=>setTimeout(soon,0),true); soon();
+})();
+</script>
+<style id="cmTblStdCss">
+  /* CM_TBLSTD_V1 (build 631, Rickie 15.11 20:56 "i need the ui standard. Freeze pane, columns, horizontal bar, put all
+     columns by default"; KB UI_STANDARD §22-§23). On a desk a table first tries to fit (cmCardify's fit); what still does
+     not fit SLIDES inside its own box (no more cards on a desk): the row-identifying first column (and the tick column
+     before it) stays frozen with a navy edge, and a slider with ◀ ▶ is held at the bottom of the window while the box's own
+     bar is out of view. Every long table gets ⚙ Columns (all on by default, kept per browser). A phone keeps its cards. */
+  .cmslidebox{overflow-x:auto !important;}
+  table.grid.cmslide{width:auto !important;}
+  table.grid.cmfrz .cmfz{position:sticky !important;z-index:3;}
+  table.grid.cmfrz tbody td.cmfz{background:var(--surface) !important;}
+  table.grid.cmfrz thead .cmfz{z-index:6;}
+  table.grid.cmfrz .cmfzE{box-shadow:6px 0 8px -6px rgba(16,33,42,.45);border-right:2px solid #2B4C7E !important;}
+  .cmhs{position:fixed;bottom:0;z-index:70;display:none;align-items:center;gap:6px;padding:6px 8px;box-sizing:border-box;
+    background:var(--surface);border:1px solid var(--border);border-bottom:0;border-radius:10px 10px 0 0;box-shadow:0 -4px 14px rgba(16,33,42,.12);}
+  .cmhs.on{display:flex;}
+  .cmhs button{width:32px;height:32px;min-width:32px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--ink);cursor:pointer;font-size:12px;}
+  .cmhs .trk{flex:1;height:12px;border-radius:6px;background:var(--surface-2);position:relative;cursor:pointer;}
+  .cmhs .thm{position:absolute;top:0;height:12px;border-radius:6px;background:#7a8794;cursor:grab;}
+  .cmcolbar{display:flex;justify-content:flex-end;gap:8px;margin:0 0 6px;position:relative;}
+  .cmcolbar.inl{display:inline-flex;margin:0 8px 0 0;vertical-align:middle;}
+  .cmcolbar .btn{min-height:32px;}
+  .cmcolmenu{position:absolute;right:0;top:calc(100% + 4px);z-index:90;min-width:220px;max-height:60vh;overflow:auto;padding:8px;
+    background:var(--surface);border:1px solid var(--border);border-radius:10px;box-shadow:0 8px 24px rgba(16,33,42,.18);}
+  .cmcolmenu label{display:flex;gap:8px;align-items:center;padding:6px 4px;font-size:13px;cursor:pointer;white-space:nowrap;}
+  .cmcolmenu .ft{display:flex;justify-content:space-between;gap:8px;border-top:1px solid var(--border);margin-top:6px;padding-top:8px;}
+  @media (max-width:900px){ .cmhs{display:none !important;} }
+</style>
+<script id="cmTblStdJs">/* CM_TBLSTD_V1 - see #cmTblStdCss. Runs after cmCardify on every redraw. tests/tblstd.cjs */
+(function cmTblStd(){
+  'use strict';
+  var ru=function(){ return (typeof lang!=="undefined"&&lang==="ru"); };
+  var W=function(en,r){ return ru()?r:en; };
+  var LAB=function(th){ return (th.getAttribute("aria-label")||th.textContent||"").replace(/[↕↑↓▲▼⇅]/g,"").replace(/\s+/g," ").trim(); };
+  var OWN="#actionTbl,table.acttbl,#fleetTbl,#covTbl,table.pawk,#paWeek table,table[class*=lmx-]";
+  function isFilt(r){ return r.classList.contains("cwfh")||r.classList.contains("cmfr")||!!r.querySelector("th.cwfh"); }
+  function headRow(t){ var hs=[].slice.call(t.tHead?t.tHead.rows:[]).filter(function(r){ return !isFilt(r); }); return hs[hs.length-1]||null; }
+  function keyOf(t){ var sec=t.closest('section[id^="tab-"]'), all=sec?[].slice.call(sec.querySelectorAll("table.grid")):[];
+    return (sec?sec.id:"x")+"_"+(t.id||("t"+all.indexOf(t))); }
+  function hidden(k){ try{ var v=JSON.parse(localStorage.getItem("cm_tblcols_"+k)||"[]"); return Array.isArray(v)?v:[]; }catch(e){ return []; } }
+  function save(k,v){ try{ if(v.length) localStorage.setItem("cm_tblcols_"+k,JSON.stringify(v)); else localStorage.removeItem("cm_tblcols_"+k); }catch(e){} }
+  function labels(t){ var h=headRow(t), out=[]; if(!h) return out;
+    [].slice.call(h.cells).forEach(function(th){ var s=LAB(th); for(var i=0;i<(th.colSpan||1);i++) out.push(i?"":s); }); return out; }
+  /* the column a cell sits in, counting colspans; a one-cell row spanning the table is a detail row and is left alone */
+  function eachCell(t,fn){ [].slice.call(t.rows).forEach(function(tr){ if(tr.cells.length===1&&tr.cells[0].colSpan>1) return; var c=0;
+      [].slice.call(tr.cells).forEach(function(td){ fn(td,c,tr); c+=td.colSpan||1; }); }); }
+  function applyCols(t,k,labs){ var hid=hidden(k).filter(function(l){ return labs.indexOf(l)>=0; }), idx={};
+    labs.forEach(function(l,i){ if(l&&hid.indexOf(l)>=0) idx[i]=1; });
+    eachCell(t,function(td,c){ var h=!!idx[c]; if(td.classList.contains("cmcolh")!==h){ td.classList.toggle("cmcolh",h); td.style.display=h?"none":""; } });
+    [].slice.call(t.querySelectorAll(":scope>colgroup>col")).forEach(function(col,i){ var h=!!idx[i]; if((col.style.display==="none")!==h) col.style.display=h?"none":""; });
+    return hid.length; }
+  function menu(t,k,labs){
+    var box=t.closest(".tblwrap")||t, host=box.parentNode; if(!host) return;
+    var bar=document.querySelector('.cmcolbar[data-for="'+k+'"]');
+    var named=labs.filter(Boolean), nh=applyCols(t,k,labs);
+    if(!bar){ var sec=t.closest(".section"), tool=null;
+      if(sec) [].slice.call(sec.querySelectorAll("button,a")).some(function(x){ if(/csv/i.test(x.textContent)&&!t.contains(x)&&x.compareDocumentPosition(t)&Node.DOCUMENT_POSITION_FOLLOWING){ tool=x; return true; } return false; });
+      bar=document.createElement("span"); bar.className="cmcolbar"+(tool?" inl":""); bar.dataset.for=k;
+      bar.innerHTML='<button type="button" class="btn sm cmcolbtn" aria-haspopup="true" aria-expanded="false"></button>';
+      if(tool) tool.parentNode.insertBefore(bar,tool); else { bar.style.display="flex"; host.insertBefore(bar,box); } }
+    var b=bar.querySelector(".cmcolbtn"), txt="⚙ "+W("Columns","Столбцы")+" "+(named.length-nh)+"/"+named.length;
+    if(b.textContent!==txt) b.textContent=txt;
+    b.onclick=function(e){ e.stopPropagation(); var m=bar.querySelector(".cmcolmenu"); if(m){ m.remove(); b.setAttribute("aria-expanded","false"); return; }
+      var hid=hidden(k); m=document.createElement("div"); m.className="cmcolmenu"; m.setAttribute("role","dialog");
+      m.innerHTML=named.map(function(l,i){ return '<label><input type="checkbox" data-c="'+i+'"'+(hid.indexOf(l)<0?" checked":"")+'> '+l.replace(/[&<>"]/g,function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; })+'</label>'; }).join("")
+        +'<div class="ft"><button type="button" class="btn sm" data-all>'+W("All columns","Все столбцы")+'</button></div>';
+      m.addEventListener("click",function(ev){ ev.stopPropagation(); });
+      m.querySelectorAll("input[data-c]").forEach(function(cb){ cb.onchange=function(){ var l=named[+cb.dataset.c], h=hidden(k).filter(function(x){ return x!==l; });
+        if(!cb.checked) h.push(l); if(h.length>=named.length){ cb.checked=true; return; } save(k,h); window.cmTblStd(); }; });
+      m.querySelector("[data-all]").onclick=function(){ save(k,[]); m.querySelectorAll("input[data-c]").forEach(function(cb){ cb.checked=true; }); window.cmTblStd(); };
+      bar.appendChild(m); b.setAttribute("aria-expanded","true"); };
+  }
+  /* frozen columns: the tick column (if any) and the first column that names the row */
+  function freeze(t){
+    var h=headRow(t); if(!h) return; var first=h.cells[0], n=1;
+    if(first&&(first.querySelector("input[type=checkbox]")||LAB(first)==="")) n=2;
+    /* freeze through the column that names the row (unit, asset, machine), when it is among the first four */
+    for(var j=0;j<Math.min(4,h.cells.length);j++){ if(/^(unit|asset|machine|equipment|единица|техника|машина|оборудование)\b/i.test(LAB(h.cells[j]))){ n=Math.max(n,j+1); break; } }
+    var offs=[], x=0; for(var i=0;i<n&&h.cells[i];i++){ offs.push(x); x+=h.cells[i].getBoundingClientRect().width; }
+    if(x>t.parentElement.clientWidth*0.55){ n=1; offs=[0]; }   /* frozen columns never take more than about half the box */
+    eachCell(t,function(td,c){ var on=c<n; if(td.classList.contains("cmfz")!==on) td.classList.toggle("cmfz",on);
+      var l=on?offs[c]+"px":""; if(td.style.left!==l) td.style.left=l; var e=on&&c===n-1; if(td.classList.contains("cmfzE")!==e) td.classList.toggle("cmfzE",e); });
+  }
+  function unfreeze(t){ t.querySelectorAll(".cmfz").forEach(function(td){ td.classList.remove("cmfz","cmfzE"); td.style.left=""; }); }
+  /* the held slider */
+  var hs=null, cur=null;
+  function slider(){
+    if(!hs){ hs=document.createElement("div"); hs.className="cmhs"; hs.setAttribute("aria-hidden","true");
+      hs.innerHTML='<button type="button" data-d="-1">◀</button><div class="trk"><div class="thm"></div></div><button type="button" data-d="1">▶</button>';
+      document.body.appendChild(hs);
+      hs.querySelectorAll("button").forEach(function(b){ b.onclick=function(){ if(cur) cur.scrollBy({left:+b.dataset.d*Math.max(160,cur.clientWidth*0.6),behavior:"smooth"}); }; });
+      var trk=hs.querySelector(".trk"), thm=hs.querySelector(".thm");
+      trk.addEventListener("click",function(e){ if(e.target===thm||!cur) return; var r=trk.getBoundingClientRect(); cur.scrollLeft=(e.clientX-r.left)/r.width*(cur.scrollWidth-cur.clientWidth); });
+      thm.addEventListener("pointerdown",function(e){ if(!cur) return; e.preventDefault(); thm.setPointerCapture(e.pointerId); var x0=e.clientX, s0=cur.scrollLeft, r=trk.getBoundingClientRect();
+        var mv=function(ev){ cur.scrollLeft=s0+(ev.clientX-x0)/r.width*cur.scrollWidth; }; var up=function(){ thm.removeEventListener("pointermove",mv); thm.removeEventListener("pointerup",up); };
+        thm.addEventListener("pointermove",mv); thm.addEventListener("pointerup",up); }); }
+    var boxes=[].slice.call(document.querySelectorAll("main .cmslidebox")).filter(function(b){ return b.offsetParent&&b.scrollWidth>b.clientWidth+1; });
+    cur=null; var vh=innerHeight;
+    for(var i=0;i<boxes.length;i++){ var r=boxes[i].getBoundingClientRect(); if(r.top<vh-60&&r.bottom>vh){ cur=boxes[i]; break; } }
+    if(!cur||innerWidth<=900){ hs.classList.remove("on"); return; }
+    var rc=cur.getBoundingClientRect(); hs.style.left=Math.max(0,rc.left)+"px"; hs.style.width=Math.min(innerWidth,rc.width)+"px"; hs.classList.add("on");
+    var th=hs.querySelector(".thm"), tw=hs.querySelector(".trk").clientWidth, f=cur.clientWidth/cur.scrollWidth;
+    th.style.width=Math.max(24,tw*f)+"px"; th.style.left=((tw-Math.max(24,tw*f))*(cur.scrollLeft/Math.max(1,cur.scrollWidth-cur.clientWidth)))+"px";
+  }
+  function run(){
+    document.querySelectorAll("main table.grid").forEach(function(t){ if(!t.offsetParent) return;
+      try{
+        var labs=labels(t), rows=t.tBodies[0]?t.tBodies[0].rows.length:0;
+        var sec=t.closest(".section"), own=t.matches(OWN)&&!!(sec&&[].slice.call(sec.querySelectorAll("button,summary")).some(function(x){ return !x.closest(".cmcolbar")&&/^\s*(columns|столбцы)/i.test(x.textContent); }));
+        if(!own&&!t.matches("#covTbl,table.pawk,#paWeek table")&&labs.filter(Boolean).length>=5&&rows>=3&&!t.classList.contains("ascards")) menu(t,keyOf(t),labs);
+        var bx=t.closest(".tblwrap")||t.parentElement, wide=!t.classList.contains("ascards")&&bx&&bx.scrollWidth>bx.clientWidth+1;
+        if(bx) bx.classList.toggle("cmslidebox", !!(wide||t.classList.contains("cmslide")));
+        if(wide||t.classList.contains("cmslide")){ t.classList.add("cmfrz"); freeze(t); } else { t.classList.remove("cmfrz"); unfreeze(t); }
+      }catch(e){ window.cmTblStdErr=String(e); } });
+    slider();
+  }
+  window.cmTblStd=run;
+  addEventListener("scroll",function(){ slider(); },{passive:true,capture:true});
+  addEventListener("resize",function(){ slider(); });
+  document.addEventListener("click",function(){ document.querySelectorAll(".cmcolmenu").forEach(function(m){ var b=m.parentNode.querySelector(".cmcolbtn"); if(b) b.setAttribute("aria-expanded","false"); m.remove(); }); });
+  document.addEventListener("keydown",function(e){ if(e.key==="Escape") document.querySelectorAll(".cmcolmenu").forEach(function(m){ m.remove(); }); });
+  run();
 })();
 </script>
 <style id="cmTplCss">

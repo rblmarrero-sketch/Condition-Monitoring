@@ -5565,6 +5565,37 @@ made on an hour-interval round. The hour rule (`dueTabRows`) is still computed a
 opens it, for the phone and for the checks that read it. CM_PLAIN2_V1 also puts a heading's (i) back when the language
 switch rewrites the heading (`data-i18n` sets textContent, which took the button with it).
 
+**FINDINGS FOLLOW 1C, ONE TABLE STANDARD, AND WHY PLANNED ROUNDS WERE NOT DONE (build 630, CM_FIND1C_V1 + CM_TBLSTD_V1 +
+CM_MISS_V1, Rickie 15.11 20:56-21:10).** Both office pages.
+- **Findings follow their point and their 1C defect** (21:02 "when they found something they create a defect ... 1000+
+  findings without actions is bad monitoring. Owner of that is always maintenance"; 21:03 "go"). `actionState` is now a
+  wrapper: an office decision on the finding (No action needed / Done / Verified) still wins; otherwise `CMFlow.find1C`
+  decides for a finding graded 3-5: a NEWER reading of the same machine and point graded 1-2 closes it ("cleared",
+  why:"cleared"), graded 3-5 carries it (this one is k:"none", why:"later" - one finding per point); then the 1C defect
+  matched to it (the links rule): Completed = closed, Registered / In progress = open, none = triage with the one missing
+  item `c1` ("1C defect required"). CM asks for no priority or due date once 1C decides (the Due cell shows "—").
+  `ownerOf`: the finding's own owner, else the 1C defect's responsible person, else "Maintenance" (`own_maint`) for any
+  finding graded 3-5 or carrying an action. The rule before is `actionStateOld`, kept for the old-rule / new-rule card on
+  Data & Sync (two new rows: findings needing action, cleared or carried). The Checks card has a fifth line: 1C defects
+  still open on a point that now reads 1-2 (`CMFlow.staleDefects`). `finds()` no longer calls actionState to match 1C
+  defects (`base()`), so the link map cannot recurse.
+- **The table standard** (20:56 "Freeze pane, columns, horizontal bar, put all columns by default"; KB UI_STANDARD §22-23):
+  `#cmTblStdCss` / `#cmTblStdJs` run after `cmCardify` on every redraw. On a desk a table no longer becomes cards: it may
+  shrink a little (to 85 %, was 60 %), a words column is never squeezed under 140 px, and what still does not fit
+  SLIDES in its own box (`table.cmslide`, box `.cmslidebox`). Any table whose box slides gets frozen columns (`cmfrz`,
+  `.cmfz` sticky, navy edge `.cmfzE`): the tick column and through the unit / asset column when it is among the first
+  four, never more than 55 % of the box; and the held slider `.cmhs` (◀ track ▶) at the bottom of the window while the
+  box's own bar is out of view. Every long table (5+ named columns, 3+ rows) that has no Columns control of its own gets
+  ⚙ Columns (`.cmcolbar`, on the table's own toolbar next to Export CSV when it has one), all on by default, kept per
+  browser (`cm_tblcols_<tab>_<table>`). Every column by default: Maintenance Actions shows all ten once
+  (`cm_dash_actcols_all`), the fleet table hides Inspected / Findings only on a phone (`.hide-m` and FLEET_MQ at 900 px,
+  was 1500). A phone keeps its cards.
+- **Why scheduled rounds were not done** (21:10 "we need also reason why the scheduled was not performed, statistics"):
+  Plan vs Actual `#paMiss` (`CMFlow.renderMiss`): of the 1C PM orders with a CM round whose plan date fell in the last 30
+  days - planned · done on time · done late · not done, and the not-done ones by the reason recorded for that machine and
+  round (the deferral's `whyKey` through `TERMS.whyText`, else the words typed, else "No reason recorded" in red), with
+  counts, share and the machines.
+
 ---
 
 ## Secrets

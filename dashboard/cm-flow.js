@@ -301,13 +301,14 @@
       + '.kpis.cmcards .kpi{min-width:0}.kpis.cmcards .kpi .k{display:inline-flex;align-items:center;gap:4px}'
       + '.kpis.cmcards .kpi .s{white-space:normal}.kpis.cmcards .kpi.hot .v{color:var(--crit-ink)}.kpis.cmcards .kpi.warnv .v{color:var(--g2-ink,#8a4b00)}'
       + '.kpis.cmcards .kpi[role=button]{cursor:pointer}.kpis.cmcards .kpi[role=button]:hover{border-color:var(--accent)}'
-      + '.cmone{color:var(--muted);font-size:14px;padding:6px 0 2px}'
+      + '.cmone{color:var(--muted);font-size:14px;padding:6px 0 2px}.cmTip.cmt2{margin-left:4px;vertical-align:middle}'
       + '.cmchk{margin:0 0 16px}.cmchk .cl{display:flex;gap:10px;align-items:baseline;padding:10px 0;border-top:1px solid var(--border);font-size:14px}'
       + '.cmchk .cl:first-of-type{border-top:0}.cmchk .cl b{min-width:18px;color:var(--good-ink)}.cmchk .cl.bad b{color:var(--crit-ink)}'
-      + '.cmchk .cl .x{color:var(--muted)}.cmchk .cl a{margin-left:auto;font-weight:600}';
+      + '.cmchk .cl .x{color:var(--muted)}.cmchk .cl a{margin-left:auto;font-weight:600}'
+      + '.cmmiss{margin:0 0 16px}.cmmiss .cmbar{display:block;height:10px;border-radius:5px;background:#2B4C7E;min-width:2px}.cmmiss tr.cmnone td:first-child{color:var(--crit-ink);font-weight:600}.cmmiss tr.cmnone .cmbar{background:var(--crit-ink)}';
     document.head.appendChild(st);
   }
-  function tip(txt) { return '<button type="button" class="cmTip cmp2tip cmt2" aria-expanded="false" aria-label="' + E(txt) + '"><i aria-hidden="true">i</i><span class="tipbox" role="tooltip">' + E(txt) + '</span></button>'; }
+  function tip(txt) { return '<button type="button" class="cmTip cmt2" aria-expanded="false" aria-label="' + E(txt) + '"><i aria-hidden="true">i</i><span class="tipbox" role="tooltip">' + E(txt) + '</span></button>'; }
   function wireTips(el) {
     el.querySelectorAll('.cmt2').forEach(function (b) {
       var set = function (o) { b.classList.toggle('open', o); b.setAttribute('aria-expanded', String(o)); };
@@ -415,6 +416,50 @@
     wireTips(box);
   }
 
-  window.CMFlow = { find1C: find1C, staleDefects: staleDefects, base: base, renderFail: renderFail, renderMachine: renderMachine, syncChecks: syncChecks, dmy: dmy, renderFind: renderFind, inOneC: inOneC, compare: compare, plan: plan, dueRow: dueRow, owner1C: owner1C, warm: warm, deferOn: deferOn, comp: comp, flow: flow, stage: stage, isFind: function (r, i) { return sevOf(r, i) >= 3; }, defectOf: defectOf, render: render, cond: cond,
+  /* ---- CM_MISS_V1 (build 631, Rickie 15.11 21:10 "we need also reason why the scheduled was not performed, statistics").
+     Plan vs Actual: of the 1C PM orders whose plan date fell in the last N days (COMP_DAYS), the ones without a CM round
+     (no round within the Plan vs Actual window), by the reason recorded for them: the deferral made on the phone or at a
+     desk for that machine and round (TERMS.WHY keys, else the words typed), and "No reason recorded" for the rest. Rounds
+     walked late are counted beside them, not as a reason. ---- */
+  function missStats(days) {
+    var t0 = today(), from = addD(t0, -(days || COMP_DAYS)), m = (typeof deferrals !== 'undefined' && deferrals) || {};
+    var out = { due: 0, done: 0, late: 0, miss: 0, by: {} };
+    planRows().forEach(function (r) {
+      var p = String(r.w.planStart); if (p < from || p > t0) return;
+      out.due++;
+      if (r.status === 'ontime' || r.status === 'early') { out.done++; return; }
+      if (r.status === 'late') { out.late++; return; }
+      out.miss++;
+      var u = String(r.w.equip || '').toUpperCase(), d = null;
+      (r.info.types || []).some(function (ty) { var x = m[ty + '|' + u]; if (x && !x.cleared && String(x.at || '').slice(0, 10) >= addD(p, -COMP_DAYS)) { d = x; return true; } return false; });
+      var k = d ? (d.whyKey || ('txt:' + String(d.why || '').trim().toLowerCase())) : 'none';
+      if (k === 'txt:') k = 'none';
+      var e = out.by[k] || (out.by[k] = { n: 0, units: [], label: d ? ((window.TERMS && TERMS.whyText) ? TERMS.whyText(d.whyKey, d.why, typeof lang !== 'undefined' ? lang : 'en') : (d.why || '')) : '' });
+      e.n++; if (e.units.indexOf(u) < 0) e.units.push(u);
+    });
+    return out;
+  }
+  function renderMiss(el, days) {
+    if (!el) return null; css();
+    var s = missStats(days), D = days || COMP_DAYS, keys = Object.keys(s.by).sort(function (a, b) { return (b === 'none') - (a === 'none') || s.by[b].n - s.by[a].n; });
+    var pct = function (n) { return s.miss ? Math.round(n / s.miss * 100) : 0; };
+    el.className = 'section cmmiss';
+    el.innerHTML = '<div class="secthd"><h2>' + E(L('Why scheduled rounds were not done', 'Почему плановые обходы не выполнены')) + tip(L('1C PM work orders whose plan date fell in the last ' + D + ' days with no CM round near it, by the reason recorded for the machine and round (Defer on the phone or here). Rounds done late are counted beside them.', 'Заказ-наряды ТО 1С с плановой датой за последние ' + D + ' дней без обхода МС рядом с ней, по причине, записанной для единицы и обхода (отложить на телефоне или здесь). Обходы, выполненные с опозданием, считаются отдельно.')) + '</h2>'
+      + '<span class="spacer"></span><span class="hint">' + E(L('last ', 'за ') + D + L(' days', ' дней')) + '</span></div>'
+      + '<div class="kpis cmcards" style="grid-template-columns:repeat(4,minmax(0,1fr))">'
+      + card(L('Planned in 1C', 'Запланировано в 1С'), num(s.due), L('orders with a CM round', 'наряды с обходом МС'), L('1C PM work orders that resolve to a CM round, plan date in the period.', 'Наряды ТО 1С, которым соответствует обход МС, с плановой датой в периоде.'))
+      + card(L('Done on time', 'Выполнено в срок'), num(s.done), s.due ? Math.round(s.done / s.due * 100) + '%' : '–', L('A CM round within the on-time window of the plan date.', 'Обход МС в пределах окна от плановой даты.'))
+      + card(L('Done late', 'Выполнено с опозданием'), num(s.late), s.due ? Math.round(s.late / s.due * 100) + '%' : '–', L('A CM round after the on-time window.', 'Обход МС позже окна.'), s.late ? 'warnv' : '')
+      + card(L('Not done', 'Не выполнено'), num(s.miss), s.due ? Math.round(s.miss / s.due * 100) + '%' : '–', L('No CM round near the plan date.', 'Обхода МС рядом с плановой датой нет.'), s.miss ? 'hot' : '')
+      + '</div>'
+      + (s.miss ? '<div class="tblwrap"><table class="grid cmmisst"><thead><tr><th>' + E(L('Reason', 'Причина')) + '</th><th class="num">' + E(L('Orders', 'Наряды')) + '</th><th class="num">%</th><th style="width:34%"></th><th>' + E(L('Machines', 'Единицы')) + '</th></tr></thead><tbody>'
+        + keys.map(function (k) { var e = s.by[k], lab = k === 'none' ? L('No reason recorded', 'Причина не указана') : (e.label || k);
+          return '<tr' + (k === 'none' ? ' class="cmnone"' : '') + '><td>' + E(lab) + '</td><td class="num"><b>' + e.n + '</b></td><td class="num">' + pct(e.n) + '%</td><td><span class="cmbar" style="width:' + pct(e.n) + '%"></span></td><td class="muted" title="' + E(e.units.join(', ')) + '">' + E(e.units.slice(0, 8).join(', ') + (e.units.length > 8 ? ' …' : '')) + '</td></tr>'; }).join('')
+        + '</tbody></table></div>' : '<div class="cmone">' + E(L('Every planned round of the period was done.', 'Все плановые обходы периода выполнены.')) + '</div>');
+    wireTips(el);
+    return s;
+  }
+
+  window.CMFlow = { fresh: function () { latestCache = null; linkCache = { k: '', m: null }; }, missStats: missStats, renderMiss: renderMiss, find1C: find1C, staleDefects: staleDefects, base: base, renderFail: renderFail, renderMachine: renderMachine, syncChecks: syncChecks, dmy: dmy, renderFind: renderFind, inOneC: inOneC, compare: compare, plan: plan, dueRow: dueRow, owner1C: owner1C, warm: warm, deferOn: deferOn, comp: comp, flow: flow, stage: stage, isFind: function (r, i) { return sevOf(r, i) >= 3; }, defectOf: defectOf, render: render, cond: cond,
                     LINK_DAYS: LINK_DAYS, COMP_DAYS: COMP_DAYS, L: L };
 })();
