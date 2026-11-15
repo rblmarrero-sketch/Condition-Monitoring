@@ -3309,15 +3309,16 @@
         </dl></div>
       </details>
     </div>
+    <div id="failFlow" class="kpis cmcards"></div>
     <div class="grid12">
     <div class="section g7">
       <h2 data-i18n="s_pareto">Top failure modes (Pareto)</h2>
-      <div class="sub" data-i18n="s_pareto_sub">Coded defect types ranked by frequency — this is your defect-elimination shortlist.</div>
+      <div class="sub" data-fold data-i18n="s_pareto_sub">Coded defect types ranked by frequency — this is your defect-elimination shortlist.</div>
       <div class="pareto" id="paretoDefect"></div>
     </div>
     <div class="section g5">
       <h2 data-i18n="s_cause">Direct causes</h2>
-      <div class="sub" data-i18n="s_cause_sub">Why those defects occurred, as recorded at inspection.</div>
+      <div class="sub" data-fold data-i18n="s_cause_sub">Why those defects occurred, as recorded at inspection.</div>
       <div class="pareto" id="paretoCause"></div>
     </div>
     <!-- The Pareto says what fails. This says how long you have once it starts
@@ -3335,7 +3336,7 @@
     </div>
     <div class="section g5">
       <h2 data-i18n="s_iso">ISO 14224 failure mechanism</h2>
-      <div class="sub" data-i18n="s_iso_sub">Table B.2 mechanism classes — comparable across sites and benchmarks.</div>
+      <div class="sub" data-fold data-i18n="s_iso_sub">Table B.2 mechanism classes — comparable across sites and benchmarks.</div>
       <div class="pareto" id="paretoIso"></div>
     </div>
     </div>
@@ -3379,7 +3380,8 @@
         <button class="btn" id="wearCsv" data-i18n="w_csv">⬇ Export CSV</button>
       </div>
       <select id="wBand" class="hidden">
-        <option value="due"></option><option value="act"></option><option value="all"></option>
+        <option value="due"></option><option value="act"></option><option value="cmint" data-i18n="dd_cmint">CM interval</option>
+          <option value="all"></option>
         <option value="watch"></option><option value="soon"></option><option value="life"></option>
         <option value="plan"></option><option value="second"></option>
       </select>
@@ -3463,6 +3465,7 @@
           <span class="hint" id="equipShown"></span>
         </span></div>
     </div>
+    <div id="eqCards" class="kpis cmcards" hidden></div>   <!-- CM_TABS2_V1: the chosen machine in five cards -->
     <div class="section">
       <!-- The report belongs where the inspection is. Reaching it used to mean
            leaving this screen for the Reports tab and picking, from a list of
@@ -3532,7 +3535,6 @@
           <option value="put" data-i18n="dd_put">Deferred</option>
           <option value="done" data-i18n="dd_done">Completed</option>
           <option value="later" data-i18n="dd_1c_later">Planned later</option>
-          <option value="cmint" data-i18n="dd_cmint">CM interval</option>
           <option value="all" data-i18n="dd_all">All</option>
         </select></label>
         <span class="ddbreak" aria-hidden="true"></span>
@@ -4156,23 +4158,23 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=628"></script>
+<script src="../data/magnetic_plug.js?v=629"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=628"></script>
-<script src="../mobile/hme.js?v=628"></script>
-<script src="../mobile/mp-fc.js?v=628"></script>
-<script src="../mobile/rtw.js?v=628"></script>
-<script src="../mobile/hme-cascade.js?v=628"></script>
-<script src="../mobile/temp-limits.js?v=628"></script>
+<script src="../data/work_orders.js?v=629"></script>
+<script src="../mobile/hme.js?v=629"></script>
+<script src="../mobile/mp-fc.js?v=629"></script>
+<script src="../mobile/rtw.js?v=629"></script>
+<script src="../mobile/hme-cascade.js?v=629"></script>
+<script src="../mobile/temp-limits.js?v=629"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=628"></script>
-<script src="../mobile/normalize.js?v=628"></script>
-<script src="../mobile/terms.js?v=628"></script>
+<script src="../mobile/assets.js?v=629"></script>
+<script src="../mobile/normalize.js?v=629"></script>
+<script src="../mobile/terms.js?v=629"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -4191,22 +4193,22 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=628"></script>
-<script src="../mobile/edits.js?v=628"></script>
-<script src="../mobile/due.js?v=628"></script>
-<script src="cm-flow.js?v=628"></script>
-<script src="../mobile/wear.js?v=628"></script>
-<script src="../mobile/wear-map.js?v=628"></script>
-<script src="../mobile/lube.js?v=628"></script>
-<script src="../mobile/lube-overrides.js?v=628"></script>
-<script src="../mobile/lube2027.js?v=628"></script>
-<script src="../mobile/lube-tds.js?v=628"></script>
-<script src="lube-master.js?v=628"></script>
-<script src="wear-limits.js?v=628"></script>
+<script src="../mobile/grade.js?v=629"></script>
+<script src="../mobile/edits.js?v=629"></script>
+<script src="../mobile/due.js?v=629"></script>
+<script src="cm-flow.js?v=629"></script>
+<script src="../mobile/wear.js?v=629"></script>
+<script src="../mobile/wear-map.js?v=629"></script>
+<script src="../mobile/lube.js?v=629"></script>
+<script src="../mobile/lube-overrides.js?v=629"></script>
+<script src="../mobile/lube2027.js?v=629"></script>
+<script src="../mobile/lube-tds.js?v=629"></script>
+<script src="lube-master.js?v=629"></script>
+<script src="wear-limits.js?v=629"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=628"></script>
-<script src="../mobile/machine-photos.js?v=628"></script>
+<script src="../mobile/upload-defaults.js?v=629"></script>
+<script src="../mobile/machine-photos.js?v=629"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -4215,17 +4217,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=628"></script>
-<script src="../mobile/get.js?v=628"></script>
-<script src="../mobile/points.js?v=628"></script>
-<script src="../mobile/uc-points.js?v=628"></script>
-<script src="../mobile/inspect-guide.js?v=628"></script>
-<script src="../mobile/get-figs.js?v=628"></script>
-<script src="../mobile/body-points.js?v=628"></script>
-<script src="../mobile/body-map.js?v=628"></script>
-<script src="../mobile/jspdf.umd.min.js?v=628"></script>
-<script src="../mobile/html2canvas.min.js?v=628"></script>
-<script src="../mobile/report-core.js?v=628"></script>
+<script src="../mobile/machine-fig.js?v=629"></script>
+<script src="../mobile/get.js?v=629"></script>
+<script src="../mobile/points.js?v=629"></script>
+<script src="../mobile/uc-points.js?v=629"></script>
+<script src="../mobile/inspect-guide.js?v=629"></script>
+<script src="../mobile/get-figs.js?v=629"></script>
+<script src="../mobile/body-points.js?v=629"></script>
+<script src="../mobile/body-map.js?v=629"></script>
+<script src="../mobile/jspdf.umd.min.js?v=629"></script>
+<script src="../mobile/html2canvas.min.js?v=629"></script>
+<script src="../mobile/report-core.js?v=629"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -4353,6 +4355,8 @@ const I18N={
   pf_note_no:"{u} \u00b7 {p}: not enough movement between readings to measure a P\u2013F interval yet.",
   pf_none:"No P\u2013F interval to draw yet",
   pf_none_s:"It needs a position measured at least twice, with a condemn figure. Undercarriage, GET and tray rounds produce these.",
+  pf_none1:"Nothing to draw yet — a position must be measured twice (undercarriage, GET, tray).",
+  iso_none1:"No ISO 14224 mechanism coded on these {n} findings.",
   tab_wear:"Wear \u0026 Remaining Life",
   w_title:"Wear and remaining life",
   w_sub:"Every measured position, soonest to run out first. Life is projected from this position's own history — two readings at least, and it says so plainly when it will not guess.",
@@ -5305,6 +5309,8 @@ const I18N={
   pf_note_no:"{u} \u00b7 {p}: \u0434\u0432\u0438\u0436\u0435\u043d\u0438\u044f \u043c\u0435\u0436\u0434\u0443 \u0437\u0430\u043c\u0435\u0440\u0430\u043c\u0438 \u043f\u043e\u043a\u0430 \u043d\u0435\u0434\u043e\u0441\u0442\u0430\u0442\u043e\u0447\u043d\u043e.",
   pf_none:"\u0418\u043d\u0442\u0435\u0440\u0432\u0430\u043b P\u2013F \u043f\u043e\u043a\u0430 \u043d\u0435 \u043f\u043e\u0441\u0442\u0440\u043e\u0438\u0442\u044c",
   pf_none_s:"\u041d\u0443\u0436\u043d\u0430 \u0442\u043e\u0447\u043a\u0430 \u0441 \u0434\u0432\u0443\u043c\u044f \u0437\u0430\u043c\u0435\u0440\u0430\u043c\u0438 \u0438 \u043f\u0440\u0435\u0434\u0435\u043b\u043e\u043c.",
+  pf_none1:"Строить пока нечего — нужна точка, измеренная дважды (ходовая, GET, кузов).",
+  iso_none1:"У этих {n} замечаний нет кода механизма ISO 14224.",
   tab_wear:"\u0418\u0437\u043d\u043e\u0441 \u0438 \u043e\u0441\u0442\u0430\u0442\u043e\u0447\u043d\u044b\u0439 \u0440\u0435\u0441\u0443\u0440\u0441",
   w_title:"\u0418\u0437\u043d\u043e\u0441 \u0438 \u043e\u0441\u0442\u0430\u0442\u043e\u0447\u043d\u044b\u0439 \u0440\u0435\u0441\u0443\u0440\u0441",
   w_sub:"\u0412\u0441\u0435 \u0437\u0430\u043c\u0435\u0440\u0435\u043d\u043d\u044b\u0435 \u0442\u043e\u0447\u043a\u0438; \u0441\u043d\u0430\u0447\u0430\u043b\u0430 \u0442\u0435, \u0447\u0442\u043e \u0432\u044b\u0439\u0434\u0443\u0442 \u0440\u0430\u043d\u044c\u0448\u0435. \u0420\u0435\u0441\u0443\u0440\u0441 \u0441\u0447\u0438\u0442\u0430\u0435\u0442\u0441\u044f \u043f\u043e \u0438\u0441\u0442\u043e\u0440\u0438\u0438 \u0441\u0430\u043c\u043e\u0439 \u0442\u043e\u0447\u043a\u0438 \u2014 \u043d\u0443\u0436\u043d\u043e \u043d\u0435 \u043c\u0435\u043d\u0435\u0435 \u0434\u0432\u0443\u0445 \u0437\u0430\u043c\u0435\u0440\u043e\u0432.",
@@ -7684,6 +7690,11 @@ function renderFailure(){
     f.length ? src+t("e_cause_tail") : src, c.total);
   pareto($("paretoIso"),    i.rows, ()=>"var(--accent)", null,
     f.length ? src+t("e_iso_tail") : src, i.total);
+  { /* CM_TABS2_V1: no coded mechanism = one line, not an empty chart (and, where there is one, an empty table) */
+    const pi=$("paretoIso"), mt=$("isoMechTbl"), mw=mt&&mt.closest(".tblwrap"), mh=mw&&mw.previousElementSibling;
+    if(!i.rows.length && pi){ pi.innerHTML=`<div class="cmone">${esc(t("iso_none1",{n:fmtN(f.length)}))}</div>`; }
+    if(mw) mw.hidden=!i.rows.length; if(mh&&mh.getAttribute("data-i18n")==="fa_mech_title") mh.hidden=!i.rows.length; }
+  try{ if(window.CMFlow&&CMFlow.renderFail) CMFlow.renderFail($("failFlow"), f, filtered()); }catch(e){ bad("cm-tabs2-fail",e); }   /* CM_TABS2_V1 */
   renderPF();
   renderFailAffected(f);
 }
@@ -7761,10 +7772,11 @@ function renderPF(){
   const cands=pfCandidates(), sel=$("pfSel");
   if(!sel) return;
   if(!cands.length){
-    sel.innerHTML=""; $("pfChart").innerHTML=
-      `<div class="empty"><b>${esc(t("pf_none"))}</b><span>${esc(t("pf_none_s"))}</span></div>`;
+    sel.innerHTML=""; { const rw=sel.closest(".row"); if(rw) rw.style.display="none"; }   /* CM_TABS2_V1: an empty chart is one line */
+    $("pfChart").innerHTML=`<div class="cmone" title="${esc(t("pf_none_s"))}">${esc(t("pf_none1"))}</div>`;
     $("pfNote").textContent=""; return;
   }
+  { const rw=sel.closest(".row"); if(rw) rw.style.display=""; }
   const keep = cands.some(c=>c.key===pfKey) ? pfKey : cands[0].key;
   pfKey=keep;
   sel.innerHTML=cands.map(c=>`<option value="${esc(c.key)}"${c.key===keep?" selected":""}>${
@@ -9972,7 +9984,7 @@ function renderHistList(recs){
         <td title="${esc(i.comment||"")}"><span class="trunc">${i.comment?"“"+esc(i.comment)+"”":"—"}</span></td></tr>`;
     }).join("");
     return `<div class="insp${rec._void?" voided":""}"><div class="head">
-      <span class="date">${esc(rec.date||"")}</span>
+      <span class="date" data-d="${esc(rec.date||"")}">${esc(window.CMFlow?CMFlow.dmy(rec.date):(rec.date||""))}</span>
       <span class="tag">${esc(TYPE_LABEL[rec.type]||rec.type)}</span>
       ${rec._void?`<span class="voidflag" title="${esc(rec._reason||"")}">${esc(t("ed_voided"))}${rec._reason?" · "+esc(rec._reason):""}</span>`:""}
       ${!rec._void&&rec._editAt?`<span class="editflag" title="${esc(rec._editAt)} · ${esc(rec._editBy||"—")}">${esc(t("ed_corrected"))}</span>`:""}
@@ -10040,6 +10052,7 @@ function histFilterName(){
 function renderHistory(){
   fillEquip();                                   // the list follows the filters
   const e=$("equipSel").value; const recs=histRecs(e);
+  try{ if(window.CMFlow&&CMFlow.renderMachine) CMFlow.renderMachine($("eqCards"), e, (typeof RECS!=="undefined"?RECS:[]).filter(r=>r.equip===e)); }catch(err){ bad("cm-tabs2-eq",err); }   /* CM_TABS2_V1 */
   const on=anyFilterOn();
   $("histTitle").textContent=t("hist_title",{x:e||""});
   $("histSub").textContent=recs.length ? t(on?"hist_sub_f":"hist_sub",{n:recs.length}) : (on?t("hist_none_f",{f:histFilterName()}):t("hist_none"));
@@ -10064,7 +10077,7 @@ function renderHistory(){
     const skippedPos=mpDisplayFold(rec).filter(i=>!histShown(i,rec));
     return `
     <div class="insp${rec._void?" voided":""}"><div class="head">
-      <span class="date">${esc(rec.date||"")}</span>
+      <span class="date" data-d="${esc(rec.date||"")}">${esc(window.CMFlow?CMFlow.dmy(rec.date):(rec.date||""))}</span>
       <span class="tag">${esc(TYPE_LABEL[rec.type]||rec.type)}</span>
       ${rec._void?`<span class="voidflag" title="${esc(rec._reason||"")}">${esc(t("ed_voided"))}${rec._reason?" · "+esc(rec._reason):""}</span>`:""}
       ${!rec._void&&rec._editAt?`<span class="editflag" title="${esc(rec._editAt)} · ${esc(rec._editBy||"—")}">${esc(t("ed_corrected"))}</span>`:""}
@@ -16427,7 +16440,7 @@ function renderDueTab(){
   const seg=$("ddSeg");
   if(seg){
     const views=[["over","dd_1c_over",c1Over.length],["soon","dd_1c_week",c1Week.length],["later","dd_1c_later",c1Later.length],
-                 ["done","dd_1c_done",c1Done.length],["put","dd_put",intPut.length+c1Put.length],["never","dd_never",nNever],["cmint","dd_cmint",cmInt.length]];
+                 ["done","dd_1c_done",c1Done.length],["put","dd_put",intPut.length+c1Put.length],["never","dd_never",nNever]];   /* CM_TABS2_V1 (Rickie 15.11 "remove the CM interval, we are basing all in 1C") */
     const viewsOld=[["over","dd_missed",nOver],["soon","dd_soon",nSoon],["never","dd_never",nNever],
                  /* 1C's own plan, beside CM's judgement rather than mixed into
                     it — see duePlanRows for why the other counts must not move. */
@@ -16465,7 +16478,7 @@ function renderDueTab(){
   }
   const show = scope==="all" ? c1Over.concat(c1Week,c1Later,c1Done,never)
              : scope==="over" ? c1Over : scope==="soon" ? c1Week : scope==="later" ? c1Later : scope==="done" ? c1Done
-             : scope==="cmint" ? cmInt
+             : scope==="cmint" ? cmInt   /* no tab since build 629; kept for an old address and the checks that read the hour rule */
              : scope==="plan" ? plan
              : scope==="cmp" ? compared
              : scope==="never" ? never
@@ -18095,6 +18108,7 @@ function renderSync(){
   if(!$("syncKpis")) return;
   const s=syncScan();
   if(RENDER_LIVE) renderSync.scan=s;
+  try{ if(window.CMFlow&&CMFlow.syncChecks) CMFlow.syncChecks({ sev:sevConflicts().length, quar:(s.quar||[]).length, gaps:s.linked?(s.gaps||[]).length:null }); }catch(e){ bad("cm-tabs2-sync",e); }   /* CM_TABS2_V1 */
   /* data-kpi as well as the id, and it is not decoration.
 
      These tiles are built here, so no literal id="syGrade" exists in the
@@ -19252,11 +19266,11 @@ document.querySelector(".lang").addEventListener("click",e=>{
   setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 })();
 </script>
-<script src="drive.js?v=628"></script>
-<script src="sync-adapter.js?v=628"></script>
-<script src="report.js?v=628"></script>
-<script src="reliability.js?v=628"></script>
-<script src="day-summary.js?v=628"></script>
+<script src="drive.js?v=629"></script>
+<script src="sync-adapter.js?v=629"></script>
+<script src="report.js?v=629"></script>
+<script src="reliability.js?v=629"></script>
+<script src="day-summary.js?v=629"></script>
 <script>
 /* THE CLOSED FILTER SAYS WHAT IS CHOSEN. A dropdown narrower than its option
    text ellipsises ("All t…", audit of 2026-10-01). Between 1331 and 1500 px
@@ -19464,13 +19478,14 @@ document.querySelector(".lang").addEventListener("click",e=>{
   function sync(b){ var t=b._src.map(function(s){ return s.textContent.replace(/\s+/g,' ').trim(); }).filter(Boolean).join(' '); b.querySelector('.tipbox').textContent=t; b.setAttribute('aria-label',t); b.hidden=!t; }
   function fold(root){
     (root||document).querySelectorAll('main .section p.sub, main .section div.sub, main .section .hint, main .section p.lede, main .section .secthd .sub').forEach(function(el){
+      if(el._cmp2&&el._cmp2b&&!el._cmp2b.isConnected) el._cmp2=0;   /* CM_TABS2_V1: the language switch rewrote the heading and took its (i): put it back */
       if(el._cmp2||el.closest(KEEP)||el.closest('table,dialog,.drawer,.drw,#drwBody,#dsPrev,.modal,.sheet,[role=dialog]')) return;
       if(el.matches(KEEP)) return;
-      var txt=el.textContent.replace(/\s+/g,' ').trim(); if(txt.length<90) return;
+      var txt=el.textContent.replace(/\s+/g,' ').trim(); if(txt.length<90 && !el.hasAttribute('data-fold')) return;   /* CM_TABS2_V1: a card note marked data-fold always goes into the (i) */
       if(el.querySelector('a,button,input,select,b,strong,.warn,.bad')) return;
       var h=head(el); if(h&&h.closest(KEEP)) return;
       if(!h){ h=document.createElement('div'); h.className='cmp2spot'; el.parentNode.insertBefore(h,el); } /* no heading in the card: the (i) sits where the note was */
-      var b=tipFor(h); el._cmp2=1; el.classList.add('cmp2fold'); b._src.push(el); sync(b);
+      var b=tipFor(h); el._cmp2=1; el._cmp2b=b; el.classList.add('cmp2fold'); b._src.push(el); sync(b);
       new MutationObserver(function(){ sync(b); }).observe(el,{childList:true,characterData:true,subtree:true});
     }); }
   var pend=0; function later(){ if(pend) return; pend=1; requestAnimationFrame(function(){ pend=0; try{ fold(); }catch(e){ window.cmPlain2Err=String(e); } }); }

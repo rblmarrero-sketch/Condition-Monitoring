@@ -237,6 +237,129 @@
       + '</tbody></table></div>';
   }
 
-  window.CMFlow = { renderFind: renderFind, inOneC: inOneC, compare: compare, plan: plan, dueRow: dueRow, owner1C: owner1C, warm: warm, deferOn: deferOn, comp: comp, flow: flow, stage: stage, isFind: function (r, i) { return sevOf(r, i) >= 3; }, defectOf: defectOf, render: render, cond: cond,
+
+  /* ---- CM_TABS2_V1 (build 629, Rickie 15.11 "go" on the mock-ups): card rows for Failure Analysis and Equipment
+     History, one Checks card on Data & Sync. Same card shape as the rest of the office page (.kpi in a .kpis row),
+     the explanation of each card in its (i). ---- */
+  function css() {
+    if (document.getElementById('cmTabs2Css')) return;
+    var st = document.createElement('style'); st.id = 'cmTabs2Css';
+    st.textContent = '.kpis.cmcards{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin:0 0 16px}'
+      + '@media (max-width:1100px){.kpis.cmcards{grid-template-columns:repeat(3,minmax(0,1fr))}}'
+      + '@media (max-width:640px){.kpis.cmcards{grid-template-columns:repeat(2,minmax(0,1fr))}}'
+      + '.kpis.cmcards .kpi{min-width:0}.kpis.cmcards .kpi .k{display:inline-flex;align-items:center;gap:4px}'
+      + '.kpis.cmcards .kpi .s{white-space:normal}.kpis.cmcards .kpi.hot .v{color:var(--crit-ink)}.kpis.cmcards .kpi.warnv .v{color:var(--g2-ink,#8a4b00)}'
+      + '.kpis.cmcards .kpi[role=button]{cursor:pointer}.kpis.cmcards .kpi[role=button]:hover{border-color:var(--accent)}'
+      + '.cmone{color:var(--muted);font-size:14px;padding:6px 0 2px}'
+      + '.cmchk{margin:0 0 16px}.cmchk .cl{display:flex;gap:10px;align-items:baseline;padding:10px 0;border-top:1px solid var(--border);font-size:14px}'
+      + '.cmchk .cl:first-of-type{border-top:0}.cmchk .cl b{min-width:18px;color:var(--good-ink)}.cmchk .cl.bad b{color:var(--crit-ink)}'
+      + '.cmchk .cl .x{color:var(--muted)}.cmchk .cl a{margin-left:auto;font-weight:600}';
+    document.head.appendChild(st);
+  }
+  function tip(txt) { return '<button type="button" class="cmTip cmp2tip cmt2" aria-expanded="false" aria-label="' + E(txt) + '"><i aria-hidden="true">i</i><span class="tipbox" role="tooltip">' + E(txt) + '</span></button>'; }
+  function wireTips(el) {
+    el.querySelectorAll('.cmt2').forEach(function (b) {
+      var set = function (o) { b.classList.toggle('open', o); b.setAttribute('aria-expanded', String(o)); };
+      b.onmouseenter = function () { set(true); }; b.onmouseleave = function () { if (document.activeElement !== b) set(false); };
+      b.onfocus = function () { set(true); }; b.onblur = function () { set(false); };
+      b.onclick = function (e) { e.stopPropagation(); set(!b.classList.contains('open')); };
+    });
+  }
+  function card(k, v, s, info, cls, go) {
+    return '<div class="kpi ' + (cls || '') + '"' + (go ? ' role="button" tabindex="0" data-cgo="' + E(go) + '"' : '') + '><span class="hd"><span class="k">' + E(k) + tip(info) + '</span></span>'
+      + '<span class="v">' + E(v) + '</span><span class="s">' + E(s) + '</span></div>';
+  }
+  function dmy(d) { var p = String(d || '').slice(0, 10).split('-'); return p.length === 3 ? p[2] + '.' + p[1] + '.' + p[0] : String(d || ''); }
+  function num(n) { return Number(n || 0).toLocaleString('en-US'); }
+  function wireGo(el, go) {
+    el.querySelectorAll('[data-cgo]').forEach(function (c) {
+      var f = function () { go(c.getAttribute('data-cgo')); };
+      c.onclick = f; c.onkeydown = function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); f(); } };
+    });
+  }
+  /* Failure Analysis: the findings graded 3-5 in view, the machines, repeat points, the top failure mode, not raised in 1C */
+  function renderFail(el, f, recs) {
+    if (!el) return null; css();
+    var g3 = f.filter(function (x) { return (sevOf(x.r, x.i) || 0) >= 3; });
+    var units = {}, pts = {}, top = {}, coded = 0;
+    g3.forEach(function (x) { units[x.r.equip] = 1; var k = x.r.equip + '|' + (x.i.key || x.i.label || ''); pts[k] = pts[k] || {}; pts[k][x.r.date + '|' + x.r.type] = 1; });
+    f.forEach(function (x) { var k = typeof defectKeyOf === 'function' ? defectKeyOf(x.i) : (x.i.defect || ''); if (!k) return; coded++; top[k] = (top[k] || 0) + 1; });
+    var rep = Object.keys(pts).filter(function (k) { return Object.keys(pts[k]).length > 1; }).length;
+    var tk = Object.keys(top).sort(function (a, b) { return top[b] - top[a]; })[0];
+    var share = tk ? Math.round(top[tk] / coded * 100) : null;
+    var tl = tk ? (typeof defectKeyLabel === 'function' ? (defectKeyLabel(tk) || tk) : tk) : '';
+    var fl = flow(recs);
+    el.className = 'kpis cmcards'; el.id = el.id || 'failFlow';
+    el.innerHTML = card(L('Findings 3–5', 'Замечания 3–5'), num(g3.length), L('of ', 'из ') + num(f.length) + L(' findings', ' замечаний'),
+        L('Findings graded Degraded, Severe or Critical in the view the filter bar sets.', 'Замечания с оценкой «Ухудшенное», «Серьёзное» или «Критическое» в выборке фильтра.'))
+      + card(L('Machines', 'Единицы'), num(Object.keys(units).length), L('with a finding graded 3–5', 'с замечанием 3–5'),
+        L('Machines carrying at least one finding graded 3–5.', 'Единицы, у которых есть хотя бы одно замечание с оценкой 3–5.'))
+      + card(L('Repeat points', 'Повторы'), num(rep), L('same point graded 3+ twice', 'та же точка 3+ дважды'),
+        L('The same point on the same machine graded 3 or worse on two or more rounds: a fix that did not hold.', 'Одна и та же точка единицы с оценкой 3 и хуже в двух и более обходах: устранение не помогло.'), rep ? 'warnv' : '')
+      + card(L('Top failure mode', 'Главный вид отказа'), share == null ? '–' : share + '%', tl || L('no coded defect', 'нет кода дефекта'),
+        L('Share of coded findings that carry the most frequent defect type (the first bar of the Pareto).', 'Доля замечаний с самым частым видом дефекта (первая строка Парето).'))
+      + card(L('Not raised in 1C', 'Не оформлено в 1С'), num(fl.none.length), L('of ', 'из ') + num(fl.all.length) + L(' findings graded 3–5', ' замечаний 3–5'),
+        L('Findings graded 3–5 with no 1C defect raised for them. Press to open them in Maintenance Actions.', 'Замечания 3–5, по которым дефект в 1С не оформлен. Нажмите, чтобы открыть их в «Действиях по ТО».'), fl.none.length ? 'hot' : '', 'f_none');
+    wireTips(el);
+    wireGo(el, function (go) { try { if (typeof setAFilt === 'function') setAFilt(go); showTab('actions'); } catch (e) {} });
+    return { g3: g3.length, units: Object.keys(units).length, rep: rep, share: share, none: fl.none.length };
+  }
+  /* Equipment History: one row of cards about the chosen machine */
+  function renderMachine(el, unit, recs) {
+    if (!el) return null; css(); el.className = 'kpis cmcards'; el.id = el.id || 'eqCards';
+    if (!unit) { el.innerHTML = ''; el.hidden = true; return null; }
+    el.hidden = false;
+    var U = String(unit).toUpperCase(), a = (typeof ASSET_BY !== 'undefined' && ASSET_BY[U]) || ((window.ASSETS || []).find(function (x) { return x && String(x.n).toUpperCase() === U; })) || {};
+    var live = (recs || []).filter(function (r) { return !r._void; }).sort(function (x, y) { return String(y.date || '').localeCompare(String(x.date || '')); });
+    var last = live[0] || null;
+    var open = [];
+    try { open = finds(live).filter(function (x) { return typeof actionState !== 'function' || ['closed', 'noaction'].indexOf(actionState(x.r, x.i).k) < 0; }); } catch (e) {}
+    var worst = open.reduce(function (m, x) { return Math.max(m, sevOf(x.r, x.i) || 0); }, 0);
+    var wn = {}; open.forEach(function (x) { var s = sevOf(x.r, x.i); wn[s] = (wn[s] || 0) + 1; });
+    var ds = defects().filter(function (d) { return String(d.asset || '').toUpperCase() === U && (typeof cwStage !== 'function' || cwStage(d) !== 'done'); });
+    var t0 = today(), next = null;
+    try { (typeof paRows === 'function' ? paRows() : []).forEach(function (r) {
+      if (!r.w || String(r.w.equip || '').toUpperCase() !== U || r.w.open === false || !r.w.planStart) return;
+      if (!next || String(r.w.planStart) < String(next.w.planStart)) next = r; }); } catch (e) {}
+    var model = [a.mk || a.model || '', a.cat || a.desc || ''].filter(Boolean).join(' · ') || (a.cls ? L('class ', 'класс ') + a.cls : '');
+    var sevName = function (s) { return ((typeof SEV !== 'undefined' && SEV[s]) ? String(SEV[s].l) : String(s)).replace(/^\d+\s*[–-]\s*/, ''); };
+    el.innerHTML = card(L('Machine', 'Единица'), U, model || '–', L('The machine chosen above, as the register names it.', 'Единица, выбранная выше, по реестру.'))
+      + card(L('Last inspected', 'Последний осмотр'), last ? dmy(last.date) : '–', last ? [(typeof TYPE_LABEL !== 'undefined' && TYPE_LABEL[last.type]) || last.type, last.smu ? 'SMU ' + num(last.smu) + ' h' : ''].filter(Boolean).join(' · ') : L('no round recorded', 'обходов нет'),
+        L('The newest CM round on this machine.', 'Самый новый обход МС на этой единице.'))
+      + card(L('Open findings', 'Открытые замечания'), num(open.length), open.length ? Object.keys(wn).sort(function (x, y) { return y - x; }).map(function (s) { return wn[s] + ' ' + sevName(+s); }).join(' · ') : L('nothing graded 3–5 open', 'нет открытых 3–5'),
+        L('Findings graded 3–5 on this machine whose action is not closed.', 'Замечания 3–5 на этой единице, действие по которым не закрыто.'), worst >= 5 ? 'hot' : (worst >= 3 ? 'warnv' : ''))
+      + card(L('1C defects open', 'Дефекты 1С открыты'), num(ds.length), ds.length ? ds.slice(0, 2).map(function (d) { return d.defect; }).join(' · ') + (ds.length > 2 ? ' …' : '') : L('none open in 1C', 'в 1С нет открытых'),
+        L('Defects raised in 1C for this machine that are not completed (Defects raised).', 'Дефекты 1С по этой единице, которые не выполнены (вкладка «Дефекты»).'), '', ds.length ? 'cmwo' : '')
+      + card(L('Next 1C PM', 'Следующее ТО 1С'), next ? dmy(next.w.planStart) : '–', next ? [next.w.woNumber || '', next.info && next.info.label || ''].filter(Boolean).join(' · ') : L('no open PM work order', 'нет открытого наряда ТО'),
+        L('The earliest open 1C PM work order for this machine (Plan vs Actual).', 'Ближайший открытый наряд ТО 1С по этой единице (План / факт).'), next && String(next.w.planStart) < t0 ? 'hot' : '');
+    wireTips(el);
+    wireGo(el, function (go) { try { var q = document.getElementById('fQ'); if (q) { q.value = U; q.dispatchEvent(new Event('input', { bubbles: true })); } showTab(go); } catch (e) {} });
+    return { open: open.length, defects: ds.length, last: last ? last.date : '', next: next ? next.w.planStart : '' };
+  }
+  /* Data & Sync: one Checks card; a list section shows only while it has something in it */
+  function syncChecks(c) {
+    var tab = document.getElementById('tab-sync'); if (!tab) return; css();
+    var box = document.getElementById('syChecks');
+    var kp = document.getElementById('syncKpis');
+    if (!box) { box = document.createElement('div'); box.className = 'section cmchk'; box.id = 'syChecks'; if (kp && kp.parentNode) kp.parentNode.insertBefore(box, kp.nextSibling); else tab.appendChild(box); }
+    var sec = function (id) { var e = document.getElementById(id); return e ? (e.closest('.section') || e) : null; };
+    var rows = [
+      { n: c.sev, s: sec('sySevBox'), ok: L('Grades: every condition follows its grade or reading', 'Оценки: каждое состояние следует из оценки или замера'), bad: L('grade review required', 'нужна проверка оценки'), x: L(' to review', ' к проверке') },
+      { n: c.quar, s: sec('syQuarTbl'), ok: L('Records: every inspection names its unit, date, round and points', 'Записи: у каждого осмотра есть единица, дата, обход и точки'), bad: L('inspections requiring correction', 'осмотров требуют исправления'), x: L(' to correct', ' к исправлению') },
+      { n: c.gaps, s: sec('syGapTbl'), ok: L('Attachments: every photograph and video is on the server', 'Вложения: все фото и видео на сервере'), bad: L('records waiting on evidence', 'записей ждут вложений'), x: L(' waiting', ' ожидают'),
+        na: L('Attachments: no server attached, nothing to compare against', 'Вложения: сервер не подключён, сравнивать не с чем') }
+    ];
+    box.innerHTML = '<div class="secthd"><h2>' + E(L('Checks', 'Проверки')) + tip(L('Each check reads the records this page holds. A list opens below only when a check finds something.', 'Каждая проверка читает записи этой панели. Список ниже открывается, только когда проверка что-то нашла.')) + '</h2></div>'
+      + rows.map(function (r, ix) {
+        if (r.n == null) return '<div class="cl"><b>–</b>' + E(r.na || '') + '</div>';
+        if (!r.n) return '<div class="cl"><b>✓</b>' + E(r.ok) + '<span class="x">· 0' + E(r.x) + '</span></div>';
+        return '<div class="cl bad"><b>!</b>' + E(r.n + ' ' + r.bad) + '<a href="#" data-chk="' + ix + '">' + E(L('Open the list ↓', 'Открыть список ↓')) + '</a></div>';
+      }).join('');
+    rows.forEach(function (r) { if (r.s) r.s.hidden = !(r.n > 0); });   /* a section shows only while its check finds something */
+    box.querySelectorAll('[data-chk]').forEach(function (a) { a.onclick = function (e) { e.preventDefault(); var s = rows[+a.getAttribute('data-chk')].s; if (s) s.scrollIntoView({ behavior: 'smooth', block: 'start' }); }; });
+    wireTips(box);
+  }
+
+  window.CMFlow = { renderFail: renderFail, renderMachine: renderMachine, syncChecks: syncChecks, dmy: dmy, renderFind: renderFind, inOneC: inOneC, compare: compare, plan: plan, dueRow: dueRow, owner1C: owner1C, warm: warm, deferOn: deferOn, comp: comp, flow: flow, stage: stage, isFind: function (r, i) { return sevOf(r, i) >= 3; }, defectOf: defectOf, render: render, cond: cond,
                     LINK_DAYS: LINK_DAYS, COMP_DAYS: COMP_DAYS, L: L };
 })();

@@ -5547,6 +5547,24 @@ that saved a column choice before it existed (`cm_dash_actcols_def`). dashboard-
 ticked, as dashboard/'s always did - a change to a recorded design difference, asked for on the mock-up. `#actKpis` stays in the
 page, empty and hidden.
 
+**FAILURE ANALYSIS, EQUIPMENT HISTORY AND DATA & SYNC IN THE STANDARD SHAPE; NO CM INTERVAL TAB (build 629, CM_TABS2_V1,
+Rickie 15.11 "go" on the mock-ups, 20:59 "remove the CM interval, we are basing all in 1C").** Both office pages.
+`dashboard/cm-flow.js` draws three things in the page's own `.kpi` card shape (label + (i), number, one line):
+- Failure Analysis `#failFlow`: Findings 3–5 · Machines · Repeat points (the same unit and point graded 3+ on two or more
+  rounds) · Top failure mode (share of coded findings) · Not raised in 1C (press = Maintenance Actions on that tab).
+  The card notes (Pareto, causes, ISO) go into the heading's (i) (`data-fold`, CM_PLAIN2_V1 folds them whatever their
+  length). An empty P–F chart and an empty ISO 14224 chart are one line each (`pf_none1`, `iso_none1`); dashboard-next's
+  Affected equipment lists the worst grade first until a heading is pressed.
+- Equipment History `#eqCards`: Machine · Last inspected · Open findings (graded 3–5, action not closed) · 1C defects open
+  (press = Defects raised, search set to the unit) · Next 1C PM (earliest open PM order, red when its plan date passed).
+  History dates read dd.mm.yyyy; the ISO date stays on the element as `data-d` (tests read it).
+- Data & Sync `#syChecks`: one Checks card (grades, records, attachments). A list section shows only while its check
+  finds something; "Open the list ↓" scrolls to it. The four tiles lost the tag that repeated their line.
+The Inspection Schedule has no "CM interval" tab: every view is the 1C PM work orders; Deferred still counts a deferral
+made on an hour-interval round. The hour rule (`dueTabRows`) is still computed and the address scope `cmint` still
+opens it, for the phone and for the checks that read it. CM_PLAIN2_V1 also puts a heading's (i) back when the language
+switch rewrites the heading (`data-i18n` sets textContent, which took the button with it).
+
 ---
 
 ## Secrets

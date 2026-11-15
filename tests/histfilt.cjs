@@ -50,7 +50,7 @@ const state = p => p.evaluate(() => ({
   chips: [...document.querySelectorAll('#chips .chip:not(.clearall)')].map(c => c.textContent.replace('×', '').trim()),
   sub: document.getElementById('histSub').textContent,
   empty: (document.querySelector('#history .empty') || {}).textContent || '',
-  rounds: [...document.querySelectorAll('#history .insp')].map(d => d.querySelector('.date').textContent),
+  rounds: [...document.querySelectorAll('#history .insp')].map(d => { const e = d.querySelector('.date'); return e.dataset.d || e.textContent; }),
   grades: [...document.querySelectorAll('#history .hrow .sevcell, #history .pos .pill, #history .sevcell')].map(e => e.textContent.trim()),
   drawer: !(document.getElementById('drw') || { hidden: true }).hidden && !(document.getElementById('drw') || {}).classList.contains('hidden'),
 }));

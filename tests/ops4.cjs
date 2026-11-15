@@ -123,9 +123,9 @@ const SEED = () => {
              cmint: by.cmint ? by.cmint.n : -1, st: (o => { dueTabRows().forEach(r => { o[r.st] = (o[r.st] || 0) + 1; }); return o; })({}) }; });
   /* Build 627 (CM_SCHED1C_V1): the first four views follow the 1C PM work orders; the hour-interval rows are the
      CM interval view; All is an address, not a tab. */
-  ok('Overdue in 1C · Due in 7 days · Planned later · Done this week · Deferred · Never inspected · CM interval', D.keys === 'over,soon,later,done,put,never,cmint', D.keys);
-  ok('  in the dictionary\'s words', D.labels === ['Overdue in 1C', 'Due in 7 days', 'Planned later', 'Done this week', TERMS.en.deferred, TERMS.en.never_inspected, 'CM interval'].join(' | '), D.labels);
-  ok('  CM interval holds the hour-based past due and due soon: TK108\'s plug is one of them', D.cmint === (D.st.over || 0) + (D.st.soon || 0) && (D.st.over || 0) === 1, JSON.stringify({ cmint: D.cmint, st: D.st }));
+  ok('Overdue in 1C · Due in 7 days · Planned later · Done this week · Deferred · Never inspected (no CM interval tab since build 629: all in 1C)', D.keys === 'over,soon,later,done,put,never', D.keys);
+  ok('  in the dictionary\'s words', D.labels === ['Overdue in 1C', 'Due in 7 days', 'Planned later', 'Done this week', TERMS.en.deferred, TERMS.en.never_inspected].join(' | '), D.labels);
+  ok('  the hour rule still answers behind the scenes (address scope cmint): TK108\'s plug is past due by it', D.cmint === -1 && (D.st.over || 0) === 1, JSON.stringify({ cmint: D.cmint, st: D.st }));
   ok('  never inspected: every machine on a round with nothing recorded, one row per round', D.never > 100 && D.by.never.n === D.never, D.never + ' rows');
   ok('  a never-inspected row says so, has no last date and no clock, and still offers Start and Defer', D.cells.length === 7 && D.cells[2] === TERMS.en.never_inspected && D.cells[3] === '—' && /Start/.test(D.cells[6]) && /Defer/.test(D.cells[6]), D.cells.join(' | '));
   ok('  the address can name every view', D.opts === 'over,soon,due,never,plan,cmp,put,done,later,cmint,all', D.opts);

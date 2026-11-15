@@ -174,7 +174,7 @@ const rows = p => p.$$eval('#ddList tbody tr', a => a.map(tr => ({
   /* Seven seeded unit-rounds. On the CM interval tab: TK101 and TK107 past due and unexcused, TK104 and TK106 due soon;
      TK102 put off with a reason is a decision, on Deferred; TK103 fresh; TK105's reason spent by an inspection. */
   ok('no tile strip above the tabs', await p.evaluate(() => document.getElementById('dueKpis').children.length) === 0);
-  ok('the CM interval tab counts the past due and the due soon', tabs.cmint === 4, JSON.stringify(tabs));
+  ok('no CM interval tab (build 629, all in 1C); the hour rule still counts the past due and the due soon', !('cmint' in tabs) && await p.evaluate(() => dueTabRows().filter(r => r.st === 'over' || r.st === 'soon').length) === 4, JSON.stringify(tabs));
   ok('a machine put off on purpose is counted as a decision, not a miss', tabs.put >= 1, String(tabs.put));
   ok('pressing a tab filters to what it counts', await (async () => {
     await p.click('#ddSeg [data-dd="put"]'); await p.waitForTimeout(200);
