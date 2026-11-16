@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-16T19:18:24+00:00",
+  "generated": "2026-11-16T19:38:02+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -14465,6 +14465,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021608"
     },
     {
+      "asset": "CR004",
+      "defect": "DD-00016309",
+      "raised": "2026-11-04",
+      "system": "CR004.CRS.LNR (Liners (Mantle & Concaves) / Футеровка (броня)",
+      "defectType": "7.01 Cone crusher liner wear / Износ брони конусной дробилки",
+      "descr": "футеровка конуса и чаши изношена",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-021890"
+    },
+    {
       "asset": "BS019",
       "defect": "DD-00016257",
       "raised": "2026-11-04",
@@ -15035,19 +15048,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-021835"
-    },
-    {
-      "asset": "CR004",
-      "defect": "DD-00016309",
-      "raised": "2026-11-04",
-      "system": "CR004.CRS.LNR (Liners (Mantle & Concaves) / Футеровка (броня)",
-      "defectType": "7.01 Cone crusher liner wear / Износ брони конусной дробилки",
-      "descr": "футеровка конуса и чаши изношена",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": "WO-021890"
     },
     {
       "asset": "TK115",
