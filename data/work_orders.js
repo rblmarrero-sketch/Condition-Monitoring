@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-16T05:12:41+00:00",
+  "generated": "2026-11-16T05:28:08+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -6340,6 +6340,32 @@ window.CM_WO_DATA = {
       "wo": "WO-022590"
     },
     {
+      "asset": "WE004",
+      "defect": "DD-00016943",
+      "raised": "2026-11-15",
+      "system": "WE004.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Отгрев, запуск",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022606"
+    },
+    {
+      "asset": "GE009",
+      "defect": "DD-00016942",
+      "raised": "2026-11-15",
+      "system": "GE009.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Отгрев, запуск",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022605"
+    },
+    {
       "asset": "TK148",
       "defect": "DD-00016956",
       "raised": "2026-11-15",
@@ -6626,19 +6652,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022610"
     },
     {
-      "asset": "GE009",
-      "defect": "DD-00016942",
-      "raised": "2026-11-15",
-      "system": "GE009.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Отгрев, запуск",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022605"
-    },
-    {
       "asset": "BS009",
       "defect": "DD-00016954",
       "raised": "2026-11-15",
@@ -6728,19 +6741,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022601"
-    },
-    {
-      "asset": "WE004",
-      "defect": "DD-00016943",
-      "raised": "2026-11-15",
-      "system": "WE004.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Отгрев, запуск",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022606"
     },
     {
       "asset": "EX023",
@@ -7224,19 +7224,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "GR015",
-      "defect": "DD-00016902",
-      "raised": "2026-11-14",
-      "system": "GR015.OC.HE (Heating / Отопление)",
-      "defectType": "3.01 Control failure / Ошибка управления",
-      "descr": "Не работает автономный отопитель",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": null
-    },
-    {
       "asset": "GE058",
       "defect": "DD-00016872",
       "raised": "2026-11-14",
@@ -7443,6 +7430,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": null
+    },
+    {
+      "asset": "GR015",
+      "defect": "DD-00016902",
+      "raised": "2026-11-14",
+      "system": "GR015.OC.HE (Heating / Отопление)",
+      "defectType": "3.01 Control failure / Ошибка управления",
+      "descr": "Не работает автономный отопитель",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022655"
     },
     {
       "asset": "TK106",
@@ -8043,19 +8043,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "CR003",
-      "defect": "DD-00016822",
-      "raised": "2026-11-13",
-      "system": "CR003.CRS.JAW (Jaw Crusher / Щековая дробилка)",
-      "defectType": "7.05 Jaw crusher jaw die wear / Износ щеки щековой дробилки",
-      "descr": "Износ дробящих плит",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": null
-    },
-    {
       "asset": "DZ008",
       "defect": "DD-00016792",
       "raised": "2026-11-13",
@@ -8080,6 +8067,19 @@ window.CM_WO_DATA = {
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": null
+    },
+    {
+      "asset": "CR003",
+      "defect": "DD-00016822",
+      "raised": "2026-11-13",
+      "system": "CR003.CRS.JAW (Jaw Crusher / Щековая дробилка)",
+      "defectType": "7.05 Jaw crusher jaw die wear / Износ щеки щековой дробилки",
+      "descr": "Износ дробящих плит",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-022657"
     },
     {
       "asset": "CR005",
@@ -35681,19 +35681,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "GR016",
-      "defect": "DD-00014553",
-      "raised": "2026-10-11",
-      "system": "GR016.DRS.AXL (Axles / Мосты)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Чрезмерный люфт в соединениях левой цапфы переднего моста",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Evgeniy Frolin",
-      "regBy": "Фролин Евгений Владимирович",
-      "wo": null
-    },
-    {
       "asset": "HX019",
       "defect": "DD-00014530",
       "raised": "2026-10-11",
@@ -35796,6 +35783,19 @@ window.CM_WO_DATA = {
       "by": "Artem Yakovlev",
       "regBy": "Яковлев Артем Сергеевич",
       "wo": null
+    },
+    {
+      "asset": "GR016",
+      "defect": "DD-00014553",
+      "raised": "2026-10-11",
+      "system": "GR016.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Чрезмерный люфт в соединениях левой цапфы переднего моста",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Evgeniy Frolin",
+      "regBy": "Фролин Евгений Владимирович",
+      "wo": "WO-022656"
     },
     {
       "asset": "EX006",
