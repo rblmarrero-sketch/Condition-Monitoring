@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-16T04:13:10+00:00",
+  "generated": "2026-11-16T04:28:05+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -5833,6 +5833,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "LV036",
+      "defect": "DD-00016983",
+      "raised": "2026-11-16",
+      "system": "LV036.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Замена мотора отопителя",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022650"
+    },
+    {
       "asset": "FL001",
       "defect": "DD-00016982",
       "raised": "2026-11-16",
@@ -8875,6 +8888,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "CN018",
+      "defect": "DD-00016744",
+      "raised": "2026-11-12",
+      "system": "CN018.CH.GAN (Crane / Кран)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "EKT Замена подшипников 4-й секции стрелы телескопа, проверка работоспособности крановой установки, инспекция канатов телескопирования, прове",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022453"
+    },
+    {
       "asset": "GE076",
       "defect": "DD-00016742",
       "raised": "2026-11-12",
@@ -8938,19 +8964,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022454"
-    },
-    {
-      "asset": "CN018",
-      "defect": "DD-00016744",
-      "raised": "2026-11-12",
-      "system": "CN018.CH.GAN (Crane / Кран)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "EKT Замена подшипников 4-й секции стрелы телескопа, проверка работоспособности крановой установки, инспекция канатов телескопирования, прове",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022453"
     },
     {
       "asset": "GR003",
@@ -41245,6 +41258,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "TK162",
+      "defect": "DD-00014083",
+      "raised": "2026-10-05",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK162 TRANSMISSION OldNumber (UT162)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка масла с РК",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": null
+    },
+    {
       "asset": "GR001",
       "defect": "DD-00014146",
       "raised": "2026-10-05",
@@ -41511,19 +41537,6 @@ window.CM_WO_DATA = {
       "system": "LV158.CH.SU (Suspension / Подвеска)",
       "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
       "descr": "Требуется замена нижних и верхних шаровых опор, замена втулок и стоек стабилизатора",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": null
-    },
-    {
-      "asset": "TK162",
-      "defect": "DD-00014083",
-      "raised": "2026-10-05",
-      "system": "TRUCK, WATER URAL 4672M1-20, TK162 TRANSMISSION OldNumber (UT162)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка масла с РК",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -55351,19 +55364,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "GR008",
-      "defect": "DD-00012933",
-      "raised": "2026-09-19",
-      "system": "GR008.CH.FR (Frame / Рама)",
-      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
-      "descr": "Требуется заменить замки на вынос передней полурамы",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Pavel Kostin",
-      "regBy": "Костин Павел Александрович",
-      "wo": null
-    },
-    {
-      "asset": "GR008",
       "defect": "DD-00012940",
       "raised": "2026-09-19",
       "system": "GR008.DRS.TRA (Transmission / Трансмиссия)",
@@ -55374,6 +55374,19 @@ window.CM_WO_DATA = {
       "by": "Pavel Kostin",
       "regBy": "Костин Павел Александрович",
       "wo": null
+    },
+    {
+      "asset": "GR008",
+      "defect": "DD-00012933",
+      "raised": "2026-09-19",
+      "system": "GR008.CH.FR (Frame / Рама)",
+      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
+      "descr": "Требуется заменить замки на вынос передней полурамы",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": "WO-018386"
     },
     {
       "asset": "EX023",
