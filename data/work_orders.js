@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-16T21:42:44+00:00",
+  "generated": "2026-11-16T21:57:57+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 812,
@@ -5963,6 +5963,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022691"
     },
     {
+      "asset": "EX005",
+      "defect": "DD-00017021",
+      "raised": "2026-11-17",
+      "system": "EX005.CH.UC (Undercarriage / Ходовая часть)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Замена левого ленивца и натяжного",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022698"
+    },
+    {
       "asset": "TK101",
       "defect": "DD-00017018",
       "raised": "2026-11-17",
@@ -8589,17 +8602,17 @@ window.CM_WO_DATA = {
       "wo": "WO-022513"
     },
     {
-      "asset": "TK104",
-      "defect": "DD-00016795",
+      "asset": "CR005",
+      "defect": "DD-00016818",
       "raised": "2026-11-13",
-      "system": "TK104.DRS.TRA (Transmission / Трансмиссия)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка по РВД трансмиссионых филтров",
-      "status": "Registered",
+      "system": "CR005.CRS.JAW (Jaw Crusher / Щековая дробилка)",
+      "defectType": "7.05 Jaw crusher jaw die wear / Износ щеки щековой дробилки",
+      "descr": "критический износ неподвижной плиты",
+      "status": "Completed",
       "priority": "P4 Planned (Repair)",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": null
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-022591"
     },
     {
       "asset": "DZ008",
@@ -8680,19 +8693,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022661"
     },
     {
-      "asset": "CR005",
-      "defect": "DD-00016818",
-      "raised": "2026-11-13",
-      "system": "CR005.CRS.JAW (Jaw Crusher / Щековая дробилка)",
-      "defectType": "7.05 Jaw crusher jaw die wear / Износ щеки щековой дробилки",
-      "descr": "критический износ неподвижной плиты",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": "WO-022591"
-    },
-    {
       "asset": "GR001",
       "defect": "DD-00016814",
       "raised": "2026-11-13",
@@ -8730,6 +8730,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022506"
+    },
+    {
+      "asset": "TK104",
+      "defect": "DD-00016795",
+      "raised": "2026-11-13",
+      "system": "TK104.DRS.TRA (Transmission / Трансмиссия)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка по РВД трансмиссионых филтров",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022697"
     },
     {
       "asset": "CR003",
@@ -13490,6 +13503,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021848"
     },
     {
+      "asset": "CR006",
+      "defect": "DD-00016421",
+      "raised": "2026-11-06",
+      "system": "CR006.CH.CV (Conveyor / Конвейер)",
+      "defectType": "1.10 Rupture / Burst / Разрыв",
+      "descr": "Ремонт стыка конвейерной ленты главного конвейера",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Rinat Musaferov",
+      "regBy": "Мусаферов Ринат Искакович",
+      "wo": "WO-021850"
+    },
+    {
       "asset": "EX021",
       "defect": "DD-00016417",
       "raised": "2026-11-06",
@@ -13631,19 +13657,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": null
-    },
-    {
-      "asset": "CR006",
-      "defect": "DD-00016421",
-      "raised": "2026-11-06",
-      "system": "CR006.CH.CV (Conveyor / Конвейер)",
-      "defectType": "1.10 Rupture / Burst / Разрыв",
-      "descr": "Ремонт стыка конвейерной ленты главного конвейера",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Rinat Musaferov",
-      "regBy": "Мусаферов Ринат Искакович",
-      "wo": "WO-021850"
     },
     {
       "asset": "TK089",
@@ -15193,19 +15206,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK106",
-      "defect": "DD-00016281",
-      "raised": "2026-11-04",
-      "system": "TK106.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.04 Abnormal noise / vibration Аномальный шум / вибрация",
-      "descr": "Диагностика вибрации в районе демпфера",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": null
-    },
-    {
       "asset": "TK114",
       "defect": "DD-00016291",
       "raised": "2026-11-04",
@@ -15308,6 +15308,19 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-022213"
+    },
+    {
+      "asset": "TK106",
+      "defect": "DD-00016281",
+      "raised": "2026-11-04",
+      "system": "TK106.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.04 Abnormal noise / vibration Аномальный шум / вибрация",
+      "descr": "Диагностика вибрации в районе демпфера",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-022187"
     },
     {
       "asset": "LV012",
@@ -21576,19 +21589,6 @@ window.CM_WO_DATA = {
       "wo": "WO-020867"
     },
     {
-      "asset": "TK106",
-      "defect": "DD-00015745",
-      "raised": "2026-10-27",
-      "system": "TK106.OC (Operator Cab / Кабина оператора)",
-      "defectType": "3.01 Control failure / Ошибка управления",
-      "descr": "Не работает побогрев зеркала заднего вида",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": null
-    },
-    {
       "asset": "TK115",
       "defect": "DD-00015791",
       "raised": "2026-10-27",
@@ -21691,6 +21691,19 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-022191"
+    },
+    {
+      "asset": "TK106",
+      "defect": "DD-00015745",
+      "raised": "2026-10-27",
+      "system": "TK106.OC (Operator Cab / Кабина оператора)",
+      "defectType": "3.01 Control failure / Ошибка управления",
+      "descr": "Не работает побогрев зеркала заднего вида",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022701"
     },
     {
       "asset": "DR009",
@@ -25489,6 +25502,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021480"
     },
     {
+      "asset": "CR006",
+      "defect": "DD-00015480",
+      "raised": "2026-10-23",
+      "system": "CR006.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.06 Deformation / bending / buckling Деформация / изгиб / коробление",
+      "descr": "поврежден патрубок интеркуллера",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-021849"
+    },
+    {
       "asset": "TK091",
       "defect": "DD-00015440",
       "raised": "2026-10-23",
@@ -25643,19 +25669,6 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-020948"
-    },
-    {
-      "asset": "CR006",
-      "defect": "DD-00015480",
-      "raised": "2026-10-23",
-      "system": "CR006.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.06 Deformation / bending / buckling Деформация / изгиб / коробление",
-      "descr": "поврежден патрубок интеркуллера",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": "WO-021849"
     },
     {
       "asset": "EX025",
@@ -29467,6 +29480,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021727"
     },
     {
+      "asset": "CR008",
+      "defect": "DD-00015147",
+      "raised": "2026-10-19",
+      "system": "CR008.DRS.COO (Cooling System / Система охлаждения)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Сварочные работы защитной решетки вентилятора",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Rinat Musaferov",
+      "regBy": "Мусаферов Ринат Искакович",
+      "wo": "WO-021241"
+    },
+    {
       "asset": "TK153",
       "defect": "DD-00015114",
       "raised": "2026-10-19",
@@ -29594,19 +29620,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "TK105",
-      "defect": "DD-00015135",
-      "raised": "2026-10-19",
-      "system": "TK105.DRS.AXL (Axles / Мосты)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Люфт внешней крестовины приводного вала передней оси",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Evgeniy Frolin",
-      "regBy": "Фролин Евгений Владимирович",
       "wo": null
     },
     {
@@ -29779,17 +29792,17 @@ window.CM_WO_DATA = {
       "wo": "WO-022396"
     },
     {
-      "asset": "CR008",
-      "defect": "DD-00015147",
+      "asset": "TK105",
+      "defect": "DD-00015135",
       "raised": "2026-10-19",
-      "system": "CR008.DRS.COO (Cooling System / Система охлаждения)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Сварочные работы защитной решетки вентилятора",
+      "system": "TK105.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Люфт внешней крестовины приводного вала передней оси",
       "status": "Elimination scheduled",
       "priority": "P4 Planned (Repair)",
-      "by": "Rinat Musaferov",
-      "regBy": "Мусаферов Ринат Искакович",
-      "wo": "WO-021241"
+      "by": "Evgeniy Frolin",
+      "regBy": "Фролин Евгений Владимирович",
+      "wo": "WO-022700"
     },
     {
       "asset": "TK152",
@@ -37657,6 +37670,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "PU008",
+      "defect": "DD-00014445",
+      "raised": "2026-10-09",
+      "system": "PU008.DRS.PD (Pump Drive / Привод насоса)",
+      "defectType": "1.19 No movement / no drive / Нет движения / нет привода",
+      "descr": "Сломан Вал привода насоса",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Temir Marochko",
+      "regBy": "Марочко Темир",
+      "wo": null
+    },
+    {
       "asset": "LV069",
       "defect": "DD-00014408",
       "raised": "2026-10-09",
@@ -37680,19 +37706,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Shcherbina",
       "regBy": "Щербина Андрей Николаевич",
-      "wo": null
-    },
-    {
-      "asset": "PU008",
-      "defect": "DD-00014445",
-      "raised": "2026-10-09",
-      "system": "PU008.DRS.PD (Pump Drive / Привод насоса)",
-      "defectType": "1.19 No movement / no drive / Нет движения / нет привода",
-      "descr": "Сломан Вал привода насоса",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Temir Marochko",
-      "regBy": "Марочко Темир",
       "wo": null
     },
     {
@@ -39126,19 +39139,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK105",
-      "defect": "DD-00014403",
-      "raised": "2026-10-08",
-      "system": "TK105.DRS.AXL (Axles / Мосты)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Осмотр на утечки, замена сальника хвостовика среднего моста",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Pavel Kostin",
-      "regBy": "Костин Павел Александрович",
-      "wo": null
-    },
-    {
       "asset": "EX018",
       "defect": "DD-00014286",
       "raised": "2026-10-08",
@@ -39241,6 +39241,19 @@ window.CM_WO_DATA = {
       "by": "Andrey Taran",
       "regBy": "Таран Андрей Андреевич",
       "wo": "WO-019225"
+    },
+    {
+      "asset": "TK105",
+      "defect": "DD-00014403",
+      "raised": "2026-10-08",
+      "system": "TK105.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Осмотр на утечки, замена сальника хвостовика среднего моста",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": "WO-022699"
     },
     {
       "asset": "DZ020",
@@ -39984,6 +39997,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022207"
     },
     {
+      "asset": "TK105",
+      "defect": "DD-00014400",
+      "raised": "2026-10-07",
+      "system": "TK105.CH.FR (Frame / Рама)",
+      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
+      "descr": "Заменить сайлентблоки реактивной штанги",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": "WO-021478"
+    },
+    {
       "asset": "EX002",
       "defect": "DD-00014278",
       "raised": "2026-10-07",
@@ -40021,19 +40047,6 @@ window.CM_WO_DATA = {
       "by": "Pavel Lefrank",
       "regBy": "Лефранк Павел Петрович",
       "wo": "WO-019045"
-    },
-    {
-      "asset": "TK105",
-      "defect": "DD-00014400",
-      "raised": "2026-10-07",
-      "system": "TK105.CH.FR (Frame / Рама)",
-      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
-      "descr": "Заменить сайлентблоки реактивной штанги",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Pavel Kostin",
-      "regBy": "Костин Павел Александрович",
-      "wo": "WO-021478"
     },
     {
       "asset": "EX021",
@@ -58639,19 +58652,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "DZ022",
-      "defect": "DD-00011314",
-      "raised": "2026-08-21",
-      "system": "DZ022.HS (Hydraulic System / Гидравлическая система)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Повреждение (трещина) трубки подачи гидравлического масла (# 1186 – 73 – 04000 ).",
-      "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Andrey Shipelov",
-      "regBy": "Шипелов Андрей Анатольевич",
-      "wo": null
-    },
-    {
       "asset": "H04",
       "defect": "EB-00000082",
       "raised": "2026-08-21",
@@ -58662,6 +58662,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Eduard Shapoval",
       "regBy": "Eduard Shapoval",
+      "wo": null
+    },
+    {
+      "asset": "DZ022",
+      "defect": "DD-00011314",
+      "raised": "2026-08-21",
+      "system": "DZ022.HS (Hydraulic System / Гидравлическая система)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Повреждение (трещина) трубки подачи гидравлического масла (# 1186 – 73 – 04000 ).",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Andrey Shipelov",
+      "regBy": "Шипелов Андрей Анатольевич",
       "wo": null
     },
     {
@@ -60759,11 +60772,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "TK074",
-      "defect": "DD-00009836",
+      "defect": "DD-00009832",
       "raised": "2026-07-29",
-      "system": "TRUCK, WATER, DUST SUPPRESSING KAMAZ 65115-3082-48, TK074 SUSPENSIONS OldNumber (UT074)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Незначительный люфт балансиров",
+      "system": "TK074.OC (Operator Cab / Кабина оператора)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Требуется замена задних амортизаторов кабины",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -60772,11 +60785,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "TK074",
-      "defect": "DD-00009832",
+      "defect": "DD-00009836",
       "raised": "2026-07-29",
-      "system": "TK074.OC (Operator Cab / Кабина оператора)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Требуется замена задних амортизаторов кабины",
+      "system": "TRUCK, WATER, DUST SUPPRESSING KAMAZ 65115-3082-48, TK074 SUSPENSIONS OldNumber (UT074)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Незначительный люфт балансиров",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -124638,15 +124651,15 @@ window.CM_WO_DATA = {
       "cmLabel": "500h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-12",
       "planStartDt": "2026-11-12T00:00:00",
       "planEnd": "2026-11-12",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-12",
+      "actualStartDt": "2026-11-12T00:00:00",
+      "actualEnd": "2026-11-12"
     },
     {
       "equip": "GE058",
