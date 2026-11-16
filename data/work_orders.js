@@ -2,10 +2,10 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-16T20:52:52+00:00",
+  "generated": "2026-11-16T20:59:25+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
-  "unitsInWorkbook": 811,
+  "unitsInWorkbook": 812,
   "unitsKept": [
     "BL001",
     "BL002",
@@ -1688,7 +1688,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-10-23",
       "detected": "2026-10-23",
-      "planStart": "2026-11-06",
+      "planStart": "2026-12-04",
       "closed": null,
       "asset": "TK107",
       "defect": "DD-00015488",
@@ -5974,6 +5974,32 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-022692"
+    },
+    {
+      "asset": "TK101",
+      "defect": "DD-00017018",
+      "raised": "2026-11-17",
+      "system": "TK101.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Демонтаж ДВС",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": null
+    },
+    {
+      "asset": "WC1001",
+      "defect": "EB-00000106",
+      "raised": "2026-11-17",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Maksat Shakhmurat",
+      "regBy": "Maksat Shakhmurat",
+      "wo": null
     },
     {
       "asset": "EX009",
@@ -25203,6 +25229,19 @@ window.CM_WO_DATA = {
       "wo": "WO-020640"
     },
     {
+      "asset": "EX015",
+      "defect": "DD-00015458",
+      "raised": "2026-10-23",
+      "system": "EX015.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Запотевание РВД на пилотном фильтре",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-020948"
+    },
+    {
       "asset": "DZ005",
       "defect": "DD-00015477",
       "raised": "2026-10-23",
@@ -25292,19 +25331,6 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-020869"
-    },
-    {
-      "asset": "EX015",
-      "defect": "DD-00015458",
-      "raised": "2026-10-23",
-      "system": "EX015.HS.DL (Hydraulic Lines / Гидролинии)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Запотевание РВД на пилотном фильтре",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": "WO-020948"
     },
     {
       "asset": "EX015",
@@ -25760,19 +25786,6 @@ window.CM_WO_DATA = {
       "by": "Andrey Taran",
       "regBy": "Таран Андрей Андреевич",
       "wo": "WO-020550"
-    },
-    {
-      "asset": "LV108",
-      "defect": "DD-00015411",
-      "raised": "2026-10-22",
-      "system": "LV108.CH.SU (Suspension / Подвеска)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "диагностика подвески, ходовой части, трансмиссии, проверка ДВС, ТКР, электросистемпроверка, уровней масла мостов, КПП",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022385"
     },
     {
       "asset": "DZ003",
@@ -26319,6 +26332,19 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-020483"
+    },
+    {
+      "asset": "LV108",
+      "defect": "DD-00015411",
+      "raised": "2026-10-22",
+      "system": "LV108.CH.SU (Suspension / Подвеска)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "диагностика подвески, ходовой части, трансмиссии, проверка ДВС, ТКР, электросистемпроверка, уровней масла мостов, КПП",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022385"
     },
     {
       "asset": "DZ011",
@@ -160109,9 +160135,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-27",
-      "planStartDt": "2026-11-27T00:00:00",
-      "planEnd": "2026-11-27",
+      "planStart": "2026-12-18",
+      "planStartDt": "2026-12-18T00:00:00",
+      "planEnd": "2026-12-18",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -160130,9 +160156,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-12-10",
-      "planStartDt": "2026-12-10T00:00:00",
-      "planEnd": "2026-12-10",
+      "planStart": "2026-12-30",
+      "planStartDt": "2026-12-30T00:00:00",
+      "planEnd": "2026-12-30",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null

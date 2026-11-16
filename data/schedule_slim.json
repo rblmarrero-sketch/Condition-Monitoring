@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-16T20:52:52+00:00",
+  "generated": "2026-11-16T20:59:25+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -418,7 +418,7 @@
         "types": [
           "MP"
         ],
-        "plan": "2026-11-27",
+        "plan": "2026-12-18",
         "priority": "P3 Planned (PM)"
       },
       {
@@ -427,7 +427,7 @@
         "types": [
           "MP"
         ],
-        "plan": "2026-12-10",
+        "plan": "2026-12-30",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -1077,10 +1077,28 @@
       "comp": "",
       "desc": "Magnetic Plug",
       "priority": "P3 Planned (PM)",
-      "raised": "2026-12-10",
+      "raised": "2026-12-30",
       "type": "500 Hours service Planned",
       "hours": 500,
-      "plan": "2026-12-10",
+      "plan": "2026-12-30",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-021277",
+      "equip": "TK101",
+      "cls": "AT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-12-18",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-12-18",
       "status": "Elimination scheduled",
       "request": "",
       "defType": "",
@@ -1544,24 +1562,6 @@
       "cls": "GRD",
       "comp": "",
       "desc": "250h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-27",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-11-27",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
-      "wo": "WO-021277",
-      "equip": "TK101",
-      "cls": "AT",
-      "comp": "",
-      "desc": "Magnetic Plug",
       "priority": "P3 Planned (PM)",
       "raised": "2026-11-27",
       "type": "250 Hours service Planned",
@@ -8262,7 +8262,7 @@
       "raised": "2026-10-23",
       "type": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "hours": null,
-      "plan": "2026-11-06",
+      "plan": "2026-12-04",
       "status": "Elimination scheduled",
       "request": "DD-00015488",
       "defType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
@@ -30813,6 +30813,22 @@
       "x": "Разрушение внешнего  слоя РВД"
     },
     {
+      "d": "DD-00017018",
+      "u": "TK101",
+      "s": "TK101.DRS.ENG (Engine / Двигатель)",
+      "p": "P4",
+      "r": "2026-11-17",
+      "x": "Демонтаж ДВС"
+    },
+    {
+      "d": "EB-00000106",
+      "u": "WC1001",
+      "s": null,
+      "p": "P4",
+      "r": "2026-11-17",
+      "x": null
+    },
+    {
       "d": "DD-00016985",
       "u": "TK121",
       "s": "TK121.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
@@ -34949,6 +34965,14 @@
       "x": "Замена футеровки приемного бункера щековой дробилки"
     },
     {
+      "d": "DD-00015458",
+      "u": "EX015",
+      "s": "EX015.HS.DL (Hydraulic Lines / Гидролинии)",
+      "p": "P4",
+      "r": "2026-10-23",
+      "x": "Запотевание РВД на пилотном фильтре"
+    },
+    {
       "d": "DD-00015441",
       "u": "DZ017",
       "s": "DZ017.OC.FS (Fire Suppression / Система пожаротушения)",
@@ -34987,14 +35011,6 @@
       "p": "P4",
       "r": "2026-10-23",
       "x": "Диагностика утечки масла в районе гидробака"
-    },
-    {
-      "d": "DD-00015458",
-      "u": "EX015",
-      "s": "EX015.HS.DL (Hydraulic Lines / Гидролинии)",
-      "p": "P4",
-      "r": "2026-10-23",
-      "x": "Запотевание РВД на пилотном фильтре"
     },
     {
       "d": "DD-00015460",
@@ -35221,14 +35237,6 @@
       "x": "Дефектовка и ремонт шасси крана"
     },
     {
-      "d": "DD-00015411",
-      "u": "LV108",
-      "s": "LV108.CH.SU (Suspension / Подвеска)",
-      "p": "P4",
-      "r": "2026-10-22",
-      "x": "диагностика подвески, ходовой части, трансмиссии, проверка ДВС, ТКР, электросист"
-    },
-    {
       "d": "DD-00015358",
       "u": "GE096",
       "s": "GE096.DRS.ENG (Engine / Двигатель)",
@@ -35267,6 +35275,14 @@
       "p": "P4",
       "r": "2026-10-22",
       "x": "Не работает автономный отопитель кабины, ошибка F15"
+    },
+    {
+      "d": "DD-00015411",
+      "u": "LV108",
+      "s": "LV108.CH.SU (Suspension / Подвеска)",
+      "p": "P4",
+      "r": "2026-10-22",
+      "x": "диагностика подвески, ходовой части, трансмиссии, проверка ДВС, ТКР, электросист"
     },
     {
       "d": "DD-00015379",
