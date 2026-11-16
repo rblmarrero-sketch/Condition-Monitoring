@@ -6927,3 +6927,11 @@ DRGZCS takes build 635, EX019's first round comes back on the server, provided t
 Also: Severe on a measured round starts at 60 % worn (`GRADE.fromRemaining`, confirmed 15.11), so the UC/TB summary row counts
 "Above 60%" (`uc_above80`, the key keeps its name) and the wear legend says 60 %.
 Defer reasons: "Not in the scope of condition monitoring" (`noscope`, build 634).
+
+**A LOST INDEXEDDB CONNECTION IS REOPENED ON A READ TOO (build 637).** DRGZCS, 15.11.2026 22:09: WebKit answered
+"Connection to Indexed Database server lost. Refresh the page to try again" and every queue read failed the same way for
+over twenty minutes (`queue-unreadable` in the trace), because only three failed WRITES reopened the connection
+(`dbWriteFail`) and a run that cannot read its queue writes nothing. `dbLost(e)` reopens at once when an IndexedDB read or
+write fails with that sentence, "The database connection is closing" or InvalidStateError; any other error keeps the
+connection. The store functions are wrappers (`dbAll` → `dbAll0`, likewise dbTeam, dbGet, dbDel, dbPutRaw); the caller
+still gets the error. `tests/idblost.cjs` fails 2 assertions on build 636. Phone only; no backend change.
