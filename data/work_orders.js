@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-16T08:42:40+00:00",
+  "generated": "2026-11-16T08:57:40+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -5872,6 +5872,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022643"
     },
     {
+      "asset": "BS002",
+      "defect": "DD-00016990",
+      "raised": "2026-11-16",
+      "system": "BS002.ELS.ALT (Alternator / Генератор)",
+      "defectType": "3.13 Warning light / alarm active / Сигнальная лампа / аварийная сигнализация активна",
+      "descr": "Промаргивает индикация системы зарядки АКБ",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": null
+    },
+    {
       "asset": "DR011",
       "defect": "DD-00016977",
       "raised": "2026-11-16",
@@ -5883,6 +5896,45 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": null
+    },
+    {
+      "asset": "EX003",
+      "defect": "DD-00016987",
+      "raised": "2026-11-16",
+      "system": "EX003.ELS.LIG (Head Lighting System / Система головного освещения)",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "Неисправность световых приборов.",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022666"
+    },
+    {
+      "asset": "LV050",
+      "defect": "DD-00016989",
+      "raised": "2026-11-16",
+      "system": "LV050.CH.UC (Undercarriage / Ходовая часть)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Диагностика ходовой части, подвески",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022667"
+    },
+    {
+      "asset": "LV038",
+      "defect": "DD-00016988",
+      "raised": "2026-11-16",
+      "system": "LV038.CH.SU (Suspension / Подвеска)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Диагностика подвески, ходовой части",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022665"
     },
     {
       "asset": "DZ009",
@@ -46926,19 +46978,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK089",
-      "defect": "DD-00004490",
-      "raised": "2026-09-29",
-      "system": "TK089.CH.BY (Dump Body / Самосвальный кузов)",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "Износ кузова 60%",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": "WO-018709"
-    },
-    {
       "asset": "LS030",
       "defect": "DD-00013644",
       "raised": "2026-09-29",
@@ -46950,6 +46989,19 @@ window.CM_WO_DATA = {
       "by": "Andrey Taran",
       "regBy": "Таран Андрей Андреевич",
       "wo": "WO-018603"
+    },
+    {
+      "asset": "TK089",
+      "defect": "DD-00004490",
+      "raised": "2026-09-29",
+      "system": "TK089.CH.BY (Dump Body / Самосвальный кузов)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Износ кузова 60%",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": "WO-018709"
     },
     {
       "asset": "EX001",
@@ -58054,19 +58106,6 @@ window.CM_WO_DATA = {
       "wo": "WO-015456"
     },
     {
-      "asset": "TK046",
-      "defect": "DD-00011270",
-      "raised": "2026-08-21",
-      "system": "TK046.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь масла из-под клапанной крышки ДВС",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
       "asset": "H04",
       "defect": "EB-00000082",
       "raised": "2026-08-21",
@@ -58077,6 +58116,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Eduard Shapoval",
       "regBy": "Eduard Shapoval",
+      "wo": null
+    },
+    {
+      "asset": "TK046",
+      "defect": "DD-00011270",
+      "raised": "2026-08-21",
+      "system": "TK046.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь масла из-под клапанной крышки ДВС",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
       "wo": null
     },
     {
@@ -60459,6 +60511,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "CN004.CH",
+      "defect": "EB-00000070",
+      "raised": "2026-07-24",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P1 Breakdown",
+      "by": "Temir Marochko",
+      "regBy": "Temir Marochko",
+      "wo": null
+    },
+    {
       "asset": "CR001",
       "defect": "DD-00009555",
       "raised": "2026-07-24",
@@ -60482,19 +60547,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Rinat Musaferov",
       "regBy": "Мусаферов Ринат Искакович",
-      "wo": null
-    },
-    {
-      "asset": "CN004.CH",
-      "defect": "EB-00000070",
-      "raised": "2026-07-24",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P1 Breakdown",
-      "by": "Temir Marochko",
-      "regBy": "Temir Marochko",
       "wo": null
     },
     {
