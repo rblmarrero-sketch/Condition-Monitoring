@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-16T22:12:44+00:00",
+  "generated": "2026-11-16T22:27:59+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 812,
@@ -447,8 +447,8 @@ window.CM_WO_DATA = {
     "planStart": 0
   },
   "cmCauseFrom": {
-    "wo": 115,
-    "wr": 92,
+    "wo": 116,
+    "wr": 91,
     "cert": 0,
     "none": 0
   },
@@ -1194,7 +1194,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-10-30",
       "detected": "2026-10-30",
-      "planStart": null,
+      "planStart": "2026-11-24",
       "closed": null,
       "asset": "TK110",
       "defect": "DD-00015979",
@@ -1204,15 +1204,15 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "cause": "Усталостная трещина",
-      "causeFrom": "wr",
+      "causeFrom": "wo",
       "descr": "Износ и поперечные трещины на ремне генератора.",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "by": "Bekzhan",
       "byFull": "Bekzhan Kazhybekov",
       "regBy": "Кажыбеков Бекжан",
       "raisedBy": "ГДК Баимская",
-      "woNumber": null,
-      "maintType": null,
+      "woNumber": "WO-022703",
+      "maintType": "P4 Planned Repair",
       "planned": false
     },
     {
@@ -5961,6 +5961,19 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022691"
+    },
+    {
+      "asset": "LV052",
+      "defect": "DD-00017022",
+      "raised": "2026-11-17",
+      "system": "LV052.ELS.WH (Wiring Harness / Жгут проводов)",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "Ремонт электрооборудования",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022702"
     },
     {
       "asset": "EX005",
@@ -13516,6 +13529,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021850"
     },
     {
+      "asset": "SN004",
+      "defect": "DD-00016413",
+      "raised": "2026-11-06",
+      "system": "SN004.CONV.SDC (Side Discharge Conveyor / Боковой разгрузочный конвейер)",
+      "defectType": "8.03 Conveyor belt splice failure / Разрушение стыка конвейерной ленты",
+      "descr": "износ соеденителей ленты на стыке правого конвейера",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-021851"
+    },
+    {
       "asset": "EX021",
       "defect": "DD-00016417",
       "raised": "2026-11-06",
@@ -13748,19 +13774,6 @@ window.CM_WO_DATA = {
       "by": "Roman Besedovskiy",
       "regBy": "Беседовский Роман Иванович",
       "wo": "WO-021892"
-    },
-    {
-      "asset": "SN004",
-      "defect": "DD-00016413",
-      "raised": "2026-11-06",
-      "system": "SN004.CONV.SDC (Side Discharge Conveyor / Боковой разгрузочный конвейер)",
-      "defectType": "8.03 Conveyor belt splice failure / Разрушение стыка конвейерной ленты",
-      "descr": "износ соеденителей ленты на стыке правого конвейера",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": "WO-021851"
     },
     {
       "asset": "CR003",
@@ -37670,19 +37683,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "PU008",
-      "defect": "DD-00014445",
-      "raised": "2026-10-09",
-      "system": "PU008.DRS.PD (Pump Drive / Привод насоса)",
-      "defectType": "1.19 No movement / no drive / Нет движения / нет привода",
-      "descr": "Сломан Вал привода насоса",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Temir Marochko",
-      "regBy": "Марочко Темир",
-      "wo": null
-    },
-    {
       "asset": "LV069",
       "defect": "DD-00014408",
       "raised": "2026-10-09",
@@ -37706,6 +37706,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Shcherbina",
       "regBy": "Щербина Андрей Николаевич",
+      "wo": null
+    },
+    {
+      "asset": "PU008",
+      "defect": "DD-00014445",
+      "raised": "2026-10-09",
+      "system": "PU008.DRS.PD (Pump Drive / Привод насоса)",
+      "defectType": "1.19 No movement / no drive / Нет движения / нет привода",
+      "descr": "Сломан Вал привода насоса",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Temir Marochko",
+      "regBy": "Марочко Темир",
       "wo": null
     },
     {
@@ -46679,6 +46692,19 @@ window.CM_WO_DATA = {
       "wo": "WO-018630"
     },
     {
+      "asset": "TK108",
+      "defect": "DD-00013664",
+      "raised": "2026-09-29",
+      "system": "TK108.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка антифриза из-под головки 1 цилиндра",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": null
+    },
+    {
       "asset": "EX003",
       "defect": "DD-00013605",
       "raised": "2026-09-29",
@@ -47365,19 +47391,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
       "regBy": "Таран Андрей Андреевич",
-      "wo": null
-    },
-    {
-      "asset": "TK108",
-      "defect": "DD-00013664",
-      "raised": "2026-09-29",
-      "system": "TK108.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка антифриза из-под головки 1 цилиндра",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Pavel Kostin",
-      "regBy": "Костин Павел Александрович",
       "wo": null
     },
     {
@@ -58561,6 +58574,19 @@ window.CM_WO_DATA = {
       "wo": "WO-015456"
     },
     {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
+      "wo": null
+    },
+    {
       "asset": "TK046",
       "defect": "DD-00011270",
       "raised": "2026-08-21",
@@ -58649,19 +58675,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
