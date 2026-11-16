@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-16T11:17:41+00:00",
+  "generated": "2026-11-16T11:24:33+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -5904,11 +5904,37 @@ window.CM_WO_DATA = {
       "system": "EX021.CH.BUC (Bucket / Ковш)",
       "defectType": "2.01 Wear / Износ",
       "descr": "Износ коронок",
-      "status": "Registered",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
-      "wo": null
+      "wo": "WO-022680"
+    },
+    {
+      "asset": "EX009",
+      "defect": "DD-00017003",
+      "raised": "2026-11-16",
+      "system": "EX009.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Порыв РВД",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022681"
+    },
+    {
+      "asset": "TK110",
+      "defect": "DD-00017004",
+      "raised": "2026-11-16",
+      "system": "TK110.DRS.TRA (Transmission / Трансмиссия)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Низкий уровень масла в КПП",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022682"
     },
     {
       "asset": "DR011",
@@ -58262,6 +58288,19 @@ window.CM_WO_DATA = {
       "wo": "WO-015456"
     },
     {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
+      "wo": null
+    },
+    {
       "asset": "TK046",
       "defect": "DD-00011270",
       "raised": "2026-08-21",
@@ -58363,19 +58402,6 @@ window.CM_WO_DATA = {
       "priority": "P2 Urgent",
       "by": "Andrey Shipelov",
       "regBy": "Шипелов Андрей Анатольевич",
-      "wo": null
-    },
-    {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
@@ -60473,11 +60499,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "TK074",
-      "defect": "DD-00009836",
+      "defect": "DD-00009832",
       "raised": "2026-07-29",
-      "system": "TRUCK, WATER, DUST SUPPRESSING KAMAZ 65115-3082-48, TK074 SUSPENSIONS OldNumber (UT074)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Незначительный люфт балансиров",
+      "system": "TK074.OC (Operator Cab / Кабина оператора)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Требуется замена задних амортизаторов кабины",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -60486,11 +60512,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "TK074",
-      "defect": "DD-00009832",
+      "defect": "DD-00009836",
       "raised": "2026-07-29",
-      "system": "TK074.OC (Operator Cab / Кабина оператора)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Требуется замена задних амортизаторов кабины",
+      "system": "TRUCK, WATER, DUST SUPPRESSING KAMAZ 65115-3082-48, TK074 SUSPENSIONS OldNumber (UT074)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Незначительный люфт балансиров",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
