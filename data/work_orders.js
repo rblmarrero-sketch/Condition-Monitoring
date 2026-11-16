@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-16T09:12:46+00:00",
+  "generated": "2026-11-16T09:27:45+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -5872,19 +5872,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022643"
     },
     {
-      "asset": "BS002",
-      "defect": "DD-00016990",
-      "raised": "2026-11-16",
-      "system": "BS002.ELS.ALT (Alternator / Генератор)",
-      "defectType": "3.13 Warning light / alarm active / Сигнальная лампа / аварийная сигнализация активна",
-      "descr": "Промаргивает индикация системы зарядки АКБ",
-      "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": null
-    },
-    {
       "asset": "DR011",
       "defect": "DD-00016977",
       "raised": "2026-11-16",
@@ -5896,6 +5883,45 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": null
+    },
+    {
+      "asset": "EX007",
+      "defect": "DD-00016992",
+      "raised": "2026-11-16",
+      "system": "EX007.CH.TRK (Tracks / Гусеницы)",
+      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
+      "descr": "Износ грунтозацепов",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Kiselev",
+      "regBy": "Киселев Алексей Александрович",
+      "wo": "WO-022670"
+    },
+    {
+      "asset": "DZ019",
+      "defect": "DD-00016991",
+      "raised": "2026-11-16",
+      "system": "DZ019.OC.HE (Heating / Отопление)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Устранить утечку О/Ж",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022669"
+    },
+    {
+      "asset": "BS002",
+      "defect": "DD-00016990",
+      "raised": "2026-11-16",
+      "system": "BS002.ELS.ALT (Alternator / Генератор)",
+      "defectType": "3.13 Warning light / alarm active / Сигнальная лампа / аварийная сигнализация активна",
+      "descr": "Промаргивает индикация системы зарядки АКБ",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022668"
     },
     {
       "asset": "EX003",
