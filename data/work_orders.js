@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-16T10:15:27+00:00",
+  "generated": "2026-11-16T10:27:43+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -5872,32 +5872,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022643"
     },
     {
-      "asset": "TK168",
-      "defect": "DD-00016995",
-      "raised": "2026-11-16",
-      "system": "TK168.OC.GL (Glass / Стекла)",
-      "defectType": "4.22 Wiper/washer circuit fault / Неисправность стеклоочистителя/омывателя",
-      "descr": "Не работает стеклоочиститель. Не работает сигнальный маячок.",
-      "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": null
-    },
-    {
-      "asset": "EX001",
-      "defect": "DD-00016996",
-      "raised": "2026-11-16",
-      "system": "EX001.CH.BUC (Bucket / Ковш)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Замена коронки ковша, долив до уровня техжидкостей",
-      "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": null
-    },
-    {
       "asset": "DR011",
       "defect": "DD-00016977",
       "raised": "2026-11-16",
@@ -5909,6 +5883,32 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": null
+    },
+    {
+      "asset": "CO009",
+      "defect": "DD-00016997",
+      "raised": "2026-11-16",
+      "system": "CO009.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Отогрев, сброс ошибок, запуск",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022675"
+    },
+    {
+      "asset": "EX001",
+      "defect": "DD-00016996",
+      "raised": "2026-11-16",
+      "system": "EX001.CH.BUC (Bucket / Ковш)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Замена коронки ковша, долив до уровня техжидкостей",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022674"
     },
     {
       "asset": "EX003",
@@ -6000,6 +6000,19 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-022668"
+    },
+    {
+      "asset": "TK168",
+      "defect": "DD-00016995",
+      "raised": "2026-11-16",
+      "system": "TK168.OC.GL (Glass / Стекла)",
+      "defectType": "4.22 Wiper/washer circuit fault / Неисправность стеклоочистителя/омывателя",
+      "descr": "Не работает стеклоочиститель. Не работает сигнальный маячок.",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022673"
     },
     {
       "asset": "LV050",
@@ -58184,19 +58197,6 @@ window.CM_WO_DATA = {
       "wo": "WO-015456"
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
-      "wo": null
-    },
-    {
       "asset": "TK046",
       "defect": "DD-00011270",
       "raised": "2026-08-21",
@@ -58298,6 +58298,19 @@ window.CM_WO_DATA = {
       "priority": "P2 Urgent",
       "by": "Andrey Shipelov",
       "regBy": "Шипелов Андрей Анатольевич",
+      "wo": null
+    },
+    {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
@@ -60277,12 +60290,12 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "EX003",
-      "defect": "DD-00009814",
+      "asset": "EX002",
+      "defect": "DD-00009830",
       "raised": "2026-07-29",
-      "system": "EX003.OC.GL (Glass / Стекла)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Трещина стекла",
+      "system": "EX002.HS.MP (Hydraulic Pumps / Гидронасосы)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Масляное запотевание насоса",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -60290,12 +60303,12 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "EX002",
-      "defect": "DD-00009830",
+      "asset": "EX003",
+      "defect": "DD-00009814",
       "raised": "2026-07-29",
-      "system": "EX002.HS.MP (Hydraulic Pumps / Гидронасосы)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Масляное запотевание насоса",
+      "system": "EX003.OC.GL (Glass / Стекла)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Трещина стекла",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -60395,11 +60408,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "TK074",
-      "defect": "DD-00009832",
+      "defect": "DD-00009836",
       "raised": "2026-07-29",
-      "system": "TK074.OC (Operator Cab / Кабина оператора)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Требуется замена задних амортизаторов кабины",
+      "system": "TRUCK, WATER, DUST SUPPRESSING KAMAZ 65115-3082-48, TK074 SUSPENSIONS OldNumber (UT074)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Незначительный люфт балансиров",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -60408,11 +60421,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "TK074",
-      "defect": "DD-00009836",
+      "defect": "DD-00009832",
       "raised": "2026-07-29",
-      "system": "TRUCK, WATER, DUST SUPPRESSING KAMAZ 65115-3082-48, TK074 SUSPENSIONS OldNumber (UT074)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Незначительный люфт балансиров",
+      "system": "TK074.OC (Operator Cab / Кабина оператора)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Требуется замена задних амортизаторов кабины",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
