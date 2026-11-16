@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-16T03:07:49+00:00",
+  "generated": "2026-11-16T03:23:08+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -5833,6 +5833,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "FL001",
+      "defect": "DD-00016982",
+      "raised": "2026-11-16",
+      "system": "FL001.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Установка дополнительного отопителя",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022647"
+    },
+    {
       "asset": "EX004",
       "defect": "DD-00016980",
       "raised": "2026-11-16",
@@ -7146,6 +7159,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022548"
     },
     {
+      "asset": "LS025",
+      "defect": "DD-00016880",
+      "raised": "2026-11-14",
+      "system": "LS025.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Отогрев, запуск ДВС.",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022555"
+    },
+    {
       "asset": "LV086",
       "defect": "DD-00016878",
       "raised": "2026-11-14",
@@ -7404,19 +7430,6 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022565"
-    },
-    {
-      "asset": "LS025",
-      "defect": "DD-00016880",
-      "raised": "2026-11-14",
-      "system": "LS025.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Отогрев, запуск ДВС.",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022555"
     },
     {
       "asset": "TK091",
@@ -37033,19 +37046,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "PU008",
-      "defect": "DD-00014445",
-      "raised": "2026-10-09",
-      "system": "PU008.DRS.PD (Pump Drive / Привод насоса)",
-      "defectType": "1.19 No movement / no drive / Нет движения / нет привода",
-      "descr": "Сломан Вал привода насоса",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Temir Marochko",
-      "regBy": "Марочко Темир",
-      "wo": null
-    },
-    {
       "asset": "GR009",
       "defect": "DD-00014449",
       "raised": "2026-10-09",
@@ -37095,6 +37095,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Shcherbina",
       "regBy": "Щербина Андрей Николаевич",
+      "wo": null
+    },
+    {
+      "asset": "PU008",
+      "defect": "DD-00014445",
+      "raised": "2026-10-09",
+      "system": "PU008.DRS.PD (Pump Drive / Привод насоса)",
+      "defectType": "1.19 No movement / no drive / Нет движения / нет привода",
+      "descr": "Сломан Вал привода насоса",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Temir Marochko",
+      "regBy": "Марочко Темир",
       "wo": null
     },
     {
@@ -57937,6 +57950,19 @@ window.CM_WO_DATA = {
       "wo": "WO-015456"
     },
     {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
+      "wo": null
+    },
+    {
       "asset": "TK046",
       "defect": "DD-00011270",
       "raised": "2026-08-21",
@@ -58025,19 +58051,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
@@ -60379,6 +60392,19 @@ window.CM_WO_DATA = {
       "by": "Rinat Musaferov",
       "regBy": "Мусаферов Ринат Искакович",
       "wo": null
+    },
+    {
+      "asset": "CN019",
+      "defect": "DD-00009527",
+      "raised": "2026-07-24",
+      "system": "CN019 TTC025G2-V SINOMACH",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Telescoping boom pulley block - Bearings",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Temir Marochko",
+      "regBy": "Марочко Темир",
+      "wo": "WO-013391"
     },
     {
       "asset": "CN007",
@@ -62800,29 +62826,29 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "GR002",
-      "defect": "DD-00004868",
-      "raised": "2026-05-11",
-      "system": "GR002.OC (Operator Cab / Кабина оператора)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Трещина на защите под кабиной",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Evgeniy Frolin",
-      "regBy": "Фролин Евгений Владимирович",
-      "wo": null
-    },
-    {
-      "asset": "GR002",
       "defect": "DD-00004869",
       "raised": "2026-05-11",
       "system": "GR002.CH.SU (Suspension / Подвеска)",
       "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "descr": "Разрушение крышки шкворня с правой стороны",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "priority": "P4 Planned (Repair)",
       "by": "Evgeniy Frolin",
       "regBy": "Фролин Евгений Владимирович",
-      "wo": null
+      "wo": "WO-022648"
+    },
+    {
+      "asset": "GR002",
+      "defect": "DD-00004868",
+      "raised": "2026-05-11",
+      "system": "GR002.OC (Operator Cab / Кабина оператора)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Трещина на защите под кабиной",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Evgeniy Frolin",
+      "regBy": "Фролин Евгений Владимирович",
+      "wo": "WO-022646"
     },
     {
       "asset": "EX016",
