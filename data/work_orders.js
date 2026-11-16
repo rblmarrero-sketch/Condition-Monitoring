@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-16T02:43:48+00:00",
+  "generated": "2026-11-16T02:52:43+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -43806,19 +43806,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "DZ020",
-      "defect": "DD-00013872",
-      "raised": "2026-10-02",
-      "system": "DZ020.DRS.EXH (Exhaust System / Система выпуска)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Негерметичность соединения выпускного коллектора и глушителя",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Evgeniy Frolin",
-      "regBy": "Фролин Евгений Владимирович",
-      "wo": "WO-020074"
-    },
-    {
       "asset": "EX023",
       "defect": "DD-00013853",
       "raised": "2026-10-02",
@@ -43830,6 +43817,19 @@ window.CM_WO_DATA = {
       "by": "Evgeniy Frolin",
       "regBy": "Фролин Евгений Владимирович",
       "wo": "WO-021543"
+    },
+    {
+      "asset": "DZ020",
+      "defect": "DD-00013872",
+      "raised": "2026-10-02",
+      "system": "DZ020.DRS.EXH (Exhaust System / Система выпуска)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Негерметичность соединения выпускного коллектора и глушителя",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Evgeniy Frolin",
+      "regBy": "Фролин Евгений Владимирович",
+      "wo": "WO-020074"
     },
     {
       "asset": "CR003",
@@ -57170,6 +57170,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "EX023",
+      "defect": "DD-00006492",
+      "raised": "2026-09-11",
+      "system": "EX023.CH.AL (Central Lubrication System / Централизованная система смазки)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Замена втулок левой цепи 3 шт. (лопнули)",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": "WO-022645"
+    },
+    {
       "asset": "EX022",
       "defect": "DD-00007524",
       "raised": "2026-09-11",
@@ -58910,6 +58923,19 @@ window.CM_WO_DATA = {
       "by": "Andrey Taran",
       "regBy": "Таран Андрей Андреевич",
       "wo": null
+    },
+    {
+      "asset": "CN005",
+      "defect": "DD-00010680",
+      "raised": "2026-08-12",
+      "system": "CN005 TTC025G2-V SINOMACH",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Load pulley block and guide block bearing failure",
+      "status": "Elimination scheduled",
+      "priority": "P1 Breakdown",
+      "by": "Temir Marochko",
+      "regBy": "Марочко Темир",
+      "wo": "WO-018429"
     },
     {
       "asset": "CN014",
