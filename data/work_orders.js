@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-16T02:08:01+00:00",
+  "generated": "2026-11-16T02:22:39+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -5807,6 +5807,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022627"
     },
     {
+      "asset": "TK159",
+      "defect": "DD-00016981",
+      "raised": "2026-11-16",
+      "system": "TK159.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Долив масла в ДВС",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-022643"
+    },
+    {
       "asset": "DR011",
       "defect": "DD-00016977",
       "raised": "2026-11-16",
@@ -5818,19 +5831,6 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": null
-    },
-    {
-      "asset": "TK159",
-      "defect": "DD-00016981",
-      "raised": "2026-11-16",
-      "system": "TK159.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Долив масла в ДВС",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": "WO-022643"
     },
     {
       "asset": "EX004",
@@ -57067,19 +57067,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "EX022",
-      "defect": "DD-00007524",
-      "raised": "2026-09-11",
-      "system": "EX022.CH.AL (Central Lubrication System / Централизованная система смазки)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Замена насоса ЦСС, система ЦСС не работает",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Pavel Kostin",
-      "regBy": "Костин Павел Александрович",
-      "wo": null
-    },
-    {
-      "asset": "EX022",
       "defect": "DD-00012453",
       "raised": "2026-09-11",
       "system": "EX022.DRS.ENG (Engine / Двигатель)",
@@ -57181,6 +57168,19 @@ window.CM_WO_DATA = {
       "by": "Valentin Trapilo",
       "regBy": "Трапило Валентин Святославович",
       "wo": null
+    },
+    {
+      "asset": "EX022",
+      "defect": "DD-00007524",
+      "raised": "2026-09-11",
+      "system": "EX022.CH.AL (Central Lubrication System / Централизованная система смазки)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Замена насоса ЦСС, система ЦСС не работает",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": "WO-022644"
     },
     {
       "asset": "GR015",
