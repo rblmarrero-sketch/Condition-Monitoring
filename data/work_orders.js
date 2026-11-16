@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-16T04:42:55+00:00",
+  "generated": "2026-11-16T04:58:24+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -5833,19 +5833,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "LV036",
-      "defect": "DD-00016983",
-      "raised": "2026-11-16",
-      "system": "LV036.OC.HE (Heating / Отопление)",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Замена мотора отопителя",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022650"
-    },
-    {
       "asset": "FL001",
       "defect": "DD-00016982",
       "raised": "2026-11-16",
@@ -5857,6 +5844,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022647"
+    },
+    {
+      "asset": "LV036",
+      "defect": "DD-00016983",
+      "raised": "2026-11-16",
+      "system": "LV036.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Замена мотора отопителя",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022650"
     },
     {
       "asset": "EX004",
@@ -6314,6 +6314,32 @@ window.CM_WO_DATA = {
       "wo": "WO-022567"
     },
     {
+      "asset": "TK096",
+      "defect": "DD-00016925",
+      "raised": "2026-11-15",
+      "system": "TK096.OC.HE (Heating / Отопление)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Ремонт фена в отсеке водяного насоса",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022586"
+    },
+    {
+      "asset": "TK003",
+      "defect": "DD-00016933",
+      "raised": "2026-11-15",
+      "system": "TK003.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь масла со щупа",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022590"
+    },
+    {
       "asset": "TK148",
       "defect": "DD-00016956",
       "raised": "2026-11-15",
@@ -6444,19 +6470,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "GR012",
-      "defect": "DD-00016958",
-      "raised": "2026-11-15",
-      "system": "GR012.OC.HE (Heating / Отопление)",
-      "defectType": "3.12 Incorrect parameter / setpoint / Неверный параметр / уставка",
-      "descr": "Не работает отопителя кабины",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": null
-    },
-    {
       "asset": "LV048",
       "defect": "DD-00016930",
       "raised": "2026-11-15",
@@ -6494,6 +6507,19 @@ window.CM_WO_DATA = {
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": null
+    },
+    {
+      "asset": "GR012",
+      "defect": "DD-00016958",
+      "raised": "2026-11-15",
+      "system": "GR012.OC.HE (Heating / Отопление)",
+      "defectType": "3.12 Incorrect parameter / setpoint / Неверный параметр / уставка",
+      "descr": "Не работает отопителя кабины",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022651"
     },
     {
       "asset": "DZ016",
@@ -6678,19 +6704,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022587"
     },
     {
-      "asset": "TK096",
-      "defect": "DD-00016925",
-      "raised": "2026-11-15",
-      "system": "TK096.OC.HE (Heating / Отопление)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Ремонт фена в отсеке водяного насоса",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022586"
-    },
-    {
       "asset": "GE054",
       "defect": "DD-00016932",
       "raised": "2026-11-15",
@@ -6715,19 +6728,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022601"
-    },
-    {
-      "asset": "TK003",
-      "defect": "DD-00016933",
-      "raised": "2026-11-15",
-      "system": "TK003.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь масла со щупа",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022590"
     },
     {
       "asset": "WE004",
@@ -7185,6 +7185,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022555"
     },
     {
+      "asset": "TK091",
+      "defect": "DD-00016894",
+      "raised": "2026-11-14",
+      "system": "TK091.CH.BED (Bed / Кузов)",
+      "defectType": "6.03 Structural crack / Трещина конструкции",
+      "descr": "Лопнуло крепление борта",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Kiselev",
+      "regBy": "Киселев Алексей Александрович",
+      "wo": "WO-022556"
+    },
+    {
       "asset": "LV086",
       "defect": "DD-00016878",
       "raised": "2026-11-14",
@@ -7443,19 +7456,6 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022565"
-    },
-    {
-      "asset": "TK091",
-      "defect": "DD-00016894",
-      "raised": "2026-11-14",
-      "system": "TK091.CH.BED (Bed / Кузов)",
-      "defectType": "6.03 Structural crack / Трещина конструкции",
-      "descr": "Лопнуло крепление борта",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Kiselev",
-      "regBy": "Киселев Алексей Александрович",
-      "wo": "WO-022556"
     },
     {
       "asset": "EX011",
@@ -10136,32 +10136,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "GR013",
-      "defect": "DD-00016651",
-      "raised": "2026-11-10",
-      "system": "GR013.CH.AL (Central Lubrication System / Централизованная система смазки)",
-      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
-      "descr": "Отрегулировать подачу смазки",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": null
-    },
-    {
-      "asset": "GR013",
-      "defect": "DD-00016652",
-      "raised": "2026-11-10",
-      "system": "GR013.HS.CYL (Cylinders / Гидроцилиндры)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка с гидроцелиндра поворота",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": null
-    },
-    {
       "asset": "TK170",
       "defect": "DD-00016646",
       "raised": "2026-11-10",
@@ -10303,6 +10277,32 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": null
+    },
+    {
+      "asset": "GR013",
+      "defect": "DD-00016652",
+      "raised": "2026-11-10",
+      "system": "GR013.HS.CYL (Cylinders / Гидроцилиндры)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка с гидроцелиндра поворота",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022653"
+    },
+    {
+      "asset": "GR013",
+      "defect": "DD-00016651",
+      "raised": "2026-11-10",
+      "system": "GR013.CH.AL (Central Lubrication System / Централизованная система смазки)",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "Отрегулировать подачу смазки",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022652"
     },
     {
       "asset": "TK047",
@@ -37085,6 +37085,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "PU008",
+      "defect": "DD-00014445",
+      "raised": "2026-10-09",
+      "system": "PU008.DRS.PD (Pump Drive / Привод насоса)",
+      "defectType": "1.19 No movement / no drive / Нет движения / нет привода",
+      "descr": "Сломан Вал привода насоса",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Temir Marochko",
+      "regBy": "Марочко Темир",
+      "wo": null
+    },
+    {
       "asset": "LV069",
       "defect": "DD-00014408",
       "raised": "2026-10-09",
@@ -37108,19 +37121,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Shcherbina",
       "regBy": "Щербина Андрей Николаевич",
-      "wo": null
-    },
-    {
-      "asset": "PU008",
-      "defect": "DD-00014445",
-      "raised": "2026-10-09",
-      "system": "PU008.DRS.PD (Pump Drive / Привод насоса)",
-      "defectType": "1.19 No movement / no drive / Нет движения / нет привода",
-      "descr": "Сломан Вал привода насоса",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Temir Marochko",
-      "regBy": "Марочко Темир",
       "wo": null
     },
     {
@@ -41258,19 +41258,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK162",
-      "defect": "DD-00014083",
-      "raised": "2026-10-05",
-      "system": "TRUCK, WATER URAL 4672M1-20, TK162 TRANSMISSION OldNumber (UT162)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка масла с РК",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": null
-    },
-    {
       "asset": "GR001",
       "defect": "DD-00014146",
       "raised": "2026-10-05",
@@ -41537,6 +41524,19 @@ window.CM_WO_DATA = {
       "system": "LV158.CH.SU (Suspension / Подвеска)",
       "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
       "descr": "Требуется замена нижних и верхних шаровых опор, замена втулок и стоек стабилизатора",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": null
+    },
+    {
+      "asset": "TK162",
+      "defect": "DD-00014083",
+      "raised": "2026-10-05",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK162 TRANSMISSION OldNumber (UT162)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка масла с РК",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -55369,11 +55369,11 @@ window.CM_WO_DATA = {
       "system": "GR008.DRS.TRA (Transmission / Трансмиссия)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Требуется заменить пыльник левого рулевого наконечника.",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "priority": "P4 Planned (Repair)",
       "by": "Pavel Kostin",
       "regBy": "Костин Павел Александрович",
-      "wo": null
+      "wo": "WO-018383"
     },
     {
       "asset": "GR008",
@@ -57963,19 +57963,6 @@ window.CM_WO_DATA = {
       "wo": "WO-015456"
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
-      "wo": null
-    },
-    {
       "asset": "TK046",
       "defect": "DD-00011270",
       "raised": "2026-08-21",
@@ -58064,6 +58051,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
@@ -58353,6 +58353,19 @@ window.CM_WO_DATA = {
       "wo": "WO-015157"
     },
     {
+      "asset": "GR012",
+      "defect": "DD-00011028",
+      "raised": "2026-08-17",
+      "system": "GR012.DRS (Drive System / Система передачи)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Ослабла натяжка цепей тандемных передач",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Evgeniy Frolin",
+      "regBy": "Фролин Евгений Владимирович",
+      "wo": null
+    },
+    {
       "asset": "EX021",
       "defect": "DD-00011066",
       "raised": "2026-08-17",
@@ -58379,36 +58392,10 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "GR012",
-      "defect": "DD-00011028",
-      "raised": "2026-08-17",
-      "system": "GR012.DRS (Drive System / Система передачи)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Ослабла натяжка цепей тандемных передач",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Evgeniy Frolin",
-      "regBy": "Фролин Евгений Владимирович",
-      "wo": null
-    },
-    {
       "asset": "LV055",
       "defect": "DD-00011051",
       "raised": "2026-08-17",
       "system": "LV055.OC.GL (Glass / Стекла)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Изношены щётки стеклоочистителя",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "LV065",
-      "defect": "DD-00011025",
-      "raised": "2026-08-17",
-      "system": "LV065.OC.GL (Glass / Стекла)",
       "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "descr": "Изношены щётки стеклоочистителя",
       "status": "Registered",
@@ -58428,6 +58415,19 @@ window.CM_WO_DATA = {
       "priority": "P1 Breakdown",
       "by": null,
       "regBy": "Кунсбаев Ратмир Ахсанович",
+      "wo": null
+    },
+    {
+      "asset": "LV065",
+      "defect": "DD-00011025",
+      "raised": "2026-08-17",
+      "system": "LV065.OC.GL (Glass / Стекла)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Изношены щётки стеклоочистителя",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
       "wo": null
     },
     {
