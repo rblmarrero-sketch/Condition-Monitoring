@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-16T13:52:41+00:00",
+  "generated": "2026-11-16T14:22:38+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -5787,11 +5787,11 @@ window.CM_WO_DATA = {
       "system": "EX011.DRS.FS (Fuel System / Топливная система)",
       "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
       "descr": "Потеря мощности",
-      "status": "Registered",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
-      "wo": null
+      "wo": "WO-022684"
     },
     {
       "asset": "GR009",
@@ -6730,6 +6730,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022609"
     },
     {
+      "asset": "TK092",
+      "defect": "DD-00016923",
+      "raised": "2026-11-15",
+      "system": "TK092.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Неисправность отопителя в кабине.",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022584"
+    },
+    {
       "asset": "TK130",
       "defect": "DD-00016949",
       "raised": "2026-11-15",
@@ -7053,19 +7066,6 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-022587"
-    },
-    {
-      "asset": "TK092",
-      "defect": "DD-00016923",
-      "raised": "2026-11-15",
-      "system": "TK092.OC.HE (Heating / Отопление)",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Неисправность отопителя в кабине.",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-022584"
     },
     {
       "asset": "GE054",
@@ -26451,19 +26451,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022393"
     },
     {
-      "asset": "LV108",
-      "defect": "DD-00015411",
-      "raised": "2026-10-22",
-      "system": "LV108.CH.SU (Suspension / Подвеска)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "диагностика подвески, ходовой части, трансмиссии, проверка ДВС, ТКР, электросистемпроверка, уровней масла мостов, КПП",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022385"
-    },
-    {
       "asset": "LV062",
       "defect": "DD-00015365",
       "raised": "2026-10-22",
@@ -26501,6 +26488,19 @@ window.CM_WO_DATA = {
       "by": "Roman Besedovskiy",
       "regBy": "Беседовский Роман Иванович",
       "wo": "WO-020561"
+    },
+    {
+      "asset": "LV108",
+      "defect": "DD-00015411",
+      "raised": "2026-10-22",
+      "system": "LV108.CH.SU (Suspension / Подвеска)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "диагностика подвески, ходовой части, трансмиссии, проверка ДВС, ТКР, электросистемпроверка, уровней масла мостов, КПП",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022385"
     },
     {
       "asset": "CN019",
