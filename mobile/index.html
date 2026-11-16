@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=636">
+<link rel="manifest" href="manifest.webmanifest?v=637">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=636">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=636">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=636">
+<link rel="apple-touch-icon" href="icon-192.png?v=637">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=637">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=637">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -3009,16 +3009,16 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=636"></script>
-<script src="upload-defaults.js?v=636"></script>
-<script src="hme.js?v=636"></script>
-<script src="mp-fc.js?v=636"></script>
-<script src="rtw.js?v=636"></script>
-<script src="hme-cascade.js?v=636"></script>
-<script src="assets.js?v=636"></script>
-<script src="temp-limits.js?v=636"></script>
-<script src="normalize.js?v=636"></script>
-<script src="terms.js?v=636"></script>
+<script src="native.js?v=637"></script>
+<script src="upload-defaults.js?v=637"></script>
+<script src="hme.js?v=637"></script>
+<script src="mp-fc.js?v=637"></script>
+<script src="rtw.js?v=637"></script>
+<script src="hme-cascade.js?v=637"></script>
+<script src="assets.js?v=637"></script>
+<script src="temp-limits.js?v=637"></script>
+<script src="normalize.js?v=637"></script>
+<script src="terms.js?v=637"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -3037,25 +3037,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=636"></script>
-<script src="edits.js?v=636"></script>
-<script src="due.js?v=636"></script>
-<script src="wear.js?v=636"></script>
-<script src="wear-figs.js?v=636"></script>
-<script src="wear-map.js?v=636"></script>
-<script src="machine-photos.js?v=636"></script>
-<script src="machine-fig.js?v=636"></script>
-<script src="get.js?v=636"></script>
-<script src="points.js?v=636"></script>
-<script src="uc-points.js?v=636"></script>
-<script src="inspect-guide.js?v=636"></script>
-<script src="get-figs.js?v=636"></script>
-<script src="body-points.js?v=636"></script>
-<script src="body-map.js?v=636"></script>
-<script src="lube.js?v=636"></script>
-<script src="lube-overrides.js?v=636"></script>
-<script src="lube2027.js?v=636"></script>
-<script src="report-core.js?v=636"></script>
+<script src="grade.js?v=637"></script>
+<script src="edits.js?v=637"></script>
+<script src="due.js?v=637"></script>
+<script src="wear.js?v=637"></script>
+<script src="wear-figs.js?v=637"></script>
+<script src="wear-map.js?v=637"></script>
+<script src="machine-photos.js?v=637"></script>
+<script src="machine-fig.js?v=637"></script>
+<script src="get.js?v=637"></script>
+<script src="points.js?v=637"></script>
+<script src="uc-points.js?v=637"></script>
+<script src="inspect-guide.js?v=637"></script>
+<script src="get-figs.js?v=637"></script>
+<script src="body-points.js?v=637"></script>
+<script src="body-map.js?v=637"></script>
+<script src="lube.js?v=637"></script>
+<script src="lube-overrides.js?v=637"></script>
+<script src="lube2027.js?v=637"></script>
+<script src="report-core.js?v=637"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -5657,6 +5657,21 @@ function dbReconnect(why){
   if(p && typeof p.then==="function") p.then(d=>{ try{ d.close(); }catch(e){} }).catch(()=>{});
 }
 function dbWriteOk(){ dbFailStreak=0; }
+/* A CONNECTION THE ENGINE SAYS IS LOST IS REOPENED AT ONCE, ON A READ AS
+   WELL AS A WRITE (build 637). DRGZCS, 15.11.2026 22:09: WebKit answered
+   "Connection to Indexed Database server lost. Refresh the page to try
+   again" and every queue read after it failed the same way for over twenty
+   minutes ("queue-unreadable"), because only three failed WRITES reopen the
+   connection and a run that cannot read its queue writes nothing. That
+   sentence, and "The database connection is closing" (InvalidStateError),
+   mean this handle will never work again; idb() opens a new one when dbConn
+   is null. Nothing else is retried here: the caller still gets the error. */
+function dbLost(e){
+  const m=String((e&&((e.name||"")+" "+(e.message||"")))||e||"");
+  if(/server lost|connection is closing|InvalidStateError/i.test(m)){ slog("db-lost",{err:m.slice(0,120)}); dbReconnect("lost"); }
+  return e;
+}
+
 function dbWriteFail(why){ dbFailStreak++; if(dbFailStreak>=DB_RECONNECT_AT) dbReconnect(why); }
 /* "storage may be full" was always a guess, not a diagnosis: it only fires
    when t.error is null, and IDBTransaction.error is nullable by spec even
@@ -5774,7 +5789,8 @@ async function dbPut(rec){
   try{ left=await detachRec(rec); }catch(e){ bad("db-detach", e); }
   if(left.length) slog("db-detach-left", {id:String((rec&&rec.id)||"").slice(0,80), n:left.length, names:left.join(", ").slice(0,200)});
   return dbPutRaw(rec); }
-async function dbPutRaw(rec){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readwrite"); let reqErr=null, done=false; const rq=t.objectStore(STORE).put(rec); rq.onerror=()=>{ reqErr=rq.error||null; };
+async function dbPutRaw(rec){ try{ return await dbPutRaw0(rec); }catch(e){ throw dbLost(e); } }
+async function dbPutRaw0(rec){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readwrite"); let reqErr=null, done=false; const rq=t.objectStore(STORE).put(rec); rq.onerror=()=>{ reqErr=rq.error||null; };
   const fail=(phase,fallbackMsg)=>{ if(done) return; done=true; dbWriteFail("dbPut:"+phase); const e=reqErr||t.error||new Error(fallbackMsg); try{ e.phase=phase; e.hadReqErr=!!reqErr; }catch(_){} rej(e); };
   t.oncomplete=()=>{ if(done) return; done=true; dbVer++; dbWriteOk(); res(); }; t.onerror=()=>fail("error","save failed — storage may be full"); t.onabort=()=>fail("abort","save aborted — storage may be full"); }); }
 /* The round being typed lives in this store too, under a reserved id, so it
@@ -5797,11 +5813,15 @@ const DRAFT_ID="__draft__";
    everywhere without every caller having to remember. */
 const TEAM_ID="__team__";
 const isTeamId=id=>String(id||"").indexOf(TEAM_ID)===0;
-async function dbAll(){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readonly"); const rq=t.objectStore(STORE).getAll(); rq.onsuccess=()=>res((rq.result||[]).filter(r=>r&&r.id!==DRAFT_ID&&!isTeamId(r.id))); rq.onerror=()=>rej(rq.error||new Error("could not read the saved rounds")); }); }
+async function dbAll(){ try{ return await dbAll0(); }catch(e){ throw dbLost(e); } }
+async function dbAll0(){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readonly"); const rq=t.objectStore(STORE).getAll(); rq.onsuccess=()=>res((rq.result||[]).filter(r=>r&&r.id!==DRAFT_ID&&!isTeamId(r.id))); rq.onerror=()=>rej(rq.error||new Error("could not read the saved rounds")); }); }
 /* The team rounds only — the other side of that same filter. */
-async function dbTeam(){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readonly"); const rq=t.objectStore(STORE).getAll(); rq.onsuccess=()=>res((rq.result||[]).filter(r=>r&&isTeamId(r.id))); rq.onerror=()=>rej(rq.error||new Error("could not read the shared rounds")); }); }
-async function dbGet(id){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readonly"); const rq=t.objectStore(STORE).get(id); rq.onsuccess=()=>res(rq.result||null); rq.onerror=()=>rej(rq.error||new Error("could not read this record")); }); }
-async function dbDel(id){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readwrite"); let reqErr=null, done=false; const rq=t.objectStore(STORE).delete(id); rq.onerror=()=>{ reqErr=rq.error||null; };
+async function dbTeam(){ try{ return await dbTeam0(); }catch(e){ throw dbLost(e); } }
+async function dbTeam0(){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readonly"); const rq=t.objectStore(STORE).getAll(); rq.onsuccess=()=>res((rq.result||[]).filter(r=>r&&isTeamId(r.id))); rq.onerror=()=>rej(rq.error||new Error("could not read the shared rounds")); }); }
+async function dbGet(id){ try{ return await dbGet0(id); }catch(e){ throw dbLost(e); } }
+async function dbGet0(id){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readonly"); const rq=t.objectStore(STORE).get(id); rq.onsuccess=()=>res(rq.result||null); rq.onerror=()=>rej(rq.error||new Error("could not read this record")); }); }
+async function dbDel(id){ try{ return await dbDel0(id); }catch(e){ throw dbLost(e); } }
+async function dbDel0(id){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readwrite"); let reqErr=null, done=false; const rq=t.objectStore(STORE).delete(id); rq.onerror=()=>{ reqErr=rq.error||null; };
   const fail=(phase,fallbackMsg)=>{ if(done) return; done=true; dbWriteFail("dbDel:"+phase); const e=reqErr||t.error||new Error(fallbackMsg); try{ e.phase=phase; e.hadReqErr=!!reqErr; }catch(_){} rej(e); };
   t.oncomplete=()=>{ if(done) return; done=true; dbVer++; dbWriteOk(); res(); }; t.onerror=()=>fail("error","delete failed"); t.onabort=()=>fail("abort","delete aborted"); }); }
 
@@ -16250,7 +16270,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="636";
+const BUILD="637";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
