@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-16T14:37:42+00:00",
+  "generated": "2026-11-16T14:52:41+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -5989,6 +5989,32 @@ window.CM_WO_DATA = {
       "wo": "WO-022616"
     },
     {
+      "asset": "TK004",
+      "defect": "DD-00016967",
+      "raised": "2026-11-16",
+      "system": "TK004.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "Неисправност задних фонарней. Индикация неисправности на панели приборов.",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022623"
+    },
+    {
+      "asset": "TK167",
+      "defect": "DD-00016968",
+      "raised": "2026-11-16",
+      "system": "TK167.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "Неисправность головного освещения",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022624"
+    },
+    {
       "asset": "DR011",
       "defect": "DD-00016977",
       "raised": "2026-11-16",
@@ -6299,32 +6325,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022638"
-    },
-    {
-      "asset": "TK167",
-      "defect": "DD-00016968",
-      "raised": "2026-11-16",
-      "system": "TK167.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
-      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
-      "descr": "Неисправность головного освещения",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-022624"
-    },
-    {
-      "asset": "TK004",
-      "defect": "DD-00016967",
-      "raised": "2026-11-16",
-      "system": "TK004.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
-      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
-      "descr": "Неисправност задних фонарней. Индикация неисправности на панели приборов.",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-022623"
     },
     {
       "asset": "TK010",
@@ -6782,6 +6782,45 @@ window.CM_WO_DATA = {
       "wo": "WO-022614"
     },
     {
+      "asset": "TK088",
+      "defect": "DD-00016951",
+      "raised": "2026-11-15",
+      "system": "TK088.ELS.BAT (Batteries / Аккумуляторные батареи)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Затруднённый запуск двигателя",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022610"
+    },
+    {
+      "asset": "BS002",
+      "defect": "DD-00016952",
+      "raised": "2026-11-15",
+      "system": "BS002.ELS (Electrical System / Электросистема)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Затруднённый запуск.",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022611"
+    },
+    {
+      "asset": "TK098",
+      "defect": "DD-00016953",
+      "raised": "2026-11-15",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK098 HEAD LAMPS AND TAIL LIGHTS OldNumber (UT098)",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "Неисправность ламп наружного и сигнального освещения.",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022612"
+    },
+    {
       "asset": "TK148",
       "defect": "DD-00016956",
       "raised": "2026-11-15",
@@ -6988,45 +7027,6 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-022607"
-    },
-    {
-      "asset": "BS002",
-      "defect": "DD-00016952",
-      "raised": "2026-11-15",
-      "system": "BS002.ELS (Electrical System / Электросистема)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Затруднённый запуск.",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-022611"
-    },
-    {
-      "asset": "TK098",
-      "defect": "DD-00016953",
-      "raised": "2026-11-15",
-      "system": "TRUCK, WATER URAL 4672M1-20, TK098 HEAD LAMPS AND TAIL LIGHTS OldNumber (UT098)",
-      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
-      "descr": "Неисправность ламп наружного и сигнального освещения.",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-022612"
-    },
-    {
-      "asset": "TK088",
-      "defect": "DD-00016951",
-      "raised": "2026-11-15",
-      "system": "TK088.ELS.BAT (Batteries / Аккумуляторные батареи)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Затруднённый запуск двигателя",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-022610"
     },
     {
       "asset": "LD006",
