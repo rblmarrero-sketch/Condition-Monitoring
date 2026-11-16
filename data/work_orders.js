@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-16T11:37:46+00:00",
+  "generated": "2026-11-16T11:52:38+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -5937,6 +5937,32 @@ window.CM_WO_DATA = {
       "wo": "WO-022682"
     },
     {
+      "asset": "TK097",
+      "defect": "DD-00016970",
+      "raised": "2026-11-16",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK097 FRAME OldNumber (UT097)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Излом резьбового соединения балки рамы",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022626"
+    },
+    {
+      "asset": "EX001",
+      "defect": "DD-00016960",
+      "raised": "2026-11-16",
+      "system": "EX001.CH.BUC (Bucket / Ковш)",
+      "defectType": "1.25 Reduced capacity / output / Снижение производительности / выхода",
+      "descr": "Смазка соединений ковша",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022616"
+    },
+    {
       "asset": "DR011",
       "defect": "DD-00016977",
       "raised": "2026-11-16",
@@ -6275,19 +6301,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022638"
     },
     {
-      "asset": "TK097",
-      "defect": "DD-00016970",
-      "raised": "2026-11-16",
-      "system": "TRUCK, WATER URAL 4672M1-20, TK097 FRAME OldNumber (UT097)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Излом резьбового соединения балки рамы",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022626"
-    },
-    {
       "asset": "TK167",
       "defect": "DD-00016968",
       "raised": "2026-11-16",
@@ -6325,19 +6338,6 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-022625"
-    },
-    {
-      "asset": "EX001",
-      "defect": "DD-00016960",
-      "raised": "2026-11-16",
-      "system": "EX001.CH.BUC (Bucket / Ковш)",
-      "defectType": "1.25 Reduced capacity / output / Снижение производительности / выхода",
-      "descr": "Смазка соединений ковша",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022616"
     },
     {
       "asset": "DZ004",
@@ -6704,6 +6704,45 @@ window.CM_WO_DATA = {
       "wo": "WO-022609"
     },
     {
+      "asset": "TK130",
+      "defect": "DD-00016949",
+      "raised": "2026-11-15",
+      "system": "EMERGENCY EQUIPMENT, FIRE-TRUCK IVECO CURSOR, TK130 WATER PUMP OldNumber (ET003)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Разрыв напорного трубопровода лафетного ствола-разморожен",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022608"
+    },
+    {
+      "asset": "BS009",
+      "defect": "DD-00016954",
+      "raised": "2026-11-15",
+      "system": "BS009.CH.UC (Undercarriage / Ходовая часть)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Заклинивание колеса",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022613"
+    },
+    {
+      "asset": "EX003",
+      "defect": "DD-00016955",
+      "raised": "2026-11-15",
+      "system": "EX003.CH.AL (Central Lubrication System / Централизованная система смазки)",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "заправка смазкой ЦСС",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022614"
+    },
+    {
       "asset": "TK148",
       "defect": "DD-00016956",
       "raised": "2026-11-15",
@@ -6899,32 +6938,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022599"
     },
     {
-      "asset": "EX003",
-      "defect": "DD-00016955",
-      "raised": "2026-11-15",
-      "system": "EX003.CH.AL (Central Lubrication System / Централизованная система смазки)",
-      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
-      "descr": "заправка смазкой ЦСС",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022614"
-    },
-    {
-      "asset": "TK130",
-      "defect": "DD-00016949",
-      "raised": "2026-11-15",
-      "system": "EMERGENCY EQUIPMENT, FIRE-TRUCK IVECO CURSOR, TK130 WATER PUMP OldNumber (ET003)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Разрыв напорного трубопровода лафетного ствола-разморожен",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022608"
-    },
-    {
       "asset": "TK085",
       "defect": "DD-00016947",
       "raised": "2026-11-15",
@@ -6975,19 +6988,6 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-022610"
-    },
-    {
-      "asset": "BS009",
-      "defect": "DD-00016954",
-      "raised": "2026-11-15",
-      "system": "BS009.CH.UC (Undercarriage / Ходовая часть)",
-      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
-      "descr": "Заклинивание колеса",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022613"
     },
     {
       "asset": "LD006",
@@ -8316,6 +8316,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022499"
     },
     {
+      "asset": "EX016",
+      "defect": "DD-00016829",
+      "raised": "2026-11-13",
+      "system": "EX016.HS.PD (Hydraulic Motors / Гидромоторы)",
+      "defectType": "1.20 Slow response / sluggish operation / Медленная реакция / вялая работа",
+      "descr": "Рывки во время движения, греется гидромотор",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022513"
+    },
+    {
       "asset": "TK104",
       "defect": "DD-00016795",
       "raised": "2026-11-13",
@@ -8418,19 +8431,6 @@ window.CM_WO_DATA = {
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": "WO-022591"
-    },
-    {
-      "asset": "EX016",
-      "defect": "DD-00016829",
-      "raised": "2026-11-13",
-      "system": "EX016.HS.PD (Hydraulic Motors / Гидромоторы)",
-      "defectType": "1.20 Slow response / sluggish operation / Медленная реакция / вялая работа",
-      "descr": "Рывки во время движения, греется гидромотор",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022513"
     },
     {
       "asset": "GR001",
