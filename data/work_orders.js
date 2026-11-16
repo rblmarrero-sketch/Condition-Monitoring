@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-16T22:42:52+00:00",
+  "generated": "2026-11-16T22:57:39+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 812,
@@ -447,8 +447,8 @@ window.CM_WO_DATA = {
     "planStart": 0
   },
   "cmCauseFrom": {
-    "wo": 116,
-    "wr": 91,
+    "wo": 117,
+    "wr": 90,
     "cert": 0,
     "none": 0
   },
@@ -1402,7 +1402,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-10-26",
       "detected": "2026-10-26",
-      "planStart": null,
+      "planStart": "2026-11-26",
       "closed": null,
       "asset": "TK107",
       "defect": "DD-00015727",
@@ -1412,15 +1412,15 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
       "cause": "Износ брони",
-      "causeFrom": "wr",
+      "causeFrom": "wo",
       "descr": "Критический износ футеровочных пластин кузова.",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "by": "Bekzhan",
       "byFull": "Bekzhan Kazhybekov",
       "regBy": "Кажыбеков Бекжан",
       "raisedBy": "ГДК Баимская",
-      "woNumber": null,
-      "maintType": null,
+      "woNumber": "WO-022704",
+      "maintType": "P4 Planned Repair",
       "planned": false
     },
     {
@@ -19691,6 +19691,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021240"
     },
     {
+      "asset": "TK111",
+      "defect": "DD-00015880",
+      "raised": "2026-10-29",
+      "system": "TK111.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Диагностика течи масла с сальника коренного",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-022190"
+    },
+    {
       "asset": "EX021",
       "defect": "DD-00015850",
       "raised": "2026-10-29",
@@ -20469,19 +20482,6 @@ window.CM_WO_DATA = {
       "by": "Roman Kochetov",
       "regBy": "Кочетов Роман Иванович",
       "wo": "WO-022257"
-    },
-    {
-      "asset": "TK111",
-      "defect": "DD-00015880",
-      "raised": "2026-10-29",
-      "system": "TK111.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Диагностика течи масла с сальника коренного",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": "WO-022190"
     },
     {
       "asset": "EX021",
@@ -169549,9 +169549,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-12-06",
-      "planStartDt": "2026-12-06T00:00:00",
-      "planEnd": "2026-12-06",
+      "planStart": "2026-12-03",
+      "planStartDt": "2026-12-03T00:00:00",
+      "planEnd": "2026-12-03",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null

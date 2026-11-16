@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-16T22:42:52+00:00",
+  "generated": "2026-11-16T22:57:39+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -556,7 +556,7 @@
         "types": [
           "MP"
         ],
-        "plan": "2026-12-06",
+        "plan": "2026-12-03",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -1107,24 +1107,6 @@
       "completed": ""
     },
     {
-      "wo": "WO-021938",
-      "equip": "TK111",
-      "cls": "AT",
-      "comp": "",
-      "desc": "Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-12-06",
-      "type": "500 Hours service Planned",
-      "hours": 500,
-      "plan": "2026-12-06",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
       "wo": "WO-022142",
       "equip": "TK149",
       "cls": "HT",
@@ -1135,6 +1117,24 @@
       "type": "3000 Hours service Planned",
       "hours": 3000,
       "plan": "2026-12-05",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-021938",
+      "equip": "TK111",
+      "cls": "AT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-12-03",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-12-03",
       "status": "Elimination scheduled",
       "request": "",
       "defType": "",
@@ -7799,6 +7799,24 @@
       "request": "DD-00015724",
       "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "cause": "Фитинг/штуцер ослаб",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-022704",
+      "equip": "TK107",
+      "cls": "",
+      "comp": "TK107.CH.BY (Dump Body / Самосвальный кузов)",
+      "desc": "Критический износ футеровочных пластин кузова.",
+      "priority": "P4 Planned (Repair)",
+      "raised": "2026-10-26",
+      "type": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
+      "hours": null,
+      "plan": "2026-11-26",
+      "status": "Elimination scheduled",
+      "request": "DD-00015727",
+      "defType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
+      "cause": "Износ брони",
       "pmStatus": "open",
       "completed": ""
     },
@@ -33927,6 +33945,14 @@
       "x": "ленты конвеера смещены"
     },
     {
+      "d": "DD-00015880",
+      "u": "TK111",
+      "s": "TK111.DRS.ENG (Engine / Двигатель)",
+      "p": "P4",
+      "r": "2026-10-29",
+      "x": "Диагностика течи масла с сальника коренного"
+    },
+    {
       "d": "DD-00015864",
       "u": "LV041",
       "s": "LV041.ELS.AS (Alarm System / Система сигнализации)",
@@ -33997,14 +34023,6 @@
       "p": "P4",
       "r": "2026-10-29",
       "x": "Требуется установить крепление огнетушителя"
-    },
-    {
-      "d": "DD-00015880",
-      "u": "TK111",
-      "s": "TK111.DRS.ENG (Engine / Двигатель)",
-      "p": "P4",
-      "r": "2026-10-29",
-      "x": "Диагностика течи масла с сальника коренного"
     },
     {
       "d": "DD-00015822",
