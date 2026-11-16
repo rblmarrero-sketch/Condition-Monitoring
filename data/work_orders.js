@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-16T18:35:22+00:00",
+  "generated": "2026-11-16T18:47:47+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -6262,6 +6262,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022654"
     },
     {
+      "asset": "EX007",
+      "defect": "DD-00016992",
+      "raised": "2026-11-16",
+      "system": "EX007.CH.TRK (Tracks / Гусеницы)",
+      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
+      "descr": "Износ грунтозацепов",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Kiselev",
+      "regBy": "Киселев Алексей Александрович",
+      "wo": "WO-022670"
+    },
+    {
       "asset": "LV038",
       "defect": "DD-00016988",
       "raised": "2026-11-16",
@@ -6312,19 +6325,6 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-022673"
-    },
-    {
-      "asset": "EX007",
-      "defect": "DD-00016992",
-      "raised": "2026-11-16",
-      "system": "EX007.CH.TRK (Tracks / Гусеницы)",
-      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
-      "descr": "Износ грунтозацепов",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Kiselev",
-      "regBy": "Киселев Алексей Александрович",
-      "wo": "WO-022670"
     },
     {
       "asset": "EX016",
