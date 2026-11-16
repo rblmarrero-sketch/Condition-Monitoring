@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-16T06:13:03+00:00",
+  "generated": "2026-11-16T06:27:57+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -442,13 +442,13 @@ window.CM_WO_DATA = {
     "regBy": "Contact person initiator WR"
   },
   "cmDateFrom": {
-    "raised": 202,
+    "raised": 204,
     "detected": 0,
     "planStart": 0
   },
   "cmCauseFrom": {
     "wo": 115,
-    "wr": 87,
+    "wr": 89,
     "cert": 0,
     "none": 0
   },
@@ -461,6 +461,58 @@ window.CM_WO_DATA = {
     "Bekzhan"
   ],
   "cmWorkOrders": [
+    {
+      "date": "2026-11-16",
+      "dateFrom": "raised",
+      "raised": "2026-11-16",
+      "detected": "2026-11-16",
+      "planStart": null,
+      "closed": null,
+      "asset": "TK121",
+      "defect": "DD-00016985",
+      "requestNo": "DD-00016985",
+      "eqType": "TRUCK, ARTICULATED",
+      "system": "TK121.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
+      "priority": "P4 Planned (Repair)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "cause": "Поврежден шланга/линии",
+      "causeFrom": "wr",
+      "descr": "Трещина и отсутствие куска защитного стекла бокового дополнительного фонаря",
+      "status": "Registered",
+      "by": "Slam",
+      "byFull": "Slam Taganov",
+      "regBy": "Таганов Слам Джумамуратович",
+      "raisedBy": "ГДК Баимская",
+      "woNumber": null,
+      "maintType": null,
+      "planned": false
+    },
+    {
+      "date": "2026-11-16",
+      "dateFrom": "raised",
+      "raised": "2026-11-16",
+      "detected": "2026-11-16",
+      "planStart": null,
+      "closed": null,
+      "asset": "TK121",
+      "defect": "DD-00016984",
+      "requestNo": "DD-00016984",
+      "eqType": "TRUCK, ARTICULATED",
+      "system": "TK121.BS (Braking System / Тормозная система)",
+      "priority": "P4 Planned (Repair)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Поврежден шланга/линии",
+      "causeFrom": "wr",
+      "descr": "Течь РВД охлаждения тормозов.",
+      "status": "Registered",
+      "by": "Slam",
+      "byFull": "Slam Taganov",
+      "regBy": "Таганов Слам Джумамуратович",
+      "raisedBy": "ГДК Баимская",
+      "woNumber": null,
+      "maintType": null,
+      "planned": false
+    },
     {
       "date": "2026-11-14",
       "dateFrom": "raised",
@@ -5833,6 +5885,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "CN001",
+      "defect": "GD-00006024",
+      "raised": "2026-11-16",
+      "system": "CN001.CH.STR (Superstructure / Надстройка)",
+      "defectType": "7.09 Screen media tear / breakage / Разрыв / поломка ситовой панели",
+      "descr": "нет зарядки",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Ilshat Sabitov",
+      "regBy": "Сабитов Ильшат Рашидович",
+      "wo": "WO-022654"
+    },
+    {
       "asset": "FL001",
       "defect": "DD-00016982",
       "raised": "2026-11-16",
@@ -6392,6 +6457,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022601"
     },
     {
+      "asset": "DZ016",
+      "defect": "DD-00016950",
+      "raised": "2026-11-15",
+      "system": "DZ016.HS.CYL (Cylinders / Гидроцилиндры)",
+      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "descr": "Люфт Г/Ц подъема отвала",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022609"
+    },
+    {
       "asset": "TK148",
       "defect": "DD-00016956",
       "raised": "2026-11-15",
@@ -6572,19 +6650,6 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022651"
-    },
-    {
-      "asset": "DZ016",
-      "defect": "DD-00016950",
-      "raised": "2026-11-15",
-      "system": "DZ016.HS.CYL (Cylinders / Гидроцилиндры)",
-      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
-      "descr": "Люфт Г/Ц подъема отвала",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": "WO-022609"
     },
     {
       "asset": "TK097",
@@ -8017,19 +8082,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "LD004",
-      "defect": "DD-00016796",
-      "raised": "2026-11-13",
-      "system": "LD004.OC.HE (Heating / Отопление)",
-      "defectType": "3.01 Control failure / Ошибка управления",
-      "descr": "Неисправен фен",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": null
-    },
-    {
       "asset": "LD006",
       "defect": "DD-00016797",
       "raised": "2026-11-13",
@@ -8093,6 +8145,19 @@ window.CM_WO_DATA = {
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": "WO-022657"
+    },
+    {
+      "asset": "LD004",
+      "defect": "DD-00016796",
+      "raised": "2026-11-13",
+      "system": "LD004.OC.HE (Heating / Отопление)",
+      "defectType": "3.01 Control failure / Ошибка управления",
+      "descr": "Неисправен фен",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022661"
     },
     {
       "asset": "CR005",
@@ -16949,37 +17014,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "LD001",
-      "defect": "DD-00016125",
-      "raised": "2026-11-01",
-      "system": "LD001.CH (Structure & Chassis / Рама и конструкция)",
-      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
-      "descr": "Разбиты пальцы на центральной втулке",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": null
-    },
-    {
-      "asset": "LD001",
       "defect": "DD-00016123",
       "raised": "2026-11-01",
       "system": "Boom / Стрела",
       "defectType": "3.01 Control failure / Ошибка управления",
       "descr": "Не работает датчик подъема стрелы",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": null
-    },
-    {
-      "asset": "LD001",
-      "defect": "DD-00016124",
-      "raised": "2026-11-01",
-      "system": "LD001.CH.SU (Suspension / Подвеска)",
-      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
-      "descr": "Требуется закачка азота",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Aleksandr Golovko",
@@ -16998,6 +17037,19 @@ window.CM_WO_DATA = {
       "by": "Roman Kochetov",
       "regBy": "Кочетов Роман Иванович",
       "wo": null
+    },
+    {
+      "asset": "LD001",
+      "defect": "DD-00016125",
+      "raised": "2026-11-01",
+      "system": "LD001.CH (Structure & Chassis / Рама и конструкция)",
+      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "descr": "Разбиты пальцы на центральной втулке",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022660"
     },
     {
       "asset": "TK158",
@@ -17024,6 +17076,19 @@ window.CM_WO_DATA = {
       "by": "Roman Besedovskiy",
       "regBy": "Беседовский Роман Иванович",
       "wo": "WO-022198"
+    },
+    {
+      "asset": "LD001",
+      "defect": "DD-00016124",
+      "raised": "2026-11-01",
+      "system": "LD001.CH.SU (Suspension / Подвеска)",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "Требуется закачка азота",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022658"
     },
     {
       "asset": "EX023",
@@ -57976,19 +58041,6 @@ window.CM_WO_DATA = {
       "wo": "WO-015456"
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
-      "wo": null
-    },
-    {
       "asset": "TK046",
       "defect": "DD-00011270",
       "raised": "2026-08-21",
@@ -57999,6 +58051,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
@@ -60381,19 +60446,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "CN004.CH",
-      "defect": "EB-00000070",
-      "raised": "2026-07-24",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P1 Breakdown",
-      "by": "Temir Marochko",
-      "regBy": "Temir Marochko",
-      "wo": null
-    },
-    {
       "asset": "CR001",
       "defect": "DD-00009555",
       "raised": "2026-07-24",
@@ -60417,6 +60469,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Rinat Musaferov",
       "regBy": "Мусаферов Ринат Искакович",
+      "wo": null
+    },
+    {
+      "asset": "CN004.CH",
+      "defect": "EB-00000070",
+      "raised": "2026-07-24",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P1 Breakdown",
+      "by": "Temir Marochko",
+      "regBy": "Temir Marochko",
       "wo": null
     },
     {
@@ -135972,9 +136037,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-27",
-      "planStartDt": "2026-11-27T00:00:00",
-      "planEnd": "2026-11-27",
+      "planStart": "2026-11-26",
+      "planStartDt": "2026-11-26T00:00:00",
+      "planEnd": "2026-11-26",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
