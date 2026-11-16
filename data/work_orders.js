@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-16T03:37:52+00:00",
+  "generated": "2026-11-16T03:57:42+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -6678,6 +6678,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022586"
     },
     {
+      "asset": "GE054",
+      "defect": "DD-00016932",
+      "raised": "2026-11-15",
+      "system": "GE054.ELS.WH (Wiring Harness / Жгут проводов)",
+      "defectType": "4.01 Short circuiting / Короткое замыкание",
+      "descr": "Замена аккумулятора",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022588"
+    },
+    {
       "asset": "EX006",
       "defect": "DD-00016940",
       "raised": "2026-11-15",
@@ -6702,19 +6715,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022590"
-    },
-    {
-      "asset": "GE054",
-      "defect": "DD-00016932",
-      "raised": "2026-11-15",
-      "system": "GE054.ELS.WH (Wiring Harness / Жгут проводов)",
-      "defectType": "4.01 Short circuiting / Короткое замыкание",
-      "descr": "Замена аккумулятора",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022588"
     },
     {
       "asset": "WE004",
@@ -17832,19 +17832,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "GR003",
-      "defect": "DD-00016055",
-      "raised": "2026-10-31",
-      "system": "GR003.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка масла",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": null
-    },
-    {
       "asset": "LV020",
       "defect": "DD-00016044",
       "raised": "2026-10-31",
@@ -17869,6 +17856,19 @@ window.CM_WO_DATA = {
       "by": "Andrey Shipelov",
       "regBy": "Шипелов Андрей Анатольевич",
       "wo": null
+    },
+    {
+      "asset": "GR003",
+      "defect": "DD-00016055",
+      "raised": "2026-10-31",
+      "system": "GR003.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка масла",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022649"
     },
     {
       "asset": "EX025",
