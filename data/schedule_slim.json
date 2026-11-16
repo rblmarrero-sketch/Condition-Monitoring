@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-16T00:17:45+00:00",
+  "generated": "2026-11-16T00:32:49+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -135,18 +135,6 @@
           "INSP"
         ],
         "plan": "2026-11-25",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "EX016": [
-      {
-        "wo": "WO-021640",
-        "hours": 1000,
-        "types": [
-          "FC",
-          "INSP"
-        ],
-        "plan": "2026-11-15",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -3829,12 +3817,12 @@
       "type": "1000 Hours service Planned",
       "hours": 1000,
       "plan": "2026-11-15",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-14"
     },
     {
       "wo": "WO-021674",
@@ -4027,12 +4015,12 @@
       "type": "250 Hours service Planned",
       "hours": 250,
       "plan": "2026-11-14",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-14"
     },
     {
       "wo": "WO-021648",
@@ -4045,12 +4033,12 @@
       "type": "500 Hours service Planned",
       "hours": 500,
       "plan": "2026-11-14",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-14"
     },
     {
       "wo": "WO-021560",
@@ -4135,12 +4123,12 @@
       "type": "500 Hours service Planned",
       "hours": 500,
       "plan": "2026-11-14",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-15"
     },
     {
       "wo": "WO-021276",
