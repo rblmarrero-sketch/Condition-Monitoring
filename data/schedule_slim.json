@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-16T20:08:43+00:00",
+  "generated": "2026-11-16T20:23:19+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -646,7 +646,7 @@
         "types": [
           "MP"
         ],
-        "plan": "2026-11-08",
+        "plan": "2026-11-22",
         "priority": "P3 Planned (PM)"
       },
       {
@@ -655,7 +655,7 @@
         "types": [
           "MP"
         ],
-        "plan": "2026-11-22",
+        "plan": "2026-11-29",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -1314,6 +1314,24 @@
       "raised": "2026-11-29",
       "type": "1000 Hours service Planned",
       "hours": 1000,
+      "plan": "2026-11-29",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-021947",
+      "equip": "TK119",
+      "cls": "AT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-29",
+      "type": "500 Hours service Planned",
+      "hours": 500,
       "plan": "2026-11-29",
       "status": "Elimination scheduled",
       "request": "",
@@ -2385,15 +2403,15 @@
       "completed": ""
     },
     {
-      "wo": "WO-021947",
+      "wo": "WO-020872",
       "equip": "TK119",
       "cls": "AT",
       "comp": "",
       "desc": "Magnetic Plug",
       "priority": "P3 Planned (PM)",
       "raised": "2026-11-22",
-      "type": "500 Hours service Planned",
-      "hours": 500,
+      "type": "250 Hours service Planned",
+      "hours": 250,
       "plan": "2026-11-22",
       "status": "Elimination scheduled",
       "request": "",
@@ -5173,24 +5191,6 @@
       "cause": "",
       "pmStatus": "complete",
       "completed": "2026-11-08"
-    },
-    {
-      "wo": "WO-020872",
-      "equip": "TK119",
-      "cls": "AT",
-      "comp": "",
-      "desc": "Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-08",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-11-08",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
     },
     {
       "wo": "WO-022597",
@@ -9216,7 +9216,7 @@
       "raised": "2026-10-18",
       "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "hours": null,
-      "plan": "2026-11-03",
+      "plan": "2026-11-28",
       "status": "Elimination scheduled",
       "request": "DD-00015045",
       "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
@@ -30789,6 +30789,30 @@
       "x": "утечка воздуха"
     },
     {
+      "d": "DD-00017017",
+      "u": "TK120",
+      "s": "TK120.DRS.TRA (Transmission / Трансмиссия)",
+      "p": "P4",
+      "r": "2026-11-17",
+      "x": "Течь масла с соединительной муфты под двигателем с правой стороны."
+    },
+    {
+      "d": "DD-00017016",
+      "u": "TK120",
+      "s": "TK120.DRS.TRA (Transmission / Трансмиссия)",
+      "p": "P4",
+      "r": "2026-11-17",
+      "x": "Течь масла с правой стороны за кабиной."
+    },
+    {
+      "d": "DD-00017015",
+      "u": "TK120",
+      "s": "TK120.HS.DL (Hydraulic Lines / Гидролинии)",
+      "p": "P4",
+      "r": "2026-11-17",
+      "x": "Разрушение внешнего  слоя РВД"
+    },
+    {
       "d": "DD-00016985",
       "u": "TK121",
       "s": "TK121.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
@@ -35869,6 +35893,14 @@
       "x": "Требуется уплотнить ковш убрать осевой люфт"
     },
     {
+      "d": "DD-00015129",
+      "u": "EX015",
+      "s": "EX015 PC2000-8 BH KOMATSU",
+      "p": "P4",
+      "r": "2026-10-19",
+      "x": "Подтек масла с гидроцилиндра ковша правый"
+    },
+    {
       "d": "DD-00015108",
       "u": "GE030",
       "s": "GE030.DRS.ENG (Engine / Двигатель)",
@@ -35891,14 +35923,6 @@
       "p": "P4",
       "r": "2026-10-19",
       "x": "коррозия на штоке ковшевого цилиндра"
-    },
-    {
-      "d": "DD-00015129",
-      "u": "EX015",
-      "s": "EX015 PC2000-8 BH KOMATSU",
-      "p": "P4",
-      "r": "2026-10-19",
-      "x": "Подтек масла с гидроцилиндра ковша правый"
     },
     {
       "d": "DD-00015109",
@@ -37157,20 +37181,20 @@
       "x": "Зазор в шарнирах рулевого управления."
     },
     {
-      "d": "DD-00014699",
-      "u": "LV050",
-      "s": "LV050.CH.SU (Suspension / Подвеска)",
-      "p": "P4",
-      "r": "2026-10-14",
-      "x": "Зазор в шаровых пальцах."
-    },
-    {
       "d": "DD-00014701",
       "u": "LV050",
       "s": "LV050.DRS.ENG (Engine / Двигатель)",
       "p": "P4",
       "r": "2026-10-14",
       "x": "Утечка топлива"
+    },
+    {
+      "d": "DD-00014699",
+      "u": "LV050",
+      "s": "LV050.CH.SU (Suspension / Подвеска)",
+      "p": "P4",
+      "r": "2026-10-14",
+      "x": "Зазор в шаровых пальцах."
     },
     {
       "d": "DD-00014721",
