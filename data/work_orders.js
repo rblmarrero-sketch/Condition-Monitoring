@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-16T12:40:11+00:00",
+  "generated": "2026-11-16T12:52:40+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -6041,19 +6041,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022666"
     },
     {
-      "asset": "DZ009",
-      "defect": "DD-00016986",
-      "raised": "2026-11-16",
-      "system": "DZ009.CH.CRW (Crawler Chassis / Гусеничное шасси)",
-      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
-      "descr": "Раздавило опорный каток",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": "WO-022664"
-    },
-    {
       "asset": "BS011",
       "defect": "DD-00016993",
       "raised": "2026-11-16",
@@ -6091,19 +6078,6 @@ window.CM_WO_DATA = {
       "by": "Aleksey Kiselev",
       "regBy": "Киселев Алексей Александрович",
       "wo": "WO-022670"
-    },
-    {
-      "asset": "DZ019",
-      "defect": "DD-00016991",
-      "raised": "2026-11-16",
-      "system": "DZ019.OC.HE (Heating / Отопление)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Устранить утечку О/Ж",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": "WO-022669"
     },
     {
       "asset": "BS002",
@@ -6338,6 +6312,32 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-022625"
+    },
+    {
+      "asset": "DZ009",
+      "defect": "DD-00016986",
+      "raised": "2026-11-16",
+      "system": "DZ009.CH.CRW (Crawler Chassis / Гусеничное шасси)",
+      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "descr": "Раздавило опорный каток",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022664"
+    },
+    {
+      "asset": "DZ019",
+      "defect": "DD-00016991",
+      "raised": "2026-11-16",
+      "system": "DZ019.OC.HE (Heating / Отопление)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Устранить утечку О/Ж",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022669"
     },
     {
       "asset": "DZ004",
