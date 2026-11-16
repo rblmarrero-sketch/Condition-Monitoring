@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-16T09:42:34+00:00",
+  "generated": "2026-11-16T10:12:38+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -5872,6 +5872,32 @@ window.CM_WO_DATA = {
       "wo": "WO-022643"
     },
     {
+      "asset": "TK168",
+      "defect": "DD-00016995",
+      "raised": "2026-11-16",
+      "system": "TK168.OC.GL (Glass / Стекла)",
+      "defectType": "4.22 Wiper/washer circuit fault / Неисправность стеклоочистителя/омывателя",
+      "descr": "Не работает стеклоочиститель. Не работает сигнальный маячок.",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": null
+    },
+    {
+      "asset": "EX001",
+      "defect": "DD-00016996",
+      "raised": "2026-11-16",
+      "system": "EX001.CH.BUC (Bucket / Ковш)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Замена коронки ковша, долив до уровня техжидкостей",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": null
+    },
+    {
       "asset": "DR011",
       "defect": "DD-00016977",
       "raised": "2026-11-16",
@@ -5883,6 +5909,58 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": null
+    },
+    {
+      "asset": "EX003",
+      "defect": "DD-00016987",
+      "raised": "2026-11-16",
+      "system": "EX003.ELS.LIG (Head Lighting System / Система головного освещения)",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "Неисправность световых приборов.",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022666"
+    },
+    {
+      "asset": "DZ009",
+      "defect": "DD-00016986",
+      "raised": "2026-11-16",
+      "system": "DZ009.CH.CRW (Crawler Chassis / Гусеничное шасси)",
+      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "descr": "Раздавило опорный каток",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022664"
+    },
+    {
+      "asset": "BS011",
+      "defect": "DD-00016993",
+      "raised": "2026-11-16",
+      "system": "BS011.ELS.AS (Alarm System / Система сигнализации)",
+      "defectType": "3.02 No (faulty) signal/ indication/alarm / Отсутвие сигнала, индикации",
+      "descr": "Не работает звуковой сигнал оповещения о движении задним ходом.",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022671"
+    },
+    {
+      "asset": "EX016",
+      "defect": "DD-00016994",
+      "raised": "2026-11-16",
+      "system": "EX016.CH.AL (Central Lubrication System / Централизованная система смазки)",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "Замена смазочного пистолета, тавотниц",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022672"
     },
     {
       "asset": "EX007",
@@ -5924,19 +6002,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022668"
     },
     {
-      "asset": "EX003",
-      "defect": "DD-00016987",
-      "raised": "2026-11-16",
-      "system": "EX003.ELS.LIG (Head Lighting System / Система головного освещения)",
-      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
-      "descr": "Неисправность световых приборов.",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-022666"
-    },
-    {
       "asset": "LV050",
       "defect": "DD-00016989",
       "raised": "2026-11-16",
@@ -5961,19 +6026,6 @@ window.CM_WO_DATA = {
       "by": "Aleksey Dobrikov",
       "regBy": "Добриков Алексей Владимирович",
       "wo": "WO-022665"
-    },
-    {
-      "asset": "DZ009",
-      "defect": "DD-00016986",
-      "raised": "2026-11-16",
-      "system": "DZ009.CH.CRW (Crawler Chassis / Гусеничное шасси)",
-      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
-      "descr": "Раздавило опорный каток",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": "WO-022664"
     },
     {
       "asset": "CN001",
@@ -60225,12 +60277,12 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "EX002",
-      "defect": "DD-00009830",
+      "asset": "EX003",
+      "defect": "DD-00009814",
       "raised": "2026-07-29",
-      "system": "EX002.HS.MP (Hydraulic Pumps / Гидронасосы)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Масляное запотевание насоса",
+      "system": "EX003.OC.GL (Glass / Стекла)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Трещина стекла",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -60238,12 +60290,12 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "EX003",
-      "defect": "DD-00009814",
+      "asset": "EX002",
+      "defect": "DD-00009830",
       "raised": "2026-07-29",
-      "system": "EX003.OC.GL (Glass / Стекла)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Трещина стекла",
+      "system": "EX002.HS.MP (Hydraulic Pumps / Гидронасосы)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Масляное запотевание насоса",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
