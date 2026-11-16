@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-16T06:42:51+00:00",
+  "generated": "2026-11-16T07:02:50+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -1251,6 +1251,24 @@
       "completed": ""
     },
     {
+      "wo": "WO-022121",
+      "equip": "LD007",
+      "cls": "LDR",
+      "comp": "",
+      "desc": "8000h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-29",
+      "type": "8000 Hours service Planned",
+      "hours": 8000,
+      "plan": "2026-11-29",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-022123",
       "equip": "LD008",
       "cls": "LDR",
@@ -1719,24 +1737,6 @@
       "completed": ""
     },
     {
-      "wo": "WO-022119",
-      "equip": "LD006",
-      "cls": "LDR",
-      "comp": "",
-      "desc": "250h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-26",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-11-26",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
       "wo": "WO-021946",
       "equip": "TK118",
       "cls": "AT",
@@ -1989,24 +1989,6 @@
       "completed": ""
     },
     {
-      "wo": "WO-022121",
-      "equip": "LD007",
-      "cls": "LDR",
-      "comp": "",
-      "desc": "8000h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-24",
-      "type": "8000 Hours service Planned",
-      "hours": 8000,
-      "plan": "2026-11-24",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
       "wo": "WO-021937",
       "equip": "TK110",
       "cls": "AT",
@@ -2100,6 +2082,24 @@
       "wo": "WO-022041",
       "equip": "EX010",
       "cls": "EXC",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-23",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-11-23",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-022119",
+      "equip": "LD006",
+      "cls": "LDR",
       "comp": "",
       "desc": "250h service",
       "priority": "P3 Planned (PM)",
@@ -30941,22 +30941,6 @@
       "x": "Утечка по РВД трансмиссионых филтров"
     },
     {
-      "d": "DD-00016797",
-      "u": "LD006",
-      "s": "LD006.HS.CYL (Cylinders / Гидроцилиндры)",
-      "p": "P4",
-      "r": "2026-11-13",
-      "x": "Утечка по рулевому гидроцилиндру"
-    },
-    {
-      "d": "DD-00016798",
-      "u": "LD006",
-      "s": "LD006.OC.HE (Heating / Отопление)",
-      "p": "P4",
-      "r": "2026-11-13",
-      "x": "Отсутствуе фен"
-    },
-    {
       "d": "DD-00016792",
       "u": "DZ008",
       "s": "DZ008.OC.HE (Heating / Отопление)",
@@ -30973,12 +30957,28 @@
       "x": "Отсутствуют блокирубщие дверки площадок обслуживания короба грохота"
     },
     {
+      "d": "DD-00016797",
+      "u": "LD006",
+      "s": "LD006.HS.CYL (Cylinders / Гидроцилиндры)",
+      "p": "P4",
+      "r": "2026-11-13",
+      "x": "Утечка по рулевому гидроцилиндру"
+    },
+    {
       "d": "DD-00016822",
       "u": "CR003",
       "s": "CR003.CRS.JAW (Jaw Crusher / Щековая дробилка)",
       "p": "P4",
       "r": "2026-11-13",
       "x": "Износ дробящих плит"
+    },
+    {
+      "d": "DD-00016798",
+      "u": "LD006",
+      "s": "LD006.OC.HE (Heating / Отопление)",
+      "p": "P4",
+      "r": "2026-11-13",
+      "x": "Отсутствуе фен"
     },
     {
       "d": "DD-00016796",

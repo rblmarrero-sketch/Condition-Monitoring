@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-16T06:42:51+00:00",
+  "generated": "2026-11-16T07:02:50+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -6463,7 +6463,7 @@ window.CM_WO_DATA = {
       "system": "DZ016.HS.CYL (Cylinders / Гидроцилиндры)",
       "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
       "descr": "Люфт Г/Ц подъема отвала",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
@@ -8082,32 +8082,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "LD006",
-      "defect": "DD-00016797",
-      "raised": "2026-11-13",
-      "system": "LD006.HS.CYL (Cylinders / Гидроцилиндры)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка по рулевому гидроцилиндру",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": null
-    },
-    {
-      "asset": "LD006",
-      "defect": "DD-00016798",
-      "raised": "2026-11-13",
-      "system": "LD006.OC.HE (Heating / Отопление)",
-      "defectType": "3.01 Control failure / Ошибка управления",
-      "descr": "Отсутствуе фен",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": null
-    },
-    {
       "asset": "DZ008",
       "defect": "DD-00016792",
       "raised": "2026-11-13",
@@ -8134,6 +8108,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "LD006",
+      "defect": "DD-00016797",
+      "raised": "2026-11-13",
+      "system": "LD006.HS.CYL (Cylinders / Гидроцилиндры)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка по рулевому гидроцилиндру",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022663"
+    },
+    {
       "asset": "CR003",
       "defect": "DD-00016822",
       "raised": "2026-11-13",
@@ -8145,6 +8132,19 @@ window.CM_WO_DATA = {
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": "WO-022657"
+    },
+    {
+      "asset": "LD006",
+      "defect": "DD-00016798",
+      "raised": "2026-11-13",
+      "system": "LD006.OC.HE (Heating / Отопление)",
+      "defectType": "3.01 Control failure / Ошибка управления",
+      "descr": "Отсутствуе фен",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022662"
     },
     {
       "asset": "LD004",
@@ -139894,9 +139894,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-26",
-      "planStartDt": "2026-11-26T00:00:00",
-      "planEnd": "2026-11-26",
+      "planStart": "2026-11-23",
+      "planStartDt": "2026-11-23T00:00:00",
+      "planEnd": "2026-11-23",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -140939,9 +140939,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-24",
-      "planStartDt": "2026-11-24T00:00:00",
-      "planEnd": "2026-11-24",
+      "planStart": "2026-11-29",
+      "planStartDt": "2026-11-29T00:00:00",
+      "planEnd": "2026-11-29",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
