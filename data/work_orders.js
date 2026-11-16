@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-16T10:47:42+00:00",
+  "generated": "2026-11-16T11:03:01+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 811,
@@ -5872,6 +5872,45 @@ window.CM_WO_DATA = {
       "wo": "WO-022643"
     },
     {
+      "asset": "DZ018",
+      "defect": "DD-00016998",
+      "raised": "2026-11-16",
+      "system": "DZ018.CH.RP (Ripper/Рыхлитель)",
+      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "descr": "Ремонт фиксатора рыхлителя",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022676"
+    },
+    {
+      "asset": "DZ006",
+      "defect": "DD-00017000",
+      "raised": "2026-11-16",
+      "system": "DZ006.HS (Hydraulic System / Гидравлическая система)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Низкий уровень",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022678"
+    },
+    {
+      "asset": "EX021",
+      "defect": "DD-00017002",
+      "raised": "2026-11-16",
+      "system": "EX021.CH.BUC (Bucket / Ковш)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Износ коронок",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": null
+    },
+    {
       "asset": "DR011",
       "defect": "DD-00016977",
       "raised": "2026-11-16",
@@ -5883,6 +5922,32 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": null
+    },
+    {
+      "asset": "EX008",
+      "defect": "DD-00017001",
+      "raised": "2026-11-16",
+      "system": "EX008.CH.BUC (Bucket / Ковш)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Установка болта подрезного ножа планировочного ковша",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022679"
+    },
+    {
+      "asset": "EX019",
+      "defect": "DD-00016999",
+      "raised": "2026-11-16",
+      "system": "EX019.CH.RB(Hydraulic Rock Breaker / Гидромолот)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Смазка агрегатов гидромолота",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022677"
     },
     {
       "asset": "CO009",
