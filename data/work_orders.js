@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-17T10:37:58+00:00",
+  "generated": "2026-11-17T10:55:36+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 812,
@@ -6171,6 +6171,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022743"
     },
     {
+      "asset": "TK037",
+      "defect": "DD-00017046",
+      "raised": "2026-11-17",
+      "system": "TK037.CH.STR (Superstructure / Надстройка)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Крепление переднего бампера",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022744"
+    },
+    {
       "asset": "TK068",
       "defect": "DD-00017037",
       "raised": "2026-11-17",
@@ -6244,6 +6257,19 @@ window.CM_WO_DATA = {
       "descr": "Устранение утечки гидро распредилителя",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": null
+    },
+    {
+      "asset": "EX009",
+      "defect": "DD-00017047",
+      "raised": "2026-11-17",
+      "system": "EX009.CH.AL (Central Lubrication System / Централизованная система смазки)",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "Cмазать рабочие оборудование",
+      "status": "Registered",
+      "priority": "P2 Urgent",
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": null
@@ -6730,32 +6756,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022670"
     },
     {
-      "asset": "LV038",
-      "defect": "DD-00016988",
-      "raised": "2026-11-16",
-      "system": "LV038.CH.SU (Suspension / Подвеска)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Диагностика подвески, ходовой части",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022665"
-    },
-    {
-      "asset": "LV050",
-      "defect": "DD-00016989",
-      "raised": "2026-11-16",
-      "system": "LV050.CH.UC (Undercarriage / Ходовая часть)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Диагностика ходовой части, подвески",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022667"
-    },
-    {
       "asset": "BS002",
       "defect": "DD-00016990",
       "raised": "2026-11-16",
@@ -6782,19 +6782,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022673"
     },
     {
-      "asset": "EX016",
-      "defect": "DD-00016994",
-      "raised": "2026-11-16",
-      "system": "EX016.CH.AL (Central Lubrication System / Централизованная система смазки)",
-      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
-      "descr": "Замена смазочного пистолета, тавотниц",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022672"
-    },
-    {
       "asset": "BS011",
       "defect": "DD-00016993",
       "raised": "2026-11-16",
@@ -6806,6 +6793,19 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-022671"
+    },
+    {
+      "asset": "EX001",
+      "defect": "DD-00016996",
+      "raised": "2026-11-16",
+      "system": "EX001.CH.BUC (Bucket / Ковш)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Замена коронки ковша, долив до уровня техжидкостей",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022674"
     },
     {
       "asset": "EX003",
@@ -6821,17 +6821,43 @@ window.CM_WO_DATA = {
       "wo": "WO-022666"
     },
     {
-      "asset": "EX001",
-      "defect": "DD-00016996",
+      "asset": "LV038",
+      "defect": "DD-00016988",
       "raised": "2026-11-16",
-      "system": "EX001.CH.BUC (Bucket / Ковш)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Замена коронки ковша, долив до уровня техжидкостей",
-      "status": "Elimination scheduled",
+      "system": "LV038.CH.SU (Suspension / Подвеска)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Диагностика подвески, ходовой части",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Aleksey Dobrikov",
       "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022674"
+      "wo": "WO-022665"
+    },
+    {
+      "asset": "LV050",
+      "defect": "DD-00016989",
+      "raised": "2026-11-16",
+      "system": "LV050.CH.UC (Undercarriage / Ходовая часть)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Диагностика ходовой части, подвески",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022667"
+    },
+    {
+      "asset": "EX016",
+      "defect": "DD-00016994",
+      "raised": "2026-11-16",
+      "system": "EX016.CH.AL (Central Lubrication System / Централизованная система смазки)",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "Замена смазочного пистолета, тавотниц",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022672"
     },
     {
       "asset": "DZ018",
@@ -6847,19 +6873,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022676"
     },
     {
-      "asset": "EX019",
-      "defect": "DD-00016999",
-      "raised": "2026-11-16",
-      "system": "EX019.CH.RB(Hydraulic Rock Breaker / Гидромолот)",
-      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
-      "descr": "Смазка агрегатов гидромолота",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022677"
-    },
-    {
       "asset": "DZ006",
       "defect": "DD-00017000",
       "raised": "2026-11-16",
@@ -6871,19 +6884,6 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022678"
-    },
-    {
-      "asset": "EX008",
-      "defect": "DD-00017001",
-      "raised": "2026-11-16",
-      "system": "EX008.CH.BUC (Bucket / Ковш)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Установка болта подрезного ножа планировочного ковша",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022679"
     },
     {
       "asset": "EX021",
@@ -6910,6 +6910,32 @@ window.CM_WO_DATA = {
       "by": "Aleksey Dobrikov",
       "regBy": "Добриков Алексей Владимирович",
       "wo": "WO-022675"
+    },
+    {
+      "asset": "EX008",
+      "defect": "DD-00017001",
+      "raised": "2026-11-16",
+      "system": "EX008.CH.BUC (Bucket / Ковш)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Установка болта подрезного ножа планировочного ковша",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022679"
+    },
+    {
+      "asset": "EX019",
+      "defect": "DD-00016999",
+      "raised": "2026-11-16",
+      "system": "EX019.CH.RB(Hydraulic Rock Breaker / Гидромолот)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Смазка агрегатов гидромолота",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022677"
     },
     {
       "asset": "DR011",
@@ -58457,19 +58483,6 @@ window.CM_WO_DATA = {
       "wo": "WO-018103"
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
-      "wo": null
-    },
-    {
       "asset": "DZ022",
       "defect": "DD-00011314",
       "raised": "2026-08-21",
@@ -58571,6 +58584,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
@@ -59303,19 +59329,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "H07",
-      "defect": "EB-00000078",
-      "raised": "2026-08-13",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Sergey Gulin",
-      "wo": null
-    },
-    {
-      "asset": "H07",
       "defect": "EB-00000079",
       "raised": "2026-08-13",
       "system": null,
@@ -59325,6 +59338,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Eduard Shapoval",
       "regBy": "Eduard Shapoval",
+      "wo": null
+    },
+    {
+      "asset": "H07",
+      "defect": "EB-00000078",
+      "raised": "2026-08-13",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Sergey Gulin",
       "wo": null
     },
     {
