@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-17T05:17:47+00:00",
+  "generated": "2026-11-17T05:38:20+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -987,7 +987,7 @@
         "types": [
           "MP"
         ],
-        "plan": "2026-11-20",
+        "plan": "2026-12-01",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -1175,6 +1175,24 @@
       "type": "250 Hours service Planned",
       "hours": 250,
       "plan": "2026-12-02",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-022151",
+      "equip": "TK157",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-12-01",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-12-01",
       "status": "Elimination scheduled",
       "request": "",
       "defType": "",
@@ -2758,24 +2776,6 @@
       "raised": "2026-11-20",
       "type": "2000 Hours service Planned",
       "hours": 2000,
-      "plan": "2026-11-20",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
-      "wo": "WO-022151",
-      "equip": "TK157",
-      "cls": "HT",
-      "comp": "",
-      "desc": "Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-20",
-      "type": "250 Hours service Planned",
-      "hours": 250,
       "plan": "2026-11-20",
       "status": "Elimination scheduled",
       "request": "",
@@ -6887,6 +6887,24 @@
       "cause": "",
       "pmStatus": "complete",
       "completed": "2026-10-31"
+    },
+    {
+      "wo": "WO-022733",
+      "equip": "TK155",
+      "cls": "",
+      "comp": "TK155.DRS.COO.BOC Brake Oil Cooler / Маслоохладитель тормозов",
+      "desc": "Выявлена утечка рабочей жидкости в зоне фильтра системы охлаждения тормозов.",
+      "priority": "P4 Planned (Repair)",
+      "raised": "2026-10-31",
+      "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "hours": null,
+      "plan": "2026-11-29",
+      "status": "Elimination scheduled",
+      "request": "DD-00016047",
+      "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Поврежден шланга/линии",
+      "pmStatus": "open",
+      "completed": ""
     },
     {
       "wo": "WO-019349",
@@ -30643,6 +30661,14 @@
       "x": "Треск (механизм ГРМ)"
     },
     {
+      "d": "DD-00017035",
+      "u": "EX020",
+      "s": "EX020.CH.BUC (Bucket / Ковш)",
+      "p": "P4",
+      "r": "2026-11-17",
+      "x": "Замена пыльников\\шимовка ковша"
+    },
+    {
       "d": "DD-00017024",
       "u": "TK004",
       "s": "TK004.BS.BPC (Brake Packs / Тормозные пакеты)",
@@ -30665,6 +30691,14 @@
       "p": "P4",
       "r": "2026-11-17",
       "x": "Сломана трубка щупа, невозможно проверить уровень"
+    },
+    {
+      "d": "DD-00017036",
+      "u": "CN013",
+      "s": "CN013.DRS.ENG (Engine / Двигатель)",
+      "p": "P4",
+      "r": "2026-11-17",
+      "x": "замена впускного воздушного патрубка ДВС"
     },
     {
       "d": "DD-00017030",
@@ -33747,6 +33781,14 @@
       "x": "Требуется установить крепление огнетушителя"
     },
     {
+      "d": "DD-00015912",
+      "u": "TK155",
+      "s": "TK155.BS (Braking System / Тормозная система)",
+      "p": "P4",
+      "r": "2026-10-29",
+      "x": "течь масла на тормозном распределителе"
+    },
+    {
       "d": "DD-00015866",
       "u": "EX009",
       "s": "EX009.OC.FS (Fire Suppression / Система пожаротушения)",
@@ -33785,14 +33827,6 @@
       "p": "P4",
       "r": "2026-10-29",
       "x": "замена подушек демпфера вальца"
-    },
-    {
-      "d": "DD-00015912",
-      "u": "TK155",
-      "s": "TK155.BS (Braking System / Тормозная система)",
-      "p": "P4",
-      "r": "2026-10-29",
-      "x": "течь масла на тормозном распределителе"
     },
     {
       "d": "DD-00015822",

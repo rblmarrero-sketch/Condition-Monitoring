@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-17T05:17:47+00:00",
+  "generated": "2026-11-17T05:38:20+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 812,
@@ -447,8 +447,8 @@ window.CM_WO_DATA = {
     "planStart": 0
   },
   "cmCauseFrom": {
-    "wo": 125,
-    "wr": 82,
+    "wo": 126,
+    "wr": 81,
     "cert": 0,
     "none": 0
   },
@@ -1064,7 +1064,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-10-31",
       "detected": "2026-10-31",
-      "planStart": null,
+      "planStart": "2026-11-29",
       "closed": null,
       "asset": "TK155",
       "defect": "DD-00016047",
@@ -1074,15 +1074,15 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "cause": "Поврежден шланга/линии",
-      "causeFrom": "wr",
+      "causeFrom": "wo",
       "descr": "Выявлена утечка рабочей жидкости в зоне фильтра системы охлаждения тормозов.",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "by": "Zhomart",
       "byFull": "Zhomart Khasenov",
       "regBy": "Хасенов Жомарт",
       "raisedBy": "ГДК Баимская",
-      "woNumber": null,
-      "maintType": null,
+      "woNumber": "WO-022733",
+      "maintType": "P4 Planned Repair",
       "planned": false
     },
     {
@@ -6158,6 +6158,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "EX020",
+      "defect": "DD-00017035",
+      "raised": "2026-11-17",
+      "system": "EX020.CH.BUC (Bucket / Ковш)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Замена пыльников\\шимовка ковша",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
       "asset": "TK004",
       "defect": "DD-00017024",
       "raised": "2026-11-17",
@@ -6190,6 +6203,19 @@ window.CM_WO_DATA = {
       "system": "TK010.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "descr": "Сломана трубка щупа, невозможно проверить уровень",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "CN013",
+      "defect": "DD-00017036",
+      "raised": "2026-11-17",
+      "system": "CN013.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "замена впускного воздушного патрубка ДВС",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -20536,6 +20562,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022257"
     },
     {
+      "asset": "TK155",
+      "defect": "DD-00015912",
+      "raised": "2026-10-29",
+      "system": "TK155.BS (Braking System / Тормозная система)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "течь масла на тормозном распределителе",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022732"
+    },
+    {
       "asset": "EX009",
       "defect": "DD-00015866",
       "raised": "2026-10-29",
@@ -20624,19 +20663,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "TK155",
-      "defect": "DD-00015912",
-      "raised": "2026-10-29",
-      "system": "TK155.BS (Braking System / Тормозная система)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "течь масла на тормозном распределителе",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
       "wo": null
     },
     {
@@ -31469,19 +31495,6 @@ window.CM_WO_DATA = {
       "wo": "WO-020991"
     },
     {
-      "asset": "TK157",
-      "defect": "DD-00014961",
-      "raised": "2026-10-17",
-      "system": "TK157.DRS.COO.RAD Radiator / Радиатор",
-      "defectType": "1.02 Overheating / high temperature Перегрев / высокая температура",
-      "descr": "Ремонт жалюзи радиатора",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": "WO-020998"
-    },
-    {
       "asset": "EX006",
       "defect": "DD-00014969",
       "raised": "2026-10-17",
@@ -31506,6 +31519,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-021120"
+    },
+    {
+      "asset": "TK157",
+      "defect": "DD-00014961",
+      "raised": "2026-10-17",
+      "system": "TK157.DRS.COO.RAD Radiator / Радиатор",
+      "defectType": "1.02 Overheating / high temperature Перегрев / высокая температура",
+      "descr": "Ремонт жалюзи радиатора",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-020998"
     },
     {
       "asset": "LS048",
@@ -193008,9 +193034,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-20",
-      "planStartDt": "2026-11-20T00:00:00",
-      "planEnd": "2026-11-20",
+      "planStart": "2026-12-01",
+      "planStartDt": "2026-12-01T00:00:00",
+      "planEnd": "2026-12-01",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
