@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-17T11:37:46+00:00",
+  "generated": "2026-11-17T11:52:43+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 812,
@@ -6389,6 +6389,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "EX021",
+      "defect": "DD-00017049",
+      "raised": "2026-11-17",
+      "system": "EX021.CH.UC (Undercarriage / Ходовая часть)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Критический износ опорных катков",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
       "wo": null
     },
     {
@@ -58496,19 +58509,6 @@ window.CM_WO_DATA = {
       "wo": "WO-018103"
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
-      "wo": null
-    },
-    {
       "asset": "DZ022",
       "defect": "DD-00011314",
       "raised": "2026-08-21",
@@ -58610,6 +58610,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
@@ -59784,6 +59797,19 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "TK010",
+      "defect": "DD-00010485",
+      "raised": "2026-08-09",
+      "system": "TK010.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь радиатора",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": null
+    },
+    {
+      "asset": "TK010",
       "defect": "DD-00010486",
       "raised": "2026-08-09",
       "system": "TK010.CH.SU (Suspension / Подвеска)",
@@ -59802,19 +59828,6 @@ window.CM_WO_DATA = {
       "system": "TK010.CH.HS (Hydraulic System / Гидравлическая система)",
       "defectType": "1.25 Reduced capacity / output / Снижение производительности / выхода",
       "descr": "Общая потеря мощности КМУ, некорректная работа аутригеров (подклинивание)",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": null
-    },
-    {
-      "asset": "TK010",
-      "defect": "DD-00010485",
-      "raised": "2026-08-09",
-      "system": "TK010.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь радиатора",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
