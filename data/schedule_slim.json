@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-16T23:57:41+00:00",
+  "generated": "2026-11-17T00:12:39+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -9315,24 +9315,6 @@
       "completed": ""
     },
     {
-      "wo": "WO-018541",
-      "equip": "DZ002",
-      "cls": "DOZ",
-      "comp": "",
-      "desc": "500h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-10-17",
-      "type": "500 Hours service Planned",
-      "hours": 500,
-      "plan": "2026-10-17",
-      "status": "Completed",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "complete",
-      "completed": "2026-10-17"
-    },
-    {
       "wo": "WO-018495",
       "equip": "DZ020",
       "cls": "DOZ",
@@ -9349,60 +9331,6 @@
       "cause": "",
       "pmStatus": "complete",
       "completed": "2026-10-18"
-    },
-    {
-      "wo": "WO-018511",
-      "equip": "GR015",
-      "cls": "GRD",
-      "comp": "",
-      "desc": "250h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-10-17",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-10-17",
-      "status": "Completed",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "complete",
-      "completed": "2026-10-17"
-    },
-    {
-      "wo": "WO-019129",
-      "equip": "LS037",
-      "cls": "GEN",
-      "comp": "",
-      "desc": "250h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-10-17",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-10-17",
-      "status": "Completed",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "complete",
-      "completed": "2026-10-17"
-    },
-    {
-      "wo": "WO-018493",
-      "equip": "TK113",
-      "cls": "AT",
-      "comp": "",
-      "desc": "Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-10-17",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-10-17",
-      "status": "Completed",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "complete",
-      "completed": "2026-10-17"
     },
     {
       "wo": "WO-018496",
@@ -9439,114 +9367,6 @@
       "cause": "Отказ предпуск. подогр.",
       "pmStatus": "complete",
       "completed": "2026-10-31"
-    },
-    {
-      "wo": "WO-018494",
-      "equip": "EX023",
-      "cls": "EXC",
-      "comp": "",
-      "desc": "Filter Cut / General Inspection",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-10-16",
-      "type": "1000 Hours service Planned",
-      "hours": 1000,
-      "plan": "2026-10-16",
-      "status": "Completed",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "complete",
-      "completed": "2026-10-17"
-    },
-    {
-      "wo": "WO-018508",
-      "equip": "LD006",
-      "cls": "LDR",
-      "comp": "",
-      "desc": "2000h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-10-16",
-      "type": "2000 Hours service Planned",
-      "hours": 2000,
-      "plan": "2026-10-16",
-      "status": "Completed",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "complete",
-      "completed": "2026-10-17"
-    },
-    {
-      "wo": "WO-017853",
-      "equip": "TK127",
-      "cls": "AT",
-      "comp": "",
-      "desc": "General Inspection / Magnetic Plug / Dump Body Liner",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-10-16",
-      "type": "8000 Hours service Planned",
-      "hours": 8000,
-      "plan": "2026-10-16",
-      "status": "Completed",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "complete",
-      "completed": "2026-10-17"
-    },
-    {
-      "wo": "WO-017295",
-      "equip": "TK151",
-      "cls": "HT",
-      "comp": "",
-      "desc": "Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-10-16",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-10-16",
-      "status": "Completed",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "complete",
-      "completed": "2026-10-17"
-    },
-    {
-      "wo": "WO-018533",
-      "equip": "TK152",
-      "cls": "HT",
-      "comp": "",
-      "desc": "Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-10-16",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-10-16",
-      "status": "Completed",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "complete",
-      "completed": "2026-10-17"
-    },
-    {
-      "wo": "WO-019123",
-      "equip": "TK166",
-      "cls": "GEN",
-      "comp": "",
-      "desc": "2000h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-10-16",
-      "type": "2000 Hours service Planned",
-      "hours": 2000,
-      "plan": "2026-10-16",
-      "status": "Completed",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "complete",
-      "completed": "2026-10-17"
     },
     {
       "wo": "WO-021507",
@@ -10125,24 +9945,6 @@
       "completed": "2026-10-19"
     },
     {
-      "wo": "WO-019254",
-      "equip": "EX003",
-      "cls": "",
-      "comp": "EX003.HS.DL (Hydraulic Lines / Гидролинии)",
-      "desc": "В насосном отсеке перетирание  РВД в месте взаимного контакта и контакта с разрушенным хомутом крепления.",
-      "priority": "P4 Planned (Repair)",
-      "raised": "2026-09-30",
-      "type": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
-      "hours": null,
-      "plan": "2026-10-17",
-      "status": "Completed",
-      "request": "DD-00013743",
-      "defType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
-      "cause": "Отсутствует крепеж",
-      "pmStatus": "complete",
-      "completed": "2026-10-17"
-    },
-    {
       "wo": "WO-021541",
       "equip": "EX012",
       "cls": "",
@@ -10231,24 +10033,6 @@
       "cause": "",
       "pmStatus": "open",
       "completed": ""
-    },
-    {
-      "wo": "WO-019695",
-      "equip": "TK151",
-      "cls": "",
-      "comp": "TK151.CH.AL (Central Lubrication System / Централизованная система смазки)",
-      "desc": "Оторван штуцер ЦСС реактивной тяги.",
-      "priority": "P4 Planned (Repair)",
-      "raised": "2026-09-24",
-      "type": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "hours": null,
-      "plan": "2026-10-17",
-      "status": "Completed",
-      "request": "DD-00013292",
-      "defType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "cause": "Хрупкое разрушение",
-      "pmStatus": "complete",
-      "completed": "2026-10-17"
     },
     {
       "wo": "WO-016837",
@@ -30601,246 +30385,6 @@
       "x": "Не работает автономный отопитель"
     },
     {
-      "d": "DD-00012790",
-      "u": "LV033",
-      "s": "LV033.SS.RE (Tie Rod Ends / Наконечники рулевых тяг)",
-      "p": "P2",
-      "r": "2026-09-17",
-      "x": "Замена наконечников рулевых тяг"
-    },
-    {
-      "d": "DD-00012776",
-      "u": "EX007",
-      "s": "EX007.CH.BUC (Bucket / Ковш)",
-      "p": "P2",
-      "r": "2026-09-17",
-      "x": "ослабление крепежа"
-    },
-    {
-      "d": "DD-00012786",
-      "u": "TK032",
-      "s": "TK032.DRS.ENG (Engine / Двигатель)",
-      "p": "P2",
-      "r": "2026-09-17",
-      "x": "Диагностика низкого давления масла ДВС"
-    },
-    {
-      "d": "DD-00012780",
-      "u": "TK003",
-      "s": "TK003.OC.GL (Glass / Стекла)",
-      "p": "P2",
-      "r": "2026-09-17",
-      "x": "Износ щёток стеклоочистителя"
-    },
-    {
-      "d": "DD-00012794",
-      "u": "TK091",
-      "s": "TK091.DRS.TRA (Transmission / Трансмиссия)",
-      "p": "P2",
-      "r": "2026-09-17",
-      "x": "Ремонт кулис КПП"
-    },
-    {
-      "d": "DD-00012789",
-      "u": "EX020",
-      "s": "EX020.CH.AL (Central Lubrication System / Централизованная система смазки)",
-      "p": "P2",
-      "r": "2026-09-17",
-      "x": "Прочистка каналов смазки шарнирных соединений стрелы"
-    },
-    {
-      "d": "DD-00012795",
-      "u": "TK071",
-      "s": "TK071.OC (Operator Cab / Кабина оператора)",
-      "p": "P2",
-      "r": "2026-09-17",
-      "x": "Ремонт подвески кабины"
-    },
-    {
-      "d": "DD-00012793",
-      "u": "TK030",
-      "s": "TK030.DRS.TRA (Transmission / Трансмиссия)",
-      "p": "P2",
-      "r": "2026-09-17",
-      "x": "Ремонт демультипликатора"
-    },
-    {
-      "d": "DD-00012792",
-      "u": "TK040",
-      "s": "TK040.DRS.FUE (Fuel System / Топливная система)",
-      "p": "P2",
-      "r": "2026-09-17",
-      "x": "Устранение утечки ДТ"
-    },
-    {
-      "d": "DD-00012770",
-      "u": "EX009",
-      "s": "EX009.CH.AL (Central Lubrication System / Централизованная система смазки)",
-      "p": "P2",
-      "r": "2026-09-17",
-      "x": "Заполнение ЦСС"
-    },
-    {
-      "d": "DD-00012772",
-      "u": "FL012",
-      "s": "FL012.HS (Hydraulic System / Гидравлическая система)",
-      "p": "P2",
-      "r": "2026-09-17",
-      "x": "списание ранее выданного фильтра"
-    },
-    {
-      "d": "DD-00012774",
-      "u": "CD006",
-      "s": "CD006.BS.HOS (Hoses and Piping / Шланги и трубопроводы)",
-      "p": "P2",
-      "r": "2026-09-17",
-      "x": "утечка топлива"
-    },
-    {
-      "d": "DD-00012777",
-      "u": "CD008",
-      "s": "CD008.OC.AC (Air Conditioning / Кондиционирование)",
-      "p": "P2",
-      "r": "2026-09-17",
-      "x": "лом шпильки крепления компрессора"
-    },
-    {
-      "d": "DD-00012775",
-      "u": "FL008",
-      "s": "FL008.ELS (Electrical System / Электросистема)",
-      "p": "P2",
-      "r": "2026-09-17",
-      "x": "ошибки на панели приборов"
-    },
-    {
-      "d": "DD-00012782",
-      "u": "EX011",
-      "s": "EX011.DRS.ENG.LUB (Lubrication System / Система смазки)",
-      "p": "P2",
-      "r": "2026-09-17",
-      "x": "Наполнение ЦСС"
-    },
-    {
-      "d": "DD-00012779",
-      "u": "TK033",
-      "s": "TK033.DRS.TRA (Transmission / Трансмиссия)",
-      "p": "P2",
-      "r": "2026-09-17",
-      "x": "Замена ПГУ"
-    },
-    {
-      "d": "DD-00012778",
-      "u": "TK035",
-      "s": "TK035.DRS.TRA (Transmission / Трансмиссия)",
-      "p": "P2",
-      "r": "2026-09-17",
-      "x": "Ремонт кулисы КПП"
-    },
-    {
-      "d": "DD-00012781",
-      "u": "TK150",
-      "s": "TK150.DRS.TRA (Transmission / Трансмиссия)",
-      "p": "P2",
-      "r": "2026-09-17",
-      "x": "Замена хвостовика отбора мощности, наролнение ЦСС, протяжка болтовых соединений"
-    },
-    {
-      "d": "DD-00012787",
-      "u": "EX019",
-      "s": "EX019.HS (Hydraulic System / Гидравлическая система)",
-      "p": "P2",
-      "r": "2026-09-17",
-      "x": "Замена клапана блокировки операций"
-    },
-    {
-      "d": "DD-00012784",
-      "u": "EX009",
-      "s": "EX009.HS.CV (Control Valves / Гидрораспределители)",
-      "p": "P2",
-      "r": "2026-09-17",
-      "x": "Утечка гидравлики"
-    },
-    {
-      "d": "DD-00012785",
-      "u": "TK107",
-      "s": "TK107.CH.SU (Suspension / Подвеска)",
-      "p": "P2",
-      "r": "2026-09-17",
-      "x": "Выровнять давление в задних стойках"
-    },
-    {
-      "d": "DD-00012791",
-      "u": "TK112",
-      "s": "TK112.BS.HOS (Hoses and Piping / Шланги и трубопроводы)",
-      "p": "P2",
-      "r": "2026-09-17",
-      "x": "Замента тормозного РВД"
-    },
-    {
-      "d": "DD-00012799",
-      "u": "LV055",
-      "s": "LV055.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
-      "p": "P2",
-      "r": "2026-09-17",
-      "x": "лампочка вышла из строя"
-    },
-    {
-      "d": "DD-00012797",
-      "u": "DZ009",
-      "s": "DZ009.ELS.BAT (Batteries / Аккумуляторные батареи)",
-      "p": "P2",
-      "r": "2026-09-17",
-      "x": "Ревизия АКБ"
-    },
-    {
-      "d": "DD-00012801",
-      "u": "EX009",
-      "s": "EX009.CH.BUC (Bucket / Ковш)",
-      "p": "P2",
-      "r": "2026-09-17",
-      "x": "Замена бокореза ковша"
-    },
-    {
-      "d": "DD-00012771",
-      "u": "TK147",
-      "s": "TK147.DRS.TRA (Transmission / Трансмиссия)",
-      "p": "P2",
-      "r": "2026-09-17",
-      "x": "Высокая температура КПП"
-    },
-    {
-      "d": "DD-00012802",
-      "u": "EX006",
-      "s": "EX006.CH.BUC (Bucket / Ковш)",
-      "p": "P2",
-      "r": "2026-09-17",
-      "x": "Отсутствует стопор пальца ковша"
-    },
-    {
-      "d": "DD-00012800",
-      "u": "TK148",
-      "s": "TK148.DRS.TRA (Transmission / Трансмиссия)",
-      "p": "P2",
-      "r": "2026-09-17",
-      "x": "Устранение течи со шланга КПП"
-    },
-    {
-      "d": "DD-00012788",
-      "u": "FL001",
-      "s": "FL001.OC (Operator Cab / Кабина оператора)",
-      "p": "P2",
-      "r": "2026-09-17",
-      "x": "Замена щеток стеклоочистителя"
-    },
-    {
-      "d": "DD-00012798",
-      "u": "TK046",
-      "s": "TK046.BS (Braking System / Тормозная система)",
-      "p": "P2",
-      "r": "2026-09-17",
-      "x": "утечка воздуха"
-    },
-    {
       "d": "DD-00017017",
       "u": "TK120",
       "s": "TK120.DRS.TRA (Transmission / Трансмиссия)",
@@ -44111,14 +43655,6 @@
       "p": "P4",
       "r": "2026-09-18",
       "x": "Утечка масла с хвостовика заднего моста"
-    },
-    {
-      "d": "DD-00012783",
-      "u": "LV047",
-      "s": "LV047 HILUX 2.5 TOYOTA",
-      "p": "P4",
-      "r": "2026-09-17",
-      "x": "Отсутствует домкрат"
     }
   ],
   "ncrList": []
