@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-17T04:43:20+00:00",
+  "generated": "2026-11-17T05:03:12+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 812,
@@ -447,8 +447,8 @@ window.CM_WO_DATA = {
     "planStart": 0
   },
   "cmCauseFrom": {
-    "wo": 123,
-    "wr": 84,
+    "wo": 125,
+    "wr": 82,
     "cert": 0,
     "none": 0
   },
@@ -2000,7 +2000,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-10-18",
       "detected": "2026-10-18",
-      "planStart": null,
+      "planStart": "2026-11-28",
       "closed": null,
       "asset": "TK148",
       "defect": "DD-00015042",
@@ -2010,15 +2010,15 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "cause": "Усталостная трещина",
-      "causeFrom": "wr",
+      "causeFrom": "wo",
       "descr": "Ремень генератора в трещинах, требуется замена.",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "by": "Bekzhan",
       "byFull": "Bekzhan Kazhybekov",
       "regBy": "Кажыбеков Бекжан",
       "raisedBy": "ГДК Баимская",
-      "woNumber": null,
-      "maintType": null,
+      "woNumber": "WO-022729",
+      "maintType": "P4 Planned Repair",
       "planned": false
     },
     {
@@ -2026,7 +2026,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-10-18",
       "detected": "2026-10-18",
-      "planStart": null,
+      "planStart": "2026-11-28",
       "closed": null,
       "asset": "TK148",
       "defect": "DD-00015041",
@@ -2036,15 +2036,15 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "cause": "Разрушение от удара",
-      "causeFrom": "wr",
+      "causeFrom": "wo",
       "descr": "Выявлено разрушения крепления фары-поворотника .",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "by": "Bekzhan",
       "byFull": "Bekzhan Kazhybekov",
       "regBy": "Кажыбеков Бекжан",
       "raisedBy": "ГДК Баимская",
-      "woNumber": null,
-      "maintType": null,
+      "woNumber": "WO-022730",
+      "maintType": "P4 Planned Repair",
       "planned": false
     },
     {
@@ -6117,6 +6117,45 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022726"
+    },
+    {
+      "asset": "TK034",
+      "defect": "DD-00017032",
+      "raised": "2026-11-17",
+      "system": "TK034.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Замена фена",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022727"
+    },
+    {
+      "asset": "CR004",
+      "defect": "DD-00017034",
+      "raised": "2026-11-17",
+      "system": "CR004 MCCLOSKEY C44",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "трещины на бортах приемного бункера",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-022731"
+    },
+    {
+      "asset": "LV067",
+      "defect": "DD-00017033",
+      "raised": "2026-11-17",
+      "system": "LV067.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Треск (механизм ГРМ)",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
     },
     {
       "asset": "TK004",
@@ -11767,7 +11806,7 @@ window.CM_WO_DATA = {
       "system": "CR008.CONV.BEL (Conveyor Belt / Конвейерная лента)",
       "defectType": "8.01 Conveyor belt cut / tear / Порез / разрыв конвейерной ленты",
       "descr": "критический износ конвейерной ленты главного конвейера",
-      "status": "Elimination scheduled",
+      "status": "In progress",
       "priority": "P4 Planned (Repair)",
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
@@ -27673,6 +27712,19 @@ window.CM_WO_DATA = {
       "wo": "WO-020504"
     },
     {
+      "asset": "TK148",
+      "defect": "DD-00015311",
+      "raised": "2026-10-21",
+      "system": "TK148.DRS.TC (Torque Converter / Гидротрансформатор)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь масла из РВД гидротрансформатора",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Evgeniy Frolin",
+      "regBy": "Фролин Евгений Владимирович",
+      "wo": "WO-022728"
+    },
+    {
       "asset": "EX006",
       "defect": "DD-00015310",
       "raised": "2026-10-21",
@@ -27770,19 +27822,6 @@ window.CM_WO_DATA = {
       "system": "TK148.DRS.FD.RRF Rear-Right Final Drive / Правая конечная передача",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Течь масла из редуктора конечной передачи справа",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Evgeniy Frolin",
-      "regBy": "Фролин Евгений Владимирович",
-      "wo": null
-    },
-    {
-      "asset": "TK148",
-      "defect": "DD-00015311",
-      "raised": "2026-10-21",
-      "system": "TK148.DRS.TC (Torque Converter / Гидротрансформатор)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь масла из РВД гидротрансформатора",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Evgeniy Frolin",
@@ -29935,6 +29974,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "TK152",
+      "defect": "DD-00015019",
+      "raised": "2026-10-18",
+      "system": "TK152.DRS.TRA Transmission / Трансмиссия",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь масла через переднее уплотнение коробки передач",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Evgeniy Frolin",
+      "regBy": "Фролин Евгений Владимирович",
+      "wo": "WO-020354"
+    },
+    {
       "asset": "TK146",
       "defect": "DD-00015055",
       "raised": "2026-10-18",
@@ -30258,19 +30310,6 @@ window.CM_WO_DATA = {
       "by": "Yuriy Novikov",
       "regBy": "Новиков Юрий Александрович",
       "wo": "WO-020153"
-    },
-    {
-      "asset": "TK152",
-      "defect": "DD-00015019",
-      "raised": "2026-10-18",
-      "system": "TK152.DRS.TRA Transmission / Трансмиссия",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь масла через переднее уплотнение коробки передач",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Evgeniy Frolin",
-      "regBy": "Фролин Евгений Владимирович",
-      "wo": "WO-020354"
     },
     {
       "asset": "TK103",
@@ -51177,6 +51216,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "TK152",
+      "defect": "DD-00013243",
+      "raised": "2026-09-24",
+      "system": "TK152.DRS.COO (Cooling System / Система охлаждения)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка ОЖ с теплообменника ДВС",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": "WO-017839"
+    },
+    {
       "asset": "CR006",
       "defect": "DD-00013275",
       "raised": "2026-09-24",
@@ -51799,19 +51851,6 @@ window.CM_WO_DATA = {
       "by": "Roman Chernienko",
       "regBy": "Черниенко Роман Юрьевич",
       "wo": "WO-017937"
-    },
-    {
-      "asset": "TK152",
-      "defect": "DD-00013243",
-      "raised": "2026-09-24",
-      "system": "TK152.DRS.COO (Cooling System / Система охлаждения)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка ОЖ с теплообменника ДВС",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Pavel Kostin",
-      "regBy": "Костин Павел Александрович",
-      "wo": "WO-017839"
     },
     {
       "asset": "CR006",
@@ -58288,6 +58327,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
+      "wo": null
+    },
+    {
       "asset": "BS005",
       "defect": "DD-00011312",
       "raised": "2026-08-21",
@@ -58376,19 +58428,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
