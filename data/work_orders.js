@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-17T06:11:10+00:00",
+  "generated": "2026-11-17T06:23:36+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 812,
@@ -447,8 +447,8 @@ window.CM_WO_DATA = {
     "planStart": 0
   },
   "cmCauseFrom": {
-    "wo": 129,
-    "wr": 78,
+    "wo": 130,
+    "wr": 77,
     "cert": 0,
     "none": 0
   },
@@ -882,7 +882,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-11-09",
       "detected": "2026-11-09",
-      "planStart": null,
+      "planStart": "2026-12-04",
       "closed": null,
       "asset": "TK161",
       "defect": "DD-00016578",
@@ -892,15 +892,15 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "cause": "Фитинг/штуцер ослаб",
-      "causeFrom": "wr",
+      "causeFrom": "wo",
       "descr": "Утечка рабочей жидкости в зоне штуцеров гидравлического распределителя системы охлаждения тормозов.",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "by": "Zhomart",
       "byFull": "Zhomart Khasenov",
       "regBy": "Хасенов Жомарт",
       "raisedBy": "ГДК Баимская",
-      "woNumber": null,
-      "maintType": null,
+      "woNumber": "WO-022738",
+      "maintType": "P4 Planned Repair",
       "planned": false
     },
     {
@@ -6236,6 +6236,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "CN008",
+      "defect": "DD-00017038",
+      "raised": "2026-11-17",
+      "system": "CN008.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "замена впускного воздушного патрубка ДВС",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
       "asset": "TK169",
       "defect": "DD-00017030",
       "raised": "2026-11-17",
@@ -6821,6 +6834,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "DZ009",
+      "defect": "DD-00016959",
+      "raised": "2026-11-15",
+      "system": "DZ009.CH.CRW (Crawler Chassis / Гусеничное шасси)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Опорный каток греется",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022659"
+    },
+    {
       "asset": "TK130",
       "defect": "DD-00016949",
       "raised": "2026-11-15",
@@ -7391,19 +7417,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022601"
-    },
-    {
-      "asset": "DZ009",
-      "defect": "DD-00016959",
-      "raised": "2026-11-15",
-      "system": "DZ009.CH.CRW (Crawler Chassis / Гусеничное шасси)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Опорный каток греется",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": "WO-022659"
     },
     {
       "asset": "SN003",
@@ -57743,6 +57756,19 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "DZ001",
+      "defect": "DD-00011985",
+      "raised": "2026-09-03",
+      "system": "DZ001.CH.CRW (Crawler Chassis / Гусеничное шасси)",
+      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
+      "descr": "Диагностика, осмотр. замена втулок и пальцев балансирной балки",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": "WO-022594"
+    },
+    {
+      "asset": "DZ001",
       "defect": "DD-00011984",
       "raised": "2026-09-03",
       "system": "DZ001.HS.CYL (Cylinders / Гидроцилиндры)",
@@ -57766,19 +57792,6 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-016240"
-    },
-    {
-      "asset": "DZ001",
-      "defect": "DD-00011985",
-      "raised": "2026-09-03",
-      "system": "DZ001.CH.CRW (Crawler Chassis / Гусеничное шасси)",
-      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
-      "descr": "Диагностика, осмотр. замена втулок и пальцев балансирной балки",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Pavel Kostin",
-      "regBy": "Костин Павел Александрович",
-      "wo": "WO-022594"
     },
     {
       "asset": "DZ003",
@@ -59641,19 +59654,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "TK010",
-      "defect": "DD-00010485",
-      "raised": "2026-08-09",
-      "system": "TK010.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь радиатора",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": null
-    },
-    {
-      "asset": "TK010",
       "defect": "DD-00010486",
       "raised": "2026-08-09",
       "system": "TK010.CH.SU (Suspension / Подвеска)",
@@ -59672,6 +59672,19 @@ window.CM_WO_DATA = {
       "system": "TK010.CH.HS (Hydraulic System / Гидравлическая система)",
       "defectType": "1.25 Reduced capacity / output / Снижение производительности / выхода",
       "descr": "Общая потеря мощности КМУ, некорректная работа аутригеров (подклинивание)",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": null
+    },
+    {
+      "asset": "TK010",
+      "defect": "DD-00010485",
+      "raised": "2026-08-09",
+      "system": "TK010.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь радиатора",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -131541,9 +131554,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-22",
-      "planStartDt": "2026-11-22T00:00:00",
-      "planEnd": "2026-11-22",
+      "planStart": "2026-11-23",
+      "planStartDt": "2026-11-23T00:00:00",
+      "planEnd": "2026-11-23",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null

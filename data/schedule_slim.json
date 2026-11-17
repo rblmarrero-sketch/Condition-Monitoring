@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-17T06:11:10+00:00",
+  "generated": "2026-11-17T06:23:36+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -217,7 +217,7 @@
           "FC",
           "INSP"
         ],
-        "plan": "2026-11-22",
+        "plan": "2026-11-23",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -2119,6 +2119,24 @@
       "completed": ""
     },
     {
+      "wo": "WO-022126",
+      "equip": "GR005",
+      "cls": "GRD",
+      "comp": "",
+      "desc": "Filter Cut / General Inspection",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-23",
+      "type": "1000 Hours service Planned",
+      "hours": 1000,
+      "plan": "2026-11-23",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-022119",
       "equip": "LD006",
       "cls": "LDR",
@@ -2272,24 +2290,6 @@
       "raised": "2026-11-22",
       "type": "500 Hours service Planned",
       "hours": 500,
-      "plan": "2026-11-22",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
-      "wo": "WO-022126",
-      "equip": "GR005",
-      "cls": "GRD",
-      "comp": "",
-      "desc": "Filter Cut / General Inspection",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-22",
-      "type": "1000 Hours service Planned",
-      "hours": 1000,
       "plan": "2026-11-22",
       "status": "Elimination scheduled",
       "request": "",
@@ -5213,6 +5213,24 @@
       "cause": "",
       "pmStatus": "complete",
       "completed": "2026-11-09"
+    },
+    {
+      "wo": "WO-022738",
+      "equip": "TK161",
+      "cls": "",
+      "comp": "TK161.HS.CV (Control Valves / Гидрораспределители)",
+      "desc": "Утечка рабочей жидкости в зоне штуцеров гидравлического распределителя системы охлаждения тормозов.",
+      "priority": "P4 Planned (Repair)",
+      "raised": "2026-11-09",
+      "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "hours": null,
+      "plan": "2026-12-04",
+      "status": "Elimination scheduled",
+      "request": "DD-00016578",
+      "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Фитинг/штуцер ослаб",
+      "pmStatus": "open",
+      "completed": ""
     },
     {
       "wo": "WO-020951",
@@ -30763,6 +30781,14 @@
       "x": "замена впускного воздушного патрубка ДВС"
     },
     {
+      "d": "DD-00017038",
+      "u": "CN008",
+      "s": "CN008.DRS.ENG (Engine / Двигатель)",
+      "p": "P4",
+      "r": "2026-11-17",
+      "x": "замена впускного воздушного патрубка ДВС"
+    },
+    {
       "d": "DD-00017030",
       "u": "TK169",
       "s": "TRUCK, WATER URAL 4672M1-20, TK169 ENGINE",
@@ -30803,6 +30829,14 @@
       "x": "нет зарядки"
     },
     {
+      "d": "DD-00016959",
+      "u": "DZ009",
+      "s": "DZ009.CH.CRW (Crawler Chassis / Гусеничное шасси)",
+      "p": "P4",
+      "r": "2026-11-15",
+      "x": "Опорный каток греется"
+    },
+    {
       "d": "DD-00016948",
       "u": "TK122",
       "s": "TK122.DRS.COO (Cooling System / Система охлаждения)",
@@ -30825,14 +30859,6 @@
       "p": "P4",
       "r": "2026-11-15",
       "x": "Не работает отопителя кабины"
-    },
-    {
-      "d": "DD-00016959",
-      "u": "DZ009",
-      "s": "DZ009.CH.CRW (Crawler Chassis / Гусеничное шасси)",
-      "p": "P4",
-      "r": "2026-11-15",
-      "x": "Опорный каток греется"
     },
     {
       "d": "DD-00016945",
