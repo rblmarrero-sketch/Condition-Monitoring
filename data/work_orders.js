@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-17T22:18:08+00:00",
+  "generated": "2026-11-17T22:32:53+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 812,
@@ -6158,6 +6158,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022764"
     },
     {
+      "asset": "SN004",
+      "defect": "DD-00017076",
+      "raised": "2026-11-18",
+      "system": "SN004.CONV.BEL (Conveyor Belt / Конвейерная лента)",
+      "defectType": "8.03 Conveyor belt splice failure / Разрушение стыка конвейерной ленты",
+      "descr": "ремонт стыков, и полотна тратранспортерной ленты",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": null
+    },
+    {
       "asset": "CR008",
       "defect": "DD-00017072",
       "raised": "2026-11-18",
@@ -6177,6 +6190,32 @@ window.CM_WO_DATA = {
       "system": "CR007.FEED.HOP (Hopper / Бункер)",
       "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "descr": "износ футеровки приемного бункера",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": null
+    },
+    {
+      "asset": "CR006",
+      "defect": "DD-00017074",
+      "raised": "2026-11-18",
+      "system": "CR006.FEED.FDR (Feeder / Питатель)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "износ футеровки вибропитателя",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": null
+    },
+    {
+      "asset": "CR006",
+      "defect": "DD-00017075",
+      "raised": "2026-11-18",
+      "system": "CR006.CONV.MAIN (Main Conveyor / Главный конвейер)",
+      "defectType": "8.03 Conveyor belt splice failure / Разрушение стыка конвейерной ленты",
+      "descr": "ремонт стыка ленты, ремонт полотна конвейернрй ленты",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Oleg Dymbrylov",
@@ -58860,6 +58899,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
+      "wo": null
+    },
+    {
       "asset": "BS005",
       "defect": "DD-00011312",
       "raised": "2026-08-21",
@@ -58948,19 +59000,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
