@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-17T14:32:42+00:00",
+  "generated": "2026-11-17T14:52:44+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 812,
@@ -5859,6 +5859,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022747"
     },
     {
+      "asset": "SN004",
+      "defect": "DD-00017052",
+      "raised": "2026-11-18",
+      "system": "SN004.DRS.PG (Power Generator / Генератор)",
+      "defectType": "4.17 Phase loss / imbalance / Потеря фазы / дисбаланс фаз",
+      "descr": "обрыв подключения генератора",
+      "status": "Completed",
+      "priority": "P1 Breakdown",
+      "by": "Sergey Murashko",
+      "regBy": "Мурашко Сергей Борисович",
+      "wo": "WO-022749"
+    },
+    {
       "asset": "DZ009",
       "defect": "DD-00017051",
       "raised": "2026-11-18",
@@ -5870,6 +5883,19 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022748"
+    },
+    {
+      "asset": "TK112",
+      "defect": "DD-00017053",
+      "raised": "2026-11-18",
+      "system": "TK112.DRS.COO (Cooling System / Система охлаждения)",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "Низкий уровень О/Ж",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": null
     },
     {
       "asset": "TK126",
