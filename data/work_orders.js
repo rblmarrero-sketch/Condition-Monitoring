@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-17T09:11:27+00:00",
+  "generated": "2026-11-17T09:26:37+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 812,
@@ -2000,7 +2000,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-10-18",
       "detected": "2026-10-18",
-      "planStart": "2026-11-28",
+      "planStart": "2026-11-27",
       "closed": null,
       "asset": "TK148",
       "defect": "DD-00015042",
@@ -2026,7 +2026,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-10-18",
       "detected": "2026-10-18",
-      "planStart": "2026-11-28",
+      "planStart": "2026-11-27",
       "closed": null,
       "asset": "TK148",
       "defect": "DD-00015041",
@@ -6143,6 +6143,19 @@ window.CM_WO_DATA = {
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": "WO-022731"
+    },
+    {
+      "asset": "TK158",
+      "defect": "DD-00017043",
+      "raised": "2026-11-17",
+      "system": "TK158.DRS.TRA (Transmission / Трансмиссия)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Установка АКПП после ремонта, обвязка, тест",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": "WO-022742"
     },
     {
       "asset": "TK068",
@@ -15466,19 +15479,6 @@ window.CM_WO_DATA = {
       "wo": "WO-021707"
     },
     {
-      "asset": "TK039",
-      "defect": "DD-00016277",
-      "raised": "2026-11-04",
-      "system": "TK039.DRS.AXL (Axles / Мосты)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Проверка ступиц (болтается заднее правое колесо)",
-      "status": "Completed",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-021835"
-    },
-    {
       "asset": "TK115",
       "defect": "DD-00016283",
       "raised": "2026-11-04",
@@ -15490,6 +15490,19 @@ window.CM_WO_DATA = {
       "by": "Roman Besedovskiy",
       "regBy": "Беседовский Роман Иванович",
       "wo": "WO-021694"
+    },
+    {
+      "asset": "TK039",
+      "defect": "DD-00016277",
+      "raised": "2026-11-04",
+      "system": "TK039.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Проверка ступиц (болтается заднее правое колесо)",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-021835"
     },
     {
       "asset": "GR004",
@@ -190859,9 +190872,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-28",
-      "planStartDt": "2026-11-28T00:00:00",
-      "planEnd": "2026-11-28",
+      "planStart": "2026-11-27",
+      "planStartDt": "2026-11-27T00:00:00",
+      "planEnd": "2026-11-27",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -191599,9 +191612,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-12-02",
-      "planStartDt": "2026-12-02T00:00:00",
-      "planEnd": "2026-12-02",
+      "planStart": "2026-11-28",
+      "planStartDt": "2026-11-28T00:00:00",
+      "planEnd": "2026-11-28",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -193377,9 +193390,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-27",
-      "planStartDt": "2026-11-27T00:00:00",
-      "planEnd": "2026-11-27",
+      "planStart": "2026-12-12",
+      "planStartDt": "2026-12-12T00:00:00",
+      "planEnd": "2026-12-12",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null

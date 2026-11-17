@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-17T09:11:27+00:00",
+  "generated": "2026-11-17T09:26:37+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -838,7 +838,7 @@
           "LUBE",
           "MP"
         ],
-        "plan": "2026-11-28",
+        "plan": "2026-11-27",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -896,7 +896,7 @@
         "types": [
           "MP"
         ],
-        "plan": "2026-12-02",
+        "plan": "2026-11-28",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -998,7 +998,7 @@
         "types": [
           "MP"
         ],
-        "plan": "2026-11-27",
+        "plan": "2026-12-12",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -1093,6 +1093,24 @@
       "completed": ""
     },
     {
+      "wo": "WO-020999",
+      "equip": "TK158",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-12-12",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-12-12",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-022142",
       "equip": "TK149",
       "cls": "HT",
@@ -1174,24 +1192,6 @@
       "raised": "2026-12-02",
       "type": "1000 Hours service Planned",
       "hours": 1000,
-      "plan": "2026-12-02",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
-      "wo": "WO-022144",
-      "equip": "TK151",
-      "cls": "HT",
-      "comp": "",
-      "desc": "Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-12-02",
-      "type": "250 Hours service Planned",
-      "hours": 250,
       "plan": "2026-12-02",
       "status": "Elimination scheduled",
       "request": "",
@@ -1543,15 +1543,15 @@
       "completed": ""
     },
     {
-      "wo": "WO-021275",
-      "equip": "TK148",
+      "wo": "WO-022144",
+      "equip": "TK151",
       "cls": "HT",
       "comp": "",
-      "desc": "Lubrication / Magnetic Plug",
+      "desc": "Magnetic Plug",
       "priority": "P3 Planned (PM)",
       "raised": "2026-11-28",
-      "type": "500 Hours service Planned",
-      "hours": 500,
+      "type": "250 Hours service Planned",
+      "hours": 250,
       "plan": "2026-11-28",
       "status": "Elimination scheduled",
       "request": "",
@@ -1669,15 +1669,15 @@
       "completed": ""
     },
     {
-      "wo": "WO-020999",
-      "equip": "TK158",
+      "wo": "WO-021275",
+      "equip": "TK148",
       "cls": "HT",
       "comp": "",
-      "desc": "Magnetic Plug",
+      "desc": "Lubrication / Magnetic Plug",
       "priority": "P3 Planned (PM)",
       "raised": "2026-11-27",
-      "type": "250 Hours service Planned",
-      "hours": 250,
+      "type": "500 Hours service Planned",
+      "hours": 500,
       "plan": "2026-11-27",
       "status": "Elimination scheduled",
       "request": "",
@@ -9436,7 +9436,7 @@
       "raised": "2026-10-18",
       "type": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "hours": null,
-      "plan": "2026-11-28",
+      "plan": "2026-11-27",
       "status": "Elimination scheduled",
       "request": "DD-00015042",
       "defType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
@@ -9454,7 +9454,7 @@
       "raised": "2026-10-18",
       "type": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "hours": null,
-      "plan": "2026-11-28",
+      "plan": "2026-11-27",
       "status": "Elimination scheduled",
       "request": "DD-00015041",
       "defType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
@@ -30749,6 +30749,14 @@
       "x": "трещины на бортах приемного бункера"
     },
     {
+      "d": "DD-00017043",
+      "u": "TK158",
+      "s": "TK158.DRS.TRA (Transmission / Трансмиссия)",
+      "p": "P4",
+      "r": "2026-11-17",
+      "x": "Установка АКПП после ремонта, обвязка, тест"
+    },
+    {
       "d": "DD-00017033",
       "u": "LV067",
       "s": "LV067.DRS.ENG (Engine / Двигатель)",
@@ -32661,20 +32669,20 @@
       "x": "Недостаточная ёмкость АКБ"
     },
     {
-      "d": "DD-00016277",
-      "u": "TK039",
-      "s": "TK039.DRS.AXL (Axles / Мосты)",
-      "p": "P4",
-      "r": "2026-11-04",
-      "x": "Проверка ступиц (болтается заднее правое колесо)"
-    },
-    {
       "d": "DD-00016283",
       "u": "TK115",
       "s": "TK115.DRS.FD (Final Drives / Конечные передачи)",
       "p": "P4",
       "r": "2026-11-04",
       "x": "Требуется дефектовка. Посторонний шум + струшка в масле"
+    },
+    {
+      "d": "DD-00016277",
+      "u": "TK039",
+      "s": "TK039.DRS.AXL (Axles / Мосты)",
+      "p": "P4",
+      "r": "2026-11-04",
+      "x": "Проверка ступиц (болтается заднее правое колесо)"
     },
     {
       "d": "DD-00016288",
