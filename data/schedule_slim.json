@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-17T05:38:20+00:00",
+  "generated": "2026-11-17T06:07:59+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -817,7 +817,7 @@
           "LUBE",
           "MP"
         ],
-        "plan": "2026-11-23",
+        "plan": "2026-11-24",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -1021,7 +1021,7 @@
         "types": [
           "MP"
         ],
-        "plan": "2026-11-27",
+        "plan": "2026-11-30",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -1228,6 +1228,24 @@
       "raised": "2026-11-30",
       "type": "500 Hours service Planned",
       "hours": 500,
+      "plan": "2026-11-30",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-022152",
+      "equip": "TK159",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-30",
+      "type": "250 Hours service Planned",
+      "hours": 250,
       "plan": "2026-11-30",
       "status": "Elimination scheduled",
       "request": "",
@@ -1669,24 +1687,6 @@
       "completed": ""
     },
     {
-      "wo": "WO-022152",
-      "equip": "TK159",
-      "cls": "HT",
-      "comp": "",
-      "desc": "Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-27",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-11-27",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
       "wo": "WO-021979",
       "equip": "DZ006",
       "cls": "DOZ",
@@ -2047,6 +2047,24 @@
       "completed": ""
     },
     {
+      "wo": "WO-022141",
+      "equip": "TK147",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Filter Cut / General Inspection / Lubrication / Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-24",
+      "type": "3000 Hours service Planned",
+      "hours": 3000,
+      "plan": "2026-11-24",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-021971",
       "equip": "DZ002",
       "cls": "DOZ",
@@ -2146,24 +2164,6 @@
       "raised": "2026-11-23",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-11-23",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
-      "wo": "WO-022141",
-      "equip": "TK147",
-      "cls": "HT",
-      "comp": "",
-      "desc": "Filter Cut / General Inspection / Lubrication / Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-23",
-      "type": "3000 Hours service Planned",
-      "hours": 3000,
       "plan": "2026-11-23",
       "status": "Elimination scheduled",
       "request": "",
@@ -4419,6 +4419,60 @@
       "request": "",
       "defType": "",
       "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-022734",
+      "equip": "TK159",
+      "cls": "",
+      "comp": "TK159.CH (Structure & Chassis / Рама и конструкция)",
+      "desc": "Ослабление креплении КПП",
+      "priority": "P4 Planned (Repair)",
+      "raised": "2026-11-13",
+      "type": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "hours": null,
+      "plan": "2026-11-30",
+      "status": "Elimination scheduled",
+      "request": "DD-00016820",
+      "defType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "cause": "Крепеж ослаблен",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-022735",
+      "equip": "TK159",
+      "cls": "",
+      "comp": "TK159.DRS.TRA (Transmission / Трансмиссия)",
+      "desc": "Обильное запотевание РВД",
+      "priority": "P4 Planned (Repair)",
+      "raised": "2026-11-13",
+      "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "hours": null,
+      "plan": "2026-11-30",
+      "status": "Elimination scheduled",
+      "request": "DD-00016819",
+      "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Поврежден шланга/линии",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-022737",
+      "equip": "TK159",
+      "cls": "",
+      "comp": "TK159.DRS.ENG (Engine / Двигатель)",
+      "desc": "Течь ОЖ с теплообменника ДВС",
+      "priority": "P4 Planned (Repair)",
+      "raised": "2026-11-13",
+      "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "hours": null,
+      "plan": "2026-11-30",
+      "status": "Elimination scheduled",
+      "request": "DD-00016817",
+      "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Поврежден прокладки",
       "pmStatus": "open",
       "completed": ""
     },
@@ -11131,6 +11185,14 @@
       "p": "P2",
       "r": "2026-11-17",
       "x": "Замена фена"
+    },
+    {
+      "d": "DD-00017037",
+      "u": "TK068",
+      "s": "TRUCK, WATER KAMAZ UST 5453K2, TK068 ENGINE OldNumber (UT068)",
+      "p": "P2",
+      "r": "2026-11-17",
+      "x": "Заглох, запуск ДВС"
     },
     {
       "d": "DD-00017003",
