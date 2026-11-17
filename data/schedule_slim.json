@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-17T23:32:49+00:00",
+  "generated": "2026-11-17T23:52:39+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -675,7 +675,7 @@
         "types": [
           "MP"
         ],
-        "plan": "2026-11-28",
+        "plan": "2026-12-01",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -1219,6 +1219,24 @@
       "completed": ""
     },
     {
+      "wo": "WO-021952",
+      "equip": "TK121",
+      "cls": "AT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-12-01",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-12-01",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-022151",
       "equip": "TK157",
       "cls": "HT",
@@ -1498,24 +1516,6 @@
       "raised": "2026-11-28",
       "type": "1000 Hours service Planned",
       "hours": 1000,
-      "plan": "2026-11-28",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
-      "wo": "WO-021952",
-      "equip": "TK121",
-      "cls": "AT",
-      "comp": "",
-      "desc": "Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-28",
-      "type": "250 Hours service Planned",
-      "hours": 250,
       "plan": "2026-11-28",
       "status": "Elimination scheduled",
       "request": "",
@@ -31581,6 +31581,14 @@
       "x": "Требуется замена фар на светодиодные"
     },
     {
+      "d": "DD-00016775",
+      "u": "DZ019",
+      "s": "DZ019.DRS.ENG (Engine / Двигатель)",
+      "p": "P4",
+      "r": "2026-11-12",
+      "x": "Потеря мощности ДВС"
+    },
+    {
       "d": "DD-00016760",
       "u": "DZ001",
       "s": "DZ001.ELS.AS (Alarm System / Система сигнализации)",
@@ -31715,14 +31723,6 @@
       "p": "P4",
       "r": "2026-11-12",
       "x": "Не работает автономный отопитель"
-    },
-    {
-      "d": "DD-00016775",
-      "u": "DZ019",
-      "s": "DZ019.DRS.ENG (Engine / Двигатель)",
-      "p": "P4",
-      "r": "2026-11-12",
-      "x": "Потеря мощности ДВС"
     },
     {
       "d": "DD-00016758",

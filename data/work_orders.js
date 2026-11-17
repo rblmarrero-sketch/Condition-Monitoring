@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-17T23:32:49+00:00",
+  "generated": "2026-11-17T23:52:39+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 812,
@@ -9629,6 +9629,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022476"
     },
     {
+      "asset": "DZ019",
+      "defect": "DD-00016775",
+      "raised": "2026-11-12",
+      "system": "DZ019.DRS.ENG (Engine / Двигатель)",
+      "defectType": "3.01 Control failure / Ошибка управления",
+      "descr": "Потеря мощности ДВС",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022780"
+    },
+    {
       "asset": "TK119",
       "defect": "DD-00016783",
       "raised": "2026-11-12",
@@ -10298,19 +10311,6 @@ window.CM_WO_DATA = {
       "system": "DZ019.OC.HE (Heating / Отопление)",
       "defectType": "3.01 Control failure / Ошибка управления",
       "descr": "Не работает автономный отопитель",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": null
-    },
-    {
-      "asset": "DZ019",
-      "defect": "DD-00016775",
-      "raised": "2026-11-12",
-      "system": "DZ019.DRS.ENG (Engine / Двигатель)",
-      "defectType": "3.01 Control failure / Ошибка управления",
-      "descr": "Потеря мощности ДВС",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Aleksandr Golovko",
@@ -181143,9 +181143,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-28",
-      "planStartDt": "2026-11-28T00:00:00",
-      "planEnd": "2026-11-28",
+      "planStart": "2026-12-01",
+      "planStartDt": "2026-12-01T00:00:00",
+      "planEnd": "2026-12-01",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
