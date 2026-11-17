@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-17T23:17:42+00:00",
+  "generated": "2026-11-17T23:32:49+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 812,
@@ -5937,6 +5937,32 @@ window.CM_WO_DATA = {
       "wo": "WO-022767"
     },
     {
+      "asset": "TK133",
+      "defect": "DD-00017078",
+      "raised": "2026-11-18",
+      "system": "TK133.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Замена ремня генератора",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022778"
+    },
+    {
+      "asset": "LV056",
+      "defect": "DD-00017079",
+      "raised": "2026-11-18",
+      "system": "LV056.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "требуется замена гидромуфты",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-022779"
+    },
+    {
       "asset": "EX010",
       "defect": "DD-00017050",
       "raised": "2026-11-18",
@@ -7419,6 +7445,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022581"
     },
     {
+      "asset": "CR004",
+      "defect": "DD-00016946",
+      "raised": "2026-11-15",
+      "system": "CR004.ELS.PH (Preheater / Предпусковой подогреватель)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "не корректная работа ППЖД на подогреве смазки конуса",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-022777"
+    },
+    {
       "asset": "TK122",
       "defect": "DD-00016948",
       "raised": "2026-11-15",
@@ -7999,19 +8038,6 @@ window.CM_WO_DATA = {
       "descr": "поломка дефлекторных роликов 4шт с кронштейнами",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": null
-    },
-    {
-      "asset": "CR004",
-      "defect": "DD-00016946",
-      "raised": "2026-11-15",
-      "system": "CR004.ELS.PH (Preheater / Предпусковой подогреватель)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "не корректная работа ППЖД на подогреве смазки конуса",
-      "status": "Registered",
-      "priority": "P2 Urgent",
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": null
@@ -58899,6 +58925,19 @@ window.CM_WO_DATA = {
       "wo": "WO-018103"
     },
     {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
+      "wo": null
+    },
+    {
       "asset": "DZ022",
       "defect": "DD-00011314",
       "raised": "2026-08-21",
@@ -59000,19 +59039,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
