@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-17T07:52:54+00:00",
+  "generated": "2026-11-17T08:23:04+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 812,
@@ -6168,6 +6168,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "EX009",
+      "defect": "DD-00017039",
+      "raised": "2026-11-17",
+      "system": "EX009.HS.CV (Control Valves / Гидрораспределители)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Устранение утечки гидро распредилителя",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
       "wo": null
     },
     {
@@ -130428,9 +130441,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-29",
-      "planStartDt": "2026-11-29T00:00:00",
-      "planEnd": "2026-11-29",
+      "planStart": "2026-11-26",
+      "planStartDt": "2026-11-26T00:00:00",
+      "planEnd": "2026-11-26",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -130614,9 +130627,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-29",
-      "planStartDt": "2026-11-29T00:00:00",
-      "planEnd": "2026-11-29",
+      "planStart": "2026-11-30",
+      "planStartDt": "2026-11-30T00:00:00",
+      "planEnd": "2026-11-30",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -132603,9 +132616,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-27",
-      "planStartDt": "2026-11-27T00:00:00",
-      "planEnd": "2026-11-27",
+      "planStart": "2026-12-03",
+      "planStartDt": "2026-12-03T00:00:00",
+      "planEnd": "2026-12-03",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -133633,9 +133646,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-26",
-      "planStartDt": "2026-11-26T00:00:00",
-      "planEnd": "2026-11-26",
+      "planStart": "2026-11-27",
+      "planStartDt": "2026-11-27T00:00:00",
+      "planEnd": "2026-11-27",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
