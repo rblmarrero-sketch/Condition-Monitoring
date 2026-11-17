@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-17T17:07:52+00:00",
+  "generated": "2026-11-17T17:27:48+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 812,
@@ -5963,19 +5963,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022755"
     },
     {
-      "asset": "BS015",
-      "defect": "DD-00017059",
-      "raised": "2026-11-18",
-      "system": "BS015.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Подсос воздуха отводящий патрубок ТКР",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022756"
-    },
-    {
       "asset": "GR005",
       "defect": "DD-00017060",
       "raised": "2026-11-18",
@@ -6026,6 +6013,45 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-022760"
+    },
+    {
+      "asset": "LD003",
+      "defect": "DD-00017064",
+      "raised": "2026-11-18",
+      "system": "LD003.DRS.AXL (Axles / Мосты)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Посторонний шум в мосту",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022761"
+    },
+    {
+      "asset": "TK040",
+      "defect": "DD-00017065",
+      "raised": "2026-11-18",
+      "system": "TK040.DRS.ENG (Engine / Двигатель)",
+      "defectType": "3.13 Warning light / alarm active / Сигнальная лампа / аварийная сигнализация активна",
+      "descr": "Загорается \"Check Engine\". Начинает дымить. Потом всё проходит",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022762"
+    },
+    {
+      "asset": "BS015",
+      "defect": "DD-00017059",
+      "raised": "2026-11-18",
+      "system": "BS015.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Подсос воздуха отводящий патрубок ТКР",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022756"
     },
     {
       "asset": "TK126",
@@ -61071,11 +61097,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "CR001",
-      "defect": "DD-00009554",
+      "defect": "DD-00009555",
       "raised": "2026-07-24",
       "system": "CR001.DRS.AIR (Air Intake System / Система впуска воздуха)",
-      "defectType": "3.02 No (faulty) signal/ indication/alarm / Отсутвие сигнала, индикации",
-      "descr": null,
+      "defectType": "1.10 Rupture / Burst / Разрыв",
+      "descr": "Разрыв патрубка интеркуллера ДВС №7Y-1182",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Rinat Musaferov",
@@ -61084,11 +61110,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "CR001",
-      "defect": "DD-00009555",
+      "defect": "DD-00009554",
       "raised": "2026-07-24",
       "system": "CR001.DRS.AIR (Air Intake System / Система впуска воздуха)",
-      "defectType": "1.10 Rupture / Burst / Разрыв",
-      "descr": "Разрыв патрубка интеркуллера ДВС №7Y-1182",
+      "defectType": "3.02 No (faulty) signal/ indication/alarm / Отсутвие сигнала, индикации",
+      "descr": null,
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Rinat Musaferov",
