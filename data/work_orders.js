@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-17T22:47:42+00:00",
+  "generated": "2026-11-17T23:03:06+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 812,
@@ -5924,6 +5924,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022766"
     },
     {
+      "asset": "DZ011",
+      "defect": "DD-00017077",
+      "raised": "2026-11-18",
+      "system": "DZ011.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Износ ремней вентиллятора",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-022767"
+    },
+    {
       "asset": "EX010",
       "defect": "DD-00017050",
       "raised": "2026-11-18",
@@ -6512,7 +6525,7 @@ window.CM_WO_DATA = {
       "asset": "CR004",
       "defect": "DD-00017034",
       "raised": "2026-11-17",
-      "system": "CR004 MCCLOSKEY C44",
+      "system": "CR004.FEED.HOP (Hopper / Бункер)",
       "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "descr": "трещины на бортах приемного бункера",
       "status": "Elimination scheduled",
@@ -58899,19 +58912,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
-      "wo": null
-    },
-    {
       "asset": "BS005",
       "defect": "DD-00011312",
       "raised": "2026-08-21",
@@ -59000,6 +59000,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
