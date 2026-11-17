@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-17T21:47:49+00:00",
+  "generated": "2026-11-17T22:02:44+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 812,
@@ -5911,6 +5911,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022765"
     },
     {
+      "asset": "CR007",
+      "defect": "DD-00017071",
+      "raised": "2026-11-18",
+      "system": "CR007.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.27 Belt drive issue (slip/break) / Проблема ременного привода (проскальзывание/обрыв)",
+      "descr": "Заклинил обводной ролик и ролик натяжителя обрыв ремня привода генератора",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-022766"
+    },
+    {
       "asset": "EX010",
       "defect": "DD-00017050",
       "raised": "2026-11-18",
@@ -6145,14 +6158,27 @@ window.CM_WO_DATA = {
       "wo": "WO-022764"
     },
     {
-      "asset": "CR007",
-      "defect": "DD-00017071",
+      "asset": "CR008",
+      "defect": "DD-00017072",
       "raised": "2026-11-18",
-      "system": "CR007.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.27 Belt drive issue (slip/break) / Проблема ременного привода (проскальзывание/обрыв)",
-      "descr": "Заклинил обводной ролик и ролик натяжителя обрыв ремня привода генератора",
+      "system": "CR008.FEED.HOP (Hopper / Бункер)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Износ футеровки бункера приемного",
       "status": "Registered",
-      "priority": "P2 Urgent",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": null
+    },
+    {
+      "asset": "CR007",
+      "defect": "DD-00017073",
+      "raised": "2026-11-18",
+      "system": "CR007.FEED.HOP (Hopper / Бункер)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "износ футеровки приемного бункера",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": null
@@ -43299,6 +43325,19 @@ window.CM_WO_DATA = {
       "wo": "WO-018889"
     },
     {
+      "asset": "DZ009",
+      "defect": "DD-00014013",
+      "raised": "2026-10-04",
+      "system": "DZ009.CH.FR (Frame / Рама)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Разрушение подножки на толкающем брусе",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Evgeniy Frolin",
+      "regBy": "Фролин Евгений Владимирович",
+      "wo": "WO-019020"
+    },
+    {
       "asset": "DZ017",
       "defect": "DD-00014002",
       "raised": "2026-10-04",
@@ -43492,19 +43531,6 @@ window.CM_WO_DATA = {
       "by": "Evgeniy Frolin",
       "regBy": "Фролин Евгений Владимирович",
       "wo": "WO-022705"
-    },
-    {
-      "asset": "DZ009",
-      "defect": "DD-00014013",
-      "raised": "2026-10-04",
-      "system": "DZ009.CH.FR (Frame / Рама)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Разрушение подножки на толкающем брусе",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Evgeniy Frolin",
-      "regBy": "Фролин Евгений Владимирович",
-      "wo": "WO-019020"
     },
     {
       "asset": "DZ009",
