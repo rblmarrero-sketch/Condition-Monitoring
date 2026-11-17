@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-17T21:12:57+00:00",
+  "generated": "2026-11-17T21:32:48+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -97,7 +97,7 @@
           "INSP",
           "UC"
         ],
-        "plan": "2026-11-23",
+        "plan": "2026-11-24",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -1975,6 +1975,24 @@
       "completed": ""
     },
     {
+      "wo": "WO-019358",
+      "equip": "DZ014",
+      "cls": "DOZ",
+      "comp": "",
+      "desc": "Filter Cut / General Inspection / Undercarriage",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-24",
+      "type": "2000 Hours service Planned",
+      "hours": 2000,
+      "plan": "2026-11-24",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-022049",
       "equip": "EX012",
       "cls": "EXC",
@@ -2074,24 +2092,6 @@
       "raised": "2026-11-23",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-11-23",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
-      "wo": "WO-019358",
-      "equip": "DZ014",
-      "cls": "DOZ",
-      "comp": "",
-      "desc": "Filter Cut / General Inspection / Undercarriage",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-23",
-      "type": "2000 Hours service Planned",
-      "hours": 2000,
       "plan": "2026-11-23",
       "status": "Elimination scheduled",
       "request": "",
@@ -11085,6 +11085,14 @@
   ],
   "firDefects": [
     {
+      "d": "DD-00017070",
+      "u": "TK007",
+      "s": "TK007.DRS.AXL (Axles / Мосты)",
+      "p": "P2",
+      "r": "2026-11-18",
+      "x": "Устранение утечки масла с правой задней бортовой"
+    },
+    {
       "d": "DD-00017050",
       "u": "EX010",
       "s": "EX010.DRS.CS (Cooling System / Система охлаждения)",
@@ -11227,6 +11235,14 @@
       "p": "P2",
       "r": "2026-11-18",
       "x": "Неисправность головного освещения."
+    },
+    {
+      "d": "DD-00017071",
+      "u": "CR007",
+      "s": "CR007.DRS.ENG (Engine / Двигатель)",
+      "p": "P2",
+      "r": "2026-11-18",
+      "x": "Заклинил обводной ролик и ролик натяжителя обрыв ремня привода генератора"
     },
     {
       "d": "DD-00017005",
