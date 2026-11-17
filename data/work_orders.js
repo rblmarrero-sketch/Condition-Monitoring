@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-17T02:12:12+00:00",
+  "generated": "2026-11-17T02:22:58+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 812,
@@ -6078,6 +6078,19 @@ window.CM_WO_DATA = {
       "by": "Pavel Kostin",
       "regBy": "Костин Павел Александрович",
       "wo": "WO-022711"
+    },
+    {
+      "asset": "DR007",
+      "defect": "DD-00017028",
+      "raised": "2026-11-17",
+      "system": "DR007.HS (Hydraulic System / Гидравлическая система)",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "Диагностика и ремонт гидравлической системы",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": "WO-022715"
     },
     {
       "asset": "TK004",
@@ -26958,19 +26971,6 @@ window.CM_WO_DATA = {
       "wo": "WO-020415"
     },
     {
-      "asset": "EX002",
-      "defect": "DD-00015319",
-      "raised": "2026-10-21",
-      "system": "EX002.CH.BUC (Bucket / Ковш)",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "Ремонт демонтированного оборотного ковша",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": "WO-020496"
-    },
-    {
       "asset": "GR014",
       "defect": "DD-00015313",
       "raised": "2026-10-21",
@@ -27593,6 +27593,19 @@ window.CM_WO_DATA = {
       "by": "Andrey Taran",
       "regBy": "Таран Андрей Андреевич",
       "wo": "WO-020509"
+    },
+    {
+      "asset": "EX002",
+      "defect": "DD-00015319",
+      "raised": "2026-10-21",
+      "system": "EX002.CH.BUC (Bucket / Ковш)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Ремонт демонтированного оборотного ковша",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": "WO-020496"
     },
     {
       "asset": "TK097",
@@ -58120,19 +58133,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "TK133",
-      "defect": "DD-00011370",
-      "raised": "2026-08-22",
-      "system": "TK133.CH.SU (Suspension / Подвеска)",
-      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
-      "descr": "Не смазываются никак втулки балансиров",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-021736"
-    },
-    {
-      "asset": "TK133",
       "defect": "DD-00011368",
       "raised": "2026-08-22",
       "system": "TK133.OC.AC (Air Conditioning / Кондиционирование)",
@@ -59563,6 +59563,19 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "TK010",
+      "defect": "DD-00010485",
+      "raised": "2026-08-09",
+      "system": "TK010.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь радиатора",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": null
+    },
+    {
+      "asset": "TK010",
       "defect": "DD-00010486",
       "raised": "2026-08-09",
       "system": "TK010.CH.SU (Suspension / Подвеска)",
@@ -59581,19 +59594,6 @@ window.CM_WO_DATA = {
       "system": "TK010.CH.HS (Hydraulic System / Гидравлическая система)",
       "defectType": "1.25 Reduced capacity / output / Снижение производительности / выхода",
       "descr": "Общая потеря мощности КМУ, некорректная работа аутригеров (подклинивание)",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": null
-    },
-    {
-      "asset": "TK010",
-      "defect": "DD-00010485",
-      "raised": "2026-08-09",
-      "system": "TK010.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь радиатора",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
