@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-17T16:07:49+00:00",
+  "generated": "2026-11-17T16:22:49+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 812,
@@ -5989,6 +5989,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022757"
     },
     {
+      "asset": "DZ009",
+      "defect": "DD-00017061",
+      "raised": "2026-11-18",
+      "system": "DZ009.CH.CRW (Crawler Chassis / Гусеничное шасси)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Требуется натяжка гусеничной ленты",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022758"
+    },
+    {
       "asset": "TK126",
       "defect": "DD-00017005",
       "raised": "2026-11-17",
@@ -6931,7 +6944,7 @@ window.CM_WO_DATA = {
       "system": "BS002.ELS.ALT (Alternator / Генератор)",
       "defectType": "3.13 Warning light / alarm active / Сигнальная лампа / аварийная сигнализация активна",
       "descr": "Промаргивает индикация системы зарядки АКБ",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
@@ -6944,7 +6957,7 @@ window.CM_WO_DATA = {
       "system": "TK168.OC.GL (Glass / Стекла)",
       "defectType": "4.22 Wiper/washer circuit fault / Неисправность стеклоочистителя/омывателя",
       "descr": "Не работает стеклоочиститель. Не работает сигнальный маячок.",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
@@ -6957,7 +6970,7 @@ window.CM_WO_DATA = {
       "system": "BS011.ELS.AS (Alarm System / Система сигнализации)",
       "defectType": "3.02 No (faulty) signal/ indication/alarm / Отсутвие сигнала, индикации",
       "descr": "Не работает звуковой сигнал оповещения о движении задним ходом.",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
@@ -6983,7 +6996,7 @@ window.CM_WO_DATA = {
       "system": "EX003.ELS.LIG (Head Lighting System / Система головного освещения)",
       "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
       "descr": "Неисправность световых приборов.",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
