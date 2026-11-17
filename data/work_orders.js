@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-17T08:41:52+00:00",
+  "generated": "2026-11-17T08:52:38+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 812,
@@ -6158,6 +6158,32 @@ window.CM_WO_DATA = {
       "wo": "WO-022736"
     },
     {
+      "asset": "TK002",
+      "defect": "DD-00017040",
+      "raised": "2026-11-17",
+      "system": "TK002.BS.SHO (Brake Shoes / Тормозные колодки)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Клинят тормоза, ошибка ABS",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022740"
+    },
+    {
+      "asset": "TK007",
+      "defect": "DD-00017042",
+      "raised": "2026-11-17",
+      "system": "TK007.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.24 Low temperature / freezing / Низкая температура / замерзание",
+      "descr": "Низкая температура-замена термостата системы ОЖ ДВС",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022741"
+    },
+    {
       "asset": "LV067",
       "defect": "DD-00017033",
       "raised": "2026-11-17",
@@ -6168,6 +6194,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "EX009",
+      "defect": "DD-00017041",
+      "raised": "2026-11-17",
+      "system": "EX009.HS.CYL (Cylinders / Гидроцилиндры)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка по гидроцелиндру подъема стрелы",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
       "wo": null
     },
     {
@@ -139154,9 +139193,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-28",
-      "planStartDt": "2026-11-28T00:00:00",
-      "planEnd": "2026-11-28",
+      "planStart": "2026-11-25",
+      "planStartDt": "2026-11-25T00:00:00",
+      "planEnd": "2026-11-25",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -141225,9 +141264,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-29",
-      "planStartDt": "2026-11-29T00:00:00",
-      "planEnd": "2026-11-29",
+      "planStart": "2026-11-28",
+      "planStartDt": "2026-11-28T00:00:00",
+      "planEnd": "2026-11-28",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -142308,9 +142347,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-29",
-      "planStartDt": "2026-11-29T00:00:00",
-      "planEnd": "2026-11-29",
+      "planStart": "2026-12-01",
+      "planStartDt": "2026-12-01T00:00:00",
+      "planEnd": "2026-12-01",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -159940,9 +159979,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-12-10",
-      "planStartDt": "2026-12-10T00:00:00",
-      "planEnd": "2026-12-10",
+      "planStart": "2026-12-18",
+      "planStartDt": "2026-12-18T00:00:00",
+      "planEnd": "2026-12-18",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -159961,9 +160000,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-12-21",
-      "planStartDt": "2026-12-21T00:00:00",
-      "planEnd": "2026-12-21",
+      "planStart": "2026-12-30",
+      "planStartDt": "2026-12-30T00:00:00",
+      "planEnd": "2026-12-30",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null

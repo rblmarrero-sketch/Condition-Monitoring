@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-17T08:41:52+00:00",
+  "generated": "2026-11-17T08:52:38+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -404,7 +404,7 @@
         "types": [
           "MP"
         ],
-        "plan": "2026-12-10",
+        "plan": "2026-12-18",
         "priority": "P3 Planned (PM)"
       },
       {
@@ -413,7 +413,7 @@
         "types": [
           "MP"
         ],
-        "plan": "2026-12-21",
+        "plan": "2026-12-30",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -1063,10 +1063,10 @@
       "comp": "",
       "desc": "Magnetic Plug",
       "priority": "P3 Planned (PM)",
-      "raised": "2026-12-21",
+      "raised": "2026-12-30",
       "type": "500 Hours service Planned",
       "hours": 500,
-      "plan": "2026-12-21",
+      "plan": "2026-12-30",
       "status": "Elimination scheduled",
       "request": "",
       "defType": "",
@@ -1081,10 +1081,10 @@
       "comp": "",
       "desc": "Magnetic Plug",
       "priority": "P3 Planned (PM)",
-      "raised": "2026-12-10",
+      "raised": "2026-12-18",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-12-10",
+      "plan": "2026-12-18",
       "status": "Elimination scheduled",
       "request": "",
       "defType": "",
@@ -1193,6 +1193,24 @@
       "type": "250 Hours service Planned",
       "hours": 250,
       "plan": "2026-12-02",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-022123",
+      "equip": "LD008",
+      "cls": "LDR",
+      "comp": "",
+      "desc": "8000h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-12-01",
+      "type": "8000 Hours service Planned",
+      "hours": 8000,
+      "plan": "2026-12-01",
       "status": "Elimination scheduled",
       "request": "",
       "defType": "",
@@ -1363,42 +1381,6 @@
       "completed": ""
     },
     {
-      "wo": "WO-022121",
-      "equip": "LD007",
-      "cls": "LDR",
-      "comp": "",
-      "desc": "8000h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-29",
-      "type": "8000 Hours service Planned",
-      "hours": 8000,
-      "plan": "2026-11-29",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
-      "wo": "WO-022123",
-      "equip": "LD008",
-      "cls": "LDR",
-      "comp": "",
-      "desc": "8000h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-29",
-      "type": "8000 Hours service Planned",
-      "hours": 8000,
-      "plan": "2026-11-29",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
       "wo": "WO-021945",
       "equip": "TK117",
       "cls": "AT",
@@ -1489,15 +1471,15 @@
       "completed": ""
     },
     {
-      "wo": "WO-022117",
-      "equip": "LD005",
+      "wo": "WO-022121",
+      "equip": "LD007",
       "cls": "LDR",
       "comp": "",
-      "desc": "250h service",
+      "desc": "8000h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-11-28",
-      "type": "250 Hours service Planned",
-      "hours": 250,
+      "type": "8000 Hours service Planned",
+      "hours": 8000,
       "plan": "2026-11-28",
       "status": "Elimination scheduled",
       "request": "",
@@ -1894,6 +1876,24 @@
       "raised": "2026-11-25",
       "type": "500 Hours service Planned",
       "hours": 500,
+      "plan": "2026-11-25",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-022117",
+      "equip": "LD005",
+      "cls": "LDR",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-25",
+      "type": "250 Hours service Planned",
+      "hours": 250,
       "plan": "2026-11-25",
       "status": "Elimination scheduled",
       "request": "",
@@ -11211,6 +11211,22 @@
       "p": "P2",
       "r": "2026-11-17",
       "x": "Заглох, запуск ДВС"
+    },
+    {
+      "d": "DD-00017040",
+      "u": "TK002",
+      "s": "TK002.BS.SHO (Brake Shoes / Тормозные колодки)",
+      "p": "P2",
+      "r": "2026-11-17",
+      "x": "Клинят тормоза, ошибка ABS"
+    },
+    {
+      "d": "DD-00017042",
+      "u": "TK007",
+      "s": "TK007.DRS.ENG (Engine / Двигатель)",
+      "p": "P2",
+      "r": "2026-11-17",
+      "x": "Низкая температура-замена термостата системы ОЖ ДВС"
     },
     {
       "d": "DD-00017003",
@@ -30739,6 +30755,14 @@
       "p": "P4",
       "r": "2026-11-17",
       "x": "Треск (механизм ГРМ)"
+    },
+    {
+      "d": "DD-00017041",
+      "u": "EX009",
+      "s": "EX009.HS.CYL (Cylinders / Гидроцилиндры)",
+      "p": "P4",
+      "r": "2026-11-17",
+      "x": "Утечка по гидроцелиндру подъема стрелы"
     },
     {
       "d": "DD-00017039",
