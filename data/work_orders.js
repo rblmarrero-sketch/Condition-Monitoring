@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-17T06:38:21+00:00",
+  "generated": "2026-11-17T06:52:57+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 812,
@@ -11891,6 +11891,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022109"
     },
     {
+      "asset": "CR008",
+      "defect": "DD-00016566",
+      "raised": "2026-11-09",
+      "system": "CR008.FEED.BEL (Feeder Belt / Лента питателя)",
+      "defectType": "8.05 Conveyor belt wear / Износ конвейерной ленты",
+      "descr": "критический износ ленты питателя",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-022739"
+    },
+    {
       "asset": "GE049",
       "defect": "DD-00016579",
       "raised": "2026-11-09",
@@ -11979,19 +11992,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "CR008",
-      "defect": "DD-00016566",
-      "raised": "2026-11-09",
-      "system": "CR008.FEED.BEL (Feeder Belt / Лента питателя)",
-      "defectType": "8.05 Conveyor belt wear / Износ конвейерной ленты",
-      "descr": "критический износ ленты питателя",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
       "wo": null
     },
     {
