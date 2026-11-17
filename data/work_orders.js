@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-17T20:46:05+00:00",
+  "generated": "2026-11-17T20:58:06+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 812,
@@ -10903,19 +10903,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK089",
-      "defect": "DD-00016611",
-      "raised": "2026-11-10",
-      "system": "TK089.OC (Operator Cab / Кабина оператора)",
-      "defectType": "6.03 Structural crack / Трещина конструкции",
-      "descr": "Отломился поручень кабины",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Aleksey Kiselev",
-      "regBy": "Киселев Алексей Александрович",
-      "wo": "WO-022390"
-    },
-    {
       "asset": "LV054",
       "defect": "DD-00016641",
       "raised": "2026-11-10",
@@ -10927,6 +10914,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022410"
+    },
+    {
+      "asset": "TK089",
+      "defect": "DD-00016611",
+      "raised": "2026-11-10",
+      "system": "TK089.OC (Operator Cab / Кабина оператора)",
+      "defectType": "6.03 Structural crack / Трещина конструкции",
+      "descr": "Отломился поручень кабины",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Aleksey Kiselev",
+      "regBy": "Киселев Алексей Александрович",
+      "wo": "WO-022390"
     },
     {
       "asset": "SN001",
