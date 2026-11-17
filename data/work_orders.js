@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-17T17:42:50+00:00",
+  "generated": "2026-11-17T17:57:40+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 812,
@@ -6052,6 +6052,32 @@ window.CM_WO_DATA = {
       "by": "Aleksey Dobrikov",
       "regBy": "Добриков Алексей Владимирович",
       "wo": "WO-022756"
+    },
+    {
+      "asset": "TK002",
+      "defect": "DD-00017066",
+      "raised": "2026-11-18",
+      "system": "TK002.BS.ABS (ABS System / Система ABS)",
+      "defectType": "3.13 Warning light / alarm active / Сигнальная лампа / аварийная сигнализация активна",
+      "descr": "Индикация неисправности системы ABS/",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022763"
+    },
+    {
+      "asset": "LV064",
+      "defect": "DD-00017067",
+      "raised": "2026-11-18",
+      "system": "LV064.ELS.LIG (Head Lighting System / Система головного освещения)",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "Неисправность головного освещения.",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022764"
     },
     {
       "asset": "TK126",
