@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-17T00:12:39+00:00",
+  "generated": "2026-11-17T00:32:45+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -276,20 +276,6 @@
           "TB"
         ],
         "plan": "2025-06-02",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "TK030": [
-      {
-        "wo": "WO-021634",
-        "hours": 4000,
-        "types": [
-          "FC",
-          "INSP",
-          "MP",
-          "TB"
-        ],
-        "plan": "2026-11-12",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -646,7 +632,7 @@
         "types": [
           "MP"
         ],
-        "plan": "2026-11-22",
+        "plan": "2026-11-18",
         "priority": "P3 Planned (PM)"
       },
       {
@@ -2403,24 +2389,6 @@
       "completed": ""
     },
     {
-      "wo": "WO-020872",
-      "equip": "TK119",
-      "cls": "AT",
-      "comp": "",
-      "desc": "Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-22",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-11-22",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
       "wo": "WO-022150",
       "equip": "TK156",
       "cls": "HT",
@@ -3114,6 +3082,24 @@
       "raised": "2026-11-18",
       "type": "500 Hours service Planned",
       "hours": 500,
+      "plan": "2026-11-18",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-020872",
+      "equip": "TK119",
+      "cls": "AT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-18",
+      "type": "250 Hours service Planned",
+      "hours": 250,
       "plan": "2026-11-18",
       "status": "Elimination scheduled",
       "request": "",
@@ -3853,12 +3839,12 @@
       "type": "250 Hours service Planned",
       "hours": 250,
       "plan": "2026-11-15",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-15"
     },
     {
       "wo": "WO-021362",
@@ -4537,12 +4523,12 @@
       "type": "4000 Hours service Planned",
       "hours": 4000,
       "plan": "2026-11-12",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-15"
     },
     {
       "wo": "WO-021299",
