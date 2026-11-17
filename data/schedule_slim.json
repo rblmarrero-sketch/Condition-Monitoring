@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-17T01:37:52+00:00",
+  "generated": "2026-11-17T02:09:55+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -3424,7 +3424,7 @@
       "raised": "2026-11-17",
       "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "hours": null,
-      "plan": "2026-11-20",
+      "plan": "2026-12-13",
       "status": "Elimination scheduled",
       "request": "DD-00017017",
       "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
@@ -3447,6 +3447,24 @@
       "request": "DD-00017016",
       "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "cause": "Износ уплотнения",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-022714",
+      "equip": "TK120",
+      "cls": "",
+      "comp": "TK120.HS.DL (Hydraulic Lines / Гидролинии)",
+      "desc": "Разрушение внешнего  слоя РВД",
+      "priority": "P4 Planned (Repair)",
+      "raised": "2026-11-17",
+      "type": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "hours": null,
+      "plan": "2026-12-02",
+      "status": "Elimination scheduled",
+      "request": "DD-00017015",
+      "defType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "cause": "Хрупкое разрушение",
       "pmStatus": "open",
       "completed": ""
     },
@@ -3807,6 +3825,24 @@
       "request": "",
       "defType": "",
       "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-022712",
+      "equip": "TK121",
+      "cls": "",
+      "comp": "TK121.BS (Braking System / Тормозная система)",
+      "desc": "Течь РВД охлаждения тормозов.",
+      "priority": "P4 Planned (Repair)",
+      "raised": "2026-11-16",
+      "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "hours": null,
+      "plan": "2026-12-01",
+      "status": "Elimination scheduled",
+      "request": "DD-00016984",
+      "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Поврежден шланга/линии",
       "pmStatus": "open",
       "completed": ""
     },
@@ -10981,6 +11017,14 @@
       "p": "P2",
       "r": "2026-11-17",
       "x": "Ремонт электрооборудования"
+    },
+    {
+      "d": "DD-00017027",
+      "u": "EX016",
+      "s": "EX016.CH.BUC (Bucket / Ковш)",
+      "p": "P2",
+      "r": "2026-11-17",
+      "x": "Замена коронки (слетела)"
     },
     {
       "d": "DD-00017003",
@@ -30463,6 +30507,14 @@
       "x": "Демонтаж ДВС"
     },
     {
+      "d": "DD-00017025",
+      "u": "TK120",
+      "s": "TK120.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
+      "p": "P4",
+      "r": "2026-11-17",
+      "x": "Произвести ревизию освещения, заменить треснутые стекла на фонарях"
+    },
+    {
       "d": "DD-00017024",
       "u": "TK004",
       "s": "TK004.BS.BPC (Brake Packs / Тормозные пакеты)",
@@ -30477,6 +30529,14 @@
       "p": "P4",
       "r": "2026-11-17",
       "x": "Разрушение заднего карданного вала (замена)"
+    },
+    {
+      "d": "DD-00017026",
+      "u": "TK010",
+      "s": "TK010.DRS.ENG (Engine / Двигатель)",
+      "p": "P4",
+      "r": "2026-11-17",
+      "x": "Сломана трубка щупа, невозможно проверить уровень"
     },
     {
       "d": "DD-00016985",

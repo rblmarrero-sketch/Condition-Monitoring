@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-17T01:37:52+00:00",
+  "generated": "2026-11-17T02:09:55+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 812,
@@ -447,8 +447,8 @@ window.CM_WO_DATA = {
     "planStart": 0
   },
   "cmCauseFrom": {
-    "wo": 119,
-    "wr": 88,
+    "wo": 121,
+    "wr": 86,
     "cert": 0,
     "none": 0
   },
@@ -466,7 +466,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-11-17",
       "detected": "2026-11-17",
-      "planStart": "2026-11-20",
+      "planStart": "2026-12-13",
       "closed": null,
       "asset": "TK120",
       "defect": "DD-00017017",
@@ -518,7 +518,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-11-17",
       "detected": "2026-11-17",
-      "planStart": null,
+      "planStart": "2026-12-02",
       "closed": null,
       "asset": "TK120",
       "defect": "DD-00017015",
@@ -528,15 +528,15 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "cause": "Хрупкое разрушение",
-      "causeFrom": "wr",
+      "causeFrom": "wo",
       "descr": "Разрушение внешнего  слоя РВД",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "by": "Slam",
       "byFull": "Slam Taganov",
       "regBy": "Таганов Слам Джумамуратович",
       "raisedBy": "ГДК Баимская",
-      "woNumber": null,
-      "maintType": null,
+      "woNumber": "WO-022714",
+      "maintType": "P4 Planned Repair",
       "planned": false
     },
     {
@@ -570,7 +570,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-11-16",
       "detected": "2026-11-16",
-      "planStart": null,
+      "planStart": "2026-12-01",
       "closed": null,
       "asset": "TK121",
       "defect": "DD-00016984",
@@ -580,15 +580,15 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "cause": "Поврежден шланга/линии",
-      "causeFrom": "wr",
+      "causeFrom": "wo",
       "descr": "Течь РВД охлаждения тормозов.",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "by": "Slam",
       "byFull": "Slam Taganov",
       "regBy": "Таганов Слам Джумамуратович",
       "raisedBy": "ГДК Баимская",
-      "woNumber": null,
-      "maintType": null,
+      "woNumber": "WO-022712",
+      "maintType": "P4 Planned Repair",
       "planned": false
     },
     {
@@ -6054,6 +6054,32 @@ window.CM_WO_DATA = {
       "wo": "WO-022702"
     },
     {
+      "asset": "EX016",
+      "defect": "DD-00017027",
+      "raised": "2026-11-17",
+      "system": "EX016.CH.BUC (Bucket / Ковш)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Замена коронки (слетела)",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022713"
+    },
+    {
+      "asset": "TK120",
+      "defect": "DD-00017025",
+      "raised": "2026-11-17",
+      "system": "TK120.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Произвести ревизию освещения, заменить треснутые стекла на фонарях",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": "WO-022711"
+    },
+    {
       "asset": "TK004",
       "defect": "DD-00017024",
       "raised": "2026-11-17",
@@ -6073,6 +6099,19 @@ window.CM_WO_DATA = {
       "system": "TK029.DRS.TRA (Transmission / Трансмиссия)",
       "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "descr": "Разрушение заднего карданного вала (замена)",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "TK010",
+      "defect": "DD-00017026",
+      "raised": "2026-11-17",
+      "system": "TK010.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Сломана трубка щупа, невозможно проверить уровень",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -7432,19 +7471,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022541"
     },
     {
-      "asset": "TK120",
-      "defect": "DD-00016879",
-      "raised": "2026-11-14",
-      "system": "TK120.BS.RCH (Brake Chambers / Тормозные камеры)",
-      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
-      "descr": "Низкое давление энергоакумулляторов",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": "WO-022708"
-    },
-    {
       "asset": "TK097",
       "defect": "DD-00016850",
       "raised": "2026-11-14",
@@ -7456,6 +7482,19 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-022534"
+    },
+    {
+      "asset": "TK120",
+      "defect": "DD-00016879",
+      "raised": "2026-11-14",
+      "system": "TK120.BS.RCH (Brake Chambers / Тормозные камеры)",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "Низкое давление энергоакумулляторов",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-022708"
     },
     {
       "asset": "EX005",
