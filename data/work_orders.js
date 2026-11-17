@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-17T11:07:40+00:00",
+  "generated": "2026-11-17T11:23:05+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 812,
@@ -6171,19 +6171,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022743"
     },
     {
-      "asset": "TK037",
-      "defect": "DD-00017046",
-      "raised": "2026-11-17",
-      "system": "TK037.CH.STR (Superstructure / Надстройка)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Крепление переднего бампера",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022744"
-    },
-    {
       "asset": "TK068",
       "defect": "DD-00017037",
       "raised": "2026-11-17",
@@ -6195,6 +6182,45 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022736"
+    },
+    {
+      "asset": "EX009",
+      "defect": "DD-00017047",
+      "raised": "2026-11-17",
+      "system": "EX009.CH.AL (Central Lubrication System / Централизованная система смазки)",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "Cмазать рабочие оборудование",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022745"
+    },
+    {
+      "asset": "EX015",
+      "defect": "DD-00017048",
+      "raised": "2026-11-17",
+      "system": "EX015.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка по РВД",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022746"
+    },
+    {
+      "asset": "TK037",
+      "defect": "DD-00017046",
+      "raised": "2026-11-17",
+      "system": "TK037.CH.STR (Superstructure / Надстройка)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Крепление переднего бампера",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022744"
     },
     {
       "asset": "TK002",
@@ -6257,19 +6283,6 @@ window.CM_WO_DATA = {
       "descr": "Устранение утечки гидро распредилителя",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": null
-    },
-    {
-      "asset": "EX009",
-      "defect": "DD-00017047",
-      "raised": "2026-11-17",
-      "system": "EX009.CH.AL (Central Lubrication System / Централизованная система смазки)",
-      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
-      "descr": "Cмазать рабочие оборудование",
-      "status": "Registered",
-      "priority": "P2 Urgent",
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": null
@@ -58483,6 +58496,19 @@ window.CM_WO_DATA = {
       "wo": "WO-018103"
     },
     {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
+      "wo": null
+    },
+    {
       "asset": "DZ022",
       "defect": "DD-00011314",
       "raised": "2026-08-21",
@@ -58584,19 +58610,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
