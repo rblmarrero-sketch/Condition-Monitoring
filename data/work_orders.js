@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-17T03:10:49+00:00",
+  "generated": "2026-11-17T03:22:43+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 812,
@@ -3353,7 +3353,7 @@ window.CM_WO_DATA = {
       "raised": "2026-10-02",
       "detected": "2026-10-02",
       "planStart": "2026-12-14",
-      "closed": null,
+      "closed": "2026-11-14",
       "asset": "CN008",
       "defect": "DD-00013864",
       "requestNo": "DD-00013864",
@@ -3364,7 +3364,7 @@ window.CM_WO_DATA = {
       "cause": "Отслоение протектора",
       "causeFrom": "wo",
       "descr": "Глубокий механический порез плечевой зоны/боковины шины.",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "by": "Irek",
       "byFull": "Irek Rayanov",
       "regBy": "Раянов Ирек Ямильевич",
@@ -6021,11 +6021,11 @@ window.CM_WO_DATA = {
       "system": "CR003.FEED (Feed System / Система питания)",
       "defectType": "2.01 Wear / Износ",
       "descr": "Износ футеровки питателя - сварочные работы",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "priority": "P4 Planned (Repair)",
       "by": "Aybar Tazhiev",
       "regBy": "Тажиев Айбар",
-      "wo": null
+      "wo": "WO-022720"
     },
     {
       "asset": "DR007",
@@ -6405,6 +6405,84 @@ window.CM_WO_DATA = {
       "wo": "WO-022670"
     },
     {
+      "asset": "EX019",
+      "defect": "DD-00016979",
+      "raised": "2026-11-16",
+      "system": "EX019.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "Ремонт рабочего освещения",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022640"
+    },
+    {
+      "asset": "EX004",
+      "defect": "DD-00016980",
+      "raised": "2026-11-16",
+      "system": "EX004.CH.BOO (Boom / Стрела)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Закончилась смазка, заскрипела стрела",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022642"
+    },
+    {
+      "asset": "LV036",
+      "defect": "DD-00016983",
+      "raised": "2026-11-16",
+      "system": "LV036.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Замена мотора отопителя",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022650"
+    },
+    {
+      "asset": "BS001",
+      "defect": "DD-00016972",
+      "raised": "2026-11-16",
+      "system": "BS001.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Не работает отпитель кабины водителя",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022629"
+    },
+    {
+      "asset": "CN002",
+      "defect": "DD-00016976",
+      "raised": "2026-11-16",
+      "system": "CN002.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Устранение утечек масла с ДВС",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022634"
+    },
+    {
+      "asset": "TK133",
+      "defect": "DD-00016978",
+      "raised": "2026-11-16",
+      "system": "TK133.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Заглох, запуск ДВС",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022638"
+    },
+    {
       "asset": "DR011",
       "defect": "DD-00016977",
       "raised": "2026-11-16",
@@ -6587,58 +6665,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022647"
     },
     {
-      "asset": "LV036",
-      "defect": "DD-00016983",
-      "raised": "2026-11-16",
-      "system": "LV036.OC.HE (Heating / Отопление)",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Замена мотора отопителя",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022650"
-    },
-    {
-      "asset": "EX004",
-      "defect": "DD-00016980",
-      "raised": "2026-11-16",
-      "system": "EX004.CH.BOO (Boom / Стрела)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Закончилась смазка, заскрипела стрела",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022642"
-    },
-    {
-      "asset": "EX019",
-      "defect": "DD-00016979",
-      "raised": "2026-11-16",
-      "system": "EX019.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
-      "defectType": "4.02 Open circuit / Разрыв цепи",
-      "descr": "Ремонт рабочего освещения",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022640"
-    },
-    {
-      "asset": "CN002",
-      "defect": "DD-00016976",
-      "raised": "2026-11-16",
-      "system": "CN002.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Устранение утечек масла с ДВС",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022634"
-    },
-    {
       "asset": "GE054",
       "defect": "DD-00016975",
       "raised": "2026-11-16",
@@ -6676,32 +6702,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022630"
-    },
-    {
-      "asset": "BS001",
-      "defect": "DD-00016972",
-      "raised": "2026-11-16",
-      "system": "BS001.OC.HE (Heating / Отопление)",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Не работает отпитель кабины водителя",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022629"
-    },
-    {
-      "asset": "TK133",
-      "defect": "DD-00016978",
-      "raised": "2026-11-16",
-      "system": "TK133.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Заглох, запуск ДВС",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022638"
     },
     {
       "asset": "DZ009",
@@ -7185,6 +7185,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022612"
     },
     {
+      "asset": "TK097",
+      "defect": "DD-00016938",
+      "raised": "2026-11-15",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK097 ENGINE OldNumber (UT097)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Запуск ДВС",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022599"
+    },
+    {
       "asset": "TK148",
       "defect": "DD-00016956",
       "raised": "2026-11-15",
@@ -7257,7 +7270,7 @@ window.CM_WO_DATA = {
       "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
       "descr": "не корректная работа ППЖД на подогреве смазки конуса",
       "status": "Registered",
-      "priority": "P4 Planned (Repair)",
+      "priority": "P2 Urgent",
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": null
@@ -7339,19 +7352,6 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022651"
-    },
-    {
-      "asset": "TK097",
-      "defect": "DD-00016938",
-      "raised": "2026-11-15",
-      "system": "TRUCK, WATER URAL 4672M1-20, TK097 ENGINE OldNumber (UT097)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Запуск ДВС",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022599"
     },
     {
       "asset": "TK085",
@@ -43755,19 +43755,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "TK126",
-      "defect": "DD-00013941",
-      "raised": "2026-10-03",
-      "system": "TK126.DRS (Drive System / Система передачи)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Люфт шлицевой части приводных валов (L и R) переднего моста",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Evgeniy Frolin",
-      "regBy": "Фролин Евгений Владимирович",
-      "wo": "WO-020877"
-    },
-    {
-      "asset": "TK126",
       "defect": "DD-00013942",
       "raised": "2026-10-03",
       "system": "TK126.DRS.FD (Final Drives / Конечные передачи)",
@@ -43778,6 +43765,19 @@ window.CM_WO_DATA = {
       "by": "Evgeniy Frolin",
       "regBy": "Фролин Евгений Владимирович",
       "wo": "WO-020878"
+    },
+    {
+      "asset": "TK126",
+      "defect": "DD-00013941",
+      "raised": "2026-10-03",
+      "system": "TK126.DRS (Drive System / Система передачи)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Люфт шлицевой части приводных валов (L и R) переднего моста",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Evgeniy Frolin",
+      "regBy": "Фролин Евгений Владимирович",
+      "wo": "WO-020877"
     },
     {
       "asset": "DZ014",
@@ -58234,32 +58234,6 @@ window.CM_WO_DATA = {
       "by": "Pavel Kostin",
       "regBy": "Костин Павел Александрович",
       "wo": null
-    },
-    {
-      "asset": "TK133",
-      "defect": "DD-00011368",
-      "raised": "2026-08-22",
-      "system": "TK133.OC.AC (Air Conditioning / Кондиционирование)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Текут патрубки отопителя в кабине (замена)",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-021737"
-    },
-    {
-      "asset": "TK133",
-      "defect": "DD-00011375",
-      "raised": "2026-08-22",
-      "system": "TK133.DRS.TRA (Transmission / Трансмиссия)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Требуется ремонт (сварка) трубки подачи масла Р/К",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-021734"
     },
     {
       "asset": "LV079",
@@ -173834,9 +173808,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-25",
-      "planStartDt": "2026-11-25T00:00:00",
-      "planEnd": "2026-11-25",
+      "planStart": "2026-11-30",
+      "planStartDt": "2026-11-30T00:00:00",
+      "planEnd": "2026-11-30",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -178068,9 +178042,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-29",
-      "planStartDt": "2026-11-29T00:00:00",
-      "planEnd": "2026-11-29",
+      "planStart": "2026-11-30",
+      "planStartDt": "2026-11-30T00:00:00",
+      "planEnd": "2026-11-30",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -189990,9 +189964,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-29",
-      "planStartDt": "2026-11-29T00:00:00",
-      "planEnd": "2026-11-29",
+      "planStart": "2026-12-02",
+      "planStartDt": "2026-12-02T00:00:00",
+      "planEnd": "2026-12-02",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -190207,9 +190181,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-12-03",
-      "planStartDt": "2026-12-03T00:00:00",
-      "planEnd": "2026-12-03",
+      "planStart": "2026-11-28",
+      "planStartDt": "2026-11-28T00:00:00",
+      "planEnd": "2026-11-28",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
