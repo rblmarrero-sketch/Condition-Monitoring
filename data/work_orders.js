@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-17T01:07:44+00:00",
+  "generated": "2026-11-17T01:22:49+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 812,
@@ -447,8 +447,8 @@ window.CM_WO_DATA = {
     "planStart": 0
   },
   "cmCauseFrom": {
-    "wo": 117,
-    "wr": 90,
+    "wo": 119,
+    "wr": 88,
     "cert": 0,
     "none": 0
   },
@@ -466,7 +466,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-11-17",
       "detected": "2026-11-17",
-      "planStart": null,
+      "planStart": "2026-11-20",
       "closed": null,
       "asset": "TK120",
       "defect": "DD-00017017",
@@ -476,15 +476,15 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "cause": "Износ уплотнения",
-      "causeFrom": "wr",
+      "causeFrom": "wo",
       "descr": "Течь масла с соединительной муфты под двигателем с правой стороны.",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "by": "Slam",
       "byFull": "Slam Taganov",
       "regBy": "Таганов Слам Джумамуратович",
       "raisedBy": "ГДК Баимская",
-      "woNumber": null,
-      "maintType": null,
+      "woNumber": "WO-022710",
+      "maintType": "P4 Planned Repair",
       "planned": false
     },
     {
@@ -492,7 +492,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-11-17",
       "detected": "2026-11-17",
-      "planStart": null,
+      "planStart": "2026-11-20",
       "closed": null,
       "asset": "TK120",
       "defect": "DD-00017016",
@@ -502,15 +502,15 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "cause": "Износ уплотнения",
-      "causeFrom": "wr",
+      "causeFrom": "wo",
       "descr": "Течь масла с правой стороны за кабиной.",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "by": "Slam",
       "byFull": "Slam Taganov",
       "regBy": "Таганов Слам Джумамуратович",
       "raisedBy": "ГДК Баимская",
-      "woNumber": null,
-      "maintType": null,
+      "woNumber": "WO-022709",
+      "maintType": "P4 Planned Repair",
       "planned": false
     },
     {
@@ -7432,6 +7432,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022541"
     },
     {
+      "asset": "TK120",
+      "defect": "DD-00016879",
+      "raised": "2026-11-14",
+      "system": "TK120.BS.RCH (Brake Chambers / Тормозные камеры)",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "Низкое давление энергоакумулляторов",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-022708"
+    },
+    {
       "asset": "TK097",
       "defect": "DD-00016850",
       "raised": "2026-11-14",
@@ -7958,19 +7971,6 @@ window.CM_WO_DATA = {
       "system": "DZ003.OC.SE (Seat / Сиденье)",
       "defectType": "1.06 Deformation / bending / buckling Деформация / изгиб / коробление",
       "descr": "Неисправность сиденья оператора",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": null
-    },
-    {
-      "asset": "TK120",
-      "defect": "DD-00016879",
-      "raised": "2026-11-14",
-      "system": "TK120.BS.RCH (Brake Chambers / Тормозные камеры)",
-      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
-      "descr": "Низкое давление энергоакумулляторов",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Dmitriy Stepanenko",
@@ -24454,7 +24454,7 @@ window.CM_WO_DATA = {
       "raised": "2026-10-24",
       "system": "TK010.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.24 Low temperature / freezing / Низкая температура / замерзание",
-      "descr": "ДВС нагревается максимум до 72 градусов",
+      "descr": "ДВС нагревается максимум до 55 градусов",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
