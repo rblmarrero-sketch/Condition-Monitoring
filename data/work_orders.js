@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-18T05:43:23+00:00",
+  "generated": "2026-11-18T05:57:49+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 812,
@@ -6373,7 +6373,7 @@ window.CM_WO_DATA = {
       "defectType": "4.12 Cable / harness damage / Повреждение кабеля / жгута",
       "descr": "Обрыв контрольного кабеля привода конуса",
       "status": "Registered",
-      "priority": "P1 Breakdown",
+      "priority": "P2 Urgent",
       "by": "Sergey Nazmutdinov",
       "regBy": "Назмутдинов Сергей Зуфарович",
       "wo": null
@@ -6480,6 +6480,32 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
+      "wo": null
+    },
+    {
+      "asset": "TK004",
+      "defect": "DD-00017103",
+      "raised": "2026-11-18",
+      "system": "TK004.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Не работает горный тормоз",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "TK004",
+      "defect": "DD-00017102",
+      "raised": "2026-11-18",
+      "system": "TK004.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Не исправна турбина (рывки)",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
       "wo": null
     },
     {
