@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-18T11:02:42+00:00",
+  "generated": "2026-11-18T11:22:54+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 812,
@@ -5938,19 +5938,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022865"
     },
     {
-      "asset": "TK007",
-      "defect": "DD-00017070",
-      "raised": "2026-11-18",
-      "system": "TK007.DRS.AXL (Axles / Мосты)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Устранение утечки масла с правой задней бортовой",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022765"
-    },
-    {
       "asset": "CR007",
       "defect": "DD-00017071",
       "raised": "2026-11-18",
@@ -6105,6 +6092,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022790"
+    },
+    {
+      "asset": "TK007",
+      "defect": "DD-00017070",
+      "raised": "2026-11-18",
+      "system": "TK007.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Устранение утечки масла с правой задней бортовой",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022765"
     },
     {
       "asset": "CR005",
