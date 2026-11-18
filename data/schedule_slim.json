@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-18T07:17:55+00:00",
+  "generated": "2026-11-18T07:38:51+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -911,7 +911,7 @@
         "types": [
           "MP"
         ],
-        "plan": "2026-11-16",
+        "plan": "2026-11-17",
         "priority": "P3 Planned (PM)"
       },
       {
@@ -3353,6 +3353,24 @@
       "completed": ""
     },
     {
+      "wo": "WO-022149",
+      "equip": "TK155",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-17",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-11-17",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-022153",
       "equip": "TK159",
       "cls": "HT",
@@ -3758,24 +3776,6 @@
       "raised": "2026-11-16",
       "type": "1500 Hours service Planned",
       "hours": 1500,
-      "plan": "2026-11-16",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
-      "wo": "WO-022149",
-      "equip": "TK155",
-      "cls": "HT",
-      "comp": "",
-      "desc": "Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-16",
-      "type": "250 Hours service Planned",
-      "hours": 250,
       "plan": "2026-11-16",
       "status": "Elimination scheduled",
       "request": "",
@@ -30595,6 +30595,14 @@
       "p": "P4",
       "r": "2026-11-18",
       "x": "Требуется ремонт крепления левого зеркала, замка левой форточки"
+    },
+    {
+      "d": "DD-00017104",
+      "u": "DZ019",
+      "s": "DZ019.DRS.TRA (Transmission / Трансмиссия)",
+      "p": "P4",
+      "r": "2026-11-18",
+      "x": "Заменить сальник входящего вала АКПП"
     },
     {
       "d": "DD-00017085",
