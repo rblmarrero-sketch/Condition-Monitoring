@@ -2,10 +2,10 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-18T22:18:14+00:00",
+  "generated": "2026-11-18T22:33:02+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
-  "unitsInWorkbook": 812,
+  "unitsInWorkbook": 813,
   "unitsKept": [
     "BL001",
     "BL002",
@@ -2340,7 +2340,7 @@ window.CM_WO_DATA = {
       "raised": "2026-10-18",
       "detected": "2026-10-18",
       "planStart": "2026-11-15",
-      "closed": null,
+      "closed": "2026-11-15",
       "asset": "DZ005",
       "defect": "DD-00015036",
       "requestNo": "DD-00015036",
@@ -2351,7 +2351,7 @@ window.CM_WO_DATA = {
       "cause": "Обрыв провода",
       "causeFrom": "wo",
       "descr": "Не работает подогреватель сидения.",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "by": "Bekzhan",
       "byFull": "Bekzhan Kazhybekov",
       "regBy": "Кажыбеков Бекжан",
@@ -6053,6 +6053,19 @@ window.CM_WO_DATA = {
       "by": "Viktor Bernikov",
       "regBy": "Берников Виктор Викторович",
       "wo": "WO-022886"
+    },
+    {
+      "asset": "LV.C001",
+      "defect": "DD-00017135",
+      "raised": "2026-11-19",
+      "system": "LIGHT VEHICLE, TOYOTA HILUX C395MH",
+      "defectType": "1.04 Abnormal noise / vibration Аномальный шум / вибрация",
+      "descr": "PM 10 000",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Ilshat Sabitov",
+      "regBy": "Сабитов Ильшат Рашидович",
+      "wo": "WO-022900"
     },
     {
       "asset": "TK032",
@@ -24645,19 +24658,6 @@ window.CM_WO_DATA = {
       "wo": "WO-020718"
     },
     {
-      "asset": "EX011",
-      "defect": "DD-00015625",
-      "raised": "2026-10-25",
-      "system": "EX011.ELS.PH (Preheater / Предпусковой подогреватель)",
-      "defectType": "4.02 Open circuit / Разрыв цепи",
-      "descr": "Не стабильная работа предпускового подогревателя, отказ запуска",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": "WO-021540"
-    },
-    {
       "asset": "SN002",
       "defect": "DD-00015648",
       "raised": "2026-10-25",
@@ -24682,6 +24682,19 @@ window.CM_WO_DATA = {
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": "WO-020785"
+    },
+    {
+      "asset": "EX011",
+      "defect": "DD-00015625",
+      "raised": "2026-10-25",
+      "system": "EX011.ELS.PH (Preheater / Предпусковой подогреватель)",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "Не стабильная работа предпускового подогревателя, отказ запуска",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-021540"
     },
     {
       "asset": "TK068",
