@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-18T12:07:41+00:00",
+  "generated": "2026-11-18T12:22:51+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 812,
@@ -6308,7 +6308,7 @@ window.CM_WO_DATA = {
       "system": "BS010.DRS.ENG (Engine / Двигатель)",
       "defectType": "3.13 Warning light / alarm active / Сигнальная лампа / аварийная сигнализация активна",
       "descr": "Индикация неисправности двигателя. Потеря тяги.",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
