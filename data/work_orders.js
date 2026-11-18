@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-18T21:18:17+00:00",
+  "generated": "2026-11-18T21:33:06+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 812,
@@ -1690,7 +1690,7 @@ window.CM_WO_DATA = {
       "raised": "2026-10-23",
       "detected": "2026-10-23",
       "planStart": "2026-11-15",
-      "closed": null,
+      "closed": "2026-11-16",
       "asset": "TK123",
       "defect": "DD-00015498",
       "requestNo": "DD-00015498",
@@ -1701,7 +1701,7 @@ window.CM_WO_DATA = {
       "cause": "Поврежден прокладки",
       "causeFrom": "wo",
       "descr": "В ДВС на блоке наблюдается следы самасливание. Точное происхождение следов не установлено,требуется диагностика и локализация течи.",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "by": "Bekzhan",
       "byFull": "Bekzhan Kazhybekov",
       "regBy": "Кажыбеков Бекжан",
@@ -6107,6 +6107,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022871"
     },
     {
+      "asset": "CN001",
+      "defect": "DD-00017132",
+      "raised": "2026-11-19",
+      "system": "CN001.CH.STR (Superstructure / Надстройка)",
+      "defectType": "7.09 Screen media tear / breakage / Разрыв / поломка ситовой панели",
+      "descr": "нет зарядки",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Ilshat Sabitov",
+      "regBy": "Сабитов Ильшат Рашидович",
+      "wo": "WO-022888"
+    },
+    {
       "asset": "TK016",
       "defect": "DD-00017115",
       "raised": "2026-11-19",
@@ -6118,6 +6131,19 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-022872"
+    },
+    {
+      "asset": "TK104",
+      "defect": "DD-00017133",
+      "raised": "2026-11-19",
+      "system": "TK104.BS.HOS (Hoses and Piping / Шланги и трубопроводы)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка масла трансмиссии",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-022889"
     },
     {
       "asset": "TK171",
@@ -7855,7 +7881,7 @@ window.CM_WO_DATA = {
       "system": "CN001.CH.STR (Superstructure / Надстройка)",
       "defectType": "7.09 Screen media tear / breakage / Разрыв / поломка ситовой панели",
       "descr": "нет зарядки",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P4 Planned (Repair)",
       "by": "Ilshat Sabitov",
       "regBy": "Сабитов Ильшат Рашидович",
@@ -16637,19 +16663,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022214"
     },
     {
-      "asset": "GR004",
-      "defect": "DD-00016286",
-      "raised": "2026-11-04",
-      "system": "GR004.ELS.BAT (Batteries / Аккумуляторные батареи)",
-      "defectType": "4.14 Battery / starting circuit fault / Неисправность аккумулятора / цепи пуска",
-      "descr": "Недостаточная ёмкость АКБ",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Evgeniy Frolin",
-      "regBy": "Фролин Евгений Владимирович",
-      "wo": "WO-021707"
-    },
-    {
       "asset": "TK115",
       "defect": "DD-00016283",
       "raised": "2026-11-04",
@@ -16700,6 +16713,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-021836"
+    },
+    {
+      "asset": "GR004",
+      "defect": "DD-00016286",
+      "raised": "2026-11-04",
+      "system": "GR004.ELS.BAT (Batteries / Аккумуляторные батареи)",
+      "defectType": "4.14 Battery / starting circuit fault / Неисправность аккумулятора / цепи пуска",
+      "descr": "Недостаточная ёмкость АКБ",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Evgeniy Frolin",
+      "regBy": "Фролин Евгений Владимирович",
+      "wo": "WO-021707"
     },
     {
       "asset": "LV042",
@@ -17664,19 +17690,6 @@ window.CM_WO_DATA = {
       "wo": "WO-021505"
     },
     {
-      "asset": "DZ007",
-      "defect": "DD-00016176",
-      "raised": "2026-11-02",
-      "system": "DZ007.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.12 Low fluid level / Низкий уровень жидкости",
-      "descr": "Замена масла в ДВС через 50 м-ч после замены ДВС",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Evgeniy Frolin",
-      "regBy": "Фролин Евгений Владимирович",
-      "wo": "WO-021504"
-    },
-    {
       "asset": "TK085",
       "defect": "DD-00016163",
       "raised": "2026-11-02",
@@ -18104,6 +18117,19 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022203"
+    },
+    {
+      "asset": "DZ007",
+      "defect": "DD-00016176",
+      "raised": "2026-11-02",
+      "system": "DZ007.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.12 Low fluid level / Низкий уровень жидкости",
+      "descr": "Замена масла в ДВС через 50 м-ч после замены ДВС",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Evgeniy Frolin",
+      "regBy": "Фролин Евгений Владимирович",
+      "wo": "WO-021504"
     },
     {
       "asset": "BS015",
@@ -27830,19 +27856,6 @@ window.CM_WO_DATA = {
       "wo": "WO-020483"
     },
     {
-      "asset": "LV108",
-      "defect": "DD-00015411",
-      "raised": "2026-10-22",
-      "system": "LV108.CH.SU (Suspension / Подвеска)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "диагностика подвески, ходовой части, трансмиссии, проверка ДВС, ТКР, электросистемпроверка, уровней масла мостов, КПП",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022385"
-    },
-    {
       "asset": "DZ011",
       "defect": "DD-00015379",
       "raised": "2026-10-22",
@@ -28036,6 +28049,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-021513"
+    },
+    {
+      "asset": "LV108",
+      "defect": "DD-00015411",
+      "raised": "2026-10-22",
+      "system": "LV108.CH.SU (Suspension / Подвеска)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "диагностика подвески, ходовой части, трансмиссии, проверка ДВС, ТКР, электросистемпроверка, уровней масла мостов, КПП",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022385"
     },
     {
       "asset": "TK089",
@@ -44977,19 +45003,6 @@ window.CM_WO_DATA = {
       "wo": "WO-020072"
     },
     {
-      "asset": "TK126",
-      "defect": "DD-00013941",
-      "raised": "2026-10-03",
-      "system": "TK126.DRS (Drive System / Система передачи)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Люфт шлицевой части приводных валов (L и R) переднего моста",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Evgeniy Frolin",
-      "regBy": "Фролин Евгений Владимирович",
-      "wo": "WO-020877"
-    },
-    {
       "asset": "TK109",
       "defect": "DD-00013960",
       "raised": "2026-10-03",
@@ -45014,6 +45027,19 @@ window.CM_WO_DATA = {
       "by": "Evgeniy Frolin",
       "regBy": "Фролин Евгений Владимирович",
       "wo": "WO-020055"
+    },
+    {
+      "asset": "TK126",
+      "defect": "DD-00013941",
+      "raised": "2026-10-03",
+      "system": "TK126.DRS (Drive System / Система передачи)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Люфт шлицевой части приводных валов (L и R) переднего моста",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Evgeniy Frolin",
+      "regBy": "Фролин Евгений Владимирович",
+      "wo": "WO-020877"
     },
     {
       "asset": "TK126",
@@ -58614,6 +58640,19 @@ window.CM_WO_DATA = {
       "wo": "WO-018103"
     },
     {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
+      "wo": null
+    },
+    {
       "asset": "DZ022",
       "defect": "DD-00011314",
       "raised": "2026-08-21",
@@ -58715,19 +58754,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
@@ -59382,6 +59408,19 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "TK008",
+      "defect": "DD-00010860",
+      "raised": "2026-08-14",
+      "system": "TK008.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Не работает фен",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": null
+    },
+    {
+      "asset": "TK008",
       "defect": "DD-00010861",
       "raised": "2026-08-14",
       "system": "TK008.CH.SU (Suspension / Подвеска)",
@@ -59400,19 +59439,6 @@ window.CM_WO_DATA = {
       "system": "FL005.OC.AC (Air Conditioning / Кондиционирование)",
       "defectType": "1.27 Belt drive issue (slip/break) / Проблема ременного привода (проскальзывание/обрыв)",
       "descr": "Трещины на ремне кондиционера",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": null
-    },
-    {
-      "asset": "TK008",
-      "defect": "DD-00010860",
-      "raised": "2026-08-14",
-      "system": "TK008.OC.HE (Heating / Отопление)",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Не работает фен",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -59902,19 +59928,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "TK010",
-      "defect": "DD-00010485",
-      "raised": "2026-08-09",
-      "system": "TK010.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь радиатора",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": null
-    },
-    {
-      "asset": "TK010",
       "defect": "DD-00010486",
       "raised": "2026-08-09",
       "system": "TK010.CH.SU (Suspension / Подвеска)",
@@ -59933,6 +59946,19 @@ window.CM_WO_DATA = {
       "system": "TK010.CH.HS (Hydraulic System / Гидравлическая система)",
       "defectType": "1.25 Reduced capacity / output / Снижение производительности / выхода",
       "descr": "Общая потеря мощности КМУ, некорректная работа аутригеров (подклинивание)",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": null
+    },
+    {
+      "asset": "TK010",
+      "defect": "DD-00010485",
+      "raised": "2026-08-09",
+      "system": "TK010.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь радиатора",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -98009,15 +98035,15 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-16",
       "planStartDt": "2026-11-16T00:00:00",
       "planEnd": "2026-11-16",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-16",
+      "actualStartDt": "2026-11-16T13:50:00",
+      "actualEnd": "2026-11-16"
     },
     {
       "equip": "DZ006",
@@ -111686,15 +111712,15 @@ window.CM_WO_DATA = {
       "cmLabel": "500h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-11",
       "planStartDt": "2026-11-11T00:00:00",
-      "planEnd": "2026-11-12",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "planEnd": "2026-11-11",
+      "actualStart": "2026-11-11",
+      "actualStartDt": "2026-11-11T07:00:00",
+      "actualEnd": "2026-11-11"
     },
     {
       "equip": "EX011",
@@ -139589,15 +139615,15 @@ window.CM_WO_DATA = {
       "cmLabel": "1000h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-16",
       "planStartDt": "2026-11-16T00:00:00",
       "planEnd": "2026-11-16",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-16",
+      "actualStartDt": "2026-11-16T07:00:00",
+      "actualEnd": "2026-11-16"
     },
     {
       "equip": "LD005",
@@ -192275,15 +192301,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CLSD",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-15",
       "planStartDt": "2026-11-15T22:00:00",
       "planEnd": "2026-11-16",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-15",
+      "actualStartDt": "2026-11-15T22:30:00",
+      "actualEnd": "2026-11-16"
     },
     {
       "equip": "TK151",
