@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-18T13:42:48+00:00",
+  "generated": "2026-11-18T13:53:36+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 812,
@@ -5925,17 +5925,17 @@ window.CM_WO_DATA = {
   ],
   "otherDefects": [
     {
-      "asset": "TK038",
-      "defect": "DD-00017108",
-      "raised": "2026-11-18",
-      "system": "TK038.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Трещина кронштейна генератора, обрыв ремня.",
+      "asset": "DZ018",
+      "defect": "DD-00017114",
+      "raised": "2026-11-19",
+      "system": "DZ018.CH.RP (Ripper/Рыхлитель)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Износ коронки",
       "status": "Elimination scheduled",
       "priority": "P2 Urgent",
-      "by": "Viktor Bernikov",
-      "regBy": "Берников Виктор Викторович",
-      "wo": "WO-022869"
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022870"
     },
     {
       "asset": "EX015",
@@ -6014,6 +6014,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022788"
+    },
+    {
+      "asset": "TK038",
+      "defect": "DD-00017108",
+      "raised": "2026-11-18",
+      "system": "TK038.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Трещина кронштейна генератора, обрыв ремня.",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Viktor Bernikov",
+      "regBy": "Берников Виктор Викторович",
+      "wo": "WO-022869"
     },
     {
       "asset": "EX003",
@@ -14102,6 +14115,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021889"
     },
     {
+      "asset": "GR012",
+      "defect": "DD-00016466",
+      "raised": "2026-11-07",
+      "system": "GR012.CH.BL (Blade / Отвал)",
+      "defectType": "6.03 Structural crack / Трещина конструкции",
+      "descr": "Требуется наварка постели переднего отвала, правого угола отвала",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-022220"
+    },
+    {
       "asset": "CR002",
       "defect": "DD-00016468",
       "raised": "2026-11-07",
@@ -14165,19 +14191,6 @@ window.CM_WO_DATA = {
       "by": "Aleksey Dobrikov",
       "regBy": "Добриков Алексей Владимирович",
       "wo": "WO-021882"
-    },
-    {
-      "asset": "GR012",
-      "defect": "DD-00016466",
-      "raised": "2026-11-07",
-      "system": "GR012.CH.BL (Blade / Отвал)",
-      "defectType": "6.03 Structural crack / Трещина конструкции",
-      "descr": "Требуется наварка постели переднего отвала, правого угола отвала",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Roman Besedovskiy",
-      "regBy": "Беседовский Роман Иванович",
-      "wo": "WO-022220"
     },
     {
       "asset": "LV147",
@@ -19601,19 +19614,6 @@ window.CM_WO_DATA = {
       "wo": "WO-021510"
     },
     {
-      "asset": "TK113",
-      "defect": "DD-00016024",
-      "raised": "2026-10-31",
-      "system": "TK113.DRS.AXL (Axles / Мосты)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка масла с сальника хвостовика сраднего моста",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Roman Kochetov",
-      "regBy": "Кочетов Роман Иванович",
-      "wo": "WO-022193"
-    },
-    {
       "asset": "EX024",
       "defect": "DD-00016011",
       "raised": "2026-10-31",
@@ -19638,6 +19638,19 @@ window.CM_WO_DATA = {
       "by": "Roman Kochetov",
       "regBy": "Кочетов Роман Иванович",
       "wo": "WO-021548"
+    },
+    {
+      "asset": "TK113",
+      "defect": "DD-00016024",
+      "raised": "2026-10-31",
+      "system": "TK113.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка масла с сальника хвостовика сраднего моста",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Roman Kochetov",
+      "regBy": "Кочетов Роман Иванович",
+      "wo": "WO-022193"
     },
     {
       "asset": "EX025",
