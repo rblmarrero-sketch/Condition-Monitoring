@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-18T00:37:50+00:00",
+  "generated": "2026-11-18T00:53:08+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -1381,24 +1381,6 @@
       "completed": ""
     },
     {
-      "wo": "WO-022028",
-      "equip": "DZ020",
-      "cls": "DOZ",
-      "comp": "",
-      "desc": "250h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-29",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-11-29",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
       "wo": "WO-021945",
       "equip": "TK117",
       "cls": "AT",
@@ -1696,6 +1678,24 @@
       "raised": "2026-11-26",
       "type": "500 Hours service Planned",
       "hours": 500,
+      "plan": "2026-11-26",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-022028",
+      "equip": "DZ020",
+      "cls": "DOZ",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-26",
+      "type": "250 Hours service Planned",
+      "hours": 250,
       "plan": "2026-11-26",
       "status": "Elimination scheduled",
       "request": "",
