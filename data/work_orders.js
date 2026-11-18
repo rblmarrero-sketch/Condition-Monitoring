@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-18T20:08:21+00:00",
+  "generated": "2026-11-18T20:28:16+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 812,
@@ -5938,19 +5938,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022876"
     },
     {
-      "asset": "TK032",
-      "defect": "DD-00017121",
-      "raised": "2026-11-19",
-      "system": "TK032.DRS.ENG (Engine / Двигатель)",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "обрыв ремня генератора",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksandr Kuznetsov",
-      "regBy": "Кузнецов Александр Андреевич",
-      "wo": "WO-022877"
-    },
-    {
       "asset": "TK125",
       "defect": "DD-00017122",
       "raised": "2026-11-19",
@@ -6066,6 +6053,19 @@ window.CM_WO_DATA = {
       "by": "Viktor Bernikov",
       "regBy": "Берников Виктор Викторович",
       "wo": "WO-022886"
+    },
+    {
+      "asset": "TK032",
+      "defect": "DD-00017121",
+      "raised": "2026-11-19",
+      "system": "TK032.DRS.ENG (Engine / Двигатель)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "замена ремня, обломана шпилька генератора, CHECK ДВС",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Kuznetsov",
+      "regBy": "Кузнецов Александр Андреевич",
+      "wo": "WO-022877"
     },
     {
       "asset": "DZ018",
@@ -6680,6 +6680,19 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "BS005",
+      "defect": "DD-00017091",
+      "raised": "2026-11-18",
+      "system": "BS005.SS.SG (Steering Gearbox / Рулевой механизм)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Люфт рулевого механизма",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "BS005",
       "defect": "DD-00017094",
       "raised": "2026-11-18",
       "system": "BS005.ELS.WH (Wiring Harness / Жгут проводов)",
@@ -6724,19 +6737,6 @@ window.CM_WO_DATA = {
       "system": "BS005.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Утечка масла из-под клапанной крышки 8 цилиндра",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "BS005",
-      "defect": "DD-00017091",
-      "raised": "2026-11-18",
-      "system": "BS005 5849HF KAMAZ GIRD",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Люфт рулевого механизма",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
