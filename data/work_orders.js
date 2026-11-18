@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-18T02:12:45+00:00",
+  "generated": "2026-11-18T02:32:41+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 812,
@@ -5989,6 +5989,71 @@ window.CM_WO_DATA = {
       "wo": "WO-022779"
     },
     {
+      "asset": "CR007",
+      "defect": "DD-00017073",
+      "raised": "2026-11-18",
+      "system": "CR007.FEED.HOP (Hopper / Бункер)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "износ футеровки приемного бункера",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-022784"
+    },
+    {
+      "asset": "CR006",
+      "defect": "DD-00017074",
+      "raised": "2026-11-18",
+      "system": "CR006.FEED.FDR (Feeder / Питатель)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "износ футеровки вибропитателя",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-022785"
+    },
+    {
+      "asset": "SN004",
+      "defect": "DD-00017076",
+      "raised": "2026-11-18",
+      "system": "SN004.CONV.MDC (Main Discharge Conveyor / Главный разгрузочный конвейер)",
+      "defectType": "8.03 Conveyor belt splice failure / Разрушение стыка конвейерной ленты",
+      "descr": "ремонт стыков, и полотна тратранспортерной ленты",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-022787"
+    },
+    {
+      "asset": "CR006",
+      "defect": "DD-00017075",
+      "raised": "2026-11-18",
+      "system": "CR006.CONV.MAIN (Main Conveyor / Главный конвейер)",
+      "defectType": "8.03 Conveyor belt splice failure / Разрушение стыка конвейерной ленты",
+      "descr": "ремонт стыка ленты, ремонт полотна конвейернрй ленты",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-022786"
+    },
+    {
+      "asset": "EX003",
+      "defect": "DD-00017082",
+      "raised": "2026-11-18",
+      "system": "EX003.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Замена РВД ковшевого цилиндра",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022788"
+    },
+    {
       "asset": "EX010",
       "defect": "DD-00017050",
       "raised": "2026-11-18",
@@ -6224,9 +6289,9 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "SN004",
-      "defect": "DD-00017076",
+      "defect": "DD-00017081",
       "raised": "2026-11-18",
-      "system": "SN004.CONV.BEL (Conveyor Belt / Конвейерная лента)",
+      "system": "SN004.CONV.SDC (Side Discharge Conveyor / Боковой разгрузочный конвейер)",
       "defectType": "8.03 Conveyor belt splice failure / Разрушение стыка конвейерной ленты",
       "descr": "ремонт стыков, и полотна тратранспортерной ленты",
       "status": "Registered",
@@ -6242,45 +6307,6 @@ window.CM_WO_DATA = {
       "system": "CR008.FEED.HOP (Hopper / Бункер)",
       "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "descr": "Износ футеровки бункера приемного",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": null
-    },
-    {
-      "asset": "CR007",
-      "defect": "DD-00017073",
-      "raised": "2026-11-18",
-      "system": "CR007.FEED.HOP (Hopper / Бункер)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "износ футеровки приемного бункера",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": null
-    },
-    {
-      "asset": "CR006",
-      "defect": "DD-00017074",
-      "raised": "2026-11-18",
-      "system": "CR006.FEED.FDR (Feeder / Питатель)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "износ футеровки вибропитателя",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": null
-    },
-    {
-      "asset": "CR006",
-      "defect": "DD-00017075",
-      "raised": "2026-11-18",
-      "system": "CR006.CONV.MAIN (Main Conveyor / Главный конвейер)",
-      "defectType": "8.03 Conveyor belt splice failure / Разрушение стыка конвейерной ленты",
-      "descr": "ремонт стыка ленты, ремонт полотна конвейернрй ленты",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Oleg Dymbrylov",
@@ -7484,6 +7510,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022777"
     },
     {
+      "asset": "CR007",
+      "defect": "DD-00016944",
+      "raised": "2026-11-15",
+      "system": "CR007.CONV.MDC (Main Discharge Conveyor / Главный разгрузочный конвейер)",
+      "defectType": "8.06 Roller / idler failure / Отказ ролика / роликоопоры",
+      "descr": "поломка дефлекторных роликов 4шт с кронштейнами",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-022783"
+    },
+    {
       "asset": "TK122",
       "defect": "DD-00016948",
       "raised": "2026-11-15",
@@ -8053,19 +8092,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "CR007",
-      "defect": "DD-00016944",
-      "raised": "2026-11-15",
-      "system": "CR007.CONV.MDC (Main Discharge Conveyor / Главный разгрузочный конвейер)",
-      "defectType": "8.06 Roller / idler failure / Отказ ролика / роликоопоры",
-      "descr": "поломка дефлекторных роликов 4шт с кронштейнами",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
       "wo": null
     },
     {
@@ -57963,19 +57989,6 @@ window.CM_WO_DATA = {
       "wo": "WO-018103"
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
-      "wo": null
-    },
-    {
       "asset": "DZ022",
       "defect": "DD-00011314",
       "raised": "2026-08-21",
@@ -58077,6 +58090,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
@@ -58809,19 +58835,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "H07",
-      "defect": "EB-00000079",
-      "raised": "2026-08-13",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
-      "wo": null
-    },
-    {
-      "asset": "H07",
       "defect": "EB-00000078",
       "raised": "2026-08-13",
       "system": null,
@@ -58831,6 +58844,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Sergey Gulin",
+      "wo": null
+    },
+    {
+      "asset": "H07",
+      "defect": "EB-00000079",
+      "raised": "2026-08-13",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
@@ -59458,8 +59484,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000076",
+      "asset": "H07",
+      "defect": "EB-00000075",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -59471,8 +59497,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H07",
-      "defect": "EB-00000075",
+      "asset": "H04",
+      "defect": "EB-00000076",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
