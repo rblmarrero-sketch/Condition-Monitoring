@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-18T04:14:39+00:00",
+  "generated": "2026-11-18T04:22:46+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 812,
@@ -356,7 +356,7 @@ window.CM_WO_DATA = {
     "WE010",
     "WE011"
   ],
-  "duplicateRowsCollapsed": 454,
+  "duplicateRowsCollapsed": 455,
   "roundsDedupedWithinVisit": 2,
   "columns": [
     "Asset description",
@@ -1480,7 +1480,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-10-26",
       "detected": "2026-10-26",
-      "planStart": "2026-11-26",
+      "planStart": "2026-12-04",
       "closed": null,
       "asset": "TK107",
       "defect": "DD-00015727",
@@ -6314,6 +6314,45 @@ window.CM_WO_DATA = {
       "wo": "WO-022764"
     },
     {
+      "asset": "TK059",
+      "defect": "DD-00017088",
+      "raised": "2026-11-18",
+      "system": "TK059.CH.SU (Suspension / Подвеска)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Диагностика и ремонт ходовой части (стук спереди)",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "SN003",
+      "defect": "DD-00017092",
+      "raised": "2026-11-18",
+      "system": "SN003.ELS.WH (Wiring Harness / Жгут проводов)",
+      "defectType": "4.12 Cable / harness damage / Повреждение кабеля / жгута",
+      "descr": "Отсутствует связь с силовым генератором и контроллером ( ориентровочно обрыв провода)",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Nazmutdinov",
+      "regBy": "Назмутдинов Сергей Зуфарович",
+      "wo": null
+    },
+    {
+      "asset": "CR008",
+      "defect": "DD-00017090",
+      "raised": "2026-11-18",
+      "system": "CR008.ELS.WH (Wiring Harness / Жгут проводов)",
+      "defectType": "4.12 Cable / harness damage / Повреждение кабеля / жгута",
+      "descr": "Обрыв контрольного кабеля привода конуса",
+      "status": "Registered",
+      "priority": "P1 Breakdown",
+      "by": "Sergey Nazmutdinov",
+      "regBy": "Назмутдинов Сергей Зуфарович",
+      "wo": null
+    },
+    {
       "asset": "CR008",
       "defect": "DD-00017072",
       "raised": "2026-11-18",
@@ -6327,6 +6366,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "BS005",
+      "defect": "DD-00017091",
+      "raised": "2026-11-18",
+      "system": "BS005 5849HF KAMAZ GIRD",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Люфт рулевого механизма",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
       "asset": "TK120",
       "defect": "DD-00017083",
       "raised": "2026-11-18",
@@ -6337,6 +6389,32 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
+      "wo": null
+    },
+    {
+      "asset": "TK027",
+      "defect": "DD-00017089",
+      "raised": "2026-11-18",
+      "system": "TK027.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Диагностика и ремонт ходовой. Подклинивает левое колесо 3-й оси",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "TK039",
+      "defect": "DD-00017087",
+      "raised": "2026-11-18",
+      "system": "TK039.OC.GL (Glass / Стекла)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Отсутствует средний дворник",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
       "wo": null
     },
     {
@@ -43845,19 +43923,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "DZ005",
-      "defect": "DD-00013974",
-      "raised": "2026-10-03",
-      "system": "DZ005.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
-      "descr": "ДВС нет мощности. Отсутствие хода",
-      "status": "Completed",
-      "priority": "P2 Urgent",
-      "by": "Sergey Tomilov",
-      "regBy": "Томилов Сергей Владимирович",
-      "wo": "WO-018846"
-    },
-    {
       "asset": "DZ014",
       "defect": "DD-00013953",
       "raised": "2026-10-03",
@@ -43869,6 +43934,19 @@ window.CM_WO_DATA = {
       "by": "Evgeniy Frolin",
       "regBy": "Фролин Евгений Владимирович",
       "wo": "WO-019029"
+    },
+    {
+      "asset": "DZ005",
+      "defect": "DD-00013974",
+      "raised": "2026-10-03",
+      "system": "DZ005.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "ДВС нет мощности. Отсутствие хода",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": "WO-018846"
     },
     {
       "asset": "TK126",
@@ -54362,6 +54440,32 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "DZ014",
+      "defect": "DD-00013074",
+      "raised": "2026-09-21",
+      "system": "DZ014.OC.GL (Glass / Стекла)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Требуется замена заднего стекла",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": "WO-019636"
+    },
+    {
+      "asset": "DZ014",
+      "defect": "DD-00013073",
+      "raised": "2026-09-21",
+      "system": "DZ014.CH (Structure & Chassis / Рама и конструкция)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Отсутсвуют болты на защитных кожухах",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": "WO-019031"
+    },
+    {
       "asset": "DZ011",
       "defect": "DD-00013076",
       "raised": "2026-09-21",
@@ -54880,32 +54984,6 @@ window.CM_WO_DATA = {
       "by": "Pavel Kostin",
       "regBy": "Костин Павел Александрович",
       "wo": "WO-018341"
-    },
-    {
-      "asset": "DZ014",
-      "defect": "DD-00013074",
-      "raised": "2026-09-21",
-      "system": "DZ014.OC.GL (Glass / Стекла)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Требуется замена заднего стекла",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Pavel Kostin",
-      "regBy": "Костин Павел Александрович",
-      "wo": "WO-019636"
-    },
-    {
-      "asset": "DZ014",
-      "defect": "DD-00013073",
-      "raised": "2026-09-21",
-      "system": "DZ014.CH (Structure & Chassis / Рама и конструкция)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Отсутсвуют болты на защитных кожухах",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Pavel Kostin",
-      "regBy": "Костин Павел Александрович",
-      "wo": "WO-019031"
     },
     {
       "asset": "LV078",
@@ -58054,6 +58132,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
+      "wo": null
+    },
+    {
       "asset": "BS005",
       "defect": "DD-00011312",
       "raised": "2026-08-21",
@@ -58142,19 +58233,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
@@ -58887,19 +58965,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "H07",
-      "defect": "EB-00000078",
-      "raised": "2026-08-13",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Sergey Gulin",
-      "wo": null
-    },
-    {
-      "asset": "H07",
       "defect": "EB-00000079",
       "raised": "2026-08-13",
       "system": null,
@@ -58909,6 +58974,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Eduard Shapoval",
       "regBy": "Eduard Shapoval",
+      "wo": null
+    },
+    {
+      "asset": "H07",
+      "defect": "EB-00000078",
+      "raised": "2026-08-13",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Sergey Gulin",
       "wo": null
     },
     {
@@ -59536,8 +59614,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H07",
-      "defect": "EB-00000075",
+      "asset": "H04",
+      "defect": "EB-00000076",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -59549,8 +59627,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000076",
+      "asset": "H07",
+      "defect": "EB-00000075",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -60421,11 +60499,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "CR001",
-      "defect": "DD-00009555",
+      "defect": "DD-00009554",
       "raised": "2026-07-24",
       "system": "CR001.DRS.AIR (Air Intake System / Система впуска воздуха)",
-      "defectType": "1.10 Rupture / Burst / Разрыв",
-      "descr": "Разрыв патрубка интеркуллера ДВС №7Y-1182",
+      "defectType": "3.02 No (faulty) signal/ indication/alarm / Отсутвие сигнала, индикации",
+      "descr": null,
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Rinat Musaferov",
@@ -60434,11 +60512,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "CR001",
-      "defect": "DD-00009554",
+      "defect": "DD-00009555",
       "raised": "2026-07-24",
       "system": "CR001.DRS.AIR (Air Intake System / Система впуска воздуха)",
-      "defectType": "3.02 No (faulty) signal/ indication/alarm / Отсутвие сигнала, индикации",
-      "descr": null,
+      "defectType": "1.10 Rupture / Burst / Разрыв",
+      "descr": "Разрыв патрубка интеркуллера ДВС №7Y-1182",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Rinat Musaferov",
@@ -102150,7 +102228,7 @@ window.CM_WO_DATA = {
       ],
       "priority": "P3 Planned (PM)",
       "woStatus": null,
-      "cmmsStatus": null,
+      "cmmsStatus": "Registered",
       "open": true,
       "planStart": null,
       "planStartDt": null,
