@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-18T21:47:51+00:00",
+  "generated": "2026-11-18T21:54:10+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 812,
@@ -5925,6 +5925,19 @@ window.CM_WO_DATA = {
   ],
   "otherDefects": [
     {
+      "asset": "LV012",
+      "defect": "DD-00017134",
+      "raised": "2026-11-19",
+      "system": "LV012 HILUX 2.5 TOYOTA",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Проверка нового ПЖД, не прогревает ДВС",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022890"
+    },
+    {
       "asset": "EX021",
       "defect": "DD-00017120",
       "raised": "2026-11-19",
@@ -5988,19 +6001,6 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-022882"
-    },
-    {
-      "asset": "LS039",
-      "defect": "DD-00017124",
-      "raised": "2026-11-19",
-      "system": "LS039.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
-      "descr": "Внеплановое ТО-250",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Viktor Bernikov",
-      "regBy": "Берников Виктор Викторович",
-      "wo": "WO-022880"
     },
     {
       "asset": "TK169",
@@ -6183,6 +6183,19 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022875"
+    },
+    {
+      "asset": "LS039",
+      "defect": "DD-00017124",
+      "raised": "2026-11-19",
+      "system": "LS039.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "Внеплановое ТО-250",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Viktor Bernikov",
+      "regBy": "Берников Виктор Викторович",
+      "wo": "WO-022880"
     },
     {
       "asset": "EX015",
@@ -16351,19 +16364,6 @@ window.CM_WO_DATA = {
       "wo": "WO-021692"
     },
     {
-      "asset": "DZ017",
-      "defect": "DD-00016285",
-      "raised": "2026-11-04",
-      "system": "DZ017.HS.CV (Control Valves / Гидрораспределители)",
-      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
-      "descr": "Неисправность гидравлического распределителя функций рабочего оборудования",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Evgeniy Frolin",
-      "regBy": "Фролин Евгений Владимирович",
-      "wo": "WO-021697"
-    },
-    {
       "asset": "DZ011",
       "defect": "DD-00016290",
       "raised": "2026-11-04",
@@ -16752,6 +16752,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-021722"
+    },
+    {
+      "asset": "DZ017",
+      "defect": "DD-00016285",
+      "raised": "2026-11-04",
+      "system": "DZ017.HS.CV (Control Valves / Гидрораспределители)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Неисправность гидравлического распределителя функций рабочего оборудования",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Evgeniy Frolin",
+      "regBy": "Фролин Евгений Владимирович",
+      "wo": "WO-021697"
     },
     {
       "asset": "WE004",
@@ -18125,7 +18138,7 @@ window.CM_WO_DATA = {
       "system": "DZ007.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.12 Low fluid level / Низкий уровень жидкости",
       "descr": "Замена масла в ДВС через 50 м-ч после замены ДВС",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P4 Planned (Repair)",
       "by": "Evgeniy Frolin",
       "regBy": "Фролин Евгений Владимирович",
@@ -39322,6 +39335,19 @@ window.CM_WO_DATA = {
       "wo": "WO-019210"
     },
     {
+      "asset": "DZ020",
+      "defect": "DD-00014379",
+      "raised": "2026-10-08",
+      "system": "DZ020.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Перетерта трубка подачи топлива на ПЖД",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Valentin Trapilo",
+      "regBy": "Трапило Валентин Святославович",
+      "wo": "WO-020075"
+    },
+    {
       "asset": "TK001",
       "defect": "DD-00014356",
       "raised": "2026-10-08",
@@ -40425,19 +40451,6 @@ window.CM_WO_DATA = {
       "by": "Andrey Taran",
       "regBy": "Таран Андрей Андреевич",
       "wo": "WO-019183"
-    },
-    {
-      "asset": "DZ020",
-      "defect": "DD-00014379",
-      "raised": "2026-10-08",
-      "system": "DZ020.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Перетерта трубка подачи топлива на ПЖД",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Valentin Trapilo",
-      "regBy": "Трапило Валентин Святославович",
-      "wo": "WO-020075"
     },
     {
       "asset": "LV071",
@@ -45893,7 +45906,7 @@ window.CM_WO_DATA = {
       "system": "DZ020.DRS.EXH (Exhaust System / Система выпуска)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Негерметичность соединения выпускного коллектора и глушителя",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P4 Planned (Repair)",
       "by": "Evgeniy Frolin",
       "regBy": "Фролин Евгений Владимирович",
