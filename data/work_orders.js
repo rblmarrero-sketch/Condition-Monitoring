@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-18T01:37:48+00:00",
+  "generated": "2026-11-18T01:52:52+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 812,
@@ -442,13 +442,13 @@ window.CM_WO_DATA = {
     "regBy": "Contact person initiator WR"
   },
   "cmDateFrom": {
-    "raised": 209,
+    "raised": 210,
     "detected": 0,
     "planStart": 0
   },
   "cmCauseFrom": {
     "wo": 130,
-    "wr": 79,
+    "wr": 80,
     "cert": 0,
     "none": 0
   },
@@ -508,6 +508,32 @@ window.CM_WO_DATA = {
       "by": "Slam",
       "byFull": "Slam Taganov",
       "regBy": "Таганов Слам Джумамуратович",
+      "raisedBy": "ГДК Баимская",
+      "woNumber": null,
+      "maintType": null,
+      "planned": false
+    },
+    {
+      "date": "2026-11-18",
+      "dateFrom": "raised",
+      "raised": "2026-11-18",
+      "detected": "2026-11-18",
+      "planStart": null,
+      "closed": null,
+      "asset": "DR010",
+      "defect": "DD-00017080",
+      "requestNo": "DD-00017080",
+      "eqType": "DRILL, BLASTING",
+      "system": "DR010.DRS.ENG (Engine / Двигатель)",
+      "priority": "P1 Breakdown",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Поврежден прокладки",
+      "causeFrom": "wr",
+      "descr": "Идёт утечка через уплотнение ДВС компрессора, необходима диагностика.",
+      "status": "Registered",
+      "by": "Nurbol",
+      "byFull": "Nurbol Amantay",
+      "regBy": "Амантай Нурбол",
       "raisedBy": "ГДК Баимская",
       "woNumber": null,
       "maintType": null,
@@ -14231,6 +14257,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021851"
     },
     {
+      "asset": "CR007",
+      "defect": "DD-00016385",
+      "raised": "2026-11-06",
+      "system": "CR007.CH.CV (Conveyor / Конвейер)",
+      "defectType": "8.03 Conveyor belt splice failure / Разрушение стыка конвейерной ленты",
+      "descr": "абразивный износ механических соеденителей",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Murashko",
+      "regBy": "Мурашко Сергей Борисович",
+      "wo": "WO-022781"
+    },
+    {
       "asset": "DZ011",
       "defect": "DD-00016406",
       "raised": "2026-11-06",
@@ -14242,6 +14281,19 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-021834"
+    },
+    {
+      "asset": "CR007",
+      "defect": "DD-00016386",
+      "raised": "2026-11-06",
+      "system": "CR007.CH.CV (Conveyor / Конвейер)",
+      "defectType": "8.09 Scraper / cleaner failure / Отказ / износ скребка / очистителя",
+      "descr": "износ скребка очистителя главного конвейера",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Murashko",
+      "regBy": "Мурашко Сергей Борисович",
+      "wo": "WO-022782"
     },
     {
       "asset": "FL001",
@@ -14501,32 +14553,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "CR007",
-      "defect": "DD-00016386",
-      "raised": "2026-11-06",
-      "system": "CR007.CH.CV (Conveyor / Конвейер)",
-      "defectType": "8.09 Scraper / cleaner failure / Отказ / износ скребка / очистителя",
-      "descr": "износ скребка очистителя главного конвейера",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Murashko",
-      "regBy": "Мурашко Сергей Борисович",
-      "wo": null
-    },
-    {
-      "asset": "CR007",
-      "defect": "DD-00016385",
-      "raised": "2026-11-06",
-      "system": "CR007.CH.CV (Conveyor / Конвейер)",
-      "defectType": "8.03 Conveyor belt splice failure / Разрушение стыка конвейерной ленты",
-      "descr": "абразивный износ механических соеденителей",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Murashko",
-      "regBy": "Мурашко Сергей Борисович",
       "wo": null
     },
     {
