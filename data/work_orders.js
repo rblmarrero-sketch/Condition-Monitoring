@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-18T22:47:52+00:00",
+  "generated": "2026-11-18T23:03:05+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -12269,19 +12269,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022238"
     },
     {
-      "asset": "TK084",
-      "defect": "DD-00016649",
-      "raised": "2026-11-10",
-      "system": "Radiator / Радиатор",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "диагностика и устранение утечек антифриза, с заменой радиатора ОЖ.",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022388"
-    },
-    {
       "asset": "TK047",
       "defect": "DD-00016640",
       "raised": "2026-11-10",
@@ -12319,6 +12306,19 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022653"
+    },
+    {
+      "asset": "TK084",
+      "defect": "DD-00016649",
+      "raised": "2026-11-10",
+      "system": "Radiator / Радиатор",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "диагностика и устранение утечек антифриза, с заменой радиатора ОЖ.",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022388"
     },
     {
       "asset": "LV123",
@@ -13192,19 +13192,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022739"
     },
     {
-      "asset": "GE049",
-      "defect": "DD-00016579",
-      "raised": "2026-11-09",
-      "system": "GE049.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Замена насоса ОЖ",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022398"
-    },
-    {
       "asset": "LS038",
       "defect": "DD-00016590",
       "raised": "2026-11-09",
@@ -13216,6 +13203,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022405"
+    },
+    {
+      "asset": "GE049",
+      "defect": "DD-00016579",
+      "raised": "2026-11-09",
+      "system": "GE049.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Замена насоса ОЖ",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022398"
     },
     {
       "asset": "TK040",
@@ -16708,7 +16708,7 @@ window.CM_WO_DATA = {
       "system": "GR004.CH.FR (Frame / Рама)",
       "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
       "descr": "Чрезмерный люфт в соединениях рамы отвала и в направляющих отвала",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P4 Planned (Repair)",
       "by": "Evgeniy Frolin",
       "regBy": "Фролин Евгений Владимирович",
@@ -17326,19 +17326,6 @@ window.CM_WO_DATA = {
       "wo": "WO-021519"
     },
     {
-      "asset": "EX012",
-      "defect": "DD-00016237",
-      "raised": "2026-11-03",
-      "system": "EX012.CH.BUC (Bucket / Ковш)",
-      "defectType": "6.03 Structural crack / Трещина конструкции",
-      "descr": "Замена футировки.Замена угловой защиты ковша",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Roman Besedovskiy",
-      "regBy": "Беседовский Роман Иванович",
-      "wo": "WO-021690"
-    },
-    {
       "asset": "TK061",
       "defect": "DD-00016230",
       "raised": "2026-11-03",
@@ -17441,6 +17428,19 @@ window.CM_WO_DATA = {
       "by": "Eduard Shapoval",
       "regBy": "Шаповал Эдуард Владимирович",
       "wo": "WO-021758"
+    },
+    {
+      "asset": "EX012",
+      "defect": "DD-00016237",
+      "raised": "2026-11-03",
+      "system": "EX012.CH.BUC (Bucket / Ковш)",
+      "defectType": "6.03 Structural crack / Трещина конструкции",
+      "descr": "Замена футировки.Замена угловой защиты ковша",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-021690"
     },
     {
       "asset": "GR001",
@@ -21993,6 +21993,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "EX005",
+      "defect": "DD-00015815",
+      "raised": "2026-10-28",
+      "system": "EX005.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Запотевание переходного РВД поворотного редуктора.",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022378"
+    },
+    {
       "asset": "DZ011",
       "defect": "DD-00015823",
       "raised": "2026-10-28",
@@ -22407,19 +22420,6 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-021139"
-    },
-    {
-      "asset": "EX005",
-      "defect": "DD-00015815",
-      "raised": "2026-10-28",
-      "system": "EX005.HS.DL (Hydraulic Lines / Гидролинии)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Запотевание переходного РВД поворотного редуктора.",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022378"
     },
     {
       "asset": "EX005",
@@ -25763,19 +25763,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022416"
     },
     {
-      "asset": "GR004",
-      "defect": "DD-00015555",
-      "raised": "2026-10-24",
-      "system": "GR004.DRS.COO.RAD (Radiator / Радиатор)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Повреждения кроштейнов крепления радиатора охл. ДВС",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Evgeniy Frolin",
-      "regBy": "Фролин Евгений Владимирович",
-      "wo": "WO-021705"
-    },
-    {
       "asset": "BS002",
       "defect": "DD-00015552",
       "raised": "2026-10-24",
@@ -25826,6 +25813,19 @@ window.CM_WO_DATA = {
       "by": "Andrey Taran",
       "regBy": "Таран Андрей Андреевич",
       "wo": "WO-021743"
+    },
+    {
+      "asset": "GR004",
+      "defect": "DD-00015555",
+      "raised": "2026-10-24",
+      "system": "GR004.DRS.COO.RAD (Radiator / Радиатор)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Повреждения кроштейнов крепления радиатора охл. ДВС",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Evgeniy Frolin",
+      "regBy": "Фролин Евгений Владимирович",
+      "wo": "WO-021705"
     },
     {
       "asset": "DZ021",
@@ -38555,19 +38555,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022369"
     },
     {
-      "asset": "EX005",
-      "defect": "DD-00014474",
-      "raised": "2026-10-09",
-      "system": "EX005.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка масла с бугельной плиты блока цилиндров.",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Shcherbina",
-      "regBy": "Щербина Андрей Николаевич",
-      "wo": "WO-022372"
-    },
-    {
       "asset": "CR005",
       "defect": "DD-00014410",
       "raised": "2026-10-09",
@@ -39203,6 +39190,19 @@ window.CM_WO_DATA = {
       "by": "Valentin Trapilo",
       "regBy": "Трапило Валентин Святославович",
       "wo": "WO-020320"
+    },
+    {
+      "asset": "EX005",
+      "defect": "DD-00014474",
+      "raised": "2026-10-09",
+      "system": "EX005.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка масла с бугельной плиты блока цилиндров.",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Shcherbina",
+      "regBy": "Щербина Андрей Николаевич",
+      "wo": "WO-022372"
     },
     {
       "asset": "PU008",
@@ -118758,8 +118758,8 @@ window.CM_WO_DATA = {
       "planStartDt": "2026-09-17T00:00:00",
       "planEnd": "2026-09-17",
       "actualStart": "2026-09-17",
-      "actualStartDt": "2026-09-17T19:00:00",
-      "actualEnd": "2026-09-18"
+      "actualStartDt": "2026-09-17T00:00:00",
+      "actualEnd": "2026-09-17"
     },
     {
       "equip": "FL012",
