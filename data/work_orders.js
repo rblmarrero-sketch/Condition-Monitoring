@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-18T10:17:42+00:00",
+  "generated": "2026-11-18T10:33:00+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 812,
@@ -6022,7 +6022,7 @@ window.CM_WO_DATA = {
       "system": "EX003.CH.BUC (Bucket / Ковш)",
       "defectType": "6.03 Structural crack / Трещина конструкции",
       "descr": "Трещина коронки адаптера",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Aleksey Kiselev",
       "regBy": "Киселев Алексей Александрович",
@@ -6390,6 +6390,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Nazmutdinov",
       "regBy": "Назмутдинов Сергей Зуфарович",
+      "wo": null
+    },
+    {
+      "asset": "DZ012",
+      "defect": "DD-00017111",
+      "raised": "2026-11-18",
+      "system": "DZ012.CH.UC (Undercarriage / Ходовая часть)",
+      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "descr": "заломы на ходовой раме",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
       "wo": null
     },
     {
