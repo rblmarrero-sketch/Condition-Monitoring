@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-18T05:13:48+00:00",
+  "generated": "2026-11-18T05:28:29+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 812,
@@ -5943,7 +5943,7 @@ window.CM_WO_DATA = {
       "system": "CR007.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.27 Belt drive issue (slip/break) / Проблема ременного привода (проскальзывание/обрыв)",
       "descr": "Заклинил обводной ролик и ролик натяжителя обрыв ремня привода генератора",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
@@ -6078,6 +6078,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022790"
+    },
+    {
+      "asset": "CR005",
+      "defect": "DD-00017097",
+      "raised": "2026-11-18",
+      "system": "CR005.CONV.MAIN (Main Conveyor / Главный конвейер)",
+      "defectType": "8.01 Conveyor belt cut / tear / Порез / разрыв конвейерной ленты",
+      "descr": "Разрыв ленты главного конвейера, необходима замена ленты",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-022791"
     },
     {
       "asset": "EX010",
@@ -6327,6 +6340,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "TK133",
+      "defect": "DD-00017098",
+      "raised": "2026-11-18",
+      "system": "TK133.ELS.WH (Wiring Harness / Жгут проводов)",
+      "defectType": "4.06 Loose connection / high resistance / Плохой контакт / высокое сопротивление",
+      "descr": "Замена ДУТ (№ДУКЭП-Т-315-24/0,3-565)",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
       "asset": "SN003",
       "defect": "DD-00017092",
       "raised": "2026-11-18",
@@ -6361,19 +6387,6 @@ window.CM_WO_DATA = {
       "descr": "Износ футеровки бункера приемного",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": null
-    },
-    {
-      "asset": "CR005",
-      "defect": "DD-00017097",
-      "raised": "2026-11-18",
-      "system": "CR005.CONV.MAIN (Main Conveyor / Главный конвейер)",
-      "defectType": "8.01 Conveyor belt cut / tear / Порез / разрыв конвейерной ленты",
-      "descr": "Разрыв ленты главного конвейера, необходима замена ленты",
-      "status": "Registered",
-      "priority": "P2 Urgent",
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": null
@@ -6444,6 +6457,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "EX020",
+      "defect": "DD-00017099",
+      "raised": "2026-11-18",
+      "system": "EX020.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Запотевание пилотных РВД насоса.",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
       "asset": "TK120",
       "defect": "DD-00017083",
       "raised": "2026-11-18",
@@ -6457,12 +6483,38 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "TK035",
+      "defect": "DD-00017101",
+      "raised": "2026-11-18",
+      "system": "TK035.OC.HE (Heating / Отопление)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Замена радиатора отопителя",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
       "asset": "TK027",
       "defect": "DD-00017089",
       "raised": "2026-11-18",
       "system": "TK027.DRS.AXL (Axles / Мосты)",
       "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
       "descr": "Диагностика и ремонт ходовой. Подклинивает левое колесо 3-й оси",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "TK044",
+      "defect": "DD-00017100",
+      "raised": "2026-11-18",
+      "system": "TK044.BS.PU (Pneumatic Control / Пневмоуправление)",
+      "defectType": "4.06 Loose connection / high resistance / Плохой контакт / высокое сопротивление",
+      "descr": "заявлена неисправность АБС. Диагностика и ремонт системы.",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -59472,6 +59524,19 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "TK010",
+      "defect": "DD-00010485",
+      "raised": "2026-08-09",
+      "system": "TK010.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь радиатора",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": null
+    },
+    {
+      "asset": "TK010",
       "defect": "DD-00010486",
       "raised": "2026-08-09",
       "system": "TK010.CH.SU (Suspension / Подвеска)",
@@ -59490,19 +59555,6 @@ window.CM_WO_DATA = {
       "system": "TK010.CH.HS (Hydraulic System / Гидравлическая система)",
       "defectType": "1.25 Reduced capacity / output / Снижение производительности / выхода",
       "descr": "Общая потеря мощности КМУ, некорректная работа аутригеров (подклинивание)",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": null
-    },
-    {
-      "asset": "TK010",
-      "defect": "DD-00010485",
-      "raised": "2026-08-09",
-      "system": "TK010.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь радиатора",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
