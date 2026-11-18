@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-18T23:17:52+00:00",
+  "generated": "2026-11-18T23:33:07+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -358,7 +358,7 @@ window.CM_WO_DATA = {
     "WE011"
   ],
   "duplicateRowsCollapsed": 459,
-  "roundsDedupedWithinVisit": 2,
+  "roundsDedupedWithinVisit": 3,
   "columns": [
     "Asset description",
     "Asset old no",
@@ -5964,6 +5964,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022878"
     },
     {
+      "asset": "TK105",
+      "defect": "DD-00017138",
+      "raised": "2026-11-19",
+      "system": "TK105.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "Ошибка по давлению топлива",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-022934"
+    },
+    {
       "asset": "DZ012",
       "defect": "DD-00017123",
       "raised": "2026-11-19",
@@ -6066,19 +6079,6 @@ window.CM_WO_DATA = {
       "by": "Ilshat Sabitov",
       "regBy": "Сабитов Ильшат Рашидович",
       "wo": "WO-022900"
-    },
-    {
-      "asset": "TK032",
-      "defect": "DD-00017121",
-      "raised": "2026-11-19",
-      "system": "TK032.DRS.ENG (Engine / Двигатель)",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "замена ремня, обломана шпилька генератора, CHECK ДВС",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksandr Kuznetsov",
-      "regBy": "Кузнецов Александр Андреевич",
-      "wo": "WO-022877"
     },
     {
       "asset": "GE088",
@@ -6185,6 +6185,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022874"
     },
     {
+      "asset": "LS039",
+      "defect": "DD-00017124",
+      "raised": "2026-11-19",
+      "system": "LS039.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "Внеплановое ТО-250",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Viktor Bernikov",
+      "regBy": "Берников Виктор Викторович",
+      "wo": "WO-022880"
+    },
+    {
       "asset": "EX009",
       "defect": "DD-00017119",
       "raised": "2026-11-19",
@@ -6198,17 +6211,43 @@ window.CM_WO_DATA = {
       "wo": "WO-022875"
     },
     {
-      "asset": "LS039",
-      "defect": "DD-00017124",
+      "asset": "TK032",
+      "defect": "DD-00017121",
       "raised": "2026-11-19",
-      "system": "LS039.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
-      "descr": "Внеплановое ТО-250",
+      "system": "TK032.DRS.ENG (Engine / Двигатель)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "замена ремня, обломана шпилька генератора, CHECK ДВС",
       "status": "Elimination scheduled",
       "priority": "P2 Urgent",
-      "by": "Viktor Bernikov",
-      "regBy": "Берников Виктор Викторович",
-      "wo": "WO-022880"
+      "by": "Aleksandr Kuznetsov",
+      "regBy": "Кузнецов Александр Андреевич",
+      "wo": "WO-022877"
+    },
+    {
+      "asset": "CD005",
+      "defect": "DD-00017137",
+      "raised": "2026-11-19",
+      "system": "CD005.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Замена подшипников",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "TK003",
+      "defect": "DD-00017136",
+      "raised": "2026-11-19",
+      "system": "TK003.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Ремонт задней правой бортовой (разрушение вылезла полуось)",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
     },
     {
       "asset": "EX015",
@@ -13224,7 +13263,7 @@ window.CM_WO_DATA = {
       "system": "TK040.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
       "descr": "Диагностика и ремонт ДВС.",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
@@ -15181,19 +15220,6 @@ window.CM_WO_DATA = {
       "wo": "WO-021848"
     },
     {
-      "asset": "EX021",
-      "defect": "DD-00016419",
-      "raised": "2026-11-06",
-      "system": "EX021.HS.MP (Hydraulic Pumps / Гидронасосы)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Подтеки масла на главном насосе управления с датчика компенсатора",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": "WO-022202"
-    },
-    {
       "asset": "SN001",
       "defect": "DD-00016408",
       "raised": "2026-11-06",
@@ -15231,6 +15257,19 @@ window.CM_WO_DATA = {
       "by": "Rinat Musaferov",
       "regBy": "Мусаферов Ринат Искакович",
       "wo": "WO-021850"
+    },
+    {
+      "asset": "EX021",
+      "defect": "DD-00016419",
+      "raised": "2026-11-06",
+      "system": "EX021.HS.MP (Hydraulic Pumps / Гидронасосы)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Подтеки масла на главном насосе управления с датчика компенсатора",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-022202"
     },
     {
       "asset": "LV021",
@@ -17625,6 +17664,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021474"
     },
     {
+      "asset": "EX021",
+      "defect": "DD-00016146",
+      "raised": "2026-11-02",
+      "system": "EX021.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Заменить  РВД (стрела-платформа)",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022203"
+    },
+    {
       "asset": "TK068",
       "defect": "DD-00016166",
       "raised": "2026-11-02",
@@ -18130,19 +18182,6 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022196"
-    },
-    {
-      "asset": "EX021",
-      "defect": "DD-00016146",
-      "raised": "2026-11-02",
-      "system": "EX021.HS.DL (Hydraulic Lines / Гидролинии)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Заменить  РВД (стрела-платформа)",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": "WO-022203"
     },
     {
       "asset": "DZ007",
@@ -38542,19 +38581,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022370"
     },
     {
-      "asset": "EX005",
-      "defect": "DD-00014471",
-      "raised": "2026-10-09",
-      "system": "EX005.HS.CV (Control Valves / Гидрораспределители)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка масла с блока клапанов.",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Shcherbina",
-      "regBy": "Щербина Андрей Николаевич",
-      "wo": "WO-022369"
-    },
-    {
       "asset": "CR005",
       "defect": "DD-00014410",
       "raised": "2026-10-09",
@@ -39203,6 +39229,19 @@ window.CM_WO_DATA = {
       "by": "Andrey Shcherbina",
       "regBy": "Щербина Андрей Николаевич",
       "wo": "WO-022372"
+    },
+    {
+      "asset": "EX005",
+      "defect": "DD-00014471",
+      "raised": "2026-10-09",
+      "system": "EX005.HS.CV (Control Valves / Гидрораспределители)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка масла с блока клапанов.",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Shcherbina",
+      "regBy": "Щербина Андрей Николаевич",
+      "wo": "WO-022369"
     },
     {
       "asset": "PU008",
@@ -60161,8 +60200,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000076",
+      "asset": "H07",
+      "defect": "EB-00000075",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -60174,8 +60213,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H07",
-      "defect": "EB-00000075",
+      "asset": "H04",
+      "defect": "EB-00000076",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -118758,8 +118797,8 @@ window.CM_WO_DATA = {
       "planStartDt": "2026-09-17T00:00:00",
       "planEnd": "2026-09-17",
       "actualStart": "2026-09-17",
-      "actualStartDt": "2026-09-17T00:00:00",
-      "actualEnd": "2026-09-17"
+      "actualStartDt": "2026-09-17T19:00:00",
+      "actualEnd": "2026-09-18"
     },
     {
       "equip": "FL012",
@@ -187268,9 +187307,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-16",
-      "planStartDt": "2026-11-16T00:00:00",
-      "planEnd": "2026-11-16",
+      "planStart": "2026-11-27",
+      "planStartDt": "2026-11-27T00:00:00",
+      "planEnd": "2026-11-27",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -187281,10 +187320,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-021959",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Magnetic Plug",
-      "cmTypes": [
-        "MP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
