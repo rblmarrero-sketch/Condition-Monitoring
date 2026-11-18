@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-18T16:17:46+00:00",
+  "generated": "2026-11-18T16:32:47+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 812,
@@ -5951,6 +5951,71 @@ window.CM_WO_DATA = {
       "wo": "WO-022877"
     },
     {
+      "asset": "TK125",
+      "defect": "DD-00017122",
+      "raised": "2026-11-19",
+      "system": "TK125.DRS.TRA (Transmission / Трансмиссия)",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "Низкий уровень в КПП",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022878"
+    },
+    {
+      "asset": "DZ012",
+      "defect": "DD-00017123",
+      "raised": "2026-11-19",
+      "system": "DZ012.CH.UC (Undercarriage / Ходовая часть)",
+      "defectType": "1.06 Deformation / bending / buckling Деформация / изгиб / коробление",
+      "descr": "Заломы бугеля опорного катка",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Kiselev",
+      "regBy": "Киселев Алексей Александрович",
+      "wo": "WO-022879"
+    },
+    {
+      "asset": "DZ007",
+      "defect": "DD-00017125",
+      "raised": "2026-11-19",
+      "system": "DZ007.ELS (Electrical System / Электросистема)",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "Не исправен датчик засорения В/Ф",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022881"
+    },
+    {
+      "asset": "TK133",
+      "defect": "DD-00017126",
+      "raised": "2026-11-19",
+      "system": "TK133.DRS.ENG (Engine / Двигатель)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Не работает ПЖД. Частое срабатывание вискомуфты.",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022882"
+    },
+    {
+      "asset": "LS039",
+      "defect": "DD-00017124",
+      "raised": "2026-11-19",
+      "system": "LS039.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "Внеплановое ТО-250",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Viktor Bernikov",
+      "regBy": "Берников Виктор Викторович",
+      "wo": "WO-022880"
+    },
+    {
       "asset": "DZ018",
       "defect": "DD-00017114",
       "raised": "2026-11-19",
@@ -6027,19 +6092,6 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022875"
-    },
-    {
-      "asset": "TK125",
-      "defect": "DD-00017122",
-      "raised": "2026-11-19",
-      "system": "TK125.DRS.TRA (Transmission / Трансмиссия)",
-      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
-      "descr": "Низкий уровень в КПП",
-      "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": null
     },
     {
       "asset": "EX015",
