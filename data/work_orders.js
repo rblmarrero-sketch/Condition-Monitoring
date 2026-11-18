@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-18T03:47:47+00:00",
+  "generated": "2026-11-18T04:02:55+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 812,
@@ -6067,6 +6067,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022789"
     },
     {
+      "asset": "GR015",
+      "defect": "DD-00017086",
+      "raised": "2026-11-18",
+      "system": "GR015.CH.FR (Frame / Рама)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Сварочные работы",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022790"
+    },
+    {
       "asset": "EX010",
       "defect": "DD-00017050",
       "raised": "2026-11-18",
@@ -6337,6 +6350,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "EX021",
+      "defect": "DD-00017085",
+      "raised": "2026-11-18",
+      "system": "EX021.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.06 Deformation / bending / buckling Деформация / изгиб / коробление",
+      "descr": "требуется замена сливного крана с поддона картера ДВС",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
       "wo": null
     },
     {
@@ -59303,19 +59329,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "TK010",
-      "defect": "DD-00010485",
-      "raised": "2026-08-09",
-      "system": "TK010.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь радиатора",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": null
-    },
-    {
-      "asset": "TK010",
       "defect": "DD-00010486",
       "raised": "2026-08-09",
       "system": "TK010.CH.SU (Suspension / Подвеска)",
@@ -59334,6 +59347,19 @@ window.CM_WO_DATA = {
       "system": "TK010.CH.HS (Hydraulic System / Гидравлическая система)",
       "defectType": "1.25 Reduced capacity / output / Снижение производительности / выхода",
       "descr": "Общая потеря мощности КМУ, некорректная работа аутригеров (подклинивание)",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": null
+    },
+    {
+      "asset": "TK010",
+      "defect": "DD-00010485",
+      "raised": "2026-08-09",
+      "system": "TK010.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь радиатора",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -60395,11 +60421,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "CR001",
-      "defect": "DD-00009554",
+      "defect": "DD-00009555",
       "raised": "2026-07-24",
       "system": "CR001.DRS.AIR (Air Intake System / Система впуска воздуха)",
-      "defectType": "3.02 No (faulty) signal/ indication/alarm / Отсутвие сигнала, индикации",
-      "descr": null,
+      "defectType": "1.10 Rupture / Burst / Разрыв",
+      "descr": "Разрыв патрубка интеркуллера ДВС №7Y-1182",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Rinat Musaferov",
@@ -60408,11 +60434,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "CR001",
-      "defect": "DD-00009555",
+      "defect": "DD-00009554",
       "raised": "2026-07-24",
       "system": "CR001.DRS.AIR (Air Intake System / Система впуска воздуха)",
-      "defectType": "1.10 Rupture / Burst / Разрыв",
-      "descr": "Разрыв патрубка интеркуллера ДВС №7Y-1182",
+      "defectType": "3.02 No (faulty) signal/ indication/alarm / Отсутвие сигнала, индикации",
+      "descr": null,
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Rinat Musaferov",
