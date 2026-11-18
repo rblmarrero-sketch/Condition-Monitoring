@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-18T11:37:50+00:00",
+  "generated": "2026-11-18T11:52:49+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 812,
@@ -6107,6 +6107,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022765"
     },
     {
+      "asset": "HX048",
+      "defect": "DD-00017113",
+      "raised": "2026-11-18",
+      "system": "HX048.OC.CO (Console / Консоль)",
+      "defectType": "3.13 Warning light / alarm active / Сигнальная лампа / аварийная сигнализация активна",
+      "descr": "Запускается и гаснет. Горит сигнализатор неисправности.",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022868"
+    },
+    {
       "asset": "CR005",
       "defect": "DD-00017097",
       "raised": "2026-11-18",
@@ -6178,7 +6191,7 @@ window.CM_WO_DATA = {
       "system": "TK005.OC.HE (Heating / Отопление)",
       "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
       "descr": "Не работает ПЖД",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
@@ -6209,6 +6222,19 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022753"
+    },
+    {
+      "asset": "DZ012",
+      "defect": "DD-00017111",
+      "raised": "2026-11-18",
+      "system": "DZ012.CH.UC (Undercarriage / Ходовая часть)",
+      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "descr": "заломы на ходовой раме",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022867"
     },
     {
       "asset": "EX011",
@@ -6321,7 +6347,7 @@ window.CM_WO_DATA = {
       "system": "BS015.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Подсос воздуха отводящий патрубок ТКР",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Aleksey Dobrikov",
       "regBy": "Добриков Алексей Владимирович",
@@ -6390,19 +6416,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Nazmutdinov",
       "regBy": "Назмутдинов Сергей Зуфарович",
-      "wo": null
-    },
-    {
-      "asset": "DZ012",
-      "defect": "DD-00017111",
-      "raised": "2026-11-18",
-      "system": "DZ012.CH.UC (Undercarriage / Ходовая часть)",
-      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
-      "descr": "заломы на ходовой раме",
-      "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
       "wo": null
     },
     {
