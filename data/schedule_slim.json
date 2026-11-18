@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-18T20:42:59+00:00",
+  "generated": "2026-11-18T20:58:08+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -824,7 +824,7 @@
           "LUBE",
           "MP"
         ],
-        "plan": "2026-11-16",
+        "plan": "2026-11-15",
         "priority": "P3 Planned (PM)"
       },
       {
@@ -3214,12 +3214,12 @@
       "type": "250 Hours service Planned",
       "hours": 250,
       "plan": "2026-11-17",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-17"
     },
     {
       "wo": "WO-022326",
@@ -3474,24 +3474,6 @@
       "completed": ""
     },
     {
-      "wo": "WO-022027",
-      "equip": "DZ020",
-      "cls": "DOZ",
-      "comp": "",
-      "desc": "500h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-16",
-      "type": "500 Hours service Planned",
-      "hours": 500,
-      "plan": "2026-11-16",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
       "wo": "WO-022332",
       "equip": "EX005",
       "cls": "EXC",
@@ -3708,24 +3690,6 @@
       "completed": ""
     },
     {
-      "wo": "WO-019531",
-      "equip": "TK151",
-      "cls": "HT",
-      "comp": "",
-      "desc": "Lubrication / Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-16",
-      "type": "1500 Hours service Planned",
-      "hours": 1500,
-      "plan": "2026-11-16",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
       "wo": "WO-022712",
       "equip": "TK121",
       "cls": "",
@@ -3764,6 +3728,24 @@
     {
       "wo": "WO-021308",
       "equip": "DZ005",
+      "cls": "DOZ",
+      "comp": "",
+      "desc": "500h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-15",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-11-15",
+      "status": "Completed",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "complete",
+      "completed": "2026-11-15"
+    },
+    {
+      "wo": "WO-022027",
+      "equip": "DZ020",
       "cls": "DOZ",
       "comp": "",
       "desc": "500h service",
@@ -3922,6 +3904,24 @@
       "cause": "",
       "pmStatus": "complete",
       "completed": "2026-11-15"
+    },
+    {
+      "wo": "WO-019531",
+      "equip": "TK151",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Lubrication / Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-15",
+      "type": "1500 Hours service Planned",
+      "hours": 1500,
+      "plan": "2026-11-15",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
     },
     {
       "wo": "WO-021664",
@@ -10906,6 +10906,14 @@
       "p": "P2",
       "r": "2026-11-19",
       "x": "замена ремня, обломана шпилька генератора, CHECK ДВС"
+    },
+    {
+      "d": "DD-00017131",
+      "u": "GE088",
+      "s": "GE088.DRS.ENG (Engine / Двигатель)",
+      "p": "P2",
+      "r": "2026-11-19",
+      "x": "Забиты фильтра"
     },
     {
       "d": "DD-00017114",

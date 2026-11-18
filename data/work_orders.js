@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-18T20:42:59+00:00",
+  "generated": "2026-11-18T20:58:08+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 812,
@@ -6066,6 +6066,19 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Kuznetsov",
       "regBy": "Кузнецов Александр Андреевич",
       "wo": "WO-022877"
+    },
+    {
+      "asset": "GE088",
+      "defect": "DD-00017131",
+      "raised": "2026-11-19",
+      "system": "GE088.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "Забиты фильтра",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022887"
     },
     {
       "asset": "DZ018",
@@ -103881,15 +103894,15 @@ window.CM_WO_DATA = {
       "cmLabel": "500h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
-      "planStart": "2026-11-16",
-      "planStartDt": "2026-11-16T00:00:00",
-      "planEnd": "2026-11-16",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
+      "planStart": "2026-11-15",
+      "planStartDt": "2026-11-15T00:00:00",
+      "planEnd": "2026-11-15",
+      "actualStart": "2026-11-15",
+      "actualStartDt": "2026-11-15T19:00:00",
+      "actualEnd": "2026-11-15"
     },
     {
       "equip": "DZ020",
@@ -141647,15 +141660,15 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-17",
       "planStartDt": "2026-11-17T00:00:00",
       "planEnd": "2026-11-17",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-17",
+      "actualStartDt": "2026-11-17T02:00:00",
+      "actualEnd": "2026-11-17"
     },
     {
       "equip": "LD007",
@@ -192265,8 +192278,8 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-16",
-      "planStartDt": "2026-11-16T00:00:00",
+      "planStart": "2026-11-15",
+      "planStartDt": "2026-11-15T22:00:00",
       "planEnd": "2026-11-16",
       "actualStart": null,
       "actualStartDt": null,
