@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-18T08:11:13+00:00",
+  "generated": "2026-11-18T08:22:39+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 812,
@@ -6471,6 +6471,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "EX015",
+      "defect": "DD-00017109",
+      "raised": "2026-11-18",
+      "system": "EX015.CH.BUC (Bucket / Ковш)",
+      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "descr": "Обрыв межзубной защиты",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": null
+    },
+    {
       "asset": "TK120",
       "defect": "DD-00017083",
       "raised": "2026-11-18",
@@ -6572,6 +6585,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "TK038",
+      "defect": "DD-00017108",
+      "raised": "2026-11-18",
+      "system": "TK038.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Трещина кронштейна генератора, обрыв ремня.",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Viktor Bernikov",
+      "regBy": "Берников Виктор Викторович",
       "wo": null
     },
     {
