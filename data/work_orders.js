@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-18T15:07:49+00:00",
+  "generated": "2026-11-18T15:22:47+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 812,
@@ -357,7 +357,7 @@ window.CM_WO_DATA = {
     "WE010",
     "WE011"
   ],
-  "duplicateRowsCollapsed": 458,
+  "duplicateRowsCollapsed": 459,
   "roundsDedupedWithinVisit": 2,
   "columns": [
     "Asset description",
@@ -5977,6 +5977,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022873"
     },
     {
+      "asset": "LS025",
+      "defect": "DD-00017118",
+      "raised": "2026-11-19",
+      "system": "LS025.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "Глохнет ДВС",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Viktor Bernikov",
+      "regBy": "Берников Виктор Викторович",
+      "wo": "WO-022874"
+    },
+    {
       "asset": "EX015",
       "defect": "DD-00017109",
       "raised": "2026-11-18",
@@ -6425,7 +6438,7 @@ window.CM_WO_DATA = {
       "system": "TK002.BS.ABS (ABS System / Система ABS)",
       "defectType": "3.13 Warning light / alarm active / Сигнальная лампа / аварийная сигнализация активна",
       "descr": "Индикация неисправности системы ABS/",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
@@ -6438,7 +6451,7 @@ window.CM_WO_DATA = {
       "system": "LV064.ELS.LIG (Head Lighting System / Система головного освещения)",
       "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
       "descr": "Неисправность головного освещения.",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
@@ -58445,19 +58458,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
-      "wo": null
-    },
-    {
       "asset": "BS005",
       "defect": "DD-00011312",
       "raised": "2026-08-21",
@@ -58546,6 +58546,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
@@ -86620,15 +86633,15 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "PCNF",
+      "cmmsStatus": "In progress",
+      "open": false,
       "planStart": "2026-11-17",
       "planStartDt": "2026-11-17T00:00:00",
       "planEnd": "2026-11-17",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-17",
+      "actualStartDt": "2026-11-17T00:00:00",
+      "actualEnd": "2026-11-17"
     },
     {
       "equip": "CN014",
@@ -156238,15 +156251,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "PCNF",
+      "cmmsStatus": "In progress",
+      "open": false,
       "planStart": "2026-11-17",
       "planStartDt": "2026-11-17T00:00:00",
       "planEnd": "2026-11-17",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-17",
+      "actualStartDt": "2026-11-17T00:00:00",
+      "actualEnd": "2026-11-17"
     },
     {
       "equip": "TK046",

@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-18T15:07:49+00:00",
+  "generated": "2026-11-18T15:22:47+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -332,17 +332,6 @@
           "MP"
         ],
         "plan": "2026-11-20",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "TK044": [
-      {
-        "wo": "WO-022310",
-        "hours": 500,
-        "types": [
-          "MP"
-        ],
-        "plan": "2026-11-17",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -3129,11 +3118,11 @@
       "type": "250 Hours service Planned",
       "hours": 250,
       "plan": "2026-11-17",
-      "status": "Elimination scheduled",
+      "status": "In progress",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
+      "pmStatus": "inprogress",
       "completed": ""
     },
     {
@@ -3309,11 +3298,11 @@
       "type": "500 Hours service Planned",
       "hours": 500,
       "plan": "2026-11-17",
-      "status": "Elimination scheduled",
+      "status": "In progress",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
+      "pmStatus": "inprogress",
       "completed": ""
     },
     {
@@ -10891,6 +10880,14 @@
       "p": "P2",
       "r": "2026-11-19",
       "x": "износ ремней навесного оборудования"
+    },
+    {
+      "d": "DD-00017118",
+      "u": "LS025",
+      "s": "LS025.DRS.ENG (Engine / Двигатель)",
+      "p": "P2",
+      "r": "2026-11-19",
+      "x": "Глохнет ДВС"
     },
     {
       "d": "DD-00017080",
