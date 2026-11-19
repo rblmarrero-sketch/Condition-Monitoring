@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-19T21:37:50+00:00",
+  "generated": "2026-11-19T21:52:44+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -6209,6 +6209,19 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-022978"
+    },
+    {
+      "asset": "TK044",
+      "defect": "DD-00017200",
+      "raised": "2026-11-20",
+      "system": "TK044.DRS.TRA (Transmission / Трансмиссия)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Регулировка кулисы",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022982"
     },
     {
       "asset": "DZ003",
@@ -19302,19 +19315,6 @@ window.CM_WO_DATA = {
       "wo": "WO-021417"
     },
     {
-      "asset": "DZ001",
-      "defect": "DD-00016102",
-      "raised": "2026-11-01",
-      "system": "DZ001.CH.TRK (Tracks / Гусеницы)",
-      "defectType": "6.04 Structural deformation / Деформация конструкции",
-      "descr": "Требуется шиповка гусенечной ленты",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Roman Besedovskiy",
-      "regBy": "Беседовский Роман Иванович",
-      "wo": "WO-022198"
-    },
-    {
       "asset": "HX054",
       "defect": "DD-00016072",
       "raised": "2026-11-01",
@@ -19924,6 +19924,19 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022660"
+    },
+    {
+      "asset": "DZ001",
+      "defect": "DD-00016102",
+      "raised": "2026-11-01",
+      "system": "DZ001.CH.TRK (Tracks / Гусеницы)",
+      "defectType": "6.04 Structural deformation / Деформация конструкции",
+      "descr": "Требуется шиповка гусенечной ленты",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-022198"
     },
     {
       "asset": "DZ021",
