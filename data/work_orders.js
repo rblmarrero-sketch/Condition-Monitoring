@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-19T13:47:46+00:00",
+  "generated": "2026-11-19T14:03:00+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -5924,6 +5924,19 @@ window.CM_WO_DATA = {
     }
   ],
   "otherDefects": [
+    {
+      "asset": "EX003",
+      "defect": "DD-00017176",
+      "raised": "2026-11-20",
+      "system": "EX003.CH.AL (Central Lubrication System / Централизованная система смазки)",
+      "defectType": "1.24 Low temperature / freezing / Низкая температура / замерзание",
+      "descr": "Не поступает консистентная смазка в шарнирное соединение ковша",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Kuznetsov",
+      "regBy": "Кузнецов Александр Андреевич",
+      "wo": null
+    },
     {
       "asset": "EX021",
       "defect": "DD-00017120",
