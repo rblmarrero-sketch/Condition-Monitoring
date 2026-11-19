@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-19T19:12:48+00:00",
+  "generated": "2026-11-19T19:27:59+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -6182,6 +6182,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
+      "wo": null
+    },
+    {
+      "asset": "TK155",
+      "defect": "DD-00017197",
+      "raised": "2026-11-20",
+      "system": "TK155.OC.SE (Seat / Сиденье)",
+      "defectType": "1.06 Deformation / bending / buckling Деформация / изгиб / коробление",
+      "descr": "Неисправен ремень безопасности",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
       "wo": null
     },
     {
@@ -12490,12 +12503,12 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK061",
-      "defect": "DD-00016683",
+      "asset": "TK092",
+      "defect": "DD-00016697",
       "raised": "2026-11-11",
-      "system": "TK061.BS.HOS (Hoses and Piping / Шланги и трубопроводы)",
+      "system": "TK092.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "устранение утечки воздуха",
+      "descr": "каплевидная утечка по лобовине ДВС, замена уплотнения",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -12503,12 +12516,12 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK092",
-      "defect": "DD-00016697",
+      "asset": "TK061",
+      "defect": "DD-00016683",
       "raised": "2026-11-11",
-      "system": "TK092.DRS.ENG (Engine / Двигатель)",
+      "system": "TK061.BS.HOS (Hoses and Piping / Шланги и трубопроводы)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "каплевидная утечка по лобовине ДВС, замена уплотнения",
+      "descr": "устранение утечки воздуха",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -59122,11 +59135,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "TK008",
-      "defect": "DD-00010860",
+      "defect": "DD-00010861",
       "raised": "2026-08-14",
-      "system": "TK008.OC.HE (Heating / Отопление)",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Не работает фен",
+      "system": "TK008.CH.SU (Suspension / Подвеска)",
+      "defectType": "1.04 Abnormal noise / vibration Аномальный шум / вибрация",
+      "descr": "Стук в передней подвеске",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -59135,11 +59148,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "TK008",
-      "defect": "DD-00010861",
+      "defect": "DD-00010860",
       "raised": "2026-08-14",
-      "system": "TK008.CH.SU (Suspension / Подвеска)",
-      "defectType": "1.04 Abnormal noise / vibration Аномальный шум / вибрация",
-      "descr": "Стук в передней подвеске",
+      "system": "TK008.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Не работает фен",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -170100,9 +170113,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-22",
-      "planStartDt": "2026-11-22T00:00:00",
-      "planEnd": "2026-11-22",
+      "planStart": "2026-11-18",
+      "planStartDt": "2026-11-18T00:00:00",
+      "planEnd": "2026-11-18",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null

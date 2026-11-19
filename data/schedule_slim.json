@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-19T19:12:48+00:00",
+  "generated": "2026-11-19T19:27:59+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -455,7 +455,7 @@
         "types": [
           "MP"
         ],
-        "plan": "2026-11-22",
+        "plan": "2026-11-18",
         "priority": "P3 Planned (PM)"
       },
       {
@@ -2278,24 +2278,6 @@
       "completed": ""
     },
     {
-      "wo": "WO-021288",
-      "equip": "TK111",
-      "cls": "AT",
-      "comp": "",
-      "desc": "Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-22",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-11-22",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
       "wo": "WO-022150",
       "equip": "TK156",
       "cls": "HT",
@@ -2953,6 +2935,24 @@
       "raised": "2026-11-18",
       "type": "500 Hours service Planned",
       "hours": 500,
+      "plan": "2026-11-18",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-021288",
+      "equip": "TK111",
+      "cls": "AT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-18",
+      "type": "250 Hours service Planned",
+      "hours": 250,
       "plan": "2026-11-18",
       "status": "Elimination scheduled",
       "request": "",
@@ -10674,6 +10674,14 @@
       "p": "P2",
       "r": "2026-11-20",
       "x": "Течь масла с уплотнения РВД"
+    },
+    {
+      "d": "DD-00017197",
+      "u": "TK155",
+      "s": "TK155.OC.SE (Seat / Сиденье)",
+      "p": "P2",
+      "r": "2026-11-20",
+      "x": "Неисправен ремень безопасности"
     },
     {
       "d": "DD-00017120",
@@ -31620,20 +31628,20 @@
       "x": "определение места утечки масла с ДВС"
     },
     {
-      "d": "DD-00016683",
-      "u": "TK061",
-      "s": "TK061.BS.HOS (Hoses and Piping / Шланги и трубопроводы)",
-      "p": "P4",
-      "r": "2026-11-11",
-      "x": "устранение утечки воздуха"
-    },
-    {
       "d": "DD-00016697",
       "u": "TK092",
       "s": "TK092.DRS.ENG (Engine / Двигатель)",
       "p": "P4",
       "r": "2026-11-11",
       "x": "каплевидная утечка по лобовине ДВС, замена уплотнения"
+    },
+    {
+      "d": "DD-00016683",
+      "u": "TK061",
+      "s": "TK061.BS.HOS (Hoses and Piping / Шланги и трубопроводы)",
+      "p": "P4",
+      "r": "2026-11-11",
+      "x": "устранение утечки воздуха"
     },
     {
       "d": "DD-00016708",
