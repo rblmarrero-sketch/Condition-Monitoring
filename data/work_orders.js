@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-19T02:13:27+00:00",
+  "generated": "2026-11-19T02:28:00+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -6016,6 +6016,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022881"
     },
     {
+      "asset": "DZ003",
+      "defect": "DD-00017162",
+      "raised": "2026-11-19",
+      "system": "DZ003.CH.RP (Ripper / Рыхлитель)",
+      "defectType": "1.06 Deformation / bending / buckling Деформация / изгиб / коробление",
+      "descr": "износ пальцев крепления защиты",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-022938"
+    },
+    {
       "asset": "TK133",
       "defect": "DD-00017126",
       "raised": "2026-11-19",
@@ -6507,6 +6520,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
+      "wo": null
+    },
+    {
+      "asset": "LV092",
+      "defect": "DD-00017161",
+      "raised": "2026-11-19",
+      "system": "LV092.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Замена ремня навесного оборудования",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
       "wo": null
     },
     {
@@ -11398,6 +11424,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022379"
     },
     {
+      "asset": "CD004",
+      "defect": "DD-00016713",
+      "raised": "2026-11-11",
+      "system": "CD004.SS (Steering System / Рулевая система)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Не работает рулевое управление",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Ilshat Sabitov",
+      "regBy": "Сабитов Ильшат Рашидович",
+      "wo": "WO-022384"
+    },
+    {
       "asset": "DZ018",
       "defect": "DD-00016711",
       "raised": "2026-11-11",
@@ -11422,19 +11461,6 @@ window.CM_WO_DATA = {
       "by": "Ilshat Sabitov",
       "regBy": "Сабитов Ильшат Рашидович",
       "wo": "WO-022383"
-    },
-    {
-      "asset": "CD004",
-      "defect": "DD-00016713",
-      "raised": "2026-11-11",
-      "system": "CD004.SS (Steering System / Рулевая система)",
-      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
-      "descr": "Не работает рулевое управление",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Ilshat Sabitov",
-      "regBy": "Сабитов Ильшат Рашидович",
-      "wo": "WO-022384"
     },
     {
       "asset": "BS002",
@@ -18756,6 +18782,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "DZ001",
+      "defect": "DD-00016102",
+      "raised": "2026-11-01",
+      "system": "DZ001.CH.TRK (Tracks / Гусеницы)",
+      "defectType": "6.04 Structural deformation / Деформация конструкции",
+      "descr": "Требуется шиповка гусенечной ленты",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-022198"
+    },
+    {
       "asset": "TK092",
       "defect": "DD-00016127",
       "raised": "2026-11-01",
@@ -19352,19 +19391,6 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022658"
-    },
-    {
-      "asset": "DZ001",
-      "defect": "DD-00016102",
-      "raised": "2026-11-01",
-      "system": "DZ001.CH.TRK (Tracks / Гусеницы)",
-      "defectType": "6.04 Structural deformation / Деформация конструкции",
-      "descr": "Требуется шиповка гусенечной ленты",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Roman Besedovskiy",
-      "regBy": "Беседовский Роман Иванович",
-      "wo": "WO-022198"
     },
     {
       "asset": "TK158",
@@ -21304,19 +21330,6 @@ window.CM_WO_DATA = {
       "wo": "WO-021295"
     },
     {
-      "asset": "TK089",
-      "defect": "DD-00015931",
-      "raised": "2026-10-30",
-      "system": "TK089.BS.BPC (Brake Packs / Тормозные пакеты)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Скрипят тормоза (при торможении машину уводит вправо)",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022392"
-    },
-    {
       "asset": "CR008",
       "defect": "DD-00015977",
       "raised": "2026-10-30",
@@ -21328,6 +21341,19 @@ window.CM_WO_DATA = {
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": "WO-021262"
+    },
+    {
+      "asset": "TK089",
+      "defect": "DD-00015931",
+      "raised": "2026-10-30",
+      "system": "TK089.BS.BPC (Brake Packs / Тормозные пакеты)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Скрипят тормоза (при торможении машину уводит вправо)",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022392"
     },
     {
       "asset": "TK162",
@@ -31333,7 +31359,7 @@ window.CM_WO_DATA = {
       "system": "TK089.DRS.AXL (Axles / Мосты)",
       "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "descr": "Требуется замена шпильки передняя правая ось",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
@@ -36125,11 +36151,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "LV050",
-      "defect": "DD-00014699",
+      "defect": "DD-00014701",
       "raised": "2026-10-14",
-      "system": "LV050.CH.SU (Suspension / Подвеска)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Зазор в шаровых пальцах.",
+      "system": "LV050.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка топлива",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Shcherbina",
@@ -36138,11 +36164,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "LV050",
-      "defect": "DD-00014701",
+      "defect": "DD-00014699",
       "raised": "2026-10-14",
-      "system": "LV050.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка топлива",
+      "system": "LV050.CH.SU (Suspension / Подвеска)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Зазор в шаровых пальцах.",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Shcherbina",
@@ -59381,8 +59407,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000076",
+      "asset": "H07",
+      "defect": "EB-00000075",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -59394,8 +59420,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H07",
-      "defect": "EB-00000075",
+      "asset": "H04",
+      "defect": "EB-00000076",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -59953,19 +59979,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "EX003",
-      "defect": "DD-00009814",
-      "raised": "2026-07-29",
-      "system": "EX003.OC.GL (Glass / Стекла)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Трещина стекла",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": null
-    },
-    {
       "asset": "EX002",
       "defect": "DD-00009830",
       "raised": "2026-07-29",
@@ -59985,6 +59998,19 @@ window.CM_WO_DATA = {
       "system": "EX001.CH.UC (Undercarriage / Ходовая часть)",
       "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
       "descr": "Отсутствует защита опорных катков слева и справа",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": null
+    },
+    {
+      "asset": "EX003",
+      "defect": "DD-00009814",
+      "raised": "2026-07-29",
+      "system": "EX003.OC.GL (Glass / Стекла)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Трещина стекла",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -101606,15 +101632,15 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-17",
       "planStartDt": "2026-11-17T00:00:00",
       "planEnd": "2026-11-17",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-17",
+      "actualStartDt": "2026-11-17T19:00:00",
+      "actualEnd": "2026-11-17"
     },
     {
       "equip": "DZ011",
@@ -142015,15 +142041,15 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-18",
       "planStartDt": "2026-11-18T00:00:00",
       "planEnd": "2026-11-18",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-18",
+      "actualStartDt": "2026-11-18T01:00:00",
+      "actualEnd": "2026-11-18"
     },
     {
       "equip": "LD008",
