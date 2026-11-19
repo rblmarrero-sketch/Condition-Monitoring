@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-19T23:13:29+00:00",
+  "generated": "2026-11-19T23:27:50+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -6237,6 +6237,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022982"
     },
     {
+      "asset": "LD006",
+      "defect": "DD-00017202",
+      "raised": "2026-11-20",
+      "system": "LD006.BS.HOS (Hoses and Piping / Шланги и трубопроводы)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "течь тормозного РВД",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-022992"
+    },
+    {
       "asset": "DZ003",
       "defect": "DD-00017187",
       "raised": "2026-11-20",
@@ -6406,19 +6419,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022884"
     },
     {
-      "asset": "TK040",
-      "defect": "DD-00017129",
-      "raised": "2026-11-19",
-      "system": "TK040.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
-      "descr": "Дымность выброс масла в выхлоп",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Viktor Bernikov",
-      "regBy": "Берников Виктор Викторович",
-      "wo": "WO-022885"
-    },
-    {
       "asset": "LS013",
       "defect": "DD-00017130",
       "raised": "2026-11-19",
@@ -6542,7 +6542,7 @@ window.CM_WO_DATA = {
       "system": "TRUCK, WATER URAL 4672M1-20, TK171 ENGINE",
       "defectType": "2.01 Wear / Износ",
       "descr": "износ ремней навесного оборудования",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Aleksandr Kuznetsov",
       "regBy": "Кузнецов Александр Андреевич",
@@ -6755,6 +6755,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022890"
+    },
+    {
+      "asset": "TK040",
+      "defect": "DD-00017129",
+      "raised": "2026-11-19",
+      "system": "TK040.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "Дымность выброс масла в выхлоп",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Viktor Bernikov",
+      "regBy": "Берников Виктор Викторович",
+      "wo": "WO-022885"
     },
     {
       "asset": "TK096",
@@ -7114,7 +7127,7 @@ window.CM_WO_DATA = {
       "system": "TK133.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
       "descr": "Замена ремня генератора",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
@@ -7132,19 +7145,6 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-022779"
-    },
-    {
-      "asset": "EX003",
-      "defect": "DD-00017082",
-      "raised": "2026-11-18",
-      "system": "EX003.HS.DL (Hydraulic Lines / Гидролинии)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Замена РВД ковшевого цилиндра",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022788"
     },
     {
       "asset": "TK038",
@@ -7249,19 +7249,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022790"
-    },
-    {
-      "asset": "TK007",
-      "defect": "DD-00017070",
-      "raised": "2026-11-18",
-      "system": "TK007.DRS.AXL (Axles / Мосты)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Устранение утечки масла с правой задней бортовой",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022765"
     },
     {
       "asset": "HX048",
@@ -7561,6 +7548,32 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022979"
+    },
+    {
+      "asset": "TK007",
+      "defect": "DD-00017070",
+      "raised": "2026-11-18",
+      "system": "TK007.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Устранение утечки масла с правой задней бортовой",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022765"
+    },
+    {
+      "asset": "EX003",
+      "defect": "DD-00017082",
+      "raised": "2026-11-18",
+      "system": "EX003.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Замена РВД ковшевого цилиндра",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022788"
     },
     {
       "asset": "TK133",
@@ -33732,12 +33745,12 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "EX006",
-      "defect": "DD-00014971",
+      "asset": "LS048",
+      "defect": "DD-00014962",
       "raised": "2026-10-17",
-      "system": "EX006.HS.MP (Hydraulic Pumps / Гидронасосы)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "каплевидная утечка по гидронасосу",
+      "system": "LS048.ELS.MW (Machine Wiring / Электропроводка машины)",
+      "defectType": "4.14 Battery / starting circuit fault / Неисправность аккумулятора / цепи пуска",
+      "descr": "Замена АКБ",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -33745,12 +33758,12 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "LS048",
-      "defect": "DD-00014962",
+      "asset": "EX006",
+      "defect": "DD-00014971",
       "raised": "2026-10-17",
-      "system": "LS048.ELS.MW (Machine Wiring / Электропроводка машины)",
-      "defectType": "4.14 Battery / starting circuit fault / Неисправность аккумулятора / цепи пуска",
-      "descr": "Замена АКБ",
+      "system": "EX006.HS.MP (Hydraulic Pumps / Гидронасосы)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "каплевидная утечка по гидронасосу",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -86877,7 +86890,7 @@ window.CM_WO_DATA = {
       "planStartDt": "2026-10-27T00:00:00",
       "planEnd": "2026-10-27",
       "actualStart": "2026-10-27",
-      "actualStartDt": "2026-10-27T00:00:00",
+      "actualStartDt": "2026-10-27T07:00:00",
       "actualEnd": "2026-10-27"
     },
     {
