@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-19T03:47:49+00:00",
+  "generated": "2026-11-19T04:07:42+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -6042,6 +6042,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022881"
     },
     {
+      "asset": "EX008",
+      "defect": "DD-00017165",
+      "raised": "2026-11-19",
+      "system": "EX008.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Замена РВД",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022942"
+    },
+    {
       "asset": "DZ003",
       "defect": "DD-00017162",
       "raised": "2026-11-19",
@@ -6484,6 +6497,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "GE054",
+      "defect": "DD-00017167",
+      "raised": "2026-11-19",
+      "system": "GE054.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Отогрев, запуск",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
       "asset": "GE068",
       "defect": "DD-00017148",
       "raised": "2026-11-19",
@@ -6546,6 +6572,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "LD013",
+      "defect": "DD-00017166",
+      "raised": "2026-11-19",
+      "system": "LD013.DRS.FS (Fuel System / Топливная система)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Неисправность топливной системы",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
       "wo": null
     },
     {
@@ -6794,19 +6833,6 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-022868"
-    },
-    {
-      "asset": "CR005",
-      "defect": "DD-00017097",
-      "raised": "2026-11-18",
-      "system": "CR005.CONV.MAIN (Main Conveyor / Главный конвейер)",
-      "defectType": "8.01 Conveyor belt cut / tear / Порез / разрыв конвейерной ленты",
-      "descr": "Разрыв ленты главного конвейера, необходима замена ленты",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": "WO-022791"
     },
     {
       "asset": "EX010",
@@ -7067,6 +7093,19 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-022764"
+    },
+    {
+      "asset": "CR005",
+      "defect": "DD-00017097",
+      "raised": "2026-11-18",
+      "system": "CR005.CONV.MAIN (Main Conveyor / Главный конвейер)",
+      "defectType": "8.01 Conveyor belt cut / tear / Порез / разрыв конвейерной ленты",
+      "descr": "Разрыв ленты главного конвейера, необходима замена ленты",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-022791"
     },
     {
       "asset": "TK059",
@@ -11495,7 +11534,7 @@ window.CM_WO_DATA = {
       "system": "CD004.SS (Steering System / Рулевая система)",
       "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
       "descr": "Не работает рулевое управление",
-      "status": "Completed",
+      "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Ilshat Sabitov",
       "regBy": "Сабитов Ильшат Рашидович",
@@ -12074,12 +12113,12 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK061",
-      "defect": "DD-00016683",
+      "asset": "TK092",
+      "defect": "DD-00016697",
       "raised": "2026-11-11",
-      "system": "TK061.BS.HOS (Hoses and Piping / Шланги и трубопроводы)",
+      "system": "TK092.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "устранение утечки воздуха",
+      "descr": "каплевидная утечка по лобовине ДВС, замена уплотнения",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -12087,12 +12126,12 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK092",
-      "defect": "DD-00016697",
+      "asset": "TK061",
+      "defect": "DD-00016683",
       "raised": "2026-11-11",
-      "system": "TK092.DRS.ENG (Engine / Двигатель)",
+      "system": "TK061.BS.HOS (Hoses and Piping / Шланги и трубопроводы)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "каплевидная утечка по лобовине ДВС, замена уплотнения",
+      "descr": "устранение утечки воздуха",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -36190,11 +36229,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "LV050",
-      "defect": "DD-00014701",
+      "defect": "DD-00014699",
       "raised": "2026-10-14",
-      "system": "LV050.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка топлива",
+      "system": "LV050.CH.SU (Suspension / Подвеска)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Зазор в шаровых пальцах.",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Shcherbina",
@@ -36203,11 +36242,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "LV050",
-      "defect": "DD-00014699",
+      "defect": "DD-00014701",
       "raised": "2026-10-14",
-      "system": "LV050.CH.SU (Suspension / Подвеска)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Зазор в шаровых пальцах.",
+      "system": "LV050.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка топлива",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Shcherbina",
@@ -57964,19 +58003,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
-      "wo": null
-    },
-    {
       "asset": "BS005",
       "defect": "DD-00011312",
       "raised": "2026-08-21",
@@ -58065,6 +58091,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
@@ -60331,11 +60370,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "CR001",
-      "defect": "DD-00009555",
+      "defect": "DD-00009554",
       "raised": "2026-07-24",
       "system": "CR001.DRS.AIR (Air Intake System / Система впуска воздуха)",
-      "defectType": "1.10 Rupture / Burst / Разрыв",
-      "descr": "Разрыв патрубка интеркуллера ДВС №7Y-1182",
+      "defectType": "3.02 No (faulty) signal/ indication/alarm / Отсутвие сигнала, индикации",
+      "descr": null,
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Rinat Musaferov",
@@ -60344,11 +60383,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "CR001",
-      "defect": "DD-00009554",
+      "defect": "DD-00009555",
       "raised": "2026-07-24",
       "system": "CR001.DRS.AIR (Air Intake System / Система впуска воздуха)",
-      "defectType": "3.02 No (faulty) signal/ indication/alarm / Отсутвие сигнала, индикации",
-      "descr": null,
+      "defectType": "1.10 Rupture / Burst / Разрыв",
+      "descr": "Разрыв патрубка интеркуллера ДВС №7Y-1182",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Rinat Musaferov",
