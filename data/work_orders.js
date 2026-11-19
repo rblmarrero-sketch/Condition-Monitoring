@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-19T05:42:50+00:00",
+  "generated": "2026-11-19T05:57:54+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -6406,6 +6406,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "TK120",
+      "defect": "DD-00017170",
+      "raised": "2026-11-19",
+      "system": "TK120.ELS.WH (Wiring Harness / Жгут проводов)",
+      "defectType": "1.06 Deformation / bending / buckling Деформация / изгиб / коробление",
+      "descr": "не работает экран заднего хода",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": null
+    },
+    {
       "asset": "TK112",
       "defect": "DD-00017155",
       "raised": "2026-11-19",
@@ -7732,19 +7745,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022742"
     },
     {
-      "asset": "TK089",
-      "defect": "DD-00017045",
-      "raised": "2026-11-17",
-      "system": "TK089.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Отогрев, запуск, перегон на ЕОС",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022743"
-    },
-    {
       "asset": "TK068",
       "defect": "DD-00017037",
       "raised": "2026-11-17",
@@ -7784,19 +7784,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022746"
     },
     {
-      "asset": "TK037",
-      "defect": "DD-00017046",
-      "raised": "2026-11-17",
-      "system": "TK037.CH.STR (Superstructure / Надстройка)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Крепление переднего бампера",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022744"
-    },
-    {
       "asset": "TK002",
       "defect": "DD-00017040",
       "raised": "2026-11-17",
@@ -7808,19 +7795,6 @@ window.CM_WO_DATA = {
       "by": "Aleksey Dobrikov",
       "regBy": "Добриков Алексей Владимирович",
       "wo": "WO-022740"
-    },
-    {
-      "asset": "TK007",
-      "defect": "DD-00017042",
-      "raised": "2026-11-17",
-      "system": "TK007.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.24 Low temperature / freezing / Низкая температура / замерзание",
-      "descr": "Низкая температура-замена термостата системы ОЖ ДВС",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022741"
     },
     {
       "asset": "TK032",
@@ -7847,6 +7821,45 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022702"
+    },
+    {
+      "asset": "TK007",
+      "defect": "DD-00017042",
+      "raised": "2026-11-17",
+      "system": "TK007.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.24 Low temperature / freezing / Низкая температура / замерзание",
+      "descr": "Низкая температура-замена термостата системы ОЖ ДВС",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022741"
+    },
+    {
+      "asset": "TK037",
+      "defect": "DD-00017046",
+      "raised": "2026-11-17",
+      "system": "TK037.CH.STR (Superstructure / Надстройка)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Крепление переднего бампера",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022744"
+    },
+    {
+      "asset": "TK089",
+      "defect": "DD-00017045",
+      "raised": "2026-11-17",
+      "system": "TK089.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Отогрев, запуск, перегон на ЕОС",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022743"
     },
     {
       "asset": "LV067",
@@ -8512,19 +8525,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022680"
     },
     {
-      "asset": "CO009",
-      "defect": "DD-00016997",
-      "raised": "2026-11-16",
-      "system": "CO009.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Отогрев, сброс ошибок, запуск",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Dobrikov",
-      "regBy": "Добриков Алексей Владимирович",
-      "wo": "WO-022675"
-    },
-    {
       "asset": "EX008",
       "defect": "DD-00017001",
       "raised": "2026-11-16",
@@ -8549,6 +8549,19 @@ window.CM_WO_DATA = {
       "by": "Aleksey Dobrikov",
       "regBy": "Добриков Алексей Владимирович",
       "wo": "WO-022677"
+    },
+    {
+      "asset": "CO009",
+      "defect": "DD-00016997",
+      "raised": "2026-11-16",
+      "system": "CO009.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Отогрев, сброс ошибок, запуск",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Dobrikov",
+      "regBy": "Добриков Алексей Владимирович",
+      "wo": "WO-022675"
     },
     {
       "asset": "FL001",
