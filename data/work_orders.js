@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-19T21:07:44+00:00",
+  "generated": "2026-11-19T21:22:45+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -6198,6 +6198,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022977"
     },
     {
+      "asset": "TK155",
+      "defect": "DD-00017197",
+      "raised": "2026-11-20",
+      "system": "TK155.OC.SE (Seat / Сиденье)",
+      "defectType": "1.06 Deformation / bending / buckling Деформация / изгиб / коробление",
+      "descr": "Неисправен ремень безопасности",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-022978"
+    },
+    {
       "asset": "DZ003",
       "defect": "DD-00017187",
       "raised": "2026-11-20",
@@ -6208,19 +6221,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
-      "wo": null
-    },
-    {
-      "asset": "TK155",
-      "defect": "DD-00017197",
-      "raised": "2026-11-20",
-      "system": "TK155.OC.SE (Seat / Сиденье)",
-      "defectType": "1.06 Deformation / bending / buckling Деформация / изгиб / коробление",
-      "descr": "Неисправен ремень безопасности",
-      "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
       "wo": null
     },
     {
@@ -7530,11 +7530,11 @@ window.CM_WO_DATA = {
       "system": "TK059.CH.SU (Suspension / Подвеска)",
       "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
       "descr": "Диагностика и ремонт ходовой части (стук спереди)",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
+      "wo": "WO-022979"
     },
     {
       "asset": "TK133",
