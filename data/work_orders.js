@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-19T08:07:42+00:00",
+  "generated": "2026-11-19T08:22:35+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -9721,19 +9721,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022564"
     },
     {
-      "asset": "TK106",
-      "defect": "DD-00016903",
-      "raised": "2026-11-14",
-      "system": "TK106.DRS.AXL (Axles / Мосты)",
-      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
-      "descr": "Обрыв крестовины",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": "WO-022565"
-    },
-    {
       "asset": "EX011",
       "defect": "DD-00016893",
       "raised": "2026-11-14",
@@ -9823,6 +9810,19 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022655"
+    },
+    {
+      "asset": "TK106",
+      "defect": "DD-00016903",
+      "raised": "2026-11-14",
+      "system": "TK106.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "descr": "Обрыв крестовины",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022565"
     },
     {
       "asset": "GE100",
