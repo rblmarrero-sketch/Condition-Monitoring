@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-19T03:18:08+00:00",
+  "generated": "2026-11-19T03:32:47+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -5938,19 +5938,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022876"
     },
     {
-      "asset": "DR011",
-      "defect": "EB-00000107",
-      "raised": "2026-11-19",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Maksat Shakhmurat",
-      "regBy": "Maksat Shakhmurat",
-      "wo": "WO-022939"
-    },
-    {
       "asset": "TK125",
       "defect": "DD-00017122",
       "raised": "2026-11-19",
@@ -5964,17 +5951,17 @@ window.CM_WO_DATA = {
       "wo": "WO-022878"
     },
     {
-      "asset": "TK105",
-      "defect": "DD-00017138",
+      "asset": "CD003",
+      "defect": "DD-00017163",
       "raised": "2026-11-19",
-      "system": "TK105.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
-      "descr": "Ошибка по давлению топлива",
+      "system": "CD003.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Ремонт фена",
       "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": "WO-022934"
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022940"
     },
     {
       "asset": "DZ012",
@@ -5990,6 +5977,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022879"
     },
     {
+      "asset": "CN018",
+      "defect": "DD-00017164",
+      "raised": "2026-11-19",
+      "system": "CN018.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Ремонт отопителя крановой установки",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022941"
+    },
+    {
       "asset": "LV012",
       "defect": "DD-00017134",
       "raised": "2026-11-19",
@@ -6001,6 +6001,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022890"
+    },
+    {
+      "asset": "DR011",
+      "defect": "EB-00000107",
+      "raised": "2026-11-19",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Maksat Shakhmurat",
+      "regBy": "Maksat Shakhmurat",
+      "wo": "WO-022939"
     },
     {
       "asset": "GE082",
@@ -6235,6 +6248,19 @@ window.CM_WO_DATA = {
       "by": "Viktor Bernikov",
       "regBy": "Берников Виктор Викторович",
       "wo": "WO-022880"
+    },
+    {
+      "asset": "TK105",
+      "defect": "DD-00017138",
+      "raised": "2026-11-19",
+      "system": "TK105.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "Ошибка по давлению топлива",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-022934"
     },
     {
       "asset": "EX009",
@@ -8986,7 +9012,7 @@ window.CM_WO_DATA = {
       "system": "TK085.ELS.BAT (Batteries / Аккумуляторные батареи)",
       "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
       "descr": "Затруднённый запуск.",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
@@ -13497,7 +13523,7 @@ window.CM_WO_DATA = {
       "system": "CR008.CONV.BEL (Conveyor Belt / Конвейерная лента)",
       "defectType": "8.01 Conveyor belt cut / tear / Порез / разрыв конвейерной ленты",
       "descr": "критический износ конвейерной ленты главного конвейера",
-      "status": "In progress",
+      "status": "Completed",
       "priority": "P4 Planned (Repair)",
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
@@ -13528,19 +13554,6 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-022109"
-    },
-    {
-      "asset": "CR008",
-      "defect": "DD-00016566",
-      "raised": "2026-11-09",
-      "system": "CR008.FEED.BEL (Feeder Belt / Лента питателя)",
-      "defectType": "8.05 Conveyor belt wear / Износ конвейерной ленты",
-      "descr": "критический износ ленты питателя",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": "WO-022739"
     },
     {
       "asset": "LS038",
@@ -13593,6 +13606,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022459"
+    },
+    {
+      "asset": "CR008",
+      "defect": "DD-00016566",
+      "raised": "2026-11-09",
+      "system": "CR008.FEED.BEL (Feeder Belt / Лента питателя)",
+      "defectType": "8.05 Conveyor belt wear / Износ конвейерной ленты",
+      "descr": "критический износ ленты питателя",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-022739"
     },
     {
       "asset": "LV066",
@@ -60305,11 +60331,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "CR001",
-      "defect": "DD-00009554",
+      "defect": "DD-00009555",
       "raised": "2026-07-24",
       "system": "CR001.DRS.AIR (Air Intake System / Система впуска воздуха)",
-      "defectType": "3.02 No (faulty) signal/ indication/alarm / Отсутвие сигнала, индикации",
-      "descr": null,
+      "defectType": "1.10 Rupture / Burst / Разрыв",
+      "descr": "Разрыв патрубка интеркуллера ДВС №7Y-1182",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Rinat Musaferov",
@@ -60318,11 +60344,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "CR001",
-      "defect": "DD-00009555",
+      "defect": "DD-00009554",
       "raised": "2026-07-24",
       "system": "CR001.DRS.AIR (Air Intake System / Система впуска воздуха)",
-      "defectType": "1.10 Rupture / Burst / Разрыв",
-      "descr": "Разрыв патрубка интеркуллера ДВС №7Y-1182",
+      "defectType": "3.02 No (faulty) signal/ indication/alarm / Отсутвие сигнала, индикации",
+      "descr": null,
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Rinat Musaferov",
