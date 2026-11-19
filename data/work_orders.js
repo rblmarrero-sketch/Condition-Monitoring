@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-19T10:42:45+00:00",
+  "generated": "2026-11-19T10:59:50+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -6354,6 +6354,32 @@ window.CM_WO_DATA = {
       "wo": "WO-022879"
     },
     {
+      "asset": "EX009",
+      "defect": "DD-00017174",
+      "raised": "2026-11-19",
+      "system": "EX009.CH.BUC (Bucket / Ковш)",
+      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "descr": "Потеря фиксатора коронки",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022954"
+    },
+    {
+      "asset": "EX025",
+      "defect": "DD-00017173",
+      "raised": "2026-11-19",
+      "system": "EX025.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка по РВД стрелы",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022953"
+    },
+    {
       "asset": "TK106",
       "defect": "DD-00017171",
       "raised": "2026-11-19",
@@ -12178,12 +12204,12 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK092",
-      "defect": "DD-00016697",
+      "asset": "TK061",
+      "defect": "DD-00016683",
       "raised": "2026-11-11",
-      "system": "TK092.DRS.ENG (Engine / Двигатель)",
+      "system": "TK061.BS.HOS (Hoses and Piping / Шланги и трубопроводы)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "каплевидная утечка по лобовине ДВС, замена уплотнения",
+      "descr": "устранение утечки воздуха",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -12191,12 +12217,12 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK061",
-      "defect": "DD-00016683",
+      "asset": "TK092",
+      "defect": "DD-00016697",
       "raised": "2026-11-11",
-      "system": "TK061.BS.HOS (Hoses and Piping / Шланги и трубопроводы)",
+      "system": "TK092.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "устранение утечки воздуха",
+      "descr": "каплевидная утечка по лобовине ДВС, замена уплотнения",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -33343,6 +33369,19 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "LS048",
+      "defect": "DD-00014962",
+      "raised": "2026-10-17",
+      "system": "LS048.ELS.MW (Machine Wiring / Электропроводка машины)",
+      "defectType": "4.14 Battery / starting circuit fault / Неисправность аккумулятора / цепи пуска",
+      "descr": "Замена АКБ",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "LS048",
       "defect": "DD-00014963",
       "raised": "2026-10-17",
       "system": "LS048.DRS.ENG (Engine / Двигатель)",
@@ -33361,19 +33400,6 @@ window.CM_WO_DATA = {
       "system": "EX006.HS.MP (Hydraulic Pumps / Гидронасосы)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "каплевидная утечка по гидронасосу",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "LS048",
-      "defect": "DD-00014962",
-      "raised": "2026-10-17",
-      "system": "LS048.ELS.MW (Machine Wiring / Электропроводка машины)",
-      "defectType": "4.14 Battery / starting circuit fault / Неисправность аккумулятора / цепи пуска",
-      "descr": "Замена АКБ",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -36294,11 +36320,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "LV050",
-      "defect": "DD-00014701",
+      "defect": "DD-00014699",
       "raised": "2026-10-14",
-      "system": "LV050.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка топлива",
+      "system": "LV050.CH.SU (Suspension / Подвеска)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Зазор в шаровых пальцах.",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Shcherbina",
@@ -36307,11 +36333,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "LV050",
-      "defect": "DD-00014699",
+      "defect": "DD-00014701",
       "raised": "2026-10-14",
-      "system": "LV050.CH.SU (Suspension / Подвеска)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Зазор в шаровых пальцах.",
+      "system": "LV050.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка топлива",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Shcherbina",
@@ -38321,19 +38347,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "HX019",
-      "defect": "DD-00014530",
-      "raised": "2026-10-11",
-      "system": "HX019 BV690FS MASTER",
-      "defectType": "5.14 Extreme temperature (cold/heat) / Экстремальная температура (холод/жара)",
-      "descr": "Перегрев",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Shcherbina",
-      "regBy": "Щербина Андрей Николаевич",
-      "wo": null
-    },
-    {
       "asset": "CD010",
       "defect": "DD-00014573",
       "raised": "2026-10-11",
@@ -38383,6 +38396,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
+      "wo": null
+    },
+    {
+      "asset": "HX019",
+      "defect": "DD-00014530",
+      "raised": "2026-10-11",
+      "system": "HX019 BV690FS MASTER",
+      "defectType": "5.14 Extreme temperature (cold/heat) / Экстремальная температура (холод/жара)",
+      "descr": "Перегрев",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Shcherbina",
+      "regBy": "Щербина Андрей Николаевич",
       "wo": null
     },
     {
@@ -58888,19 +58914,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "H07",
-      "defect": "EB-00000078",
-      "raised": "2026-08-13",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Sergey Gulin",
-      "wo": null
-    },
-    {
-      "asset": "H07",
       "defect": "EB-00000079",
       "raised": "2026-08-13",
       "system": null,
@@ -58910,6 +58923,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Eduard Shapoval",
       "regBy": "Eduard Shapoval",
+      "wo": null
+    },
+    {
+      "asset": "H07",
+      "defect": "EB-00000078",
+      "raised": "2026-08-13",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Sergey Gulin",
       "wo": null
     },
     {
