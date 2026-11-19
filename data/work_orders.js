@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-19T04:37:43+00:00",
+  "generated": "2026-11-19T04:57:42+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -5996,7 +5996,7 @@ window.CM_WO_DATA = {
       "system": null,
       "defectType": null,
       "descr": null,
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P4 Planned (Repair)",
       "by": "Maksat Shakhmurat",
       "regBy": "Maksat Shakhmurat",
@@ -6516,6 +6516,19 @@ window.CM_WO_DATA = {
       "system": "GE069.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Долив антифриза(красного)",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "GE054",
+      "defect": "DD-00017168",
+      "raised": "2026-11-19",
+      "system": "GE054.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Демонтаж стартера с нового ДВС. Консервация",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -8317,19 +8330,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022650"
     },
     {
-      "asset": "FL001",
-      "defect": "DD-00016982",
-      "raised": "2026-11-16",
-      "system": "FL001.OC.HE (Heating / Отопление)",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Установка дополнительного отопителя",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022647"
-    },
-    {
       "asset": "CN001",
       "defect": "GD-00006024",
       "raised": "2026-11-16",
@@ -8536,6 +8536,19 @@ window.CM_WO_DATA = {
       "by": "Aleksey Dobrikov",
       "regBy": "Добриков Алексей Владимирович",
       "wo": "WO-022677"
+    },
+    {
+      "asset": "FL001",
+      "defect": "DD-00016982",
+      "raised": "2026-11-16",
+      "system": "FL001.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Установка дополнительного отопителя",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022647"
     },
     {
       "asset": "DR011",
@@ -27493,19 +27506,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "TK023",
-      "defect": "DD-00015499",
-      "raised": "2026-10-23",
-      "system": "TK023.BS.HOS (Hoses and Piping / Шланги и трубопроводы)",
-      "defectType": "4.02 Open circuit / Разрыв цепи",
-      "descr": "Активная ошибка АБС (оборван провод)",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022411"
-    },
-    {
-      "asset": "TK023",
       "defect": "DD-00015501",
       "raised": "2026-10-23",
       "system": "TK023.DRS.AXL (Axles / Мосты)",
@@ -27529,6 +27529,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022414"
+    },
+    {
+      "asset": "TK023",
+      "defect": "DD-00015499",
+      "raised": "2026-10-23",
+      "system": "TK023.BS.HOS (Hoses and Piping / Шланги и трубопроводы)",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "Активная ошибка АБС (оборван провод)",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022411"
     },
     {
       "asset": "EX004",
@@ -36229,11 +36242,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "LV050",
-      "defect": "DD-00014699",
+      "defect": "DD-00014701",
       "raised": "2026-10-14",
-      "system": "LV050.CH.SU (Suspension / Подвеска)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Зазор в шаровых пальцах.",
+      "system": "LV050.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка топлива",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Shcherbina",
@@ -36242,11 +36255,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "LV050",
-      "defect": "DD-00014701",
+      "defect": "DD-00014699",
       "raised": "2026-10-14",
-      "system": "LV050.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка топлива",
+      "system": "LV050.CH.SU (Suspension / Подвеска)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Зазор в шаровых пальцах.",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Shcherbina",

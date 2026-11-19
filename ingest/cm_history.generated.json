@@ -1,7 +1,7 @@
 {
-  "generated": "2026-11-19T04:37:09.073Z",
+  "generated": "2026-11-19T04:57:08.293Z",
   "source": "https://script.google.com/macros/s/AKfycbwWJ1vb-OjP0VQPcrnoEB8PkuFyhk86mecIrkcomSVFqE5ddJynSwSheuskNGMcwLGf/exec?action=index&slim=1",
-  "pairsSeen": 462,
+  "pairsSeen": 463,
   "hist": {
     "FC|TK028": {
       "d": "2026-08-01"
@@ -755,6 +755,9 @@
     },
     "UC|EX019": {
       "d": "2026-11-18"
+    },
+    "LUBE|TK152": {
+      "d": "2026-11-19"
     }
   }
 }
