@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-19T04:07:42+00:00",
+  "generated": "2026-11-19T04:22:40+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -5951,19 +5951,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022878"
     },
     {
-      "asset": "CD003",
-      "defect": "DD-00017163",
-      "raised": "2026-11-19",
-      "system": "CD003.OC.HE (Heating / Отопление)",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Ремонт фена",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022940"
-    },
-    {
       "asset": "DZ012",
       "defect": "DD-00017123",
       "raised": "2026-11-19",
@@ -6068,6 +6055,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022938"
     },
     {
+      "asset": "GE054",
+      "defect": "DD-00017167",
+      "raised": "2026-11-19",
+      "system": "GE054.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Отогрев, запуск",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022943"
+    },
+    {
       "asset": "TK133",
       "defect": "DD-00017126",
       "raised": "2026-11-19",
@@ -6170,6 +6170,19 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022870"
+    },
+    {
+      "asset": "CD003",
+      "defect": "DD-00017163",
+      "raised": "2026-11-19",
+      "system": "CD003.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Ремонт фена",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022940"
     },
     {
       "asset": "WE004",
@@ -6313,6 +6326,19 @@ window.CM_WO_DATA = {
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": "WO-022936"
+    },
+    {
+      "asset": "LD013",
+      "defect": "DD-00017166",
+      "raised": "2026-11-19",
+      "system": "LD013.DRS.FS (Fuel System / Топливная система)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Неисправность топливной системы",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-022944"
     },
     {
       "asset": "TK096",
@@ -6497,19 +6523,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "GE054",
-      "defect": "DD-00017167",
-      "raised": "2026-11-19",
-      "system": "GE054.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Отогрев, запуск",
-      "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
       "asset": "GE068",
       "defect": "DD-00017148",
       "raised": "2026-11-19",
@@ -6572,19 +6585,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "LD013",
-      "defect": "DD-00017166",
-      "raised": "2026-11-19",
-      "system": "LD013.DRS.FS (Fuel System / Топливная система)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Неисправность топливной системы",
-      "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
       "wo": null
     },
     {
@@ -7680,6 +7680,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022720"
     },
     {
+      "asset": "TK034",
+      "defect": "DD-00017032",
+      "raised": "2026-11-17",
+      "system": "TK034.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Замена фена",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022727"
+    },
+    {
       "asset": "TK032",
       "defect": "DD-00017031",
       "raised": "2026-11-17",
@@ -7691,19 +7704,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022726"
-    },
-    {
-      "asset": "TK034",
-      "defect": "DD-00017032",
-      "raised": "2026-11-17",
-      "system": "TK034.OC.HE (Heating / Отопление)",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Замена фена",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022727"
     },
     {
       "asset": "CR004",
@@ -26237,7 +26237,7 @@ window.CM_WO_DATA = {
       "system": "BS002.OC.SE (Seat / Сиденье)",
       "defectType": "2.01 Wear / Износ",
       "descr": "Требуется ремонт сидений в кунге",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
       "regBy": "Таран Андрей Андреевич",
