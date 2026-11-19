@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-19T20:37:55+00:00",
+  "generated": "2026-11-19T20:52:42+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -5964,6 +5964,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022968"
     },
     {
+      "asset": "TK084",
+      "defect": "DD-00017198",
+      "raised": "2026-11-20",
+      "system": "TK084.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Обрыв ремня",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022976"
+    },
+    {
       "asset": "EX003",
       "defect": "DD-00017176",
       "raised": "2026-11-20",
@@ -6170,6 +6183,19 @@ window.CM_WO_DATA = {
       "by": "Viktor Bernikov",
       "regBy": "Берников Виктор Викторович",
       "wo": "WO-022975"
+    },
+    {
+      "asset": "TK111",
+      "defect": "DD-00017199",
+      "raised": "2026-11-20",
+      "system": "TK111.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка масла с турбокомпрессора",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-022977"
     },
     {
       "asset": "DZ003",
@@ -12503,12 +12529,12 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK092",
-      "defect": "DD-00016697",
+      "asset": "TK061",
+      "defect": "DD-00016683",
       "raised": "2026-11-11",
-      "system": "TK092.DRS.ENG (Engine / Двигатель)",
+      "system": "TK061.BS.HOS (Hoses and Piping / Шланги и трубопроводы)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "каплевидная утечка по лобовине ДВС, замена уплотнения",
+      "descr": "устранение утечки воздуха",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -12516,12 +12542,12 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK061",
-      "defect": "DD-00016683",
+      "asset": "TK092",
+      "defect": "DD-00016697",
       "raised": "2026-11-11",
-      "system": "TK061.BS.HOS (Hoses and Piping / Шланги и трубопроводы)",
+      "system": "TK092.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "устранение утечки воздуха",
+      "descr": "каплевидная утечка по лобовине ДВС, замена уплотнения",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -86825,7 +86851,7 @@ window.CM_WO_DATA = {
       "planStartDt": "2026-10-27T00:00:00",
       "planEnd": "2026-10-27",
       "actualStart": "2026-10-27",
-      "actualStartDt": "2026-10-27T07:00:00",
+      "actualStartDt": "2026-10-27T00:00:00",
       "actualEnd": "2026-10-27"
     },
     {
@@ -95655,15 +95681,15 @@ window.CM_WO_DATA = {
         "UC"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-12",
       "planStartDt": "2026-11-12T00:00:00",
       "planEnd": "2026-11-13",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-12",
+      "actualStartDt": "2026-11-12T08:00:00",
+      "actualEnd": "2026-11-13"
     },
     {
       "equip": "DZ004",
@@ -115963,15 +115989,15 @@ window.CM_WO_DATA = {
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-18",
       "planStartDt": "2026-11-18T00:00:00",
       "planEnd": "2026-11-18",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-18",
+      "actualStartDt": "2026-11-18T09:00:00",
+      "actualEnd": "2026-11-18"
     },
     {
       "equip": "EX022",
