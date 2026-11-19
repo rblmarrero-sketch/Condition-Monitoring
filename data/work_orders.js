@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-19T08:37:45+00:00",
+  "generated": "2026-11-19T08:52:39+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -6354,6 +6354,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022879"
     },
     {
+      "asset": "TK106",
+      "defect": "DD-00017171",
+      "raised": "2026-11-19",
+      "system": "TK106.ELS.ALT (Alternator / Генератор)",
+      "defectType": "3.01 Control failure / Ошибка управления",
+      "descr": "Порыв ремня генераторо",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022951"
+    },
+    {
       "asset": "TK096",
       "defect": "DD-00017153",
       "raised": "2026-11-19",
@@ -9818,7 +9831,7 @@ window.CM_WO_DATA = {
       "system": "TK106.DRS.AXL (Axles / Мосты)",
       "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
       "descr": "Обрыв крестовины",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
@@ -57444,19 +57457,6 @@ window.CM_WO_DATA = {
       "wo": "WO-016679"
     },
     {
-      "asset": "TK037",
-      "defect": "DD-00011999",
-      "raised": "2026-09-03",
-      "system": "TK037.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
-      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
-      "descr": "Не работает фара",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-016240"
-    },
-    {
       "asset": "DZ003",
       "defect": "DD-00011982",
       "raised": "2026-09-03",
@@ -59524,8 +59524,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000076",
+      "asset": "H07",
+      "defect": "EB-00000075",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -59537,8 +59537,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H07",
-      "defect": "EB-00000075",
+      "asset": "H04",
+      "defect": "EB-00000076",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -60096,19 +60096,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "EX003",
-      "defect": "DD-00009814",
-      "raised": "2026-07-29",
-      "system": "EX003.OC.GL (Glass / Стекла)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Трещина стекла",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": null
-    },
-    {
       "asset": "EX002",
       "defect": "DD-00009830",
       "raised": "2026-07-29",
@@ -60128,6 +60115,19 @@ window.CM_WO_DATA = {
       "system": "EX001.CH.UC (Undercarriage / Ходовая часть)",
       "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
       "descr": "Отсутствует защита опорных катков слева и справа",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": null
+    },
+    {
+      "asset": "EX003",
+      "defect": "DD-00009814",
+      "raised": "2026-07-29",
+      "system": "EX003.OC.GL (Glass / Стекла)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Трещина стекла",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
