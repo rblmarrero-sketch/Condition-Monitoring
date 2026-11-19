@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-19T06:47:45+00:00",
+  "generated": "2026-11-19T07:02:46+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -5951,19 +5951,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022878"
     },
     {
-      "asset": "DZ012",
-      "defect": "DD-00017123",
-      "raised": "2026-11-19",
-      "system": "DZ012.CH.UC (Undercarriage / Ходовая часть)",
-      "defectType": "1.06 Deformation / bending / buckling Деформация / изгиб / коробление",
-      "descr": "Заломы бугеля опорного катка",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Kiselev",
-      "regBy": "Киселев Алексей Александрович",
-      "wo": "WO-022879"
-    },
-    {
       "asset": "CN018",
       "defect": "DD-00017164",
       "raised": "2026-11-19",
@@ -6352,6 +6339,19 @@ window.CM_WO_DATA = {
       "by": "Kirill Soldatenkov",
       "regBy": "Солдатенков Кирилл Сергеевич",
       "wo": "WO-022946"
+    },
+    {
+      "asset": "DZ012",
+      "defect": "DD-00017123",
+      "raised": "2026-11-19",
+      "system": "DZ012.CH.UC (Undercarriage / Ходовая часть)",
+      "defectType": "1.06 Deformation / bending / buckling Деформация / изгиб / коробление",
+      "descr": "Заломы бугеля опорного катка",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Kiselev",
+      "regBy": "Киселев Алексей Александрович",
+      "wo": "WO-022879"
     },
     {
       "asset": "TK096",
