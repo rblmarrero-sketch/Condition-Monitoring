@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-19T17:08:10+00:00",
+  "generated": "2026-11-19T17:22:45+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -5964,19 +5964,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022968"
     },
     {
-      "asset": "BS017",
-      "defect": "DD-00017192",
-      "raised": "2026-11-20",
-      "system": "BS017.OC.HE (Heating / Отопление)",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Не работает автономный отопитель в кунге.",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-022971"
-    },
-    {
       "asset": "EX003",
       "defect": "DD-00017176",
       "raised": "2026-11-20",
@@ -6157,6 +6144,19 @@ window.CM_WO_DATA = {
       "by": "Aleksey Kiselev",
       "regBy": "Киселев Алексей Александрович",
       "wo": "WO-022973"
+    },
+    {
+      "asset": "BS017",
+      "defect": "DD-00017192",
+      "raised": "2026-11-20",
+      "system": "BS017.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Не работает автономный отопитель в кунге.",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-022971"
     },
     {
       "asset": "DZ003",
@@ -6664,6 +6664,19 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022952"
+    },
+    {
+      "asset": "TK038",
+      "defect": "DD-00017195",
+      "raised": "2026-11-19",
+      "system": "TK038.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "Выпало седло клапана ГБЦ",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Viktor Bernikov",
+      "regBy": "Берников Виктор Викторович",
+      "wo": "WO-022974"
     },
     {
       "asset": "TK096",
@@ -12464,12 +12477,12 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK092",
-      "defect": "DD-00016697",
+      "asset": "TK061",
+      "defect": "DD-00016683",
       "raised": "2026-11-11",
-      "system": "TK092.DRS.ENG (Engine / Двигатель)",
+      "system": "TK061.BS.HOS (Hoses and Piping / Шланги и трубопроводы)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "каплевидная утечка по лобовине ДВС, замена уплотнения",
+      "descr": "устранение утечки воздуха",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -12477,12 +12490,12 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK061",
-      "defect": "DD-00016683",
+      "asset": "TK092",
+      "defect": "DD-00016697",
       "raised": "2026-11-11",
-      "system": "TK061.BS.HOS (Hoses and Piping / Шланги и трубопроводы)",
+      "system": "TK092.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "устранение утечки воздуха",
+      "descr": "каплевидная утечка по лобовине ДВС, замена уплотнения",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
