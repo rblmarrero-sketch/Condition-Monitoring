@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-19T02:42:40+00:00",
+  "generated": "2026-11-19T02:57:49+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -5925,19 +5925,6 @@ window.CM_WO_DATA = {
   ],
   "otherDefects": [
     {
-      "asset": "LV012",
-      "defect": "DD-00017134",
-      "raised": "2026-11-19",
-      "system": "LV012 HILUX 2.5 TOYOTA",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Проверка нового ПЖД, не прогревает ДВС",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022890"
-    },
-    {
       "asset": "EX021",
       "defect": "DD-00017120",
       "raised": "2026-11-19",
@@ -5949,6 +5936,19 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022876"
+    },
+    {
+      "asset": "DR011",
+      "defect": "EB-00000107",
+      "raised": "2026-11-19",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Maksat Shakhmurat",
+      "regBy": "Maksat Shakhmurat",
+      "wo": "WO-022939"
     },
     {
       "asset": "TK125",
@@ -5988,6 +5988,19 @@ window.CM_WO_DATA = {
       "by": "Aleksey Kiselev",
       "regBy": "Киселев Алексей Александрович",
       "wo": "WO-022879"
+    },
+    {
+      "asset": "LV012",
+      "defect": "DD-00017134",
+      "raised": "2026-11-19",
+      "system": "LV012.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Проверка нового ПЖД, не прогревает ДВС",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022890"
     },
     {
       "asset": "GE082",
@@ -6256,7 +6269,7 @@ window.CM_WO_DATA = {
       "system": "CR007.DRS.COO (Cooling System / Система охлаждения)",
       "defectType": "1.02 Overheating / high temperature Перегрев / высокая температура",
       "descr": "перегрев ДВС, циркуляция охлаждающей жидкости ограничена",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
@@ -6422,7 +6435,7 @@ window.CM_WO_DATA = {
       "asset": "TK075",
       "defect": "DD-00017154",
       "raised": "2026-11-19",
-      "system": "TK075 NEXT MV-10 URAL",
+      "system": "TK075.CH.STR (Superstructure / Надстройка)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "LINCOLN происходит выдавливание смазки (слева в районе кабины)",
       "status": "Registered",
@@ -11456,7 +11469,7 @@ window.CM_WO_DATA = {
       "system": "CD004.SS (Steering System / Рулевая система)",
       "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
       "descr": "Не работает рулевое управление",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P4 Planned (Repair)",
       "by": "Ilshat Sabitov",
       "regBy": "Сабитов Ильшат Рашидович",
@@ -12841,19 +12854,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022386"
     },
     {
-      "asset": "LS038",
-      "defect": "DD-00016589",
-      "raised": "2026-11-09",
-      "system": "LS038.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "замена топливопроводов низкого давления,",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022406"
-    },
-    {
       "asset": "SN002",
       "defect": "DD-00016565",
       "raised": "2026-11-09",
@@ -13567,6 +13567,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022398"
+    },
+    {
+      "asset": "LS038",
+      "defect": "DD-00016589",
+      "raised": "2026-11-09",
+      "system": "LS038.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "замена топливопроводов низкого давления,",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022406"
     },
     {
       "asset": "TK040",
@@ -17781,19 +17794,6 @@ window.CM_WO_DATA = {
       "wo": "WO-021758"
     },
     {
-      "asset": "EX012",
-      "defect": "DD-00016237",
-      "raised": "2026-11-03",
-      "system": "EX012.CH.BUC (Bucket / Ковш)",
-      "defectType": "6.03 Structural crack / Трещина конструкции",
-      "descr": "Замена футировки.Замена угловой защиты ковша",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Roman Besedovskiy",
-      "regBy": "Беседовский Роман Иванович",
-      "wo": "WO-021690"
-    },
-    {
       "asset": "GR001",
       "defect": "DD-00016325",
       "raised": "2026-11-03",
@@ -17870,6 +17870,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022628"
+    },
+    {
+      "asset": "EX012",
+      "defect": "DD-00016237",
+      "raised": "2026-11-03",
+      "system": "EX012.CH.BUC (Bucket / Ковш)",
+      "defectType": "6.03 Structural crack / Трещина конструкции",
+      "descr": "Замена футировки.Замена угловой защиты ковша",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-021690"
     },
     {
       "asset": "TK145",
@@ -18782,19 +18795,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "DZ001",
-      "defect": "DD-00016102",
-      "raised": "2026-11-01",
-      "system": "DZ001.CH.TRK (Tracks / Гусеницы)",
-      "defectType": "6.04 Structural deformation / Деформация конструкции",
-      "descr": "Требуется шиповка гусенечной ленты",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Roman Besedovskiy",
-      "regBy": "Беседовский Роман Иванович",
-      "wo": "WO-022198"
-    },
-    {
       "asset": "TK092",
       "defect": "DD-00016127",
       "raised": "2026-11-01",
@@ -18819,6 +18819,19 @@ window.CM_WO_DATA = {
       "by": "Roman Besedovskiy",
       "regBy": "Беседовский Роман Иванович",
       "wo": "WO-021417"
+    },
+    {
+      "asset": "DZ001",
+      "defect": "DD-00016102",
+      "raised": "2026-11-01",
+      "system": "DZ001.CH.TRK (Tracks / Гусеницы)",
+      "defectType": "6.04 Structural deformation / Деформация конструкции",
+      "descr": "Требуется шиповка гусенечной ленты",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-022198"
     },
     {
       "asset": "HX054",
@@ -20420,19 +20433,6 @@ window.CM_WO_DATA = {
       "wo": "WO-021234"
     },
     {
-      "asset": "CR008",
-      "defect": "DD-00015976",
-      "raised": "2026-10-30",
-      "system": "CR008.CONV.BEL (Conveyor Belt / Конвейерная лента)",
-      "defectType": "8.02 Conveyor belt mistracking / Смещение / увод конвейерной ленты",
-      "descr": "ленты конвеера смещены",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": "WO-021240"
-    },
-    {
       "asset": "TK123",
       "defect": "DD-00015948",
       "raised": "2026-10-30",
@@ -21354,6 +21354,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022392"
+    },
+    {
+      "asset": "CR008",
+      "defect": "DD-00015976",
+      "raised": "2026-10-30",
+      "system": "CR008.CONV.BEL (Conveyor Belt / Конвейерная лента)",
+      "defectType": "8.02 Conveyor belt mistracking / Смещение / увод конвейерной ленты",
+      "descr": "ленты конвеера смещены",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-021240"
     },
     {
       "asset": "TK162",
@@ -25314,7 +25327,7 @@ window.CM_WO_DATA = {
       "system": "TK084.DRS.AXL (Axles / Мосты)",
       "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "descr": "Замена редуктора третьего моста",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
@@ -27583,6 +27596,19 @@ window.CM_WO_DATA = {
       "wo": "WO-020538"
     },
     {
+      "asset": "LV062",
+      "defect": "DD-00015365",
+      "raised": "2026-10-22",
+      "system": "LV062.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Замена свечей накаливания",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": "WO-020531"
+    },
+    {
       "asset": "TK027",
       "defect": "DD-00015385",
       "raised": "2026-10-22",
@@ -28387,19 +28413,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-021514"
-    },
-    {
-      "asset": "LV062",
-      "defect": "DD-00015365",
-      "raised": "2026-10-22",
-      "system": "LV062.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Замена свечей накаливания",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": "WO-020531"
     },
     {
       "asset": "TK155",
@@ -57925,6 +57938,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
+      "wo": null
+    },
+    {
       "asset": "BS005",
       "defect": "DD-00011312",
       "raised": "2026-08-21",
@@ -58013,19 +58039,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
@@ -59407,8 +59420,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H07",
-      "defect": "EB-00000075",
+      "asset": "H04",
+      "defect": "EB-00000076",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -59420,8 +59433,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000076",
+      "asset": "H07",
+      "defect": "EB-00000075",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -59979,6 +59992,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "EX003",
+      "defect": "DD-00009814",
+      "raised": "2026-07-29",
+      "system": "EX003.OC.GL (Glass / Стекла)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Трещина стекла",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": null
+    },
+    {
       "asset": "EX002",
       "defect": "DD-00009830",
       "raised": "2026-07-29",
@@ -59998,19 +60024,6 @@ window.CM_WO_DATA = {
       "system": "EX001.CH.UC (Undercarriage / Ходовая часть)",
       "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
       "descr": "Отсутствует защита опорных катков слева и справа",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": null
-    },
-    {
-      "asset": "EX003",
-      "defect": "DD-00009814",
-      "raised": "2026-07-29",
-      "system": "EX003.OC.GL (Glass / Стекла)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Трещина стекла",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
