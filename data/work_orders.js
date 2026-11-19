@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-19T05:12:48+00:00",
+  "generated": "2026-11-19T05:28:06+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -6341,6 +6341,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022944"
     },
     {
+      "asset": "CR007",
+      "defect": "DD-00017169",
+      "raised": "2026-11-19",
+      "system": "CR007.ELS.PLC (PLC & Control Panel / ПЛК и шкаф управления)",
+      "defectType": "4.06 Loose connection / high resistance / Плохой контакт / высокое сопротивление",
+      "descr": "Пропадание контакта в цепи запуска конуса",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Kirill Soldatenkov",
+      "regBy": "Солдатенков Кирилл Сергеевич",
+      "wo": "WO-022946"
+    },
+    {
       "asset": "TK096",
       "defect": "DD-00017153",
       "raised": "2026-11-19",
@@ -7628,19 +7641,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022698"
     },
     {
-      "asset": "LV052",
-      "defect": "DD-00017022",
-      "raised": "2026-11-17",
-      "system": "LV052.ELS.WH (Wiring Harness / Жгут проводов)",
-      "defectType": "4.02 Open circuit / Разрыв цепи",
-      "descr": "Ремонт электрооборудования",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022702"
-    },
-    {
       "asset": "EX016",
       "defect": "DD-00017027",
       "raised": "2026-11-17",
@@ -7706,19 +7706,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022727"
     },
     {
-      "asset": "TK032",
-      "defect": "DD-00017031",
-      "raised": "2026-11-17",
-      "system": "TK032.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Ремонт кулисы, утечка антифриза",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022726"
-    },
-    {
       "asset": "CR004",
       "defect": "DD-00017034",
       "raised": "2026-11-17",
@@ -7764,7 +7751,7 @@ window.CM_WO_DATA = {
       "system": "TRUCK, WATER KAMAZ UST 5453K2, TK068 ENGINE OldNumber (UT068)",
       "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
       "descr": "Заглох, запуск ДВС",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
@@ -7816,7 +7803,7 @@ window.CM_WO_DATA = {
       "system": "TK002.BS.SHO (Brake Shoes / Тормозные колодки)",
       "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
       "descr": "Клинят тормоза, ошибка ABS",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Aleksey Dobrikov",
       "regBy": "Добриков Алексей Владимирович",
@@ -7834,6 +7821,32 @@ window.CM_WO_DATA = {
       "by": "Aleksey Dobrikov",
       "regBy": "Добриков Алексей Владимирович",
       "wo": "WO-022741"
+    },
+    {
+      "asset": "TK032",
+      "defect": "DD-00017031",
+      "raised": "2026-11-17",
+      "system": "TK032.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Ремонт кулисы, утечка антифриза",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022726"
+    },
+    {
+      "asset": "LV052",
+      "defect": "DD-00017022",
+      "raised": "2026-11-17",
+      "system": "LV052.ELS.WH (Wiring Harness / Жгут проводов)",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "Ремонт электрооборудования",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022702"
     },
     {
       "asset": "LV067",
@@ -7990,6 +8003,19 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": null
+    },
+    {
+      "asset": "GE054",
+      "defect": "DD-00016974",
+      "raised": "2026-11-16",
+      "system": "GE054.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Демонтаж стартера с нового ДВС. Консервация",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022632"
     },
     {
       "asset": "EX009",
@@ -8240,25 +8266,12 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "GE054",
-      "defect": "DD-00016974",
-      "raised": "2026-11-16",
-      "system": "GE054.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Демонтаж стартера с нового ДВС. Консервация",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022632"
-    },
-    {
-      "asset": "GE054",
       "defect": "DD-00016975",
       "raised": "2026-11-16",
       "system": "GE054.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
       "descr": "Установка стартера снятого с нового ДВС",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
@@ -8616,17 +8629,17 @@ window.CM_WO_DATA = {
       "wo": "WO-022581"
     },
     {
-      "asset": "CR004",
-      "defect": "DD-00016946",
+      "asset": "GE054",
+      "defect": "DD-00016932",
       "raised": "2026-11-15",
-      "system": "CR004.ELS.PH (Preheater / Предпусковой подогреватель)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "не корректная работа ППЖД на подогреве смазки конуса",
-      "status": "Elimination scheduled",
+      "system": "GE054.ELS.WH (Wiring Harness / Жгут проводов)",
+      "defectType": "4.01 Short circuiting / Короткое замыкание",
+      "descr": "Замена аккумулятора",
+      "status": "Completed",
       "priority": "P2 Urgent",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": "WO-022777"
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022588"
     },
     {
       "asset": "TK122",
@@ -8653,19 +8666,6 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022566"
-    },
-    {
-      "asset": "GE054",
-      "defect": "DD-00016932",
-      "raised": "2026-11-15",
-      "system": "GE054.ELS.WH (Wiring Harness / Жгут проводов)",
-      "defectType": "4.01 Short circuiting / Короткое замыкание",
-      "descr": "Замена аккумулятора",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022588"
     },
     {
       "asset": "TK125",
@@ -9173,6 +9173,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022601"
+    },
+    {
+      "asset": "CR004",
+      "defect": "DD-00016946",
+      "raised": "2026-11-15",
+      "system": "CR004.ELS.PH (Preheater / Предпусковой подогреватель)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "не корректная работа ППЖД на подогреве смазки конуса",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-022777"
     },
     {
       "asset": "SN003",
@@ -23585,7 +23598,7 @@ window.CM_WO_DATA = {
       "system": "TK111.BS (Braking System / Тормозная система)",
       "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
       "descr": "Требуется заправка энергоаккумуляторов",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P4 Planned (Repair)",
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
@@ -103340,15 +103353,15 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-17",
       "planStartDt": "2026-11-17T00:00:00",
       "planEnd": "2026-11-17",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-17",
+      "actualStartDt": "2026-11-17T10:00:00",
+      "actualEnd": "2026-11-17"
     },
     {
       "equip": "EX001",
@@ -161243,15 +161256,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-17",
-      "planStartDt": "2026-11-17T00:00:00",
-      "planEnd": "2026-11-17",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "planStartDt": "2026-11-17T20:35:00",
+      "planEnd": "2026-11-18",
+      "actualStart": "2026-11-17",
+      "actualStartDt": "2026-11-17T20:35:00",
+      "actualEnd": "2026-11-18"
     },
     {
       "equip": "TK103",
