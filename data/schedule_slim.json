@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-19T19:43:00+00:00",
+  "generated": "2026-11-19T20:03:10+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -449,15 +449,6 @@
       }
     ],
     "TK111": [
-      {
-        "wo": "WO-021288",
-        "hours": 250,
-        "types": [
-          "MP"
-        ],
-        "plan": "2026-11-18",
-        "priority": "P3 Planned (PM)"
-      },
       {
         "wo": "WO-021938",
         "hours": 500,
@@ -2954,12 +2945,12 @@
       "type": "250 Hours service Planned",
       "hours": 250,
       "plan": "2026-11-18",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-18"
     },
     {
       "wo": "WO-020872",
@@ -10604,20 +10595,20 @@
       "x": "Спорадическая работа муфты вентилятора системы охлаждения. Нет прогрева ДВС."
     },
     {
-      "d": "DD-00017183",
-      "u": "TK068",
-      "s": "TRUCK, WATER KAMAZ UST 5453K2, TK068 ENGINE OldNumber (UT068)",
-      "p": "P2",
-      "r": "2026-11-20",
-      "x": "двигатель не запускается"
-    },
-    {
       "d": "DD-00017184",
       "u": "TK044",
       "s": "TK044.DRS.DSH (Driveshafts / Карданные валы)",
       "p": "P2",
       "r": "2026-11-20",
       "x": "ослабление болтов крепления фланца карданного вала"
+    },
+    {
+      "d": "DD-00017183",
+      "u": "TK068",
+      "s": "TRUCK, WATER KAMAZ UST 5453K2, TK068 ENGINE OldNumber (UT068)",
+      "p": "P2",
+      "r": "2026-11-20",
+      "x": "двигатель не запускается"
     },
     {
       "d": "DD-00017190",

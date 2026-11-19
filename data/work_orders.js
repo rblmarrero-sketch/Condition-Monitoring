@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-19T19:43:00+00:00",
+  "generated": "2026-11-19T20:03:10+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -6055,19 +6055,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022965"
     },
     {
-      "asset": "TK068",
-      "defect": "DD-00017183",
-      "raised": "2026-11-20",
-      "system": "TRUCK, WATER KAMAZ UST 5453K2, TK068 ENGINE OldNumber (UT068)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "двигатель не запускается",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksandr Kuznetsov",
-      "regBy": "Кузнецов Александр Андреевич",
-      "wo": "WO-022963"
-    },
-    {
       "asset": "TK044",
       "defect": "DD-00017184",
       "raised": "2026-11-20",
@@ -6079,6 +6066,19 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Kuznetsov",
       "regBy": "Кузнецов Александр Андреевич",
       "wo": "WO-022964"
+    },
+    {
+      "asset": "TK068",
+      "defect": "DD-00017183",
+      "raised": "2026-11-20",
+      "system": "TRUCK, WATER KAMAZ UST 5453K2, TK068 ENGINE OldNumber (UT068)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "двигатель не запускается",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Kuznetsov",
+      "regBy": "Кузнецов Александр Андреевич",
+      "wo": "WO-022963"
     },
     {
       "asset": "EX006",
@@ -170110,15 +170110,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-18",
       "planStartDt": "2026-11-18T00:00:00",
       "planEnd": "2026-11-18",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-18",
+      "actualStartDt": "2026-11-18T13:25:00",
+      "actualEnd": "2026-11-18"
     },
     {
       "equip": "TK111",
