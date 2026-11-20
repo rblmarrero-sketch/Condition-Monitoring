@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-20T04:43:04+00:00",
+  "generated": "2026-11-20T05:03:07+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -197,6 +197,20 @@
         "priority": "P3 Planned (PM)"
       }
     ],
+    "TK002": [
+      {
+        "wo": "WO-022806",
+        "hours": 4000,
+        "types": [
+          "FC",
+          "INSP",
+          "MP",
+          "TB"
+        ],
+        "plan": "2026-11-24",
+        "priority": "P3 Planned (PM)"
+      }
+    ],
     "TK003": [
       {
         "wo": "WO-018002",
@@ -239,6 +253,19 @@
           "MP"
         ],
         "plan": "2026-11-19",
+        "priority": "P3 Planned (PM)"
+      }
+    ],
+    "TK036": [
+      {
+        "wo": "WO-022802",
+        "hours": 1000,
+        "types": [
+          "FC",
+          "INSP",
+          "MP"
+        ],
+        "plan": "2026-11-24",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -1948,6 +1975,60 @@
       "completed": ""
     },
     {
+      "wo": "WO-022340",
+      "equip": "GE025",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "1000h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-24",
+      "type": "1000 Hours service Planned",
+      "hours": 1000,
+      "plan": "2026-11-24",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-022836",
+      "equip": "GE109",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "2000h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-24",
+      "type": "2000 Hours service Planned",
+      "hours": 2000,
+      "plan": "2026-11-24",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-022815",
+      "equip": "GE111",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-24",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-11-24",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-022133",
       "equip": "GR014",
       "cls": "GRD",
@@ -1957,6 +2038,42 @@
       "raised": "2026-11-24",
       "type": "500 Hours service Planned",
       "hours": 500,
+      "plan": "2026-11-24",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-022806",
+      "equip": "TK002",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Filter Cut / General Inspection / Magnetic Plug / Dump Body Liner",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-24",
+      "type": "4000 Hours service Planned",
+      "hours": 4000,
+      "plan": "2026-11-24",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-022802",
+      "equip": "TK036",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Filter Cut / General Inspection / Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-24",
+      "type": "1000 Hours service Planned",
+      "hours": 1000,
       "plan": "2026-11-24",
       "status": "Elimination scheduled",
       "request": "",
@@ -10750,6 +10867,14 @@
       "p": "P2",
       "r": "2026-11-20",
       "x": "Ремонт ПЖД"
+    },
+    {
+      "d": "DD-00017205",
+      "u": "CN014",
+      "s": "CN014.OC.HE (Heating / Отопление)",
+      "p": "P2",
+      "r": "2026-11-20",
+      "x": "Ремонт дополнительного отопителя крановой установки"
     },
     {
       "d": "DD-00017120",
@@ -36304,20 +36429,20 @@
       "x": "Замена ФОВ"
     },
     {
-      "d": "DD-00014962",
-      "u": "LS048",
-      "s": "LS048.ELS.MW (Machine Wiring / Электропроводка машины)",
-      "p": "P4",
-      "r": "2026-10-17",
-      "x": "Замена АКБ"
-    },
-    {
       "d": "DD-00014971",
       "u": "EX006",
       "s": "EX006.HS.MP (Hydraulic Pumps / Гидронасосы)",
       "p": "P4",
       "r": "2026-10-17",
       "x": "каплевидная утечка по гидронасосу"
+    },
+    {
+      "d": "DD-00014962",
+      "u": "LS048",
+      "s": "LS048.ELS.MW (Machine Wiring / Электропроводка машины)",
+      "p": "P4",
+      "r": "2026-10-17",
+      "x": "Замена АКБ"
     },
     {
       "d": "DD-00014966",

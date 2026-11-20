@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-20T04:43:04+00:00",
+  "generated": "2026-11-20T05:03:07+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -6300,6 +6300,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022994"
+    },
+    {
+      "asset": "CN014",
+      "defect": "DD-00017205",
+      "raised": "2026-11-20",
+      "system": "CN014.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Ремонт дополнительного отопителя крановой установки",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022996"
     },
     {
       "asset": "DZ003",
@@ -33797,12 +33810,12 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "LS048",
-      "defect": "DD-00014962",
+      "asset": "EX006",
+      "defect": "DD-00014971",
       "raised": "2026-10-17",
-      "system": "LS048.ELS.MW (Machine Wiring / Электропроводка машины)",
-      "defectType": "4.14 Battery / starting circuit fault / Неисправность аккумулятора / цепи пуска",
-      "descr": "Замена АКБ",
+      "system": "EX006.HS.MP (Hydraulic Pumps / Гидронасосы)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "каплевидная утечка по гидронасосу",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -33810,12 +33823,12 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "EX006",
-      "defect": "DD-00014971",
+      "asset": "LS048",
+      "defect": "DD-00014962",
       "raised": "2026-10-17",
-      "system": "EX006.HS.MP (Hydraulic Pumps / Гидронасосы)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "каплевидная утечка по гидронасосу",
+      "system": "LS048.ELS.MW (Machine Wiring / Электропроводка машины)",
+      "defectType": "4.14 Battery / starting circuit fault / Неисправность аккумулятора / цепи пуска",
+      "descr": "Замена АКБ",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -119899,6 +119912,25 @@ window.CM_WO_DATA = {
       "actualEnd": "2026-09-29"
     },
     {
+      "equip": "GE025",
+      "cls": "GEN",
+      "woNumber": "WO-022340",
+      "maintType": "1000 Hours service Planned",
+      "hours": 1000,
+      "cmLabel": "1000h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-24",
+      "planStartDt": "2026-11-24T00:00:00",
+      "planEnd": "2026-11-24",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
       "equip": "GE026",
       "cls": "GEN",
       "woNumber": "GD-001898",
@@ -129342,6 +129374,25 @@ window.CM_WO_DATA = {
       "actualEnd": "2026-11-15"
     },
     {
+      "equip": "GE109",
+      "cls": "GEN",
+      "woNumber": "WO-022836",
+      "maintType": "2000 Hours service Planned",
+      "hours": 2000,
+      "cmLabel": "2000h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-24",
+      "planStartDt": "2026-11-24T00:00:00",
+      "planEnd": "2026-11-24",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
       "equip": "GE110",
       "cls": "GEN",
       "woNumber": null,
@@ -129872,6 +129923,25 @@ window.CM_WO_DATA = {
       "actualStart": "2026-11-14",
       "actualStartDt": "2026-11-14T09:30:00",
       "actualEnd": "2026-11-14"
+    },
+    {
+      "equip": "GE111",
+      "cls": "GEN",
+      "woNumber": "WO-022815",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "250h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-24",
+      "planStartDt": "2026-11-24T00:00:00",
+      "planEnd": "2026-11-24",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
     },
     {
       "equip": "GR001",
@@ -149192,6 +149262,30 @@ window.CM_WO_DATA = {
       "actualEnd": "2026-10-25"
     },
     {
+      "equip": "TK002",
+      "cls": "HT",
+      "woNumber": "WO-022806",
+      "maintType": "4000 Hours service Planned",
+      "hours": 4000,
+      "cmLabel": "Filter Cut / General Inspection / Magnetic Plug / Dump Body Liner",
+      "cmTypes": [
+        "FC",
+        "INSP",
+        "MP",
+        "TB"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "MACH",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-24",
+      "planStartDt": "2026-11-24T00:00:00",
+      "planEnd": "2026-11-24",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
       "equip": "TK003",
       "cls": "HT",
       "woNumber": "WO-005260",
@@ -153955,6 +154049,29 @@ window.CM_WO_DATA = {
       "actualStart": "2026-11-03",
       "actualStartDt": "2026-11-03T00:00:00",
       "actualEnd": "2026-11-03"
+    },
+    {
+      "equip": "TK036",
+      "cls": "HT",
+      "woNumber": "WO-022802",
+      "maintType": "1000 Hours service Planned",
+      "hours": 1000,
+      "cmLabel": "Filter Cut / General Inspection / Magnetic Plug",
+      "cmTypes": [
+        "FC",
+        "INSP",
+        "MP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-24",
+      "planStartDt": "2026-11-24T00:00:00",
+      "planEnd": "2026-11-24",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
     },
     {
       "equip": "TK037",
