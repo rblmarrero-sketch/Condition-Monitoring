@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-20T17:12:43+00:00",
+  "generated": "2026-11-20T17:27:45+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -6224,19 +6224,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022965"
     },
     {
-      "asset": "TK044",
-      "defect": "DD-00017184",
-      "raised": "2026-11-20",
-      "system": "TK044.DRS.DSH (Driveshafts / Карданные валы)",
-      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
-      "descr": "ослабление болтов крепления фланца карданного вала",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksandr Kuznetsov",
-      "regBy": "Кузнецов Александр Андреевич",
-      "wo": "WO-022964"
-    },
-    {
       "asset": "TK068",
       "defect": "DD-00017183",
       "raised": "2026-11-20",
@@ -6248,6 +6235,19 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Kuznetsov",
       "regBy": "Кузнецов Александр Андреевич",
       "wo": "WO-022963"
+    },
+    {
+      "asset": "TK044",
+      "defect": "DD-00017184",
+      "raised": "2026-11-20",
+      "system": "TK044.DRS.DSH (Driveshafts / Карданные валы)",
+      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "descr": "ослабление болтов крепления фланца карданного вала",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Kuznetsov",
+      "regBy": "Кузнецов Александр Андреевич",
+      "wo": "WO-022964"
     },
     {
       "asset": "EX002",
