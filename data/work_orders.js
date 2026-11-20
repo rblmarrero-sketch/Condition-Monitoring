@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-20T01:38:03+00:00",
+  "generated": "2026-11-20T01:58:18+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -6438,7 +6438,7 @@ window.CM_WO_DATA = {
       "system": "LS013.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Завоздушена топливная система",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Viktor Bernikov",
       "regBy": "Берников Виктор Викторович",
@@ -6601,19 +6601,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022875"
     },
     {
-      "asset": "TK032",
-      "defect": "DD-00017121",
-      "raised": "2026-11-19",
-      "system": "TK032.DRS.ENG (Engine / Двигатель)",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "замена ремня, обломана шпилька генератора, CHECK ДВС",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksandr Kuznetsov",
-      "regBy": "Кузнецов Александр Андреевич",
-      "wo": "WO-022877"
-    },
-    {
       "asset": "CR007",
       "defect": "DD-00017140",
       "raised": "2026-11-19",
@@ -6625,6 +6612,19 @@ window.CM_WO_DATA = {
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": "WO-022936"
+    },
+    {
+      "asset": "TK032",
+      "defect": "DD-00017121",
+      "raised": "2026-11-19",
+      "system": "TK032.DRS.ENG (Engine / Двигатель)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "замена ремня, обломана шпилька генератора, CHECK ДВС",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Kuznetsov",
+      "regBy": "Кузнецов Александр Андреевич",
+      "wo": "WO-022877"
     },
     {
       "asset": "LD013",
@@ -7147,19 +7147,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022779"
     },
     {
-      "asset": "TK038",
-      "defect": "DD-00017108",
-      "raised": "2026-11-18",
-      "system": "TK038.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Трещина кронштейна генератора, обрыв ремня.",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Viktor Bernikov",
-      "regBy": "Берников Виктор Викторович",
-      "wo": "WO-022869"
-    },
-    {
       "asset": "EX003",
       "defect": "DD-00017110",
       "raised": "2026-11-18",
@@ -7574,6 +7561,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022788"
+    },
+    {
+      "asset": "TK038",
+      "defect": "DD-00017108",
+      "raised": "2026-11-18",
+      "system": "TK038.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Трещина кронштейна генератора, обрыв ремня.",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Viktor Bernikov",
+      "regBy": "Берников Виктор Викторович",
+      "wo": "WO-022869"
     },
     {
       "asset": "TK133",
@@ -60213,6 +60213,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022891"
     },
     {
+      "asset": "TK040",
+      "defect": "DD-00009402",
+      "raised": "2026-07-22",
+      "system": "TK040.DRS.COO (Cooling System / Система охлаждения)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Требуется подтянуть патрубок на радиаторе",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": "WO-022892"
+    },
+    {
       "asset": "BS003",
       "defect": "DD-00009374",
       "raised": "2026-07-22",
@@ -60258,19 +60271,6 @@ window.CM_WO_DATA = {
       "system": "TK037.OC (Operator Cab / Кабина оператора)",
       "defectType": "2.01 Wear / Износ",
       "descr": "Требуется замена газовых упоров капота кабины",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": null
-    },
-    {
-      "asset": "TK040",
-      "defect": "DD-00009402",
-      "raised": "2026-07-22",
-      "system": "TK040.DRS.COO (Cooling System / Система охлаждения)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Требуется подтянуть патрубок на радиаторе",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
