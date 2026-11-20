@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-20T12:42:39+00:00",
+  "generated": "2026-11-20T12:57:42+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -6445,19 +6445,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023009"
     },
     {
-      "asset": "TK143",
-      "defect": "DD-00017216",
-      "raised": "2026-11-20",
-      "system": "TK143.DRS.AXL (Axles / Мосты)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "развалился карданый привод  левого колеса передней оси",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Vladimir Ladik",
-      "regBy": "Ладик Владимир Владимирович",
-      "wo": "WO-023010"
-    },
-    {
       "asset": "LV045",
       "defect": "DD-00017204",
       "raised": "2026-11-20",
@@ -6469,6 +6456,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022995"
+    },
+    {
+      "asset": "TK143",
+      "defect": "DD-00017216",
+      "raised": "2026-11-20",
+      "system": "TK143.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "развалился карданый привод  левого колеса передней оси",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Vladimir Ladik",
+      "regBy": "Ладик Владимир Владимирович",
+      "wo": "WO-023010"
     },
     {
       "asset": "CD007",
