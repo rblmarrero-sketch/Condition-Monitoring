@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-20T07:13:00+00:00",
+  "generated": "2026-11-20T07:27:45+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -27050,6 +27050,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "TK023",
+      "defect": "DD-00015506",
+      "raised": "2026-10-23",
+      "system": "TK023.BS.RCH (Brake Chambers / Тормозные камеры)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Не тормозит среднее правое колесо.",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022415"
+    },
+    {
       "asset": "CR007",
       "defect": "DD-00015511",
       "raised": "2026-10-23",
@@ -28088,19 +28101,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022413"
-    },
-    {
-      "asset": "TK023",
-      "defect": "DD-00015506",
-      "raised": "2026-10-23",
-      "system": "TK023.BS.RCH (Brake Chambers / Тормозные камеры)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Не тормозит среднее правое колесо.",
-      "status": "Completed",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022415"
     },
     {
       "asset": "TK092",
