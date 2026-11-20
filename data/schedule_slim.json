@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-20T21:17:43+00:00",
+  "generated": "2026-11-20T21:37:56+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -1349,6 +1349,24 @@
       "completed": ""
     },
     {
+      "wo": "WO-023033",
+      "equip": "DZ022",
+      "cls": "DOZ",
+      "comp": "",
+      "desc": "500h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-30",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-11-30",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-022255",
       "equip": "GR002",
       "cls": "GRD",
@@ -1421,6 +1439,24 @@
       "completed": ""
     },
     {
+      "wo": "WO-022834",
+      "equip": "CD008",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "500h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-29",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-11-29",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-021972",
       "equip": "DZ003",
       "cls": "DOZ",
@@ -1448,6 +1484,24 @@
       "raised": "2026-11-29",
       "type": "1000 Hours service Planned",
       "hours": 1000,
+      "plan": "2026-11-29",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-022828",
+      "equip": "LS054",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-29",
+      "type": "250 Hours service Planned",
+      "hours": 250,
       "plan": "2026-11-29",
       "status": "Elimination scheduled",
       "request": "",
@@ -3285,11 +3339,11 @@
       "type": "1000 Hours service Planned",
       "hours": 1000,
       "plan": "2026-11-20",
-      "status": "Elimination scheduled",
+      "status": "In progress",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
+      "pmStatus": "inprogress",
       "completed": ""
     },
     {
@@ -11161,6 +11215,22 @@
       "p": "P2",
       "r": "2026-11-21",
       "x": "Замена шпилек правого переднего колеса"
+    },
+    {
+      "d": "DD-00017230",
+      "u": "BS007",
+      "s": "BS007.DRS.ENG (Engine / Двигатель)",
+      "p": "P2",
+      "r": "2026-11-21",
+      "x": "Замена ремня генератора"
+    },
+    {
+      "d": "DD-00017231",
+      "u": "TK099",
+      "s": "TRUCK, WATER URAL 4672M1-20, TK099 HEATING OldNumber (UT099)",
+      "p": "P2",
+      "r": "2026-11-21",
+      "x": "Ремонт отопителя"
     },
     {
       "d": "DD-00017177",
@@ -38331,6 +38401,14 @@
       "x": "Утечка масла с блока клапанов."
     },
     {
+      "d": "DD-00014445",
+      "u": "PU008",
+      "s": "PU008.DRS.PD (Pump Drive / Привод насоса)",
+      "p": "P4",
+      "r": "2026-10-09",
+      "x": "Сломан Вал привода насоса"
+    },
+    {
       "d": "DD-00014412",
       "u": "LV069",
       "s": "LV069.SS.RE (Tie Rod Ends / Наконечники рулевых тяг)",
@@ -38361,14 +38439,6 @@
       "p": "P4",
       "r": "2026-10-09",
       "x": "Течь масла через уплотнения задник крышек трансмиссии"
-    },
-    {
-      "d": "DD-00014445",
-      "u": "PU008",
-      "s": "PU008.DRS.PD (Pump Drive / Привод насоса)",
-      "p": "P4",
-      "r": "2026-10-09",
-      "x": "Сломан Вал привода насоса"
     },
     {
       "d": "DD-00014418",
