@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-20T19:48:40+00:00",
+  "generated": "2026-11-20T20:04:10+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -357,7 +357,7 @@ window.CM_WO_DATA = {
     "WE010",
     "WE011"
   ],
-  "duplicateRowsCollapsed": 472,
+  "duplicateRowsCollapsed": 473,
   "roundsDedupedWithinVisit": 3,
   "columns": [
     "Asset description",
@@ -6633,11 +6633,11 @@ window.CM_WO_DATA = {
       "system": "DZ003.ELS.LIG (Head Lighting System / Система головного освещения)",
       "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
       "descr": "Лопнулс стекла",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "priority": "P4 Planned (Repair)",
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
-      "wo": null
+      "wo": "WO-023023"
     },
     {
       "asset": "CR007",
