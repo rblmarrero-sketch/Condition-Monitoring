@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-20T21:37:56+00:00",
+  "generated": "2026-11-20T21:52:46+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -6081,6 +6081,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023020"
     },
     {
+      "asset": "TK036",
+      "defect": "DD-00017232",
+      "raised": "2026-11-21",
+      "system": "TK036.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Ремонт отопителя",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023036"
+    },
+    {
       "asset": "TK002",
       "defect": "DD-00017229",
       "raised": "2026-11-21",
@@ -6107,16 +6120,42 @@ window.CM_WO_DATA = {
       "wo": "WO-023032"
     },
     {
+      "asset": "GE020",
+      "defect": "DD-00017234",
+      "raised": "2026-11-21",
+      "system": "GE020.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Выброс масла",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023037"
+    },
+    {
       "asset": "TK099",
       "defect": "DD-00017231",
       "raised": "2026-11-21",
       "system": "TRUCK, WATER URAL 4672M1-20, TK099 HEATING OldNumber (UT099)",
       "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
       "descr": "Ремонт отопителя",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "priority": "P2 Urgent",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023035"
+    },
+    {
+      "asset": "DR007",
+      "defect": "DD-00017233",
+      "raised": "2026-11-21",
+      "system": "DR007.CH.MT (Mast / Мачта)",
+      "defectType": "2.06 Abrasive wear / Абразивный износ",
+      "descr": "износ направляющих пластин мачты",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
       "wo": null
     },
     {
@@ -13634,6 +13673,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022410"
     },
     {
+      "asset": "TK168",
+      "defect": "DD-00016663",
+      "raised": "2026-11-10",
+      "system": "TK168.CH (Structure & Chassis / Рама и конструкция)",
+      "defectType": "6.03 Structural crack / Трещина конструкции",
+      "descr": "Сварочные работы заднего отбойника",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Aleksey Kiselev",
+      "regBy": "Киселев Алексей Александрович",
+      "wo": "WO-022894"
+    },
+    {
       "asset": "LV123",
       "defect": "DD-00016637",
       "raised": "2026-11-10",
@@ -13774,19 +13826,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "TK168",
-      "defect": "DD-00016663",
-      "raised": "2026-11-10",
-      "system": "TK168.CH (Structure & Chassis / Рама и конструкция)",
-      "defectType": "6.03 Structural crack / Трещина конструкции",
-      "descr": "Сварочные работы заднего отбойника",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Aleksey Kiselev",
-      "regBy": "Киселев Алексей Александрович",
       "wo": null
     },
     {
@@ -40518,19 +40557,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022369"
     },
     {
-      "asset": "PU008",
-      "defect": "DD-00014445",
-      "raised": "2026-10-09",
-      "system": "PU008.DRS.PD (Pump Drive / Привод насоса)",
-      "defectType": "1.19 No movement / no drive / Нет движения / нет привода",
-      "descr": "Сломан Вал привода насоса",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Temir Marochko",
-      "regBy": "Марочко Темир",
-      "wo": null
-    },
-    {
       "asset": "LV069",
       "defect": "DD-00014412",
       "raised": "2026-10-09",
@@ -40580,6 +40606,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Evgeniy Frolin",
       "regBy": "Фролин Евгений Владимирович",
+      "wo": null
+    },
+    {
+      "asset": "PU008",
+      "defect": "DD-00014445",
+      "raised": "2026-10-09",
+      "system": "PU008.DRS.PD (Pump Drive / Привод насоса)",
+      "defectType": "1.19 No movement / no drive / Нет движения / нет привода",
+      "descr": "Сломан Вал привода насоса",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Temir Marochko",
+      "regBy": "Марочко Темир",
       "wo": null
     },
     {
@@ -59018,19 +59057,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "H07",
-      "defect": "EB-00000078",
-      "raised": "2026-08-13",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Sergey Gulin",
-      "wo": null
-    },
-    {
-      "asset": "H07",
       "defect": "EB-00000079",
       "raised": "2026-08-13",
       "system": null,
@@ -59040,6 +59066,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Eduard Shapoval",
       "regBy": "Eduard Shapoval",
+      "wo": null
+    },
+    {
+      "asset": "H07",
+      "defect": "EB-00000078",
+      "raised": "2026-08-13",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Sergey Gulin",
       "wo": null
     },
     {
