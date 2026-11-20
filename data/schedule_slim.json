@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-20T06:43:04+00:00",
+  "generated": "2026-11-20T06:58:03+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -1668,6 +1668,24 @@
       "raised": "2026-11-27",
       "type": "250 Hours service Planned",
       "hours": 250,
+      "plan": "2026-11-27",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-022814",
+      "equip": "LS038",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "1000h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-27",
+      "type": "1000 Hours service Planned",
+      "hours": 1000,
       "plan": "2026-11-27",
       "status": "Elimination scheduled",
       "request": "",
@@ -11229,6 +11247,14 @@
       "p": "P2",
       "r": "2026-11-20",
       "x": "Замена шпилек (4-я ось, левая строна)"
+    },
+    {
+      "d": "DD-00017213",
+      "u": "TK004",
+      "s": "TK004.DRS.AXL (Axles / Мосты)",
+      "p": "P2",
+      "r": "2026-11-20",
+      "x": "Заклинивание колесной пары средней оси"
     },
     {
       "d": "DD-00017120",
