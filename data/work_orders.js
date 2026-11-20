@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-20T23:37:43+00:00",
+  "generated": "2026-11-20T23:52:38+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -6003,17 +6003,17 @@ window.CM_WO_DATA = {
   ],
   "otherDefects": [
     {
-      "asset": "CN018",
-      "defect": "DD-00017238",
+      "asset": "CN014",
+      "defect": "DD-00017239",
       "raised": "2026-11-21",
-      "system": "CN018.CH.BOO (Boom / Стрела)",
+      "system": "CN014.CH.BOO (Boom / Стрела)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Замена смаки полиспаста",
+      "descr": "Замена смазки полиспаста",
       "status": "Elimination scheduled",
       "priority": "P2 Urgent",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-023040"
+      "wo": "WO-023041"
     },
     {
       "asset": "TK098",
@@ -6092,6 +6092,19 @@ window.CM_WO_DATA = {
       "by": "Vladimir Ladik",
       "regBy": "Ладик Владимир Владимирович",
       "wo": "WO-023020"
+    },
+    {
+      "asset": "CN018",
+      "defect": "DD-00017238",
+      "raised": "2026-11-21",
+      "system": "CN018.CH.BOO (Boom / Стрела)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Замена смаки полиспаста",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023040"
     },
     {
       "asset": "TK036",
