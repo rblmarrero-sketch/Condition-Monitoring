@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-20T14:52:39+00:00",
+  "generated": "2026-11-20T15:12:40+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -6002,6 +6002,19 @@ window.CM_WO_DATA = {
     }
   ],
   "otherDefects": [
+    {
+      "asset": "TK044",
+      "defect": "DD-00017223",
+      "raised": "2026-11-21",
+      "system": "TK044.ELS.STM (Starter Motor / Стартер)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Периодически не запускается. Втягивающее срабатывает - стартер - нет.",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-023016"
+    },
     {
       "asset": "HX041",
       "defect": "DD-00017177",
