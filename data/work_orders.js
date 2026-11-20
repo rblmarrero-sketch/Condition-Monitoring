@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-20T22:07:47+00:00",
+  "generated": "2026-11-20T22:22:47+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -6120,19 +6120,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023032"
     },
     {
-      "asset": "GE020",
-      "defect": "DD-00017234",
-      "raised": "2026-11-21",
-      "system": "GE020.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Выброс масла",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-023037"
-    },
-    {
       "asset": "TK099",
       "defect": "DD-00017231",
       "raised": "2026-11-21",
@@ -6146,6 +6133,45 @@ window.CM_WO_DATA = {
       "wo": "WO-023035"
     },
     {
+      "asset": "GE020",
+      "defect": "DD-00017234",
+      "raised": "2026-11-21",
+      "system": "GE020.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Выброс масла",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023037"
+    },
+    {
+      "asset": "EX010",
+      "defect": "DD-00017236",
+      "raised": "2026-11-21",
+      "system": "EX010.CH.BUC (Bucket / Ковш)",
+      "defectType": "2.06 Abrasive wear / Абразивный износ",
+      "descr": "Износ коронок ковша",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-023038"
+    },
+    {
+      "asset": "TK168",
+      "defect": "DD-00017237",
+      "raised": "2026-11-21",
+      "system": "TK168.BS.PU (Pneumatic Control / Пневмоуправление)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка воздуха из системы   . Отсутствует сцепление (утечка тормозной жидкости в районе ПГУ)",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023039"
+    },
+    {
       "asset": "DR007",
       "defect": "DD-00017233",
       "raised": "2026-11-21",
@@ -6154,6 +6180,19 @@ window.CM_WO_DATA = {
       "descr": "износ направляющих пластин мачты",
       "status": "Registered",
       "priority": "P2 Urgent",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": null
+    },
+    {
+      "asset": "DR007",
+      "defect": "DD-00017235",
+      "raised": "2026-11-21",
+      "system": "DR007.CH.MT (Mast / Мачта)",
+      "defectType": "2.06 Abrasive wear / Абразивный износ",
+      "descr": "Износ пыльников колпака",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": null
@@ -40557,6 +40596,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022369"
     },
     {
+      "asset": "PU008",
+      "defect": "DD-00014445",
+      "raised": "2026-10-09",
+      "system": "PU008.DRS.PD (Pump Drive / Привод насоса)",
+      "defectType": "1.19 No movement / no drive / Нет движения / нет привода",
+      "descr": "Сломан Вал привода насоса",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Temir Marochko",
+      "regBy": "Марочко Темир",
+      "wo": null
+    },
+    {
       "asset": "LV069",
       "defect": "DD-00014412",
       "raised": "2026-10-09",
@@ -40606,19 +40658,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Evgeniy Frolin",
       "regBy": "Фролин Евгений Владимирович",
-      "wo": null
-    },
-    {
-      "asset": "PU008",
-      "defect": "DD-00014445",
-      "raised": "2026-10-09",
-      "system": "PU008.DRS.PD (Pump Drive / Привод насоса)",
-      "defectType": "1.19 No movement / no drive / Нет движения / нет привода",
-      "descr": "Сломан Вал привода насоса",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Temir Marochko",
-      "regBy": "Марочко Темир",
       "wo": null
     },
     {
@@ -59057,19 +59096,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "H07",
-      "defect": "EB-00000079",
-      "raised": "2026-08-13",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
-      "wo": null
-    },
-    {
-      "asset": "H07",
       "defect": "EB-00000078",
       "raised": "2026-08-13",
       "system": null,
@@ -59079,6 +59105,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Sergey Gulin",
+      "wo": null
+    },
+    {
+      "asset": "H07",
+      "defect": "EB-00000079",
+      "raised": "2026-08-13",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
