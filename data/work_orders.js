@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-20T22:38:27+00:00",
+  "generated": "2026-11-20T22:53:09+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -6471,19 +6471,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022977"
     },
     {
-      "asset": "TK155",
-      "defect": "DD-00017197",
-      "raised": "2026-11-20",
-      "system": "TK155.OC.SE (Seat / Сиденье)",
-      "defectType": "1.06 Deformation / bending / buckling Деформация / изгиб / коробление",
-      "descr": "Неисправен ремень безопасности",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": "WO-022978"
-    },
-    {
       "asset": "TK044",
       "defect": "DD-00017200",
       "raised": "2026-11-20",
@@ -6510,13 +6497,26 @@ window.CM_WO_DATA = {
       "wo": "WO-022991"
     },
     {
+      "asset": "TK155",
+      "defect": "DD-00017197",
+      "raised": "2026-11-20",
+      "system": "TK155.OC.SE (Seat / Сиденье)",
+      "defectType": "1.06 Deformation / bending / buckling Деформация / изгиб / коробление",
+      "descr": "Неисправен ремень безопасности",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-022978"
+    },
+    {
       "asset": "LD006",
       "defect": "DD-00017202",
       "raised": "2026-11-20",
       "system": "LD006.BS.HOS (Hoses and Piping / Шланги и трубопроводы)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "течь тормозного РВД",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
@@ -6997,7 +6997,7 @@ window.CM_WO_DATA = {
       "system": "TK104.BS.HOS (Hoses and Piping / Шланги и трубопроводы)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Утечка масла трансмиссии",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
@@ -7647,7 +7647,7 @@ window.CM_WO_DATA = {
       "system": "LV056.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "требуется замена гидромуфты",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
@@ -9877,19 +9877,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022586"
     },
     {
-      "asset": "GR002",
-      "defect": "DD-00016926",
-      "raised": "2026-11-15",
-      "system": "GR002.CH.BL (Blade / Отвал)",
-      "defectType": "2.06 Abrasive wear / Абразивный износ",
-      "descr": "Износ ножей отвала",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": "WO-022587"
-    },
-    {
       "asset": "CR002",
       "defect": "DD-00016936",
       "raised": "2026-11-15",
@@ -9916,13 +9903,26 @@ window.CM_WO_DATA = {
       "wo": "WO-022600"
     },
     {
+      "asset": "GR002",
+      "defect": "DD-00016926",
+      "raised": "2026-11-15",
+      "system": "GR002.CH.BL (Blade / Отвал)",
+      "defectType": "2.06 Abrasive wear / Абразивный износ",
+      "descr": "Износ ножей отвала",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-022587"
+    },
+    {
       "asset": "LD006",
       "defect": "DD-00016941",
       "raised": "2026-11-15",
       "system": "LD006.HS.DL (Hydraulic Lines / Гидролинии)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "порыв РВД на центральный цилиндр стрелы",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
@@ -10468,7 +10468,7 @@ window.CM_WO_DATA = {
       "system": "EX011.CH.BUC (Bucket / Ковш)",
       "defectType": "2.06 Abrasive wear / Абразивный износ",
       "descr": "Износ коронок ковша",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Aleksandr Golovko",
       "regBy": "Степаненко Дмитрий Викторович",
@@ -12236,7 +12236,7 @@ window.CM_WO_DATA = {
       "system": "EX012.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
       "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "descr": "Требуется замена фар на светодиодные",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P4 Planned (Repair)",
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
