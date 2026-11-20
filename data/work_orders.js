@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-20T18:42:52+00:00",
+  "generated": "2026-11-20T18:57:46+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -7907,7 +7907,7 @@ window.CM_WO_DATA = {
       "system": "CR005.CONV.MAIN (Main Conveyor / Главный конвейер)",
       "defectType": "8.01 Conveyor belt cut / tear / Порез / разрыв конвейерной ленты",
       "descr": "Разрыв ленты главного конвейера, необходима замена ленты",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
