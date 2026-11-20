@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-20T04:12:44+00:00",
+  "generated": "2026-11-20T04:27:56+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -321,6 +321,20 @@
           "MP"
         ],
         "plan": "2026-11-16",
+        "priority": "P3 Planned (PM)"
+      }
+    ],
+    "TK088": [
+      {
+        "wo": "WO-022798",
+        "hours": 4000,
+        "types": [
+          "FC",
+          "INSP",
+          "MP",
+          "TB"
+        ],
+        "plan": "2026-11-23",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -2042,6 +2056,42 @@
       "completed": ""
     },
     {
+      "wo": "WO-022937",
+      "equip": "EX020",
+      "cls": "EXC",
+      "comp": "",
+      "desc": "500h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-23",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-11-23",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-022817",
+      "equip": "GE020",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "500h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-23",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-11-23",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-022126",
       "equip": "GR005",
       "cls": "GRD",
@@ -2078,6 +2128,24 @@
       "completed": ""
     },
     {
+      "wo": "WO-022821",
+      "equip": "LS041",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-23",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-11-23",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-022464",
       "equip": "TK040",
       "cls": "HT",
@@ -2087,6 +2155,24 @@
       "raised": "2026-11-23",
       "type": "500 Hours service Planned",
       "hours": 500,
+      "plan": "2026-11-23",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-022798",
+      "equip": "TK088",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Filter Cut / General Inspection / Magnetic Plug / Dump Body Liner",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-23",
+      "type": "4000 Hours service Planned",
+      "hours": 4000,
       "plan": "2026-11-23",
       "status": "Elimination scheduled",
       "request": "",
@@ -2123,6 +2209,24 @@
       "raised": "2026-11-23",
       "type": "250 Hours service Planned",
       "hours": 250,
+      "plan": "2026-11-23",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-022810",
+      "equip": "TK168",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "500h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-23",
+      "type": "500 Hours service Planned",
+      "hours": 500,
       "plan": "2026-11-23",
       "status": "Elimination scheduled",
       "request": "",
@@ -10446,6 +10550,14 @@
       "p": "P2",
       "r": "2026-11-20",
       "x": "Перемерзание конденсата в магистралях пневматической системы"
+    },
+    {
+      "d": "DD-00017204",
+      "u": "LV045",
+      "s": "LV045.ELS.ALT (Alternator / Генератор)",
+      "p": "P2",
+      "r": "2026-11-20",
+      "x": "Ремонт генератора"
     },
     {
       "d": "DD-00017189",
@@ -29800,20 +29912,20 @@
       "x": "Лопнулс стекла"
     },
     {
-      "d": "DD-00017135",
-      "u": "LV.C001",
-      "s": "LIGHT VEHICLE, TOYOTA HILUX C395MH",
-      "p": "P4",
-      "r": "2026-11-19",
-      "x": "PM 10 000"
-    },
-    {
       "d": "EB-00000107",
       "u": "DR011",
       "s": null,
       "p": "P4",
       "r": "2026-11-19",
       "x": null
+    },
+    {
+      "d": "DD-00017135",
+      "u": "LV.C001",
+      "s": "LIGHT VEHICLE, TOYOTA HILUX C395MH",
+      "p": "P4",
+      "r": "2026-11-19",
+      "x": "PM 10 000"
     },
     {
       "d": "DD-00017163",

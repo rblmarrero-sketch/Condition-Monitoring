@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-20T04:12:44+00:00",
+  "generated": "2026-11-20T04:27:56+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -5977,6 +5977,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022966"
     },
     {
+      "asset": "LV045",
+      "defect": "DD-00017204",
+      "raised": "2026-11-20",
+      "system": "LV045.ELS.ALT (Alternator / Генератор)",
+      "defectType": "4.04 Faulty power/voltage / Неверные показатели тока",
+      "descr": "Ремонт генератора",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022995"
+    },
+    {
       "asset": "GE009",
       "defect": "DD-00017189",
       "raised": "2026-11-20",
@@ -6302,19 +6315,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "LV.C001",
-      "defect": "DD-00017135",
-      "raised": "2026-11-19",
-      "system": "LIGHT VEHICLE, TOYOTA HILUX C395MH",
-      "defectType": "1.04 Abnormal noise / vibration Аномальный шум / вибрация",
-      "descr": "PM 10 000",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Ilshat Sabitov",
-      "regBy": "Сабитов Ильшат Рашидович",
-      "wo": "WO-022900"
-    },
-    {
       "asset": "EX021",
       "defect": "DD-00017120",
       "raised": "2026-11-19",
@@ -6430,6 +6430,19 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-022883"
+    },
+    {
+      "asset": "LV.C001",
+      "defect": "DD-00017135",
+      "raised": "2026-11-19",
+      "system": "LIGHT VEHICLE, TOYOTA HILUX C395MH",
+      "defectType": "1.04 Abnormal noise / vibration Аномальный шум / вибрация",
+      "descr": "PM 10 000",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Ilshat Sabitov",
+      "regBy": "Сабитов Ильшат Рашидович",
+      "wo": "WO-022900"
     },
     {
       "asset": "GR004",
@@ -57795,19 +57808,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
-      "wo": null
-    },
-    {
       "asset": "BS005",
       "defect": "DD-00011312",
       "raised": "2026-08-21",
@@ -57896,6 +57896,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
@@ -114939,6 +114952,25 @@ window.CM_WO_DATA = {
       "actualEnd": "2026-11-02"
     },
     {
+      "equip": "EX020",
+      "cls": "EXC",
+      "woNumber": "WO-022937",
+      "maintType": "500 Hours service Planned",
+      "hours": 500,
+      "cmLabel": "500h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-23",
+      "planStartDt": "2026-11-23T00:00:00",
+      "planEnd": "2026-11-23",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
       "equip": "EX021",
       "cls": "EXC",
       "woNumber": null,
@@ -119770,6 +119802,25 @@ window.CM_WO_DATA = {
       "actualStart": "2026-11-14",
       "actualStartDt": "2026-11-14T07:00:00",
       "actualEnd": "2026-11-14"
+    },
+    {
+      "equip": "GE020",
+      "cls": "GEN",
+      "woNumber": "WO-022817",
+      "maintType": "500 Hours service Planned",
+      "hours": 500,
+      "cmLabel": "500h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-23",
+      "planStartDt": "2026-11-23T00:00:00",
+      "planEnd": "2026-11-23",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
     },
     {
       "equip": "GE025",
@@ -145757,6 +145808,25 @@ window.CM_WO_DATA = {
       "actualEnd": "2026-11-15"
     },
     {
+      "equip": "LS041",
+      "cls": "GEN",
+      "woNumber": "WO-022821",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "250h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-23",
+      "planStartDt": "2026-11-23T00:00:00",
+      "planEnd": "2026-11-23",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
       "equip": "LS043",
       "cls": "GEN",
       "woNumber": null,
@@ -157900,6 +157970,30 @@ window.CM_WO_DATA = {
       "actualStart": "2026-08-05",
       "actualStartDt": "2026-08-05T19:00:00",
       "actualEnd": "2026-08-06"
+    },
+    {
+      "equip": "TK088",
+      "cls": "HT",
+      "woNumber": "WO-022798",
+      "maintType": "4000 Hours service Planned",
+      "hours": 4000,
+      "cmLabel": "Filter Cut / General Inspection / Magnetic Plug / Dump Body Liner",
+      "cmTypes": [
+        "FC",
+        "INSP",
+        "MP",
+        "TB"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-23",
+      "planStartDt": "2026-11-23T00:00:00",
+      "planEnd": "2026-11-23",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
     },
     {
       "equip": "TK089",
@@ -195903,6 +195997,25 @@ window.CM_WO_DATA = {
       "actualStart": "2026-10-29",
       "actualStartDt": "2026-10-29T09:00:00",
       "actualEnd": "2026-10-29"
+    },
+    {
+      "equip": "TK168",
+      "cls": "GEN",
+      "woNumber": "WO-022810",
+      "maintType": "500 Hours service Planned",
+      "hours": 500,
+      "cmLabel": "500h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-23",
+      "planStartDt": "2026-11-23T00:00:00",
+      "planEnd": "2026-11-23",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
     },
     {
       "equip": "WE001",
