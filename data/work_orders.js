@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-20T10:02:42+00:00",
+  "generated": "2026-11-20T10:22:41+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -6029,19 +6029,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022966"
     },
     {
-      "asset": "LV045",
-      "defect": "DD-00017204",
-      "raised": "2026-11-20",
-      "system": "LV045.ELS.ALT (Alternator / Генератор)",
-      "defectType": "4.04 Faulty power/voltage / Неверные показатели тока",
-      "descr": "Ремонт генератора",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022995"
-    },
-    {
       "asset": "GE009",
       "defect": "DD-00017189",
       "raised": "2026-11-20",
@@ -6482,6 +6469,19 @@ window.CM_WO_DATA = {
       "by": "Vladimir Ladik",
       "regBy": "Ладик Владимир Владимирович",
       "wo": "WO-023011"
+    },
+    {
+      "asset": "LV045",
+      "defect": "DD-00017204",
+      "raised": "2026-11-20",
+      "system": "LV045.ELS.ALT (Alternator / Генератор)",
+      "defectType": "4.04 Faulty power/voltage / Неверные показатели тока",
+      "descr": "Ремонт генератора",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022995"
     },
     {
       "asset": "DZ003",
