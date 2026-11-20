@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-20T03:12:46+00:00",
+  "generated": "2026-11-20T03:27:45+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -12672,19 +12672,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "LV054",
-      "defect": "DD-00016641",
-      "raised": "2026-11-10",
-      "system": "LV054.DRS.AXL (Axles / Мосты)",
-      "defectType": "4.12 Cable / harness damage / Повреждение кабеля / жгута",
-      "descr": "Диагностика\\ремонт актуатора полного привода, проверка\\замена датчиков АБС",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022410"
-    },
-    {
       "asset": "TK089",
       "defect": "DD-00016611",
       "raised": "2026-11-10",
@@ -13229,6 +13216,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022388"
+    },
+    {
+      "asset": "LV054",
+      "defect": "DD-00016641",
+      "raised": "2026-11-10",
+      "system": "LV054.DRS.AXL (Axles / Мосты)",
+      "defectType": "4.12 Cable / harness damage / Повреждение кабеля / жгута",
+      "descr": "Диагностика\\ремонт актуатора полного привода, проверка\\замена датчиков АБС",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022410"
     },
     {
       "asset": "LV123",
@@ -17690,6 +17690,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021697"
     },
     {
+      "asset": "TK040",
+      "defect": "DD-00016275",
+      "raised": "2026-11-04",
+      "system": "TK040.OC.HE (Heating / Отопление)",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "Отопитель не работает в 1-м положении",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022893"
+    },
+    {
       "asset": "WE004",
       "defect": "DD-00016297",
       "raised": "2026-11-04",
@@ -17761,19 +17774,6 @@ window.CM_WO_DATA = {
       "system": "TK091.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "утечка топлива. ВОДИТЕЛЬ НЕ ЗНАЕТ ОТКУДА.....",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "TK040",
-      "defect": "DD-00016275",
-      "raised": "2026-11-04",
-      "system": "TK040.OC.HE (Heating / Отопление)",
-      "defectType": "4.02 Open circuit / Разрыв цепи",
-      "descr": "Отопитель не работает в 1-м положении",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
