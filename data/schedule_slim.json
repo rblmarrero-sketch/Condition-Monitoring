@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-20T20:18:15+00:00",
+  "generated": "2026-11-20T20:33:37+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -1047,6 +1047,24 @@
       "completed": ""
     },
     {
+      "wo": "WO-023027",
+      "equip": "DZ011",
+      "cls": "DOZ",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-12-06",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-12-06",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-022986",
       "equip": "EX010",
       "cls": "EXC",
@@ -1506,6 +1524,24 @@
       "raised": "2026-11-28",
       "type": "8000 Hours service Planned",
       "hours": 8000,
+      "plan": "2026-11-28",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-022833",
+      "equip": "TK007",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "2000h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-28",
+      "type": "2000 Hours service Planned",
+      "hours": 2000,
       "plan": "2026-11-28",
       "status": "Elimination scheduled",
       "request": "",
@@ -11369,20 +11405,20 @@
       "x": "развалился карданый привод  левого колеса передней оси"
     },
     {
-      "d": "DD-00017215",
-      "u": "CR007",
-      "s": "CR007.DRS.ENG (Engine / Двигатель)",
-      "p": "P2",
-      "r": "2026-11-20",
-      "x": null
-    },
-    {
       "d": "DD-00017214",
       "u": "CR003",
       "s": "CR003.CRS.JAW (Jaw Crusher / Щековая дробилка)",
       "p": "P2",
       "r": "2026-11-20",
       "x": "Трещины на корпусе питмана"
+    },
+    {
+      "d": "DD-00017215",
+      "u": "CR007",
+      "s": "CR007.DRS.ENG (Engine / Двигатель)",
+      "p": "P2",
+      "r": "2026-11-20",
+      "x": "Поломка ДВС - замена"
     },
     {
       "d": "DD-00017120",
@@ -30849,20 +30885,20 @@
       "x": "ремонт стыков, и полотна тратранспортерной ленты"
     },
     {
-      "d": "DD-00017098",
-      "u": "TK133",
-      "s": "TK133.ELS.WH (Wiring Harness / Жгут проводов)",
-      "p": "P4",
-      "r": "2026-11-18",
-      "x": "Замена ДУТ (№ДУКЭП-Т-315-24/0,3-565)"
-    },
-    {
       "d": "DD-00017092",
       "u": "SN003",
       "s": "SN003.ELS.WH (Wiring Harness / Жгут проводов)",
       "p": "P4",
       "r": "2026-11-18",
       "x": "Отсутствует связь с силовым генератором и контроллером ( ориентровочно обрыв про"
+    },
+    {
+      "d": "DD-00017098",
+      "u": "TK133",
+      "s": "TK133.ELS.WH (Wiring Harness / Жгут проводов)",
+      "p": "P4",
+      "r": "2026-11-18",
+      "x": "Замена ДУТ (№ДУКЭП-Т-315-24/0,3-565)"
     },
     {
       "d": "DD-00017072",

@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-20T20:18:15+00:00",
+  "generated": "2026-11-20T20:33:37+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -6640,30 +6640,30 @@ window.CM_WO_DATA = {
       "wo": "WO-023023"
     },
     {
-      "asset": "CR007",
-      "defect": "DD-00017215",
-      "raised": "2026-11-20",
-      "system": "CR007.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
-      "descr": null,
-      "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": null
-    },
-    {
       "asset": "CR003",
       "defect": "DD-00017214",
       "raised": "2026-11-20",
       "system": "CR003.CRS.JAW (Jaw Crusher / Щековая дробилка)",
       "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "descr": "Трещины на корпусе питмана",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "priority": "P2 Urgent",
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": null
+      "wo": "WO-023024"
+    },
+    {
+      "asset": "CR007",
+      "defect": "DD-00017215",
+      "raised": "2026-11-20",
+      "system": "CR007.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "Поломка ДВС - замена",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-023026"
     },
     {
       "asset": "EX021",
@@ -7979,6 +7979,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022869"
     },
     {
+      "asset": "SN003",
+      "defect": "DD-00017092",
+      "raised": "2026-11-18",
+      "system": "SN003.ELS.WH (Wiring Harness / Жгут проводов)",
+      "defectType": "4.12 Cable / harness damage / Повреждение кабеля / жгута",
+      "descr": "Отсутствует связь с силовым генератором и контроллером ( ориентровочно обрыв провода)",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Nazmutdinov",
+      "regBy": "Назмутдинов Сергей Зуфарович",
+      "wo": "WO-022792"
+    },
+    {
       "asset": "TK133",
       "defect": "DD-00017098",
       "raised": "2026-11-18",
@@ -7989,19 +8002,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "SN003",
-      "defect": "DD-00017092",
-      "raised": "2026-11-18",
-      "system": "SN003.ELS.WH (Wiring Harness / Жгут проводов)",
-      "defectType": "4.12 Cable / harness damage / Повреждение кабеля / жгута",
-      "descr": "Отсутствует связь с силовым генератором и контроллером ( ориентровочно обрыв провода)",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Nazmutdinov",
-      "regBy": "Назмутдинов Сергей Зуфарович",
       "wo": null
     },
     {
@@ -102033,6 +102033,25 @@ window.CM_WO_DATA = {
       "actualEnd": null
     },
     {
+      "equip": "DZ011",
+      "cls": "DOZ",
+      "woNumber": "WO-023027",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "250h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-12-06",
+      "planStartDt": "2026-12-06T00:00:00",
+      "planEnd": "2026-12-06",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
       "equip": "DZ012",
       "cls": "DOZ",
       "woNumber": null,
@@ -151564,6 +151583,25 @@ window.CM_WO_DATA = {
       "actualStart": "2026-10-19",
       "actualStartDt": "2026-10-19T07:00:00",
       "actualEnd": "2026-10-19"
+    },
+    {
+      "equip": "TK007",
+      "cls": "GEN",
+      "woNumber": "WO-022833",
+      "maintType": "2000 Hours service Planned",
+      "hours": 2000,
+      "cmLabel": "2000h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-28",
+      "planStartDt": "2026-11-28T00:00:00",
+      "planEnd": "2026-11-28",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
     },
     {
       "equip": "TK027",
