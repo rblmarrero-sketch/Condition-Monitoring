@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-20T05:17:52+00:00",
+  "generated": "2026-11-20T05:38:13+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -245,6 +245,17 @@
         "priority": "P3 Planned (PM)"
       }
     ],
+    "TK027": [
+      {
+        "wo": "WO-022804",
+        "hours": 500,
+        "types": [
+          "MP"
+        ],
+        "plan": "2026-11-25",
+        "priority": "P3 Planned (PM)"
+      }
+    ],
     "TK034": [
       {
         "wo": "WO-022331",
@@ -281,6 +292,18 @@
       }
     ],
     "TK039": [
+      {
+        "wo": "WO-022800",
+        "hours": 4000,
+        "types": [
+          "FC",
+          "INSP",
+          "MP",
+          "TB"
+        ],
+        "plan": "2026-11-25",
+        "priority": "P3 Planned (PM)"
+      },
       {
         "wo": "WO-016283",
         "hours": 500,
@@ -1867,6 +1890,42 @@
       "completed": ""
     },
     {
+      "wo": "WO-022804",
+      "equip": "TK027",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-25",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-11-25",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-022800",
+      "equip": "TK039",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Filter Cut / General Inspection / Magnetic Plug / Dump Body Liner",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-25",
+      "type": "4000 Hours service Planned",
+      "hours": 4000,
+      "plan": "2026-11-25",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-021953",
       "equip": "TK122",
       "cls": "AT",
@@ -1894,6 +1953,24 @@
       "raised": "2026-11-25",
       "type": "250 Hours service Planned",
       "hours": 250,
+      "plan": "2026-11-25",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-022794",
+      "equip": "TK166",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "1000h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-25",
+      "type": "1000 Hours service Planned",
+      "hours": 1000,
       "plan": "2026-11-25",
       "status": "Elimination scheduled",
       "request": "",
@@ -10829,14 +10906,6 @@
       "x": "Утечка масла с турбокомпрессора"
     },
     {
-      "d": "DD-00017201",
-      "u": "CR008",
-      "s": "CR008.DRS.FUE (Fuel System / Топливная система)",
-      "p": "P2",
-      "r": "2026-11-20",
-      "x": "Замена насоса подкачки топлива"
-    },
-    {
       "d": "DD-00017197",
       "u": "TK155",
       "s": "TK155.OC.SE (Seat / Сиденье)",
@@ -10851,6 +10920,14 @@
       "p": "P2",
       "r": "2026-11-20",
       "x": "Регулировка кулисы"
+    },
+    {
+      "d": "DD-00017201",
+      "u": "CR008",
+      "s": "CR008.DRS.FUE (Fuel System / Топливная система)",
+      "p": "P2",
+      "r": "2026-11-20",
+      "x": "Замена насоса подкачки топлива"
     },
     {
       "d": "DD-00017202",
@@ -30029,6 +30106,22 @@
       "x": "Утечка гидравлической жидкости по штоку"
     },
     {
+      "d": "DD-00017207",
+      "u": "TK104",
+      "s": "TK104.HS.DL (Hydraulic Lines / Гидролинии)",
+      "p": "P4",
+      "r": "2026-11-20",
+      "x": "Течь РВД подьема-опускания кузова."
+    },
+    {
+      "d": "DD-00017206",
+      "u": "TK104",
+      "s": "TK104.CH.BY (Dump Body / Самосвальный кузов)",
+      "p": "P4",
+      "r": "2026-11-20",
+      "x": "Трещины на кузове"
+    },
+    {
       "d": "DD-00017187",
       "u": "DZ003",
       "s": "DZ003.ELS.LIG (Head Lighting System / Система головного освещения)",
@@ -36429,20 +36522,20 @@
       "x": "Замена ФОВ"
     },
     {
-      "d": "DD-00014971",
-      "u": "EX006",
-      "s": "EX006.HS.MP (Hydraulic Pumps / Гидронасосы)",
-      "p": "P4",
-      "r": "2026-10-17",
-      "x": "каплевидная утечка по гидронасосу"
-    },
-    {
       "d": "DD-00014962",
       "u": "LS048",
       "s": "LS048.ELS.MW (Machine Wiring / Электропроводка машины)",
       "p": "P4",
       "r": "2026-10-17",
       "x": "Замена АКБ"
+    },
+    {
+      "d": "DD-00014971",
+      "u": "EX006",
+      "s": "EX006.HS.MP (Hydraulic Pumps / Гидронасосы)",
+      "p": "P4",
+      "r": "2026-10-17",
+      "x": "каплевидная утечка по гидронасосу"
     },
     {
       "d": "DD-00014966",

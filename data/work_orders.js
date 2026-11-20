@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-20T05:17:52+00:00",
+  "generated": "2026-11-20T05:38:13+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -443,13 +443,13 @@ window.CM_WO_DATA = {
     "regBy": "Contact person initiator WR"
   },
   "cmDateFrom": {
-    "raised": 211,
+    "raised": 213,
     "detected": 0,
     "planStart": 0
   },
   "cmCauseFrom": {
     "wo": 131,
-    "wr": 80,
+    "wr": 82,
     "cert": 0,
     "none": 0
   },
@@ -462,6 +462,58 @@ window.CM_WO_DATA = {
     "Bekzhan"
   ],
   "cmWorkOrders": [
+    {
+      "date": "2026-11-20",
+      "dateFrom": "raised",
+      "raised": "2026-11-20",
+      "detected": "2026-11-20",
+      "planStart": null,
+      "closed": null,
+      "asset": "TK104",
+      "defect": "DD-00017207",
+      "requestNo": "DD-00017207",
+      "eqType": "TRUCK, ARTICULATED",
+      "system": "TK104.HS.DL (Hydraulic Lines / Гидролинии)",
+      "priority": "P4 Planned (Repair)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Поврежден прокладки",
+      "causeFrom": "wr",
+      "descr": "Течь РВД подьема-опускания кузова.",
+      "status": "Registered",
+      "by": "Slam",
+      "byFull": "Slam Taganov",
+      "regBy": "Таганов Слам Джумамуратович",
+      "raisedBy": "ГДК Баимская",
+      "woNumber": null,
+      "maintType": null,
+      "planned": false
+    },
+    {
+      "date": "2026-11-20",
+      "dateFrom": "raised",
+      "raised": "2026-11-20",
+      "detected": "2026-11-20",
+      "planStart": null,
+      "closed": null,
+      "asset": "TK104",
+      "defect": "DD-00017206",
+      "requestNo": "DD-00017206",
+      "eqType": "TRUCK, ARTICULATED",
+      "system": "TK104.CH.BY (Dump Body / Самосвальный кузов)",
+      "priority": "P4 Planned (Repair)",
+      "defectType": "2.01 Wear / Износ",
+      "cause": "Абразивный износ",
+      "causeFrom": "wr",
+      "descr": "Трещины на кузове",
+      "status": "Registered",
+      "by": "Slam",
+      "byFull": "Slam Taganov",
+      "regBy": "Таганов Слам Джумамуратович",
+      "raisedBy": "ГДК Баимская",
+      "woNumber": null,
+      "maintType": null,
+      "planned": false
+    },
     {
       "date": "2026-11-18",
       "dateFrom": "raised",
@@ -6237,19 +6289,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022977"
     },
     {
-      "asset": "CR008",
-      "defect": "DD-00017201",
-      "raised": "2026-11-20",
-      "system": "CR008.DRS.FUE (Fuel System / Топливная система)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Замена насоса подкачки топлива",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Pavel Kostin",
-      "regBy": "Костин Павел Александрович",
-      "wo": "WO-022991"
-    },
-    {
       "asset": "TK155",
       "defect": "DD-00017197",
       "raised": "2026-11-20",
@@ -6274,6 +6313,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022982"
+    },
+    {
+      "asset": "CR008",
+      "defect": "DD-00017201",
+      "raised": "2026-11-20",
+      "system": "CR008.DRS.FUE (Fuel System / Топливная система)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Замена насоса подкачки топлива",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": "WO-022991"
     },
     {
       "asset": "LD006",
@@ -33810,12 +33862,12 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "EX006",
-      "defect": "DD-00014971",
+      "asset": "LS048",
+      "defect": "DD-00014962",
       "raised": "2026-10-17",
-      "system": "EX006.HS.MP (Hydraulic Pumps / Гидронасосы)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "каплевидная утечка по гидронасосу",
+      "system": "LS048.ELS.MW (Machine Wiring / Электропроводка машины)",
+      "defectType": "4.14 Battery / starting circuit fault / Неисправность аккумулятора / цепи пуска",
+      "descr": "Замена АКБ",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -33823,12 +33875,12 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "LS048",
-      "defect": "DD-00014962",
+      "asset": "EX006",
+      "defect": "DD-00014971",
       "raised": "2026-10-17",
-      "system": "LS048.ELS.MW (Machine Wiring / Электропроводка машины)",
-      "defectType": "4.14 Battery / starting circuit fault / Неисправность аккумулятора / цепи пуска",
-      "descr": "Замена АКБ",
+      "system": "EX006.HS.MP (Hydraulic Pumps / Гидронасосы)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "каплевидная утечка по гидронасосу",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -151279,6 +151331,27 @@ window.CM_WO_DATA = {
       "actualEnd": "2026-11-02"
     },
     {
+      "equip": "TK027",
+      "cls": "HT",
+      "woNumber": "WO-022804",
+      "maintType": "500 Hours service Planned",
+      "hours": 500,
+      "cmLabel": "Magnetic Plug",
+      "cmTypes": [
+        "MP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-25",
+      "planStartDt": "2026-11-25T00:00:00",
+      "planEnd": "2026-11-25",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
       "equip": "TK029",
       "cls": "HT",
       "woNumber": null,
@@ -154810,6 +154883,30 @@ window.CM_WO_DATA = {
       "actualStart": "2026-08-07",
       "actualStartDt": "2026-08-07T01:00:00",
       "actualEnd": "2026-08-07"
+    },
+    {
+      "equip": "TK039",
+      "cls": "HT",
+      "woNumber": "WO-022800",
+      "maintType": "4000 Hours service Planned",
+      "hours": 4000,
+      "cmLabel": "Filter Cut / General Inspection / Magnetic Plug / Dump Body Liner",
+      "cmTypes": [
+        "FC",
+        "INSP",
+        "MP",
+        "TB"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-25",
+      "planStartDt": "2026-11-25T00:00:00",
+      "planEnd": "2026-11-25",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
     },
     {
       "equip": "TK039",
@@ -195392,6 +195489,25 @@ window.CM_WO_DATA = {
       "actualStart": "2026-11-03",
       "actualStartDt": "2026-11-03T03:00:00",
       "actualEnd": "2026-11-03"
+    },
+    {
+      "equip": "TK166",
+      "cls": "GEN",
+      "woNumber": "WO-022794",
+      "maintType": "1000 Hours service Planned",
+      "hours": 1000,
+      "cmLabel": "1000h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-25",
+      "planStartDt": "2026-11-25T00:00:00",
+      "planEnd": "2026-11-25",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
     },
     {
       "equip": "TK167",
