@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-20T12:07:43+00:00",
+  "generated": "2026-11-20T12:27:42+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -6009,7 +6009,7 @@ window.CM_WO_DATA = {
       "system": "HX041.OC.CO (Console / Консоль)",
       "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
       "descr": "Воспламеняется, недолго поработав, гаснет. Уходит в ошибку.",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
@@ -6113,7 +6113,7 @@ window.CM_WO_DATA = {
       "system": "BS003.OC.HE (Heating / Отопление)",
       "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
       "descr": "Не работают автономные отопители в пассажирском салоне.",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
@@ -6178,7 +6178,7 @@ window.CM_WO_DATA = {
       "system": "EX002.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
       "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
       "descr": "Неисправность фары светового сигнала.",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
@@ -6204,7 +6204,7 @@ window.CM_WO_DATA = {
       "system": "TK168.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
       "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
       "descr": "Неисправность головного света.",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
@@ -6243,7 +6243,7 @@ window.CM_WO_DATA = {
       "system": "BS017.OC.HE (Heating / Отопление)",
       "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
       "descr": "Не работает автономный отопитель в кунге.",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
@@ -6458,19 +6458,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023010"
     },
     {
-      "asset": "TK124",
-      "defect": "DD-00017218",
-      "raised": "2026-11-20",
-      "system": "TK124.DRS.FUE (Fuel System / Топливная система)",
-      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
-      "descr": "Низкое давление топрливной системы",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Vladimir Ladik",
-      "regBy": "Ладик Владимир Владимирович",
-      "wo": "WO-023011"
-    },
-    {
       "asset": "LV045",
       "defect": "DD-00017204",
       "raised": "2026-11-20",
@@ -6508,6 +6495,19 @@ window.CM_WO_DATA = {
       "by": "Viktor Bernikov",
       "regBy": "Берников Виктор Викторович",
       "wo": "WO-023013"
+    },
+    {
+      "asset": "TK124",
+      "defect": "DD-00017218",
+      "raised": "2026-11-20",
+      "system": "TK124.DRS.FUE (Fuel System / Топливная система)",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "Низкое давление топрливной системы",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Vladimir Ladik",
+      "regBy": "Ладик Владимир Владимирович",
+      "wo": "WO-023011"
     },
     {
       "asset": "DZ003",
