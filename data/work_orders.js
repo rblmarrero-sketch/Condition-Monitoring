@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-20T02:13:04+00:00",
+  "generated": "2026-11-20T02:27:45+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -6484,19 +6484,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022940"
     },
     {
-      "asset": "WE004",
-      "defect": "DD-00017116",
-      "raised": "2026-11-19",
-      "system": "WE004.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
-      "descr": "Плавают обороты ДВС, глохнет под нагрузкой",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Viktor Bernikov",
-      "regBy": "Берников Виктор Викторович",
-      "wo": "WO-022871"
-    },
-    {
       "asset": "CN001",
       "defect": "DD-00017132",
       "raised": "2026-11-19",
@@ -6768,6 +6755,19 @@ window.CM_WO_DATA = {
       "by": "Viktor Bernikov",
       "regBy": "Берников Виктор Викторович",
       "wo": "WO-022885"
+    },
+    {
+      "asset": "WE004",
+      "defect": "DD-00017116",
+      "raised": "2026-11-19",
+      "system": "WE004.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "Плавают обороты ДВС, глохнет под нагрузкой",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Viktor Bernikov",
+      "regBy": "Берников Виктор Викторович",
+      "wo": "WO-022871"
     },
     {
       "asset": "TK096",
@@ -10689,7 +10689,7 @@ window.CM_WO_DATA = {
       "system": "TK103.DRS.AXL (Axles / Мосты)",
       "defectType": "1.06 Deformation / bending / buckling Деформация / изгиб / коробление",
       "descr": "неисправность карданного вала",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
@@ -11177,19 +11177,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022472"
     },
     {
-      "asset": "EX012",
-      "defect": "DD-00016746",
-      "raised": "2026-11-12",
-      "system": "EX012.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Требуется замена фар на светодиодные",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": "WO-022456"
-    },
-    {
       "asset": "DZ009",
       "defect": "DD-00016779",
       "raised": "2026-11-12",
@@ -11222,7 +11209,7 @@ window.CM_WO_DATA = {
       "system": "TK016.BS.HOS (Hoses and Piping / Шланги и трубопроводы)",
       "defectType": "1.06 Deformation / bending / buckling Деформация / изгиб / коробление",
       "descr": "неисправен  пистолет для раздачи масла",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
@@ -11734,6 +11721,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022453"
+    },
+    {
+      "asset": "EX012",
+      "defect": "DD-00016746",
+      "raised": "2026-11-12",
+      "system": "EX012.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Требуется замена фар на светодиодные",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-022456"
     },
     {
       "asset": "LS053",
