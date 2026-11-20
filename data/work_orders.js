@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-20T09:13:01+00:00",
+  "generated": "2026-11-20T09:27:42+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -6469,6 +6469,19 @@ window.CM_WO_DATA = {
       "by": "Vladimir Ladik",
       "regBy": "Ладик Владимир Владимирович",
       "wo": "WO-023010"
+    },
+    {
+      "asset": "TK124",
+      "defect": "DD-00017218",
+      "raised": "2026-11-20",
+      "system": "TK124.DRS.FUE (Fuel System / Топливная система)",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "Низкое давление топрливной системы",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Vladimir Ladik",
+      "regBy": "Ладик Владимир Владимирович",
+      "wo": "WO-023011"
     },
     {
       "asset": "DZ003",
@@ -33992,12 +34005,12 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "EX006",
-      "defect": "DD-00014971",
+      "asset": "LS048",
+      "defect": "DD-00014962",
       "raised": "2026-10-17",
-      "system": "EX006.HS.MP (Hydraulic Pumps / Гидронасосы)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "каплевидная утечка по гидронасосу",
+      "system": "LS048.ELS.MW (Machine Wiring / Электропроводка машины)",
+      "defectType": "4.14 Battery / starting circuit fault / Неисправность аккумулятора / цепи пуска",
+      "descr": "Замена АКБ",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -34005,12 +34018,12 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "LS048",
-      "defect": "DD-00014962",
+      "asset": "EX006",
+      "defect": "DD-00014971",
       "raised": "2026-10-17",
-      "system": "LS048.ELS.MW (Machine Wiring / Электропроводка машины)",
-      "defectType": "4.14 Battery / starting circuit fault / Неисправность аккумулятора / цепи пуска",
-      "descr": "Замена АКБ",
+      "system": "EX006.HS.MP (Hydraulic Pumps / Гидронасосы)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "каплевидная утечка по гидронасосу",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -58003,19 +58016,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
-      "wo": null
-    },
-    {
       "asset": "BS005",
       "defect": "DD-00011312",
       "raised": "2026-08-21",
@@ -58104,6 +58104,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
