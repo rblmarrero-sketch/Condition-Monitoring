@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-20T23:08:55+00:00",
+  "generated": "2026-11-20T23:22:58+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -6003,6 +6003,19 @@ window.CM_WO_DATA = {
   ],
   "otherDefects": [
     {
+      "asset": "CN018",
+      "defect": "DD-00017238",
+      "raised": "2026-11-21",
+      "system": "CN018.CH.BOO (Boom / Стрела)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Замена смаки полиспаста",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023040"
+    },
+    {
       "asset": "TK098",
       "defect": "DD-00017224",
       "raised": "2026-11-21",
@@ -6464,7 +6477,7 @@ window.CM_WO_DATA = {
       "system": "TK111.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Утечка масла с турбокомпрессора",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
@@ -6503,7 +6516,7 @@ window.CM_WO_DATA = {
       "system": "TK155.OC.SE (Seat / Сиденье)",
       "defectType": "1.06 Deformation / bending / buckling Деформация / изгиб / коробление",
       "descr": "Неисправен ремень безопасности",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
@@ -6841,7 +6854,7 @@ window.CM_WO_DATA = {
       "system": "DZ003.CH.RP (Ripper / Рыхлитель)",
       "defectType": "1.06 Deformation / bending / buckling Деформация / изгиб / коробление",
       "descr": "износ пальцев крепления защиты",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
@@ -7036,7 +7049,7 @@ window.CM_WO_DATA = {
       "system": "TK105.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
       "descr": "Ошибка по давлению топлива",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
@@ -7088,7 +7101,7 @@ window.CM_WO_DATA = {
       "system": "LD013.DRS.FS (Fuel System / Топливная система)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Неисправность топливной системы",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
