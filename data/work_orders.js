@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-20T16:02:47+00:00",
+  "generated": "2026-11-20T16:22:54+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -6055,6 +6055,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023016"
     },
     {
+      "asset": "EX021",
+      "defect": "DD-00017227",
+      "raised": "2026-11-21",
+      "system": "EX021.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "РВД распределителя - утечка масла",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Vladimir Ladik",
+      "regBy": "Ладик Владимир Владимирович",
+      "wo": "WO-023020"
+    },
+    {
       "asset": "HX041",
       "defect": "DD-00017177",
       "raised": "2026-11-20",
@@ -6510,17 +6523,17 @@ window.CM_WO_DATA = {
       "wo": "WO-022995"
     },
     {
-      "asset": "TK143",
-      "defect": "DD-00017216",
+      "asset": "TK124",
+      "defect": "DD-00017218",
       "raised": "2026-11-20",
-      "system": "TK143.DRS.AXL (Axles / Мосты)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "развалился карданый привод  левого колеса передней оси",
+      "system": "TK124.DRS.FUE (Fuel System / Топливная система)",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "Низкое давление топрливной системы",
       "status": "Elimination scheduled",
       "priority": "P2 Urgent",
       "by": "Vladimir Ladik",
       "regBy": "Ладик Владимир Владимирович",
-      "wo": "WO-023010"
+      "wo": "WO-023011"
     },
     {
       "asset": "CD007",
@@ -6562,19 +6575,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023014"
     },
     {
-      "asset": "TK124",
-      "defect": "DD-00017218",
-      "raised": "2026-11-20",
-      "system": "TK124.DRS.FUE (Fuel System / Топливная система)",
-      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
-      "descr": "Низкое давление топрливной системы",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Vladimir Ladik",
-      "regBy": "Ладик Владимир Владимирович",
-      "wo": "WO-023011"
-    },
-    {
       "asset": "CD003",
       "defect": "DD-00017222",
       "raised": "2026-11-20",
@@ -6586,6 +6586,19 @@ window.CM_WO_DATA = {
       "by": "Viktor Bernikov",
       "regBy": "Берников Виктор Викторович",
       "wo": "WO-023015"
+    },
+    {
+      "asset": "TK143",
+      "defect": "DD-00017216",
+      "raised": "2026-11-20",
+      "system": "TK143.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "развалился карданый привод  левого колеса передней оси",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Vladimir Ladik",
+      "regBy": "Ладик Владимир Владимирович",
+      "wo": "WO-023010"
     },
     {
       "asset": "DZ003",
