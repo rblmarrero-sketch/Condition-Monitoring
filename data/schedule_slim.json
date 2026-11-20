@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-20T20:48:11+00:00",
+  "generated": "2026-11-20T21:03:01+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -265,6 +265,20 @@
           "MP"
         ],
         "plan": "2026-11-25",
+        "priority": "P3 Planned (PM)"
+      }
+    ],
+    "TK033": [
+      {
+        "wo": "WO-022803",
+        "hours": 4000,
+        "types": [
+          "FC",
+          "INSP",
+          "MP",
+          "TB"
+        ],
+        "plan": "2026-11-28",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -1101,6 +1115,24 @@
       "completed": ""
     },
     {
+      "wo": "WO-023028",
+      "equip": "DZ016",
+      "cls": "DOZ",
+      "comp": "",
+      "desc": "500h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-12-05",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-12-05",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-022142",
       "equip": "TK149",
       "cls": "HT",
@@ -1219,6 +1251,24 @@
       "type": "1000 Hours service Planned",
       "hours": 1000,
       "plan": "2026-12-02",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-023031",
+      "equip": "DZ021",
+      "cls": "DOZ",
+      "comp": "",
+      "desc": "500h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-12-01",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-12-01",
       "status": "Elimination scheduled",
       "request": "",
       "defType": "",
@@ -1533,6 +1583,24 @@
       "completed": ""
     },
     {
+      "wo": "WO-022824",
+      "equip": "LS037",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-28",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-11-28",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-022833",
       "equip": "TK007",
       "cls": "GEN",
@@ -1542,6 +1610,24 @@
       "raised": "2026-11-28",
       "type": "2000 Hours service Planned",
       "hours": 2000,
+      "plan": "2026-11-28",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-022803",
+      "equip": "TK033",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Filter Cut / General Inspection / Magnetic Plug / Dump Body Liner",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-28",
+      "type": "4000 Hours service Planned",
+      "hours": 4000,
       "plan": "2026-11-28",
       "status": "Elimination scheduled",
       "request": "",
@@ -34437,20 +34523,20 @@
       "x": "Монтаж и подключение розетки 220В"
     },
     {
-      "d": "DD-00015814",
-      "u": "EX005",
-      "s": "EX005.HS.DL (Hydraulic Lines / Гидролинии)",
-      "p": "P4",
-      "r": "2026-10-28",
-      "x": "каплевидная утечка масла по соединению ДВС и гидромотора, устранение утечки"
-    },
-    {
       "d": "DD-00015813",
       "u": "GE111",
       "s": "GE111.DRS.ENG (Engine / Двигатель)",
       "p": "P4",
       "r": "2026-10-28",
       "x": "замена крышки горловины радиатора ОЖ."
+    },
+    {
+      "d": "DD-00015814",
+      "u": "EX005",
+      "s": "EX005.HS.DL (Hydraulic Lines / Гидролинии)",
+      "p": "P4",
+      "r": "2026-10-28",
+      "x": "каплевидная утечка масла по соединению ДВС и гидромотора, устранение утечки"
     },
     {
       "d": "DD-00015821",

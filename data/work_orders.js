@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-20T20:48:11+00:00",
+  "generated": "2026-11-20T21:03:01+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -23709,19 +23709,6 @@ window.CM_WO_DATA = {
       "wo": "WO-021139"
     },
     {
-      "asset": "EX005",
-      "defect": "DD-00015814",
-      "raised": "2026-10-28",
-      "system": "EX005.HS.DL (Hydraulic Lines / Гидролинии)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "каплевидная утечка масла по соединению ДВС и гидромотора, устранение утечки",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022376"
-    },
-    {
       "asset": "GE111",
       "defect": "DD-00015813",
       "raised": "2026-10-28",
@@ -23733,6 +23720,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-021738"
+    },
+    {
+      "asset": "EX005",
+      "defect": "DD-00015814",
+      "raised": "2026-10-28",
+      "system": "EX005.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "каплевидная утечка масла по соединению ДВС и гидромотора, устранение утечки",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022376"
     },
     {
       "asset": "DZ021",
@@ -102892,6 +102892,25 @@ window.CM_WO_DATA = {
       "actualEnd": "2026-11-08"
     },
     {
+      "equip": "DZ016",
+      "cls": "DOZ",
+      "woNumber": "WO-023028",
+      "maintType": "500 Hours service Planned",
+      "hours": 500,
+      "cmLabel": "500h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-12-05",
+      "planStartDt": "2026-12-05T00:00:00",
+      "planEnd": "2026-12-05",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
       "equip": "DZ017",
       "cls": "DOZ",
       "woNumber": "WO-010009",
@@ -103664,6 +103683,25 @@ window.CM_WO_DATA = {
       "planStart": "2026-11-22",
       "planStartDt": "2026-11-22T00:00:00",
       "planEnd": "2026-11-22",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
+      "equip": "DZ021",
+      "cls": "DOZ",
+      "woNumber": "WO-023031",
+      "maintType": "500 Hours service Planned",
+      "hours": 500,
+      "cmLabel": "500h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-12-01",
+      "planStartDt": "2026-12-01T00:00:00",
+      "planEnd": "2026-12-01",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -145801,6 +145839,25 @@ window.CM_WO_DATA = {
       "actualEnd": null
     },
     {
+      "equip": "LS037",
+      "cls": "GEN",
+      "woNumber": "WO-022824",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "250h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-28",
+      "planStartDt": "2026-11-28T00:00:00",
+      "planEnd": "2026-11-28",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
       "equip": "LS038",
       "cls": "GEN",
       "woNumber": null,
@@ -153549,6 +153606,30 @@ window.CM_WO_DATA = {
       "actualStart": "2026-10-16",
       "actualStartDt": "2026-10-16T07:00:00",
       "actualEnd": "2026-10-16"
+    },
+    {
+      "equip": "TK033",
+      "cls": "HT",
+      "woNumber": "WO-022803",
+      "maintType": "4000 Hours service Planned",
+      "hours": 4000,
+      "cmLabel": "Filter Cut / General Inspection / Magnetic Plug / Dump Body Liner",
+      "cmTypes": [
+        "FC",
+        "INSP",
+        "MP",
+        "TB"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-28",
+      "planStartDt": "2026-11-28T00:00:00",
+      "planEnd": "2026-11-28",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
     },
     {
       "equip": "TK034",
