@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-20T00:43:42+00:00",
+  "generated": "2026-11-20T00:57:59+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -9929,19 +9929,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022542"
     },
     {
-      "asset": "EX011",
-      "defect": "DD-00016862",
-      "raised": "2026-11-14",
-      "system": "EX011.CH.BUC (Bucket / Ковш)",
-      "defectType": "2.06 Abrasive wear / Абразивный износ",
-      "descr": "Износ коронок ковша",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksandr Golovko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": "WO-022546"
-    },
-    {
       "asset": "TK005",
       "defect": "DD-00016855",
       "raised": "2026-11-14",
@@ -9966,6 +9953,19 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-022529"
+    },
+    {
+      "asset": "EX011",
+      "defect": "DD-00016862",
+      "raised": "2026-11-14",
+      "system": "EX011.CH.BUC (Bucket / Ковш)",
+      "defectType": "2.06 Abrasive wear / Абразивный износ",
+      "descr": "Износ коронок ковша",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-022546"
     },
     {
       "asset": "TK034",
