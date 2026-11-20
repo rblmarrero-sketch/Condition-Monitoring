@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-20T07:42:38+00:00",
+  "generated": "2026-11-20T07:57:39+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -6185,19 +6185,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022963"
     },
     {
-      "asset": "EX006",
-      "defect": "DD-00017190",
-      "raised": "2026-11-20",
-      "system": "EX006.CH.BUC (Bucket / Ковш)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Износ каронок",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Viktor Bernikov",
-      "regBy": "Берников Виктор Викторович",
-      "wo": "WO-022969"
-    },
-    {
       "asset": "EX002",
       "defect": "DD-00017191",
       "raised": "2026-11-20",
@@ -6235,6 +6222,19 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-022972"
+    },
+    {
+      "asset": "EX006",
+      "defect": "DD-00017190",
+      "raised": "2026-11-20",
+      "system": "EX006.CH.BUC (Bucket / Ковш)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Износ каронок",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Viktor Bernikov",
+      "regBy": "Берников Виктор Викторович",
+      "wo": "WO-022969"
     },
     {
       "asset": "EX006",
@@ -6455,6 +6455,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
+      "wo": null
+    },
+    {
+      "asset": "CR003",
+      "defect": "DD-00017214",
+      "raised": "2026-11-20",
+      "system": "CR003.CRS.JAW (Jaw Crusher / Щековая дробилка)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Трещины на корпусе питмана",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
       "wo": null
     },
     {
