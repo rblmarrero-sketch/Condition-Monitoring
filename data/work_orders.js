@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-20T01:17:53+00:00",
+  "generated": "2026-11-20T01:38:03+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -6263,6 +6263,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "LV.C001",
+      "defect": "DD-00017135",
+      "raised": "2026-11-19",
+      "system": "LIGHT VEHICLE, TOYOTA HILUX C395MH",
+      "defectType": "1.04 Abnormal noise / vibration Аномальный шум / вибрация",
+      "descr": "PM 10 000",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Ilshat Sabitov",
+      "regBy": "Сабитов Ильшат Рашидович",
+      "wo": "WO-022900"
+    },
+    {
       "asset": "EX021",
       "defect": "DD-00017120",
       "raised": "2026-11-19",
@@ -6430,19 +6443,6 @@ window.CM_WO_DATA = {
       "by": "Viktor Bernikov",
       "regBy": "Берников Виктор Викторович",
       "wo": "WO-022886"
-    },
-    {
-      "asset": "LV.C001",
-      "defect": "DD-00017135",
-      "raised": "2026-11-19",
-      "system": "LIGHT VEHICLE, TOYOTA HILUX C395MH",
-      "defectType": "1.04 Abnormal noise / vibration Аномальный шум / вибрация",
-      "descr": "PM 10 000",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Ilshat Sabitov",
-      "regBy": "Сабитов Ильшат Рашидович",
-      "wo": "WO-022900"
     },
     {
       "asset": "GE088",
@@ -60200,6 +60200,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "TK040",
+      "defect": "DD-00009403",
+      "raised": "2026-07-22",
+      "system": "TK040.OC.HE (Heating / Отопление)",
+      "defectType": "5.02 Contamination / Contamination",
+      "descr": "Требуется замена салонного фильтра",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": "WO-022891"
+    },
+    {
       "asset": "BS003",
       "defect": "DD-00009374",
       "raised": "2026-07-22",
@@ -60245,19 +60258,6 @@ window.CM_WO_DATA = {
       "system": "TK037.OC (Operator Cab / Кабина оператора)",
       "defectType": "2.01 Wear / Износ",
       "descr": "Требуется замена газовых упоров капота кабины",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": null
-    },
-    {
-      "asset": "TK040",
-      "defect": "DD-00009403",
-      "raised": "2026-07-22",
-      "system": "TK040.OC.HE (Heating / Отопление)",
-      "defectType": "5.02 Contamination / Contamination",
-      "descr": "Требуется замена салонного фильтра",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -154816,7 +154816,7 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "CRTD",
+      "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
       "planStart": "2026-11-23",
