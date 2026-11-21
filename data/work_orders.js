@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-21T22:42:56+00:00",
+  "generated": "2026-11-21T22:57:55+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6084,7 +6084,7 @@ window.CM_WO_DATA = {
       "asset": "TK143",
       "defect": "DD-00017294",
       "raised": "2026-11-22",
-      "system": "TK143 HM400 KOMATSU",
+      "system": "TK143.DRS.TRA (Transmission / Трансмиссия)",
       "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "descr": "Разрушение привода бортового редуктора",
       "status": "Elimination scheduled",
@@ -6092,6 +6092,19 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-023072"
+    },
+    {
+      "asset": "TK133",
+      "defect": "DD-00017295",
+      "raised": "2026-11-22",
+      "system": "TK133.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Разрушение подшипника привода вентилятора",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023073"
     },
     {
       "asset": "CN014",
@@ -6565,7 +6578,7 @@ window.CM_WO_DATA = {
       "asset": "LV124",
       "defect": "DD-00017246",
       "raised": "2026-11-21",
-      "system": "Пикап FENGDU P15MC ZN1032UCM5/LV124 FengDu_P15MC DONGFENG",
+      "system": "LV124.ELS.RPS (Radio Power System / Система питания радиосвязи)",
       "defectType": "4.02 Open circuit / Разрыв цепи",
       "descr": "Произвести установку антенны и подключение радиостанции",
       "status": "Registered",
@@ -6604,7 +6617,7 @@ window.CM_WO_DATA = {
       "asset": "TK098",
       "defect": "DD-00017256",
       "raised": "2026-11-21",
-      "system": "TK098 4672M1-20 URAL",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK098 HOSES AND PIPING OldNumber (UT098)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Утечка воздуха из системы (район задних мостов)",
       "status": "Registered",
@@ -7277,6 +7290,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022999"
     },
     {
+      "asset": "DZ001",
+      "defect": "DD-00017208",
+      "raised": "2026-11-20",
+      "system": "DZ001.ELS.AS (Alarm System / Система сигнализации)",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "Неисправен звуковой сигнал",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-022997"
+    },
+    {
       "asset": "TK085",
       "defect": "DD-00017210",
       "raised": "2026-11-20",
@@ -7301,19 +7327,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022996"
-    },
-    {
-      "asset": "DZ001",
-      "defect": "DD-00017208",
-      "raised": "2026-11-20",
-      "system": "DZ001.ELS.AS (Alarm System / Система сигнализации)",
-      "defectType": "4.02 Open circuit / Разрыв цепи",
-      "descr": "Неисправен звуковой сигнал",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": "WO-022997"
     },
     {
       "asset": "TK035",
@@ -33186,6 +33199,32 @@ window.CM_WO_DATA = {
       "wo": "WO-021727"
     },
     {
+      "asset": "TK033",
+      "defect": "DD-00015146",
+      "raised": "2026-10-19",
+      "system": "TK033.OC.GL (Glass / Стекла)",
+      "defectType": "4.01 Short circuiting / Короткое замыкание",
+      "descr": "Не работает подогрев зеркала",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022928"
+    },
+    {
+      "asset": "TK033",
+      "defect": "DD-00015148",
+      "raised": "2026-10-19",
+      "system": "TK033.SS.HOS (Hoses and Piping / Шланги и трубопроводы)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь шланга ГУР",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022927"
+    },
+    {
       "asset": "LV120",
       "defect": "DD-00015138",
       "raised": "2026-10-19",
@@ -33339,32 +33378,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Evgeniy Frolin",
       "regBy": "Фролин Евгений Владимирович",
-      "wo": null
-    },
-    {
-      "asset": "TK033",
-      "defect": "DD-00015148",
-      "raised": "2026-10-19",
-      "system": "TK033.SS.HOS (Hoses and Piping / Шланги и трубопроводы)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь шланга ГУР",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "TK033",
-      "defect": "DD-00015146",
-      "raised": "2026-10-19",
-      "system": "TK033.OC.GL (Glass / Стекла)",
-      "defectType": "4.01 Short circuiting / Короткое замыкание",
-      "descr": "Не работает подогрев зеркала",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
       "wo": null
     },
     {
@@ -45406,6 +45419,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022895"
     },
     {
+      "asset": "TK033",
+      "defect": "DD-00014074",
+      "raised": "2026-10-05",
+      "system": "TK033.OC (Operator Cab / Кабина оператора)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Сломаны замки капота",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": "WO-022929"
+    },
+    {
       "asset": "TK162",
       "defect": "DD-00014083",
       "raised": "2026-10-05",
@@ -45711,19 +45737,6 @@ window.CM_WO_DATA = {
       "system": "BS007.DRS.AXL (Axles / Мосты)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Запотевание сальника хвостовика заднего моста",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": null
-    },
-    {
-      "asset": "TK033",
-      "defect": "DD-00014074",
-      "raised": "2026-10-05",
-      "system": "TK033.OC (Operator Cab / Кабина оператора)",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "Сломаны замки капота",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
