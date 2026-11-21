@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-21T13:37:50+00:00",
+  "generated": "2026-11-21T13:57:40+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -6404,6 +6404,32 @@ window.CM_WO_DATA = {
       "by": "Aleksey Khalezin",
       "regBy": "Халезин Алексей Георгиевич",
       "wo": "WO-023057"
+    },
+    {
+      "asset": "EX016",
+      "defect": "DD-00017284",
+      "raised": "2026-11-21",
+      "system": "EX016.CH.BUC (Bucket / Ковш)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Замена ковша на планировочный",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Viktor Bernikov",
+      "regBy": "Берников Виктор Викторович",
+      "wo": "WO-023060"
+    },
+    {
+      "asset": "TK144",
+      "defect": "DD-00017285",
+      "raised": "2026-11-21",
+      "system": "EMERGENCY EQUIPMENT, FIRE TENDER URAL 43441C-10 AC 6.0-70, TK144 ENGINE OldNumber (ET004)",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "Завоздушивание топливной системы",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Viktor Bernikov",
+      "regBy": "Берников Виктор Викторович",
+      "wo": null
     },
     {
       "asset": "LV124",
