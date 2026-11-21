@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-21T08:14:08+00:00",
+  "generated": "2026-11-21T08:27:46+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -20290,6 +20290,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "GR003",
+      "defect": "DD-00016194",
+      "raised": "2026-11-02",
+      "system": "GR003.CH.BL (Blade / Отвал)",
+      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
+      "descr": "Износ ножей",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": null
+    },
+    {
       "asset": "BS007",
       "defect": "DD-00016189",
       "raised": "2026-11-02",
@@ -34773,6 +34786,19 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "LS048",
+      "defect": "DD-00014962",
+      "raised": "2026-10-17",
+      "system": "LS048.ELS.MW (Machine Wiring / Электропроводка машины)",
+      "defectType": "4.14 Battery / starting circuit fault / Неисправность аккумулятора / цепи пуска",
+      "descr": "Замена АКБ",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "LS048",
       "defect": "DD-00014963",
       "raised": "2026-10-17",
       "system": "LS048.DRS.ENG (Engine / Двигатель)",
@@ -34791,19 +34817,6 @@ window.CM_WO_DATA = {
       "system": "EX006.HS.MP (Hydraulic Pumps / Гидронасосы)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "каплевидная утечка по гидронасосу",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "LS048",
-      "defect": "DD-00014962",
-      "raised": "2026-10-17",
-      "system": "LS048.ELS.MW (Machine Wiring / Электропроводка машины)",
-      "defectType": "4.14 Battery / starting circuit fault / Неисправность аккумулятора / цепи пуска",
-      "descr": "Замена АКБ",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
