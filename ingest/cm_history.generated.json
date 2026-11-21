@@ -1,7 +1,7 @@
 {
-  "generated": "2026-11-21T22:57:21.951Z",
+  "generated": "2026-11-21T23:07:45.672Z",
   "source": "https://script.google.com/macros/s/AKfycbwWJ1vb-OjP0VQPcrnoEB8PkuFyhk86mecIrkcomSVFqE5ddJynSwSheuskNGMcwLGf/exec?action=index&slim=1",
-  "pairsSeen": 474,
+  "pairsSeen": 475,
   "hist": {
     "FC|TK028": {
       "d": "2026-08-01"
@@ -769,6 +769,9 @@
       "d": "2026-11-19"
     },
     "FC|DZ007": {
+      "d": "2026-11-21"
+    },
+    "TB|TK120": {
       "d": "2026-11-21"
     }
   }
