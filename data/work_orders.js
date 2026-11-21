@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-21T05:09:28+00:00",
+  "generated": "2026-11-21T05:28:15+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -6328,6 +6328,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023051"
     },
     {
+      "asset": "TK117",
+      "defect": "DD-00017273",
+      "raised": "2026-11-21",
+      "system": "TK117.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "течь масла с хвостовика сред. моста",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-023053"
+    },
+    {
       "asset": "LV124",
       "defect": "DD-00017246",
       "raised": "2026-11-21",
@@ -6419,6 +6432,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "LV017",
+      "defect": "DD-00017272",
+      "raised": "2026-11-21",
+      "system": "LV017.ELS.WH (Wiring Harness / Жгут проводов)",
+      "defectType": "4.12 Cable / harness damage / Повреждение кабеля / жгута",
+      "descr": "Проверка АКБ, низкое давление масла",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
       "asset": "LS038",
       "defect": "DD-00017266",
       "raised": "2026-11-21",
@@ -6484,6 +6510,32 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "TK036",
+      "defect": "DD-00017270",
+      "raised": "2026-11-21",
+      "system": "TK036.HS.CYL (Cylinders / Гидроцилиндры)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Цилиндр болтается на пальцах",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "TK027",
+      "defect": "DD-00017269",
+      "raised": "2026-11-21",
+      "system": "TK027.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка масла из-под крышки клапанов",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
       "asset": "TK027",
       "defect": "DD-00017247",
       "raised": "2026-11-21",
@@ -6542,6 +6594,19 @@ window.CM_WO_DATA = {
       "system": "TK006.DRS.AXL (Axles / Мосты)",
       "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
       "descr": "Передняя левая тупица периодический хруст",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "TK010",
+      "defect": "DD-00017271",
+      "raised": "2026-11-21",
+      "system": "TK010.BS.PU (Pneumatic Control / Пневмоуправление)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка воздуха",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -10527,6 +10592,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022777"
     },
     {
+      "asset": "LV048",
+      "defect": "DD-00016930",
+      "raised": "2026-11-15",
+      "system": "LV048.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Замена ШРУС передних",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022897"
+    },
+    {
       "asset": "SN003",
       "defect": "DD-00016945",
       "raised": "2026-11-15",
@@ -10546,19 +10624,6 @@ window.CM_WO_DATA = {
       "system": "LV069.CH.SU (Suspension / Подвеска)",
       "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
       "descr": "замена переднего левого амортизатора",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "LV048",
-      "defect": "DD-00016930",
-      "raised": "2026-11-15",
-      "system": "LV048.DRS.AXL (Axles / Мосты)",
-      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
-      "descr": "Замена ШРУС передних",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -11182,7 +11247,7 @@ window.CM_WO_DATA = {
       "raised": "2026-11-14",
       "system": "LV055.ELS.WH (Wiring Harness / Жгут проводов)",
       "defectType": "4.02 Open circuit / Разрыв цепи",
-      "descr": "Проверить датчик АБС и антизаноса (неисправен)",
+      "descr": "Ошибки датчик АБС и антизаноса (неисправен). Нужна замена левого заднего датчика АБС",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -15785,11 +15850,11 @@ window.CM_WO_DATA = {
       "system": "LV063.ELS.PH (Preheater / Предпусковой подогреватель)",
       "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
       "descr": "Требуется замена Webasto, не запускается при заглушенном ДВС",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
       "regBy": "Таран Андрей Андреевич",
-      "wo": null
+      "wo": "WO-022898"
     },
     {
       "asset": "LV063",
@@ -15798,11 +15863,11 @@ window.CM_WO_DATA = {
       "system": "LV063.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.13 Fluid contamination (water/dirt) / Загрязнение жидкости (вода/пыль)",
       "descr": "Требуется замена антифриза",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
       "regBy": "Таран Андрей Андреевич",
-      "wo": null
+      "wo": "WO-022899"
     },
     {
       "asset": "DZ014",
@@ -17027,6 +17092,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022202"
     },
     {
+      "asset": "TK002",
+      "defect": "DD-00016434",
+      "raised": "2026-11-06",
+      "system": "TK002.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Переднее левое колесо тянет влево, при торможении сильнее",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022905"
+    },
+    {
       "asset": "LV021",
       "defect": "DD-00016435",
       "raised": "2026-11-06",
@@ -17085,19 +17163,6 @@ window.CM_WO_DATA = {
       "system": "TK004.BS.BPC (Brake Packs / Тормозные пакеты)",
       "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
       "descr": "Проверка-регулировка или замена тормозных колодок",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "TK002",
-      "defect": "DD-00016434",
-      "raised": "2026-11-06",
-      "system": "TK002.DRS.AXL (Axles / Мосты)",
-      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
-      "descr": "Переднее левое колесо тянет влево, при торможении сильнее",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -19952,6 +20017,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021504"
     },
     {
+      "asset": "GE025",
+      "defect": "DD-00016188",
+      "raised": "2026-11-02",
+      "system": "GENERATOR, CATERPILLAR C18, GE025 ENGINE OldNumber (GN025)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка антифриза с радиатора охлаждения",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022402"
+    },
+    {
       "asset": "BS015",
       "defect": "DD-00016186",
       "raised": "2026-11-02",
@@ -20166,19 +20244,6 @@ window.CM_WO_DATA = {
       "system": "TK035.BS.SHO (Brake Shoes / Тормозные колодки)",
       "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
       "descr": "Ревизия тормозных колодок",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "GE025",
-      "defect": "DD-00016188",
-      "raised": "2026-11-02",
-      "system": "GENERATOR, CATERPILLAR C18, GE025 ENGINE OldNumber (GN025)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка антифриза с радиатора охлаждения",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -22799,6 +22864,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021240"
     },
     {
+      "asset": "TK002",
+      "defect": "DD-00015938",
+      "raised": "2026-10-30",
+      "system": "TK002.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь масла с клапанной крышки",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022904"
+    },
+    {
       "asset": "TK162",
       "defect": "DD-00015939",
       "raised": "2026-10-30",
@@ -22935,19 +23013,6 @@ window.CM_WO_DATA = {
       "system": "TK003.BS.TV (Treadle Valve / Педальный тормозной клапан)",
       "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
       "descr": "При торможении тянет вправо",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "TK002",
-      "defect": "DD-00015938",
-      "raised": "2026-10-30",
-      "system": "TK002.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь масла с клапанной крышки",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -29793,6 +29858,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021123"
     },
     {
+      "asset": "TK036",
+      "defect": "DD-00015351",
+      "raised": "2026-10-22",
+      "system": "TK036.HS.CV (Control Valves / Гидрораспределители)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "течь распределителя кузова",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022906"
+    },
+    {
       "asset": "BS005",
       "defect": "DD-00015373",
       "raised": "2026-10-22",
@@ -29998,19 +30076,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Evgeniy Frolin",
       "regBy": "Фролин Евгений Владимирович",
-      "wo": null
-    },
-    {
-      "asset": "TK036",
-      "defect": "DD-00015351",
-      "raised": "2026-10-22",
-      "system": "TK036.HS.CV (Control Valves / Гидрораспределители)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "течь распределителя кузова",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
       "wo": null
     },
     {
@@ -58133,6 +58198,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
+      "wo": null
+    },
+    {
       "asset": "BS005",
       "defect": "DD-00011312",
       "raised": "2026-08-21",
@@ -58221,19 +58299,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
@@ -60500,11 +60565,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "CR001",
-      "defect": "DD-00009554",
+      "defect": "DD-00009555",
       "raised": "2026-07-24",
       "system": "CR001.DRS.AIR (Air Intake System / Система впуска воздуха)",
-      "defectType": "3.02 No (faulty) signal/ indication/alarm / Отсутвие сигнала, индикации",
-      "descr": null,
+      "defectType": "1.10 Rupture / Burst / Разрыв",
+      "descr": "Разрыв патрубка интеркуллера ДВС №7Y-1182",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Rinat Musaferov",
@@ -60513,11 +60578,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "CR001",
-      "defect": "DD-00009555",
+      "defect": "DD-00009554",
       "raised": "2026-07-24",
       "system": "CR001.DRS.AIR (Air Intake System / Система впуска воздуха)",
-      "defectType": "1.10 Rupture / Burst / Разрыв",
-      "descr": "Разрыв патрубка интеркуллера ДВС №7Y-1182",
+      "defectType": "3.02 No (faulty) signal/ indication/alarm / Отсутвие сигнала, индикации",
+      "descr": null,
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Rinat Musaferov",
