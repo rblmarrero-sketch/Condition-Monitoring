@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-21T11:42:44+00:00",
+  "generated": "2026-11-21T12:02:47+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -6022,7 +6022,7 @@ window.CM_WO_DATA = {
       "system": "TRUCK, WATER URAL 4672M1-20, TK098 CONTROL SYSTEM OldNumber (UT098)",
       "defectType": "3.13 Warning light / alarm active / Сигнальная лампа / аварийная сигнализация активна",
       "descr": "Периодически загорается индикация неисправности двигателя.",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
@@ -6061,7 +6061,7 @@ window.CM_WO_DATA = {
       "system": "TK044.ELS.STM (Starter Motor / Стартер)",
       "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
       "descr": "Периодически не запускается. Втягивающее срабатывает - стартер - нет.",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
@@ -6380,19 +6380,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023055"
     },
     {
-      "asset": "LD001",
-      "defect": "DD-00017281",
-      "raised": "2026-11-21",
-      "system": "LD001.OC.HE (Heating / Отопление)",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "Износ моторчика отопителя",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Khalezin",
-      "regBy": "Халезин Алексей Георгиевич",
-      "wo": "WO-023057"
-    },
-    {
       "asset": "LV044",
       "defect": "DD-00017282",
       "raised": "2026-11-21",
@@ -6404,6 +6391,19 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-023058"
+    },
+    {
+      "asset": "LD001",
+      "defect": "DD-00017281",
+      "raised": "2026-11-21",
+      "system": "LD001.OC.HE (Heating / Отопление)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Износ моторчика отопителя",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Khalezin",
+      "regBy": "Халезин Алексей Георгиевич",
+      "wo": "WO-023057"
     },
     {
       "asset": "LV124",
