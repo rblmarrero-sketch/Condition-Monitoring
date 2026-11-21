@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-21T15:02:50+00:00",
+  "generated": "2026-11-21T15:22:44+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6003,19 +6003,6 @@ window.CM_WO_DATA = {
   ],
   "otherDefects": [
     {
-      "asset": "LV029",
-      "defect": "DD-00017288",
-      "raised": "2026-11-22",
-      "system": "LV029.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
-      "descr": "Индикация неисправности двигателя. Замена лампы.",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-023063"
-    },
-    {
       "asset": "CR008",
       "defect": "DD-00017289",
       "raised": "2026-11-22",
@@ -6027,6 +6014,19 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-023066"
+    },
+    {
+      "asset": "LV029",
+      "defect": "DD-00017288",
+      "raised": "2026-11-22",
+      "system": "LV029.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "Индикация неисправности двигателя. Замена лампы.",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-023063"
     },
     {
       "asset": "CN014",
@@ -6406,19 +6406,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023056"
     },
     {
-      "asset": "TK144",
-      "defect": "DD-00017285",
-      "raised": "2026-11-21",
-      "system": "EMERGENCY EQUIPMENT, FIRE TENDER URAL 43441C-10 AC 6.0-70, TK144 ENGINE OldNumber (ET004)",
-      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
-      "descr": "Завоздушивание топливной системы",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Viktor Bernikov",
-      "regBy": "Берников Виктор Викторович",
-      "wo": "WO-023061"
-    },
-    {
       "asset": "TK134",
       "defect": "DD-00017286",
       "raised": "2026-11-21",
@@ -6495,6 +6482,19 @@ window.CM_WO_DATA = {
       "by": "Viktor Bernikov",
       "regBy": "Берников Виктор Викторович",
       "wo": "WO-023064"
+    },
+    {
+      "asset": "TK144",
+      "defect": "DD-00017285",
+      "raised": "2026-11-21",
+      "system": "EMERGENCY EQUIPMENT, FIRE TENDER URAL 43441C-10 AC 6.0-70, TK144 ENGINE OldNumber (ET004)",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "Завоздушивание топливной системы",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Viktor Bernikov",
+      "regBy": "Берников Виктор Викторович",
+      "wo": "WO-023061"
     },
     {
       "asset": "LV124",
