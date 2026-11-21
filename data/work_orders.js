@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-21T06:42:54+00:00",
+  "generated": "2026-11-21T06:57:41+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -14427,19 +14427,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022404"
     },
     {
-      "asset": "CR002",
-      "defect": "DD-00016588",
-      "raised": "2026-11-09",
-      "system": "CR002.FEED.BEL (Feeder Belt / Лента питателя)",
-      "defectType": "8.01 Conveyor belt cut / tear / Порез / разрыв конвейерной ленты",
-      "descr": "порез конвейерной ленты питателя",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": "WO-022408"
-    },
-    {
       "asset": "TK041",
       "defect": "DD-00016597",
       "raised": "2026-11-09",
@@ -15153,6 +15140,19 @@ window.CM_WO_DATA = {
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": "WO-022739"
+    },
+    {
+      "asset": "CR002",
+      "defect": "DD-00016588",
+      "raised": "2026-11-09",
+      "system": "CR002.FEED.BEL (Feeder Belt / Лента питателя)",
+      "defectType": "8.01 Conveyor belt cut / tear / Порез / разрыв конвейерной ленты",
+      "descr": "порез конвейерной ленты питателя",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-022408"
     },
     {
       "asset": "LV066",
@@ -16611,19 +16611,6 @@ window.CM_WO_DATA = {
       "wo": "WO-021825"
     },
     {
-      "asset": "CR003",
-      "defect": "DD-00016414",
-      "raised": "2026-11-06",
-      "system": "CR003.CONV.MAIN (Main Conveyor / Главный конвейер)",
-      "defectType": "8.03 Conveyor belt splice failure / Разрушение стыка конвейерной ленты",
-      "descr": "износ соеденителей ленты на стыке",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": "WO-022377"
-    },
-    {
       "asset": "LS008",
       "defect": "DD-00016394",
       "raised": "2026-11-06",
@@ -16648,19 +16635,6 @@ window.CM_WO_DATA = {
       "by": "Aleksey Dobrikov",
       "regBy": "Добриков Алексей Владимирович",
       "wo": "WO-021871"
-    },
-    {
-      "asset": "CR003",
-      "defect": "DD-00016440",
-      "raised": "2026-11-06",
-      "system": "CR003.CH.CV (Conveyor / Конвейер)",
-      "defectType": "1.06 Deformation / bending / buckling Деформация / изгиб / коробление",
-      "descr": "Деформация рамы конвейера",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": "WO-022380"
     },
     {
       "asset": "SN001",
@@ -16752,19 +16726,6 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-021821"
-    },
-    {
-      "asset": "CR003",
-      "defect": "DD-00016441",
-      "raised": "2026-11-06",
-      "system": "CR003.CONV.MAIN (Main Conveyor / Главный конвейер)",
-      "defectType": "8.06 Roller / idler failure / Отказ ролика / роликоопоры",
-      "descr": "износ роликов главного конвейера",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": "WO-022381"
     },
     {
       "asset": "TK041",
@@ -17168,6 +17129,45 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022905"
+    },
+    {
+      "asset": "CR003",
+      "defect": "DD-00016414",
+      "raised": "2026-11-06",
+      "system": "CR003.CONV.MAIN (Main Conveyor / Главный конвейер)",
+      "defectType": "8.03 Conveyor belt splice failure / Разрушение стыка конвейерной ленты",
+      "descr": "износ соеденителей ленты на стыке",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-022377"
+    },
+    {
+      "asset": "CR003",
+      "defect": "DD-00016441",
+      "raised": "2026-11-06",
+      "system": "CR003.CONV.MAIN (Main Conveyor / Главный конвейер)",
+      "defectType": "8.06 Roller / idler failure / Отказ ролика / роликоопоры",
+      "descr": "износ роликов главного конвейера",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-022381"
+    },
+    {
+      "asset": "CR003",
+      "defect": "DD-00016440",
+      "raised": "2026-11-06",
+      "system": "CR003.CH.CV (Conveyor / Конвейер)",
+      "defectType": "1.06 Deformation / bending / buckling Деформация / изгиб / коробление",
+      "descr": "Деформация рамы конвейера",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-022380"
     },
     {
       "asset": "LV021",
@@ -19731,19 +19731,6 @@ window.CM_WO_DATA = {
       "wo": "WO-021458"
     },
     {
-      "asset": "SN003",
-      "defect": "DD-00016193",
-      "raised": "2026-11-02",
-      "system": "SN003.ELS.PLC (PLC & Control Panel / ПЛК и шкаф управления)",
-      "defectType": "4.20 Auxiliary electrical circuit fault / Неисправность вспомогательных электроцепей",
-      "descr": "Монтаж и подключение розетки 220 В",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Nazmutdinov",
-      "regBy": "Назмутдинов Сергей Зуфарович",
-      "wo": "WO-021566"
-    },
-    {
       "asset": "LD003",
       "defect": "DD-00016136",
       "raised": "2026-11-02",
@@ -20132,6 +20119,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-021710"
+    },
+    {
+      "asset": "SN003",
+      "defect": "DD-00016193",
+      "raised": "2026-11-02",
+      "system": "SN003.ELS.PLC (PLC & Control Panel / ПЛК и шкаф управления)",
+      "defectType": "4.20 Auxiliary electrical circuit fault / Неисправность вспомогательных электроцепей",
+      "descr": "Монтаж и подключение розетки 220 В",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Nazmutdinov",
+      "regBy": "Назмутдинов Сергей Зуфарович",
+      "wo": "WO-021566"
     },
     {
       "asset": "BS015",
@@ -47708,19 +47708,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "CR003",
-      "defect": "DD-00013890",
-      "raised": "2026-10-02",
-      "system": "CR003.HS (Hydraulic System / Гидравлическая система)",
-      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
-      "descr": "Неисправен кран гидробака",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Aybar Tazhiev",
-      "regBy": "Тажиев Айбар",
-      "wo": "WO-019302"
-    },
-    {
-      "asset": "CR003",
       "defect": "DD-00013893",
       "raised": "2026-10-02",
       "system": "CR003.CH.CRS (Crusher Unit / Дробильный узел)",
@@ -47731,6 +47718,19 @@ window.CM_WO_DATA = {
       "by": "Aybar Tazhiev",
       "regBy": "Тажиев Айбар",
       "wo": "WO-019304"
+    },
+    {
+      "asset": "CR003",
+      "defect": "DD-00013890",
+      "raised": "2026-10-02",
+      "system": "CR003.HS (Hydraulic System / Гидравлическая система)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Неисправен кран гидробака",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Aybar Tazhiev",
+      "regBy": "Тажиев Айбар",
+      "wo": "WO-019302"
     },
     {
       "asset": "CR003",
