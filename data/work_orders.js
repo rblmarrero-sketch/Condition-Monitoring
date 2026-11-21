@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-21T15:42:45+00:00",
+  "generated": "2026-11-21T15:57:46+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6399,7 +6399,7 @@ window.CM_WO_DATA = {
       "system": "DZ012.CH.UC (Undercarriage / Ходовая часть)",
       "defectType": "6.03 Structural crack / Трещина конструкции",
       "descr": "Нужны сварочные работы по востановлению защиты бортовых редуктаров",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Aleksey Kiselev",
       "regBy": "Киселев Алексей Александрович",
