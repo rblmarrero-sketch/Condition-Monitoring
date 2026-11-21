@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-21T01:13:21+00:00",
+  "generated": "2026-11-21T01:28:32+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -6133,19 +6133,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023022"
     },
     {
-      "asset": "BS007",
-      "defect": "DD-00017230",
-      "raised": "2026-11-21",
-      "system": "BS007.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Замена ремня генератора",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-023032"
-    },
-    {
       "asset": "TK099",
       "defect": "DD-00017231",
       "raised": "2026-11-21",
@@ -6185,6 +6172,32 @@ window.CM_WO_DATA = {
       "wo": "WO-023038"
     },
     {
+      "asset": "BS007",
+      "defect": "DD-00017230",
+      "raised": "2026-11-21",
+      "system": "BS007.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Замена ремня генератора",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023032"
+    },
+    {
+      "asset": "GE053",
+      "defect": "DD-00017240",
+      "raised": "2026-11-21",
+      "system": "GE053.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Демонтаж ТНВД для GE054",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023042"
+    },
+    {
       "asset": "TK168",
       "defect": "DD-00017237",
       "raised": "2026-11-21",
@@ -6198,17 +6211,17 @@ window.CM_WO_DATA = {
       "wo": "WO-023039"
     },
     {
-      "asset": "GE053",
-      "defect": "DD-00017240",
+      "asset": "EX020",
+      "defect": "DD-00017241",
       "raised": "2026-11-21",
-      "system": "GE053.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Демонтаж ТНВД для GE053",
+      "system": "EX020.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Замена РВД (изготовление)",
       "status": "Elimination scheduled",
       "priority": "P2 Urgent",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-023042"
+      "wo": "WO-023043"
     },
     {
       "asset": "DR007",
