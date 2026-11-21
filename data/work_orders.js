@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-21T06:13:24+00:00",
+  "generated": "2026-11-21T06:28:12+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -6718,6 +6718,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "TK167",
+      "defect": "DD-00017278",
+      "raised": "2026-11-21",
+      "system": "TK167.CH.STR (Superstructure / Надстройка)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Замена донных клапанов",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
       "asset": "HX041",
       "defect": "DD-00017177",
       "raised": "2026-11-20",
@@ -7823,6 +7836,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023007"
     },
     {
+      "asset": "CD005",
+      "defect": "DD-00017137",
+      "raised": "2026-11-19",
+      "system": "CD005.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Замена подшипников",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022933"
+    },
+    {
       "asset": "TK096",
       "defect": "DD-00017153",
       "raised": "2026-11-19",
@@ -7859,19 +7885,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
-      "wo": null
-    },
-    {
-      "asset": "CD005",
-      "defect": "DD-00017137",
-      "raised": "2026-11-19",
-      "system": "CD005.DRS.AXL (Axles / Мосты)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Замена подшипников",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
       "wo": null
     },
     {
@@ -12711,6 +12724,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022449"
     },
     {
+      "asset": "LS066",
+      "defect": "DD-00016759",
+      "raised": "2026-11-12",
+      "system": "LS066.CH.STR (Superstructure / Надстройка)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Инспекция при передаче техники от ХСК в ГДК",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022924"
+    },
+    {
       "asset": "DZ001",
       "defect": "DD-00016760",
       "raised": "2026-11-12",
@@ -12776,30 +12802,43 @@ window.CM_WO_DATA = {
       "wo": "WO-022456"
     },
     {
+      "asset": "GS003",
+      "defect": "DD-00016756",
+      "raised": "2026-11-12",
+      "system": "GS003.CH.STR (Superstructure / Надстройка)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Инспекция при передаче техники от ХСК в ГДК",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022921"
+    },
+    {
       "asset": "LS053",
       "defect": "DD-00016757",
       "raised": "2026-11-12",
       "system": "LS053.CH.STR (Superstructure / Надстройка)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Инспекция при передаче техники от ХСК в ГДК",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
+      "wo": "WO-022922"
     },
     {
-      "asset": "LS066",
-      "defect": "DD-00016759",
+      "asset": "LS057",
+      "defect": "DD-00016758",
       "raised": "2026-11-12",
-      "system": "LS066.CH.STR (Superstructure / Надстройка)",
+      "system": "LS057.CH.STR (Superstructure / Надстройка)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Инспекция при передаче техники от ХСК в ГДК",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
+      "wo": "WO-022923"
     },
     {
       "asset": "LV066",
@@ -12932,19 +12971,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "GS003",
-      "defect": "DD-00016756",
-      "raised": "2026-11-12",
-      "system": "GS003.CH.STR (Superstructure / Надстройка)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Инспекция при передаче техники от ХСК в ГДК",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
       "asset": "DZ019",
       "defect": "DD-00016773",
       "raised": "2026-11-12",
@@ -12955,19 +12981,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
-      "wo": null
-    },
-    {
-      "asset": "LS057",
-      "defect": "DD-00016758",
-      "raised": "2026-11-12",
-      "system": "LS057.CH.STR (Superstructure / Надстройка)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Инспекция при передаче техники от ХСК в ГДК",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
       "wo": null
     },
     {
@@ -18496,19 +18509,6 @@ window.CM_WO_DATA = {
       "wo": "WO-021618"
     },
     {
-      "asset": "CR002",
-      "defect": "DD-00016310",
-      "raised": "2026-11-04",
-      "system": "CR002.HS.MP (Hydraulic Pumps / Гидронасосы)",
-      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
-      "descr": "не коректная работа главного насоса",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": "WO-021808"
-    },
-    {
       "asset": "CR004",
       "defect": "DD-00016309",
       "raised": "2026-11-04",
@@ -18702,6 +18702,19 @@ window.CM_WO_DATA = {
       "by": "Evgeniy Frolin",
       "regBy": "Фролин Евгений Владимирович",
       "wo": "WO-021697"
+    },
+    {
+      "asset": "CR002",
+      "defect": "DD-00016310",
+      "raised": "2026-11-04",
+      "system": "CR002.HS.MP (Hydraulic Pumps / Гидронасосы)",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "не коректная работа главного насоса",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-021808"
     },
     {
       "asset": "WE004",
@@ -19965,19 +19978,6 @@ window.CM_WO_DATA = {
       "wo": "WO-021516"
     },
     {
-      "asset": "LV081",
-      "defect": "DD-00016190",
-      "raised": "2026-11-02",
-      "system": "LV081.OC.GL (Glass / Стекла)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Замена щеток стеклоочистителя",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-021710"
-    },
-    {
       "asset": "TK047",
       "defect": "DD-00016183",
       "raised": "2026-11-02",
@@ -20082,6 +20082,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022918"
     },
     {
+      "asset": "TK038",
+      "defect": "DD-00016185",
+      "raised": "2026-11-02",
+      "system": "TK038.BS.RV (Retarder Valve / Клапан ретардера)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Не работает горный тормоз",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022925"
+    },
+    {
       "asset": "DZ007",
       "defect": "DD-00016176",
       "raised": "2026-11-02",
@@ -20106,6 +20119,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022402"
+    },
+    {
+      "asset": "LV081",
+      "defect": "DD-00016190",
+      "raised": "2026-11-02",
+      "system": "LV081.OC.GL (Glass / Стекла)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Замена щеток стеклоочистителя",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-021710"
     },
     {
       "asset": "BS015",
@@ -20322,19 +20348,6 @@ window.CM_WO_DATA = {
       "system": "TK010.CH.SU (Suspension / Подвеска)",
       "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
       "descr": "Сильный стук в подвеске (справа, спереди) - диагностика",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "TK038",
-      "defect": "DD-00016185",
-      "raised": "2026-11-02",
-      "system": "TK038.BS.RV (Retarder Valve / Клапан ретардера)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Не работает горный тормоз",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -22761,29 +22774,16 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "CR002",
-      "defect": "DD-00015992",
+      "defect": "DD-00015991",
       "raised": "2026-10-30",
-      "system": "CR002.HS.CYL (Cylinders / Гидроцилиндры)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "течь аутригера",
+      "system": "CR002.CRS.CHM (Crushing Chamber / Камера дробления)",
+      "defectType": "6.08 Guarding / cover damage / Повреждение ограждений / кожухов",
+      "descr": "сварочные работы разгрузочной камеры",
       "status": "Elimination scheduled",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Murashko",
       "regBy": "Мурашко Сергей Борисович",
-      "wo": "WO-021293"
-    },
-    {
-      "asset": "CR002",
-      "defect": "DD-00015987",
-      "raised": "2026-10-30",
-      "system": "CR002.HS.HOS (Hoses & Piping / Шланги и трубки)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "замена РВД",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Murashko",
-      "regBy": "Мурашко Сергей Борисович",
-      "wo": "WO-021279"
+      "wo": "WO-021292"
     },
     {
       "asset": "CR002",
@@ -22800,29 +22800,16 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "CR002",
-      "defect": "DD-00015991",
+      "defect": "DD-00015992",
       "raised": "2026-10-30",
-      "system": "CR002.CRS.CHM (Crushing Chamber / Камера дробления)",
-      "defectType": "6.08 Guarding / cover damage / Повреждение ограждений / кожухов",
-      "descr": "сварочные работы разгрузочной камеры",
+      "system": "CR002.HS.CYL (Cylinders / Гидроцилиндры)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "течь аутригера",
       "status": "Elimination scheduled",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Murashko",
       "regBy": "Мурашко Сергей Борисович",
-      "wo": "WO-021292"
-    },
-    {
-      "asset": "CR002",
-      "defect": "DD-00015999",
-      "raised": "2026-10-30",
-      "system": "CR002.CONV.BEL (Conveyor Belt / Конвейерная лента)",
-      "defectType": "8.03 Conveyor belt splice failure / Разрушение стыка конвейерной ленты",
-      "descr": "замена механическиих соединителей",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Murashko",
-      "regBy": "Мурашко Сергей Борисович",
-      "wo": "WO-021298"
+      "wo": "WO-021293"
     },
     {
       "asset": "TK046",
@@ -22849,32 +22836,6 @@ window.CM_WO_DATA = {
       "by": "Roman Besedovskiy",
       "regBy": "Беседовский Роман Иванович",
       "wo": "WO-021211"
-    },
-    {
-      "asset": "CR002",
-      "defect": "DD-00015986",
-      "raised": "2026-10-30",
-      "system": "CR002.CH.ROL (Track Rollers / Поддерживающие ролики)",
-      "defectType": "8.06 Roller / idler failure / Отказ ролика / роликоопоры",
-      "descr": "заклинивание ролика",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Murashko",
-      "regBy": "Мурашко Сергей Борисович",
-      "wo": "WO-021248"
-    },
-    {
-      "asset": "CR002",
-      "defect": "DD-00015998",
-      "raised": "2026-10-30",
-      "system": "CR002.CRS.CHM (Crushing Chamber / Камера дробления)",
-      "defectType": "6.02 Crack at weld / HAZ / Трещина по шву / зоне терм. влияния",
-      "descr": "износ футеровки приемного бункера камеры дробления",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Murashko",
-      "regBy": "Мурашко Сергей Борисович",
-      "wo": "WO-021295"
     },
     {
       "asset": "CR008",
@@ -22927,6 +22888,58 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022904"
+    },
+    {
+      "asset": "CR002",
+      "defect": "DD-00015986",
+      "raised": "2026-10-30",
+      "system": "CR002.CH.ROL (Track Rollers / Поддерживающие ролики)",
+      "defectType": "8.06 Roller / idler failure / Отказ ролика / роликоопоры",
+      "descr": "заклинивание ролика",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Murashko",
+      "regBy": "Мурашко Сергей Борисович",
+      "wo": "WO-021248"
+    },
+    {
+      "asset": "CR002",
+      "defect": "DD-00015998",
+      "raised": "2026-10-30",
+      "system": "CR002.CRS.CHM (Crushing Chamber / Камера дробления)",
+      "defectType": "6.02 Crack at weld / HAZ / Трещина по шву / зоне терм. влияния",
+      "descr": "износ футеровки приемного бункера камеры дробления",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Murashko",
+      "regBy": "Мурашко Сергей Борисович",
+      "wo": "WO-021295"
+    },
+    {
+      "asset": "CR002",
+      "defect": "DD-00015999",
+      "raised": "2026-10-30",
+      "system": "CR002.CONV.BEL (Conveyor Belt / Конвейерная лента)",
+      "defectType": "8.03 Conveyor belt splice failure / Разрушение стыка конвейерной ленты",
+      "descr": "замена механическиих соединителей",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Murashko",
+      "regBy": "Мурашко Сергей Борисович",
+      "wo": "WO-021298"
+    },
+    {
+      "asset": "CR002",
+      "defect": "DD-00015987",
+      "raised": "2026-10-30",
+      "system": "CR002.HS.HOS (Hoses & Piping / Шланги и трубки)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "замена РВД",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Murashko",
+      "regBy": "Мурашко Сергей Борисович",
+      "wo": "WO-021279"
     },
     {
       "asset": "TK162",
@@ -57951,6 +57964,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022598"
     },
     {
+      "asset": "TK038",
+      "defect": "DD-00011575",
+      "raised": "2026-08-25",
+      "system": "TK038.OC.SE (Seat / Сиденье)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Механизм регулировки не исправен. Тебуется ремонт или замена.",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022926"
+    },
+    {
       "asset": "LV055",
       "defect": "DD-00011523",
       "raised": "2026-08-25",
@@ -57996,19 +58022,6 @@ window.CM_WO_DATA = {
       "system": "TK039.OC.GL (Glass / Стекла)",
       "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "descr": "Не исправно запирающее устройство форточки",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "TK038",
-      "defect": "DD-00011575",
-      "raised": "2026-08-25",
-      "system": "TK038.OC.SE (Seat / Сиденье)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Механизм регулировки не исправен. Тебуется ремонт или замена.",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
