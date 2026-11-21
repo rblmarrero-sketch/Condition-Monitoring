@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-21T23:11:49+00:00",
+  "generated": "2026-11-21T23:27:51+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6107,6 +6107,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023073"
     },
     {
+      "asset": "CN001",
+      "defect": "DD-00017296",
+      "raised": "2026-11-22",
+      "system": "CN001.CH.STR (Superstructure / Надстройка)",
+      "defectType": "7.09 Screen media tear / breakage / Разрыв / поломка ситовой панели",
+      "descr": "нет зарядки",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Ilshat Sabitov",
+      "regBy": "Сабитов Ильшат Рашидович",
+      "wo": "WO-023074"
+    },
+    {
       "asset": "CN014",
       "defect": "DD-00017239",
       "raised": "2026-11-21",
@@ -7725,7 +7738,7 @@ window.CM_WO_DATA = {
       "system": "CN001.CH.STR (Superstructure / Надстройка)",
       "defectType": "7.09 Screen media tear / breakage / Разрыв / поломка ситовой панели",
       "descr": "нет зарядки",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P4 Planned (Repair)",
       "by": "Ilshat Sabitov",
       "regBy": "Сабитов Ильшат Рашидович",
@@ -33200,6 +33213,32 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "TK033",
+      "defect": "DD-00015150",
+      "raised": "2026-10-19",
+      "system": "TK033.CH.UC (Undercarriage / Ходовая часть)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Клинит переднее левое колесо",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022930"
+    },
+    {
+      "asset": "TK033",
+      "defect": "DD-00015145",
+      "raised": "2026-10-19",
+      "system": "TK033.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Необходим осмотр вентилятора.",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022931"
+    },
+    {
+      "asset": "TK033",
       "defect": "DD-00015146",
       "raised": "2026-10-19",
       "system": "TK033.OC.GL (Glass / Стекла)",
@@ -33378,32 +33417,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Evgeniy Frolin",
       "regBy": "Фролин Евгений Владимирович",
-      "wo": null
-    },
-    {
-      "asset": "TK033",
-      "defect": "DD-00015145",
-      "raised": "2026-10-19",
-      "system": "TK033.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Необходим осмотр вентилятора.",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "TK033",
-      "defect": "DD-00015150",
-      "raised": "2026-10-19",
-      "system": "TK033.CH.UC (Undercarriage / Ходовая часть)",
-      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
-      "descr": "Клинит переднее левое колесо",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
       "wo": null
     },
     {
@@ -59992,8 +60005,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000076",
+      "asset": "H07",
+      "defect": "EB-00000075",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -60005,8 +60018,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H07",
-      "defect": "EB-00000075",
+      "asset": "H04",
+      "defect": "EB-00000076",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -70795,19 +70808,6 @@ window.CM_WO_DATA = {
       "wo": "GD-017310"
     },
     {
-      "asset": "SN003",
-      "defect": "GD-00016121",
-      "raised": "2025-11-26",
-      "system": "SN003.ELS (Electrical System / Электросистема)",
-      "defectType": "7.09 Screen media tear / breakage / Разрыв / поломка ситовой панели",
-      "descr": "Установка системы пылеподавления",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Rinat Musaferov",
-      "regBy": "Мусаферов Ринат Искакович",
-      "wo": "GD-017313"
-    },
-    {
       "asset": "SN004",
       "defect": "GD-00016120",
       "raised": "2025-11-26",
@@ -70832,6 +70832,19 @@ window.CM_WO_DATA = {
       "by": null,
       "regBy": "Мельник Сергей Васильевич",
       "wo": null
+    },
+    {
+      "asset": "SN003",
+      "defect": "GD-00016121",
+      "raised": "2025-11-26",
+      "system": "SN003.ELS (Electrical System / Электросистема)",
+      "defectType": "7.09 Screen media tear / breakage / Разрыв / поломка ситовой панели",
+      "descr": "Установка системы пылеподавления",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Rinat Musaferov",
+      "regBy": "Мусаферов Ринат Искакович",
+      "wo": "GD-017313"
     },
     {
       "asset": "TK091",
