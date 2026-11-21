@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-21T02:17:46+00:00",
+  "generated": "2026-11-21T02:32:45+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -776,7 +776,7 @@
           "LUBE",
           "MP"
         ],
-        "plan": "2026-11-18",
+        "plan": "2026-11-27",
         "priority": "P3 Planned (PM)"
       },
       {
@@ -785,7 +785,7 @@
         "types": [
           "MP"
         ],
-        "plan": "2026-11-28",
+        "plan": "2026-12-17",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -1035,6 +1035,24 @@
       "type": "250 Hours service Planned",
       "hours": 250,
       "plan": "2026-12-18",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-022138",
+      "equip": "TK146",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-12-17",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-12-17",
       "status": "Elimination scheduled",
       "request": "",
       "defType": "",
@@ -1709,24 +1727,6 @@
       "completed": ""
     },
     {
-      "wo": "WO-022138",
-      "equip": "TK146",
-      "cls": "HT",
-      "comp": "",
-      "desc": "Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-28",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-11-28",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
       "wo": "WO-022144",
       "equip": "TK151",
       "cls": "HT",
@@ -1952,6 +1952,24 @@
       "raised": "2026-11-27",
       "type": "1000 Hours service Planned",
       "hours": 1000,
+      "plan": "2026-11-27",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-022139",
+      "equip": "TK146",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Lubrication / Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-27",
+      "type": "500 Hours service Planned",
+      "hours": 500,
       "plan": "2026-11-27",
       "status": "Elimination scheduled",
       "request": "",
@@ -3766,24 +3784,6 @@
       "cls": "AT",
       "comp": "",
       "desc": "Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-18",
-      "type": "500 Hours service Planned",
-      "hours": 500,
-      "plan": "2026-11-18",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
-      "wo": "WO-022139",
-      "equip": "TK146",
-      "cls": "HT",
-      "comp": "",
-      "desc": "Lubrication / Magnetic Plug",
       "priority": "P3 Planned (PM)",
       "raised": "2026-11-18",
       "type": "500 Hours service Planned",
@@ -11101,14 +11101,6 @@
       "x": "Ремонт освещения в КУНГа. Ремонт пассажирской двери"
     },
     {
-      "d": "DD-00017243",
-      "u": "LV049",
-      "s": "LV049.OC.HE (Heating / Отопление)",
-      "p": "P2",
-      "r": "2026-11-21",
-      "x": "Не работает отопитель салона"
-    },
-    {
       "d": "DD-00017240",
       "u": "GE053",
       "s": "GE053.DRS.ENG (Engine / Двигатель)",
@@ -11131,6 +11123,14 @@
       "p": "P2",
       "r": "2026-11-21",
       "x": "Замена РВД (изготовление)"
+    },
+    {
+      "d": "DD-00017243",
+      "u": "LV049",
+      "s": "LV049.OC.HE (Heating / Отопление)",
+      "p": "P2",
+      "r": "2026-11-21",
+      "x": "Не работает отопитель салона"
     },
     {
       "d": "DD-00017233",
@@ -30403,6 +30403,30 @@
       "p": "P2",
       "r": "2026-09-22",
       "x": "не работает ПЖД"
+    },
+    {
+      "d": "DD-00017244",
+      "u": "TK146",
+      "s": "TK146.BS (Braking System / Тормозная система)",
+      "p": "P4",
+      "r": "2026-11-21",
+      "x": "Переборка, замена левого и правого переднего суппорта"
+    },
+    {
+      "d": "DD-00017246",
+      "u": "LV124",
+      "s": "Пикап FENGDU P15MC ZN1032UCM5/LV124 FengDu_P15MC DONGFENG",
+      "p": "P4",
+      "r": "2026-11-21",
+      "x": "Произвести установку антенны и подключение радиостанции"
+    },
+    {
+      "d": "DD-00017245",
+      "u": "LV027",
+      "s": "LV027.DRS.ENG (Engine / Двигатель)",
+      "p": "P4",
+      "r": "2026-11-21",
+      "x": "ДВС не держит температуру, замена термостата"
     },
     {
       "d": "DD-00017235",

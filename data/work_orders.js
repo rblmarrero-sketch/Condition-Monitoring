@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-21T02:17:46+00:00",
+  "generated": "2026-11-21T02:32:45+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -6198,19 +6198,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023044"
     },
     {
-      "asset": "LV049",
-      "defect": "DD-00017243",
-      "raised": "2026-11-21",
-      "system": "LV049.OC.HE (Heating / Отопление)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Не работает отопитель салона",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-023045"
-    },
-    {
       "asset": "GE053",
       "defect": "DD-00017240",
       "raised": "2026-11-21",
@@ -6248,6 +6235,58 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-023043"
+    },
+    {
+      "asset": "LV049",
+      "defect": "DD-00017243",
+      "raised": "2026-11-21",
+      "system": "LV049.OC.HE (Heating / Отопление)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Не работает отопитель салона",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023045"
+    },
+    {
+      "asset": "TK146",
+      "defect": "DD-00017244",
+      "raised": "2026-11-21",
+      "system": "TK146.BS (Braking System / Тормозная система)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Переборка, замена левого и правого переднего суппорта",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": "WO-023046"
+    },
+    {
+      "asset": "LV124",
+      "defect": "DD-00017246",
+      "raised": "2026-11-21",
+      "system": "Пикап FENGDU P15MC ZN1032UCM5/LV124 FengDu_P15MC DONGFENG",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "Произвести установку антенны и подключение радиостанции",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "LV027",
+      "defect": "DD-00017245",
+      "raised": "2026-11-21",
+      "system": "LV027.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.24 Low temperature / freezing / Низкая температура / замерзание",
+      "descr": "ДВС не держит температуру, замена термостата",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
     },
     {
       "asset": "DR007",
@@ -57795,19 +57834,6 @@ window.CM_WO_DATA = {
       "wo": "WO-018103"
     },
     {
-      "asset": "DZ022",
-      "defect": "DD-00011314",
-      "raised": "2026-08-21",
-      "system": "DZ022.HS (Hydraulic System / Гидравлическая система)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Повреждение (трещина) трубки подачи гидравлического масла (# 1186 – 73 – 04000 ).",
-      "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Andrey Shipelov",
-      "regBy": "Шипелов Андрей Анатольевич",
-      "wo": null
-    },
-    {
       "asset": "H04",
       "defect": "EB-00000082",
       "raised": "2026-08-21",
@@ -57818,6 +57844,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Eduard Shapoval",
       "regBy": "Eduard Shapoval",
+      "wo": null
+    },
+    {
+      "asset": "DZ022",
+      "defect": "DD-00011314",
+      "raised": "2026-08-21",
+      "system": "DZ022.HS (Hydraulic System / Гидравлическая система)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Повреждение (трещина) трубки подачи гидравлического масла (# 1186 – 73 – 04000 ).",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Andrey Shipelov",
+      "regBy": "Шипелов Андрей Анатольевич",
       "wo": null
     },
     {
@@ -191241,9 +191280,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-18",
-      "planStartDt": "2026-11-18T00:00:00",
-      "planEnd": "2026-11-18",
+      "planStart": "2026-11-27",
+      "planStartDt": "2026-11-27T00:00:00",
+      "planEnd": "2026-11-27",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -191262,9 +191301,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-28",
-      "planStartDt": "2026-11-28T00:00:00",
-      "planEnd": "2026-11-28",
+      "planStart": "2026-12-17",
+      "planStartDt": "2026-12-17T00:00:00",
+      "planEnd": "2026-12-17",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
