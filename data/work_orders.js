@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-21T01:47:42+00:00",
+  "generated": "2026-11-21T02:03:04+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -6185,6 +6185,32 @@ window.CM_WO_DATA = {
       "wo": "WO-023032"
     },
     {
+      "asset": "BS001",
+      "defect": "DD-00017242",
+      "raised": "2026-11-21",
+      "system": "BS001.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Ремонт освещения в КУНГа. Ремонт пассажирской двери",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023044"
+    },
+    {
+      "asset": "LV049",
+      "defect": "DD-00017243",
+      "raised": "2026-11-21",
+      "system": "LV049.OC.HE (Heating / Отопление)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Не работает отопитель салона",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023045"
+    },
+    {
       "asset": "GE053",
       "defect": "DD-00017240",
       "raised": "2026-11-21",
@@ -6523,19 +6549,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022977"
     },
     {
-      "asset": "TK044",
-      "defect": "DD-00017200",
-      "raised": "2026-11-20",
-      "system": "TK044.DRS.TRA (Transmission / Трансмиссия)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Регулировка кулисы",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022982"
-    },
-    {
       "asset": "CR008",
       "defect": "DD-00017201",
       "raised": "2026-11-20",
@@ -6547,6 +6560,19 @@ window.CM_WO_DATA = {
       "by": "Pavel Kostin",
       "regBy": "Костин Павел Александрович",
       "wo": "WO-022991"
+    },
+    {
+      "asset": "TK044",
+      "defect": "DD-00017200",
+      "raised": "2026-11-20",
+      "system": "TK044.DRS.TRA (Transmission / Трансмиссия)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Регулировка кулисы",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022982"
     },
     {
       "asset": "TK155",
@@ -6640,19 +6666,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022997"
     },
     {
-      "asset": "TK043",
-      "defect": "DD-00017212",
-      "raised": "2026-11-20",
-      "system": "TK043.CH.BED (Bed / Кузов)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Ремонт заднего борта, замков, втулок,",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-023005"
-    },
-    {
       "asset": "TK035",
       "defect": "DD-00017211",
       "raised": "2026-11-20",
@@ -6677,6 +6690,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-023008"
+    },
+    {
+      "asset": "TK043",
+      "defect": "DD-00017212",
+      "raised": "2026-11-20",
+      "system": "TK043.CH.BED (Bed / Кузов)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Ремонт заднего борта, замков, втулок,",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023005"
     },
     {
       "asset": "FL005",
@@ -22441,7 +22467,7 @@ window.CM_WO_DATA = {
       "system": "CR008.CONV.BEL (Conveyor Belt / Конвейерная лента)",
       "defectType": "8.02 Conveyor belt mistracking / Смещение / увод конвейерной ленты",
       "descr": "ленты конвеера смещены",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P4 Planned (Repair)",
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
@@ -34281,8 +34307,8 @@ window.CM_WO_DATA = {
       "asset": "TK157",
       "defect": "DD-00014961",
       "raised": "2026-10-17",
-      "system": "TK157.DRS.COO.RAD Radiator / Радиатор",
-      "defectType": "1.02 Overheating / high temperature Перегрев / высокая температура",
+      "system": "TK157.DRS.FD (Final Drives / Конечные передачи)",
+      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
       "descr": "Ремонт жалюзи радиатора",
       "status": "Elimination scheduled",
       "priority": "P2 Urgent",
@@ -44678,6 +44704,19 @@ window.CM_WO_DATA = {
       "wo": "WO-020084"
     },
     {
+      "asset": "TK168",
+      "defect": "DD-00014084",
+      "raised": "2026-10-05",
+      "system": "TK168.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь хвостовика редуктора 3 оси",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": "WO-022895"
+    },
+    {
       "asset": "TK162",
       "defect": "DD-00014083",
       "raised": "2026-10-05",
@@ -45022,19 +45061,6 @@ window.CM_WO_DATA = {
       "system": "BL015.OC.DO (Doors / Двери)",
       "defectType": "2.01 Wear / Износ",
       "descr": "Требуется замена газовых упоров на капоте со стороны ДВС",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": null
-    },
-    {
-      "asset": "TK168",
-      "defect": "DD-00014084",
-      "raised": "2026-10-05",
-      "system": "TK168.DRS.AXL (Axles / Мосты)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь хвостовика редуктора 3 оси",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -57782,6 +57808,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
+      "wo": null
+    },
+    {
       "asset": "BS005",
       "defect": "DD-00011312",
       "raised": "2026-08-21",
@@ -57870,19 +57909,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
@@ -58615,19 +58641,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "H07",
-      "defect": "EB-00000078",
-      "raised": "2026-08-13",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Sergey Gulin",
-      "wo": null
-    },
-    {
-      "asset": "H07",
       "defect": "EB-00000079",
       "raised": "2026-08-13",
       "system": null,
@@ -58637,6 +58650,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Eduard Shapoval",
       "regBy": "Eduard Shapoval",
+      "wo": null
+    },
+    {
+      "asset": "H07",
+      "defect": "EB-00000078",
+      "raised": "2026-08-13",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Sergey Gulin",
       "wo": null
     },
     {
@@ -59264,8 +59290,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000076",
+      "asset": "H07",
+      "defect": "EB-00000075",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -59277,8 +59303,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H07",
-      "defect": "EB-00000075",
+      "asset": "H04",
+      "defect": "EB-00000076",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
