@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-21T04:37:45+00:00",
+  "generated": "2026-11-21T04:52:46+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -6419,6 +6419,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "LS038",
+      "defect": "DD-00017266",
+      "raised": "2026-11-21",
+      "system": "LS038.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Нет запуска ДВС, сели АКБ",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
       "asset": "GR004",
       "defect": "DD-00017265",
       "raised": "2026-11-21",
@@ -6529,6 +6542,32 @@ window.CM_WO_DATA = {
       "system": "TK006.DRS.AXL (Axles / Мосты)",
       "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
       "descr": "Передняя левая тупица периодический хруст",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "TK169",
+      "defect": "DD-00017267",
+      "raised": "2026-11-21",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK169 DOORS",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Дверь водителя не открывается изнутри",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "TK169",
+      "defect": "DD-00017268",
+      "raised": "2026-11-21",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK169 ENGINE",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Подсос воздуха (трубопровод от интеркулера к ТКР)",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -17859,6 +17898,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "TK040",
+      "defect": "DD-00016275",
+      "raised": "2026-11-04",
+      "system": "TK040.OC.HE (Heating / Отопление)",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "Отопитель не работает в 1-м положении",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022893"
+    },
+    {
       "asset": "TK169",
       "defect": "DD-00016258",
       "raised": "2026-11-04",
@@ -18533,19 +18585,6 @@ window.CM_WO_DATA = {
       "by": "Evgeniy Frolin",
       "regBy": "Фролин Евгений Владимирович",
       "wo": "WO-021697"
-    },
-    {
-      "asset": "TK040",
-      "defect": "DD-00016275",
-      "raised": "2026-11-04",
-      "system": "TK040.OC.HE (Heating / Отопление)",
-      "defectType": "4.02 Open circuit / Разрыв цепи",
-      "descr": "Отопитель не работает в 1-м положении",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022893"
     },
     {
       "asset": "WE004",
@@ -21707,6 +21746,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022649"
     },
     {
+      "asset": "TK168",
+      "defect": "DD-00016050",
+      "raised": "2026-10-31",
+      "system": "TK168.CH.FR (Frame / Рама)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "запотевание РВД от насоса на гидромотор.",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022896"
+    },
+    {
       "asset": "DR011",
       "defect": "DD-00016307",
       "raised": "2026-10-31",
@@ -21795,19 +21847,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Roman Kochetov",
       "regBy": "Кочетов Роман Иванович",
-      "wo": null
-    },
-    {
-      "asset": "TK168",
-      "defect": "DD-00016050",
-      "raised": "2026-10-31",
-      "system": "TK168.CH.FR (Frame / Рама)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "запотевание РВД от насоса на гидромотор.",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
       "wo": null
     },
     {
@@ -27531,19 +27570,6 @@ window.CM_WO_DATA = {
       "wo": "WO-021744"
     },
     {
-      "asset": "LV048",
-      "defect": "DD-00015554",
-      "raised": "2026-10-24",
-      "system": "LV048.CH.SU (Suspension / Подвеска)",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "Требуется замена задних амортизаторов",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": "WO-021706"
-    },
-    {
       "asset": "TK085",
       "defect": "DD-00015550",
       "raised": "2026-10-24",
@@ -27581,6 +27607,19 @@ window.CM_WO_DATA = {
       "by": "Evgeniy Frolin",
       "regBy": "Фролин Евгений Владимирович",
       "wo": "WO-021705"
+    },
+    {
+      "asset": "LV048",
+      "defect": "DD-00015554",
+      "raised": "2026-10-24",
+      "system": "LV048.CH.SU (Suspension / Подвеска)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Требуется замена задних амортизаторов",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": "WO-021706"
     },
     {
       "asset": "DZ021",
@@ -58094,19 +58133,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
-      "wo": null
-    },
-    {
       "asset": "BS005",
       "defect": "DD-00011312",
       "raised": "2026-08-21",
@@ -58195,6 +58221,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
@@ -58849,19 +58888,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "TK008",
-      "defect": "DD-00010860",
-      "raised": "2026-08-14",
-      "system": "TK008.OC.HE (Heating / Отопление)",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Не работает фен",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": null
-    },
-    {
-      "asset": "TK008",
       "defect": "DD-00010861",
       "raised": "2026-08-14",
       "system": "TK008.CH.SU (Suspension / Подвеска)",
@@ -58880,6 +58906,19 @@ window.CM_WO_DATA = {
       "system": "FL005.OC.AC (Air Conditioning / Кондиционирование)",
       "defectType": "1.27 Belt drive issue (slip/break) / Проблема ременного привода (проскальзывание/обрыв)",
       "descr": "Трещины на ремне кондиционера",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": null
+    },
+    {
+      "asset": "TK008",
+      "defect": "DD-00010860",
+      "raised": "2026-08-14",
+      "system": "TK008.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Не работает фен",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -155562,6 +155601,27 @@ window.CM_WO_DATA = {
       "planStart": "2026-12-31",
       "planStartDt": "2026-12-31T00:00:00",
       "planEnd": "2026-12-31",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
+      "equip": "TK040",
+      "cls": "HT",
+      "woNumber": null,
+      "maintType": "500 Hours service Planned",
+      "hours": 500,
+      "cmLabel": "Magnetic Plug",
+      "cmTypes": [
+        "MP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": null,
+      "cmmsStatus": "Registered",
+      "open": true,
+      "planStart": null,
+      "planStartDt": null,
+      "planEnd": null,
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
