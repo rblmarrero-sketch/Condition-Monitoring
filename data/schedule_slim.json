@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-21T02:32:45+00:00",
+  "generated": "2026-11-21T02:52:44+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -505,7 +505,7 @@
         "types": [
           "MP"
         ],
-        "plan": "2026-11-20",
+        "plan": "2026-12-01",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -785,7 +785,7 @@
         "types": [
           "MP"
         ],
-        "plan": "2026-12-17",
+        "plan": "2026-12-07",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -831,7 +831,7 @@
         "types": [
           "MP"
         ],
-        "plan": "2026-11-19",
+        "plan": "2026-11-24",
         "priority": "P3 Planned (PM)"
       },
       {
@@ -843,7 +843,7 @@
           "LUBE",
           "MP"
         ],
-        "plan": "2026-12-05",
+        "plan": "2026-12-08",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -1043,24 +1043,6 @@
       "completed": ""
     },
     {
-      "wo": "WO-022138",
-      "equip": "TK146",
-      "cls": "HT",
-      "comp": "",
-      "desc": "Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-12-17",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-12-17",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
       "wo": "WO-020999",
       "equip": "TK158",
       "cls": "HT",
@@ -1071,6 +1053,42 @@
       "type": "250 Hours service Planned",
       "hours": 250,
       "plan": "2026-12-12",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-022142",
+      "equip": "TK149",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Filter Cut / General Inspection / Lubrication / Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-12-08",
+      "type": "3000 Hours service Planned",
+      "hours": 3000,
+      "plan": "2026-12-08",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-022138",
+      "equip": "TK146",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-12-07",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-12-07",
       "status": "Elimination scheduled",
       "request": "",
       "defType": "",
@@ -1142,24 +1160,6 @@
       "raised": "2026-12-05",
       "type": "500 Hours service Planned",
       "hours": 500,
-      "plan": "2026-12-05",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
-      "wo": "WO-022142",
-      "equip": "TK149",
-      "cls": "HT",
-      "comp": "",
-      "desc": "Filter Cut / General Inspection / Lubrication / Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-12-05",
-      "type": "3000 Hours service Planned",
-      "hours": 3000,
       "plan": "2026-12-05",
       "status": "Elimination scheduled",
       "request": "",
@@ -1304,6 +1304,24 @@
       "raised": "2026-12-01",
       "type": "8000 Hours service Planned",
       "hours": 8000,
+      "plan": "2026-12-01",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-021932",
+      "equip": "TK105",
+      "cls": "AT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-12-01",
+      "type": "250 Hours service Planned",
+      "hours": 250,
       "plan": "2026-12-01",
       "status": "Elimination scheduled",
       "request": "",
@@ -2663,6 +2681,24 @@
       "completed": ""
     },
     {
+      "wo": "WO-020989",
+      "equip": "TK149",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-24",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-11-24",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-021971",
       "equip": "DZ002",
       "cls": "DOZ",
@@ -3401,24 +3437,6 @@
       "completed": ""
     },
     {
-      "wo": "WO-021932",
-      "equip": "TK105",
-      "cls": "AT",
-      "comp": "",
-      "desc": "Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-20",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-11-20",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
       "wo": "WO-021949",
       "equip": "TK120",
       "cls": "AT",
@@ -3536,24 +3554,6 @@
       "raised": "2026-11-19",
       "type": "8000 Hours service Planned",
       "hours": 8000,
-      "plan": "2026-11-19",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
-      "wo": "WO-020989",
-      "equip": "TK149",
-      "cls": "HT",
-      "comp": "",
-      "desc": "Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-19",
-      "type": "250 Hours service Planned",
-      "hours": 250,
       "plan": "2026-11-19",
       "status": "Elimination scheduled",
       "request": "",
@@ -30405,6 +30405,14 @@
       "x": "не работает ПЖД"
     },
     {
+      "d": "DD-00017249",
+      "u": "TK105",
+      "s": "TK105.DRS.FUE (Fuel System / Топливная система)",
+      "p": "P4",
+      "r": "2026-11-21",
+      "x": "Диагностика топливной системы"
+    },
+    {
       "d": "DD-00017244",
       "u": "TK146",
       "s": "TK146.BS (Braking System / Тормозная система)",
@@ -30421,12 +30429,28 @@
       "x": "Произвести установку антенны и подключение радиостанции"
     },
     {
+      "d": "DD-00017248",
+      "u": "LV068",
+      "s": "LV068.ELS.WH (Wiring Harness / Жгут проводов)",
+      "p": "P4",
+      "r": "2026-11-21",
+      "x": "Замена заднего правого датчика АБС"
+    },
+    {
       "d": "DD-00017245",
       "u": "LV027",
       "s": "LV027.DRS.ENG (Engine / Двигатель)",
       "p": "P4",
       "r": "2026-11-21",
       "x": "ДВС не держит температуру, замена термостата"
+    },
+    {
+      "d": "DD-00017247",
+      "u": "TK027",
+      "s": "TK027.DRS.ENG (Engine / Двигатель)",
+      "p": "P4",
+      "r": "2026-11-21",
+      "x": "Замена подушек ДВС"
     },
     {
       "d": "DD-00017235",
@@ -30933,6 +30957,14 @@
       "x": "Разрушение внешнего  слоя РВД"
     },
     {
+      "d": "DD-00017018",
+      "u": "TK101",
+      "s": "TK101.DRS.ENG (Engine / Двигатель)",
+      "p": "P4",
+      "r": "2026-11-17",
+      "x": "Демонтаж ДВС"
+    },
+    {
       "d": "EB-00000106",
       "u": "WC1001",
       "s": null,
@@ -30955,14 +30987,6 @@
       "p": "P4",
       "r": "2026-11-17",
       "x": "Монтаж ДВС"
-    },
-    {
-      "d": "DD-00017018",
-      "u": "TK101",
-      "s": "TK101.DRS.ENG (Engine / Двигатель)",
-      "p": "P4",
-      "r": "2026-11-17",
-      "x": "Демонтаж ДВС"
     },
     {
       "d": "DD-00017025",
