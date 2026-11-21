@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-21T12:32:42+00:00",
+  "generated": "2026-11-21T12:52:39+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -7238,19 +7238,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022995"
     },
     {
-      "asset": "TK124",
-      "defect": "DD-00017218",
-      "raised": "2026-11-20",
-      "system": "TK124.DRS.FUE (Fuel System / Топливная система)",
-      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
-      "descr": "Низкое давление топрливной системы",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Vladimir Ladik",
-      "regBy": "Ладик Владимир Владимирович",
-      "wo": "WO-023011"
-    },
-    {
       "asset": "CD007",
       "defect": "DD-00017219",
       "raised": "2026-11-20",
@@ -7303,6 +7290,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023015"
     },
     {
+      "asset": "TK124",
+      "defect": "DD-00017218",
+      "raised": "2026-11-20",
+      "system": "TK124.DRS.FUE (Fuel System / Топливная система)",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "Низкое давление топрливной системы",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Vladimir Ladik",
+      "regBy": "Ладик Владимир Владимирович",
+      "wo": "WO-023011"
+    },
+    {
       "asset": "DZ003",
       "defect": "DD-00017187",
       "raised": "2026-11-20",
@@ -7348,7 +7348,7 @@ window.CM_WO_DATA = {
       "system": "TK143.DRS.AXL (Axles / Мосты)",
       "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "descr": "развалился карданый привод  левого колеса передней оси",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Vladimir Ladik",
       "regBy": "Ладик Владимир Владимирович",
