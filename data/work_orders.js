@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-21T21:12:49+00:00",
+  "generated": "2026-11-21T21:27:39+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -4627,8 +4627,8 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-09-18",
       "detected": "2026-09-18",
-      "planStart": "2026-11-14",
-      "closed": null,
+      "planStart": "2026-11-13",
+      "closed": "2026-11-20",
       "asset": "TK118",
       "defect": "DD-00012866",
       "requestNo": "DD-00012866",
@@ -4639,7 +4639,7 @@ window.CM_WO_DATA = {
       "cause": "Абразивный износ",
       "causeFrom": "wo",
       "descr": "Критический износ кузова, трещины. Требуются футеровка и сварка кузова.",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "by": "Slam",
       "byFull": "Slam Taganov",
       "regBy": "Таганов Слам Джумамуратович",
@@ -6042,6 +6042,32 @@ window.CM_WO_DATA = {
       "wo": "WO-023067"
     },
     {
+      "asset": "TK104",
+      "defect": "DD-00017291",
+      "raised": "2026-11-22",
+      "system": "TK104.CH.BY (Dump Body / Самосвальный кузов)",
+      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
+      "descr": "Ремонт кузова",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": "WO-023068"
+    },
+    {
+      "asset": "HX043",
+      "defect": "DD-00017292",
+      "raised": "2026-11-22",
+      "system": "HX043.AU.CS (Control System / Система управления)",
+      "defectType": "4.12 Cable / harness damage / Повреждение кабеля / жгута",
+      "descr": "Отказ датчика пламени",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Evgeniy Dolzhnikov",
+      "regBy": "Должников Евгений Геннадьевич",
+      "wo": null
+    },
+    {
       "asset": "CN014",
       "defect": "DD-00017239",
       "raised": "2026-11-21",
@@ -7225,19 +7251,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022999"
     },
     {
-      "asset": "CR007",
-      "defect": "DD-00017203",
-      "raised": "2026-11-20",
-      "system": "CR007.ELS.PH (Preheater / Предпусковой подогреватель)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Ремонт ПЖД",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022994"
-    },
-    {
       "asset": "TK085",
       "defect": "DD-00017210",
       "raised": "2026-11-20",
@@ -7327,6 +7340,19 @@ window.CM_WO_DATA = {
       "by": "Viktor Bernikov",
       "regBy": "Берников Виктор Викторович",
       "wo": "WO-023009"
+    },
+    {
+      "asset": "CR007",
+      "defect": "DD-00017203",
+      "raised": "2026-11-20",
+      "system": "CR007.ELS.PH (Preheater / Предпусковой подогреватель)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Ремонт ПЖД",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022994"
     },
     {
       "asset": "LV045",
@@ -15506,19 +15532,6 @@ window.CM_WO_DATA = {
       "wo": "WO-021907"
     },
     {
-      "asset": "SN002",
-      "defect": "DD-00016524",
-      "raised": "2026-11-08",
-      "system": "SN002.SCN.MED (Screen Media / Сита)",
-      "defectType": "7.08 Screen media wear / Износ сит / панелей грохота",
-      "descr": "износ просеевающих сит",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": "WO-022391"
-    },
-    {
       "asset": "LV101",
       "defect": "DD-00016487",
       "raised": "2026-11-08",
@@ -15530,32 +15543,6 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-021908"
-    },
-    {
-      "asset": "SN002",
-      "defect": "DD-00016528",
-      "raised": "2026-11-08",
-      "system": "SN002.CONV.SDC (Side Discharge Conveyor / Боковой разгрузочный конвейер)",
-      "defectType": "8.05 Conveyor belt wear / Износ конвейерной ленты",
-      "descr": "износ конвейернй ленты бокового конвейера",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": "WO-022397"
-    },
-    {
-      "asset": "SN002",
-      "defect": "DD-00016529",
-      "raised": "2026-11-08",
-      "system": "SN002.FEED.FBX (Feed Box / Питающий короб)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "частичный износ футеровки",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": "WO-022400"
     },
     {
       "asset": "TK143",
@@ -16115,6 +16102,45 @@ window.CM_WO_DATA = {
       "by": "Andrey Taran",
       "regBy": "Таран Андрей Андреевич",
       "wo": "WO-022899"
+    },
+    {
+      "asset": "SN002",
+      "defect": "DD-00016524",
+      "raised": "2026-11-08",
+      "system": "SN002.SCN.MED (Screen Media / Сита)",
+      "defectType": "7.08 Screen media wear / Износ сит / панелей грохота",
+      "descr": "износ просеевающих сит",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-022391"
+    },
+    {
+      "asset": "SN002",
+      "defect": "DD-00016528",
+      "raised": "2026-11-08",
+      "system": "SN002.CONV.SDC (Side Discharge Conveyor / Боковой разгрузочный конвейер)",
+      "defectType": "8.05 Conveyor belt wear / Износ конвейерной ленты",
+      "descr": "износ конвейернй ленты бокового конвейера",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-022397"
+    },
+    {
+      "asset": "SN002",
+      "defect": "DD-00016529",
+      "raised": "2026-11-08",
+      "system": "SN002.FEED.FBX (Feed Box / Питающий короб)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "частичный износ футеровки",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-022400"
     },
     {
       "asset": "DZ014",
@@ -17157,32 +17183,6 @@ window.CM_WO_DATA = {
       "wo": "WO-021837"
     },
     {
-      "asset": "CR007",
-      "defect": "DD-00016385",
-      "raised": "2026-11-06",
-      "system": "CR007.CH.CV (Conveyor / Конвейер)",
-      "defectType": "8.03 Conveyor belt splice failure / Разрушение стыка конвейерной ленты",
-      "descr": "абразивный износ механических соеденителей",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Murashko",
-      "regBy": "Мурашко Сергей Борисович",
-      "wo": "WO-022781"
-    },
-    {
-      "asset": "CR007",
-      "defect": "DD-00016386",
-      "raised": "2026-11-06",
-      "system": "CR007.CH.CV (Conveyor / Конвейер)",
-      "defectType": "8.09 Scraper / cleaner failure / Отказ / износ скребка / очистителя",
-      "descr": "износ скребка очистителя главного конвейера",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Murashko",
-      "regBy": "Мурашко Сергей Борисович",
-      "wo": "WO-022782"
-    },
-    {
       "asset": "EX019",
       "defect": "DD-00016418",
       "raised": "2026-11-06",
@@ -17337,6 +17337,32 @@ window.CM_WO_DATA = {
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": "WO-022373"
+    },
+    {
+      "asset": "CR007",
+      "defect": "DD-00016385",
+      "raised": "2026-11-06",
+      "system": "CR007.CH.CV (Conveyor / Конвейер)",
+      "defectType": "8.03 Conveyor belt splice failure / Разрушение стыка конвейерной ленты",
+      "descr": "абразивный износ механических соеденителей",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Murashko",
+      "regBy": "Мурашко Сергей Борисович",
+      "wo": "WO-022781"
+    },
+    {
+      "asset": "CR007",
+      "defect": "DD-00016386",
+      "raised": "2026-11-06",
+      "system": "CR007.CH.CV (Conveyor / Конвейер)",
+      "defectType": "8.09 Scraper / cleaner failure / Отказ / износ скребка / очистителя",
+      "descr": "износ скребка очистителя главного конвейера",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Murashko",
+      "regBy": "Мурашко Сергей Борисович",
+      "wo": "WO-022782"
     },
     {
       "asset": "LV021",
@@ -196837,9 +196863,9 @@ window.CM_WO_DATA = {
       "planStart": "2026-09-17",
       "planStartDt": "2026-09-17T00:00:00",
       "planEnd": "2026-09-17",
-      "actualStart": "2026-09-17",
-      "actualStartDt": "2026-09-17T00:00:00",
-      "actualEnd": "2026-09-17"
+      "actualStart": "2026-09-15",
+      "actualStartDt": "2026-09-15T19:00:00",
+      "actualEnd": "2026-09-16"
     },
     {
       "equip": "TK167",
