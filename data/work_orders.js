@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-21T22:12:40+00:00",
+  "generated": "2026-11-21T22:28:01+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6068,19 +6068,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023070"
     },
     {
-      "asset": "TK143",
-      "defect": "DD-00017294",
-      "raised": "2026-11-22",
-      "system": "TK143 HM400 KOMATSU",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Разрушение привода бортового редуктора",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": "WO-023072"
-    },
-    {
       "asset": "HX043",
       "defect": "DD-00017292",
       "raised": "2026-11-22",
@@ -6092,6 +6079,19 @@ window.CM_WO_DATA = {
       "by": "Evgeniy Dolzhnikov",
       "regBy": "Должников Евгений Геннадьевич",
       "wo": "WO-023069"
+    },
+    {
+      "asset": "TK143",
+      "defect": "DD-00017294",
+      "raised": "2026-11-22",
+      "system": "TK143 HM400 KOMATSU",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Разрушение привода бортового редуктора",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-023072"
     },
     {
       "asset": "CN014",
