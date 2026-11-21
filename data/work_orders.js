@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-21T16:12:43+00:00",
+  "generated": "2026-11-21T16:27:45+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6393,6 +6393,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023054"
     },
     {
+      "asset": "LD001",
+      "defect": "DD-00017281",
+      "raised": "2026-11-21",
+      "system": "LD001.OC.HE (Heating / Отопление)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Износ моторчика отопителя",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Khalezin",
+      "regBy": "Халезин Алексей Георгиевич",
+      "wo": "WO-023057"
+    },
+    {
       "asset": "DZ012",
       "defect": "DD-00017280",
       "raised": "2026-11-21",
@@ -6430,19 +6443,6 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-023058"
-    },
-    {
-      "asset": "LD001",
-      "defect": "DD-00017281",
-      "raised": "2026-11-21",
-      "system": "LD001.OC.HE (Heating / Отопление)",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "Износ моторчика отопителя",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksey Khalezin",
-      "regBy": "Халезин Алексей Георгиевич",
-      "wo": "WO-023057"
     },
     {
       "asset": "EX016",
