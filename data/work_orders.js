@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-21T03:37:58+00:00",
+  "generated": "2026-11-21T03:52:54+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -357,7 +357,7 @@ window.CM_WO_DATA = {
     "WE010",
     "WE011"
   ],
-  "duplicateRowsCollapsed": 473,
+  "duplicateRowsCollapsed": 474,
   "roundsDedupedWithinVisit": 3,
   "columns": [
     "Asset description",
@@ -6302,6 +6302,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023049"
     },
     {
+      "asset": "TK127",
+      "defect": "DD-00017255",
+      "raised": "2026-11-21",
+      "system": "TK127.DRS.FUE (Fuel System / Топливная система)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Диагностика и ремонт топливной системы",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": "WO-023052"
+    },
+    {
       "asset": "LV068",
       "defect": "DD-00017248",
       "raised": "2026-11-21",
@@ -6328,6 +6341,45 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "TK098",
+      "defect": "DD-00017257",
+      "raised": "2026-11-21",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK098 ENGINE OldNumber (UT098)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка ОЖ (район расширительного бачка)",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "TK098",
+      "defect": "DD-00017258",
+      "raised": "2026-11-21",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK098 SUSPENSIONS OldNumber (UT098)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Посторонний стук снизу ТС (диагностика, ремонт)",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "TK098",
+      "defect": "DD-00017256",
+      "raised": "2026-11-21",
+      "system": "TK098 4672M1-20 URAL",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка воздуха из системы (район задних мостов)",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
       "asset": "LV027",
       "defect": "DD-00017245",
       "raised": "2026-11-21",
@@ -6338,19 +6390,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "TK127",
-      "defect": "DD-00017255",
-      "raised": "2026-11-21",
-      "system": "TK127.DRS.FUE (Fuel System / Топливная система)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Диагностика и ремонт топливной системы",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Pavel Kostin",
-      "regBy": "Костин Павел Александрович",
       "wo": null
     },
     {
@@ -13185,7 +13224,7 @@ window.CM_WO_DATA = {
       "system": "LV087.DRS.TRA (Transmission / Трансмиссия)",
       "defectType": "1.19 No movement / no drive / Нет движения / нет привода",
       "descr": "не едет",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P4 Planned (Repair)",
       "by": "Ilshat Sabitov",
       "regBy": "Сабитов Ильшат Рашидович",
@@ -19120,19 +19159,6 @@ window.CM_WO_DATA = {
       "wo": "WO-021549"
     },
     {
-      "asset": "TK128",
-      "defect": "DD-00016225",
-      "raised": "2026-11-03",
-      "system": "TK128.DRS.PD (Pump Drive / Привод насоса)",
-      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
-      "descr": "Не вращается редуктор промежуточный привода рабочего органа. (Редуктор рабочего органа и цепной вращаются)",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022628"
-    },
-    {
       "asset": "EX012",
       "defect": "DD-00016237",
       "raised": "2026-11-03",
@@ -19144,6 +19170,19 @@ window.CM_WO_DATA = {
       "by": "Roman Besedovskiy",
       "regBy": "Беседовский Роман Иванович",
       "wo": "WO-021690"
+    },
+    {
+      "asset": "TK128",
+      "defect": "DD-00016225",
+      "raised": "2026-11-03",
+      "system": "TK128.DRS.PD (Pump Drive / Привод насоса)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Не вращается редуктор промежуточный привода рабочего органа. (Редуктор рабочего органа и цепной вращаются)",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022628"
     },
     {
       "asset": "TK145",
@@ -59446,8 +59485,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000076",
+      "asset": "H07",
+      "defect": "EB-00000075",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -59459,8 +59498,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H07",
-      "defect": "EB-00000075",
+      "asset": "H04",
+      "defect": "EB-00000076",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
