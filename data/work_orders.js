@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-21T20:42:46+00:00",
+  "generated": "2026-11-21T20:57:43+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -16741,19 +16741,6 @@ window.CM_WO_DATA = {
       "wo": "WO-021833"
     },
     {
-      "asset": "SN001",
-      "defect": "DD-00016411",
-      "raised": "2026-11-06",
-      "system": "SN001.CH.FR (Frame / Рама)",
-      "defectType": "6.08 Guarding / cover damage / Повреждение ограждений / кожухов",
-      "descr": "отсутствуют блокирующие дверки обслуживающих площадок грохота",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": "WO-022373"
-    },
-    {
       "asset": "GR015",
       "defect": "DD-00016400",
       "raised": "2026-11-06",
@@ -16806,19 +16793,6 @@ window.CM_WO_DATA = {
       "wo": "WO-021871"
     },
     {
-      "asset": "SN001",
-      "defect": "DD-00016409",
-      "raised": "2026-11-06",
-      "system": "SN001.CONV.SDC (Side Discharge Conveyor / Боковой разгрузочный конвейер)",
-      "defectType": "8.06 Roller / idler failure / Отказ ролика / роликоопоры",
-      "descr": "износ роликов правого бокового конвейера",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": "WO-022366"
-    },
-    {
       "asset": "LV008",
       "defect": "DD-00016401",
       "raised": "2026-11-06",
@@ -16830,19 +16804,6 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-021830"
-    },
-    {
-      "asset": "SN001",
-      "defect": "DD-00016410",
-      "raised": "2026-11-06",
-      "system": "SN001.CONV.SDC (Side Discharge Conveyor / Боковой разгрузочный конвейер)",
-      "defectType": "8.03 Conveyor belt splice failure / Разрушение стыка конвейерной ленты",
-      "descr": "изношены соеденения на стыках ленты правого конвейера",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": "WO-022367"
     },
     {
       "asset": "TK162",
@@ -17337,6 +17298,45 @@ window.CM_WO_DATA = {
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": "WO-022380"
+    },
+    {
+      "asset": "SN001",
+      "defect": "DD-00016409",
+      "raised": "2026-11-06",
+      "system": "SN001.CONV.SDC (Side Discharge Conveyor / Боковой разгрузочный конвейер)",
+      "defectType": "8.06 Roller / idler failure / Отказ ролика / роликоопоры",
+      "descr": "износ роликов правого бокового конвейера",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-022366"
+    },
+    {
+      "asset": "SN001",
+      "defect": "DD-00016410",
+      "raised": "2026-11-06",
+      "system": "SN001.CONV.SDC (Side Discharge Conveyor / Боковой разгрузочный конвейер)",
+      "defectType": "8.03 Conveyor belt splice failure / Разрушение стыка конвейерной ленты",
+      "descr": "изношены соеденения на стыках ленты правого конвейера",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-022367"
+    },
+    {
+      "asset": "SN001",
+      "defect": "DD-00016411",
+      "raised": "2026-11-06",
+      "system": "SN001.CH.FR (Frame / Рама)",
+      "defectType": "6.08 Guarding / cover damage / Повреждение ограждений / кожухов",
+      "descr": "отсутствуют блокирующие дверки обслуживающих площадок грохота",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-022373"
     },
     {
       "asset": "LV021",
@@ -18678,19 +18678,6 @@ window.CM_WO_DATA = {
       "wo": "WO-021618"
     },
     {
-      "asset": "CR004",
-      "defect": "DD-00016309",
-      "raised": "2026-11-04",
-      "system": "CR004.CRS.LNR (Liners (Mantle & Concaves) / Футеровка (броня)",
-      "defectType": "7.01 Cone crusher liner wear / Износ брони конусной дробилки",
-      "descr": "футеровка конуса и чаши изношена",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": "WO-021890"
-    },
-    {
       "asset": "LV060",
       "defect": "DD-00016312",
       "raised": "2026-11-04",
@@ -18884,6 +18871,19 @@ window.CM_WO_DATA = {
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": "WO-021808"
+    },
+    {
+      "asset": "CR004",
+      "defect": "DD-00016309",
+      "raised": "2026-11-04",
+      "system": "CR004.CRS.LNR (Liners (Mantle & Concaves) / Футеровка (броня)",
+      "defectType": "7.01 Cone crusher liner wear / Износ брони конусной дробилки",
+      "descr": "футеровка конуса и чаши изношена",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-021890"
     },
     {
       "asset": "WE004",
@@ -22025,7 +22025,7 @@ window.CM_WO_DATA = {
       "system": "TK113.DRS.AXL (Axles / Мосты)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Утечка масла с сальника хвостовика сраднего моста",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P4 Planned (Repair)",
       "by": "Roman Kochetov",
       "regBy": "Кочетов Роман Иванович",
@@ -136212,15 +136212,15 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
-      "planStart": "2026-11-18",
-      "planStartDt": "2026-11-18T00:00:00",
-      "planEnd": "2026-11-18",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
+      "planStart": "2026-11-20",
+      "planStartDt": "2026-11-20T00:00:00",
+      "planEnd": "2026-11-20",
+      "actualStart": "2026-11-20",
+      "actualStartDt": "2026-11-20T11:00:00",
+      "actualEnd": "2026-11-20"
     },
     {
       "equip": "GR016",
@@ -173233,15 +173233,15 @@ window.CM_WO_DATA = {
         "TB"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-19",
       "planStartDt": "2026-11-19T00:00:00",
       "planEnd": "2026-11-20",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-19",
+      "actualStartDt": "2026-11-19T20:20:00",
+      "actualEnd": "2026-11-20"
     },
     {
       "equip": "TK114",

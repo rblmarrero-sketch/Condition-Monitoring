@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-21T20:42:46+00:00",
+  "generated": "2026-11-21T20:57:43+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -573,19 +573,6 @@
           "MP"
         ],
         "plan": "2026-11-24",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "TK113": [
-      {
-        "wo": "WO-021941",
-        "hours": 8000,
-        "types": [
-          "INSP",
-          "MP",
-          "TB"
-        ],
-        "plan": "2026-11-19",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -3362,6 +3349,24 @@
       "completed": ""
     },
     {
+      "wo": "WO-022136",
+      "equip": "GR016",
+      "cls": "GRD",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-20",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-11-20",
+      "status": "Completed",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "complete",
+      "completed": "2026-11-20"
+    },
+    {
       "wo": "WO-022322",
       "equip": "LD015",
       "cls": "LDR",
@@ -3552,12 +3557,12 @@
       "type": "8000 Hours service Planned",
       "hours": 8000,
       "plan": "2026-11-19",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-20"
     },
     {
       "wo": "WO-022145",
@@ -3677,24 +3682,6 @@
       "raised": "2026-11-18",
       "type": "1000 Hours service Planned",
       "hours": 1000,
-      "plan": "2026-11-18",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
-      "wo": "WO-022136",
-      "equip": "GR016",
-      "cls": "GRD",
-      "comp": "",
-      "desc": "250h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-18",
-      "type": "250 Hours service Planned",
-      "hours": 250,
       "plan": "2026-11-18",
       "status": "Elimination scheduled",
       "request": "",
@@ -32776,30 +32763,6 @@
       "x": "Течь сальника хвостовика моста"
     },
     {
-      "d": "DD-00016411",
-      "u": "SN001",
-      "s": "SN001.CH.FR (Frame / Рама)",
-      "p": "P4",
-      "r": "2026-11-06",
-      "x": "отсутствуют блокирующие дверки обслуживающих площадок грохота"
-    },
-    {
-      "d": "DD-00016409",
-      "u": "SN001",
-      "s": "SN001.CONV.SDC (Side Discharge Conveyor / Боковой разгрузочный конвейер)",
-      "p": "P4",
-      "r": "2026-11-06",
-      "x": "износ роликов правого бокового конвейера"
-    },
-    {
-      "d": "DD-00016410",
-      "u": "SN001",
-      "s": "SN001.CONV.SDC (Side Discharge Conveyor / Боковой разгрузочный конвейер)",
-      "p": "P4",
-      "r": "2026-11-06",
-      "x": "изношены соеденения на стыках ленты правого конвейера"
-    },
-    {
       "d": "DD-00016413",
       "u": "SN004",
       "s": "SN004.CONV.SDC (Side Discharge Conveyor / Боковой разгрузочный конвейер)",
@@ -32942,6 +32905,30 @@
       "p": "P4",
       "r": "2026-11-06",
       "x": "Деформация рамы конвейера"
+    },
+    {
+      "d": "DD-00016409",
+      "u": "SN001",
+      "s": "SN001.CONV.SDC (Side Discharge Conveyor / Боковой разгрузочный конвейер)",
+      "p": "P4",
+      "r": "2026-11-06",
+      "x": "износ роликов правого бокового конвейера"
+    },
+    {
+      "d": "DD-00016410",
+      "u": "SN001",
+      "s": "SN001.CONV.SDC (Side Discharge Conveyor / Боковой разгрузочный конвейер)",
+      "p": "P4",
+      "r": "2026-11-06",
+      "x": "изношены соеденения на стыках ленты правого конвейера"
+    },
+    {
+      "d": "DD-00016411",
+      "u": "SN001",
+      "s": "SN001.CH.FR (Frame / Рама)",
+      "p": "P4",
+      "r": "2026-11-06",
+      "x": "отсутствуют блокирующие дверки обслуживающих площадок грохота"
     },
     {
       "d": "DD-00016435",
@@ -33232,14 +33219,6 @@
       "x": "Замена шин"
     },
     {
-      "d": "DD-00016309",
-      "u": "CR004",
-      "s": "CR004.CRS.LNR (Liners (Mantle & Concaves) / Футеровка (броня)",
-      "p": "P4",
-      "r": "2026-11-04",
-      "x": "футеровка конуса и чаши изношена"
-    },
-    {
       "d": "DD-00016281",
       "u": "TK106",
       "s": "TK106.DRS.ENG (Engine / Двигатель)",
@@ -33334,6 +33313,14 @@
       "p": "P4",
       "r": "2026-11-04",
       "x": "не коректная работа главного насоса"
+    },
+    {
+      "d": "DD-00016309",
+      "u": "CR004",
+      "s": "CR004.CRS.LNR (Liners (Mantle & Concaves) / Футеровка (броня)",
+      "p": "P4",
+      "r": "2026-11-04",
+      "x": "футеровка конуса и чаши изношена"
     },
     {
       "d": "DD-00016297",
