@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-21T03:07:42+00:00",
+  "generated": "2026-11-21T03:22:46+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -6250,6 +6250,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023043"
     },
     {
+      "asset": "TK133",
+      "defect": "DD-00017254",
+      "raised": "2026-11-21",
+      "system": "TK133.BS.HOS (Hoses and Piping / Шланги и трубопроводы)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Ремонт тормозной пневмоститемы",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023050"
+    },
+    {
       "asset": "LV049",
       "defect": "DD-00017243",
       "raised": "2026-11-21",
@@ -6276,17 +6289,17 @@ window.CM_WO_DATA = {
       "wo": "WO-023046"
     },
     {
-      "asset": "LV124",
-      "defect": "DD-00017246",
+      "asset": "TK119",
+      "defect": "DD-00017253",
       "raised": "2026-11-21",
-      "system": "Пикап FENGDU P15MC ZN1032UCM5/LV124 FengDu_P15MC DONGFENG",
-      "defectType": "4.02 Open circuit / Разрыв цепи",
-      "descr": "Произвести установку антенны и подключение радиостанции",
-      "status": "Registered",
+      "system": "TK119.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Диагностика перетока масла в ДВС (2 уровня)",
+      "status": "Elimination scheduled",
       "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": "WO-023049"
     },
     {
       "asset": "LV068",
@@ -6295,6 +6308,19 @@ window.CM_WO_DATA = {
       "system": "LV068.ELS.WH (Wiring Harness / Жгут проводов)",
       "defectType": "4.02 Open circuit / Разрыв цепи",
       "descr": "Замена заднего правого датчика АБС",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023051"
+    },
+    {
+      "asset": "LV124",
+      "defect": "DD-00017246",
+      "raised": "2026-11-21",
+      "system": "Пикап FENGDU P15MC ZN1032UCM5/LV124 FengDu_P15MC DONGFENG",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "Произвести установку антенны и подключение радиостанции",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -6315,12 +6341,64 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "TK127",
+      "defect": "DD-00017255",
+      "raised": "2026-11-21",
+      "system": "TK127.DRS.FUE (Fuel System / Топливная система)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Диагностика и ремонт топливной системы",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": null
+    },
+    {
+      "asset": "TK119",
+      "defect": "DD-00017250",
+      "raised": "2026-11-21",
+      "system": "TK119.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Диагностика перетоков масла в ДВС (два уровня)",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": null
+    },
+    {
       "asset": "TK027",
       "defect": "DD-00017247",
       "raised": "2026-11-21",
       "system": "TK027.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
       "descr": "Замена подушек ДВС",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "TK006",
+      "defect": "DD-00017252",
+      "raised": "2026-11-21",
+      "system": "TK006.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Не работает фен",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "TK006",
+      "defect": "DD-00017251",
+      "raised": "2026-11-21",
+      "system": "TK006.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Передняя левая тупица периодический хруст",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -179182,9 +179260,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-18",
-      "planStartDt": "2026-11-18T00:00:00",
-      "planEnd": "2026-11-18",
+      "planStart": "2026-11-28",
+      "planStartDt": "2026-11-28T00:00:00",
+      "planEnd": "2026-11-28",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
