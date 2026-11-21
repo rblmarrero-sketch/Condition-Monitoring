@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-21T21:42:42+00:00",
+  "generated": "2026-11-21T21:57:53+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6055,17 +6055,43 @@ window.CM_WO_DATA = {
       "wo": "WO-023068"
     },
     {
+      "asset": "LV056",
+      "defect": "DD-00017293",
+      "raised": "2026-11-22",
+      "system": "LV056.DRS.TRA (Transmission / Трансмиссия)",
+      "defectType": "2.06 Abrasive wear / Абразивный износ",
+      "descr": "Износ ремня вариатора",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-023070"
+    },
+    {
+      "asset": "TK143",
+      "defect": "DD-00017294",
+      "raised": "2026-11-22",
+      "system": "TK143 HM400 KOMATSU",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Разрушение привода бортового редуктора",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-023072"
+    },
+    {
       "asset": "HX043",
       "defect": "DD-00017292",
       "raised": "2026-11-22",
       "system": "HX043.AU.CS (Control System / Система управления)",
       "defectType": "4.12 Cable / harness damage / Повреждение кабеля / жгута",
       "descr": "Отказ датчика пламени",
-      "status": "Registered",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Evgeniy Dolzhnikov",
       "regBy": "Должников Евгений Геннадьевич",
-      "wo": null
+      "wo": "WO-023069"
     },
     {
       "asset": "CN014",
@@ -13510,7 +13536,7 @@ window.CM_WO_DATA = {
       "system": "DZ022.CH.UC (Undercarriage / Ходовая часть)",
       "defectType": "1.06 Deformation / bending / buckling Деформация / изгиб / коробление",
       "descr": "Деформация защит кареток ходовой части",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P4 Planned (Repair)",
       "by": "Evgeniy Frolin",
       "regBy": "Фролин Евгений Владимирович",
@@ -13686,25 +13712,25 @@ window.CM_WO_DATA = {
       "wo": "WO-022419"
     },
     {
-      "asset": "TK097",
-      "defect": "DD-00016704",
-      "raised": "2026-11-11",
-      "system": "TRUCK, WATER URAL 4672M1-20, TK097 TIE ROD ENDS OldNumber (UT097)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Люфты и стуки в передних рулевых тягах, наконечниках",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
       "asset": "LV032",
       "defect": "DD-00016707",
       "raised": "2026-11-11",
       "system": "LV032.OC.HE (Heating / Отопление)",
       "defectType": "4.02 Open circuit / Разрыв цепи",
       "descr": "ремонт блока климата и отопителя салона.",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023071"
+    },
+    {
+      "asset": "TK097",
+      "defect": "DD-00016704",
+      "raised": "2026-11-11",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK097 TIE ROD ENDS OldNumber (UT097)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Люфты и стуки в передних рулевых тягах, наконечниках",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -16513,7 +16539,7 @@ window.CM_WO_DATA = {
       "system": "GR012.CH.BL (Blade / Отвал)",
       "defectType": "6.03 Structural crack / Трещина конструкции",
       "descr": "Требуется наварка постели переднего отвала, правого угола отвала",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P4 Planned (Repair)",
       "by": "Roman Besedovskiy",
       "regBy": "Беседовский Роман Иванович",
@@ -18782,19 +18808,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022214"
     },
     {
-      "asset": "TK115",
-      "defect": "DD-00016283",
-      "raised": "2026-11-04",
-      "system": "TK115.DRS.FD (Final Drives / Конечные передачи)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Требуется дефектовка. Посторонний шум + струшка в масле",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Roman Besedovskiy",
-      "regBy": "Беседовский Роман Иванович",
-      "wo": "WO-021694"
-    },
-    {
       "asset": "TK039",
       "defect": "DD-00016277",
       "raised": "2026-11-04",
@@ -18910,6 +18923,19 @@ window.CM_WO_DATA = {
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": "WO-021890"
+    },
+    {
+      "asset": "TK115",
+      "defect": "DD-00016283",
+      "raised": "2026-11-04",
+      "system": "TK115.DRS.FD (Final Drives / Конечные передачи)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Требуется дефектовка. Посторонний шум + струшка в масле",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-021694"
     },
     {
       "asset": "WE004",
@@ -24001,7 +24027,7 @@ window.CM_WO_DATA = {
       "system": "DZ022.OC.FS (Fire Suppression / Система пожаротушения)",
       "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
       "descr": "Требуется установить крепление огнетушителя",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P4 Planned (Repair)",
       "by": "Roman Kochetov",
       "regBy": "Кочетов Роман Иванович",
@@ -35870,7 +35896,7 @@ window.CM_WO_DATA = {
       "system": "EX021.OC.FS (Fire Suppression / Система пожаротушения)",
       "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
       "descr": "Требуются сварочные работы по креплению огнетушителя",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P4 Planned (Repair)",
       "by": "Roman Kochetov",
       "regBy": "Кочетов Роман Иванович",
@@ -47317,6 +47343,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "CR003",
+      "defect": "DD-00013890",
+      "raised": "2026-10-02",
+      "system": "CR003.HS (Hydraulic System / Гидравлическая система)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Неисправен кран гидробака",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Aybar Tazhiev",
+      "regBy": "Тажиев Айбар",
+      "wo": "WO-019302"
+    },
+    {
       "asset": "TK047",
       "defect": "DD-00013907",
       "raised": "2026-10-02",
@@ -47926,19 +47965,6 @@ window.CM_WO_DATA = {
       "by": "Aybar Tazhiev",
       "regBy": "Тажиев Айбар",
       "wo": "WO-019304"
-    },
-    {
-      "asset": "CR003",
-      "defect": "DD-00013890",
-      "raised": "2026-10-02",
-      "system": "CR003.HS (Hydraulic System / Гидравлическая система)",
-      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
-      "descr": "Неисправен кран гидробака",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Aybar Tazhiev",
-      "regBy": "Тажиев Айбар",
-      "wo": "WO-019302"
     },
     {
       "asset": "CR003",
@@ -58458,19 +58484,6 @@ window.CM_WO_DATA = {
       "wo": "WO-018103"
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
-      "wo": null
-    },
-    {
       "asset": "DZ022",
       "defect": "DD-00011314",
       "raised": "2026-08-21",
@@ -58572,6 +58585,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
@@ -110811,7 +110837,7 @@ window.CM_WO_DATA = {
       "cmLabel": "500h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
+      "woStatus": "CNF",
       "cmmsStatus": "Completed",
       "open": false,
       "planStart": "2026-11-16",
@@ -196863,9 +196889,9 @@ window.CM_WO_DATA = {
       "planStart": "2026-09-17",
       "planStartDt": "2026-09-17T00:00:00",
       "planEnd": "2026-09-17",
-      "actualStart": "2026-09-15",
-      "actualStartDt": "2026-09-15T19:00:00",
-      "actualEnd": "2026-09-16"
+      "actualStart": "2026-09-17",
+      "actualStartDt": "2026-09-17T00:00:00",
+      "actualEnd": "2026-09-17"
     },
     {
       "equip": "TK167",
