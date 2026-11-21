@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-21T12:17:41+00:00",
+  "generated": "2026-11-21T12:32:42+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 813,
@@ -6048,7 +6048,7 @@ window.CM_WO_DATA = {
       "system": "TK075.ELS.LIG (Head Lighting System / Система головного освещения)",
       "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
       "descr": "Неисправность ближнегоь света и ДХО.",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
@@ -6074,7 +6074,7 @@ window.CM_WO_DATA = {
       "system": "LS041.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
       "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
       "descr": "Переодически гаснут лампы (через минут 10 загараются )",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
@@ -7303,19 +7303,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023015"
     },
     {
-      "asset": "TK143",
-      "defect": "DD-00017216",
-      "raised": "2026-11-20",
-      "system": "TK143.DRS.AXL (Axles / Мосты)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "развалился карданый привод  левого колеса передней оси",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Vladimir Ladik",
-      "regBy": "Ладик Владимир Владимирович",
-      "wo": "WO-023010"
-    },
-    {
       "asset": "DZ003",
       "defect": "DD-00017187",
       "raised": "2026-11-20",
@@ -7353,6 +7340,19 @@ window.CM_WO_DATA = {
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": "WO-023026"
+    },
+    {
+      "asset": "TK143",
+      "defect": "DD-00017216",
+      "raised": "2026-11-20",
+      "system": "TK143.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "развалился карданый привод  левого колеса передней оси",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Vladimir Ladik",
+      "regBy": "Ладик Владимир Владимирович",
+      "wo": "WO-023010"
     },
     {
       "asset": "EX021",
@@ -7899,6 +7899,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022933"
+    },
+    {
+      "asset": "TK127",
+      "defect": "DD-00017283",
+      "raised": "2026-11-19",
+      "system": "TK127.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "ошибка в работе оборудования(LO3), са122 ошибка датчика турбонаддува",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Vladimir Ladik",
+      "regBy": "Ладик Владимир Владимирович",
+      "wo": "WO-023059"
     },
     {
       "asset": "TK096",
