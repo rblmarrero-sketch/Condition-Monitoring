@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-21T19:12:53+00:00",
+  "generated": "2026-11-21T19:27:54+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -3374,24 +3374,6 @@
       "raised": "2026-11-20",
       "type": "250 Hours service Planned",
       "hours": 250,
-      "plan": "2026-11-20",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
-      "wo": "WO-022115",
-      "equip": "LD002",
-      "cls": "LDR",
-      "comp": "",
-      "desc": "1000h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-20",
-      "type": "1000 Hours service Planned",
-      "hours": 1000,
       "plan": "2026-11-20",
       "status": "Elimination scheduled",
       "request": "",
@@ -11149,14 +11131,6 @@
       "x": "Замена РВД (изготовление)"
     },
     {
-      "d": "DD-00017254",
-      "u": "TK133",
-      "s": "TK133.BS.HOS (Hoses and Piping / Шланги и трубопроводы)",
-      "p": "P2",
-      "r": "2026-11-21",
-      "x": "Ремонт тормозной пневмоститемы"
-    },
-    {
       "d": "DD-00017243",
       "u": "LV049",
       "s": "LV049.OC.HE (Heating / Отопление)",
@@ -11251,6 +11225,14 @@
       "p": "P2",
       "r": "2026-11-21",
       "x": "Завоздушивание топливной системы"
+    },
+    {
+      "d": "DD-00017254",
+      "u": "TK133",
+      "s": "TK133.BS.HOS (Hoses and Piping / Шланги и трубопроводы)",
+      "p": "P2",
+      "r": "2026-11-21",
+      "x": "Ремонт тормозной пневмоститемы"
     },
     {
       "d": "DD-00017233",

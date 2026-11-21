@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-21T19:12:53+00:00",
+  "generated": "2026-11-21T19:27:54+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6289,19 +6289,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023043"
     },
     {
-      "asset": "TK133",
-      "defect": "DD-00017254",
-      "raised": "2026-11-21",
-      "system": "TK133.BS.HOS (Hoses and Piping / Шланги и трубопроводы)",
-      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
-      "descr": "Ремонт тормозной пневмоститемы",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-023050"
-    },
-    {
       "asset": "LV049",
       "defect": "DD-00017243",
       "raised": "2026-11-21",
@@ -6495,6 +6482,19 @@ window.CM_WO_DATA = {
       "by": "Viktor Bernikov",
       "regBy": "Берников Виктор Викторович",
       "wo": "WO-023061"
+    },
+    {
+      "asset": "TK133",
+      "defect": "DD-00017254",
+      "raised": "2026-11-21",
+      "system": "TK133.BS.HOS (Hoses and Piping / Шланги и трубопроводы)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Ремонт тормозной пневмоститемы",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023050"
     },
     {
       "asset": "LV124",
@@ -137800,13 +137800,13 @@ window.CM_WO_DATA = {
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
-      "open": true,
-      "planStart": "2026-11-20",
-      "planStartDt": "2026-11-20T00:00:00",
-      "planEnd": "2026-11-20",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "open": false,
+      "planStart": "2026-11-18",
+      "planStartDt": "2026-11-18T00:00:00",
+      "planEnd": "2026-11-18",
+      "actualStart": "2026-11-18",
+      "actualStartDt": "2026-11-18T20:20:00",
+      "actualEnd": "2026-11-19"
     },
     {
       "equip": "LD003",
