@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-22T22:07:36+00:00",
+  "generated": "2026-11-22T22:22:43+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6276,19 +6276,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023107"
     },
     {
-      "asset": "TK092",
-      "defect": "DD-00017338",
-      "raised": "2026-11-23",
-      "system": "TK092 65201 KAMAZ",
-      "defectType": "4.12 Cable / harness damage / Повреждение кабеля / жгута",
-      "descr": "Не подымает кузов",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-023108"
-    },
-    {
       "asset": "BS020",
       "defect": "DD-00017336",
       "raised": "2026-11-23",
@@ -6300,6 +6287,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-023106"
+    },
+    {
+      "asset": "TK092",
+      "defect": "DD-00017338",
+      "raised": "2026-11-23",
+      "system": "TK092 65201 KAMAZ",
+      "defectType": "4.12 Cable / harness damage / Повреждение кабеля / жгута",
+      "descr": "Не подымает кузов",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023108"
     },
     {
       "asset": "LD002",
@@ -7550,19 +7550,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022966"
     },
     {
-      "asset": "GE009",
-      "defect": "DD-00017189",
-      "raised": "2026-11-20",
-      "system": "GE009.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.24 Low temperature / freezing / Низкая температура / замерзание",
-      "descr": "утечка масла ДВС",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksandr Kuznetsov",
-      "regBy": "Кузнецов Александр Андреевич",
-      "wo": "WO-022968"
-    },
-    {
       "asset": "TK084",
       "defect": "DD-00017198",
       "raised": "2026-11-20",
@@ -7574,6 +7561,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022976"
+    },
+    {
+      "asset": "GE009",
+      "defect": "DD-00017189",
+      "raised": "2026-11-20",
+      "system": "GE009.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.24 Low temperature / freezing / Низкая температура / замерзание",
+      "descr": "утечка масла ДВС",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Kuznetsov",
+      "regBy": "Кузнецов Александр Андреевич",
+      "wo": "WO-022968"
     },
     {
       "asset": "EX003",
@@ -7771,19 +7771,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022971"
     },
     {
-      "asset": "EX016",
-      "defect": "DD-00017196",
-      "raised": "2026-11-20",
-      "system": "EX016.HS.DL (Hydraulic Lines / Гидролинии)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь масла с уплотнения РВД",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Viktor Bernikov",
-      "regBy": "Берников Виктор Викторович",
-      "wo": "WO-022975"
-    },
-    {
       "asset": "TK111",
       "defect": "DD-00017199",
       "raised": "2026-11-20",
@@ -7821,6 +7808,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022982"
+    },
+    {
+      "asset": "EX016",
+      "defect": "DD-00017196",
+      "raised": "2026-11-20",
+      "system": "EX016.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь масла с уплотнения РВД",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Viktor Bernikov",
+      "regBy": "Берников Виктор Викторович",
+      "wo": "WO-022975"
     },
     {
       "asset": "TK155",
@@ -51444,7 +51444,7 @@ window.CM_WO_DATA = {
       "system": "LS030.DRS (Drive System / Система передачи)",
       "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
       "descr": "Требуется ревизия, пуско-наладочные работы",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
       "regBy": "Таран Андрей Андреевич",
@@ -70210,19 +70210,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "SN004",
-      "defect": "GD-00016120",
-      "raised": "2025-11-26",
-      "system": "SN004.ELS (Electrical System / Электросистема)",
-      "defectType": "7.09 Screen media tear / breakage / Разрыв / поломка ситовой панели",
-      "descr": "Установка системы пылеподавления",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Rinat Musaferov",
-      "regBy": "Мусаферов Ринат Искакович",
-      "wo": "GD-017311"
-    },
-    {
       "asset": "GE095",
       "defect": "GD-00016101",
       "raised": "2025-11-26",
@@ -70260,6 +70247,19 @@ window.CM_WO_DATA = {
       "by": "Rinat Musaferov",
       "regBy": "Мусаферов Ринат Искакович",
       "wo": "GD-017309"
+    },
+    {
+      "asset": "SN004",
+      "defect": "GD-00016120",
+      "raised": "2025-11-26",
+      "system": "SN004.ELS (Electrical System / Электросистема)",
+      "defectType": "7.09 Screen media tear / breakage / Разрыв / поломка ситовой панели",
+      "descr": "Установка системы пылеподавления",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Rinat Musaferov",
+      "regBy": "Мусаферов Ринат Искакович",
+      "wo": "GD-017311"
     },
     {
       "asset": "CR006",
