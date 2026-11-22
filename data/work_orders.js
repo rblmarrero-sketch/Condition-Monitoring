@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-22T03:13:00+00:00",
+  "generated": "2026-11-22T03:27:47+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6014,6 +6014,32 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-023078"
+    },
+    {
+      "asset": "CN010",
+      "defect": "DD-00017301",
+      "raised": "2026-11-22",
+      "system": "CN010.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Ремонт отопителя крановой установки",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023079"
+    },
+    {
+      "asset": "LV052",
+      "defect": "DD-00017302",
+      "raised": "2026-11-22",
+      "system": "LV052.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Ремонт генератора",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023080"
     },
     {
       "asset": "CR008",
@@ -29455,6 +29481,19 @@ window.CM_WO_DATA = {
       "wo": "WO-020567"
     },
     {
+      "asset": "TK092",
+      "defect": "DD-00015410",
+      "raised": "2026-10-22",
+      "system": "TK092.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "течь масла из-под клапанной крышки",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-021514"
+    },
+    {
       "asset": "LV065",
       "defect": "DD-00015372",
       "raised": "2026-10-22",
@@ -30311,19 +30350,6 @@ window.CM_WO_DATA = {
       "by": "Andrey Taran",
       "regBy": "Таран Андрей Андреевич",
       "wo": "WO-020537"
-    },
-    {
-      "asset": "TK092",
-      "defect": "DD-00015410",
-      "raised": "2026-10-22",
-      "system": "TK092.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "течь масла из-под клапанной крышки",
-      "status": "Completed",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-021514"
     },
     {
       "asset": "TK155",
