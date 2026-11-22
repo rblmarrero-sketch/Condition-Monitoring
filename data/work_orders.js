@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-22T16:32:43+00:00",
+  "generated": "2026-11-22T16:52:43+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6146,6 +6146,45 @@ window.CM_WO_DATA = {
       "wo": "WO-023091"
     },
     {
+      "asset": "TK092",
+      "defect": "DD-00017322",
+      "raised": "2026-11-23",
+      "system": "TK092.BS.HOS (Hoses and Piping / Шланги и трубопроводы)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка воздуха.",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Viktor Bernikov",
+      "regBy": "Берников Виктор Викторович",
+      "wo": "WO-023092"
+    },
+    {
+      "asset": "EX008",
+      "defect": "DD-00017324",
+      "raised": "2026-11-23",
+      "system": "EX008.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь рабочей жидкости по соединению (фитингу) РВД",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Kuznetsov",
+      "regBy": "Кузнецов Александр Андреевич",
+      "wo": "WO-023093"
+    },
+    {
+      "asset": "LD002",
+      "defect": "DD-00017323",
+      "raised": "2026-11-23",
+      "system": "LD002.WE.BUC (Bucket / Ковш)",
+      "defectType": "2.06 Abrasive wear / Абразивный износ",
+      "descr": "Замена зубьев ковша",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Vladimir Ladik",
+      "regBy": "Ладик Владимир Владимирович",
+      "wo": null
+    },
+    {
       "asset": "CN010",
       "defect": "DD-00017298",
       "raised": "2026-11-22",
@@ -6250,19 +6289,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023078"
     },
     {
-      "asset": "TK002",
-      "defect": "DD-00017309",
-      "raised": "2026-11-22",
-      "system": "TK002.ELS.ALT (Alternator / Генератор)",
-      "defectType": "4.15 Alternator / charging fault / Неисправность генератора / зарядки",
-      "descr": "Замена генератора",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-023084"
-    },
-    {
       "asset": "TK084",
       "defect": "DD-00017317",
       "raised": "2026-11-22",
@@ -6287,6 +6313,19 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-023088"
+    },
+    {
+      "asset": "TK002",
+      "defect": "DD-00017309",
+      "raised": "2026-11-22",
+      "system": "TK002.ELS.ALT (Alternator / Генератор)",
+      "defectType": "4.15 Alternator / charging fault / Неисправность генератора / зарядки",
+      "descr": "Замена генератора",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023084"
     },
     {
       "asset": "CR008",
