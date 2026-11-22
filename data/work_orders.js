@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-22T23:07:45+00:00",
+  "generated": "2026-11-22T23:22:48+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -448,8 +448,8 @@ window.CM_WO_DATA = {
     "planStart": 0
   },
   "cmCauseFrom": {
-    "wo": 130,
-    "wr": 85,
+    "wo": 131,
+    "wr": 84,
     "cert": 0,
     "none": 0
   },
@@ -1975,7 +1975,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-10-20",
       "detected": "2026-10-20",
-      "planStart": null,
+      "planStart": "2026-12-10",
       "closed": null,
       "asset": "TK146",
       "defect": "DD-00015243",
@@ -1985,15 +1985,15 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "defectType": "1.15 Abnormal smoke / abnormal exhaust / Дымность / ненормальный выхлоп",
       "cause": "Сгорает масло",
-      "causeFrom": "wr",
+      "causeFrom": "wo",
       "descr": "Разгерметизация выпускного тракта выхлопной трубы, выброс сажи из под термочехла.",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "by": "Bekzhan",
       "byFull": "Bekzhan Kazhybekov",
       "regBy": "Кажыбеков Бекжан",
       "raisedBy": "ГДК Баимская",
-      "woNumber": null,
-      "maintType": null,
+      "woNumber": "WO-023110",
+      "maintType": "P4 Planned Repair",
       "planned": false
     },
     {
@@ -6263,19 +6263,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023105"
     },
     {
-      "asset": "TK084",
-      "defect": "DD-00017337",
-      "raised": "2026-11-23",
-      "system": "TK084.ELS.WH (Wiring Harness / Жгут проводов)",
-      "defectType": "4.12 Cable / harness damage / Повреждение кабеля / жгута",
-      "descr": "Диагностика ДВС CHECK",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-023107"
-    },
-    {
       "asset": "BS020",
       "defect": "DD-00017336",
       "raised": "2026-11-23",
@@ -6300,6 +6287,32 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-023108"
+    },
+    {
+      "asset": "TK037",
+      "defect": "DD-00017342",
+      "raised": "2026-11-23",
+      "system": "TK037.ELS.WH (Wiring Harness / Жгут проводов)",
+      "defectType": "4.06 Loose connection / high resistance / Плохой контакт / высокое сопротивление",
+      "descr": "Замена педали газа",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023109"
+    },
+    {
+      "asset": "TK084",
+      "defect": "DD-00017337",
+      "raised": "2026-11-23",
+      "system": "TK084.ELS.WH (Wiring Harness / Жгут проводов)",
+      "defectType": "4.12 Cable / harness damage / Повреждение кабеля / жгута",
+      "descr": "Диагностика ДВС CHECK",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023107"
     },
     {
       "asset": "LD006",
@@ -6347,6 +6360,19 @@ window.CM_WO_DATA = {
       "system": "TK112.DRS.AXL (Axles / Мосты)",
       "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
       "descr": "Люфт заднего хвостовика среднего моста",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": null
+    },
+    {
+      "asset": "GR013",
+      "defect": "DD-00017343",
+      "raised": "2026-11-23",
+      "system": "GR013.DRS.FD (Final Drives / Конечные передачи)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка масла с бортовых редукторов",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Dmitriy Stepanenko",
@@ -6482,6 +6508,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-023078"
+    },
+    {
+      "asset": "TK147",
+      "defect": "DD-00017304",
+      "raised": "2026-11-22",
+      "system": "TK147.CH.SU.RRC Rear Ride Cylinder / Задний цилиндр подвески",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "Низкое давление в подвеске",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-023111"
     },
     {
       "asset": "CR008",
@@ -6689,19 +6728,6 @@ window.CM_WO_DATA = {
       "priority": "P2 Urgent",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "TK147",
-      "defect": "DD-00017304",
-      "raised": "2026-11-22",
-      "system": "TK147.CH.SU.RRC Rear Ride Cylinder / Задний цилиндр подвески",
-      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
-      "descr": "Низкое давление в подвеске",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
       "wo": null
     },
     {
@@ -14947,6 +14973,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022205"
     },
     {
+      "asset": "DZ014",
+      "defect": "DD-00016668",
+      "raised": "2026-11-10",
+      "system": "DZ014.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка по РВД",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022240"
+    },
+    {
       "asset": "TK146",
       "defect": "DD-00016624",
       "raised": "2026-11-10",
@@ -15126,19 +15165,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Aleksey Kiselev",
       "regBy": "Киселев Алексей Александрович",
-      "wo": null
-    },
-    {
-      "asset": "DZ014",
-      "defect": "DD-00016668",
-      "raised": "2026-11-10",
-      "system": "DZ014.HS.DL (Hydraulic Lines / Гидролинии)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка по РВД",
-      "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
       "wo": null
     },
     {
