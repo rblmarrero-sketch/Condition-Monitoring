@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-22T09:42:43+00:00",
+  "generated": "2026-11-22T09:57:38+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6172,19 +6172,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023083"
     },
     {
-      "asset": "TK002",
-      "defect": "DD-00017309",
-      "raised": "2026-11-22",
-      "system": "TK002.ELS.ALT (Alternator / Генератор)",
-      "defectType": "4.15 Alternator / charging fault / Неисправность генератора / зарядки",
-      "descr": "Замена генератора",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-023084"
-    },
-    {
       "asset": "EX002",
       "defect": "DD-00017312",
       "raised": "2026-11-22",
@@ -6222,6 +6209,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-023078"
+    },
+    {
+      "asset": "TK002",
+      "defect": "DD-00017309",
+      "raised": "2026-11-22",
+      "system": "TK002.ELS.ALT (Alternator / Генератор)",
+      "defectType": "4.15 Alternator / charging fault / Неисправность генератора / зарядки",
+      "descr": "Замена генератора",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023084"
     },
     {
       "asset": "CR008",
