@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-22T01:37:52+00:00",
+  "generated": "2026-11-22T01:52:41+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6131,6 +6131,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-023075"
+    },
+    {
+      "asset": "CN010",
+      "defect": "DD-00017298",
+      "raised": "2026-11-22",
+      "system": "CN010.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Ремонт отопителя крановой установки",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023076"
     },
     {
       "asset": "CN014",
@@ -23130,7 +23143,7 @@ window.CM_WO_DATA = {
       "system": "TK089.BS.BPC (Brake Packs / Тормозные пакеты)",
       "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
       "descr": "Скрипят тормоза (при торможении машину уводит вправо)",
-      "status": "Completed",
+      "status": "In progress",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
@@ -29377,6 +29390,32 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "TK089",
+      "defect": "DD-00015407",
+      "raised": "2026-10-22",
+      "system": "TK089.CH.SU (Suspension / Подвеска)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "ремонт передней ходовой",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022393"
+    },
+    {
+      "asset": "TK089",
+      "defect": "DD-00015406",
+      "raised": "2026-10-22",
+      "system": "TK089.CH.SU (Suspension / Подвеска)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "замена втулок сайлентблоков",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022395"
+    },
+    {
       "asset": "LD008",
       "defect": "DD-00015418",
       "raised": "2026-10-22",
@@ -30298,32 +30337,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022385"
-    },
-    {
-      "asset": "TK089",
-      "defect": "DD-00015407",
-      "raised": "2026-10-22",
-      "system": "TK089.CH.SU (Suspension / Подвеска)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "ремонт передней ходовой",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022393"
-    },
-    {
-      "asset": "TK089",
-      "defect": "DD-00015406",
-      "raised": "2026-10-22",
-      "system": "TK089.CH.SU (Suspension / Подвеска)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "замена втулок сайлентблоков",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022395"
     },
     {
       "asset": "TK144",
@@ -58485,6 +58498,19 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "TK008",
+      "defect": "DD-00010860",
+      "raised": "2026-08-14",
+      "system": "TK008.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Не работает фен",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": null
+    },
+    {
+      "asset": "TK008",
       "defect": "DD-00010861",
       "raised": "2026-08-14",
       "system": "TK008.CH.SU (Suspension / Подвеска)",
@@ -58503,19 +58529,6 @@ window.CM_WO_DATA = {
       "system": "FL005.OC.AC (Air Conditioning / Кондиционирование)",
       "defectType": "1.27 Belt drive issue (slip/break) / Проблема ременного привода (проскальзывание/обрыв)",
       "descr": "Трещины на ремне кондиционера",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": null
-    },
-    {
-      "asset": "TK008",
-      "defect": "DD-00010860",
-      "raised": "2026-08-14",
-      "system": "TK008.OC.HE (Heating / Отопление)",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Не работает фен",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
