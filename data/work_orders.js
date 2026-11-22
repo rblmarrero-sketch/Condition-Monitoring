@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-22T06:08:16+00:00",
+  "generated": "2026-11-22T06:22:49+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6211,6 +6211,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023078"
     },
     {
+      "asset": "CD003",
+      "defect": "DD-00017313",
+      "raised": "2026-11-22",
+      "system": "CD003.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Демонтаж глушителя",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023086"
+    },
+    {
       "asset": "CR008",
       "defect": "DD-00017289",
       "raised": "2026-11-22",
@@ -7303,19 +7316,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022957"
     },
     {
-      "asset": "TK169",
-      "defect": "DD-00017181",
-      "raised": "2026-11-20",
-      "system": "TRUCK, WATER URAL 4672M1-20, TK169 ENGINE",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "утечка воздуха в системе турбонаддува",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksandr Kuznetsov",
-      "regBy": "Кузнецов Александр Андреевич",
-      "wo": "WO-022961"
-    },
-    {
       "asset": "EX024",
       "defect": "DD-00017180",
       "raised": "2026-11-20",
@@ -7340,6 +7340,19 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-022960"
+    },
+    {
+      "asset": "TK169",
+      "defect": "DD-00017181",
+      "raised": "2026-11-20",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK169 ENGINE",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "утечка воздуха в системе турбонаддува",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Kuznetsov",
+      "regBy": "Кузнецов Александр Андреевич",
+      "wo": "WO-022961"
     },
     {
       "asset": "DZ008",
@@ -7439,7 +7452,7 @@ window.CM_WO_DATA = {
       "system": "EX006.CH.BUC (Bucket / Ковш)",
       "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "descr": "Износ каронок",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Viktor Bernikov",
       "regBy": "Берников Виктор Викторович",
@@ -8050,7 +8063,7 @@ window.CM_WO_DATA = {
       "system": "LS025.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
       "descr": "Глохнет ДВС",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Viktor Bernikov",
       "regBy": "Берников Виктор Викторович",
@@ -57977,19 +57990,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
-      "wo": null
-    },
-    {
       "asset": "BS005",
       "defect": "DD-00011312",
       "raised": "2026-08-21",
@@ -58078,6 +58078,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
@@ -81404,6 +81417,25 @@ window.CM_WO_DATA = {
     }
   ],
   "workOrders": [
+    {
+      "equip": "BL001",
+      "cls": "GEN",
+      "woNumber": null,
+      "maintType": "2000 Hours service Planned",
+      "hours": 2000,
+      "cmLabel": "2000h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": null,
+      "cmmsStatus": "Registered",
+      "open": true,
+      "planStart": null,
+      "planStartDt": null,
+      "planEnd": null,
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
     {
       "equip": "BL001",
       "cls": "GEN",
