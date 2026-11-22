@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-22T01:17:53+00:00",
+  "generated": "2026-11-22T01:37:52+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6118,6 +6118,19 @@ window.CM_WO_DATA = {
       "by": "Ilshat Sabitov",
       "regBy": "Сабитов Ильшат Рашидович",
       "wo": "WO-023074"
+    },
+    {
+      "asset": "TK010",
+      "defect": "DD-00017297",
+      "raised": "2026-11-22",
+      "system": "TK010.BS.PU (Pneumatic Control / Пневмоуправление)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Замена компрессора",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023075"
     },
     {
       "asset": "CN014",
@@ -16689,6 +16702,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "TK089",
+      "defect": "DD-00016437",
+      "raised": "2026-11-06",
+      "system": "TK089.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка ОЖ в передней части ДВС",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022389"
+    },
+    {
       "asset": "PU005",
       "defect": "DD-00016449",
       "raised": "2026-11-06",
@@ -17259,19 +17285,6 @@ window.CM_WO_DATA = {
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": "WO-022365"
-    },
-    {
-      "asset": "TK089",
-      "defect": "DD-00016437",
-      "raised": "2026-11-06",
-      "system": "TK089.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка ОЖ в передней части ДВС",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022389"
     },
     {
       "asset": "CR006",
