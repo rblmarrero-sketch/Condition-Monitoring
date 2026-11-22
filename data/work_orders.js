@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-22T15:14:53+00:00",
+  "generated": "2026-11-22T15:27:50+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6126,10 +6126,23 @@ window.CM_WO_DATA = {
       "system": "TRUCK, WATER KAMAZ UST 5453K2, TK068 HEATING OldNumber (UT068)",
       "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
       "descr": "Не работает автономный отопитель в насосном отсеке.",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "priority": "P2 Urgent",
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-023090"
+    },
+    {
+      "asset": "CR008",
+      "defect": "DD-00017321",
+      "raised": "2026-11-23",
+      "system": "CR008.OC.CON (Control Console / Пульт управления)",
+      "defectType": "4.06 Loose connection / high resistance / Плохой контакт / высокое сопротивление",
+      "descr": "ревизия/очистка контактов пульта управления",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Sergey Murashko",
+      "regBy": "Мурашко Сергей Борисович",
       "wo": null
     },
     {
