@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-22T16:18:02+00:00",
+  "generated": "2026-11-22T16:32:43+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -25919,19 +25919,6 @@ window.CM_WO_DATA = {
       "wo": "WO-020755"
     },
     {
-      "asset": "TK047",
-      "defect": "DD-00015718",
-      "raised": "2026-10-26",
-      "system": "TK047.CH.SU (Suspension / Подвеска)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Требуется диагностика подвески (посторонний шум)",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022420"
-    },
-    {
       "asset": "TK044",
       "defect": "DD-00015707",
       "raised": "2026-10-26",
@@ -26541,6 +26528,19 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-020807"
+    },
+    {
+      "asset": "TK047",
+      "defect": "DD-00015718",
+      "raised": "2026-10-26",
+      "system": "TK047.CH.SU (Suspension / Подвеска)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Требуется диагностика подвески (посторонний шум)",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022420"
     },
     {
       "asset": "LV068",
