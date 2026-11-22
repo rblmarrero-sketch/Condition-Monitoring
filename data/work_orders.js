@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-22T03:47:47+00:00",
+  "generated": "2026-11-22T04:02:41+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6003,19 +6003,6 @@ window.CM_WO_DATA = {
   ],
   "otherDefects": [
     {
-      "asset": "TK036",
-      "defect": "DD-00017300",
-      "raised": "2026-11-22",
-      "system": "TK036.BS.CV (Control Valve / Управляющий клапан)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Не работает подъем кузова",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-023078"
-    },
-    {
       "asset": "CN010",
       "defect": "DD-00017301",
       "raised": "2026-11-22",
@@ -6040,6 +6027,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-023080"
+    },
+    {
+      "asset": "TK036",
+      "defect": "DD-00017300",
+      "raised": "2026-11-22",
+      "system": "TK036.BS.CV (Control Valve / Управляющий клапан)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Не работает подъем кузова",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023078"
     },
     {
       "asset": "CR008",
@@ -6196,6 +6196,32 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-023076"
+    },
+    {
+      "asset": "EX010",
+      "defect": "DD-00017303",
+      "raised": "2026-11-22",
+      "system": "EX010.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь масла гидравлическогос распределительного коллектора",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": null
+    },
+    {
+      "asset": "TK147",
+      "defect": "DD-00017304",
+      "raised": "2026-11-22",
+      "system": "TK147.CH.SU.RRC Rear Ride Cylinder / Задний цилиндр подвески",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "Низкое давление в подвеске",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": null
     },
     {
       "asset": "CN014",
@@ -7641,6 +7667,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022878"
     },
     {
+      "asset": "EX008",
+      "defect": "DD-00017165",
+      "raised": "2026-11-19",
+      "system": "EX008.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Замена РВД",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022942"
+    },
+    {
       "asset": "DR011",
       "defect": "EB-00000107",
       "raised": "2026-11-19",
@@ -7665,19 +7704,6 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022881"
-    },
-    {
-      "asset": "EX008",
-      "defect": "DD-00017165",
-      "raised": "2026-11-19",
-      "system": "EX008.HS.DL (Hydraulic Lines / Гидролинии)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Замена РВД",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022942"
     },
     {
       "asset": "DZ003",
@@ -26595,6 +26621,19 @@ window.CM_WO_DATA = {
       "wo": "WO-020725"
     },
     {
+      "asset": "CR004",
+      "defect": "DD-00015652",
+      "raised": "2026-10-25",
+      "system": "CR004.CONV.MDC (Main Discharge Conveyor / Главный разгрузочный конвейер)",
+      "defectType": "8.06 Roller / idler failure / Отказ ролика / роликоопоры",
+      "descr": "Критический износ демпферного стола",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-020781"
+    },
+    {
       "asset": "LV068",
       "defect": "DD-00015592",
       "raised": "2026-10-25",
@@ -27217,19 +27256,6 @@ window.CM_WO_DATA = {
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": "WO-020785"
-    },
-    {
-      "asset": "CR004",
-      "defect": "DD-00015652",
-      "raised": "2026-10-25",
-      "system": "CR004.CONV.MDC (Main Discharge Conveyor / Главный разгрузочный конвейер)",
-      "defectType": "8.06 Roller / idler failure / Отказ ролика / роликоопоры",
-      "descr": "Критический износ демпферного стола",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": "WO-020781"
     },
     {
       "asset": "TK098",
