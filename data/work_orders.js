@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-22T04:47:55+00:00",
+  "generated": "2026-11-22T05:07:52+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -443,13 +443,13 @@ window.CM_WO_DATA = {
     "regBy": "Contact person initiator WR"
   },
   "cmDateFrom": {
-    "raised": 213,
+    "raised": 217,
     "detected": 0,
     "planStart": 0
   },
   "cmCauseFrom": {
     "wo": 131,
-    "wr": 82,
+    "wr": 86,
     "cert": 0,
     "none": 0
   },
@@ -462,6 +462,110 @@ window.CM_WO_DATA = {
     "Bekzhan"
   ],
   "cmWorkOrders": [
+    {
+      "date": "2026-11-22",
+      "dateFrom": "raised",
+      "raised": "2026-11-22",
+      "detected": "2026-11-22",
+      "planStart": null,
+      "closed": null,
+      "asset": "TK150",
+      "defect": "DD-00017311",
+      "requestNo": "DD-00017311",
+      "eqType": "TRUCK, DUMP",
+      "system": "TK150.DRS.AXL.RAX Rear Axle Group / Задний мост",
+      "priority": "P4 Planned (Repair)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Износ уплотнения",
+      "causeFrom": "wr",
+      "descr": "Течь с сальника дифференциала",
+      "status": "Registered",
+      "by": "Slam",
+      "byFull": "Slam Taganov",
+      "regBy": "Таганов Слам Джумамуратович",
+      "raisedBy": "ГДК Баимская",
+      "woNumber": null,
+      "maintType": null,
+      "planned": false
+    },
+    {
+      "date": "2026-11-22",
+      "dateFrom": "raised",
+      "raised": "2026-11-22",
+      "detected": "2026-11-22",
+      "planStart": null,
+      "closed": null,
+      "asset": "TK150",
+      "defect": "DD-00017310",
+      "requestNo": "DD-00017310",
+      "eqType": "TRUCK, DUMP",
+      "system": "TK150.DRS.TRA (Transmission / Трансмиссия)",
+      "priority": "P4 Planned (Repair)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Износ уплотнения",
+      "causeFrom": "wr",
+      "descr": "Каплевидная течь сальника входного вала АКПП.",
+      "status": "Registered",
+      "by": "Slam",
+      "byFull": "Slam Taganov",
+      "regBy": "Таганов Слам Джумамуратович",
+      "raisedBy": "ГДК Баимская",
+      "woNumber": null,
+      "maintType": null,
+      "planned": false
+    },
+    {
+      "date": "2026-11-22",
+      "dateFrom": "raised",
+      "raised": "2026-11-22",
+      "detected": "2026-11-22",
+      "planStart": null,
+      "closed": null,
+      "asset": "TK150",
+      "defect": "DD-00017308",
+      "requestNo": "DD-00017308",
+      "eqType": "TRUCK, DUMP",
+      "system": "TK150.DRS.TRA (Transmission / Трансмиссия)",
+      "priority": "P4 Planned (Repair)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Износ уплотнения",
+      "causeFrom": "wr",
+      "descr": "Течь с сальника ВОМ.",
+      "status": "Registered",
+      "by": "Slam",
+      "byFull": "Slam Taganov",
+      "regBy": "Таганов Слам Джумамуратович",
+      "raisedBy": "ГДК Баимская",
+      "woNumber": null,
+      "maintType": null,
+      "planned": false
+    },
+    {
+      "date": "2026-11-22",
+      "dateFrom": "raised",
+      "raised": "2026-11-22",
+      "detected": "2026-11-22",
+      "planStart": null,
+      "closed": null,
+      "asset": "TK150",
+      "defect": "DD-00017307",
+      "requestNo": "DD-00017307",
+      "eqType": "TRUCK, DUMP",
+      "system": "TK150.DRS.COO.RAD Radiator / Радиатор",
+      "priority": "P4 Planned (Repair)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Поврежден шланга/линии",
+      "causeFrom": "wr",
+      "descr": "Течь ОЖ с радиатора.",
+      "status": "Registered",
+      "by": "Slam",
+      "byFull": "Slam Taganov",
+      "regBy": "Таганов Слам Джумамуратович",
+      "raisedBy": "ГДК Баимская",
+      "woNumber": null,
+      "maintType": null,
+      "planned": false
+    },
     {
       "date": "2026-11-20",
       "dateFrom": "raised",
@@ -6066,6 +6170,19 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-023083"
+    },
+    {
+      "asset": "TK002",
+      "defect": "DD-00017309",
+      "raised": "2026-11-22",
+      "system": "TK002.ELS.ALT (Alternator / Генератор)",
+      "defectType": "4.15 Alternator / charging fault / Неисправность генератора / зарядки",
+      "descr": "Замена генератора",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023084"
     },
     {
       "asset": "CR008",
@@ -14076,6 +14193,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022390"
     },
     {
+      "asset": "TK047",
+      "defect": "DD-00016640",
+      "raised": "2026-11-10",
+      "system": "TK047.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Клинит левое колесо, вторая ось. Проверка\\ремонт тормозной системы, проверка\\ремонт ступиц и шкворневых узлов",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022423"
+    },
+    {
       "asset": "SN001",
       "defect": "DD-00016625",
       "raised": "2026-11-10",
@@ -14555,19 +14685,6 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022238"
-    },
-    {
-      "asset": "TK047",
-      "defect": "DD-00016640",
-      "raised": "2026-11-10",
-      "system": "TK047.DRS.AXL (Axles / Мосты)",
-      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
-      "descr": "Клинит левое колесо, вторая ось. Проверка\\ремонт тормозной системы, проверка\\ремонт ступиц и шкворневых узлов",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022423"
     },
     {
       "asset": "GR013",
@@ -20511,6 +20628,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021566"
     },
     {
+      "asset": "GR003",
+      "defect": "DD-00016194",
+      "raised": "2026-11-02",
+      "system": "GR003.CH.BL (Blade / Отвал)",
+      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
+      "descr": "Износ ножей",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-021515"
+    },
+    {
       "asset": "BS015",
       "defect": "DD-00016186",
       "raised": "2026-11-02",
@@ -20664,19 +20794,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "GR003",
-      "defect": "DD-00016194",
-      "raised": "2026-11-02",
-      "system": "GR003.CH.BL (Blade / Отвал)",
-      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
-      "descr": "Износ ножей",
-      "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
       "wo": null
     },
     {
@@ -40141,19 +40258,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "HX019",
-      "defect": "DD-00014530",
-      "raised": "2026-10-11",
-      "system": "HX019 BV690FS MASTER",
-      "defectType": "5.14 Extreme temperature (cold/heat) / Экстремальная температура (холод/жара)",
-      "descr": "Перегрев",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Shcherbina",
-      "regBy": "Щербина Андрей Николаевич",
-      "wo": null
-    },
-    {
       "asset": "CD010",
       "defect": "DD-00014573",
       "raised": "2026-10-11",
@@ -40203,6 +40307,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
+      "wo": null
+    },
+    {
+      "asset": "HX019",
+      "defect": "DD-00014530",
+      "raised": "2026-10-11",
+      "system": "HX019 BV690FS MASTER",
+      "defectType": "5.14 Extreme temperature (cold/heat) / Экстремальная температура (холод/жара)",
+      "descr": "Перегрев",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Shcherbina",
+      "regBy": "Щербина Андрей Николаевич",
       "wo": null
     },
     {
@@ -59329,8 +59446,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H07",
-      "defect": "EB-00000075",
+      "asset": "H04",
+      "defect": "EB-00000076",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -59342,8 +59459,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000076",
+      "asset": "H07",
+      "defect": "EB-00000075",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -155556,6 +155673,30 @@ window.CM_WO_DATA = {
       "planStart": "2026-11-23",
       "planStartDt": "2026-11-23T00:00:00",
       "planEnd": "2026-11-23",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
+      "equip": "TK041",
+      "cls": "HT",
+      "woNumber": null,
+      "maintType": "4000 Hours service Planned",
+      "hours": 4000,
+      "cmLabel": "Filter Cut / General Inspection / Magnetic Plug / Dump Body Liner",
+      "cmTypes": [
+        "FC",
+        "INSP",
+        "MP",
+        "TB"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": null,
+      "cmmsStatus": "Registered",
+      "open": true,
+      "planStart": null,
+      "planStartDt": null,
+      "planEnd": null,
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
