@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-22T02:42:56+00:00",
+  "generated": "2026-11-22T02:57:45+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6003,6 +6003,19 @@ window.CM_WO_DATA = {
   ],
   "otherDefects": [
     {
+      "asset": "TK036",
+      "defect": "DD-00017300",
+      "raised": "2026-11-22",
+      "system": "TK036.BS.CV (Control Valve / Управляющий клапан)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Не работает подъем кузова",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023078"
+    },
+    {
       "asset": "CR008",
       "defect": "DD-00017289",
       "raised": "2026-11-22",
@@ -6107,6 +6120,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023073"
     },
     {
+      "asset": "EX022",
+      "defect": "DD-00017299",
+      "raised": "2026-11-22",
+      "system": "EX022.CH.BUC (Bucket / Ковш)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Отломился адаптер и коронка ковша",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023077"
+    },
+    {
       "asset": "CN001",
       "defect": "DD-00017296",
       "raised": "2026-11-22",
@@ -6144,19 +6170,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-023076"
-    },
-    {
-      "asset": "EX022",
-      "defect": "DD-00017299",
-      "raised": "2026-11-22",
-      "system": "EX022.CH.BUC (Bucket / Ковш)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Отломился адаптер и коронка ковша",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-023077"
     },
     {
       "asset": "CN014",
@@ -57756,6 +57769,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
+      "wo": null
+    },
+    {
       "asset": "BS005",
       "defect": "DD-00011312",
       "raised": "2026-08-21",
@@ -57844,19 +57870,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
@@ -59238,8 +59251,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H07",
-      "defect": "EB-00000075",
+      "asset": "H04",
+      "defect": "EB-00000076",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -59251,8 +59264,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000076",
+      "asset": "H07",
+      "defect": "EB-00000075",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -59810,6 +59823,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "EX003",
+      "defect": "DD-00009814",
+      "raised": "2026-07-29",
+      "system": "EX003.OC.GL (Glass / Стекла)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Трещина стекла",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": null
+    },
+    {
       "asset": "EX002",
       "defect": "DD-00009830",
       "raised": "2026-07-29",
@@ -59829,19 +59855,6 @@ window.CM_WO_DATA = {
       "system": "EX001.CH.UC (Undercarriage / Ходовая часть)",
       "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
       "descr": "Отсутствует защита опорных катков слева и справа",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": null
-    },
-    {
-      "asset": "EX003",
-      "defect": "DD-00009814",
-      "raised": "2026-07-29",
-      "system": "EX003.OC.GL (Glass / Стекла)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Трещина стекла",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
