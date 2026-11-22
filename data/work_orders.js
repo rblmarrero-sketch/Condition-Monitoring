@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-22T05:38:01+00:00",
+  "generated": "2026-11-22T05:53:11+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6108,6 +6108,19 @@ window.CM_WO_DATA = {
   "otherDefects": [
     {
       "asset": "CN010",
+      "defect": "DD-00017298",
+      "raised": "2026-11-22",
+      "system": "CN010.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Ремонт отопителя крановой установки",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023076"
+    },
+    {
+      "asset": "CN010",
       "defect": "DD-00017301",
       "raised": "2026-11-22",
       "system": "CN010.OC.HE (Heating / Отопление)",
@@ -6131,19 +6144,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-023080"
-    },
-    {
-      "asset": "TK036",
-      "defect": "DD-00017300",
-      "raised": "2026-11-22",
-      "system": "TK036.BS.CV (Control Valve / Управляющий клапан)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Не работает подъем кузова",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-023078"
     },
     {
       "asset": "CN018",
@@ -6196,6 +6196,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-023085"
+    },
+    {
+      "asset": "TK036",
+      "defect": "DD-00017300",
+      "raised": "2026-11-22",
+      "system": "TK036.BS.CV (Control Valve / Управляющий клапан)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Не работает подъем кузова",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023078"
     },
     {
       "asset": "CR008",
@@ -6339,19 +6352,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-023075"
-    },
-    {
-      "asset": "CN010",
-      "defect": "DD-00017298",
-      "raised": "2026-11-22",
-      "system": "CN010.OC.HE (Heating / Отопление)",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Ремонт отопителя крановой установки",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-023076"
     },
     {
       "asset": "EX010",
@@ -119778,9 +119778,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-18",
-      "planStartDt": "2026-11-18T00:00:00",
-      "planEnd": "2026-11-18",
+      "planStart": "2026-11-27",
+      "planStartDt": "2026-11-27T00:00:00",
+      "planEnd": "2026-11-27",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -119797,9 +119797,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-27",
-      "planStartDt": "2026-11-27T00:00:00",
-      "planEnd": "2026-11-27",
+      "planStart": "2026-12-05",
+      "planStartDt": "2026-12-05T00:00:00",
+      "planEnd": "2026-12-05",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
