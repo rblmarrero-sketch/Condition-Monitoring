@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-22T10:42:41+00:00",
+  "generated": "2026-11-22T10:57:46+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6377,6 +6377,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
+      "wo": null
+    },
+    {
+      "asset": "TK084",
+      "defect": "DD-00017317",
+      "raised": "2026-11-22",
+      "system": "TK084.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "Потеря мощности двигателя. Индикация неисправности ДВС.",
+      "status": "Registered",
+      "priority": "P1 Breakdown",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
       "wo": null
     },
     {
