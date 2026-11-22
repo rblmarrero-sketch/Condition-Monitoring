@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-22T07:12:49+00:00",
+  "generated": "2026-11-22T07:27:51+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6377,6 +6377,32 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
+      "wo": null
+    },
+    {
+      "asset": "TK040",
+      "defect": "DD-00017315",
+      "raised": "2026-11-22",
+      "system": "TK040.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Неисправность ДВС",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Aleksey Kiselev",
+      "regBy": "Киселев Алексей Александрович",
+      "wo": null
+    },
+    {
+      "asset": "TK039",
+      "defect": "DD-00017314",
+      "raised": "2026-11-22",
+      "system": "TK039.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Неисправность ДВС",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Aleksey Kiselev",
+      "regBy": "Киселев Алексей Александрович",
       "wo": null
     },
     {
@@ -40284,6 +40310,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "HX019",
+      "defect": "DD-00014530",
+      "raised": "2026-10-11",
+      "system": "HX019 BV690FS MASTER",
+      "defectType": "5.14 Extreme temperature (cold/heat) / Экстремальная температура (холод/жара)",
+      "descr": "Перегрев",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Shcherbina",
+      "regBy": "Щербина Андрей Николаевич",
+      "wo": null
+    },
+    {
       "asset": "CD010",
       "defect": "DD-00014573",
       "raised": "2026-10-11",
@@ -40333,19 +40372,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
-      "wo": null
-    },
-    {
-      "asset": "HX019",
-      "defect": "DD-00014530",
-      "raised": "2026-10-11",
-      "system": "HX019 BV690FS MASTER",
-      "defectType": "5.14 Extreme temperature (cold/heat) / Экстремальная температура (холод/жара)",
-      "descr": "Перегрев",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Shcherbina",
-      "regBy": "Щербина Андрей Николаевич",
       "wo": null
     },
     {
@@ -57990,6 +58016,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
+      "wo": null
+    },
+    {
       "asset": "BS005",
       "defect": "DD-00011312",
       "raised": "2026-08-21",
@@ -58078,19 +58117,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
