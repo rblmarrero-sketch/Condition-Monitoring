@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-22T15:42:45+00:00",
+  "generated": "2026-11-22T16:02:48+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6139,11 +6139,11 @@ window.CM_WO_DATA = {
       "system": "CR008.OC.CON (Control Console / Пульт управления)",
       "defectType": "4.06 Loose connection / high resistance / Плохой контакт / высокое сопротивление",
       "descr": "ревизия/очистка контактов пульта управления",
-      "status": "Registered",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Sergey Murashko",
       "regBy": "Мурашко Сергей Борисович",
-      "wo": null
+      "wo": "WO-023091"
     },
     {
       "asset": "CN010",
@@ -17730,19 +17730,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "SN001",
-      "defect": "DD-00016409",
-      "raised": "2026-11-06",
-      "system": "SN001.CONV.SDC (Side Discharge Conveyor / Боковой разгрузочный конвейер)",
-      "defectType": "8.06 Roller / idler failure / Отказ ролика / роликоопоры",
-      "descr": "износ роликов правого бокового конвейера",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": "WO-022366"
-    },
-    {
-      "asset": "SN001",
       "defect": "DD-00016410",
       "raised": "2026-11-06",
       "system": "SN001.CONV.SDC (Side Discharge Conveyor / Боковой разгрузочный конвейер)",
@@ -17766,6 +17753,19 @@ window.CM_WO_DATA = {
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": "WO-022373"
+    },
+    {
+      "asset": "SN001",
+      "defect": "DD-00016409",
+      "raised": "2026-11-06",
+      "system": "SN001.CONV.SDC (Side Discharge Conveyor / Боковой разгрузочный конвейер)",
+      "defectType": "8.06 Roller / idler failure / Отказ ролика / роликоопоры",
+      "descr": "износ роликов правого бокового конвейера",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-022366"
     },
     {
       "asset": "CR007",
