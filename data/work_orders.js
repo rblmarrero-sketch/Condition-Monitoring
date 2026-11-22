@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-22T08:32:45+00:00",
+  "generated": "2026-11-22T08:52:46+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -25724,6 +25724,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "LV.C006",
+      "defect": "DD-00015710",
+      "raised": "2026-10-26",
+      "system": "LIGHT VEHICLE, TOYOTA HILUX P813PK",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "Диагностика турбины",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022424"
+    },
+    {
       "asset": "GR008",
       "defect": "DD-00015673",
       "raised": "2026-10-26",
@@ -26567,19 +26580,6 @@ window.CM_WO_DATA = {
       "by": "Evgeniy Frolin",
       "regBy": "Фролин Евгений Владимирович",
       "wo": "WO-021002"
-    },
-    {
-      "asset": "LV.C006",
-      "defect": "DD-00015710",
-      "raised": "2026-10-26",
-      "system": "LIGHT VEHICLE, TOYOTA HILUX P813PK",
-      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
-      "descr": "Диагностика турбины",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022424"
     },
     {
       "asset": "TK035",
