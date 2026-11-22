@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-22T07:47:40+00:00",
+  "generated": "2026-11-22T08:02:50+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6198,19 +6198,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023085"
     },
     {
-      "asset": "TK036",
-      "defect": "DD-00017300",
-      "raised": "2026-11-22",
-      "system": "TK036.BS.CV (Control Valve / Управляющий клапан)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Не работает подъем кузова",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-023078"
-    },
-    {
       "asset": "CD003",
       "defect": "DD-00017313",
       "raised": "2026-11-22",
@@ -6222,6 +6209,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-023086"
+    },
+    {
+      "asset": "TK036",
+      "defect": "DD-00017300",
+      "raised": "2026-11-22",
+      "system": "TK036.BS.CV (Control Valve / Управляющий клапан)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Не работает подъем кузова",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023078"
     },
     {
       "asset": "CR008",
@@ -6377,6 +6377,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
+      "wo": null
+    },
+    {
+      "asset": "TK041",
+      "defect": "DD-00017316",
+      "raised": "2026-11-22",
+      "system": "TK041.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Неисправность ДВС",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Aleksey Kiselev",
+      "regBy": "Киселев Алексей Александрович",
       "wo": null
     },
     {
@@ -25841,6 +25854,19 @@ window.CM_WO_DATA = {
       "wo": "WO-020755"
     },
     {
+      "asset": "TK047",
+      "defect": "DD-00015718",
+      "raised": "2026-10-26",
+      "system": "TK047.CH.SU (Suspension / Подвеска)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Требуется диагностика подвески (посторонний шум)",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022420"
+    },
+    {
       "asset": "TK044",
       "defect": "DD-00015707",
       "raised": "2026-10-26",
@@ -26541,19 +26567,6 @@ window.CM_WO_DATA = {
       "by": "Evgeniy Frolin",
       "regBy": "Фролин Евгений Владимирович",
       "wo": "WO-021002"
-    },
-    {
-      "asset": "TK047",
-      "defect": "DD-00015718",
-      "raised": "2026-10-26",
-      "system": "TK047.CH.SU (Suspension / Подвеска)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Требуется диагностика подвески (посторонний шум)",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022420"
     },
     {
       "asset": "LV.C006",
