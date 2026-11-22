@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-22T21:44:42+00:00",
+  "generated": "2026-11-22T21:52:40+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6263,6 +6263,32 @@ window.CM_WO_DATA = {
       "wo": "WO-023105"
     },
     {
+      "asset": "TK084",
+      "defect": "DD-00017337",
+      "raised": "2026-11-23",
+      "system": "TK084.ELS.WH (Wiring Harness / Жгут проводов)",
+      "defectType": "4.12 Cable / harness damage / Повреждение кабеля / жгута",
+      "descr": "Диагностика ДВС CHECK",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023107"
+    },
+    {
+      "asset": "TK092",
+      "defect": "DD-00017338",
+      "raised": "2026-11-23",
+      "system": "TK092 65201 KAMAZ",
+      "defectType": "4.12 Cable / harness damage / Повреждение кабеля / жгута",
+      "descr": "Не подымает кузов",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023108"
+    },
+    {
       "asset": "BS020",
       "defect": "DD-00017336",
       "raised": "2026-11-23",
@@ -6289,16 +6315,16 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK084",
-      "defect": "DD-00017337",
+      "asset": "TK112",
+      "defect": "DD-00017339",
       "raised": "2026-11-23",
-      "system": "TK084.ELS.WH (Wiring Harness / Жгут проводов)",
-      "defectType": "4.12 Cable / harness damage / Повреждение кабеля / жгута",
-      "descr": "Диагностика ДВС CHECK",
+      "system": "TK112.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "descr": "Люфт заднего хвостовика среднего моста",
       "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
       "wo": null
     },
     {
@@ -70171,32 +70197,6 @@ window.CM_WO_DATA = {
       "wo": "GD-017306"
     },
     {
-      "asset": "CR006",
-      "defect": "GD-00016117",
-      "raised": "2025-11-26",
-      "system": "CR006.ELS (Electrical System / Электросистема)",
-      "defectType": "7.09 Screen media tear / breakage / Разрыв / поломка ситовой панели",
-      "descr": "Установка системы пылеподавления",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Rinat Musaferov",
-      "regBy": "Мусаферов Ринат Искакович",
-      "wo": "GD-017307"
-    },
-    {
-      "asset": "CR007",
-      "defect": "GD-00016118",
-      "raised": "2025-11-26",
-      "system": "CR007.ELS (Electrical System / Электросистема)",
-      "defectType": "7.09 Screen media tear / breakage / Разрыв / поломка ситовой панели",
-      "descr": "Установка системы пылеподавления",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Rinat Musaferov",
-      "regBy": "Мусаферов Ринат Искакович",
-      "wo": "GD-017309"
-    },
-    {
       "asset": "CR008",
       "defect": "GD-00016137",
       "raised": "2025-11-26",
@@ -70247,6 +70247,32 @@ window.CM_WO_DATA = {
       "by": "Rinat Musaferov",
       "regBy": "Мусаферов Ринат Искакович",
       "wo": "GD-017310"
+    },
+    {
+      "asset": "CR007",
+      "defect": "GD-00016118",
+      "raised": "2025-11-26",
+      "system": "CR007.ELS (Electrical System / Электросистема)",
+      "defectType": "7.09 Screen media tear / breakage / Разрыв / поломка ситовой панели",
+      "descr": "Установка системы пылеподавления",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Rinat Musaferov",
+      "regBy": "Мусаферов Ринат Искакович",
+      "wo": "GD-017309"
+    },
+    {
+      "asset": "CR006",
+      "defect": "GD-00016117",
+      "raised": "2025-11-26",
+      "system": "CR006.ELS (Electrical System / Электросистема)",
+      "defectType": "7.09 Screen media tear / breakage / Разрыв / поломка ситовой панели",
+      "descr": "Установка системы пылеподавления",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Rinat Musaferov",
+      "regBy": "Мусаферов Ринат Искакович",
+      "wo": "GD-017307"
     },
     {
       "asset": "SN003",
