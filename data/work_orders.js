@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-22T23:42:37+00:00",
+  "generated": "2026-11-22T23:57:46+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6380,6 +6380,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "GR013",
+      "defect": "DD-00017344",
+      "raised": "2026-11-23",
+      "system": "GR013.CH.SU (Suspension / Подвеска)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Разбиты шарнирные соединения  передней подвески",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": null
+    },
+    {
       "asset": "CN010",
       "defect": "DD-00017301",
       "raised": "2026-11-22",
@@ -7946,7 +7959,7 @@ window.CM_WO_DATA = {
       "system": "CN014.OC.HE (Heating / Отопление)",
       "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
       "descr": "Ремонт дополнительного отопителя крановой установки",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
@@ -7992,6 +8005,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023005"
     },
     {
+      "asset": "CR007",
+      "defect": "DD-00017203",
+      "raised": "2026-11-20",
+      "system": "CR007.ELS.PH (Preheater / Предпусковой подогреватель)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Ремонт ПЖД",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022994"
+    },
+    {
       "asset": "FL005",
       "defect": "DD-00017217",
       "raised": "2026-11-20",
@@ -8003,19 +8029,6 @@ window.CM_WO_DATA = {
       "by": "Viktor Bernikov",
       "regBy": "Берников Виктор Викторович",
       "wo": "WO-023009"
-    },
-    {
-      "asset": "CR007",
-      "defect": "DD-00017203",
-      "raised": "2026-11-20",
-      "system": "CR007.ELS.PH (Preheater / Предпусковой подогреватель)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Ремонт ПЖД",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022994"
     },
     {
       "asset": "LV045",
@@ -8544,7 +8557,7 @@ window.CM_WO_DATA = {
       "system": "GE065.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Течь антифриза с помпы охлаждения",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Viktor Bernikov",
       "regBy": "Берников Виктор Викторович",
@@ -9318,6 +9331,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022758"
     },
     {
+      "asset": "CR008",
+      "defect": "DD-00017090",
+      "raised": "2026-11-18",
+      "system": "CR008.ELS.WH (Wiring Harness / Жгут проводов)",
+      "defectType": "4.12 Cable / harness damage / Повреждение кабеля / жгута",
+      "descr": "Обрыв контрольного кабеля привода конуса",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Nazmutdinov",
+      "regBy": "Назмутдинов Сергей Зуфарович",
+      "wo": "WO-023112"
+    },
+    {
       "asset": "EX022",
       "defect": "DD-00017062",
       "raised": "2026-11-18",
@@ -9497,19 +9523,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "CR008",
-      "defect": "DD-00017090",
-      "raised": "2026-11-18",
-      "system": "CR008.ELS.WH (Wiring Harness / Жгут проводов)",
-      "defectType": "4.12 Cable / harness damage / Повреждение кабеля / жгута",
-      "descr": "Обрыв контрольного кабеля привода конуса",
-      "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Sergey Nazmutdinov",
-      "regBy": "Назмутдинов Сергей Зуфарович",
       "wo": null
     },
     {
@@ -87057,9 +87070,9 @@ window.CM_WO_DATA = {
       "planStart": "2026-07-23",
       "planStartDt": "2026-07-23T19:00:00",
       "planEnd": "2026-07-24",
-      "actualStart": "2026-07-22",
-      "actualStartDt": "2026-07-22T00:00:00",
-      "actualEnd": "2026-07-22"
+      "actualStart": "2026-07-23",
+      "actualStartDt": "2026-07-23T19:00:00",
+      "actualEnd": "2026-07-24"
     },
     {
       "equip": "CN023",
