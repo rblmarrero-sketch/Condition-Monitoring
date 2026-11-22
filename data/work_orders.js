@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-22T11:47:41+00:00",
+  "generated": "2026-11-22T12:02:54+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6235,6 +6235,19 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-023087"
+    },
+    {
+      "asset": "CD006",
+      "defect": "DD-00017318",
+      "raised": "2026-11-22",
+      "system": "CD006.ELS.ALT (Alternator / Генератор)",
+      "defectType": "4.15 Alternator / charging fault / Неисправность генератора / зарядки",
+      "descr": "Промаргивает индикация неисправности системы зарядки аккумулятора",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-023088"
     },
     {
       "asset": "CR008",
