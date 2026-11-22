@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-22T22:37:40+00:00",
+  "generated": "2026-11-22T22:52:49+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6292,7 +6292,7 @@ window.CM_WO_DATA = {
       "asset": "TK092",
       "defect": "DD-00017338",
       "raised": "2026-11-23",
-      "system": "TK092 65201 KAMAZ",
+      "system": "TK092.ELS.WH (Wiring Harness / Жгут проводов)",
       "defectType": "4.12 Cable / harness damage / Повреждение кабеля / жгута",
       "descr": "Не подымает кузов",
       "status": "Elimination scheduled",
@@ -6300,6 +6300,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-023108"
+    },
+    {
+      "asset": "LD006",
+      "defect": "DD-00017341",
+      "raised": "2026-11-23",
+      "system": "LD006.ELS.PH (Preheater / Предпусковой подогреватель)",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "требуется установка доп отопителя кабины",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": null
     },
     {
       "asset": "LD002",
@@ -6312,6 +6325,19 @@ window.CM_WO_DATA = {
       "priority": "P2 Urgent",
       "by": "Vladimir Ladik",
       "regBy": "Ладик Владимир Владимирович",
+      "wo": null
+    },
+    {
+      "asset": "LD001",
+      "defect": "DD-00017340",
+      "raised": "2026-11-23",
+      "system": "LD001.ELS.PH (Preheater / Предпусковой подогреватель)",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "Дополнительная печка дует холодным воздухом",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
       "wo": null
     },
     {
@@ -7537,19 +7563,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022958"
     },
     {
-      "asset": "TK004",
-      "defect": "DD-00017186",
-      "raised": "2026-11-20",
-      "system": "TK004.BS.PU (Pneumatic Control / Пневмоуправление)",
-      "defectType": "1.24 Low temperature / freezing / Низкая температура / замерзание",
-      "descr": "Перемерзание конденсата в магистралях пневматической системы",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksandr Kuznetsov",
-      "regBy": "Кузнецов Александр Андреевич",
-      "wo": "WO-022966"
-    },
-    {
       "asset": "TK084",
       "defect": "DD-00017198",
       "raised": "2026-11-20",
@@ -7576,13 +7589,26 @@ window.CM_WO_DATA = {
       "wo": "WO-022968"
     },
     {
+      "asset": "TK004",
+      "defect": "DD-00017186",
+      "raised": "2026-11-20",
+      "system": "TK004.BS.PU (Pneumatic Control / Пневмоуправление)",
+      "defectType": "1.24 Low temperature / freezing / Низкая температура / замерзание",
+      "descr": "Перемерзание конденсата в магистралях пневматической системы",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Kuznetsov",
+      "regBy": "Кузнецов Александр Андреевич",
+      "wo": "WO-022966"
+    },
+    {
       "asset": "EX003",
       "defect": "DD-00017176",
       "raised": "2026-11-20",
       "system": "EX003.CH.AL (Central Lubrication System / Централизованная система смазки)",
       "defectType": "1.24 Low temperature / freezing / Низкая температура / замерзание",
       "descr": "Не поступает консистентная смазка в шарнирное соединение ковша",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Aleksandr Kuznetsov",
       "regBy": "Кузнецов Александр Андреевич",
@@ -7686,7 +7712,7 @@ window.CM_WO_DATA = {
       "system": "TK044.DRS.DSH (Driveshafts / Карданные валы)",
       "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
       "descr": "ослабление болтов крепления фланца карданного вала",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Aleksandr Kuznetsov",
       "regBy": "Кузнецов Александр Андреевич",
@@ -7803,7 +7829,7 @@ window.CM_WO_DATA = {
       "system": "TK044.DRS.TRA (Transmission / Трансмиссия)",
       "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
       "descr": "Регулировка кулисы",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
@@ -15850,7 +15876,7 @@ window.CM_WO_DATA = {
       "system": "LS038.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
       "descr": "замена ремня генератора",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
