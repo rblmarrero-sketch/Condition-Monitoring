@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-22T06:39:01+00:00",
+  "generated": "2026-11-22T06:57:45+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6328,19 +6328,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023073"
     },
     {
-      "asset": "EX022",
-      "defect": "DD-00017299",
-      "raised": "2026-11-22",
-      "system": "EX022.CH.BUC (Bucket / Ковш)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Отломился адаптер и коронка ковша",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-023077"
-    },
-    {
       "asset": "CN001",
       "defect": "DD-00017296",
       "raised": "2026-11-22",
@@ -6352,6 +6339,19 @@ window.CM_WO_DATA = {
       "by": "Ilshat Sabitov",
       "regBy": "Сабитов Ильшат Рашидович",
       "wo": "WO-023074"
+    },
+    {
+      "asset": "EX022",
+      "defect": "DD-00017299",
+      "raised": "2026-11-22",
+      "system": "EX022.CH.BUC (Bucket / Ковш)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Отломился адаптер и коронка ковша",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023077"
     },
     {
       "asset": "TK010",
