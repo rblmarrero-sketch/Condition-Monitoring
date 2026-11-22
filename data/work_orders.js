@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-22T02:07:40+00:00",
+  "generated": "2026-11-22T02:22:44+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6144,6 +6144,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-023076"
+    },
+    {
+      "asset": "EX022",
+      "defect": "DD-00017299",
+      "raised": "2026-11-22",
+      "system": "EX022.CH.BUC (Bucket / Ковш)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Отломился адаптер и коронка ковша",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023077"
     },
     {
       "asset": "CN014",
@@ -59797,19 +59810,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "EX003",
-      "defect": "DD-00009814",
-      "raised": "2026-07-29",
-      "system": "EX003.OC.GL (Glass / Стекла)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Трещина стекла",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": null
-    },
-    {
       "asset": "EX002",
       "defect": "DD-00009830",
       "raised": "2026-07-29",
@@ -59829,6 +59829,19 @@ window.CM_WO_DATA = {
       "system": "EX001.CH.UC (Undercarriage / Ходовая часть)",
       "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
       "descr": "Отсутствует защита опорных катков слева и справа",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": null
+    },
+    {
+      "asset": "EX003",
+      "defect": "DD-00009814",
+      "raised": "2026-07-29",
+      "system": "EX003.OC.GL (Glass / Стекла)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Трещина стекла",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -70015,19 +70028,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "CR008",
-      "defect": "GD-00016119",
-      "raised": "2025-11-26",
-      "system": "CR008.ELS (Electrical System / Электросистема)",
-      "defectType": "7.09 Screen media tear / breakage / Разрыв / поломка ситовой панели",
-      "descr": "Установка системы пылеподавления",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Rinat Musaferov",
-      "regBy": "Мусаферов Ринат Искакович",
-      "wo": "GD-017310"
-    },
-    {
       "asset": "SN004",
       "defect": "GD-00016120",
       "raised": "2025-11-26",
@@ -70052,6 +70052,19 @@ window.CM_WO_DATA = {
       "by": null,
       "regBy": "Мельник Сергей Васильевич",
       "wo": null
+    },
+    {
+      "asset": "CR008",
+      "defect": "GD-00016119",
+      "raised": "2025-11-26",
+      "system": "CR008.ELS (Electrical System / Электросистема)",
+      "defectType": "7.09 Screen media tear / breakage / Разрыв / поломка ситовой панели",
+      "descr": "Установка системы пылеподавления",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Rinat Musaferov",
+      "regBy": "Мусаферов Ринат Искакович",
+      "wo": "GD-017310"
     },
     {
       "asset": "SN003",
