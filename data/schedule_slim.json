@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-23T08:37:38+00:00",
+  "generated": "2026-11-23T08:52:47+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -339,17 +339,6 @@
           "MP"
         ],
         "plan": "2026-12-31",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "TK043": [
-      {
-        "wo": "WO-022307",
-        "hours": 500,
-        "types": [
-          "MP"
-        ],
-        "plan": "2026-11-20",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -3057,24 +3046,6 @@
       "completed": ""
     },
     {
-      "wo": "WO-022024",
-      "equip": "DZ018",
-      "cls": "DOZ",
-      "comp": "",
-      "desc": "250h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-22",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-11-22",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
       "wo": "WO-022261",
       "equip": "DZ021",
       "cls": "DOZ",
@@ -3265,6 +3236,24 @@
       "type": "250 Hours service Planned",
       "hours": 250,
       "plan": "2026-11-21",
+      "status": "Completed",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "complete",
+      "completed": "2026-11-21"
+    },
+    {
+      "wo": "WO-022024",
+      "equip": "DZ018",
+      "cls": "DOZ",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-21",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-11-21",
       "status": "Elimination scheduled",
       "request": "",
       "defType": "",
@@ -3283,12 +3272,12 @@
       "type": "500 Hours service Planned",
       "hours": 500,
       "plan": "2026-11-21",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-21"
     },
     {
       "wo": "WO-022321",
@@ -3499,12 +3488,12 @@
       "type": "1000 Hours service Planned",
       "hours": 1000,
       "plan": "2026-11-20",
-      "status": "In progress",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "inprogress",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-20"
     },
     {
       "wo": "WO-022307",
@@ -3517,12 +3506,12 @@
       "type": "500 Hours service Planned",
       "hours": 500,
       "plan": "2026-11-20",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-20"
     },
     {
       "wo": "WO-021949",
@@ -8682,13 +8671,13 @@
       "raised": "2026-10-26",
       "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "hours": null,
-      "plan": "2026-11-21",
-      "status": "Elimination scheduled",
+      "plan": "2026-11-22",
+      "status": "Completed",
       "request": "DD-00015724",
       "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "cause": "Фитинг/штуцер ослаб",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-22"
     },
     {
       "wo": "WO-022704",
@@ -41795,6 +41784,14 @@
       "x": "Люфт ШСЛ цилиндра перекоса отвала"
     },
     {
+      "d": "DD-00013342",
+      "u": "GE101",
+      "s": "GE101.DRS.ENG (Engine / Двигатель)",
+      "p": "P4",
+      "r": "2026-09-25",
+      "x": "Замена шлангов ОЖ"
+    },
+    {
       "d": "DD-00013345",
       "u": "LV101",
       "s": "EMERGENCY EQUIPMENT, AMBULANCE TREKOL 287591, LV101 PNEUMATIC OldNumber (ET001)",
@@ -42513,14 +42510,6 @@
       "p": "P4",
       "r": "2026-09-25",
       "x": "Восстановление"
-    },
-    {
-      "d": "DD-00013342",
-      "u": "GE101",
-      "s": "GE101.DRS.ENG (Engine / Двигатель)",
-      "p": "P4",
-      "r": "2026-09-25",
-      "x": "Замена шлангов ОЖ"
     },
     {
       "d": "DD-00013325",
