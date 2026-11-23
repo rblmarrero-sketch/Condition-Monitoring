@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-23T03:03:02+00:00",
+  "generated": "2026-11-23T03:22:53+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6354,6 +6354,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023115"
     },
     {
+      "asset": "TK036",
+      "defect": "DD-00017348",
+      "raised": "2026-11-23",
+      "system": "TK036.HS.TIP.VAL Control Valve (Tipping) / Гидрораспределитель подъема кузова",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Не опускается кузов",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023117"
+    },
+    {
       "asset": "LD006",
       "defect": "DD-00017341",
       "raised": "2026-11-23",
@@ -6403,6 +6416,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
+      "wo": null
+    },
+    {
+      "asset": "TK004",
+      "defect": "DD-00017349",
+      "raised": "2026-11-23",
+      "system": "TK004.BS.RCH (Brake Chambers / Тормозные камеры)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Ремонт тормозной системы",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
       "wo": null
     },
     {
@@ -35566,19 +35592,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "LS048",
-      "defect": "DD-00014962",
-      "raised": "2026-10-17",
-      "system": "LS048.ELS.MW (Machine Wiring / Электропроводка машины)",
-      "defectType": "4.14 Battery / starting circuit fault / Неисправность аккумулятора / цепи пуска",
-      "descr": "Замена АКБ",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "LS048",
       "defect": "DD-00014963",
       "raised": "2026-10-17",
       "system": "LS048.DRS.ENG (Engine / Двигатель)",
@@ -35597,6 +35610,19 @@ window.CM_WO_DATA = {
       "system": "EX006.HS.MP (Hydraulic Pumps / Гидронасосы)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "каплевидная утечка по гидронасосу",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "LS048",
+      "defect": "DD-00014962",
+      "raised": "2026-10-17",
+      "system": "LS048.ELS.MW (Machine Wiring / Электропроводка машины)",
+      "defectType": "4.14 Battery / starting circuit fault / Неисправность аккумулятора / цепи пуска",
+      "descr": "Замена АКБ",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -45952,12 +45978,12 @@ window.CM_WO_DATA = {
       "wo": "WO-022929"
     },
     {
-      "asset": "TK162",
-      "defect": "DD-00014083",
+      "asset": "LV158",
+      "defect": "DD-00014121",
       "raised": "2026-10-05",
-      "system": "TRUCK, WATER URAL 4672M1-20, TK162 TRANSMISSION OldNumber (UT162)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка масла с РК",
+      "system": "LV158.CH.SU (Suspension / Подвеска)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Требуется замена нижних и верхних шаровых опор, замена втулок и стоек стабилизатора",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -45965,12 +45991,12 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "LV158",
-      "defect": "DD-00014121",
+      "asset": "TK162",
+      "defect": "DD-00014083",
       "raised": "2026-10-05",
-      "system": "LV158.CH.SU (Suspension / Подвеска)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Требуется замена нижних и верхних шаровых опор, замена втулок и стоек стабилизатора",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK162 TRANSMISSION OldNumber (UT162)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка масла с РК",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -57561,6 +57587,19 @@ window.CM_WO_DATA = {
       "wo": "WO-018103"
     },
     {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
+      "wo": null
+    },
+    {
       "asset": "DZ022",
       "defect": "DD-00011314",
       "raised": "2026-08-21",
@@ -57662,19 +57701,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
@@ -58394,19 +58420,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "H07",
-      "defect": "EB-00000079",
-      "raised": "2026-08-13",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
-      "wo": null
-    },
-    {
-      "asset": "H07",
       "defect": "EB-00000078",
       "raised": "2026-08-13",
       "system": null,
@@ -58416,6 +58429,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Sergey Gulin",
+      "wo": null
+    },
+    {
+      "asset": "H07",
+      "defect": "EB-00000079",
+      "raised": "2026-08-13",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
