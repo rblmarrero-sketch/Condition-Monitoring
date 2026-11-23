@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-23T04:13:32+00:00",
+  "generated": "2026-11-23T04:33:04+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6458,6 +6458,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "CN018",
+      "defect": "DD-00017352",
+      "raised": "2026-11-23",
+      "system": "CN018.CH.BOO (Boom / Стрела)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Трещина в зоне втулки шарнирного крепления стрелы крана",
+      "status": "Registered",
+      "priority": "P1 Breakdown",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
       "asset": "GR013",
       "defect": "DD-00017343",
       "raised": "2026-11-23",
@@ -6711,7 +6724,7 @@ window.CM_WO_DATA = {
       "system": "TK143.DRS.TRA (Transmission / Трансмиссия)",
       "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "descr": "Разрушение привода бортового редуктора",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
