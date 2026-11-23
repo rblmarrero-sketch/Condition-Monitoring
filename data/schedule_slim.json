@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-23T05:42:44+00:00",
+  "generated": "2026-11-23T05:57:53+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -466,6 +466,26 @@
         ],
         "plan": "2026-11-21",
         "priority": "P3 Planned (PM)"
+      },
+      {
+        "wo": "WO-023127",
+        "hours": 250,
+        "types": [
+          "MP"
+        ],
+        "plan": "2026-12-04",
+        "priority": "P3 Planned (PM)"
+      }
+    ],
+    "TK108": [
+      {
+        "wo": "WO-023126",
+        "hours": 250,
+        "types": [
+          "MP"
+        ],
+        "plan": "2026-12-01",
+        "priority": "P3 Planned (PM)"
       }
     ],
     "TK109": [
@@ -486,7 +506,7 @@
         "types": [
           "MP"
         ],
-        "plan": "2026-11-24",
+        "plan": "2026-11-28",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -1107,6 +1127,24 @@
       "completed": ""
     },
     {
+      "wo": "WO-023127",
+      "equip": "TK107",
+      "cls": "AT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-12-04",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-12-04",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-022127",
       "equip": "GR008",
       "cls": "GRD",
@@ -1235,6 +1273,24 @@
     {
       "wo": "WO-021932",
       "equip": "TK105",
+      "cls": "AT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-12-01",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-12-01",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-023126",
+      "equip": "TK108",
       "cls": "AT",
       "comp": "",
       "desc": "Magnetic Plug",
@@ -1656,6 +1712,24 @@
       "raised": "2026-11-28",
       "type": "1000 Hours service Planned",
       "hours": 1000,
+      "plan": "2026-11-28",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-021937",
+      "equip": "TK110",
+      "cls": "AT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-28",
+      "type": "500 Hours service Planned",
+      "hours": 500,
       "plan": "2026-11-28",
       "status": "Elimination scheduled",
       "request": "",
@@ -2502,24 +2576,6 @@
       "raised": "2026-11-24",
       "type": "1000 Hours service Planned",
       "hours": 1000,
-      "plan": "2026-11-24",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
-      "wo": "WO-021937",
-      "equip": "TK110",
-      "cls": "AT",
-      "comp": "",
-      "desc": "Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-24",
-      "type": "500 Hours service Planned",
-      "hours": 500,
       "plan": "2026-11-24",
       "status": "Elimination scheduled",
       "request": "",
@@ -9099,6 +9155,24 @@
       "completed": "2026-11-03"
     },
     {
+      "wo": "WO-023128",
+      "equip": "TK109",
+      "cls": "",
+      "comp": "TK109.DRS.ENG (Engine / Двигатель)",
+      "desc": "Выпускной системе двигателя обнаружено повреждение теплоизоляционного(противопожарного) чехла.",
+      "priority": "P4 Planned (Repair)",
+      "raised": "2026-10-10",
+      "type": "6.08 Guarding / cover damage / Повреждение ограждений / кожухов",
+      "hours": null,
+      "plan": "2026-12-07",
+      "status": "Elimination scheduled",
+      "request": "DD-00014509",
+      "defType": "6.08 Guarding / cover damage / Повреждение ограждений / кожухов",
+      "cause": "Усталость от вибрации",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-020831",
       "equip": "TK109",
       "cls": "",
@@ -10595,14 +10669,6 @@
       "x": "Ремонт генератора"
     },
     {
-      "d": "DD-00017305",
-      "u": "CN018",
-      "s": "CN018.OC.DO (Doors / Двери)",
-      "p": "P2",
-      "r": "2026-11-22",
-      "x": "Ремонт внутренего замка двери"
-    },
-    {
       "d": "DD-00017306",
       "u": "TK115",
       "s": "TK115.DRS.FUE.LFP Fuel Lift Pump / Подкачивающий насос",
@@ -10713,6 +10779,14 @@
       "p": "P2",
       "r": "2026-11-22",
       "x": "Разрушение подшипника привода вентилятора"
+    },
+    {
+      "d": "DD-00017305",
+      "u": "CN018",
+      "s": "CN018.OC.DO (Doors / Двери)",
+      "p": "P2",
+      "r": "2026-11-22",
+      "x": "Ремонт внутренего замка двери"
     },
     {
       "d": "DD-00017299",
@@ -10867,14 +10941,6 @@
       "x": "Замена ремня генератора"
     },
     {
-      "d": "DD-00017242",
-      "u": "BS001",
-      "s": "BS001.DRS.ENG (Engine / Двигатель)",
-      "p": "P2",
-      "r": "2026-11-21",
-      "x": "Ремонт освещения в КУНГа. Ремонт пассажирской двери"
-    },
-    {
       "d": "DD-00017241",
       "u": "EX020",
       "s": "EX020.HS.DL (Hydraulic Lines / Гидролинии)",
@@ -10993,6 +11059,14 @@
       "p": "P2",
       "r": "2026-11-21",
       "x": "Ремонт тормозной пневмоститемы"
+    },
+    {
+      "d": "DD-00017242",
+      "u": "BS001",
+      "s": "BS001.DRS.ENG (Engine / Двигатель)",
+      "p": "P2",
+      "r": "2026-11-21",
+      "x": "Ремонт освещения в КУНГа. Ремонт пассажирской двери"
     },
     {
       "d": "DD-00017233",
@@ -17667,6 +17741,14 @@
       "x": "Требуется установка теплозищитного одеяла"
     },
     {
+      "d": "DD-00015894",
+      "u": "TK109",
+      "s": "TK109.DRS.ENG (Engine / Двигатель)",
+      "p": "P1",
+      "r": "2026-10-29",
+      "x": "Утечка масла с сальника лобовины"
+    },
+    {
       "d": "DD-00015899",
       "u": "TK106",
       "s": "TK106.DRS.ENG (Engine / Двигатель)",
@@ -18065,14 +18147,6 @@
       "p": "P2",
       "r": "2026-10-29",
       "x": "Протерся шламовый рукав"
-    },
-    {
-      "d": "DD-00015894",
-      "u": "TK109",
-      "s": "TK109.DRS.ENG (Engine / Двигатель)",
-      "p": "P1",
-      "r": "2026-10-29",
-      "x": "Утечка масла с сальника лобовины"
     },
     {
       "d": "DD-00015862",
@@ -36323,14 +36397,6 @@
       "x": "каплевидная утечка с труб гидролинии стрелы"
     },
     {
-      "d": "DD-00014962",
-      "u": "LS048",
-      "s": "LS048.ELS.MW (Machine Wiring / Электропроводка машины)",
-      "p": "P4",
-      "r": "2026-10-17",
-      "x": "Замена АКБ"
-    },
-    {
       "d": "DD-00014963",
       "u": "LS048",
       "s": "LS048.DRS.ENG (Engine / Двигатель)",
@@ -36345,6 +36411,14 @@
       "p": "P4",
       "r": "2026-10-17",
       "x": "каплевидная утечка по гидронасосу"
+    },
+    {
+      "d": "DD-00014962",
+      "u": "LS048",
+      "s": "LS048.ELS.MW (Machine Wiring / Электропроводка машины)",
+      "p": "P4",
+      "r": "2026-10-17",
+      "x": "Замена АКБ"
     },
     {
       "d": "DD-00014966",
@@ -38923,20 +38997,20 @@
       "x": "Сломаны замки капота"
     },
     {
-      "d": "DD-00014083",
-      "u": "TK162",
-      "s": "TRUCK, WATER URAL 4672M1-20, TK162 TRANSMISSION OldNumber (UT162)",
-      "p": "P4",
-      "r": "2026-10-05",
-      "x": "Утечка масла с РК"
-    },
-    {
       "d": "DD-00014121",
       "u": "LV158",
       "s": "LV158.CH.SU (Suspension / Подвеска)",
       "p": "P4",
       "r": "2026-10-05",
       "x": "Требуется замена нижних и верхних шаровых опор, замена втулок и стоек стабилизат"
+    },
+    {
+      "d": "DD-00014083",
+      "u": "TK162",
+      "s": "TRUCK, WATER URAL 4672M1-20, TK162 TRANSMISSION OldNumber (UT162)",
+      "p": "P4",
+      "r": "2026-10-05",
+      "x": "Утечка масла с РК"
     },
     {
       "d": "DD-00014119",
