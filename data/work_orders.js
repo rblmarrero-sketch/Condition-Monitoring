@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-23T04:47:49+00:00",
+  "generated": "2026-11-23T05:07:48+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -448,8 +448,8 @@ window.CM_WO_DATA = {
     "planStart": 0
   },
   "cmCauseFrom": {
-    "wo": 132,
-    "wr": 83,
+    "wo": 133,
+    "wr": 82,
     "cert": 0,
     "none": 0
   },
@@ -597,7 +597,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-11-20",
       "detected": "2026-11-20",
-      "planStart": null,
+      "planStart": "2026-12-02",
       "closed": null,
       "asset": "TK104",
       "defect": "DD-00017206",
@@ -607,15 +607,15 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "defectType": "2.01 Wear / Износ",
       "cause": "Абразивный износ",
-      "causeFrom": "wr",
+      "causeFrom": "wo",
       "descr": "Трещины на кузове",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "by": "Slam",
       "byFull": "Slam Taganov",
       "regBy": "Таганов Слам Джумамуратович",
       "raisedBy": "ГДК Баимская",
-      "woNumber": null,
-      "maintType": null,
+      "woNumber": "WO-023121",
+      "maintType": "P4 Planned Repair",
       "planned": false
     },
     {
@@ -8681,6 +8681,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022952"
     },
     {
+      "asset": "TK106",
+      "defect": "DD-00017143",
+      "raised": "2026-11-19",
+      "system": "Injectors / Форсунки",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "Неисправность топливной системы",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-023122"
+    },
+    {
       "asset": "LV012",
       "defect": "DD-00017134",
       "raised": "2026-11-19",
@@ -8882,19 +8895,6 @@ window.CM_WO_DATA = {
       "system": "TK112.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Утечка выхлопных газов",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": null
-    },
-    {
-      "asset": "TK106",
-      "defect": "DD-00017143",
-      "raised": "2026-11-19",
-      "system": "Injectors / Форсунки",
-      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
-      "descr": "Неисправность топливной системы",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Dmitriy Stepanenko",
@@ -12607,19 +12607,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022525"
     },
     {
-      "asset": "TK104",
-      "defect": "DD-00016795",
-      "raised": "2026-11-13",
-      "system": "TK104.DRS.TRA (Transmission / Трансмиссия)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка по РВД трансмиссионых филтров",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": "WO-022697"
-    },
-    {
       "asset": "TK047",
       "defect": "DD-00016816",
       "raised": "2026-11-13",
@@ -13099,6 +13086,19 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022663"
+    },
+    {
+      "asset": "TK104",
+      "defect": "DD-00016795",
+      "raised": "2026-11-13",
+      "system": "TK104.DRS.TRA (Transmission / Трансмиссия)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка по РВД трансмиссионых филтров",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022697"
     },
     {
       "asset": "SN002",
@@ -32861,6 +32861,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "TK105",
+      "defect": "DD-00015135",
+      "raised": "2026-10-19",
+      "system": "TK105.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Люфт внешней крестовины приводного вала передней оси",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Evgeniy Frolin",
+      "regBy": "Фролин Евгений Владимирович",
+      "wo": "WO-022700"
+    },
+    {
       "asset": "CD001",
       "defect": "DD-00015205",
       "raised": "2026-10-19",
@@ -33704,19 +33717,6 @@ window.CM_WO_DATA = {
       "by": "Eduard Shapoval",
       "regBy": "Шаповал Эдуард Владимирович",
       "wo": "WO-020280"
-    },
-    {
-      "asset": "TK105",
-      "defect": "DD-00015135",
-      "raised": "2026-10-19",
-      "system": "TK105.DRS.AXL (Axles / Мосты)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Люфт внешней крестовины приводного вала передней оси",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Evgeniy Frolin",
-      "regBy": "Фролин Евгений Владимирович",
-      "wo": "WO-022700"
     },
     {
       "asset": "BS003",
@@ -42052,6 +42052,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "TK105",
+      "defect": "DD-00014403",
+      "raised": "2026-10-08",
+      "system": "TK105.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Осмотр на утечки, замена сальника хвостовика среднего моста",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": "WO-022699"
+    },
+    {
       "asset": "EX009",
       "defect": "DD-00014303",
       "raised": "2026-10-08",
@@ -43287,19 +43300,6 @@ window.CM_WO_DATA = {
       "wo": "WO-020908"
     },
     {
-      "asset": "TK105",
-      "defect": "DD-00014403",
-      "raised": "2026-10-08",
-      "system": "TK105.DRS.AXL (Axles / Мосты)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Осмотр на утечки, замена сальника хвостовика среднего моста",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Pavel Kostin",
-      "regBy": "Костин Павел Александрович",
-      "wo": "WO-022699"
-    },
-    {
       "asset": "LV066",
       "defect": "DD-00014358",
       "raised": "2026-10-08",
@@ -43558,6 +43558,19 @@ window.CM_WO_DATA = {
       "by": "Valentin Trapilo",
       "regBy": "Трапило Валентин Святославович",
       "wo": null
+    },
+    {
+      "asset": "TK105",
+      "defect": "DD-00014400",
+      "raised": "2026-10-07",
+      "system": "TK105.CH.FR (Frame / Рама)",
+      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
+      "descr": "Заменить сайлентблоки реактивной штанги",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": "WO-021478"
     },
     {
       "asset": "EX010",
@@ -44130,19 +44143,6 @@ window.CM_WO_DATA = {
       "by": "Roman Kochetov",
       "regBy": "Кочетов Роман Иванович",
       "wo": "WO-020082"
-    },
-    {
-      "asset": "TK105",
-      "defect": "DD-00014400",
-      "raised": "2026-10-07",
-      "system": "TK105.CH.FR (Frame / Рама)",
-      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
-      "descr": "Заменить сайлентблоки реактивной штанги",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Pavel Kostin",
-      "regBy": "Костин Павел Александрович",
-      "wo": "WO-021478"
     },
     {
       "asset": "CD008",
@@ -46394,6 +46394,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "TK107",
+      "defect": "DD-00014044",
+      "raised": "2026-10-04",
+      "system": "TK107.CH.BY (Dump Body / Самосвальный кузов)",
+      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
+      "descr": "Течь масла из коробки передач",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Evgeniy Frolin",
+      "regBy": "Фролин Евгений Владимирович",
+      "wo": "WO-022705"
+    },
+    {
       "asset": "HX027",
       "defect": "EB-00000097",
       "raised": "2026-10-04",
@@ -47081,19 +47094,6 @@ window.CM_WO_DATA = {
       "by": "Evgeniy Frolin",
       "regBy": "Фролин Евгений Владимирович",
       "wo": "WO-019998"
-    },
-    {
-      "asset": "TK107",
-      "defect": "DD-00014044",
-      "raised": "2026-10-04",
-      "system": "TK107.CH.BY (Dump Body / Самосвальный кузов)",
-      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
-      "descr": "Течь масла из коробки передач",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Evgeniy Frolin",
-      "regBy": "Фролин Евгений Владимирович",
-      "wo": "WO-022705"
     },
     {
       "asset": "DZ009",
