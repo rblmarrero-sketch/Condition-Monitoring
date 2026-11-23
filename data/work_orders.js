@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-23T02:12:43+00:00",
+  "generated": "2026-11-23T02:27:57+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6328,6 +6328,32 @@ window.CM_WO_DATA = {
       "wo": "WO-023107"
     },
     {
+      "asset": "TK117",
+      "defect": "DD-00017346",
+      "raised": "2026-11-23",
+      "system": "TK117.DRS.TRA (Transmission / Трансмиссия)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка масла трансмиссии",
+      "status": "Elimination scheduled",
+      "priority": "P1 Breakdown",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-023114"
+    },
+    {
+      "asset": "BS015",
+      "defect": "DD-00017347",
+      "raised": "2026-11-23",
+      "system": "BS015.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Выхлопные газы в кабине (Замена гофры)",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
       "asset": "LD006",
       "defect": "DD-00017341",
       "raised": "2026-11-23",
@@ -6789,7 +6815,7 @@ window.CM_WO_DATA = {
       "system": "LV068.ELS.WH (Wiring Harness / Жгут проводов)",
       "defectType": "4.02 Open circuit / Разрыв цепи",
       "descr": "Замена заднего правого датчика АБС",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
@@ -6919,7 +6945,7 @@ window.CM_WO_DATA = {
       "system": "TRUCK, WATER URAL 4672M1-20, TK099 HEATING OldNumber (UT099)",
       "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
       "descr": "Ремонт отопителя",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
@@ -6997,7 +7023,7 @@ window.CM_WO_DATA = {
       "system": "GE053.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
       "descr": "Демонтаж ТНВД для GE054",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
@@ -8252,19 +8278,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022938"
     },
     {
-      "asset": "GE054",
-      "defect": "DD-00017167",
-      "raised": "2026-11-19",
-      "system": "GE054.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Отогрев, запуск",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022943"
-    },
-    {
       "asset": "TK133",
       "defect": "DD-00017126",
       "raised": "2026-11-19",
@@ -8406,6 +8419,19 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-022889"
+    },
+    {
+      "asset": "GE054",
+      "defect": "DD-00017167",
+      "raised": "2026-11-19",
+      "system": "GE054.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Отогрев, запуск",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022943"
     },
     {
       "asset": "TK171",
@@ -9987,7 +10013,7 @@ window.CM_WO_DATA = {
       "system": "EX005.CH.UC (Undercarriage / Ходовая часть)",
       "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
       "descr": "Замена левого ленивца и натяжного",
-      "status": "Elimination scheduled",
+      "status": "In progress",
       "priority": "P2 Urgent",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
