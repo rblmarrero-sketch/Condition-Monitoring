@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-23T09:07:45+00:00",
+  "generated": "2026-11-23T09:22:36+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -683,15 +683,6 @@
       }
     ],
     "TK124": [
-      {
-        "wo": "WO-021956",
-        "hours": 500,
-        "types": [
-          "MP"
-        ],
-        "plan": "2026-11-18",
-        "priority": "P3 Planned (PM)"
-      },
       {
         "wo": "WO-023141",
         "hours": 250,
@@ -3064,24 +3055,6 @@
       "completed": ""
     },
     {
-      "wo": "WO-022107",
-      "equip": "EX023",
-      "cls": "EXC",
-      "comp": "",
-      "desc": "250h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-22",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-11-22",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
       "wo": "WO-022336",
       "equip": "GE104",
       "cls": "GEN",
@@ -3586,6 +3559,24 @@
       "completed": ""
     },
     {
+      "wo": "WO-022107",
+      "equip": "EX023",
+      "cls": "EXC",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-19",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-11-19",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-022125",
       "equip": "GR003",
       "cls": "GRD",
@@ -3866,12 +3857,12 @@
       "type": "500 Hours service Planned",
       "hours": 500,
       "plan": "2026-11-18",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-18"
     },
     {
       "wo": "WO-021962",
@@ -9247,13 +9238,13 @@
       "raised": "2026-10-18",
       "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "hours": null,
-      "plan": "2026-11-16",
-      "status": "Elimination scheduled",
+      "plan": "2026-11-19",
+      "status": "Completed",
       "request": "DD-00015062",
       "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "cause": "Фитинг/штуцер ослаб",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-20"
     },
     {
       "wo": "WO-021499",
@@ -10679,6 +10670,14 @@
     }
   ],
   "firDefects": [
+    {
+      "d": "DD-00017357",
+      "u": "LV006",
+      "s": "LV006.OC.HE (Heating / Отопление)",
+      "p": "P2",
+      "r": "2026-11-23",
+      "x": "Не работает штатный отопитель."
+    },
     {
       "d": "DD-00017320",
       "u": "TK068",
@@ -24658,7 +24657,7 @@
     {
       "d": "DD-00014588",
       "u": "DZ021",
-      "s": "DZ021 SD60-C5 SHANTUI",
+      "s": "Бульдозер гусеничный SHANTUI SD60-C5 VIN CHSDA60AKSC000312/Dozer track Shantui SD60-C5",
       "p": "P2",
       "r": "2026-10-12",
       "x": "Не исправность автономного отопителя"

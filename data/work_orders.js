@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-23T09:07:45+00:00",
+  "generated": "2026-11-23T09:22:36+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -2443,8 +2443,8 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-10-18",
       "detected": "2026-10-18",
-      "planStart": "2026-11-16",
-      "closed": null,
+      "planStart": "2026-11-19",
+      "closed": "2026-11-20",
       "asset": "EX010",
       "defect": "DD-00015062",
       "requestNo": "DD-00015062",
@@ -2455,7 +2455,7 @@ window.CM_WO_DATA = {
       "cause": "Фитинг/штуцер ослаб",
       "causeFrom": "wo",
       "descr": "Действущая течь РВД на гидрораспределителе, наблюдается масла в зоне фитинга.",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "by": "Bekzhan",
       "byFull": "Bekzhan Kazhybekov",
       "regBy": "Кажыбеков Бекжан",
@@ -6105,6 +6105,19 @@ window.CM_WO_DATA = {
       "by": "Pavel Kostin",
       "regBy": "Костин Павел Александрович",
       "wo": "WO-023100"
+    },
+    {
+      "asset": "LV006",
+      "defect": "DD-00017357",
+      "raised": "2026-11-23",
+      "system": "LV006.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Не работает штатный отопитель.",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-023143"
     },
     {
       "asset": "TK104",
@@ -39910,7 +39923,7 @@ window.CM_WO_DATA = {
       "asset": "DZ021",
       "defect": "DD-00014588",
       "raised": "2026-10-12",
-      "system": "DZ021 SD60-C5 SHANTUI",
+      "system": "Бульдозер гусеничный SHANTUI SD60-C5 VIN CHSDA60AKSC000312/Dozer track Shantui SD60-C5",
       "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
       "descr": "Не исправность автономного отопителя",
       "status": "Registered",
@@ -116083,9 +116096,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-22",
-      "planStartDt": "2026-11-22T00:00:00",
-      "planEnd": "2026-11-22",
+      "planStart": "2026-11-19",
+      "planStartDt": "2026-11-19T00:00:00",
+      "planEnd": "2026-11-19",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -184313,15 +184326,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-18",
       "planStartDt": "2026-11-18T00:00:00",
       "planEnd": "2026-11-18",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-18",
+      "actualStartDt": "2026-11-18T08:00:00",
+      "actualEnd": "2026-11-18"
     },
     {
       "equip": "TK124",
@@ -196442,8 +196455,8 @@ window.CM_WO_DATA = {
       "planStartDt": "2026-09-21T00:00:00",
       "planEnd": "2026-09-21",
       "actualStart": "2026-09-21",
-      "actualStartDt": "2026-09-21T23:00:00",
-      "actualEnd": "2026-09-22"
+      "actualStartDt": "2026-09-21T00:00:00",
+      "actualEnd": "2026-09-21"
     }
   ]
 };
