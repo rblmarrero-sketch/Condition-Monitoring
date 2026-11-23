@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-23T02:47:48+00:00",
+  "generated": "2026-11-23T03:03:02+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -448,8 +448,8 @@ window.CM_WO_DATA = {
     "planStart": 0
   },
   "cmCauseFrom": {
-    "wo": 131,
-    "wr": 84,
+    "wo": 132,
+    "wr": 83,
     "cert": 0,
     "none": 0
   },
@@ -1013,7 +1013,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-11-12",
       "detected": "2026-11-12",
-      "planStart": null,
+      "planStart": "2026-12-07",
       "closed": null,
       "asset": "TK154",
       "defect": "DD-00016750",
@@ -1023,15 +1023,15 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "cause": "Фитинг/штуцер ослаб",
-      "causeFrom": "wr",
+      "causeFrom": "wo",
       "descr": "Утечка рабочей жидкости на распределителе ретардера.",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "by": "Zhomart",
       "byFull": "Zhomart Khasenov",
       "regBy": "Хасенов Жомарт",
       "raisedBy": "ГДК Баимская",
-      "woNumber": null,
-      "maintType": null,
+      "woNumber": "WO-023116",
+      "maintType": "P4 Planned Repair",
       "planned": false
     },
     {
@@ -6347,11 +6347,11 @@ window.CM_WO_DATA = {
       "system": "BS015.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Выхлопные газы в кабине (Замена гофры)",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "priority": "P2 Urgent",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
+      "wo": "WO-023115"
     },
     {
       "asset": "LD006",
@@ -6984,7 +6984,7 @@ window.CM_WO_DATA = {
       "system": "BS007.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
       "descr": "Замена ремня генератора",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
@@ -7017,6 +7017,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023047"
     },
     {
+      "asset": "EX020",
+      "defect": "DD-00017241",
+      "raised": "2026-11-21",
+      "system": "EX020.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Замена РВД (изготовление)",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023043"
+    },
+    {
       "asset": "GE053",
       "defect": "DD-00017240",
       "raised": "2026-11-21",
@@ -7041,19 +7054,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-023039"
-    },
-    {
-      "asset": "EX020",
-      "defect": "DD-00017241",
-      "raised": "2026-11-21",
-      "system": "EX020.HS.DL (Hydraulic Lines / Гидролинии)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Замена РВД (изготовление)",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-023043"
     },
     {
       "asset": "LV049",
@@ -7706,6 +7706,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022957"
     },
     {
+      "asset": "TK068",
+      "defect": "DD-00017183",
+      "raised": "2026-11-20",
+      "system": "TRUCK, WATER KAMAZ UST 5453K2, TK068 ENGINE OldNumber (UT068)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "двигатель не запускается",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Kuznetsov",
+      "regBy": "Кузнецов Александр Андреевич",
+      "wo": "WO-022963"
+    },
+    {
       "asset": "EX024",
       "defect": "DD-00017180",
       "raised": "2026-11-20",
@@ -7769,19 +7782,6 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-022965"
-    },
-    {
-      "asset": "TK068",
-      "defect": "DD-00017183",
-      "raised": "2026-11-20",
-      "system": "TRUCK, WATER KAMAZ UST 5453K2, TK068 ENGINE OldNumber (UT068)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "двигатель не запускается",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksandr Kuznetsov",
-      "regBy": "Кузнецов Александр Андреевич",
-      "wo": "WO-022963"
     },
     {
       "asset": "TK044",
