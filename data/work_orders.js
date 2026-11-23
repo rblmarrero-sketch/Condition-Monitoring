@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-23T14:37:45+00:00",
+  "generated": "2026-11-23T14:57:40+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6055,6 +6055,19 @@ window.CM_WO_DATA = {
   ],
   "otherDefects": [
     {
+      "asset": "DZ004",
+      "defect": "DD-00017362",
+      "raised": "2026-11-24",
+      "system": "DZ004.CH.UC (Undercarriage / Ходовая часть)",
+      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "descr": "залом болта бугеля",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Kiselev",
+      "regBy": "Киселев Алексей Александрович",
+      "wo": "WO-023148"
+    },
+    {
       "asset": "TK125",
       "defect": "DD-00017333",
       "raised": "2026-11-23",
@@ -6107,19 +6120,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023100"
     },
     {
-      "asset": "GE109",
-      "defect": "DD-00017358",
-      "raised": "2026-11-23",
-      "system": "GE109.AU.CS (Control System / Система управления)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Глохнет. Не запускается.",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-023144"
-    },
-    {
       "asset": "LV006",
       "defect": "DD-00017357",
       "raised": "2026-11-23",
@@ -6131,19 +6131,6 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-023143"
-    },
-    {
-      "asset": "DZ004",
-      "defect": "DD-00017359",
-      "raised": "2026-11-23",
-      "system": "DZ004.CH.UC (Undercarriage / Ходовая часть)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Залом болта бугеля опорного катка",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Vladimir Ladik",
-      "regBy": "Ладик Владимир Владимирович",
-      "wo": "WO-023145"
     },
     {
       "asset": "BSL001",
@@ -6170,6 +6157,32 @@ window.CM_WO_DATA = {
       "by": "Viktor Bernikov",
       "regBy": "Берников Виктор Викторович",
       "wo": "WO-023147"
+    },
+    {
+      "asset": "DZ004",
+      "defect": "DD-00017359",
+      "raised": "2026-11-23",
+      "system": "DZ004.CH.UC (Undercarriage / Ходовая часть)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Залом болта бугеля опорного катка",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Vladimir Ladik",
+      "regBy": "Ладик Владимир Владимирович",
+      "wo": "WO-023145"
+    },
+    {
+      "asset": "GE109",
+      "defect": "DD-00017358",
+      "raised": "2026-11-23",
+      "system": "GE109.AU.CS (Control System / Система управления)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Глохнет. Не запускается.",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-023144"
     },
     {
       "asset": "TK104",
@@ -57743,6 +57756,19 @@ window.CM_WO_DATA = {
       "wo": "WO-018103"
     },
     {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
+      "wo": null
+    },
+    {
       "asset": "DZ022",
       "defect": "DD-00011314",
       "raised": "2026-08-21",
@@ -57844,19 +57870,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
