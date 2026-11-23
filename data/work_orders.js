@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-23T20:43:03+00:00",
+  "generated": "2026-11-23T21:03:04+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6198,12 +6198,51 @@ window.CM_WO_DATA = {
       "wo": "WO-023167"
     },
     {
+      "asset": "EX019",
+      "defect": "DD-00017381",
+      "raised": "2026-11-24",
+      "system": "EX019.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Замена РВД",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023171"
+    },
+    {
+      "asset": "GR003",
+      "defect": "DD-00017382",
+      "raised": "2026-11-24",
+      "system": "GR003.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь переднего сальника коленчатого вала",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": null
+    },
+    {
       "asset": "GR003",
       "defect": "DD-00017380",
       "raised": "2026-11-24",
       "system": "GR003.DRS.FUE (Fuel System / Топливная система)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Течь регулятора ТНВД",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": null
+    },
+    {
+      "asset": "DZ016",
+      "defect": "DD-00017383",
+      "raised": "2026-11-24",
+      "system": "DZ016.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Отопитель салона не работает",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Tomilov",
@@ -6601,6 +6640,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023105"
     },
     {
+      "asset": "LD006",
+      "defect": "DD-00017341",
+      "raised": "2026-11-23",
+      "system": "LD006.ELS.PH (Preheater / Предпусковой подогреватель)",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "требуется установка доп отопителя кабины",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-023170"
+    },
+    {
       "asset": "BS020",
       "defect": "DD-00017336",
       "raised": "2026-11-23",
@@ -6794,19 +6846,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-023129"
-    },
-    {
-      "asset": "LD006",
-      "defect": "DD-00017341",
-      "raised": "2026-11-23",
-      "system": "LD006.ELS.PH (Preheater / Предпусковой подогреватель)",
-      "defectType": "4.02 Open circuit / Разрыв цепи",
-      "descr": "требуется установка доп отопителя кабины",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": null
     },
     {
       "asset": "LD002",
@@ -7017,19 +7056,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023063"
     },
     {
-      "asset": "CR002",
-      "defect": "DD-00017290",
-      "raised": "2026-11-22",
-      "system": "CR002.HS.DL (Hydraulic Lines / Гидролинии)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка гидравлической жидкости",
-      "status": "Completed",
-      "priority": "P2 Urgent",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": "WO-023067"
-    },
-    {
       "asset": "TK104",
       "defect": "DD-00017291",
       "raised": "2026-11-22",
@@ -7041,6 +7067,19 @@ window.CM_WO_DATA = {
       "by": "Pavel Kostin",
       "regBy": "Костин Павел Александрович",
       "wo": "WO-023068"
+    },
+    {
+      "asset": "CR002",
+      "defect": "DD-00017290",
+      "raised": "2026-11-22",
+      "system": "CR002.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка гидравлической жидкости",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-023067"
     },
     {
       "asset": "LV056",
@@ -149267,7 +149306,7 @@ window.CM_WO_DATA = {
         "TB"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "MACH",
+      "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
       "planStart": "2026-11-24",
