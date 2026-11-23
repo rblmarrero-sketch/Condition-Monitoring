@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-23T08:07:59+00:00",
+  "generated": "2026-11-23T08:22:41+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -358,7 +358,7 @@ window.CM_WO_DATA = {
     "WE011"
   ],
   "duplicateRowsCollapsed": 464,
-  "roundsDedupedWithinVisit": 3,
+  "roundsDedupedWithinVisit": 2,
   "columns": [
     "Asset description",
     "Asset old no",
@@ -3301,7 +3301,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-10-03",
       "detected": "2026-10-03",
-      "planStart": "2026-12-02",
+      "planStart": "2026-12-01",
       "closed": null,
       "asset": "TK143",
       "defect": "DD-00013970",
@@ -6068,6 +6068,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023103"
     },
     {
+      "asset": "TK126",
+      "defect": "DD-00017332",
+      "raised": "2026-11-23",
+      "system": "TK126.DRS.FD (Final Drives / Конечные передачи)",
+      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
+      "descr": "Ремонт бортового редуктора",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": "WO-023101"
+    },
+    {
       "asset": "TK112",
       "defect": "DD-00017339",
       "raised": "2026-11-23",
@@ -6079,6 +6092,19 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-023131"
+    },
+    {
+      "asset": "TK127",
+      "defect": "DD-00017330",
+      "raised": "2026-11-23",
+      "system": "TK127.DRS.FD (Final Drives / Конечные передачи)",
+      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
+      "descr": "Ремонт бортового редуктора",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": "WO-023100"
     },
     {
       "asset": "TK104",
@@ -6209,32 +6235,6 @@ window.CM_WO_DATA = {
       "by": "Ilshat Sabitov",
       "regBy": "Сабитов Ильшат Рашидович",
       "wo": "WO-023098"
-    },
-    {
-      "asset": "TK127",
-      "defect": "DD-00017330",
-      "raised": "2026-11-23",
-      "system": "TK127.DRS.FD (Final Drives / Конечные передачи)",
-      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
-      "descr": "Ремонт бортового редуктора",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Pavel Kostin",
-      "regBy": "Костин Павел Александрович",
-      "wo": "WO-023100"
-    },
-    {
-      "asset": "TK126",
-      "defect": "DD-00017332",
-      "raised": "2026-11-23",
-      "system": "TK126.DRS.FD (Final Drives / Конечные передачи)",
-      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
-      "descr": "Ремонт бортового редуктора",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Pavel Kostin",
-      "regBy": "Костин Павел Александрович",
-      "wo": "WO-023101"
     },
     {
       "asset": "TK151",
@@ -47265,6 +47265,32 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "TK126",
+      "defect": "DD-00013942",
+      "raised": "2026-10-03",
+      "system": "TK126.DRS.FD (Final Drives / Конечные передачи)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь масла через уплотнения передних редукторов (L и R) конечных передач",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Evgeniy Frolin",
+      "regBy": "Фролин Евгений Владимирович",
+      "wo": "WO-020878"
+    },
+    {
+      "asset": "TK126",
+      "defect": "DD-00013940",
+      "raised": "2026-10-03",
+      "system": "TK126.DRS (Drive System / Система передачи)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Люфт карданного вала промежуточного соединения (шлицы и крестовина)",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Evgeniy Frolin",
+      "regBy": "Фролин Евгений Владимирович",
+      "wo": "WO-020879"
+    },
+    {
       "asset": "DZ005",
       "defect": "DD-00013974",
       "raised": "2026-10-03",
@@ -47848,32 +47874,6 @@ window.CM_WO_DATA = {
       "by": "Evgeniy Frolin",
       "regBy": "Фролин Евгений Владимирович",
       "wo": "WO-020877"
-    },
-    {
-      "asset": "TK126",
-      "defect": "DD-00013942",
-      "raised": "2026-10-03",
-      "system": "TK126.DRS.FD (Final Drives / Конечные передачи)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь масла через уплотнения передних редукторов (L и R) конечных передач",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Evgeniy Frolin",
-      "regBy": "Фролин Евгений Владимирович",
-      "wo": "WO-020878"
-    },
-    {
-      "asset": "TK126",
-      "defect": "DD-00013940",
-      "raised": "2026-10-03",
-      "system": "TK126.DRS (Drive System / Система передачи)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Люфт карданного вала промежуточного соединения (шлицы и крестовина)",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Evgeniy Frolin",
-      "regBy": "Фролин Евгений Владимирович",
-      "wo": "WO-020879"
     },
     {
       "asset": "EX012",
@@ -50996,6 +50996,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "TK127",
+      "defect": "DD-00013663",
+      "raised": "2026-09-29",
+      "system": "TK127.DRS.FD (Final Drives / Конечные передачи)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка с переднего левого бортового редуктора",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": null
+    },
+    {
       "asset": "SN004",
       "defect": "DD-00013615",
       "raised": "2026-09-29",
@@ -51704,19 +51717,6 @@ window.CM_WO_DATA = {
       "system": "GR007.CH.UC (Undercarriage / Ходовая часть)",
       "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
       "descr": "Канибализация GR007-GR008 8X-2926 (Цепи тандема 4 шт)",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Pavel Kostin",
-      "regBy": "Костин Павел Александрович",
-      "wo": null
-    },
-    {
-      "asset": "TK127",
-      "defect": "DD-00013663",
-      "raised": "2026-09-29",
-      "system": "TK127.DRS.FD (Final Drives / Конечные передачи)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка с переднего левого бортового редуктора",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Pavel Kostin",
@@ -128517,7 +128517,7 @@ window.CM_WO_DATA = {
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "PCNF",
-      "cmmsStatus": "In progress",
+      "cmmsStatus": "Completed",
       "open": false,
       "planStart": "2026-11-17",
       "planStartDt": "2026-11-17T00:00:00",
@@ -184337,9 +184337,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-12-02",
-      "planStartDt": "2026-12-02T00:00:00",
-      "planEnd": "2026-12-02",
+      "planStart": "2026-12-03",
+      "planStartDt": "2026-12-03T00:00:00",
+      "planEnd": "2026-12-03",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -186704,15 +186704,17 @@ window.CM_WO_DATA = {
       "woNumber": "WO-021959",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "500h service",
-      "cmTypes": null,
+      "cmLabel": "Magnetic Plug",
+      "cmTypes": [
+        "MP"
+      ],
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-27",
-      "planStartDt": "2026-11-27T00:00:00",
-      "planEnd": "2026-11-27",
+      "planStart": "2026-12-05",
+      "planStartDt": "2026-12-05T00:00:00",
+      "planEnd": "2026-12-05",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -186753,6 +186755,28 @@ window.CM_WO_DATA = {
       "priority": "P3 Planned (PM)",
       "woStatus": null,
       "cmmsStatus": null,
+      "open": true,
+      "planStart": null,
+      "planStartDt": null,
+      "planEnd": null,
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
+      "equip": "TK127",
+      "cls": "AT",
+      "woNumber": null,
+      "maintType": "1000 Hours service Planned",
+      "hours": 1000,
+      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmTypes": [
+        "INSP",
+        "MP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": null,
+      "cmmsStatus": "Registered",
       "open": true,
       "planStart": null,
       "planStartDt": null,
@@ -187933,6 +187957,27 @@ window.CM_WO_DATA = {
       "planStart": "2026-11-27",
       "planStartDt": "2026-11-27T00:00:00",
       "planEnd": "2026-11-27",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
+      "equip": "TK127",
+      "cls": "AT",
+      "woNumber": "WO-023142",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "Magnetic Plug",
+      "cmTypes": [
+        "MP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-12-10",
+      "planStartDt": "2026-12-10T00:00:00",
+      "planEnd": "2026-12-10",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -190293,9 +190338,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-12-02",
-      "planStartDt": "2026-12-02T00:00:00",
-      "planEnd": "2026-12-02",
+      "planStart": "2026-12-01",
+      "planStartDt": "2026-12-01T00:00:00",
+      "planEnd": "2026-12-01",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
