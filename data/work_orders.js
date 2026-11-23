@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-23T09:37:40+00:00",
+  "generated": "2026-11-23T09:52:40+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -2417,8 +2417,8 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-10-18",
       "detected": "2026-10-18",
-      "planStart": "2026-11-16",
-      "closed": null,
+      "planStart": "2026-11-18",
+      "closed": "2026-11-18",
       "asset": "EX010",
       "defect": "DD-00015063",
       "requestNo": "DD-00015063",
@@ -2429,7 +2429,7 @@ window.CM_WO_DATA = {
       "cause": "Неверная уставка",
       "causeFrom": "wo",
       "descr": "Фара функционирует некорректно.",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "by": "Bekzhan",
       "byFull": "Bekzhan Kazhybekov",
       "regBy": "Кажыбеков Бекжан",
@@ -6107,6 +6107,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023100"
     },
     {
+      "asset": "GE109",
+      "defect": "DD-00017358",
+      "raised": "2026-11-23",
+      "system": "GE109.AU.CS (Control System / Система управления)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Глохнет. Не запускается.",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-023144"
+    },
+    {
       "asset": "LV006",
       "defect": "DD-00017357",
       "raised": "2026-11-23",
@@ -6126,7 +6139,7 @@ window.CM_WO_DATA = {
       "system": "TK104.HS.DL (Hydraulic Lines / Гидролинии)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Утечка по РВД подъема цилиндра",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P4 Planned (Repair)",
       "by": "Vladimir Ladik",
       "regBy": "Ладик Владимир Владимирович",
@@ -14875,7 +14888,7 @@ window.CM_WO_DATA = {
       "system": "DR008.PS.OC (Compressor Oil Cooler / Маслоохладитель компрессора)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Течь масла из радиатора охлаждения масла компрессора",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P4 Planned (Repair)",
       "by": "Evgeniy Frolin",
       "regBy": "Фролин Евгений Владимирович",
@@ -16877,7 +16890,7 @@ window.CM_WO_DATA = {
       "system": "LD008.HS.CYL (Cylinders / Гидроцилиндры)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Течь масла 2-х РВД поворотных цилиндров",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P4 Planned (Repair)",
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
@@ -179582,15 +179595,15 @@ window.CM_WO_DATA = {
         "TB"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
-      "planStart": "2026-11-20",
-      "planStartDt": "2026-11-20T00:00:00",
-      "planEnd": "2026-11-21",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
+      "planStart": "2026-11-21",
+      "planStartDt": "2026-11-21T00:00:00",
+      "planEnd": "2026-11-22",
+      "actualStart": "2026-11-21",
+      "actualStartDt": "2026-11-21T07:00:00",
+      "actualEnd": "2026-11-22"
     },
     {
       "equip": "TK120",
@@ -196455,8 +196468,8 @@ window.CM_WO_DATA = {
       "planStartDt": "2026-09-21T00:00:00",
       "planEnd": "2026-09-21",
       "actualStart": "2026-09-21",
-      "actualStartDt": "2026-09-21T00:00:00",
-      "actualEnd": "2026-09-21"
+      "actualStartDt": "2026-09-21T23:00:00",
+      "actualEnd": "2026-09-22"
     }
   ]
 };

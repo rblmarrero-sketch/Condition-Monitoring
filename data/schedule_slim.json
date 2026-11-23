@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-23T09:37:40+00:00",
+  "generated": "2026-11-23T09:52:40+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -619,17 +619,6 @@
       }
     ],
     "TK120": [
-      {
-        "wo": "WO-021949",
-        "hours": 2000,
-        "types": [
-          "INSP",
-          "MP",
-          "TB"
-        ],
-        "plan": "2026-11-20",
-        "priority": "P3 Planned (PM)"
-      },
       {
         "wo": "WO-023138",
         "hours": 250,
@@ -3307,6 +3296,24 @@
       "completed": ""
     },
     {
+      "wo": "WO-021949",
+      "equip": "TK120",
+      "cls": "AT",
+      "comp": "",
+      "desc": "General Inspection / Magnetic Plug / Dump Body Liner",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-21",
+      "type": "2000 Hours service Planned",
+      "hours": 2000,
+      "plan": "2026-11-21",
+      "status": "Completed",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "complete",
+      "completed": "2026-11-22"
+    },
+    {
       "wo": "WO-022146",
       "equip": "TK153",
       "cls": "HT",
@@ -3485,24 +3492,6 @@
       "cause": "",
       "pmStatus": "complete",
       "completed": "2026-11-20"
-    },
-    {
-      "wo": "WO-021949",
-      "equip": "TK120",
-      "cls": "AT",
-      "comp": "",
-      "desc": "General Inspection / Magnetic Plug / Dump Body Liner",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-20",
-      "type": "2000 Hours service Planned",
-      "hours": 2000,
-      "plan": "2026-11-20",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
     },
     {
       "wo": "WO-022327",
@@ -9220,13 +9209,13 @@
       "raised": "2026-10-18",
       "type": "3.03 Out of adjustment / Неверная настройка",
       "hours": null,
-      "plan": "2026-11-16",
-      "status": "Elimination scheduled",
+      "plan": "2026-11-18",
+      "status": "Completed",
       "request": "DD-00015063",
       "defType": "3.03 Out of adjustment / Неверная настройка",
       "cause": "Неверная уставка",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-18"
     },
     {
       "wo": "WO-021508",
@@ -10670,6 +10659,14 @@
     }
   ],
   "firDefects": [
+    {
+      "d": "DD-00017358",
+      "u": "GE109",
+      "s": "GE109.AU.CS (Control System / Система управления)",
+      "p": "P2",
+      "r": "2026-11-23",
+      "x": "Глохнет. Не запускается."
+    },
     {
       "d": "DD-00017357",
       "u": "LV006",
