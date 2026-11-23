@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-23T01:43:11+00:00",
+  "generated": "2026-11-23T01:57:41+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6289,6 +6289,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023108"
     },
     {
+      "asset": "LD002",
+      "defect": "DD-00017345",
+      "raised": "2026-11-23",
+      "system": "Bucket / Ковш",
+      "defectType": "2.06 Abrasive wear / Абразивный износ",
+      "descr": "Износ коронок ковша",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-023113"
+    },
+    {
       "asset": "TK037",
       "defect": "DD-00017342",
       "raised": "2026-11-23",
@@ -6770,6 +6783,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023065"
     },
     {
+      "asset": "LV068",
+      "defect": "DD-00017248",
+      "raised": "2026-11-21",
+      "system": "LV068.ELS.WH (Wiring Harness / Жгут проводов)",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "Замена заднего правого датчика АБС",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023051"
+    },
+    {
       "asset": "TK098",
       "defect": "DD-00017224",
       "raised": "2026-11-21",
@@ -6867,7 +6893,7 @@ window.CM_WO_DATA = {
       "system": "TK036.OC.HE (Heating / Отопление)",
       "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
       "descr": "Ремонт отопителя",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
@@ -7056,19 +7082,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023052"
     },
     {
-      "asset": "LV068",
-      "defect": "DD-00017248",
-      "raised": "2026-11-21",
-      "system": "LV068.ELS.WH (Wiring Harness / Жгут проводов)",
-      "defectType": "4.02 Open circuit / Разрыв цепи",
-      "descr": "Замена заднего правого датчика АБС",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-023051"
-    },
-    {
       "asset": "TK117",
       "defect": "DD-00017273",
       "raised": "2026-11-21",
@@ -7205,7 +7218,7 @@ window.CM_WO_DATA = {
       "system": "TK133.BS.HOS (Hoses and Piping / Шланги и трубопроводы)",
       "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
       "descr": "Ремонт тормозной пневмоститемы",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
@@ -7602,19 +7615,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022958"
     },
     {
-      "asset": "TK084",
-      "defect": "DD-00017198",
-      "raised": "2026-11-20",
-      "system": "TK084.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Обрыв ремня",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022976"
-    },
-    {
       "asset": "GE009",
       "defect": "DD-00017189",
       "raised": "2026-11-20",
@@ -7639,6 +7639,19 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Kuznetsov",
       "regBy": "Кузнецов Александр Андреевич",
       "wo": "WO-022966"
+    },
+    {
+      "asset": "TK084",
+      "defect": "DD-00017198",
+      "raised": "2026-11-20",
+      "system": "TK084.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Обрыв ремня",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022976"
     },
     {
       "asset": "EX003",
@@ -8031,6 +8044,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023009"
     },
     {
+      "asset": "CD003",
+      "defect": "DD-00017222",
+      "raised": "2026-11-20",
+      "system": "CD003.ELS.ALT (Alternator / Генератор)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Обломило болты кронштейна генератора",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Viktor Bernikov",
+      "regBy": "Берников Виктор Викторович",
+      "wo": "WO-023015"
+    },
+    {
       "asset": "CD007",
       "defect": "DD-00017220",
       "raised": "2026-11-20",
@@ -8044,26 +8070,13 @@ window.CM_WO_DATA = {
       "wo": "WO-023013"
     },
     {
-      "asset": "LV045",
-      "defect": "DD-00017204",
-      "raised": "2026-11-20",
-      "system": "LV045.ELS.ALT (Alternator / Генератор)",
-      "defectType": "4.04 Faulty power/voltage / Неверные показатели тока",
-      "descr": "Ремонт генератора",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022995"
-    },
-    {
       "asset": "CD007",
       "defect": "DD-00017219",
       "raised": "2026-11-20",
       "system": "CD007.HS.DL (Hydraulic Lines / Гидролинии)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Порыв РВД на вибропривод",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Viktor Bernikov",
       "regBy": "Берников Виктор Викторович",
@@ -8083,19 +8096,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023014"
     },
     {
-      "asset": "CD003",
-      "defect": "DD-00017222",
-      "raised": "2026-11-20",
-      "system": "CD003.ELS.ALT (Alternator / Генератор)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Обломило болты кронштейна генератора",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Viktor Bernikov",
-      "regBy": "Берников Виктор Викторович",
-      "wo": "WO-023015"
-    },
-    {
       "asset": "TK124",
       "defect": "DD-00017218",
       "raised": "2026-11-20",
@@ -8107,6 +8107,19 @@ window.CM_WO_DATA = {
       "by": "Vladimir Ladik",
       "regBy": "Ладик Владимир Владимирович",
       "wo": "WO-023011"
+    },
+    {
+      "asset": "LV045",
+      "defect": "DD-00017204",
+      "raised": "2026-11-20",
+      "system": "LV045.ELS.ALT (Alternator / Генератор)",
+      "defectType": "4.04 Faulty power/voltage / Неверные показатели тока",
+      "descr": "Ремонт генератора",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022995"
     },
     {
       "asset": "DZ003",
