@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-23T22:37:48+00:00",
+  "generated": "2026-11-23T22:53:02+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6367,6 +6367,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "DZ002",
+      "defect": "DD-00017391",
+      "raised": "2026-11-24",
+      "system": "DZ002.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка гидровлического масла",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": null
+    },
+    {
       "asset": "EX015",
       "defect": "DD-00017376",
       "raised": "2026-11-24",
@@ -6614,19 +6627,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023091"
     },
     {
-      "asset": "TK092",
-      "defect": "DD-00017322",
-      "raised": "2026-11-23",
-      "system": "TK092.BS.HOS (Hoses and Piping / Шланги и трубопроводы)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка воздуха.",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Viktor Bernikov",
-      "regBy": "Берников Виктор Викторович",
-      "wo": "WO-023092"
-    },
-    {
       "asset": "EX008",
       "defect": "DD-00017324",
       "raised": "2026-11-23",
@@ -6724,7 +6724,7 @@ window.CM_WO_DATA = {
       "system": "BS001.BS.HOS (Hoses and Piping / Шланги и трубопроводы)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Низкое давление воздуха",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
@@ -6742,19 +6742,6 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-023170"
-    },
-    {
-      "asset": "BS020",
-      "defect": "DD-00017336",
-      "raised": "2026-11-23",
-      "system": "BS020.BS.HOS (Hoses and Piping / Шланги и трубопроводы)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Неисправно сцепление",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-023106"
     },
     {
       "asset": "TK092",
@@ -6809,19 +6796,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023114"
     },
     {
-      "asset": "BS015",
-      "defect": "DD-00017347",
-      "raised": "2026-11-23",
-      "system": "BS015.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Выхлопные газы в кабине (Замена гофры)",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-023115"
-    },
-    {
       "asset": "TK036",
       "defect": "DD-00017348",
       "raised": "2026-11-23",
@@ -6841,7 +6815,7 @@ window.CM_WO_DATA = {
       "system": "TK004.BS.RCH (Brake Chambers / Тормозные камеры)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Ремонт тормозной системы",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
@@ -6932,11 +6906,37 @@ window.CM_WO_DATA = {
       "system": "TK088.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
       "descr": "Отогрев, запуск",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-023123"
+    },
+    {
+      "asset": "BS020",
+      "defect": "DD-00017336",
+      "raised": "2026-11-23",
+      "system": "BS020.BS.HOS (Hoses and Piping / Шланги и трубопроводы)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Неисправно сцепление",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023106"
+    },
+    {
+      "asset": "BS015",
+      "defect": "DD-00017347",
+      "raised": "2026-11-23",
+      "system": "BS015.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Выхлопные газы в кабине (Замена гофры)",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023115"
     },
     {
       "asset": "DZ018",
@@ -6963,6 +6963,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-023125"
+    },
+    {
+      "asset": "TK092",
+      "defect": "DD-00017322",
+      "raised": "2026-11-23",
+      "system": "TK092.BS.HOS (Hoses and Piping / Шланги и трубопроводы)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка воздуха.",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Viktor Bernikov",
+      "regBy": "Берников Виктор Викторович",
+      "wo": "WO-023092"
     },
     {
       "asset": "EX001",
@@ -7054,19 +7067,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-023085"
-    },
-    {
-      "asset": "CD003",
-      "defect": "DD-00017313",
-      "raised": "2026-11-22",
-      "system": "CD003.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Демонтаж глушителя",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-023086"
     },
     {
       "asset": "TK084",
@@ -7275,6 +7275,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-023082"
+    },
+    {
+      "asset": "CD003",
+      "defect": "DD-00017313",
+      "raised": "2026-11-22",
+      "system": "CD003.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Демонтаж глушителя",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023086"
     },
     {
       "asset": "CN001",
@@ -11541,6 +11554,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "GE054",
+      "defect": "DD-00016974",
+      "raised": "2026-11-16",
+      "system": "GE054.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Демонтаж стартера с нового ДВС. Консервация",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
       "asset": "TK130",
       "defect": "DD-00016949",
       "raised": "2026-11-15",
@@ -14238,7 +14264,7 @@ window.CM_WO_DATA = {
       "system": "GE076.CH.STR (Superstructure / Надстройка)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "отогрев, проверка на комплектность, запуск. 2 слес\\1 элект, 4 часа.",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
@@ -27336,19 +27362,6 @@ window.CM_WO_DATA = {
       "wo": "WO-020807"
     },
     {
-      "asset": "TK047",
-      "defect": "DD-00015718",
-      "raised": "2026-10-26",
-      "system": "TK047.CH.SU (Suspension / Подвеска)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Требуется диагностика подвески (посторонний шум)",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022420"
-    },
-    {
       "asset": "LV068",
       "defect": "DD-00015682",
       "raised": "2026-10-26",
@@ -27464,6 +27477,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022915"
+    },
+    {
+      "asset": "TK047",
+      "defect": "DD-00015718",
+      "raised": "2026-10-26",
+      "system": "TK047.CH.SU (Suspension / Подвеска)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Требуется диагностика подвески (посторонний шум)",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022420"
     },
     {
       "asset": "DR011",
@@ -27711,6 +27737,19 @@ window.CM_WO_DATA = {
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": "WO-020781"
+    },
+    {
+      "asset": "CR004",
+      "defect": "DD-00015653",
+      "raised": "2026-10-25",
+      "system": "CR004.CONV.MDC (Main Discharge Conveyor / Главный разгрузочный конвейер)",
+      "defectType": "8.01 Conveyor belt cut / tear / Порез / разрыв конвейерной ленты",
+      "descr": "Износ соеденителей на стыке ленты",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-020785"
     },
     {
       "asset": "LV068",
@@ -28322,19 +28361,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022387"
-    },
-    {
-      "asset": "CR004",
-      "defect": "DD-00015653",
-      "raised": "2026-10-25",
-      "system": "CR004.CONV.MDC (Main Discharge Conveyor / Главный разгрузочный конвейер)",
-      "defectType": "8.01 Conveyor belt cut / tear / Порез / разрыв конвейерной ленты",
-      "descr": "Износ соеденителей на стыке ленты",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": "WO-020785"
     },
     {
       "asset": "TK098",
@@ -29110,7 +29136,7 @@ window.CM_WO_DATA = {
       "system": "TK034.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Течь масла с клапанной крышки",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
       "regBy": "Таран Андрей Андреевич",
@@ -85419,15 +85445,15 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-18",
       "planStartDt": "2026-11-18T00:00:00",
       "planEnd": "2026-11-18",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-18",
+      "actualStartDt": "2026-11-18T13:00:00",
+      "actualEnd": "2026-11-18"
     },
     {
       "equip": "CN009",
@@ -134649,6 +134675,28 @@ window.CM_WO_DATA = {
       "actualEnd": "2026-11-09"
     },
     {
+      "equip": "GR012",
+      "cls": "GRD",
+      "woNumber": "WO-023183",
+      "maintType": "2000 Hours service Planned",
+      "hours": 2000,
+      "cmLabel": "Filter Cut / General Inspection",
+      "cmTypes": [
+        "FC",
+        "INSP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-12-03",
+      "planStartDt": "2026-12-03T00:00:00",
+      "planEnd": "2026-12-03",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
       "equip": "GR013",
       "cls": "GRD",
       "woNumber": null,
@@ -134916,9 +134964,28 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-25",
-      "planStartDt": "2026-11-25T00:00:00",
-      "planEnd": "2026-11-25",
+      "planStart": "2026-12-08",
+      "planStartDt": "2026-12-08T00:00:00",
+      "planEnd": "2026-12-08",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
+      "equip": "GR013",
+      "cls": "GRD",
+      "woNumber": "WO-023184",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "250h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-12-19",
+      "planStartDt": "2026-12-19T00:00:00",
+      "planEnd": "2026-12-19",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -157332,15 +157399,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-16",
       "planStartDt": "2026-11-16T00:00:00",
       "planEnd": "2026-11-16",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-16",
+      "actualStartDt": "2026-11-16T07:00:00",
+      "actualEnd": "2026-11-16"
     },
     {
       "equip": "TK085",
