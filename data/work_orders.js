@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-23T06:47:55+00:00",
+  "generated": "2026-11-23T07:07:57+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -448,8 +448,8 @@ window.CM_WO_DATA = {
     "planStart": 0
   },
   "cmCauseFrom": {
-    "wo": 134,
-    "wr": 81,
+    "wo": 135,
+    "wr": 80,
     "cert": 0,
     "none": 0
   },
@@ -2053,7 +2053,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-10-20",
       "detected": "2026-10-20",
-      "planStart": null,
+      "planStart": "2026-12-08",
       "closed": null,
       "asset": "TK112",
       "defect": "DD-00015238",
@@ -2063,15 +2063,15 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "defectType": "1.27 Belt drive issue (slip/break) / Проблема ременного привода (проскальзывание/обрыв)",
       "cause": "Поврежден шкива",
-      "causeFrom": "wr",
+      "causeFrom": "wo",
       "descr": "Износ шкива.",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "by": "Bekzhan",
       "byFull": "Bekzhan Kazhybekov",
       "regBy": "Кажыбеков Бекжан",
       "raisedBy": "ГДК Баимская",
-      "woNumber": null,
-      "maintType": null,
+      "woNumber": "WO-023130",
+      "maintType": "P4 Planned Repair",
       "planned": false
     },
     {
@@ -6055,6 +6055,19 @@ window.CM_WO_DATA = {
   ],
   "otherDefects": [
     {
+      "asset": "TK112",
+      "defect": "DD-00017339",
+      "raised": "2026-11-23",
+      "system": "TK112.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "descr": "Люфт заднего хвостовика среднего моста",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-023131"
+    },
+    {
       "asset": "TK104",
       "defect": "DD-00017319",
       "raised": "2026-11-23",
@@ -6490,19 +6503,6 @@ window.CM_WO_DATA = {
       "system": "LD001.ELS.PH (Preheater / Предпусковой подогреватель)",
       "defectType": "4.02 Open circuit / Разрыв цепи",
       "descr": "Дополнительная печка дует холодным воздухом",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": null
-    },
-    {
-      "asset": "TK112",
-      "defect": "DD-00017339",
-      "raised": "2026-11-23",
-      "system": "TK112.DRS.AXL (Axles / Мосты)",
-      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
-      "descr": "Люфт заднего хвостовика среднего моста",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Dmitriy Stepanenko",
@@ -8330,6 +8330,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022876"
     },
     {
+      "asset": "TK112",
+      "defect": "DD-00017155",
+      "raised": "2026-11-19",
+      "system": "TK112.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка выхлопных газов",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-023132"
+    },
+    {
       "asset": "TK125",
       "defect": "DD-00017122",
       "raised": "2026-11-19",
@@ -8934,19 +8947,6 @@ window.CM_WO_DATA = {
       "system": "TK120.ELS.WH (Wiring Harness / Жгут проводов)",
       "defectType": "1.06 Deformation / bending / buckling Деформация / изгиб / коробление",
       "descr": "не работает экран заднего хода",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": null
-    },
-    {
-      "asset": "TK112",
-      "defect": "DD-00017155",
-      "raised": "2026-11-19",
-      "system": "TK112.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка выхлопных газов",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Dmitriy Stepanenko",
@@ -15389,6 +15389,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "TK111",
+      "defect": "DD-00016591",
+      "raised": "2026-11-09",
+      "system": "TK111.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь масла c тривода генератора",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-022192"
+    },
+    {
       "asset": "CR003",
       "defect": "DD-00016567",
       "raised": "2026-11-09",
@@ -15972,19 +15985,6 @@ window.CM_WO_DATA = {
       "by": "Roman Besedovskiy",
       "regBy": "Беседовский Роман Иванович",
       "wo": "WO-022156"
-    },
-    {
-      "asset": "TK111",
-      "defect": "DD-00016591",
-      "raised": "2026-11-09",
-      "system": "TK111.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь масла c тривода генератора",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": "WO-022192"
     },
     {
       "asset": "LD008",
@@ -35683,6 +35683,19 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "LS048",
+      "defect": "DD-00014962",
+      "raised": "2026-10-17",
+      "system": "LS048.ELS.MW (Machine Wiring / Электропроводка машины)",
+      "defectType": "4.14 Battery / starting circuit fault / Неисправность аккумулятора / цепи пуска",
+      "descr": "Замена АКБ",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "LS048",
       "defect": "DD-00014963",
       "raised": "2026-10-17",
       "system": "LS048.DRS.ENG (Engine / Двигатель)",
@@ -35701,19 +35714,6 @@ window.CM_WO_DATA = {
       "system": "EX006.HS.MP (Hydraulic Pumps / Гидронасосы)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "каплевидная утечка по гидронасосу",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "LS048",
-      "defect": "DD-00014962",
-      "raised": "2026-10-17",
-      "system": "LS048.ELS.MW (Machine Wiring / Электропроводка машины)",
-      "defectType": "4.14 Battery / starting circuit fault / Неисправность аккумулятора / цепи пуска",
-      "descr": "Замена АКБ",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -57691,19 +57691,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
-      "wo": null
-    },
-    {
       "asset": "BS005",
       "defect": "DD-00011312",
       "raised": "2026-08-21",
@@ -57792,6 +57779,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
