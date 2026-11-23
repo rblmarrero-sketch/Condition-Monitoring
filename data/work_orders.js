@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-23T17:47:44+00:00",
+  "generated": "2026-11-23T18:02:43+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6131,6 +6131,32 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-023154"
+    },
+    {
+      "asset": "EX001",
+      "defect": "DD-00017369",
+      "raised": "2026-11-24",
+      "system": "EX001.ELS (Electrical System / Электросистема)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Заглох не запускается.",
+      "status": "Elimination scheduled",
+      "priority": "P1 Breakdown",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-023155"
+    },
+    {
+      "asset": "TK098",
+      "defect": "DD-00017370",
+      "raised": "2026-11-24",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK098 ENGINE OldNumber (UT098)",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "Потеря мощности. Активирован индикатор неисправности двигателя",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-023156"
     },
     {
       "asset": "TK125",
