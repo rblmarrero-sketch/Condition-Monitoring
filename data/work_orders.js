@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-23T16:47:43+00:00",
+  "generated": "2026-11-23T17:02:47+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6081,6 +6081,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023149"
     },
     {
+      "asset": "CR008",
+      "defect": "DD-00017364",
+      "raised": "2026-11-24",
+      "system": "CR008.CONV.PUL (Pulleys / Барабаны)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "доливка в редуктор барабана",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Murashko",
+      "regBy": "Мурашко Сергей Борисович",
+      "wo": "WO-023150"
+    },
+    {
       "asset": "TK125",
       "defect": "DD-00017333",
       "raised": "2026-11-23",
@@ -6196,6 +6209,19 @@ window.CM_WO_DATA = {
       "by": "Vladimir Ladik",
       "regBy": "Ладик Владимир Владимирович",
       "wo": "WO-023145"
+    },
+    {
+      "asset": "TK034",
+      "defect": "DD-00017365",
+      "raised": "2026-11-23",
+      "system": "TK034.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Люфт хвастовика среднего моста",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Viktor Bernikov",
+      "regBy": "Берников Виктор Викторович",
+      "wo": "WO-023151"
     },
     {
       "asset": "TK104",
@@ -6711,7 +6737,7 @@ window.CM_WO_DATA = {
       "system": "TK084.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
       "descr": "Потеря мощности двигателя. Индикация неисправности ДВС.",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P1 Breakdown",
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
@@ -6724,7 +6750,7 @@ window.CM_WO_DATA = {
       "system": "CD006.ELS.ALT (Alternator / Генератор)",
       "defectType": "4.15 Alternator / charging fault / Неисправность генератора / зарядки",
       "descr": "Промаргивает индикация неисправности системы зарядки аккумулятора",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
@@ -6776,7 +6802,7 @@ window.CM_WO_DATA = {
       "system": "CR008.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
       "descr": "Двигатель не запускается.",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P1 Breakdown",
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
@@ -7616,11 +7642,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "GR004",
-      "defect": "DD-00017262",
+      "defect": "DD-00017260",
       "raised": "2026-11-21",
-      "system": "GR004.DRS.AXL (Axles / Мосты)",
-      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
-      "descr": "открутилась гайка ступицы",
+      "system": "GR004.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь масла ДВС",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Dmitriy Stepanenko",
@@ -7629,11 +7655,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "GR004",
-      "defect": "DD-00017260",
+      "defect": "DD-00017262",
       "raised": "2026-11-21",
-      "system": "GR004.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь масла ДВС",
+      "system": "GR004.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "descr": "открутилась гайка ступицы",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Dmitriy Stepanenko",
@@ -57782,19 +57808,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
-      "wo": null
-    },
-    {
       "asset": "BS005",
       "defect": "DD-00011312",
       "raised": "2026-08-21",
@@ -57883,6 +57896,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
@@ -59251,8 +59277,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H07",
-      "defect": "EB-00000075",
+      "asset": "H04",
+      "defect": "EB-00000076",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -59264,8 +59290,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000076",
+      "asset": "H07",
+      "defect": "EB-00000075",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
