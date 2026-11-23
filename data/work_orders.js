@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-23T01:12:43+00:00",
+  "generated": "2026-11-23T01:27:53+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6594,7 +6594,7 @@ window.CM_WO_DATA = {
       "system": "LV056.DRS.TRA (Transmission / Трансмиссия)",
       "defectType": "2.06 Abrasive wear / Абразивный износ",
       "descr": "Износ ремня вариатора",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
@@ -7075,7 +7075,7 @@ window.CM_WO_DATA = {
       "system": "TK117.DRS.AXL (Axles / Мосты)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "течь масла с хвостовика сред. моста",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
@@ -8024,11 +8024,24 @@ window.CM_WO_DATA = {
       "system": "FL005.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
       "descr": "Диградация масла",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Viktor Bernikov",
       "regBy": "Берников Виктор Викторович",
       "wo": "WO-023009"
+    },
+    {
+      "asset": "CD007",
+      "defect": "DD-00017220",
+      "raised": "2026-11-20",
+      "system": "CD007.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Порыв РВД",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Viktor Bernikov",
+      "regBy": "Берников Виктор Викторович",
+      "wo": "WO-023013"
     },
     {
       "asset": "LV045",
@@ -8055,19 +8068,6 @@ window.CM_WO_DATA = {
       "by": "Viktor Bernikov",
       "regBy": "Берников Виктор Викторович",
       "wo": "WO-023012"
-    },
-    {
-      "asset": "CD007",
-      "defect": "DD-00017220",
-      "raised": "2026-11-20",
-      "system": "CD007.HS.DL (Hydraulic Lines / Гидролинии)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Порыв РВД",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Viktor Bernikov",
-      "regBy": "Берников Виктор Викторович",
-      "wo": "WO-023013"
     },
     {
       "asset": "TK111",
@@ -86472,9 +86472,9 @@ window.CM_WO_DATA = {
       "planStart": "2026-07-23",
       "planStartDt": "2026-07-23T19:00:00",
       "planEnd": "2026-07-24",
-      "actualStart": "2026-07-23",
-      "actualStartDt": "2026-07-23T19:00:00",
-      "actualEnd": "2026-07-24"
+      "actualStart": "2026-07-22",
+      "actualStartDt": "2026-07-22T00:00:00",
+      "actualEnd": "2026-07-22"
     },
     {
       "equip": "CN023",
