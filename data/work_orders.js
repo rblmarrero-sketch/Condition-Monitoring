@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-23T17:17:49+00:00",
+  "generated": "2026-11-23T17:32:45+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6092,6 +6092,45 @@ window.CM_WO_DATA = {
       "by": "Sergey Murashko",
       "regBy": "Мурашко Сергей Борисович",
       "wo": "WO-023150"
+    },
+    {
+      "asset": "TK037",
+      "defect": "DD-00017366",
+      "raised": "2026-11-24",
+      "system": "TK037.CH.BY (Dump Body / Самосвальный кузов)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "не срабатывает соленоид подьема кузова",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Viktor Bernikov",
+      "regBy": "Берников Виктор Викторович",
+      "wo": "WO-023152"
+    },
+    {
+      "asset": "TK091",
+      "defect": "DD-00017367",
+      "raised": "2026-11-24",
+      "system": "TK091.DRS.TRA (Transmission / Трансмиссия)",
+      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "descr": "Раскрутилась кулиса",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Viktor Bernikov",
+      "regBy": "Берников Виктор Викторович",
+      "wo": "WO-023153"
+    },
+    {
+      "asset": "LV084",
+      "defect": "DD-00017368",
+      "raised": "2026-11-24",
+      "system": "LV084.ELS.AS (Alarm System / Система сигнализации)",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "Не работает проблесковый маячок",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-023154"
     },
     {
       "asset": "TK125",
@@ -40778,6 +40817,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "HX019",
+      "defect": "DD-00014530",
+      "raised": "2026-10-11",
+      "system": "HX019 BV690FS MASTER",
+      "defectType": "5.14 Extreme temperature (cold/heat) / Экстремальная температура (холод/жара)",
+      "descr": "Перегрев",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Shcherbina",
+      "regBy": "Щербина Андрей Николаевич",
+      "wo": null
+    },
+    {
       "asset": "CD010",
       "defect": "DD-00014573",
       "raised": "2026-10-11",
@@ -40827,19 +40879,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
-      "wo": null
-    },
-    {
-      "asset": "HX019",
-      "defect": "DD-00014530",
-      "raised": "2026-10-11",
-      "system": "HX019 BV690FS MASTER",
-      "defectType": "5.14 Extreme temperature (cold/heat) / Экстремальная температура (холод/жара)",
-      "descr": "Перегрев",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Shcherbina",
-      "regBy": "Щербина Андрей Николаевич",
       "wo": null
     },
     {
