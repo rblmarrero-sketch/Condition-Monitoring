@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-23T19:17:53+00:00",
+  "generated": "2026-11-23T19:33:09+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -45,7 +45,7 @@
           "INSP",
           "UC"
         ],
-        "plan": "2026-11-19",
+        "plan": "2026-11-21",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -3164,6 +3164,24 @@
       "completed": "2026-11-21"
     },
     {
+      "wo": "WO-019352",
+      "equip": "DZ007",
+      "cls": "DOZ",
+      "comp": "",
+      "desc": "Filter Cut / General Inspection / Undercarriage",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-21",
+      "type": "1000 Hours service Planned",
+      "hours": 1000,
+      "plan": "2026-11-21",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-022024",
       "equip": "DZ018",
       "cls": "DOZ",
@@ -3448,24 +3466,6 @@
       "request": "DD-00017206",
       "defType": "2.01 Wear / Износ",
       "cause": "Абразивный износ",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
-      "wo": "WO-019352",
-      "equip": "DZ007",
-      "cls": "DOZ",
-      "comp": "",
-      "desc": "Filter Cut / General Inspection / Undercarriage",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-19",
-      "type": "1000 Hours service Planned",
-      "hours": 1000,
-      "plan": "2026-11-19",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
       "pmStatus": "open",
       "completed": ""
     },

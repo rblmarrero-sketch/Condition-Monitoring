@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-23T19:17:53+00:00",
+  "generated": "2026-11-23T19:33:09+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -7387,7 +7387,7 @@ window.CM_WO_DATA = {
       "system": "TK146.BS (Braking System / Тормозная система)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Переборка, замена левого и правого переднего суппорта",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P4 Planned (Repair)",
       "by": "Pavel Kostin",
       "regBy": "Костин Павел Александрович",
@@ -98121,9 +98121,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-19",
-      "planStartDt": "2026-11-19T00:00:00",
-      "planEnd": "2026-11-19",
+      "planStart": "2026-11-21",
+      "planStartDt": "2026-11-21T00:00:00",
+      "planEnd": "2026-11-21",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
