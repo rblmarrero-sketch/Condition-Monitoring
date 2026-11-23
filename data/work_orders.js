@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-23T22:17:51+00:00",
+  "generated": "2026-11-23T22:37:48+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -357,7 +357,7 @@ window.CM_WO_DATA = {
     "WE010",
     "WE011"
   ],
-  "duplicateRowsCollapsed": 464,
+  "duplicateRowsCollapsed": 466,
   "roundsDedupedWithinVisit": 2,
   "columns": [
     "Asset description",
@@ -6302,19 +6302,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023171"
     },
     {
-      "asset": "LV016",
-      "defect": "DD-00017385",
-      "raised": "2026-11-24",
-      "system": "LV016.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.24 Low temperature / freezing / Низкая температура / замерзание",
-      "descr": "ДВС термозащита",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Ilshat Sabitov",
-      "regBy": "Сабитов Ильшат Рашидович",
-      "wo": "WO-023175"
-    },
-    {
       "asset": "GR003",
       "defect": "DD-00017382",
       "raised": "2026-11-24",
@@ -6326,6 +6313,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Tomilov",
       "regBy": "Томилов Сергей Владимирович",
       "wo": "WO-023172"
+    },
+    {
+      "asset": "LV016",
+      "defect": "DD-00017385",
+      "raised": "2026-11-24",
+      "system": "LV016.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.24 Low temperature / freezing / Низкая температура / замерзание",
+      "descr": "ДВС термозащита",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Ilshat Sabitov",
+      "regBy": "Сабитов Ильшат Рашидович",
+      "wo": "WO-023175"
     },
     {
       "asset": "DZ016",
@@ -6601,19 +6601,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023089"
     },
     {
-      "asset": "TK068",
-      "defect": "DD-00017320",
-      "raised": "2026-11-23",
-      "system": "TRUCK, WATER KAMAZ UST 5453K2, TK068 HEATING OldNumber (UT068)",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Не работает автономный отопитель в насосном отсеке.",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-023090"
-    },
-    {
       "asset": "CR008",
       "defect": "DD-00017321",
       "raised": "2026-11-23",
@@ -6692,19 +6679,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023162"
     },
     {
-      "asset": "CN005",
-      "defect": "DD-00017327",
-      "raised": "2026-11-23",
-      "system": "CN005.ELS.WH (Wiring Harness / Жгут проводов)",
-      "defectType": "4.12 Cable / harness damage / Повреждение кабеля / жгута",
-      "descr": "Установка педали газа",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-023097"
-    },
-    {
       "asset": "TK143",
       "defect": "DD-00017329",
       "raised": "2026-11-23",
@@ -6716,19 +6690,6 @@ window.CM_WO_DATA = {
       "by": "Pavel Kostin",
       "regBy": "Костин Павел Александрович",
       "wo": "WO-023099"
-    },
-    {
-      "asset": "GE066",
-      "defect": "DD-00017328",
-      "raised": "2026-11-23",
-      "system": "GE066.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.13 Fluid contamination (water/dirt) / Загрязнение жидкости (вода/пыль)",
-      "descr": "New filters",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Ilshat Sabitov",
-      "regBy": "Сабитов Ильшат Рашидович",
-      "wo": "WO-023098"
     },
     {
       "asset": "TK151",
@@ -6802,7 +6763,7 @@ window.CM_WO_DATA = {
       "system": "TK092.ELS.WH (Wiring Harness / Жгут проводов)",
       "defectType": "4.12 Cable / harness damage / Повреждение кабеля / жгута",
       "descr": "Не подымает кузов",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
@@ -6820,19 +6781,6 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-023113"
-    },
-    {
-      "asset": "TK037",
-      "defect": "DD-00017342",
-      "raised": "2026-11-23",
-      "system": "TK037.ELS.WH (Wiring Harness / Жгут проводов)",
-      "defectType": "4.06 Loose connection / high resistance / Плохой контакт / высокое сопротивление",
-      "descr": "Замена педали газа",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-023109"
     },
     {
       "asset": "TK084",
@@ -6900,13 +6848,26 @@ window.CM_WO_DATA = {
       "wo": "WO-023118"
     },
     {
+      "asset": "CN005",
+      "defect": "DD-00017327",
+      "raised": "2026-11-23",
+      "system": "CN005.ELS.WH (Wiring Harness / Жгут проводов)",
+      "defectType": "4.12 Cable / harness damage / Повреждение кабеля / жгута",
+      "descr": "Установка педали газа",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023097"
+    },
+    {
       "asset": "TK027",
       "defect": "DD-00017350",
       "raised": "2026-11-23",
       "system": "TK027.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
       "descr": "Замена ремня",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
@@ -6924,6 +6885,45 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-023120"
+    },
+    {
+      "asset": "GE066",
+      "defect": "DD-00017328",
+      "raised": "2026-11-23",
+      "system": "GE066.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.13 Fluid contamination (water/dirt) / Загрязнение жидкости (вода/пыль)",
+      "descr": "New filters",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Ilshat Sabitov",
+      "regBy": "Сабитов Ильшат Рашидович",
+      "wo": "WO-023098"
+    },
+    {
+      "asset": "TK037",
+      "defect": "DD-00017342",
+      "raised": "2026-11-23",
+      "system": "TK037.ELS.WH (Wiring Harness / Жгут проводов)",
+      "defectType": "4.06 Loose connection / high resistance / Плохой контакт / высокое сопротивление",
+      "descr": "Замена педали газа",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023109"
+    },
+    {
+      "asset": "TK068",
+      "defect": "DD-00017320",
+      "raised": "2026-11-23",
+      "system": "TRUCK, WATER KAMAZ UST 5453K2, TK068 HEATING OldNumber (UT068)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Не работает автономный отопитель в насосном отсеке.",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-023090"
     },
     {
       "asset": "TK088",
@@ -8954,19 +8954,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022886"
     },
     {
-      "asset": "GE088",
-      "defect": "DD-00017131",
-      "raised": "2026-11-19",
-      "system": "GE088.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
-      "descr": "Забиты фильтра",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022887"
-    },
-    {
       "asset": "DZ018",
       "defect": "DD-00017114",
       "raised": "2026-11-19",
@@ -9147,6 +9134,19 @@ window.CM_WO_DATA = {
       "by": "Kirill Soldatenkov",
       "regBy": "Солдатенков Кирилл Сергеевич",
       "wo": "WO-022946"
+    },
+    {
+      "asset": "GE088",
+      "defect": "DD-00017131",
+      "raised": "2026-11-19",
+      "system": "GE088.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "Забиты фильтра",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022887"
     },
     {
       "asset": "DZ012",
@@ -12061,19 +12061,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022609"
     },
     {
-      "asset": "TK003",
-      "defect": "DD-00016933",
-      "raised": "2026-11-15",
-      "system": "TK003.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь масла со щупа",
-      "status": "Completed",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022590"
-    },
-    {
       "asset": "GR012",
       "defect": "DD-00016958",
       "raised": "2026-11-15",
@@ -12085,6 +12072,19 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022651"
+    },
+    {
+      "asset": "TK003",
+      "defect": "DD-00016933",
+      "raised": "2026-11-15",
+      "system": "TK003.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь масла со щупа",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022590"
     },
     {
       "asset": "WE004",
@@ -49280,6 +49280,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "GR008",
+      "defect": "DD-00013840",
+      "raised": "2026-10-01",
+      "system": "GR008.CH (Structure & Chassis / Рама и конструкция)",
+      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
+      "descr": "Требуется ремонт поворотного круга",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": null
+    },
+    {
       "asset": "SN003",
       "defect": "DD-00013808",
       "raised": "2026-10-01",
@@ -50058,19 +50071,6 @@ window.CM_WO_DATA = {
       "by": "Pavel Kostin",
       "regBy": "Костин Павел Александрович",
       "wo": "WO-018482"
-    },
-    {
-      "asset": "GR008",
-      "defect": "DD-00013840",
-      "raised": "2026-10-01",
-      "system": "GR008.CH (Structure & Chassis / Рама и конструкция)",
-      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
-      "descr": "Требуется ремонт поворотного круга",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Pavel Kostin",
-      "regBy": "Костин Павел Александрович",
-      "wo": null
     },
     {
       "asset": "GE021",
@@ -84996,15 +84996,15 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-16",
       "planStartDt": "2026-11-16T00:00:00",
       "planEnd": "2026-11-16",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-16",
+      "actualStartDt": "2026-11-16T13:00:00",
+      "actualEnd": "2026-11-16"
     },
     {
       "equip": "CN005",
@@ -132798,6 +132798,28 @@ window.CM_WO_DATA = {
     {
       "equip": "GR008",
       "cls": "GRD",
+      "woNumber": "WO-023182",
+      "maintType": "1000 Hours service Planned",
+      "hours": 1000,
+      "cmLabel": "Filter Cut / General Inspection",
+      "cmTypes": [
+        "FC",
+        "INSP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-12-05",
+      "planStartDt": "2026-12-05T00:00:00",
+      "planEnd": "2026-12-05",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
+      "equip": "GR008",
+      "cls": "GRD",
       "woNumber": "WO-022127",
       "maintType": "250 Hours service Planned",
       "hours": 250,
@@ -132807,9 +132829,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-12-03",
-      "planStartDt": "2026-12-03T00:00:00",
-      "planEnd": "2026-12-03",
+      "planStart": "2026-12-17",
+      "planStartDt": "2026-12-17T00:00:00",
+      "planEnd": "2026-12-17",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -145596,15 +145618,15 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-17",
       "planStartDt": "2026-11-17T00:00:00",
       "planEnd": "2026-11-17",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-17",
+      "actualStartDt": "2026-11-17T15:00:00",
+      "actualEnd": "2026-11-17"
     },
     {
       "equip": "LS038",
