@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-23T18:47:48+00:00",
+  "generated": "2026-11-23T19:02:57+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -7108,19 +7108,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023041"
     },
     {
-      "asset": "TK119",
-      "defect": "DD-00017250",
-      "raised": "2026-11-21",
-      "system": "TK119.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Диагностика перетоков масла в ДВС (два уровня)",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Pavel Kostin",
-      "regBy": "Костин Павел Александрович",
-      "wo": "WO-023137"
-    },
-    {
       "asset": "TK016.HS.DL",
       "defect": "EB-00000108",
       "raised": "2026-11-21",
@@ -7132,6 +7119,19 @@ window.CM_WO_DATA = {
       "by": "Viktor Bernikov",
       "regBy": "Viktor Bernikov",
       "wo": "WO-023065"
+    },
+    {
+      "asset": "TK119",
+      "defect": "DD-00017250",
+      "raised": "2026-11-21",
+      "system": "TK119.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Диагностика перетоков масла в ДВС (два уровня)",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": "WO-023137"
     },
     {
       "asset": "LV068",
