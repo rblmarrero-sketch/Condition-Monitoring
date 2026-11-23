@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-23T21:38:02+00:00",
+  "generated": "2026-11-23T21:57:42+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -443,13 +443,13 @@ window.CM_WO_DATA = {
     "regBy": "Contact person initiator WR"
   },
   "cmDateFrom": {
-    "raised": 215,
+    "raised": 218,
     "detected": 0,
     "planStart": 0
   },
   "cmCauseFrom": {
     "wo": 136,
-    "wr": 79,
+    "wr": 82,
     "cert": 0,
     "none": 0
   },
@@ -462,6 +462,84 @@ window.CM_WO_DATA = {
     "Bekzhan"
   ],
   "cmWorkOrders": [
+    {
+      "date": "2026-11-24",
+      "dateFrom": "raised",
+      "raised": "2026-11-24",
+      "detected": "2026-11-24",
+      "planStart": null,
+      "closed": null,
+      "asset": "EX009",
+      "defect": "DD-00017390",
+      "requestNo": "DD-00017390",
+      "eqType": "EXCAVATOR, BUCKET",
+      "system": "EX009.CH.UC (Undercarriage / Ходовая часть)",
+      "priority": "P4 Planned (Repair)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Поврежден прокладки",
+      "causeFrom": "wr",
+      "descr": "Течь опорных катков",
+      "status": "Registered",
+      "by": "Slam",
+      "byFull": "Slam Taganov",
+      "regBy": "Таганов Слам Джумамуратович",
+      "raisedBy": "ГДК Баимская",
+      "woNumber": null,
+      "maintType": null,
+      "planned": false
+    },
+    {
+      "date": "2026-11-24",
+      "dateFrom": "raised",
+      "raised": "2026-11-24",
+      "detected": "2026-11-24",
+      "planStart": null,
+      "closed": null,
+      "asset": "EX009",
+      "defect": "DD-00017389",
+      "requestNo": "DD-00017389",
+      "eqType": "EXCAVATOR, BUCKET",
+      "system": "EX009.CH.UC (Undercarriage / Ходовая часть)",
+      "priority": "P4 Planned (Repair)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "cause": "Недостаток смазки",
+      "causeFrom": "wr",
+      "descr": "Заклинивание среднего поддерживающего катка с левой стороны.",
+      "status": "Registered",
+      "by": "Slam",
+      "byFull": "Slam Taganov",
+      "regBy": "Таганов Слам Джумамуратович",
+      "raisedBy": "ГДК Баимская",
+      "woNumber": null,
+      "maintType": null,
+      "planned": false
+    },
+    {
+      "date": "2026-11-24",
+      "dateFrom": "raised",
+      "raised": "2026-11-24",
+      "detected": "2026-11-24",
+      "planStart": null,
+      "closed": null,
+      "asset": "EX009",
+      "defect": "DD-00017388",
+      "requestNo": "DD-00017388",
+      "eqType": "EXCAVATOR, BUCKET",
+      "system": "EX009.CH.BUC (Bucket / Ковш)",
+      "priority": "P4 Planned (Repair)",
+      "defectType": "6.02 Crack at weld / HAZ / Трещина по шву / зоне терм. влияния",
+      "cause": "Трещина шва",
+      "causeFrom": "wr",
+      "descr": "На сварочных швах адаптеров выявлены трещины.",
+      "status": "Registered",
+      "by": "Slam",
+      "byFull": "Slam Taganov",
+      "regBy": "Таганов Слам Джумамуратович",
+      "raisedBy": "ГДК Баимская",
+      "woNumber": null,
+      "maintType": null,
+      "planned": false
+    },
     {
       "date": "2026-11-22",
       "dateFrom": "raised",
@@ -6243,11 +6321,11 @@ window.CM_WO_DATA = {
       "system": "GR003.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Течь переднего сальника коленчатого вала",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Tomilov",
       "regBy": "Томилов Сергей Владимирович",
-      "wo": null
+      "wo": "WO-023172"
     },
     {
       "asset": "DZ016",
@@ -6952,19 +7030,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "LV052",
-      "defect": "DD-00017302",
-      "raised": "2026-11-22",
-      "system": "LV052.OC.HE (Heating / Отопление)",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Ремонт генератора",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-023080"
-    },
-    {
       "asset": "TK115",
       "defect": "DD-00017306",
       "raised": "2026-11-22",
@@ -7080,6 +7145,19 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-023111"
+    },
+    {
+      "asset": "LV052",
+      "defect": "DD-00017302",
+      "raised": "2026-11-22",
+      "system": "LV052.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Ремонт генератора",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023080"
     },
     {
       "asset": "CR008",
@@ -7379,6 +7457,45 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-023051"
+    },
+    {
+      "asset": "GR004",
+      "defect": "DD-00017262",
+      "raised": "2026-11-21",
+      "system": "GR004.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "descr": "открутилась гайка ступицы",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-023180"
+    },
+    {
+      "asset": "GR004",
+      "defect": "DD-00017265",
+      "raised": "2026-11-21",
+      "system": "GR004.HS.CYL (Cylinders / Гидроцилиндры)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь масла гидроцилиндра выдвижения отвала по штоку",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-023179"
+    },
+    {
+      "asset": "GR004",
+      "defect": "DD-00017260",
+      "raised": "2026-11-21",
+      "system": "GR004.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь масла ДВС",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-023181"
     },
     {
       "asset": "TK098",
@@ -7911,45 +8028,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "GR004",
-      "defect": "DD-00017265",
-      "raised": "2026-11-21",
-      "system": "GR004.HS.CYL (Cylinders / Гидроцилиндры)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь масла гидроцилиндра выдвижения отвала по штоку",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": null
-    },
-    {
-      "asset": "GR004",
-      "defect": "DD-00017260",
-      "raised": "2026-11-21",
-      "system": "GR004.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь масла ДВС",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": null
-    },
-    {
-      "asset": "GR004",
-      "defect": "DD-00017262",
-      "raised": "2026-11-21",
-      "system": "GR004.DRS.AXL (Axles / Мосты)",
-      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
-      "descr": "открутилась гайка ступицы",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
       "wo": null
     },
     {
@@ -51412,6 +51490,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "GR003",
+      "defect": "DD-00013608",
+      "raised": "2026-09-29",
+      "system": "GR003.DRS (Drive System / Система передачи)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Требуется замена переднего сальника демпферного шкива",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": null
+    },
+    {
       "asset": "SN004",
       "defect": "DD-00013615",
       "raised": "2026-09-29",
@@ -52098,19 +52189,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
       "regBy": "Таран Андрей Андреевич",
-      "wo": null
-    },
-    {
-      "asset": "GR003",
-      "defect": "DD-00013608",
-      "raised": "2026-09-29",
-      "system": "GR003.DRS (Drive System / Система передачи)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Требуется замена переднего сальника демпферного шкива",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Pavel Kostin",
-      "regBy": "Костин Павел Александрович",
       "wo": null
     },
     {
@@ -129660,15 +129738,15 @@ window.CM_WO_DATA = {
       "cmLabel": "1000h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-16",
       "planStartDt": "2026-11-16T00:00:00",
       "planEnd": "2026-11-16",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-16",
+      "actualStartDt": "2026-11-16T10:00:00",
+      "actualEnd": "2026-11-16"
     },
     {
       "equip": "GE110",
@@ -131503,6 +131581,25 @@ window.CM_WO_DATA = {
       "actualStart": "2026-11-14",
       "actualStartDt": "2026-11-14T00:00:00",
       "actualEnd": "2026-11-14"
+    },
+    {
+      "equip": "GR004",
+      "cls": "GRD",
+      "woNumber": "WO-023178",
+      "maintType": "500 Hours service Planned",
+      "hours": 500,
+      "cmLabel": "500h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-12-22",
+      "planStartDt": "2026-12-22T00:00:00",
+      "planEnd": "2026-12-22",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
     },
     {
       "equip": "GR005",
