@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-23T15:12:46+00:00",
+  "generated": "2026-11-23T15:27:54+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6068,6 +6068,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023148"
     },
     {
+      "asset": "EX006",
+      "defect": "DD-00017363",
+      "raised": "2026-11-24",
+      "system": "EX006.CH.BUC (Bucket / Ковш)",
+      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
+      "descr": "Износ коронки ковша(Сварочные работы)",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Kiselev",
+      "regBy": "Киселев Алексей Александрович",
+      "wo": "WO-023149"
+    },
+    {
       "asset": "TK125",
       "defect": "DD-00017333",
       "raised": "2026-11-23",
@@ -6133,19 +6146,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023143"
     },
     {
-      "asset": "BSL001",
-      "defect": "DD-00017360",
-      "raised": "2026-11-23",
-      "system": "IVECO AMT 633910 BSL001",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Оборвало карданный вал",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Viktor Bernikov",
-      "regBy": "Берников Виктор Викторович",
-      "wo": "WO-023146"
-    },
-    {
       "asset": "GE009",
       "defect": "DD-00017361",
       "raised": "2026-11-23",
@@ -6159,19 +6159,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023147"
     },
     {
-      "asset": "DZ004",
-      "defect": "DD-00017359",
-      "raised": "2026-11-23",
-      "system": "DZ004.CH.UC (Undercarriage / Ходовая часть)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Залом болта бугеля опорного катка",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Vladimir Ladik",
-      "regBy": "Ладик Владимир Владимирович",
-      "wo": "WO-023145"
-    },
-    {
       "asset": "GE109",
       "defect": "DD-00017358",
       "raised": "2026-11-23",
@@ -6183,6 +6170,32 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-023144"
+    },
+    {
+      "asset": "BSL001",
+      "defect": "DD-00017360",
+      "raised": "2026-11-23",
+      "system": "IVECO AMT 633910 BSL001",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Оборвало карданный вал",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Viktor Bernikov",
+      "regBy": "Берников Виктор Викторович",
+      "wo": "WO-023146"
+    },
+    {
+      "asset": "DZ004",
+      "defect": "DD-00017359",
+      "raised": "2026-11-23",
+      "system": "DZ004.CH.UC (Undercarriage / Ходовая часть)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Залом болта бугеля опорного катка",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Vladimir Ladik",
+      "regBy": "Ладик Владимир Владимирович",
+      "wo": "WO-023145"
     },
     {
       "asset": "TK104",
@@ -7603,11 +7616,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "GR004",
-      "defect": "DD-00017260",
+      "defect": "DD-00017262",
       "raised": "2026-11-21",
-      "system": "GR004.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь масла ДВС",
+      "system": "GR004.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "descr": "открутилась гайка ступицы",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Dmitriy Stepanenko",
@@ -7616,11 +7629,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "GR004",
-      "defect": "DD-00017262",
+      "defect": "DD-00017260",
       "raised": "2026-11-21",
-      "system": "GR004.DRS.AXL (Axles / Мосты)",
-      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
-      "descr": "открутилась гайка ступицы",
+      "system": "GR004.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь масла ДВС",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Dmitriy Stepanenko",
@@ -57756,19 +57769,6 @@ window.CM_WO_DATA = {
       "wo": "WO-018103"
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
-      "wo": null
-    },
-    {
       "asset": "DZ022",
       "defect": "DD-00011314",
       "raised": "2026-08-21",
@@ -57779,6 +57779,19 @@ window.CM_WO_DATA = {
       "priority": "P2 Urgent",
       "by": "Andrey Shipelov",
       "regBy": "Шипелов Андрей Анатольевич",
+      "wo": null
+    },
+    {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
@@ -59238,8 +59251,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000076",
+      "asset": "H07",
+      "defect": "EB-00000075",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -59251,8 +59264,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H07",
-      "defect": "EB-00000075",
+      "asset": "H04",
+      "defect": "EB-00000076",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
