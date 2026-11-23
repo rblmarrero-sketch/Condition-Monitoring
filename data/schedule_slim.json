@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-23T23:42:47+00:00",
+  "generated": "2026-11-23T23:57:43+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -3286,12 +3286,12 @@
       "type": "250 Hours service Planned",
       "hours": 250,
       "plan": "2026-11-21",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-22"
     },
     {
       "wo": "WO-022344",
@@ -3562,6 +3562,24 @@
       "cause": "Абразивный износ",
       "pmStatus": "open",
       "completed": ""
+    },
+    {
+      "wo": "WO-022107",
+      "equip": "EX023",
+      "cls": "EXC",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-19",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-11-19",
+      "status": "Completed",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "complete",
+      "completed": "2026-11-19"
     },
     {
       "wo": "WO-022125",
@@ -10736,6 +10754,14 @@
       "p": "P2",
       "r": "2026-11-24",
       "x": "Замена РВД"
+    },
+    {
+      "d": "DD-00017392",
+      "u": "SN004",
+      "s": "SN004.DRS.ELE (High Voltage Electrical Control / Высоковольтная система управления)",
+      "p": "P2",
+      "r": "2026-11-24",
+      "x": "Обрыв фазы в цепи питания вибромотора Грохота"
     },
     {
       "d": "DD-00017391",
