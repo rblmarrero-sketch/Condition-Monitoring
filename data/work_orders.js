@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-23T10:12:36+00:00",
+  "generated": "2026-11-23T10:27:41+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -1560,7 +1560,7 @@ window.CM_WO_DATA = {
       "raised": "2026-10-26",
       "detected": "2026-10-26",
       "planStart": "2026-11-21",
-      "closed": null,
+      "closed": "2026-11-21",
       "asset": "TK114",
       "defect": "DD-00015725",
       "requestNo": "DD-00015725",
@@ -1571,7 +1571,7 @@ window.CM_WO_DATA = {
       "cause": "Фитинг/штуцер ослаб",
       "causeFrom": "wo",
       "descr": "Течь масло с фильтра маслоохладителя тормозной жидкости.",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "by": "Bekzhan",
       "byFull": "Bekzhan Kazhybekov",
       "regBy": "Кажыбеков Бекжан",
@@ -6131,6 +6131,19 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-023143"
+    },
+    {
+      "asset": "DZ004",
+      "defect": "DD-00017359",
+      "raised": "2026-11-23",
+      "system": "DZ004.CH.UC (Undercarriage / Ходовая часть)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Залом болта бугеля опорного катка",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Vladimir Ladik",
+      "regBy": "Ладик Владимир Владимирович",
+      "wo": "WO-023145"
     },
     {
       "asset": "TK104",
@@ -81961,14 +81974,14 @@ window.CM_WO_DATA = {
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-17",
       "planStartDt": "2026-11-17T00:00:00",
       "planEnd": "2026-11-17",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-17",
+      "actualStartDt": "2026-11-17T13:00:00",
+      "actualEnd": "2026-11-17"
     },
     {
       "equip": "CD002",
@@ -103012,15 +103025,15 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-22",
       "planStartDt": "2026-11-22T00:00:00",
       "planEnd": "2026-11-22",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-22",
+      "actualStartDt": "2026-11-22T10:30:00",
+      "actualEnd": "2026-11-22"
     },
     {
       "equip": "DZ021",
@@ -114252,15 +114265,15 @@ window.CM_WO_DATA = {
         "UC"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-18",
       "planStartDt": "2026-11-18T00:00:00",
       "planEnd": "2026-11-18",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-18",
+      "actualStartDt": "2026-11-18T00:00:00",
+      "actualEnd": "2026-11-18"
     },
     {
       "equip": "EX020",
@@ -117522,15 +117535,15 @@ window.CM_WO_DATA = {
       "cmLabel": "500h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-17",
       "planStartDt": "2026-11-17T00:00:00",
       "planEnd": "2026-11-17",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-19",
+      "actualStartDt": "2026-11-19T01:00:00",
+      "actualEnd": "2026-11-19"
     },
     {
       "equip": "FL005",
@@ -147041,15 +147054,15 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-17",
       "planStartDt": "2026-11-17T00:00:00",
       "planEnd": "2026-11-17",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-17",
+      "actualStartDt": "2026-11-17T00:00:00",
+      "actualEnd": "2026-11-17"
     },
     {
       "equip": "PU006",
@@ -153883,15 +153896,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-18",
       "planStartDt": "2026-11-18T00:00:00",
       "planEnd": "2026-11-18",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-18",
+      "actualStartDt": "2026-11-18T13:00:00",
+      "actualEnd": "2026-11-18"
     },
     {
       "equip": "TK038",
@@ -162403,13 +162416,13 @@ window.CM_WO_DATA = {
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "open": false,
       "planStart": "2026-11-22",
       "planStartDt": "2026-11-22T00:00:00",
       "planEnd": "2026-11-22",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-22",
+      "actualStartDt": "2026-11-22T20:55:00",
+      "actualEnd": "2026-11-23"
     },
     {
       "equip": "TK105",
@@ -170589,15 +170602,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
-      "planStart": "2026-11-24",
-      "planStartDt": "2026-11-24T00:00:00",
-      "planEnd": "2026-11-24",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
+      "planStart": "2026-11-23",
+      "planStartDt": "2026-11-23T00:00:00",
+      "planEnd": "2026-11-23",
+      "actualStart": "2026-11-23",
+      "actualStartDt": "2026-11-23T03:20:00",
+      "actualEnd": "2026-11-23"
     },
     {
       "equip": "TK113",
@@ -172964,15 +172977,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
-      "planStart": "2026-11-21",
-      "planStartDt": "2026-11-21T00:00:00",
-      "planEnd": "2026-11-21",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
+      "planStart": "2026-11-22",
+      "planStartDt": "2026-11-22T00:00:00",
+      "planEnd": "2026-11-22",
+      "actualStart": "2026-11-22",
+      "actualStartDt": "2026-11-22T07:00:00",
+      "actualEnd": "2026-11-22"
     },
     {
       "equip": "TK114",
