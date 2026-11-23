@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-23T07:07:57+00:00",
+  "generated": "2026-11-23T07:53:32+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -443,6 +443,17 @@
         ],
         "plan": "2026-12-01",
         "priority": "P3 Planned (PM)"
+      },
+      {
+        "wo": "WO-023135",
+        "hours": 4000,
+        "types": [
+          "INSP",
+          "MP",
+          "TB"
+        ],
+        "plan": "2026-12-09",
+        "priority": "P3 Planned (PM)"
       }
     ],
     "TK106": [
@@ -532,6 +543,17 @@
         "priority": "P3 Planned (PM)"
       }
     ],
+    "TK113": [
+      {
+        "wo": "WO-023134",
+        "hours": 250,
+        "types": [
+          "MP"
+        ],
+        "plan": "2026-12-01",
+        "priority": "P3 Planned (PM)"
+      }
+    ],
     "TK114": [
       {
         "wo": "WO-021942",
@@ -540,6 +562,15 @@
           "MP"
         ],
         "plan": "2026-11-21",
+        "priority": "P3 Planned (PM)"
+      },
+      {
+        "wo": "WO-023136",
+        "hours": 250,
+        "types": [
+          "MP"
+        ],
+        "plan": "2026-12-04",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -551,7 +582,7 @@
           "INSP",
           "MP"
         ],
-        "plan": "2026-11-30",
+        "plan": "2026-12-06",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -594,7 +625,7 @@
         "types": [
           "MP"
         ],
-        "plan": "2026-11-30",
+        "plan": "2026-12-10",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -608,6 +639,15 @@
           "TB"
         ],
         "plan": "2026-11-20",
+        "priority": "P3 Planned (PM)"
+      },
+      {
+        "wo": "WO-023138",
+        "hours": 250,
+        "types": [
+          "MP"
+        ],
+        "plan": "2026-12-02",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -631,6 +671,15 @@
         ],
         "plan": "2026-11-25",
         "priority": "P3 Planned (PM)"
+      },
+      {
+        "wo": "WO-023140",
+        "hours": 500,
+        "types": [
+          "MP"
+        ],
+        "plan": "2026-12-06",
+        "priority": "P3 Planned (PM)"
       }
     ],
     "TK123": [
@@ -652,6 +701,15 @@
           "MP"
         ],
         "plan": "2026-11-18",
+        "priority": "P3 Planned (PM)"
+      },
+      {
+        "wo": "WO-023141",
+        "hours": 250,
+        "types": [
+          "MP"
+        ],
+        "plan": "2026-12-02",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -983,6 +1041,42 @@
       "completed": ""
     },
     {
+      "wo": "WO-021947",
+      "equip": "TK119",
+      "cls": "AT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-12-10",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-12-10",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-023135",
+      "equip": "TK105",
+      "cls": "AT",
+      "comp": "",
+      "desc": "General Inspection / Magnetic Plug / Dump Body Liner",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-12-09",
+      "type": "4000 Hours service Planned",
+      "hours": 4000,
+      "plan": "2026-12-09",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-022142",
       "equip": "TK149",
       "cls": "HT",
@@ -1046,6 +1140,42 @@
       "raised": "2026-12-06",
       "type": "1000 Hours service Planned",
       "hours": 1000,
+      "plan": "2026-12-06",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-021943",
+      "equip": "TK115",
+      "cls": "AT",
+      "comp": "",
+      "desc": "General Inspection / Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-12-06",
+      "type": "1000 Hours service Planned",
+      "hours": 1000,
+      "plan": "2026-12-06",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-023140",
+      "equip": "TK122",
+      "cls": "AT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-12-06",
+      "type": "500 Hours service Planned",
+      "hours": 500,
       "plan": "2026-12-06",
       "status": "Elimination scheduled",
       "request": "",
@@ -1145,6 +1275,24 @@
       "completed": ""
     },
     {
+      "wo": "WO-023136",
+      "equip": "TK114",
+      "cls": "AT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-12-04",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-12-04",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-022127",
       "equip": "GR008",
       "cls": "GRD",
@@ -1201,6 +1349,42 @@
     {
       "wo": "WO-021930",
       "equip": "TK103",
+      "cls": "AT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-12-02",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-12-02",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-023138",
+      "equip": "TK120",
+      "cls": "AT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-12-02",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-12-02",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-023141",
+      "equip": "TK124",
       "cls": "AT",
       "comp": "",
       "desc": "Magnetic Plug",
@@ -1307,6 +1491,24 @@
       "completed": ""
     },
     {
+      "wo": "WO-023134",
+      "equip": "TK113",
+      "cls": "AT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-12-01",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-12-01",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-021952",
       "equip": "TK121",
       "cls": "AT",
@@ -1384,42 +1586,6 @@
       "cls": "GRD",
       "comp": "",
       "desc": "500h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-30",
-      "type": "500 Hours service Planned",
-      "hours": 500,
-      "plan": "2026-11-30",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
-      "wo": "WO-021943",
-      "equip": "TK115",
-      "cls": "AT",
-      "comp": "",
-      "desc": "General Inspection / Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-30",
-      "type": "1000 Hours service Planned",
-      "hours": 1000,
-      "plan": "2026-11-30",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
-      "wo": "WO-021947",
-      "equip": "TK119",
-      "cls": "AT",
-      "comp": "",
-      "desc": "Magnetic Plug",
       "priority": "P3 Planned (PM)",
       "raised": "2026-11-30",
       "type": "500 Hours service Planned",
@@ -3099,12 +3265,12 @@
       "type": "1000 Hours service Planned",
       "hours": 1000,
       "plan": "2026-11-21",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-23"
     },
     {
       "wo": "WO-021934",
@@ -3207,12 +3373,12 @@
       "type": "500 Hours service Planned",
       "hours": 500,
       "plan": "2026-11-20",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-20"
     },
     {
       "wo": "WO-022111",
@@ -3998,7 +4164,7 @@
       "raised": "2026-11-17",
       "type": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "hours": null,
-      "plan": "2026-12-13",
+      "plan": "2026-12-14",
       "status": "Elimination scheduled",
       "request": "DD-00017017",
       "defType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
@@ -4255,6 +4421,24 @@
       "request": "",
       "defType": "",
       "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-023139",
+      "equip": "TK121",
+      "cls": "",
+      "comp": "TK121.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
+      "desc": "Трещина и отсутствие куска защитного стекла бокового дополнительного фонаря",
+      "priority": "P4 Planned (Repair)",
+      "raised": "2026-11-16",
+      "type": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "hours": null,
+      "plan": "2026-12-01",
+      "status": "Elimination scheduled",
+      "request": "DD-00016985",
+      "defType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "cause": "Поврежден шланга/линии",
       "pmStatus": "open",
       "completed": ""
     },
@@ -29679,6 +29863,14 @@
       "x": "Поручни сварочные работы"
     },
     {
+      "d": "DD-00017333",
+      "u": "TK125",
+      "s": "TK125.DRS.FD (Final Drives / Конечные передачи)",
+      "p": "P4",
+      "r": "2026-11-23",
+      "x": "Ремонт бортового редуктора"
+    },
+    {
       "d": "DD-00017339",
       "u": "TK112",
       "s": "TK112.DRS.AXL (Axles / Мосты)",
@@ -29722,14 +29914,6 @@
       "d": "DD-00017332",
       "u": "TK126",
       "s": "TK126.DRS.FD (Final Drives / Конечные передачи)",
-      "p": "P4",
-      "r": "2026-11-23",
-      "x": "Ремонт бортового редуктора"
-    },
-    {
-      "d": "DD-00017333",
-      "u": "TK125",
-      "s": "TK125.DRS.FD (Final Drives / Конечные передачи)",
       "p": "P4",
       "r": "2026-11-23",
       "x": "Ремонт бортового редуктора"
@@ -29863,6 +30047,22 @@
       "x": "Неисправность ДВС"
     },
     {
+      "d": "DD-00017253",
+      "u": "TK119",
+      "s": "TK119.DRS.ENG (Engine / Двигатель)",
+      "p": "P4",
+      "r": "2026-11-21",
+      "x": "Диагностика перетока масла в ДВС (2 уровня)"
+    },
+    {
+      "d": "DD-00017250",
+      "u": "TK119",
+      "s": "TK119.DRS.ENG (Engine / Двигатель)",
+      "p": "P4",
+      "r": "2026-11-21",
+      "x": "Диагностика перетоков масла в ДВС (два уровня)"
+    },
+    {
       "d": "DD-00017249",
       "u": "TK105",
       "s": "TK105.DRS.FUE (Fuel System / Топливная система)",
@@ -29877,14 +30077,6 @@
       "p": "P4",
       "r": "2026-11-21",
       "x": "Переборка, замена левого и правого переднего суппорта"
-    },
-    {
-      "d": "DD-00017253",
-      "u": "TK119",
-      "s": "TK119.DRS.ENG (Engine / Двигатель)",
-      "p": "P4",
-      "r": "2026-11-21",
-      "x": "Диагностика перетока масла в ДВС (2 уровня)"
     },
     {
       "d": "DD-00017255",
@@ -30013,14 +30205,6 @@
       "p": "P4",
       "r": "2026-11-21",
       "x": "Не работает горный тормоз"
-    },
-    {
-      "d": "DD-00017250",
-      "u": "TK119",
-      "s": "TK119.DRS.ENG (Engine / Двигатель)",
-      "p": "P4",
-      "r": "2026-11-21",
-      "x": "Диагностика перетоков масла в ДВС (два уровня)"
     },
     {
       "d": "DD-00017270",
@@ -30615,6 +30799,14 @@
       "x": "Разрушение внешнего  слоя РВД"
     },
     {
+      "d": "DD-00017025",
+      "u": "TK120",
+      "s": "TK120.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
+      "p": "P4",
+      "r": "2026-11-17",
+      "x": "Произвести ревизию освещения, заменить треснутые стекла на фонарях"
+    },
+    {
       "d": "DD-00017018",
       "u": "TK101",
       "s": "TK101.DRS.ENG (Engine / Двигатель)",
@@ -30645,14 +30837,6 @@
       "p": "P4",
       "r": "2026-11-17",
       "x": "Монтаж ДВС"
-    },
-    {
-      "d": "DD-00017025",
-      "u": "TK120",
-      "s": "TK120.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
-      "p": "P4",
-      "r": "2026-11-17",
-      "x": "Произвести ревизию освещения, заменить треснутые стекла на фонарях"
     },
     {
       "d": "DD-00017028",
@@ -34775,6 +34959,14 @@
       "x": "Течь масла с распределителя тормозов"
     },
     {
+      "d": "DD-00015464",
+      "u": "TK112",
+      "s": "TK112.DRS (Drive System / Система передачи)",
+      "p": "P4",
+      "r": "2026-10-23",
+      "x": "Течь масла через уплотнения приводных валов L и R на передней оси"
+    },
+    {
       "d": "DD-00015462",
       "u": "TK112",
       "s": "TK112.DRS.FUE (Fuel System / Топливная система)",
@@ -35045,14 +35237,6 @@
       "p": "P4",
       "r": "2026-10-23",
       "x": "замена тавотниц на трапеции"
-    },
-    {
-      "d": "DD-00015464",
-      "u": "TK112",
-      "s": "TK112.DRS (Drive System / Система передачи)",
-      "p": "P4",
-      "r": "2026-10-23",
-      "x": "Течь масла через уплотнения приводных валов L и R на передней оси"
     },
     {
       "d": "DD-00015440",

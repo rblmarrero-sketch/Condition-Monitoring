@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-23T07:07:57+00:00",
+  "generated": "2026-11-23T07:53:32+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -448,8 +448,8 @@ window.CM_WO_DATA = {
     "planStart": 0
   },
   "cmCauseFrom": {
-    "wo": 135,
-    "wr": 80,
+    "wo": 136,
+    "wr": 79,
     "cert": 0,
     "none": 0
   },
@@ -701,7 +701,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-11-17",
       "detected": "2026-11-17",
-      "planStart": "2026-12-13",
+      "planStart": "2026-12-14",
       "closed": null,
       "asset": "TK120",
       "defect": "DD-00017017",
@@ -779,7 +779,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-11-16",
       "detected": "2026-11-16",
-      "planStart": null,
+      "planStart": "2026-12-01",
       "closed": null,
       "asset": "TK121",
       "defect": "DD-00016985",
@@ -789,15 +789,15 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "cause": "Поврежден шланга/линии",
-      "causeFrom": "wr",
+      "causeFrom": "wo",
       "descr": "Трещина и отсутствие куска защитного стекла бокового дополнительного фонаря",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "by": "Slam",
       "byFull": "Slam Taganov",
       "regBy": "Таганов Слам Джумамуратович",
       "raisedBy": "ГДК Баимская",
-      "woNumber": null,
-      "maintType": null,
+      "woNumber": "WO-023139",
+      "maintType": "P4 Planned Repair",
       "planned": false
     },
     {
@@ -6055,6 +6055,19 @@ window.CM_WO_DATA = {
   ],
   "otherDefects": [
     {
+      "asset": "TK125",
+      "defect": "DD-00017333",
+      "raised": "2026-11-23",
+      "system": "TK125.DRS.FD (Final Drives / Конечные передачи)",
+      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
+      "descr": "Ремонт бортового редуктора",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": "WO-023103"
+    },
+    {
       "asset": "TK112",
       "defect": "DD-00017339",
       "raised": "2026-11-23",
@@ -6235,19 +6248,6 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-023102"
-    },
-    {
-      "asset": "TK125",
-      "defect": "DD-00017333",
-      "raised": "2026-11-23",
-      "system": "TK125.DRS.FD (Final Drives / Конечные передачи)",
-      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
-      "descr": "Ремонт бортового редуктора",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Pavel Kostin",
-      "regBy": "Костин Павел Александрович",
-      "wo": "WO-023103"
     },
     {
       "asset": "TK124",
@@ -6900,6 +6900,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "TK119",
+      "defect": "DD-00017253",
+      "raised": "2026-11-21",
+      "system": "TK119.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Диагностика перетока масла в ДВС (2 уровня)",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": "WO-023049"
+    },
+    {
       "asset": "CN014",
       "defect": "DD-00017239",
       "raised": "2026-11-21",
@@ -6911,6 +6924,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-023041"
+    },
+    {
+      "asset": "TK119",
+      "defect": "DD-00017250",
+      "raised": "2026-11-21",
+      "system": "TK119.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Диагностика перетоков масла в ДВС (два уровня)",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": "WO-023137"
     },
     {
       "asset": "TK016.HS.DL",
@@ -7184,19 +7210,6 @@ window.CM_WO_DATA = {
       "by": "Pavel Kostin",
       "regBy": "Костин Павел Александрович",
       "wo": "WO-023046"
-    },
-    {
-      "asset": "TK119",
-      "defect": "DD-00017253",
-      "raised": "2026-11-21",
-      "system": "TK119.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Диагностика перетока масла в ДВС (2 уровня)",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Pavel Kostin",
-      "regBy": "Костин Павел Александрович",
-      "wo": "WO-023049"
     },
     {
       "asset": "TK127",
@@ -7560,19 +7573,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "TK119",
-      "defect": "DD-00017250",
-      "raised": "2026-11-21",
-      "system": "TK119.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Диагностика перетоков масла в ДВС (два уровня)",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Pavel Kostin",
-      "regBy": "Костин Павел Александрович",
       "wo": null
     },
     {
@@ -9968,6 +9968,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022684"
     },
     {
+      "asset": "TK120",
+      "defect": "DD-00017025",
+      "raised": "2026-11-17",
+      "system": "TK120.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Произвести ревизию освещения, заменить треснутые стекла на фонарях",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": "WO-022711"
+    },
+    {
       "asset": "TK101",
       "defect": "DD-00017018",
       "raised": "2026-11-17",
@@ -10148,19 +10161,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022713"
-    },
-    {
-      "asset": "TK120",
-      "defect": "DD-00017025",
-      "raised": "2026-11-17",
-      "system": "TK120.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Произвести ревизию освещения, заменить треснутые стекла на фонарях",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Pavel Kostin",
-      "regBy": "Костин Павел Александрович",
-      "wo": "WO-022711"
     },
     {
       "asset": "DR007",
@@ -15434,7 +15434,7 @@ window.CM_WO_DATA = {
       "system": "TK041.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
       "descr": "Диагностика и ремонт ДВС.",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
@@ -28961,6 +28961,19 @@ window.CM_WO_DATA = {
       "wo": "WO-020599"
     },
     {
+      "asset": "TK112",
+      "defect": "DD-00015464",
+      "raised": "2026-10-23",
+      "system": "TK112.DRS (Drive System / Система передачи)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь масла через уплотнения приводных валов L и R на передней оси",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Evgeniy Frolin",
+      "regBy": "Фролин Евгений Владимирович",
+      "wo": "WO-023133"
+    },
+    {
       "asset": "EX002",
       "defect": "DD-00015467",
       "raised": "2026-10-23",
@@ -30024,19 +30037,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "TK112",
-      "defect": "DD-00015464",
-      "raised": "2026-10-23",
-      "system": "TK112.DRS (Drive System / Система передачи)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь масла через уплотнения приводных валов L и R на передней оси",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Evgeniy Frolin",
-      "regBy": "Фролин Евгений Владимирович",
       "wo": null
     },
     {
@@ -107627,15 +107627,15 @@ window.CM_WO_DATA = {
       "cmLabel": "500h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-20",
       "planStartDt": "2026-11-20T00:00:00",
       "planEnd": "2026-11-20",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-20",
+      "actualStartDt": "2026-11-20T00:00:00",
+      "actualEnd": "2026-11-20"
     },
     {
       "equip": "EX009",
@@ -144906,15 +144906,15 @@ window.CM_WO_DATA = {
       "cmLabel": "1000h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-21",
       "planStartDt": "2026-11-21T00:00:00",
       "planEnd": "2026-11-21",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-23",
+      "actualStartDt": "2026-11-23T03:00:00",
+      "actualEnd": "2026-11-23"
     },
     {
       "equip": "LS037",
@@ -163626,6 +163626,29 @@ window.CM_WO_DATA = {
       "actualEnd": null
     },
     {
+      "equip": "TK105",
+      "cls": "AT",
+      "woNumber": "WO-023135",
+      "maintType": "4000 Hours service Planned",
+      "hours": 4000,
+      "cmLabel": "General Inspection / Magnetic Plug / Dump Body Liner",
+      "cmTypes": [
+        "INSP",
+        "MP",
+        "TB"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-12-09",
+      "planStartDt": "2026-12-09T00:00:00",
+      "planEnd": "2026-12-10",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
       "equip": "TK106",
       "cls": "AT",
       "woNumber": null,
@@ -171706,6 +171729,27 @@ window.CM_WO_DATA = {
       "actualEnd": "2026-11-20"
     },
     {
+      "equip": "TK113",
+      "cls": "AT",
+      "woNumber": "WO-023134",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "Magnetic Plug",
+      "cmTypes": [
+        "MP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-12-01",
+      "planStartDt": "2026-12-01T00:00:00",
+      "planEnd": "2026-12-01",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
       "equip": "TK114",
       "cls": "AT",
       "woNumber": null,
@@ -172905,6 +172949,27 @@ window.CM_WO_DATA = {
       "actualEnd": null
     },
     {
+      "equip": "TK114",
+      "cls": "AT",
+      "woNumber": "WO-023136",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "Magnetic Plug",
+      "cmTypes": [
+        "MP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-12-04",
+      "planStartDt": "2026-12-04T00:00:00",
+      "planEnd": "2026-12-04",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
       "equip": "TK115",
       "cls": "AT",
       "woNumber": null,
@@ -174011,9 +174076,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-30",
-      "planStartDt": "2026-11-30T00:00:00",
-      "planEnd": "2026-11-30",
+      "planStart": "2026-12-06",
+      "planStartDt": "2026-12-06T00:00:00",
+      "planEnd": "2026-12-06",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -178245,9 +178310,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-30",
-      "planStartDt": "2026-11-30T00:00:00",
-      "planEnd": "2026-11-30",
+      "planStart": "2026-12-10",
+      "planStartDt": "2026-12-10T00:00:00",
+      "planEnd": "2026-12-10",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -179510,6 +179575,27 @@ window.CM_WO_DATA = {
       "planStart": "2026-11-20",
       "planStartDt": "2026-11-20T00:00:00",
       "planEnd": "2026-11-21",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
+      "equip": "TK120",
+      "cls": "AT",
+      "woNumber": "WO-023138",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "Magnetic Plug",
+      "cmTypes": [
+        "MP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-12-02",
+      "planStartDt": "2026-12-02T00:00:00",
+      "planEnd": "2026-12-02",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -181733,6 +181819,27 @@ window.CM_WO_DATA = {
       "planStart": "2026-11-25",
       "planStartDt": "2026-11-25T00:00:00",
       "planEnd": "2026-11-25",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
+      "equip": "TK122",
+      "cls": "AT",
+      "woNumber": "WO-023140",
+      "maintType": "500 Hours service Planned",
+      "hours": 500,
+      "cmLabel": "Magnetic Plug",
+      "cmTypes": [
+        "MP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-12-06",
+      "planStartDt": "2026-12-06T00:00:00",
+      "planEnd": "2026-12-06",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -184212,6 +184319,27 @@ window.CM_WO_DATA = {
       "planStart": "2026-11-18",
       "planStartDt": "2026-11-18T00:00:00",
       "planEnd": "2026-11-18",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
+      "equip": "TK124",
+      "cls": "AT",
+      "woNumber": "WO-023141",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "Magnetic Plug",
+      "cmTypes": [
+        "MP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-12-02",
+      "planStartDt": "2026-12-02T00:00:00",
+      "planEnd": "2026-12-02",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
