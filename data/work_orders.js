@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-23T05:07:48+00:00",
+  "generated": "2026-11-23T05:27:59+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6406,6 +6406,45 @@ window.CM_WO_DATA = {
       "wo": "WO-023120"
     },
     {
+      "asset": "TK088",
+      "defect": "DD-00017353",
+      "raised": "2026-11-23",
+      "system": "TK088.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Отогрев, запуск",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023123"
+    },
+    {
+      "asset": "DZ018",
+      "defect": "DD-00017354",
+      "raised": "2026-11-23",
+      "system": "DZ018.CH.RP (Ripper/Рыхлитель)",
+      "defectType": "2.06 Abrasive wear / Абразивный износ",
+      "descr": "Износ коронок",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-023124"
+    },
+    {
+      "asset": "FL008",
+      "defect": "DD-00017355",
+      "raised": "2026-11-23",
+      "system": "FL008.ELS.PH (Preheater / Предпусковой подогреватель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка топлива",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023125"
+    },
+    {
       "asset": "LD006",
       "defect": "DD-00017341",
       "raised": "2026-11-23",
@@ -7192,7 +7231,7 @@ window.CM_WO_DATA = {
       "system": "GE038.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "descr": "Замена ремней",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
@@ -7251,19 +7290,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023058"
     },
     {
-      "asset": "EX016",
-      "defect": "DD-00017284",
-      "raised": "2026-11-21",
-      "system": "EX016.CH.BUC (Bucket / Ковш)",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "Замена ковша на планировочный",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Viktor Bernikov",
-      "regBy": "Берников Виктор Викторович",
-      "wo": "WO-023060"
-    },
-    {
       "asset": "TK104",
       "defect": "DD-00017279",
       "raised": "2026-11-21",
@@ -7275,6 +7301,19 @@ window.CM_WO_DATA = {
       "by": "Aleksey Kiselev",
       "regBy": "Киселев Алексей Александрович",
       "wo": "WO-023055"
+    },
+    {
+      "asset": "EX016",
+      "defect": "DD-00017284",
+      "raised": "2026-11-21",
+      "system": "EX016.CH.BUC (Bucket / Ковш)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Замена ковша на планировочный",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Viktor Bernikov",
+      "regBy": "Берников Виктор Викторович",
+      "wo": "WO-023060"
     },
     {
       "asset": "TK016",
@@ -7296,7 +7335,7 @@ window.CM_WO_DATA = {
       "system": "EMERGENCY EQUIPMENT, FIRE TENDER URAL 43441C-10 AC 6.0-70, TK144 ENGINE OldNumber (ET004)",
       "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
       "descr": "Завоздушивание топливной системы",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Viktor Bernikov",
       "regBy": "Берников Виктор Викторович",
@@ -13712,19 +13751,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022458"
     },
     {
-      "asset": "CN018",
-      "defect": "DD-00016744",
-      "raised": "2026-11-12",
-      "system": "CN018.CH.GAN (Crane / Кран)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "EKT Замена подшипников 4-й секции стрелы телескопа, проверка работоспособности крановой установки, инспекция канатов телескопирования, прове",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022453"
-    },
-    {
       "asset": "LD010",
       "defect": "DD-00016755",
       "raised": "2026-11-12",
@@ -13749,6 +13775,19 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-022456"
+    },
+    {
+      "asset": "CN018",
+      "defect": "DD-00016744",
+      "raised": "2026-11-12",
+      "system": "CN018.CH.GAN (Crane / Кран)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "EKT Замена подшипников 4-й секции стрелы телескопа, проверка работоспособности крановой установки, инспекция канатов телескопирования, прове",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022453"
     },
     {
       "asset": "GS003",
