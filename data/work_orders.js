@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-24T07:37:43+00:00",
+  "generated": "2026-11-24T07:52:50+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6510,6 +6510,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023192"
     },
     {
+      "asset": "DZ002",
+      "defect": "DD-00017391",
+      "raised": "2026-11-24",
+      "system": "DZ002.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка гидровлического масла",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": "WO-023185"
+    },
+    {
       "asset": "GR014",
       "defect": "DD-00017414",
       "raised": "2026-11-24",
@@ -6635,19 +6648,6 @@ window.CM_WO_DATA = {
       "descr": "Замена пресс-масленки (не мажется палец платформы рыхлителя)",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
-      "by": "Sergey Tomilov",
-      "regBy": "Томилов Сергей Владимирович",
-      "wo": null
-    },
-    {
-      "asset": "DZ002",
-      "defect": "DD-00017391",
-      "raised": "2026-11-24",
-      "system": "DZ002.HS.DL (Hydraulic Lines / Гидролинии)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка гидровлического масла",
-      "status": "Registered",
-      "priority": "P2 Urgent",
       "by": "Sergey Tomilov",
       "regBy": "Томилов Сергей Владимирович",
       "wo": null
@@ -14193,6 +14193,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "DZ001",
+      "defect": "DD-00016760",
+      "raised": "2026-11-12",
+      "system": "DZ001.ELS.AS (Alarm System / Система сигнализации)",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "Требуется замена сигнала( плохо слышно)",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-022593"
+    },
+    {
       "asset": "EX011",
       "defect": "DD-00016767",
       "raised": "2026-11-12",
@@ -14750,19 +14763,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022924"
-    },
-    {
-      "asset": "DZ001",
-      "defect": "DD-00016760",
-      "raised": "2026-11-12",
-      "system": "DZ001.ELS.AS (Alarm System / Система сигнализации)",
-      "defectType": "4.02 Open circuit / Разрыв цепи",
-      "descr": "Требуется замена сигнала( плохо слышно)",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": "WO-022593"
     },
     {
       "asset": "GE076",
@@ -91740,9 +91740,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-12-02",
-      "planStartDt": "2026-12-02T00:00:00",
-      "planEnd": "2026-12-02",
+      "planStart": "2026-11-30",
+      "planStartDt": "2026-11-30T00:00:00",
+      "planEnd": "2026-11-30",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -92822,9 +92822,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-12-04",
-      "planStartDt": "2026-12-04T00:00:00",
-      "planEnd": "2026-12-04",
+      "planStart": "2026-12-02",
+      "planStartDt": "2026-12-02T00:00:00",
+      "planEnd": "2026-12-02",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
