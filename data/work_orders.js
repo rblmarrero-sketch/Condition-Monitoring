@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-24T15:17:47+00:00",
+  "generated": "2026-11-24T15:37:49+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6146,6 +6146,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023237"
     },
     {
+      "asset": "BS011",
+      "defect": "DD-00017440",
+      "raised": "2026-11-25",
+      "system": "BS011.OC.DO (Doors / Двери)",
+      "defectType": "2.03 Fatigue / Усталость материала",
+      "descr": "не работает  замок кунга",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Kuznetsov",
+      "regBy": "Кузнецов Александр Андреевич",
+      "wo": "WO-023239"
+    },
+    {
       "asset": "DZ009",
       "defect": "DD-00017433",
       "raised": "2026-11-25",
@@ -6508,6 +6521,19 @@ window.CM_WO_DATA = {
       "by": "Valentin Trapilo",
       "regBy": "Трапило Валентин Святославович",
       "wo": "WO-023221"
+    },
+    {
+      "asset": "TK109",
+      "defect": "DD-00017439",
+      "raised": "2026-11-24",
+      "system": "TK109.DRS.TRA (Transmission / Трансмиссия)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Износ обоймы АКПП",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Kiselev",
+      "regBy": "Киселев Алексей Александрович",
+      "wo": "WO-023238"
     },
     {
       "asset": "SN004",
@@ -60227,11 +60253,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "CR001",
-      "defect": "DD-00009555",
+      "defect": "DD-00009554",
       "raised": "2026-07-24",
       "system": "CR001.DRS.AIR (Air Intake System / Система впуска воздуха)",
-      "defectType": "1.10 Rupture / Burst / Разрыв",
-      "descr": "Разрыв патрубка интеркуллера ДВС №7Y-1182",
+      "defectType": "3.02 No (faulty) signal/ indication/alarm / Отсутвие сигнала, индикации",
+      "descr": null,
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Rinat Musaferov",
@@ -60240,11 +60266,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "CR001",
-      "defect": "DD-00009554",
+      "defect": "DD-00009555",
       "raised": "2026-07-24",
       "system": "CR001.DRS.AIR (Air Intake System / Система впуска воздуха)",
-      "defectType": "3.02 No (faulty) signal/ indication/alarm / Отсутвие сигнала, индикации",
-      "descr": null,
+      "defectType": "1.10 Rupture / Burst / Разрыв",
+      "descr": "Разрыв патрубка интеркуллера ДВС №7Y-1182",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Rinat Musaferov",
