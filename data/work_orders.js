@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-24T04:47:53+00:00",
+  "generated": "2026-11-24T05:03:11+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6523,6 +6523,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "BS009",
+      "defect": "DD-00017411",
+      "raised": "2026-11-24",
+      "system": "BS009.OC.HE (Heating / Отопление)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Промывка (замена) радиатора отопителя (дует холодным)",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
       "asset": "EX015",
       "defect": "DD-00017376",
       "raised": "2026-11-24",
@@ -6715,6 +6728,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Tomilov",
       "regBy": "Томилов Сергей Владимирович",
+      "wo": null
+    },
+    {
+      "asset": "TK167",
+      "defect": "DD-00017412",
+      "raised": "2026-11-24",
+      "system": "TK167.CH.FP (Fuel Pump / топливный насос)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Замена малого топливораздаточного пистолета",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
       "wo": null
     },
     {
