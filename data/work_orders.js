@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-24T06:38:10+00:00",
+  "generated": "2026-11-24T06:53:10+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6503,7 +6503,7 @@ window.CM_WO_DATA = {
       "system": "GR014.CH.FR (Frame / Рама)",
       "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "descr": "Сварка крепления зеркала",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
@@ -6637,6 +6637,19 @@ window.CM_WO_DATA = {
       "priority": "P2 Urgent",
       "by": "Sergey Tomilov",
       "regBy": "Томилов Сергей Владимирович",
+      "wo": null
+    },
+    {
+      "asset": "CR006",
+      "defect": "DD-00017429",
+      "raised": "2026-11-24",
+      "system": "CR006.CRS.JAW (Jaw Crusher / Щековая дробилка)",
+      "defectType": "7.04 Cone crusher setting / CSS incorrect / Неверная настройка щели конусной дробилки",
+      "descr": "зазор разгрузочной щели не регулируется",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
       "wo": null
     },
     {
@@ -7134,19 +7147,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023093"
     },
     {
-      "asset": "TK165",
-      "defect": "DD-00017325",
-      "raised": "2026-11-23",
-      "system": "TK165.BS.RCH (Brake Chambers / Тормозные камеры)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Замена правого среднего энергоаккумулятора",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-023095"
-    },
-    {
       "asset": "TK106",
       "defect": "DD-00017326",
       "raised": "2026-11-23",
@@ -7236,6 +7236,19 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-023170"
+    },
+    {
+      "asset": "TK165",
+      "defect": "DD-00017325",
+      "raised": "2026-11-23",
+      "system": "TK165.BS.RCH (Brake Chambers / Тормозные камеры)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Замена правого среднего энергоаккумулятора",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023095"
     },
     {
       "asset": "TK092",
