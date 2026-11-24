@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-24T00:50:25+00:00",
+  "generated": "2026-11-24T01:07:46+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -3538,12 +3538,12 @@
       "type": "2000 Hours service Planned",
       "hours": 2000,
       "plan": "2026-11-20",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-20"
     },
     {
       "wo": "WO-023121",
@@ -4006,12 +4006,12 @@
       "type": "500 Hours service Planned",
       "hours": 500,
       "plan": "2026-11-17",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-21"
     },
     {
       "wo": "WO-022120",
@@ -10616,6 +10616,14 @@
       "p": "P2",
       "r": "2026-11-24",
       "x": "отсутствует освещение"
+    },
+    {
+      "d": "DD-00017393",
+      "u": "TK159",
+      "s": "TK159.OC (Operator Cab / Кабина оператора)",
+      "p": "P2",
+      "r": "2026-11-24",
+      "x": "Ремонт замка двери"
     },
     {
       "d": "DD-00017357",

@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-24T00:50:25+00:00",
+  "generated": "2026-11-24T01:07:46+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6477,6 +6477,19 @@ window.CM_WO_DATA = {
       "system": "DZ019.ELS.LIG (Head Lighting System / Система головного освещения)",
       "defectType": "4.08 Fuse blown / Перегорел предохранитель",
       "descr": "отсутствует освещение",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": null
+    },
+    {
+      "asset": "TK159",
+      "defect": "DD-00017393",
+      "raised": "2026-11-24",
+      "system": "TK159.OC (Operator Cab / Кабина оператора)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Ремонт замка двери",
       "status": "Registered",
       "priority": "P2 Urgent",
       "by": "Sergey Tomilov",
@@ -135053,15 +135066,15 @@ window.CM_WO_DATA = {
       "cmLabel": "500h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-17",
       "planStartDt": "2026-11-17T00:00:00",
       "planEnd": "2026-11-17",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-21",
+      "actualStartDt": "2026-11-21T06:00:00",
+      "actualEnd": "2026-11-21"
     },
     {
       "equip": "HX055",
@@ -195189,15 +195202,15 @@ window.CM_WO_DATA = {
       "cmLabel": "2000h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-20",
       "planStartDt": "2026-11-20T00:00:00",
       "planEnd": "2026-11-20",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-19",
+      "actualStartDt": "2026-11-19T20:00:00",
+      "actualEnd": "2026-11-20"
     },
     {
       "equip": "TK168",
