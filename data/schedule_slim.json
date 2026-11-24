@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-24T02:08:12+00:00",
+  "generated": "2026-11-24T02:23:02+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -301,17 +301,6 @@
           "MP"
         ],
         "plan": "2026-12-31",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "TK047": [
-      {
-        "wo": "WO-022306",
-        "hours": 500,
-        "types": [
-          "MP"
-        ],
-        "plan": "2026-11-22",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -1134,6 +1123,24 @@
       "completed": ""
     },
     {
+      "wo": "WO-023195",
+      "equip": "GR014",
+      "cls": "GRD",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-12-06",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-12-06",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-021943",
       "equip": "TK115",
       "cls": "AT",
@@ -1263,6 +1270,24 @@
       "wo": "WO-022990",
       "equip": "DZ002",
       "cls": "DOZ",
+      "comp": "",
+      "desc": "500h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-12-04",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-12-04",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-023196",
+      "equip": "GR015",
+      "cls": "GRD",
       "comp": "",
       "desc": "500h service",
       "priority": "P3 Planned (PM)",
@@ -3070,12 +3095,12 @@
       "type": "500 Hours service Planned",
       "hours": 500,
       "plan": "2026-11-22",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-22"
     },
     {
       "wo": "WO-022116",
@@ -3142,12 +3167,12 @@
       "type": "500 Hours service Planned",
       "hours": 500,
       "plan": "2026-11-22",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-22"
     },
     {
       "wo": "WO-021931",
@@ -10610,6 +10635,14 @@
       "x": "Ремонт замка двери"
     },
     {
+      "d": "DD-00017397",
+      "u": "TK106",
+      "s": "TK106.HS.DL (Hydraulic Lines / Гидролинии)",
+      "p": "P2",
+      "r": "2026-11-24",
+      "x": "Утечка с РВД охлаждения тормозов"
+    },
+    {
       "d": "DD-00017391",
       "u": "DZ002",
       "s": "DZ002.HS.DL (Hydraulic Lines / Гидролинии)",
@@ -10618,12 +10651,12 @@
       "x": "Утечка гидровлического масла"
     },
     {
-      "d": "DD-00017397",
-      "u": "TK106",
-      "s": "TK106.HS.DL (Hydraulic Lines / Гидролинии)",
+      "d": "DD-00017399",
+      "u": "LD005",
+      "s": "LD005.HS (Hydraulic System / Гидравлическая система)",
       "p": "P2",
       "r": "2026-11-24",
-      "x": "Утечка с РВД охлаждения тормозов"
+      "x": "Низкий уровень гидравлической жидкости"
     },
     {
       "d": "DD-00017386",
@@ -10640,6 +10673,14 @@
       "p": "P2",
       "r": "2026-11-24",
       "x": "Течь ОЖ с корпуса ПЖД"
+    },
+    {
+      "d": "DD-00017398",
+      "u": "EX025",
+      "s": "EX025.HS.DL (Hydraulic Lines / Гидролинии)",
+      "p": "P2",
+      "r": "2026-11-24",
+      "x": "Трещина в РВД ковшевого цилиндра"
     },
     {
       "d": "DD-00017357",
@@ -32818,20 +32859,20 @@
       "x": "Заменить  РВД (стрела-платформа)"
     },
     {
-      "d": "DD-00016183",
-      "u": "TK047",
-      "s": "TK047.BS.RV (Retarder Valve / Клапан ретардера)",
-      "p": "P4",
-      "r": "2026-11-02",
-      "x": "Не работает горный тормоз"
-    },
-    {
       "d": "DD-00016184",
       "u": "TK047",
       "s": "TK047.BS.HOS (Hoses and Piping / Шланги и трубопроводы)",
       "p": "P4",
       "r": "2026-11-02",
       "x": "Утечка воздуха под кабиной"
+    },
+    {
+      "d": "DD-00016183",
+      "u": "TK047",
+      "s": "TK047.BS.RV (Retarder Valve / Клапан ретардера)",
+      "p": "P4",
+      "r": "2026-11-02",
+      "x": "Не работает горный тормоз"
     },
     {
       "d": "DD-00016179",

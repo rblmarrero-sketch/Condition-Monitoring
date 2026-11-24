@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-24T02:08:12+00:00",
+  "generated": "2026-11-24T02:23:02+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6354,6 +6354,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023189"
     },
     {
+      "asset": "TK106",
+      "defect": "DD-00017397",
+      "raised": "2026-11-24",
+      "system": "TK106.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка с РВД охлаждения тормозов",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": "WO-023194"
+    },
+    {
       "asset": "DZ016",
       "defect": "DD-00017383",
       "raised": "2026-11-24",
@@ -6399,6 +6412,19 @@ window.CM_WO_DATA = {
       "system": "DZ002.HS.DL (Hydraulic Lines / Гидролинии)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Утечка гидровлического масла",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": null
+    },
+    {
+      "asset": "LD005",
+      "defect": "DD-00017399",
+      "raised": "2026-11-24",
+      "system": "LD005.HS (Hydraulic System / Гидравлическая система)",
+      "defectType": "1.12 Low fluid level / Низкий уровень жидкости",
+      "descr": "Низкий уровень гидравлической жидкости",
       "status": "Registered",
       "priority": "P2 Urgent",
       "by": "Sergey Tomilov",
@@ -6484,19 +6510,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK106",
-      "defect": "DD-00017397",
-      "raised": "2026-11-24",
-      "system": "TK106.HS.DL (Hydraulic Lines / Гидролинии)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка с РВД охлаждения тормозов",
-      "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Sergey Tomilov",
-      "regBy": "Томилов Сергей Владимирович",
-      "wo": null
-    },
-    {
       "asset": "DZ019",
       "defect": "DD-00017386",
       "raised": "2026-11-24",
@@ -6544,6 +6557,19 @@ window.CM_WO_DATA = {
       "descr": "Трещина адаптера коронки ковша",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": null
+    },
+    {
+      "asset": "EX025",
+      "defect": "DD-00017398",
+      "raised": "2026-11-24",
+      "system": "EX025.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Трещина в РВД ковшевого цилиндра",
+      "status": "Registered",
+      "priority": "P2 Urgent",
       "by": "Sergey Tomilov",
       "regBy": "Томилов Сергей Владимирович",
       "wo": null
@@ -18658,7 +18684,7 @@ window.CM_WO_DATA = {
       "system": "CR003.CH.CV (Conveyor / Конвейер)",
       "defectType": "1.06 Deformation / bending / buckling Деформация / изгиб / коробление",
       "descr": "Деформация рамы конвейера",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P4 Planned (Repair)",
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
@@ -21109,6 +21135,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022203"
     },
     {
+      "asset": "TK047",
+      "defect": "DD-00016184",
+      "raised": "2026-11-02",
+      "system": "TK047.BS.HOS (Hoses and Piping / Шланги и трубопроводы)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка воздуха под кабиной",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022422"
+    },
+    {
       "asset": "TK068",
       "defect": "DD-00016166",
       "raised": "2026-11-02",
@@ -21523,19 +21562,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022421"
-    },
-    {
-      "asset": "TK047",
-      "defect": "DD-00016184",
-      "raised": "2026-11-02",
-      "system": "TK047.BS.HOS (Hoses and Piping / Шланги и трубопроводы)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка воздуха под кабиной",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022422"
     },
     {
       "asset": "TK047",
@@ -30475,7 +30501,7 @@ window.CM_WO_DATA = {
       "system": "TK023.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Утечка ОЖ (патрубки ПЖД)",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
@@ -30540,7 +30566,7 @@ window.CM_WO_DATA = {
       "system": "TK023.DRS.AXL (Axles / Мосты)",
       "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
       "descr": "Не работает система подкачки колес",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
@@ -30553,7 +30579,7 @@ window.CM_WO_DATA = {
       "system": "TK023.BS.BPC (Brake Packs / Тормозные пакеты)",
       "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
       "descr": "Не работает ручной тормоз необходима проверка (колодки)",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
@@ -57353,19 +57379,6 @@ window.CM_WO_DATA = {
       "wo": "WO-018103"
     },
     {
-      "asset": "DZ022",
-      "defect": "DD-00011314",
-      "raised": "2026-08-21",
-      "system": "DZ022.HS (Hydraulic System / Гидравлическая система)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Повреждение (трещина) трубки подачи гидравлического масла (# 1186 – 73 – 04000 ).",
-      "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Andrey Shipelov",
-      "regBy": "Шипелов Андрей Анатольевич",
-      "wo": null
-    },
-    {
       "asset": "H04",
       "defect": "EB-00000082",
       "raised": "2026-08-21",
@@ -57376,6 +57389,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Eduard Shapoval",
       "regBy": "Eduard Shapoval",
+      "wo": null
+    },
+    {
+      "asset": "DZ022",
+      "defect": "DD-00011314",
+      "raised": "2026-08-21",
+      "system": "DZ022.HS (Hydraulic System / Гидравлическая система)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Повреждение (трещина) трубки подачи гидравлического масла (# 1186 – 73 – 04000 ).",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Andrey Shipelov",
+      "regBy": "Шипелов Андрей Анатольевич",
       "wo": null
     },
     {
@@ -58809,8 +58835,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H07",
-      "defect": "EB-00000075",
+      "asset": "H04",
+      "defect": "EB-00000076",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -58822,8 +58848,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000076",
+      "asset": "H07",
+      "defect": "EB-00000075",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -128355,15 +128381,15 @@ window.CM_WO_DATA = {
       "cmLabel": "500h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-22",
       "planStartDt": "2026-11-22T00:00:00",
       "planEnd": "2026-11-22",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-22",
+      "actualStartDt": "2026-11-22T07:00:00",
+      "actualEnd": "2026-11-22"
     },
     {
       "equip": "GE105",
@@ -134329,6 +134355,25 @@ window.CM_WO_DATA = {
       "actualEnd": null
     },
     {
+      "equip": "GR014",
+      "cls": "GRD",
+      "woNumber": "WO-023195",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "250h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-12-06",
+      "planStartDt": "2026-12-06T00:00:00",
+      "planEnd": "2026-12-06",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
       "equip": "GR015",
       "cls": "GRD",
       "woNumber": null,
@@ -134507,6 +134552,25 @@ window.CM_WO_DATA = {
       "actualStart": "2026-11-20",
       "actualStartDt": "2026-11-20T19:00:00",
       "actualEnd": "2026-11-20"
+    },
+    {
+      "equip": "GR015",
+      "cls": "GRD",
+      "woNumber": "WO-023196",
+      "maintType": "500 Hours service Planned",
+      "hours": 500,
+      "cmLabel": "500h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-12-04",
+      "planStartDt": "2026-12-04T00:00:00",
+      "planEnd": "2026-12-04",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
     },
     {
       "equip": "GR016",
@@ -156157,15 +156221,15 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-22",
       "planStartDt": "2026-11-22T00:00:00",
       "planEnd": "2026-11-22",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-22",
+      "actualStartDt": "2026-11-22T07:00:00",
+      "actualEnd": "2026-11-22"
     },
     {
       "equip": "TK060",
