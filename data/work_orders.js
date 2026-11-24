@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-24T17:47:44+00:00",
+  "generated": "2026-11-24T18:02:54+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 815,
@@ -6243,7 +6243,7 @@ window.CM_WO_DATA = {
       "system": "DZ009.CH.ROL (Track Rollers / Поддерживающие ролики)",
       "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
       "descr": "Заклинивание поддерживающего катка",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Valentin Trapilo",
       "regBy": "Трапило Валентин Святославович",
