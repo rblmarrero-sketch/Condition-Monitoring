@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-24T20:38:19+00:00",
+  "generated": "2026-11-24T20:53:07+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -403,17 +403,6 @@
           "MP"
         ],
         "plan": "2026-12-01",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "TK109": [
-      {
-        "wo": "WO-021936",
-        "hours": 250,
-        "types": [
-          "MP"
-        ],
-        "plan": "2026-11-23",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -2744,24 +2733,6 @@
       "completed": ""
     },
     {
-      "wo": "WO-021983",
-      "equip": "DZ009",
-      "cls": "DOZ",
-      "comp": "",
-      "desc": "250h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-24",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-11-24",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
       "wo": "WO-022049",
       "equip": "EX012",
       "cls": "EXC",
@@ -2924,6 +2895,24 @@
       "completed": ""
     },
     {
+      "wo": "WO-021983",
+      "equip": "DZ009",
+      "cls": "DOZ",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-23",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-11-23",
+      "status": "Completed",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "complete",
+      "completed": "2026-11-23"
+    },
+    {
       "wo": "WO-022041",
       "equip": "EX010",
       "cls": "EXC",
@@ -3041,24 +3030,6 @@
       "raised": "2026-11-23",
       "type": "4000 Hours service Planned",
       "hours": 4000,
-      "plan": "2026-11-23",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
-      "wo": "WO-021936",
-      "equip": "TK109",
-      "cls": "AT",
-      "comp": "",
-      "desc": "Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-23",
-      "type": "250 Hours service Planned",
-      "hours": 250,
       "plan": "2026-11-23",
       "status": "Elimination scheduled",
       "request": "",
@@ -33440,6 +33411,14 @@
       "x": "Заменить РВД на подъем кузова"
     },
     {
+      "d": "DD-00016185",
+      "u": "TK038",
+      "s": "TK038.BS.RV (Retarder Valve / Клапан ретардера)",
+      "p": "P4",
+      "r": "2026-11-02",
+      "x": "Не работает горный тормоз"
+    },
+    {
       "d": "DD-00016180",
       "u": "TK035",
       "s": "TK035.ELS.PH (Preheater / Предпусковой подогреватель)",
@@ -33462,14 +33441,6 @@
       "p": "P4",
       "r": "2026-11-02",
       "x": "Утечка антифриза с радиатора охлаждения"
-    },
-    {
-      "d": "DD-00016185",
-      "u": "TK038",
-      "s": "TK038.BS.RV (Retarder Valve / Клапан ретардера)",
-      "p": "P4",
-      "r": "2026-11-02",
-      "x": "Не работает горный тормоз"
     },
     {
       "d": "DD-00016190",
@@ -34464,6 +34435,14 @@
       "x": "Монтаж и подключение розетки 220В"
     },
     {
+      "d": "DD-00015814",
+      "u": "EX005",
+      "s": "EX005.HS.DL (Hydraulic Lines / Гидролинии)",
+      "p": "P4",
+      "r": "2026-10-28",
+      "x": "Замена ДВС, гидромотора"
+    },
+    {
       "d": "DD-00015841",
       "u": "LD003",
       "s": "LD003.BS (Braking System / Тормозная система)",
@@ -34486,14 +34465,6 @@
       "p": "P4",
       "r": "2026-10-28",
       "x": "замена крышки горловины радиатора ОЖ."
-    },
-    {
-      "d": "DD-00015814",
-      "u": "EX005",
-      "s": "EX005.HS.DL (Hydraulic Lines / Гидролинии)",
-      "p": "P4",
-      "r": "2026-10-28",
-      "x": "Замена ДВС, гидромотора"
     },
     {
       "d": "DD-00015821",
