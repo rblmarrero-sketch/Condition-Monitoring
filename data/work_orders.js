@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-24T09:42:52+00:00",
+  "generated": "2026-11-24T09:57:39+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6484,6 +6484,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023175"
     },
     {
+      "asset": "DZ016",
+      "defect": "DD-00017384",
+      "raised": "2026-11-24",
+      "system": "DZ016.DRS.EXH (Exhaust System / Система выпуска)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь масла с выпускного коллектора",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": "WO-023174"
+    },
+    {
       "asset": "SN004",
       "defect": "DD-00017392",
       "raised": "2026-11-24",
@@ -6547,6 +6560,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-023212"
+    },
+    {
+      "asset": "DZ016",
+      "defect": "DD-00017383",
+      "raised": "2026-11-24",
+      "system": "DZ016.DRS.ENG (Engine / Двигатель)",
+      "defectType": "4.01 Short circuiting / Короткое замыкание",
+      "descr": "Отопитель салона не работает",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": "WO-023173"
     },
     {
       "asset": "TK106",
@@ -6624,32 +6650,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "DZ016",
-      "defect": "DD-00017383",
-      "raised": "2026-11-24",
-      "system": "DZ016.OC.HE (Heating / Отопление)",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Отопитель салона не работает",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Tomilov",
-      "regBy": "Томилов Сергей Владимирович",
-      "wo": null
-    },
-    {
-      "asset": "DZ016",
-      "defect": "DD-00017384",
-      "raised": "2026-11-24",
-      "system": "DZ016.DRS.EXH (Exhaust System / Система выпуска)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь масла с выпускного коллектора",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Tomilov",
-      "regBy": "Томилов Сергей Владимирович",
       "wo": null
     },
     {
@@ -7108,19 +7108,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023145"
     },
     {
-      "asset": "TK034",
-      "defect": "DD-00017365",
-      "raised": "2026-11-23",
-      "system": "TK034.DRS.AXL (Axles / Мосты)",
-      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
-      "descr": "Люфт хвастовика среднего моста",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Viktor Bernikov",
-      "regBy": "Берников Виктор Викторович",
-      "wo": "WO-023151"
-    },
-    {
       "asset": "TK104",
       "defect": "DD-00017319",
       "raised": "2026-11-23",
@@ -7509,6 +7496,19 @@ window.CM_WO_DATA = {
       "by": "Viktor Bernikov",
       "regBy": "Берников Виктор Викторович",
       "wo": "WO-023092"
+    },
+    {
+      "asset": "TK034",
+      "defect": "DD-00017365",
+      "raised": "2026-11-23",
+      "system": "TK034.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Люфт хвастовика среднего моста",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Viktor Bernikov",
+      "regBy": "Берников Виктор Викторович",
+      "wo": "WO-023151"
     },
     {
       "asset": "EX001",
@@ -10670,6 +10670,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022792"
     },
     {
+      "asset": "CR008",
+      "defect": "DD-00017072",
+      "raised": "2026-11-18",
+      "system": "CR008.FEED.HOP (Hopper / Бункер)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Износ футеровки бункера приемного",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-023224"
+    },
+    {
       "asset": "TK133",
       "defect": "DD-00017098",
       "raised": "2026-11-18",
@@ -10680,19 +10693,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "CR008",
-      "defect": "DD-00017072",
-      "raised": "2026-11-18",
-      "system": "CR008.FEED.HOP (Hopper / Бункер)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Износ футеровки бункера приемного",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
       "wo": null
     },
     {
@@ -22045,19 +22045,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022918"
     },
     {
-      "asset": "TK038",
-      "defect": "DD-00016185",
-      "raised": "2026-11-02",
-      "system": "TK038.BS.RV (Retarder Valve / Клапан ретардера)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Не работает горный тормоз",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022925"
-    },
-    {
       "asset": "DZ007",
       "defect": "DD-00016176",
       "raised": "2026-11-02",
@@ -22082,6 +22069,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022402"
+    },
+    {
+      "asset": "TK038",
+      "defect": "DD-00016185",
+      "raised": "2026-11-02",
+      "system": "TK038.BS.RV (Retarder Valve / Клапан ретардера)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Не работает горный тормоз",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022925"
     },
     {
       "asset": "LV081",
@@ -35984,7 +35984,7 @@ window.CM_WO_DATA = {
       "asset": "DZ016",
       "defect": "DD-00015025",
       "raised": "2026-10-18",
-      "system": "DZ016.DRS.ENG (Engine / Двигатель)",
+      "system": "DZ016.OC.HE (Heating / Отопление)",
       "defectType": "4.09 Relay / contactor failure / Отказ реле / контактора",
       "descr": "Не работает датчик темпиратуры ДВС",
       "status": "Registered",
@@ -102296,9 +102296,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-12-05",
-      "planStartDt": "2026-12-05T00:00:00",
-      "planEnd": "2026-12-05",
+      "planStart": "2026-12-04",
+      "planStartDt": "2026-12-04T00:00:00",
+      "planEnd": "2026-12-04",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
