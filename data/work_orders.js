@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-24T11:12:39+00:00",
+  "generated": "2026-11-24T11:27:43+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6586,6 +6586,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Tomilov",
       "regBy": "Томилов Сергей Владимирович",
       "wo": "WO-023189"
+    },
+    {
+      "asset": "TK170",
+      "defect": "DD-00017432",
+      "raised": "2026-11-24",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK170 HEATING",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Неисправность автономного отопителя в насосном отсеке. Горит \"Check engine\"",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-023231"
     },
     {
       "asset": "EX022",
@@ -58550,6 +58563,19 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "TK008",
+      "defect": "DD-00010860",
+      "raised": "2026-08-14",
+      "system": "TK008.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Не работает фен",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": null
+    },
+    {
+      "asset": "TK008",
       "defect": "DD-00010861",
       "raised": "2026-08-14",
       "system": "TK008.CH.SU (Suspension / Подвеска)",
@@ -58568,19 +58594,6 @@ window.CM_WO_DATA = {
       "system": "FL005.OC.AC (Air Conditioning / Кондиционирование)",
       "defectType": "1.27 Belt drive issue (slip/break) / Проблема ременного привода (проскальзывание/обрыв)",
       "descr": "Трещины на ремне кондиционера",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": null
-    },
-    {
-      "asset": "TK008",
-      "defect": "DD-00010860",
-      "raised": "2026-08-14",
-      "system": "TK008.OC.HE (Heating / Отопление)",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Не работает фен",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
