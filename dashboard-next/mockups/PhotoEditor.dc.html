@@ -1,61 +1,1049 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<title>HME Photo Editor — Industrial Standard</title>
-<script src="/shared_photo_editor/hme-photo-editor.js"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>HME RELIABILITY · SHARED TOOL · Photo editor tools</title><!-- PX_TOOLS_V1 (15.11.2026): one photo editor for CM, NCR, FIR / RCA, notes and comments; opened by /site/px-tools.js -->
 <style>
-  html, body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    background: #0f1115;
-    overflow: hidden;
+/* Layout: one working screen — tool rail left, the photo in the middle, properties right, photo strip below.
+   Site standard look (navy band, IBM Plex, 12 px floor, 32 px controls on a desk / 44 px on a phone). */
+:root{
+  --bg:#eef0f1; --surface:#ffffff; --surface-2:#f6f7f8; --border:#dde2e6; --ink:#16212a; --muted:#5b6670;
+  --navy:#16304F; --navy-2:#2B4C7E; --on-navy:#ffffff; --stage:#2a3138; --stage-ink:#e8edf2;
+  --g5:#c62828; --g4:#e65100; --g3:#f2a900; --g1:#2e7d32; --white:#ffffff; --black:#111111;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Arial,sans-serif; --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#12171c; --surface:#1a2128; --surface-2:#212a32; --border:#2e3943; --ink:#e6ecf1; --muted:#9aa7b3;
+  --navy:#3b6290; --navy-2:#4d76a6; --stage:#0d1115; --stage-ink:#e8edf2; color-scheme:dark } }
+:root[data-theme="dark"]{ --bg:#12171c; --surface:#1a2128; --surface-2:#212a32; --border:#2e3943; --ink:#e6ecf1; --muted:#9aa7b3;
+  --navy:#3b6290; --navy-2:#4d76a6; --stage:#0d1115; --stage-ink:#e8edf2; color-scheme:dark }
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font:14px/1.45 var(--sans);margin:0}
+*{box-sizing:border-box}
+button,input,select,textarea{font:inherit;color:inherit}
+.app{height:100%;display:grid;grid-template-rows:auto auto 1fr auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:12px;gap:10px}
+.band{background:var(--navy);color:var(--on-navy);border-radius:12px;padding:10px 14px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;position:relative;overflow:hidden}
+.band::after{content:"";position:absolute;left:0;right:0;top:0;height:4px;background:repeating-linear-gradient(135deg,#f2a900 0 10px,#16304F 10px 20px)}
+.band h1{margin:0;font-size:17px;font-weight:600;letter-spacing:.01em}
+.band .eye{font:600 11px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;opacity:.75}
+.band .name{font:500 12px var(--mono);opacity:.85}
+.band .sp{flex:1}
+.bbtn{min-height:32px;padding:0 12px;border-radius:8px;border:1px solid rgba(255,255,255,.35);background:transparent;color:var(--on-navy);cursor:pointer;font-weight:600;font-size:13px;display:inline-flex;align-items:center;gap:6px}
+.bbtn:hover{background:rgba(255,255,255,.12)}
+.bbtn.pri{background:#fff;color:#16304F;border-color:#fff}
+.bbtn[disabled]{opacity:.45;cursor:default}
+.where{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12px;color:var(--muted)}
+.where b{color:var(--ink);font-weight:600}
+.chip{border:1px solid var(--border);background:var(--surface);border-radius:999px;padding:2px 10px;font-size:12px}
+.work{display:grid;grid-template-columns:auto minmax(0,1fr) 280px;gap:10px;min-height:0}
+.rail{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:8px;display:flex;flex-direction:column;gap:4px;overflow:auto;width:244px}
+.rail h3{margin:8px 4px 2px;font:600 11px/1.2 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.rail h3:first-child{margin-top:2px}
+.tg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px}
+.tool{min-height:32px;white-space:normal;line-height:1.15;text-align:left;min-width:0;border:1px solid transparent;border-radius:8px;background:var(--surface-2);cursor:pointer;display:flex;align-items:center;gap:6px;padding:0 8px;font-size:12.5px;text-align:left}
+.tool svg{width:16px;height:16px;flex:none}
+.tool:hover{border-color:var(--border)}
+.tool.on{background:var(--navy);color:var(--on-navy)}
+.tool:focus-visible,.bbtn:focus-visible,.btn:focus-visible{outline:2px solid #f2a900;outline-offset:1px}
+.stage{background:var(--stage);border-radius:12px;position:relative;min-height:320px;overflow:hidden;touch-action:none}
+.stage canvas{position:absolute;inset:0;width:100%;height:100%}
+.hud{position:absolute;left:10px;bottom:10px;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.hud .btn{background:rgba(0,0,0,.45);color:var(--stage-ink);border-color:rgba(255,255,255,.2)}
+.hint{position:absolute;right:10px;top:10px;max-width:60%;background:rgba(0,0,0,.55);color:var(--stage-ink);font-size:12px;padding:6px 10px;border-radius:8px}
+.cmp{position:absolute;left:10px;top:10px;background:#f2a900;color:#111;font:600 11px var(--mono);padding:3px 8px;border-radius:6px;letter-spacing:.06em}
+.side{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:10px 12px;overflow:auto;display:flex;flex-direction:column;gap:12px;min-width:0}
+.side h3{margin:0;font:600 11px/1.2 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.sw{width:28px;height:28px;border-radius:50%;border:2px solid var(--border);cursor:pointer;padding:0}
+.sw.on{outline:2px solid var(--navy-2);outline-offset:2px}
+.btn{min-height:32px;padding:0 10px;border-radius:8px;border:1px solid var(--border);background:var(--surface);cursor:pointer;font-size:12.5px;font-weight:500}
+.btn.on{background:var(--navy);color:var(--on-navy);border-color:var(--navy)}
+.btn.pri{background:var(--navy);color:var(--on-navy);border-color:var(--navy);font-weight:600}
+label.f{display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--muted)}
+label.f input,label.f select,label.f textarea{min-height:32px;border:1px solid var(--border);border-radius:8px;background:var(--surface-2);padding:4px 8px;font-size:13px;color:var(--ink)}
+label.f textarea{min-height:44px;resize:vertical}
+input[type=range]{accent-color:var(--navy-2);width:100%}
+.layers{display:flex;flex-direction:column;gap:3px;max-height:200px;overflow:auto}
+.sgl{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+.sg{display:grid;grid-template-columns:18px 1fr auto;gap:6px;align-items:start;font-size:12.5px;padding:6px 8px;border-radius:8px;background:var(--surface-2)}
+.sg b{font-weight:600}
+.sg .ic{font-weight:700;line-height:1.4}
+.sg.bad .ic{color:var(--g5)} .sg.warn .ic{color:var(--g4)} .sg.ok .ic{color:var(--g1)} .sg.tip .ic{color:var(--navy-2)}
+.sg .btn{min-height:28px;padding:0 8px;font-size:12px}
+.ai{display:flex;flex-direction:column;gap:4px;margin-top:8px;border-top:1px dashed var(--border);padding-top:8px}
+/* PXAI_LOCAL_V1: Scan on this server - the part, the CM photos that look alike */
+.lcsim{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.lcsim a{display:flex;flex-direction:column;gap:2px;text-decoration:none;color:var(--ink);font-size:11px;line-height:1.25;min-width:0}.lcsim img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:6px;border:1px solid var(--border);background:var(--surface-2)}.lcsim span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.lcsim .same{color:#8a4b00;font-weight:700}.aires .bar{height:6px;border-radius:3px;background:var(--surface-2);overflow:hidden}.aires .bar i{display:block;height:100%;background:#2b4c7e}
+/* PXAI_V1: the Scan with AI result - nothing is added until it is ticked */
+.aires{display:flex;flex-direction:column;gap:6px;margin-top:4px}.aires .ap{font-size:12.5px}.aires .af{display:grid;grid-template-columns:20px 1fr auto;gap:6px;align-items:start;font-size:12.5px;padding:6px 8px;border-radius:8px;background:var(--surface-2)}.aires .af input{width:16px;height:16px;margin:2px 0 0}.aires .gd{display:inline-block;min-width:18px;text-align:center;border-radius:9px;padding:0 6px;font-weight:700;font-size:11.5px;color:#fff}.aires .row{display:flex;gap:6px;flex-wrap:wrap}.aires .warn{color:#8a4b00}.aires .q{font-size:12px;color:var(--muted)}
+.layer{display:flex;align-items:center;gap:6px;font-size:12.5px;padding:4px 6px;border-radius:6px;cursor:pointer;border:1px solid transparent}
+.layer:hover{border-color:var(--border)}
+.layer.on{background:var(--surface-2);border-color:var(--navy-2)}
+.layer i{width:10px;height:10px;border-radius:50%;flex:none}
+.layer .x{margin-left:auto;border:0;background:none;cursor:pointer;color:var(--muted);min-height:24px;min-width:24px}
+.muted{color:var(--muted);font-size:12px}
+.strip{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:8px 10px;display:flex;gap:10px;align-items:center;overflow-x:auto;min-height:92px}
+.strip h3{margin:0;font:600 11px/1.2 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);writing-mode:vertical-rl;transform:rotate(180deg)}
+.th{flex:none;width:96px;display:flex;flex-direction:column;gap:3px;cursor:pointer;border-radius:8px;padding:3px;border:2px solid transparent;background:none;text-align:left}
+.th.on{border-color:var(--navy-2)}
+.th img{width:100%;height:60px;object-fit:cover;border-radius:5px;display:block}
+.th span{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.th.pick{outline:2px dashed #f2a900}
+.addph{flex:none;width:96px;height:78px;border:1.5px dashed var(--border);border-radius:8px;display:grid;place-items:center;color:var(--muted);font-size:12px;cursor:pointer;text-align:center;padding:4px}
+.toast{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:8px 14px;border-radius:8px;font-size:13px;z-index:40}
+.sheet{position:fixed;inset:0;background:rgba(10,14,18,.55);display:grid;place-items:center;z-index:30;padding:16px}
+.sheet .box{background:var(--surface);border-radius:12px;padding:14px;max-width:min(900px,100%);max-height:100%;overflow:auto;display:flex;flex-direction:column;gap:10px}
+.sheet img{max-width:100%;border:1px solid var(--border);border-radius:6px}
+.kbd{font:500 11px var(--mono);border:1px solid var(--border);border-bottom-width:2px;border-radius:4px;padding:0 4px;color:var(--muted)}
+@media (max-width:900px){
+  .app{height:auto}
+  .work{grid-template-columns:1fr}
+  .rail{width:auto;flex-direction:row;flex-wrap:nowrap;overflow-x:auto}
+  .rail h3{display:none}
+  .tg{display:flex;gap:4px}
+  .tool{min-height:44px;white-space:nowrap}
+  .stage{height:62vh}
+  .btn,.bbtn{min-height:44px}
+  .hint{display:none}
+}
+@media (prefers-reduced-motion: reduce){ *{transition:none!important} }
+/* PX_TOOLS_V2 (15.11 22:19, Rickie "i dont see lay out"): the page never grows wider than the window (a long photo strip pushed the
+   right panel and Save off screen); the collage layouts sit on the photo while Collage is picked */
+.app{grid-template-columns:minmax(0,1fr)}.app>*{min-width:0}
+.colbar{position:absolute;left:10px;top:10px;right:10px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;background:rgba(0,0,0,.62);color:var(--stage-ink);padding:8px 10px;border-radius:8px;font-size:12.5px;z-index:2}
+.colbar .btn{background:#fff;color:#16304F;border-color:#fff;font-weight:600}.colbar[hidden]{display:none}.colbar .btn[disabled]{opacity:.45}.ql .btn{min-height:28px;font-size:12px;padding:0 8px}
+.colbar .btn.on{background:#f2a900;color:#111;border-color:#f2a900}.colbar .btn.pri{background:#2e7d32;color:#fff;border-color:#2e7d32}
+/* PX_TOOLS_V3: handles on a selected mark, crop bar on the photo, zoom buttons that work */
+/* PX_TOOLS_V4 (16.11 re-scan): Russian rail wraps in two equal columns, mm in the page's language, measured labels stay on the photo, parts and tips in Russian, the count label clear of its marks */
+html:has(.colbar:not([hidden])) .hint{display:none}
+.bbtn.ghost{border-color:transparent}
+html.host .where{display:none}
+html.host .app{padding-block:10px}
+.capopt{display:flex;gap:6px;align-items:center;font-size:12px;color:var(--muted)}
+.busy{opacity:.6;pointer-events:none}
+</style></head><body>
+
+<div class="app" id="app">
+  <header class="band">
+    <div>
+      <div class="eye" id="eye">HME Reliability · shared tool</div>
+      <h1>Photo editor tools</h1>
+    </div>
+    <span class="name" id="phName">—</span>
+    <span class="sp"></span>
+    <button class="bbtn" id="bUndo" title="Undo (Ctrl+Z)">↶ Undo</button>
+    <button class="bbtn" id="bRedo" title="Redo (Ctrl+Y)">↷ Redo</button>
+    <button class="bbtn" id="bCmp" title="Hold to see the original">◐ Before / after</button>
+    <button class="bbtn ghost" id="bKeys" title="Keyboard shortcuts (?)">⌨ Keys</button>
+    <button class="bbtn" id="bReset" title="Back to the original photo">Reset</button>
+    <button class="bbtn ghost" id="bClose" title="Close without saving" hidden>Cancel</button>
+    <button class="bbtn pri" id="bSave" title="Save the edited photo as a new version; the original is kept">Save as new version</button>
+  </header>
+
+  <div class="where" id="where">
+    <span>Same editor on:</span>
+    <span class="chip"><b>CM dashboard</b> · findings, history</span>
+    <span class="chip"><b>NCR</b> · evidence</span>
+    <span class="chip"><b>FIR / RCA</b> · photos</span>
+    <span class="chip"><b>Assets Down</b> · field notes</span>
+    <span class="chip"><b>Comments</b> · attachments</span>
+    <span class="muted">Mock-up with sample photos — load your own with “+ Add photo”.</span>
+  </div>
+
+  <div class="work">
+    <nav class="rail" id="rail" aria-label="Tools"></nav>
+    <div class="stage" id="stage">
+      <canvas id="cv"></canvas>
+      <div class="hint" id="hint"></div>
+      <div class="colbar" id="colBar" hidden></div>
+      <div class="cmp" id="cmpTag" hidden>ORIGINAL</div>
+      <div class="hud">
+        <button class="btn" id="zOut" title="Zoom out">−</button>
+        <button class="btn" id="zFit" title="Fit the photo">Fit</button>
+        <button class="btn" id="zIn" title="Zoom in">+</button>
+        <span class="muted" id="zPct" style="color:var(--stage-ink);font-family:var(--mono)">100%</span>
+      </div>
+    </div>
+    <aside class="side" id="side">
+      <section id="sugBox" class="sug">
+        <h3>Check &amp; suggest</h3>
+        <label class="f" style="margin-top:6px">This photo shows
+          <select id="sgComp"></select></label>
+        <div id="sgList" class="sgl"></div>
+        <div class="ai" id="lcBox" data-m="PXAI_LOCAL_V1"><button class="btn" id="bLc" disabled>▣ Scan on this server</button>
+          <span class="muted" id="lcNote">Checking the scan on this server…</span><div class="aires" id="lcRes" hidden></div></div>
+        <div class="ai" id="aiBox" data-m="PXAI_V1"><button class="btn" id="bAi" disabled>◎ Scan with AI</button>
+          <span class="muted" id="aiNote">Checking whether Scan with AI is switched on…</span><div class="aires" id="aiRes" hidden></div></div>
+      </section>
+      <section>
+        <h3>Colour · meaning</h3>
+        <div class="row" id="swatches" style="margin-top:6px"></div>
+        <div class="muted" id="swName" style="margin-top:4px"></div>
+      </section>
+      <section>
+        <h3>Line</h3>
+        <div class="row" style="margin-top:6px">
+          <button class="btn" data-w="3">Thin</button><button class="btn on" data-w="6">Medium</button><button class="btn" data-w="10">Bold</button>
+        </div>
+      </section>
+      <section id="selBox">
+        <h3>Selected</h3>
+        <div id="selBody" class="muted" style="margin-top:6px">Nothing selected. Pick the arrow tool and tap a mark.</div>
+      </section>
+      <section>
+        <h3>Adjust</h3>
+        <label class="f">Brightness <input type="range" id="aB" min="-60" max="60" value="0"></label>
+        <label class="f">Contrast <input type="range" id="aC" min="-50" max="80" value="0"></label>
+        <label class="f">Sharpen <input type="range" id="aS" min="0" max="100" value="0"></label>
+        <label class="f">Saturation <input type="range" id="aSat" min="-100" max="100" value="0"></label>
+        <label class="f">Exposure <input type="range" id="aExp" min="-100" max="100" value="0"></label>
+        <label class="f">Colour temperature <input type="range" id="aTmp" min="-100" max="100" value="0"></label>
+        <div class="row" style="margin-top:6px"><button class="btn" id="bAuto">✨ Auto-correct</button><button class="btn" id="bAdjReset">Reset adjust</button></div>
+      </section>
+      <section>
+        <h3>Caption (printed under the photo)</h3>
+        <label class="f">English <input id="capEn" placeholder="e.g. 4C left rear final drive — heavy ferrous debris"></label>
+        <label class="f">Русский <input id="capRu" placeholder="напр. 4C левая задняя бортовая — много стружки"></label>
+        <label class="capopt"><input type="checkbox" id="capOn"> <span>Print the caption on the picture</span></label>
+        <label class="capopt"><input type="checkbox" id="stOn"> <span>Evidence stamp on the picture</span></label>
+        <label class="f">Stamp text <input id="stTx" placeholder="unit · component · date · name"></label>
+      </section>
+      <section>
+        <div class="row" style="justify-content:space-between"><h3>Marks on this photo</h3><button class="btn" id="bClear">Clear all marks</button></div>
+        <div class="layers" id="layers" style="margin-top:6px"></div>
+      </section>
+    </aside>
+  </div>
+
+  <div class="strip" id="strip"><h3>Photos</h3></div>
+  <input type="file" id="file" accept="image/*" multiple hidden>
+</div>
+
+<script>
+(function(){
+'use strict';
+const $=id=>document.getElementById(id);
+const cv=$('cv'), cx=cv.getContext('2d'), stage=$('stage');
+const COLORS=[['#c62828','Critical / defect'],['#e65100','Severe'],['#f2a900','Watch / wear'],['#2e7d32','OK / good'],['#1e63c6','Information'],['#ffffff','Label on dark'],['#111111','Label on light']];
+const TOOLS=[
+  ['View',[['sel','Select / move','V','<path d="M4 3l7 17 2-7 7-2z"/>'],['pan','Pan','H','<path d="M12 3v18M3 12h18M7 7l-4 5 4 5M17 7l4 5-4 5"/>']]],
+  ['Frame',[['crop','Crop','C','<path d="M6 2v16h16M2 6h16v16"/>'],['rotl','Rotate left','[','<path d="M4 12a8 8 0 1 0 3-6.2M4 3v4h4"/>'],['rotr','Rotate right',']','<path d="M20 12a8 8 0 1 1-3-6.2M20 3v4h-4"/>'],['flip','Flip','F','<path d="M12 3v18M4 7l5 5-5 5zM20 7l-5 5 5 5z"/>']]],
+  ['Mark',[['ring','Circle','O','<circle cx="12" cy="12" r="8"/>'],['rect','Box','R','<rect x="4" y="6" width="16" height="12" rx="1"/>'],['arrow','Arrow','A','<path d="M4 20L19 5M19 5h-8M19 5v8"/>'],['line','Line','L','<path d="M4 18L20 6"/>'],['pen','Pen','P','<path d="M3 21l3-1 12-12-2-2L4 18zM14 6l4 4"/>'],['hl','Highlight','G','<path d="M4 16h16v4H4zM8 16l4-12 4 12"/>'],['erase','Eraser','X','<path d="M16 3l5 5-11 11H5l-2-2z"/><path d="M10 19h11"/>']]],
+  ['Label',[['text','Text','T','<path d="M5 5h14M12 5v14"/>'],['callout','Callout','K','<path d="M4 4h16v10H10l-4 5v-5H4z"/>'],['badge','Number','N','<circle cx="12" cy="12" r="9"/><path d="M11 8h2v8"/>'],['icon','Icon','I','<path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17v.5"/>'],['dim','Measure','D','<path d="M3 12h18M3 8v8M21 8v8"/>'],['ang','Angle','Q','<path d="M4 20h16M4 20L16 6"/><path d="M11 20a7 7 0 0 0-2-5"/>'],['diam','Diameter','U','<circle cx="12" cy="12" r="8"/><path d="M6 18L18 6"/>']]],
+  ['Measure',[['scale','Scale bar','S','<path d="M3 15h18v4H3zM7 15v-3M11 15v-2M15 15v-3M19 15v-2"/>'],['poly','Polyline length','Y','<path d="M3 18l5-9 5 6 4-9 4 4"/>'],['area','Area','W','<path d="M4 18l3-12 10 2 3 9z"/>'],['rad3','3-point radius','Z','<path d="M4 18a10 10 0 0 1 16 0"/><circle cx="4" cy="18" r="1.5"/><circle cx="12" cy="10" r="1.5"/><circle cx="20" cy="18" r="1.5"/>'],['cnt','Count','#','<path d="M5 5l4 4M9 5l-4 4M15 13l4 4M19 13l-4 4M5 15h4M7 13v4"/>'],['wear','Wear %','%','<path d="M5 4v16M19 4v16M5 8h14M5 14h14" stroke-dasharray="2 2"/>']]],
+  ['Focus',[['spot','Spotlight','/','<circle cx="12" cy="12" r="5"/><path d="M2 2h20v20H2z" opacity=".4"/>']]],
+  ['Detail',[['mag','Magnify','M','<circle cx="10" cy="10" r="6"/><path d="M15 15l6 6"/>'],['insert','Insert photo','E','<rect x="3" y="5" width="18" height="14" rx="1"/><rect x="11" y="9" width="8" height="8"/>'],['blur','Blur','B','<circle cx="8" cy="8" r="2"/><circle cx="16" cy="8" r="2"/><circle cx="8" cy="16" r="2"/><circle cx="16" cy="16" r="2"/>']]],
+  ['Compose',[['collage','Collage','J','<rect x="3" y="3" width="8" height="8"/><rect x="13" y="3" width="8" height="8"/><rect x="3" y="13" width="18" height="8"/>']]],
+];
+const ICONS=[['⚠','Warning'],['✕','Reject / NC'],['✓','OK'],['⟳','Wear'],['⚡','Crack'],['💧','Leak'],['🔥','Heat']];
+const KEYS={}; TOOLS.forEach(g=>g[1].forEach(t=>KEYS[t[2].toLowerCase()]=t[0]));
+
+/* PX_TOOLS_V1 host: opened by /site/px-tools.js inside an iframe; the page that opened it holds the photo and saves the result */
+const H=(function(){ try{ return parent!==window&&parent.__pxtHost||null; }catch(e){ return null; } })();
+const LANG=(H&&H.lang)||(function(){ try{ return localStorage.getItem('askpi_lang')==='ru'?'ru':'en'; }catch(e){ return 'en'; } })();
+const RU={'Checking the scan on this server…':'Проверяем анализ на сервере…','▣ Scan on this server':'▣ Анализ на сервере','Runs on the company server: nothing leaves the network. Names the part and finds CM photos that look alike.':'Работает на сервере компании: ничего не уходит из сети. Называет деталь и находит похожие фото МС.','CM photos indexed:':'Фото МС в индексе:','The CM photo index is still being built.':'Индекс фото МС ещё строится.','This looks like a screen or a document, not a part.':'Похоже на экран или документ, а не на деталь.','This server sees:':'Сервер видит:','Not sure of the part.':'Деталь не определена уверенно.','Maybe:':'Возможно:','Like CM photos of:':'Похоже на фото МС:','of':'из','CM photos that look alike (open in a new tab):':'Похожие фото МС (открываются в новой вкладке):','same photo':'то же фото','Set "This photo shows":':'Указать «На фото»:','Use the part as caption':'Деталь — в подпись','Small model on the company server: it names the part, it does not judge wear. Check before you use it.':'Небольшая модель на сервере компании: называет деталь, но не оценивает износ. Проверьте перед использованием.','"This photo shows" set from the scan.':'«На фото» указано по анализу.','Caption taken from the scan.':'Подпись взята из анализа.','Low resolution':'Низкое разрешение','Under 900 px: zooming in the report will be blurred. Use the full camera photo if you have it.':'Менее 900 px: при увеличении в отчёте будет размыто. Возьмите исходное фото с камеры, если есть.','Checking whether Scan with AI is switched on…':'Проверяем, включён ли анализ ИИ…','Scanning…':'Анализ…','Not set up on this server.':'На этом сервере не настроено.','Off: it is switched on once the company approves sending photos to an outside AI service (Anthropic).':'Выключено: включается после согласования компанией отправки фото во внешний сервис ИИ (Anthropic).','Off: the approval is noted but the service key is not set.':'Выключено: согласование есть, но ключ сервиса не задан.','Sends this photo (reduced, no file data) to an outside AI service. Nothing is added until you tick it.':'Отправляет это фото (уменьшенное, без данных файла) во внешний сервис ИИ. Ничего не добавляется, пока вы не отметите.','Approved:':'Согласовано:','The AI sees:':'ИИ видит:','Nothing wrong found.':'Неисправностей не найдено.','sure':'уверенность','Add ticked marks':'Добавить отмеченные','Use its caption':'Взять подпись','Photo:':'Фото:','AI can be wrong: check every mark before saving.':'ИИ может ошибаться: проверьте каждую пометку перед сохранением.','Marks added from the AI scan. Move or delete any that are wrong.':'Пометки из анализа ИИ добавлены. Переместите или удалите неверные.','Caption taken from the AI scan.':'Подпись взята из анализа ИИ.','Scan failed:':'Анализ не выполнен:','no answer from the server':'нет ответа сервера','scans left today':'анализов осталось сегодня','View':'Вид','Frame':'Кадр','Mark':'Пометки','Label':'Подписи','Detail':'Деталь','Compose':'Композиция',
+ 'Select / move':'Выбрать / двигать','Pan':'Сдвиг','Crop':'Обрезать','Rotate left':'Повернуть влево','Rotate right':'Повернуть вправо','Flip':'Отразить',
+ 'Circle':'Круг','Box':'Рамка','Arrow':'Стрелка','Line':'Линия','Pen':'Карандаш','Highlight':'Маркер','Eraser':'Ластик','Text':'Текст','Callout':'Выноска',
+ 'Number':'Номер','Icon':'Значок','Measure':'Размер','Angle':'Угол','Diameter':'Диаметр',
+ 'Scale bar':'Линейка','Polyline length':'Длина по ломаной','Area':'Площадь','3-point radius':'Радиус по 3 точкам','Count':'Счёт','Wear %':'Износ %','Spotlight':'Подсветка','Focus':'Акцент','Saturation':'Насыщенность','Exposure':'Экспозиция','Colour temperature':'Цветовая температура','Evidence stamp on the picture':'Штамп на фото (единица, дата, кто)','Stamp text':'Текст штампа','Finish':'Готово','perimeter':'периметр','Set a reference to read mm':'Задайте эталон, чтобы видеть мм','Set a reference first':'Сначала задайте эталон','Set a reference, or type the size now':'Задайте эталон или введите текущий размер','Now':'Сейчас','worn':'износ','to limit':'до предела','New size, mm':'Новый размер, мм','Wear limit, mm (optional)':'Предел износа, мм (необязательно)','Size now, mm (empty = from the reference)':'Текущий размер, мм (пусто = по эталону)','Round':'Круг','Square':'Прямоугольник','Darkness':'Затемнение','Start a new count':'Начать новый счёт','New count started: tap each one.':'Новый счёт: нажимайте на каждый.','Drag a dot to move a point.':'Тяните точку, чтобы сдвинуть её.','Set a reference first: Measure a known size, type it, Use as reference.':'Сначала задайте эталон: Размер по известной детали, введите длину, «Использовать как эталон».','No reference yet: Measure (D) a known size, type it, Use as reference.':'Эталона нет: Размер (D) по известной детали, введите длину, «Использовать как эталон».','Tap point by point along the crack or edge. Double-tap or Finish to end.':'Ставьте точки вдоль трещины или кромки. Двойное нажатие или «Готово» — конец.','Tap around the area, point by point. Double-tap or Finish to close it.':'Ставьте точки вокруг площади. Двойное нажатие или «Готово» — замкнуть.','Tap three points on the arc or edge.':'Поставьте три точки на дуге или кромке.','Tap each one (pit, chip, crack). The total is written beside the first.':'Нажимайте на каждый (раковина, скол, трещина). Итог пишется у первого.','Drag the size left now (from the base to the worn face); then type the new size.':'Проведите текущий размер (от базы до изношенной поверхности), затем введите новый размер.','Drag over the part to keep bright; everything else is dimmed.':'Обведите деталь — всё остальное затемнится.','Tap where the scale bar goes.':'Нажмите, где поставить линейку.',
+ 'Drag from the corner along one edge; then drag the round handles to set both lines. The angle is written in degrees.':'Тяните от вершины вдоль одной стороны, затем двигайте маркеры, чтобы задать обе линии. Угол пишется в градусах.',
+ 'Drag across the circle (a bore, a pin, a bearing). With a reference set it reads Ø in mm.':'Проведите поперёк окружности (отверстие, палец, подшипник). При заданном эталоне показывает Ø в мм.',
+ 'Text · callout · number · icon · measure · angle · diameter':'Текст · выноска · номер · значок · размер · угол · диаметр','Magnify':'Лупа','Insert photo':'Вставить фото','Blur':'Скрыть','Collage':'Коллаж','Inserted photo':'Вставленное фото',
+ 'Photo editor tools':'Редактор фото','HME Reliability · shared tool':'Надёжность ГТО · общий инструмент','↶ Undo':'↶ Отменить','↷ Redo':'↷ Вернуть',
+ '◐ Before / after':'◐ До / после','Reset':'Сбросить','Save as new version':'Сохранить новую версию','Cancel':'Отмена','Saving…':'Сохранение…',
+ 'Check & suggest':'Проверка и советы','This photo shows':'На фото','Colour · meaning':'Цвет · значение','Line':'Линия','Thin':'Тонкая','Medium':'Средняя','Bold':'Толстая',
+ 'Selected':'Выбрано','Adjust':'Коррекция','Brightness':'Яркость','Contrast':'Контраст','Sharpen':'Резкость','✨ Auto-correct':'✨ Автокоррекция','Reset adjust':'Сбросить коррекцию',
+ 'Caption (printed under the photo)':'Подпись (печатается под фото)','English':'Английский','Print the caption on the picture':'Печатать подпись на самом фото',
+ 'Marks on this photo':'Пометки на фото','Clear all marks':'Убрать все пометки','Photos':'Фото','+ Add photo':'+ Добавить фото','from this device':'с устройства',
+ 'Fit':'Вписать','Zoom in':'Крупнее','Zoom out':'Мельче','Fit the photo':'Вписать фото','◎ Scan with AI':'◎ Анализ ИИ',
+ 'Critical / defect':'Критично / дефект','Severe':'Серьёзно','Watch / wear':'Наблюдать / износ','OK / good':'В норме','Information':'Информация','Label on dark':'Подпись на тёмном','Label on light':'Подпись на светлом',
+ 'Warning':'Внимание','Reject / NC':'Брак / несоответствие','OK':'В норме','Wear':'Износ','Crack':'Трещина','Leak':'Течь','Heat':'Перегрев',
+ 'Nothing selected. Pick the arrow tool and tap a mark.':'Ничего не выбрано. Возьмите «Выбрать» и нажмите на пометку.','No marks yet.':'Пометок пока нет.','Delete':'Удалить',
+ 'Apply crop':'Обрезать','No crop':'Без обрезки','Free':'Свободно','Start again at 1':'Начать снова с 1','Next number:':'Следующий номер:',
+ 'Tap a mark to select it, drag to move it. Delete removes it.':'Нажмите на пометку, чтобы выбрать; тяните, чтобы сдвинуть. Delete удаляет.',
+ 'Drag to move around. Use + / − or the mouse wheel to zoom.':'Тяните, чтобы сдвинуть. + / − или колесо мыши меняют масштаб.',
+ 'Drag the frame you want to keep. Ratio: ':'Выделите часть, которую оставить. Пропорции: ','Drag around the part you want to point out.':'Обведите часть, на которую надо указать.',
+ 'Drag a box around the area.':'Обведите область рамкой.','Drag from the label side to the point.':'Тяните от подписи к точке.','Drag a straight line.':'Проведите прямую линию.','Draw by hand.':'Рисуйте от руки.',
+ 'Paint over a part to tint it, like a marker.':'Закрасьте часть, как маркером.','Tap where the label goes, then type it in the panel.':'Нажмите, где будет подпись, затем впишите её справа.',
+ 'Drag from the point to where the label sits.':'Тяните от точки к месту подписи.','Tap to drop numbers 1, 2, 3… in order.':'Нажимайте, чтобы ставить номера 1, 2, 3… по порядку.',
+ 'Pick an icon in the panel, then tap where it goes.':'Выберите значок справа, затем нажмите, где он нужен.','Drag across the part, then write the reading (e.g. 81 % worn, 12.4 mm).':'Проведите поперёк детали и впишите значение (напр. износ 81 %, 12,4 мм).',
+ 'Drag a circle on the area to enlarge; the enlarged circle appears beside it. Move it, or put a close-up photo in it.':'Обведите место кругом; рядом появится увеличенный круг. Его можно сдвинуть или вставить в него фото крупным планом.',
+ 'Pick a photo in the strip below to place it inside this one.':'Выберите фото внизу, чтобы вставить его в это.','Drag over a face, a plate or a screen to hide it.':'Закрасьте лицо, номер или экран, чтобы скрыть.',
+ 'Tick 2, 3 or 4 photos in the strip, then choose a layout.':'Отметьте внизу 2, 3 или 4 фото и выберите раскладку.','Drag over marks to rub them out. Undo brings them back.':'Проведите по пометкам, чтобы стереть. «Отменить» вернёт их.',
+ '2 side by side':'2 рядом','2 stacked':'2 друг над другом','1 large + 2':'1 большое + 2','2 × 2':'2 × 2','Text':'Текст','Enlarge':'Увеличение',
+ 'Use a close-up photo instead':'Вставить фото крупным планом','Change detail photo':'Другое фото крупным планом','Back to enlarged area':'Вернуть увеличение',
+ 'Looks blurred':'Нечётко','Too dark':'Слишком темно','Too bright':'Слишком светло','Glare':'Блик','Flat, low contrast':'Мало контраста','Crop to the part':'Обрежьте по детали',
+ 'Nothing is marked':'Ничего не отмечено','No close-up':'Нет крупного плана','No size or reading':'Нет размера или значения','No caption':'Нет подписи','Caption':'Подпись',
+ 'Auto-correct':'Автокоррекция','Crop 1:1':'Обрезать 1:1','Suggest marks':'Предложить пометки','Use draft':'Взять черновик',
+ 'Fine detail is soft. Retake it, or put a sharper close-up in a Magnify circle.':'Мелкие детали размыты. Переснимите или вставьте чёткий крупный план в лупу.',
+ 'Detail is lost in the shadows.':'Детали теряются в тени.','Shade the part or step to the side to cut the glare.':'Затените деталь или снимите сбоку, чтобы убрать блик.',
+ 'Part of the photo is burnt white. Change the angle if you can retake it.':'Часть фото засвечена. Если можно переснять — смените угол.',
+ 'Wear marks stand out more with more contrast.':'Следы износа заметнее при большем контрасте.','Reports print photos as square tiles; crop so the part fills it.':'В отчётах фото печатаются квадратами; обрежьте так, чтобы деталь заполнила квадрат.',
+ 'A reader should see in two seconds where to look.':'Читатель должен за две секунды увидеть, куда смотреть.','Magnify the worst spot, or insert the close-up you took.':'Увеличьте худшее место или вставьте снятый крупный план.',
+ 'Add the measured value (mm or % worn) so the photo carries the number.':'Добавьте измеренное значение (мм или % износа), чтобы число было на фото.','Say what the photo shows, in both languages.':'Напишите, что на фото, на двух языках.',
+ 'Quick labels':'Быстрые подписи','Pick a quick label, then tap the photo.':'Выберите подпись, затем нажмите на фото.','Next label':'Следующая подпись','Label':'Подпись','Duplicate':'Копия','Reference':'Эталон',
+ 'Real length of this line, mm':'Реальная длина линии, мм','e.g. 50':'напр. 50','Use as reference':'Сделать эталоном','Type the real length in mm first.':'Сначала введите реальную длину в мм.',
+ 'Reference set: every measure reads in mm.':'Эталон задан: все размеры в мм.','Reference set: every measure reads in mm. Type a text to override one.':'Эталон задан: все размеры в мм. Свой текст заменяет значение.',
+ 'Draw a line across something of known size (a ruler, a bolt), type its length here and press Use as reference: every other measure then reads in mm.':'Проведите линию по предмету известного размера (линейка, болт), введите его длину и нажмите «Сделать эталоном»: остальные размеры будут в мм.',
+ '⌨ Keys':'⌨ Клавиши','Keyboard shortcuts':'Сочетания клавиш','Close':'Закрыть','Select · pan':'Выбрать · сдвиг','Crop · rotate · flip':'Обрезать · повернуть · отразить',
+ 'Circle · box · arrow · line · pen · highlight · eraser':'Круг · рамка · стрелка · линия · карандаш · маркер · ластик','Text · callout · number · icon · measure':'Текст · выноска · номер · значок · размер',
+ 'Magnify · insert photo · blur · collage':'Лупа · вставить фото · скрыть · коллаж','Undo · redo':'Отменить · вернуть','Duplicate the selected mark':'Копия выбранной пометки','Nudge the selected mark':'Сдвинуть выбранную пометку',
+ 'Delete the selected mark':'Удалить выбранную пометку','Zoom in · out · fit':'Крупнее · мельче · вписать','Pan · zoom':'Сдвиг · масштаб','This list':'Этот список','Crop':'Обрезать',
+ 'Saved. The original photo is kept.':'Сохранено. Исходное фото сохранено без изменений.','Could not save: ':'Не сохранено: ','The photo could not be opened.':'Фото не открылось.'};
+function tr(s){ return LANG==='ru'&&RU[s]||s; }
+
+/* ---------- state ---------- */
+const S={photos:[],cur:0,tool:'sel',color:'#c62828',w:6,sel:-1,view:{s:1,x:0,y:0},cmp:false,crop:null,ratio:'free',iconGlyph:'⚠',badgeN:1,pick:null};
+function blankRecipe(){ return {rot:0,flip:false,crop:null,adj:{b:0,c:0,s:0,auto:null},cap:{en:'',ru:''},marks:[]}; }
+function P(){ return S.photos[S.cur]; }
+function R(){ return P().rec; }
+window.R=R; window.S=S; window.setTool=(t)=>{ S.tool=t; syncPanel(); draw(); }; window.syncPanel=syncPanel; window.draw=draw;
+const hist={u:[],r:[]};
+function push(){ hist.u.push(JSON.stringify(R())); if(hist.u.length>80) hist.u.shift(); hist.r=[]; btns(); }
+function undo(){ if(!hist.u.length) return; hist.r.push(JSON.stringify(R())); P().rec=JSON.parse(hist.u.pop()); afterRec(); }
+function redo(){ if(!hist.r.length) return; hist.u.push(JSON.stringify(R())); P().rec=JSON.parse(hist.r.pop()); afterRec(); }
+function afterRec(){ S.sel=-1; buildBase(); fit(); syncPanel(); draw(); btns(); }
+function btns(){ $('bUndo').disabled=!hist.u.length; $('bRedo').disabled=!hist.r.length; }
+
+/* ---------- sample photos (drawn, so the mock-up needs nothing from outside) ---------- */
+function noise(g,w,h,a){ const d=g.getImageData(0,0,w,h),p=d.data; for(let i=0;i<p.length;i+=4){ const n=(Math.random()-.5)*a; p[i]+=n;p[i+1]+=n;p[i+2]+=n; } g.putImageData(d,0,0); }
+function sample(kind){
+  const c=document.createElement('canvas'); c.width=1600; c.height=1200; const g=c.getContext('2d');
+  if(kind===0){ /* magnetic plug with ferrous debris, a little dark (auto-correct has something to do) */
+    let gr=g.createRadialGradient(800,600,100,800,600,900); gr.addColorStop(0,'#5d5a52'); gr.addColorStop(1,'#26241f'); g.fillStyle=gr; g.fillRect(0,0,1600,1200);
+    g.fillStyle='#7d7a72'; g.beginPath(); g.ellipse(800,620,330,330,0,0,7); g.fill();
+    g.fillStyle='#a19d93'; g.beginPath(); g.ellipse(800,620,250,250,0,0,7); g.fill();
+    for(let i=0;i<6;i++){ g.strokeStyle='#5c5950'; g.lineWidth=14; g.beginPath(); g.arc(800,620,270+i*0,i,i+.5); g.stroke(); }
+    g.fillStyle='#3a3833'; g.beginPath(); g.ellipse(800,620,120,120,0,0,7); g.fill();
+    for(let i=0;i<900;i++){ const a=Math.random()*6.28,r=60+Math.random()*80; g.fillStyle=i%3?'#2a2926':'#8a7f6a'; g.save(); g.translate(800+Math.cos(a)*r,620+Math.sin(a)*r); g.rotate(a); g.fillRect(-1,-6-Math.random()*16,2+Math.random()*3,10+Math.random()*20); g.restore(); }
+    g.fillStyle='rgba(255,240,200,.18)'; g.beginPath(); g.ellipse(700,480,120,40,-.5,0,7); g.fill();
+    noise(g,1600,1200,26); g.fillStyle='rgba(0,0,0,.18)'; g.fillRect(0,0,1600,1200);
+  } else if(kind===1){ /* track link with worn grouser */
+    g.fillStyle='#4d4a43'; g.fillRect(0,0,1600,1200);
+    for(let k=0;k<4;k++){ const y=120+k*270; g.fillStyle='#34322d'; g.fillRect(80,y,1440,220); g.fillStyle='#5f5b51'; g.fillRect(80,y,1440,40);
+      g.fillStyle=k===2?'#6e6a5e':'#77736a'; g.beginPath(); g.moveTo(140,y+40); g.lineTo(1460,y+40); g.lineTo(1400,y+(k===2?120:170)); g.lineTo(200,y+(k===2?120:170)); g.fill();
+      for(const x of [380,1220]){ g.fillStyle='#22211d'; g.beginPath(); g.arc(x,y+170,26,0,7); g.fill(); } }
+    noise(g,1600,1200,30);
+  } else { /* hose with a wet leak */
+    g.fillStyle='#3f4447'; g.fillRect(0,0,1600,1200);
+    g.strokeStyle='#151617'; g.lineWidth=120; g.beginPath(); g.moveTo(-50,900); g.bezierCurveTo(500,700,900,300,1650,250); g.stroke();
+    g.strokeStyle='#2a2c2d'; g.lineWidth=60; g.stroke();
+    g.fillStyle='#b8a46a'; g.fillRect(700,470,90,150); g.fillStyle='#8c7c4d'; g.fillRect(700,470,90,20);
+    g.fillStyle='rgba(120,90,40,.55)'; g.beginPath(); g.ellipse(760,760,180,90,.3,0,7); g.fill();
+    g.fillStyle='rgba(255,255,255,.25)'; g.beginPath(); g.ellipse(740,690,30,12,.3,0,7); g.fill();
+    noise(g,1600,1200,22);
   }
-  hme-photo-editor {
-    width: 100vw;
-    height: 100vh;
+  return c;
+}
+function P_comp(i){ const p=S.photos[i]; return p.comp||(p.comp=guessComp(p.name)); }
+function P_last(){ return S.photos[S.photos.length-1]; }
+function addPhoto(img,name){
+  S.photos.push({img,name,rec:blankRecipe(),versions:[]});
+}
+if(!H){ ['TK148_4C_MP_2026-11-14.jpg','DZ011_TRK.L-12_UC_2026-11-12.jpg','EX016_HS.HL_INSP_2026-11-10.jpg'].forEach((n,i)=>{ const c=sample(i); addPhoto(c,n); });
+S.photos[0].rec.cap={en:'4C left rear final drive — heavy ferrous debris on the plug',ru:'4C левая задняя бортовая — много стружки на пробке'}; }
+let capOn=!H||!!H.capOnPhoto;
+
+/* ---------- the base: the photo rotated, flipped and adjusted (marks sit on it) ---------- */
+let base=document.createElement('canvas');
+function autoLevels(src){
+  const w=src.width,h=src.height,g=src.getContext('2d'),d=g.getImageData(0,0,w,h).data,hs=[[],[],[]];
+  for(let c=0;c<3;c++) hs[c]=new Uint32Array(256);
+  for(let i=0;i<d.length;i+=16){ hs[0][d[i]]++; hs[1][d[i+1]]++; hs[2][d[i+2]]++; }
+  const n=d.length/16, lo=[],hi=[];
+  for(let c=0;c<3;c++){ let a=0; lo[c]=0; for(let v=0;v<256;v++){ a+=hs[c][v]; if(a>n*.01){ lo[c]=v; break; } } a=0; hi[c]=255; for(let v=255;v>=0;v--){ a+=hs[c][v]; if(a>n*.01){ hi[c]=v; break; } } }
+  return {lo,hi};
+}
+function buildBase(){
+  const p=P(), r=p.rec, img=p.img, rot=((r.rot%360)+360)%360, sw=rot%180?img.height:img.width, sh=rot%180?img.width:img.height;
+  base.width=sw; base.height=sh; const g=base.getContext('2d');
+  g.save(); g.translate(sw/2,sh/2); g.rotate(rot*Math.PI/180); if(r.flip) g.scale(-1,1); g.drawImage(img,-img.width/2,-img.height/2); g.restore();
+  const a=r.adj; if(!a.b&&!a.c&&!a.s&&!a.auto&&!a.sat&&!a.exp&&!a.tmp) return;
+  const d=g.getImageData(0,0,sw,sh),px=d.data, cf=(259*(a.c+255))/(255*(259-a.c));
+  const ex=Math.pow(2,(a.exp||0)/50), sat=1+(a.sat||0)/100, tm=(a.tmp||0)*.45;   /* PX_TOOLS_V3: exposure, saturation, colour temperature */
+  for(let i=0;i<px.length;i+=4){ const o=[0,0,0]; for(let c=0;c<3;c++){ let v=px[i+c];
+    if(a.auto){ const lo=a.auto.lo[c],hi=Math.max(a.auto.hi[c],lo+1); v=(v-lo)*255/(hi-lo); }
+    o[c]=(cf*(v-128)+128+a.b)*ex; }
+    o[0]+=tm; o[2]-=tm; if(sat!==1){ const L=.299*o[0]+.587*o[1]+.114*o[2]; for(let c=0;c<3;c++) o[c]=L+(o[c]-L)*sat; }
+    for(let c=0;c<3;c++){ const v=o[c]; px[i+c]=v<0?0:v>255?255:v; } }
+  if(a.s>0){ /* unsharp: 3x3 */ const k=a.s/100, o=new Uint8ClampedArray(px), W=sw*4;
+    for(let y=1;y<sh-1;y++) for(let x=1;x<sw-1;x++){ const i=y*W+x*4; for(let c=0;c<3;c++){ const v=5*o[i+c]-o[i+c-4]-o[i+c+4]-o[i+c-W]-o[i+c+W]; px[i+c]=o[i+c]+(v-o[i+c])*k; } } }
+  g.putImageData(d,0,0);
+}
+
+/* ---------- view ---------- */
+function size(){ const r=stage.getBoundingClientRect(), dpr=devicePixelRatio||1; cv.width=Math.round(r.width*dpr); cv.height=Math.round(r.height*dpr); }
+function fit(){ if(!P()) return; size(); const r=R(), c=r.crop||{x:0,y:0,w:base.width,h:base.height}, W=cv.width,H=cv.height, s=Math.min(W*.92/c.w,H*.86/(c.h+(capH()))); S.view={s,x:W/2-(c.x+c.w/2)*s,y:H/2-(c.y+(c.h+capH())/2)*s}; zp(); }
+function capH(){ const c=R().cap; return capOn&&(c.en||c.ru)? (R().crop||{h:base.height}).h*0.12 : 0; }
+function zp(){ $('zPct').textContent=Math.round(S.view.s*100/(devicePixelRatio||1))+'%'; }
+function toImg(e){ const r=cv.getBoundingClientRect(), dpr=cv.width/r.width; return {x:((e.clientX-r.left)*dpr-S.view.x)/S.view.s, y:((e.clientY-r.top)*dpr-S.view.y)/S.view.s}; }
+
+/* ---------- drawing marks ---------- */
+function arrowHead(g,x1,y1,x2,y2,w){ const a=Math.atan2(y2-y1,x2-x1),L=w*4.2; g.beginPath(); g.moveTo(x2,y2); g.lineTo(x2-L*Math.cos(a-.42),y2-L*Math.sin(a-.42)); g.lineTo(x2-L*Math.cos(a+.42),y2-L*Math.sin(a+.42)); g.closePath(); g.fill(); }
+function textBox(g,m,x,y){ const fs=m.size||Math.max(28,base.width/36); g.font=`600 ${fs}px "IBM Plex Sans",Arial,sans-serif`; const lines=String(m.text||'').split('\n'), w=Math.max(...lines.map(l=>g.measureText(l).width))+fs*.8, h=lines.length*fs*1.25+fs*.5;
+  if(m.t!=='text'&&base){ x=Math.max(fs*.2,Math.min(x,base.width-w-fs*.2)); y=Math.max(fs*.2,Math.min(y,base.height-h-fs*.2)); }   /* PX_TOOLS_V3: a measured label never runs off the photo */
+  g.fillStyle=m.color==='#ffffff'?'rgba(17,17,17,.78)':(m.color==='#111111'?'rgba(255,255,255,.88)':'rgba(255,255,255,.92)'); g.strokeStyle=m.color; g.lineWidth=Math.max(2,fs/10);
+  g.beginPath(); g.roundRect(x,y,w,h,fs*.25); g.fill(); g.stroke();
+  g.fillStyle=(m.color==='#ffffff')?'#fff':(m.color==='#f2a900'||m.color==='#111111'||m.color==='#ffffff')?'#111':m.color; g.textBaseline='top';
+  lines.forEach((l,i)=>g.fillText(l,x+fs*.4,y+fs*.3+i*fs*1.25)); return {w,h}; }
+/* PX_TOOLS_V3: badges and icons scale (m.k), text and callouts by m.size; a selected mark shows handles */
+/* PX_TOOLS_V3 measure: one line of known length (a ruler, a bolt, the plug thread) is the reference; every other measure then reads
+   in mm by itself. A typed text always wins. */
+function angDeg(m){ const a1=Math.atan2(m.y1-m.y0,m.x1-m.x0), a2=Math.atan2(m.y2-m.y0,m.x2-m.x0); let d=Math.abs(a1-a2)*180/Math.PI; if(d>180) d=360-d; return d; }
+/* PX_TOOLS_V3 measuring set: polyline length, area, 3-point radius, count, wear %, spotlight, scale bar */
+function pxmm(){ const sc=R().scale; return sc&&sc.pxmm>0?sc.pxmm:0; }
+function plen(pts,closed){ let L=0; for(let i=1;i<pts.length;i++) L+=Math.hypot(pts[i][0]-pts[i-1][0],pts[i][1]-pts[i-1][1]); if(closed&&pts.length>2) L+=Math.hypot(pts[0][0]-pts[pts.length-1][0],pts[0][1]-pts[pts.length-1][1]); return L; }
+function parea(pts){ let a=0; for(let i=0;i<pts.length;i++){ const p=pts[i],q=pts[(i+1)%pts.length]; a+=p[0]*q[1]-q[0]*p[1]; } return Math.abs(a)/2; }
+function circ3(p){ const [a,b,c]=p, d=2*(a[0]*(b[1]-c[1])+b[0]*(c[1]-a[1])+c[0]*(a[1]-b[1])); if(Math.abs(d)<1e-6) return null;
+  const ux=((a[0]**2+a[1]**2)*(b[1]-c[1])+(b[0]**2+b[1]**2)*(c[1]-a[1])+(c[0]**2+c[1]**2)*(a[1]-b[1]))/d, uy=((a[0]**2+a[1]**2)*(c[0]-b[0])+(b[0]**2+b[1]**2)*(a[0]-c[0])+(c[0]**2+c[1]**2)*(b[0]-a[0]))/d; return {x:ux,y:uy,r:Math.hypot(a[0]-ux,a[1]-uy)}; }
+function MM(){ return LANG==='ru'?'мм':'mm'; }
+function mmTxt(px){ const k=pxmm(); if(!k) return ''; const v=px/k; return fmtN(v,v<100?1:0)+' '+MM(); }
+function wearTxt(m){ const k=pxmm(), now=m.nowmm>0?m.nowmm:(k?dimLen(m)/k:0); if(!now) return tr('Set a reference, or type the size now'); let t=tr('Now')+' '+fmtN(now,1)+' '+MM();
+  if(m.newmm>0){ const w=Math.max(0,(m.newmm-now)/m.newmm*100); t+=' · '+fmtN(w,0)+' % '+tr('worn'); if(m.limmm>0&&m.newmm>m.limmm){ const u=Math.max(0,(m.newmm-now)/(m.newmm-m.limmm)*100); t+=' · '+fmtN(u,0)+' % '+tr('to limit'); } } return t; }
+function fmtN(v,dec){ return v.toFixed(dec).replace('.',LANG==='ru'?',':'.'); }
+function dimLen(m){ return Math.hypot(m.x2-m.x1,m.y2-m.y1); }
+function dimLabel(m){ if(m.text) return m.text; const sc=R().scale; if(m.ref&&m.refmm) return tr('Reference')+' '+m.refmm+' '+MM();
+  if(sc&&sc.pxmm>0) return (dimLen(m)/sc.pxmm).toFixed(dimLen(m)/sc.pxmm<100?1:0).replace('.',LANG==='ru'?',':'.')+' '+MM(); return ''; }
+const QL=[['Crack','Трещина'],['Wear','Износ'],['Pitting','Питтинг'],['Spalling','Выкрашивание'],['Scoring','Задиры'],['Corrosion','Коррозия'],['Leak','Течь'],['Heat discolouration','Цвета побежалости'],['Fretting','Фреттинг'],['Debris','Стружка'],['Missing part','Отсутствует деталь'],['Loose','Ослаблено'],['Broken','Сломано'],['Deformed','Деформация'],['OK','В норме']];
+function qlRow(){ return `<div class="muted" style="margin-top:6px">${tr('Quick labels')}</div><div class="row ql">${QL.map((q,i)=>`<button class="btn" data-ql="${i}">${esc(LANG==='ru'?q[1]:q[0])}</button>`).join('')}</div>`; }
+function dup(){ const m=R().marks[S.sel]; if(!m) return; push(); const c=JSON.parse(JSON.stringify(m)), d=base.width/40; move(c,d,d,'dst'); if(c.t==='mag'){ c.sx+=d; c.sy+=d; } delete c.ref; R().marks.push(c); S.sel=R().marks.length-1; syncPanel(); draw(); }
+function rOf(m){ return (m.t==='badge'?Math.max(26,base.width/42):Math.max(34,base.width/30))*(m.k||1); }
+function drawMark(g,m,img){
+  const lw=m.w*base.width/1000; g.strokeStyle=m.color; g.fillStyle=m.color; g.lineWidth=lw; g.lineCap='round'; g.lineJoin='round';
+  const shadow=()=>{ g.shadowColor='rgba(0,0,0,.55)'; g.shadowBlur=lw*1.2; };
+  g.save(); shadow();
+  switch(m.t){
+    case 'ring': g.beginPath(); g.ellipse(m.x+m.w2/2,m.y+m.h2/2,Math.abs(m.w2/2),Math.abs(m.h2/2),0,0,7); g.stroke(); break;
+    case 'rect': g.strokeRect(m.x,m.y,m.w2,m.h2); break;
+    case 'line': g.beginPath(); g.moveTo(m.x1,m.y1); g.lineTo(m.x2,m.y2); g.stroke(); break;
+    case 'arrow': g.beginPath(); g.moveTo(m.x1,m.y1); g.lineTo(m.x2-(m.x2-m.x1)*.02,m.y2-(m.y2-m.y1)*.02); g.stroke(); arrowHead(g,m.x1,m.y1,m.x2,m.y2,lw); break;
+    case 'pen': case 'hl': if(m.t==='hl'){ g.shadowBlur=0; g.globalAlpha=.38; g.lineWidth=lw*4; } g.beginPath(); m.pts.forEach((p,i)=>i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1])); g.stroke(); break;
+    case 'text': g.shadowBlur=0; m._bb=textBox(g,m,m.x,m.y); break;
+    case 'callout': { g.beginPath(); g.moveTo(m.x1,m.y1); g.lineTo(m.x2,m.y2); g.stroke(); g.beginPath(); g.arc(m.x1,m.y1,lw*1.6,0,7); g.fill(); g.shadowBlur=0; m._bb=textBox(g,m,m.x2,m.y2-(m.size||base.width/36)); break; }
+    case 'badge': { const r=rOf(m); g.beginPath(); g.arc(m.x,m.y,r,0,7); g.fill(); g.shadowBlur=0; g.fillStyle=(m.color==='#f2a900'||m.color==='#ffffff')?'#111':'#fff'; g.font=`700 ${r*1.1}px "IBM Plex Sans",Arial`; g.textAlign='center'; g.textBaseline='middle'; g.fillText(m.n,m.x,m.y+r*.05); break; }
+    case 'icon': { const r=rOf(m); g.beginPath(); g.arc(m.x,m.y,r,0,7); g.fillStyle='rgba(255,255,255,.92)'; g.fill(); g.stroke(); g.shadowBlur=0; g.fillStyle=m.color; g.font=`700 ${r*1.15}px "Segoe UI Symbol","Apple Color Emoji",Arial`; g.textAlign='center'; g.textBaseline='middle'; g.fillText(m.glyph,m.x,m.y+r*.06); break; }
+    case 'dim': { g.beginPath(); g.moveTo(m.x1,m.y1); g.lineTo(m.x2,m.y2); g.stroke(); const a=Math.atan2(m.y2-m.y1,m.x2-m.x1), t=lw*3; [[m.x1,m.y1],[m.x2,m.y2]].forEach(p=>{ g.beginPath(); g.moveTo(p[0]-Math.sin(a)*t,p[1]+Math.cos(a)*t); g.lineTo(p[0]+Math.sin(a)*t,p[1]-Math.cos(a)*t); g.stroke(); });
+      { const lab=dimLabel(m); if(lab){ g.shadowBlur=0; m._bb=textBox(g,Object.assign({},m,{text:lab,size:m.size||base.width/42}),(m.x1+m.x2)/2+t,(m.y1+m.y2)/2-t*3); } } break; }
+    case 'ang': { /* PX_TOOLS_V3 */ g.beginPath(); g.moveTo(m.x1,m.y1); g.lineTo(m.x0,m.y0); g.lineTo(m.x2,m.y2); g.stroke();
+      const a1=Math.atan2(m.y1-m.y0,m.x1-m.x0), a2=Math.atan2(m.y2-m.y0,m.x2-m.x0), rr=Math.min(Math.hypot(m.x1-m.x0,m.y1-m.y0),Math.hypot(m.x2-m.x0,m.y2-m.y0))*.35;
+      let d=a2-a1; while(d>Math.PI) d-=2*Math.PI; while(d<-Math.PI) d+=2*Math.PI; g.beginPath(); g.arc(m.x0,m.y0,rr,a1,a1+d,d<0); g.stroke();
+      const am=a1+d/2, lab=m.text||(fmtN(angDeg(m),1)+'°'); g.shadowBlur=0; m._bb=textBox(g,Object.assign({},m,{text:lab,size:m.size||base.width/42}),m.x0+Math.cos(am)*rr*1.25,m.y0+Math.sin(am)*rr*1.25); break; }
+    case 'diam': { const cx0=(m.x1+m.x2)/2, cy0=(m.y1+m.y2)/2, r=dimLen(m)/2; g.beginPath(); g.arc(cx0,cy0,r,0,7); g.stroke(); g.beginPath(); g.moveTo(m.x1,m.y1); g.lineTo(m.x2,m.y2); g.stroke();
+      arrowHead(g,m.x2,m.y2,m.x1,m.y1,lw); arrowHead(g,m.x1,m.y1,m.x2,m.y2,lw); const sc=R().scale, lab=m.text||('Ø '+(sc&&sc.pxmm>0?fmtN(dimLen(m)/sc.pxmm,dimLen(m)/sc.pxmm<100?1:0)+' '+MM():''));
+      g.shadowBlur=0; m._bb=textBox(g,Object.assign({},m,{text:lab.trim(),size:m.size||base.width/42}),cx0+r*.75,cy0-r*.9); break; }
+    case 'poly': case 'area': case 'rad3': { const P=m.pts||[]; if(!P.length) break; g.beginPath(); P.forEach((q,i)=>i?g.lineTo(q[0],q[1]):g.moveTo(q[0],q[1]));
+      if(m.t==='area'&&P.length>2){ g.closePath(); g.save(); g.globalAlpha=.18; g.fill(); g.restore(); } g.stroke(); P.forEach(q=>{ g.beginPath(); g.arc(q[0],q[1],lw*1.3,0,7); g.fill(); });
+      let lab=m.text||''; if(!lab){ if(m.t==='poly') lab=mmTxt(plen(P,false))||tr('Set a reference to read mm');
+        else if(m.t==='area'){ const k=pxmm(); lab=k&&P.length>2?fmtN(parea(P)/k/k,0)+' '+MM()+'² · '+tr('perimeter')+' '+mmTxt(plen(P,true)):tr('Set a reference to read mm'); }
+        else { const C=P.length===3?circ3(P):null; if(C){ g.save(); g.setLineDash([lw*3,lw*2]); g.beginPath(); g.arc(C.x,C.y,C.r,0,7); g.stroke(); g.restore(); g.beginPath(); g.arc(C.x,C.y,lw*1.5,0,7); g.fill(); lab=pxmm()?'R '+mmTxt(C.r)+' · Ø '+mmTxt(C.r*2):tr('Set a reference to read mm'); } } }
+      if(lab){ const q=P[P.length-1]; g.shadowBlur=0; m._bb=textBox(g,Object.assign({},m,{text:lab,size:m.size||base.width/42}),q[0]+lw*3,q[1]+lw*2); } break; }
+    case 'cnt': { const r=Math.max(10,base.width/120)*(m.k||1); g.beginPath(); g.moveTo(m.x-r,m.y-r); g.lineTo(m.x+r,m.y+r); g.moveTo(m.x+r,m.y-r); g.lineTo(m.x-r,m.y+r); g.stroke();
+      const grp=R().marks.filter(x=>x.t==='cnt'&&x.g===m.g); if(grp[0]===m){ g.shadowBlur=0; m._bb=textBox(g,Object.assign({},m,{text:(m.text||tr('Count'))+': '+grp.length,size:m.size||base.width/42}),m.x+r*2.6,m.y-r*4.2); } break; }
+    case 'wear': { g.beginPath(); g.moveTo(m.x1,m.y1); g.lineTo(m.x2,m.y2); g.stroke(); const a=Math.atan2(m.y2-m.y1,m.x2-m.x1)+Math.PI/2, t=lw*6;
+      [[m.x1,m.y1],[m.x2,m.y2]].forEach(q=>{ g.beginPath(); g.moveTo(q[0]-Math.cos(a)*t,q[1]-Math.sin(a)*t); g.lineTo(q[0]+Math.cos(a)*t,q[1]+Math.sin(a)*t); g.stroke(); });
+      g.shadowBlur=0; m._bb=textBox(g,Object.assign({},m,{text:m.text||wearTxt(m),size:m.size||base.width/42}),(m.x1+m.x2)/2+t*1.2,(m.y1+m.y2)/2-t); break; }
+    case 'spot': { g.restore(); g.save(); const x=Math.min(m.x,m.x+m.w2),y=Math.min(m.y,m.y+m.h2),w=Math.abs(m.w2),h=Math.abs(m.h2); g.fillStyle='rgba(0,0,0,'+(m.dim||.55)+')';
+      g.beginPath(); g.rect(0,0,base.width,base.height); if(m.round) g.ellipse(x+w/2,y+h/2,w/2,h/2,0,0,7,true); else { g.moveTo(x,y); g.lineTo(x,y+h); g.lineTo(x+w,y+h); g.lineTo(x+w,y); g.closePath(); } g.fill('evenodd'); break; }
+    case 'scale': { const k=pxmm(), mm=m.mm||10, L=k?mm*k:base.width/8, h=Math.max(8,base.width/150), n=5; g.shadowBlur=0;
+      for(let i=0;i<n;i++){ g.fillStyle=i%2?'#ffffff':'#111111'; g.fillRect(m.x+i*L/n,m.y,L/n,h); } g.strokeStyle='#111'; g.lineWidth=Math.max(1,h/6); g.strokeRect(m.x,m.y,L,h);
+      m._bb=textBox(g,Object.assign({},m,{color:'#111111',text:k?mm+' '+MM():tr('Set a reference first'),size:m.size||base.width/50}),m.x,m.y+h*1.6); m._L=L; break; }
+    case 'blur': { g.restore(); g.save(); const bs=Math.max(12,Math.round(base.width/90)); const x=Math.round(Math.min(m.x,m.x+m.w2)),y=Math.round(Math.min(m.y,m.y+m.h2)),w=Math.round(Math.abs(m.w2)),h=Math.round(Math.abs(m.h2)); if(w<2||h<2) break;
+      const t=document.createElement('canvas'); t.width=Math.max(1,Math.round(w/bs)); t.height=Math.max(1,Math.round(h/bs)); t.getContext('2d').drawImage(img,x,y,w,h,0,0,t.width,t.height); g.imageSmoothingEnabled=false; g.drawImage(t,x,y,w,h); break; }
+    case 'mag': { const src=m.photo!=null?S.photos[m.photo]:null; g.shadowBlur=0;
+      g.beginPath(); g.arc(m.sx,m.sy,m.sr,0,7); g.stroke();
+      const ang=Math.atan2(m.dy-m.sy,m.dx-m.sx); g.beginPath(); g.moveTo(m.sx+Math.cos(ang)*m.sr,m.sy+Math.sin(ang)*m.sr); g.lineTo(m.dx-Math.cos(ang)*m.dr,m.dy-Math.sin(ang)*m.dr); g.stroke();
+      g.save(); g.beginPath(); g.arc(m.dx,m.dy,m.dr,0,7); g.clip(); g.fillStyle='#000'; g.fillRect(m.dx-m.dr,m.dy-m.dr,m.dr*2,m.dr*2);
+      if(m.closeUpImg){ const im=m.closeUpImg,sc=Math.max(m.dr*2/im.width,m.dr*2/im.height); g.drawImage(im,m.dx-im.width*sc/2,m.dy-im.height*sc/2,im.width*sc,im.height*sc); }
+       else if(src){ const im=src.img,sc=Math.max(m.dr*2/im.width,m.dr*2/im.height); g.drawImage(im,m.dx-im.width*sc/2,m.dy-im.height*sc/2,im.width*sc,im.height*sc); }
+      else g.drawImage(img,m.sx-m.sr,m.sy-m.sr,m.sr*2,m.sr*2,m.dx-m.dr,m.dy-m.dr,m.dr*2,m.dr*2);
+      g.restore(); shadow(); g.lineWidth=lw*1.3; g.beginPath(); g.arc(m.dx,m.dy,m.dr,0,7); g.stroke(); g.shadowBlur=0;
+      const tag=(src?'Detail photo':('×'+(m.dr/m.sr).toFixed(1))); g.font=`700 ${m.dr*.16}px "IBM Plex Mono",monospace`; g.textAlign='center'; const tw=g.measureText(tag).width+m.dr*.12;
+      g.fillStyle=m.color; g.beginPath(); g.roundRect(m.dx-tw/2,m.dy+m.dr-m.dr*.12,tw,m.dr*.22,6); g.fill(); g.fillStyle=(m.color==='#f2a900'||m.color==='#ffffff')?'#111':'#fff'; g.textBaseline='middle'; g.fillText(tag,m.dx,m.dy+m.dr-m.dr*.01); break; }
+    case 'img': { g.shadowBlur=lw*2; const im=S.photos[m.photo].img; g.fillStyle='#fff'; g.fillRect(m.x-lw,m.y-lw,m.w2+lw*2,m.h2+lw*2); g.shadowBlur=0; g.drawImage(im,m.x,m.y,m.w2,m.h2); g.strokeStyle=m.color; g.strokeRect(m.x,m.y,m.w2,m.h2); break; }
   }
-</style>
-</head>
-<body>
-  <hme-photo-editor id="editor"></hme-photo-editor>
+  g.restore();
+}
+function bbox(m){
+  switch(m.t){
+    case 'ring': case 'rect': case 'blur': case 'img': return {x:Math.min(m.x,m.x+m.w2),y:Math.min(m.y,m.y+m.h2),w:Math.abs(m.w2),h:Math.abs(m.h2)};
+    case 'ang': return {x:Math.min(m.x0,m.x1,m.x2),y:Math.min(m.y0,m.y1,m.y2),w:Math.max(m.x0,m.x1,m.x2)-Math.min(m.x0,m.x1,m.x2),h:Math.max(m.y0,m.y1,m.y2)-Math.min(m.y0,m.y1,m.y2)};
+    case 'poly': case 'area': case 'rad3': { const P=m.pts||[[0,0]], xs=P.map(q=>q[0]), ys=P.map(q=>q[1]); return {x:Math.min(...xs),y:Math.min(...ys),w:Math.max(...xs)-Math.min(...xs),h:Math.max(...ys)-Math.min(...ys)}; }
+    case 'cnt': { const r=Math.max(10,base.width/120)*(m.k||1)*1.5; return {x:m.x-r,y:m.y-r,w:r*2,h:r*2}; }
+    case 'wear': return {x:Math.min(m.x1,m.x2),y:Math.min(m.y1,m.y2),w:Math.abs(m.x2-m.x1),h:Math.abs(m.y2-m.y1)};
+    case 'spot': return {x:Math.min(m.x,m.x+m.w2),y:Math.min(m.y,m.y+m.h2),w:Math.abs(m.w2),h:Math.abs(m.h2)};
+    case 'scale': return {x:m.x,y:m.y,w:m._L||base.width/8,h:Math.max(8,base.width/150)*3};
+    case 'diam': { const r=dimLen(m)/2, cx0=(m.x1+m.x2)/2, cy0=(m.y1+m.y2)/2; return {x:cx0-r,y:cy0-r,w:r*2,h:r*2}; }
+    case 'line': case 'arrow': case 'dim': return {x:Math.min(m.x1,m.x2),y:Math.min(m.y1,m.y2),w:Math.abs(m.x2-m.x1),h:Math.abs(m.y2-m.y1)};
+    case 'pen': case 'hl': { const xs=m.pts.map(p=>p[0]),ys=m.pts.map(p=>p[1]); return {x:Math.min(...xs),y:Math.min(...ys),w:Math.max(...xs)-Math.min(...xs),h:Math.max(...ys)-Math.min(...ys)}; }
+    case 'text': return {x:m.x,y:m.y,w:(m._bb||{w:200}).w,h:(m._bb||{h:60}).h};
+    case 'callout': return {x:Math.min(m.x1,m.x2),y:Math.min(m.y1,m.y2-60),w:Math.abs(m.x2-m.x1)+(m._bb||{w:200}).w,h:Math.abs(m.y2-m.y1)+(m._bb||{h:60}).h};
+    case 'badge': case 'icon': { const r=rOf(m); return {x:m.x-r,y:m.y-r,w:r*2,h:r*2}; }
+    case 'mag': return {x:m.dx-m.dr,y:m.dy-m.dr,w:m.dr*2,h:m.dr*2};
+  }
+}
+function handles(m){ if(!m) return []; if(m.t==='poly'||m.t==='area'||m.t==='rad3') return (m.pts||[]).map((q,i)=>({k:'v'+i,x:q[0],y:q[1]})); if(m.t==='ang') return [{k:'p0',x:m.x0,y:m.y0},{k:'p1',x:m.x1,y:m.y1},{k:'p2',x:m.x2,y:m.y2}]; if('x1' in m) return [{k:'p1',x:m.x1,y:m.y1},{k:'p2',x:m.x2,y:m.y2}];
+  if(m.t==='mag') return [{k:'mag',x:m.dx+m.dr*.7071,y:m.dy+m.dr*.7071},{k:'src',x:m.sx+m.sr,y:m.sy}];
+  const b=bbox(m); return b?[{k:'br',x:b.x+b.w,y:b.y+b.h}]:[]; }
+function hitHandle(p){ const m=R().marks[S.sel]; if(!m) return null; const pad=Math.max(14,12/S.view.s*(devicePixelRatio||1)); return handles(m).find(h=>Math.abs(p.x-h.x)<=pad&&Math.abs(p.y-h.y)<=pad)||null; }
+function resizeTo(m,m0,k,p){
+  if(/^v\d+$/.test(k)){ const i=+k.slice(1); if(m.pts&&m.pts[i]) m.pts[i]=[p.x,p.y]; return; }
+  if(k==='p0'){ m.x0=p.x; m.y0=p.y; return; }
+  if(k==='p1'){ m.x1=p.x; m.y1=p.y; return; } if(k==='p2'){ m.x2=p.x; m.y2=p.y; return; }
+  if(k==='mag'){ const z=m0.dr/m0.sr; m.dr=Math.max(12,Math.hypot(p.x-m.dx,p.y-m.dy)/.99); m.sr=m.dr/z; return; }
+  if(k==='src'){ m.sr=Math.max(4,Math.hypot(p.x-m.sx,p.y-m.sy)); return; }
+  const b0=bbox(m0); if(!b0) return;
+  if(m.t==='cnt'){ const r0=Math.max(10,base.width/120)*(m0.k||1)*1.5; m.k=Math.max(.3,(m0.k||1)*Math.hypot(p.x-m.x,p.y-m.y)/1.414/r0); return; }
+  if(m.t==='scale'){ m.size=Math.max(10,(m0.size||base.width/50)*Math.max(.3,(p.y-b0.y)/Math.max(1,b0.h))); return; }
+  if(m.t==='ring'||m.t==='rect'||m.t==='blur'||m.t==='img'||m.t==='spot'){ const x0=Math.min(m0.x,m0.x+m0.w2), y0=Math.min(m0.y,m0.y+m0.h2); m.x=x0; m.y=y0; m.w2=Math.max(8,p.x-x0); m.h2=Math.max(8,p.y-y0);
+    if(m.t==='img') m.h2=m.w2*Math.abs(m0.h2/(m0.w2||1)); return; }
+  if(m.t==='text'||m.t==='callout'){ const fs0=m0.size||Math.max(28,base.width/36), q=Math.max(.2,(p.x-b0.x)/Math.max(1,b0.w)); m.size=Math.max(10,fs0*q); return; }
+  if(m.t==='badge'||m.t==='icon'){ const r0=rOf(m0), d=Math.hypot(p.x-m.x,p.y-m.y)/1.414; m.k=Math.max(.3,(m0.k||1)*d/r0); return; }
+  if(m.pts){ const qx=Math.max(.05,(p.x-b0.x)/Math.max(1,b0.w)), qy=Math.max(.05,(p.y-b0.y)/Math.max(1,b0.h)); m.pts=m0.pts.map(q=>[b0.x+(q[0]-b0.x)*qx,b0.y+(q[1]-b0.y)*qy]); }
+}
+function hit(p){ const ms=R().marks, pad=base.width/80; for(let i=ms.length-1;i>=0;i--){ const b=bbox(ms[i]); if(b&&p.x>=b.x-pad&&p.x<=b.x+b.w+pad&&p.y>=b.y-pad&&p.y<=b.y+b.h+pad) return i; if(ms[i].t==='mag'){ const m=ms[i]; if(Math.hypot(p.x-m.sx,p.y-m.sy)<m.sr+pad) return i; } } return -1; }
+function move(m,dx,dy,part){
+  if('x' in m&&m.t!=='mag'&&m.t!=='callout'){ m.x+=dx; m.y+=dy; }
+  if('x1' in m){ m.x1+=dx; m.y1+=dy; m.x2+=dx; m.y2+=dy; }
+  if('x0' in m){ m.x0+=dx; m.y0+=dy; }
+  if(m.pts) m.pts.forEach(p=>{ p[0]+=dx; p[1]+=dy; });
+  if(m.t==='mag'){ if(part==='src'){ m.sx+=dx; m.sy+=dy; } else { m.dx+=dx; m.dy+=dy; } }
+}
 
-  <script>
-    const editor = document.getElementById('editor');
+/* ---------- render ---------- */
+function renderTo(g,withCap,showSel){
+  const r=R(); g.drawImage(base,0,0);
+  if(!S.cmp) r.marks.forEach((m,i)=>{ drawMark(g,m,base); if(showSel&&i===S.sel){ const b=bbox(m); if(b){ g.save(); g.setLineDash([12,8]); g.strokeStyle='#f2a900'; g.lineWidth=base.width/500; g.strokeRect(b.x-8,b.y-8,b.w+16,b.h+16); g.restore(); }
+    const hs=Math.max(10,9/S.view.s*(devicePixelRatio||1)); g.save(); handles(m).forEach(h=>{ g.fillStyle='#fff'; g.strokeStyle='#16304F'; g.lineWidth=hs/4; g.fillRect(h.x-hs,h.y-hs,hs*2,hs*2); g.strokeRect(h.x-hs,h.y-hs,hs*2,hs*2); }); g.restore(); } });
+}
+function draw(){ if(!P()) return; if(AI&&AI.res&&AI.for!==S.cur){ AI.res=null; aiShow(); } if(typeof LC!=='undefined'&&LC.res&&LC.for!==S.cur){ LC.res=null; lcShow(); }   /* PXAI_LOCAL_V1 */   /* PXAI_V1: a scan belongs to the photo it was made on */
+  const g=cx, W=cv.width, H=cv.height; g.setTransform(1,0,0,1,0,0); g.clearRect(0,0,W,H);
+  g.setTransform(S.view.s,0,0,S.view.s,S.view.x,S.view.y);
+  const r=R(), c=r.crop||{x:0,y:0,w:base.width,h:base.height};
+  g.save(); if(r.crop&&S.tool!=='crop'){ g.beginPath(); g.rect(c.x,c.y,c.w,c.h); g.clip(); }
+  renderTo(g,false,true); if(!S.cmp) drawStamp(g,c); g.restore();
+  if(S.tool==='crop'){ const k=S.crop||r.crop; g.fillStyle='rgba(0,0,0,.55)'; if(k){ g.beginPath(); g.rect(0,0,base.width,base.height); g.rect(k.x,k.y+k.h,k.w,-k.h); g.fill('evenodd'); g.strokeStyle='#f2a900'; g.lineWidth=3/S.view.s; g.strokeRect(k.x,k.y,k.w,k.h);
+      g.lineWidth=1/S.view.s; g.strokeStyle='rgba(255,255,255,.6)'; for(let i=1;i<3;i++){ g.beginPath(); g.moveTo(k.x+k.w*i/3,k.y); g.lineTo(k.x+k.w*i/3,k.y+k.h); g.moveTo(k.x,k.y+k.h*i/3); g.lineTo(k.x+k.w,k.y+k.h*i/3); g.stroke(); } } }
+  else if(!S.cmp){ /* caption preview, as it prints */ const cp=r.cap; if(capOn&&(cp.en||cp.ru)){ const y=c.y+c.h, h=capH(); g.fillStyle='#ffffff'; g.fillRect(c.x,y,c.w,h); g.fillStyle='#16212a'; const fs=h*.3; g.font=`600 ${fs}px "IBM Plex Sans",Arial`; g.textBaseline='top'; g.fillText(cp.en||'',c.x+fs*.6,y+h*.12,c.w-fs*1.2); g.fillStyle='#5b6670'; g.font=`400 ${fs*.9}px "IBM Plex Sans",Arial`; g.fillText(cp.ru||'',c.x+fs*.6,y+h*.55,c.w-fs*1.2); } }
+  $('cmpTag').hidden=!S.cmp;
+}
 
-    // Sample initial asset pool to showcase FIR/RCA capabilities
-    window.addEventListener('DOMContentLoaded', () => {
-      editor.addPhoto({
-        url: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900"><rect fill="%23222" width="1200" height="900"/><circle cx="600" cy="450" r="280" fill="%233a3d45" stroke="%23555" stroke-width="12"/><text x="600" y="470" fill="%23888" font-size="32" text-anchor="middle" font-family="monospace">PRIMARY DRIVE GEAR</text></svg>',
-        title: 'Drive Gear Overview',
-        caption: 'Inspection of final drive assembly following vibration alarm',
-        selected: true
-      });
+/* ---------- the panel ---------- */
+const HINTS={ang:'Drag from the corner along one edge; then drag the round handles to set both lines. The angle is written in degrees.',diam:'Drag across the circle (a bore, a pin, a bearing). With a reference set it reads Ø in mm.',sel:'Tap a mark to select it, drag to move it. Delete removes it.',pan:'Drag to move around. Use + / − or the mouse wheel to zoom.',crop:'Drag the frame you want to keep. Ratio: ',ring:'Drag around the part you want to point out.',rect:'Drag a box around the area.',arrow:'Drag from the label side to the point.',line:'Drag a straight line.',pen:'Draw by hand.',hl:'Paint over a part to tint it, like a marker.',text:'Tap where the label goes, then type it in the panel.',callout:'Drag from the point to where the label sits.',badge:'Tap to drop numbers 1, 2, 3… in order.',icon:'Pick an icon in the panel, then tap where it goes.',dim:'Drag across the part, then write the reading (e.g. 81 % worn, 12.4 mm).',mag:'Drag a circle on the area to enlarge; the enlarged circle appears beside it. Move it, or put a close-up photo in it.',insert:'Pick a photo in the strip below to place it inside this one.',blur:'Drag over a face, a plate or a screen to hide it.',collage:'Tick 2, 3 or 4 photos in the strip, then choose a layout.',erase:'Drag over marks to rub them out. Undo brings them back.'};
+function setTool(t){
+  if(t==='rotl'||t==='rotr'||t==='flip'){ push(); const r=R(); if(t==='flip') r.flip=!r.flip; else r.rot+=t==='rotl'?-90:90; r.crop=null; r.marks=[]; toast(t==='flip'?'Flipped. Marks were cleared (they sit on the picture).':'Rotated. Marks were cleared (they sit on the picture).'); buildBase(); fit(); draw(); return; }
+  if(S.pp!=null&&t!==S.tool) polyEnd();
+  S.tool=t; S.crop=null; S.pick=null; if(t!=='sel') S.sel=-1; document.querySelectorAll('.tool').forEach(b=>b.classList.toggle('on',b.dataset.t===t));
+  if(t==='crop'){ S.crop=R().crop?Object.assign({},R().crop):null; }
+  $('hint').textContent=tr(HINTS[t]||MHINT[t]||'')+(t==='crop'?S.ratio:''); syncPanel(); draw();
+}
+function railBuild(){ const n=$('rail'); n.innerHTML=TOOLS.map(([g,ts])=>`<h3>${tr(g)}</h3><div class="tg">${ts.map(([k,l0,key,ic])=>{ const l=tr(l0); return `<button class="tool" data-t="${k}" title="${l} (${key})" aria-label="${l}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ic}</svg>${l}</button>`; }).join('')}</div>`).join('');
+  n.querySelectorAll('.tool').forEach(b=>b.onclick=()=>setTool(b.dataset.t)); }
+function swBuild(){ $('swatches').innerHTML=COLORS.map(([c,n])=>`<button class="sw${c===S.color?' on':''}" style="background:${c}" data-c="${c}" title="${tr(n)}" aria-label="${tr(n)}"></button>`).join('');
+  $('swatches').querySelectorAll('.sw').forEach(b=>b.onclick=()=>{ S.color=b.dataset.c; const m=R().marks[S.sel]; if(m){ push(); m.color=S.color; } swBuild(); draw(); });
+  $('swName').textContent=tr((COLORS.find(c=>c[0]===S.color)||[,''])[1]); }
+function measP(m){ /* PX_TOOLS_V3: fields of the measuring marks */
+  const num=(id,lab,v)=>`<label class="f">${tr(lab)}<input id="${id}" type="number" min="0" step="0.1" value="${v>0?v:''}"></label>`;
+  if(m.t==='wear') return num('wNew','New size, mm',m.newmm)+num('wLim','Wear limit, mm (optional)',m.limmm)+num('wNow','Size now, mm (empty = from the reference)',m.nowmm)+`<div class="muted" id="wTxt">${esc(wearTxt(m))}</div>`;
+  if(m.t==='scale') return `<div class="row">${[5,10,20,50,100].map(v=>`<button class="btn${(m.mm||10)===v?' on':''}" data-sbm="${v}">${v} mm</button>`).join('')}</div>`+(pxmm()?'':`<div class="muted">${tr('Set a reference first: Measure a known size, type it, Use as reference.')}</div>`);
+  if(m.t==='spot') return `<div class="row"><button class="btn${m.round?' on':''}" data-spr="1">${tr('Round')}</button><button class="btn${!m.round?' on':''}" data-spr="0">${tr('Square')}</button></div><label class="f">${tr('Darkness')}<input type="range" id="spDim" min="20" max="85" value="${Math.round((m.dim||.55)*100)}"></label>`;
+  if(m.t==='cnt') return `<div class="row"><button class="btn" id="cntNew">${tr('Start a new count')}</button></div>`;
+  if(m.t==='poly'||m.t==='area'||m.t==='rad3') return `<div class="muted">${tr('Drag a dot to move a point.')}</div>`; return ''; }
+function wireMeasP(b,m){ if(!m) return; const v=id=>{ const e=b.querySelector('#'+id); return e?parseFloat(String(e.value).replace(',','.'))||0:0; };
+  ['wNew','wLim','wNow'].forEach(id=>{ const e=b.querySelector('#'+id); if(e){ e.onfocus=()=>push(); e.oninput=()=>{ m.newmm=v('wNew'); m.limmm=v('wLim'); m.nowmm=v('wNow'); const wt=b.querySelector('#wTxt'); if(wt) wt.textContent=wearTxt(m); draw(); }; } });
+  b.querySelectorAll('[data-sbm]').forEach(x=>x.onclick=()=>{ push(); m.mm=+x.dataset.sbm; S.sbarMM=m.mm; syncPanel(); draw(); });
+  b.querySelectorAll('[data-spr]').forEach(x=>x.onclick=()=>{ push(); m.round=x.dataset.spr==='1'; syncPanel(); draw(); });
+  const sd=b.querySelector('#spDim'); if(sd){ sd.onpointerdown=()=>push(); sd.oninput=()=>{ m.dim=+sd.value/100; draw(); }; }
+  const cn=b.querySelector('#cntNew'); if(cn) cn.onclick=()=>{ S.cntG=(S.cntG||1)+1; setTool('cnt'); toast(tr('New count started: tap each one.')); }; }
+const MHINT={poly:'Tap point by point along the crack or edge. Double-tap or Finish to end.',area:'Tap around the area, point by point. Double-tap or Finish to close it.',rad3:'Tap three points on the arc or edge.',cnt:'Tap each one (pit, chip, crack). The total is written beside the first.',wear:'Drag the size left now (from the base to the worn face); then type the new size.',spot:'Drag over the part to keep bright; everything else is dimmed.',scale:'Tap where the scale bar goes.'};
+function syncPanel(){ if(!P()) return;
+  const m=R().marks[S.sel], b=$('selBody'), t=S.tool;
+  let h='';
+  if(t==='crop') h=`<div class="row">${['free','1:1','4:3','16:9'].map(r=>`<button class="btn${S.ratio===r?' on':''}" data-r="${r}">${r==='free'?tr('Free'):r}${r==='1:1'?' · report tile':''}</button>`).join('')}</div>
+    <div class="row" style="margin-top:8px"><button class="btn pri" id="cApply">${tr('Apply crop')}</button><button class="btn" id="cClear">${tr('No crop')}</button></div>`;
+  else if((t==='text'||t==='callout')&&!m) h=`<div class="muted">${tr('Pick a quick label, then tap the photo.')}</div>`+qlRow()+(S.qlabel?`<div class="muted">${tr('Next label')}: <b style="color:var(--ink)">${esc(S.qlabel)}</b></div>`:'');
+  else if(t==='dim'&&!m) h=`<div class="muted">${R().scale&&R().scale.pxmm>0?tr('Reference set: every measure reads in mm. Type a text to override one.'):tr('Draw a line across something of known size (a ruler, a bolt), type its length here and press Use as reference: every other measure then reads in mm.')}</div>`;
+  else if(t==='icon') h=`<div class="row">${ICONS.map(([g,n])=>`<button class="btn${S.iconGlyph===g?' on':''}" data-g="${g}" title="${tr(n)}">${g} ${tr(n)}</button>`).join('')}</div>`;
+  else if(t==='badge') h=`<div class="muted">${tr('Next number:')} <b style="color:var(--ink)">${S.badgeN}</b></div><button class="btn" id="bRestart" style="margin-top:6px">${tr('Start again at 1')}</button>`;
+  else if(t==='collage') h=collagePanel();
+  else if(t==='insert') h=`<div class="muted">Pick the photo to put inside this one in the strip below. It lands in the top-right corner; drag it with Select.</div>`;
+  if(m){
+    const txt=('text' in m)?`<label class="f">${tr('Text')}<textarea id="mText" rows="2">${esc(m.text||'')}</textarea></label>`:'';
+    const mag=m.t==='mag'?`<label class="f">Enlarge ×${(m.dr/m.sr).toFixed(1)}<input type="range" id="mZoom" min="1.5" max="6" step="0.1" value="${(m.dr/m.sr).toFixed(1)}"></label>
+      <div class="row" style="gap:4px">
+      <button class="btn" id="mPhoto">${tr(m.photo!=null||m.closeUpImg?'Change close-up':'Use close-up from strip')}</button>
+      <button class="btn" id="mUploadCloseUp">📸 ${tr('Upload file')}</button>
+      ${m.photo!=null||m.closeUpImg?'<button class="btn" id="mZoomBack">'+tr('Back to enlarged area')+'</button>':''}
+    </div>
+    <input type="file" id="magFileInput" accept="image/*" style="display:none">
+      <div class="muted">${m.photo!=null?'The circle shows a close-up you took; the ring still marks where it is.':'Drag the small ring to change what is enlarged; drag the big one to move it.'}</div>`:'';
+    const dimP=m.t==='dim'?`<label class="f">${tr('Real length of this line, mm')}<input id="mRef" type="number" min="0" step="0.1" value="${m.ref&&m.refmm?m.refmm:''}" placeholder="${tr('e.g. 50')}"></label><div class="row"><button class="btn" id="mRefSet">${tr('Use as reference')}</button></div><div class="muted">${R().scale&&R().scale.pxmm>0?tr('Reference set: every measure reads in mm. Type a text to override one.'):tr('Draw a line across something of known size (a ruler, a bolt), type its length here and press Use as reference: every other measure then reads in mm.')}</div>`:'';
+    const qlP=(m.t==='text'||m.t==='callout')?qlRow():'';
+    h+=`<div class="row" style="justify-content:space-between;margin-top:${h?'10px':'0'}"><b>${tr(NAMES[m.t])}</b><span class="row"><button class="btn" id="mDup" title="Ctrl+D">${tr('Duplicate')}</button><button class="btn" id="mDel" title="Delete">${tr('Delete')}</button></span></div>${txt}${qlP}${dimP}${mag}${measP(m)}`;
+  }
+  b.innerHTML=h||'<span class="muted">'+tr('Nothing selected. Pick the arrow tool and tap a mark.')+'</span>';
+  b.querySelectorAll('[data-r]').forEach(x=>x.onclick=()=>{ S.ratio=x.dataset.r; syncPanel(); $('hint').textContent=tr(HINTS.crop)+S.ratio; });
+  if(!m) b.querySelectorAll('[data-ql]').forEach(x=>x.onclick=()=>{ const q=QL[+x.dataset.ql]; S.qlabel=LANG==='ru'?q[1]:q[0]; syncPanel(); });
+  b.querySelectorAll('[data-g]').forEach(x=>x.onclick=()=>{ S.iconGlyph=x.dataset.g; syncPanel(); });
+  const on=(id,f)=>{ const e=b.querySelector('#'+id); if(e) e.onclick=f; };
+  on('cApply',()=>{ if(!S.crop||S.crop.w<20) return; push(); R().crop=normRect(S.crop); setTool('sel'); fit(); draw(); toast('Cropped. The full photo is kept; Reset brings it back.'); });
+  on('cClear',()=>{ push(); R().crop=null; S.crop=null; fit(); draw(); });
+  on('bRestart',()=>{ S.badgeN=1; syncPanel(); });
+  on('mDel',delSel); on('mDup',dup);
+  on('mRefSet',()=>{ const v=parseFloat(String(($('mRef')||{}).value||'').replace(',','.')); if(!(v>0)||!m||m.t!=='dim') { toast(tr('Type the real length in mm first.')); return; } push(); R().marks.forEach(x=>{ if(x.t==='dim') delete x.ref; }); m.ref=1; m.refmm=v; delete m.text; R().scale={pxmm:dimLen(m)/v}; syncPanel(); draw(); toast(tr('Reference set: every measure reads in mm.')); });
+  b.querySelectorAll('[data-ql]').forEach(x=>x.onclick=()=>{ const q=QL[+x.dataset.ql]; if(m&&('text' in m)){ push(); m.text=LANG==='ru'?q[1]:q[0]; syncPanel(); draw(); } });
+  on('mPhoto',()=>{ S.pick='mag'; toast('Pick the close-up in the strip below.'); stripBuild(); });
+  on('mZoomBack',()=>{ push(); delete m.photo; delete m.closeUpImg; syncPanel(); draw(); });
+  const mUp = b.querySelector('#mUploadCloseUp');
+  const mF = b.querySelector('#magFileInput');
+  if(mUp && mF){
+    mUp.onclick = () => mF.click();
+    mF.onchange = e => {
+      const f = e.target.files[0];
+      if(!f) return;
+      const u = URL.createObjectURL(f), im = new Image();
+      im.onload = () => { push(); m.closeUpImg = im; syncPanel(); draw(); toast('Close-up photo loaded into magnifier lens.'); };
+      im.src = u;
+    };
+  }
+  wireMeasP(b,m);
+  const tx=b.querySelector('#mText'); if(tx){ tx.onfocus=()=>push(); tx.oninput=()=>{ m.text=tx.value; draw(); layers(); }; }
+  const zr=b.querySelector('#mZoom'); if(zr){ zr.onpointerdown=()=>push(); zr.oninput=()=>{ m.sr=m.dr/Number(zr.value); draw(); }; }
+  b.querySelectorAll('[data-lay]').forEach(x=>x.onclick=()=>doCollage(x.dataset.lay));
+  const fitBtn=b.querySelector('#bColFit'); if(fitBtn) fitBtn.onclick=()=>{ S.collageFit=!S.collageFit; syncPanel(); };
+  const a=R().adj; $('aB').value=a.b; $('aC').value=a.c; $('aS').value=a.s; $('aSat').value=a.sat||0; $('aExp').value=a.exp||0; $('aTmp').value=a.tmp||0;
+  const st=R().stamp||{}; $('stOn').checked=!!st.on; $('stTx').value=st.text!=null?st.text:stampDefault(); $('capEn').value=R().cap.en; $('capRu').value=R().cap.ru;
+  const cb=$('colBar'); if(cb){ cb.hidden=S.tool!=='collage'&&S.tool!=='crop'&&!MHINT[S.tool];
+    if(S.tool==='collage'){ cb.innerHTML=collagePanel(); cb.querySelectorAll('[data-lay]').forEach(x=>x.onclick=()=>doCollage(x.dataset.lay)); }
+    else if(MHINT[S.tool]){ cb.innerHTML=`<span>${esc(tr(MHINT[S.tool]))}</span>`+((S.tool==='poly'||S.tool==='area')?`<button class="btn pri" data-pf="1">✓ ${tr('Finish')}</button>`:'')
+        +(['poly','area','rad3','wear','scale'].includes(S.tool)?`<span class="muted" style="color:#f2a900">${pxmm()?'':esc(tr('No reference yet: Measure (D) a known size, type it, Use as reference.'))}</span>`:'')+(S.tool==='scale'?[5,10,20,50,100].map(v=>`<button class="btn${(S.sbarMM||10)===v?' on':''}" data-sb="${v}">${v} mm</button>`).join(''):'');
+      const pf=cb.querySelector('[data-pf]'); if(pf) pf.onclick=()=>polyEnd(); cb.querySelectorAll('[data-sb]').forEach(x=>x.onclick=()=>{ S.sbarMM=+x.dataset.sb; syncPanel(); }); }
+    else if(S.tool==='crop'){ /* PX_TOOLS_V3: the ratio, Apply and No crop on the photo */
+      cb.innerHTML=`<b>${tr('Crop')}</b>`+['free','1:1','4:3','16:9'].map(r=>`<button class="btn${S.ratio===r?' on':''}" data-cr="${r}">${r==='free'?tr('Free'):r}</button>`).join('')+`<button class="btn pri" data-ca="1">✓ ${tr('Apply crop')}</button><button class="btn" data-cn="1">${tr('No crop')}</button>`;
+      cb.querySelectorAll('[data-cr]').forEach(x=>x.onclick=()=>{ S.ratio=x.dataset.cr; syncPanel(); $('hint').textContent=tr(HINTS.crop)+S.ratio; });
+      cb.querySelector('[data-ca]').onclick=()=>{ const a=$('cApply'); if(a) a.click(); }; cb.querySelector('[data-cn]').onclick=()=>{ const a=$('cClear'); if(a) a.click(); }; } }
+  layers(); clearTimeout(sgT); sgT=setTimeout(()=>{ try{ suggest(); }catch(e){} },120);
+}
+let sgT;
+const NAMES={poly:'Polyline length',area:'Area',rad3:'3-point radius',cnt:'Count',wear:'Wear %',spot:'Spotlight',scale:'Scale bar',ang:'Angle',diam:'Diameter',erase:'Eraser',ring:'Circle',rect:'Box',arrow:'Arrow',line:'Line',pen:'Pen',hl:'Highlight',text:'Text',callout:'Callout',badge:'Number',icon:'Icon',dim:'Measure',mag:'Magnify',img:'Inserted photo',blur:'Blur'};
+function esc(s){ return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function layers(){ const ms=R().marks; $('layers').innerHTML=ms.length?ms.map((m,i)=>`<div class="layer${i===S.sel?' on':''}" data-i="${i}"><i style="background:${m.color}"></i>${tr(NAMES[m.t])}${m.text?' · '+esc(String(m.text).slice(0,18)):m.n?' '+m.n:m.glyph?' '+m.glyph:''}<button class="x" data-x="${i}" aria-label="Delete">✕</button></div>`).reverse().join(''):'<span class="muted">'+tr('No marks yet.')+'</span>';
+  $('layers').querySelectorAll('.layer').forEach(l=>l.onclick=e=>{ if(e.target.dataset.x!=null){ S.sel=+e.target.dataset.x; delSel(); return; } S.sel=+l.dataset.i; setTool('sel'); }); }
+function eraseAt(p){ const i=hit(p); if(i>=0){ R().marks.splice(i,1); S.sel=-1; layers(); draw(); } }
+function delSel(){ if(S.sel<0) return; push(); R().marks.splice(S.sel,1); S.sel=-1; syncPanel(); draw(); }
+function normRect(k){ return {x:Math.round(Math.min(k.x,k.x+k.w)),y:Math.round(Math.min(k.y,k.y+k.h)),w:Math.round(Math.abs(k.w)),h:Math.round(Math.abs(k.h))}; }
 
-      editor.addPhoto({
-        url: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900"><rect fill="%231a1a1a" width="1200" height="900"/><path d="M 300 600 Q 600 200 900 600" stroke="%23ff5500" stroke-width="16" fill="none"/><text x="600" y="300" fill="%23ffaa00" font-size="28" text-anchor="middle" font-family="monospace">CLOSE-UP: FLANK CRACK</text></svg>',
-        title: 'Tooth #14 Root Crack',
-        caption: 'Close-up macro detail of crack initiation site at tooth root fillet',
-        selected: true
-      });
+/* ---------- collage ---------- */
+let collagePick=[];
+if(S.collageFit==null) S.collageFit = true;
+function collagePanel(){ return `<div class="muted">Tick photos in the strip (${collagePick.length} picked). The collage becomes a new photo you can mark like any other.</div>
+  <div class="row" style="margin-top:6px;gap:6px">
+    ${[['2h','2 side by side'],['2v','2 stacked'],['3','1 large + 2'],['4','2 × 2']].map(([k,l])=>`<button class="btn" data-lay="${k}"${collagePick.length<(k==='4'?4:k==='3'?3:2)?' disabled':''}>${tr(l)}</button>`).join('')}
+    <button class="btn ${S.collageFit?'on':''}" id="bColFit" title="Fit (contain) vs Fill (cover)">${S.collageFit?'Fit (contain)':'Fill (cover)'}</button>
+  </div>`; }
+function doCollage(k){
+  const ims=collagePick.map(i=>S.photos[i].img), W=2400, gap=16; let H, cells;
+  if(k==='2h'){ H=900; cells=[[0,0,(W-gap)/2,H],[(W+gap)/2,0,(W-gap)/2,H]]; }
+  else if(k==='2v'){ H=1800; cells=[[0,0,W,(H-gap)/2],[0,(H+gap)/2,W,(H-gap)/2]]; }
+  else if(k==='3'){ H=1200; cells=[[0,0,W*0.62,H],[W*0.62+gap,0,W*0.38-gap,(H-gap)/2],[W*0.62+gap,(H+gap)/2,W*0.38-gap,(H-gap)/2]]; }
+  else { H=1800; const w=(W-gap)/2,h=(H-gap)/2; cells=[[0,0,w,h],[w+gap,0,w,h],[0,h+gap,w,h],[w+gap,h+gap,w,h]]; }
+  const c=document.createElement('canvas'); c.width=W; c.height=H; const g=c.getContext('2d'); g.fillStyle='#fff'; g.fillRect(0,0,W,H);
+  cells.forEach((cl,i)=>{ const im=ims[i]; if(!im) return; const [x,y,w,h]=cl, s=S.collageFit ? Math.min(w/im.width,h/im.height) : Math.max(w/im.width,h/im.height); g.save(); g.beginPath(); g.rect(x,y,w,h); g.clip(); g.drawImage(im,x+(w-im.width*s)/2,y+(h-im.height*s)/2,im.width*s,im.height*s); g.restore();
+    g.fillStyle='#16304F'; g.fillRect(x+14,y+14,64,64); g.fillStyle='#fff'; g.font='700 40px "IBM Plex Sans",Arial'; g.textAlign='center'; g.textBaseline='middle'; g.fillText(String.fromCharCode(65+i),x+46,y+48); });
+  addPhoto(c,'Collage of '+collagePick.length+' photos'); collagePick=[]; selectPhoto(S.photos.length-1); toast('Collage made as a new photo (A, B, C… mark each part). The photos it uses are kept.');
+}
 
-      editor.addEventListener('save', (e) => {
-        console.log('Saved flattened image and metadata recipe:', e.detail);
-        alert('Photo saved successfully! Recipe schema: ' + e.detail.metadata.schema);
-      });
+/* ---------- strip ---------- */
+function thumb(p){ if(!p._t){ const c=document.createElement('canvas'), s=200/p.img.width; c.width=200; c.height=Math.round(p.img.height*s); c.getContext('2d').drawImage(p.img,0,0,c.width,c.height); p._t=c.toDataURL('image/jpeg',.7); } return p._t; }
+function stripBuild(){
+  const s=$('strip');
+  // Ensure report status on all photos
+  S.photos.forEach((p, idx)=>{ if(p.inReport==null) p.inReport = idx < 6; });
+  const repList = S.photos.filter(p=>p.inReport);
+  const repCount = repList.length;
+  
+  let h = `<div style="display:flex;align-items:center;justify-content:space-between;width:100%;margin-bottom:6px">
+    <div style="display:flex;align-items:center;gap:8px">
+      <h3 style="margin:0">${tr('Photos')}</h3>
+      <span style="font-family:var(--mono);font-size:11px;font-weight:600;padding:2px 8px;border-radius:4px;background:${repCount>6?'#c62828':'#16304F'};color:#fff">
+        REPORT: ${repCount} / 6 ${repCount>6?'(max 6 in print)':''}
+      </span>
+    </div>
+    <div style="display:flex;gap:4px">
+      <button class="btn sm" id="bSelAll">${tr('Select all')}</button>
+      <button class="btn sm" id="bClearRep">${tr('Clear')}</button>
+    </div>
+  </div>
+  <div style="display:flex;gap:8px;align-items:center;overflow-x:auto;padding-bottom:4px;width:100%">`;
 
-      editor.addEventListener('cancel', () => {
-        if (window.history.length > 1) {
-          window.history.back();
-        } else {
-          window.close();
-        }
-      });
+  h += S.photos.map((p,i)=>{
+    const repIdx = repList.indexOf(p);
+    const inRep = repIdx >= 0;
+    return `<div class="th-card ${i===S.cur?'on':''}" style="flex:none;width:124px;border:1px solid ${i===S.cur?'var(--navy-2)':'var(--border)'};border-radius:8px;padding:4px;background:var(--surface);display:flex;flex-direction:column;gap:4px;position:relative">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <label style="font-size:10px;font-weight:600;display:flex;align-items:center;gap:3px;cursor:pointer">
+          <input type="checkbox" class="th-inc" data-i="${i}" ${inRep?'checked':''}>
+          <span style="color:${inRep?'#2e7d32':'var(--muted)'}">${inRep?`✓ REP ${repIdx+1}`:'POOL'}</span>
+        </label>
+        <div style="display:flex;gap:2px">
+          ${inRep && repIdx>0 ? `<button class="th-nav" data-mv="${i}" data-dir="-1" title="Move earlier" style="padding:0 3px;font-size:10px;cursor:pointer">◀</button>`:''}
+          ${inRep && repIdx<repList.length-1 ? `<button class="th-nav" data-mv="${i}" data-dir="1" title="Move later" style="padding:0 3px;font-size:10px;cursor:pointer">▶</button>`:''}
+        </div>
+      </div>
+      <div class="th ${i===S.cur?'on':''}" data-i="${i}" style="width:100%;height:68px;border-radius:4px;overflow:hidden;cursor:pointer;position:relative">
+        <img src="${thumb(p)}" style="width:100%;height:100%;object-fit:cover" alt="">
+        ${p.versions&&p.versions.length?`<span style="position:absolute;bottom:2px;right:2px;background:rgba(0,0,0,0.6);color:#fff;font-size:9px;padding:1px 4px;border-radius:2px">v${p.versions.length}</span>`:''}
+      </div>
+      <input type="text" class="th-title" data-i="${i}" value="${esc(p.name)}" placeholder="Photo title" style="width:100%;font-size:10px;padding:2px 4px;border:1px solid var(--border);border-radius:4px;background:var(--surface-2)">
+    </div>`;
+  }).join('');
+
+  h += `<label class="addph" for="file" style="flex:none;width:104px;height:98px">${tr('+ Add photo')}<br>${tr('from this device')}</label></div>`;
+  s.innerHTML = h;
+
+  // Handlers
+  s.querySelectorAll('.th').forEach(b=>b.onclick=()=>{
+    const i=+b.dataset.i;
+    if(S.pick==='mag'){ const m=R().marks[S.sel]; if(m){ push(); m.photo=i; } S.pick=null; stripBuild(); syncPanel(); draw(); return; }
+    if(S.tool==='insert'){ if(i===S.cur){ toast('Pick a different photo to insert.'); return; } push(); const im=S.photos[i].img, w=base.width*.32, h=w*im.height/im.width; R().marks.push({t:'img',photo:i,x:base.width-w-base.width*.03,y:base.height*.04,w2:w,h2:h,color:S.color,w:S.w}); S.sel=R().marks.length-1; setTool('sel'); stripBuild(); return; }
+    if(S.tool==='collage'){ const k=collagePick.indexOf(i); if(k>=0) collagePick.splice(k,1); else if(collagePick.length<4) collagePick.push(i); stripBuild(); syncPanel(); return; }
+    selectPhoto(i);
+  });
+  s.querySelectorAll('.th-inc').forEach(cb=>cb.onchange=(e)=>{
+    e.stopPropagation();
+    const i = +cb.dataset.i;
+    S.photos[i].inReport = cb.checked;
+    stripBuild();
+  });
+  s.querySelectorAll('.th-nav').forEach(btn=>btn.onclick=(e)=>{
+    e.stopPropagation();
+    const i = +btn.dataset.i, dir = +btn.dataset.dir;
+    const targetIdx = i + dir;
+    if(targetIdx>=0 && targetIdx<S.photos.length){
+      const tmp = S.photos[i]; S.photos[i] = S.photos[targetIdx]; S.photos[targetIdx] = tmp;
+      if(S.cur===i) S.cur = targetIdx;
+      else if(S.cur===targetIdx) S.cur = i;
+      stripBuild();
+    }
+  });
+  s.querySelectorAll('.th-title').forEach(inp=>inp.onchange=(e)=>{
+    const i = +inp.dataset.i;
+    if(S.photos[i]){ S.photos[i].name = inp.value; if(i===S.cur) $('phName').textContent = inp.value; }
+  });
+  const bAll = s.querySelector('#bSelAll'); if(bAll) bAll.onclick=()=>{ S.photos.forEach((p,idx)=>p.inReport = idx<6); stripBuild(); };
+  const bClr = s.querySelector('#bClearRep'); if(bClr) bClr.onclick=()=>{ S.photos.forEach(p=>p.inReport = false); stripBuild(); };
+}
+function selectPhoto(i){ $('sgComp').value=P_comp(i);  S.cur=i; S.sel=-1; hist.u=[]; hist.r=[]; btns(); $('phName').textContent=P().name; buildBase(); fit(); stripBuild(); syncPanel(); draw(); }
+$('file').onchange=e=>{ [...e.target.files].forEach(f=>{ const u=URL.createObjectURL(f), im=new Image(); im.onload=()=>{ addPhoto(im,f.name); stripBuild(); if(S.photos.length===1) selectPhoto(0); }; im.src=u; }); e.target.value=''; };
+
+/* ---------- pointer ---------- */
+let drag=null;
+function newMark(t,p){ const m={t,color:S.color,w:S.w};
+  if(t==='ring'||t==='rect'||t==='blur') Object.assign(m,{x:p.x,y:p.y,w2:0,h2:0});
+  else if(t==='ang') Object.assign(m,{x0:p.x,y0:p.y,x1:p.x,y1:p.y,x2:p.x,y2:p.y,text:''});
+  else if(t==='wear') Object.assign(m,{x1:p.x,y1:p.y,x2:p.x,y2:p.y,text:''});
+  else if(t==='spot') Object.assign(m,{x:p.x,y:p.y,w2:0,h2:0,dim:.55,round:true});
+  else if(t==='diam') Object.assign(m,{x1:p.x,y1:p.y,x2:p.x,y2:p.y,text:''});
+  else if(t==='arrow'||t==='line'||t==='dim') Object.assign(m,{x1:p.x,y1:p.y,x2:p.x,y2:p.y,text:t==='dim'?'':undefined});
+  else if(t==='callout') Object.assign(m,{x1:p.x,y1:p.y,x2:p.x,y2:p.y,text:S.qlabel||tr('Label')});
+  else if(t==='pen'||t==='hl') m.pts=[[p.x,p.y]];
+  else if(t==='mag') Object.assign(m,{sx:p.x,sy:p.y,sr:1,dx:p.x,dy:p.y,dr:1});
+  return m; }
+stage.addEventListener('pointerdown',e=>{
+  if(e.target.closest&&e.target.closest('.hud,.colbar,button,input,select')) return;   /* PX_TOOLS_V3: - / + / Fit and the bars are buttons, not a drag on the photo */
+  if(e.button===1||S.tool==='pan'||(e.button===0&&e.altKey)){ drag={pan:1,x:e.clientX,y:e.clientY,vx:S.view.x,vy:S.view.y}; stage.setPointerCapture(e.pointerId); return; }
+  const p=toImg(e), t=S.tool; stage.setPointerCapture(e.pointerId);
+  if(t!=='crop'&&t!=='pan'&&S.sel>=0){ const hh=hitHandle(p); if(hh){ push(); drag={resize:hh.k,m0:JSON.parse(JSON.stringify(R().marks[S.sel]))}; return; } }
+  if(t==='sel'){ const i=hit(p); S.sel=i; syncPanel(); draw(); if(i>=0){ const m=R().marks[i]; push(); const part=m.t==='mag'&&Math.hypot(p.x-m.sx,p.y-m.sy)<m.sr+base.width/80&&Math.hypot(p.x-m.dx,p.y-m.dy)>m.dr?'src':'dst'; drag={move:1,last:p,part}; } return; }
+  if(t==='crop'){ drag={crop:1,o:p}; S.crop={x:p.x,y:p.y,w:0,h:0}; return; }
+  if(t==='poly'||t==='area'||t==='rad3'){ const ms=R().marks; let m=S.pp!=null?ms[S.pp]:null;
+    if(!m||m.t!==t){ push(); m={t,pts:[[p.x,p.y],[p.x,p.y]],text:'',color:S.color,w:S.w}; ms.push(m); S.pp=ms.length-1; S.sel=-1; }
+    else { m.pts[m.pts.length-1]=[p.x,p.y]; if(t==='rad3'&&m.pts.length>=3){ polyEnd(); return; } m.pts.push([p.x,p.y]); } draw(); return; }
+  if(t==='cnt'){ push(); R().marks.push({t:'cnt',x:p.x,y:p.y,g:S.cntG||1,text:'',color:S.color,w:S.w}); draw(); layers(); return; }
+  if(t==='scale'){ push(); R().marks.push({t:'scale',x:p.x,y:p.y,mm:S.sbarMM||10,color:'#111111',w:S.w}); S.sel=R().marks.length-1; setTool('sel'); return; }
+  if(t==='text'){ push(); R().marks.push({t:'text',x:p.x,y:p.y,text:S.qlabel||tr('Label'),color:S.color,w:S.w}); S.sel=R().marks.length-1; setTool('sel'); setTimeout(()=>{ const x=$('mText'); if(x){ x.focus(); x.select(); } },0); return; }
+  if(t==='badge'){ push(); R().marks.push({t:'badge',x:p.x,y:p.y,n:S.badgeN++,color:S.color,w:S.w}); syncPanel(); draw(); return; }
+  if(t==='icon'){ push(); R().marks.push({t:'icon',x:p.x,y:p.y,glyph:S.iconGlyph,color:S.color,w:S.w}); syncPanel(); draw(); return; }
+  if(t==='erase'){ push(); drag={erase:1}; eraseAt(p); return; }
+  if(['ring','rect','arrow','line','pen','hl','callout','dim','ang','diam','wear','spot','blur','mag'].includes(t)){ push(); R().marks.push(newMark(t,p)); drag={make:1,o:p}; }
+});
+function polyEnd(){ const ms=R().marks, i=S.pp; S.pp=null; const m=ms[i]; if(!m||!m.pts){ syncPanel(); draw(); return; }
+  if(m.t!=='rad3') m.pts.pop(); m.pts=m.pts.filter((q,k,a)=>!k||Math.hypot(q[0]-a[k-1][0],q[1]-a[k-1][1])>2);
+  const need=m.t==='area'||m.t==='rad3'?3:2; if(m.pts.length<need){ ms.splice(i,1); hist.u.pop(); S.sel=-1; } else S.sel=i; syncPanel(); draw(); btns(); }
+stage.addEventListener('dblclick',e=>{ if(S.pp!=null){ e.preventDefault(); polyEnd(); } });
+stage.addEventListener('pointermove',e=>{ if(!drag&&S.pp!=null){ const m=R().marks[S.pp]; if(m&&m.pts){ m.pts[m.pts.length-1]=[toImg(e).x,toImg(e).y]; draw(); } return; } if(!drag) return;
+  if(drag.pan){ const dpr=cv.width/cv.getBoundingClientRect().width; S.view.x=drag.vx+(e.clientX-drag.x)*dpr; S.view.y=drag.vy+(e.clientY-drag.y)*dpr; draw(); return; }
+  const p=toImg(e);
+  if(drag.erase){ eraseAt(p); return; }
+  if(drag.resize){ resizeTo(R().marks[S.sel],drag.m0,drag.resize,p); draw(); return; }
+  if(drag.move){ const m=R().marks[S.sel]; move(m,p.x-drag.last.x,p.y-drag.last.y,drag.part); drag.last=p; draw(); return; }
+  if(drag.crop){ let w=p.x-drag.o.x,h=p.y-drag.o.y; const rr={'1:1':1,'4:3':4/3,'16:9':16/9}[S.ratio]; if(rr) h=Math.sign(h||1)*Math.abs(w)/rr; S.crop={x:drag.o.x,y:drag.o.y,w,h}; draw(); return; }
+  const m=R().marks[R().marks.length-1];
+  if(m.t==='ring'||m.t==='rect'||m.t==='blur'||m.t==='spot'){ m.w2=p.x-m.x; m.h2=p.y-m.y; if(m.t==='ring'&&e.shiftKey){ m.h2=Math.sign(m.h2||1)*Math.abs(m.w2); } }
+  else if(m.t==='ang'){ m.x1=p.x; m.y1=p.y; const L=Math.hypot(p.x-m.x0,p.y-m.y0), a=Math.atan2(p.y-m.y0,p.x-m.x0)-Math.PI/3; m.x2=m.x0+Math.cos(a)*L; m.y2=m.y0+Math.sin(a)*L; }
+  else if('x1' in m){ m.x2=p.x; m.y2=p.y; }
+  else if(m.pts) m.pts.push([p.x,p.y]);
+  else if(m.t==='mag'){ m.sr=Math.max(4,Math.hypot(p.x-m.sx,p.y-m.sy)); m.dr=m.sr*2.5; m.dx=m.sx+m.sr+m.dr+base.width*.03; m.dy=m.sy; if(m.dx+m.dr>base.width) m.dx=m.sx-m.sr-m.dr-base.width*.03; }
+  draw(); });
+stage.addEventListener('pointerup',()=>{ if(!drag) return;
+  if(drag.resize){ syncPanel(); }
+  if(drag.make){ const ms=R().marks, m=ms[ms.length-1], b=bbox(m); if(b&&b.w<6&&b.h<6&&m.t!=='mag'){ ms.pop(); hist.u.pop(); } else if(m.t==='mag'&&m.sr<6){ ms.pop(); hist.u.pop(); } else { S.sel=ms.length-1; if(m.t==='callout'||m.t==='dim'||m.t==='wear'){ setTool('sel'); setTimeout(()=>{ const x=$('mText'); if(x){ x.focus(); x.select(); } },0); } } syncPanel(); }
+  drag=null; draw(); btns(); });
+stage.addEventListener('wheel',e=>{ e.preventDefault(); const r=cv.getBoundingClientRect(),dpr=cv.width/r.width,mx=(e.clientX-r.left)*dpr,my=(e.clientY-r.top)*dpr,k=e.deltaY<0?1.12:1/1.12; S.view.x=mx-(mx-S.view.x)*k; S.view.y=my-(my-S.view.y)*k; S.view.s*=k; zp(); draw(); },{passive:false});
+function zoomBy(k){ const W=cv.width/2,H=cv.height/2; S.view.x=W-(W-S.view.x)*k; S.view.y=H-(H-S.view.y)*k; S.view.s*=k; zp(); draw(); }
+$('zIn').onclick=()=>zoomBy(1.25); $('zOut').onclick=()=>zoomBy(1/1.25); $('zFit').onclick=()=>{ fit(); draw(); };
+
+/* ---------- adjust, caption ---------- */
+['aB','aC','aS','aSat','aExp','aTmp'].forEach(id=>{ const e=$(id); e.onpointerdown=()=>push(); e.oninput=()=>{ const a=R().adj; a.b=+$('aB').value; a.c=+$('aC').value; a.s=+$('aS').value; a.sat=+$('aSat').value; a.exp=+$('aExp').value; a.tmp=+$('aTmp').value; buildBase(); draw(); }; });
+$('bAuto').onclick=()=>{ push(); const p=P(), c=document.createElement('canvas'); c.width=p.img.width; c.height=p.img.height; c.getContext('2d').drawImage(p.img,0,0); R().adj.auto=autoLevels(c); R().adj.s=Math.max(R().adj.s,15); buildBase(); syncPanel(); draw(); toast('Auto-corrected: levels, contrast and a little sharpening.'); };
+$('bAdjReset').onclick=()=>{ push(); R().adj={b:0,c:0,s:0,auto:null,sat:0,exp:0,tmp:0}; buildBase(); syncPanel(); draw(); };
+['capEn','capRu'].forEach(id=>{ const e=$(id); e.onfocus=()=>push(); e.oninput=()=>{ R().cap[id==='capEn'?'en':'ru']=e.value; fit(); draw(); }; });
+document.querySelectorAll('[data-w]').forEach(b=>b.onclick=()=>{ S.w=+b.dataset.w; document.querySelectorAll('[data-w]').forEach(x=>x.classList.toggle('on',x===b)); const m=R().marks[S.sel]; if(m){ push(); m.w=S.w; draw(); } });
+
+/* ---------- header buttons ---------- */
+$('bClear').onclick=()=>{ if(!R().marks.length) return; push(); R().marks=[]; S.sel=-1; S.badgeN=1; syncPanel(); draw(); toast('All marks cleared. Undo brings them back.'); };
+$('bUndo').onclick=undo; $('bKeys').onclick=keysHelp; $('bRedo').onclick=redo;
+const cmpOn=()=>{ S.cmp=true; const r=R(); r._adj=r.adj; r.adj={b:0,c:0,s:0,auto:null}; buildBase(); draw(); }, cmpOff=()=>{ if(!S.cmp) return; S.cmp=false; const r=R(); r.adj=r._adj; delete r._adj; buildBase(); draw(); };
+$('bCmp').onpointerdown=cmpOn; $('bCmp').onpointerup=cmpOff; $('bCmp').onpointerleave=cmpOff;
+$('bReset').onclick=()=>{ push(); P().rec=blankRecipe(); afterRec(); toast('Back to the original photo. Undo brings your edits back.'); };
+/* PX_TOOLS_V3 evidence stamp: unit / component / date / who, small in the corner of the saved photo */
+function dmyToday(){ const d=new Date(); return String(d.getDate()).padStart(2,'0')+'.'+String(d.getMonth()+1).padStart(2,'0')+'.'+d.getFullYear(); }
+function stampDefault(){ return [H&&H.stamp||'',P()?P().name:'',dmyToday()].filter(Boolean).filter((v,i,a)=>a.indexOf(v)===i).join(' · '); }
+function drawStamp(g,c){ const st=R().stamp; if(!st||!st.on) return; const t=(st.text!=null?st.text:stampDefault()).trim(); if(!t) return;
+  const fs=Math.max(14,c.w/60); g.save(); g.font=`600 ${fs}px "IBM Plex Mono",Consolas,monospace`; const w=g.measureText(t).width+fs; g.fillStyle='rgba(0,0,0,.62)'; g.fillRect(c.x+c.w-w-fs*.5,c.y+c.h-fs*1.9,w,fs*1.5); g.fillStyle='#fff'; g.textBaseline='middle'; g.fillText(t,c.x+c.w-w-fs*.5+fs*.5,c.y+c.h-fs*1.15); g.restore(); }
+function render(){
+  const r=R(), c=r.crop||{x:0,y:0,w:base.width,h:base.height}, ch=capOn&&(r.cap.en||r.cap.ru)?Math.round(c.h*.12):0, out=document.createElement('canvas'); out.width=c.w; out.height=c.h+ch;
+  const g=out.getContext('2d'), keep=S.sel; S.sel=-1; g.translate(-c.x,-c.y); renderTo(g,true,false); drawStamp(g,c); g.setTransform(1,0,0,1,0,0);
+  if(ch){ g.fillStyle='#fff'; g.fillRect(0,c.h,c.w,ch); const fs=ch*.3; g.fillStyle='#16212a'; g.font=`600 ${fs}px "IBM Plex Sans",Arial`; g.textBaseline='top'; g.fillText(r.cap.en,fs*.6,c.h+ch*.12,c.w-fs*1.2); g.fillStyle='#5b6670'; g.font=`400 ${fs*.9}px "IBM Plex Sans",Arial`; g.fillText(r.cap.ru,fs*.6,c.h+ch*.55,c.w-fs*1.2); }
+  S.sel=keep; return out; }
+function shrink(c,max){ const k=Math.min(1,max/Math.max(c.width,c.height)); if(k>=1) return c; const o=document.createElement('canvas'); o.width=Math.round(c.width*k); o.height=Math.round(c.height*k); const g=o.getContext('2d'); g.imageSmoothingQuality='high'; g.drawImage(c,0,0,o.width,o.height); return o; }
+function jpeg(c){ let q=.9, u=c.toDataURL('image/jpeg',q); while(u.length>7.6e6&&q>.5){ q-=.1; u=c.toDataURL('image/jpeg',q); } return u; }
+/* the steps of the edit, so the photo opens again with its marks: numbers rounded, long pen strokes thinned, other photos by their address only */
+function recipeOut(){ const r=JSON.parse(JSON.stringify(R(),(k,v)=>k.charAt(0)==='_'?undefined:(typeof v==='number'?Math.round(v*10)/10:v))), refs=[], map={};
+  r.marks.forEach(m=>{ if(m.pts&&m.pts.length>120){ const st=Math.ceil(m.pts.length/120); m.pts=m.pts.filter((p,i)=>i%st===0||i===m.pts.length-1); }
+    if(m.photo!=null){ const p=S.photos[m.photo]; if(!p||!p.src||/^(data|blob):/.test(p.src)){ delete m.photo; if(m.t==='img') m.gone=1; return; } if(!(p.src in map)){ map[p.src]=refs.length; refs.push({src:p.src,name:p.name}); } m.photo=map[p.src]; } });
+  r.marks=r.marks.filter(m=>!m.gone); const o={v:1,cap:capOn?1:0,rec:r,refs}; return JSON.stringify(o).length<=7600?o:{v:1,cap:capOn?1:0,rec:Object.assign(r,{marks:[]}),refs:[],cut:1}; }
+$('bSave').onclick=()=>{
+  if(H){ const b=$('bSave'); b.disabled=true; b.textContent=tr('Saving…'); let out; try{ out=jpeg(shrink(render(),2400)); }catch(e){ b.disabled=false; b.textContent=tr('Save as new version'); toast(tr('Could not save: ')+(e.message||e)); return; }
+    const repPhotos = S.photos.filter(p=>p.inReport);
+    const pDoc2 = {
+      version: 2,
+      schema: "photoDocument:2",
+      report: {
+        included: repPhotos.map(p=>p.name),
+        count: repPhotos.length,
+        max: 6
+      },
+      photos: S.photos.map((p, idx)=>({
+        name: p.name,
+        inReport: !!p.inReport,
+        order: idx + 1,
+        versions: p.versions || []
+      })),
+      b64: out,
+      recipe: recipeOut(),
+      caption: { en: R().cap.en || '', ru: R().cap.ru || '' }
+    };
+    Promise.resolve().then(()=>H.onSave(pDoc2)).then(()=>{ H.close({saved:1}); },e=>{ b.disabled=false; b.textContent=tr('Save as new version'); toast(tr('Could not save: ')+((e&&e.message)||e||'')); }); return; }
+  const r=R(), c=r.crop||{x:0,y:0,w:base.width,h:base.height}, ch=(r.cap.en||r.cap.ru)?Math.round(c.h*.12):0, out=document.createElement('canvas'); out.width=c.w; out.height=c.h+ch;
+  const g=out.getContext('2d'), keep=S.sel; S.sel=-1; g.translate(-c.x,-c.y); renderTo(g,true,false); drawStamp(g,c); g.setTransform(1,0,0,1,0,0);
+  if(ch){ g.fillStyle='#fff'; g.fillRect(0,c.h,c.w,ch); const fs=ch*.3; g.fillStyle='#16212a'; g.font=`600 ${fs}px "IBM Plex Sans",Arial`; g.textBaseline='top'; g.fillText(r.cap.en,fs*.6,c.h+ch*.12,c.w-fs*1.2); g.fillStyle='#5b6670'; g.font=`400 ${fs*.9}px "IBM Plex Sans",Arial`; g.fillText(r.cap.ru,fs*.6,c.h+ch*.55,c.w-fs*1.2); }
+  S.sel=keep; const url=out.toDataURL('image/jpeg',.9), v={at:new Date(),recipe:JSON.parse(JSON.stringify(r)),url}; P().versions.push(v); stripBuild();
+  const sh=document.createElement('div'); sh.className='sheet'; sh.innerHTML=`<div class="box" role="dialog" aria-label="Saved version"><div class="row" style="justify-content:space-between"><b>Saved as version ${P().versions.length} of ${esc(P().name)}</b><button class="btn" id="shClose">Close</button></div>
+    <img src="${url}" alt="Edited photo"><div class="muted">The original photo is kept unchanged. The edit is saved twice: as this picture (what reports print) and as its steps (so anyone can open it again and change a mark). ${out.width} × ${out.height} px · ${r.marks.length} mark${r.marks.length===1?'':'s'}${r.crop?' · cropped':''}${r.adj.auto?' · auto-corrected':''}${ch?' · caption EN / RU':''}.</div></div>`;
+  document.body.appendChild(sh); sh.querySelector('#shClose').onclick=()=>sh.remove(); sh.onclick=e=>{ if(e.target===sh) sh.remove(); };
+};
+
+/* ---------- keys ---------- */
+
+/* Drag-and-drop file upload on canvas and bottom strip */
+['stage','strip'].forEach(id=>{
+  const el = $(id); if(!el) return;
+  el.addEventListener('dragover', e=>{ e.preventDefault(); e.dataTransfer.dropEffect='copy'; });
+  el.addEventListener('drop', e=>{
+    e.preventDefault();
+    const files = [...e.dataTransfer.files].filter(f=>f.type.startsWith('image/'));
+    if(!files.length) return;
+    files.forEach(f=>{
+      const u = URL.createObjectURL(f), im = new Image();
+      im.onload = ()=>{ addPhoto(im, f.name); stripBuild(); if(S.photos.length===1) selectPhoto(0); toast('Photo uploaded: ' + f.name); };
+      im.src = u;
     });
-  </script>
-</body>
-</html>
+  });
+});
+
+addEventListener('keydown',e=>{ if(/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)) return;
+  if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='z'){ e.preventDefault(); e.shiftKey?redo():undo(); return; }
+  if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='y'){ e.preventDefault(); redo(); return; }
+  if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='d'){ e.preventDefault(); dup(); return; }
+  if(e.key.startsWith('Arrow')&&S.sel>=0){ e.preventDefault(); const st=(e.shiftKey?10:1)*Math.max(1,base.width/800), m=R().marks[S.sel]; if(!e.repeat) push();
+    move(m,e.key==='ArrowLeft'?-st:e.key==='ArrowRight'?st:0,e.key==='ArrowUp'?-st:e.key==='ArrowDown'?st:0,'dst'); if(m.t==='mag'&&e.altKey){} draw(); return; }
+  if(e.key==='+'||e.key==='='){ zoomBy(1.25); return; } if(e.key==='-'||e.key==='_'){ zoomBy(1/1.25); return; } if(e.key==='0'){ fit(); draw(); return; }
+  if(e.key==='?'){ keysHelp(); return; }
+  if(e.key==='Delete'||e.key==='Backspace'){ delSel(); return; }
+  if(e.key==='Enter'&&S.pp!=null){ polyEnd(); return; }
+  if(e.key==='Escape'){ if(S.pp!=null) polyEnd(); S.sel=-1; setTool('sel'); return; }
+  const t=KEYS[e.key.toLowerCase()]; if(t&&!e.ctrlKey&&!e.metaKey) setTool(t); });
+
+function keysHelp(){ const old=document.querySelector('.sheet.keys'); if(old){ old.remove(); return; } const rows=[['V H','Select · pan'],['C [ ] F','Crop · rotate · flip'],['O R A L P G X','Circle · box · arrow · line · pen · highlight · eraser'],['T K N I D Q U','Text · callout · number · icon · measure · angle · diameter'],['M E B J','Magnify · insert photo · blur · collage'],['Ctrl+Z  Ctrl+Y','Undo · redo'],['Ctrl+D','Duplicate the selected mark'],['← ↑ → ↓  (Shift ×10)','Nudge the selected mark'],['Delete','Delete the selected mark'],['+  −  0','Zoom in · out · fit'],['Alt + drag, mouse wheel','Pan · zoom'],['?','This list']];
+  const sh=document.createElement('div'); sh.className='sheet keys'; sh.innerHTML=`<div class="box" role="dialog" aria-label="${tr('Keyboard shortcuts')}"><div class="row" style="justify-content:space-between"><b>${tr('Keyboard shortcuts')}</b><button class="btn" id="kClose">${tr('Close')}</button></div><table style="border-collapse:collapse;font-size:13px">${rows.map(r=>`<tr><td style="padding:4px 12px 4px 0;white-space:nowrap"><span class="kbd">${esc(r[0])}</span></td><td style="padding:4px 0">${esc(tr(r[1]))}</td></tr>`).join('')}</table></div>`;
+  document.body.appendChild(sh); sh.querySelector('#kClose').onclick=()=>sh.remove(); sh.onclick=e=>{ if(e.target===sh) sh.remove(); }; }
+let toastT; function toast(s){ let t=document.querySelector('.toast'); if(!t){ t=document.createElement('div'); t.className='toast'; t.setAttribute('role','status'); document.body.appendChild(t); } t.textContent=tr(s); clearTimeout(toastT); toastT=setTimeout(()=>t.remove(),3200); }
+addEventListener('resize',()=>{ fit(); draw(); });
+
+
+/* ---------- check & suggest: on this device, from the photo and from what it shows ---------- */
+const COMP={
+  general:{nr:'Общий осмотр детали',tr:['Чёткий фокус на месте дефекта','Размер или масштаб с помощью «Размер»','Подпись с кратким описанием'],n:'General inspection',cap:['{u} {p} — {d}','{u} {p} — {dr}'],d:['inspection detail','деталь при осмотре'],tips:['Sharp focus on defect area','Reference scale with Measure','Concise engineering caption']},
+  plug:{nr:'Магнитная пробка / мусор на фильтре',tr:['Вся поверхность пробки в кадре, стружка в фокусе', 'Крупный план самых крупных частиц (лупа или фото детали)', 'Что-то для масштаба: линейка или резьба пробки'],n:'Magnetic plug / filter debris',cap:['{u} {p} — {d} on the plug','{u} {p} — {dr} на пробке'],d:['heavy ferrous debris','много стружки'],
+    tips:['Whole plug face in frame, debris in focus','A close-up of the largest particles (Magnify or a detail photo)','Something for size: a ruler or the plug thread']},
+  gear:{nr:'Шестерня / зубья',tr:['Несколько зубьев, чтобы была видна картина (один зуб или много?)', 'Пятно контакта: где на боковой поверхности, у ножки или у вершины', 'Пронумеруйте повреждённые зубья (1, 2, 3)', 'Линейка поперёк самой большой раковины'],n:'Gear / teeth',cap:['{u} {p} — {d} on the tooth flanks','{u} {p} — {dr} на рабочих поверхностях зубьев'],d:['pitting / spalling','выкрашивание / отслаивание'],
+    tips:['Several teeth, so the pattern shows (one tooth or many?)','The contact area: where on the flank, root or tip','Number the damaged teeth (1, 2, 3)','A ruler across the worst pit']},
+  shaft:{nr:'Вал / шлицы / шпоночный паз',tr:['Изношенная и неизношенная зона на одном фото, для сравнения', 'Отметки по длине: где начинается и где кончается', 'Значение, если измеряли (мм или % износа)'],n:'Shaft / spline / keyway',cap:['{u} {p} — {d}','{u} {p} — {dr}'],d:['spline wear / fretting','износ шлицев / фреттинг'],
+    tips:['The worn zone and an unworn zone in one photo, for comparison','Marks along the length: where it starts and ends','A reading if measured (mm or % worn)']},
+  bearing:{nr:'Подшипник',tr:['Видны и дорожка, и тела качения', 'Обведите выкрашивание; увеличьте его', 'Цвета побежалости (нагрев) — отметьте значком'],n:'Bearing',cap:['{u} {p} — {d}','{u} {p} — {dr}'],d:['race spalling','выкрашивание дорожки качения'],
+    tips:['Race and rolling elements both visible','Circle the spall; magnify it','Discolouration (heat) called out with an icon']},
+  hose:{nr:'Рукав / течь',tr:['Источник течи, а не только мокрое место', 'Стрелка от мокрого места к источнику', 'Бирка или номер рукава читается (или скрыт, если не нужен)'],n:'Hose / leak',cap:['{u} {p} — {d}','{u} {p} — {dr}'],d:['oil leak at the fitting','течь масла по штуцеру'],
+    tips:['The source of the leak, not only the wet area','An arrow from the wet area to the source','Hose tag or number readable (or blurred if not needed)']},
+  track:{nr:'Звено гусеницы / ходовая',tr:['Изношенное и менее изношенное звено рядом', 'Измеренная высота инструментом «Размер» или «Износ %»', 'Номер звена или место, чтобы его найти снова'],n:'Track link / undercarriage',cap:['{u} {p} — {d}','{u} {p} — {dr}'],d:['grouser worn','износ грунтозацепа'],
+    tips:['Worn and a less worn link side by side','The measured height with Measure (mm / % worn)','Link number or position so it can be found again']},
+  weld:{nr:'Конструкция / шов / трещина',tr:['Вся трещина, оба конца отмечены', 'Её длина: «Размер» или «Длина по ломаной»', 'Общий вид, где она, со вставленным крупным планом'],n:'Structure / weld / crack',cap:['{u} {p} — {d}','{u} {p} — {dr}'],d:['crack at the weld toe','трещина по границе сварного шва'],
+    tips:['The whole crack, both ends marked','Its length with Measure','A wide photo to show where it is, with a close-up inserted']}
+};
+function guessComp(name){ const n=name.toUpperCase(); if(/_MP_|PLUG|FC_/.test(n)) return 'plug'; if(/TRK|_UC_|LINK/.test(n)) return 'track'; if(/HS\.|HOSE|_HL/.test(n)) return 'hose'; return (H&&H.comp)||'general'; }
+function quality(){
+  const W=320, h=Math.round(base.height*W/base.width), c=document.createElement('canvas'); c.width=W; c.height=h; const g=c.getContext('2d'); g.drawImage(base,0,0,W,h);
+  const d=g.getImageData(0,0,W,h).data, L=new Float32Array(W*h); let sum=0,sq=0,hi=0,lo=0;
+  for(let i=0,j=0;i<d.length;i+=4,j++){ const y=.299*d[i]+.587*d[i+1]+.114*d[i+2]; L[j]=y; sum+=y; sq+=y*y; if(y>247) hi++; if(y<8) lo++; }
+  const n=W*h, mean=sum/n, sd=Math.sqrt(sq/n-mean*mean); let lap=0,ln=0;
+  for(let y=1;y<h-1;y++) for(let x=1;x<W-1;x++){ const j=y*W+x, v=4*L[j]-L[j-1]-L[j+1]-L[j-W]-L[j+W]; lap+=v*v; ln++; }
+  return {mean,sd,hi:hi/n,lo:lo/n,sharp:lap/ln};
+}
+function capDraft(){ const k=$('sgComp').value, C=COMP[k], nm=P().name.split('_'), u=nm[0]||'', p=(nm[1]||'').replace(/\..*/,'');
+  return [C.cap[0].replace('{u}',u).replace('{p}',p).replace('{d}',C.d[0]), C.cap[1].replace('{u}',u).replace('{p}',p).replace('{dr}',C.d[1])]; }
+function suggestMarks(){ const k=$('sgComp').value, C=COMP[k], W=base.width, H=base.height, cx0=W/2, cy0=H/2, r=Math.min(W,H)*.16; push();
+  R().marks.push({t:'ring',x:cx0-r,y:cy0-r,w2:r*2,h2:r*2,color:'#c62828',w:6});
+  R().marks.push({t:'mag',sx:cx0,sy:cy0,sr:r*.45,dx:Math.min(W-r*1.2,cx0+r*2.2),dy:cy0-r*.6,dr:r*1.1,color:'#c62828',w:6});
+  R().marks.push({t:'callout',x1:cx0-r*.7,y1:cy0+r*.7,x2:W*.06,y2:H*.86,text:C.d[0].charAt(0).toUpperCase()+C.d[0].slice(1),color:'#c62828',w:6});
+  if(k==='gear'||k==='track'||k==='weld'||k==='shaft') R().marks.push({t:'dim',x1:cx0-r,y1:cy0+r*1.25,x2:cx0+r,y2:cy0+r*1.25,text:'… mm',color:'#f2a900',w:6});
+  S.sel=-1; syncPanel(); draw(); toast('Suggested marks placed on the middle of the photo. Drag them onto the part; change the words in the panel.'); }
+function suggest(){
+  const box=$('sgList'); if(!box) return; const q=quality(), r=R(), k=$('sgComp').value, C=COMP[k], items=[];
+  const add=(lvl,t,s,btn,fn)=>items.push({lvl,t:tr(t),s:tr(s),btn:btn&&tr(btn),fn});
+  if(Math.min(base.width,base.height)<900) add('warn','Low resolution','Under 900 px: zooming in the report will be blurred. Use the full camera photo if you have it.');   /* PXAI_LOCAL_V1 */
+  if(q.sharp<18) add('bad','Looks blurred','Fine detail is soft. Retake it, or put a sharper close-up in a Magnify circle.');
+  if(q.mean<75&&!r.adj.auto) add('warn','Too dark','Detail is lost in the shadows.','Auto-correct',()=>$('bAuto').click());
+  else if(q.mean>190) add('warn','Too bright','Shade the part or step to the side to cut the glare.');
+  if(q.hi>.06) add('warn','Glare','Part of the photo is burnt white. Change the angle if you can retake it.');
+  if(q.sd<38&&!r.adj.auto) add('warn','Flat, low contrast','Wear marks stand out more with more contrast.','Auto-correct',()=>$('bAuto').click());
+  if(!r.crop&&S.ratio==='1:1') add('tip','Crop to the part','Crop so the part fills the frame.','Apply crop',()=>{ setTool('crop'); });
+  if(!r.marks.length) add('warn','Nothing is marked','A reader should see in two seconds where to look.','Suggest marks',suggestMarks);
+  if(!r.marks.some(m=>m.t==='mag'||m.t==='img')) add('tip','No close-up','Magnify the worst spot, or insert the close-up you took.','Magnify',()=>setTool('mag'));
+  if(['gear','track','weld','shaft'].includes(k)&&!r.marks.some(m=>m.t==='dim'||/\d\s*(mm|%)/.test(m.text||''))) add('tip','No size or reading','Add the measured value (mm or % worn) so the photo carries the number.','Measure',()=>setTool('dim'));
+  if(!r.cap.en&&!r.cap.ru) add('warn','No caption','Say what the photo shows, in both languages.','Use draft',()=>{ push(); const d=capDraft(); r.cap.en=d[0]; r.cap.ru=d[1]; fit(); syncPanel(); draw(); });
+  else items.push({lvl:'ok',t:tr('Caption'),s:(LANG==='ru'?r.cap.ru||r.cap.en:r.cap.en||r.cap.ru)});
+  (LANG==='ru'?C.tr:C.tips).forEach(t=>items.push({lvl:'tip',t:(LANG==='ru'?C.nr.split(' / ')[0]+':':'For a '+C.n.toLowerCase().split(' / ')[0]+':'),s:t,tipOnly:1}));
+  box.innerHTML=items.map((x,i)=>`<div class="sg ${x.lvl}"><span class="ic">${x.lvl==='bad'?'✕':x.lvl==='warn'?'!':x.lvl==='ok'?'✓':'›'}</span><span><b>${esc(x.t)}</b> ${esc(x.s)}</span>${x.btn?`<button class="btn" data-sg="${i}">${esc(x.btn)}</button>`:'<span></span>'}</div>`).join('');
+  box.querySelectorAll('[data-sg]').forEach(b=>b.onclick=()=>{ items[+b.dataset.sg].fn(); suggest(); });
+}
+/* ---------- PXAI_V1: Scan with AI (Rickie 16.11.2026 10:48) ----------
+   /pxai/api/status says whether the site has it switched on (off until the company approves sending photos to an outside AI service).
+   A scan sends the photo on screen, reduced to 1,568 px and re-encoded (no camera data), and the part chosen above; the answer is
+   listed with tick boxes and NOTHING is added to the photo until the person presses Add ticked marks / Use its caption (one Undo). */
+var AI={st:null,busy:false,res:null,for:-1};
+var GCOL={1:'#2e7d32',2:'#b88a00',3:'#e08a00',4:'#e65100',5:'#c62828'};
+var GN={1:['Normal','Норма'],2:['Incipient','Начальное'],3:['Degraded','Ухудшение'],4:['Severe','Серьёзное'],5:['Critical','Критическое']};
+function aiL(o){ return o?(LANG==='ru'?(o.ru||o.en):(o.en||o.ru))||'':''; }
+function aiPaint(){ const b=$('bAi'), n=$('aiNote'); if(!b) return; const st=AI.st;
+  b.disabled=!(st&&st.on)||AI.busy; b.textContent=AI.busy?tr('Scanning…'):tr('◎ Scan with AI');
+  if(!st) n.textContent=tr('Not set up on this server.');
+  else if(!st.on) n.textContent=tr(st.why==='nokey'?'Off: the approval is noted but the service key is not set.':'Off: it is switched on once the company approves sending photos to an outside AI service (Anthropic).');
+  else n.textContent=tr('Sends this photo (reduced, no file data) to an outside AI service. Nothing is added until you tick it.')+(st.approved?' '+tr('Approved:')+' '+st.approved+'.':'')+(st.daily?' · '+Math.max(0,st.daily-(st.today||0))+' '+tr('scans left today'):''); }
+function aiStatus(){ return fetch('/pxai/api/status',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{ AI.st=j&&j.marker==='PXAI_V1'?j:null; aiPaint(); lcPaint(); },()=>{ AI.st=null; aiPaint(); lcPaint(); }); }
+function aiPhoto(){ const L=1568, k=Math.min(1,L/Math.max(base.width,base.height)), c=document.createElement('canvas'); c.width=Math.round(base.width*k); c.height=Math.round(base.height*k);
+  c.getContext('2d').drawImage(base,0,0,c.width,c.height); return c.toDataURL('image/jpeg',.85); }
+function aiScan(){ if(AI.busy||!AI.st||!AI.st.on) return; AI.busy=true; AI.for=S.cur; aiPaint(); const k=$('sgComp').value, C=COMP[k];
+  fetch('/pxai/api/scan',{method:'POST',headers:{'Content-Type':'application/json','X-PXAI':'1'},body:JSON.stringify({img:aiPhoto(),comp:C?C.n:'',lang:LANG})})
+    .then(r=>r.json().then(j=>({r,j}),()=>({r,j:{}})))
+    .then(({r,j})=>{ AI.busy=false; if(!r.ok||!j.part){ AI.res=null; aiPaint(); toast(tr('Scan failed:')+' '+(j.error||r.status)); aiStatus(); return; } AI.res=j; aiPaint(); aiShow(); aiStatus(); },
+          ()=>{ AI.busy=false; aiPaint(); toast(tr('Scan failed:')+' '+tr('no answer from the server')); }); }
+function aiShow(){ const box=$('aiRes'), j=AI.res; if(!j){ box.hidden=true; box.innerHTML=''; return; } box.hidden=false;
+  const f=j.findings||[];
+  box.innerHTML='<div class="ap"><b>'+esc(tr('The AI sees:'))+'</b> '+esc(aiL(j.part))+'</div>'
+    +(f.length?f.map((x,i)=>'<label class="af"><input type="checkbox" data-ai="'+i+'"'+(x.conf>=.5?' checked':'')+'><span>'+esc(aiL(x.what))+'</span><span><span class="gd" style="background:'+GCOL[x.grade]+'" title="'+esc(GN[x.grade][LANG==='ru'?1:0])+'">'+x.grade+'</span> <span class="muted">'+Math.round(x.conf*100)+'% '+esc(tr('sure'))+'</span></span></label>').join(''):'<div class="ap">'+esc(tr('Nothing wrong found.'))+'</div>')
+    +((j.quality||[]).length?'<div class="q">'+esc(tr('Photo:'))+' '+j.quality.map(q=>esc(aiL(q))).join(' · ')+'</div>':'')
+    +'<div class="row">'+(f.length?'<button class="btn" id="aiAdd">'+esc(tr('Add ticked marks'))+'</button>':'')+(aiL(j.caption)?'<button class="btn" id="aiCap">'+esc(tr('Use its caption'))+'</button>':'')+'</div>'
+    +'<div class="q warn">'+esc(tr('AI can be wrong: check every mark before saving.'))+'</div>';
+  const a=$('aiAdd'); if(a) a.onclick=aiAdd; const c=$('aiCap'); if(c) c.onclick=aiCap; }
+function aiAdd(){ const j=AI.res; if(!j) return; const W=base.width, Hh=base.height, lw=Math.max(4,Math.round(Math.min(W,Hh)/220));
+  const pick=[...document.querySelectorAll('#aiRes [data-ai]')].filter(x=>x.checked).map(x=>j.findings[+x.dataset.ai]); if(!pick.length) return;
+  push();
+  pick.forEach(x=>{ const b=x.box, w2=b.w*W, h2=b.h*Hh, x0=b.x*W, y0=b.y*Hh, cx=x0+w2/2, cy=y0+h2/2, col=GCOL[x.grade]||'#c62828';
+    R().marks.push({t:'ring',x:x0,y:y0,w2,h2,color:col,w:lw});
+    const right=cx<W/2, tx=right?Math.min(W*.70,x0+w2+W*.05):Math.max(W*.03,x0-W*.30), ty=Math.min(Hh*.92,Math.max(Hh*.06,cy));
+    R().marks.push({t:'callout',x1:right?x0+w2:x0,y1:cy,x2:tx,y2:ty,text:aiL(x.what),color:col,w:lw}); });
+  S.sel=-1; syncPanel(); draw(); suggest(); toast(tr('Marks added from the AI scan. Move or delete any that are wrong.')); }
+function aiCap(){ const j=AI.res; if(!j||!j.caption) return; push(); const r=R(); r.cap={en:j.caption.en||'',ru:j.caption.ru||''}; fit(); syncPanel(); draw(); suggest(); toast(tr('Caption taken from the AI scan.')); }
+/* ---------- PXAI_LOCAL_V1: Scan on this server (Rickie 16.11.2026 11:25 "can we build 1,2,3?") ----------
+   Runs on PECHANKA (askpi-pxai, local.py): a small open model (CLIP ViT-B/32) names the part, and the CM photos that look most alike
+   (index of /opt/cm-media) vote and are shown. Nothing leaves the company network, so it needs no approval. Photo quality is worked out
+   here in the browser (quality(), Check & suggest). Nothing is changed until the person presses a button. */
+var LC={busy:false,res:null,for:-1};
+function lcPaint(){ const b=$('bLc'), n=$('lcNote'); if(!b) return; const l=AI.st&&AI.st.local;
+  b.disabled=!(l&&l.ready)||LC.busy; b.textContent=LC.busy?tr('Scanning…'):tr('▣ Scan on this server');
+  if(!l||!l.ready) n.textContent=tr('Not set up on this server.');
+  else n.textContent=tr('Runs on the company server: nothing leaves the network. Names the part and finds CM photos that look alike.')+(l.photos?' '+tr('CM photos indexed:')+' '+l.photos+'.':' '+tr('The CM photo index is still being built.')); }
+function lcPhoto(){ const L=640, k=Math.min(1,L/Math.max(base.width,base.height)), c=document.createElement('canvas'); c.width=Math.round(base.width*k); c.height=Math.round(base.height*k);
+  c.getContext('2d').drawImage(base,0,0,c.width,c.height); return c.toDataURL('image/jpeg',.9); }
+function lcScan(){ const l=AI.st&&AI.st.local; if(LC.busy||!(l&&l.ready)) return; LC.busy=true; LC.for=S.cur; lcPaint();
+  fetch('/pxai/api/local',{method:'POST',headers:{'Content-Type':'application/json','X-PXAI':'1'},body:JSON.stringify({img:lcPhoto()})})
+    .then(r=>r.json().then(j=>({r,j}),()=>({r,j:{}})))
+    .then(({r,j})=>{ LC.busy=false; if(!r.ok||!j.part){ LC.res=null; lcPaint(); toast(tr('Scan failed:')+' '+(j.error||r.status)); return; } LC.res=j; lcPaint(); lcShow(); },
+          ()=>{ LC.busy=false; lcPaint(); toast(tr('Scan failed:')+' '+tr('no answer from the server')); }); }
+function lcShow(){ const box=$('lcRes'), j=LC.res; if(!j){ box.hidden=true; box.innerHTML=''; return; } box.hidden=false;
+  const pn=x=>LANG==='ru'?x.ru:x.en, top=j.part[0], C=j.comp&&COMP[j.comp], cur=$('sgComp').value;
+  let h='';
+  if(j.screen) h+='<div class="ap"><b>'+esc(tr('This looks like a screen or a document, not a part.'))+'</b></div>';
+  else if(j.sure) h+='<div class="ap"><b>'+esc(tr('This server sees:'))+'</b> '+esc(pn(top))+' <span class="muted">'+Math.round(top.p*100)+'%</span></div>';
+  else h+='<div class="ap"><b>'+esc(tr('Not sure of the part.'))+'</b> '+esc(tr('Maybe:'))+' '+j.part.map(x=>esc(pn(x))+' '+Math.round(x.p*100)+'%').join(' · ')+'</div>';
+  if(j.sure) h+=j.part.slice(1).map(x=>'<div class="q">'+esc(pn(x))+' '+Math.round(x.p*100)+'%</div>').join('');
+  if(j.like) h+='<div class="ap">'+esc(tr('Like CM photos of:'))+' <b>'+esc(j.like.l)+'</b> <span class="muted">('+esc(j.like.t)+', '+j.like.n+' '+esc(tr('of'))+' '+j.like.of+')</span></div>';
+  if((j.similar||[]).length) h+='<div class="q">'+esc(tr('CM photos that look alike (open in a new tab):'))+'</div><div class="lcsim">'+j.similar.map(x=>'<a href="'+esc(x.src)+'" target="_blank" rel="noopener" title="'+esc([x.u,x.d,x.t,x.l||x.k].join(' · '))+'"><img loading="lazy" alt="" src="'+esc(x.src)+'"><span>'+esc(x.u)+' · '+esc((x.d||'').slice(5).split('-').reverse().join('.'))+'</span><span>'+esc(x.t)+' '+esc(x.l||x.k)+(x.g&&GCOL[x.g]?' <b style="color:'+GCOL[x.g]+'">'+esc(x.g)+'</b>':'')+'</span>'+(x.same?'<span class="same">'+esc(tr('same photo'))+'</span>':'')+'</a>').join('')+'</div>';
+  else if(!j.photos) h+='<div class="q">'+esc(tr('The CM photo index is still being built.'))+'</div>';
+  h+='<div class="row">'+(C&&j.comp!==cur?'<button class="btn" id="lcComp">'+esc(tr('Set "This photo shows":'))+' '+esc(LANG==='ru'?C.nr.split(' / ')[0]:C.n.split(' / ')[0])+'</button>':'')+(j.sure?'<button class="btn" id="lcCap">'+esc(tr('Use the part as caption'))+'</button>':'')+'</div>';
+  h+='<div class="q">'+esc(tr('Small model on the company server: it names the part, it does not judge wear. Check before you use it.'))+'</div>';
+  box.innerHTML=h;
+  const a=$('lcComp'); if(a) a.onclick=()=>{ $('sgComp').value=j.comp; P().comp=j.comp; suggest(); lcShow(); toast(tr('"This photo shows" set from the scan.')); };
+  const c=$('lcCap'); if(c) c.onclick=()=>{ push(); const r=R(); r.cap={en:top.en,ru:top.ru}; fit(); syncPanel(); draw(); suggest(); toast(tr('Caption taken from the scan.')); }; }
+function sgInit(){ const s=$('sgComp'); s.innerHTML=Object.keys(COMP).map(k=>`<option value="${k}">${LANG==='ru'?COMP[k].nr:COMP[k].n}</option>`).join(''); s.onchange=()=>{ P().comp=s.value; suggest(); }; }
+
+/* ---------- start in a realistic working state: the debris photo, already marked ---------- */
+/* static words in the page's language */
+function trPage(){ if(LANG!=='ru') return; document.documentElement.lang='ru'; const w=document.createTreeWalker($('app'),NodeFilter.SHOW_TEXT); let n; while((n=w.nextNode())){ const t=n.nodeValue.trim(); if(t&&RU[t]) n.nodeValue=n.nodeValue.replace(t,RU[t]); }
+  document.querySelectorAll('[title]').forEach(e=>{ const t=e.getAttribute('title'); if(RU[t]) e.setAttribute('title',RU[t]); }); }
+$('stOn').onchange=()=>{ push(); const r=R(); r.stamp=Object.assign({},r.stamp,{on:$('stOn').checked,text:$('stTx').value}); draw(); };
+$('stTx').onfocus=()=>push(); $('stTx').oninput=()=>{ const r=R(); r.stamp=Object.assign({},r.stamp,{text:$('stTx').value,on:true}); $('stOn').checked=true; draw(); };
+$('capOn').checked=capOn; $('capOn').onchange=()=>{ capOn=$('capOn').checked; fit(); draw(); };
+function loadImg(src){ return new Promise((ok,no)=>{ const im=new Image(); im.onload=()=>ok(im); im.onerror=()=>no(new Error(tr('The photo could not be opened.'))); im.src=src; }); }
+if(H){ document.documentElement.classList.add('host'); $('bClose').hidden=false; $('bClose').onclick=()=>H.close(null);
+  /* PX_TOOLS_V3: Escape no longer closes the editor (it lost the work); Cancel does */
+  railBuild(); swBuild(); sgInit(); trPage(); $('bAi').onclick=aiScan; $('bLc').onclick=lcScan; aiStatus();
+  const rp=H.recipe&&H.recipe.v===1?H.recipe:null, list=[{src:H.src,name:H.name||'photo'}].concat(H.others||[]), refs=(rp&&rp.refs)||[];
+  refs.forEach(x=>{ if(!list.some(y=>y.src===x.src)) list.push(x); });
+  Promise.all(list.map(x=>loadImg(x.src).then(im=>({im,x}),()=>null))).then(rs=>{
+    if(!rs[0]){ toast(tr('The photo could not be opened.')); setTimeout(()=>H.close(null),2500); return; }
+    rs.forEach(z=>{ if(z){ addPhoto(z.im,z.x.name||''); P_last().src=z.x.src; } });
+    const r0=S.photos[0];
+    if(rp&&rp.rec){ const rec=JSON.parse(JSON.stringify(rp.rec)); rec.adj=rec.adj||{b:0,c:0,s:0,auto:null}; rec.cap=rec.cap||{en:'',ru:''}; rec.marks=(rec.marks||[]).filter(m=>{ if(m.photo==null) return true; const ref=refs[m.photo], i=ref?S.photos.findIndex(p=>p.src===ref.src):-1; if(i<0){ delete m.photo; return m.t!=='img'; } m.photo=i; return true; }); r0.rec=rec; if('cap' in rp){ capOn=!!rp.cap; $('capOn').checked=capOn; } }
+    const cp=H.caption||{}; if(cp.en||cp.ru) r0.rec.cap={en:cp.en||'',ru:cp.ru||''};
+    if(H.comp) r0.comp=H.comp;
+    S.cur=0; buildBase(); $('phName').textContent=r0.name; $('sgComp').value=P_comp(0); stripBuild(); setTool('sel'); requestAnimationFrame(()=>{ fit(); draw(); });
+  });
+} else {
+railBuild(); swBuild(); sgInit(); trPage(); $('bAi').onclick=aiScan; $('bLc').onclick=lcScan; aiStatus(); S.cur=0; buildBase();
+(function seed(){ const W=1600; R().marks=[
+  {t:'ring',x:640,y:460,w2:320,h2:320,color:'#c62828',w:6},
+  {t:'mag',sx:800,sy:560,sr:70,dx:1290,dy:360,dr:210,color:'#c62828',w:6},
+  {t:'callout',x1:690,y1:700,x2:180,y2:960,text:'Heavy ferrous debris\nchips / flakes',color:'#c62828',w:6},
+  {t:'badge',x:540,y:440,n:1,color:'#16304F',w:6}]; S.badgeN=2; })();
+$('phName').textContent=P().name; $('sgComp').value=P_comp(0); stripBuild(); setTool('sel'); requestAnimationFrame(()=>{ fit(); draw(); });
+}
+window.__pxt={S,R,version:'PX_TOOLS_V1',get base(){ return base; }};   /* PXAI_V1: the base size for the checks */
+})();
+</script>
+</body></html>

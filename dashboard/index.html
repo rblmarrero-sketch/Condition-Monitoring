@@ -2726,6 +2726,7 @@ setTimeout(done,20000);})();</script>
 #actFlow.cmflow .cfprob button.on{background:var(--surface-2);box-shadow:inset 0 0 0 1px var(--border)}   /* CM_ACTFLOW_V1 */   /* a 32 px target that does not make the header taller */
 :is(#kpis,#actFlow).cmflow button:focus-visible,:is(#kpis,#actFlow).cmflow .cfgo:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 </style>
+<script src="/site/px-tools.js?v=639" data-m="PX_TOOLS_V1"></script>
 </head>
 <body>
 <header class="app">
@@ -13290,6 +13291,39 @@ function pxSyncControls(){
 }
 function pxOpenPanel(){
   if($("pxOpen").hidden) return;
+  if(window.PXTools && PXTools.use()){
+    const im = $("lbimg");
+    const rec = pxRecipe || pxDraft || {};
+    const curName = lbCtx ? lbCtx.name : "";
+    const rk = lbCtx ? lbCtx.rk : "";
+    const list = (typeof lbList==="function" ? lbList() : []) || [];
+    const others = list.map((item, idx) => ({
+      src: item.url || item.src || "",
+      name: item.name || item.title || ("Photo " + (idx + 1)),
+      inReport: !item.excluded,
+      order: item.order || (idx + 1)
+    }));
+
+    PXTools.open({
+      src: im ? im.src : "",
+      name: curName,
+      recipe: rec,
+      others: others,
+      caption: { en: $("pxCap") ? $("pxCap").value : "", ru: "" },
+      onSave: function(res){
+        if(res && res.b64 && im){
+          im.src = res.b64;
+          if(res.caption && $("pxCap")) $("pxCap").value = res.caption.en || res.caption.ru || "";
+          if(typeof pxPut==="function" && rk && curName){
+            pxPut(rk, curName, res.recipe || res);
+          }
+          if(typeof pxBadge==="function") pxBadge();
+        }
+        return Promise.resolve();
+      }
+    });
+    return;
+  }
   pxZoomReset();
   if(pxPending()){ $("pxMsg").textContent=t("px_pending"); }
   $("pxPanel").classList.remove("hidden");
