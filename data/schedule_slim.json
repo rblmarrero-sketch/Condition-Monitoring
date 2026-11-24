@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-24T01:38:08+00:00",
+  "generated": "2026-11-24T01:53:19+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -3106,12 +3106,12 @@
       "type": "500 Hours service Planned",
       "hours": 500,
       "plan": "2026-11-22",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-23"
     },
     {
       "wo": "WO-022341",
@@ -3628,12 +3628,12 @@
       "type": "250 Hours service Planned",
       "hours": 250,
       "plan": "2026-11-19",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-19"
     },
     {
       "wo": "WO-022331",
@@ -10618,12 +10618,28 @@
       "x": "Утечка гидровлического масла"
     },
     {
+      "d": "DD-00017397",
+      "u": "TK106",
+      "s": "TK106.HS.DL (Hydraulic Lines / Гидролинии)",
+      "p": "P2",
+      "r": "2026-11-24",
+      "x": "Утечка с РВД охлаждения тормозов"
+    },
+    {
       "d": "DD-00017386",
       "u": "DZ019",
       "s": "DZ019.ELS.LIG (Head Lighting System / Система головного освещения)",
       "p": "P2",
       "r": "2026-11-24",
       "x": "отсутствует освещение"
+    },
+    {
+      "d": "DD-00017394",
+      "u": "EX022",
+      "s": "EX022.OC.HE (Heating / Отопление)",
+      "p": "P2",
+      "r": "2026-11-24",
+      "x": "Течь ОЖ с корпуса ПЖД"
     },
     {
       "d": "DD-00017357",
@@ -29616,6 +29632,22 @@
       "p": "P4",
       "r": "2026-11-24",
       "x": "Замена бокорезов ковша"
+    },
+    {
+      "d": "DD-00017396",
+      "u": "DZ020",
+      "s": "DZ020.DRS.ENG (Engine / Двигатель)",
+      "p": "P4",
+      "r": "2026-11-24",
+      "x": "Требуется замена линии турбокомпрессора"
+    },
+    {
+      "d": "DD-00017395",
+      "u": "EX022",
+      "s": "EX022.CH.BUC (Bucket / Ковш)",
+      "p": "P4",
+      "r": "2026-11-24",
+      "x": "Трещина адаптера коронки ковша"
     },
     {
       "d": "DD-00017333",
