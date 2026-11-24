@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-24T16:42:45+00:00",
+  "generated": "2026-11-24T16:57:45+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 815,
@@ -6183,6 +6183,32 @@ window.CM_WO_DATA = {
       "by": "Valentin Trapilo",
       "regBy": "Трапило Валентин Святославович",
       "wo": "WO-023241"
+    },
+    {
+      "asset": "LV021",
+      "defect": "DD-00017442",
+      "raised": "2026-11-25",
+      "system": "LV021.ELS.LIG (Head Lighting System / Система головного освещения)",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "Не работает фонарь доп освещения.",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-023242"
+    },
+    {
+      "asset": "TK166",
+      "defect": "DD-00017443",
+      "raised": "2026-11-25",
+      "system": "TK166.DRS.TRA (Transmission / Трансмиссия)",
+      "defectType": "4.09 Relay / contactor failure / Отказ реле / контактора",
+      "descr": "Не активируется индикатор включения блокировки моста.",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-023243"
     },
     {
       "asset": "DZ009",
