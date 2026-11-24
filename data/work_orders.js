@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-24T01:07:46+00:00",
+  "generated": "2026-11-24T01:22:53+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6341,6 +6341,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023188"
     },
     {
+      "asset": "TK159",
+      "defect": "DD-00017393",
+      "raised": "2026-11-24",
+      "system": "TK159.OC (Operator Cab / Кабина оператора)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Ремонт замка двери",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": "WO-023189"
+    },
+    {
       "asset": "DZ016",
       "defect": "DD-00017383",
       "raised": "2026-11-24",
@@ -6477,19 +6490,6 @@ window.CM_WO_DATA = {
       "system": "DZ019.ELS.LIG (Head Lighting System / Система головного освещения)",
       "defectType": "4.08 Fuse blown / Перегорел предохранитель",
       "descr": "отсутствует освещение",
-      "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Sergey Tomilov",
-      "regBy": "Томилов Сергей Владимирович",
-      "wo": null
-    },
-    {
-      "asset": "TK159",
-      "defect": "DD-00017393",
-      "raised": "2026-11-24",
-      "system": "TK159.OC (Operator Cab / Кабина оператора)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Ремонт замка двери",
       "status": "Registered",
       "priority": "P2 Urgent",
       "by": "Sergey Tomilov",
@@ -6835,19 +6835,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023114"
     },
     {
-      "asset": "TK036",
-      "defect": "DD-00017348",
-      "raised": "2026-11-23",
-      "system": "TK036.HS.TIP.VAL Control Valve (Tipping) / Гидрораспределитель подъема кузова",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Не опускается кузов",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-023117"
-    },
-    {
       "asset": "TK004",
       "defect": "DD-00017349",
       "raised": "2026-11-23",
@@ -6950,6 +6937,19 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-023090"
+    },
+    {
+      "asset": "TK036",
+      "defect": "DD-00017348",
+      "raised": "2026-11-23",
+      "system": "TK036.HS.TIP.VAL Control Valve (Tipping) / Гидрораспределитель подъема кузова",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Не опускается кузов",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023117"
     },
     {
       "asset": "TK088",
@@ -57301,19 +57301,6 @@ window.CM_WO_DATA = {
       "wo": "WO-018103"
     },
     {
-      "asset": "DZ022",
-      "defect": "DD-00011314",
-      "raised": "2026-08-21",
-      "system": "DZ022.HS (Hydraulic System / Гидравлическая система)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Повреждение (трещина) трубки подачи гидравлического масла (# 1186 – 73 – 04000 ).",
-      "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Andrey Shipelov",
-      "regBy": "Шипелов Андрей Анатольевич",
-      "wo": null
-    },
-    {
       "asset": "H04",
       "defect": "EB-00000082",
       "raised": "2026-08-21",
@@ -57324,6 +57311,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Eduard Shapoval",
       "regBy": "Eduard Shapoval",
+      "wo": null
+    },
+    {
+      "asset": "DZ022",
+      "defect": "DD-00011314",
+      "raised": "2026-08-21",
+      "system": "DZ022.HS (Hydraulic System / Гидравлическая система)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Повреждение (трещина) трубки подачи гидравлического масла (# 1186 – 73 – 04000 ).",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Andrey Shipelov",
+      "regBy": "Шипелов Андрей Анатольевич",
       "wo": null
     },
     {
@@ -58757,8 +58757,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H07",
-      "defect": "EB-00000075",
+      "asset": "H04",
+      "defect": "EB-00000076",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -58770,8 +58770,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000076",
+      "asset": "H07",
+      "defect": "EB-00000075",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
