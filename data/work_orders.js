@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-24T05:38:30+00:00",
+  "generated": "2026-11-24T05:53:05+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6354,6 +6354,32 @@ window.CM_WO_DATA = {
       "wo": "WO-023206"
     },
     {
+      "asset": "CN014",
+      "defect": "DD-00017419",
+      "raised": "2026-11-24",
+      "system": "CN014.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Ремонт системы охлаждения",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023217"
+    },
+    {
+      "asset": "TK016",
+      "defect": "DD-00017418",
+      "raised": "2026-11-24",
+      "system": "TK016.SS.SG (Steering Gearbox / Рулевой механизм)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Замена рулевого механизма, амортизаторов",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023216"
+    },
+    {
       "asset": "GR003",
       "defect": "DD-00017380",
       "raised": "2026-11-24",
@@ -6663,6 +6689,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Tomilov",
       "regBy": "Томилов Сергей Владимирович",
+      "wo": null
+    },
+    {
+      "asset": "TK092",
+      "defect": "DD-00017420",
+      "raised": "2026-11-24",
+      "system": "TK092.BS.PU (Pneumatic Control / Пневмоуправление)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка воздуха",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
       "wo": null
     },
     {
@@ -11957,6 +11996,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022588"
     },
     {
+      "asset": "CR002",
+      "defect": "DD-00016936",
+      "raised": "2026-11-15",
+      "system": "CR002.HS.CV (Control Valves / Гидрораспределители)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Заклинил гидрораспределитель",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-022595"
+    },
+    {
       "asset": "TK122",
       "defect": "DD-00016948",
       "raised": "2026-11-15",
@@ -12254,19 +12306,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022586"
-    },
-    {
-      "asset": "CR002",
-      "defect": "DD-00016936",
-      "raised": "2026-11-15",
-      "system": "CR002.HS.CV (Control Valves / Гидрораспределители)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Заклинил гидрораспределитель",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": "WO-022595"
     },
     {
       "asset": "EX007",
