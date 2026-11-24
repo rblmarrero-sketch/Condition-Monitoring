@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-24T19:18:27+00:00",
+  "generated": "2026-11-24T19:33:31+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 815,
@@ -6276,6 +6276,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023234"
     },
     {
+      "asset": "DZ002",
+      "defect": "DD-00017447",
+      "raised": "2026-11-25",
+      "system": "DZ002.CH.CRW (Crawler Chassis / Гусеничное шасси)",
+      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
+      "descr": "Шиповка гусеничных лент",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": "WO-023247"
+    },
+    {
       "asset": "EX025",
       "defect": "DD-00017446",
       "raised": "2026-11-25",
@@ -10124,6 +10137,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023059"
     },
     {
+      "asset": "GE054",
+      "defect": "DD-00017168",
+      "raised": "2026-11-19",
+      "system": "GE054.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Демонтаж стартера с нового ДВС. Консервация",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022945"
+    },
+    {
       "asset": "TK096",
       "defect": "DD-00017153",
       "raised": "2026-11-19",
@@ -10247,19 +10273,6 @@ window.CM_WO_DATA = {
       "system": "GE069.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Долив антифриза(красного)",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "GE054",
-      "defect": "DD-00017168",
-      "raised": "2026-11-19",
-      "system": "GE054.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Демонтаж стартера с нового ДВС. Консервация",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
