@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-24T20:02:58+00:00",
+  "generated": "2026-11-24T20:23:37+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 815,
@@ -443,13 +443,13 @@ window.CM_WO_DATA = {
     "regBy": "Contact person initiator WR"
   },
   "cmDateFrom": {
-    "raised": 218,
+    "raised": 219,
     "detected": 0,
     "planStart": 0
   },
   "cmCauseFrom": {
     "wo": 137,
-    "wr": 81,
+    "wr": 82,
     "cert": 0,
     "none": 0
   },
@@ -462,6 +462,32 @@ window.CM_WO_DATA = {
     "Bekzhan"
   ],
   "cmWorkOrders": [
+    {
+      "date": "2026-11-25",
+      "dateFrom": "raised",
+      "raised": "2026-11-25",
+      "detected": "2026-11-25",
+      "planStart": null,
+      "closed": null,
+      "asset": "TK127",
+      "defect": "DD-00017450",
+      "requestNo": "DD-00017450",
+      "eqType": "TRUCK, ARTICULATED",
+      "system": "TK127.CH.UC (Undercarriage / Ходовая часть)",
+      "priority": "P4 Planned (Repair)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Износ уплотнения",
+      "causeFrom": "wr",
+      "descr": "Течь РВД охлаждения тормозов среднего моста",
+      "status": "Registered",
+      "by": "Slam",
+      "byFull": "Slam Taganov",
+      "regBy": "Таганов Слам Джумамуратович",
+      "raisedBy": "ГДК Баимская",
+      "woNumber": null,
+      "maintType": null,
+      "planned": false
+    },
     {
       "date": "2026-11-24",
       "dateFrom": "raised",
@@ -6172,6 +6198,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023237"
     },
     {
+      "asset": "LV022",
+      "defect": "DD-00017451",
+      "raised": "2026-11-25",
+      "system": "LV022 HILUX 2.5 TOYOTA",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Замена левого зеркала, ремонт отопителя",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023250"
+    },
+    {
       "asset": "BS011",
       "defect": "DD-00017440",
       "raised": "2026-11-25",
@@ -6326,6 +6365,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Tomilov",
       "regBy": "Томилов Сергей Владимирович",
       "wo": null
+    },
+    {
+      "asset": "DZ019",
+      "defect": "DD-00017386",
+      "raised": "2026-11-24",
+      "system": "DZ019.ELS.LIG (Head Lighting System / Система головного освещения)",
+      "defectType": "4.08 Fuse blown / Перегорел предохранитель",
+      "descr": "отсутствует освещение",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": "WO-023176"
     },
     {
       "asset": "EX025",
@@ -6716,19 +6768,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Tomilov",
       "regBy": "Томилов Сергей Владимирович",
       "wo": "WO-023177"
-    },
-    {
-      "asset": "DZ019",
-      "defect": "DD-00017386",
-      "raised": "2026-11-24",
-      "system": "DZ019.ELS.LIG (Head Lighting System / Система головного освещения)",
-      "defectType": "4.08 Fuse blown / Перегорел предохранитель",
-      "descr": "отсутствует освещение",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Tomilov",
-      "regBy": "Томилов Сергей Владимирович",
-      "wo": "WO-023176"
     },
     {
       "asset": "DZ009",
@@ -15980,7 +16019,7 @@ window.CM_WO_DATA = {
       "system": "EX024.CH.BUC (Bucket / Ковш)",
       "defectType": "2.01 Wear / Износ",
       "descr": "Износ футеровок ковша",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P4 Planned (Repair)",
       "by": "Evgeniy Frolin",
       "regBy": "Фролин Евгений Владимирович",
@@ -20803,7 +20842,7 @@ window.CM_WO_DATA = {
       "system": "EX024.HS.CV (Control Valves / Гидрораспределители)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Течь масла из под крепления РВД распределителя (снизу)",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P4 Planned (Repair)",
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
@@ -20816,7 +20855,7 @@ window.CM_WO_DATA = {
       "system": "EX024.ELS.DSC (Powertrain Control System / Система управления силовой передачей)",
       "defectType": "4.02 Open circuit / Разрыв цепи",
       "descr": "Активная ошибка датчика давления насоса",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P4 Planned (Repair)",
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
@@ -102882,6 +102921,25 @@ window.CM_WO_DATA = {
       "actualStart": "2026-11-21",
       "actualStartDt": "2026-11-21T19:50:00",
       "actualEnd": "2026-11-22"
+    },
+    {
+      "equip": "DZ019",
+      "cls": "DOZ",
+      "woNumber": null,
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "250h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": null,
+      "cmmsStatus": "Registered",
+      "open": true,
+      "planStart": null,
+      "planStartDt": null,
+      "planEnd": null,
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
     },
     {
       "equip": "DZ019",
