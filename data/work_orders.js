@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-24T18:17:44+00:00",
+  "generated": "2026-11-24T18:32:49+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 815,
@@ -6274,6 +6274,19 @@ window.CM_WO_DATA = {
       "by": "Viktor Bernikov",
       "regBy": "Берников Виктор Викторович",
       "wo": "WO-023234"
+    },
+    {
+      "asset": "EX025",
+      "defect": "DD-00017446",
+      "raised": "2026-11-25",
+      "system": "EX025.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь РВД / Требуется замена",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": null
     },
     {
       "asset": "EX025",
