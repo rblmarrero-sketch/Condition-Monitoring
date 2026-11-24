@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-24T03:42:53+00:00",
+  "generated": "2026-11-24T04:03:13+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6146,6 +6146,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023148"
     },
     {
+      "asset": "LD005",
+      "defect": "DD-00017399",
+      "raised": "2026-11-24",
+      "system": "LD005.HS (Hydraulic System / Гидравлическая система)",
+      "defectType": "1.12 Low fluid level / Низкий уровень жидкости",
+      "descr": "Низкий уровень гидравлической жидкости",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": "WO-023198"
+    },
+    {
       "asset": "EX006",
       "defect": "DD-00017363",
       "raised": "2026-11-24",
@@ -6250,6 +6263,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023157"
     },
     {
+      "asset": "DZ008",
+      "defect": "DD-00017404",
+      "raised": "2026-11-24",
+      "system": "DZ008.ELS.LIG (Head Lighting System / Система головного освещения)",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "Замена сигнального маяка",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": "WO-023203"
+    },
+    {
       "asset": "EX015",
       "defect": "DD-00017374",
       "raised": "2026-11-24",
@@ -6261,6 +6287,19 @@ window.CM_WO_DATA = {
       "by": "Pavel Kostin",
       "regBy": "Костин Павел Александрович",
       "wo": "WO-023160"
+    },
+    {
+      "asset": "DZ009",
+      "defect": "DD-00017407",
+      "raised": "2026-11-24",
+      "system": "DZ009.ELS.LIG (Head Lighting System / Система головного освещения)",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "DZ008/Замена сигнального маяка",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": "WO-023205"
     },
     {
       "asset": "GR003",
@@ -6419,19 +6458,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "LD005",
-      "defect": "DD-00017399",
-      "raised": "2026-11-24",
-      "system": "LD005.HS (Hydraulic System / Гидравлическая система)",
-      "defectType": "1.12 Low fluid level / Низкий уровень жидкости",
-      "descr": "Низкий уровень гидравлической жидкости",
-      "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Sergey Tomilov",
-      "regBy": "Томилов Сергей Владимирович",
-      "wo": null
-    },
-    {
       "asset": "EX015",
       "defect": "DD-00017376",
       "raised": "2026-11-24",
@@ -6511,13 +6537,91 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "TK044",
+      "defect": "DD-00017403",
+      "raised": "2026-11-24",
+      "system": "TK044.OC.GL (Glass / Стекла)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Требуется замена щёток стеклоочистителя",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "TK044",
+      "defect": "DD-00017402",
+      "raised": "2026-11-24",
+      "system": "TK044.OC.GL (Glass / Стекла)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Требуется регулировка фар (светят вверх)",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "TK044",
+      "defect": "DD-00017405",
+      "raised": "2026-11-24",
+      "system": "TK044.OC.CO (Console / Консоль)",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "Требуется замена кнопки освещения салона",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "TK044",
+      "defect": "DD-00017409",
+      "raised": "2026-11-24",
+      "system": "TK044.ELS.WH (Wiring Harness / Жгут проводов)",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "Требуется доп.освещения заднего хода",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "TK044",
       "defect": "DD-00017401",
       "raised": "2026-11-24",
       "system": "TK044.DRS.TRA (Transmission / Трансмиссия)",
       "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
       "descr": "Не включаются передачи (5,6 выскакивают)",
       "status": "Registered",
-      "priority": "P2 Urgent",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "TK044",
+      "defect": "DD-00017408",
+      "raised": "2026-11-24",
+      "system": "TK044.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Выхлопные газы поступают в кабину",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "TK044",
+      "defect": "DD-00017406",
+      "raised": "2026-11-24",
+      "system": "TK044.CH.BED (Bed / Кузов)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Требуется регулировка боковых направляющих кузова",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": null
@@ -21954,6 +22058,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "EX023",
+      "defect": "DD-00016119",
+      "raised": "2026-11-01",
+      "system": "EX023.CH.BUC (Bucket / Ковш)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Износ ковша",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Evgeniy Frolin",
+      "regBy": "Фролин Евгений Владимирович",
+      "wo": "WO-021446"
+    },
+    {
       "asset": "TK092",
       "defect": "DD-00016127",
       "raised": "2026-11-01",
@@ -22474,19 +22591,6 @@ window.CM_WO_DATA = {
       "wo": "WO-021441"
     },
     {
-      "asset": "EX023",
-      "defect": "DD-00016119",
-      "raised": "2026-11-01",
-      "system": "EX023.CH.BUC (Bucket / Ковш)",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "Износ ковша",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Evgeniy Frolin",
-      "regBy": "Фролин Евгений Владимирович",
-      "wo": "WO-021446"
-    },
-    {
       "asset": "LV038",
       "defect": "DD-00016112",
       "raised": "2026-11-01",
@@ -22654,6 +22758,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": null
+    },
+    {
+      "asset": "EX023",
+      "defect": "DD-00016010",
+      "raised": "2026-10-31",
+      "system": "EX023.CH.BUC (Bucket / Ковш)",
+      "defectType": "6.03 Structural crack / Трещина конструкции",
+      "descr": "Износ межзубовой защиты и угловых пяток",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-021445"
     },
     {
       "asset": "DZ006",
@@ -23382,19 +23499,6 @@ window.CM_WO_DATA = {
       "by": "Aleksey Gvozdev",
       "regBy": "Гвоздев Алексей Владимирович",
       "wo": "WO-021303"
-    },
-    {
-      "asset": "EX023",
-      "defect": "DD-00016010",
-      "raised": "2026-10-31",
-      "system": "EX023.CH.BUC (Bucket / Ковш)",
-      "defectType": "6.03 Structural crack / Трещина конструкции",
-      "descr": "Износ межзубовой защиты и угловых пяток",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Roman Besedovskiy",
-      "regBy": "Беседовский Роман Иванович",
-      "wo": "WO-021445"
     },
     {
       "asset": "EX010",
@@ -45575,6 +45679,19 @@ window.CM_WO_DATA = {
       "wo": "WO-019576"
     },
     {
+      "asset": "EX023",
+      "defect": "DD-00014207",
+      "raised": "2026-10-06",
+      "system": "EX023.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Изготовление рукавов высокого давления",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": "WO-023202"
+    },
+    {
       "asset": "EX002",
       "defect": "DD-00014181",
       "raised": "2026-10-06",
@@ -45776,19 +45893,6 @@ window.CM_WO_DATA = {
       "system": "EX024.HS.DL (Hydraulic Lines / Гидролинии)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Изготовление РВД/Замена РВД",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Tomilov",
-      "regBy": "Томилов Сергей Владимирович",
-      "wo": null
-    },
-    {
-      "asset": "EX023",
-      "defect": "DD-00014207",
-      "raised": "2026-10-06",
-      "system": "EX023.HS.DL (Hydraulic Lines / Гидролинии)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Изготовление рукавов высокого давления",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Tomilov",
@@ -48604,6 +48708,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "EX023",
+      "defect": "DD-00013853",
+      "raised": "2026-10-02",
+      "system": "EX023.CH.UC (Undercarriage / Ходовая часть)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Заклинивание поддерживающего ролика слева спереди",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Evgeniy Frolin",
+      "regBy": "Фролин Евгений Владимирович",
+      "wo": "WO-021543"
+    },
+    {
       "asset": "TK047",
       "defect": "DD-00013907",
       "raised": "2026-10-02",
@@ -49330,19 +49447,6 @@ window.CM_WO_DATA = {
       "by": "Evgeniy Frolin",
       "regBy": "Фролин Евгений Владимирович",
       "wo": "WO-020074"
-    },
-    {
-      "asset": "EX023",
-      "defect": "DD-00013853",
-      "raised": "2026-10-02",
-      "system": "EX023.CH.UC (Undercarriage / Ходовая часть)",
-      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
-      "descr": "Заклинивание поддерживающего ролика слева спереди",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Evgeniy Frolin",
-      "regBy": "Фролин Евгений Владимирович",
-      "wo": "WO-021543"
     },
     {
       "asset": "CN012",
@@ -56144,19 +56248,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK047",
-      "defect": "DD-00012958",
-      "raised": "2026-09-19",
-      "system": "TK047.DRS.TRA (Transmission / Трансмиссия)",
-      "defectType": "1.19 No movement / no drive / Нет движения / нет привода",
-      "descr": "Не работает блокировка",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Ilshat Sabitov",
-      "regBy": "Сабитов Ильшат Рашидович",
-      "wo": "WO-017533"
-    },
-    {
       "asset": "EX023",
       "defect": "DD-00012949",
       "raised": "2026-09-19",
@@ -56168,6 +56259,19 @@ window.CM_WO_DATA = {
       "by": "Pavel Kostin",
       "regBy": "Костин Павел Александрович",
       "wo": "WO-018358"
+    },
+    {
+      "asset": "TK047",
+      "defect": "DD-00012958",
+      "raised": "2026-09-19",
+      "system": "TK047.DRS.TRA (Transmission / Трансмиссия)",
+      "defectType": "1.19 No movement / no drive / Нет движения / нет привода",
+      "descr": "Не работает блокировка",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Ilshat Sabitov",
+      "regBy": "Сабитов Ильшат Рашидович",
+      "wo": "WO-017533"
     },
     {
       "asset": "GR008",
@@ -56560,19 +56664,6 @@ window.CM_WO_DATA = {
       "wo": "WO-016982"
     },
     {
-      "asset": "GR015",
-      "defect": "DD-00012465",
-      "raised": "2026-09-11",
-      "system": "GR015.DRS.WH (Engine Wiring Harness / Жгут проводки двигателя)",
-      "defectType": "3.06 Sensor failure / Отказ датчика",
-      "descr": "Ремонт/замена цилиндра поворота правого колеса (Устранение утечек)",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Pavel Kostin",
-      "regBy": "Костин Павел Александрович",
-      "wo": "WO-020323"
-    },
-    {
       "asset": "EX022",
       "defect": "DD-00007524",
       "raised": "2026-09-11",
@@ -56597,6 +56688,19 @@ window.CM_WO_DATA = {
       "by": "Pavel Kostin",
       "regBy": "Костин Павел Александрович",
       "wo": "WO-022645"
+    },
+    {
+      "asset": "GR015",
+      "defect": "DD-00012465",
+      "raised": "2026-09-11",
+      "system": "GR015.DRS.WH (Engine Wiring Harness / Жгут проводки двигателя)",
+      "defectType": "3.06 Sensor failure / Отказ датчика",
+      "descr": "Ремонт/замена цилиндра поворота правого колеса (Устранение утечек)",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": "WO-020323"
     },
     {
       "asset": "DZ015_10112024",
@@ -115766,6 +115870,28 @@ window.CM_WO_DATA = {
       "actualEnd": "2026-11-19"
     },
     {
+      "equip": "EX023",
+      "cls": "EXC",
+      "woNumber": "WO-023200",
+      "maintType": "2000 Hours service Planned",
+      "hours": 2000,
+      "cmLabel": "Filter Cut / General Inspection",
+      "cmTypes": [
+        "FC",
+        "INSP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-30",
+      "planStartDt": "2026-11-30T00:00:00",
+      "planEnd": "2026-11-30",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
       "equip": "EX024",
       "cls": "EXC",
       "woNumber": null,
@@ -116103,6 +116229,25 @@ window.CM_WO_DATA = {
       "actualStart": "2026-11-21",
       "actualStartDt": "2026-11-21T04:00:00",
       "actualEnd": "2026-11-22"
+    },
+    {
+      "equip": "EX024",
+      "cls": "EXC",
+      "woNumber": "WO-023204",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "250h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-12-06",
+      "planStartDt": "2026-12-06T00:00:00",
+      "planEnd": "2026-12-06",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
     },
     {
       "equip": "EX025",
