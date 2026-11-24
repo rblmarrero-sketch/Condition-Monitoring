@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-24T10:12:35+00:00",
+  "generated": "2026-11-24T10:27:49+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6302,6 +6302,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023160"
     },
     {
+      "asset": "SN004",
+      "defect": "DD-00017423",
+      "raised": "2026-11-24",
+      "system": "SN004.CONV (Conveyors / Конвейеры)",
+      "defectType": "6.05 Loose/missing structural fasteners / Ослабленные/отсутствующие крепежи конструкции",
+      "descr": "Износ пальцев крепления отсевного конвейера к раме грохота",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-023226"
+    },
+    {
       "asset": "EX022",
       "defect": "DD-00017394",
       "raised": "2026-11-24",
@@ -6432,6 +6445,32 @@ window.CM_WO_DATA = {
       "wo": "WO-023221"
     },
     {
+      "asset": "SN004",
+      "defect": "DD-00017428",
+      "raised": "2026-11-24",
+      "system": "SN004.CONV.PUL (Pulleys / Барабаны)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "утечка смазки по валу мотор барабана",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-023228"
+    },
+    {
+      "asset": "DZ020",
+      "defect": "DD-00017396",
+      "raised": "2026-11-24",
+      "system": "DZ020.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Требуется замена линии турбокомпрессора",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": "WO-023229"
+    },
+    {
       "asset": "GR003",
       "defect": "DD-00017382",
       "raised": "2026-11-24",
@@ -6458,6 +6497,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023177"
     },
     {
+      "asset": "DZ019",
+      "defect": "DD-00017386",
+      "raised": "2026-11-24",
+      "system": "DZ019.ELS.LIG (Head Lighting System / Система головного освещения)",
+      "defectType": "4.08 Fuse blown / Перегорел предохранитель",
+      "descr": "отсутствует освещение",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": "WO-023176"
+    },
+    {
       "asset": "DZ009",
       "defect": "DD-00017407",
       "raised": "2026-11-24",
@@ -6469,6 +6521,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Tomilov",
       "regBy": "Томилов Сергей Владимирович",
       "wo": "WO-023205"
+    },
+    {
+      "asset": "TK169",
+      "defect": "DD-00017431",
+      "raised": "2026-11-24",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK169 ENGINE",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "Спорадически теряет мощность под нагрузкой.",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-023230"
     },
     {
       "asset": "LV016",
@@ -6588,6 +6653,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023194"
     },
     {
+      "asset": "CR006",
+      "defect": "DD-00017429",
+      "raised": "2026-11-24",
+      "system": "CR006.CRS.JAW (Jaw Crusher / Щековая дробилка)",
+      "defectType": "7.04 Cone crusher setting / CSS incorrect / Неверная настройка щели конусной дробилки",
+      "descr": "зазор разгрузочной щели не регулируется",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-023225"
+    },
+    {
       "asset": "GE106",
       "defect": "DD-00017427",
       "raised": "2026-11-24",
@@ -6614,32 +6692,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "SN004",
-      "defect": "DD-00017428",
-      "raised": "2026-11-24",
-      "system": "SN004.CONV.PUL (Pulleys / Барабаны)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "утечка смазки по валу мотор барабана",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": null
-    },
-    {
-      "asset": "SN004",
-      "defect": "DD-00017423",
-      "raised": "2026-11-24",
-      "system": "SN004.CONV (Conveyors / Конвейеры)",
-      "defectType": "6.05 Loose/missing structural fasteners / Ослабленные/отсутствующие крепежи конструкции",
-      "descr": "Износ пальцев крепления отсевного конвейера к раме грохота",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": null
-    },
-    {
       "asset": "LV019",
       "defect": "DD-00017424",
       "raised": "2026-11-24",
@@ -6650,19 +6702,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "CR006",
-      "defect": "DD-00017429",
-      "raised": "2026-11-24",
-      "system": "CR006.CRS.JAW (Jaw Crusher / Щековая дробилка)",
-      "defectType": "7.04 Cone crusher setting / CSS incorrect / Неверная настройка щели конусной дробилки",
-      "descr": "зазор разгрузочной щели не регулируется",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
       "wo": null
     },
     {
@@ -6926,32 +6965,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "DZ019",
-      "defect": "DD-00017386",
-      "raised": "2026-11-24",
-      "system": "DZ019.ELS.LIG (Head Lighting System / Система головного освещения)",
-      "defectType": "4.08 Fuse blown / Перегорел предохранитель",
-      "descr": "отсутствует освещение",
-      "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Sergey Tomilov",
-      "regBy": "Томилов Сергей Владимирович",
-      "wo": null
-    },
-    {
-      "asset": "DZ020",
-      "defect": "DD-00017396",
-      "raised": "2026-11-24",
-      "system": "DZ020.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Требуется замена линии турбокомпрессора",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Tomilov",
-      "regBy": "Томилов Сергей Владимирович",
-      "wo": null
-    },
-    {
       "asset": "CD007",
       "defect": "DD-00017417",
       "raised": "2026-11-24",
@@ -7049,7 +7062,7 @@ window.CM_WO_DATA = {
       "system": "LV006.OC.HE (Heating / Отопление)",
       "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
       "descr": "Не работает штатный отопитель.",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
@@ -7979,19 +7992,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023040"
     },
     {
-      "asset": "TK119",
-      "defect": "DD-00017250",
-      "raised": "2026-11-21",
-      "system": "TK119.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Диагностика перетоков масла в ДВС (два уровня)",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Pavel Kostin",
-      "regBy": "Костин Павел Александрович",
-      "wo": "WO-023137"
-    },
-    {
       "asset": "GE020",
       "defect": "DD-00017234",
       "raised": "2026-11-21",
@@ -8055,6 +8055,19 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-023181"
+    },
+    {
+      "asset": "TK119",
+      "defect": "DD-00017250",
+      "raised": "2026-11-21",
+      "system": "TK119.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Диагностика перетоков масла в ДВС (два уровня)",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": "WO-023137"
     },
     {
       "asset": "TK098",
@@ -12113,6 +12126,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022581"
     },
     {
+      "asset": "DZ020",
+      "defect": "DD-00016935",
+      "raised": "2026-11-15",
+      "system": "DZ020.CH.BL (Blade / Отвал)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Отломилась подножка на брусе отвала для подъема в кабину",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-023227"
+    },
+    {
       "asset": "GE054",
       "defect": "DD-00016932",
       "raised": "2026-11-15",
@@ -12747,19 +12773,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "DZ020",
-      "defect": "DD-00016935",
-      "raised": "2026-11-15",
-      "system": "DZ020.CH.BL (Blade / Отвал)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Отломилась подножка на брусе отвала для подъема в кабину",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
       "wo": null
     },
     {
@@ -47083,12 +47096,12 @@ window.CM_WO_DATA = {
       "wo": "WO-022929"
     },
     {
-      "asset": "LV158",
-      "defect": "DD-00014121",
+      "asset": "TK162",
+      "defect": "DD-00014083",
       "raised": "2026-10-05",
-      "system": "LV158.CH.SU (Suspension / Подвеска)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Требуется замена нижних и верхних шаровых опор, замена втулок и стоек стабилизатора",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK162 TRANSMISSION OldNumber (UT162)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка масла с РК",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -47096,12 +47109,12 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK162",
-      "defect": "DD-00014083",
+      "asset": "LV158",
+      "defect": "DD-00014121",
       "raised": "2026-10-05",
-      "system": "TRUCK, WATER URAL 4672M1-20, TK162 TRANSMISSION OldNumber (UT162)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка масла с РК",
+      "system": "LV158.CH.SU (Suspension / Подвеска)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Требуется замена нижних и верхних шаровых опор, замена втулок и стоек стабилизатора",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -57782,19 +57795,6 @@ window.CM_WO_DATA = {
       "wo": "WO-018103"
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
-      "wo": null
-    },
-    {
       "asset": "DZ022",
       "defect": "DD-00011314",
       "raised": "2026-08-21",
@@ -57896,6 +57896,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
@@ -102818,9 +102831,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-27",
-      "planStartDt": "2026-11-27T00:00:00",
-      "planEnd": "2026-11-27",
+      "planStart": "2026-12-09",
+      "planStartDt": "2026-12-09T00:00:00",
+      "planEnd": "2026-12-09",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
