@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-24T08:42:52+00:00",
+  "generated": "2026-11-24T08:57:52+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -27063,6 +27063,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022216"
     },
     {
+      "asset": "DZ003",
+      "defect": "DD-00015786",
+      "raised": "2026-10-27",
+      "system": "DZ003.CH.BL (Blade / Отвал)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Износ пальца",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-023222"
+    },
+    {
       "asset": "TK118",
       "defect": "DD-00015755",
       "raised": "2026-10-27",
@@ -27074,19 +27087,6 @@ window.CM_WO_DATA = {
       "by": "Evgeniy Frolin",
       "regBy": "Фролин Евгений Владимирович",
       "wo": "WO-020867"
-    },
-    {
-      "asset": "DZ003",
-      "defect": "DD-00015786",
-      "raised": "2026-10-27",
-      "system": "DZ003.CH.BL (Blade / Отвал)",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "Износ пальца",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": null
     },
     {
       "asset": "CR003",
