@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-24T03:13:00+00:00",
+  "generated": "2026-11-24T03:27:50+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -443,13 +443,13 @@ window.CM_WO_DATA = {
     "regBy": "Contact person initiator WR"
   },
   "cmDateFrom": {
-    "raised": 218,
+    "raised": 217,
     "detected": 0,
     "planStart": 0
   },
   "cmCauseFrom": {
     "wo": 136,
-    "wr": 82,
+    "wr": 81,
     "cert": 0,
     "none": 0
   },
@@ -2592,32 +2592,6 @@ window.CM_WO_DATA = {
       "raisedBy": "ГДК Баимская",
       "woNumber": "WO-020309",
       "maintType": "P4 Planned Repair",
-      "planned": false
-    },
-    {
-      "date": "2026-10-15",
-      "dateFrom": "raised",
-      "raised": "2026-10-15",
-      "detected": "2026-10-15",
-      "planStart": null,
-      "closed": null,
-      "asset": "EX022",
-      "defect": "DD-00014828",
-      "requestNo": "DD-00014828",
-      "eqType": "EXCAVATOR, BUCKET",
-      "system": "EX022.CH.BUC (Bucket / Ковш)",
-      "priority": "P4 Planned (Repair)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "cause": "Усталостная трещина",
-      "causeFrom": "wr",
-      "descr": "Трещины в ремне генератора.",
-      "status": "Registered",
-      "by": "Zhomart",
-      "byFull": "Zhomart Khasenov",
-      "regBy": "Хасенов Жомарт",
-      "raisedBy": "ГДК Баимская",
-      "woNumber": null,
-      "maintType": null,
       "planned": false
     },
     {
@@ -6146,6 +6120,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023199"
     },
     {
+      "asset": "EX025",
+      "defect": "DD-00017398",
+      "raised": "2026-11-24",
+      "system": "EX025.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Трещина в РВД ковшевого цилиндра",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": "WO-023197"
+    },
+    {
       "asset": "DZ004",
       "defect": "DD-00017362",
       "raised": "2026-11-24",
@@ -6523,6 +6510,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "TK044",
+      "defect": "DD-00017401",
+      "raised": "2026-11-24",
+      "system": "TK044.DRS.TRA (Transmission / Трансмиссия)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Не включаются передачи (5,6 выскакивают)",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
       "asset": "DZ019",
       "defect": "DD-00017386",
       "raised": "2026-11-24",
@@ -6563,6 +6563,19 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "EX022",
+      "defect": "DD-00014828",
+      "raised": "2026-11-24",
+      "system": "EX022.ELS.ALT (Alternator / Генератор)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Трещины в ремне генератора/Требуется замена ремня кондиционера",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Tomilov",
+      "regBy": "Хасенов Жомарт",
+      "wo": null
+    },
+    {
+      "asset": "EX022",
       "defect": "DD-00017395",
       "raised": "2026-11-24",
       "system": "EX022.CH.BUC (Bucket / Ковш)",
@@ -6570,19 +6583,6 @@ window.CM_WO_DATA = {
       "descr": "Трещина адаптера коронки ковша",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
-      "by": "Sergey Tomilov",
-      "regBy": "Томилов Сергей Владимирович",
-      "wo": null
-    },
-    {
-      "asset": "EX025",
-      "defect": "DD-00017398",
-      "raised": "2026-11-24",
-      "system": "EX025.HS.DL (Hydraulic Lines / Гидролинии)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Трещина в РВД ковшевого цилиндра",
-      "status": "Registered",
-      "priority": "P2 Urgent",
       "by": "Sergey Tomilov",
       "regBy": "Томилов Сергей Владимирович",
       "wo": null
@@ -7576,6 +7576,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023045"
     },
     {
+      "asset": "CN018",
+      "defect": "DD-00017238",
+      "raised": "2026-11-21",
+      "system": "CN018.CH.BOO (Boom / Стрела)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Замена смаки полиспаста",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023040"
+    },
+    {
       "asset": "TK119",
       "defect": "DD-00017250",
       "raised": "2026-11-21",
@@ -7730,19 +7743,6 @@ window.CM_WO_DATA = {
       "by": "Vladimir Ladik",
       "regBy": "Ладик Владимир Владимирович",
       "wo": "WO-023020"
-    },
-    {
-      "asset": "CN018",
-      "defect": "DD-00017238",
-      "raised": "2026-11-21",
-      "system": "CN018.CH.BOO (Boom / Стрела)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Замена смаки полиспаста",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-023040"
     },
     {
       "asset": "TK036",
@@ -18619,7 +18619,7 @@ window.CM_WO_DATA = {
       "system": "SN001.SCN.SBX (Screen Box / Короб грохота)",
       "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "descr": "поломка перильных ограждений площадок обслуживания",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P4 Planned (Repair)",
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
@@ -18710,24 +18710,11 @@ window.CM_WO_DATA = {
       "system": "SN001.CONV.SDC (Side Discharge Conveyor / Боковой разгрузочный конвейер)",
       "defectType": "8.03 Conveyor belt splice failure / Разрушение стыка конвейерной ленты",
       "descr": "изношены соеденения на стыках ленты правого конвейера",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P4 Planned (Repair)",
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": "WO-022367"
-    },
-    {
-      "asset": "SN001",
-      "defect": "DD-00016411",
-      "raised": "2026-11-06",
-      "system": "SN001.CH.FR (Frame / Рама)",
-      "defectType": "6.08 Guarding / cover damage / Повреждение ограждений / кожухов",
-      "descr": "отсутствуют блокирующие дверки обслуживающих площадок грохота",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": "WO-022373"
     },
     {
       "asset": "SN001",
@@ -18736,11 +18723,24 @@ window.CM_WO_DATA = {
       "system": "SN001.CONV.SDC (Side Discharge Conveyor / Боковой разгрузочный конвейер)",
       "defectType": "8.06 Roller / idler failure / Отказ ролика / роликоопоры",
       "descr": "износ роликов правого бокового конвейера",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P4 Planned (Repair)",
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": "WO-022366"
+    },
+    {
+      "asset": "SN001",
+      "defect": "DD-00016411",
+      "raised": "2026-11-06",
+      "system": "SN001.CH.FR (Frame / Рама)",
+      "defectType": "6.08 Guarding / cover damage / Повреждение ограждений / кожухов",
+      "descr": "отсутствуют блокирующие дверки обслуживающих площадок грохота",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-022373"
     },
     {
       "asset": "CR007",
@@ -24521,7 +24521,7 @@ window.CM_WO_DATA = {
       "system": "CR002.CONV.BEL (Conveyor Belt / Конвейерная лента)",
       "defectType": "8.03 Conveyor belt splice failure / Разрушение стыка конвейерной ленты",
       "descr": "замена механическиих соединителей",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Murashko",
       "regBy": "Мурашко Сергей Борисович",
@@ -105630,15 +105630,15 @@ window.CM_WO_DATA = {
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-16",
       "planStartDt": "2026-11-16T00:00:00",
       "planEnd": "2026-11-16",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-17",
+      "actualStartDt": "2026-11-17T04:00:00",
+      "actualEnd": "2026-11-19"
     },
     {
       "equip": "EX006",
