@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-24T16:12:51+00:00",
+  "generated": "2026-11-24T16:27:55+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 815,
@@ -6172,6 +6172,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023240"
     },
     {
+      "asset": "TK150",
+      "defect": "DD-00017441",
+      "raised": "2026-11-25",
+      "system": "TK150.DRS.COO (Cooling System / Система охлаждения)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка ОЖ",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Valentin Trapilo",
+      "regBy": "Трапило Валентин Святославович",
+      "wo": "WO-023241"
+    },
+    {
       "asset": "DZ009",
       "defect": "DD-00017433",
       "raised": "2026-11-25",
@@ -6347,7 +6360,7 @@ window.CM_WO_DATA = {
       "system": "TRUCK, WATER URAL 4672M1-20, TK098 ENGINE OldNumber (UT098)",
       "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
       "descr": "Потеря мощности. Активирован индикатор неисправности двигателя",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
@@ -28135,7 +28148,7 @@ window.CM_WO_DATA = {
       "system": "TK047.CH.SU (Suspension / Подвеска)",
       "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
       "descr": "Требуется диагностика подвески (посторонний шум)",
-      "status": "Elimination scheduled",
+      "status": "In progress",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
@@ -86220,7 +86233,7 @@ window.CM_WO_DATA = {
       "planStartDt": "2026-10-27T00:00:00",
       "planEnd": "2026-10-27",
       "actualStart": "2026-10-27",
-      "actualStartDt": "2026-10-27T00:00:00",
+      "actualStartDt": "2026-10-27T07:00:00",
       "actualEnd": "2026-10-27"
     },
     {
