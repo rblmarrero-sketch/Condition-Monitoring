@@ -2,10 +2,10 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-24T15:37:49+00:00",
+  "generated": "2026-11-24T15:52:43+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
-  "unitsInWorkbook": 814,
+  "unitsInWorkbook": 815,
   "unitsKept": [
     "BL001",
     "BL002",
@@ -6159,6 +6159,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023239"
     },
     {
+      "asset": "TK166.SS.HOS",
+      "defect": "EB-00000109",
+      "raised": "2026-11-25",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Viktor Bernikov",
+      "regBy": "Viktor Bernikov",
+      "wo": "WO-023240"
+    },
+    {
       "asset": "DZ009",
       "defect": "DD-00017433",
       "raised": "2026-11-25",
@@ -6308,7 +6321,7 @@ window.CM_WO_DATA = {
       "system": "LV084.ELS.AS (Alarm System / Система сигнализации)",
       "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
       "descr": "Не работает проблесковый маячок",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
@@ -6321,7 +6334,7 @@ window.CM_WO_DATA = {
       "system": "EX001.ELS (Electrical System / Электросистема)",
       "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
       "descr": "Заглох не запускается.",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P1 Breakdown",
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
@@ -86207,7 +86220,7 @@ window.CM_WO_DATA = {
       "planStartDt": "2026-10-27T00:00:00",
       "planEnd": "2026-10-27",
       "actualStart": "2026-10-27",
-      "actualStartDt": "2026-10-27T07:00:00",
+      "actualStartDt": "2026-10-27T00:00:00",
       "actualEnd": "2026-10-27"
     },
     {
