@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-24T21:37:56+00:00",
+  "generated": "2026-11-24T21:53:07+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 815,
@@ -6175,7 +6175,7 @@ window.CM_WO_DATA = {
       "asset": "LV022",
       "defect": "DD-00017451",
       "raised": "2026-11-25",
-      "system": "LV022 HILUX 2.5 TOYOTA",
+      "system": "LV022.OC.GL (Glass / Стекла)",
       "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "descr": "Замена левого зеркала, ремонт отопителя",
       "status": "Elimination scheduled",
@@ -6276,6 +6276,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023249"
     },
     {
+      "asset": "DR008",
+      "defect": "DD-00017448",
+      "raised": "2026-11-25",
+      "system": "DR008.HS.PD (Hydraulic Motors / Гидромоторы)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Оторвалось крепление шлангов на вращателе",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": "WO-023248"
+    },
+    {
       "asset": "GR001",
       "defect": "DD-00017444",
       "raised": "2026-11-25",
@@ -6287,19 +6300,6 @@ window.CM_WO_DATA = {
       "by": "Valentin Trapilo",
       "regBy": "Трапило Валентин Святославович",
       "wo": "WO-023244"
-    },
-    {
-      "asset": "DR008",
-      "defect": "DD-00017448",
-      "raised": "2026-11-25",
-      "system": "DR008.HS.PD (Hydraulic Motors / Гидромоторы)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Оторвалось крепление шлангов на вращателе",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Tomilov",
-      "regBy": "Томилов Сергей Владимирович",
-      "wo": "WO-023248"
     },
     {
       "asset": "BSL001",
@@ -7862,19 +7862,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "EX002",
-      "defect": "DD-00017312",
-      "raised": "2026-11-22",
-      "system": "EX002.CH.BUC (Bucket / Ковш)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Замена коронок ковша, ремня генератора",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-023085"
-    },
-    {
       "asset": "TK084",
       "defect": "DD-00017317",
       "raised": "2026-11-22",
@@ -7977,6 +7964,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-023078"
+    },
+    {
+      "asset": "EX002",
+      "defect": "DD-00017312",
+      "raised": "2026-11-22",
+      "system": "EX002.CH.BUC (Bucket / Ковш)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Замена коронок ковша, ремня генератора",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023085"
     },
     {
       "asset": "CR008",
@@ -112086,15 +112086,15 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
-      "planStart": "2026-11-24",
-      "planStartDt": "2026-11-24T00:00:00",
-      "planEnd": "2026-11-24",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
+      "planStart": "2026-11-23",
+      "planStartDt": "2026-11-23T00:00:00",
+      "planEnd": "2026-11-23",
+      "actualStart": "2026-11-23",
+      "actualStartDt": "2026-11-23T14:00:00",
+      "actualEnd": "2026-11-23"
     },
     {
       "equip": "EX012",
@@ -131156,15 +131156,15 @@ window.CM_WO_DATA = {
       "cmLabel": "500h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-19",
       "planStartDt": "2026-11-19T00:00:00",
       "planEnd": "2026-11-19",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-22",
+      "actualStartDt": "2026-11-22T07:30:00",
+      "actualEnd": "2026-11-22"
     },
     {
       "equip": "GR004",

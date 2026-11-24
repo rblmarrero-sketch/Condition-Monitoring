@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-24T21:37:56+00:00",
+  "generated": "2026-11-24T21:53:07+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -2733,24 +2733,6 @@
       "completed": ""
     },
     {
-      "wo": "WO-022049",
-      "equip": "EX012",
-      "cls": "EXC",
-      "comp": "",
-      "desc": "250h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-24",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-11-24",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
       "wo": "WO-022340",
       "equip": "GE025",
       "cls": "GEN",
@@ -2929,6 +2911,24 @@
       "cause": "",
       "pmStatus": "open",
       "completed": ""
+    },
+    {
+      "wo": "WO-022049",
+      "equip": "EX012",
+      "cls": "EXC",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-23",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-11-23",
+      "status": "Completed",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "complete",
+      "completed": "2026-11-23"
     },
     {
       "wo": "WO-022937",
@@ -3679,12 +3679,12 @@
       "type": "500 Hours service Planned",
       "hours": 500,
       "plan": "2026-11-19",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-22"
     },
     {
       "wo": "WO-022128",
@@ -10629,7 +10629,7 @@
     {
       "d": "DD-00017451",
       "u": "LV022",
-      "s": "LV022 HILUX 2.5 TOYOTA",
+      "s": "LV022.OC.GL (Glass / Стекла)",
       "p": "P2",
       "r": "2026-11-25",
       "x": "Замена левого зеркала, ремонт отопителя"
@@ -10691,20 +10691,20 @@
       "x": "Течь РВД гидроцилиндра"
     },
     {
-      "d": "DD-00017444",
-      "u": "GR001",
-      "s": "GR001.DRS.COO (Cooling System / Система охлаждения)",
-      "p": "P2",
-      "r": "2026-11-25",
-      "x": "Утечка ОЖ в кабине оператора"
-    },
-    {
       "d": "DD-00017448",
       "u": "DR008",
       "s": "DR008.HS.PD (Hydraulic Motors / Гидромоторы)",
       "p": "P2",
       "r": "2026-11-25",
       "x": "Оторвалось крепление шлангов на вращателе"
+    },
+    {
+      "d": "DD-00017444",
+      "u": "GR001",
+      "s": "GR001.DRS.COO (Cooling System / Система охлаждения)",
+      "p": "P2",
+      "r": "2026-11-25",
+      "x": "Утечка ОЖ в кабине оператора"
     },
     {
       "d": "DD-00017445",
@@ -11259,14 +11259,6 @@
       "x": "Трещина в зоне втулки шарнирного крепления стрелы крана"
     },
     {
-      "d": "DD-00017312",
-      "u": "EX002",
-      "s": "EX002.CH.BUC (Bucket / Ковш)",
-      "p": "P2",
-      "r": "2026-11-22",
-      "x": "Замена коронок ковша, ремня генератора"
-    },
-    {
       "d": "DD-00017317",
       "u": "TK084",
       "s": "TK084.DRS.ENG (Engine / Двигатель)",
@@ -11321,6 +11313,14 @@
       "p": "P2",
       "r": "2026-11-22",
       "x": "Не работает подъем кузова"
+    },
+    {
+      "d": "DD-00017312",
+      "u": "EX002",
+      "s": "EX002.CH.BUC (Bucket / Ковш)",
+      "p": "P2",
+      "r": "2026-11-22",
+      "x": "Замена коронок ковша, ремня генератора"
     },
     {
       "d": "DD-00017289",
