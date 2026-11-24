@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-24T05:18:10+00:00",
+  "generated": "2026-11-24T05:38:30+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6458,6 +6458,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023192"
     },
     {
+      "asset": "GR014",
+      "defect": "DD-00017414",
+      "raised": "2026-11-24",
+      "system": "GR014.CH.FR (Frame / Рама)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Сварка крепления зеркала",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023212"
+    },
+    {
       "asset": "TK106",
       "defect": "DD-00017397",
       "raised": "2026-11-24",
@@ -6524,11 +6537,50 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "BS009",
+      "defect": "DD-00017416",
+      "raised": "2026-11-24",
+      "system": "BS009.SS.RE (Tie Rod Ends / Наконечники рулевых тяг)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Диагностика рулевых тяг",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "BS009",
       "defect": "DD-00017411",
       "raised": "2026-11-24",
       "system": "BS009.OC.HE (Heating / Отопление)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Промывка (замена) радиатора отопителя (дует холодным)",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "BS009",
+      "defect": "DD-00017413",
+      "raised": "2026-11-24",
+      "system": "BS009.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Замена шланга на расширительный бачок (трещины)",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "BS009",
+      "defect": "DD-00017415",
+      "raised": "2026-11-24",
+      "system": "BS009.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка с помпы ОЖ",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -6728,6 +6780,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Tomilov",
       "regBy": "Томилов Сергей Владимирович",
+      "wo": null
+    },
+    {
+      "asset": "CD007",
+      "defect": "DD-00017417",
+      "raised": "2026-11-24",
+      "system": "CD007.CH.STR (Superstructure / Надстройка)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Утепление РВД",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
       "wo": null
     },
     {
@@ -8791,7 +8856,7 @@ window.CM_WO_DATA = {
       "system": "CR008.DRS.FUE (Fuel System / Топливная система)",
       "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
       "descr": "Замена насоса подкачки топлива",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Pavel Kostin",
       "regBy": "Костин Павел Александрович",
@@ -24879,6 +24944,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "EX009",
+      "defect": "DD-00015866",
+      "raised": "2026-10-29",
+      "system": "EX009.OC.FS (Fire Suppression / Система пожаротушения)",
+      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "descr": "КТХ-5",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Roman Kochetov",
+      "regBy": "Кочетов Роман Иванович",
+      "wo": "WO-022631"
+    },
+    {
       "asset": "TK106",
       "defect": "DD-00015899",
       "raised": "2026-10-29",
@@ -25566,19 +25644,6 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022732"
-    },
-    {
-      "asset": "EX009",
-      "defect": "DD-00015866",
-      "raised": "2026-10-29",
-      "system": "EX009.OC.FS (Fire Suppression / Система пожаротушения)",
-      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
-      "descr": "КТХ-5",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Roman Kochetov",
-      "regBy": "Кочетов Роман Иванович",
-      "wo": "WO-022631"
     },
     {
       "asset": "DR011",
@@ -59004,8 +59069,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H07",
-      "defect": "EB-00000075",
+      "asset": "H04",
+      "defect": "EB-00000076",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -59017,8 +59082,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000076",
+      "asset": "H07",
+      "defect": "EB-00000075",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -115084,6 +115149,25 @@ window.CM_WO_DATA = {
       "actualStart": "2026-11-18",
       "actualStartDt": "2026-11-18T09:00:00",
       "actualEnd": "2026-11-18"
+    },
+    {
+      "equip": "EX021",
+      "cls": "EXC",
+      "woNumber": "WO-023213",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "250h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-12-04",
+      "planStartDt": "2026-12-04T00:00:00",
+      "planEnd": "2026-12-04",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
     },
     {
       "equip": "EX022",
