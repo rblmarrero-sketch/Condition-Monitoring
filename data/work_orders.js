@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-24T10:42:47+00:00",
+  "generated": "2026-11-24T10:53:20+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 814,
@@ -6523,19 +6523,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023205"
     },
     {
-      "asset": "TK169",
-      "defect": "DD-00017431",
-      "raised": "2026-11-24",
-      "system": "TRUCK, WATER URAL 4672M1-20, TK169 ENGINE",
-      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
-      "descr": "Спорадически теряет мощность под нагрузкой.",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-023230"
-    },
-    {
       "asset": "LV016",
       "defect": "DD-00017385",
       "raised": "2026-11-24",
@@ -6547,6 +6534,19 @@ window.CM_WO_DATA = {
       "by": "Ilshat Sabitov",
       "regBy": "Сабитов Ильшат Рашидович",
       "wo": "WO-023175"
+    },
+    {
+      "asset": "TK169",
+      "defect": "DD-00017431",
+      "raised": "2026-11-24",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK169 ENGINE",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "Спорадически теряет мощность под нагрузкой.",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-023230"
     },
     {
       "asset": "DZ016",
@@ -9643,6 +9643,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022877"
     },
     {
+      "asset": "TK106",
+      "defect": "DD-00017143",
+      "raised": "2026-11-19",
+      "system": "Injectors / Форсунки",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "Неисправность топливной системы",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-023122"
+    },
+    {
       "asset": "LD013",
       "defect": "DD-00017166",
       "raised": "2026-11-19",
@@ -9758,19 +9771,6 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022952"
-    },
-    {
-      "asset": "TK106",
-      "defect": "DD-00017143",
-      "raised": "2026-11-19",
-      "system": "Injectors / Форсунки",
-      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
-      "descr": "Неисправность топливной системы",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": "WO-023122"
     },
     {
       "asset": "LV012",
