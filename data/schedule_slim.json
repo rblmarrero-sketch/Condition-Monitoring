@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-24T22:08:18+00:00",
+  "generated": "2026-11-24T22:37:38+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -667,6 +667,15 @@
         ],
         "plan": "2026-11-24",
         "priority": "P3 Planned (PM)"
+      },
+      {
+        "wo": "WO-023254",
+        "hours": 250,
+        "types": [
+          "MP"
+        ],
+        "plan": "2026-12-05",
+        "priority": "P3 Planned (PM)"
       }
     ],
     "TK148": [
@@ -735,6 +744,17 @@
           "MP"
         ],
         "plan": "2026-11-28",
+        "priority": "P3 Planned (PM)"
+      }
+    ],
+    "TK152": [
+      {
+        "wo": "WO-023255",
+        "hours": 250,
+        "types": [
+          "MP"
+        ],
+        "plan": "2026-12-02",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -837,6 +857,16 @@
           "MP"
         ],
         "plan": "2026-11-23",
+        "priority": "P3 Planned (PM)"
+      },
+      {
+        "wo": "WO-023256",
+        "hours": 500,
+        "types": [
+          "LUBE",
+          "MP"
+        ],
+        "plan": "2026-12-05",
         "priority": "P3 Planned (PM)"
       }
     ]
@@ -1311,6 +1341,42 @@
       "completed": ""
     },
     {
+      "wo": "WO-023254",
+      "equip": "TK147",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-12-05",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-12-05",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-023256",
+      "equip": "TK161",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Lubrication / Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-12-05",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-12-05",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-023028",
       "equip": "DZ016",
       "cls": "DOZ",
@@ -1530,6 +1596,24 @@
       "wo": "WO-023138",
       "equip": "TK120",
       "cls": "AT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-12-02",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-12-02",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-023255",
+      "equip": "TK152",
+      "cls": "HT",
       "comp": "",
       "desc": "Magnetic Plug",
       "priority": "P3 Planned (PM)",
@@ -10737,6 +10821,14 @@
       "p": "P2",
       "r": "2026-11-25",
       "x": "Обрыв ремня генератора"
+    },
+    {
+      "d": "DD-00017453",
+      "u": "DR008",
+      "s": "DR008.HS.PD (Hydraulic Motors / Гидромоторы)",
+      "p": "P2",
+      "r": "2026-11-25",
+      "x": "Сломался штуцер на вращателе"
     },
     {
       "d": "DD-00017446",
@@ -36963,20 +37055,20 @@
       "x": "каплевидная утечка с труб гидролинии стрелы"
     },
     {
-      "d": "DD-00014962",
-      "u": "LS048",
-      "s": "LS048.ELS.MW (Machine Wiring / Электропроводка машины)",
-      "p": "P4",
-      "r": "2026-10-17",
-      "x": "Замена АКБ"
-    },
-    {
       "d": "DD-00014963",
       "u": "LS048",
       "s": "LS048.DRS.ENG (Engine / Двигатель)",
       "p": "P4",
       "r": "2026-10-17",
       "x": "Замена ФОВ"
+    },
+    {
+      "d": "DD-00014962",
+      "u": "LS048",
+      "s": "LS048.ELS.MW (Machine Wiring / Электропроводка машины)",
+      "p": "P4",
+      "r": "2026-10-17",
+      "x": "Замена АКБ"
     },
     {
       "d": "DD-00014971",
@@ -39555,20 +39647,20 @@
       "x": "Сломаны замки капота"
     },
     {
-      "d": "DD-00014083",
-      "u": "TK162",
-      "s": "TRUCK, WATER URAL 4672M1-20, TK162 TRANSMISSION OldNumber (UT162)",
-      "p": "P4",
-      "r": "2026-10-05",
-      "x": "Утечка масла с РК"
-    },
-    {
       "d": "DD-00014121",
       "u": "LV158",
       "s": "LV158.CH.SU (Suspension / Подвеска)",
       "p": "P4",
       "r": "2026-10-05",
       "x": "Требуется замена нижних и верхних шаровых опор, замена втулок и стоек стабилизат"
+    },
+    {
+      "d": "DD-00014083",
+      "u": "TK162",
+      "s": "TRUCK, WATER URAL 4672M1-20, TK162 TRANSMISSION OldNumber (UT162)",
+      "p": "P4",
+      "r": "2026-10-05",
+      "x": "Утечка масла с РК"
     },
     {
       "d": "DD-00014119",
