@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-24T02:42:53+00:00",
+  "generated": "2026-11-24T02:57:56+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -239,17 +239,6 @@
           "TB"
         ],
         "plan": "2026-11-28",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "TK034": [
-      {
-        "wo": "WO-022331",
-        "hours": 500,
-        "types": [
-          "MP"
-        ],
-        "plan": "2026-11-19",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -3041,12 +3030,12 @@
       "type": "500 Hours service Planned",
       "hours": 500,
       "plan": "2026-11-22",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-22"
     },
     {
       "wo": "WO-021971",
@@ -3257,12 +3246,12 @@
       "type": "4000 Hours service Planned",
       "hours": 4000,
       "plan": "2026-11-22",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-23"
     },
     {
       "wo": "WO-022354",
@@ -3671,12 +3660,12 @@
       "type": "500 Hours service Planned",
       "hours": 500,
       "plan": "2026-11-19",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-23"
     },
     {
       "wo": "WO-021941",
@@ -10538,6 +10527,14 @@
     }
   ],
   "firDefects": [
+    {
+      "d": "DD-00017400",
+      "u": "LV021",
+      "s": "LV021.CH.SU (Suspension / Подвеска)",
+      "p": "P2",
+      "r": "2026-11-24",
+      "x": "Замена переднего правого амортизатора"
+    },
     {
       "d": "DD-00017362",
       "u": "DZ004",
