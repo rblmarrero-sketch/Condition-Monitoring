@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-24T23:12:59+00:00",
+  "generated": "2026-11-24T23:27:55+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 815,
@@ -357,7 +357,7 @@ window.CM_WO_DATA = {
     "WE010",
     "WE011"
   ],
-  "duplicateRowsCollapsed": 470,
+  "duplicateRowsCollapsed": 471,
   "roundsDedupedWithinVisit": 2,
   "columns": [
     "Asset description",
@@ -961,7 +961,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-11-14",
       "detected": "2026-11-14",
-      "planStart": "2026-11-30",
+      "planStart": "2026-12-14",
       "closed": null,
       "asset": "EX021",
       "defect": "DD-00016890",
@@ -6484,32 +6484,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023150"
     },
     {
-      "asset": "TK037",
-      "defect": "DD-00017366",
-      "raised": "2026-11-24",
-      "system": "TK037.CH.BY (Dump Body / Самосвальный кузов)",
-      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
-      "descr": "не срабатывает соленоид подьема кузова",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Viktor Bernikov",
-      "regBy": "Берников Виктор Викторович",
-      "wo": "WO-023152"
-    },
-    {
-      "asset": "TK091",
-      "defect": "DD-00017367",
-      "raised": "2026-11-24",
-      "system": "TK091.DRS.TRA (Transmission / Трансмиссия)",
-      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
-      "descr": "Раскрутилась кулиса",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Viktor Bernikov",
-      "regBy": "Берников Виктор Викторович",
-      "wo": "WO-023153"
-    },
-    {
       "asset": "EX007",
       "defect": "DD-00017437",
       "raised": "2026-11-24",
@@ -6770,6 +6744,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023228"
     },
     {
+      "asset": "TK091",
+      "defect": "DD-00017367",
+      "raised": "2026-11-24",
+      "system": "TK091.DRS.TRA (Transmission / Трансмиссия)",
+      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "descr": "Раскрутилась кулиса",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Viktor Bernikov",
+      "regBy": "Берников Виктор Викторович",
+      "wo": "WO-023153"
+    },
+    {
       "asset": "DZ020",
       "defect": "DD-00017396",
       "raised": "2026-11-24",
@@ -6848,6 +6835,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023230"
     },
     {
+      "asset": "TK037",
+      "defect": "DD-00017366",
+      "raised": "2026-11-24",
+      "system": "TK037.CH.BY (Dump Body / Самосвальный кузов)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "не срабатывает соленоид подьема кузова",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Viktor Bernikov",
+      "regBy": "Берников Виктор Викторович",
+      "wo": "WO-023152"
+    },
+    {
       "asset": "DZ016",
       "defect": "DD-00017384",
       "raised": "2026-11-24",
@@ -6913,19 +6913,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023192"
     },
     {
-      "asset": "DZ002",
-      "defect": "DD-00017391",
-      "raised": "2026-11-24",
-      "system": "DZ002.HS.DL (Hydraulic Lines / Гидролинии)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка гидровлического масла",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Tomilov",
-      "regBy": "Томилов Сергей Владимирович",
-      "wo": "WO-023185"
-    },
-    {
       "asset": "GR014",
       "defect": "DD-00017414",
       "raised": "2026-11-24",
@@ -6937,6 +6924,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-023212"
+    },
+    {
+      "asset": "DZ002",
+      "defect": "DD-00017391",
+      "raised": "2026-11-24",
+      "system": "DZ002.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка гидровлического масла",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": "WO-023185"
     },
     {
       "asset": "DZ016",
@@ -7426,7 +7426,7 @@ window.CM_WO_DATA = {
       "system": "FL008.ELS.PH (Preheater / Предпусковой подогреватель)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Утечка топлива",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
@@ -7483,19 +7483,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Murashko",
       "regBy": "Мурашко Сергей Борисович",
       "wo": "WO-023091"
-    },
-    {
-      "asset": "EX008",
-      "defect": "DD-00017324",
-      "raised": "2026-11-23",
-      "system": "EX008.HS.DL (Hydraulic Lines / Гидролинии)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь рабочей жидкости по соединению (фитингу) РВД",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Aleksandr Kuznetsov",
-      "regBy": "Кузнецов Александр Андреевич",
-      "wo": "WO-023093"
     },
     {
       "asset": "TK106",
@@ -7667,6 +7654,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023118"
     },
     {
+      "asset": "EX008",
+      "defect": "DD-00017324",
+      "raised": "2026-11-23",
+      "system": "EX008.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь рабочей жидкости по соединению (фитингу) РВД",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksandr Kuznetsov",
+      "regBy": "Кузнецов Александр Андреевич",
+      "wo": "WO-023093"
+    },
+    {
       "asset": "CN005",
       "defect": "DD-00017327",
       "raised": "2026-11-23",
@@ -7693,19 +7693,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023119"
     },
     {
-      "asset": "FL002",
-      "defect": "DD-00017351",
-      "raised": "2026-11-23",
-      "system": "FL002.ELS.ALT (Alternator / Генератор)",
-      "defectType": "4.15 Alternator / charging fault / Неисправность генератора / зарядки",
-      "descr": "Замена генератора",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-023120"
-    },
-    {
       "asset": "GE066",
       "defect": "DD-00017328",
       "raised": "2026-11-23",
@@ -7730,6 +7717,19 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-023187"
+    },
+    {
+      "asset": "FL002",
+      "defect": "DD-00017351",
+      "raised": "2026-11-23",
+      "system": "FL002.ELS.ALT (Alternator / Генератор)",
+      "defectType": "4.15 Alternator / charging fault / Неисправность генератора / зарядки",
+      "descr": "Замена генератора",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023120"
     },
     {
       "asset": "TK037",
@@ -7855,7 +7855,7 @@ window.CM_WO_DATA = {
       "system": "EX001.ELS.ALT (Alternator / Генератор)",
       "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "descr": "Оборван болт крепления генератора",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
@@ -8265,19 +8265,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023041"
     },
     {
-      "asset": "TK016.HS.DL",
-      "defect": "EB-00000108",
-      "raised": "2026-11-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Viktor Bernikov",
-      "regBy": "Viktor Bernikov",
-      "wo": "WO-023065"
-    },
-    {
       "asset": "TK016",
       "defect": "DD-00017287",
       "raised": "2026-11-21",
@@ -8315,6 +8302,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-023040"
+    },
+    {
+      "asset": "TK016.HS.DL",
+      "defect": "EB-00000108",
+      "raised": "2026-11-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Viktor Bernikov",
+      "regBy": "Viktor Bernikov",
+      "wo": "WO-023065"
     },
     {
       "asset": "GE020",
@@ -46303,19 +46303,6 @@ window.CM_WO_DATA = {
       "wo": "WO-019576"
     },
     {
-      "asset": "EX023",
-      "defect": "DD-00014207",
-      "raised": "2026-10-06",
-      "system": "EX023.HS.DL (Hydraulic Lines / Гидролинии)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Изготовление рукавов высокого давления",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Tomilov",
-      "regBy": "Томилов Сергей Владимирович",
-      "wo": "WO-023202"
-    },
-    {
       "asset": "EX002",
       "defect": "DD-00014181",
       "raised": "2026-10-06",
@@ -46379,6 +46366,19 @@ window.CM_WO_DATA = {
       "by": "Temir Marochko",
       "regBy": "Марочко Темир",
       "wo": "WO-020485"
+    },
+    {
+      "asset": "EX023",
+      "defect": "DD-00014207",
+      "raised": "2026-10-06",
+      "system": "EX023.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Изготовление рукавов высокого давления",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": "WO-023202"
     },
     {
       "asset": "EX022",
