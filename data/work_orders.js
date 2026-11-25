@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-25T15:12:43+00:00",
+  "generated": "2026-11-25T15:27:53+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 815,
@@ -6159,6 +6159,19 @@ window.CM_WO_DATA = {
   ],
   "otherDefects": [
     {
+      "asset": "EX025",
+      "defect": "DD-00017497",
+      "raised": "2026-11-26",
+      "system": "EX025.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка по стыку РВД",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Valentin Trapilo",
+      "regBy": "Трапило Валентин Святославович",
+      "wo": "WO-023293"
+    },
+    {
       "asset": "LD007",
       "defect": "DD-00017492",
       "raised": "2026-11-26",
@@ -6222,6 +6235,19 @@ window.CM_WO_DATA = {
       "by": "Valentin Trapilo",
       "regBy": "Трапило Валентин Святославович",
       "wo": "WO-023292"
+    },
+    {
+      "asset": "TK047",
+      "defect": "DD-00017498",
+      "raised": "2026-11-26",
+      "system": "TK047.DRS.ENG (Engine / Двигатель)",
+      "defectType": "3.13 Warning light / alarm active / Сигнальная лампа / аварийная сигнализация активна",
+      "descr": "Неверные показания стрелки датчика масла.",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-023294"
     },
     {
       "asset": "EX008",
