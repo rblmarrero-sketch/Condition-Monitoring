@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-25T01:12:47+00:00",
+  "generated": "2026-11-25T01:27:58+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 815,
@@ -6237,19 +6237,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023241"
     },
     {
-      "asset": "LV021",
-      "defect": "DD-00017442",
-      "raised": "2026-11-25",
-      "system": "LV021.ELS.LIG (Head Lighting System / Система головного освещения)",
-      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
-      "descr": "Не работает фонарь доп освещения.",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-023242"
-    },
-    {
       "asset": "DZ019",
       "defect": "DD-00017452",
       "raised": "2026-11-25",
@@ -6269,7 +6256,7 @@ window.CM_WO_DATA = {
       "system": "TK166.DRS.TRA (Transmission / Трансмиссия)",
       "defectType": "4.09 Relay / contactor failure / Отказ реле / контактора",
       "descr": "Не активируется индикатор включения блокировки моста.",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
@@ -6315,19 +6302,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023244"
     },
     {
-      "asset": "BSL001",
-      "defect": "DD-00017445",
-      "raised": "2026-11-25",
-      "system": "IVECO AMT 633910 BSL001",
-      "defectType": "4.06 Loose connection / high resistance / Плохой контакт / высокое сопротивление",
-      "descr": "Неисправность заднего правого фонаря",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-023245"
-    },
-    {
       "asset": "DZ009",
       "defect": "DD-00017433",
       "raised": "2026-11-25",
@@ -6354,17 +6328,43 @@ window.CM_WO_DATA = {
       "wo": "WO-023233"
     },
     {
+      "asset": "BSL001",
+      "defect": "DD-00017445",
+      "raised": "2026-11-25",
+      "system": "IVECO AMT 633910 BSL001",
+      "defectType": "4.06 Loose connection / high resistance / Плохой контакт / высокое сопротивление",
+      "descr": "Неисправность заднего правого фонаря",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-023245"
+    },
+    {
       "asset": "CD001",
       "defect": "DD-00017435",
       "raised": "2026-11-25",
       "system": "CD001.ELS.ALT (Alternator / Генератор)",
       "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
       "descr": "Обрыв ремня генератора",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Viktor Bernikov",
       "regBy": "Берников Виктор Викторович",
       "wo": "WO-023234"
+    },
+    {
+      "asset": "TK104",
+      "defect": "DD-00017457",
+      "raised": "2026-11-25",
+      "system": "TK104.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "Потеря мощности ДВС",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": "WO-023268"
     },
     {
       "asset": "DR008",
@@ -6380,6 +6380,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023257"
     },
     {
+      "asset": "LV021",
+      "defect": "DD-00017442",
+      "raised": "2026-11-25",
+      "system": "LV021.ELS.LIG (Head Lighting System / Система головного освещения)",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "Не работает фонарь доп освещения.",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-023242"
+    },
+    {
       "asset": "DZ002",
       "defect": "DD-00017447",
       "raised": "2026-11-25",
@@ -6391,6 +6404,19 @@ window.CM_WO_DATA = {
       "by": "Pavel Kostin",
       "regBy": "Костин Павел Александрович",
       "wo": "WO-023247"
+    },
+    {
+      "asset": "EX021",
+      "defect": "DD-00017456",
+      "raised": "2026-11-25",
+      "system": "EX021.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка масла со стрелового РВД",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": null
     },
     {
       "asset": "EX021",
@@ -6534,19 +6560,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-023167"
-    },
-    {
-      "asset": "EX007",
-      "defect": "DD-00017437",
-      "raised": "2026-11-24",
-      "system": "EX007.DRS.PD (Pump Drive / Привод насоса)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка масла с РПН",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Viktor Bernikov",
-      "regBy": "Берников Виктор Викторович",
-      "wo": "WO-023236"
     },
     {
       "asset": "LV084",
@@ -6841,7 +6854,7 @@ window.CM_WO_DATA = {
       "system": "TRUCK, WATER URAL 4672M1-20, TK169 ENGINE",
       "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
       "descr": "Спорадически теряет мощность под нагрузкой.",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
@@ -6906,11 +6919,24 @@ window.CM_WO_DATA = {
       "system": "TRUCK, WATER URAL 4672M1-20, TK170 HEATING",
       "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
       "descr": "Неисправность автономного отопителя в насосном отсеке. Горит \"Check engine\"",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-023231"
+    },
+    {
+      "asset": "EX007",
+      "defect": "DD-00017437",
+      "raised": "2026-11-24",
+      "system": "EX007.DRS.PD (Pump Drive / Привод насоса)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка масла с РПН",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Viktor Bernikov",
+      "regBy": "Берников Виктор Викторович",
+      "wo": "WO-023236"
     },
     {
       "asset": "EX022",
@@ -6997,7 +7023,7 @@ window.CM_WO_DATA = {
       "system": "TK031.DRS.COO.FAN Cooling Fan & Drive / Вентилятор и привод вентилятора",
       "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
       "descr": "Открутился вентилятор ДВС",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Viktor Bernikov",
       "regBy": "Берников Виктор Викторович",
@@ -37048,11 +37074,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "LS048",
-      "defect": "DD-00014962",
+      "defect": "DD-00014963",
       "raised": "2026-10-17",
-      "system": "LS048.ELS.MW (Machine Wiring / Электропроводка машины)",
-      "defectType": "4.14 Battery / starting circuit fault / Неисправность аккумулятора / цепи пуска",
-      "descr": "Замена АКБ",
+      "system": "LS048.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "Замена ФОВ",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -37061,11 +37087,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "LS048",
-      "defect": "DD-00014963",
+      "defect": "DD-00014962",
       "raised": "2026-10-17",
-      "system": "LS048.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
-      "descr": "Замена ФОВ",
+      "system": "LS048.ELS.MW (Machine Wiring / Электропроводка машины)",
+      "defectType": "4.14 Battery / starting circuit fault / Неисправность аккумулятора / цепи пуска",
+      "descr": "Замена АКБ",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -46407,6 +46433,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023209"
     },
     {
+      "asset": "EX022",
+      "defect": "DD-00014155",
+      "raised": "2026-10-06",
+      "system": "EX022.CH.BOO (Boom / Стрела)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Устранение люфта стрела-рукоять",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": "WO-023269"
+    },
+    {
       "asset": "TK143",
       "defect": "DD-00014158",
       "raised": "2026-10-06",
@@ -46489,21 +46528,8 @@ window.CM_WO_DATA = {
       "defect": "DD-00014156",
       "raised": "2026-10-06",
       "system": "EX022.CH.BUC (Bucket / Ковш)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
       "descr": "Устранение люфта рукоять-ковш",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Tomilov",
-      "regBy": "Томилов Сергей Владимирович",
-      "wo": null
-    },
-    {
-      "asset": "EX022",
-      "defect": "DD-00014155",
-      "raised": "2026-10-06",
-      "system": "EX022.CH.BOO (Boom / Стрела)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Устранение люфта стрела-рукоять",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Tomilov",
@@ -47434,12 +47460,12 @@ window.CM_WO_DATA = {
       "wo": "WO-022929"
     },
     {
-      "asset": "TK162",
-      "defect": "DD-00014083",
+      "asset": "LV158",
+      "defect": "DD-00014121",
       "raised": "2026-10-05",
-      "system": "TRUCK, WATER URAL 4672M1-20, TK162 TRANSMISSION OldNumber (UT162)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка масла с РК",
+      "system": "LV158.CH.SU (Suspension / Подвеска)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Требуется замена нижних и верхних шаровых опор, замена втулок и стоек стабилизатора",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -47447,12 +47473,12 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "LV158",
-      "defect": "DD-00014121",
+      "asset": "TK162",
+      "defect": "DD-00014083",
       "raised": "2026-10-05",
-      "system": "LV158.CH.SU (Suspension / Подвеска)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Требуется замена нижних и верхних шаровых опор, замена втулок и стоек стабилизатора",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK162 TRANSMISSION OldNumber (UT162)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка масла с РК",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -56677,19 +56703,6 @@ window.CM_WO_DATA = {
       "wo": "WO-018103"
     },
     {
-      "asset": "DZ022",
-      "defect": "DD-00011314",
-      "raised": "2026-08-21",
-      "system": "DZ022.HS (Hydraulic System / Гидравлическая система)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Повреждение (трещина) трубки подачи гидравлического масла (# 1186 – 73 – 04000 ).",
-      "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Andrey Shipelov",
-      "regBy": "Шипелов Андрей Анатольевич",
-      "wo": null
-    },
-    {
       "asset": "H04",
       "defect": "EB-00000082",
       "raised": "2026-08-21",
@@ -56700,6 +56713,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Eduard Shapoval",
       "regBy": "Eduard Shapoval",
+      "wo": null
+    },
+    {
+      "asset": "DZ022",
+      "defect": "DD-00011314",
+      "raised": "2026-08-21",
+      "system": "DZ022.HS (Hydraulic System / Гидравлическая система)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Повреждение (трещина) трубки подачи гидравлического масла (# 1186 – 73 – 04000 ).",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Andrey Shipelov",
+      "regBy": "Шипелов Андрей Анатольевич",
       "wo": null
     },
     {
