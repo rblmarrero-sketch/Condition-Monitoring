@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-25T04:08:01+00:00",
+  "generated": "2026-11-25T04:23:24+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 815,
@@ -6484,6 +6484,32 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "EX020",
+      "defect": "DD-00017465",
+      "raised": "2026-11-25",
+      "system": "EX020.OC.SE (Seat / Сиденье)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Необходима замена сиденья оператора",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "TK004",
+      "defect": "DD-00017464",
+      "raised": "2026-11-25",
+      "system": "TK004.BS.ABS (ABS System / Система ABS)",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "Проверка и ремонт системы АБС.",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
       "asset": "EX021",
       "defect": "DD-00017456",
       "raised": "2026-11-25",
@@ -6534,6 +6560,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Tomilov",
       "regBy": "Томилов Сергей Владимирович",
       "wo": "WO-023176"
+    },
+    {
+      "asset": "TK016",
+      "defect": "DD-00017418",
+      "raised": "2026-11-24",
+      "system": "TK016.SS.SG (Steering Gearbox / Рулевой механизм)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Замена рулевого механизма, амортизаторов",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023216"
     },
     {
       "asset": "LV021",
@@ -6768,19 +6807,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-023217"
-    },
-    {
-      "asset": "TK016",
-      "defect": "DD-00017418",
-      "raised": "2026-11-24",
-      "system": "TK016.SS.SG (Steering Gearbox / Рулевой механизм)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Замена рулевого механизма, амортизаторов",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-023216"
     },
     {
       "asset": "GR003",
