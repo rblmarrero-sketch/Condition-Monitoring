@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-25T17:12:46+00:00",
+  "generated": "2026-11-25T17:27:43+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 815,
@@ -6328,6 +6328,58 @@ window.CM_WO_DATA = {
       "wo": "WO-023304"
     },
     {
+      "asset": "DZ014",
+      "defect": "DD-00017509",
+      "raised": "2026-11-26",
+      "system": "DZ014.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "descr": "Отпала тяга топливного насоса, выкинуло антифриз",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Valentin Trapilo",
+      "regBy": "Трапило Валентин Святославович",
+      "wo": "WO-023305"
+    },
+    {
+      "asset": "SN004",
+      "defect": "DD-00017511",
+      "raised": "2026-11-26",
+      "system": "SN004.CONV.BEL (Conveyor Belt / Конвейерная лента)",
+      "defectType": "8.05 Conveyor belt wear / Износ конвейерной ленты",
+      "descr": "абразивный износ конвейерной ленты",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Sergey Murashko",
+      "regBy": "Мурашко Сергей Борисович",
+      "wo": null
+    },
+    {
+      "asset": "TK098",
+      "defect": "DD-00017510",
+      "raised": "2026-11-26",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK098 PUMP DRIVE OldNumber (UT098)",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "Низкое давление",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Ilya Borzunov",
+      "regBy": "Борзунов Илья Николаевич",
+      "wo": null
+    },
+    {
+      "asset": "EX003",
+      "defect": "DD-00017512",
+      "raised": "2026-11-26",
+      "system": "EX003.CH.BUC (Bucket / Ковш)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "износ режущих элементов и трещины ковша",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sychev Anton",
+      "regBy": "Сычев Антон Александрович",
+      "wo": "WO-023306"
+    },
+    {
       "asset": "TK047",
       "defect": "DD-00017498",
       "raised": "2026-11-26",
@@ -6365,19 +6417,6 @@ window.CM_WO_DATA = {
       "by": "Valentin Trapilo",
       "regBy": "Трапило Валентин Святославович",
       "wo": "WO-023288"
-    },
-    {
-      "asset": "DZ014",
-      "defect": "DD-00017509",
-      "raised": "2026-11-26",
-      "system": "DZ014.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
-      "descr": "Отпала тяга топливного насоса, выкинуло антифриз",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Valentin Trapilo",
-      "regBy": "Трапило Валентин Святославович",
-      "wo": "WO-023305"
     },
     {
       "asset": "BS003",
@@ -6840,7 +6879,7 @@ window.CM_WO_DATA = {
       "raised": "2026-11-25",
       "system": "LD005.HS.CYL (Cylinders / Гидроцилиндры)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка по правому рулевому ГЦ",
+      "descr": "Утечка по левому рулевому ГЦ",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Valentin Trapilo",
@@ -37789,11 +37828,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "LS048",
-      "defect": "DD-00014963",
+      "defect": "DD-00014962",
       "raised": "2026-10-17",
-      "system": "LS048.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
-      "descr": "Замена ФОВ",
+      "system": "LS048.ELS.MW (Machine Wiring / Электропроводка машины)",
+      "defectType": "4.14 Battery / starting circuit fault / Неисправность аккумулятора / цепи пуска",
+      "descr": "Замена АКБ",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -37802,11 +37841,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "LS048",
-      "defect": "DD-00014962",
+      "defect": "DD-00014963",
       "raised": "2026-10-17",
-      "system": "LS048.ELS.MW (Machine Wiring / Электропроводка машины)",
-      "defectType": "4.14 Battery / starting circuit fault / Неисправность аккумулятора / цепи пуска",
-      "descr": "Замена АКБ",
+      "system": "LS048.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "Замена ФОВ",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -58835,8 +58874,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000076",
+      "asset": "H07",
+      "defect": "EB-00000075",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -58848,8 +58887,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H07",
-      "defect": "EB-00000075",
+      "asset": "H04",
+      "defect": "EB-00000076",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
