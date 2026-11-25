@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-25T13:02:49+00:00",
+  "generated": "2026-11-25T13:22:47+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 815,
@@ -6866,7 +6866,7 @@ window.CM_WO_DATA = {
       "raised": "2026-11-25",
       "system": "GR014.CH.BL (Blade / Отвал)",
       "defectType": "2.01 Wear / Износ",
-      "descr": "Требуется замена ножей отвала и 1 коронки рыхлителя",
+      "descr": "Требуется замена ножей отвала и 1 сохи рыхлителя",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Valentin Trapilo",
