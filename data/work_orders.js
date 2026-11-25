@@ -2,10 +2,10 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-25T17:27:43+00:00",
+  "generated": "2026-11-25T17:52:49+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
-  "unitsInWorkbook": 815,
+  "unitsInWorkbook": 816,
   "unitsKept": [
     "BL001",
     "BL002",
@@ -6690,6 +6690,19 @@ window.CM_WO_DATA = {
       "by": "Valentin Trapilo",
       "regBy": "Трапило Валентин Святославович",
       "wo": "WO-023280"
+    },
+    {
+      "asset": "GE019",
+      "defect": "DD-00017513",
+      "raised": "2026-11-25",
+      "system": "GE019 J165 KOHLER",
+      "defectType": "5.14 Extreme temperature (cold/heat) / Экстремальная температура (холод/жара)",
+      "descr": "Отогрев и запуск холодного ДВС",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Ilya Borzunov",
+      "regBy": "Борзунов Илья Николаевич",
+      "wo": "WO-023307"
     },
     {
       "asset": "EX021",
