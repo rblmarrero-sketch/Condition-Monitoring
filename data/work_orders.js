@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-25T10:12:43+00:00",
+  "generated": "2026-11-25T10:27:44+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 815,
@@ -6536,6 +6536,32 @@ window.CM_WO_DATA = {
       "wo": "WO-023282"
     },
     {
+      "asset": "TK152",
+      "defect": "DD-00017486",
+      "raised": "2026-11-25",
+      "system": "TK152.DRS.COO.CAC Charge Air Cooler / Охладитель наддувочного воздуха",
+      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "descr": "Слетел патрубок интеркуллера",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Valentin Trapilo",
+      "regBy": "Трапило Валентин Святославович",
+      "wo": "WO-023284"
+    },
+    {
+      "asset": "TK169",
+      "defect": "DD-00017485",
+      "raised": "2026-11-25",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK169 ENGINE",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "Заклинивание иглы распылителя форсунки ДВС",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Ilya Borzunov",
+      "regBy": "Борзунов Илья Николаевич",
+      "wo": "WO-023283"
+    },
+    {
       "asset": "LV067",
       "defect": "DD-00017462",
       "raised": "2026-11-25",
@@ -6767,19 +6793,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Aleksey Kiselev",
       "regBy": "Киселев Алексей Александрович",
-      "wo": null
-    },
-    {
-      "asset": "TK169",
-      "defect": "DD-00017485",
-      "raised": "2026-11-25",
-      "system": "TRUCK, WATER URAL 4672M1-20, TK169 ENGINE",
-      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
-      "descr": "Заклинивание иглы распылителя форсунки ДВС",
-      "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Ilya Borzunov",
-      "regBy": "Борзунов Илья Николаевич",
       "wo": null
     },
     {
@@ -57080,19 +57093,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
-      "wo": null
-    },
-    {
       "asset": "BS005",
       "defect": "DD-00011312",
       "raised": "2026-08-21",
@@ -57181,6 +57181,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
@@ -58523,8 +58536,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000076",
+      "asset": "H07",
+      "defect": "EB-00000075",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -58536,8 +58549,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H07",
-      "defect": "EB-00000075",
+      "asset": "H04",
+      "defect": "EB-00000076",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
