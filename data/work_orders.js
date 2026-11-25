@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-25T16:42:48+00:00",
+  "generated": "2026-11-25T16:57:41+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 815,
@@ -6289,6 +6289,45 @@ window.CM_WO_DATA = {
       "wo": "WO-023296"
     },
     {
+      "asset": "DZ008",
+      "defect": "DD-00017506",
+      "raised": "2026-11-26",
+      "system": "DZ008.CH.RP (Ripper/Рыхлитель)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Замена коронки рыхлителя",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Valentin Trapilo",
+      "regBy": "Трапило Валентин Святославович",
+      "wo": "WO-023302"
+    },
+    {
+      "asset": "DR009",
+      "defect": "DD-00017507",
+      "raised": "2026-11-26",
+      "system": "DR009.CH.MT (Mast / Мачта)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Замена плашек направляющих колпака пылеподавления, ремонт электропроводки",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Valentin Trapilo",
+      "regBy": "Трапило Валентин Святославович",
+      "wo": "WO-023303"
+    },
+    {
+      "asset": "DZ002",
+      "defect": "DD-00017508",
+      "raised": "2026-11-26",
+      "system": "DZ002.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "Замена фары",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Valentin Trapilo",
+      "regBy": "Трапило Валентин Святославович",
+      "wo": "WO-023304"
+    },
+    {
       "asset": "TK047",
       "defect": "DD-00017498",
       "raised": "2026-11-26",
@@ -6328,17 +6367,17 @@ window.CM_WO_DATA = {
       "wo": "WO-023288"
     },
     {
-      "asset": "DZ008",
-      "defect": "DD-00017506",
+      "asset": "DZ014",
+      "defect": "DD-00017509",
       "raised": "2026-11-26",
-      "system": "DZ008.CH.RP (Ripper/Рыхлитель)",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "Замена коронки рыхлителя",
+      "system": "DZ014.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "descr": "Отпала тяга топливного насоса, выкинуло антифриз",
       "status": "Elimination scheduled",
       "priority": "P2 Urgent",
       "by": "Valentin Trapilo",
       "regBy": "Трапило Валентин Святославович",
-      "wo": "WO-023302"
+      "wo": "WO-023305"
     },
     {
       "asset": "BS003",
