@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-25T11:12:48+00:00",
+  "generated": "2026-11-25T11:27:41+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 815,
@@ -6204,7 +6204,7 @@ window.CM_WO_DATA = {
       "system": "TK104.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
       "descr": "Потеря мощности ДВС",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Sergey Tomilov",
       "regBy": "Томилов Сергей Владимирович",
@@ -6287,6 +6287,19 @@ window.CM_WO_DATA = {
       "by": "Viktor Bernikov",
       "regBy": "Viktor Bernikov",
       "wo": "WO-023240"
+    },
+    {
+      "asset": "TK021",
+      "defect": "DD-00017489",
+      "raised": "2026-11-25",
+      "system": "TK021 4320-6952-72 URAL",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Неисправность мотора штатного отопителя",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-023285"
     },
     {
       "asset": "TK150",
@@ -6562,6 +6575,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023283"
     },
     {
+      "asset": "TK098",
+      "defect": "DD-00017490",
+      "raised": "2026-11-25",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK098 ENGINE OldNumber (UT098)",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "Нет тяги двигателя. Активирован индикатор \"Check Engine\".",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": null
+    },
+    {
       "asset": "LV067",
       "defect": "DD-00017462",
       "raised": "2026-11-25",
@@ -6646,6 +6672,19 @@ window.CM_WO_DATA = {
       "system": "DZ014.DRS.FD (Final Drives / Конечные передачи)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Устранение утечки с правой бортовой",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Valentin Trapilo",
+      "regBy": "Трапило Валентин Святославович",
+      "wo": null
+    },
+    {
+      "asset": "LD005",
+      "defect": "DD-00017488",
+      "raised": "2026-11-25",
+      "system": "LD005.HS.CYL (Cylinders / Гидроцилиндры)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка по правому рулевому ГЦ",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Valentin Trapilo",
@@ -6833,19 +6872,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Tomilov",
       "regBy": "Томилов Сергей Владимирович",
       "wo": null
-    },
-    {
-      "asset": "DZ019",
-      "defect": "DD-00017386",
-      "raised": "2026-11-24",
-      "system": "DZ019.ELS.LIG (Head Lighting System / Система головного освещения)",
-      "defectType": "4.08 Fuse blown / Перегорел предохранитель",
-      "descr": "отсутствует освещение",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Tomilov",
-      "regBy": "Томилов Сергей Владимирович",
-      "wo": "WO-023176"
     },
     {
       "asset": "TK016",
@@ -7418,6 +7444,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Tomilov",
       "regBy": "Томилов Сергей Владимирович",
       "wo": "WO-023205"
+    },
+    {
+      "asset": "DZ019",
+      "defect": "DD-00017386",
+      "raised": "2026-11-24",
+      "system": "DZ019.ELS.LIG (Head Lighting System / Система головного освещения)",
+      "defectType": "4.08 Fuse blown / Перегорел предохранитель",
+      "descr": "отсутствует освещение",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": "WO-023176"
     },
     {
       "asset": "GE106",
@@ -58549,8 +58588,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H07",
-      "defect": "EB-00000075",
+      "asset": "H04",
+      "defect": "EB-00000076",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -58562,8 +58601,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000076",
+      "asset": "H07",
+      "defect": "EB-00000075",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
