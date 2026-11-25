@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-25T21:12:50+00:00",
+  "generated": "2026-11-25T21:27:52+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -443,13 +443,13 @@ window.CM_WO_DATA = {
     "regBy": "Contact person initiator WR"
   },
   "cmDateFrom": {
-    "raised": 223,
+    "raised": 224,
     "detected": 0,
     "planStart": 0
   },
   "cmCauseFrom": {
     "wo": 137,
-    "wr": 86,
+    "wr": 87,
     "cert": 0,
     "none": 0
   },
@@ -462,6 +462,32 @@ window.CM_WO_DATA = {
     "Bekzhan"
   ],
   "cmWorkOrders": [
+    {
+      "date": "2026-11-26",
+      "dateFrom": "raised",
+      "raised": "2026-11-26",
+      "detected": "2026-11-26",
+      "planStart": null,
+      "closed": null,
+      "asset": "TK117",
+      "defect": "DD-00017523",
+      "requestNo": "DD-00017523",
+      "eqType": "TRUCK, ARTICULATED",
+      "system": "TK117.DRS.TRA (Transmission / Трансмиссия)",
+      "priority": "P4 Planned (Repair)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Износ уплотнения",
+      "causeFrom": "wr",
+      "descr": "Каплевидная течь из сливной пробки фильтра системы охлаждения тормозов",
+      "status": "Registered",
+      "by": "Slam",
+      "byFull": "Slam Taganov",
+      "regBy": "Таганов Слам Джумамуратович",
+      "raisedBy": "ГДК Баимская",
+      "woNumber": null,
+      "maintType": null,
+      "planned": false
+    },
     {
       "date": "2026-11-26",
       "dateFrom": "raised",
@@ -6484,12 +6510,12 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "DZ011",
-      "defect": "DD-00017514",
+      "asset": "GR013",
+      "defect": "DD-00017525",
       "raised": "2026-11-26",
-      "system": "DZ011.DRS.COO.RAD (Radiator / Радиатор)",
+      "system": "GR013.DRS.FD (Final Drives / Конечные передачи)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка охлажд.жидкости",
+      "descr": "Многочисленные утечки /утечка масла с бортовых редукторов, утечка масла с поворотного редуктора, разбиты шарнирные соединения на передней по",
       "status": "Registered",
       "priority": "P2 Urgent",
       "by": "Sergey Tomilov",
@@ -6508,6 +6534,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Tomilov",
       "regBy": "Томилов Сергей Владимирович",
       "wo": null
+    },
+    {
+      "asset": "DZ011",
+      "defect": "DD-00017514",
+      "raised": "2026-11-26",
+      "system": "DZ011.DRS.COO.RAD (Radiator / Радиатор)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка охлажд.жидкости",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": "WO-023309"
     },
     {
       "asset": "TK098",
@@ -13881,6 +13920,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022588"
     },
     {
+      "asset": "TK125",
+      "defect": "DD-00016934",
+      "raised": "2026-11-15",
+      "system": "TK125.OC.DO (Doors / Двери)",
+      "defectType": "2.06 Abrasive wear / Абразивный износ",
+      "descr": "Износ  щеток стеклоочистителей",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-022723"
+    },
+    {
       "asset": "TK148",
       "defect": "DD-00016956",
       "raised": "2026-11-15",
@@ -13996,19 +14048,6 @@ window.CM_WO_DATA = {
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": "WO-022783"
-    },
-    {
-      "asset": "TK125",
-      "defect": "DD-00016934",
-      "raised": "2026-11-15",
-      "system": "TK125.OC.DO (Doors / Двери)",
-      "defectType": "2.06 Abrasive wear / Абразивный износ",
-      "descr": "Износ  щеток стеклоочистителей",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": "WO-022723"
     },
     {
       "asset": "TK122",
@@ -30118,6 +30157,32 @@ window.CM_WO_DATA = {
       "wo": "WO-020790"
     },
     {
+      "asset": "TK125",
+      "defect": "DD-00015604",
+      "raised": "2026-10-25",
+      "system": "TK125.BS (Braking System / Тормозная система)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Устранить утечку тормозного фильтра",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022722"
+    },
+    {
+      "asset": "TK125",
+      "defect": "DD-00015602",
+      "raised": "2026-10-25",
+      "system": "TK125.BS (Braking System / Тормозная система)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Замена РВД охлаждения тормозов",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022721"
+    },
+    {
       "asset": "TK157",
       "defect": "DD-00015637",
       "raised": "2026-10-25",
@@ -30207,32 +30272,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": null
-    },
-    {
-      "asset": "TK125",
-      "defect": "DD-00015604",
-      "raised": "2026-10-25",
-      "system": "TK125.BS (Braking System / Тормозная система)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Устранить утечку тормозного фильтра",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": "WO-022722"
-    },
-    {
-      "asset": "TK125",
-      "defect": "DD-00015602",
-      "raised": "2026-10-25",
-      "system": "TK125.BS (Braking System / Тормозная система)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Замена РВД охлаждения тормозов",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": "WO-022721"
     },
     {
       "asset": "TK125",
@@ -57600,6 +57639,19 @@ window.CM_WO_DATA = {
       "wo": "WO-015456"
     },
     {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
+      "wo": null
+    },
+    {
       "asset": "TK046",
       "defect": "DD-00011270",
       "raised": "2026-08-21",
@@ -57701,19 +57753,6 @@ window.CM_WO_DATA = {
       "priority": "P2 Urgent",
       "by": "Andrey Shipelov",
       "regBy": "Шипелов Андрей Анатольевич",
-      "wo": null
-    },
-    {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
@@ -58797,6 +58836,19 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "TK010",
+      "defect": "DD-00010485",
+      "raised": "2026-08-09",
+      "system": "TK010.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь радиатора",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": null
+    },
+    {
+      "asset": "TK010",
       "defect": "DD-00010489",
       "raised": "2026-08-09",
       "system": "TK010.CH.HS (Hydraulic System / Гидравлическая система)",
@@ -58815,19 +58867,6 @@ window.CM_WO_DATA = {
       "system": "TK010.CH.SU (Suspension / Подвеска)",
       "defectType": "2.01 Wear / Износ",
       "descr": "Износ передних амортизаторов",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": null
-    },
-    {
-      "asset": "TK010",
-      "defect": "DD-00010485",
-      "raised": "2026-08-09",
-      "system": "TK010.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь радиатора",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -185709,7 +185748,7 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
+      "woStatus": "CNF",
       "cmmsStatus": "Completed",
       "open": false,
       "planStart": "2026-11-24",
