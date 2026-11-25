@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-25T03:33:01+00:00",
+  "generated": "2026-11-25T03:53:05+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 815,
@@ -6315,17 +6315,17 @@ window.CM_WO_DATA = {
       "wo": "WO-023248"
     },
     {
-      "asset": "GR001",
-      "defect": "DD-00017444",
+      "asset": "TK042",
+      "defect": "DD-00017463",
       "raised": "2026-11-25",
-      "system": "GR001.DRS.COO (Cooling System / Система охлаждения)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка ОЖ в кабине оператора",
+      "system": "TK042.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Порван верхний патрубок ситемы охлаждения",
       "status": "Elimination scheduled",
       "priority": "P2 Urgent",
-      "by": "Valentin Trapilo",
-      "regBy": "Трапило Валентин Святославович",
-      "wo": "WO-023244"
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023276"
     },
     {
       "asset": "DZ009",
@@ -6430,6 +6430,58 @@ window.CM_WO_DATA = {
       "by": "Pavel Kostin",
       "regBy": "Костин Павел Александрович",
       "wo": "WO-023247"
+    },
+    {
+      "asset": "GR001",
+      "defect": "DD-00017444",
+      "raised": "2026-11-25",
+      "system": "GR001.DRS.COO (Cooling System / Система охлаждения)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка ОЖ в кабине оператора",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Valentin Trapilo",
+      "regBy": "Трапило Валентин Святославович",
+      "wo": "WO-023244"
+    },
+    {
+      "asset": "LV067",
+      "defect": "DD-00017462",
+      "raised": "2026-11-25",
+      "system": "LV067.OC.GL (Glass / Стекла)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Скол на левом заднем фонаре (замена)",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "LV067",
+      "defect": "DD-00017460",
+      "raised": "2026-11-25",
+      "system": "LV067.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "Двигатель не тянет.",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "LV067",
+      "defect": "DD-00017461",
+      "raised": "2026-11-25",
+      "system": "LV067.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Сорвана резьба на шпильке левого колеса (замена)",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
     },
     {
       "asset": "EX021",
@@ -7049,7 +7101,7 @@ window.CM_WO_DATA = {
       "system": "DZ009.ELS.LIG (Head Lighting System / Система головного освещения)",
       "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
       "descr": "DZ008/Замена сигнального маяка",
-      "status": "Elimination scheduled",
+      "status": "In progress",
       "priority": "P2 Urgent",
       "by": "Sergey Tomilov",
       "regBy": "Томилов Сергей Владимирович",
@@ -7556,7 +7608,7 @@ window.CM_WO_DATA = {
       "system": "TK106.BS.HOS (Hoses and Piping / Шланги и трубопроводы)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Течь масла РВД тормозной системы",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
@@ -13756,7 +13808,7 @@ window.CM_WO_DATA = {
       "raised": "2026-11-14",
       "system": "LV055.ELS.WH (Wiring Harness / Жгут проводов)",
       "defectType": "4.02 Open circuit / Разрыв цепи",
-      "descr": "Ошибки датчик АБС и антизаноса (неисправен). Нужна замена левого заднего датчика АБС",
+      "descr": "Диагностика электрооборудования¶Ошибки датчик АБС и антизаноса (неисправен). Нужна замена левого заднего датчика АБС. При включении отопител",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
