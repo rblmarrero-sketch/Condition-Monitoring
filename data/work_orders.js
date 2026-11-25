@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-25T06:13:01+00:00",
+  "generated": "2026-11-25T06:28:26+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 815,
@@ -6656,7 +6656,7 @@ window.CM_WO_DATA = {
       "asset": "TK016",
       "defect": "DD-00017473",
       "raised": "2026-11-25",
-      "system": "TK016 1891AA URAL-NEXT",
+      "system": "TK016.DRS.ENG (Engine / Двигатель)",
       "defectType": "4.02 Open circuit / Разрыв цепи",
       "descr": "ДВС периодически троит на холодную, ошибки по ДВС, после перезагрузки пропадает",
       "status": "Registered",
