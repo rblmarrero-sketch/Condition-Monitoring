@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-25T18:17:47+00:00",
+  "generated": "2026-11-25T18:32:45+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -6360,11 +6360,11 @@ window.CM_WO_DATA = {
       "system": "TRUCK, WATER URAL 4672M1-20, TK098 PUMP DRIVE OldNumber (UT098)",
       "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
       "descr": "Низкое давление",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "priority": "P2 Urgent",
       "by": "Ilya Borzunov",
       "regBy": "Борзунов Илья Николаевич",
-      "wo": null
+      "wo": "WO-023308"
     },
     {
       "asset": "EX003",
