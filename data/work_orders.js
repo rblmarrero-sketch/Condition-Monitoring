@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-25T08:37:51+00:00",
+  "generated": "2026-11-25T08:53:02+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 815,
@@ -6510,6 +6510,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023277"
     },
     {
+      "asset": "LD008",
+      "defect": "DD-00017481",
+      "raised": "2026-11-25",
+      "system": "Bucket / Ковш",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Требуется уплотнение ковша, замена тавотниц, замена коронок и ножей (высокий износ)",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Valentin Trapilo",
+      "regBy": "Трапило Валентин Святославович",
+      "wo": "WO-023281"
+    },
+    {
       "asset": "LV067",
       "defect": "DD-00017462",
       "raised": "2026-11-25",
@@ -6559,6 +6572,32 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "GR012",
+      "defect": "DD-00017482",
+      "raised": "2026-11-25",
+      "system": "GR012.OC.HE (Heating / Отопление)",
+      "defectType": "1.04 Abnormal noise / vibration Аномальный шум / вибрация",
+      "descr": "Посторонний шум и вибрация отопителя салона",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Valentin Trapilo",
+      "regBy": "Трапило Валентин Святославович",
+      "wo": null
+    },
+    {
+      "asset": "EX007",
+      "defect": "DD-00017479",
+      "raised": "2026-11-25",
+      "system": "EX007.CH.BUC (Bucket / Ковш)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Износ ножей ковша",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Aleksey Kiselev",
+      "regBy": "Киселев Алексей Александрович",
       "wo": null
     },
     {
@@ -6676,6 +6715,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "GE025",
+      "defect": "DD-00017480",
+      "raised": "2026-11-25",
+      "system": "GE025.CH (Structure & Chassis / Рама и конструкция)",
+      "defectType": "6.03 Structural crack / Трещина конструкции",
+      "descr": "Утечка антифриза",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Aleksey Kiselev",
+      "regBy": "Киселев Алексей Александрович",
       "wo": null
     },
     {
@@ -7758,19 +7810,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023145"
     },
     {
-      "asset": "TK127",
-      "defect": "DD-00017330",
-      "raised": "2026-11-23",
-      "system": "TK127.DRS.FD (Final Drives / Конечные передачи)",
-      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
-      "descr": "Ремонт бортового редуктора",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Pavel Kostin",
-      "regBy": "Костин Павел Александрович",
-      "wo": "WO-023100"
-    },
-    {
       "asset": "TK104",
       "defect": "DD-00017319",
       "raised": "2026-11-23",
@@ -7795,6 +7834,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Murashko",
       "regBy": "Мурашко Сергей Борисович",
       "wo": "WO-023091"
+    },
+    {
+      "asset": "TK127",
+      "defect": "DD-00017330",
+      "raised": "2026-11-23",
+      "system": "TK127.DRS.FD (Final Drives / Конечные передачи)",
+      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
+      "descr": "Ремонт бортового редуктора",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": "WO-023100"
     },
     {
       "asset": "TK106",
@@ -56976,19 +57028,6 @@ window.CM_WO_DATA = {
       "wo": "WO-018103"
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
-      "wo": null
-    },
-    {
       "asset": "DZ022",
       "defect": "DD-00011314",
       "raised": "2026-08-21",
@@ -57090,6 +57129,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
@@ -58432,8 +58484,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H07",
-      "defect": "EB-00000075",
+      "asset": "H04",
+      "defect": "EB-00000076",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -58445,8 +58497,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000076",
+      "asset": "H07",
+      "defect": "EB-00000075",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
