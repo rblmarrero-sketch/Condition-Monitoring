@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-25T03:12:49+00:00",
+  "generated": "2026-11-25T03:33:01+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 815,
@@ -6211,6 +6211,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023250"
     },
     {
+      "asset": "TK098",
+      "defect": "DD-00017459",
+      "raised": "2026-11-25",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK098 ENGINE OldNumber (UT098)",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "Замена клапана дозатора ТНВД",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023275"
+    },
+    {
       "asset": "BS011",
       "defect": "DD-00017440",
       "raised": "2026-11-25",
@@ -6417,19 +6430,6 @@ window.CM_WO_DATA = {
       "by": "Pavel Kostin",
       "regBy": "Костин Павел Александрович",
       "wo": "WO-023247"
-    },
-    {
-      "asset": "TK098",
-      "defect": "DD-00017459",
-      "raised": "2026-11-25",
-      "system": "TRUCK, WATER URAL 4672M1-20, TK098 ENGINE OldNumber (UT098)",
-      "defectType": "4.02 Open circuit / Разрыв цепи",
-      "descr": "Замена клапана дозатора ТНВД",
-      "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
     },
     {
       "asset": "EX021",
@@ -6848,19 +6848,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023177"
     },
     {
-      "asset": "DZ009",
-      "defect": "DD-00017407",
-      "raised": "2026-11-24",
-      "system": "DZ009.ELS.LIG (Head Lighting System / Система головного освещения)",
-      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
-      "descr": "DZ008/Замена сигнального маяка",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Tomilov",
-      "regBy": "Томилов Сергей Владимирович",
-      "wo": "WO-023205"
-    },
-    {
       "asset": "LV016",
       "defect": "DD-00017385",
       "raised": "2026-11-24",
@@ -6926,19 +6913,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023188"
     },
     {
-      "asset": "TK159",
-      "defect": "DD-00017393",
-      "raised": "2026-11-24",
-      "system": "TK159.OC (Operator Cab / Кабина оператора)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Ремонт замка двери",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Tomilov",
-      "regBy": "Томилов Сергей Владимирович",
-      "wo": "WO-023189"
-    },
-    {
       "asset": "TK170",
       "defect": "DD-00017432",
       "raised": "2026-11-24",
@@ -6963,6 +6937,19 @@ window.CM_WO_DATA = {
       "by": "Viktor Bernikov",
       "regBy": "Берников Виктор Викторович",
       "wo": "WO-023236"
+    },
+    {
+      "asset": "TK159",
+      "defect": "DD-00017393",
+      "raised": "2026-11-24",
+      "system": "TK159.OC (Operator Cab / Кабина оператора)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Ремонт замка двери",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": "WO-023189"
     },
     {
       "asset": "EX022",
@@ -7054,6 +7041,19 @@ window.CM_WO_DATA = {
       "by": "Viktor Bernikov",
       "regBy": "Берников Виктор Викторович",
       "wo": "WO-023235"
+    },
+    {
+      "asset": "DZ009",
+      "defect": "DD-00017407",
+      "raised": "2026-11-24",
+      "system": "DZ009.ELS.LIG (Head Lighting System / Система головного освещения)",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "DZ008/Замена сигнального маяка",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": "WO-023205"
     },
     {
       "asset": "GE106",
