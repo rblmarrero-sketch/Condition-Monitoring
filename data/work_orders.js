@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-25T01:42:52+00:00",
+  "generated": "2026-11-25T01:58:09+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 815,
@@ -6204,7 +6204,7 @@ window.CM_WO_DATA = {
       "system": "BS011.OC.DO (Doors / Двери)",
       "defectType": "2.03 Fatigue / Усталость материала",
       "descr": "не работает  замок кунга",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Aleksandr Kuznetsov",
       "regBy": "Кузнецов Александр Андреевич",
@@ -7621,7 +7621,7 @@ window.CM_WO_DATA = {
       "system": "TK165.BS.RCH (Brake Chambers / Тормозные камеры)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Замена правого среднего энергоаккумулятора",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
@@ -46434,6 +46434,19 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "EX022",
+      "defect": "DD-00014156",
+      "raised": "2026-10-06",
+      "system": "EX022.CH.BUC (Bucket / Ковш)",
+      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
+      "descr": "Устранение люфта рукоять-ковш",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": "WO-023270"
+    },
+    {
+      "asset": "EX022",
       "defect": "DD-00014155",
       "raised": "2026-10-06",
       "system": "EX022.CH.BOO (Boom / Стрела)",
@@ -46521,19 +46534,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Artem Yakovlev",
       "regBy": "Яковлев Артем Сергеевич",
-      "wo": null
-    },
-    {
-      "asset": "EX022",
-      "defect": "DD-00014156",
-      "raised": "2026-10-06",
-      "system": "EX022.CH.BUC (Bucket / Ковш)",
-      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
-      "descr": "Устранение люфта рукоять-ковш",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Tomilov",
-      "regBy": "Томилов Сергей Владимирович",
       "wo": null
     },
     {
