@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-25T06:48:12+00:00",
+  "generated": "2026-11-25T07:03:03+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 815,
@@ -6576,6 +6576,19 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "TK019",
+      "defect": "DD-00017471",
+      "raised": "2026-11-25",
+      "system": "TK019.SS.SG (Steering Gearbox / Рулевой механизм)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка по штуцеру на ГУРе",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "TK019",
       "defect": "DD-00017466",
       "raised": "2026-11-25",
       "system": "TK019.SS.RE (Tie Rod Ends / Наконечники рулевых тяг)",
@@ -6633,19 +6646,6 @@ window.CM_WO_DATA = {
       "system": "TK019.CH.SU (Suspension / Подвеска)",
       "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
       "descr": "Посторонние стуки спереди при движении по неровностям",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "TK019",
-      "defect": "DD-00017471",
-      "raised": "2026-11-25",
-      "system": "TK019 1891AA URAL-NEXT",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка по штуцеру на ГУРе",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
