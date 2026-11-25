@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-25T23:42:47+00:00",
+  "generated": "2026-11-25T23:57:41+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -6547,6 +6547,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Tomilov",
       "regBy": "Томилов Сергей Владимирович",
       "wo": null
+    },
+    {
+      "asset": "TK097",
+      "defect": "DD-00017527",
+      "raised": "2026-11-26",
+      "system": "TK097.ELS (Electrical System / Электросистема)",
+      "defectType": "4.14 Battery / starting circuit fault / Неисправность аккумулятора / цепи пуска",
+      "descr": "Замена АКБ",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Pavel Lefrank",
+      "regBy": "Лефранк Павел Петрович",
+      "wo": "WO-023382"
     },
     {
       "asset": "DZ011",
@@ -58498,19 +58511,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "H07",
-      "defect": "EB-00000079",
-      "raised": "2026-08-13",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
-      "wo": null
-    },
-    {
-      "asset": "H07",
       "defect": "EB-00000078",
       "raised": "2026-08-13",
       "system": null,
@@ -58520,6 +58520,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Sergey Gulin",
+      "wo": null
+    },
+    {
+      "asset": "H07",
+      "defect": "EB-00000079",
+      "raised": "2026-08-13",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
