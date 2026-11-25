@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-25T21:43:11+00:00",
+  "generated": "2026-11-25T21:58:31+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -30171,6 +30171,19 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "TK125",
+      "defect": "DD-00015601",
+      "raised": "2026-10-25",
+      "system": "TK125.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "Провести ремонт заднего доп. освещения",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-022719"
+    },
+    {
+      "asset": "TK125",
       "defect": "DD-00015602",
       "raised": "2026-10-25",
       "system": "TK125.BS (Braking System / Тормозная система)",
@@ -30272,19 +30285,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": null
-    },
-    {
-      "asset": "TK125",
-      "defect": "DD-00015601",
-      "raised": "2026-10-25",
-      "system": "TK125.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
-      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
-      "descr": "Провести ремонт заднего доп. освещения",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": "WO-022719"
     },
     {
       "asset": "TK125",
