@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-25T12:47:39+00:00",
+  "generated": "2026-11-25T13:02:49+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 815,
@@ -6159,6 +6159,19 @@ window.CM_WO_DATA = {
   ],
   "otherDefects": [
     {
+      "asset": "LD007",
+      "defect": "DD-00017492",
+      "raised": "2026-11-26",
+      "system": "Bucket / Ковш",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Замена коронок",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Valentin Trapilo",
+      "regBy": "Трапило Валентин Святославович",
+      "wo": "WO-023288"
+    },
+    {
       "asset": "EX008",
       "defect": "DD-00017454",
       "raised": "2026-11-25",
@@ -6230,7 +6243,7 @@ window.CM_WO_DATA = {
       "system": "Bucket / Ковш",
       "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
       "descr": "Утеря коронки ковша",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Valentin Trapilo",
       "regBy": "Трапило Валентин Святославович",
