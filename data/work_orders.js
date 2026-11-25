@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-25T04:38:50+00:00",
+  "generated": "2026-11-25T04:53:02+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 815,
@@ -6484,6 +6484,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "DZ014",
+      "defect": "DD-00017469",
+      "raised": "2026-11-25",
+      "system": "DZ014.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "Не реагирует на газ",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": null
+    },
+    {
       "asset": "EX020",
       "defect": "DD-00017465",
       "raised": "2026-11-25",
@@ -6503,6 +6516,97 @@ window.CM_WO_DATA = {
       "system": "TK004.BS.ABS (ABS System / Система ABS)",
       "defectType": "4.02 Open circuit / Разрыв цепи",
       "descr": "Проверка и ремонт системы АБС.",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "TK019",
+      "defect": "DD-00017466",
+      "raised": "2026-11-25",
+      "system": "TK019.SS.RE (Tie Rod Ends / Наконечники рулевых тяг)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Погнута поперечная рулевая тяга в общий план",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "TK019",
+      "defect": "DD-00017472",
+      "raised": "2026-11-25",
+      "system": "TK019.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "Неисправность освещения поворотников и повторителей, заднего хода, ходовые огни справа не горят",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "TK019",
+      "defect": "DD-00017470",
+      "raised": "2026-11-25",
+      "system": "TK019.DRS.TRA (Transmission / Трансмиссия)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Люфт фланца раздатки к среднему мосту",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "TK019",
+      "defect": "DD-00017468",
+      "raised": "2026-11-25",
+      "system": "TK019.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка по заднему редуктора",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "TK019",
+      "defect": "DD-00017467",
+      "raised": "2026-11-25",
+      "system": "TK019.CH.SU (Suspension / Подвеска)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Посторонние стуки спереди при движении по неровностям",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "TK019",
+      "defect": "DD-00017471",
+      "raised": "2026-11-25",
+      "system": "TK019 1891AA URAL-NEXT",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка по штуцеру на ГУРе",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "TK016",
+      "defect": "DD-00017473",
+      "raised": "2026-11-25",
+      "system": "TK016 1891AA URAL-NEXT",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "ДВС периодически троит на холодную, ошибки по ДВС, после перезагрузки пропадает",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -58263,8 +58367,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H07",
-      "defect": "EB-00000075",
+      "asset": "H04",
+      "defect": "EB-00000076",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -58276,8 +58380,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000076",
+      "asset": "H07",
+      "defect": "EB-00000075",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
