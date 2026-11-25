@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-25T02:42:57+00:00",
+  "generated": "2026-11-25T02:57:43+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 815,
@@ -6417,6 +6417,19 @@ window.CM_WO_DATA = {
       "by": "Pavel Kostin",
       "regBy": "Костин Павел Александрович",
       "wo": "WO-023247"
+    },
+    {
+      "asset": "TK098",
+      "defect": "DD-00017459",
+      "raised": "2026-11-25",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK098 ENGINE OldNumber (UT098)",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "Замена клапана дозатора ТНВД",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
     },
     {
       "asset": "EX021",
@@ -17456,19 +17469,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022155"
     },
     {
-      "asset": "DZ014",
-      "defect": "DD-00016572",
-      "raised": "2026-11-09",
-      "system": "DZ014.HS.DL (Hydraulic Lines / Гидролинии)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка масла гидравлического",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": "WO-022109"
-    },
-    {
       "asset": "LS038",
       "defect": "DD-00016590",
       "raised": "2026-11-09",
@@ -17545,6 +17545,19 @@ window.CM_WO_DATA = {
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": "WO-022408"
+    },
+    {
+      "asset": "DZ014",
+      "defect": "DD-00016572",
+      "raised": "2026-11-09",
+      "system": "DZ014.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка масла гидравлического",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-022109"
     },
     {
       "asset": "LV066",
@@ -22448,19 +22461,6 @@ window.CM_WO_DATA = {
       "wo": "WO-021504"
     },
     {
-      "asset": "TK038",
-      "defect": "DD-00016185",
-      "raised": "2026-11-02",
-      "system": "TK038.BS.RV (Retarder Valve / Клапан ретардера)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Не работает горный тормоз",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022925"
-    },
-    {
       "asset": "GE025",
       "defect": "DD-00016188",
       "raised": "2026-11-02",
@@ -22511,6 +22511,19 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-021515"
+    },
+    {
+      "asset": "TK038",
+      "defect": "DD-00016185",
+      "raised": "2026-11-02",
+      "system": "TK038.BS.RV (Retarder Valve / Клапан ретардера)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Не работает горный тормоз",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022925"
     },
     {
       "asset": "BS015",
@@ -56729,19 +56742,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
-      "wo": null
-    },
-    {
       "asset": "BS005",
       "defect": "DD-00011312",
       "raised": "2026-08-21",
@@ -56830,6 +56830,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
@@ -58172,8 +58185,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000076",
+      "asset": "H07",
+      "defect": "EB-00000075",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -58185,8 +58198,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H07",
-      "defect": "EB-00000075",
+      "asset": "H04",
+      "defect": "EB-00000076",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -93898,15 +93911,15 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
-      "planStart": "2026-11-24",
-      "planStartDt": "2026-11-24T00:00:00",
-      "planEnd": "2026-11-24",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
+      "planStart": "2026-11-23",
+      "planStartDt": "2026-11-23T00:00:00",
+      "planEnd": "2026-11-23",
+      "actualStart": "2026-11-23",
+      "actualStartDt": "2026-11-23T20:20:00",
+      "actualEnd": "2026-11-23"
     },
     {
       "equip": "DZ004",
@@ -108814,9 +108827,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-12-06",
-      "planStartDt": "2026-12-06T00:00:00",
-      "planEnd": "2026-12-06",
+      "planStart": "2026-12-09",
+      "planStartDt": "2026-12-09T00:00:00",
+      "planEnd": "2026-12-09",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
@@ -167253,7 +167266,7 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
+      "woStatus": "CNF",
       "cmmsStatus": "Completed",
       "open": false,
       "planStart": "2026-11-23",
