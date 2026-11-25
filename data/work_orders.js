@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-25T00:23:03+00:00",
+  "generated": "2026-11-25T01:03:13+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 815,
@@ -6393,6 +6393,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023247"
     },
     {
+      "asset": "EX021",
+      "defect": "DD-00017455",
+      "raised": "2026-11-25",
+      "system": "EX021.ELS.ALT (Alternator / Генератор)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Люфт натяжного ролика",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": null
+    },
+    {
       "asset": "EX025",
       "defect": "DD-00017446",
       "raised": "2026-11-25",
@@ -6508,6 +6521,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Murashko",
       "regBy": "Мурашко Сергей Борисович",
       "wo": "WO-023150"
+    },
+    {
+      "asset": "EX004",
+      "defect": "DD-00017379",
+      "raised": "2026-11-24",
+      "system": "EX004.CH.BUC (Bucket / Ковш)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Замена коронок ковша",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023167"
     },
     {
       "asset": "EX007",
@@ -6690,19 +6716,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Tomilov",
       "regBy": "Томилов Сергей Владимирович",
       "wo": "WO-023219"
-    },
-    {
-      "asset": "EX004",
-      "defect": "DD-00017379",
-      "raised": "2026-11-24",
-      "system": "EX004.CH.BUC (Bucket / Ковш)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Замена коронок ковша",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-023167"
     },
     {
       "asset": "EX010",
@@ -7381,6 +7394,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023146"
     },
     {
+      "asset": "GE109",
+      "defect": "DD-00017358",
+      "raised": "2026-11-23",
+      "system": "GE109.AU.CS (Control System / Система управления)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Глохнет. Не запускается.",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-023144"
+    },
+    {
       "asset": "TK127",
       "defect": "DD-00017330",
       "raised": "2026-11-23",
@@ -7420,17 +7446,17 @@ window.CM_WO_DATA = {
       "wo": "WO-023125"
     },
     {
-      "asset": "GE109",
-      "defect": "DD-00017358",
+      "asset": "TK084",
+      "defect": "DD-00017337",
       "raised": "2026-11-23",
-      "system": "GE109.AU.CS (Control System / Система управления)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Глохнет. Не запускается.",
-      "status": "Elimination scheduled",
+      "system": "TK084.ELS.WH (Wiring Harness / Жгут проводов)",
+      "defectType": "4.12 Cable / harness damage / Повреждение кабеля / жгута",
+      "descr": "Диагностика ДВС CHECK",
+      "status": "Completed",
       "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-023144"
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023107"
     },
     {
       "asset": "DZ004",
@@ -7600,19 +7626,6 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-023113"
-    },
-    {
-      "asset": "TK084",
-      "defect": "DD-00017337",
-      "raised": "2026-11-23",
-      "system": "TK084.ELS.WH (Wiring Harness / Жгут проводов)",
-      "defectType": "4.12 Cable / harness damage / Повреждение кабеля / жгута",
-      "descr": "Диагностика ДВС CHECK",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-023107"
     },
     {
       "asset": "TK117",
