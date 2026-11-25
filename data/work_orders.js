@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-25T05:08:59+00:00",
+  "generated": "2026-11-25T05:23:24+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 815,
@@ -6393,6 +6393,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023268"
     },
     {
+      "asset": "TK153",
+      "defect": "DD-00017475",
+      "raised": "2026-11-25",
+      "system": "TK153.DRS.TRA (Transmission / Трансмиссия)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Диагностика АКПП",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": "WO-023278"
+    },
+    {
       "asset": "DR008",
       "defect": "DD-00017453",
       "raised": "2026-11-25",
@@ -6445,6 +6458,32 @@ window.CM_WO_DATA = {
       "wo": "WO-023244"
     },
     {
+      "asset": "EX025",
+      "defect": "DD-00017446",
+      "raised": "2026-11-25",
+      "system": "EX025.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь РВД / Требуется замена",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": "WO-023246"
+    },
+    {
+      "asset": "DZ014",
+      "defect": "DD-00017469",
+      "raised": "2026-11-25",
+      "system": "DZ014.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "Не реагирует на педаль газа",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": "WO-023277"
+    },
+    {
       "asset": "LV067",
       "defect": "DD-00017462",
       "raised": "2026-11-25",
@@ -6484,16 +6523,16 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "DZ014",
-      "defect": "DD-00017469",
+      "asset": "LV062",
+      "defect": "DD-00017474",
       "raised": "2026-11-25",
-      "system": "DZ014.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
-      "descr": "Не реагирует на газ",
+      "system": "LV062.ELS.LIG (Head Lighting System / Система головного освещения)",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "Установка светодиодной балки",
       "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Sergey Tomilov",
-      "regBy": "Томилов Сергей Владимирович",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
       "wo": null
     },
     {
@@ -6635,19 +6674,6 @@ window.CM_WO_DATA = {
       "descr": "Люфт натяжного ролика",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
-      "by": "Sergey Tomilov",
-      "regBy": "Томилов Сергей Владимирович",
-      "wo": null
-    },
-    {
-      "asset": "EX025",
-      "defect": "DD-00017446",
-      "raised": "2026-11-25",
-      "system": "EX025.HS.DL (Hydraulic Lines / Гидролинии)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь РВД / Требуется замена",
-      "status": "Registered",
-      "priority": "P2 Urgent",
       "by": "Sergey Tomilov",
       "regBy": "Томилов Сергей Владимирович",
       "wo": null
@@ -6898,6 +6924,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Tomilov",
       "regBy": "Хасенов Жомарт",
       "wo": "WO-023206"
+    },
+    {
+      "asset": "DZ016",
+      "defect": "DD-00017383",
+      "raised": "2026-11-24",
+      "system": "DZ016.DRS.ENG (Engine / Двигатель)",
+      "defectType": "4.01 Short circuiting / Короткое замыкание",
+      "descr": "Отопитель салона не работает",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": "WO-023173"
     },
     {
       "asset": "CN014",
@@ -7171,19 +7210,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Tomilov",
       "regBy": "Томилов Сергей Владимирович",
       "wo": "WO-023185"
-    },
-    {
-      "asset": "DZ016",
-      "defect": "DD-00017383",
-      "raised": "2026-11-24",
-      "system": "DZ016.DRS.ENG (Engine / Двигатель)",
-      "defectType": "4.01 Short circuiting / Короткое замыкание",
-      "descr": "Отопитель салона не работает",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Tomilov",
-      "regBy": "Томилов Сергей Владимирович",
-      "wo": "WO-023173"
     },
     {
       "asset": "TK106",
@@ -55676,6 +55702,19 @@ window.CM_WO_DATA = {
       "wo": "WO-018358"
     },
     {
+      "asset": "GR008",
+      "defect": "DD-00012940",
+      "raised": "2026-09-19",
+      "system": "GR008.DRS.TRA (Transmission / Трансмиссия)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Требуется заменить пыльник левого рулевого наконечника.",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": "WO-018383"
+    },
+    {
       "asset": "TK047",
       "defect": "DD-00012958",
       "raised": "2026-09-19",
@@ -55700,19 +55739,6 @@ window.CM_WO_DATA = {
       "by": "Pavel Kostin",
       "regBy": "Костин Павел Александрович",
       "wo": "WO-018386"
-    },
-    {
-      "asset": "GR008",
-      "defect": "DD-00012940",
-      "raised": "2026-09-19",
-      "system": "GR008.DRS.TRA (Transmission / Трансмиссия)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Требуется заменить пыльник левого рулевого наконечника.",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Pavel Kostin",
-      "regBy": "Костин Павел Александрович",
-      "wo": "WO-018383"
     },
     {
       "asset": "DZ009",
@@ -101448,9 +101474,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-12-04",
-      "planStartDt": "2026-12-04T00:00:00",
-      "planEnd": "2026-12-04",
+      "planStart": "2026-12-11",
+      "planStartDt": "2026-12-11T00:00:00",
+      "planEnd": "2026-12-11",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
