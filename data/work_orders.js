@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-25T08:02:49+00:00",
+  "generated": "2026-11-25T08:22:44+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 815,
@@ -6185,17 +6185,17 @@ window.CM_WO_DATA = {
       "wo": "WO-023274"
     },
     {
-      "asset": "TK104",
-      "defect": "DD-00017457",
+      "asset": "LD003",
+      "defect": "DD-00017477",
       "raised": "2026-11-25",
-      "system": "TK104.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
-      "descr": "Потеря мощности ДВС",
+      "system": "Bucket / Ковш",
+      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "descr": "Утеря коронки ковша",
       "status": "Elimination scheduled",
       "priority": "P2 Urgent",
-      "by": "Sergey Tomilov",
-      "regBy": "Томилов Сергей Владимирович",
-      "wo": "WO-023268"
+      "by": "Valentin Trapilo",
+      "regBy": "Трапило Валентин Святославович",
+      "wo": "WO-023280"
     },
     {
       "asset": "DZ018",
@@ -6209,6 +6209,19 @@ window.CM_WO_DATA = {
       "by": "Valentin Trapilo",
       "regBy": "Трапило Валентин Святославович",
       "wo": "WO-023237"
+    },
+    {
+      "asset": "TK104",
+      "defect": "DD-00017457",
+      "raised": "2026-11-25",
+      "system": "TK104.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "Потеря мощности ДВС",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": "WO-023268"
     },
     {
       "asset": "LV022",
@@ -6663,6 +6676,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "TK084",
+      "defect": "DD-00017478",
+      "raised": "2026-11-25",
+      "system": "TK084.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.04 Abnormal noise / vibration Аномальный шум / вибрация",
+      "descr": "Неисправность ДВС",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Aleksey Kiselev",
+      "regBy": "Киселев Алексей Александрович",
       "wo": null
     },
     {
@@ -7732,6 +7758,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023145"
     },
     {
+      "asset": "TK127",
+      "defect": "DD-00017330",
+      "raised": "2026-11-23",
+      "system": "TK127.DRS.FD (Final Drives / Конечные передачи)",
+      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
+      "descr": "Ремонт бортового редуктора",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": "WO-023100"
+    },
+    {
       "asset": "TK104",
       "defect": "DD-00017319",
       "raised": "2026-11-23",
@@ -7951,19 +7990,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-023119"
-    },
-    {
-      "asset": "TK127",
-      "defect": "DD-00017330",
-      "raised": "2026-11-23",
-      "system": "TK127.DRS.FD (Final Drives / Конечные передачи)",
-      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
-      "descr": "Ремонт бортового редуктора",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Pavel Kostin",
-      "regBy": "Костин Павел Александрович",
-      "wo": "WO-023100"
     },
     {
       "asset": "GE066",
