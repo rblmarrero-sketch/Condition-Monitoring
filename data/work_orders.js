@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-25T07:48:00+00:00",
+  "generated": "2026-11-25T08:02:49+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 815,
@@ -7680,19 +7680,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023144"
     },
     {
-      "asset": "TK127",
-      "defect": "DD-00017330",
-      "raised": "2026-11-23",
-      "system": "TK127.DRS.FD (Final Drives / Конечные передачи)",
-      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
-      "descr": "Ремонт бортового редуктора",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Pavel Kostin",
-      "regBy": "Костин Павел Александрович",
-      "wo": "WO-023100"
-    },
-    {
       "asset": "LV006",
       "defect": "DD-00017357",
       "raised": "2026-11-23",
@@ -7964,6 +7951,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-023119"
+    },
+    {
+      "asset": "TK127",
+      "defect": "DD-00017330",
+      "raised": "2026-11-23",
+      "system": "TK127.DRS.FD (Final Drives / Конечные передачи)",
+      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
+      "descr": "Ремонт бортового редуктора",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": "WO-023100"
     },
     {
       "asset": "GE066",
