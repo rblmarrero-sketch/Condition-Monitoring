@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-25T09:42:40+00:00",
+  "generated": "2026-11-25T09:57:43+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 815,
@@ -6185,19 +6185,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023274"
     },
     {
-      "asset": "LD003",
-      "defect": "DD-00017477",
-      "raised": "2026-11-25",
-      "system": "Bucket / Ковш",
-      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
-      "descr": "Утеря коронки ковша",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Valentin Trapilo",
-      "regBy": "Трапило Валентин Святославович",
-      "wo": "WO-023280"
-    },
-    {
       "asset": "DZ018",
       "defect": "DD-00017438",
       "raised": "2026-11-25",
@@ -6235,6 +6222,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-023250"
+    },
+    {
+      "asset": "LD003",
+      "defect": "DD-00017477",
+      "raised": "2026-11-25",
+      "system": "Bucket / Ковш",
+      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "descr": "Утеря коронки ковша",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Valentin Trapilo",
+      "regBy": "Трапило Валентин Святославович",
+      "wo": "WO-023280"
     },
     {
       "asset": "TR001",
@@ -6529,7 +6529,7 @@ window.CM_WO_DATA = {
       "system": "GR016.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.12 Low fluid level / Низкий уровень жидкости",
       "descr": "Долив масла ДВС+ просьба посадить на фиксатор резьбовой 3D тарелку",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P4 Planned (Repair)",
       "by": "Valentin Trapilo",
       "regBy": "Трапило Валентин Святославович",
@@ -6767,6 +6767,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Aleksey Kiselev",
       "regBy": "Киселев Алексей Александрович",
+      "wo": null
+    },
+    {
+      "asset": "TK169",
+      "defect": "DD-00017485",
+      "raised": "2026-11-25",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK169 ENGINE",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "Заклинивание иглы распылителя форсунки ДВС",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Ilya Borzunov",
+      "regBy": "Борзунов Илья Николаевич",
       "wo": null
     },
     {
