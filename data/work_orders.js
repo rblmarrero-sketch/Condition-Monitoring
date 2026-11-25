@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-25T11:42:49+00:00",
+  "generated": "2026-11-25T12:02:45+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 815,
@@ -6562,6 +6562,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023284"
     },
     {
+      "asset": "DZ019",
+      "defect": "DD-00017491",
+      "raised": "2026-11-25",
+      "system": "DZ019.CH (Structure & Chassis / Рама и конструкция)",
+      "defectType": "6.03 Structural crack / Трещина конструкции",
+      "descr": "Лопнуло крепление интеркуллера",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Aleksey Kiselev",
+      "regBy": "Киселев Алексей Александрович",
+      "wo": "WO-023286"
+    },
+    {
       "asset": "TK169",
       "defect": "DD-00017485",
       "raised": "2026-11-25",
@@ -6581,11 +6594,11 @@ window.CM_WO_DATA = {
       "system": "TRUCK, WATER URAL 4672M1-20, TK098 ENGINE OldNumber (UT098)",
       "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
       "descr": "Нет тяги двигателя. Активирован индикатор \"Check Engine\".",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "priority": "P2 Urgent",
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
-      "wo": null
+      "wo": "WO-023287"
     },
     {
       "asset": "LV067",
