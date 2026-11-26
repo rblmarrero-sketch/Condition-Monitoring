@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-26T01:47:58+00:00",
+  "generated": "2026-11-26T02:07:41+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -848,18 +848,6 @@
       }
     ],
     "TK159": [
-      {
-        "wo": "WO-022153",
-        "hours": 3000,
-        "types": [
-          "FC",
-          "INSP",
-          "LUBE",
-          "MP"
-        ],
-        "plan": "2026-11-17",
-        "priority": "P3 Planned (PM)"
-      },
       {
         "wo": "WO-022152",
         "hours": 250,
@@ -4432,12 +4420,12 @@
       "type": "3000 Hours service Planned",
       "hours": 3000,
       "plan": "2026-11-17",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-19"
     },
     {
       "wo": "WO-022710",
@@ -10552,6 +10540,14 @@
       "p": "P2",
       "r": "2026-11-26",
       "x": "Не работает дополнительный фен"
+    },
+    {
+      "d": "DD-00017531",
+      "u": "FL001",
+      "s": "FL001.OC.GL (Glass / Стекла)",
+      "p": "P2",
+      "r": "2026-11-26",
+      "x": "Замена щеток стеклоочистителя"
     },
     {
       "d": "DD-00017515",
