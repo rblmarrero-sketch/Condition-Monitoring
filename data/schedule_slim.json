@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-26T07:37:51+00:00",
+  "generated": "2026-11-26T07:57:49+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -239,6 +239,17 @@
           "TB"
         ],
         "plan": "2025-06-02",
+        "priority": "P3 Planned (PM)"
+      }
+    ],
+    "TK005": [
+      {
+        "wo": "WO-023329",
+        "hours": 500,
+        "types": [
+          "MP"
+        ],
+        "plan": "2026-11-30",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -1881,6 +1892,24 @@
       "raised": "2026-11-30",
       "type": "2000 Hours service Planned",
       "hours": 2000,
+      "plan": "2026-11-30",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-023329",
+      "equip": "TK005",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-30",
+      "type": "500 Hours service Planned",
+      "hours": 500,
       "plan": "2026-11-30",
       "status": "Elimination scheduled",
       "request": "",
@@ -29652,6 +29681,14 @@
       "p": "P4",
       "r": "2026-11-26",
       "x": "Не исправен СГУ (Сигнально-голосовое устройство)"
+    },
+    {
+      "d": "DD-00017553",
+      "u": "DZ006",
+      "s": "DZ006.CH.BL (Blade / Отвал)",
+      "p": "P4",
+      "r": "2026-11-26",
+      "x": "Износ ножей отвала"
     },
     {
       "d": "DD-00017450",
