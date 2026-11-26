@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-26T02:07:41+00:00",
+  "generated": "2026-11-26T02:28:13+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -6536,6 +6536,32 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "GE025",
+      "defect": "DD-00017536",
+      "raised": "2026-11-26",
+      "system": "GENERATOR, CATERPILLAR C18, GE025 ENGINE OldNumber (GN025)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Демонтаж радиатора ОЖ",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Lefrank",
+      "regBy": "Лефранк Павел Петрович",
+      "wo": null
+    },
+    {
+      "asset": "GE025",
+      "defect": "DD-00017537",
+      "raised": "2026-11-26",
+      "system": "GENERATOR, CATERPILLAR C18, GE025 ENGINE OldNumber (GN025)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Монтаж радиатора ОЖ",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Lefrank",
+      "regBy": "Лефранк Павел Петрович",
+      "wo": null
+    },
+    {
       "asset": "LD008",
       "defect": "DD-00017530",
       "raised": "2026-11-26",
@@ -6560,6 +6586,58 @@ window.CM_WO_DATA = {
       "by": "Sergey Tomilov",
       "regBy": "Томилов Сергей Владимирович",
       "wo": null
+    },
+    {
+      "asset": "LV022",
+      "defect": "DD-00017533",
+      "raised": "2026-11-26",
+      "system": "LV022.CH.UC (Undercarriage / Ходовая часть)",
+      "defectType": "2.06 Abrasive wear / Абразивный износ",
+      "descr": "замена врулок амартизаторапереднего замена втулок рессор",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Viktor Nizhebovskiy",
+      "regBy": "Нижебовский Виктор Петрович",
+      "wo": null
+    },
+    {
+      "asset": "LV022",
+      "defect": "DD-00017532",
+      "raised": "2026-11-26",
+      "system": "LV022.DRS.ENG (Engine / Двигатель)",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "свеча накала вышла из стоя",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Viktor Nizhebovskiy",
+      "regBy": "Нижебовский Виктор Петрович",
+      "wo": null
+    },
+    {
+      "asset": "LV022",
+      "defect": "DD-00017534",
+      "raised": "2026-11-26",
+      "system": "LV022.DRS.TRA (Transmission / Трансмиссия)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Износ подвесного подшипника",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Viktor Nizhebovskiy",
+      "regBy": "Нижебовский Виктор Петрович",
+      "wo": null
+    },
+    {
+      "asset": "TK129",
+      "defect": "DD-00017535",
+      "raised": "2026-11-26",
+      "system": "EMERGENCY EQUIPMENT, FIRE-TRUCK IVECO AMT 473916, TK129 TANK OldNumber (ET002)",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "Не исправен СГУ (Сигнально-голосовое устройство)",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Ilshat Sabitov",
+      "regBy": "Сабитов Ильшат Рашидович",
+      "wo": "WO-023400"
     },
     {
       "asset": "FL001",
@@ -21408,19 +21486,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK151",
-      "defect": "DD-00016282",
-      "raised": "2026-11-04",
-      "system": "TK151.DRS.TRA (Transmission / Трансмиссия)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Требуется дефектовка АКПП. Не включаются передачи.",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Roman Besedovskiy",
-      "regBy": "Беседовский Роман Иванович",
-      "wo": "WO-021692"
-    },
-    {
       "asset": "DZ001",
       "defect": "DD-00016263",
       "raised": "2026-11-04",
@@ -22160,6 +22225,19 @@ window.CM_WO_DATA = {
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": "WO-021808"
+    },
+    {
+      "asset": "TK151",
+      "defect": "DD-00016282",
+      "raised": "2026-11-04",
+      "system": "TK151.DRS.TRA (Transmission / Трансмиссия)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Требуется дефектовка АКПП. Не включаются передачи.",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-021692"
     },
     {
       "asset": "TK106",
@@ -38113,12 +38191,12 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "EX006",
-      "defect": "DD-00014971",
+      "asset": "LS048",
+      "defect": "DD-00014963",
       "raised": "2026-10-17",
-      "system": "EX006.HS.MP (Hydraulic Pumps / Гидронасосы)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "каплевидная утечка по гидронасосу",
+      "system": "LS048.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "Замена ФОВ",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -38126,12 +38204,12 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "LS048",
-      "defect": "DD-00014963",
+      "asset": "EX006",
+      "defect": "DD-00014971",
       "raised": "2026-10-17",
-      "system": "LS048.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
-      "descr": "Замена ФОВ",
+      "system": "EX006.HS.MP (Hydraulic Pumps / Гидронасосы)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "каплевидная утечка по гидронасосу",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -56989,6 +57067,19 @@ window.CM_WO_DATA = {
       "wo": "WO-015456"
     },
     {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
+      "wo": null
+    },
+    {
       "asset": "TK046",
       "defect": "DD-00011270",
       "raised": "2026-08-21",
@@ -57077,19 +57168,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
