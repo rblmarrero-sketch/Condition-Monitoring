@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-26T23:28:03+00:00",
+  "generated": "2026-11-26T23:43:04+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -6666,19 +6666,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "EX009",
-      "defect": "DD-00017592",
-      "raised": "2026-11-27",
-      "system": "EX009.OC.HE (Heating / Отопление)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь антифриза, порыв шланга ПЖД",
-      "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Sergey Tomilov",
-      "regBy": "Томилов Сергей Владимирович",
-      "wo": null
-    },
-    {
       "asset": "GR008",
       "defect": "DD-00017584",
       "raised": "2026-11-27",
@@ -6690,6 +6677,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Tomilov",
       "regBy": "Томилов Сергей Владимирович",
       "wo": null
+    },
+    {
+      "asset": "EX009",
+      "defect": "DD-00017592",
+      "raised": "2026-11-27",
+      "system": "EX009.OC.HE (Heating / Отопление)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь антифриза, порыв шланга ПЖД",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": "WO-023474"
     },
     {
       "asset": "EX002",
@@ -8694,6 +8694,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023205"
     },
     {
+      "asset": "DZ019",
+      "defect": "DD-00017386",
+      "raised": "2026-11-24",
+      "system": "DZ019.ELS.LIG (Head Lighting System / Система головного освещения)",
+      "defectType": "4.08 Fuse blown / Перегорел предохранитель",
+      "descr": "отсутствует освещение",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": "WO-023176"
+    },
+    {
       "asset": "TK167",
       "defect": "DD-00017412",
       "raised": "2026-11-24",
@@ -9030,19 +9043,6 @@ window.CM_WO_DATA = {
       "by": "Valentin Trapilo",
       "regBy": "Трапило Валентин Святославович",
       "wo": "WO-023221"
-    },
-    {
-      "asset": "DZ019",
-      "defect": "DD-00017386",
-      "raised": "2026-11-24",
-      "system": "DZ019.ELS.LIG (Head Lighting System / Система головного освещения)",
-      "defectType": "4.08 Fuse blown / Перегорел предохранитель",
-      "descr": "отсутствует освещение",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Tomilov",
-      "regBy": "Томилов Сергей Владимирович",
-      "wo": "WO-023176"
     },
     {
       "asset": "CR006",
