@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-26T05:08:44+00:00",
+  "generated": "2026-11-26T05:24:21+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -443,13 +443,13 @@ window.CM_WO_DATA = {
     "regBy": "Contact person initiator WR"
   },
   "cmDateFrom": {
-    "raised": 224,
+    "raised": 225,
     "detected": 0,
     "planStart": 0
   },
   "cmCauseFrom": {
     "wo": 138,
-    "wr": 86,
+    "wr": 87,
     "cert": 0,
     "none": 0
   },
@@ -462,6 +462,32 @@ window.CM_WO_DATA = {
     "Bekzhan"
   ],
   "cmWorkOrders": [
+    {
+      "date": "2026-11-26",
+      "dateFrom": "raised",
+      "raised": "2026-11-26",
+      "detected": "2026-11-26",
+      "planStart": null,
+      "closed": null,
+      "asset": "TK117",
+      "defect": "DD-00017524",
+      "requestNo": "DD-00017524",
+      "eqType": "TRUCK, ARTICULATED",
+      "system": "TK117.CH.BY (Dump Body / Самосвальный кузов)",
+      "priority": "P4 Planned (Repair)",
+      "defectType": "2.01 Wear / Износ",
+      "cause": "Абразивный износ",
+      "causeFrom": "wr",
+      "descr": "Трещины на кузове.",
+      "status": "Registered",
+      "by": "Slam",
+      "byFull": "Slam Taganov",
+      "regBy": "Таганов Слам Джумамуратович",
+      "raisedBy": "ГДК Баимская",
+      "woNumber": null,
+      "maintType": null,
+      "planned": false
+    },
     {
       "date": "2026-11-26",
       "dateFrom": "raised",
@@ -6289,19 +6315,6 @@ window.CM_WO_DATA = {
   ],
   "otherDefects": [
     {
-      "asset": "LD008",
-      "defect": "DD-00017530",
-      "raised": "2026-11-26",
-      "system": "LD008.OC.HE (Heating / Отопление)",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Не работает дополнительный фен",
-      "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Sergey Tomilov",
-      "regBy": "Томилов Сергей Владимирович",
-      "wo": null
-    },
-    {
       "asset": "TK108",
       "defect": "DD-00017493",
       "raised": "2026-11-26",
@@ -6549,6 +6562,45 @@ window.CM_WO_DATA = {
       "wo": "WO-023439"
     },
     {
+      "asset": "LD008",
+      "defect": "DD-00017530",
+      "raised": "2026-11-26",
+      "system": "LD008.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Не работает дополнительный фен",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": "WO-023385"
+    },
+    {
+      "asset": "TK047",
+      "defect": "DD-00017498",
+      "raised": "2026-11-26",
+      "system": "TK047.DRS.ENG (Engine / Двигатель)",
+      "defectType": "3.13 Warning light / alarm active / Сигнальная лампа / аварийная сигнализация активна",
+      "descr": "Неверные показания стрелки датчика масла.",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-023294"
+    },
+    {
+      "asset": "LV064",
+      "defect": "DD-00017494",
+      "raised": "2026-11-26",
+      "system": "LV064.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
+      "defectType": "4.06 Loose connection / high resistance / Плохой контакт / высокое сопротивление",
+      "descr": "Неисправность наружнего освещения сзади (задних фонарей)",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-023290"
+    },
+    {
       "asset": "DR008",
       "defect": "DD-00017517",
       "raised": "2026-11-26",
@@ -6663,6 +6715,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Pavel Lefrank",
       "regBy": "Лефранк Павел Петрович",
+      "wo": null
+    },
+    {
+      "asset": "CR006",
+      "defect": "DD-00017550",
+      "raised": "2026-11-26",
+      "system": "CR006.CRS.JAW (Jaw Crusher / Щековая дробилка)",
+      "defectType": "7.04 Cone crusher setting / CSS incorrect / Неверная настройка щели конусной дробилки",
+      "descr": "не регулируется зазор дробящих плит",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
       "wo": null
     },
     {
@@ -6898,32 +6963,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Murashko",
       "regBy": "Мурашко Сергей Борисович",
       "wo": "WO-023311"
-    },
-    {
-      "asset": "TK047",
-      "defect": "DD-00017498",
-      "raised": "2026-11-26",
-      "system": "TK047.DRS.ENG (Engine / Двигатель)",
-      "defectType": "3.13 Warning light / alarm active / Сигнальная лампа / аварийная сигнализация активна",
-      "descr": "Неверные показания стрелки датчика масла.",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-023294"
-    },
-    {
-      "asset": "LV064",
-      "defect": "DD-00017494",
-      "raised": "2026-11-26",
-      "system": "LV064.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
-      "defectType": "4.06 Loose connection / high resistance / Плохой контакт / высокое сопротивление",
-      "descr": "Неисправность наружнего освещения сзади (задних фонарей)",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-023290"
     },
     {
       "asset": "LD007",
@@ -7290,6 +7329,45 @@ window.CM_WO_DATA = {
       "wo": "WO-023240"
     },
     {
+      "asset": "TK021",
+      "defect": "DD-00017489",
+      "raised": "2026-11-25",
+      "system": "TK021 4320-6952-72 URAL",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Неисправность мотора штатного отопителя",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-023285"
+    },
+    {
+      "asset": "LV022",
+      "defect": "DD-00017451",
+      "raised": "2026-11-25",
+      "system": "LV022.OC.GL (Glass / Стекла)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Замена левого зеркала, ремонт отопителя",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023250"
+    },
+    {
+      "asset": "TK042",
+      "defect": "DD-00017463",
+      "raised": "2026-11-25",
+      "system": "TK042.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Порван верхний патрубок ситемы охлаждения",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023276"
+    },
+    {
       "asset": "EX021",
       "defect": "DD-00017455",
       "raised": "2026-11-25",
@@ -7563,19 +7641,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "LV022",
-      "defect": "DD-00017451",
-      "raised": "2026-11-25",
-      "system": "LV022.OC.GL (Glass / Стекла)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Замена левого зеркала, ремонт отопителя",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-023250"
-    },
-    {
       "asset": "TK098",
       "defect": "DD-00017490",
       "raised": "2026-11-25",
@@ -7628,19 +7693,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023278"
     },
     {
-      "asset": "TK042",
-      "defect": "DD-00017463",
-      "raised": "2026-11-25",
-      "system": "TK042.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Порван верхний патрубок ситемы охлаждения",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-023276"
-    },
-    {
       "asset": "DZ019",
       "defect": "DD-00017452",
       "raised": "2026-11-25",
@@ -7652,19 +7704,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Tomilov",
       "regBy": "Томилов Сергей Владимирович",
       "wo": "WO-023251"
-    },
-    {
-      "asset": "TK021",
-      "defect": "DD-00017489",
-      "raised": "2026-11-25",
-      "system": "TK021 4320-6952-72 URAL",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Неисправность мотора штатного отопителя",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-023285"
     },
     {
       "asset": "TK151",
@@ -8993,6 +9032,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023117"
     },
     {
+      "asset": "TK143",
+      "defect": "DD-00017329",
+      "raised": "2026-11-23",
+      "system": "TK143.DRS.FD (Final Drives / Конечные передачи)",
+      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
+      "descr": "Ремонт бортового редуктора",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": "WO-023099"
+    },
+    {
       "asset": "CN018",
       "defect": "DD-00017352",
       "raised": "2026-11-23",
@@ -9108,19 +9160,6 @@ window.CM_WO_DATA = {
       "by": "Pavel Kostin",
       "regBy": "Костин Павел Александрович",
       "wo": "WO-023104"
-    },
-    {
-      "asset": "TK143",
-      "defect": "DD-00017329",
-      "raised": "2026-11-23",
-      "system": "TK143.DRS.FD (Final Drives / Конечные передачи)",
-      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
-      "descr": "Ремонт бортового редуктора",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Pavel Kostin",
-      "regBy": "Костин Павел Александрович",
-      "wo": "WO-023099"
     },
     {
       "asset": "LD001",
@@ -9929,6 +9968,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023065"
     },
     {
+      "asset": "TK119",
+      "defect": "DD-00017250",
+      "raised": "2026-11-21",
+      "system": "TK119.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Диагностика перетоков масла в ДВС (два уровня)",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": "WO-023137"
+    },
+    {
       "asset": "TK167",
       "defect": "DD-00017278",
       "raised": "2026-11-21",
@@ -10304,19 +10356,6 @@ window.CM_WO_DATA = {
       "by": "Vladimir Ladik",
       "regBy": "Ладик Владимир Владимирович",
       "wo": "WO-023020"
-    },
-    {
-      "asset": "TK119",
-      "defect": "DD-00017250",
-      "raised": "2026-11-21",
-      "system": "TK119.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Диагностика перетоков масла в ДВС (два уровня)",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Pavel Kostin",
-      "regBy": "Костин Павел Александрович",
-      "wo": "WO-023137"
     },
     {
       "asset": "GR004",
@@ -12893,6 +12932,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022731"
     },
     {
+      "asset": "DR007",
+      "defect": "DD-00017028",
+      "raised": "2026-11-17",
+      "system": "DR007.HS (Hydraulic System / Гидравлическая система)",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "Диагностика и ремонт гидравлической системы",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": "WO-022715"
+    },
+    {
       "asset": "EX021",
       "defect": "DD-00017049",
       "raised": "2026-11-17",
@@ -13060,19 +13112,6 @@ window.CM_WO_DATA = {
       "by": "Pavel Kostin",
       "regBy": "Костин Павел Александрович",
       "wo": "WO-022742"
-    },
-    {
-      "asset": "DR007",
-      "defect": "DD-00017028",
-      "raised": "2026-11-17",
-      "system": "DR007.HS (Hydraulic System / Гидравлическая система)",
-      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
-      "descr": "Диагностика и ремонт гидравлической системы",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Pavel Kostin",
-      "regBy": "Костин Павел Александрович",
-      "wo": "WO-022715"
     },
     {
       "asset": "TK101",
@@ -19497,6 +19536,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "TK101",
+      "defect": "DD-00016522",
+      "raised": "2026-11-08",
+      "system": "TK101.DRS.FUE.FIL Fuel Filters / Топливные фильтры",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "ошибка по датчику распредвала",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-021964"
+    },
+    {
       "asset": "SN002",
       "defect": "DD-00016529",
       "raised": "2026-11-08",
@@ -19612,19 +19664,6 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-022717"
-    },
-    {
-      "asset": "TK101",
-      "defect": "DD-00016522",
-      "raised": "2026-11-08",
-      "system": "TK101.DRS.FUE.FIL Fuel Filters / Топливные фильтры",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "ошибка по датчику распредвала",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": "WO-021964"
     },
     {
       "asset": "DZ004",
@@ -25438,6 +25477,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022193"
     },
     {
+      "asset": "EX024",
+      "defect": "DD-00016011",
+      "raised": "2026-10-31",
+      "system": "EX024.CH.BUC (Bucket / Ковш)",
+      "defectType": "6.03 Structural crack / Трещина конструкции",
+      "descr": "Износ межзубовой защиты и угловых пяток",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-022211"
+    },
+    {
       "asset": "EX021",
       "defect": "DD-00016020",
       "raised": "2026-10-31",
@@ -25566,19 +25618,6 @@ window.CM_WO_DATA = {
       "by": "Roman Kochetov",
       "regBy": "Кочетов Роман Иванович",
       "wo": "WO-021548"
-    },
-    {
-      "asset": "EX024",
-      "defect": "DD-00016011",
-      "raised": "2026-10-31",
-      "system": "EX024.CH.BUC (Bucket / Ковш)",
-      "defectType": "6.03 Structural crack / Трещина конструкции",
-      "descr": "Износ межзубовой защиты и угловых пяток",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Roman Besedovskiy",
-      "regBy": "Беседовский Роман Иванович",
-      "wo": "WO-022211"
     },
     {
       "asset": "EX010",
@@ -38399,19 +38438,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK157",
-      "defect": "DD-00014961",
-      "raised": "2026-10-17",
-      "system": "TK157.DRS.FD (Final Drives / Конечные передачи)",
-      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
-      "descr": "Ремонт жалюзи радиатора",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": "WO-020998"
-    },
-    {
       "asset": "TK151",
       "defect": "DD-00014984",
       "raised": "2026-10-17",
@@ -38423,6 +38449,19 @@ window.CM_WO_DATA = {
       "by": "Evgeniy Frolin",
       "regBy": "Фролин Евгений Владимирович",
       "wo": "WO-020991"
+    },
+    {
+      "asset": "TK157",
+      "defect": "DD-00014961",
+      "raised": "2026-10-17",
+      "system": "TK157.DRS.FD (Final Drives / Конечные передачи)",
+      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
+      "descr": "Ремонт жалюзи радиатора",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-020998"
     },
     {
       "asset": "GR015",
@@ -57263,11 +57302,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "BS005",
-      "defect": "DD-00011308",
+      "defect": "DD-00011309",
       "raised": "2026-08-21",
-      "system": "BS005.DRS.ENG (Engine / Двигатель)",
-      "defectType": "4.12 Cable / harness damage / Повреждение кабеля / жгута",
-      "descr": "Не корректные показатели О.Ж.",
+      "system": "BS005.BS.CV (Control Valve / Управляющий клапан)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Выдавило резинку на фильтре осушителя (забит)",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -57276,11 +57315,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "BS005",
-      "defect": "DD-00011309",
+      "defect": "DD-00011308",
       "raised": "2026-08-21",
-      "system": "BS005.BS.CV (Control Valve / Управляющий клапан)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Выдавило резинку на фильтре осушителя (забит)",
+      "system": "BS005.DRS.ENG (Engine / Двигатель)",
+      "defectType": "4.12 Cable / harness damage / Повреждение кабеля / жгута",
+      "descr": "Не корректные показатели О.Ж.",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
