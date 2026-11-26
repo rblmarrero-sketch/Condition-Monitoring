@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-26T15:12:45+00:00",
+  "generated": "2026-11-26T16:37:54+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -6341,6 +6341,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023458"
     },
     {
+      "asset": "SN004",
+      "defect": "DD-00017570",
+      "raised": "2026-11-27",
+      "system": "SN004.DRS.FUE (Fuel System / Топливная система)",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "прокачка топливной системы/ ревизия топливопроводов",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Sergey Murashko",
+      "regBy": "Мурашко Сергей Борисович",
+      "wo": null
+    },
+    {
       "asset": "TK478",
       "defect": "DD-00017568",
       "raised": "2026-11-27",
@@ -6365,6 +6378,19 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-023455"
+    },
+    {
+      "asset": "EX008",
+      "defect": "DD-00017565",
+      "raised": "2026-11-26",
+      "system": "EX008.OC (Operator Cab / Кабина оператора)",
+      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "descr": "Ослабление крепления зеркала",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Ilya Borzunov",
+      "regBy": "Борзунов Илья Николаевич",
+      "wo": "WO-023454"
     },
     {
       "asset": "TK108",
@@ -7095,6 +7121,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023288"
     },
     {
+      "asset": "TK135",
+      "defect": "DD-00017555",
+      "raised": "2026-11-26",
+      "system": "TK135.BS.HOS (Hoses and Piping / Шланги и трубопроводы)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "утечки воздуха, ОЖ, масла ГУР. электрические неисправности.",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sychev Anton",
+      "regBy": "Сычев Антон Александрович",
+      "wo": "WO-023445"
+    },
+    {
       "asset": "GR004",
       "defect": "DD-00017563",
       "raised": "2026-11-26",
@@ -7106,19 +7145,6 @@ window.CM_WO_DATA = {
       "by": "Valentin Trapilo",
       "regBy": "Трапило Валентин Святославович",
       "wo": "WO-023452"
-    },
-    {
-      "asset": "EX008",
-      "defect": "DD-00017565",
-      "raised": "2026-11-26",
-      "system": "EX008.OC (Operator Cab / Кабина оператора)",
-      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
-      "descr": "Ослабление крепления зеркала",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Ilya Borzunov",
-      "regBy": "Борзунов Илья Николаевич",
-      "wo": "WO-023454"
     },
     {
       "asset": "BS003",
@@ -7171,19 +7197,6 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-023447"
-    },
-    {
-      "asset": "TK135",
-      "defect": "DD-00017555",
-      "raised": "2026-11-26",
-      "system": "TK135.BS.HOS (Hoses and Piping / Шланги и трубопроводы)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "утечки воздуха, ОЖ, масла ГУР. электрические неисправности.",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sychev Anton",
-      "regBy": "Сычев Антон Александрович",
-      "wo": "WO-023445"
     },
     {
       "asset": "DZ019",
@@ -49345,12 +49358,12 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "LV158",
-      "defect": "DD-00014121",
+      "asset": "TK162",
+      "defect": "DD-00014083",
       "raised": "2026-10-05",
-      "system": "LV158.CH.SU (Suspension / Подвеска)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Требуется замена нижних и верхних шаровых опор, замена втулок и стоек стабилизатора",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK162 TRANSMISSION OldNumber (UT162)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка масла с РК",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -49358,12 +49371,12 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK162",
-      "defect": "DD-00014083",
+      "asset": "LV158",
+      "defect": "DD-00014121",
       "raised": "2026-10-05",
-      "system": "TRUCK, WATER URAL 4672M1-20, TK162 TRANSMISSION OldNumber (UT162)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка масла с РК",
+      "system": "LV158.CH.SU (Suspension / Подвеска)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Требуется замена нижних и верхних шаровых опор, замена втулок и стоек стабилизатора",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -57522,19 +57535,6 @@ window.CM_WO_DATA = {
       "wo": "WO-015456"
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
-      "wo": null
-    },
-    {
       "asset": "TK046",
       "defect": "DD-00011270",
       "raised": "2026-08-21",
@@ -57636,6 +57636,19 @@ window.CM_WO_DATA = {
       "priority": "P2 Urgent",
       "by": "Andrey Shipelov",
       "regBy": "Шипелов Андрей Анатольевич",
+      "wo": null
+    },
+    {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
