@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-26T22:52:52+00:00",
+  "generated": "2026-11-26T23:13:11+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -14934,6 +14934,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022723"
     },
     {
+      "asset": "LV048",
+      "defect": "DD-00016930",
+      "raised": "2026-11-15",
+      "system": "LV048.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Замена ШРУС передних",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022897"
+    },
+    {
       "asset": "TK148",
       "defect": "DD-00016956",
       "raised": "2026-11-15",
@@ -15010,19 +15023,6 @@ window.CM_WO_DATA = {
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": null
-    },
-    {
-      "asset": "LV048",
-      "defect": "DD-00016930",
-      "raised": "2026-11-15",
-      "system": "LV048.DRS.AXL (Axles / Мосты)",
-      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
-      "descr": "Замена ШРУС передних",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022897"
     },
     {
       "asset": "GR012",
@@ -17742,6 +17742,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022256"
     },
     {
+      "asset": "LV032",
+      "defect": "DD-00016707",
+      "raised": "2026-11-11",
+      "system": "LV032.OC.HE (Heating / Отопление)",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "ремонт блока климата и отопителя салона.",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023071"
+    },
+    {
       "asset": "EX024",
       "defect": "DD-00016703",
       "raised": "2026-11-11",
@@ -17922,19 +17935,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": null
-    },
-    {
-      "asset": "LV032",
-      "defect": "DD-00016707",
-      "raised": "2026-11-11",
-      "system": "LV032.OC.HE (Heating / Отопление)",
-      "defectType": "4.02 Open circuit / Разрыв цепи",
-      "descr": "ремонт блока климата и отопителя салона.",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-023071"
     },
     {
       "asset": "TR015",
@@ -20147,6 +20147,32 @@ window.CM_WO_DATA = {
       "wo": "WO-022907"
     },
     {
+      "asset": "LV063",
+      "defect": "DD-00016532",
+      "raised": "2026-11-08",
+      "system": "LV063.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.13 Fluid contamination (water/dirt) / Загрязнение жидкости (вода/пыль)",
+      "descr": "Требуется замена антифриза",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": "WO-022899"
+    },
+    {
+      "asset": "LV063",
+      "defect": "DD-00016531",
+      "raised": "2026-11-08",
+      "system": "LV063.ELS.PH (Preheater / Предпусковой подогреватель)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Требуется замена Webasto, не запускается при заглушенном ДВС",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": "WO-022898"
+    },
+    {
       "asset": "TK148",
       "defect": "DD-00016545",
       "raised": "2026-11-08",
@@ -20249,32 +20275,6 @@ window.CM_WO_DATA = {
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": "WO-022391"
-    },
-    {
-      "asset": "LV063",
-      "defect": "DD-00016532",
-      "raised": "2026-11-08",
-      "system": "LV063.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.13 Fluid contamination (water/dirt) / Загрязнение жидкости (вода/пыль)",
-      "descr": "Требуется замена антифриза",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": "WO-022899"
-    },
-    {
-      "asset": "LV063",
-      "defect": "DD-00016531",
-      "raised": "2026-11-08",
-      "system": "LV063.ELS.PH (Preheater / Предпусковой подогреватель)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Требуется замена Webasto, не запускается при заглушенном ДВС",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": "WO-022898"
     },
     {
       "asset": "LD007",
@@ -30261,6 +30261,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022420"
     },
     {
+      "asset": "LV.C006",
+      "defect": "DD-00015710",
+      "raised": "2026-10-26",
+      "system": "LIGHT VEHICLE, TOYOTA HILUX P813PK",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "Диагностика турбины",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022424"
+    },
+    {
       "asset": "LV078",
       "defect": "DD-00015728",
       "raised": "2026-10-26",
@@ -30428,19 +30441,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022915"
-    },
-    {
-      "asset": "LV.C006",
-      "defect": "DD-00015710",
-      "raised": "2026-10-26",
-      "system": "LIGHT VEHICLE, TOYOTA HILUX P813PK",
-      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
-      "descr": "Диагностика турбины",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022424"
     },
     {
       "asset": "TK149",
@@ -32029,6 +32029,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021743"
     },
     {
+      "asset": "LV048",
+      "defect": "DD-00015554",
+      "raised": "2026-10-24",
+      "system": "LV048.CH.SU (Suspension / Подвеска)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Требуется замена задних амортизаторов",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": "WO-021706"
+    },
+    {
       "asset": "DZ018",
       "defect": "DD-00015563",
       "raised": "2026-10-24",
@@ -32170,19 +32183,6 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": null
-    },
-    {
-      "asset": "LV048",
-      "defect": "DD-00015554",
-      "raised": "2026-10-24",
-      "system": "LV048.CH.SU (Suspension / Подвеска)",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "Требуется замена задних амортизаторов",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": "WO-021706"
     },
     {
       "asset": "GR015",
@@ -120096,9 +120096,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-23",
-      "planStartDt": "2026-11-23T00:00:00",
-      "planEnd": "2026-11-23",
+      "planStart": "2026-12-22",
+      "planStartDt": "2026-12-22T00:00:00",
+      "planEnd": "2026-12-22",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
