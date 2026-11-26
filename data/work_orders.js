@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-26T09:42:44+00:00",
+  "generated": "2026-11-26T09:57:48+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -6991,6 +6991,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023299"
     },
     {
+      "asset": "DZ019",
+      "defect": "DD-00017554",
+      "raised": "2026-11-26",
+      "system": "DZ019 SD60-C5 SHANTUI",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Физический износ гнунтозацепов гусеничных лент",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Ilya Borzunov",
+      "regBy": "Борзунов Илья Николаевич",
+      "wo": "WO-023444"
+    },
+    {
       "asset": "DZ006",
       "defect": "DD-00017553",
       "raised": "2026-11-26",
@@ -7041,6 +7054,19 @@ window.CM_WO_DATA = {
       "by": "Valentin Trapilo",
       "regBy": "Трапило Валентин Святославович",
       "wo": null
+    },
+    {
+      "asset": "LD008",
+      "defect": "DD-00017481",
+      "raised": "2026-11-25",
+      "system": "Bucket / Ковш",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Требуется уплотнение ковша, замена тавотниц, замена коронок и ножей (высокий износ)",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Valentin Trapilo",
+      "regBy": "Трапило Валентин Святославович",
+      "wo": "WO-023281"
     },
     {
       "asset": "DZ018",
@@ -7407,6 +7433,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023276"
     },
     {
+      "asset": "DZ019",
+      "defect": "DD-00017452",
+      "raised": "2026-11-25",
+      "system": "DZ019.DRS.COO.CAC (Charge Air Cooler / Охладитель наддувочного воздуха)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Потеря мощности ДВС/Не исправность интеркулера",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": "WO-023251"
+    },
+    {
       "asset": "EX021",
       "defect": "DD-00017455",
       "raised": "2026-11-25",
@@ -7693,19 +7732,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023287"
     },
     {
-      "asset": "LD008",
-      "defect": "DD-00017481",
-      "raised": "2026-11-25",
-      "system": "Bucket / Ковш",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "Требуется уплотнение ковша, замена тавотниц, замена коронок и ножей (высокий износ)",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Valentin Trapilo",
-      "regBy": "Трапило Валентин Святославович",
-      "wo": "WO-023281"
-    },
-    {
       "asset": "DZ002",
       "defect": "DD-00017447",
       "raised": "2026-11-25",
@@ -7730,19 +7756,6 @@ window.CM_WO_DATA = {
       "by": "Pavel Kostin",
       "regBy": "Костин Павел Александрович",
       "wo": "WO-023278"
-    },
-    {
-      "asset": "DZ019",
-      "defect": "DD-00017452",
-      "raised": "2026-11-25",
-      "system": "DZ019.DRS.COO.CAC (Charge Air Cooler / Охладитель наддувочного воздуха)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Потеря мощности ДВС/Не исправность интеркулера",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Tomilov",
-      "regBy": "Томилов Сергей Владимирович",
-      "wo": "WO-023251"
     },
     {
       "asset": "TK151",
