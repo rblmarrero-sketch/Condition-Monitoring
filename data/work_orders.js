@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-26T10:12:45+00:00",
+  "generated": "2026-11-26T10:27:45+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -6640,6 +6640,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023415"
     },
     {
+      "asset": "GR012",
+      "defect": "DD-00017515",
+      "raised": "2026-11-26",
+      "system": "GR012.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Отсутсвует основное и доп. отопление",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": "WO-023310"
+    },
+    {
       "asset": "DR008",
       "defect": "DD-00017517",
       "raised": "2026-11-26",
@@ -6861,6 +6874,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "TK135",
+      "defect": "DD-00017555",
+      "raised": "2026-11-26",
+      "system": "TK135.BS.HOS (Hoses and Piping / Шланги и трубопроводы)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "утечки воздуха, ОЖ, масла ГУР. электрические неисправности.",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Sychev Anton",
+      "regBy": "Сычев Антон Александрович",
+      "wo": null
+    },
+    {
       "asset": "LV133",
       "defect": "DD-00017546",
       "raised": "2026-11-26",
@@ -6911,19 +6937,6 @@ window.CM_WO_DATA = {
       "by": "Pavel Lefrank",
       "regBy": "Лефранк Павел Петрович",
       "wo": "WO-023387"
-    },
-    {
-      "asset": "GR012",
-      "defect": "DD-00017515",
-      "raised": "2026-11-26",
-      "system": "GR012.OC.HE (Heating / Отопление)",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Отсутсвует основное и доп. отопление",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Tomilov",
-      "regBy": "Томилов Сергей Владимирович",
-      "wo": "WO-023310"
     },
     {
       "asset": "TK031",
@@ -58796,8 +58809,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000076",
+      "asset": "H07",
+      "defect": "EB-00000075",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -58809,8 +58822,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H07",
-      "defect": "EB-00000075",
+      "asset": "H04",
+      "defect": "EB-00000076",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
