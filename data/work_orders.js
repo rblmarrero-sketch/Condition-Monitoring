@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-26T13:12:44+00:00",
+  "generated": "2026-11-26T13:28:05+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -7028,6 +7028,19 @@ window.CM_WO_DATA = {
       "by": "Valentin Trapilo",
       "regBy": "Трапило Валентин Святославович",
       "wo": "WO-023288"
+    },
+    {
+      "asset": "EX008",
+      "defect": "DD-00017565",
+      "raised": "2026-11-26",
+      "system": "EX008.OC (Operator Cab / Кабина оператора)",
+      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "descr": "Ослабление крепления зеркала",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Ilya Borzunov",
+      "regBy": "Борзунов Илья Николаевич",
+      "wo": "WO-023454"
     },
     {
       "asset": "BS003",
@@ -38568,6 +38581,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "LS048",
+      "defect": "DD-00014963",
+      "raised": "2026-10-17",
+      "system": "LS048.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "Замена ФОВ",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
       "asset": "EX003",
       "defect": "DD-00014966",
       "raised": "2026-10-17",
@@ -38600,19 +38626,6 @@ window.CM_WO_DATA = {
       "system": "LS048.ELS.MW (Machine Wiring / Электропроводка машины)",
       "defectType": "4.14 Battery / starting circuit fault / Неисправность аккумулятора / цепи пуска",
       "descr": "Замена АКБ",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "LS048",
-      "defect": "DD-00014963",
-      "raised": "2026-10-17",
-      "system": "LS048.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
-      "descr": "Замена ФОВ",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -58926,8 +58939,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000076",
+      "asset": "H07",
+      "defect": "EB-00000075",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -58939,8 +58952,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H07",
-      "defect": "EB-00000075",
+      "asset": "H04",
+      "defect": "EB-00000076",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
