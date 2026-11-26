@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-26T22:22:55+00:00",
+  "generated": "2026-11-26T22:38:05+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -6627,6 +6627,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023472"
     },
     {
+      "asset": "DZ002",
+      "defect": "DD-00017594",
+      "raised": "2026-11-27",
+      "system": "DZ002.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "Замена фары",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": "WO-023476"
+    },
+    {
       "asset": "TK166",
       "defect": "DD-00017585",
       "raised": "2026-11-27",
@@ -6648,19 +6661,6 @@ window.CM_WO_DATA = {
       "descr": "Замена основного отопителя",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
-      "by": "Sergey Tomilov",
-      "regBy": "Томилов Сергей Владимирович",
-      "wo": null
-    },
-    {
-      "asset": "DZ002",
-      "defect": "DD-00017594",
-      "raised": "2026-11-27",
-      "system": "DZ002.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
-      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
-      "descr": "Замена фары",
-      "status": "Registered",
-      "priority": "P2 Urgent",
       "by": "Sergey Tomilov",
       "regBy": "Томилов Сергей Владимирович",
       "wo": null
@@ -49403,7 +49403,7 @@ window.CM_WO_DATA = {
       "system": "TK168.DRS.AXL (Axles / Мосты)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Течь хвостовика редуктора 3 оси",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
       "regBy": "Таран Андрей Андреевич",
