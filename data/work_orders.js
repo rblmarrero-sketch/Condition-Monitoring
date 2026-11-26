@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-26T13:57:44+00:00",
+  "generated": "2026-11-26T14:27:34+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -6315,6 +6315,19 @@ window.CM_WO_DATA = {
   ],
   "otherDefects": [
     {
+      "asset": "GR012",
+      "defect": "DD-00017567",
+      "raised": "2026-11-27",
+      "system": "GR012.DRS.COO (Cooling System / Система охлаждения)",
+      "defectType": "1.02 Overheating / high temperature Перегрев / высокая температура",
+      "descr": "Демонтаж утеплителя - греется",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Valentin Trapilo",
+      "regBy": "Трапило Валентин Святославович",
+      "wo": "WO-023456"
+    },
+    {
       "asset": "TK043",
       "defect": "DD-00017566",
       "raised": "2026-11-27",
@@ -6705,6 +6718,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023451"
     },
     {
+      "asset": "TK047",
+      "defect": "DD-00017564",
+      "raised": "2026-11-26",
+      "system": "TK047.BS.PU (Pneumatic Control / Пневмоуправление)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка воздуха с пневмосистемы тормозов",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Ilya Borzunov",
+      "regBy": "Борзунов Илья Николаевич",
+      "wo": "WO-023453"
+    },
+    {
       "asset": "DR008",
       "defect": "DD-00017517",
       "raised": "2026-11-26",
@@ -7080,19 +7106,6 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-023299"
-    },
-    {
-      "asset": "TK047",
-      "defect": "DD-00017564",
-      "raised": "2026-11-26",
-      "system": "TK047.BS.PU (Pneumatic Control / Пневмоуправление)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка воздуха с пневмосистемы тормозов",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Ilya Borzunov",
-      "regBy": "Борзунов Илья Николаевич",
-      "wo": "WO-023453"
     },
     {
       "asset": "TK068",
