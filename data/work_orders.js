@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-26T17:57:43+00:00",
+  "generated": "2026-11-26T18:12:48+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -6354,6 +6354,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023458"
     },
     {
+      "asset": "TK143",
+      "defect": "DD-00017575",
+      "raised": "2026-11-27",
+      "system": "TK143.DRS.TRA (Transmission / Трансмиссия)",
+      "defectType": "1.12 Low fluid level / Низкий уровень жидкости",
+      "descr": "Доливка масла в КПП",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Valentin Trapilo",
+      "regBy": "Трапило Валентин Святославович",
+      "wo": "WO-023464"
+    },
+    {
       "asset": "CR004",
       "defect": "DD-00017572",
       "raised": "2026-11-27",
@@ -6380,17 +6393,17 @@ window.CM_WO_DATA = {
       "wo": "WO-023459"
     },
     {
-      "asset": "TK143",
-      "defect": "DD-00017575",
+      "asset": "LD005",
+      "defect": "DD-00017576",
       "raised": "2026-11-27",
-      "system": "TK143.DRS.TRA (Transmission / Трансмиссия)",
+      "system": "LD005.HS (Hydraulic System / Гидравлическая система)",
       "defectType": "1.12 Low fluid level / Низкий уровень жидкости",
-      "descr": "Доливка масла в КПП",
-      "status": "Elimination scheduled",
+      "descr": "Доливка гидравлики",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Valentin Trapilo",
       "regBy": "Трапило Валентин Святославович",
-      "wo": "WO-023464"
+      "wo": "WO-023465"
     },
     {
       "asset": "DZ005",
@@ -6848,6 +6861,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023453"
     },
     {
+      "asset": "DZ019",
+      "defect": "DD-00017554",
+      "raised": "2026-11-26",
+      "system": "DZ019.CH.TRK (Tracks / Гусеницы)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Физический износ гнунтозацепов гусеничных лент",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Ilya Borzunov",
+      "regBy": "Борзунов Илья Николаевич",
+      "wo": "WO-023444"
+    },
+    {
       "asset": "DR008",
       "defect": "DD-00017517",
       "raised": "2026-11-26",
@@ -7262,19 +7288,6 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-023447"
-    },
-    {
-      "asset": "DZ019",
-      "defect": "DD-00017554",
-      "raised": "2026-11-26",
-      "system": "DZ019 SD60-C5 SHANTUI",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "Физический износ гнунтозацепов гусеничных лент",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Ilya Borzunov",
-      "regBy": "Борзунов Илья Николаевич",
-      "wo": "WO-023444"
     },
     {
       "asset": "DZ006",
