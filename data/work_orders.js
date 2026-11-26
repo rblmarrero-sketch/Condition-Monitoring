@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-26T06:18:57+00:00",
+  "generated": "2026-11-26T06:33:25+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -6614,6 +6614,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023440"
     },
     {
+      "asset": "SN004",
+      "defect": "DD-00017511",
+      "raised": "2026-11-26",
+      "system": "SN004.CONV.BEL (Conveyor Belt / Конвейерная лента)",
+      "defectType": "8.05 Conveyor belt wear / Износ конвейерной ленты",
+      "descr": "абразивный износ конвейерной ленты",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Murashko",
+      "regBy": "Мурашко Сергей Борисович",
+      "wo": "WO-023311"
+    },
+    {
       "asset": "DR008",
       "defect": "DD-00017517",
       "raised": "2026-11-26",
@@ -6937,19 +6950,6 @@ window.CM_WO_DATA = {
       "by": "Ilya Borzunov",
       "regBy": "Борзунов Илья Николаевич",
       "wo": "WO-023308"
-    },
-    {
-      "asset": "SN004",
-      "defect": "DD-00017511",
-      "raised": "2026-11-26",
-      "system": "SN004.CONV.BEL (Conveyor Belt / Конвейерная лента)",
-      "defectType": "8.05 Conveyor belt wear / Износ конвейерной ленты",
-      "descr": "абразивный износ конвейерной ленты",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Murashko",
-      "regBy": "Мурашко Сергей Борисович",
-      "wo": "WO-023311"
     },
     {
       "asset": "LD007",
@@ -29630,7 +29630,7 @@ window.CM_WO_DATA = {
       "system": "TK047.CH.SU (Suspension / Подвеска)",
       "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
       "descr": "Требуется диагностика подвески (посторонний шум)",
-      "status": "In progress",
+      "status": "Completed",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
