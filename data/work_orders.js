@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-26T05:43:38+00:00",
+  "generated": "2026-11-26T06:03:51+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -1014,7 +1014,7 @@ window.CM_WO_DATA = {
       "raised": "2026-11-17",
       "detected": "2026-11-17",
       "planStart": "2026-11-20",
-      "closed": null,
+      "closed": "2026-11-20",
       "asset": "TK120",
       "defect": "DD-00017016",
       "requestNo": "DD-00017016",
@@ -1025,7 +1025,7 @@ window.CM_WO_DATA = {
       "cause": "Износ уплотнения",
       "causeFrom": "wo",
       "descr": "Течь масла с правой стороны за кабиной.",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "by": "Slam",
       "byFull": "Slam Taganov",
       "regBy": "Таганов Слам Джумамуратович",
@@ -1715,7 +1715,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-10-27",
       "detected": "2026-10-27",
-      "planStart": "2026-11-21",
+      "planStart": "2026-12-10",
       "closed": null,
       "asset": "TK153",
       "defect": "DD-00015781",
@@ -1741,7 +1741,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-10-27",
       "detected": "2026-10-27",
-      "planStart": "2026-11-21",
+      "planStart": "2026-12-10",
       "closed": null,
       "asset": "TK153",
       "defect": "DD-00015780",
@@ -2027,7 +2027,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-10-23",
       "detected": "2026-10-23",
-      "planStart": "2026-11-19",
+      "planStart": "2026-12-20",
       "closed": null,
       "asset": "TK158",
       "defect": "DD-00015505",
@@ -2053,7 +2053,7 @@ window.CM_WO_DATA = {
       "dateFrom": "raised",
       "raised": "2026-10-23",
       "detected": "2026-10-23",
-      "planStart": "2026-11-19",
+      "planStart": "2026-12-20",
       "closed": null,
       "asset": "TK158",
       "defect": "DD-00015502",
@@ -6601,6 +6601,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023290"
     },
     {
+      "asset": "CR006",
+      "defect": "DD-00017550",
+      "raised": "2026-11-26",
+      "system": "CR006.CRS.JAW (Jaw Crusher / Щековая дробилка)",
+      "defectType": "7.04 Cone crusher setting / CSS incorrect / Неверная настройка щели конусной дробилки",
+      "descr": "не регулируется зазор дробящих плит",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Oleg Dymbrylov",
+      "regBy": "Дымбрылов Олег Дамдинович",
+      "wo": "WO-023440"
+    },
+    {
       "asset": "DR008",
       "defect": "DD-00017517",
       "raised": "2026-11-26",
@@ -6718,19 +6731,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "CR006",
-      "defect": "DD-00017550",
-      "raised": "2026-11-26",
-      "system": "CR006.CRS.JAW (Jaw Crusher / Щековая дробилка)",
-      "defectType": "7.04 Cone crusher setting / CSS incorrect / Неверная настройка щели конусной дробилки",
-      "descr": "не регулируется зазор дробящих плит",
-      "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Oleg Dymbrylov",
-      "regBy": "Дымбрылов Олег Дамдинович",
-      "wo": null
-    },
-    {
       "asset": "DZ005",
       "defect": "DD-00017547",
       "raised": "2026-11-26",
@@ -6752,19 +6752,6 @@ window.CM_WO_DATA = {
       "descr": "Утранить люфты в гидроцилиндрах отвала",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
-      "by": "Sergey Tomilov",
-      "regBy": "Томилов Сергей Владимирович",
-      "wo": null
-    },
-    {
-      "asset": "DZ008",
-      "defect": "DD-00017539",
-      "raised": "2026-11-26",
-      "system": "DZ008.CH.UC (Undercarriage / Ходовая часть)",
-      "defectType": "6.05 Loose/missing structural fasteners / Ослабленные/отсутствующие крепежи конструкции",
-      "descr": "Залом бугельного болта опорного катка",
-      "status": "Registered",
-      "priority": "P2 Urgent",
       "by": "Sergey Tomilov",
       "regBy": "Томилов Сергей Владимирович",
       "wo": null
@@ -6989,6 +6976,45 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-023299"
+    },
+    {
+      "asset": "DZ008",
+      "defect": "DD-00017539",
+      "raised": "2026-11-26",
+      "system": "DZ008.CH.UC (Undercarriage / Ходовая часть)",
+      "defectType": "6.05 Loose/missing structural fasteners / Ослабленные/отсутствующие крепежи конструкции",
+      "descr": "Залом бугельного болта опорного катка",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": "WO-023415"
+    },
+    {
+      "asset": "TK004",
+      "defect": "DD-00017552",
+      "raised": "2026-11-26",
+      "system": "TK004.BS (Braking System / Тормозная система)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Устранение утечки пневмосистемы",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Pavel Lefrank",
+      "regBy": "Лефранк Павел Петрович",
+      "wo": "WO-023442"
+    },
+    {
+      "asset": "TK033",
+      "defect": "DD-00017551",
+      "raised": "2026-11-26",
+      "system": "TK033.DRS.COO (Cooling System / Система охлаждения)",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "Замена патрубка интеркулера",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Pavel Lefrank",
+      "regBy": "Лефранк Павел Петрович",
+      "wo": "WO-023441"
     },
     {
       "asset": "GR012",
@@ -17872,6 +17898,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022212"
     },
     {
+      "asset": "TK047",
+      "defect": "DD-00016640",
+      "raised": "2026-11-10",
+      "system": "TK047.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Клинит левое колесо, вторая ось. Проверка\\ремонт тормозной системы, проверка\\ремонт ступиц и шкворневых узлов",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022423"
+    },
+    {
       "asset": "TK170",
       "defect": "DD-00016646",
       "raised": "2026-11-10",
@@ -18052,19 +18091,6 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022240"
-    },
-    {
-      "asset": "TK047",
-      "defect": "DD-00016640",
-      "raised": "2026-11-10",
-      "system": "TK047.DRS.AXL (Axles / Мосты)",
-      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
-      "descr": "Клинит левое колесо, вторая ось. Проверка\\ремонт тормозной системы, проверка\\ремонт ступиц и шкворневых узлов",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022423"
     },
     {
       "asset": "TK111",
@@ -29741,6 +29767,32 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "TK158",
+      "defect": "DD-00015695",
+      "raised": "2026-10-26",
+      "system": "TK158.DRS.FD.RLF Rear-Left Final Drive / Левая конечная передача",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Значительная течь масла из редуктора левой конечной передачи",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Evgeniy Frolin",
+      "regBy": "Фролин Евгений Владимирович",
+      "wo": "WO-021001"
+    },
+    {
+      "asset": "TK158",
+      "defect": "DD-00015697",
+      "raised": "2026-10-26",
+      "system": "TK158.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь масла из РВД цилиндров подъёма кузова",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Evgeniy Frolin",
+      "regBy": "Фролин Евгений Владимирович",
+      "wo": "WO-021002"
+    },
+    {
       "asset": "TK035",
       "defect": "DD-00015693",
       "raised": "2026-10-26",
@@ -29765,32 +29817,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022424"
-    },
-    {
-      "asset": "TK158",
-      "defect": "DD-00015697",
-      "raised": "2026-10-26",
-      "system": "TK158.HS.DL (Hydraulic Lines / Гидролинии)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь масла из РВД цилиндров подъёма кузова",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Evgeniy Frolin",
-      "regBy": "Фролин Евгений Владимирович",
-      "wo": "WO-021002"
-    },
-    {
-      "asset": "TK158",
-      "defect": "DD-00015695",
-      "raised": "2026-10-26",
-      "system": "TK158.DRS.FD.RLF Rear-Left Final Drive / Левая конечная передача",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Значительная течь масла из редуктора левой конечной передачи",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Evgeniy Frolin",
-      "regBy": "Фролин Евгений Владимирович",
-      "wo": "WO-021001"
     },
     {
       "asset": "TK149",
