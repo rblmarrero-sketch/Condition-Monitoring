@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-26T08:12:48+00:00",
+  "generated": "2026-11-26T08:27:44+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -6627,6 +6627,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023311"
     },
     {
+      "asset": "DZ008",
+      "defect": "DD-00017539",
+      "raised": "2026-11-26",
+      "system": "DZ008.CH.UC (Undercarriage / Ходовая часть)",
+      "defectType": "6.05 Loose/missing structural fasteners / Ослабленные/отсутствующие крепежи конструкции",
+      "descr": "Залом бугельного болта опорного катка",
+      "status": "In progress",
+      "priority": "P2 Urgent",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": "WO-023415"
+    },
+    {
       "asset": "DR008",
       "defect": "DD-00017517",
       "raised": "2026-11-26",
@@ -6989,19 +7002,6 @@ window.CM_WO_DATA = {
       "by": "Valentin Trapilo",
       "regBy": "Трапило Валентин Святославович",
       "wo": "WO-023443"
-    },
-    {
-      "asset": "DZ008",
-      "defect": "DD-00017539",
-      "raised": "2026-11-26",
-      "system": "DZ008.CH.UC (Undercarriage / Ходовая часть)",
-      "defectType": "6.05 Loose/missing structural fasteners / Ослабленные/отсутствующие крепежи конструкции",
-      "descr": "Залом бугельного болта опорного катка",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Tomilov",
-      "regBy": "Томилов Сергей Владимирович",
-      "wo": "WO-023415"
     },
     {
       "asset": "TK004",
