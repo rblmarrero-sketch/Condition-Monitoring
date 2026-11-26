@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-26T18:57:44+00:00",
+  "generated": "2026-11-26T19:13:07+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -6432,6 +6432,58 @@ window.CM_WO_DATA = {
       "wo": "WO-023467"
     },
     {
+      "asset": "EX016",
+      "defect": "DD-00017580",
+      "raised": "2026-11-27",
+      "system": "EX016.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "РВД квик каплера замена (повреждение)",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Ilya Borzunov",
+      "regBy": "Борзунов Илья Николаевич",
+      "wo": "WO-023469"
+    },
+    {
+      "asset": "TK170",
+      "defect": "DD-00017581",
+      "raised": "2026-11-27",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK170 WATER PUMP",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Замена РВД привода СВН",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Ilya Borzunov",
+      "regBy": "Борзунов Илья Николаевич",
+      "wo": "WO-023470"
+    },
+    {
+      "asset": "CD010",
+      "defect": "DD-00017583",
+      "raised": "2026-11-27",
+      "system": "CD010.OC.AC (Air Conditioning / Кондиционирование)",
+      "defectType": "6.05 Loose/missing structural fasteners / Ослабленные/отсутствующие крепежи конструкции",
+      "descr": "ДВС посторонний шум. Установка болта крепления кондиционера",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Ilya Borzunov",
+      "regBy": "Борзунов Илья Николаевич",
+      "wo": "WO-023472"
+    },
+    {
+      "asset": "TK104",
+      "defect": "DD-00017579",
+      "raised": "2026-11-27",
+      "system": "TK104.DRS.FUE (Fuel System / Топливная система)",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "Диагностика топливной системы/ Потеря мощности ДВС",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": "WO-023468"
+    },
+    {
       "asset": "DZ005",
       "defect": "DD-00017573",
       "raised": "2026-11-27",
@@ -6978,19 +7030,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "GE025",
-      "defect": "DD-00017536",
-      "raised": "2026-11-26",
-      "system": "GENERATOR, CATERPILLAR C18, GE025 ENGINE OldNumber (GN025)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Демонтаж радиатора ОЖ",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Pavel Lefrank",
-      "regBy": "Лефранк Павел Петрович",
-      "wo": null
-    },
-    {
       "asset": "GE020",
       "defect": "DD-00017543",
       "raised": "2026-11-26",
@@ -7001,6 +7040,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "GE025",
+      "defect": "DD-00017536",
+      "raised": "2026-11-26",
+      "system": "GENERATOR, CATERPILLAR C18, GE025 ENGINE OldNumber (GN025)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Демонтаж радиатора ОЖ",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Lefrank",
+      "regBy": "Лефранк Павел Петрович",
       "wo": null
     },
     {
@@ -45094,19 +45146,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "PU008",
-      "defect": "DD-00014445",
-      "raised": "2026-10-09",
-      "system": "PU008.DRS.PD (Pump Drive / Привод насоса)",
-      "defectType": "1.19 No movement / no drive / Нет движения / нет привода",
-      "descr": "Сломан Вал привода насоса",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Temir Marochko",
-      "regBy": "Марочко Темир",
-      "wo": null
-    },
-    {
       "asset": "LV069",
       "defect": "DD-00014408",
       "raised": "2026-10-09",
@@ -45130,6 +45169,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Shcherbina",
       "regBy": "Щербина Андрей Николаевич",
+      "wo": null
+    },
+    {
+      "asset": "PU008",
+      "defect": "DD-00014445",
+      "raised": "2026-10-09",
+      "system": "PU008.DRS.PD (Pump Drive / Привод насоса)",
+      "defectType": "1.19 No movement / no drive / Нет движения / нет привода",
+      "descr": "Сломан Вал привода насоса",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Temir Marochko",
+      "regBy": "Марочко Темир",
       "wo": null
     },
     {
@@ -49319,19 +49371,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK162",
-      "defect": "DD-00014083",
-      "raised": "2026-10-05",
-      "system": "TRUCK, WATER URAL 4672M1-20, TK162 TRANSMISSION OldNumber (UT162)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка масла с РК",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": null
-    },
-    {
       "asset": "LV028",
       "defect": "DD-00014112",
       "raised": "2026-10-05",
@@ -49481,6 +49520,19 @@ window.CM_WO_DATA = {
       "system": "LV158.CH.SU (Suspension / Подвеска)",
       "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
       "descr": "Требуется замена нижних и верхних шаровых опор, замена втулок и стоек стабилизатора",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": null
+    },
+    {
+      "asset": "TK162",
+      "defect": "DD-00014083",
+      "raised": "2026-10-05",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK162 TRANSMISSION OldNumber (UT162)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка масла с РК",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -57730,19 +57782,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
-      "wo": null
-    },
-    {
       "asset": "DZ022",
       "defect": "DD-00011314",
       "raised": "2026-08-21",
@@ -57753,6 +57792,19 @@ window.CM_WO_DATA = {
       "priority": "P2 Urgent",
       "by": "Andrey Shipelov",
       "regBy": "Шипелов Андрей Анатольевич",
+      "wo": null
+    },
+    {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
@@ -59108,8 +59160,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000076",
+      "asset": "H07",
+      "defect": "EB-00000075",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -59121,8 +59173,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H07",
-      "defect": "EB-00000075",
+      "asset": "H04",
+      "defect": "EB-00000076",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
