@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-26T04:37:56+00:00",
+  "generated": "2026-11-26T04:53:18+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -6289,6 +6289,19 @@ window.CM_WO_DATA = {
   ],
   "otherDefects": [
     {
+      "asset": "LD008",
+      "defect": "DD-00017530",
+      "raised": "2026-11-26",
+      "system": "LD008.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Не работает дополнительный фен",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": null
+    },
+    {
       "asset": "TK108",
       "defect": "DD-00017493",
       "raised": "2026-11-26",
@@ -6523,6 +6536,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023306"
     },
     {
+      "asset": "EX025",
+      "defect": "DD-00017549",
+      "raised": "2026-11-26",
+      "system": "EX025.CH.UC (Undercarriage / Ходовая часть)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Заклинил опорный каток/Чистка ходовой части",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": "WO-023439"
+    },
+    {
       "asset": "DR008",
       "defect": "DD-00017517",
       "raised": "2026-11-26",
@@ -6637,19 +6663,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Pavel Lefrank",
       "regBy": "Лефранк Павел Петрович",
-      "wo": null
-    },
-    {
-      "asset": "LD008",
-      "defect": "DD-00017530",
-      "raised": "2026-11-26",
-      "system": "LD008.OC.HE (Heating / Отопление)",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Не работает дополнительный фен",
-      "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Sergey Tomilov",
-      "regBy": "Томилов Сергей Владимирович",
       "wo": null
     },
     {
@@ -7264,6 +7277,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023279"
     },
     {
+      "asset": "TK166.SS.HOS",
+      "defect": "EB-00000109",
+      "raised": "2026-11-25",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Viktor Bernikov",
+      "regBy": "Viktor Bernikov",
+      "wo": "WO-023240"
+    },
+    {
       "asset": "EX021",
       "defect": "DD-00017455",
       "raised": "2026-11-25",
@@ -7537,6 +7563,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "LV022",
+      "defect": "DD-00017451",
+      "raised": "2026-11-25",
+      "system": "LV022.OC.GL (Glass / Стекла)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Замена левого зеркала, ремонт отопителя",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023250"
+    },
+    {
       "asset": "TK098",
       "defect": "DD-00017490",
       "raised": "2026-11-25",
@@ -7626,32 +7665,6 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-023285"
-    },
-    {
-      "asset": "TK166.SS.HOS",
-      "defect": "EB-00000109",
-      "raised": "2026-11-25",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Viktor Bernikov",
-      "regBy": "Viktor Bernikov",
-      "wo": "WO-023240"
-    },
-    {
-      "asset": "LV022",
-      "defect": "DD-00017451",
-      "raised": "2026-11-25",
-      "system": "LV022.OC.GL (Glass / Стекла)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Замена левого зеркала, ремонт отопителя",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-023250"
     },
     {
       "asset": "TK151",
@@ -20056,6 +20069,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "GE107",
+      "defect": "DD-00016423",
+      "raised": "2026-11-06",
+      "system": "GENERATOR, RESURS-D1000, GE107 ENGINE",
+      "defectType": "1.04 Abnormal noise / vibration Аномальный шум / вибрация",
+      "descr": "Подозрение на гидроудар и заклинивание двигателя",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-021892"
+    },
+    {
       "asset": "DZ011",
       "defect": "DD-00016387",
       "raised": "2026-11-06",
@@ -20873,19 +20899,6 @@ window.CM_WO_DATA = {
       "by": "Roman Besedovskiy",
       "regBy": "Беседовский Роман Иванович",
       "wo": "WO-021893"
-    },
-    {
-      "asset": "GE107",
-      "defect": "DD-00016423",
-      "raised": "2026-11-06",
-      "system": "GENERATOR, RESURS-D1000, GE107 ENGINE",
-      "defectType": "1.04 Abnormal noise / vibration Аномальный шум / вибрация",
-      "descr": "Подозрение на гидроудар и заклинивание двигателя",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Roman Besedovskiy",
-      "regBy": "Беседовский Роман Иванович",
-      "wo": "WO-021892"
     },
     {
       "asset": "DZ009",
@@ -57250,11 +57263,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "BS005",
-      "defect": "DD-00011309",
+      "defect": "DD-00011308",
       "raised": "2026-08-21",
-      "system": "BS005.BS.CV (Control Valve / Управляющий клапан)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Выдавило резинку на фильтре осушителя (забит)",
+      "system": "BS005.DRS.ENG (Engine / Двигатель)",
+      "defectType": "4.12 Cable / harness damage / Повреждение кабеля / жгута",
+      "descr": "Не корректные показатели О.Ж.",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -57263,11 +57276,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "BS005",
-      "defect": "DD-00011308",
+      "defect": "DD-00011309",
       "raised": "2026-08-21",
-      "system": "BS005.DRS.ENG (Engine / Двигатель)",
-      "defectType": "4.12 Cable / harness damage / Повреждение кабеля / жгута",
-      "descr": "Не корректные показатели О.Ж.",
+      "system": "BS005.BS.CV (Control Valve / Управляющий клапан)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Выдавило резинку на фильтре осушителя (забит)",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
