@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-26T20:47:57+00:00",
+  "generated": "2026-11-26T21:03:08+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -6648,6 +6648,19 @@ window.CM_WO_DATA = {
       "descr": "Замена основного отопителя",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": null
+    },
+    {
+      "asset": "EX009",
+      "defect": "DD-00017592",
+      "raised": "2026-11-27",
+      "system": "EX009.OC.HE (Heating / Отопление)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь антифриза, порыв шланга ПЖД",
+      "status": "Registered",
+      "priority": "P2 Urgent",
       "by": "Sergey Tomilov",
       "regBy": "Томилов Сергей Владимирович",
       "wo": null
@@ -18496,6 +18509,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022423"
     },
     {
+      "asset": "TK168",
+      "defect": "DD-00016663",
+      "raised": "2026-11-10",
+      "system": "TK168.CH (Structure & Chassis / Рама и конструкция)",
+      "defectType": "6.03 Structural crack / Трещина конструкции",
+      "descr": "Сварочные работы заднего отбойника",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Aleksey Kiselev",
+      "regBy": "Киселев Алексей Александрович",
+      "wo": "WO-022894"
+    },
+    {
       "asset": "TK170",
       "defect": "DD-00016646",
       "raised": "2026-11-10",
@@ -18624,19 +18650,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": null
-    },
-    {
-      "asset": "TK168",
-      "defect": "DD-00016663",
-      "raised": "2026-11-10",
-      "system": "TK168.CH (Structure & Chassis / Рама и конструкция)",
-      "defectType": "6.03 Structural crack / Трещина конструкции",
-      "descr": "Сварочные работы заднего отбойника",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Aleksey Kiselev",
-      "regBy": "Киселев Алексей Александрович",
-      "wo": "WO-022894"
     },
     {
       "asset": "GR013",
@@ -130705,15 +130718,15 @@ window.CM_WO_DATA = {
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
-      "planStart": "2026-11-26",
-      "planStartDt": "2026-11-26T00:00:00",
-      "planEnd": "2026-11-26",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
+      "planStart": "2026-11-25",
+      "planStartDt": "2026-11-25T00:00:00",
+      "planEnd": "2026-11-25",
+      "actualStart": "2026-11-25",
+      "actualStartDt": "2026-11-25T20:00:00",
+      "actualEnd": "2026-11-26"
     },
     {
       "equip": "GR002",

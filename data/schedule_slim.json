@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-26T20:47:57+00:00",
+  "generated": "2026-11-26T21:03:08+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -131,18 +131,6 @@
           "INSP"
         ],
         "plan": "2026-11-30",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
-    "GR001": [
-      {
-        "wo": "WO-022124",
-        "hours": 1000,
-        "types": [
-          "FC",
-          "INSP"
-        ],
-        "plan": "2026-11-26",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -2585,24 +2573,6 @@
       "completed": ""
     },
     {
-      "wo": "WO-022124",
-      "equip": "GR001",
-      "cls": "GRD",
-      "comp": "",
-      "desc": "Filter Cut / General Inspection",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-26",
-      "type": "1000 Hours service Planned",
-      "hours": 1000,
-      "plan": "2026-11-26",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
       "wo": "WO-022114",
       "equip": "LD001",
       "cls": "LDR",
@@ -2727,6 +2697,24 @@
       "cause": "",
       "pmStatus": "complete",
       "completed": "2026-11-25"
+    },
+    {
+      "wo": "WO-022124",
+      "equip": "GR001",
+      "cls": "GRD",
+      "comp": "",
+      "desc": "Filter Cut / General Inspection",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-25",
+      "type": "1000 Hours service Planned",
+      "hours": 1000,
+      "plan": "2026-11-25",
+      "status": "Completed",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "complete",
+      "completed": "2026-11-26"
     },
     {
       "wo": "WO-022117",
@@ -10511,6 +10499,14 @@
       "p": "P2",
       "r": "2026-11-27",
       "x": "ДВС посторонний шум. Установка болта крепления кондиционера"
+    },
+    {
+      "d": "DD-00017592",
+      "u": "EX009",
+      "s": "EX009.OC.HE (Heating / Отопление)",
+      "p": "P2",
+      "r": "2026-11-27",
+      "x": "Течь антифриза, порыв шланга ПЖД"
     },
     {
       "d": "DD-00017584",
@@ -32473,6 +32469,14 @@
       "x": "Клинит левое колесо, вторая ось. Проверка\\ремонт тормозной системы, проверка\\рем"
     },
     {
+      "d": "DD-00016663",
+      "u": "TK168",
+      "s": "TK168.CH (Structure & Chassis / Рама и конструкция)",
+      "p": "P4",
+      "r": "2026-11-10",
+      "x": "Сварочные работы заднего отбойника"
+    },
+    {
       "d": "DD-00016646",
       "u": "TK170",
       "s": "TRUCK, WATER URAL 4672M1-20, TK170 TANK",
@@ -32551,14 +32555,6 @@
       "p": "P4",
       "r": "2026-11-10",
       "x": "Устранение утечек топливной аппаратуры"
-    },
-    {
-      "d": "DD-00016663",
-      "u": "TK168",
-      "s": "TK168.CH (Structure & Chassis / Рама и конструкция)",
-      "p": "P4",
-      "r": "2026-11-10",
-      "x": "Сварочные работы заднего отбойника"
     },
     {
       "d": "DD-00016652",
