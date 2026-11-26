@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-26T04:03:06+00:00",
+  "generated": "2026-11-26T04:23:07+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -6510,6 +6510,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023435"
     },
     {
+      "asset": "EX003",
+      "defect": "DD-00017512",
+      "raised": "2026-11-26",
+      "system": "EX003.CH.BUC (Bucket / Ковш)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "износ режущих элементов и трещины ковша",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sychev Anton",
+      "regBy": "Сычев Антон Александрович",
+      "wo": "WO-023306"
+    },
+    {
       "asset": "DR008",
       "defect": "DD-00017517",
       "raised": "2026-11-26",
@@ -6846,19 +6859,6 @@ window.CM_WO_DATA = {
       "by": "Pavel Lefrank",
       "regBy": "Лефранк Павел Петрович",
       "wo": "WO-023382"
-    },
-    {
-      "asset": "EX003",
-      "defect": "DD-00017512",
-      "raised": "2026-11-26",
-      "system": "EX003.CH.BUC (Bucket / Ковш)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "износ режущих элементов и трещины ковша",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sychev Anton",
-      "regBy": "Сычев Антон Александрович",
-      "wo": "WO-023306"
     },
     {
       "asset": "TK098",
@@ -7251,6 +7251,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023283"
     },
     {
+      "asset": "TR001",
+      "defect": "DD-00017476",
+      "raised": "2026-11-25",
+      "system": "TR001.BS.HOS (Hoses and Piping / Шланги и трубопроводы)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Отогрев, растормаживание",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023279"
+    },
+    {
       "asset": "EX021",
       "defect": "DD-00017455",
       "raised": "2026-11-25",
@@ -7626,19 +7639,6 @@ window.CM_WO_DATA = {
       "by": "Viktor Bernikov",
       "regBy": "Viktor Bernikov",
       "wo": "WO-023240"
-    },
-    {
-      "asset": "TR001",
-      "defect": "DD-00017476",
-      "raised": "2026-11-25",
-      "system": "TR001.BS.HOS (Hoses and Piping / Шланги и трубопроводы)",
-      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
-      "descr": "Отогрев, растормаживание",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-023279"
     },
     {
       "asset": "LV022",
