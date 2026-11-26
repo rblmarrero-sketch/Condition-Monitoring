@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-26T20:33:14+00:00",
+  "generated": "2026-11-26T20:47:57+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -553,15 +553,6 @@
     ],
     "TK122": [
       {
-        "wo": "WO-021953",
-        "hours": 250,
-        "types": [
-          "MP"
-        ],
-        "plan": "2026-11-25",
-        "priority": "P3 Planned (PM)"
-      },
-      {
         "wo": "WO-023140",
         "hours": 500,
         "types": [
@@ -870,15 +861,6 @@
       }
     ],
     "TK161": [
-      {
-        "wo": "WO-022154",
-        "hours": 250,
-        "types": [
-          "MP"
-        ],
-        "plan": "2026-11-23",
-        "priority": "P3 Planned (PM)"
-      },
       {
         "wo": "WO-023256",
         "hours": 500,
@@ -2739,12 +2721,12 @@
       "type": "250 Hours service Planned",
       "hours": 250,
       "plan": "2026-11-25",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-25"
     },
     {
       "wo": "WO-022117",
@@ -2757,12 +2739,12 @@
       "type": "250 Hours service Planned",
       "hours": 250,
       "plan": "2026-11-25",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-25"
     },
     {
       "wo": "WO-022804",
@@ -2793,12 +2775,12 @@
       "type": "250 Hours service Planned",
       "hours": 250,
       "plan": "2026-11-25",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-26"
     },
     {
       "wo": "WO-022147",
@@ -2817,6 +2799,24 @@
       "cause": "",
       "pmStatus": "open",
       "completed": ""
+    },
+    {
+      "wo": "WO-022154",
+      "equip": "TK161",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-25",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-11-25",
+      "status": "Completed",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "complete",
+      "completed": "2026-11-25"
     },
     {
       "wo": "WO-022794",
@@ -2973,12 +2973,12 @@
       "type": "250 Hours service Planned",
       "hours": 250,
       "plan": "2026-11-24",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-24"
     },
     {
       "wo": "WO-022806",
@@ -3249,24 +3249,6 @@
       "cause": "",
       "pmStatus": "complete",
       "completed": "2026-11-23"
-    },
-    {
-      "wo": "WO-022154",
-      "equip": "TK161",
-      "cls": "HT",
-      "comp": "",
-      "desc": "Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-23",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-11-23",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
     },
     {
       "wo": "WO-022810",
@@ -29739,12 +29721,52 @@
       "x": "Радиатор охлаждения ДВС внешнее повреждение/ Ожидание запасных частей ETR WR2027"
     },
     {
+      "d": "DD-00017591",
+      "u": "TK149",
+      "s": "TK149.DRS.ENG (Engine / Двигатель)",
+      "p": "P4",
+      "r": "2026-11-27",
+      "x": "Замерзание загрязнение сапуна ДВС."
+    },
+    {
+      "d": "DD-00017590",
+      "u": "TK149",
+      "s": "TK149.BS.RV (Retarder Valve / Клапан ретардера)",
+      "p": "P4",
+      "r": "2026-11-27",
+      "x": "Течь цилиндра ретарды."
+    },
+    {
+      "d": "DD-00017588",
+      "u": "TK149",
+      "s": "TK149.DRS.AXL.RAX Rear Axle Group / Задний мост",
+      "p": "P4",
+      "r": "2026-11-27",
+      "x": "Течь сальника дифференциала."
+    },
+    {
       "d": "DD-00017586",
       "u": "TK106",
       "s": "TK106.CH.BED (Bed / Кузов)",
       "p": "P4",
       "r": "2026-11-27",
       "x": "Трещины на кузове."
+    },
+    {
+      "d": "DD-00017589",
+      "u": "DZ008",
+      "s": "DZ008.CH.RP (Ripper/Рыхлитель)",
+      "p": "P4",
+      "r": "2026-11-27",
+      "x": "Течь РВД рыхлителя."
+    },
+    {
+      "d": "DD-00017587",
+      "u": "DZ008",
+      "s": "DZ008.DRS.AIR (Air Intake System / Система впуска воздуха)",
+      "p": "P4",
+      "r": "2026-11-27",
+      "x": "Патрубок системы впуска соскочил с посадочного места; ослаблен хомут крепления."
     },
     {
       "d": "DD-00017585",
@@ -31971,6 +31993,22 @@
       "x": "критический износ неподвижной плиты"
     },
     {
+      "d": "DD-00016797",
+      "u": "LD006",
+      "s": "LD006.HS.CYL (Cylinders / Гидроцилиндры)",
+      "p": "P4",
+      "r": "2026-11-13",
+      "x": "Утечка по рулевому гидроцилиндру"
+    },
+    {
+      "d": "DD-00016798",
+      "u": "LD006",
+      "s": "LD006.OC.HE (Heating / Отопление)",
+      "p": "P4",
+      "r": "2026-11-13",
+      "x": "Отсутствуе фен"
+    },
+    {
       "d": "DD-00016792",
       "u": "DZ008",
       "s": "DZ008.OC.HE (Heating / Отопление)",
@@ -31995,28 +32033,12 @@
       "x": "Утечка по РВД трансмиссионых филтров"
     },
     {
-      "d": "DD-00016797",
-      "u": "LD006",
-      "s": "LD006.HS.CYL (Cylinders / Гидроцилиндры)",
-      "p": "P4",
-      "r": "2026-11-13",
-      "x": "Утечка по рулевому гидроцилиндру"
-    },
-    {
       "d": "DD-00016822",
       "u": "CR003",
       "s": "CR003.CRS.JAW (Jaw Crusher / Щековая дробилка)",
       "p": "P4",
       "r": "2026-11-13",
       "x": "Износ дробящих плит"
-    },
-    {
-      "d": "DD-00016798",
-      "u": "LD006",
-      "s": "LD006.OC.HE (Heating / Отопление)",
-      "p": "P4",
-      "r": "2026-11-13",
-      "x": "Отсутствуе фен"
     },
     {
       "d": "DD-00016796",
