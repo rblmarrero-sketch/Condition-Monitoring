@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-26T10:42:43+00:00",
+  "generated": "2026-11-26T10:58:04+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -6633,7 +6633,7 @@ window.CM_WO_DATA = {
       "system": "DZ008.CH.UC (Undercarriage / Ходовая часть)",
       "defectType": "6.05 Loose/missing structural fasteners / Ослабленные/отсутствующие крепежи конструкции",
       "descr": "Залом бугельного болта опорного катка",
-      "status": "In progress",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Sergey Tomilov",
       "regBy": "Томилов Сергей Владимирович",
@@ -6651,6 +6651,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Tomilov",
       "regBy": "Томилов Сергей Владимирович",
       "wo": "WO-023310"
+    },
+    {
+      "asset": "TK103",
+      "defect": "DD-00017556",
+      "raised": "2026-11-26",
+      "system": "TK103.ELS.ALT (Alternator / Генератор)",
+      "defectType": "1.27 Belt drive issue (slip/break) / Проблема ременного привода (проскальзывание/обрыв)",
+      "descr": "Проскальзывание ремней генератора",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Valentin Trapilo",
+      "regBy": "Трапило Валентин Святославович",
+      "wo": "WO-023446"
     },
     {
       "asset": "DR008",
@@ -6874,19 +6887,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK135",
-      "defect": "DD-00017555",
-      "raised": "2026-11-26",
-      "system": "TK135.BS.HOS (Hoses and Piping / Шланги и трубопроводы)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "утечки воздуха, ОЖ, масла ГУР. электрические неисправности.",
-      "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Sychev Anton",
-      "regBy": "Сычев Антон Александрович",
-      "wo": null
-    },
-    {
       "asset": "LV133",
       "defect": "DD-00017546",
       "raised": "2026-11-26",
@@ -7002,6 +7002,32 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-023299"
+    },
+    {
+      "asset": "LV050",
+      "defect": "DD-00017557",
+      "raised": "2026-11-26",
+      "system": "LV050.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Не работает штатный отопитель.",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-023447"
+    },
+    {
+      "asset": "TK135",
+      "defect": "DD-00017555",
+      "raised": "2026-11-26",
+      "system": "TK135.BS.HOS (Hoses and Piping / Шланги и трубопроводы)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "утечки воздуха, ОЖ, масла ГУР. электрические неисправности.",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sychev Anton",
+      "regBy": "Сычев Антон Александрович",
+      "wo": "WO-023445"
     },
     {
       "asset": "DZ019",
@@ -57340,19 +57366,6 @@ window.CM_WO_DATA = {
       "wo": "WO-015456"
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
-      "wo": null
-    },
-    {
       "asset": "TK046",
       "defect": "DD-00011270",
       "raised": "2026-08-21",
@@ -57441,6 +57454,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
