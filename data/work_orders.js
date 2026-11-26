@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-26T02:47:52+00:00",
+  "generated": "2026-11-26T03:02:52+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -448,8 +448,8 @@ window.CM_WO_DATA = {
     "planStart": 0
   },
   "cmCauseFrom": {
-    "wo": 137,
-    "wr": 87,
+    "wo": 138,
+    "wr": 86,
     "cert": 0,
     "none": 0
   },
@@ -1517,7 +1517,7 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "cause": "Износ уплотнения",
-      "causeFrom": "wr",
+      "causeFrom": "wo",
       "descr": "Утечка рабочей жидкости в месте фланцевого соединения основного гидравлического насоса.",
       "status": "Registered",
       "by": "Zhomart",
@@ -6575,6 +6575,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "DZ008",
+      "defect": "DD-00017539",
+      "raised": "2026-11-26",
+      "system": "DZ008.CH.UC (Undercarriage / Ходовая часть)",
+      "defectType": "6.05 Loose/missing structural fasteners / Ослабленные/отсутствующие крепежи конструкции",
+      "descr": "Залом бугельного болта опорного катка",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": null
+    },
+    {
       "asset": "DZ016",
       "defect": "DD-00017528",
       "raised": "2026-11-26",
@@ -6585,6 +6598,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Tomilov",
       "regBy": "Томилов Сергей Владимирович",
+      "wo": null
+    },
+    {
+      "asset": "EX007",
+      "defect": "DD-00017540",
+      "raised": "2026-11-26",
+      "system": "EX007.CH.BUC (Bucket / Ковш)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Износ ножей ковша",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Aleksey Kiselev",
+      "regBy": "Киселев Алексей Александрович",
       "wo": null
     },
     {
@@ -6624,6 +6650,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Viktor Nizhebovskiy",
       "regBy": "Нижебовский Виктор Петрович",
+      "wo": null
+    },
+    {
+      "asset": "LV067",
+      "defect": "DD-00017538",
+      "raised": "2026-11-26",
+      "system": "LV067.DRS.TRA (Transmission / Трансмиссия)",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "Двигатель не тянет.",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
       "wo": null
     },
     {
@@ -8824,6 +8863,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023096"
     },
     {
+      "asset": "TK036",
+      "defect": "DD-00017348",
+      "raised": "2026-11-23",
+      "system": "TK036.HS.TIP.VAL Control Valve (Tipping) / Гидрораспределитель подъема кузова",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Не опускается кузов",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023117"
+    },
+    {
       "asset": "CN018",
       "defect": "DD-00017352",
       "raised": "2026-11-23",
@@ -8861,19 +8913,6 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-023124"
-    },
-    {
-      "asset": "TK036",
-      "defect": "DD-00017348",
-      "raised": "2026-11-23",
-      "system": "TK036.HS.TIP.VAL Control Valve (Tipping) / Гидрораспределитель подъема кузова",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Не опускается кузов",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-023117"
     },
     {
       "asset": "GR013",
@@ -9253,6 +9292,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023085"
     },
     {
+      "asset": "CN001",
+      "defect": "DD-00017296",
+      "raised": "2026-11-22",
+      "system": "CN001.CH.STR (Superstructure / Надстройка)",
+      "defectType": "7.09 Screen media tear / breakage / Разрыв / поломка ситовой панели",
+      "descr": "нет зарядки",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Ilshat Sabitov",
+      "regBy": "Сабитов Ильшат Рашидович",
+      "wo": "WO-023074"
+    },
+    {
       "asset": "CN010",
       "defect": "DD-00017298",
       "raised": "2026-11-22",
@@ -9316,19 +9368,6 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": null
-    },
-    {
-      "asset": "CN001",
-      "defect": "DD-00017296",
-      "raised": "2026-11-22",
-      "system": "CN001.CH.STR (Superstructure / Надстройка)",
-      "defectType": "7.09 Screen media tear / breakage / Разрыв / поломка ситовой панели",
-      "descr": "нет зарядки",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Ilshat Sabitov",
-      "regBy": "Сабитов Ильшат Рашидович",
-      "wo": "WO-023074"
     },
     {
       "asset": "TK147",
@@ -20573,6 +20612,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
+      "wo": null
+    },
+    {
+      "asset": "TK092",
+      "defect": "DD-00016430",
+      "raised": "2026-11-06",
+      "system": "TK092.BS.BPC (Brake Packs / Тормозные пакеты)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Проверка-регулировка или замена тормозных колодок переднего правого колеса",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
       "wo": null
     },
     {
@@ -38191,12 +38243,12 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "LS048",
-      "defect": "DD-00014963",
+      "asset": "EX006",
+      "defect": "DD-00014971",
       "raised": "2026-10-17",
-      "system": "LS048.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
-      "descr": "Замена ФОВ",
+      "system": "EX006.HS.MP (Hydraulic Pumps / Гидронасосы)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "каплевидная утечка по гидронасосу",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -38204,12 +38256,12 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "EX006",
-      "defect": "DD-00014971",
+      "asset": "LS048",
+      "defect": "DD-00014963",
       "raised": "2026-10-17",
-      "system": "EX006.HS.MP (Hydraulic Pumps / Гидронасосы)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "каплевидная утечка по гидронасосу",
+      "system": "LS048.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "Замена ФОВ",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -58536,8 +58588,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H07",
-      "defect": "EB-00000075",
+      "asset": "H04",
+      "defect": "EB-00000076",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -58549,8 +58601,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000076",
+      "asset": "H07",
+      "defect": "EB-00000075",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
