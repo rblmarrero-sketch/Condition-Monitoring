@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-26T19:43:02+00:00",
+  "generated": "2026-11-26T20:02:50+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -2873,6 +2873,24 @@
       "completed": "2026-11-24"
     },
     {
+      "wo": "WO-022041",
+      "equip": "EX010",
+      "cls": "EXC",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-24",
+      "type": "250 Hours service Planned",
+      "hours": 250,
+      "plan": "2026-11-24",
+      "status": "Completed",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "complete",
+      "completed": "2026-11-24"
+    },
+    {
       "wo": "WO-022340",
       "equip": "GE025",
       "cls": "GEN",
@@ -2936,6 +2954,24 @@
       "raised": "2026-11-24",
       "type": "500 Hours service Planned",
       "hours": 500,
+      "plan": "2026-11-24",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-022119",
+      "equip": "LD006",
+      "cls": "LDR",
+      "comp": "",
+      "desc": "250h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-24",
+      "type": "250 Hours service Planned",
+      "hours": 250,
       "plan": "2026-11-24",
       "status": "Elimination scheduled",
       "request": "",
@@ -3071,24 +3107,6 @@
       "completed": "2026-11-23"
     },
     {
-      "wo": "WO-022041",
-      "equip": "EX010",
-      "cls": "EXC",
-      "comp": "",
-      "desc": "250h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-23",
-      "type": "250 Hours service Planned",
-      "hours": 250,
-      "plan": "2026-11-23",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
       "wo": "WO-022049",
       "equip": "EX012",
       "cls": "EXC",
@@ -3152,24 +3170,6 @@
       "raised": "2026-11-23",
       "type": "1000 Hours service Planned",
       "hours": 1000,
-      "plan": "2026-11-23",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
-      "wo": "WO-022119",
-      "equip": "LD006",
-      "cls": "LDR",
-      "comp": "",
-      "desc": "250h service",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-23",
-      "type": "250 Hours service Planned",
-      "hours": 250,
       "plan": "2026-11-23",
       "status": "Elimination scheduled",
       "request": "",
@@ -29737,6 +29737,22 @@
       "p": "P2",
       "r": "2026-09-27",
       "x": "Радиатор охлаждения ДВС внешнее повреждение/ Ожидание запасных частей ETR WR2027"
+    },
+    {
+      "d": "DD-00017586",
+      "u": "TK106",
+      "s": "TK106.CH.BED (Bed / Кузов)",
+      "p": "P4",
+      "r": "2026-11-27",
+      "x": "Трещины на кузове."
+    },
+    {
+      "d": "DD-00017585",
+      "u": "TK166",
+      "s": "TK166.DRS.TRA (Transmission / Трансмиссия)",
+      "p": "P4",
+      "r": "2026-11-27",
+      "x": "Люфт заднего карданного вала."
     },
     {
       "d": "DD-00017582",

@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-26T19:43:02+00:00",
+  "generated": "2026-11-26T20:02:50+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -443,13 +443,13 @@ window.CM_WO_DATA = {
     "regBy": "Contact person initiator WR"
   },
   "cmDateFrom": {
-    "raised": 225,
+    "raised": 226,
     "detected": 0,
     "planStart": 0
   },
   "cmCauseFrom": {
     "wo": 138,
-    "wr": 87,
+    "wr": 88,
     "cert": 0,
     "none": 0
   },
@@ -462,6 +462,32 @@ window.CM_WO_DATA = {
     "Bekzhan"
   ],
   "cmWorkOrders": [
+    {
+      "date": "2026-11-27",
+      "dateFrom": "raised",
+      "raised": "2026-11-27",
+      "detected": "2026-11-27",
+      "planStart": null,
+      "closed": null,
+      "asset": "TK106",
+      "defect": "DD-00017586",
+      "requestNo": "DD-00017586",
+      "eqType": "TRUCK, ARTICULATED",
+      "system": "TK106.CH.BED (Bed / Кузов)",
+      "priority": "P4 Planned (Repair)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "cause": "Усталостная трещина",
+      "causeFrom": "wr",
+      "descr": "Трещины на кузове.",
+      "status": "Registered",
+      "by": "Slam",
+      "byFull": "Slam Taganov",
+      "regBy": "Таганов Слам Джумамуратович",
+      "raisedBy": "ГДК Баимская",
+      "woNumber": null,
+      "maintType": null,
+      "planned": false
+    },
     {
       "date": "2026-11-26",
       "dateFrom": "raised",
@@ -6469,6 +6495,19 @@ window.CM_WO_DATA = {
       "by": "Ilya Borzunov",
       "regBy": "Борзунов Илья Николаевич",
       "wo": "WO-023472"
+    },
+    {
+      "asset": "TK166",
+      "defect": "DD-00017585",
+      "raised": "2026-11-27",
+      "system": "TK166.DRS.TRA (Transmission / Трансмиссия)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Люфт заднего карданного вала.",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Shcherbina",
+      "regBy": "Щербина Андрей Николаевич",
+      "wo": null
     },
     {
       "asset": "TK109",
@@ -15584,19 +15623,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022919"
     },
     {
-      "asset": "TK035",
-      "defect": "DD-00016866",
-      "raised": "2026-11-14",
-      "system": "TK035.ELS.WH (Wiring Harness / Жгут проводов)",
-      "defectType": "4.02 Open circuit / Разрыв цепи",
-      "descr": "Не корректно работает указатель уровня топлива",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022917"
-    },
-    {
       "asset": "DZ022",
       "defect": "DD-00016843",
       "raised": "2026-11-14",
@@ -15608,6 +15634,19 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022527"
+    },
+    {
+      "asset": "TK035",
+      "defect": "DD-00016866",
+      "raised": "2026-11-14",
+      "system": "TK035.ELS.WH (Wiring Harness / Жгут проводов)",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "Не корректно работает указатель уровня топлива",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022917"
     },
     {
       "asset": "TK120",
@@ -109921,15 +109960,15 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
-      "planStart": "2026-11-23",
-      "planStartDt": "2026-11-23T00:00:00",
-      "planEnd": "2026-11-23",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
+      "planStart": "2026-11-24",
+      "planStartDt": "2026-11-24T00:00:00",
+      "planEnd": "2026-11-24",
+      "actualStart": "2026-11-24",
+      "actualStartDt": "2026-11-24T08:00:00",
+      "actualEnd": "2026-11-24"
     },
     {
       "equip": "EX010",
@@ -140534,9 +140573,9 @@ window.CM_WO_DATA = {
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-23",
-      "planStartDt": "2026-11-23T00:00:00",
-      "planEnd": "2026-11-23",
+      "planStart": "2026-11-24",
+      "planStartDt": "2026-11-24T00:00:00",
+      "planEnd": "2026-11-24",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
