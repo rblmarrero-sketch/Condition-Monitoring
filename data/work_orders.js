@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-26T21:18:02+00:00",
+  "generated": "2026-11-26T21:38:00+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -21395,6 +21395,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022377"
     },
     {
+      "asset": "TK002",
+      "defect": "DD-00016434",
+      "raised": "2026-11-06",
+      "system": "TK002.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Переднее левое колесо тянет влево, при торможении сильнее",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022905"
+    },
+    {
       "asset": "EX021",
       "defect": "DD-00016417",
       "raised": "2026-11-06",
@@ -21536,19 +21549,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Murashko",
       "regBy": "Мурашко Сергей Борисович",
       "wo": "WO-022781"
-    },
-    {
-      "asset": "TK002",
-      "defect": "DD-00016434",
-      "raised": "2026-11-06",
-      "system": "TK002.DRS.AXL (Axles / Мосты)",
-      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
-      "descr": "Переднее левое колесо тянет влево, при торможении сильнее",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022905"
     },
     {
       "asset": "GE108",
@@ -27141,6 +27141,19 @@ window.CM_WO_DATA = {
       "wo": "WO-021298"
     },
     {
+      "asset": "TK002",
+      "defect": "DD-00015938",
+      "raised": "2026-10-30",
+      "system": "TK002.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь масла с клапанной крышки",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022904"
+    },
+    {
       "asset": "DZ018",
       "defect": "DD-00015945",
       "raised": "2026-10-30",
@@ -27334,19 +27347,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Murashko",
       "regBy": "Мурашко Сергей Борисович",
       "wo": "WO-021248"
-    },
-    {
-      "asset": "TK002",
-      "defect": "DD-00015938",
-      "raised": "2026-10-30",
-      "system": "TK002.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь масла с клапанной крышки",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022904"
     },
     {
       "asset": "CR002",
