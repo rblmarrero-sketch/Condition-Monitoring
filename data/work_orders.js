@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-26T03:18:07+00:00",
+  "generated": "2026-11-26T03:33:28+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -6471,6 +6471,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023305"
     },
     {
+      "asset": "DZ011",
+      "defect": "DD-00017514",
+      "raised": "2026-11-26",
+      "system": "DZ011.DRS.COO.RAD (Radiator / Радиатор)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка охлажд.жидкости",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": "WO-023309"
+    },
+    {
       "asset": "DR008",
       "defect": "DD-00017517",
       "raised": "2026-11-26",
@@ -6510,6 +6523,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "TK150",
+      "defect": "DD-00017542",
+      "raised": "2026-11-26",
+      "system": "TK150.DRS.COO.RAD Radiator / Радиатор",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Требуется замена радиатора",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": null
+    },
+    {
       "asset": "TK156",
       "defect": "DD-00017526",
       "raised": "2026-11-26",
@@ -6533,6 +6559,19 @@ window.CM_WO_DATA = {
       "priority": "P2 Urgent",
       "by": "Sergey Tomilov",
       "regBy": "Томилов Сергей Владимирович",
+      "wo": null
+    },
+    {
+      "asset": "GE020",
+      "defect": "DD-00017543",
+      "raised": "2026-11-26",
+      "system": "GE020.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Выброс масла",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
       "wo": null
     },
     {
@@ -6666,6 +6705,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "CN001",
+      "defect": "DD-00017541",
+      "raised": "2026-11-26",
+      "system": "CN001.CH.STR (Superstructure / Надстройка)",
+      "defectType": "7.09 Screen media tear / breakage / Разрыв / поломка ситовой панели",
+      "descr": "нет зарядки",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Ilshat Sabitov",
+      "regBy": "Сабитов Ильшат Рашидович",
+      "wo": "WO-023424"
+    },
+    {
       "asset": "TK129",
       "defect": "DD-00017535",
       "raised": "2026-11-26",
@@ -6729,19 +6781,6 @@ window.CM_WO_DATA = {
       "by": "Pavel Lefrank",
       "regBy": "Лефранк Павел Петрович",
       "wo": "WO-023382"
-    },
-    {
-      "asset": "DZ011",
-      "defect": "DD-00017514",
-      "raised": "2026-11-26",
-      "system": "DZ011.DRS.COO.RAD (Radiator / Радиатор)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка охлажд.жидкости",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Tomilov",
-      "regBy": "Томилов Сергей Владимирович",
-      "wo": "WO-023309"
     },
     {
       "asset": "TK098",
@@ -6833,6 +6872,19 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-023299"
+    },
+    {
+      "asset": "GR012",
+      "defect": "DD-00017482",
+      "raised": "2026-11-25",
+      "system": "GR012.OC.HE (Heating / Отопление)",
+      "defectType": "1.04 Abnormal noise / vibration Аномальный шум / вибрация",
+      "descr": "Посторонний шум и вибрация отопителя салона",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Valentin Trapilo",
+      "regBy": "Трапило Валентин Святославович",
+      "wo": null
     },
     {
       "asset": "DZ018",
@@ -7108,6 +7160,32 @@ window.CM_WO_DATA = {
       "wo": "WO-023307"
     },
     {
+      "asset": "TK098",
+      "defect": "DD-00017459",
+      "raised": "2026-11-25",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK098 ENGINE OldNumber (UT098)",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "Замена клапана дозатора ТНВД",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023275"
+    },
+    {
+      "asset": "TK169",
+      "defect": "DD-00017485",
+      "raised": "2026-11-25",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK169 ENGINE",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "Заклинивание иглы распылителя форсунки ДВС",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Ilya Borzunov",
+      "regBy": "Борзунов Илья Николаевич",
+      "wo": "WO-023283"
+    },
+    {
       "asset": "EX021",
       "defect": "DD-00017455",
       "raised": "2026-11-25",
@@ -7329,19 +7407,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "GR012",
-      "defect": "DD-00017482",
-      "raised": "2026-11-25",
-      "system": "GR012.OC.HE (Heating / Отопление)",
-      "defectType": "1.04 Abnormal noise / vibration Аномальный шум / вибрация",
-      "descr": "Посторонний шум и вибрация отопителя салона",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Valentin Trapilo",
-      "regBy": "Трапило Валентин Святославович",
-      "wo": null
-    },
-    {
       "asset": "LV062",
       "defect": "DD-00017474",
       "raised": "2026-11-25",
@@ -7405,19 +7470,6 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-023287"
-    },
-    {
-      "asset": "TK169",
-      "defect": "DD-00017485",
-      "raised": "2026-11-25",
-      "system": "TRUCK, WATER URAL 4672M1-20, TK169 ENGINE",
-      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
-      "descr": "Заклинивание иглы распылителя форсунки ДВС",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Ilya Borzunov",
-      "regBy": "Борзунов Илья Николаевич",
-      "wo": "WO-023283"
     },
     {
       "asset": "LD008",
@@ -7509,19 +7561,6 @@ window.CM_WO_DATA = {
       "by": "Viktor Bernikov",
       "regBy": "Viktor Bernikov",
       "wo": "WO-023240"
-    },
-    {
-      "asset": "TK098",
-      "defect": "DD-00017459",
-      "raised": "2026-11-25",
-      "system": "TRUCK, WATER URAL 4672M1-20, TK098 ENGINE OldNumber (UT098)",
-      "defectType": "4.02 Open circuit / Разрыв цепи",
-      "descr": "Замена клапана дозатора ТНВД",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-023275"
     },
     {
       "asset": "TR001",
@@ -8213,6 +8252,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "EX010",
+      "defect": "DD-00017430",
+      "raised": "2026-11-24",
+      "system": "EX010.DRS.ENG (Engine / Двигатель)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Ненормальный шум ДВС",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Valentin Trapilo",
+      "regBy": "Трапило Валентин Святославович",
+      "wo": "WO-023221"
+    },
+    {
       "asset": "DZ019",
       "defect": "DD-00017386",
       "raised": "2026-11-24",
@@ -8341,19 +8393,6 @@ window.CM_WO_DATA = {
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": "WO-023228"
-    },
-    {
-      "asset": "EX010",
-      "defect": "DD-00017430",
-      "raised": "2026-11-24",
-      "system": "EX010.DRS.ENG (Engine / Двигатель)",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "Ненормальный шум ДВС",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Valentin Trapilo",
-      "regBy": "Трапило Валентин Святославович",
-      "wo": "WO-023221"
     },
     {
       "asset": "EX012",
@@ -57119,19 +57158,6 @@ window.CM_WO_DATA = {
       "wo": "WO-015456"
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
-      "wo": null
-    },
-    {
       "asset": "TK046",
       "defect": "DD-00011270",
       "raised": "2026-08-21",
@@ -57233,6 +57259,19 @@ window.CM_WO_DATA = {
       "priority": "P2 Urgent",
       "by": "Andrey Shipelov",
       "regBy": "Шипелов Андрей Анатольевич",
+      "wo": null
+    },
+    {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
@@ -58588,8 +58627,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000076",
+      "asset": "H07",
+      "defect": "EB-00000075",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -58601,8 +58640,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H07",
-      "defect": "EB-00000075",
+      "asset": "H04",
+      "defect": "EB-00000076",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
