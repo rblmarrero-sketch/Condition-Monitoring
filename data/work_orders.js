@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-26T03:48:15+00:00",
+  "generated": "2026-11-26T04:03:06+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -6485,6 +6485,32 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "DR008",
+      "defect": "DD-00017544",
+      "raised": "2026-11-26",
+      "system": "DR008.CH.AL (Central Lubrication System / Централизованная система смазки)",
+      "defectType": "1.12 Low fluid level / Низкий уровень жидкости",
+      "descr": "Требуется лубрикатор",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": "WO-023432"
+    },
+    {
+      "asset": "DR007",
+      "defect": "DD-00017545",
+      "raised": "2026-11-26",
+      "system": "DR007.CH.AL (Central Lubrication System / Централизованная система смазки)",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "установить тавотницу на нижн.звездочку /Ремонт ЦСС",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": "WO-023435"
+    },
+    {
+      "asset": "DR008",
       "defect": "DD-00017517",
       "raised": "2026-11-26",
       "system": "DR008.CH.MT (Mast / Мачта)",
@@ -6614,6 +6640,32 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "DZ005",
+      "defect": "DD-00017547",
+      "raised": "2026-11-26",
+      "system": "DZ005.CH.UC (Undercarriage / Ходовая часть)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Большие люфты в балансирной балке",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": null
+    },
+    {
+      "asset": "DZ005",
+      "defect": "DD-00017548",
+      "raised": "2026-11-26",
+      "system": "DZ005.HS.CYL (Cylinders / Гидроцилиндры)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Утранить люфты в гидроцилиндрах отвала",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": null
+    },
+    {
       "asset": "DZ008",
       "defect": "DD-00017539",
       "raised": "2026-11-26",
@@ -6705,6 +6757,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "LV133",
+      "defect": "DD-00017546",
+      "raised": "2026-11-26",
+      "system": "LV133.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "утечка тепла установка автоодеяла",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Viktor Nizhebovskiy",
+      "regBy": "Нижебовский Виктор Петрович",
+      "wo": "WO-023436"
+    },
+    {
       "asset": "CN001",
       "defect": "DD-00017541",
       "raised": "2026-11-26",
@@ -6783,6 +6848,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023382"
     },
     {
+      "asset": "EX003",
+      "defect": "DD-00017512",
+      "raised": "2026-11-26",
+      "system": "EX003.CH.BUC (Bucket / Ковш)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "износ режущих элементов и трещины ковша",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sychev Anton",
+      "regBy": "Сычев Антон Александрович",
+      "wo": "WO-023306"
+    },
+    {
       "asset": "TK098",
       "defect": "DD-00017510",
       "raised": "2026-11-26",
@@ -6807,19 +6885,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Murashko",
       "regBy": "Мурашко Сергей Борисович",
       "wo": "WO-023311"
-    },
-    {
-      "asset": "EX003",
-      "defect": "DD-00017512",
-      "raised": "2026-11-26",
-      "system": "EX003.CH.BUC (Bucket / Ковш)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "износ режущих элементов и трещины ковша",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sychev Anton",
-      "regBy": "Сычев Антон Александрович",
-      "wo": "WO-023306"
     },
     {
       "asset": "TK047",
@@ -57158,6 +57223,19 @@ window.CM_WO_DATA = {
       "wo": "WO-015456"
     },
     {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
+      "wo": null
+    },
+    {
       "asset": "TK046",
       "defect": "DD-00011270",
       "raised": "2026-08-21",
@@ -57259,19 +57337,6 @@ window.CM_WO_DATA = {
       "priority": "P2 Urgent",
       "by": "Andrey Shipelov",
       "regBy": "Шипелов Андрей Анатольевич",
-      "wo": null
-    },
-    {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
@@ -58355,19 +58420,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "TK010",
-      "defect": "DD-00010485",
-      "raised": "2026-08-09",
-      "system": "TK010.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь радиатора",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": null
-    },
-    {
-      "asset": "TK010",
       "defect": "DD-00010489",
       "raised": "2026-08-09",
       "system": "TK010.CH.HS (Hydraulic System / Гидравлическая система)",
@@ -58386,6 +58438,19 @@ window.CM_WO_DATA = {
       "system": "TK010.CH.SU (Suspension / Подвеска)",
       "defectType": "2.01 Wear / Износ",
       "descr": "Износ передних амортизаторов",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": null
+    },
+    {
+      "asset": "TK010",
+      "defect": "DD-00010485",
+      "raised": "2026-08-09",
+      "system": "TK010.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь радиатора",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
