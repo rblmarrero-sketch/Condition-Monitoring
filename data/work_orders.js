@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-27T20:58:09+00:00",
+  "generated": "2026-11-27T21:10:13+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -6672,11 +6672,11 @@ window.CM_WO_DATA = {
       "system": "EX009.HS.DL (Hydraulic Lines / Гидролинии)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
       "descr": "Требуется замена РВД",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "priority": "P2 Urgent",
       "by": "Sergey Tomilov",
       "regBy": "Томилов Сергей Владимирович",
-      "wo": null
+      "wo": "WO-023521"
     },
     {
       "asset": "DZ004",
@@ -7095,6 +7095,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023501"
     },
     {
+      "asset": "TK043",
+      "defect": "DD-00017566",
+      "raised": "2026-11-27",
+      "system": "TK043.DRS.ENG (Engine / Двигатель)",
+      "defectType": "3.13 Warning light / alarm active / Сигнальная лампа / аварийная сигнализация активна",
+      "descr": "Активирован индикатор неисправности двигателя. Не отключается муфта вентилятора охлаждения двигателя.",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-023455"
+    },
+    {
       "asset": "TK166",
       "defect": "DD-00017585",
       "raised": "2026-11-27",
@@ -7379,19 +7392,6 @@ window.CM_WO_DATA = {
       "by": "Pavel Lefrank",
       "regBy": "Лефранк Павел Петрович",
       "wo": "WO-023475"
-    },
-    {
-      "asset": "TK043",
-      "defect": "DD-00017566",
-      "raised": "2026-11-27",
-      "system": "TK043.DRS.ENG (Engine / Двигатель)",
-      "defectType": "3.13 Warning light / alarm active / Сигнальная лампа / аварийная сигнализация активна",
-      "descr": "Активирован индикатор неисправности двигателя. Не отключается муфта вентилятора охлаждения двигателя.",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-023455"
     },
     {
       "asset": "TK108",
@@ -7823,6 +7823,45 @@ window.CM_WO_DATA = {
       "wo": "WO-023466"
     },
     {
+      "asset": "LV050",
+      "defect": "DD-00017557",
+      "raised": "2026-11-26",
+      "system": "LV050.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Не работает штатный отопитель.",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-023447"
+    },
+    {
+      "asset": "CN002",
+      "defect": "DD-00017558",
+      "raised": "2026-11-26",
+      "system": "CN002.ELS (Electrical System / Электросистема)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Затруднённый запуск двигателя.",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-023448"
+    },
+    {
+      "asset": "TK068",
+      "defect": "DD-00017560",
+      "raised": "2026-11-26",
+      "system": "TRUCK, WATER KAMAZ UST 5453K2, TK068 HEATING OldNumber (UT068)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Не работает фен в кабине.",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-023450"
+    },
+    {
       "asset": "DR008",
       "defect": "DD-00017517",
       "raised": "2026-11-26",
@@ -8109,19 +8148,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023386"
     },
     {
-      "asset": "TK097",
-      "defect": "DD-00017527",
-      "raised": "2026-11-26",
-      "system": "TK097.ELS (Electrical System / Электросистема)",
-      "defectType": "4.14 Battery / starting circuit fault / Неисправность аккумулятора / цепи пуска",
-      "descr": "Замена АКБ",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Pavel Lefrank",
-      "regBy": "Лефранк Павел Петрович",
-      "wo": "WO-023382"
-    },
-    {
       "asset": "TK098",
       "defect": "DD-00017510",
       "raised": "2026-11-26",
@@ -8174,6 +8200,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023445"
     },
     {
+      "asset": "TK097",
+      "defect": "DD-00017527",
+      "raised": "2026-11-26",
+      "system": "TK097.ELS (Electrical System / Электросистема)",
+      "defectType": "4.14 Battery / starting circuit fault / Неисправность аккумулятора / цепи пуска",
+      "descr": "Замена АКБ",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Pavel Lefrank",
+      "regBy": "Лефранк Павел Петрович",
+      "wo": "WO-023382"
+    },
+    {
       "asset": "BS003",
       "defect": "DD-00017503",
       "raised": "2026-11-26",
@@ -8185,45 +8224,6 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-023299"
-    },
-    {
-      "asset": "TK068",
-      "defect": "DD-00017560",
-      "raised": "2026-11-26",
-      "system": "TRUCK, WATER KAMAZ UST 5453K2, TK068 HEATING OldNumber (UT068)",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Не работает фен в кабине.",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-023450"
-    },
-    {
-      "asset": "CN002",
-      "defect": "DD-00017558",
-      "raised": "2026-11-26",
-      "system": "CN002.ELS (Electrical System / Электросистема)",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Затруднённый запуск двигателя.",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-023448"
-    },
-    {
-      "asset": "LV050",
-      "defect": "DD-00017557",
-      "raised": "2026-11-26",
-      "system": "LV050.OC.HE (Heating / Отопление)",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Не работает штатный отопитель.",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-023447"
     },
     {
       "asset": "DZ006",
@@ -8707,6 +8707,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023258"
     },
     {
+      "asset": "TK098",
+      "defect": "DD-00017490",
+      "raised": "2026-11-25",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK098 ENGINE OldNumber (UT098)",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "Нет тяги двигателя. Активирован индикатор \"Check Engine\".",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-023287"
+    },
+    {
       "asset": "EX021",
       "defect": "DD-00017455",
       "raised": "2026-11-25",
@@ -8965,19 +8978,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": null
-    },
-    {
-      "asset": "TK098",
-      "defect": "DD-00017490",
-      "raised": "2026-11-25",
-      "system": "TRUCK, WATER URAL 4672M1-20, TK098 ENGINE OldNumber (UT098)",
-      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
-      "descr": "Нет тяги двигателя. Активирован индикатор \"Check Engine\".",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-023287"
     },
     {
       "asset": "DZ002",
