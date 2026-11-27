@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-27T03:27:59+00:00",
+  "generated": "2026-11-27T03:43:01+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -6724,11 +6724,11 @@ window.CM_WO_DATA = {
       "system": "GR008.DRS.FD (Final Drives / Конечные передачи)",
       "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
       "descr": "Поворонтный редуктор - заклинил",
-      "status": "Registered",
+      "status": "Elimination scheduled",
       "priority": "P2 Urgent",
       "by": "Sergey Tomilov",
       "regBy": "Томилов Сергей Владимирович",
-      "wo": null
+      "wo": "WO-023473"
     },
     {
       "asset": "TK037",
@@ -114653,15 +114653,15 @@ window.CM_WO_DATA = {
       "cmLabel": "500h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-23",
       "planStartDt": "2026-11-23T00:00:00",
       "planEnd": "2026-11-23",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-23",
+      "actualStartDt": "2026-11-23T07:00:00",
+      "actualEnd": "2026-11-23"
     },
     {
       "equip": "EX021",

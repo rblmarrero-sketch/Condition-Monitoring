@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-27T03:27:59+00:00",
+  "generated": "2026-11-27T03:43:01+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -3141,12 +3141,12 @@
       "type": "500 Hours service Planned",
       "hours": 500,
       "plan": "2026-11-23",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-23"
     },
     {
       "wo": "WO-022126",
