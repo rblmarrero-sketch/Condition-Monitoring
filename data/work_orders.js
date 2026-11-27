@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-27T11:18:02+00:00",
+  "generated": "2026-11-27T11:37:45+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -6640,6 +6640,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023476"
     },
     {
+      "asset": "GR015",
+      "defect": "DD-00017621",
+      "raised": "2026-11-27",
+      "system": "GR015.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.12 Low fluid level / Низкий уровень жидкости",
+      "descr": "Доливка масла в ДВС",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Valentin Trapilo",
+      "regBy": "Трапило Валентин Святославович",
+      "wo": "WO-023500"
+    },
+    {
       "asset": "EX009",
       "defect": "DD-00017592",
       "raised": "2026-11-27",
@@ -6744,6 +6757,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023497"
     },
     {
+      "asset": "DZ002",
+      "defect": "DD-00017619",
+      "raised": "2026-11-27",
+      "system": "DZ002.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "Ремонт освещения",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Valentin Trapilo",
+      "regBy": "Трапило Валентин Святославович",
+      "wo": "WO-023499"
+    },
+    {
       "asset": "TK166",
       "defect": "DD-00017585",
       "raised": "2026-11-27",
@@ -6819,6 +6845,19 @@ window.CM_WO_DATA = {
       "priority": "P2 Urgent",
       "by": "Sergey Tomilov",
       "regBy": "Томилов Сергей Владимирович",
+      "wo": null
+    },
+    {
+      "asset": "EX001",
+      "defect": "DD-00017620",
+      "raised": "2026-11-27",
+      "system": "EX001.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.12 Low fluid level / Низкий уровень жидкости",
+      "descr": "Долив масла в ДВС. Инспекция ГЦ ковша на наличие повреждений штока",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Ilya Borzunov",
+      "regBy": "Борзунов Илья Николаевич",
       "wo": null
     },
     {
@@ -6989,6 +7028,19 @@ window.CM_WO_DATA = {
       "by": "Pavel Lefrank",
       "regBy": "Лефранк Павел Петрович",
       "wo": "WO-023485"
+    },
+    {
+      "asset": "TK004",
+      "defect": "DD-00017618",
+      "raised": "2026-11-27",
+      "system": "TK004.BS.CV (Control Valve / Управляющий клапан)",
+      "defectType": "3.07 Actuator / control valve fault / Отказ исполнительного механизма / регулирующего клапана",
+      "descr": "Главный тормозной клапан управления замена",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Ilya Borzunov",
+      "regBy": "Борзунов Илья Николаевич",
+      "wo": "WO-023498"
     },
     {
       "asset": "TK031",
@@ -7563,19 +7615,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "GE020",
-      "defect": "DD-00017543",
-      "raised": "2026-11-26",
-      "system": "GE020.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Выброс масла",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
       "asset": "GE025",
       "defect": "DD-00017536",
       "raised": "2026-11-26",
@@ -7586,6 +7625,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Pavel Lefrank",
       "regBy": "Лефранк Павел Петрович",
+      "wo": null
+    },
+    {
+      "asset": "GE020",
+      "defect": "DD-00017543",
+      "raised": "2026-11-26",
+      "system": "GE020.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Выброс масла",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
       "wo": null
     },
     {
@@ -7745,19 +7797,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023424"
     },
     {
-      "asset": "TK129",
-      "defect": "DD-00017535",
-      "raised": "2026-11-26",
-      "system": "EMERGENCY EQUIPMENT, FIRE-TRUCK IVECO AMT 473916, TK129 TANK OldNumber (ET002)",
-      "defectType": "4.02 Open circuit / Разрыв цепи",
-      "descr": "Не исправен СГУ (Сигнально-голосовое устройство)",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Ilshat Sabitov",
-      "regBy": "Сабитов Ильшат Рашидович",
-      "wo": "WO-023400"
-    },
-    {
       "asset": "FL001",
       "defect": "DD-00017531",
       "raised": "2026-11-26",
@@ -7821,6 +7860,19 @@ window.CM_WO_DATA = {
       "by": "Valentin Trapilo",
       "regBy": "Трапило Валентин Святославович",
       "wo": "WO-023288"
+    },
+    {
+      "asset": "TK129",
+      "defect": "DD-00017535",
+      "raised": "2026-11-26",
+      "system": "EMERGENCY EQUIPMENT, FIRE-TRUCK IVECO AMT 473916, TK129 TANK OldNumber (ET002)",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "Не исправен СГУ (Сигнально-голосовое устройство)",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Ilshat Sabitov",
+      "regBy": "Сабитов Ильшат Рашидович",
+      "wo": "WO-023400"
     },
     {
       "asset": "TK135",
@@ -117295,6 +117347,25 @@ window.CM_WO_DATA = {
       "actualStart": "2026-10-28",
       "actualStartDt": "2026-10-28T19:00:00",
       "actualEnd": "2026-10-29"
+    },
+    {
+      "equip": "FL002",
+      "cls": "GEN",
+      "woNumber": "WO-022819",
+      "maintType": "500 Hours service Planned",
+      "hours": 500,
+      "cmLabel": "500h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-30",
+      "planStartDt": "2026-11-30T00:00:00",
+      "planEnd": "2026-11-30",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
     },
     {
       "equip": "FL003",
