@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-27T22:18:22+00:00",
+  "generated": "2026-11-27T22:32:49+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -13075,19 +13075,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023122"
     },
     {
-      "asset": "EX023",
-      "defect": "DD-00017158",
-      "raised": "2026-11-19",
-      "system": "EX023.CH.BUC (Bucket / Ковш)",
-      "defectType": "1.06 Deformation / bending / buckling Деформация / изгиб / коробление",
-      "descr": "осевой зазор проушин ковша и рукояти",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": "WO-023201"
-    },
-    {
       "asset": "LV.C001",
       "defect": "DD-00017135",
       "raised": "2026-11-19",
@@ -13099,6 +13086,19 @@ window.CM_WO_DATA = {
       "by": "Ilshat Sabitov",
       "regBy": "Сабитов Ильшат Рашидович",
       "wo": "WO-022900"
+    },
+    {
+      "asset": "EX023",
+      "defect": "DD-00017158",
+      "raised": "2026-11-19",
+      "system": "EX023.CH.BUC (Bucket / Ковш)",
+      "defectType": "1.06 Deformation / bending / buckling Деформация / изгиб / коробление",
+      "descr": "осевой зазор проушин ковша и рукояти",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-023201"
     },
     {
       "asset": "TK112",
