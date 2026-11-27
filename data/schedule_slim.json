@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-27T22:48:10+00:00",
+  "generated": "2026-11-27T23:03:02+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -16,6 +16,17 @@
       {
         "wo": "WO-023396",
         "hours": 2000,
+        "types": [
+          "INSP"
+        ],
+        "plan": "2026-11-30",
+        "priority": "P3 Planned (PM)"
+      }
+    ],
+    "CN009": [
+      {
+        "wo": "WO-023335",
+        "hours": 1000,
         "types": [
           "INSP"
         ],
@@ -1892,6 +1903,24 @@
       "raised": "2026-11-30",
       "type": "2000 Hours service Planned",
       "hours": 2000,
+      "plan": "2026-11-30",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-023335",
+      "equip": "CN009",
+      "cls": "CRN",
+      "comp": "",
+      "desc": "General Inspection",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-30",
+      "type": "1000 Hours service Planned",
+      "hours": 1000,
       "plan": "2026-11-30",
       "status": "Elimination scheduled",
       "request": "",
@@ -31163,6 +31192,14 @@
       "x": null
     },
     {
+      "d": "DD-00017135",
+      "u": "LV.C001",
+      "s": "LIGHT VEHICLE, TOYOTA HILUX C395MH",
+      "p": "P4",
+      "r": "2026-11-19",
+      "x": "PM 10 000"
+    },
+    {
       "d": "DD-00017160",
       "u": "LV092",
       "s": "LV092.CH.SU (Suspension / Подвеска)",
@@ -31321,14 +31358,6 @@
       "p": "P4",
       "r": "2026-11-19",
       "x": "Неисправность топливной системы"
-    },
-    {
-      "d": "DD-00017135",
-      "u": "LV.C001",
-      "s": "LIGHT VEHICLE, TOYOTA HILUX C395MH",
-      "p": "P4",
-      "r": "2026-11-19",
-      "x": "PM 10 000"
     },
     {
       "d": "DD-00017158",

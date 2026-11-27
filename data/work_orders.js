@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-27T22:48:10+00:00",
+  "generated": "2026-11-27T23:03:02+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -12776,6 +12776,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022939"
     },
     {
+      "asset": "LV.C001",
+      "defect": "DD-00017135",
+      "raised": "2026-11-19",
+      "system": "LIGHT VEHICLE, TOYOTA HILUX C395MH",
+      "defectType": "1.04 Abnormal noise / vibration Аномальный шум / вибрация",
+      "descr": "PM 10 000",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Ilshat Sabitov",
+      "regBy": "Сабитов Ильшат Рашидович",
+      "wo": "WO-022900"
+    },
+    {
       "asset": "LV092",
       "defect": "DD-00017160",
       "raised": "2026-11-19",
@@ -13073,19 +13086,6 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-023122"
-    },
-    {
-      "asset": "LV.C001",
-      "defect": "DD-00017135",
-      "raised": "2026-11-19",
-      "system": "LIGHT VEHICLE, TOYOTA HILUX C395MH",
-      "defectType": "1.04 Abnormal noise / vibration Аномальный шум / вибрация",
-      "descr": "PM 10 000",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Ilshat Sabitov",
-      "regBy": "Сабитов Ильшат Рашидович",
-      "wo": "WO-022900"
     },
     {
       "asset": "EX023",
@@ -85451,6 +85451,27 @@ window.CM_WO_DATA = {
       "actualStart": "2026-10-27",
       "actualStartDt": "2026-10-27T10:00:00",
       "actualEnd": "2026-10-27"
+    },
+    {
+      "equip": "CN009",
+      "cls": "CRN",
+      "woNumber": "WO-023335",
+      "maintType": "1000 Hours service Planned",
+      "hours": 1000,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-30",
+      "planStartDt": "2026-11-30T00:00:00",
+      "planEnd": "2026-11-30",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
     },
     {
       "equip": "CN010",
