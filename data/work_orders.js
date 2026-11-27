@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-27T02:22:45+00:00",
+  "generated": "2026-11-27T02:42:57+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -6729,6 +6729,32 @@ window.CM_WO_DATA = {
       "by": "Sergey Tomilov",
       "regBy": "Томилов Сергей Владимирович",
       "wo": null
+    },
+    {
+      "asset": "GE054",
+      "defect": "DD-00017601",
+      "raised": "2026-11-27",
+      "system": "GE054.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.22 Incorrect speed (overspeed/underspeed) / Неверная скорость (переразгон/недобор)",
+      "descr": "Настабильная работа ДВС",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Pavel Lefrank",
+      "regBy": "Лефранк Павел Петрович",
+      "wo": "WO-023484"
+    },
+    {
+      "asset": "TK031",
+      "defect": "DD-00017600",
+      "raised": "2026-11-27",
+      "system": "TK031.DRS.COO (Cooling System / Система охлаждения)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Устранение утечки ОЖ",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Pavel Lefrank",
+      "regBy": "Лефранк Павел Петрович",
+      "wo": "WO-023483"
     },
     {
       "asset": "TK034",
@@ -145830,15 +145856,15 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "PCNF",
+      "cmmsStatus": "In progress",
+      "open": false,
       "planStart": "2026-11-23",
       "planStartDt": "2026-11-23T00:00:00",
       "planEnd": "2026-11-23",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-23",
+      "actualStartDt": "2026-11-23T07:00:00",
+      "actualEnd": "2026-11-23"
     },
     {
       "equip": "LS043",

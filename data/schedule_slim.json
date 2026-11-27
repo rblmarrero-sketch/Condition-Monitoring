@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-27T02:22:45+00:00",
+  "generated": "2026-11-27T02:42:57+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -3177,11 +3177,11 @@
       "type": "250 Hours service Planned",
       "hours": 250,
       "plan": "2026-11-23",
-      "status": "Elimination scheduled",
+      "status": "In progress",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
+      "pmStatus": "inprogress",
       "completed": ""
     },
     {
@@ -10349,6 +10349,22 @@
       "p": "P2",
       "r": "2026-11-27",
       "x": "Поворонтный редуктор - заклинил"
+    },
+    {
+      "d": "DD-00017601",
+      "u": "GE054",
+      "s": "GE054.DRS.ENG (Engine / Двигатель)",
+      "p": "P2",
+      "r": "2026-11-27",
+      "x": "Настабильная работа ДВС"
+    },
+    {
+      "d": "DD-00017600",
+      "u": "TK031",
+      "s": "TK031.DRS.COO (Cooling System / Система охлаждения)",
+      "p": "P2",
+      "r": "2026-11-27",
+      "x": "Устранение утечки ОЖ"
     },
     {
       "d": "DD-00017599",
