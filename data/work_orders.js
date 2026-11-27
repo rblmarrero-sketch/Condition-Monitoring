@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-27T17:27:43+00:00",
+  "generated": "2026-11-27T17:42:55+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -6536,6 +6536,58 @@ window.CM_WO_DATA = {
       "wo": "WO-023508"
     },
     {
+      "asset": "TK167",
+      "defect": "DD-00017633",
+      "raised": "2026-11-28",
+      "system": "TK167.CH.STR (Superstructure / Надстройка)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Не работает донный клапан",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Artem Yakovlev",
+      "regBy": "Яковлев Артем Сергеевич",
+      "wo": null
+    },
+    {
+      "asset": "TK167",
+      "defect": "DD-00017631",
+      "raised": "2026-11-28",
+      "system": "TK167.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь сальника ступицы",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Artem Yakovlev",
+      "regBy": "Яковлев Артем Сергеевич",
+      "wo": null
+    },
+    {
+      "asset": "WE004",
+      "defect": "DD-00017632",
+      "raised": "2026-11-28",
+      "system": "WE004.AU.CS (Control System / Система управления)",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "Нестабильная работа системы регулирования оборотов. Обороты плавают. Глохнет.",
+      "status": "Elimination scheduled",
+      "priority": "P1 Breakdown",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-023511"
+    },
+    {
+      "asset": "CD010",
+      "defect": "DD-00017630",
+      "raised": "2026-11-28",
+      "system": "CD010.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Не работает автономный отопитель.",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-023510"
+    },
+    {
       "asset": "DZ002",
       "defect": "DD-00017625",
       "raised": "2026-11-28",
@@ -6560,6 +6612,19 @@ window.CM_WO_DATA = {
       "by": "Valentin Trapilo",
       "regBy": "Трапило Валентин Святославович",
       "wo": "WO-023503"
+    },
+    {
+      "asset": "DZ011",
+      "defect": "DD-00017609",
+      "raised": "2026-11-27",
+      "system": "DZ011.DRS.FUE.FIL (Fuel Filters / Топливные фильтры)",
+      "defectType": "5.07 Dust ingress / Попадание пыли",
+      "descr": "Требуется замена воздушного фильтра",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Valentin Trapilo",
+      "regBy": "Трапило Валентин Святославович",
+      "wo": "WO-023489"
     },
     {
       "asset": "TK113",
@@ -7028,19 +7093,6 @@ window.CM_WO_DATA = {
       "by": "Valentin Trapilo",
       "regBy": "Трапило Валентин Святославович",
       "wo": "WO-023490"
-    },
-    {
-      "asset": "DZ011",
-      "defect": "DD-00017609",
-      "raised": "2026-11-27",
-      "system": "DZ011.DRS.FUE.FIL (Fuel Filters / Топливные фильтры)",
-      "defectType": "5.07 Dust ingress / Попадание пыли",
-      "descr": "Требуется замена воздушного фильтра",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Valentin Trapilo",
-      "regBy": "Трапило Валентин Святославович",
-      "wo": "WO-023489"
     },
     {
       "asset": "CR002",
@@ -8734,11 +8786,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "LV067",
-      "defect": "DD-00017461",
+      "defect": "DD-00017460",
       "raised": "2026-11-25",
-      "system": "LV067.DRS.AXL (Axles / Мосты)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Сорвана резьба на шпильке левого колеса (замена)",
+      "system": "LV067.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "Двигатель не тянет.",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -8747,11 +8799,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "LV067",
-      "defect": "DD-00017460",
+      "defect": "DD-00017461",
       "raised": "2026-11-25",
-      "system": "LV067.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
-      "descr": "Двигатель не тянет.",
+      "system": "LV067.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Сорвана резьба на шпильке левого колеса (замена)",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
