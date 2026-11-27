@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-27T04:28:12+00:00",
+  "generated": "2026-11-27T04:48:14+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -6679,19 +6679,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK103",
-      "defect": "DD-00017596",
-      "raised": "2026-11-27",
-      "system": "TK103.DRS.FUE (Fuel System / Топливная система)",
-      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
-      "descr": "Низкое давление топлива /Ошибка L03",
-      "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Sergey Tomilov",
-      "regBy": "Томилов Сергей Владимирович",
-      "wo": null
-    },
-    {
       "asset": "TK109",
       "defect": "DD-00017582",
       "raised": "2026-11-27",
@@ -6742,6 +6729,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Tomilov",
       "regBy": "Томилов Сергей Владимирович",
       "wo": null
+    },
+    {
+      "asset": "TK103",
+      "defect": "DD-00017596",
+      "raised": "2026-11-27",
+      "system": "TK103.DRS.FUE (Fuel System / Топливная система)",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "Низкое давление топлива /Ошибка L03",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": "WO-023479"
     },
     {
       "asset": "GR008",
@@ -11671,6 +11671,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022991"
     },
     {
+      "asset": "TK035",
+      "defect": "DD-00017211",
+      "raised": "2026-11-20",
+      "system": "TK035.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Замена шпилек (4-я ось, левая строна)",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023004"
+    },
+    {
       "asset": "CR007",
       "defect": "DD-00017215",
       "raised": "2026-11-20",
@@ -11721,19 +11734,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-023008"
-    },
-    {
-      "asset": "TK035",
-      "defect": "DD-00017211",
-      "raised": "2026-11-20",
-      "system": "TK035.DRS.AXL (Axles / Мосты)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Замена шпилек (4-я ось, левая строна)",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-023004"
     },
     {
       "asset": "TK085",
@@ -196523,15 +196523,15 @@ window.CM_WO_DATA = {
       "cmLabel": "500h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-23",
       "planStartDt": "2026-11-23T00:00:00",
       "planEnd": "2026-11-23",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-23",
+      "actualStartDt": "2026-11-23T07:00:00",
+      "actualEnd": "2026-11-23"
     },
     {
       "equip": "WE001",
