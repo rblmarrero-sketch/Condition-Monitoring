@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-27T16:22:49+00:00",
+  "generated": "2026-11-27T16:37:49+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -6471,6 +6471,19 @@ window.CM_WO_DATA = {
   ],
   "otherDefects": [
     {
+      "asset": "DZ011",
+      "defect": "DD-00017627",
+      "raised": "2026-11-28",
+      "system": "DZ011.DRS.AIR (Air Intake System / Система впуска воздуха)",
+      "defectType": "5.04 Harsh environment (dust/mud/ice) / Тяжёлые условия (пыль/грязь/лед)",
+      "descr": "Замена воздушного фильтра",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Valentin Trapilo",
+      "regBy": "Трапило Валентин Святославович",
+      "wo": "WO-023507"
+    },
+    {
       "asset": "TK153",
       "defect": "DD-00017624",
       "raised": "2026-11-28",
@@ -6822,6 +6835,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023499"
     },
     {
+      "asset": "TK103",
+      "defect": "DD-00017596",
+      "raised": "2026-11-27",
+      "system": "TK103.DRS.FUE (Fuel System / Топливная система)",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "Низкое давление топлива /Ошибка L03",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": "WO-023479"
+    },
+    {
       "asset": "DZ003",
       "defect": "DD-00017622",
       "raised": "2026-11-27",
@@ -7054,19 +7080,6 @@ window.CM_WO_DATA = {
       "by": "Ilya Borzunov",
       "regBy": "Борзунов Илья Николаевич",
       "wo": "WO-023492"
-    },
-    {
-      "asset": "TK103",
-      "defect": "DD-00017596",
-      "raised": "2026-11-27",
-      "system": "TK103.DRS.FUE (Fuel System / Топливная система)",
-      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
-      "descr": "Низкое давление топлива /Ошибка L03",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Tomilov",
-      "regBy": "Томилов Сергей Владимирович",
-      "wo": "WO-023479"
     },
     {
       "asset": "LD006",
@@ -8695,11 +8708,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "LV067",
-      "defect": "DD-00017460",
+      "defect": "DD-00017461",
       "raised": "2026-11-25",
-      "system": "LV067.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
-      "descr": "Двигатель не тянет.",
+      "system": "LV067.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Сорвана резьба на шпильке левого колеса (замена)",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -8708,11 +8721,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "LV067",
-      "defect": "DD-00017461",
+      "defect": "DD-00017460",
       "raised": "2026-11-25",
-      "system": "LV067.DRS.AXL (Axles / Мосты)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Сорвана резьба на шпильке левого колеса (замена)",
+      "system": "LV067.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "Двигатель не тянет.",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -39465,12 +39478,12 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "LS048",
-      "defect": "DD-00014962",
+      "asset": "EX006",
+      "defect": "DD-00014971",
       "raised": "2026-10-17",
-      "system": "LS048.ELS.MW (Machine Wiring / Электропроводка машины)",
-      "defectType": "4.14 Battery / starting circuit fault / Неисправность аккумулятора / цепи пуска",
-      "descr": "Замена АКБ",
+      "system": "EX006.HS.MP (Hydraulic Pumps / Гидронасосы)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "каплевидная утечка по гидронасосу",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -39478,12 +39491,12 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "EX006",
-      "defect": "DD-00014971",
+      "asset": "LS048",
+      "defect": "DD-00014962",
       "raised": "2026-10-17",
-      "system": "EX006.HS.MP (Hydraulic Pumps / Гидронасосы)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "каплевидная утечка по гидронасосу",
+      "system": "LS048.ELS.MW (Machine Wiring / Электропроводка машины)",
+      "defectType": "4.14 Battery / starting circuit fault / Неисправность аккумулятора / цепи пуска",
+      "descr": "Замена АКБ",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -58589,19 +58602,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "H07",
-      "defect": "EB-00000079",
-      "raised": "2026-08-13",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
-      "wo": null
-    },
-    {
-      "asset": "H07",
       "defect": "EB-00000078",
       "raised": "2026-08-13",
       "system": null,
@@ -58611,6 +58611,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Sergey Gulin",
+      "wo": null
+    },
+    {
+      "asset": "H07",
+      "defect": "EB-00000079",
+      "raised": "2026-08-13",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
@@ -59199,8 +59212,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H07",
-      "defect": "EB-00000075",
+      "asset": "H04",
+      "defect": "EB-00000076",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -59212,8 +59225,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000076",
+      "asset": "H07",
+      "defect": "EB-00000075",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
