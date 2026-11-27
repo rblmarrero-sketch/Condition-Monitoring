@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-27T13:57:43+00:00",
+  "generated": "2026-11-27T14:17:43+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -6471,6 +6471,32 @@ window.CM_WO_DATA = {
   ],
   "otherDefects": [
     {
+      "asset": "TK153",
+      "defect": "DD-00017624",
+      "raised": "2026-11-28",
+      "system": "TK153.OC (Operator Cab / Кабина оператора)",
+      "defectType": "1.19 No movement / no drive / Нет движения / нет привода",
+      "descr": "Ремонт стеклоподъемника",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Valentin Trapilo",
+      "regBy": "Трапило Валентин Святославович",
+      "wo": null
+    },
+    {
+      "asset": "TK110",
+      "defect": "DD-00017623",
+      "raised": "2026-11-28",
+      "system": "TK110.ELS (Electrical System / Электросистема)",
+      "defectType": "4.20 Auxiliary electrical circuit fault / Неисправность вспомогательных электроцепей",
+      "descr": "Отсутствует перемычка АКБ",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Valentin Trapilo",
+      "regBy": "Трапило Валентин Святославович",
+      "wo": "WO-023503"
+    },
+    {
       "asset": "TK113",
       "defect": "DD-00017574",
       "raised": "2026-11-27",
@@ -6770,19 +6796,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023499"
     },
     {
-      "asset": "EX001",
-      "defect": "DD-00017620",
-      "raised": "2026-11-27",
-      "system": "EX001.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.12 Low fluid level / Низкий уровень жидкости",
-      "descr": "Долив масла в ДВС. Инспекция ГЦ ковша на наличие повреждений штока",
-      "status": "Completed",
-      "priority": "P2 Urgent",
-      "by": "Ilya Borzunov",
-      "regBy": "Борзунов Илья Николаевич",
-      "wo": "WO-023501"
-    },
-    {
       "asset": "DZ003",
       "defect": "DD-00017622",
       "raised": "2026-11-27",
@@ -6794,6 +6807,19 @@ window.CM_WO_DATA = {
       "by": "Ilya Borzunov",
       "regBy": "Борзунов Илья Николаевич",
       "wo": "WO-023502"
+    },
+    {
+      "asset": "EX001",
+      "defect": "DD-00017620",
+      "raised": "2026-11-27",
+      "system": "EX001.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.12 Low fluid level / Низкий уровень жидкости",
+      "descr": "Долив масла в ДВС. Инспекция ГЦ ковша на наличие повреждений штока",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Ilya Borzunov",
+      "regBy": "Борзунов Илья Николаевич",
+      "wo": "WO-023501"
     },
     {
       "asset": "TK166",
