@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-27T23:22:44+00:00",
+  "generated": "2026-11-27T23:42:40+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -443,13 +443,13 @@ window.CM_WO_DATA = {
     "regBy": "Contact person initiator WR"
   },
   "cmDateFrom": {
-    "raised": 231,
+    "raised": 232,
     "detected": 0,
     "planStart": 0
   },
   "cmCauseFrom": {
     "wo": 138,
-    "wr": 93,
+    "wr": 94,
     "cert": 0,
     "none": 0
   },
@@ -462,6 +462,32 @@ window.CM_WO_DATA = {
     "Bekzhan"
   ],
   "cmWorkOrders": [
+    {
+      "date": "2026-11-28",
+      "dateFrom": "raised",
+      "raised": "2026-11-28",
+      "detected": "2026-11-25",
+      "planStart": null,
+      "closed": null,
+      "asset": "CR008",
+      "defect": "DD-00017645",
+      "requestNo": "DD-00017645",
+      "eqType": "CRUSHER, MOBILE CONE",
+      "system": "CR008.DRS.ENG (Engine / Двигатель)",
+      "priority": "P1 Breakdown",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "cause": "Перегруз, разрушение",
+      "causeFrom": "wr",
+      "descr": "Отверстие в крышке клапана",
+      "status": "Registered",
+      "by": "Nurbol",
+      "byFull": "Nurbol Amantay",
+      "regBy": "Амантай Нурбол",
+      "raisedBy": "ГДК Баимская",
+      "woNumber": null,
+      "maintType": null,
+      "planned": false
+    },
     {
       "date": "2026-11-27",
       "dateFrom": "raised",
@@ -6664,6 +6690,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Tomilov",
       "regBy": "Томилов Сергей Владимирович",
       "wo": null
+    },
+    {
+      "asset": "LS048",
+      "defect": "DD-00017644",
+      "raised": "2026-11-28",
+      "system": "LS048.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Нет запуска ДВС",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Viktor Nizhebovskiy",
+      "regBy": "Нижебовский Виктор Петрович",
+      "wo": "WO-023523"
     },
     {
       "asset": "EX009",
@@ -157614,6 +157653,25 @@ window.CM_WO_DATA = {
       "actualStart": "2026-11-16",
       "actualStartDt": "2026-11-16T00:00:00",
       "actualEnd": "2026-11-16"
+    },
+    {
+      "equip": "TK060",
+      "cls": "GEN",
+      "woNumber": "WO-023317",
+      "maintType": "500 Hours service Planned",
+      "hours": 500,
+      "cmLabel": "500h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-12-02",
+      "planStartDt": "2026-12-02T00:00:00",
+      "planEnd": "2026-12-02",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
     },
     {
       "equip": "TK078",

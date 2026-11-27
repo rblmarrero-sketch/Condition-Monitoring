@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-27T23:22:44+00:00",
+  "generated": "2026-11-27T23:42:40+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -1651,6 +1651,24 @@
       "raised": "2026-12-02",
       "type": "1000 Hours service Planned",
       "hours": 1000,
+      "plan": "2026-12-02",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-023317",
+      "equip": "TK060",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "500h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-12-02",
+      "type": "500 Hours service Planned",
+      "hours": 500,
       "plan": "2026-12-02",
       "status": "Elimination scheduled",
       "request": "",
@@ -10464,6 +10482,14 @@
   ],
   "firDefects": [
     {
+      "d": "DD-00017645",
+      "u": "CR008",
+      "s": "CR008.DRS.ENG (Engine / Двигатель)",
+      "p": "P1",
+      "r": "2026-11-28",
+      "x": "Отверстие в крышке клапана"
+    },
+    {
       "d": "DD-00017627",
       "u": "DZ011",
       "s": "DZ011.DRS.AIR (Air Intake System / Система впуска воздуха)",
@@ -10534,6 +10560,14 @@
       "p": "P2",
       "r": "2026-11-28",
       "x": "Низкое давление топлива /Ошибка L03"
+    },
+    {
+      "d": "DD-00017644",
+      "u": "LS048",
+      "s": "LS048.DRS.ENG (Engine / Двигатель)",
+      "p": "P2",
+      "r": "2026-11-28",
+      "x": "Нет запуска ДВС"
     },
     {
       "d": "DD-00017643",
