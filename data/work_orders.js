@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-27T15:52:49+00:00",
+  "generated": "2026-11-27T16:08:09+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -6490,7 +6490,7 @@ window.CM_WO_DATA = {
       "system": "BS008.OC.HE (Heating / Отопление)",
       "defectType": "5.07 Dust ingress / Попадание пыли",
       "descr": "плохо дует печка",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Sychev Anton",
       "regBy": "Сычев Антон Александрович",
