@@ -1,7 +1,7 @@
 {
-  "generated": "2026-11-27T03:12:50.504Z",
+  "generated": "2026-11-27T03:27:25.045Z",
   "source": "https://script.google.com/macros/s/AKfycbwWJ1vb-OjP0VQPcrnoEB8PkuFyhk86mecIrkcomSVFqE5ddJynSwSheuskNGMcwLGf/exec?action=index&slim=1",
-  "pairsSeen": 499,
+  "pairsSeen": 502,
   "hist": {
     "FC|TK028": {
       "d": "2026-08-01"
@@ -451,7 +451,7 @@
       "d": "2026-11-22"
     },
     "FC|DZ006": {
-      "d": "2026-10-02"
+      "d": "2026-11-27"
     },
     "FC|TK149": {
       "d": "2026-11-19"
@@ -541,7 +541,7 @@
       "d": "2026-10-13"
     },
     "INSP|EX023": {
-      "d": "2026-10-13"
+      "d": "2026-11-27"
     },
     "INSP|TK127": {
       "d": "2026-11-24"
@@ -785,6 +785,9 @@
     },
     "LUBE|TK150": {
       "d": "2026-11-26"
+    },
+    "LUBE|TK148": {
+      "d": "2026-11-27"
     }
   }
 }
