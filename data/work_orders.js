@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-27T11:52:46+00:00",
+  "generated": "2026-11-27T12:04:15+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -6646,7 +6646,7 @@ window.CM_WO_DATA = {
       "system": "GR015.DRS.ENG (Engine / Двигатель)",
       "defectType": "1.12 Low fluid level / Низкий уровень жидкости",
       "descr": "Доливка масла в ДВС",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Valentin Trapilo",
       "regBy": "Трапило Валентин Святославович",
@@ -6770,6 +6770,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023499"
     },
     {
+      "asset": "EX001",
+      "defect": "DD-00017620",
+      "raised": "2026-11-27",
+      "system": "EX001.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.12 Low fluid level / Низкий уровень жидкости",
+      "descr": "Долив масла в ДВС. Инспекция ГЦ ковша на наличие повреждений штока",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Ilya Borzunov",
+      "regBy": "Борзунов Илья Николаевич",
+      "wo": "WO-023501"
+    },
+    {
       "asset": "TK166",
       "defect": "DD-00017585",
       "raised": "2026-11-27",
@@ -6845,19 +6858,6 @@ window.CM_WO_DATA = {
       "priority": "P2 Urgent",
       "by": "Sergey Tomilov",
       "regBy": "Томилов Сергей Владимирович",
-      "wo": null
-    },
-    {
-      "asset": "EX001",
-      "defect": "DD-00017620",
-      "raised": "2026-11-27",
-      "system": "EX001.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.12 Low fluid level / Низкий уровень жидкости",
-      "descr": "Долив масла в ДВС. Инспекция ГЦ ковша на наличие повреждений штока",
-      "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Ilya Borzunov",
-      "regBy": "Борзунов Илья Николаевич",
       "wo": null
     },
     {
@@ -84205,6 +84205,25 @@ window.CM_WO_DATA = {
       "actualEnd": "2026-11-21"
     },
     {
+      "equip": "CD010",
+      "cls": "GEN",
+      "woNumber": "WO-023339",
+      "maintType": "500 Hours service Planned",
+      "hours": 500,
+      "cmLabel": "500h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-30",
+      "planStartDt": "2026-11-30T00:00:00",
+      "planEnd": "2026-11-30",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
       "equip": "CN001",
       "cls": "CRN",
       "woNumber": "GD-006770",
@@ -103695,6 +103714,25 @@ window.CM_WO_DATA = {
       "actualEnd": "2026-11-05"
     },
     {
+      "equip": "EX001",
+      "cls": "EXC",
+      "woNumber": "WO-023332",
+      "maintType": "500 Hours service Planned",
+      "hours": 500,
+      "cmLabel": "500h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-30",
+      "planStartDt": "2026-11-30T00:00:00",
+      "planEnd": "2026-11-30",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
       "equip": "EX002",
       "cls": "EXC",
       "woNumber": null,
@@ -104909,6 +104947,28 @@ window.CM_WO_DATA = {
       "actualStart": "2026-11-02",
       "actualStartDt": "2026-11-02T14:00:00",
       "actualEnd": "2026-11-02"
+    },
+    {
+      "equip": "EX003",
+      "cls": "EXC",
+      "woNumber": "WO-023346",
+      "maintType": "2000 Hours service Planned",
+      "hours": 2000,
+      "cmLabel": "Filter Cut / General Inspection",
+      "cmTypes": [
+        "FC",
+        "INSP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-30",
+      "planStartDt": "2026-11-30T00:00:00",
+      "planEnd": "2026-11-30",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
     },
     {
       "equip": "EX004",
@@ -127797,6 +127857,25 @@ window.CM_WO_DATA = {
       "actualStart": "2026-11-09",
       "actualStartDt": "2026-11-09T19:00:00",
       "actualEnd": "2026-11-10"
+    },
+    {
+      "equip": "GE097",
+      "cls": "GEN",
+      "woNumber": "WO-023330",
+      "maintType": "500 Hours service Planned",
+      "hours": 500,
+      "cmLabel": "500h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-30",
+      "planStartDt": "2026-11-30T00:00:00",
+      "planEnd": "2026-11-30",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
     },
     {
       "equip": "GE098",
@@ -156027,6 +156106,27 @@ window.CM_WO_DATA = {
       "actualStart": "2026-11-08",
       "actualStartDt": "2026-11-08T07:00:00",
       "actualEnd": "2026-11-08"
+    },
+    {
+      "equip": "TK042",
+      "cls": "HT",
+      "woNumber": "WO-023322",
+      "maintType": "500 Hours service Planned",
+      "hours": 500,
+      "cmLabel": "Magnetic Plug",
+      "cmTypes": [
+        "MP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-30",
+      "planStartDt": "2026-11-30T00:00:00",
+      "planEnd": "2026-11-30",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
     },
     {
       "equip": "TK043",

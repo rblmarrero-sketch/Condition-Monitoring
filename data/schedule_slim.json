@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-27T11:52:46+00:00",
+  "generated": "2026-11-27T12:04:15+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -59,6 +59,18 @@
           "UC"
         ],
         "plan": "2026-12-06",
+        "priority": "P3 Planned (PM)"
+      }
+    ],
+    "EX003": [
+      {
+        "wo": "WO-023346",
+        "hours": 2000,
+        "types": [
+          "FC",
+          "INSP"
+        ],
+        "plan": "2026-11-30",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -301,6 +313,17 @@
           "MP"
         ],
         "plan": "2026-12-31",
+        "priority": "P3 Planned (PM)"
+      }
+    ],
+    "TK042": [
+      {
+        "wo": "WO-023322",
+        "hours": 500,
+        "types": [
+          "MP"
+        ],
+        "plan": "2026-11-30",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -1804,6 +1827,24 @@
       "completed": ""
     },
     {
+      "wo": "WO-023339",
+      "equip": "CD010",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "500h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-30",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-11-30",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-022988",
       "equip": "DZ001",
       "cls": "DOZ",
@@ -1858,6 +1899,42 @@
       "completed": ""
     },
     {
+      "wo": "WO-023332",
+      "equip": "EX001",
+      "cls": "EXC",
+      "comp": "",
+      "desc": "500h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-30",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-11-30",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-023346",
+      "equip": "EX003",
+      "cls": "EXC",
+      "comp": "",
+      "desc": "Filter Cut / General Inspection",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-30",
+      "type": "2000 Hours service Planned",
+      "hours": 2000,
+      "plan": "2026-11-30",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-023200",
       "equip": "EX023",
       "cls": "EXC",
@@ -1894,8 +1971,44 @@
       "completed": ""
     },
     {
+      "wo": "WO-023330",
+      "equip": "GE097",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "500h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-30",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-11-30",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-023329",
       "equip": "TK005",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-30",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-11-30",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-023322",
+      "equip": "TK042",
       "cls": "HT",
       "comp": "",
       "desc": "Magnetic Plug",
@@ -10388,6 +10501,14 @@
       "x": "РВД ковша утечка. Крепежные работы"
     },
     {
+      "d": "DD-00017620",
+      "u": "EX001",
+      "s": "EX001.DRS.ENG (Engine / Двигатель)",
+      "p": "P2",
+      "r": "2026-11-27",
+      "x": "Долив масла в ДВС. Инспекция ГЦ ковша на наличие повреждений штока"
+    },
+    {
       "d": "DD-00017597",
       "u": "LD005",
       "s": "LD005.HS.DL (Hydraulic Lines / Гидролинии)",
@@ -10402,14 +10523,6 @@
       "p": "P2",
       "r": "2026-11-27",
       "x": "Течь пилотного РВД"
-    },
-    {
-      "d": "DD-00017620",
-      "u": "EX001",
-      "s": "EX001.DRS.ENG (Engine / Двигатель)",
-      "p": "P2",
-      "r": "2026-11-27",
-      "x": "Долив масла в ДВС. Инспекция ГЦ ковша на наличие повреждений штока"
     },
     {
       "d": "DD-00017616",
