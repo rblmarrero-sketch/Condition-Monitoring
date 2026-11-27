@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-27T06:52:52+00:00",
+  "generated": "2026-11-27T07:13:41+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -6770,6 +6770,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "CR002",
+      "defect": "DD-00017571",
+      "raised": "2026-11-27",
+      "system": "CR002.ELS.PH (Preheater / Предпусковой подогреватель)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Не работает предпусковой подогреватель.",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-023460"
+    },
+    {
       "asset": "GE054",
       "defect": "DD-00017601",
       "raised": "2026-11-27",
@@ -6911,19 +6924,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Tomilov",
       "regBy": "Томилов Сергей Владимирович",
       "wo": "WO-023468"
-    },
-    {
-      "asset": "CR002",
-      "defect": "DD-00017571",
-      "raised": "2026-11-27",
-      "system": "CR002.ELS.PH (Preheater / Предпусковой подогреватель)",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Не работает предпусковой подогреватель.",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-023460"
     },
     {
       "asset": "TK043",
@@ -12022,19 +12022,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022936"
     },
     {
-      "asset": "DR011",
-      "defect": "EB-00000107",
-      "raised": "2026-11-19",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Completed",
-      "priority": "P4 Planned (Repair)",
-      "by": "Maksat Shakhmurat",
-      "regBy": "Maksat Shakhmurat",
-      "wo": "WO-022939"
-    },
-    {
       "asset": "CR007",
       "defect": "DD-00017169",
       "raised": "2026-11-19",
@@ -12319,6 +12306,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022945"
+    },
+    {
+      "asset": "DR011",
+      "defect": "EB-00000107",
+      "raised": "2026-11-19",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Maksat Shakhmurat",
+      "regBy": "Maksat Shakhmurat",
+      "wo": "WO-022939"
     },
     {
       "asset": "LV092",
@@ -13569,19 +13569,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022691"
     },
     {
-      "asset": "WC1001",
-      "defect": "EB-00000106",
-      "raised": "2026-11-17",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Completed",
-      "priority": "P4 Planned (Repair)",
-      "by": "Maksat Shakhmurat",
-      "regBy": "Maksat Shakhmurat",
-      "wo": "WO-022694"
-    },
-    {
       "asset": "EX009",
       "defect": "DD-00017047",
       "raised": "2026-11-17",
@@ -13775,6 +13762,19 @@ window.CM_WO_DATA = {
       "by": "Pavel Kostin",
       "regBy": "Костин Павел Александрович",
       "wo": "WO-022715"
+    },
+    {
+      "asset": "WC1001",
+      "defect": "EB-00000106",
+      "raised": "2026-11-17",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Maksat Shakhmurat",
+      "regBy": "Maksat Shakhmurat",
+      "wo": "WO-022694"
     },
     {
       "asset": "EX021",
