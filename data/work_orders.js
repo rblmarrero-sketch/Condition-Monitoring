@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-27T16:52:50+00:00",
+  "generated": "2026-11-27T17:12:46+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -6497,6 +6497,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023505"
     },
     {
+      "asset": "DZ012",
+      "defect": "DD-00017629",
+      "raised": "2026-11-28",
+      "system": "DZ012.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Замена РВД ГЦ отвала",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Valentin Trapilo",
+      "regBy": "Трапило Валентин Святославович",
+      "wo": "WO-023509"
+    },
+    {
       "asset": "BS008",
       "defect": "DD-00017626",
       "raised": "2026-11-28",
@@ -6508,6 +6521,19 @@ window.CM_WO_DATA = {
       "by": "Sychev Anton",
       "regBy": "Сычев Антон Александрович",
       "wo": "WO-023506"
+    },
+    {
+      "asset": "TK092",
+      "defect": "DD-00017628",
+      "raised": "2026-11-28",
+      "system": "TK092.DRS.AXL (Axles / Мосты)",
+      "defectType": "6.03 Structural crack / Трещина конструкции",
+      "descr": "Утечка масла с редуктора моста (трещина). Доливка масла до уровня",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Ilya Borzunov",
+      "regBy": "Борзунов Илья Николаевич",
+      "wo": "WO-023508"
     },
     {
       "asset": "DZ002",
@@ -7693,19 +7719,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "GE025",
-      "defect": "DD-00017536",
-      "raised": "2026-11-26",
-      "system": "GENERATOR, CATERPILLAR C18, GE025 ENGINE OldNumber (GN025)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Демонтаж радиатора ОЖ",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Pavel Lefrank",
-      "regBy": "Лефранк Павел Петрович",
-      "wo": null
-    },
-    {
       "asset": "GE020",
       "defect": "DD-00017543",
       "raised": "2026-11-26",
@@ -7716,6 +7729,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "GE025",
+      "defect": "DD-00017536",
+      "raised": "2026-11-26",
+      "system": "GENERATOR, CATERPILLAR C18, GE025 ENGINE OldNumber (GN025)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Демонтаж радиатора ОЖ",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Lefrank",
+      "regBy": "Лефранк Павел Петрович",
       "wo": null
     },
     {
@@ -25062,19 +25088,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "TK035",
-      "defect": "DD-00016180",
-      "raised": "2026-11-02",
-      "system": "TK035.ELS.PH (Preheater / Предпусковой подогреватель)",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Не работает ПЖД",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022918"
-    },
-    {
-      "asset": "TK035",
       "defect": "DD-00016181",
       "raised": "2026-11-02",
       "system": "TK035.BS.SHO (Brake Shoes / Тормозные колодки)",
@@ -25098,6 +25111,19 @@ window.CM_WO_DATA = {
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": "WO-021472"
+    },
+    {
+      "asset": "TK035",
+      "defect": "DD-00016180",
+      "raised": "2026-11-02",
+      "system": "TK035.ELS.PH (Preheater / Предпусковой подогреватель)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Не работает ПЖД",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022918"
     },
     {
       "asset": "DZ010",
@@ -39492,11 +39518,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "LS048",
-      "defect": "DD-00014962",
+      "defect": "DD-00014963",
       "raised": "2026-10-17",
-      "system": "LS048.ELS.MW (Machine Wiring / Электропроводка машины)",
-      "defectType": "4.14 Battery / starting circuit fault / Неисправность аккумулятора / цепи пуска",
-      "descr": "Замена АКБ",
+      "system": "LS048.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "Замена ФОВ",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -39505,11 +39531,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "LS048",
-      "defect": "DD-00014963",
+      "defect": "DD-00014962",
       "raised": "2026-10-17",
-      "system": "LS048.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
-      "descr": "Замена ФОВ",
+      "system": "LS048.ELS.MW (Machine Wiring / Электропроводка машины)",
+      "defectType": "4.14 Battery / starting circuit fault / Неисправность аккумулятора / цепи пуска",
+      "descr": "Замена АКБ",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -57756,19 +57782,6 @@ window.CM_WO_DATA = {
       "wo": "WO-015456"
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
-      "wo": null
-    },
-    {
       "asset": "TK046",
       "defect": "DD-00011270",
       "raised": "2026-08-21",
@@ -57870,6 +57883,19 @@ window.CM_WO_DATA = {
       "priority": "P2 Urgent",
       "by": "Andrey Shipelov",
       "regBy": "Шипелов Андрей Анатольевич",
+      "wo": null
+    },
+    {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
