@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-27T12:58:38+00:00",
+  "generated": "2026-11-27T13:12:50+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -6783,6 +6783,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023501"
     },
     {
+      "asset": "DZ003",
+      "defect": "DD-00017622",
+      "raised": "2026-11-27",
+      "system": "DZ003 D275.5D KOMATSU",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Выкручивание залома бугельного болта катка",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Ilya Borzunov",
+      "regBy": "Борзунов Илья Николаевич",
+      "wo": "WO-023502"
+    },
+    {
       "asset": "TK166",
       "defect": "DD-00017585",
       "raised": "2026-11-27",
@@ -6872,6 +6885,19 @@ window.CM_WO_DATA = {
       "by": "Andrey Shcherbina",
       "regBy": "Щербина Андрей Николаевич",
       "wo": null
+    },
+    {
+      "asset": "TK004",
+      "defect": "DD-00017618",
+      "raised": "2026-11-27",
+      "system": "TK004.BS.CV (Control Valve / Управляющий клапан)",
+      "defectType": "3.07 Actuator / control valve fault / Отказ исполнительного механизма / регулирующего клапана",
+      "descr": "Главный тормозной клапан управления замена",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Ilya Borzunov",
+      "regBy": "Борзунов Илья Николаевич",
+      "wo": "WO-023498"
     },
     {
       "asset": "TK171",
@@ -7028,19 +7054,6 @@ window.CM_WO_DATA = {
       "by": "Pavel Lefrank",
       "regBy": "Лефранк Павел Петрович",
       "wo": "WO-023485"
-    },
-    {
-      "asset": "TK004",
-      "defect": "DD-00017618",
-      "raised": "2026-11-27",
-      "system": "TK004.BS.CV (Control Valve / Управляющий клапан)",
-      "defectType": "3.07 Actuator / control valve fault / Отказ исполнительного механизма / регулирующего клапана",
-      "descr": "Главный тормозной клапан управления замена",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Ilya Borzunov",
-      "regBy": "Борзунов Илья Николаевич",
-      "wo": "WO-023498"
     },
     {
       "asset": "TK031",
