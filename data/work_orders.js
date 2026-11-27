@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-27T01:18:29+00:00",
+  "generated": "2026-11-27T01:33:00+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -6653,19 +6653,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023474"
     },
     {
-      "asset": "LV081",
-      "defect": "DD-00017595",
-      "raised": "2026-11-27",
-      "system": "LV081 DF6 DONGFENG",
-      "defectType": "4.14 Battery / starting circuit fault / Неисправность аккумулятора / цепи пуска",
-      "descr": "Замена АКБ",
-      "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Pavel Lefrank",
-      "regBy": "Лефранк Павел Петрович",
-      "wo": null
-    },
-    {
       "asset": "TK166",
       "defect": "DD-00017585",
       "raised": "2026-11-27",
@@ -6703,6 +6690,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Tomilov",
       "regBy": "Томилов Сергей Владимирович",
       "wo": null
+    },
+    {
+      "asset": "LV081",
+      "defect": "DD-00017595",
+      "raised": "2026-11-27",
+      "system": "LV081.ELS (Electrical System / Электросистема)",
+      "defectType": "4.14 Battery / starting circuit fault / Неисправность аккумулятора / цепи пуска",
+      "descr": "Замена АКБ",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Pavel Lefrank",
+      "regBy": "Лефранк Павел Петрович",
+      "wo": "WO-023478"
     },
     {
       "asset": "EX002",
