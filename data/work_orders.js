@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-27T09:27:41+00:00",
+  "generated": "2026-11-27T09:42:39+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -357,7 +357,7 @@ window.CM_WO_DATA = {
     "WE010",
     "WE011"
   ],
-  "duplicateRowsCollapsed": 474,
+  "duplicateRowsCollapsed": 475,
   "roundsDedupedWithinVisit": 2,
   "columns": [
     "Asset description",
@@ -6471,19 +6471,6 @@ window.CM_WO_DATA = {
   ],
   "otherDefects": [
     {
-      "asset": "GR008",
-      "defect": "DD-00017584",
-      "raised": "2026-11-27",
-      "system": "GR008.DRS.FD (Final Drives / Конечные передачи)",
-      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
-      "descr": "Поворонтный редуктор - заклинил",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Tomilov",
-      "regBy": "Томилов Сергей Владимирович",
-      "wo": "WO-023473"
-    },
-    {
       "asset": "TK113",
       "defect": "DD-00017574",
       "raised": "2026-11-27",
@@ -6822,6 +6809,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023460"
     },
     {
+      "asset": "TK104",
+      "defect": "DD-00017579",
+      "raised": "2026-11-27",
+      "system": "TK104.DRS.FUE (Fuel System / Топливная система)",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "Диагностика топливной системы/ Потеря мощности ДВС",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": "WO-023468"
+    },
+    {
       "asset": "GE054",
       "defect": "DD-00017601",
       "raised": "2026-11-27",
@@ -6846,6 +6846,32 @@ window.CM_WO_DATA = {
       "by": "Pavel Lefrank",
       "regBy": "Лефранк Павел Петрович",
       "wo": "WO-023488"
+    },
+    {
+      "asset": "LV009",
+      "defect": "DD-00017612",
+      "raised": "2026-11-27",
+      "system": "LV009.DRS.PG (Power Generator / Генератор)",
+      "defectType": "8.06 Roller / idler failure / Отказ ролика / роликоопоры",
+      "descr": "Ролики приводных ремней посторонний шум. Замена",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Ilya Borzunov",
+      "regBy": "Борзунов Илья Николаевич",
+      "wo": "WO-023492"
+    },
+    {
+      "asset": "GR008",
+      "defect": "DD-00017584",
+      "raised": "2026-11-27",
+      "system": "GR008.DRS.FD (Final Drives / Конечные передачи)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Поворонтный редуктор - заклинил",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": "WO-023473"
     },
     {
       "asset": "LD006",
@@ -6950,19 +6976,6 @@ window.CM_WO_DATA = {
       "by": "Pavel Lefrank",
       "regBy": "Лефранк Павел Петрович",
       "wo": "WO-023475"
-    },
-    {
-      "asset": "TK104",
-      "defect": "DD-00017579",
-      "raised": "2026-11-27",
-      "system": "TK104.DRS.FUE (Fuel System / Топливная система)",
-      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
-      "descr": "Диагностика топливной системы/ Потеря мощности ДВС",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Tomilov",
-      "regBy": "Томилов Сергей Владимирович",
-      "wo": "WO-023468"
     },
     {
       "asset": "TK043",
@@ -57548,6 +57561,19 @@ window.CM_WO_DATA = {
       "wo": "WO-015456"
     },
     {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
+      "wo": null
+    },
+    {
       "asset": "TK046",
       "defect": "DD-00011270",
       "raised": "2026-08-21",
@@ -57636,19 +57662,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
@@ -59862,6 +59875,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "CN004.CH",
+      "defect": "EB-00000070",
+      "raised": "2026-07-24",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P1 Breakdown",
+      "by": "Temir Marochko",
+      "regBy": "Temir Marochko",
+      "wo": null
+    },
+    {
       "asset": "CR001",
       "defect": "DD-00009555",
       "raised": "2026-07-24",
@@ -59885,19 +59911,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Rinat Musaferov",
       "regBy": "Мусаферов Ринат Искакович",
-      "wo": null
-    },
-    {
-      "asset": "CN004.CH",
-      "defect": "EB-00000070",
-      "raised": "2026-07-24",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P1 Breakdown",
-      "by": "Temir Marochko",
-      "regBy": "Temir Marochko",
       "wo": null
     },
     {
