@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-27T21:27:44+00:00",
+  "generated": "2026-11-27T21:42:52+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -7862,6 +7862,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023450"
     },
     {
+      "asset": "TK097",
+      "defect": "DD-00017527",
+      "raised": "2026-11-26",
+      "system": "TK097.ELS (Electrical System / Электросистема)",
+      "defectType": "4.14 Battery / starting circuit fault / Неисправность аккумулятора / цепи пуска",
+      "descr": "Замена АКБ",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Pavel Lefrank",
+      "regBy": "Лефранк Павел Петрович",
+      "wo": "WO-023382"
+    },
+    {
       "asset": "DR008",
       "defect": "DD-00017517",
       "raised": "2026-11-26",
@@ -8198,19 +8211,6 @@ window.CM_WO_DATA = {
       "by": "Sychev Anton",
       "regBy": "Сычев Антон Александрович",
       "wo": "WO-023445"
-    },
-    {
-      "asset": "TK097",
-      "defect": "DD-00017527",
-      "raised": "2026-11-26",
-      "system": "TK097.ELS (Electrical System / Электросистема)",
-      "defectType": "4.14 Battery / starting circuit fault / Неисправность аккумулятора / цепи пуска",
-      "descr": "Замена АКБ",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Pavel Lefrank",
-      "regBy": "Лефранк Павел Петрович",
-      "wo": "WO-023382"
     },
     {
       "asset": "BS003",
@@ -12217,19 +12217,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023024"
     },
     {
-      "asset": "DZ003",
-      "defect": "DD-00017187",
-      "raised": "2026-11-20",
-      "system": "DZ003.ELS.LIG (Head Lighting System / Система головного освещения)",
-      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
-      "descr": "Лопнулс стекла",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Aleksandr Golovko",
-      "regBy": "Головко Александр Николаевич",
-      "wo": "WO-023023"
-    },
-    {
       "asset": "TK004",
       "defect": "DD-00017213",
       "raised": "2026-11-20",
@@ -12267,6 +12254,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-022999"
+    },
+    {
+      "asset": "DZ003",
+      "defect": "DD-00017187",
+      "raised": "2026-11-20",
+      "system": "DZ003.ELS.LIG (Head Lighting System / Система головного освещения)",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "Лопнулс стекла",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Aleksandr Golovko",
+      "regBy": "Головко Александр Николаевич",
+      "wo": "WO-023023"
     },
     {
       "asset": "CN001",
