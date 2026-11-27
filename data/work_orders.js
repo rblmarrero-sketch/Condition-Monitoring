@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-27T08:57:56+00:00",
+  "generated": "2026-11-27T09:12:45+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -6471,6 +6471,19 @@ window.CM_WO_DATA = {
   ],
   "otherDefects": [
     {
+      "asset": "GR008",
+      "defect": "DD-00017584",
+      "raised": "2026-11-27",
+      "system": "GR008.DRS.FD (Final Drives / Конечные передачи)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Поворонтный редуктор - заклинил",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": "WO-023473"
+    },
+    {
       "asset": "TK113",
       "defect": "DD-00017574",
       "raised": "2026-11-27",
@@ -6835,6 +6848,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023488"
     },
     {
+      "asset": "LD006",
+      "defect": "DD-00017611",
+      "raised": "2026-11-27",
+      "system": "LD006.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь РВД с распределителя",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Valentin Trapilo",
+      "regBy": "Трапило Валентин Святославович",
+      "wo": "WO-023491"
+    },
+    {
       "asset": "TK103",
       "defect": "DD-00017596",
       "raised": "2026-11-27",
@@ -6846,19 +6872,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Tomilov",
       "regBy": "Томилов Сергей Владимирович",
       "wo": "WO-023479"
-    },
-    {
-      "asset": "GR008",
-      "defect": "DD-00017584",
-      "raised": "2026-11-27",
-      "system": "GR008.DRS.FD (Final Drives / Конечные передачи)",
-      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
-      "descr": "Поворонтный редуктор - заклинил",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Tomilov",
-      "regBy": "Томилов Сергей Владимирович",
-      "wo": "WO-023473"
     },
     {
       "asset": "TK037",
@@ -43446,7 +43459,7 @@ window.CM_WO_DATA = {
       "asset": "DR010",
       "defect": "DD-00014596",
       "raised": "2026-10-12",
-      "system": "DR010 SWDE165A SUNWARD",
+      "system": "Установка буровая SUNWARD SWDE165A VIN SWDE165AS00282/Drilling rig",
       "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
       "descr": "Не исправна система пылеподавления",
       "status": "Registered",
