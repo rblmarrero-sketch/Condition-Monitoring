@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-27T05:55:46+00:00",
+  "generated": "2026-11-27T06:09:02+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -6692,6 +6692,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "FL013",
+      "defect": "DD-00017606",
+      "raised": "2026-11-27",
+      "system": "FL013.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка масла с моста",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Shcherbina",
+      "regBy": "Щербина Андрей Николаевич",
+      "wo": null
+    },
+    {
       "asset": "TK109",
       "defect": "DD-00017582",
       "raised": "2026-11-27",
@@ -6742,6 +6755,19 @@ window.CM_WO_DATA = {
       "by": "Andrey Shcherbina",
       "regBy": "Щербина Андрей Николаевич",
       "wo": null
+    },
+    {
+      "asset": "EX016",
+      "defect": "DD-00017607",
+      "raised": "2026-11-27",
+      "system": "EX016.HS (Hydraulic System / Гидравлическая система)",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "Диагностика работы гидросистемы",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Pavel Lefrank",
+      "regBy": "Лефранк Павел Петрович",
+      "wo": "WO-023488"
     },
     {
       "asset": "TK103",
@@ -8422,11 +8448,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "LV067",
-      "defect": "DD-00017461",
+      "defect": "DD-00017460",
       "raised": "2026-11-25",
-      "system": "LV067.DRS.AXL (Axles / Мосты)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Сорвана резьба на шпильке левого колеса (замена)",
+      "system": "LV067.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "Двигатель не тянет.",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -8435,11 +8461,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "LV067",
-      "defect": "DD-00017460",
+      "defect": "DD-00017461",
       "raised": "2026-11-25",
-      "system": "LV067.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
-      "descr": "Двигатель не тянет.",
+      "system": "LV067.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Сорвана резьба на шпильке левого колеса (замена)",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
