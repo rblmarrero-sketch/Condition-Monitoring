@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-27T09:57:35+00:00",
+  "generated": "2026-11-27T10:12:47+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -6679,6 +6679,58 @@ window.CM_WO_DATA = {
       "wo": "WO-023487"
     },
     {
+      "asset": "GR008",
+      "defect": "DD-00017584",
+      "raised": "2026-11-27",
+      "system": "GR008.DRS.FD (Final Drives / Конечные передачи)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Поворонтный редуктор - заклинил",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": "WO-023473"
+    },
+    {
+      "asset": "DZ009",
+      "defect": "DD-00017613",
+      "raised": "2026-11-27",
+      "system": "DZ009.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "Замена фары на рыхлитель",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Valentin Trapilo",
+      "regBy": "Трапило Валентин Святославович",
+      "wo": "WO-023493"
+    },
+    {
+      "asset": "LD004",
+      "defect": "DD-00017614",
+      "raised": "2026-11-27",
+      "system": "LD004.OC.HE (Heating / Отопление)",
+      "defectType": "4.20 Auxiliary electrical circuit fault / Неисправность вспомогательных электроцепей",
+      "descr": "Ремонт фена",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Valentin Trapilo",
+      "regBy": "Трапило Валентин Святославович",
+      "wo": "WO-023494"
+    },
+    {
+      "asset": "DR009",
+      "defect": "DD-00017615",
+      "raised": "2026-11-27",
+      "system": "DR009.DRS.COO (Cooling System / Система охлаждения)",
+      "defectType": "1.02 Overheating / high temperature Перегрев / высокая температура",
+      "descr": "Перегрев ДВС компрессора",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Valentin Trapilo",
+      "regBy": "Трапило Валентин Святославович",
+      "wo": "WO-023495"
+    },
+    {
       "asset": "TK166",
       "defect": "DD-00017585",
       "raised": "2026-11-27",
@@ -6768,6 +6820,19 @@ window.CM_WO_DATA = {
       "by": "Andrey Shcherbina",
       "regBy": "Щербина Андрей Николаевич",
       "wo": null
+    },
+    {
+      "asset": "TK171",
+      "defect": "DD-00017616",
+      "raised": "2026-11-27",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK171 HEAD LIGHTING SYSTEM",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "Неисправность креплений фар ближнего света.",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-023496"
     },
     {
       "asset": "DZ002",
@@ -6861,17 +6926,17 @@ window.CM_WO_DATA = {
       "wo": "WO-023492"
     },
     {
-      "asset": "GR008",
-      "defect": "DD-00017584",
+      "asset": "TK103",
+      "defect": "DD-00017596",
       "raised": "2026-11-27",
-      "system": "GR008.DRS.FD (Final Drives / Конечные передачи)",
-      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
-      "descr": "Поворонтный редуктор - заклинил",
+      "system": "TK103.DRS.FUE (Fuel System / Топливная система)",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "Низкое давление топлива /Ошибка L03",
       "status": "Elimination scheduled",
       "priority": "P2 Urgent",
       "by": "Sergey Tomilov",
       "regBy": "Томилов Сергей Владимирович",
-      "wo": "WO-023473"
+      "wo": "WO-023479"
     },
     {
       "asset": "LD006",
@@ -6885,19 +6950,6 @@ window.CM_WO_DATA = {
       "by": "Valentin Trapilo",
       "regBy": "Трапило Валентин Святославович",
       "wo": "WO-023491"
-    },
-    {
-      "asset": "TK103",
-      "defect": "DD-00017596",
-      "raised": "2026-11-27",
-      "system": "TK103.DRS.FUE (Fuel System / Топливная система)",
-      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
-      "descr": "Низкое давление топлива /Ошибка L03",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Tomilov",
-      "regBy": "Томилов Сергей Владимирович",
-      "wo": "WO-023479"
     },
     {
       "asset": "TK037",
@@ -58407,19 +58459,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "H07",
-      "defect": "EB-00000078",
-      "raised": "2026-08-13",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Sergey Gulin",
-      "wo": null
-    },
-    {
-      "asset": "H07",
       "defect": "EB-00000079",
       "raised": "2026-08-13",
       "system": null,
@@ -58429,6 +58468,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Eduard Shapoval",
       "regBy": "Eduard Shapoval",
+      "wo": null
+    },
+    {
+      "asset": "H07",
+      "defect": "EB-00000078",
+      "raised": "2026-08-13",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Sergey Gulin",
       "wo": null
     },
     {
