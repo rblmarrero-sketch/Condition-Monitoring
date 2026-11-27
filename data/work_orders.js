@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-27T21:57:50+00:00",
+  "generated": "2026-11-27T22:18:22+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -25009,6 +25009,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022925"
     },
     {
+      "asset": "GE025",
+      "defect": "DD-00016188",
+      "raised": "2026-11-02",
+      "system": "GENERATOR, CATERPILLAR C18, GE025 ENGINE OldNumber (GN025)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка антифриза с радиатора охлаждения",
+      "status": "Completed",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022402"
+    },
+    {
       "asset": "TK010",
       "defect": "DD-00016164",
       "raised": "2026-11-02",
@@ -25254,19 +25267,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-021710"
-    },
-    {
-      "asset": "GE025",
-      "defect": "DD-00016188",
-      "raised": "2026-11-02",
-      "system": "GENERATOR, CATERPILLAR C18, GE025 ENGINE OldNumber (GN025)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка антифриза с радиатора охлаждения",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022402"
     },
     {
       "asset": "TK035",
@@ -85310,6 +85310,27 @@ window.CM_WO_DATA = {
       "actualStart": "2026-11-18",
       "actualStartDt": "2026-11-18T13:00:00",
       "actualEnd": "2026-11-18"
+    },
+    {
+      "equip": "CN008",
+      "cls": "CRN",
+      "woNumber": "WO-023396",
+      "maintType": "2000 Hours service Planned",
+      "hours": 2000,
+      "cmLabel": "General Inspection",
+      "cmTypes": [
+        "INSP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-30",
+      "planStartDt": "2026-11-30T00:00:00",
+      "planEnd": "2026-11-30",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
     },
     {
       "equip": "CN009",
