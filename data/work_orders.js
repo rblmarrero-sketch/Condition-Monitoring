@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-27T12:22:41+00:00",
+  "generated": "2026-11-27T12:37:46+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -357,7 +357,7 @@ window.CM_WO_DATA = {
     "WE010",
     "WE011"
   ],
-  "duplicateRowsCollapsed": 475,
+  "duplicateRowsCollapsed": 476,
   "roundsDedupedWithinVisit": 2,
   "columns": [
     "Asset description",
@@ -12529,19 +12529,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "EX023",
-      "defect": "DD-00017158",
-      "raised": "2026-11-19",
-      "system": "EX023.CH.BUC (Bucket / Ковш)",
-      "defectType": "1.06 Deformation / bending / buckling Деформация / изгиб / коробление",
-      "descr": "осевой зазор проушин ковша и рукояти",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Dmitriy Stepanenko",
-      "regBy": "Степаненко Дмитрий Викторович",
-      "wo": null
-    },
-    {
       "asset": "TK040",
       "defect": "DD-00017141",
       "raised": "2026-11-19",
@@ -12800,6 +12787,19 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-023122"
+    },
+    {
+      "asset": "EX023",
+      "defect": "DD-00017158",
+      "raised": "2026-11-19",
+      "system": "EX023.CH.BUC (Bucket / Ковш)",
+      "defectType": "1.06 Deformation / bending / buckling Деформация / изгиб / коробление",
+      "descr": "осевой зазор проушин ковша и рукояти",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Dmitriy Stepanenko",
+      "regBy": "Степаненко Дмитрий Викторович",
+      "wo": "WO-023201"
     },
     {
       "asset": "LV.C001",
@@ -25022,19 +25022,6 @@ window.CM_WO_DATA = {
       "wo": "WO-021472"
     },
     {
-      "asset": "EX023",
-      "defect": "DD-00016119",
-      "raised": "2026-11-01",
-      "system": "EX023.CH.BUC (Bucket / Ковш)",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "Износ ковша",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Evgeniy Frolin",
-      "regBy": "Фролин Евгений Владимирович",
-      "wo": "WO-021446"
-    },
-    {
       "asset": "DZ010",
       "defect": "DD-00016100",
       "raised": "2026-11-01",
@@ -25725,16 +25712,16 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "EX023",
-      "defect": "DD-00016010",
-      "raised": "2026-10-31",
+      "defect": "DD-00016119",
+      "raised": "2026-11-01",
       "system": "EX023.CH.BUC (Bucket / Ковш)",
-      "defectType": "6.03 Structural crack / Трещина конструкции",
-      "descr": "Износ межзубовой защиты и угловых пяток",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Износ ковша",
       "status": "Elimination scheduled",
       "priority": "P4 Planned (Repair)",
-      "by": "Roman Besedovskiy",
-      "regBy": "Беседовский Роман Иванович",
-      "wo": "WO-021445"
+      "by": "Evgeniy Frolin",
+      "regBy": "Фролин Евгений Владимирович",
+      "wo": "WO-021446"
     },
     {
       "asset": "DR008",
@@ -26645,6 +26632,19 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-021510"
+    },
+    {
+      "asset": "EX023",
+      "defect": "DD-00016010",
+      "raised": "2026-10-31",
+      "system": "EX023.CH.BUC (Bucket / Ковш)",
+      "defectType": "6.03 Structural crack / Трещина конструкции",
+      "descr": "Износ межзубовой защиты и угловых пяток",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-021445"
     },
     {
       "asset": "DZ011",
@@ -51685,19 +51685,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "EX023",
-      "defect": "DD-00013853",
-      "raised": "2026-10-02",
-      "system": "EX023.CH.UC (Undercarriage / Ходовая часть)",
-      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
-      "descr": "Заклинивание поддерживающего ролика слева спереди",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Evgeniy Frolin",
-      "regBy": "Фролин Евгений Владимирович",
-      "wo": "WO-021543"
-    },
-    {
       "asset": "TK047",
       "defect": "DD-00013907",
       "raised": "2026-10-02",
@@ -52489,6 +52476,19 @@ window.CM_WO_DATA = {
       "by": "Temir Marochko",
       "regBy": "Марочко Темир",
       "wo": "WO-018815"
+    },
+    {
+      "asset": "EX023",
+      "defect": "DD-00013853",
+      "raised": "2026-10-02",
+      "system": "EX023.CH.UC (Undercarriage / Ходовая часть)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Заклинивание поддерживающего ролика слева спереди",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Evgeniy Frolin",
+      "regBy": "Фролин Евгений Владимирович",
+      "wo": "WO-021543"
     },
     {
       "asset": "TK157",
@@ -56456,19 +56456,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "EX023",
-      "defect": "DD-00012949",
-      "raised": "2026-09-19",
-      "system": "EX023.CH.STR (Superstructure / Надстройка)",
-      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
-      "descr": "Требуется ремонт площадки (загнута) левая сторона, отсутсвуют три подножки (болты заломаны)",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Pavel Kostin",
-      "regBy": "Костин Павел Александрович",
-      "wo": "WO-018358"
-    },
-    {
       "asset": "GR008",
       "defect": "DD-00012940",
       "raised": "2026-09-19",
@@ -56584,6 +56571,19 @@ window.CM_WO_DATA = {
       "by": "Pavel Kostin",
       "regBy": "Костин Павел Александрович",
       "wo": "WO-018386"
+    },
+    {
+      "asset": "EX023",
+      "defect": "DD-00012949",
+      "raised": "2026-09-19",
+      "system": "EX023.CH.STR (Superstructure / Надстройка)",
+      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
+      "descr": "Требуется ремонт площадки (загнута) левая сторона, отсутсвуют три подножки (болты заломаны)",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": "WO-018358"
     },
     {
       "asset": "TK047",
@@ -56885,19 +56885,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022644"
     },
     {
-      "asset": "EX023",
-      "defect": "DD-00006492",
-      "raised": "2026-09-11",
-      "system": "EX023.CH.AL (Central Lubrication System / Централизованная система смазки)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Замена втулок левой цепи 3 шт. (лопнули)",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Pavel Kostin",
-      "regBy": "Костин Павел Александрович",
-      "wo": "WO-022645"
-    },
-    {
       "asset": "EX022",
       "defect": "DD-00012453",
       "raised": "2026-09-11",
@@ -57013,6 +57000,19 @@ window.CM_WO_DATA = {
       "by": "Valentin Trapilo",
       "regBy": "Трапило Валентин Святославович",
       "wo": null
+    },
+    {
+      "asset": "EX023",
+      "defect": "DD-00006492",
+      "raised": "2026-09-11",
+      "system": "EX023.CH.AL (Central Lubrication System / Централизованная система смазки)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Замена втулок левой цепи 3 шт. (лопнули)",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": "WO-022645"
     },
     {
       "asset": "GR015",
@@ -81125,6 +81125,25 @@ window.CM_WO_DATA = {
       "actualStart": "2026-09-18",
       "actualStartDt": "2026-09-18T18:00:00",
       "actualEnd": "2026-09-18"
+    },
+    {
+      "equip": "BL006",
+      "cls": "GEN",
+      "woNumber": "WO-023384",
+      "maintType": "500 Hours service Planned",
+      "hours": 500,
+      "cmLabel": "500h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-12-01",
+      "planStartDt": "2026-12-01T00:00:00",
+      "planEnd": "2026-12-01",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
     },
     {
       "equip": "BL015",
@@ -150170,6 +150189,27 @@ window.CM_WO_DATA = {
       "actualEnd": "2026-10-22"
     },
     {
+      "equip": "TK004",
+      "cls": "HT",
+      "woNumber": "WO-023319",
+      "maintType": "500 Hours service Planned",
+      "hours": 500,
+      "cmLabel": "Magnetic Plug",
+      "cmTypes": [
+        "MP"
+      ],
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-30",
+      "planStartDt": "2026-11-30T00:00:00",
+      "planEnd": "2026-11-30",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
       "equip": "TK005",
       "cls": "HT",
       "woNumber": null,
@@ -197415,9 +197455,9 @@ window.CM_WO_DATA = {
       "equip": "WE011",
       "cls": "GEN",
       "woNumber": null,
-      "maintType": "500 Hours service Planned",
-      "hours": 500,
-      "cmLabel": "500h service",
+      "maintType": "1000 Hours service Planned",
+      "hours": 1000,
+      "cmLabel": "1000h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": null,
@@ -197434,9 +197474,9 @@ window.CM_WO_DATA = {
       "equip": "WE011",
       "cls": "GEN",
       "woNumber": null,
-      "maintType": "1000 Hours service Planned",
-      "hours": 1000,
-      "cmLabel": "1000h service",
+      "maintType": "500 Hours service Planned",
+      "hours": 500,
+      "cmLabel": "500h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": null,
@@ -197467,6 +197507,25 @@ window.CM_WO_DATA = {
       "actualStart": "2026-09-21",
       "actualStartDt": "2026-09-21T00:00:00",
       "actualEnd": "2026-09-21"
+    },
+    {
+      "equip": "WE011",
+      "cls": "GEN",
+      "woNumber": "WO-023325",
+      "maintType": "1000 Hours service Planned",
+      "hours": 1000,
+      "cmLabel": "1000h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-11-30",
+      "planStartDt": "2026-11-30T00:00:00",
+      "planEnd": "2026-11-30",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
     }
   ]
 };
