@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-27T14:17:43+00:00",
+  "generated": "2026-11-27T14:32:47+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -6477,11 +6477,37 @@ window.CM_WO_DATA = {
       "system": "TK153.OC (Operator Cab / Кабина оператора)",
       "defectType": "1.19 No movement / no drive / Нет движения / нет привода",
       "descr": "Ремонт стеклоподъемника",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
+      "status": "Completed",
+      "priority": "P2 Urgent",
       "by": "Valentin Trapilo",
       "regBy": "Трапило Валентин Святославович",
-      "wo": null
+      "wo": "WO-023505"
+    },
+    {
+      "asset": "BS008",
+      "defect": "DD-00017626",
+      "raised": "2026-11-28",
+      "system": "BS008.OC.HE (Heating / Отопление)",
+      "defectType": "5.07 Dust ingress / Попадание пыли",
+      "descr": "плохо дует печка",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sychev Anton",
+      "regBy": "Сычев Антон Александрович",
+      "wo": "WO-023506"
+    },
+    {
+      "asset": "DZ002",
+      "defect": "DD-00017625",
+      "raised": "2026-11-28",
+      "system": "DZ002.CH.TRK (Tracks / Гусеницы)",
+      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "descr": "Утерян башмак",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Valentin Trapilo",
+      "regBy": "Трапило Валентин Святославович",
+      "wo": "WO-023504"
     },
     {
       "asset": "TK110",
@@ -7745,19 +7771,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "EX007",
-      "defect": "DD-00017540",
-      "raised": "2026-11-26",
-      "system": "EX007.CH.BUC (Bucket / Ковш)",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "Износ ножей ковша",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Aleksey Kiselev",
-      "regBy": "Киселев Алексей Александрович",
-      "wo": null
-    },
-    {
       "asset": "LV022",
       "defect": "DD-00017533",
       "raised": "2026-11-26",
@@ -7821,6 +7834,19 @@ window.CM_WO_DATA = {
       "by": "Viktor Nizhebovskiy",
       "regBy": "Нижебовский Виктор Петрович",
       "wo": "WO-023436"
+    },
+    {
+      "asset": "EX007",
+      "defect": "DD-00017540",
+      "raised": "2026-11-26",
+      "system": "EX007.CH.BUC (Bucket / Ковш)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Износ ножей ковша",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Aleksey Kiselev",
+      "regBy": "Киселев Алексей Александрович",
+      "wo": "WO-023419"
     },
     {
       "asset": "CN001",
