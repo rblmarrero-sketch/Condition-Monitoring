@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-27T05:18:59+00:00",
+  "generated": "2026-11-27T05:55:46+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -2480,12 +2480,12 @@
       "type": "500 Hours service Planned",
       "hours": 500,
       "plan": "2026-11-26",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-25"
     },
     {
       "wo": "WO-022829",
@@ -2894,12 +2894,12 @@
       "type": "1000 Hours service Planned",
       "hours": 1000,
       "plan": "2026-11-24",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "open",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-25"
     },
     {
       "wo": "WO-022836",
@@ -3164,12 +3164,12 @@
       "type": "250 Hours service Planned",
       "hours": 250,
       "plan": "2026-11-23",
-      "status": "In progress",
+      "status": "Completed",
       "request": "",
       "defType": "",
       "cause": "",
-      "pmStatus": "inprogress",
-      "completed": ""
+      "pmStatus": "complete",
+      "completed": "2026-11-23"
     },
     {
       "wo": "WO-022798",
@@ -10314,6 +10314,14 @@
       "x": "Порыв РВД перекоса"
     },
     {
+      "d": "DD-00017604",
+      "u": "DZ014",
+      "s": "DZ014 SD32 SHANTUI",
+      "p": "P2",
+      "r": "2026-11-27",
+      "x": "Не запускается ДВС"
+    },
+    {
       "d": "DD-00017597",
       "u": "LD005",
       "s": "LD005.HS.DL (Hydraulic Lines / Гидролинии)",
@@ -10328,14 +10336,6 @@
       "p": "P2",
       "r": "2026-11-27",
       "x": "Течь пилотного РВД"
-    },
-    {
-      "d": "DD-00017604",
-      "u": "DZ014",
-      "s": "DZ014 SD32 SHANTUI",
-      "p": "P2",
-      "r": "2026-11-27",
-      "x": "Не запускается ДВС"
     },
     {
       "d": "DD-00017596",
@@ -29368,6 +29368,14 @@
       "p": "P4",
       "r": "2026-11-27",
       "x": "Замена основного отопителя"
+    },
+    {
+      "d": "DD-00017605",
+      "u": "LV043",
+      "s": "LV043.DRS.TRA (Transmission / Трансмиссия)",
+      "p": "P4",
+      "r": "2026-11-27",
+      "x": "Неисправность сцепления"
     },
     {
       "d": "DD-00017524",

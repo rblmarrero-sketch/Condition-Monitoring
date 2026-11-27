@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-27T05:18:59+00:00",
+  "generated": "2026-11-27T05:55:46+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -6666,6 +6666,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023462"
     },
     {
+      "asset": "DZ014",
+      "defect": "DD-00017604",
+      "raised": "2026-11-27",
+      "system": "DZ014 SD32 SHANTUI",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Не запускается ДВС",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": "WO-023487"
+    },
+    {
       "asset": "TK166",
       "defect": "DD-00017585",
       "raised": "2026-11-27",
@@ -6718,16 +6731,16 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "DZ014",
-      "defect": "DD-00017604",
+      "asset": "LV043",
+      "defect": "DD-00017605",
       "raised": "2026-11-27",
-      "system": "DZ014 SD32 SHANTUI",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Не запускается ДВС",
+      "system": "LV043.DRS.TRA (Transmission / Трансмиссия)",
+      "defectType": "1.16 Burning smell / thermal odor / Запах гари / запах перегрева",
+      "descr": "Неисправность сцепления",
       "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Sergey Tomilov",
-      "regBy": "Томилов Сергей Владимирович",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Shcherbina",
+      "regBy": "Щербина Андрей Николаевич",
       "wo": null
     },
     {
@@ -82282,15 +82295,15 @@ window.CM_WO_DATA = {
       "cmLabel": "500h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-26",
       "planStartDt": "2026-11-26T00:00:00",
       "planEnd": "2026-11-26",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-25",
+      "actualStartDt": "2026-11-25T16:00:00",
+      "actualEnd": "2026-11-25"
     },
     {
       "equip": "CD004",
@@ -119701,15 +119714,15 @@ window.CM_WO_DATA = {
       "cmLabel": "1000h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-11-24",
       "planStartDt": "2026-11-24T00:00:00",
       "planEnd": "2026-11-24",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-24",
+      "actualStartDt": "2026-11-24T16:00:00",
+      "actualEnd": "2026-11-25"
     },
     {
       "equip": "GE026",
@@ -145882,8 +145895,8 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "PCNF",
-      "cmmsStatus": "In progress",
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
       "open": false,
       "planStart": "2026-11-23",
       "planStartDt": "2026-11-23T00:00:00",
