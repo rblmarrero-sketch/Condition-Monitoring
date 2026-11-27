@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-27T19:17:58+00:00",
+  "generated": "2026-11-27T19:37:52+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -2242,6 +2242,24 @@
       "type": "1500 Hours service Planned",
       "hours": 1500,
       "plan": "2026-11-29",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-022827",
+      "equip": "CD004",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "1000h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-11-28",
+      "type": "1000 Hours service Planned",
+      "hours": 1000,
+      "plan": "2026-11-28",
       "status": "Elimination scheduled",
       "request": "",
       "defType": "",
