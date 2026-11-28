@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-28T07:22:39+00:00",
+  "generated": "2026-11-28T07:37:46+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -7199,6 +7199,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023502"
     },
     {
+      "asset": "DZ014",
+      "defect": "DD-00017604",
+      "raised": "2026-11-27",
+      "system": "DZ014 SD32 SHANTUI",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Не запускается ДВС",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": "WO-023487"
+    },
+    {
       "asset": "TK113",
       "defect": "DD-00017574",
       "raised": "2026-11-27",
@@ -7717,19 +7730,6 @@ window.CM_WO_DATA = {
       "by": "Valentin Trapilo",
       "regBy": "Трапило Валентин Святославович",
       "wo": "WO-023490"
-    },
-    {
-      "asset": "DZ014",
-      "defect": "DD-00017604",
-      "raised": "2026-11-27",
-      "system": "DZ014 SD32 SHANTUI",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Не запускается ДВС",
-      "status": "Completed",
-      "priority": "P2 Urgent",
-      "by": "Sergey Tomilov",
-      "regBy": "Томилов Сергей Владимирович",
-      "wo": "WO-023487"
     },
     {
       "asset": "LV009",
