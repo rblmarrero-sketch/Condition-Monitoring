@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-28T02:18:03+00:00",
+  "generated": "2026-11-28T02:37:46+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -6705,19 +6705,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK027",
-      "defect": "DD-00017649",
-      "raised": "2026-11-28",
-      "system": "TK027.DRS.AXL (Axles / Мосты)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Ремонт редуктора среднего моста",
-      "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Pavel Lefrank",
-      "regBy": "Лефранк Павел Петрович",
-      "wo": null
-    },
-    {
       "asset": "TK124",
       "defect": "DD-00017640",
       "raised": "2026-11-28",
@@ -6742,6 +6729,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Tomilov",
       "regBy": "Томилов Сергей Владимирович",
       "wo": null
+    },
+    {
+      "asset": "TK027",
+      "defect": "DD-00017649",
+      "raised": "2026-11-28",
+      "system": "TK027.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Ремонт редуктора среднего моста",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Pavel Lefrank",
+      "regBy": "Лефранк Павел Петрович",
+      "wo": "WO-023531"
     },
     {
       "asset": "DR010",
@@ -189986,6 +189986,25 @@ window.CM_WO_DATA = {
       "actualStart": "2026-11-03",
       "actualStartDt": "2026-11-03T19:00:00",
       "actualEnd": "2026-11-04"
+    },
+    {
+      "equip": "TK134",
+      "cls": "GEN",
+      "woNumber": "WO-023390",
+      "maintType": "500 Hours service Planned",
+      "hours": 500,
+      "cmLabel": "500h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-12-05",
+      "planStartDt": "2026-12-05T00:00:00",
+      "planEnd": "2026-12-05",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
     },
     {
       "equip": "TK135",

@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-28T02:18:03+00:00",
+  "generated": "2026-11-28T02:37:46+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -1455,6 +1455,24 @@
       "cls": "AT",
       "comp": "",
       "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-12-05",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-12-05",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-023390",
+      "equip": "TK134",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "500h service",
       "priority": "P3 Planned (PM)",
       "raised": "2026-12-05",
       "type": "500 Hours service Planned",
@@ -10540,20 +10558,20 @@
       "x": "Течь правого суппорта"
     },
     {
-      "d": "DD-00017649",
-      "u": "TK027",
-      "s": "TK027.DRS.AXL (Axles / Мосты)",
-      "p": "P2",
-      "r": "2026-11-28",
-      "x": "Ремонт редуктора среднего моста"
-    },
-    {
       "d": "DD-00017640",
       "u": "TK124",
       "s": "TK124.DRS.FUE (Fuel System / Топливная система)",
       "p": "P2",
       "r": "2026-11-28",
       "x": "Низкое давление топлива /Ошибка L03"
+    },
+    {
+      "d": "DD-00017649",
+      "u": "TK027",
+      "s": "TK027.DRS.AXL (Axles / Мосты)",
+      "p": "P2",
+      "r": "2026-11-28",
+      "x": "Ремонт редуктора среднего моста"
     },
     {
       "d": "DD-00017644",
