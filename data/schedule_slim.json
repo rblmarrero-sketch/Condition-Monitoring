@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-28T00:43:12+00:00",
+  "generated": "2026-11-28T01:02:48+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -280,7 +280,7 @@
         "types": [
           "MP"
         ],
-        "plan": "2026-11-30",
+        "plan": "2026-12-03",
         "priority": "P3 Planned (PM)"
       }
     ],
@@ -1612,6 +1612,24 @@
       "completed": ""
     },
     {
+      "wo": "WO-023337",
+      "equip": "GE100",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "500h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-12-03",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-12-03",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-023183",
       "equip": "GR012",
       "cls": "GRD",
@@ -1639,6 +1657,42 @@
       "raised": "2026-12-03",
       "type": "1000 Hours service Planned",
       "hours": 1000,
+      "plan": "2026-12-03",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-023397",
+      "equip": "LS041",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "1000h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-12-03",
+      "type": "1000 Hours service Planned",
+      "hours": 1000,
+      "plan": "2026-12-03",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-023329",
+      "equip": "TK005",
+      "cls": "HT",
+      "comp": "",
+      "desc": "Magnetic Plug",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-12-03",
+      "type": "500 Hours service Planned",
+      "hours": 500,
       "plan": "2026-12-03",
       "status": "Elimination scheduled",
       "request": "",
@@ -2208,24 +2262,6 @@
     {
       "wo": "WO-023319",
       "equip": "TK004",
-      "cls": "HT",
-      "comp": "",
-      "desc": "Magnetic Plug",
-      "priority": "P3 Planned (PM)",
-      "raised": "2026-11-30",
-      "type": "500 Hours service Planned",
-      "hours": 500,
-      "plan": "2026-11-30",
-      "status": "Elimination scheduled",
-      "request": "",
-      "defType": "",
-      "cause": "",
-      "pmStatus": "open",
-      "completed": ""
-    },
-    {
-      "wo": "WO-023329",
-      "equip": "TK005",
       "cls": "HT",
       "comp": "",
       "desc": "Magnetic Plug",
@@ -10483,7 +10519,7 @@
       "s": "TK151.BS (Braking System / Тормозная система)",
       "p": "P2",
       "r": "2026-11-28",
-      "x": "Течь правого супорта"
+      "x": "Течь правого суппорта"
     },
     {
       "d": "DD-00017640",
@@ -29548,6 +29584,14 @@
       "p": "P4",
       "r": "2026-11-28",
       "x": "Требуется замена гидроцилиндра выдвижения отвала"
+    },
+    {
+      "d": "DD-00017648",
+      "u": "DR010",
+      "s": "DR010.OC.FS (Fire Suppression / Система пожаротушения)",
+      "p": "P4",
+      "r": "2026-11-28",
+      "x": "Установка системы пожаротушения"
     },
     {
       "d": "DD-00017591",

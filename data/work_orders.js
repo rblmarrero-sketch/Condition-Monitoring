@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-28T00:43:12+00:00",
+  "generated": "2026-11-28T01:02:48+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -6658,7 +6658,7 @@ window.CM_WO_DATA = {
       "raised": "2026-11-28",
       "system": "TK151.BS (Braking System / Тормозная система)",
       "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь правого супорта",
+      "descr": "Течь правого суппорта",
       "status": "Registered",
       "priority": "P2 Urgent",
       "by": "Sergey Tomilov",
@@ -6728,6 +6728,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Tomilov",
       "regBy": "Томилов Сергей Владимирович",
+      "wo": null
+    },
+    {
+      "asset": "DR010",
+      "defect": "DD-00017648",
+      "raised": "2026-11-28",
+      "system": "DR010.OC.FS (Fire Suppression / Система пожаротушения)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Установка системы пожаротушения",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
       "wo": null
     },
     {
@@ -57574,6 +57587,19 @@ window.CM_WO_DATA = {
       "wo": "WO-015456"
     },
     {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
+      "wo": null
+    },
+    {
       "asset": "TK046",
       "defect": "DD-00011270",
       "raised": "2026-08-21",
@@ -57662,19 +57688,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
@@ -58420,19 +58433,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "H07",
-      "defect": "EB-00000078",
-      "raised": "2026-08-13",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Sergey Gulin",
-      "wo": null
-    },
-    {
-      "asset": "H07",
       "defect": "EB-00000079",
       "raised": "2026-08-13",
       "system": null,
@@ -58442,6 +58442,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Eduard Shapoval",
       "regBy": "Eduard Shapoval",
+      "wo": null
+    },
+    {
+      "asset": "H07",
+      "defect": "EB-00000078",
+      "raised": "2026-08-13",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Sergey Gulin",
       "wo": null
     },
     {
@@ -128671,6 +128684,25 @@ window.CM_WO_DATA = {
       "actualEnd": "2026-11-22"
     },
     {
+      "equip": "GE100",
+      "cls": "GEN",
+      "woNumber": "WO-023337",
+      "maintType": "500 Hours service Planned",
+      "hours": 500,
+      "cmLabel": "500h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-12-03",
+      "planStartDt": "2026-12-03T00:00:00",
+      "planEnd": "2026-12-03",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
       "equip": "GE101",
       "cls": "GEN",
       "woNumber": "GD-025862",
@@ -146226,6 +146258,25 @@ window.CM_WO_DATA = {
       "actualEnd": "2026-11-23"
     },
     {
+      "equip": "LS041",
+      "cls": "GEN",
+      "woNumber": "WO-023397",
+      "maintType": "1000 Hours service Planned",
+      "hours": 1000,
+      "cmLabel": "1000h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-12-03",
+      "planStartDt": "2026-12-03T00:00:00",
+      "planEnd": "2026-12-03",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
       "equip": "LS043",
       "cls": "GEN",
       "woNumber": null,
@@ -150786,12 +150837,12 @@ window.CM_WO_DATA = {
         "MP"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "CRTD",
+      "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
       "open": true,
-      "planStart": "2026-11-30",
-      "planStartDt": "2026-11-30T00:00:00",
-      "planEnd": "2026-11-30",
+      "planStart": "2026-12-03",
+      "planStartDt": "2026-12-03T00:00:00",
+      "planEnd": "2026-12-03",
       "actualStart": null,
       "actualStartDt": null,
       "actualEnd": null
