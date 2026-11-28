@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-28T03:27:52+00:00",
+  "generated": "2026-11-28T03:42:55+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -6640,6 +6640,32 @@ window.CM_WO_DATA = {
       "wo": "WO-023510"
     },
     {
+      "asset": "TK124",
+      "defect": "DD-00017640",
+      "raised": "2026-11-28",
+      "system": "TK124.DRS.FUE (Fuel System / Топливная система)",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "Низкое давление топлива /Ошибка L03",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": "WO-023515"
+    },
+    {
+      "asset": "EX009",
+      "defect": "DD-00017643",
+      "raised": "2026-11-28",
+      "system": "EX009.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Требуется замена РВД",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": "WO-023521"
+    },
+    {
       "asset": "TK167",
       "defect": "DD-00017633",
       "raised": "2026-11-28",
@@ -6679,6 +6705,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "TK171",
+      "defect": "DD-00017650",
+      "raised": "2026-11-28",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK171 ENGINE",
+      "defectType": "1.24 Low temperature / freezing / Низкая температура / замерзание",
+      "descr": "Неисправность системы охлаждения",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Shcherbina",
+      "regBy": "Щербина Андрей Николаевич",
+      "wo": null
+    },
+    {
       "asset": "TK091",
       "defect": "DD-00017637",
       "raised": "2026-11-28",
@@ -6715,19 +6754,6 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Artem Yakovlev",
       "regBy": "Яковлев Артем Сергеевич",
-      "wo": null
-    },
-    {
-      "asset": "TK124",
-      "defect": "DD-00017640",
-      "raised": "2026-11-28",
-      "system": "TK124.DRS.FUE (Fuel System / Топливная система)",
-      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
-      "descr": "Низкое давление топлива /Ошибка L03",
-      "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Sergey Tomilov",
-      "regBy": "Томилов Сергей Владимирович",
       "wo": null
     },
     {
@@ -6781,19 +6807,6 @@ window.CM_WO_DATA = {
       "by": "Viktor Nizhebovskiy",
       "regBy": "Нижебовский Виктор Петрович",
       "wo": "WO-023523"
-    },
-    {
-      "asset": "EX009",
-      "defect": "DD-00017643",
-      "raised": "2026-11-28",
-      "system": "EX009.HS.DL (Hydraulic Lines / Гидролинии)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Требуется замена РВД",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Tomilov",
-      "regBy": "Томилов Сергей Владимирович",
-      "wo": "WO-023521"
     },
     {
       "asset": "WE004",
@@ -7238,6 +7251,45 @@ window.CM_WO_DATA = {
       "wo": "WO-023498"
     },
     {
+      "asset": "TK037",
+      "defect": "DD-00017603",
+      "raised": "2026-11-27",
+      "system": "TK037.SS.SP (Steering Pump / Насос рулевого управления)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Устранение утечки ГУР",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Pavel Lefrank",
+      "regBy": "Лефранк Павел Петрович",
+      "wo": "WO-023486"
+    },
+    {
+      "asset": "EX016",
+      "defect": "DD-00017607",
+      "raised": "2026-11-27",
+      "system": "EX016.HS (Hydraulic System / Гидравлическая система)",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "Диагностика работы гидросистемы",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Pavel Lefrank",
+      "regBy": "Лефранк Павел Петрович",
+      "wo": "WO-023488"
+    },
+    {
+      "asset": "GE054",
+      "defect": "DD-00017601",
+      "raised": "2026-11-27",
+      "system": "GE054.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.22 Incorrect speed (overspeed/underspeed) / Неверная скорость (переразгон/недобор)",
+      "descr": "Настабильная работа ДВС",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Pavel Lefrank",
+      "regBy": "Лефранк Павел Петрович",
+      "wo": "WO-023484"
+    },
+    {
       "asset": "TK166",
       "defect": "DD-00017585",
       "raised": "2026-11-27",
@@ -7368,32 +7420,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023468"
     },
     {
-      "asset": "GE054",
-      "defect": "DD-00017601",
-      "raised": "2026-11-27",
-      "system": "GE054.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.22 Incorrect speed (overspeed/underspeed) / Неверная скорость (переразгон/недобор)",
-      "descr": "Настабильная работа ДВС",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Pavel Lefrank",
-      "regBy": "Лефранк Павел Петрович",
-      "wo": "WO-023484"
-    },
-    {
-      "asset": "EX016",
-      "defect": "DD-00017607",
-      "raised": "2026-11-27",
-      "system": "EX016.HS (Hydraulic System / Гидравлическая система)",
-      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
-      "descr": "Диагностика работы гидросистемы",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Pavel Lefrank",
-      "regBy": "Лефранк Павел Петрович",
-      "wo": "WO-023488"
-    },
-    {
       "asset": "LV009",
       "defect": "DD-00017612",
       "raised": "2026-11-27",
@@ -7405,19 +7431,6 @@ window.CM_WO_DATA = {
       "by": "Ilya Borzunov",
       "regBy": "Борзунов Илья Николаевич",
       "wo": "WO-023492"
-    },
-    {
-      "asset": "TK037",
-      "defect": "DD-00017603",
-      "raised": "2026-11-27",
-      "system": "TK037.SS.SP (Steering Pump / Насос рулевого управления)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Устранение утечки ГУР",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Pavel Lefrank",
-      "regBy": "Лефранк Павел Петрович",
-      "wo": "WO-023486"
     },
     {
       "asset": "LD006",
@@ -12321,19 +12334,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023008"
     },
     {
-      "asset": "TK088",
-      "defect": "DD-00017209",
-      "raised": "2026-11-20",
-      "system": "TK088.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка масла по коренному сальнику ДВС",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": "WO-022999"
-    },
-    {
       "asset": "TK085",
       "defect": "DD-00017210",
       "raised": "2026-11-20",
@@ -12345,6 +12345,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-023003"
+    },
+    {
+      "asset": "TK088",
+      "defect": "DD-00017209",
+      "raised": "2026-11-20",
+      "system": "TK088.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка масла по коренному сальнику ДВС",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022999"
     },
     {
       "asset": "DZ003",
@@ -37944,19 +37957,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "FL002",
-      "defect": "DD-00015140",
-      "raised": "2026-10-19",
-      "system": "FL002.DRS.FD (Final Drives / Конечные передачи)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь сальника ступицы переднего правого колеса",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
       "asset": "TK091",
       "defect": "DD-00015141",
       "raised": "2026-10-19",
@@ -38150,6 +38150,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": null
+    },
+    {
+      "asset": "FL002",
+      "defect": "DD-00015140",
+      "raised": "2026-10-19",
+      "system": "FL002.DRS.FD (Final Drives / Конечные передачи)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь сальника ступицы переднего правого колеса",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022911"
     },
     {
       "asset": "TK033",
