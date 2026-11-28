@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-28T04:57:56+00:00",
+  "generated": "2026-11-28T05:18:01+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -6497,6 +6497,19 @@ window.CM_WO_DATA = {
   ],
   "otherDefects": [
     {
+      "asset": "TK084",
+      "defect": "DD-00017652",
+      "raised": "2026-11-28",
+      "system": "TK084.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
+      "descr": "Износ ЦПГ",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Boyko",
+      "regBy": "Бойко Сергей Владимирович",
+      "wo": null
+    },
+    {
       "asset": "DZ011",
       "defect": "DD-00017627",
       "raised": "2026-11-28",
@@ -6718,19 +6731,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK084",
-      "defect": "DD-00017652",
-      "raised": "2026-11-28",
-      "system": "TK084.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
-      "descr": "Износ ЦПГ",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Boyko",
-      "regBy": "Бойко Сергей Владимирович",
-      "wo": null
-    },
-    {
       "asset": "TK091",
       "defect": "DD-00017637",
       "raised": "2026-11-28",
@@ -6796,6 +6796,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "LV073",
+      "defect": "DD-00017659",
+      "raised": "2026-11-28",
+      "system": "LV073.ELS.ALT (Alternator / Генератор)",
+      "defectType": "4.23 Charging system fault (alternator/regulator) / Неисправность системы зарядки (генератор/регулят",
+      "descr": "Замена генератора зарядки АКБ",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Pavel Lefrank",
+      "regBy": "Лефранк Павел Петрович",
+      "wo": null
+    },
+    {
       "asset": "BS014",
       "defect": "DD-00017655",
       "raised": "2026-11-28",
@@ -6807,6 +6820,32 @@ window.CM_WO_DATA = {
       "by": "Andrey Shcherbina",
       "regBy": "Щербина Андрей Николаевич",
       "wo": null
+    },
+    {
+      "asset": "TK150",
+      "defect": "DD-00017658",
+      "raised": "2026-11-28",
+      "system": "TK150.DRS.COO (Cooling System / Система охлаждения)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Сварочные работы кронштейна радиатора",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Pavel Lefrank",
+      "regBy": "Лефранк Павел Петрович",
+      "wo": "WO-023551"
+    },
+    {
+      "asset": "EX007",
+      "defect": "DD-00017657",
+      "raised": "2026-11-28",
+      "system": "EX007.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.27 Belt drive issue (slip/break) / Проблема ременного привода (проскальзывание/обрыв)",
+      "descr": "Регулировка натяжения ремня генератора",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Pavel Lefrank",
+      "regBy": "Лефранк Павел Петрович",
+      "wo": "WO-023546"
     },
     {
       "asset": "TK027",
@@ -8369,19 +8408,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023308"
     },
     {
-      "asset": "LD007",
-      "defect": "DD-00017492",
-      "raised": "2026-11-26",
-      "system": "Bucket / Ковш",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "Замена коронок",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Valentin Trapilo",
-      "regBy": "Трапило Валентин Святославович",
-      "wo": "WO-023288"
-    },
-    {
       "asset": "TK129",
       "defect": "DD-00017535",
       "raised": "2026-11-26",
@@ -8393,6 +8419,19 @@ window.CM_WO_DATA = {
       "by": "Ilshat Sabitov",
       "regBy": "Сабитов Ильшат Рашидович",
       "wo": "WO-023400"
+    },
+    {
+      "asset": "LD007",
+      "defect": "DD-00017492",
+      "raised": "2026-11-26",
+      "system": "Bucket / Ковш",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Замена коронок",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Valentin Trapilo",
+      "regBy": "Трапило Валентин Святославович",
+      "wo": "WO-023288"
     },
     {
       "asset": "TK135",
@@ -11502,19 +11541,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK010",
-      "defect": "DD-00017271",
-      "raised": "2026-11-21",
-      "system": "TK010.BS.PU (Pneumatic Control / Пневмоуправление)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка воздуха",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
       "asset": "TK006",
       "defect": "DD-00017251",
       "raised": "2026-11-21",
@@ -11760,6 +11786,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": null
+    },
+    {
+      "asset": "TK010",
+      "defect": "DD-00017271",
+      "raised": "2026-11-21",
+      "system": "TK010.BS.PU (Pneumatic Control / Пневмоуправление)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка воздуха",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023404"
     },
     {
       "asset": "TK127",
@@ -14466,19 +14505,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK010",
-      "defect": "DD-00017026",
-      "raised": "2026-11-17",
-      "system": "TK010.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Сломана трубка щупа, невозможно проверить уровень",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
       "asset": "TK029",
       "defect": "DD-00017023",
       "raised": "2026-11-17",
@@ -14568,6 +14594,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": null
+    },
+    {
+      "asset": "TK010",
+      "defect": "DD-00017026",
+      "raised": "2026-11-17",
+      "system": "TK010.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Сломана трубка щупа, невозможно проверить уровень",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023403"
     },
     {
       "asset": "TK158",
@@ -25204,32 +25243,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022402"
     },
     {
-      "asset": "TK010",
-      "defect": "DD-00016164",
-      "raised": "2026-11-02",
-      "system": "TK010.CH.SU (Suspension / Подвеска)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Сильный стук в подвеске (справа, спереди) - диагностика",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
-      "asset": "TK010",
-      "defect": "DD-00016165",
-      "raised": "2026-11-02",
-      "system": "TK010.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Стремительно уходит масло из ДВС (уровень в ноль за 2 дня)-диагностика",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
       "asset": "TK001",
       "defect": "DD-00016191",
       "raised": "2026-11-02",
@@ -25423,6 +25436,32 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": null
+    },
+    {
+      "asset": "TK010",
+      "defect": "DD-00016165",
+      "raised": "2026-11-02",
+      "system": "TK010.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Стремительно уходит масло из ДВС (уровень в ноль за 2 дня)-диагностика",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023402"
+    },
+    {
+      "asset": "TK010",
+      "defect": "DD-00016164",
+      "raised": "2026-11-02",
+      "system": "TK010.CH.SU (Suspension / Подвеска)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Сильный стук в подвеске (справа, спереди) - диагностика",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023401"
     },
     {
       "asset": "SN003",
@@ -32042,19 +32081,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "FL002",
-      "defect": "DD-00015613",
-      "raised": "2026-10-25",
-      "system": "FL002.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.12 Low fluid level / Низкий уровень жидкости",
-      "descr": "Диагностика уровня масла",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
       "asset": "TR002",
       "defect": "DD-00015615",
       "raised": "2026-10-25",
@@ -32118,6 +32144,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": null
+    },
+    {
+      "asset": "FL002",
+      "defect": "DD-00015613",
+      "raised": "2026-10-25",
+      "system": "FL002.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.12 Low fluid level / Низкий уровень жидкости",
+      "descr": "Диагностика уровня масла",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022914"
     },
     {
       "asset": "TK125",
@@ -58875,19 +58914,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "TK010",
-      "defect": "DD-00010485",
-      "raised": "2026-08-09",
-      "system": "TK010.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь радиатора",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": null
-    },
-    {
-      "asset": "TK010",
       "defect": "DD-00010489",
       "raised": "2026-08-09",
       "system": "TK010.CH.HS (Hydraulic System / Гидравлическая система)",
@@ -58906,6 +58932,19 @@ window.CM_WO_DATA = {
       "system": "TK010.CH.SU (Suspension / Подвеска)",
       "defectType": "2.01 Wear / Износ",
       "descr": "Износ передних амортизаторов",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": null
+    },
+    {
+      "asset": "TK010",
+      "defect": "DD-00010485",
+      "raised": "2026-08-09",
+      "system": "TK010.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь радиатора",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
@@ -59147,8 +59186,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000076",
+      "asset": "H07",
+      "defect": "EB-00000075",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -59160,8 +59199,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H07",
-      "defect": "EB-00000075",
+      "asset": "H04",
+      "defect": "EB-00000076",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
