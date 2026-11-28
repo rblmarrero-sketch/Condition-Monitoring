@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-28T09:52:42+00:00",
+  "generated": "2026-11-28T10:07:39+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -6835,6 +6835,32 @@ window.CM_WO_DATA = {
       "wo": "WO-023589"
     },
     {
+      "asset": "TK110",
+      "defect": "DD-00017623",
+      "raised": "2026-11-28",
+      "system": "TK110.ELS (Electrical System / Электросистема)",
+      "defectType": "4.20 Auxiliary electrical circuit fault / Неисправность вспомогательных электроцепей",
+      "descr": "Отсутствует перемычка АКБ",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Valentin Trapilo",
+      "regBy": "Трапило Валентин Святославович",
+      "wo": "WO-023503"
+    },
+    {
+      "asset": "TK047",
+      "defect": "DD-00017677",
+      "raised": "2026-11-28",
+      "system": "TK047.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.06 Deformation / bending / buckling Деформация / изгиб / коробление",
+      "descr": "Ремонт маслянного щупа (нарушение геометрии)",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Ilya Borzunov",
+      "regBy": "Борзунов Илья Николаевич",
+      "wo": "WO-023592"
+    },
+    {
       "asset": "TK167",
       "defect": "DD-00017633",
       "raised": "2026-11-28",
@@ -6976,6 +7002,19 @@ window.CM_WO_DATA = {
       "by": "Andrey Shcherbina",
       "regBy": "Щербина Андрей Николаевич",
       "wo": null
+    },
+    {
+      "asset": "DZ002",
+      "defect": "DD-00017625",
+      "raised": "2026-11-28",
+      "system": "DZ002.CH.TRK (Tracks / Гусеницы)",
+      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "descr": "Утерян башмак",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Valentin Trapilo",
+      "regBy": "Трапило Валентин Святославович",
+      "wo": "WO-023504"
     },
     {
       "asset": "LV073",
@@ -7210,32 +7249,6 @@ window.CM_WO_DATA = {
       "by": "Viktor Nizhebovskiy",
       "regBy": "Нижебовский Виктор Петрович",
       "wo": "WO-023533"
-    },
-    {
-      "asset": "DZ002",
-      "defect": "DD-00017625",
-      "raised": "2026-11-28",
-      "system": "DZ002.CH.TRK (Tracks / Гусеницы)",
-      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
-      "descr": "Утерян башмак",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Valentin Trapilo",
-      "regBy": "Трапило Валентин Святославович",
-      "wo": "WO-023504"
-    },
-    {
-      "asset": "TK110",
-      "defect": "DD-00017623",
-      "raised": "2026-11-28",
-      "system": "TK110.ELS (Electrical System / Электросистема)",
-      "defectType": "4.20 Auxiliary electrical circuit fault / Неисправность вспомогательных электроцепей",
-      "descr": "Отсутствует перемычка АКБ",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Valentin Trapilo",
-      "regBy": "Трапило Валентин Святославович",
-      "wo": "WO-023503"
     },
     {
       "asset": "DZ011",
@@ -7719,6 +7732,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023468"
     },
     {
+      "asset": "DZ002",
+      "defect": "DD-00017610",
+      "raised": "2026-11-27",
+      "system": "DZ002.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "Замена фар на светодиодные",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Valentin Trapilo",
+      "regBy": "Трапило Валентин Святославович",
+      "wo": "WO-023490"
+    },
+    {
       "asset": "TK166",
       "defect": "DD-00017585",
       "raised": "2026-11-27",
@@ -7808,19 +7834,6 @@ window.CM_WO_DATA = {
       "by": "Andrey Shcherbina",
       "regBy": "Щербина Андрей Николаевич",
       "wo": null
-    },
-    {
-      "asset": "DZ002",
-      "defect": "DD-00017610",
-      "raised": "2026-11-27",
-      "system": "DZ002.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
-      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
-      "descr": "Замена фар на светодиодные",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Valentin Trapilo",
-      "regBy": "Трапило Валентин Святославович",
-      "wo": "WO-023490"
     },
     {
       "asset": "LV009",
@@ -10826,6 +10839,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023099"
     },
     {
+      "asset": "DZ004",
+      "defect": "DD-00017359",
+      "raised": "2026-11-23",
+      "system": "DZ004.CH.UC (Undercarriage / Ходовая часть)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Залом болта бугеля опорного катка",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Vladimir Ladik",
+      "regBy": "Ладик Владимир Владимирович",
+      "wo": "WO-023145"
+    },
+    {
       "asset": "CN018",
       "defect": "DD-00017352",
       "raised": "2026-11-23",
@@ -10967,19 +10993,6 @@ window.CM_WO_DATA = {
       "by": "Pavel Kostin",
       "regBy": "Костин Павел Александрович",
       "wo": "WO-023100"
-    },
-    {
-      "asset": "DZ004",
-      "defect": "DD-00017359",
-      "raised": "2026-11-23",
-      "system": "DZ004.CH.UC (Undercarriage / Ходовая часть)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Залом болта бугеля опорного катка",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Vladimir Ladik",
-      "regBy": "Ладик Владимир Владимирович",
-      "wo": "WO-023145"
     },
     {
       "asset": "TK112",
@@ -13283,6 +13296,19 @@ window.CM_WO_DATA = {
       "wo": "WO-022900"
     },
     {
+      "asset": "TK127",
+      "defect": "DD-00017283",
+      "raised": "2026-11-19",
+      "system": "TK127.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "ошибка в работе оборудования(LO3), са122 ошибка датчика турбонаддува",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Vladimir Ladik",
+      "regBy": "Ладик Владимир Владимирович",
+      "wo": "WO-023059"
+    },
+    {
       "asset": "LV092",
       "defect": "DD-00017160",
       "raised": "2026-11-19",
@@ -13515,19 +13541,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": null
-    },
-    {
-      "asset": "TK127",
-      "defect": "DD-00017283",
-      "raised": "2026-11-19",
-      "system": "TK127.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
-      "descr": "ошибка в работе оборудования(LO3), са122 ошибка датчика турбонаддува",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Vladimir Ladik",
-      "regBy": "Ладик Владимир Владимирович",
-      "wo": "WO-023059"
     },
     {
       "asset": "CD005",
