@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-28T05:50:32+00:00",
+  "generated": "2026-11-28T06:03:00+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -443,13 +443,13 @@ window.CM_WO_DATA = {
     "regBy": "Contact person initiator WR"
   },
   "cmDateFrom": {
-    "raised": 232,
+    "raised": 235,
     "detected": 0,
     "planStart": 0
   },
   "cmCauseFrom": {
     "wo": 138,
-    "wr": 94,
+    "wr": 97,
     "cert": 0,
     "none": 0
   },
@@ -462,6 +462,84 @@ window.CM_WO_DATA = {
     "Bekzhan"
   ],
   "cmWorkOrders": [
+    {
+      "date": "2026-11-28",
+      "dateFrom": "raised",
+      "raised": "2026-11-28",
+      "detected": "2026-11-28",
+      "planStart": null,
+      "closed": null,
+      "asset": "TK143",
+      "defect": "DD-00017666",
+      "requestNo": "DD-00017666",
+      "eqType": "TRUCK, ARTICULATED",
+      "system": "TK143.DRS.ENG (Engine / Двигатель)",
+      "priority": "P4 Planned (Repair)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Износ уплотнения",
+      "causeFrom": "wr",
+      "descr": "Обильное замасливание под нижней части оборудования.",
+      "status": "Registered",
+      "by": "Irek",
+      "byFull": "Irek Rayanov",
+      "regBy": "Раянов Ирек Ямильевич",
+      "raisedBy": "ГДК Баимская",
+      "woNumber": null,
+      "maintType": null,
+      "planned": false
+    },
+    {
+      "date": "2026-11-28",
+      "dateFrom": "raised",
+      "raised": "2026-11-28",
+      "detected": "2026-11-28",
+      "planStart": null,
+      "closed": null,
+      "asset": "TK143",
+      "defect": "DD-00017664",
+      "requestNo": "DD-00017664",
+      "eqType": "TRUCK, ARTICULATED",
+      "system": "TK143.DRS.TRA (Transmission / Трансмиссия)",
+      "priority": "P4 Planned (Repair)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Фитинг/штуцер ослаб",
+      "causeFrom": "wr",
+      "descr": "Течь тех.жидкости с права за кабиной.",
+      "status": "Registered",
+      "by": "Irek",
+      "byFull": "Irek Rayanov",
+      "regBy": "Раянов Ирек Ямильевич",
+      "raisedBy": "ГДК Баимская",
+      "woNumber": null,
+      "maintType": null,
+      "planned": false
+    },
+    {
+      "date": "2026-11-28",
+      "dateFrom": "raised",
+      "raised": "2026-11-28",
+      "detected": "2026-11-28",
+      "planStart": null,
+      "closed": null,
+      "asset": "EX003",
+      "defect": "DD-00017667",
+      "requestNo": "DD-00017667",
+      "eqType": "EXCAVATOR, BUCKET",
+      "system": "EX003.HS.DL (Hydraulic Lines / Гидролинии)",
+      "priority": "P4 Planned (Repair)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Фитинг/штуцер ослаб",
+      "causeFrom": "wr",
+      "descr": "Течь РВД ГЦ стрелы",
+      "status": "Registered",
+      "by": "Irek",
+      "byFull": "Irek Rayanov",
+      "regBy": "Раянов Ирек Ямильевич",
+      "raisedBy": "ГДК Баимская",
+      "woNumber": null,
+      "maintType": null,
+      "planned": false
+    },
     {
       "date": "2026-11-28",
       "dateFrom": "raised",
@@ -6835,6 +6913,32 @@ window.CM_WO_DATA = {
       "wo": "WO-023551"
     },
     {
+      "asset": "EX005",
+      "defect": "DD-00017665",
+      "raised": "2026-11-28",
+      "system": "EX005.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Дефетовка компонентов ДВС",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Pavel Lefrank",
+      "regBy": "Лефранк Павел Петрович",
+      "wo": "WO-023557"
+    },
+    {
+      "asset": "DZ002",
+      "defect": "DD-00017663",
+      "raised": "2026-11-28",
+      "system": "DZ002.CH.CRW (Crawler Chassis / Гусеничное шасси)",
+      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
+      "descr": "Замена гусеничных лен",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": "WO-023556"
+    },
+    {
       "asset": "EX007",
       "defect": "DD-00017657",
       "raised": "2026-11-28",
@@ -6846,6 +6950,19 @@ window.CM_WO_DATA = {
       "by": "Pavel Lefrank",
       "regBy": "Лефранк Павел Петрович",
       "wo": "WO-023546"
+    },
+    {
+      "asset": "EX019",
+      "defect": "DD-00017662",
+      "raised": "2026-11-28",
+      "system": "EX019.CH (Structure & Chassis / Рама и конструкция)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Замена зеркала заднего вида",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Pavel Lefrank",
+      "regBy": "Лефранк Павел Петрович",
+      "wo": "WO-023555"
     },
     {
       "asset": "DZ002",
