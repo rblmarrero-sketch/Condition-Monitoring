@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-28T16:27:44+00:00",
+  "generated": "2026-11-28T16:42:41+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -6614,6 +6614,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023598"
     },
     {
+      "asset": "TK122",
+      "defect": "DD-00017685",
+      "raised": "2026-11-29",
+      "system": "TK122.DRS.FUE (Fuel System / Топливная система)",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "Диагностика топливной системы",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Valentin Trapilo",
+      "regBy": "Трапило Валентин Святославович",
+      "wo": "WO-023606"
+    },
+    {
       "asset": "TK161",
       "defect": "DD-00017689",
       "raised": "2026-11-29",
@@ -6640,45 +6653,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023599"
     },
     {
-      "asset": "TK014",
-      "defect": "DD-00017691",
-      "raised": "2026-11-29",
-      "system": "TK014.OC.HE (Heating / Отопление)",
-      "defectType": "5.07 Dust ingress / Попадание пыли",
-      "descr": "Слабый поток воздуха отопителя",
-      "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Sychev Anton",
-      "regBy": "Сычев Антон Александрович",
-      "wo": null
-    },
-    {
-      "asset": "DZ009",
-      "defect": "DD-00017685",
-      "raised": "2026-11-29",
-      "system": "DZ009.ELS.AS (Alarm System / Система сигнализации)",
-      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
-      "descr": "Ремонт маячка",
-      "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Valentin Trapilo",
-      "regBy": "Трапило Валентин Святославович",
-      "wo": null
-    },
-    {
-      "asset": "BS015",
-      "defect": "DD-00017690",
-      "raised": "2026-11-29",
-      "system": "BS015.OC.HE (Heating / Отопление)",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Не работает отопитель в пассажирском салоне.",
-      "status": "Registered",
-      "priority": "P1 Breakdown",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": null
-    },
-    {
       "asset": "CD006",
       "defect": "DD-00017686",
       "raised": "2026-11-29",
@@ -6690,6 +6664,32 @@ window.CM_WO_DATA = {
       "by": "Sychev Anton",
       "regBy": "Сычев Антон Александрович",
       "wo": "WO-023600"
+    },
+    {
+      "asset": "BS015",
+      "defect": "DD-00017690",
+      "raised": "2026-11-29",
+      "system": "BS015.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Не работает отопитель в пассажирском салоне.",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-023605"
+    },
+    {
+      "asset": "TK014",
+      "defect": "DD-00017691",
+      "raised": "2026-11-29",
+      "system": "TK014.OC.HE (Heating / Отопление)",
+      "defectType": "5.07 Dust ingress / Попадание пыли",
+      "descr": "Слабый поток воздуха отопителя",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sychev Anton",
+      "regBy": "Сычев Антон Александрович",
+      "wo": "WO-023604"
     },
     {
       "asset": "LS043",
@@ -6705,6 +6705,32 @@ window.CM_WO_DATA = {
       "wo": "WO-023602"
     },
     {
+      "asset": "CN019",
+      "defect": "DD-00017694",
+      "raised": "2026-11-29",
+      "system": "CN019.OC.GL (Glass / Стекла)",
+      "defectType": "4.22 Wiper/washer circuit fault / Неисправность стеклоочистителя/омывателя",
+      "descr": "Не работает стеклоочиститель.",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-023609"
+    },
+    {
+      "asset": "LV078",
+      "defect": "DD-00017693",
+      "raised": "2026-11-29",
+      "system": "LV078.ELS.LIG (Head Lighting System / Система головного освещения)",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "Не работают фары - ближний свет.",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-023608"
+    },
+    {
       "asset": "TK171",
       "defect": "DD-00017687",
       "raised": "2026-11-29",
@@ -6716,6 +6742,19 @@ window.CM_WO_DATA = {
       "by": "Ilya Borzunov",
       "regBy": "Борзунов Илья Николаевич",
       "wo": "WO-023601"
+    },
+    {
+      "asset": "BS019",
+      "defect": "DD-00017692",
+      "raised": "2026-11-29",
+      "system": "BS019.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "Неисправность наружного освещения.",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-023607"
     },
     {
       "asset": "TK084",
@@ -7070,11 +7109,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "TK167",
-      "defect": "DD-00017633",
+      "defect": "DD-00017631",
       "raised": "2026-11-28",
-      "system": "TK167.CH.STR (Superstructure / Надстройка)",
-      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
-      "descr": "Не работает донный клапан",
+      "system": "TK167.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь сальника ступицы",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Artem Yakovlev",
@@ -7083,11 +7122,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "TK167",
-      "defect": "DD-00017631",
+      "defect": "DD-00017633",
       "raised": "2026-11-28",
-      "system": "TK167.DRS.AXL (Axles / Мосты)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь сальника ступицы",
+      "system": "TK167.CH.STR (Superstructure / Надстройка)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Не работает донный клапан",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Artem Yakovlev",
@@ -58198,19 +58237,6 @@ window.CM_WO_DATA = {
       "wo": "WO-015456"
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
-      "wo": null
-    },
-    {
       "asset": "TK046",
       "defect": "DD-00011270",
       "raised": "2026-08-21",
@@ -58299,6 +58325,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
+      "wo": null
+    },
+    {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
@@ -59654,8 +59693,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000076",
+      "asset": "H07",
+      "defect": "EB-00000075",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -59667,8 +59706,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H07",
-      "defect": "EB-00000075",
+      "asset": "H04",
+      "defect": "EB-00000076",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
