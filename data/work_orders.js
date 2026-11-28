@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-28T15:22:40+00:00",
+  "generated": "2026-11-28T15:37:41+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -6627,6 +6627,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "LS043",
+      "defect": "DD-00017688",
+      "raised": "2026-11-29",
+      "system": "LS043.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка ДТ с соленойда",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Sychev Anton",
+      "regBy": "Сычев Антон Александрович",
+      "wo": null
+    },
+    {
       "asset": "CD006",
       "defect": "DD-00017686",
       "raised": "2026-11-29",
@@ -6991,6 +7004,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023591"
     },
     {
+      "asset": "DZ002",
+      "defect": "DD-00017625",
+      "raised": "2026-11-28",
+      "system": "DZ002.CH.TRK (Tracks / Гусеницы)",
+      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
+      "descr": "Утерян башмак",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Valentin Trapilo",
+      "regBy": "Трапило Валентин Святославович",
+      "wo": "WO-023504"
+    },
+    {
       "asset": "TK167",
       "defect": "DD-00017633",
       "raised": "2026-11-28",
@@ -7134,19 +7160,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "DZ002",
-      "defect": "DD-00017625",
-      "raised": "2026-11-28",
-      "system": "DZ002.CH.TRK (Tracks / Гусеницы)",
-      "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
-      "descr": "Утерян башмак",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Valentin Trapilo",
-      "regBy": "Трапило Валентин Святославович",
-      "wo": "WO-023504"
-    },
-    {
       "asset": "LV073",
       "defect": "DD-00017659",
       "raised": "2026-11-28",
@@ -7210,6 +7223,19 @@ window.CM_WO_DATA = {
       "by": "Pavel Lefrank",
       "regBy": "Лефранк Павел Петрович",
       "wo": "WO-023546"
+    },
+    {
+      "asset": "TK037",
+      "defect": "DD-00017678",
+      "raised": "2026-11-28",
+      "system": "TK037.ELS.ALT (Alternator / Генератор)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Ремень генератора порыв",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Ilya Borzunov",
+      "regBy": "Борзунов Илья Николаевич",
+      "wo": "WO-023593"
     },
     {
       "asset": "LD003",
@@ -7340,19 +7366,6 @@ window.CM_WO_DATA = {
       "by": "Pavel Kostin",
       "regBy": "Костин Павел Александрович",
       "wo": "WO-023534"
-    },
-    {
-      "asset": "TK037",
-      "defect": "DD-00017678",
-      "raised": "2026-11-28",
-      "system": "TK037.ELS.ALT (Alternator / Генератор)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Ремень генератора порыв",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Ilya Borzunov",
-      "regBy": "Борзунов Илья Николаевич",
-      "wo": "WO-023593"
     },
     {
       "asset": "WE004",
