@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-28T14:52:42+00:00",
+  "generated": "2026-11-28T15:07:45+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -6627,6 +6627,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "CD006",
+      "defect": "DD-00017686",
+      "raised": "2026-11-29",
+      "system": "CD006.CH.STR (Superstructure / Надстройка)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "разрушение подушки на вальце",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Sychev Anton",
+      "regBy": "Сычев Антон Александрович",
+      "wo": "WO-023600"
+    },
+    {
       "asset": "TK110",
       "defect": "DD-00017684",
       "raised": "2026-11-29",
@@ -6638,6 +6651,19 @@ window.CM_WO_DATA = {
       "by": "Valentin Trapilo",
       "regBy": "Трапило Валентин Святославович",
       "wo": "WO-023599"
+    },
+    {
+      "asset": "TK171",
+      "defect": "DD-00017687",
+      "raised": "2026-11-29",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK171 PUMP DRIVE",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "Система охлаждения, диагностика, замена гидромуфты привода вентилятора",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Ilya Borzunov",
+      "regBy": "Борзунов Илья Николаевич",
+      "wo": "WO-023601"
     },
     {
       "asset": "TK084",
@@ -7875,6 +7901,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023492"
     },
     {
+      "asset": "LD006",
+      "defect": "DD-00017611",
+      "raised": "2026-11-27",
+      "system": "LD006.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь РВД с распределителя",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Valentin Trapilo",
+      "regBy": "Трапило Валентин Святославович",
+      "wo": "WO-023491"
+    },
+    {
       "asset": "TK166",
       "defect": "DD-00017585",
       "raised": "2026-11-27",
@@ -7951,19 +7990,6 @@ window.CM_WO_DATA = {
       "by": "Andrey Shcherbina",
       "regBy": "Щербина Андрей Николаевич",
       "wo": null
-    },
-    {
-      "asset": "LD006",
-      "defect": "DD-00017611",
-      "raised": "2026-11-27",
-      "system": "LD006.HS.DL (Hydraulic Lines / Гидролинии)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь РВД с распределителя",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Valentin Trapilo",
-      "regBy": "Трапило Валентин Святославович",
-      "wo": "WO-023491"
     },
     {
       "asset": "CD001",
@@ -59304,6 +59330,19 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "TK010",
+      "defect": "DD-00010485",
+      "raised": "2026-08-09",
+      "system": "TK010.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь радиатора",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Taran",
+      "regBy": "Таран Андрей Андреевич",
+      "wo": null
+    },
+    {
+      "asset": "TK010",
       "defect": "DD-00010489",
       "raised": "2026-08-09",
       "system": "TK010.CH.HS (Hydraulic System / Гидравлическая система)",
@@ -59322,19 +59361,6 @@ window.CM_WO_DATA = {
       "system": "TK010.CH.SU (Suspension / Подвеска)",
       "defectType": "2.01 Wear / Износ",
       "descr": "Износ передних амортизаторов",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Andrey Taran",
-      "regBy": "Таран Андрей Андреевич",
-      "wo": null
-    },
-    {
-      "asset": "TK010",
-      "defect": "DD-00010485",
-      "raised": "2026-08-09",
-      "system": "TK010.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь радиатора",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Andrey Taran",
