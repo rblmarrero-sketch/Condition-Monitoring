@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-28T11:27:42+00:00",
+  "generated": "2026-11-28T11:42:42+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -6861,6 +6861,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023592"
     },
     {
+      "asset": "TK005",
+      "defect": "DD-00017680",
+      "raised": "2026-11-28",
+      "system": "TK005.CH.BY (Dump Body / Самосвальный кузов)",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Стопор пальца заднего борта (сварочные работы)",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Ilya Borzunov",
+      "regBy": "Борзунов Илья Николаевич",
+      "wo": "WO-023594"
+    },
+    {
       "asset": "DZ009",
       "defect": "DD-00017679",
       "raised": "2026-11-28",
@@ -6872,6 +6885,32 @@ window.CM_WO_DATA = {
       "by": "Valentin Trapilo",
       "regBy": "Трапило Валентин Святославович",
       "wo": "WO-023595"
+    },
+    {
+      "asset": "DZ021",
+      "defect": "DD-00017681",
+      "raised": "2026-11-28",
+      "system": "DZ021.ELS.LIG (Head Lighting System / Система головного освещения)",
+      "defectType": "4.20 Auxiliary electrical circuit fault / Неисправность вспомогательных электроцепей",
+      "descr": "Ремонт освещения",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Valentin Trapilo",
+      "regBy": "Трапило Валентин Святославович",
+      "wo": "WO-023596"
+    },
+    {
+      "asset": "DZ021",
+      "defect": "DD-00017682",
+      "raised": "2026-11-28",
+      "system": "DZ021.ELS.LIG (Head Lighting System / Система головного освещения)",
+      "defectType": "4.20 Auxiliary electrical circuit fault / Неисправность вспомогательных электроцепей",
+      "descr": "Замена фары, ремонт электропроводки",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Valentin Trapilo",
+      "regBy": "Трапило Валентин Святославович",
+      "wo": "WO-023597"
     },
     {
       "asset": "TK167",
@@ -7134,19 +7173,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023555"
     },
     {
-      "asset": "TK005",
-      "defect": "DD-00017680",
-      "raised": "2026-11-28",
-      "system": "TK005.CH.BY (Dump Body / Самосвальный кузов)",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "Стопор пальца заднего борта (сварочные работы)",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Ilya Borzunov",
-      "regBy": "Борзунов Илья Николаевич",
-      "wo": "WO-023594"
-    },
-    {
       "asset": "DZ002",
       "defect": "DD-00017661",
       "raised": "2026-11-28",
@@ -7158,19 +7184,6 @@ window.CM_WO_DATA = {
       "by": "Pavel Lefrank",
       "regBy": "Лефранк Павел Петрович",
       "wo": "WO-023554"
-    },
-    {
-      "asset": "DZ021",
-      "defect": "DD-00017681",
-      "raised": "2026-11-28",
-      "system": "DZ021.ELS.LIG (Head Lighting System / Система головного освещения)",
-      "defectType": "4.20 Auxiliary electrical circuit fault / Неисправность вспомогательных электроцепей",
-      "descr": "Ремонт освещения",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Valentin Trapilo",
-      "regBy": "Трапило Валентин Святославович",
-      "wo": "WO-023596"
     },
     {
       "asset": "CR002",
