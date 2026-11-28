@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-28T00:27:40+00:00",
+  "generated": "2026-11-28T00:43:12+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -1579,6 +1579,24 @@
       "wo": "WO-023331",
       "equip": "EX007",
       "cls": "EXC",
+      "comp": "",
+      "desc": "500h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-12-03",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-12-03",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-023394",
+      "equip": "FL001",
+      "cls": "GEN",
       "comp": "",
       "desc": "500h service",
       "priority": "P3 Planned (PM)",
