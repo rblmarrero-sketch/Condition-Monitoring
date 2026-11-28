@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-28T01:47:47+00:00",
+  "generated": "2026-11-28T02:02:49+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -7972,7 +7972,7 @@ window.CM_WO_DATA = {
       "system": "GR004.DRS.AXL (Axles / Мосты)",
       "defectType": "1.07 Looseness / missing fasteners Ослабление / отсутствуют крепежи",
       "descr": "Срезало гайку ступицы колеса средняя ось",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P4 Planned (Repair)",
       "by": "Valentin Trapilo",
       "regBy": "Трапило Валентин Святославович",
@@ -82890,6 +82890,25 @@ window.CM_WO_DATA = {
       "actualStart": "2026-11-14",
       "actualStartDt": "2026-11-14T10:00:00",
       "actualEnd": "2026-11-14"
+    },
+    {
+      "equip": "CD006",
+      "cls": "GEN",
+      "woNumber": "WO-023342",
+      "maintType": "1000 Hours service Planned",
+      "hours": 1000,
+      "cmLabel": "1000h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-12-05",
+      "planStartDt": "2026-12-05T00:00:00",
+      "planEnd": "2026-12-05",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
     },
     {
       "equip": "CD007",
