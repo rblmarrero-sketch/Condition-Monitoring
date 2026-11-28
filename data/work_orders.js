@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-28T05:18:01+00:00",
+  "generated": "2026-11-28T05:33:50+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -6796,19 +6796,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "LV073",
-      "defect": "DD-00017659",
-      "raised": "2026-11-28",
-      "system": "LV073.ELS.ALT (Alternator / Генератор)",
-      "defectType": "4.23 Charging system fault (alternator/regulator) / Неисправность системы зарядки (генератор/регулят",
-      "descr": "Замена генератора зарядки АКБ",
-      "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Pavel Lefrank",
-      "regBy": "Лефранк Павел Петрович",
-      "wo": null
-    },
-    {
       "asset": "BS014",
       "defect": "DD-00017655",
       "raised": "2026-11-28",
@@ -6820,6 +6807,19 @@ window.CM_WO_DATA = {
       "by": "Andrey Shcherbina",
       "regBy": "Щербина Андрей Николаевич",
       "wo": null
+    },
+    {
+      "asset": "LV073",
+      "defect": "DD-00017659",
+      "raised": "2026-11-28",
+      "system": "LV073.ELS.ALT (Alternator / Генератор)",
+      "defectType": "4.23 Charging system fault (alternator/regulator) / Неисправность системы зарядки (генератор/регулят",
+      "descr": "Замена генератора зарядки АКБ",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Pavel Lefrank",
+      "regBy": "Лефранк Павел Петрович",
+      "wo": "WO-023552"
     },
     {
       "asset": "TK150",
@@ -6846,6 +6846,32 @@ window.CM_WO_DATA = {
       "by": "Pavel Lefrank",
       "regBy": "Лефранк Павел Петрович",
       "wo": "WO-023546"
+    },
+    {
+      "asset": "DZ002",
+      "defect": "DD-00017661",
+      "raised": "2026-11-28",
+      "system": "DZ002.CH.TRK (Tracks / Гусеницы)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Устраненение залома замка гусеничной ленты",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Pavel Lefrank",
+      "regBy": "Лефранк Павел Петрович",
+      "wo": "WO-023554"
+    },
+    {
+      "asset": "TK038",
+      "defect": "DD-00017660",
+      "raised": "2026-11-28",
+      "system": "TK038.ELS.ALT (Alternator / Генератор)",
+      "defectType": "4.23 Charging system fault (alternator/regulator) / Неисправность системы зарядки (генератор/регулят",
+      "descr": "Зарядка АКБ, поиск/устранение неисправности",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Pavel Lefrank",
+      "regBy": "Лефранк Павел Петрович",
+      "wo": "WO-023553"
     },
     {
       "asset": "TK027",
@@ -82783,15 +82809,15 @@ window.CM_WO_DATA = {
       "cmLabel": "1000h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "PCNF",
+      "cmmsStatus": "In progress",
+      "open": false,
       "planStart": "2026-11-28",
       "planStartDt": "2026-11-28T00:00:00",
       "planEnd": "2026-11-28",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "actualStart": "2026-11-28",
+      "actualStartDt": "2026-11-28T00:00:00",
+      "actualEnd": "2026-11-28"
     },
     {
       "equip": "CD005",
