@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-28T09:22:41+00:00",
+  "generated": "2026-11-28T09:37:55+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -7030,6 +7030,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023556"
     },
     {
+      "asset": "TK092",
+      "defect": "DD-00017676",
+      "raised": "2026-11-28",
+      "system": "TK092.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Редуктор заднего моста трещина (сварочные работы)",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Ilya Borzunov",
+      "regBy": "Борзунов Илья Николаевич",
+      "wo": "WO-023591"
+    },
+    {
       "asset": "EX007",
       "defect": "DD-00017657",
       "raised": "2026-11-28",
@@ -7041,6 +7054,19 @@ window.CM_WO_DATA = {
       "by": "Pavel Lefrank",
       "regBy": "Лефранк Павел Петрович",
       "wo": "WO-023546"
+    },
+    {
+      "asset": "LD003",
+      "defect": "DD-00017675",
+      "raised": "2026-11-28",
+      "system": "LD003.ELS.TC (Transmission Control / Управление трансмиссией)",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "Ошибка по фильтру трансмиссии",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Valentin Trapilo",
+      "regBy": "Трапило Валентин Святославович",
+      "wo": "WO-023590"
     },
     {
       "asset": "EX019",
@@ -11736,6 +11762,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023137"
     },
     {
+      "asset": "EX021",
+      "defect": "DD-00017227",
+      "raised": "2026-11-21",
+      "system": "EX021.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "РВД распределителя - утечка масла",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Vladimir Ladik",
+      "regBy": "Ладик Владимир Владимирович",
+      "wo": "WO-023020"
+    },
+    {
       "asset": "TK167",
       "defect": "DD-00017278",
       "raised": "2026-11-21",
@@ -12098,19 +12137,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": "WO-023022"
-    },
-    {
-      "asset": "EX021",
-      "defect": "DD-00017227",
-      "raised": "2026-11-21",
-      "system": "EX021.HS.DL (Hydraulic Lines / Гидролинии)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "РВД распределителя - утечка масла",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Vladimir Ladik",
-      "regBy": "Ладик Владимир Владимирович",
-      "wo": "WO-023020"
     },
     {
       "asset": "GR004",
