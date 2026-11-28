@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-28T13:47:45+00:00",
+  "generated": "2026-11-28T14:02:43+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -6607,11 +6607,24 @@ window.CM_WO_DATA = {
       "system": "TK154.DRS.COO (Cooling System / Система охлаждения)",
       "defectType": "1.12 Low fluid level / Низкий уровень жидкости",
       "descr": "Доливка ОЖ",
-      "status": "Elimination scheduled",
+      "status": "Completed",
       "priority": "P2 Urgent",
       "by": "Valentin Trapilo",
       "regBy": "Трапило Валентин Святославович",
       "wo": "WO-023598"
+    },
+    {
+      "asset": "TK110",
+      "defect": "DD-00017684",
+      "raised": "2026-11-29",
+      "system": "TK110.DRS.ENG (Engine / Двигатель)",
+      "defectType": "4.20 Auxiliary electrical circuit fault / Неисправность вспомогательных электроцепей",
+      "descr": "Ошибки ДВС",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Valentin Trapilo",
+      "regBy": "Трапило Валентин Святославович",
+      "wo": "WO-023599"
     },
     {
       "asset": "TK084",
@@ -6926,6 +6939,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023597"
     },
     {
+      "asset": "TK092",
+      "defect": "DD-00017676",
+      "raised": "2026-11-28",
+      "system": "TK092.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Редуктор заднего моста трещина (сварочные работы)",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Ilya Borzunov",
+      "regBy": "Борзунов Илья Николаевич",
+      "wo": "WO-023591"
+    },
+    {
       "asset": "TK167",
       "defect": "DD-00017633",
       "raised": "2026-11-28",
@@ -7132,19 +7158,6 @@ window.CM_WO_DATA = {
       "by": "Pavel Kostin",
       "regBy": "Костин Павел Александрович",
       "wo": "WO-023556"
-    },
-    {
-      "asset": "TK092",
-      "defect": "DD-00017676",
-      "raised": "2026-11-28",
-      "system": "TK092.DRS.AXL (Axles / Мосты)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Редуктор заднего моста трещина (сварочные работы)",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Ilya Borzunov",
-      "regBy": "Борзунов Илья Николаевич",
-      "wo": "WO-023591"
     },
     {
       "asset": "EX007",
