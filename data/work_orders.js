@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-28T12:27:44+00:00",
+  "generated": "2026-11-28T12:42:40+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -7823,6 +7823,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023480"
     },
     {
+      "asset": "LV009",
+      "defect": "DD-00017612",
+      "raised": "2026-11-27",
+      "system": "LV009.DRS.PG (Power Generator / Генератор)",
+      "defectType": "8.06 Roller / idler failure / Отказ ролика / роликоопоры",
+      "descr": "Ролики приводных ремней посторонний шум. Замена",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Ilya Borzunov",
+      "regBy": "Борзунов Илья Николаевич",
+      "wo": "WO-023492"
+    },
+    {
       "asset": "TK166",
       "defect": "DD-00017585",
       "raised": "2026-11-27",
@@ -7899,19 +7912,6 @@ window.CM_WO_DATA = {
       "by": "Andrey Shcherbina",
       "regBy": "Щербина Андрей Николаевич",
       "wo": null
-    },
-    {
-      "asset": "LV009",
-      "defect": "DD-00017612",
-      "raised": "2026-11-27",
-      "system": "LV009.DRS.PG (Power Generator / Генератор)",
-      "defectType": "8.06 Roller / idler failure / Отказ ролика / роликоопоры",
-      "descr": "Ролики приводных ремней посторонний шум. Замена",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Ilya Borzunov",
-      "regBy": "Борзунов Илья Николаевич",
-      "wo": "WO-023492"
     },
     {
       "asset": "LD006",
