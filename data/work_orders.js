@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-28T06:18:06+00:00",
+  "generated": "2026-11-28T06:32:43+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -443,13 +443,13 @@ window.CM_WO_DATA = {
     "regBy": "Contact person initiator WR"
   },
   "cmDateFrom": {
-    "raised": 235,
+    "raised": 236,
     "detected": 0,
     "planStart": 0
   },
   "cmCauseFrom": {
     "wo": 138,
-    "wr": 97,
+    "wr": 98,
     "cert": 0,
     "none": 0
   },
@@ -505,6 +505,32 @@ window.CM_WO_DATA = {
       "cause": "Фитинг/штуцер ослаб",
       "causeFrom": "wr",
       "descr": "Течь тех.жидкости с права за кабиной.",
+      "status": "Registered",
+      "by": "Irek",
+      "byFull": "Irek Rayanov",
+      "regBy": "Раянов Ирек Ямильевич",
+      "raisedBy": "ГДК Баимская",
+      "woNumber": null,
+      "maintType": null,
+      "planned": false
+    },
+    {
+      "date": "2026-11-28",
+      "dateFrom": "raised",
+      "raised": "2026-11-28",
+      "detected": "2026-11-28",
+      "planStart": null,
+      "closed": null,
+      "asset": "EX003",
+      "defect": "DD-00017668",
+      "requestNo": "DD-00017668",
+      "eqType": "EXCAVATOR, BUCKET",
+      "system": "EX003.HS.CV (Control Valves / Гидрораспределители)",
+      "priority": "P4 Planned (Repair)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "cause": "Поврежден шланга/линии",
+      "causeFrom": "wr",
+      "descr": "Течь тех жидкостей в зоне поворотного гидрораспределителя .",
       "status": "Registered",
       "by": "Irek",
       "byFull": "Irek Rayanov",
@@ -6848,6 +6874,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "BS002",
+      "defect": "DD-00017669",
+      "raised": "2026-11-28",
+      "system": "BS002.OC.GL (Glass / Стекла)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Трещина лобового стекла",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Shcherbina",
+      "regBy": "Щербина Андрей Николаевич",
+      "wo": null
+    },
+    {
       "asset": "GR004",
       "defect": "DD-00017646",
       "raised": "2026-11-28",
@@ -8460,19 +8499,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "LV067",
-      "defect": "DD-00017538",
-      "raised": "2026-11-26",
-      "system": "LV067.DRS.TRA (Transmission / Трансмиссия)",
-      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
-      "descr": "Двигатель не тянет.",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
       "asset": "LV133",
       "defect": "DD-00017546",
       "raised": "2026-11-26",
@@ -8510,6 +8536,19 @@ window.CM_WO_DATA = {
       "by": "Ilshat Sabitov",
       "regBy": "Сабитов Ильшат Рашидович",
       "wo": "WO-023424"
+    },
+    {
+      "asset": "LV067",
+      "defect": "DD-00017538",
+      "raised": "2026-11-26",
+      "system": "LV067.DRS.TRA (Transmission / Трансмиссия)",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "Двигатель не тянет.",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023407"
     },
     {
       "asset": "FL001",
@@ -16572,19 +16611,6 @@ window.CM_WO_DATA = {
       "wo": "WO-022551"
     },
     {
-      "asset": "LV086",
-      "defect": "DD-00016878",
-      "raised": "2026-11-14",
-      "system": "LV086.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "диагностика ДВС (металлический стук)",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
       "asset": "EX024",
       "defect": "DD-00016883",
       "raised": "2026-11-14",
@@ -16830,6 +16856,19 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-022708"
+    },
+    {
+      "asset": "LV086",
+      "defect": "DD-00016878",
+      "raised": "2026-11-14",
+      "system": "LV086.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "диагностика ДВС (металлический стук)",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023477"
     },
     {
       "asset": "EX015",
@@ -20498,19 +20537,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "EX003",
-      "defect": "DD-00016583",
-      "raised": "2026-11-09",
-      "system": "EX003.CH.STR (Superstructure / Надстройка)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "отсутствует палуба со стороны радиаторов охлаждения ДВС",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
       "asset": "LV066",
       "defect": "DD-00016593",
       "raised": "2026-11-09",
@@ -20535,6 +20561,19 @@ window.CM_WO_DATA = {
       "by": "Sergey Gulin",
       "regBy": "Гулин Сергей Григорьевич",
       "wo": null
+    },
+    {
+      "asset": "EX003",
+      "defect": "DD-00016583",
+      "raised": "2026-11-09",
+      "system": "EX003.CH.STR (Superstructure / Надстройка)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "отсутствует палуба со стороны радиаторов охлаждения ДВС",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023405"
     },
     {
       "asset": "CR002",
@@ -56794,6 +56833,19 @@ window.CM_WO_DATA = {
       "wo": "WO-017533"
     },
     {
+      "asset": "DR009",
+      "defect": "DD-00012827",
+      "raised": "2026-09-18",
+      "system": "DR009.OC.SE (Seat / Сиденье)",
+      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
+      "descr": "Неисправен ремень безопасности.",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": "WO-018277"
+    },
+    {
       "asset": "TK159",
       "defect": "DD-00012881",
       "raised": "2026-09-18",
@@ -56831,19 +56883,6 @@ window.CM_WO_DATA = {
       "by": "Ilshat Sabitov",
       "regBy": "Сабитов Ильшат Рашидович",
       "wo": "WO-017470"
-    },
-    {
-      "asset": "DR009",
-      "defect": "DD-00012827",
-      "raised": "2026-09-18",
-      "system": "DR009.OC.SE (Seat / Сиденье)",
-      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
-      "descr": "Неисправен ремень безопасности.",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Pavel Kostin",
-      "regBy": "Костин Павел Александрович",
-      "wo": "WO-018277"
     },
     {
       "asset": "TK079",
@@ -83505,6 +83544,25 @@ window.CM_WO_DATA = {
       "actualStart": "2026-11-22",
       "actualStartDt": "2026-11-22T08:00:00",
       "actualEnd": "2026-11-22"
+    },
+    {
+      "equip": "CD007",
+      "cls": "GEN",
+      "woNumber": "WO-023340",
+      "maintType": "250 Hours service Planned",
+      "hours": 250,
+      "cmLabel": "250h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-12-01",
+      "planStartDt": "2026-12-01T00:00:00",
+      "planEnd": "2026-12-01",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
     },
     {
       "equip": "CD008",
