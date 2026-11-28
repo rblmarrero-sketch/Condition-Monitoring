@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-28T06:47:40+00:00",
+  "generated": "2026-11-28T07:02:48+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -7160,6 +7160,45 @@ window.CM_WO_DATA = {
       "wo": "WO-023489"
     },
     {
+      "asset": "TK478",
+      "defect": "DD-00017568",
+      "raised": "2026-11-27",
+      "system": "TK478 43441C-10 URAL",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "Ремонт топливной системы и ПЖД",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Ilya Borzunov",
+      "regBy": "Борзунов Илья Николаевич",
+      "wo": "WO-023457"
+    },
+    {
+      "asset": "CD010",
+      "defect": "DD-00017583",
+      "raised": "2026-11-27",
+      "system": "CD010.OC.AC (Air Conditioning / Кондиционирование)",
+      "defectType": "6.05 Loose/missing structural fasteners / Ослабленные/отсутствующие крепежи конструкции",
+      "descr": "ДВС посторонний шум. Установка болта крепления кондиционера",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Ilya Borzunov",
+      "regBy": "Борзунов Илья Николаевич",
+      "wo": "WO-023472"
+    },
+    {
+      "asset": "DZ003",
+      "defect": "DD-00017622",
+      "raised": "2026-11-27",
+      "system": "DZ003 D275.5D KOMATSU",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Выкручивание залома бугельного болта катка",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Ilya Borzunov",
+      "regBy": "Борзунов Илья Николаевич",
+      "wo": "WO-023502"
+    },
+    {
       "asset": "TK113",
       "defect": "DD-00017574",
       "raised": "2026-11-27",
@@ -7251,19 +7290,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023465"
     },
     {
-      "asset": "TK478",
-      "defect": "DD-00017568",
-      "raised": "2026-11-27",
-      "system": "TK478 43441C-10 URAL",
-      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
-      "descr": "Ремонт топливной системы и ПЖД",
-      "status": "Completed",
-      "priority": "P2 Urgent",
-      "by": "Ilya Borzunov",
-      "regBy": "Борзунов Илья Николаевич",
-      "wo": "WO-023457"
-    },
-    {
       "asset": "TK092",
       "defect": "DD-00017578",
       "raised": "2026-11-27",
@@ -7301,19 +7327,6 @@ window.CM_WO_DATA = {
       "by": "Ilya Borzunov",
       "regBy": "Борзунов Илья Николаевич",
       "wo": "WO-023470"
-    },
-    {
-      "asset": "CD010",
-      "defect": "DD-00017583",
-      "raised": "2026-11-27",
-      "system": "CD010.OC.AC (Air Conditioning / Кондиционирование)",
-      "defectType": "6.05 Loose/missing structural fasteners / Ослабленные/отсутствующие крепежи конструкции",
-      "descr": "ДВС посторонний шум. Установка болта крепления кондиционера",
-      "status": "Completed",
-      "priority": "P2 Urgent",
-      "by": "Ilya Borzunov",
-      "regBy": "Борзунов Илья Николаевич",
-      "wo": "WO-023472"
     },
     {
       "asset": "DZ002",
@@ -7366,19 +7379,6 @@ window.CM_WO_DATA = {
       "by": "Valentin Trapilo",
       "regBy": "Трапило Валентин Святославович",
       "wo": "WO-023462"
-    },
-    {
-      "asset": "DZ014",
-      "defect": "DD-00017604",
-      "raised": "2026-11-27",
-      "system": "DZ014 SD32 SHANTUI",
-      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
-      "descr": "Не запускается ДВС",
-      "status": "Completed",
-      "priority": "P2 Urgent",
-      "by": "Sergey Tomilov",
-      "regBy": "Томилов Сергей Владимирович",
-      "wo": "WO-023487"
     },
     {
       "asset": "GR008",
@@ -7470,19 +7470,6 @@ window.CM_WO_DATA = {
       "by": "Sergey Tomilov",
       "regBy": "Томилов Сергей Владимирович",
       "wo": "WO-023479"
-    },
-    {
-      "asset": "DZ003",
-      "defect": "DD-00017622",
-      "raised": "2026-11-27",
-      "system": "DZ003 D275.5D KOMATSU",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Выкручивание залома бугельного болта катка",
-      "status": "Completed",
-      "priority": "P2 Urgent",
-      "by": "Ilya Borzunov",
-      "regBy": "Борзунов Илья Николаевич",
-      "wo": "WO-023502"
     },
     {
       "asset": "EX001",
@@ -7732,6 +7719,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023490"
     },
     {
+      "asset": "DZ014",
+      "defect": "DD-00017604",
+      "raised": "2026-11-27",
+      "system": "DZ014 SD32 SHANTUI",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Не запускается ДВС",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Sergey Tomilov",
+      "regBy": "Томилов Сергей Владимирович",
+      "wo": "WO-023487"
+    },
+    {
       "asset": "LV009",
       "defect": "DD-00017612",
       "raised": "2026-11-27",
@@ -7795,6 +7795,19 @@ window.CM_WO_DATA = {
       "by": "Pavel Lefrank",
       "regBy": "Лефранк Павел Петрович",
       "wo": "WO-023478"
+    },
+    {
+      "asset": "GR004",
+      "defect": "DD-00017561",
+      "raised": "2026-11-26",
+      "system": "GR004 SG18-3 SHANTUI",
+      "defectType": "2.01 Wear / Износ",
+      "descr": "Износ стопорного кольца вала",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Ilya Borzunov",
+      "regBy": "Борзунов Илья Николаевич",
+      "wo": "WO-023451"
     },
     {
       "asset": "TK108",
@@ -8159,19 +8172,6 @@ window.CM_WO_DATA = {
       "by": "Valentin Trapilo",
       "regBy": "Трапило Валентин Святославович",
       "wo": "WO-023449"
-    },
-    {
-      "asset": "GR004",
-      "defect": "DD-00017561",
-      "raised": "2026-11-26",
-      "system": "GR004 SG18-3 SHANTUI",
-      "defectType": "2.01 Wear / Износ",
-      "descr": "Износ стопорного кольца вала",
-      "status": "Completed",
-      "priority": "P2 Urgent",
-      "by": "Ilya Borzunov",
-      "regBy": "Борзунов Илья Николаевич",
-      "wo": "WO-023451"
     },
     {
       "asset": "EX008",
@@ -8707,6 +8707,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023281"
     },
     {
+      "asset": "GE019",
+      "defect": "DD-00017513",
+      "raised": "2026-11-25",
+      "system": "GE019 J165 KOHLER",
+      "defectType": "5.14 Extreme temperature (cold/heat) / Экстремальная температура (холод/жара)",
+      "descr": "Отогрев и запуск холодного ДВС",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Ilya Borzunov",
+      "regBy": "Борзунов Илья Николаевич",
+      "wo": "WO-023307"
+    },
+    {
       "asset": "DZ018",
       "defect": "DD-00017438",
       "raised": "2026-11-25",
@@ -8965,19 +8978,6 @@ window.CM_WO_DATA = {
       "by": "Valentin Trapilo",
       "regBy": "Трапило Валентин Святославович",
       "wo": "WO-023280"
-    },
-    {
-      "asset": "GE019",
-      "defect": "DD-00017513",
-      "raised": "2026-11-25",
-      "system": "GE019 J165 KOHLER",
-      "defectType": "5.14 Extreme temperature (cold/heat) / Экстремальная температура (холод/жара)",
-      "descr": "Отогрев и запуск холодного ДВС",
-      "status": "Completed",
-      "priority": "P2 Urgent",
-      "by": "Ilya Borzunov",
-      "regBy": "Борзунов Илья Николаевич",
-      "wo": "WO-023307"
     },
     {
       "asset": "TK098",
@@ -16767,19 +16767,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK096",
-      "defect": "DD-00016876",
-      "raised": "2026-11-14",
-      "system": "TK096.CH.TK (Tank / бак)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Замена ёмкости (АЦ)",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
       "asset": "GE100",
       "defect": "DD-00016870",
       "raised": "2026-11-14",
@@ -16804,6 +16791,19 @@ window.CM_WO_DATA = {
       "by": "Aleksandr Golovko",
       "regBy": "Головко Александр Николаевич",
       "wo": "WO-022655"
+    },
+    {
+      "asset": "TK096",
+      "defect": "DD-00016876",
+      "raised": "2026-11-14",
+      "system": "TK096.CH.TK (Tank / бак)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Замена ёмкости (АЦ)",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022932"
     },
     {
       "asset": "LV017",
@@ -31379,19 +31379,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK092",
-      "defect": "DD-00015689",
-      "raised": "2026-10-26",
-      "system": "TK092.OC.SE (Seat / Сиденье)",
-      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
-      "descr": "нужен ремонт сидения (не работает амортизатор)",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
       "asset": "HX037",
       "defect": "DD-00015720",
       "raised": "2026-10-26",
@@ -31468,6 +31455,19 @@ window.CM_WO_DATA = {
       "by": "Evgeniy Frolin",
       "regBy": "Фролин Евгений Владимирович",
       "wo": "WO-021002"
+    },
+    {
+      "asset": "TK092",
+      "defect": "DD-00015689",
+      "raised": "2026-10-26",
+      "system": "TK092.OC.SE (Seat / Сиденье)",
+      "defectType": "1.09 Sticking / seizure / jamming Заклинивание / заедание",
+      "descr": "нужен ремонт сидения (не работает амортизатор)",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-023408"
     },
     {
       "asset": "TK035",
