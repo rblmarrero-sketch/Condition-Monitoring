@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-28T03:57:01+00:00",
+  "generated": "2026-11-28T04:13:09+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -6718,6 +6718,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "TK084",
+      "defect": "DD-00017652",
+      "raised": "2026-11-28",
+      "system": "TK084.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.26 Abnormal wear (rapid wear) / Быстрый износ",
+      "descr": "Износ ЦПГ",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Boyko",
+      "regBy": "Бойко Сергей Владимирович",
+      "wo": null
+    },
+    {
       "asset": "TK091",
       "defect": "DD-00017637",
       "raised": "2026-11-28",
@@ -6770,6 +6783,19 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
+      "asset": "LV032",
+      "defect": "DD-00017653",
+      "raised": "2026-11-28",
+      "system": "LV032.OC.HE (Heating / Отопление)",
+      "defectType": "4.01 Short circuiting / Короткое замыкание",
+      "descr": "Оплавление проводов.",
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Andrey Shcherbina",
+      "regBy": "Щербина Андрей Николаевич",
+      "wo": null
+    },
+    {
       "asset": "TK027",
       "defect": "DD-00017649",
       "raised": "2026-11-28",
@@ -6809,6 +6835,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023523"
     },
     {
+      "asset": "DR009",
+      "defect": "DD-00017654",
+      "raised": "2026-11-28",
+      "system": "DR009.OC.FS (Fire Suppression / Система пожаротушения)",
+      "defectType": "1.18 No start / fails to start / Не запускается / отказ запуска",
+      "descr": "Установка системы пожаротушения",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Pavel Kostin",
+      "regBy": "Костин Павел Александрович",
+      "wo": "WO-023534"
+    },
+    {
       "asset": "WE004",
       "defect": "DD-00017632",
       "raised": "2026-11-28",
@@ -6820,6 +6859,19 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-023511"
+    },
+    {
+      "asset": "LV005",
+      "defect": "DD-00017651",
+      "raised": "2026-11-28",
+      "system": "LV005.DRS.TRA (Transmission / Трансмиссия)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Разрушение подшипника подвесного",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Viktor Nizhebovskiy",
+      "regBy": "Нижебовский Виктор Петрович",
+      "wo": "WO-023533"
     },
     {
       "asset": "DZ002",
@@ -7290,6 +7342,32 @@ window.CM_WO_DATA = {
       "wo": "WO-023484"
     },
     {
+      "asset": "CR002",
+      "defect": "DD-00017571",
+      "raised": "2026-11-27",
+      "system": "CR002.ELS.PH (Preheater / Предпусковой подогреватель)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Не работает предпусковой подогреватель.",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-023460"
+    },
+    {
+      "asset": "EX002",
+      "defect": "DD-00017593",
+      "raised": "2026-11-27",
+      "system": "EX002.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
+      "defectType": "4.02 Open circuit / Разрыв цепи",
+      "descr": "Ремонт цепей освещения",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Pavel Lefrank",
+      "regBy": "Лефранк Павел Петрович",
+      "wo": "WO-023475"
+    },
+    {
       "asset": "TK166",
       "defect": "DD-00017585",
       "raised": "2026-11-27",
@@ -7394,19 +7472,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023490"
     },
     {
-      "asset": "CR002",
-      "defect": "DD-00017571",
-      "raised": "2026-11-27",
-      "system": "CR002.ELS.PH (Preheater / Предпусковой подогреватель)",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Не работает предпусковой подогреватель.",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-023460"
-    },
-    {
       "asset": "TK104",
       "defect": "DD-00017579",
       "raised": "2026-11-27",
@@ -7483,19 +7548,6 @@ window.CM_WO_DATA = {
       "by": "Pavel Lefrank",
       "regBy": "Лефранк Павел Петрович",
       "wo": "WO-023478"
-    },
-    {
-      "asset": "EX002",
-      "defect": "DD-00017593",
-      "raised": "2026-11-27",
-      "system": "EX002.ELS.HD (Head Lamps & Tail Lights / Передние фары и задние фонари)",
-      "defectType": "4.02 Open circuit / Разрыв цепи",
-      "descr": "Ремонт цепей освещения",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Pavel Lefrank",
-      "regBy": "Лефранк Павел Петрович",
-      "wo": "WO-023475"
     },
     {
       "asset": "TK108",
@@ -9046,11 +9098,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "LV067",
-      "defect": "DD-00017460",
+      "defect": "DD-00017461",
       "raised": "2026-11-25",
-      "system": "LV067.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
-      "descr": "Двигатель не тянет.",
+      "system": "LV067.DRS.AXL (Axles / Мосты)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Сорвана резьба на шпильке левого колеса (замена)",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -9059,11 +9111,11 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "LV067",
-      "defect": "DD-00017461",
+      "defect": "DD-00017460",
       "raised": "2026-11-25",
-      "system": "LV067.DRS.AXL (Axles / Мосты)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Сорвана резьба на шпильке левого колеса (замена)",
+      "system": "LV067.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.17 Loss of power / reduced power / Потеря мощности / снижение мощности",
+      "descr": "Двигатель не тянет.",
       "status": "Registered",
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
@@ -20199,19 +20251,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "FL002",
-      "defect": "DD-00016599",
-      "raised": "2026-11-09",
-      "system": "FL002.SS.CYL (Steering Cylinders / Рулевые цилиндры)",
-      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
-      "descr": "Ремонт переднего моста люфт шкворней, рулевых наконечников",
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Sergey Gulin",
-      "regBy": "Гулин Сергей Григорьевич",
-      "wo": null
-    },
-    {
       "asset": "TK104",
       "defect": "DD-00016553",
       "raised": "2026-11-09",
@@ -20327,6 +20366,19 @@ window.CM_WO_DATA = {
       "by": "Oleg Dymbrylov",
       "regBy": "Дымбрылов Олег Дамдинович",
       "wo": "WO-022386"
+    },
+    {
+      "asset": "FL002",
+      "defect": "DD-00016599",
+      "raised": "2026-11-09",
+      "system": "FL002.SS.CYL (Steering Cylinders / Рулевые цилиндры)",
+      "defectType": "1.23 Excessive play / backlash / Люфт / увеличенный зазор",
+      "descr": "Ремонт переднего моста люфт шкворней, рулевых наконечников",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Sergey Gulin",
+      "regBy": "Гулин Сергей Григорьевич",
+      "wo": "WO-022913"
     },
     {
       "asset": "EX005",
@@ -26972,19 +27024,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "EX025",
-      "defect": "DD-00016012",
-      "raised": "2026-10-31",
-      "system": "EX025.CH.BUC (Bucket / Ковш)",
-      "defectType": "6.03 Structural crack / Трещина конструкции",
-      "descr": "Износ межзубовой защиты и угловых пяток",
-      "status": "Elimination scheduled",
-      "priority": "P4 Planned (Repair)",
-      "by": "Roman Besedovskiy",
-      "regBy": "Беседовский Роман Иванович",
-      "wo": "WO-021545"
-    },
-    {
       "asset": "GR003",
       "defect": "DD-00016055",
       "raised": "2026-10-31",
@@ -27022,6 +27061,19 @@ window.CM_WO_DATA = {
       "by": "Dmitriy Stepanenko",
       "regBy": "Степаненко Дмитрий Викторович",
       "wo": "WO-021510"
+    },
+    {
+      "asset": "EX025",
+      "defect": "DD-00016012",
+      "raised": "2026-10-31",
+      "system": "EX025.CH.BUC (Bucket / Ковш)",
+      "defectType": "6.03 Structural crack / Трещина конструкции",
+      "descr": "Износ межзубовой защиты и угловых пяток",
+      "status": "Elimination scheduled",
+      "priority": "P4 Planned (Repair)",
+      "by": "Roman Besedovskiy",
+      "regBy": "Беседовский Роман Иванович",
+      "wo": "WO-021545"
     },
     {
       "asset": "EX023",
@@ -57613,19 +57665,6 @@ window.CM_WO_DATA = {
       "wo": "WO-015456"
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000082",
-      "raised": "2026-08-21",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
-      "wo": null
-    },
-    {
       "asset": "TK046",
       "defect": "DD-00011270",
       "raised": "2026-08-21",
@@ -57727,6 +57766,19 @@ window.CM_WO_DATA = {
       "priority": "P2 Urgent",
       "by": "Andrey Shipelov",
       "regBy": "Шипелов Андрей Анатольевич",
+      "wo": null
+    },
+    {
+      "asset": "H04",
+      "defect": "EB-00000082",
+      "raised": "2026-08-21",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
@@ -58459,19 +58511,6 @@ window.CM_WO_DATA = {
     },
     {
       "asset": "H07",
-      "defect": "EB-00000079",
-      "raised": "2026-08-13",
-      "system": null,
-      "defectType": null,
-      "descr": null,
-      "status": "Registered",
-      "priority": "P4 Planned (Repair)",
-      "by": "Eduard Shapoval",
-      "regBy": "Eduard Shapoval",
-      "wo": null
-    },
-    {
-      "asset": "H07",
       "defect": "EB-00000078",
       "raised": "2026-08-13",
       "system": null,
@@ -58481,6 +58520,19 @@ window.CM_WO_DATA = {
       "priority": "P4 Planned (Repair)",
       "by": "Sergey Gulin",
       "regBy": "Sergey Gulin",
+      "wo": null
+    },
+    {
+      "asset": "H07",
+      "defect": "EB-00000079",
+      "raised": "2026-08-13",
+      "system": null,
+      "defectType": null,
+      "descr": null,
+      "status": "Registered",
+      "priority": "P4 Planned (Repair)",
+      "by": "Eduard Shapoval",
+      "regBy": "Eduard Shapoval",
       "wo": null
     },
     {
@@ -59069,8 +59121,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000076",
+      "asset": "H07",
+      "defect": "EB-00000075",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -59082,8 +59134,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H07",
-      "defect": "EB-00000075",
+      "asset": "H04",
+      "defect": "EB-00000076",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
