@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-28T02:57:48+00:00",
+  "generated": "2026-11-28T03:13:01+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -6627,6 +6627,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023516"
     },
     {
+      "asset": "CD010",
+      "defect": "DD-00017630",
+      "raised": "2026-11-28",
+      "system": "CD010.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Не работает автономный отопитель.",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-023510"
+    },
+    {
       "asset": "TK167",
       "defect": "DD-00017633",
       "raised": "2026-11-28",
@@ -6794,19 +6807,6 @@ window.CM_WO_DATA = {
       "by": "Nikolay Khrapov",
       "regBy": "Храпов Николай Алексеевич",
       "wo": "WO-023511"
-    },
-    {
-      "asset": "CD010",
-      "defect": "DD-00017630",
-      "raised": "2026-11-28",
-      "system": "CD010.OC.HE (Heating / Отопление)",
-      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
-      "descr": "Не работает автономный отопитель.",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-023510"
     },
     {
       "asset": "DZ002",
@@ -7199,6 +7199,45 @@ window.CM_WO_DATA = {
       "wo": "WO-023455"
     },
     {
+      "asset": "TK171",
+      "defect": "DD-00017616",
+      "raised": "2026-11-27",
+      "system": "TRUCK, WATER URAL 4672M1-20, TK171 HEAD LIGHTING SYSTEM",
+      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
+      "descr": "Неисправность креплений фар ближнего света.",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
+      "wo": "WO-023496"
+    },
+    {
+      "asset": "TK031",
+      "defect": "DD-00017600",
+      "raised": "2026-11-27",
+      "system": "TK031.DRS.COO (Cooling System / Система охлаждения)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Устранение утечки ОЖ",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Pavel Lefrank",
+      "regBy": "Лефранк Павел Петрович",
+      "wo": "WO-023483"
+    },
+    {
+      "asset": "TK004",
+      "defect": "DD-00017618",
+      "raised": "2026-11-27",
+      "system": "TK004.BS.CV (Control Valve / Управляющий клапан)",
+      "defectType": "3.07 Actuator / control valve fault / Отказ исполнительного механизма / регулирующего клапана",
+      "descr": "Главный тормозной клапан управления замена",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Ilya Borzunov",
+      "regBy": "Борзунов Илья Николаевич",
+      "wo": "WO-023498"
+    },
+    {
       "asset": "TK166",
       "defect": "DD-00017585",
       "raised": "2026-11-27",
@@ -7290,32 +7329,6 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "TK004",
-      "defect": "DD-00017618",
-      "raised": "2026-11-27",
-      "system": "TK004.BS.CV (Control Valve / Управляющий клапан)",
-      "defectType": "3.07 Actuator / control valve fault / Отказ исполнительного механизма / регулирующего клапана",
-      "descr": "Главный тормозной клапан управления замена",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Ilya Borzunov",
-      "regBy": "Борзунов Илья Николаевич",
-      "wo": "WO-023498"
-    },
-    {
-      "asset": "TK171",
-      "defect": "DD-00017616",
-      "raised": "2026-11-27",
-      "system": "TRUCK, WATER URAL 4672M1-20, TK171 HEAD LIGHTING SYSTEM",
-      "defectType": "4.19 The light bulb has burned out / Лампочка вышла из строя",
-      "descr": "Неисправность креплений фар ближнего света.",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Nikolay Khrapov",
-      "regBy": "Храпов Николай Алексеевич",
-      "wo": "WO-023496"
-    },
-    {
       "asset": "DZ002",
       "defect": "DD-00017610",
       "raised": "2026-11-27",
@@ -7394,19 +7407,6 @@ window.CM_WO_DATA = {
       "wo": "WO-023492"
     },
     {
-      "asset": "LD006",
-      "defect": "DD-00017611",
-      "raised": "2026-11-27",
-      "system": "LD006.HS.DL (Hydraulic Lines / Гидролинии)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Течь РВД с распределителя",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Valentin Trapilo",
-      "regBy": "Трапило Валентин Святославович",
-      "wo": "WO-023491"
-    },
-    {
       "asset": "TK037",
       "defect": "DD-00017603",
       "raised": "2026-11-27",
@@ -7420,6 +7420,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023486"
     },
     {
+      "asset": "LD006",
+      "defect": "DD-00017611",
+      "raised": "2026-11-27",
+      "system": "LD006.HS.DL (Hydraulic Lines / Гидролинии)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Течь РВД с распределителя",
+      "status": "Elimination scheduled",
+      "priority": "P2 Urgent",
+      "by": "Valentin Trapilo",
+      "regBy": "Трапило Валентин Святославович",
+      "wo": "WO-023491"
+    },
+    {
       "asset": "CD001",
       "defect": "DD-00017602",
       "raised": "2026-11-27",
@@ -7431,19 +7444,6 @@ window.CM_WO_DATA = {
       "by": "Pavel Lefrank",
       "regBy": "Лефранк Павел Петрович",
       "wo": "WO-023485"
-    },
-    {
-      "asset": "TK031",
-      "defect": "DD-00017600",
-      "raised": "2026-11-27",
-      "system": "TK031.DRS.COO (Cooling System / Система охлаждения)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Устранение утечки ОЖ",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Pavel Lefrank",
-      "regBy": "Лефранк Павел Петрович",
-      "wo": "WO-023483"
     },
     {
       "asset": "TK034",
@@ -119596,6 +119596,25 @@ window.CM_WO_DATA = {
       "actualEnd": null
     },
     {
+      "equip": "GE012",
+      "cls": "GEN",
+      "woNumber": "WO-023345",
+      "maintType": "500 Hours service Planned",
+      "hours": 500,
+      "cmLabel": "500h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-12-06",
+      "planStartDt": "2026-12-06T00:00:00",
+      "planEnd": "2026-12-06",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
+    },
+    {
       "equip": "GE020",
       "cls": "GEN",
       "woNumber": null,
@@ -126149,6 +126168,25 @@ window.CM_WO_DATA = {
       "actualStart": "2026-05-29",
       "actualStartDt": "2026-05-29T19:00:00",
       "actualEnd": "2026-05-30"
+    },
+    {
+      "equip": "GE065",
+      "cls": "GEN",
+      "woNumber": "WO-023393",
+      "maintType": "2000 Hours service Planned",
+      "hours": 2000,
+      "cmLabel": "2000h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-12-06",
+      "planStartDt": "2026-12-06T00:00:00",
+      "planEnd": "2026-12-06",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
     },
     {
       "equip": "GE066",
@@ -150883,9 +150921,9 @@ window.CM_WO_DATA = {
       "equip": "TK006",
       "cls": "GEN",
       "woNumber": null,
-      "maintType": "500 Hours service Planned",
-      "hours": 500,
-      "cmLabel": "500h service",
+      "maintType": "4000 Hours service Planned",
+      "hours": 4000,
+      "cmLabel": "4000h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": null,
@@ -150902,9 +150940,9 @@ window.CM_WO_DATA = {
       "equip": "TK006",
       "cls": "GEN",
       "woNumber": null,
-      "maintType": "4000 Hours service Planned",
-      "hours": 4000,
-      "cmLabel": "4000h service",
+      "maintType": "500 Hours service Planned",
+      "hours": 500,
+      "cmLabel": "500h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": null,
@@ -151220,6 +151258,25 @@ window.CM_WO_DATA = {
       "actualStart": "2026-11-04",
       "actualStartDt": "2026-11-04T19:00:00",
       "actualEnd": "2026-11-05"
+    },
+    {
+      "equip": "TK006",
+      "cls": "GEN",
+      "woNumber": "WO-023391",
+      "maintType": "4000 Hours service Planned",
+      "hours": 4000,
+      "cmLabel": "4000h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "REL",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-12-06",
+      "planStartDt": "2026-12-06T00:00:00",
+      "planEnd": "2026-12-06",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
     },
     {
       "equip": "TK007",
@@ -190214,6 +190271,25 @@ window.CM_WO_DATA = {
       "actualStart": "2026-08-18",
       "actualStartDt": "2026-08-18T19:00:00",
       "actualEnd": "2026-08-19"
+    },
+    {
+      "equip": "TK135",
+      "cls": "GEN",
+      "woNumber": "WO-023388",
+      "maintType": "2000 Hours service Planned",
+      "hours": 2000,
+      "cmLabel": "2000h service",
+      "cmTypes": null,
+      "priority": "P3 Planned (PM)",
+      "woStatus": "MACH",
+      "cmmsStatus": "Elimination scheduled",
+      "open": true,
+      "planStart": "2026-12-06",
+      "planStartDt": "2026-12-06T00:00:00",
+      "planEnd": "2026-12-06",
+      "actualStart": null,
+      "actualStartDt": null,
+      "actualEnd": null
     },
     {
       "equip": "TK143",

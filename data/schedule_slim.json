@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-28T02:57:48+00:00",
+  "generated": "2026-11-28T03:13:01+00:00",
   "byUnit": {
     "CN007": [
       {
@@ -1270,6 +1270,42 @@
       "completed": ""
     },
     {
+      "wo": "WO-023345",
+      "equip": "GE012",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "500h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-12-06",
+      "type": "500 Hours service Planned",
+      "hours": 500,
+      "plan": "2026-12-06",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-023393",
+      "equip": "GE065",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "2000h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-12-06",
+      "type": "2000 Hours service Planned",
+      "hours": 2000,
+      "plan": "2026-12-06",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
       "wo": "WO-023195",
       "equip": "GR014",
       "cls": "GRD",
@@ -1279,6 +1315,24 @@
       "raised": "2026-12-06",
       "type": "250 Hours service Planned",
       "hours": 250,
+      "plan": "2026-12-06",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-023391",
+      "equip": "TK006",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "4000h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-12-06",
+      "type": "4000 Hours service Planned",
+      "hours": 4000,
       "plan": "2026-12-06",
       "status": "Elimination scheduled",
       "request": "",
@@ -1315,6 +1369,24 @@
       "raised": "2026-12-06",
       "type": "500 Hours service Planned",
       "hours": 500,
+      "plan": "2026-12-06",
+      "status": "Elimination scheduled",
+      "request": "",
+      "defType": "",
+      "cause": "",
+      "pmStatus": "open",
+      "completed": ""
+    },
+    {
+      "wo": "WO-023388",
+      "equip": "TK135",
+      "cls": "GEN",
+      "comp": "",
+      "desc": "2000h service",
+      "priority": "P3 Planned (PM)",
+      "raised": "2026-12-06",
+      "type": "2000 Hours service Planned",
+      "hours": 2000,
       "plan": "2026-12-06",
       "status": "Elimination scheduled",
       "request": "",
@@ -10550,6 +10622,14 @@
       "x": "Перегрев АКБ"
     },
     {
+      "d": "DD-00017630",
+      "u": "CD010",
+      "s": "CD010.OC.HE (Heating / Отопление)",
+      "p": "P2",
+      "r": "2026-11-28",
+      "x": "Не работает автономный отопитель."
+    },
+    {
       "d": "DD-00017647",
       "u": "TK151",
       "s": "TK151.BS (Braking System / Тормозная система)",
@@ -10596,14 +10676,6 @@
       "p": "P1",
       "r": "2026-11-28",
       "x": "Нестабильная работа системы регулирования оборотов. Обороты плавают. Глохнет."
-    },
-    {
-      "d": "DD-00017630",
-      "u": "CD010",
-      "s": "CD010.OC.HE (Heating / Отопление)",
-      "p": "P2",
-      "r": "2026-11-28",
-      "x": "Не работает автономный отопитель."
     },
     {
       "d": "DD-00017625",
@@ -10838,6 +10910,30 @@
       "x": "Активирован индикатор неисправности двигателя. Не отключается муфта вентилятора "
     },
     {
+      "d": "DD-00017616",
+      "u": "TK171",
+      "s": "TRUCK, WATER URAL 4672M1-20, TK171 HEAD LIGHTING SYSTEM",
+      "p": "P2",
+      "r": "2026-11-27",
+      "x": "Неисправность креплений фар ближнего света."
+    },
+    {
+      "d": "DD-00017600",
+      "u": "TK031",
+      "s": "TK031.DRS.COO (Cooling System / Система охлаждения)",
+      "p": "P2",
+      "r": "2026-11-27",
+      "x": "Устранение утечки ОЖ"
+    },
+    {
+      "d": "DD-00017618",
+      "u": "TK004",
+      "s": "TK004.BS.CV (Control Valve / Управляющий клапан)",
+      "p": "P2",
+      "r": "2026-11-27",
+      "x": "Главный тормозной клапан управления замена"
+    },
+    {
       "d": "DD-00017597",
       "u": "LD005",
       "s": "LD005.HS.DL (Hydraulic Lines / Гидролинии)",
@@ -10852,22 +10948,6 @@
       "p": "P2",
       "r": "2026-11-27",
       "x": "Течь пилотного РВД"
-    },
-    {
-      "d": "DD-00017618",
-      "u": "TK004",
-      "s": "TK004.BS.CV (Control Valve / Управляющий клапан)",
-      "p": "P2",
-      "r": "2026-11-27",
-      "x": "Главный тормозной клапан управления замена"
-    },
-    {
-      "d": "DD-00017616",
-      "u": "TK171",
-      "s": "TRUCK, WATER URAL 4672M1-20, TK171 HEAD LIGHTING SYSTEM",
-      "p": "P2",
-      "r": "2026-11-27",
-      "x": "Неисправность креплений фар ближнего света."
     },
     {
       "d": "DD-00017610",
@@ -10918,14 +10998,6 @@
       "x": "Ролики приводных ремней посторонний шум. Замена"
     },
     {
-      "d": "DD-00017611",
-      "u": "LD006",
-      "s": "LD006.HS.DL (Hydraulic Lines / Гидролинии)",
-      "p": "P2",
-      "r": "2026-11-27",
-      "x": "Течь РВД с распределителя"
-    },
-    {
       "d": "DD-00017603",
       "u": "TK037",
       "s": "TK037.SS.SP (Steering Pump / Насос рулевого управления)",
@@ -10934,20 +11006,20 @@
       "x": "Устранение утечки ГУР"
     },
     {
+      "d": "DD-00017611",
+      "u": "LD006",
+      "s": "LD006.HS.DL (Hydraulic Lines / Гидролинии)",
+      "p": "P2",
+      "r": "2026-11-27",
+      "x": "Течь РВД с распределителя"
+    },
+    {
       "d": "DD-00017602",
       "u": "CD001",
       "s": "CD001.BS (Braking System / Тормозная система)",
       "p": "P2",
       "r": "2026-11-27",
       "x": "Регулировка ручного тормоза"
-    },
-    {
-      "d": "DD-00017600",
-      "u": "TK031",
-      "s": "TK031.DRS.COO (Cooling System / Система охлаждения)",
-      "p": "P2",
-      "r": "2026-11-27",
-      "x": "Устранение утечки ОЖ"
     },
     {
       "d": "DD-00017599",
