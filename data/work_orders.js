@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-11-28T15:52:44+00:00",
+  "generated": "2026-11-28T16:07:50+00:00",
   "source": "/opt/askpi-auto/pub/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 816,
@@ -6614,6 +6614,45 @@ window.CM_WO_DATA = {
       "wo": "WO-023598"
     },
     {
+      "asset": "TK161",
+      "defect": "DD-00017689",
+      "raised": "2026-11-29",
+      "system": "TK161.HS.HOI (Body Hoist System / Система подъема кузова)",
+      "defectType": "1.03 Low pressure / low flow / Низкое давление/расход",
+      "descr": "Гул при опускании кузова",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Valentin Trapilo",
+      "regBy": "Трапило Валентин Святославович",
+      "wo": "WO-023603"
+    },
+    {
+      "asset": "TK110",
+      "defect": "DD-00017684",
+      "raised": "2026-11-29",
+      "system": "TK110.DRS.ENG (Engine / Двигатель)",
+      "defectType": "4.20 Auxiliary electrical circuit fault / Неисправность вспомогательных электроцепей",
+      "descr": "Ошибки ДВС",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Valentin Trapilo",
+      "regBy": "Трапило Валентин Святославович",
+      "wo": "WO-023599"
+    },
+    {
+      "asset": "TK014",
+      "defect": "DD-00017691",
+      "raised": "2026-11-29",
+      "system": "TK014.OC.HE (Heating / Отопление)",
+      "defectType": "5.07 Dust ingress / Попадание пыли",
+      "descr": "Слабый поток воздуха отопителя",
+      "status": "Registered",
+      "priority": "P2 Urgent",
+      "by": "Sychev Anton",
+      "regBy": "Сычев Антон Александрович",
+      "wo": null
+    },
+    {
       "asset": "DZ009",
       "defect": "DD-00017685",
       "raised": "2026-11-29",
@@ -6627,16 +6666,16 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "LS043",
-      "defect": "DD-00017688",
+      "asset": "BS015",
+      "defect": "DD-00017690",
       "raised": "2026-11-29",
-      "system": "LS043.DRS.ENG (Engine / Двигатель)",
-      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
-      "descr": "Утечка ДТ с соленойда",
+      "system": "BS015.OC.HE (Heating / Отопление)",
+      "defectType": "4.21 Cab HVAC/heater/blower electrical fault / Неисправность электрики отопителя/вентилятора кабины",
+      "descr": "Не работает отопитель в пассажирском салоне.",
       "status": "Registered",
-      "priority": "P2 Urgent",
-      "by": "Sychev Anton",
-      "regBy": "Сычев Антон Александрович",
+      "priority": "P1 Breakdown",
+      "by": "Nikolay Khrapov",
+      "regBy": "Храпов Николай Алексеевич",
       "wo": null
     },
     {
@@ -6653,17 +6692,17 @@ window.CM_WO_DATA = {
       "wo": "WO-023600"
     },
     {
-      "asset": "TK110",
-      "defect": "DD-00017684",
+      "asset": "LS043",
+      "defect": "DD-00017688",
       "raised": "2026-11-29",
-      "system": "TK110.DRS.ENG (Engine / Двигатель)",
-      "defectType": "4.20 Auxiliary electrical circuit fault / Неисправность вспомогательных электроцепей",
-      "descr": "Ошибки ДВС",
+      "system": "LS043.DRS.ENG (Engine / Двигатель)",
+      "defectType": "1.01 Leakage (external/internal) Утечка (внешняя/внутренняя)",
+      "descr": "Утечка ДТ с соленойда",
       "status": "Elimination scheduled",
       "priority": "P2 Urgent",
-      "by": "Valentin Trapilo",
-      "regBy": "Трапило Валентин Святославович",
-      "wo": "WO-023599"
+      "by": "Sychev Anton",
+      "regBy": "Сычев Антон Александрович",
+      "wo": "WO-023602"
     },
     {
       "asset": "TK171",
@@ -7017,6 +7056,19 @@ window.CM_WO_DATA = {
       "wo": "WO-023504"
     },
     {
+      "asset": "TK037",
+      "defect": "DD-00017678",
+      "raised": "2026-11-28",
+      "system": "TK037.ELS.ALT (Alternator / Генератор)",
+      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
+      "descr": "Ремень генератора порыв",
+      "status": "Completed",
+      "priority": "P2 Urgent",
+      "by": "Ilya Borzunov",
+      "regBy": "Борзунов Илья Николаевич",
+      "wo": "WO-023593"
+    },
+    {
       "asset": "TK167",
       "defect": "DD-00017633",
       "raised": "2026-11-28",
@@ -7223,19 +7275,6 @@ window.CM_WO_DATA = {
       "by": "Pavel Lefrank",
       "regBy": "Лефранк Павел Петрович",
       "wo": "WO-023546"
-    },
-    {
-      "asset": "TK037",
-      "defect": "DD-00017678",
-      "raised": "2026-11-28",
-      "system": "TK037.ELS.ALT (Alternator / Генератор)",
-      "defectType": "1.08 Crack / fracture / breakage / Трещина / разрушение / поломка",
-      "descr": "Ремень генератора порыв",
-      "status": "Elimination scheduled",
-      "priority": "P2 Urgent",
-      "by": "Ilya Borzunov",
-      "regBy": "Борзунов Илья Николаевич",
-      "wo": "WO-023593"
     },
     {
       "asset": "LD003",
@@ -59615,8 +59654,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H07",
-      "defect": "EB-00000075",
+      "asset": "H04",
+      "defect": "EB-00000076",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
@@ -59628,8 +59667,8 @@ window.CM_WO_DATA = {
       "wo": null
     },
     {
-      "asset": "H04",
-      "defect": "EB-00000076",
+      "asset": "H07",
+      "defect": "EB-00000075",
       "raised": "2026-08-07",
       "system": null,
       "defectType": null,
